@@ -22,7 +22,7 @@
 #undef __class__
 #define __class__ "resource::DistanceFieldFont"
 
-#define SIZE_GENERATION (70)
+#define SIZE_GENERATION (30)
 
 ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontName) :
   ewol::resource::Texture(_fontName),
@@ -218,12 +218,12 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 		//EWOL_DEBUG("load char : '" << _val << "'=" << _val.get());
 		hasChange = true;
 		// change line if needed ...
-		if (m_lastGlyphPos.x() + tmpchar.m_sizeTexture.x() > m_data.getSize().x()) {
+		if (m_lastGlyphPos.x() + tmpchar.m_sizeTexture.x()+m_borderSize*2.0 > m_data.getSize().x()) {
 			m_lastGlyphPos.setX(1);
 			m_lastGlyphPos += ivec2(0, m_lastRawHeigh);
 			m_lastRawHeigh = 0;
 		}
-		while(m_lastGlyphPos.y()+tmpchar.m_sizeTexture.y() > m_data.getSize().y()) {
+		while(m_lastGlyphPos.y()+tmpchar.m_sizeTexture.y()+m_borderSize*2.0 > m_data.getSize().y()) {
 			ivec2 size = m_data.getSize();
 			size.setY(size.y()*2);
 			m_data.resize(size, etk::Color<>(0));

@@ -19,15 +19,18 @@ namespace ewol {
 				enum ewol::key::status m_status;
 				uint8_t m_inputId;
 				vec2 m_pos;
+				ewol::key::Special m_specialKey; //!< input key status (prevent change in time..)
 			public:
 				Input(enum ewol::key::type _type,
 				      enum ewol::key::status _status,
 				      uint8_t _id,
-				      const vec2& _pos):
+				      const vec2& _pos,
+				      ewol::key::Special _specialKey):
 				  m_type(_type),
 				  m_status(_status),
 				  m_inputId(_id),
-				  m_pos(_pos){
+				  m_pos(_pos),
+				  m_specialKey(_specialKey) {
 					
 				};
 				void setType(enum ewol::key::type _type) {
@@ -54,6 +57,12 @@ namespace ewol {
 				inline const vec2& getPos(void) const {
 					return m_pos;
 				};
+				void setSpecialKey(const ewol::key::Special& _specialKey) {
+					m_specialKey = _specialKey;
+				};
+				inline const ewol::key::Special& getSpecialKey(void) const {
+					return m_specialKey;
+				};
 				/**
 				 * @brief Reset the input property of the curent event.
 				 */
@@ -70,8 +79,9 @@ namespace ewol {
 				            uint8_t _id,
 				            const vec2& _pos,
 				            ewol::Widget* _dest,
-				            int32_t _realIdEvent) :
-				  m_event(_type, _status, _id, _pos),
+				            int32_t _realIdEvent,
+				            ewol::key::Special _specialKey) :
+				  m_event(_type, _status, _id, _pos, _specialKey),
 				  m_dest(_dest),
 				  m_realIdEvent(_realIdEvent) { };
 				ewol::event::Input m_event;

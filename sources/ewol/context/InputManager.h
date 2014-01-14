@@ -119,6 +119,12 @@ namespace ewol {
 				 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 				 */
 				void unGrabPointer(void);
+			private:
+				ewol::key::Special m_specialKey;
+			public:
+				void setLastKeyboardSpecial(const ewol::key::Special& _specialKey) {
+					m_specialKey = _specialKey;
+				}
 		};
 	};
 };

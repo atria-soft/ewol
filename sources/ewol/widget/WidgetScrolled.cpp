@@ -116,12 +116,14 @@ bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event
 				return false;
 			} else if (    _event.getId() == 4
 			            && _event.getStatus() == ewol::key::statusUp) {
-				/*
-				if (true == ewol::isSetCtrl()) {
+				if (true == _event.getSpecialKey().getCtrl()) {
+					changeZoom(1);
+					/*
 					float zoom = getZoom()*1.1;
 					zoom = etk_avg(0.1, zoom, 5000);
 					setZoom(zoom);
-				} else */{
+					*/
+				} else {
 					if(m_size.y() < m_maxSize.y()
 					    || m_originScrooled.y() != 0
 					    || m_size.y()*m_limitScrolling < m_maxSize.y() ) {
@@ -133,12 +135,14 @@ bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event
 				}
 			} else if (    _event.getId() == 5
 			            && _event.getStatus() == ewol::key::statusUp) {
-				/*
-				if (true == ewol::isSetCtrl()) {
+				if (true == _event.getSpecialKey().getCtrl()) {
+					changeZoom(-1);
+					/*
 					float zoom = getZoom()*0.9;
 					zoom = etk_avg(0.1, zoom, 5000);
 					setZoom(zoom);
-				} else */{
+					*/
+				} else {
 					if(m_size.y() < m_maxSize.y()
 					    || m_originScrooled.y()!=0
 					    || m_size.y()*m_limitScrolling < m_maxSize.y() ) {

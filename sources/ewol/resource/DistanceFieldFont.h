@@ -41,7 +41,7 @@ namespace ewol {
 				 * @return Dimention of the font need between 2 lines
 				 */
 				float getHeight(float _size) {
-					return _size * m_sizeRatio;;
+					return ((float)m_font->getHeight(_size));
 				};
 				/**
 				 * @brief get the ID of a unicode charcode

@@ -174,6 +174,8 @@ void ewol::Context::processEvents(void) {
 			case eSystemMessage::msgKeyboardKey:
 			case eSystemMessage::msgKeyboardMove:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
+				// store the keyboard special key status for mouse event...
+				m_input.setLastKeyboardSpecial(data->keyboardSpecial);
 				if (NULL != m_windowsCurrent) {
 					if (false == m_windowsCurrent->onEventShortCut(data->keyboardSpecial,
 					                                             data->keyboardChar,

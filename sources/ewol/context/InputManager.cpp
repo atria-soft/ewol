@@ -49,7 +49,7 @@ bool ewol::context::InputManager::localEventInput(enum ewol::key::type _type,
 	if (NULL != _destWidget) {
 		if (_type == ewol::key::typeMouse || _type == ewol::key::typeFinger) {
 			// create the system Event :
-			ewol::event::InputSystem tmpEventSystem(_type, _status, _IdInput, _pos, _destWidget, 0); // TODO : set the real ID ...
+			ewol::event::InputSystem tmpEventSystem(_type, _status, _IdInput, _pos, _destWidget, 0, m_specialKey); // TODO : set the real ID ...
 			// generate the event :
 			return _destWidget->systemEventInput(tmpEventSystem);
 		} else {

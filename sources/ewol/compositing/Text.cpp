@@ -52,8 +52,10 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	// TextureID
+	// Texture :
 	m_GLprogram->setTexture0(m_GLtexID, m_font->getId());
+	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
+	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &m_coord[0]);
 	// Texture :
@@ -89,8 +91,10 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	// TextureID
+	// Texture :
 	m_GLprogram->setTexture0(m_GLtexID, m_font->getId());
+	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
+	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// Texture :
@@ -340,3 +344,24 @@ void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 	m_previousCharcode = _charcode;
 	return;
 }
+
+
+vec3 ewol::compositing::Text::calculateSizeChar(const char32_t& _charcode) {
+	// get a pointer on the glyph property : 
+	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
+	int32_t fontHeigh = getHeight();
+	
+	// get the kerning ofset :
+	float kerningOffset = 0.0;
+	if (true == m_kerning) {
+		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
+	}
+	
+	vec3 outputSize((float)(myGlyph->m_advance.x() + kerningOffset),
+	                (float)(fontHeigh),
+	                (float)(0.0));
+	// Register the previous character
+	m_previousCharcode = _charcode;
+	return outputSize;
+}
+

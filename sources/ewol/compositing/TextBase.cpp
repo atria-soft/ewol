@@ -51,11 +51,13 @@ void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
 	m_GLPosition = 0;
 	m_GLprogram = ewol::resource::Program::keep(_shaderName);
 	if (m_GLprogram != NULL) {
-		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->getAttribute("EW_color");
-		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
-		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
-		m_GLtexID    = m_GLprogram->getUniform("EW_texID");
+		m_GLPosition   = m_GLprogram->getAttribute("EW_coord3d");
+		m_GLColor      = m_GLprogram->getAttribute("EW_color");
+		m_GLtexture    = m_GLprogram->getAttribute("EW_texture2d");
+		m_GLMatrix     = m_GLprogram->getUniform("EW_MatrixTransformation");
+		m_GLtexID      = m_GLprogram->getUniform("EW_texID");
+		m_GLtextWidth  = m_GLprogram->getUniform("EW_texWidth");
+		m_GLtextHeight = m_GLprogram->getUniform("EW_texHeight");
 	}
 }
 
@@ -901,25 +903,6 @@ vec3 ewol::compositing::TextBase::calculateSize(const std::u32string& _text) {
 		}
 		outputSize.setX( outputSize.x() + tmpp.x());
 	}
-	return outputSize;
-}
-
-vec3 ewol::compositing::TextBase::calculateSize(const char32_t& _charcode) {
-	// get a pointer on the glyph property : 
-	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
-	int32_t fontHeigh = getHeight();
-	
-	// get the kerning ofset :
-	float kerningOffset = 0.0;
-	if (true == m_kerning) {
-		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
-	}
-	
-	vec3 outputSize((float)(myGlyph->m_advance.x() + kerningOffset),
-	                (float)(fontHeigh),
-	                (float)(0.0));
-	// Register the previous character
-	m_previousCharcode = _charcode;
 	return outputSize;
 }
 

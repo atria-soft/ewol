@@ -23,21 +23,28 @@ void main(void) {
 
 
 /*
-// Distance map contour texturing according to Green (2007),
-// implementation by Stefan Gustavson 2009.
-// This code is in the public domain.
+// Input :
+attribute vec3 EW_coord3d;
+attribute vec2 EW_texture2d;
+attribute vec4 EW_color;
+uniform mat4 EW_MatrixTransformation;
+uniform int EW_texHeight;
+uniform int EW_texWidth;
 
-uniform sampler2D gradtexture, reftexture;
-uniform float texw, texh;
-varying float onestepu, onestepv;
-varying vec2 st;
+// output :
+varying vec4 f_color;
+varying vec2 f_texcoord;
+varying float f_onestepu;
+varying float f_onestepv;
 
-void main( void )
-{
-  // Get the texture coordinates
-  st = gl_MultiTexCoord0.xy;
-  onestepu = 1.0 / texw; // Saves a division in the fragment shader
-  onestepv = 1.0 / texh;
-  gl_Position = ftransform();
+void main(void) {
+	gl_Position = EW_MatrixTransformation * vec4(EW_coord3d, 1.0);
+	// set texture output coord
+	f_texcoord = EW_texture2d;
+	f_onestepu = 1.0 / float(EW_texWidth);
+	f_onestepv = 1.0 / float(EW_texHeight);
+	// set output color :
+	f_color = EW_color;
 }
+
 */

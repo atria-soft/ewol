@@ -55,8 +55,10 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	// TextureID
+	// Texture :
 	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
+	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
+	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// Texture :
@@ -94,8 +96,10 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	// TextureID
+	// Texture :
 	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
+	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
+	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// Texture :
@@ -199,18 +203,29 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 		float dyC = m_position.y() + (myGlyph->m_bearing.y() + fontHeigh - fontSize) * factorDisplay;
 		float dyD = dyC - myGlyph->m_sizeTexture.y() * factorDisplay;
 		#else
-		float dxA = m_position.x() + (myGlyph->m_bearing.x() + kerningOffset - (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay;
-		float dxB = dxA + (myGlyph->m_sizeTexture.x() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
-		float dyC = m_position.y() + (myGlyph->m_bearing.y() + fontHeigh - fontSize + (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay;
-		float dyD = dyC - (myGlyph->m_sizeTexture.y() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
+		//EWOL_DEBUG(" plop : fontHeigh" << fontHeigh << " fontSize=" << fontSize);
+		float dxA = m_position.x() + ((float)myGlyph->m_bearing.x() + kerningOffset - (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay;
+		float dxB = dxA + ((float)myGlyph->m_sizeTexture.x() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
+		float dyC = m_position.y() + (fontHeigh - fontSize + ((float)myGlyph->m_bearing.y() + (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay);
+		float dyD = dyC - ((float)myGlyph->m_sizeTexture.y() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
 		#endif
 		
 		float tuA = myGlyph->m_texturePosStart.x();
 		float tuB = tuA + myGlyph->m_texturePosSize.x();
 		float tvC = myGlyph->m_texturePosStart.y();
 		float tvD = tvC + myGlyph->m_texturePosSize.y();
+		/*
+		vec3 drawingPos = m_vectorialDraw.getPos();
+		etk::Color<> backColor = m_vectorialDraw.getColor();
 		
+		m_vectorialDraw.setPos(vec2(dxA, dyC));
 		
+		m_vectorialDraw.setColor(etk::Color<>(0.0,1.0,0.0,1.0));
+		m_vectorialDraw.rectangle(vec2(dxB, dyD));
+		
+		m_vectorialDraw.setPos(drawingPos);
+		m_vectorialDraw.setColor(backColor);
+		*/
 		// Clipping and drawing area
 		if(    m_clippingEnable == true
 		    && (    dxB < m_clippingPosStart.x()
@@ -339,3 +354,25 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 	m_previousCharcode = _charcode;
 	return;
 }
+
+
+vec3 ewol::compositing::TextDF::calculateSizeChar(const char32_t& _charcode) {
+	// get a pointer on the glyph property : 
+	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
+	int32_t fontHeigh = getHeight();
+	
+	// get the kerning ofset :
+	float kerningOffset = 0.0;
+	if (true == m_kerning) {
+		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
+	}
+	
+	vec3 outputSize((float)(myGlyph->m_advance.x() + kerningOffset)*m_fontDF->getDisplayRatio(getSize()),
+	                (float)(fontHeigh),
+	                (float)(0.0));
+	// Register the previous character
+	m_previousCharcode = _charcode;
+	return outputSize;
+}
+
+

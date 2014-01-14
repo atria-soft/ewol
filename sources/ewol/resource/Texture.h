@@ -34,11 +34,14 @@ namespace ewol {
 				void removeContextToLate(void);
 			// middleware interface:
 			public:
-				GLuint getId(void) {
+				GLuint getId(void) const {
 					return m_texId;
 				};
-				vec2 getUsableSize(void) {
+				const vec2& getUsableSize(void) const {
 					return m_endPointSize;
+				};
+				const ivec2& getOpenGlSize(void) const {
+					return m_data.getSize();
 				};
 			// Public API:
 			protected:

@@ -14,11 +14,11 @@ varying vec4 f_color;
 
 const float glyph_center   = 0.50;
 const float outline_center = 0.55;
-const float glow_center    = 1.25;
+const float glow_center    = 1.55;
 
-vec3 glyph_color    = vec3(1.0,1.0,1.0);
+vec3 glyph_color    = vec3(0.0,0.0,0.0);
 vec3 outline_color  = vec3(0.0,0.0,0.0);
-vec3 glow_color     = vec3(0.0,1.0,0.0);
+vec3 glow_color     = vec3(0.0,0.0,0.0);
 
 void main(void) {
 	vec4 color = texture2D(EW_texID, f_texcoord );
@@ -27,7 +27,6 @@ void main(void) {
 	float alpha = smoothstep(glyph_center-width, glyph_center+width, dist);
 	
 	// Smooth
-	
 	gl_FragColor = vec4(f_color[0], f_color[1], f_color[2], f_color[3]*alpha);
 	
 	// Outline

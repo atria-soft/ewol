@@ -121,11 +121,25 @@ namespace ewol {
 					m_color = _color;
 				};
 				/**
+				 * @brief Get the foreground color of the font.
+				 * @return Foreground color.
+				 */
+				const etk::Color<>& getColor(void) {
+					return m_color;
+				};
+				/**
 				 * @brief set the background color of the font (for selected Text (not the global BG))
 				 * @param[in] _color Color to set on background (for next print)
 				 */
 				void setColorBg(const etk::Color<>& _color) {
 					m_colorBg = _color;
+				};
+				/**
+				 * @brief Get the background color of the font.
+				 * @return Background color.
+				 */
+				const etk::Color<>& getColorBg(void) {
+					return m_colorBg;
 				};
 				/**
 				 * @brief Request a clipping area for the text (next draw only)

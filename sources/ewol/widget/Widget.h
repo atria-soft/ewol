@@ -231,6 +231,11 @@ namespace ewol {
 			 * @return the current zoom value
 			 */
 			virtual float getZoom(void);
+			/**
+			 * @brief Change Zoom property.
+			 * @param[in] _range Range of the zoom change.
+			 */
+			virtual void changeZoom(float _range) {};
 		protected:
 			vec2 m_origin; //!< internal ... I do not really known how i can use it ...
 		public:

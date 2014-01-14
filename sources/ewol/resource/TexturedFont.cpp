@@ -238,12 +238,12 @@ bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 			//EWOL_DEBUG("load char : '" << _val << "'=" << _val.get());
 			hasChange = true;
 			// change line if needed ...
-			if (m_lastGlyphPos[iii].x()+tmpchar.m_sizeTexture.x() > m_data.getSize().x()) {
+			if (m_lastGlyphPos[iii].x()+tmpchar.m_sizeTexture.x()+3 > m_data.getSize().x()) {
 				m_lastGlyphPos[iii].setX(1);
 				m_lastGlyphPos[iii] += ivec2(0, m_lastRawHeigh[iii]);
 				m_lastRawHeigh[iii] = 0;
 			}
-			while(m_lastGlyphPos[iii].y()+tmpchar.m_sizeTexture.y() > m_data.getSize().y()) {
+			while(m_lastGlyphPos[iii].y()+tmpchar.m_sizeTexture.y()+3 > m_data.getSize().y()) {
 				ivec2 size = m_data.getSize();
 				size.setY(size.y()*2);
 				m_data.resize(size, etk::Color<>(0));

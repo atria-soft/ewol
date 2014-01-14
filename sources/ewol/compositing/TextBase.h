@@ -80,6 +80,8 @@ namespace ewol {
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)
 				int32_t m_GLtexture; //!< openGL id on the element (Texture position)
 				int32_t m_GLtexID; //!< openGL id on the element (texture ID)
+				int32_t m_GLtextWidth; //!< openGL Id on the texture width
+				int32_t m_GLtextHeight; //!< openGL Id on the texture height
 			protected:
 				int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
 				int32_t m_cursorPos; //!< Cursor position (default no cursor  == > -100)
@@ -398,7 +400,13 @@ namespace ewol {
 				 * @param[in] _charcode The µUnicode value to calculate dimention.
 				 * @return The theoric size used.
 				 */
-				vec3 calculateSize(const char32_t& _charcode);
+				inline vec3 calculateSize(const char32_t& _charcode) {
+					return calculateSizeChar(_charcode);
+				};
+			protected:
+				//! @previous
+				virtual vec3 calculateSizeChar(const char32_t& _charcode) = 0;
+			public:
 				/**
 				 * @brief draw a cursor at the specify position
 				 * @param[in] _isInsertMode True if the insert mode is activated
