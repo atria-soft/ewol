@@ -13,6 +13,7 @@
 #include <ewol/compositing/Compositing.h>
 #include <ewol/resource/Program.h>
 #include <ewol/resource/ConfigFile.h>
+#include <ewol/resource/ColorFile.h>
 #include <ewol/resource/Image.h>
 #include <ewol/event/Time.h>
 
@@ -32,6 +33,7 @@ namespace ewol {
 				int32_t m_confIdPaddingY;   //!< ConfigFile padding property Y
 				int32_t m_confIdChangeTime; //!< ConfigFile padding transition time property
 				int32_t m_confProgramFile;  //!< ConfigFile opengGl program Name
+				int32_t m_confColorFile;    //!< ConfigFile opengGl color file Name
 				int32_t m_confImageFile;    //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
 				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
@@ -57,6 +59,9 @@ namespace ewol {
 				int32_t m_stateNew;               //!< destination state
 				float   m_stateTransition;        //!< working state between 2 states
 				vec2    m_coord[6];               //!< the double triangle coordonates
+				// color management theme:
+				ewol::resource::ColorFile* m_colorProperty; //!< input resource for color management
+				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed

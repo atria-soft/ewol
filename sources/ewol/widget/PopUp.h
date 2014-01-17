@@ -37,7 +37,7 @@ namespace ewol {
 				 * @brief Constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
-				PopUp(const std::string& _shaperName="THEME:GUI:widgetPopUp.conf");
+				PopUp(const std::string& _shaperName="THEME:GUI:PopUp.conf");
 				/**
 				 * @brief Destructor
 				 */

@@ -15,11 +15,13 @@
 #define __class__	"ewol::compositing::TextBase"
 
 
-ewol::compositing::TextBase::TextBase(const std::string& _shaderName) :
+ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _loadProgram) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
   m_clippingEnable(false),
+  m_defaultColorFg(etk::color::black),
+  m_defaultColorBg(etk::color::none),
   m_color(etk::color::black),
   m_colorBg(etk::color::none),
   m_colorCursor(etk::color::black),
@@ -38,7 +40,9 @@ ewol::compositing::TextBase::TextBase(const std::string& _shaderName) :
   m_GLtexID(-1),
   m_selectionStartPos(-100),
   m_cursorPos(-100) {
-	loadProgram(_shaderName);
+	if (_loadProgram == true) {
+		loadProgram(_shaderName);
+	}
 }
 
 
@@ -97,8 +101,8 @@ void ewol::compositing::TextBase::reset(void) {
 	m_sizeDisplayStop = m_position;
 	m_nbCharDisplayed = 0;
 	m_clippingEnable = false;
-	m_color = etk::color::black;
-	m_colorBg = etk::color::none;
+	m_color = m_defaultColorFg;
+	m_colorBg = m_defaultColorBg;
 	m_mode = ewol::font::Regular;
 	m_previousCharcode = 0;
 	m_startTextpos = 0;
@@ -351,8 +355,8 @@ void ewol::compositing::TextBase::printHTML(const std::string& _text) {
 	exml::Document doc;
 	
 	// reset parameter :
-	m_htmlDecoTmp.m_colorBg = etk::color::none;
-	m_htmlDecoTmp.m_colorFg = etk::color::black;
+	m_htmlDecoTmp.m_colorBg = m_defaultColorBg;
+	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
 	if (doc.parse(_text) == false) {
@@ -379,8 +383,8 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 	exml::Document doc;
 	
 	// reset parameter :
-	m_htmlDecoTmp.m_colorBg = etk::color::none;
-	m_htmlDecoTmp.m_colorFg = etk::color::black;
+	m_htmlDecoTmp.m_colorBg = m_defaultColorBg;
+	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	// TODO : Create an instance of xml parser to manage std::u32string...
 	if (doc.parse(std::to_string(_text)) == false) {

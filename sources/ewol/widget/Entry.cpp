@@ -48,7 +48,7 @@ const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
 const char* const ewol::widget::Entry::configValue = "value";
 
 ewol::widget::Entry::Entry(std::string _newData) :
-  m_shaper("THEME:GUI:widgetEntry.conf"),
+  m_shaper("THEME:GUI:Entry.conf"),
   m_data(""),
   m_maxCharacter(0x7FFFFFFF),
   m_regExp(".*"),

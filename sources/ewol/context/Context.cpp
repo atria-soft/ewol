@@ -291,6 +291,9 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
 	// set the curent interface :
 	lockContext();
+	// By default we set 2 themes (1 color and 1 shape ...) :
+	etk::theme::setNameDefault("GUI", "shape/square/");
+	etk::theme::setNameDefault("COLOR", "color/black/");
 	// parse the debug level:
 	for(int32_t iii = 0; iii < m_commandLine.size() ; ++iii) {
 		if (m_commandLine.get(iii) == "-l0") {

@@ -330,7 +330,15 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 
 ewol::resource::DistanceFieldFont* ewol::resource::DistanceFieldFont::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : DistanceFieldFont : file : '" << _filename << "'");
-	ewol::resource::DistanceFieldFont* object = static_cast<ewol::resource::DistanceFieldFont*>(getManager().localKeep(_filename));
+	ewol::resource::DistanceFieldFont* object = NULL;
+	ewol::Resource* object2 = getManager().localKeep(_filename);
+	if (NULL != object2) {
+		object = dynamic_cast<ewol::resource::DistanceFieldFont*>(object2);
+		if (NULL == object) {
+			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
+			return NULL;
+		}
+	}
 	if (NULL != object) {
 		return object;
 	}

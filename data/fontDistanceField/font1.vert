@@ -7,11 +7,13 @@ precision mediump int;
 attribute vec3 EW_coord3d;
 attribute vec2 EW_texture2d;
 attribute vec4 EW_color;
+attribute float EW_glyphLevel;
 uniform mat4 EW_MatrixTransformation;
 
 // output :
 varying vec4 f_color;
 varying vec2 f_texcoord;
+varying float f_glyphLevel;
 
 void main(void) {
 	gl_Position = EW_MatrixTransformation * vec4(EW_coord3d, 1.0);
@@ -19,6 +21,7 @@ void main(void) {
 	f_texcoord = EW_texture2d;
 	// set output color :
 	f_color = EW_color;
+	f_glyphLevel = EW_glyphLevel;
 }
 
 

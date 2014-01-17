@@ -98,6 +98,9 @@ namespace ewol {
 				inline void sendAttribute(int32_t _idElem, const std::vector<etk::Color<float> >& _data) {
 					sendAttribute(_idElem, 4/*r,g,b,a*/, &_data[0]);
 				}
+				inline void sendAttribute(int32_t _idElem, const std::vector<float>& _data) {
+					sendAttribute(_idElem, 1, &_data[0]);
+				}
 				/**
 				 * @brief User request an Uniform on this program.
 				 * @note uniform value is availlable for all the fragment shader in the program (only one value for all)
@@ -113,6 +116,11 @@ namespace ewol {
 				 * @param[in] _transpose Transpose the matrix (needed all the taime in the normal openGl access (only not done in the openGL-ES2 due to the fact we must done it ourself)
 				 */
 				void uniformMatrix4fv(int32_t _idElem, int32_t _nbElement, mat4 _pointer, bool _transpose=true);
+				
+				inline void uniform(int32_t _idElem, const etk::Color<float>& _value) {
+					uniform4f(_idElem, _value.r(), _value.g(), _value.b(), _value.a());
+				}
+				
 				/**
 				 * @brief Send 1 float uniform element to the spefified ID (not send if does not really exist in the openGL program)
 				 * @param[in] _idElem Id of the uniform that might be sended.

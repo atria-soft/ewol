@@ -16,11 +16,12 @@
 
 
 ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSize) :
-  ewol::compositing::TextBase("DATA:fontDistanceField/font1.prog"),
+  ewol::compositing::TextBase("", false),
   m_fontDF(NULL),
+  m_GLglyphLevel(-1),
   m_size(12.0) {
 	setFont(_fontName, _fontSize);
-	// TODO : Reset size .... when reset ...
+	loadProgram("DATA:fontDistanceField/font1.prog");
 }
 
 
@@ -33,7 +34,6 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	EWOL_WARNING("draw DF...");
 	if (m_coord.size() <= 0 || m_fontDF == NULL) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -59,12 +59,10 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
-	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
-	// Texture :
 	m_GLprogram->sendAttribute(m_GLtexture, m_coordTex);
-	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
+	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
 	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
@@ -75,7 +73,6 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 
 
 void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
-	EWOL_WARNING("draw DF.2.");
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
@@ -100,16 +97,26 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
-	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
-	// Texture :
 	m_GLprogram->sendAttribute(m_GLtexture, m_coordTex);
-	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
+	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
 	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
+
+void ewol::compositing::TextDF::clear(void) {
+	ewol::compositing::TextBase::clear();
+	m_glyphLevel.clear();
+}
+void ewol::compositing::TextDF::loadProgram(const std::string& _shaderName) {
+	ewol::compositing::TextBase::loadProgram(_shaderName);
+	if (m_GLprogram != NULL) {
+		m_GLglyphLevel = m_GLprogram->getAttribute("EW_glyphLevel");
+	}
+}
+
 
 float ewol::compositing::TextDF::getHeight(void) {
 	if (m_fontDF == NULL) {
@@ -167,6 +174,9 @@ void ewol::compositing::TextDF::setFontMode(enum ewol::font::mode _mode) {
 	m_mode = _mode;
 }
 
+//#define ANGLE_OF_ITALIC (tan(0.4))
+#define ANGLE_OF_ITALIC (0.00698143f)
+
 
 void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
@@ -189,7 +199,21 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 		}
 	}
 	// 0x01 == 0x20 == ' ';
-	if (_charcode != 0x01) {
+	if (    _charcode != 0x01
+	     && _charcode != 0x20) {
+		float glyphLevel = 0.5f;
+		if (    m_mode == ewol::font::BoldItalic
+		     || m_mode == ewol::font::Bold) {
+			glyphLevel = 0.41f;
+		}
+		float italicMove = 0.0f;
+		if (    m_mode == ewol::font::BoldItalic
+		     || m_mode == ewol::font::Italic) {
+			// This is a simple version of Italic mode, in theory we need to move the up and the down...
+			italicMove = (float)myGlyph->m_sizeTexture.y() * factorDisplay * ANGLE_OF_ITALIC;
+			// TODO : pb on the clipper...
+		}
+		
 		/* Bitmap position
 		 *      xA     xB
 		 *   yC *------*
@@ -287,8 +311,8 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 				 */
 				if (m_needDisplay == true) {
 					vec3 bitmapDrawPos[4];
-					bitmapDrawPos[0].setValue(dxA, dyC, 0);
-					bitmapDrawPos[1].setValue(dxB, dyC, 0);
+					bitmapDrawPos[0].setValue(dxA+italicMove, dyC, 0);
+					bitmapDrawPos[1].setValue(dxB+italicMove, dyC, 0);
 					bitmapDrawPos[2].setValue(dxB, dyD, 0);
 					bitmapDrawPos[3].setValue(dxA, dyD, 0);
 					/* texture Position : 
@@ -323,6 +347,9 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 					m_coordColor.push_back(m_color);
 					m_coordColor.push_back(m_color);
 					m_coordColor.push_back(m_color);
+					m_glyphLevel.push_back(glyphLevel);
+					m_glyphLevel.push_back(glyphLevel);
+					m_glyphLevel.push_back(glyphLevel);
 					/* Step 2 : 
 					 *              
 					 *   **         
@@ -342,6 +369,9 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 					m_coordColor.push_back(m_color);
 					m_coordColor.push_back(m_color);
 					m_coordColor.push_back(m_color);
+					m_glyphLevel.push_back(glyphLevel);
+					m_glyphLevel.push_back(glyphLevel);
+					m_glyphLevel.push_back(glyphLevel);
 				}
 			}
 		}

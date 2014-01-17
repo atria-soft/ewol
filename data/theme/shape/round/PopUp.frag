@@ -19,24 +19,25 @@ struct widgetStateProperty {
 uniform displayProperty     EW_widgetProperty;
 
 uniform widgetStateProperty EW_status;
+uniform vec4 EW_background;
+uniform vec4 EW_foreground;
+uniform vec4 EW_border;
 
 // transmit from the vertex shader
 varying vec2  v_position; // interpolated position ...
 
 // internal static define
-vec4  S_colorBg = vec4(0.0);
-vec4  S_colorFg = vec4(0.5,0.5,0.5,0.3);
-vec4  S_colorBorder = vec4(0.0,0.0,0.0,1.0);
 float S_sizePadding  =  3.0; // must not be NULL
-float S_sizeBorder   =  1.0; //==> this id for 1 px border
+float S_sizeBorder   =  2.0; //==> this id for 1 px border
 float S_roundedRatio = 10.0;
+
 
 void main(void) {
 	// position form center : 
-	vec2 ratio = EW_widgetProperty.size / 2.0;
+	vec2 ratio = EW_widgetProperty.insideSize / 2.0;
 	
 	// prevent origin moving ... 
-	vec2 position = v_position - EW_widgetProperty.origin;
+	vec2 position = v_position - EW_widgetProperty.insidePos;
 	
 	/* generate a central simetry
 	  ____       _____
@@ -56,11 +57,12 @@ void main(void) {
 	                          S_roundedRatio + S_sizeBorder*1.5,
 	                          tmpDist);
 	// set Background
-	gl_FragColor = S_colorBg;
+	gl_FragColor = EW_background;
 	// set foreground
-	gl_FragColor = gl_FragColor*tmpVal + S_colorFg*(1.0-tmpVal);
+	gl_FragColor = gl_FragColor*tmpVal + EW_foreground*(1.0-tmpVal);
 	// set border
 	float tmpVal2 = abs(tmpVal-0.5)*2.0;
-	gl_FragColor = gl_FragColor*tmpVal2 + S_colorBorder*(1.0-tmpVal2);
+	gl_FragColor = gl_FragColor*tmpVal2 + EW_border*(1.0-tmpVal2);
+	
 }
 

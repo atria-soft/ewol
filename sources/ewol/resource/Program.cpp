@@ -310,11 +310,12 @@ void ewol::resource::Program::sendAttribute(int32_t _idElem,
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
+	if (    _idElem < 0
+	     || (size_t)_idElem > m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[_idElem].m_isLinked) {
+	if (m_elementList[_idElem].m_isLinked == false) {
 		return;
 	}
 	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
@@ -776,7 +777,15 @@ void ewol::resource::Program::unUse(void) {
 
 ewol::resource::Program* ewol::resource::Program::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Program : file : \"" << _filename << "\"");
-	ewol::resource::Program* object = static_cast<ewol::resource::Program*>(getManager().localKeep(_filename));
+	ewol::resource::Program* object = NULL;
+	ewol::Resource* object2 = getManager().localKeep(_filename);
+	if (NULL != object2) {
+		object = dynamic_cast<ewol::resource::Program*>(object2);
+		if (NULL == object) {
+			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
+			return NULL;
+		}
+	}
 	if (NULL != object) {
 		return object;
 	}

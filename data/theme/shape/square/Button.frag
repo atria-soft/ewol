@@ -15,13 +15,13 @@ uniform displayProperty     EW_widgetProperty;
 
 // transmit from the vertex shader
 varying vec2  v_position; // interpolated position ...
+varying vec4  v_colorTansition;
+varying vec4  v_colorBorder;
+varying vec4  v_colorBackground;
 
 // internal static define
-vec4  S_colorBg = vec4(0.0);
-vec4  S_colorFg = vec4(1.0,1.0,1.0,0.8);
-vec4  S_colorBorder = vec4(0.0,0.0,0.0,1.0);
-float S_sizePadding = 1.0;
-float S_sizeBorder = 3.0;
+float S_sizePadding = 3.0;
+float S_sizeBorder = 1.0;
 
 void main(void) {
 	// prevent origin moving ... 
@@ -39,13 +39,13 @@ void main(void) {
 		    || position.x>  endStart.x
 		    || position.y>  endStart.y
 		  ) {
-			gl_FragColor = S_colorBorder;
+			gl_FragColor = v_colorBorder;
 		} else {
 			// note : int() is needed for the OpenGL ES platform
-			gl_FragColor = S_colorFg;
+			gl_FragColor = v_colorTansition;
 		}
 	} else {
-		gl_FragColor = S_colorBg;
+		gl_FragColor = v_colorBackground;
 	}
 }
 

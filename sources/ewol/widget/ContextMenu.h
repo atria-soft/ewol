@@ -38,7 +38,7 @@ namespace ewol {
 				static const char* const configArrowMode;
 				static const char* const configShaper;
 			public:
-				ContextMenu(const std::string& _shaperName="THEME:GUI:widgetContextMenu.conf");
+				ContextMenu(const std::string& _shaperName="THEME:GUI:ContextMenu.conf");
 				virtual ~ContextMenu(void);
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.

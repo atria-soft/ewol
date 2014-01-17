@@ -160,7 +160,7 @@ ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep(void) {
 	// need to crate a new one ...
 	ewol::resource::Colored3DObject* object = new ewol::resource::Colored3DObject();
 	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
+		EWOL_ERROR("allocation error of a resource : ???Colored3DObject??? ");
 		return NULL;
 	}
 	getManager().localAdd(object);

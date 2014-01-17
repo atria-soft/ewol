@@ -190,14 +190,14 @@ void ewol::widget::Button::systemDraw(const ewol::DrawProperty& _displayProp) {
 	}
 	ewol::Widget::systemDraw(_displayProp);
 	// draw the widget that need something ...
-	if(    false == m_toggleMode
-	    || false == m_value
-	    || NULL == m_subWidget[1]) {
-		if (NULL!=m_subWidget[0]) {
+	if(    m_toggleMode == false
+	    || m_value == false
+	    || m_subWidget[1] == NULL) {
+		if (m_subWidget[0] != NULL) {
 			m_subWidget[0]->systemDraw(_displayProp);
 		}
 	} else {
-		if (NULL!=m_subWidget[1]) {
+		if (m_subWidget[1] != NULL) {
 			m_subWidget[1]->systemDraw(_displayProp);
 		}
 	}

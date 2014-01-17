@@ -389,7 +389,15 @@ void ewol::resource::FontFreeType::display(void) {
 
 ewol::resource::FontBase* ewol::resource::FontFreeType::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
-	ewol::resource::FontBase* object = static_cast<ewol::resource::FontBase*>(getManager().localKeep(_filename));
+	ewol::resource::FontBase* object = NULL;
+	ewol::Resource* object2 = getManager().localKeep(_filename);
+	if (NULL != object2) {
+		object = dynamic_cast<ewol::resource::FontBase*>(object2);
+		if (NULL == object) {
+			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
+			return NULL;
+		}
+	}
 	if (NULL != object) {
 		return object;
 	}

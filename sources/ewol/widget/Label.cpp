@@ -25,9 +25,17 @@ static ewol::Widget* create(void) {
 void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
-
-ewol::widget::Label::Label(std::string _newLabel) {
+// TODO : Remove the label name in the constructor ...
+ewol::widget::Label::Label(std::string _newLabel) :
+  m_colorProperty(NULL),
+  m_colorDefaultFgText(-1),
+  m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
+	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Label.json");
+	if (m_colorProperty != NULL) {
+		m_colorDefaultFgText = m_colorProperty->request("foreground");
+		m_colorDefaultBgText = m_colorProperty->request("background");
+	}
 	m_label = std::to_u32string(_newLabel);
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
@@ -111,6 +119,12 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 	
 	// clean the element
 	m_text.reset();
+	if (m_colorProperty != NULL) {
+		EWOL_DEBUG("set FG : " << m_colorProperty->get(m_colorDefaultFgText));
+		EWOL_DEBUG("set BG : " << m_colorProperty->get(m_colorDefaultBgText));
+		m_text.setDefaultColorFg(m_colorProperty->get(m_colorDefaultFgText));
+		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
+	}
 	m_text.setPos(tmpTextOrigin);
 	EWOL_VERBOSE("[" << getId() << "] {" << m_label << "} display at pos : " << tmpTextOrigin);
 	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);

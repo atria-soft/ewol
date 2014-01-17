@@ -61,6 +61,9 @@ namespace ewol {
 				vec3 m_clippingPosStop; //!< Clipping stop position
 				bool m_clippingEnable; //!< true if the clipping must be activated
 			protected:
+				etk::Color<> m_defaultColorFg; //!< The text foreground color
+				etk::Color<> m_defaultColorBg; //!< The text background color
+			protected:
 				etk::Color<> m_color; //!< The text foreground color
 				etk::Color<> m_colorBg; //!< The text background color
 				etk::Color<> m_colorCursor; //!< The text cursor color
@@ -93,12 +96,12 @@ namespace ewol {
 				/**
 				 * @brief load the openGL program and get all the ID needed
 				 */
-				void loadProgram(const std::string& _shaderName);
+				virtual void loadProgram(const std::string& _shaderName);
 			public:
 				/**
 				 * @brief generic constructor
 				 */
-				TextBase(const std::string& _shaderName="DATA:text.prog");
+				TextBase(const std::string& _shaderName = "DATA:text.prog", bool _loadProgram = true);
 				/**
 				 * @brief generic destructor
 				 */
@@ -166,10 +169,26 @@ namespace ewol {
 					setRelPos(vec3(_pos.x(),_pos.y(),0));
 				};
 				/**
+				 * @brief set the default background color of the font (when reset, set this value ...)
+				 * @param[in] _color Color to set on background
+				 */
+				void setDefaultColorBg(const etk::Color<>& _color) {
+					m_defaultColorBg = _color;
+				}
+				/**
+				 * @brief set the default Foreground color of the font (when reset, set this value ...)
+				 * @param[in] _color Color to set on foreground
+				 */
+				void setDefaultColorFg(const etk::Color<>& _color) {
+					m_defaultColorFg = _color;
+				}
+				/**
 				 * @brief set the Color of the current foreground font
 				 * @param[in] _color Color to set on foreground (for next print)
 				 */
-				void setColor(const etk::Color<>& _color) { m_color = _color; };
+				void setColor(const etk::Color<>& _color) {
+					m_color = _color;
+				};
 				/**
 				 * @brief set the background color of the font (for selected Text (not the global BG))
 				 * @param[in] _color Color to set on background (for next print)

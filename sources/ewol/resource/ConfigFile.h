@@ -15,6 +15,7 @@
 
 namespace ewol {
 	namespace resource {
+		// TODO : Show if it is possible to integrate this in a json interface ==> simplify code ...
 		/**
 		 * @not-in-doc
 		 */
@@ -32,10 +33,16 @@ namespace ewol {
 					m_valueInt(0),
 					m_valuefloat(0.0) { };
 				~SimpleConfigElement(void) { };
-				void          parse(const std::string& value);
-				int32_t       getInteger(void) { return m_valueInt; };
-				float         getFloat(void)   { return m_valuefloat; };
-				std::string& getString(void)  { return m_value; };
+				void parse(const std::string& value);
+				int32_t getInteger(void) {
+					return m_valueInt;
+				};
+				float getFloat(void) {
+					return m_valuefloat;
+				};
+				std::string& getString(void) {
+					return m_value;
+				};
 		};
 		
 		class ConfigFile : public ewol::Resource {

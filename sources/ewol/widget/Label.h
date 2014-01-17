@@ -14,6 +14,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/resource/ColorFile.h>
 
 namespace ewol {
 	namespace widget {
@@ -33,6 +34,9 @@ namespace ewol {
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
 				std::u32string m_label; //!< decorated text to display.
+				ewol::resource::ColorFile* m_colorProperty; //!< theme color proterty
+				int32_t m_colorDefaultFgText; //!< Default color of the text
+				int32_t m_colorDefaultBgText; //!< Default Background color of the text
 			public:
 				/**
 				 * @brief Constructor

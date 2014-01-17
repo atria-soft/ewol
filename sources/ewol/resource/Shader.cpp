@@ -151,7 +151,15 @@ void ewol::resource::Shader::reload(void) {
 
 ewol::resource::Shader* ewol::resource::Shader::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
-	ewol::resource::Shader* object = static_cast<ewol::resource::Shader*>(getManager().localKeep(_filename));
+	ewol::resource::Shader* object = NULL;
+	ewol::Resource* object2 = getManager().localKeep(_filename);
+	if (NULL != object2) {
+		object = dynamic_cast<ewol::resource::Shader*>(object2);
+		if (NULL == object) {
+			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
+			return NULL;
+		}
+	}
 	if (NULL != object) {
 		return object;
 	}

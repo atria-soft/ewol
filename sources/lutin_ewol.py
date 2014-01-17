@@ -103,6 +103,7 @@ def create(target):
 	# resources :
 	myModule.add_src_file([
 		'ewol/resource/Colored3DObject.cpp',
+		'ewol/resource/ColorFile.cpp',
 		'ewol/resource/ConfigFile.cpp',
 		'ewol/resource/FontFreeType.cpp',
 		'ewol/resource/Image.cpp',
@@ -153,14 +154,10 @@ def create(target):
 		'ewol/widget/WSlider.cpp',
 		])
 	
-	myModule.copy_folder('../data/theme/default/widgetEntry.*','theme/default')
-	myModule.copy_folder('../data/theme/rounded/widgetEntry.*','theme/rounded')
-	myModule.copy_folder('../data/theme/default/widgetButton.*','theme/default')
-	myModule.copy_folder('../data/theme/rounded/widgetButton.*','theme/rounded')
-	myModule.copy_folder('../data/theme/default/widgetContextMenu.*','theme/default')
-	myModule.copy_folder('../data/theme/rounded/widgetContextMenu.*','theme/rounded')
-	myModule.copy_folder('../data/theme/default/widgetPopUp.*','theme/default')
-	myModule.copy_folder('../data/theme/rounded/widgetPopUp.*','theme/rounded')
+	myModule.copy_folder('../data/theme/shape/square/*','theme/shape/square')
+	myModule.copy_folder('../data/theme/shape/round/*','theme/shape/round')
+	myModule.copy_folder('../data/theme/color/black/*','theme/color/black')
+	myModule.copy_folder('../data/theme/color/white/*','theme/color/white')
 	myModule.copy_folder('../data/textured.*','')
 	myModule.copy_folder('../data/texturedNoMaterial.*','')
 	myModule.copy_folder('../data/text.*','')

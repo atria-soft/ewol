@@ -159,14 +159,22 @@ int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
 
 ewol::resource::ConfigFile* ewol::resource::ConfigFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
-	ewol::resource::ConfigFile* object = static_cast<ewol::resource::ConfigFile*>(getManager().localKeep(_filename));
+	ewol::resource::ConfigFile* object = NULL;
+	ewol::Resource* object2 = getManager().localKeep(_filename);
+	if (NULL != object2) {
+		object = dynamic_cast<ewol::resource::ConfigFile*>(object2);
+		if (NULL == object) {
+			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
+			return NULL;
+		}
+	}
 	if (NULL != object) {
 		return object;
 	}
 	// this element create a new one every time ....
 	object = new ewol::resource::ConfigFile(_filename);
 	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
+		EWOL_ERROR("allocation error of a resource : '" << _filename << "'");
 		return NULL;
 	}
 	getManager().localAdd(object);

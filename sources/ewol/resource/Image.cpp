@@ -97,7 +97,15 @@ ewol::resource::TextureFile* ewol::resource::TextureFile::keep(const std::string
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::resource::TextureFile* object = static_cast<ewol::resource::TextureFile*>(getManager().localKeep(TmpFilename));
+	ewol::resource::TextureFile* object = NULL;
+	ewol::Resource* object2 = getManager().localKeep(TmpFilename);
+	if (NULL != object2) {
+		object = dynamic_cast<ewol::resource::TextureFile*>(object2);
+		if (NULL == object) {
+			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
+			return NULL;
+		}
+	}
 	if (NULL != object) {
 		return object;
 	}

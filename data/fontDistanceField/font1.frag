@@ -11,6 +11,7 @@ uniform int       EW_SoftEdge;
 
 varying vec2 f_texcoord;
 varying vec4 f_color;
+varying float f_glyphLevel;
 
 const float glyph_center   = 0.50;
 const float outline_center = 0.55;
@@ -24,7 +25,7 @@ void main(void) {
 	vec4 color = texture2D(EW_texID, f_texcoord );
 	float dist  = color.r;
 	float width = fwidth(dist);
-	float alpha = smoothstep(glyph_center-width, glyph_center+width, dist);
+	float alpha = smoothstep(f_glyphLevel-width, f_glyphLevel+width, dist);
 	
 	// Smooth
 	gl_FragColor = vec4(f_color[0], f_color[1], f_color[2], f_color[3]*alpha);

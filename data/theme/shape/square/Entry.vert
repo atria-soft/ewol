@@ -11,37 +11,34 @@ struct widgetStateProperty {
 
 // Input :
 attribute vec2 EW_coord2d;
-uniform mat4   EW_MatrixTransformation;
+uniform mat4 EW_MatrixTransformation;
 uniform widgetStateProperty EW_status;
+uniform vec4 EW_foreground;
+uniform vec4 EW_foregroundSelected;
+uniform vec4 EW_foregroundHover;
 
 // output :
 varying vec2  v_position;       // This will be passed into the fragment shader.
 varying vec4  v_colorTansition;
 
-// internal :
-vec4  S_colorFg[3];
-
 void main(void) {
-	S_colorFg[0] = vec4(1.0,1.0,1.0,0.8);
-	S_colorFg[1] = vec4(1.0,1.0,1.0,0.4);
-	S_colorFg[2] = vec4(0.0,0.0,1.0,0.1);
 	
 	gl_Position = EW_MatrixTransformation * vec4(EW_coord2d, 0.0, 1.0);
 	// transmit position of the curent element (intermolated ...)
 	v_position = EW_coord2d;
 	
 	
-	vec4 colorOld = S_colorFg[0];
+	vec4 colorOld = EW_foreground;
 	if(EW_status.stateOld==1) {
-		colorOld = S_colorFg[1];
+		colorOld = EW_foregroundSelected;
 	} else if(EW_status.stateOld==2) {
-		colorOld = S_colorFg[2];
+		colorOld = EW_foregroundHover;
 	}
-	vec4 colorNew = S_colorFg[0];
+	vec4 colorNew = EW_foreground;
 	if(EW_status.stateNew==1) {
-		colorNew = S_colorFg[1];
+		colorNew = EW_foregroundSelected;
 	} else if(EW_status.stateNew==2) {
-		colorNew = S_colorFg[2];
+		colorNew = EW_foregroundHover;
 	}
 	
 	// note : int() is needed for the OpenGL ES platform

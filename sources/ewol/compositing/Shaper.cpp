@@ -20,6 +20,8 @@ ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_confIdPaddingY(-1),
   m_confIdChangeTime(-1),
   m_confProgramFile(-1),
+  m_confColorFile(-1),
+  m_confImageFile(-1),
   m_GLprogram(NULL),
   m_GLPosition(-1),
   m_GLMatrix(-1),
@@ -50,11 +52,13 @@ void ewol::compositing::Shaper::unLoadProgram(void) {
 	ewol::resource::Program::release(m_GLprogram);
 	ewol::resource::TextureFile::release(m_resourceTexture);
 	ewol::resource::ConfigFile::release(m_config);
+	ewol::resource::ColorFile::release(m_colorProperty);
 	m_confIdPaddingX = -1;
 	m_confIdPaddingY = -1;
 	m_confIdChangeTime = -1;
 	m_confProgramFile = -1;
 	m_confImageFile = -1;
+	m_listAssiciatedId.clear();
 }
 
 void ewol::compositing::Shaper::loadProgram(void) {
@@ -69,17 +73,23 @@ void ewol::compositing::Shaper::loadProgram(void) {
 		m_confIdChangeTime = m_config->request("ChangeTime");
 		m_confProgramFile  = m_config->request("program");
 		m_confImageFile    = m_config->request("image");
+		m_confColorFile    = m_config->request("color");
 	}
 	std::string basicShaderFile = m_config->getString(m_confProgramFile);
-	if (basicShaderFile!="") {
-		// get the relative position of the current file ...
-		etk::FSNode file(m_name);
-		std::string tmpFilename = file.getRelativeFolder() + basicShaderFile;
-		EWOL_DEBUG("Shaper try load shader : " << tmpFilename << " with base : " << basicShaderFile);
+	if (basicShaderFile != "") {
+		std::string tmpFilename(basicShaderFile);
+		if (tmpFilename.find(':') == std::string::npos) {
+			// get the relative position of the current file ...
+			etk::FSNode file(m_name);
+			tmpFilename = file.getRelativeFolder() + basicShaderFile;
+			EWOL_DEBUG("Shaper try load shader : '" << tmpFilename << "' with base : '" << basicShaderFile << "'");
+		} else {
+			EWOL_DEBUG("Shaper try load shader : '" << tmpFilename << "'");
+		}
 		// get the shader resource :
 		m_GLPosition = 0;
 		m_GLprogram = ewol::resource::Program::keep(tmpFilename);
-		if (NULL !=m_GLprogram) {
+		if (m_GLprogram != NULL) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
 			// Widget property  == > for the Vertex shader
@@ -96,9 +106,39 @@ void ewol::compositing::Shaper::loadProgram(void) {
 		}
 		std::string basicImageFile = m_config->getString(m_confImageFile);
 		if (basicImageFile != "") {
-			tmpFilename = file.getRelativeFolder() + basicImageFile;
+			std::string tmpFilename(basicImageFile);
+			if (tmpFilename.find(':') == std::string::npos) {
+				// get the relative position of the current file ...
+				etk::FSNode file(m_name);
+				tmpFilename = file.getRelativeFolder() + basicImageFile;
+				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "' with base : '" << basicImageFile << "'");
+			} else {
+				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "'");
+			}
 			ivec2 size(64,64);
 			m_resourceTexture = ewol::resource::TextureFile::keep(tmpFilename, size);
+		}
+	}
+	std::string basicColorFile = m_config->getString(m_confColorFile);
+	if (basicColorFile != "") {
+		std::string tmpFilename(basicColorFile);
+		if (tmpFilename.find(':') == std::string::npos) {
+			// get the relative position of the current file ...
+			etk::FSNode file(m_name);
+			tmpFilename = file.getRelativeFolder() + basicColorFile;
+			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "' with base : '" << basicColorFile << "'");
+		} else {
+			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "'");
+		}
+		m_colorProperty = ewol::resource::ColorFile::keep(tmpFilename);
+		if (    m_GLprogram != NULL
+		     && m_colorProperty != NULL) {
+			std::vector<std::string> listColor = m_colorProperty->getColors();
+			for (auto tmpColor : listColor) {
+				int32_t glId = m_GLprogram->getUniform(tmpColor);
+				int32_t colorID = m_colorProperty->request(tmpColor);
+				m_listAssiciatedId.push_back(ivec2(glId, colorID));
+			}
 		}
 	}
 }
@@ -127,7 +167,9 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	m_GLprogram->uniform1i(m_GLStateOld,        m_stateOld);
 	m_GLprogram->uniform1i(m_GLStateNew,        m_stateNew);
 	m_GLprogram->uniform1f(m_GLStateTransition, m_stateTransition);
-	
+	for (auto element : m_listAssiciatedId) {
+		m_GLprogram->uniform(element.x(), m_colorProperty->get(element.y()));
+	}
 	if (NULL!=m_resourceTexture) {
 		// TextureID
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getId());

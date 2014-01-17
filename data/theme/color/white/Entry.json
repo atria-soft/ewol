@@ -1,0 +1,9 @@
+{
+	"color": [
+		{ name:"EW_background",         color:"#0000" },
+		{ name:"EW_foreground",         color:"#FFFA" },
+		{ name:"EW_foregroundSelected", color:"#0005" },
+		{ name:"EW_foregroundHover",    color:"#00F5" },
+		{ name:"EW_border",             color:"#FFFF" },
+	]
+}
