@@ -11,6 +11,7 @@
 
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
+#include <ewol/resource/ColorFile.h>
 
 namespace ewol {
 	namespace widget {
@@ -37,6 +38,12 @@ namespace ewol {
 			public:
 				ListFileSystem(void);
 				~ListFileSystem(void);
+			protected:
+				ewol::resource::ColorFile* m_colorProperty; //!< theme color property.
+				int32_t m_colorIdText; //!< Color of the text.
+				int32_t m_colorIdBackground1; //!< Color of the Background.
+				int32_t m_colorIdBackground2; //!< Color of the Background 2.
+				int32_t m_colorIdBackgroundSelected; //!< Color of line selected.
 			protected : // Derived function from the List...
 				virtual etk::Color<> getBasicBG(void);
 				virtual uint32_t getNuberOfColomn(void);

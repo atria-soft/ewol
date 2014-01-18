@@ -24,11 +24,16 @@ extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKey
 
 
 ewol::widget::Windows::Windows(void) :
-  m_backgroundColor(0.750, 0.750, 0.750, 0.5) {
+  m_colorProperty(NULL),
+  m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
 	m_subWidget = NULL;
 	setDecorationDisable();
+	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Windows.json");
+	if (m_colorProperty != NULL) {
+		m_colorBg = m_colorProperty->request("background");
+	}
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
@@ -133,10 +138,11 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 	
 	// clear the screen with transparency ...
-	glClearColor(m_backgroundColor.r(),
-	             m_backgroundColor.g(),
-	             m_backgroundColor.b(),
-	             m_backgroundColor.a());
+	etk::Color<float> colorBg(0.5, 0.5, 0.5, 0.5);
+	if (m_colorProperty != NULL) {
+		colorBg = m_colorProperty->get(m_colorBg);
+	}
+	glClearColor(colorBg.r(), colorBg.g(), colorBg.b(), colorBg.a());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime0 = (float)(ewol::getTime() - ___startTime0) / 1000.0f;

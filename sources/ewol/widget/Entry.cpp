@@ -62,6 +62,10 @@ ewol::widget::Entry::Entry(std::string _newData) :
   m_textWhenNothing("") {
 	addObjectType("ewol::widget::Entry");
 	m_textColorBg.setA(0xAF);
+	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
+	m_colorIdTextBg = m_shaper.requestColor("text-background");
+	m_colorIdCursor = m_shaper.requestColor("text-cursor");
+	m_colorIdSelection = m_shaper.requestColor("text-selection");
 	setCanHaveFocus(true);
 	addEventId(eventClick);
 	addEventId(eventEnter);
@@ -104,7 +108,7 @@ void ewol::widget::Entry::calculateMinMaxSize(void) {
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
 	vec2 padding = m_shaper.getPadding();
-	int32_t minHeight = m_oObjectText.calculateSize(char32_t('A')).y();
+	int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
 	vec2 minimumSizeBase(20, minHeight);
 	// add padding :
 	minimumSizeBase += padding*2.0f;
@@ -133,14 +137,20 @@ void ewol::widget::Entry::setValue(const std::string& _newData) {
 
 void ewol::widget::Entry::onDraw(void) {
 	m_shaper.draw();
-	m_oObjectText.draw();
+	m_text.draw();
 }
 
 
 void ewol::widget::Entry::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		m_shaper.clear();
-		m_oObjectText.clear();
+		m_text.clear();
+		if (m_colorIdTextFg >= 0) {
+			m_text.setDefaultColorFg(m_shaper.getColor(m_colorIdTextFg));
+			m_text.setDefaultColorBg(m_shaper.getColor(m_colorIdTextBg));
+			m_text.setCursorColor(m_shaper.getColor(m_colorIdCursor));
+			m_text.setSelectionColor(m_shaper.getColor(m_colorIdSelection));
+		}
 		updateTextPosition();
 		vec2 padding = m_shaper.getPadding();
 		
@@ -156,7 +166,7 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 		vec2 tmpSizeText = tmpSizeShaper - padding * 2.0f;
 		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		int32_t minHeight = m_oObjectText.calculateSize(char32_t('A')).y();
+		int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
 		if (tmpSizeText.y()>minHeight) {
 			tmpOriginText += vec2(0,(tmpSizeText.y()-minHeight)/2.0f);
 		}
@@ -166,21 +176,21 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 		tmpSizeText = vec2ClipInt32(tmpSizeText);
 		tmpOriginText = vec2ClipInt32(tmpOriginText);
 		
-		m_oObjectText.setClippingWidth(tmpOriginText, tmpSizeText);
-		m_oObjectText.setPos(tmpOriginText+vec2(m_displayStartPosition,0));
+		m_text.setClippingWidth(tmpOriginText, tmpSizeText);
+		m_text.setPos(tmpOriginText+vec2(m_displayStartPosition,0));
 		if (m_displayCursorPosSelection != m_displayCursorPos) {
-			m_oObjectText.setCursorSelection(m_displayCursorPos, m_displayCursorPosSelection);
+			m_text.setCursorSelection(m_displayCursorPos, m_displayCursorPosSelection);
 		} else {
-			m_oObjectText.setCursorPos(m_displayCursorPos);
+			m_text.setCursorPos(m_displayCursorPos);
 		}
 		if (0!=m_data.size()) {
-			m_oObjectText.print(m_data);
+			m_text.print(m_data);
 		} else {
 			if (0!=m_textWhenNothing.size()) {
-				m_oObjectText.printDecorated(m_textWhenNothing);
+				m_text.printDecorated(m_textWhenNothing);
 			}
 		}
-		m_oObjectText.setClippingMode(false);
+		m_text.setClippingMode(false);
 		
 		m_shaper.setOrigin(tmpOriginShaper);
 		m_shaper.setSize(tmpSizeShaper);
@@ -195,13 +205,13 @@ void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.x());
 	// try to find the new cursor position :
 	std::string tmpDisplay = std::string(m_data, 0, m_displayStartPosition);
-	int32_t displayHidenSize = m_oObjectText.calculateSize(tmpDisplay).x();
+	int32_t displayHidenSize = m_text.calculateSize(tmpDisplay).x();
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = padding.x();
 	for (size_t iii=0; iii<m_data.size(); iii++) {
 		tmpDisplay = std::string(m_data, 0, iii);
-		int32_t tmpWidth = m_oObjectText.calculateSize(tmpDisplay).x() - displayHidenSize;
+		int32_t tmpWidth = m_text.calculateSize(tmpDisplay).x() - displayHidenSize;
 		if (tmpWidth >= relPos.x()-tmpTextOriginX) {
 			newCursorPosition = iii;
 			break;
@@ -335,7 +345,7 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 		}
 	}
 	else if(    ewol::key::typeMouse == _event.getType()
-	         && 2 == _event.getId()) {
+	         && _event.getId() == 2) {
 		if(    _event.getStatus() == ewol::key::statusDown
 		    || _event.getStatus() == ewol::key::statusMove
 		    || _event.getStatus() == ewol::key::statusUp) {
@@ -510,7 +520,7 @@ void ewol::widget::Entry::updateTextPosition(void) {
 		tmpSizeX = m_size.x();
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(padding.x());
-	int32_t totalWidth = m_oObjectText.calculateSize(m_data).x();
+	int32_t totalWidth = m_text.calculateSize(m_data).x();
 	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {
 		// all can be display :
@@ -518,7 +528,7 @@ void ewol::widget::Entry::updateTextPosition(void) {
 	} else {
 		// all can not be set :
 		std::string tmpDisplay = std::string(m_data, 0, m_displayCursorPos);
-		int32_t pixelCursorPos = m_oObjectText.calculateSize(tmpDisplay).x();
+		int32_t pixelCursorPos = m_text.calculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
 		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);

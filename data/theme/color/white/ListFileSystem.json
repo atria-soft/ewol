@@ -1,0 +1,8 @@
+{
+	"color": [
+		{ name:"text",        color:"#111F" },
+		{ name:"background1", color:"#EEEF" },
+		{ name:"background2", color:"#BBBF" },
+		{ name:"selected",    color:"#88FF" },
+	]
+}

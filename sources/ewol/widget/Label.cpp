@@ -120,8 +120,6 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 	// clean the element
 	m_text.reset();
 	if (m_colorProperty != NULL) {
-		EWOL_DEBUG("set FG : " << m_colorProperty->get(m_colorDefaultFgText));
-		EWOL_DEBUG("set BG : " << m_colorProperty->get(m_colorDefaultBgText));
 		m_text.setDefaultColorFg(m_colorProperty->get(m_colorDefaultFgText));
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
 	}

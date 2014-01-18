@@ -172,6 +172,24 @@ namespace ewol {
 				 * @brief update the internal vertex table.
 				 */
 				void updateVertex(void);
+			public:
+				/**
+				 * @brief Get an ID on the color instance element
+				 * @param[in] _name Name of the element requested
+				 * @return The Id of the color
+				 */
+				int32_t requestColor(const std::string& _name) {
+					if (m_colorProperty == NULL) {
+						return -1;
+					}
+					return m_colorProperty->request(_name);
+				}
+				/**
+				 * @brief Get The color associated at an ID.
+				 * @param[in] _id Id of the color
+				 * @return the reference on the color
+				 */
+				const etk::Color<float>& getColor(int32_t _id);
 		};
 	};
 };

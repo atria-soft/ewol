@@ -4,7 +4,7 @@
 		{ name:"EW_border",             color:"#000" },
 		{ name:"EW_foreground",         color:"#8884" },
 		{ name:"EW_foregroundHover",    color:"#00A6" },
-		{ name:"EW_foregroundSelected", color:"#0A06" },
+		{ name:"EW_foregroundSelected", color:"#0A0A" },
 		{ name:"EW_foregroundPressed",  color:"#A006" },
 	]
 }

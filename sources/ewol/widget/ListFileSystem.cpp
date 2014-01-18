@@ -46,6 +46,13 @@ ewol::widget::ListFileSystem::ListFileSystem(void) :
 	#if defined(__TARGET_OS__Windows)
 		m_folder = "c:/";
 	#endif
+	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:ListFileSystem.json");
+	if (m_colorProperty != NULL) {
+		m_colorIdText = m_colorProperty->request("text");
+		m_colorIdBackground1 = m_colorProperty->request("background1");
+		m_colorIdBackground2 = m_colorProperty->request("background2");
+		m_colorIdBackgroundSelected = m_colorProperty->request("selected");
+	}
 	addEventId(eventFileSelect);
 	addEventId(eventFileValidate);
 	addEventId(eventFolderSelect);
@@ -75,7 +82,7 @@ void ewol::widget::ListFileSystem::clearList(void) {
 };
 
 etk::Color<> ewol::widget::ListFileSystem::getBasicBG(void) {
-	return etk::Color<>(0x00000010);
+	return m_colorProperty->get(m_colorIdBackground1);
 }
 
 
@@ -148,22 +155,16 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std
 	if(    _raw-offset >= 0
 	    && _raw-offset < (int32_t)m_list.size()
 	    && NULL != m_list[_raw-offset]) {
-		/*if (etk::FSN_FILE == m_list[raw-offset]->getNodeType()) {
-			myTextToWrite = m_list[raw-offset]->getRight().getRight();
-			myTextToWrite += " ";
-			myTextToWrite += m_list[raw-offset]->getNameFile();
-		} else */{
-			_myTextToWrite = m_list[_raw-offset]->getNameFile();
-		}
+		_myTextToWrite = m_list[_raw-offset]->getNameFile();
 	}
-	_fg = etk::color::black;
+	_fg = m_colorProperty->get(m_colorIdText);
 	if (_raw % 2) {
-		_bg = 0xFFFFFF00;
+		_bg = m_colorProperty->get(m_colorIdBackground1);
 	} else {
-		_bg = 0xBFBFBFFF;
+		_bg = m_colorProperty->get(m_colorIdBackground2);
 	}
 	if (m_selectedLine == _raw) {
-		_bg = 0x8F8FFFFF;
+		_bg = m_colorProperty->get(m_colorIdBackgroundSelected);
 	}
 	return true;
 };

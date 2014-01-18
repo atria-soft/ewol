@@ -13,6 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
+#include <ewol/resource/ColorFile.h>
 
 namespace ewol {
 	namespace widget {
@@ -20,6 +21,9 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Windows : public ewol::Widget {
+			protected:
+				ewol::resource::ColorFile* m_colorProperty; //!< theme color property
+				int32_t m_colorBg; //!< Default background color of the windows
 			public:
 				Windows(void);
 				virtual ~Windows(void);

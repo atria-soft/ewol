@@ -48,7 +48,11 @@ namespace ewol {
 				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaper;
-				ewol::compositing::Text m_oObjectText; //!< text display m_text
+				int32_t m_colorIdTextFg; //!< color property of the text foreground
+				int32_t m_colorIdTextBg; //!< color property of the text background
+				int32_t m_colorIdCursor; //!< color property of the text cursor
+				int32_t m_colorIdSelection; //!< color property of the text selection
+				ewol::compositing::Text m_text; //!< text display m_text
 			public:
 				/**
 				 * @brief Contuctor

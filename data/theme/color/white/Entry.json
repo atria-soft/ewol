@@ -3,7 +3,11 @@
 		{ name:"EW_background",         color:"#0000" },
 		{ name:"EW_foreground",         color:"#FFFA" },
 		{ name:"EW_foregroundSelected", color:"#0005" },
-		{ name:"EW_foregroundHover",    color:"#00F5" },
-		{ name:"EW_border",             color:"#FFFF" },
+		{ name:"EW_foregroundHover",    color:"#55F5" },
+		{ name:"EW_border",             color:"#000F" },
+		{ name:"text-foreground",       color:"#222F" },
+		{ name:"text-background",       color:"#0000" },
+		{ name:"text-cursor",           color:"#00FF" },
+		{ name:"text-selection",        color:"#0A0F" },
 	]
 }

@@ -292,3 +292,11 @@ bool ewol::compositing::Shaper::hasSources(void) {
 	return m_GLprogram!=NULL;
 }
 
+
+const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
+	static const etk::Color<float> errorValue(0,0,0,0);
+	if (m_colorProperty == NULL) {
+		return errorValue;
+	}
+	return m_colorProperty->get(_id);
+}
