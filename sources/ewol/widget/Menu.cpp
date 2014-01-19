@@ -89,16 +89,17 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			return tmpObject->m_localId;
 		}
 		if (tmpObject->m_image.size()!=0) {
-			myButton->setSubWidget(
-			    new ewol::widget::Composer(widget::Composer::String,
-			        std::string("<composer>\n") + 
-			        "	<sizer mode=\"hori\">\n"
-			        "		<image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n"
-			        "		<label>" + tmpObject->m_label + "</label>\n"
-			        "	</sizer>\n"
-			        "</composer>\n"));
+			std::string composeString ="<sizer mode=\"hori\">\n";
+			if (std::end_with(tmpObject->m_image, ".edf") == true) {
+				composeString+="    <image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\" distance-field='true'/>\n";
+			} else {
+				composeString+="    <image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n";
+			}
+			composeString+="    <label>" + tmpObject->m_label + "</label>\n";
+			composeString+="</sizer>\n";
+			myButton->setSubWidget(new ewol::widget::Composer(widget::Composer::String, composeString));
 		} else {
-			myButton->setSubWidget( new ewol::widget::Label(tmpObject->m_label) );
+			myButton->setSubWidget(new ewol::widget::Label(tmpObject->m_label) );
 		}
 		
 		// add it in the widget list
@@ -196,14 +197,18 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 										EWOL_ERROR("Allocation Error");
 									} else {
 										if (m_listElement[jjj]->m_image.size()!=0) {
-											myButton->setSubWidget(
-											    new ewol::widget::Composer(widget::Composer::String,
-											        std::string("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
-											        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
-											        "		<image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n"
-											        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + " ]]></label>\n"
-											        "	</sizer>\n"
-											        "</composer>\n"));
+										
+											std::string composeString = "<composer expand=\"true,false\" fill=\"true,true\">\n";
+											composeString+= "    <sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n";
+											if (std::end_with(m_listElement[jjj]->m_image, ".edf") == true) {
+												composeString+="        <image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"  distance-field='true'/>\n";
+											} else {
+												composeString+="        <image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n";
+											}
+											composeString+="        <label exand=\"true,true\" fill=\"true,true\">" + m_listElement[jjj]->m_label + "</label>\n";
+											composeString+="    </sizer>\n";
+											composeString+="</composer>\n";
+											myButton->setSubWidget(new ewol::widget::Composer(widget::Composer::String, composeString));
 										} else {
 											if (true == menuHaveImage) {
 												myButton->setSubWidget(

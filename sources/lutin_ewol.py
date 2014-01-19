@@ -107,6 +107,7 @@ def create(target):
 		'ewol/resource/ConfigFile.cpp',
 		'ewol/resource/FontFreeType.cpp',
 		'ewol/resource/Image.cpp',
+		'ewol/resource/ImageDF.cpp',
 		'ewol/resource/Manager.cpp',
 		'ewol/resource/Program.cpp',
 		'ewol/resource/Resource.cpp',
@@ -166,6 +167,7 @@ def create(target):
 	myModule.copy_folder('../data/color3.*','')
 	myModule.copy_folder('../data/textured3D2.*','')
 	myModule.copy_folder('../data/textured3D.*','')
+	myModule.copy_folder('../data/texturedDF.*','')
 	myModule.copy_folder('../data/fontDistanceField/*','fontDistanceField')
 	
 	# name of the dependency

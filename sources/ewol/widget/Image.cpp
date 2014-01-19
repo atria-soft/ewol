@@ -31,6 +31,7 @@ const char * const ewol::widget::Image::configRatio = "ratio";
 const char * const ewol::widget::Image::configSize = "size";
 const char * const ewol::widget::Image::configBorder = "border";
 const char * const ewol::widget::Image::configSource = "src";
+const char * const ewol::widget::Image::configDistanceField = "distance-field";
 
 ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
   m_imageSize(vec2(0,0)),
@@ -41,6 +42,7 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
 	registerConfig(configSize, "Dimension", NULL, "Basic display size of the image");
 	registerConfig(configBorder, "Dimension", NULL, "Border of the image");
 	registerConfig(configSource, "string", "Image source path");
+	registerConfig(configDistanceField, "bool", "Distance field mode");
 	set(_file, _border);
 }
 
@@ -240,6 +242,10 @@ bool ewol::widget::Image::onSetConfig(const ewol::object::Config& _conf) {
 		setFile(_conf.getData());
 		return true;
 	}
+	if (_conf.getConfig() == configDistanceField) {
+		setDistanceField(std::stob(_conf.getData()));
+		return true;
+	}
 	return false;
 }
 
@@ -263,6 +269,11 @@ bool ewol::widget::Image::onGetConfig(const char* _config, std::string& _result)
 		_result = getFile();
 		return true;
 	}
+	if (_config == configDistanceField) {
+		_result = std::to_string(getDistanceField());
+		return true;
+	}
+	
 	return false;
 }
 

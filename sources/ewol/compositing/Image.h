@@ -13,11 +13,14 @@
 #include <ewol/compositing/Compositing.h>
 #include <ewol/resource/Program.h>
 #include <ewol/resource/Image.h>
+#include <ewol/resource/ImageDF.h>
 
 namespace ewol {
 	namespace compositing {
 		class Image : public ewol::Compositing {
 			private:
+				std::string m_filename;
+				ivec2 m_requestSize;
 				vec3 m_position; //!< The current position to draw
 				vec3 m_clippingPosStart; //!< Clipping start position
 				vec3 m_clippingPosStop; //!< Clipping stop position
@@ -33,7 +36,9 @@ namespace ewol {
 				int32_t m_GLtexture; //!< openGL id on the element (Texture position)
 				int32_t m_GLtexID; //!< openGL id on the element (texture ID)
 			private:
+				bool m_distanceFieldMode; //!< select distance field mode
 				ewol::resource::TextureFile* m_resource; //!< texture resources
+				ewol::resource::ImageDF* m_resourceDF; //!< texture resources
 				std::vector<vec3 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
@@ -46,8 +51,9 @@ namespace ewol {
 				/**
 				 * @brief generic constructor
 				 * @param[in] _imageName Name of the file that might be loaded
+				 * @param[in] _df enable distance field mode
 				 */
-				Image(const std::string& _imageName="");
+				Image(const std::string& _imageName="", bool _df = false);
 				/**
 				 * @brief generic destructor
 				 */
@@ -164,9 +170,21 @@ namespace ewol {
 				 * @return tre image registered size
 				 */
 				vec2 getRealSize(void);
+			public:
+				/**
+				 * @brief Set render mode of the image
+				 * @param[in] _mode Activation of distance field mode
+				 */
+				void setDistanceFieldMode(bool _mode);
+				/**
+				 * @brief Get the render methode.
+				 * @return The render mode of the image.
+				 */
+				bool getDistanceFieldMode(void) const {
+					return m_distanceFieldMode;
+				}
 		};
 	};
 };
 
 #endif
-

@@ -33,6 +33,10 @@ ewol::resource::TextureFile::TextureFile(std::string _genName, const std::string
 	}
 	ivec2 tmp = m_data.getSize();
 	m_realImageSize = vec2(tmp.x(), tmp.y());
+	#ifdef GENERATE_DISTANCE_FIELD_MODE
+		//egami::generateDistanceFieldFile(_tmpfileName, std::string(_tmpfileName, 0, _tmpfileName.size()-4) + ".bmp");
+		egami::generateDistanceFieldFile(_tmpfileName, std::string(_tmpfileName, 0, _tmpfileName.size()-4) + ".edf");
+	#endif
 	flush();
 }
 

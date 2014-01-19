@@ -30,6 +30,7 @@ namespace ewol {
 				static const char * const configSize;
 				static const char * const configBorder;
 				static const char * const configSource;
+				static const char * const configDistanceField;
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
@@ -113,6 +114,21 @@ namespace ewol {
 				bool getKeepRatio(void) const {
 					return m_keepRatio;
 				};
+			public:
+				/**
+				 * @brief Set distance field rendering mode
+				 * @param[in] _df enable distance field
+				 */
+				void setDistanceField(bool _df) {
+					m_compositing.setDistanceFieldMode(_df);
+				}
+				/**
+				 * @brief Get the distance field render mode.
+				 * @return Status of the distance field render mode.
+				 */
+				bool getDistanceField(void) const {
+					return m_compositing.getDistanceFieldMode();
+				}
 			protected: // Derived function
 				virtual void onDraw(void);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

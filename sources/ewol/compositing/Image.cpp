@@ -12,7 +12,9 @@
 #undef __class__
 #define __class__	"ewol::compositing::Image"
 
-ewol::compositing::Image::Image(const std::string& _imageName) :
+ewol::compositing::Image::Image(const std::string& _imageName, bool _df) :
+  m_filename(_imageName),
+  m_requestSize(2,2),
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -25,21 +27,29 @@ ewol::compositing::Image::Image(const std::string& _imageName) :
   m_GLColor(-1),
   m_GLtexture(-1),
   m_GLtexID(-1),
-  m_resource(NULL) {
+  m_distanceFieldMode(_df),
+  m_resource(NULL),
+  m_resourceDF(NULL) {
 	setSource(_imageName);
 	loadProgram();
 }
 
 ewol::compositing::Image::~Image(void) {
 	ewol::resource::TextureFile::release(m_resource);
+	ewol::resource::ImageDF::release(m_resourceDF);
 	ewol::resource::Program::release(m_GLprogram);
 }
 
 void ewol::compositing::Image::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
-	if (NULL!=m_GLprogram) {
+	ewol::resource::Program::release(m_GLprogram);
+	if (m_distanceFieldMode == true) {
+		m_GLprogram = ewol::resource::Program::keep("DATA:texturedDF.prog");
+	} else {
+		m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
+	}
+	if (m_GLprogram != NULL) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
@@ -53,7 +63,8 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_resource == NULL) {
+	if (    m_resource == NULL
+	     && m_resourceDF == NULL) {
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
@@ -71,7 +82,17 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
-	m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
+	if (m_resource != NULL) {
+		if (m_distanceFieldMode == true) {
+			EWOL_ERROR("FONT type error Request distance field and display normal ...");
+		}
+		m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
+	} else {
+		if (m_distanceFieldMode == false) {
+			EWOL_ERROR("FONT type error Request normal and display distance field ...");
+		}
+		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getId());
+	}
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// Texture :
@@ -229,39 +250,67 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
 	ewol::resource::TextureFile* resource = m_resource;
+	ewol::resource::ImageDF* resourceDF = m_resourceDF;
+	m_filename = _newFile;
+	m_requestSize = _size;
 	m_resource = NULL;
+	m_resourceDF = NULL;
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
 		// link to new one
-		m_resource = ewol::resource::TextureFile::keep(_newFile, tmpSize);
-		if (NULL == m_resource) {
-			EWOL_ERROR("Can not get Image resource");
+		if (m_distanceFieldMode == false) {
+			m_resource = ewol::resource::TextureFile::keep(m_filename, tmpSize);
+			if (NULL == m_resource) {
+				EWOL_ERROR("Can not get Image resource");
+			}
+		} else {
+			m_resourceDF = ewol::resource::ImageDF::keep(_newFile, tmpSize);
+			if (NULL == m_resourceDF) {
+				EWOL_ERROR("Can not get Image resource DF");
+			}
 		}
 	}
-	if (m_resource == NULL) {
+	if (    m_resource == NULL
+	     && m_resourceDF == NULL) {
 		if (resource != NULL) {
 			EWOL_WARNING("Retrive previous resource");
 			m_resource = resource;
 		}
-	} else {
-		if (resource != NULL) {
-			ewol::resource::TextureFile::release(resource);
+		if (resourceDF != NULL) {
+			EWOL_WARNING("Retrive previous resource (DF)");
+			m_resourceDF = resourceDF;
 		}
+	} else {
+		ewol::resource::TextureFile::release(resource);
+		ewol::resource::ImageDF::release(resourceDF);
 	}
 }
 
 bool ewol::compositing::Image::hasSources(void) {
-	return m_resource != NULL;
+	return (m_resource != NULL || m_resourceDF != NULL);
 }
 
 
 vec2 ewol::compositing::Image::getRealSize(void) {
-	if (NULL == m_resource) {
+	if (    m_resource == NULL
+	     && m_resourceDF == NULL) {
 		return vec2(0,0);
 	}
-	return m_resource->getRealSize();
+	if (m_resource != NULL) {
+		return m_resource->getRealSize();
+	}
+	return m_resourceDF->getRealSize();
 }
 
 
 
+void ewol::compositing::Image::setDistanceFieldMode(bool _mode) {
+	if (m_distanceFieldMode == _mode) {
+		return;
+	}
+	m_distanceFieldMode = _mode;
+	// Force reload input
+	setSource(m_filename, m_requestSize);
+	loadProgram();
+}

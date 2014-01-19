@@ -278,7 +278,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	}
 	if (hasChange == true) {
 		flush();
-		egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
+		//egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
 	}
 	return hasChange;
 }
