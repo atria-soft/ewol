@@ -42,6 +42,10 @@ ewol::widget::Label::Label(std::string _newLabel) :
 	registerConfig(configValue, "string", NULL, "displayed value string"); // TODO : do not store in attibute...
 }
 
+ewol::widget::Label::~Label(void) {
+	ewol::resource::ColorFile::release(m_colorProperty);
+}
+
 void ewol::widget::Label::calculateMinMaxSize(void) {
 	vec2 tmpMax = m_userMaxSize.getPixel();
 	vec2 tmpMin = m_userMinSize.getPixel();

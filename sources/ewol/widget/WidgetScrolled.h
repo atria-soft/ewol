@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Scroll.h>
-#include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Shaper.h>
 
 #define CALCULATE_SIMULTANEOUS_FINGER (5)
 
@@ -30,7 +30,8 @@ namespace ewol {
 					scroolModeGame, //!< Zoom enable, no move left and right
 				};
 			private:
-				ewol::compositing::Drawing m_drawing; //!< generic element to display...
+				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
+				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
 			protected:
 				vec2 m_originScrooled; //!< pixel distance from the origin of the display (Bottum left)
 				vec2 m_maxSize; //!< Maximum size of the Widget ==> to display scrollbar
@@ -49,8 +50,9 @@ namespace ewol {
 			public:
 				/**
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)
+				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
-				WidgetScrooled(void);
+				WidgetScrooled(const std::string& _shaperName="THEME:GUI:WidgetScrolled.conf");
 				/**
 				 * @brief Scroll widget destructor.
 				 */

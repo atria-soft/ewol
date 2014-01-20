@@ -181,6 +181,11 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 
 void ewol::compositing::Shaper::clear(void) {
 	// nothing to do ...
+	m_propertySize = vec2(0,0);
+	m_propertyOrigin = vec2(0,0);
+	m_propertyInsidePosition = vec2(0,0);
+	m_propertyInsideSize = vec2(0,0);
+	memset(m_coord, 0, sizeof(m_coord));
 }
 
 bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {

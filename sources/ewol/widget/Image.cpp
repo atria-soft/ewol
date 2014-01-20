@@ -34,6 +34,8 @@ const char * const ewol::widget::Image::configSource = "src";
 const char * const ewol::widget::Image::configDistanceField = "distance-field";
 
 ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
+  m_colorProperty(NULL),
+  m_colorId(-1),
   m_imageSize(vec2(0,0)),
   m_keepRatio(true) {
 	addObjectType("ewol::widget::Image");
@@ -43,9 +45,16 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
 	registerConfig(configBorder, "Dimension", NULL, "Border of the image");
 	registerConfig(configSource, "string", "Image source path");
 	registerConfig(configDistanceField, "bool", "Distance field mode");
+	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Image.json");
+	if (m_colorProperty != NULL) {
+		m_colorId = m_colorProperty->request("foreground");
+	}
 	set(_file, _border);
 }
 
+ewol::widget::Image::~Image(void) {
+	ewol::resource::ColorFile::release(m_colorProperty);
+}
 
 void ewol::widget::Image::setFile(const std::string& _file) {
 	EWOL_VERBOSE("Set Image : " << _file);
@@ -109,7 +118,9 @@ void ewol::widget::Image::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		// remove data of the previous composition :
 		m_compositing.clear();
-		
+		if (m_colorProperty != NULL) {
+			m_compositing.setColor(m_colorProperty->get(m_colorId));
+		}
 		// calculate the new position and size :
 		vec2 imageBoder = m_border.getPixel();
 		vec2 origin = imageBoder;

@@ -14,6 +14,7 @@
 #include <draw/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Image.h>
+#include <ewol/resource/ColorFile.h>
 #include <ewol/widget/Manager.h>
 
 namespace ewol {
@@ -38,6 +39,8 @@ namespace ewol {
 				static void init(ewol::widget::Manager& _widgetManager);
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
+				ewol::resource::ColorFile* m_colorProperty; //!< theme color property
+				int32_t m_colorId; //!< Color of the image.
 			public:
 				/**
 				 * @brief 
@@ -47,7 +50,7 @@ namespace ewol {
 				/**
 				 * @brief 
 				 */
-				virtual ~Image(void) { };
+				virtual ~Image(void);
 				/**
 				 * @brief set All the configuration of the current image
 				 * @param[in] _file Filaneme of the new image

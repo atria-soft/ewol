@@ -46,9 +46,7 @@ namespace ewol {
 				/**
 				 * @brief destructor
 				 */
-				virtual ~Label(void) {
-					
-				};
+				virtual ~Label(void);
 				/**
 				 * @brief change the label displayed
 				 * @param[in] _newLabel The displayed decorated text.
