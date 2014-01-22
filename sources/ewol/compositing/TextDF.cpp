@@ -29,6 +29,14 @@ ewol::compositing::TextDF::~TextDF(void) {
 	ewol::resource::DistanceFieldFont::release(m_fontDF);
 }
 
+void ewol::compositing::TextDF::updateSizeToRender(const vec2& _size) {
+	float minSize = etk_min(_size.x(), _size.y());
+	if (m_fontDF != NULL) {
+		setFontSize(m_fontDF->getSize(minSize));
+	}
+}
+
+
 void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _enableDepthTest) {
 	
 	// draw BG in any case:

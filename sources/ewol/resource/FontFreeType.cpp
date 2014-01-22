@@ -119,6 +119,9 @@ vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const std::string&
 int32_t ewol::resource::FontFreeType::getHeight(int32_t _fontSize) {
 	return _fontSize*1.43f; // this is a really "magic" number ...
 }
+float ewol::resource::FontFreeType::getSizeWithHeight(float _fontHeight) {
+	return _fontHeight*0.6993f; // this is a really "magic" number ...
+}
 
 bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property) {
 	if(false == m_init) {

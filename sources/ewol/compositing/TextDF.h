@@ -39,6 +39,13 @@ namespace ewol {
 				 */
 				virtual ~TextDF(void);
 			public:
+				/**
+				 * @brief Calculate size to be at the best size for a render in this special size.
+				 * @note special for Distance field mode.
+				 * @param[in] _size request dimention.
+				 */
+				void updateSizeToRender(const vec2& _size);
+			public:
 				virtual void clear(void);
 				virtual void drawD(bool _disableDepthTest);
 				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);

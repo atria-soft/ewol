@@ -41,6 +41,7 @@ namespace ewol {
 				                       int32_t _borderSize = 0) = 0;
 				
 				virtual vec2 getSize(int32_t _fontSize, const std::string& _unicodeString) = 0;
+				virtual float getSizeWithHeight(float _fontHeight) = 0;
 				
 				virtual int32_t getHeight(int32_t _fontSize) = 0;
 				

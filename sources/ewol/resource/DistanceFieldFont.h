@@ -44,6 +44,14 @@ namespace ewol {
 					return ((float)m_font->getHeight(_size));
 				};
 				/**
+				 * @brief get the font size with a specific display size
+				 * @param[in] _fontHeight Request font height
+				 * @return Dimention of the font for this compleate line size.
+				 */
+				float getSize(float _fontHeight) {
+					return m_font->getSizeWithHeight(_fontHeight);
+				}
+				/**
 				 * @brief get the ID of a unicode charcode
 				 * @param[in] _charcode The unicodeValue
 				 * @return The ID in the table (if it does not exist : return 0)

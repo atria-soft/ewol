@@ -50,6 +50,7 @@ namespace ewol {
 				vec2 getSize(int32_t _fontSize, const std::string& _unicodeString);
 				
 				int32_t getHeight(int32_t _fontSize);
+				float getSizeWithHeight(float _fontHeight);
 				
 				void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph);
 			public:
