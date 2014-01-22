@@ -265,7 +265,7 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 				EWOL_ERROR("Can not get Image resource");
 			}
 		} else {
-			m_resourceDF = ewol::resource::ImageDF::keep(_newFile, tmpSize);
+			m_resourceDF = ewol::resource::ImageDF::keep(m_filename, tmpSize);
 			if (NULL == m_resourceDF) {
 				EWOL_ERROR("Can not get Image resource DF");
 			}
@@ -300,7 +300,9 @@ vec2 ewol::compositing::Image::getRealSize(void) {
 	if (m_resource != NULL) {
 		return m_resource->getRealSize();
 	}
-	return m_resourceDF->getRealSize();
+	if (m_resourceDF != NULL) {
+		return m_resourceDF->getRealSize();
+	}
 }
 
 

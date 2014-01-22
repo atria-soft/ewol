@@ -18,6 +18,7 @@ static const char* statusDescriptionString[ewol::key::statusCount+1] = {
 	"statusQuad",
 	"statusQuinte",
 	"statusUp",
+	"statusUpAfter",
 	"statusEnter",
 	"statusLeave",
 	"statusAbort",

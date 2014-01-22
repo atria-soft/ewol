@@ -12,10 +12,16 @@ uniform int       EW_SoftEdge;
 varying vec2 f_texcoord;
 varying vec4 f_color;
 
+
 void main(void) {
 	vec4 color = texture2D(EW_texID, f_texcoord );
 	float dist  = color.r;
+	#ifndef GL_ES
 	float width = fwidth(dist);
+	#else
+	// float width = abs(dFdx(dist)) + abs(dFdy(dist))
+	float width = dist;
+	#endif
 	float alpha = smoothstep(0.5-width, 0.5+width, dist);
 	
 	// Smooth

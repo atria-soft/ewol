@@ -9,6 +9,7 @@
 #include <ewol/object/Manager.h>
 #include <ewol/context/Context.h>
 #include <ewol/ewol.h>
+#include <unistd.h>
 
 #undef __class__
 #define __class__ "ewol::object::Manager"
@@ -95,20 +96,33 @@ int32_t ewol::object::Manager::getNumberObject(void) {
 }
 
 void ewol::object::Manager::informOneObjectIsRemoved(ewol::Object* _object) {
-	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
-		if (m_eObjectList[iii] != NULL) {
-			//EWOL_DEBUG("inform " << iii << "/" << m_eObjectList.size());
-			//EWOL_DEBUG("    named '" << m_eObjectList[iii]->getName() << "' type=" << m_eObjectList[iii]->getObjectType());
+	size_t mbElement = m_eObjectList.size();
+	for (int64_t iii=0; iii<(int64_t)m_eObjectList.size(); ++iii) {
+		if (    m_eObjectList[iii] != NULL
+		     && m_eObjectList[iii] != _object) {
+			//EWOL_DEBUG("inform " << iii+1 << "/" << m_eObjectList.size());
+			//EWOL_DEBUG("    id=" << m_eObjectList[iii]->getId() << " named '" << m_eObjectList[iii]->getName() << "' type=" << m_eObjectList[iii]->getObjectType());
 			m_eObjectList[iii]->onObjectRemove(_object);
+			if (mbElement != m_eObjectList.size()) {
+				iii = -1;
+				mbElement = m_eObjectList.size();
+			}
 		}
 	}
+	//EWOL_DEBUG("inform active done");
+	mbElement = m_eObjectAutoRemoveList.size();
 	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] != _object) {
-			//EWOL_DEBUG("inform2 " << iii << "/" << m_eObjectList.size());
+			//EWOL_DEBUG("inform2 " << iii+1 << "/" << m_eObjectAutoRemoveList.size());
 			m_eObjectAutoRemoveList[iii]->onObjectRemove(_object);
+			if (mbElement != m_eObjectAutoRemoveList.size()) {
+				iii = -1;
+				mbElement = m_eObjectAutoRemoveList.size();
+			}
 		}
 	}
+	//EWOL_DEBUG("inform in-active done");
 	// call input event manager to remove linked widget ...
 	ewol::getContext().onObjectRemove(_object);
 }
@@ -148,8 +162,10 @@ void ewol::object::Manager::autoRemove(ewol::Object* _object) {
 			// remove Element
 			m_eObjectList[iii] = NULL;
 			m_eObjectList.erase(m_eObjectList.begin()+iii);
-			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type=\"" << _object->getObjectType() << "\"");
-			informOneObjectIsRemoved(_object);
+			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "'");
+			if (_object->getStatusResource() == false) {
+				informOneObjectIsRemoved(_object);
+			}
 			m_eObjectAutoRemoveList.push_back(_object);
 			ewol::getContext().forceRedrawAll();
 			EWOL_DEBUG("Auto-Remove Object ... done");
@@ -164,7 +180,7 @@ void ewol::object::Manager::removeAllAutoRemove(void) {
 	//EWOL_DEBUG("Auto-Remove Object section : " << m_eObjectAutoRemoveList.size() << " elemeents");
 	while(0<m_eObjectAutoRemoveList.size()) {
 		if (m_eObjectAutoRemoveList[0] != NULL) {
-			EWOL_DEBUG("Real Auto-Remove Object type=\"" << m_eObjectAutoRemoveList[0]->getObjectType() << "\"");
+			EWOL_DEBUG("Real Auto-Remove Object [" << m_eObjectAutoRemoveList[0]->getId() << "]type='" << m_eObjectAutoRemoveList[0]->getObjectType() << "'");
 			delete(m_eObjectAutoRemoveList[0]);
 			m_eObjectAutoRemoveList[0] = NULL;
 		} else {

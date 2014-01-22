@@ -27,6 +27,7 @@ namespace ewol {
 			statusQuad,
 			statusQuinte,
 			statusUp, // availlable on Keyboard too
+			statusUpAfter, // mouse input & finger input this appear after the single event (depending on some case...)
 			statusEnter,
 			statusLeave,
 			statusAbort, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has lost the events)

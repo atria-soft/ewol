@@ -274,7 +274,7 @@ bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event
 			int32_t idTable = _event.getId()-1;
 			if (_event.getStatus() == ewol::key::statusDown) {
 				m_fingerPresent[idTable] = true;
-			} else if (_event.getStatus() == ewol::key::statusUp) {
+			} else if (_event.getStatus() == ewol::key::statusUpAfter) {
 				m_fingerPresent[idTable] = false;
 			}
 			if (m_fingerScoolActivated == false) {
@@ -300,7 +300,7 @@ bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event
 				}
 				if (    m_fingerPresent[0] == false
 				     && m_fingerPresent[1] == false) {
-					if (_event.getStatus() == ewol::key::statusUp) {
+					if (_event.getStatus() == ewol::key::statusUpAfter) {
 						// TODO : Reset event ...
 						m_fingerScoolActivated = false;
 						_event.reset();
@@ -317,7 +317,7 @@ bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event
 					m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
 					EWOL_DEBUG("SCROOL  == > INIT");
 					return true;
-				} else if (_event.getStatus() == ewol::key::statusUp) {
+				} else if (_event.getStatus() == ewol::key::statusUpAfter) {
 					m_highSpeedMode = ewol::widget::Scroll::speedModeDisable;
 					m_highSpeedType = ewol::key::typeUnknow;
 					EWOL_DEBUG("SCROOL  == > DISABLE");
