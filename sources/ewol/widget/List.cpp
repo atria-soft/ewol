@@ -99,7 +99,7 @@ void ewol::widget::List::onDraw(void) {
 			m_listOObject[iii]->draw();
 		}
 	}
-	WidgetScrooled::onDraw();
+	WidgetScrolled::onDraw();
 }
 
 void ewol::widget::List::onRegenerateDisplay(void) {
@@ -208,14 +208,14 @@ void ewol::widget::List::onRegenerateDisplay(void) {
 		addOObject(BGOObjects, 0);
 		
 		// call the herited class...
-		WidgetScrooled::onRegenerateDisplay();
+		WidgetScrolled::onRegenerateDisplay();
 	}
 }
 
 bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	
-	if (true == WidgetScrooled::onEventInput(_event)) {
+	if (true == WidgetScrolled::onEventInput(_event)) {
 		keepFocus();
 		// nothing to do ... done on upper widet ...
 		return true;

@@ -22,7 +22,7 @@ namespace ewol {
 		/**
 		 * @brief Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
 		 */
-		class WidgetScrooled : public ewol::Widget {
+		class WidgetScrolled : public ewol::Widget {
 			public:
 				enum scrollingMode {
 					scroolModeNormal, //!< No Zoom , can UP and down, left and right
@@ -52,11 +52,11 @@ namespace ewol {
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)
 				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
-				WidgetScrooled(const std::string& _shaperName="THEME:GUI:WidgetScrolled.conf");
+				WidgetScrolled(const std::string& _shaperName="THEME:GUI:WidgetScrolled.conf");
 				/**
 				 * @brief Scroll widget destructor.
 				 */
-				virtual ~WidgetScrooled(void);
+				virtual ~WidgetScrolled(void);
 			protected: // Derived function
 				virtual void onDraw(void);
 			public: // Derived function

@@ -15,10 +15,10 @@
 
 
 
-ewol::widget::WidgetScrooled::WidgetScrooled(const std::string& _shaperName) :
+ewol::widget::WidgetScrolled::WidgetScrolled(const std::string& _shaperName) :
 	m_shaperH(_shaperName),
 	m_shaperV(_shaperName) {
-	addObjectType("ewol::widget::WidgetScrooled");
+	addObjectType("ewol::widget::WidgetScrolled");
 	m_originScrooled.setValue(0,0);
 	m_pixelScrolling = 20;
 	m_highSpeedMode = ewol::widget::Scroll::speedModeDisable;
@@ -33,12 +33,12 @@ ewol::widget::WidgetScrooled::WidgetScrooled(const std::string& _shaperName) :
 	}
 }
 
-ewol::widget::WidgetScrooled::~WidgetScrooled(void) {
+ewol::widget::WidgetScrolled::~WidgetScrolled(void) {
 	
 }
 
 
-void ewol::widget::WidgetScrooled::onRegenerateDisplay(void) {
+void ewol::widget::WidgetScrolled::onRegenerateDisplay(void) {
 	m_shaperH.clear();
 	m_shaperV.clear();
 	if (m_scroollingMode == scroolModeGame) {
@@ -73,7 +73,7 @@ void ewol::widget::WidgetScrooled::onRegenerateDisplay(void) {
 	}
 }
 
-bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event) {
+bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("event XXX " << _event);
 	vec2 relativePos = relativePosition(_event.getPos());
 	// corection due to the open Gl invertion ...
@@ -394,12 +394,12 @@ bool ewol::widget::WidgetScrooled::onEventInput(const ewol::event::Input& _event
 }
 
 
-void ewol::widget::WidgetScrooled::onDraw(void) {
+void ewol::widget::WidgetScrolled::onDraw(void) {
 	m_shaperH.draw();
 	m_shaperV.draw();
 }
 
-void ewol::widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::WidgetScrolled::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::openGL::push();
 	if (m_scroollingMode == scroolModeCenter) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
@@ -435,7 +435,7 @@ void ewol::widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _display
 	ewol::openGL::pop();
 }
 
-void ewol::widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center) {
+void ewol::widget::WidgetScrolled::setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center) {
 	if (true == _center) {
 		_borderWidth.setValue(m_size.x() / 2 - _borderWidth.x(),
 		                      m_size.y() / 2 - _borderWidth.y() );
@@ -458,7 +458,7 @@ void ewol::widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth
 	}
 }
 
-void ewol::widget::WidgetScrooled::scroolingMode(enum scrollingMode _newMode) {
+void ewol::widget::WidgetScrolled::scroolingMode(enum scrollingMode _newMode) {
 	m_scroollingMode = _newMode;
 	if (m_scroollingMode == scroolModeGame) {
 		// set the scene maximum size :

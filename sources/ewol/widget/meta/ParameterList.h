@@ -36,7 +36,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ParameterList :public ewol::widget::WidgetScrooled {
+		class ParameterList :public ewol::widget::WidgetScrolled {
 			public:
 				// Event list of properties
 				static const char * const eventSelect;
