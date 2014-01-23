@@ -99,49 +99,9 @@ void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp
 }
 
 ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availlable, const ewol::Padding& _padding) {
-	#if 1
 	vec2 localAvaillable = _availlable - vec2(_padding.x(), _padding.y());
-	//ewol::Widget::calculateSize(_availlable);
+	ewol::Widget::calculateSize(_availlable);
 	// set minimal size
-	m_size = m_minSize;
-	if (m_userExpand.x() == true) {
-		m_size.setX(_availlable.x());
-	}
-	if (m_userExpand.y() == true) {
-		m_size.setY(_availlable.y());
-	}
-	for (size_t iii = 0; iii < 2; ++iii) {
-		if (m_subWidget[iii] != NULL) {
-			vec2 origin = m_origin+m_offset;
-			vec2 minSize = m_subWidget[iii]->getCalculateMinSize();
-			bvec2 expand = m_subWidget[iii]->getExpand();
-			if (    expand.x() == false
-			    || minSize.x()>localAvaillable.x()) {
-				if (m_gravity == ewol::gravityCenter) {
-					origin -= vec2((minSize.x() - localAvaillable.x())/2.0f, 0);
-				} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
-					origin -= vec2((minSize.x() - localAvaillable.x()), 0);
-				}
-			}
-			if(    expand.y() == false
-			    || minSize.y()>localAvaillable.y()) {
-				if (m_gravity == ewol::gravityCenter) {
-					origin -= vec2(0, (minSize.y() - localAvaillable.y())/2.0f);
-				} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
-					origin -= vec2(0, (minSize.y() - localAvaillable.y()));
-				}
-			}
-			m_subWidget[iii]->setOrigin(origin + vec2(_padding.xLeft(), _padding.yButtom()));
-			m_subWidget[iii]->calculateSize(localAvaillable);
-		}
-	}
-	return ewol::Padding(m_origin.x(), 0, 0, m_origin.y());
-	#else
-	// set minimal size
-	m_size = m_minSize;
-	vec2 minimumSizeBase(0,0);
-	vec2 minimumSizeToggle(0,0);
-	// Checking the expand properties :
 	if (m_userExpand.x() == true) {
 		m_size.setX(_availlable.x());
 	}
@@ -158,20 +118,35 @@ ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availla
 	}
 	vec2 origin = (m_size - subElementSize)*0.5f + vec2(_padding.xLeft(), _padding.yButtom());
 	subElementSize -= vec2(_padding.x(), _padding.y());
-	if (NULL!=m_subWidget[0]) {
-		m_subWidget[0]->setOrigin(m_origin+origin);
-		m_subWidget[0]->calculateSize(subElementSize);
+	for (size_t iii = 0; iii < 2; ++iii) {
+		if (m_subWidget[iii] != NULL) {
+			vec2 origin2 = origin+m_offset;
+			vec2 minSize = m_subWidget[iii]->getCalculateMinSize();
+			bvec2 expand = m_subWidget[iii]->getExpand();
+			if (    expand.x() == false
+			    || minSize.x() > localAvaillable.x()) {
+				if (m_gravity == ewol::gravityCenter) {
+					origin2 -= vec2((minSize.x() - localAvaillable.x())/2.0f, 0);
+				} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
+					origin2 -= vec2((minSize.x() - localAvaillable.x()), 0);
+				}
+			}
+			if(    expand.y() == false
+			    || minSize.y() > localAvaillable.y()) {
+				if (m_gravity == ewol::gravityCenter) {
+					origin2 -= vec2(0, (minSize.y() - localAvaillable.y())/2.0f);
+				} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
+					origin2 -= vec2(0, (minSize.y() - localAvaillable.y()));
+				}
+			}
+			m_subWidget[iii]->setOrigin(m_origin + origin);
+			m_subWidget[iii]->calculateSize(subElementSize);
+		}
 	}
-	if (NULL!=m_subWidget[1]) {
-		m_subWidget[1]->setOrigin(m_origin+origin);
-		m_subWidget[1]->calculateSize(subElementSize);
-	}
-	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
-	vec2 selectableAreaSize = subElementSize + vec2(_padding.x(), _padding.y());
 	vec2 selectableAreaPos = origin-vec2(_padding.xLeft(), _padding.yButtom());
+	vec2 selectableAreaEndPos = m_size - (selectableAreaPos + subElementSize + vec2(_padding.x(), _padding.y()));
 	markToRedraw();
-	return ewol::Padding(selectableAreaPos.x(), selectableAreaPos.y(), selectableAreaSize.x(), selectableAreaSize.y());
-	#endif
+	return ewol::Padding(selectableAreaPos.x(), selectableAreaEndPos.y(), selectableAreaEndPos.x(), selectableAreaPos.y());
 }
 
 void ewol::widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _padding) {

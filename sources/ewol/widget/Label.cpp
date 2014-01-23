@@ -87,8 +87,8 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 	// to know the size of one line : 
 	vec3 minSize = m_text.calculateSize(char32_t('A'));
 	
-	minSize.setX(etk_max(minSize.x(), m_minSize.x()));
-	minSize.setY(etk_max(minSize.y(), m_minSize.y()));
+	//minSize.setX(etk_max(minSize.x(), m_minSize.x()));
+	//minSize.setY(etk_max(minSize.y(), m_minSize.y()));
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}
@@ -101,11 +101,11 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
-	if (true == m_userFill.x()) {
+	if (m_userFill.x() == true) {
 		localSize.setX(m_size.x());
 		tmpTextOrigin.setX(0);
 	}
-	if (true == m_userFill.y()) {
+	if (m_userFill.y() == true) {
 		localSize.setY(m_size.y());
 		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 	}

@@ -89,7 +89,7 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::Widget* _newWidget) {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii]) {
 			m_subWidget[iii]->removeUpperWidget();
-			delete(m_subWidget[iii]);
+			m_subWidget[iii]->removeObject();
 			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 			if (errorControl == m_subWidget.size()) {
 				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
@@ -125,7 +125,7 @@ void ewol::widget::ContainerN::subWidgetRemoveAll(void) {
 	while (m_subWidget.size() > 0 ) {
 		if (NULL != m_subWidget[0]) {
 			m_subWidget[0]->removeUpperWidget();
-			delete(m_subWidget[0]);
+			m_subWidget[0]->removeObject();
 			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 			if (errorControl == m_subWidget.size()) {
 				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
