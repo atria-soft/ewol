@@ -12,7 +12,7 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Widget.h>
+#include <ewol/widget/Container2.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/compositing/Shaper.h>
@@ -25,7 +25,7 @@ namespace ewol {
 		 * @brief a composed button is a button with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple
 		 */
-		class Button : public ewol::Widget {
+		class Button : public ewol::widget::Container2 {
 			public:
 				//! @not-in-doc
 				static void init(ewol::widget::Manager& _widgetManager);
@@ -64,33 +64,6 @@ namespace ewol {
 				 * @param[in] _shaperName The new shaper filename
 				 */
 				void setShaperName(const std::string& _shaperName);
-			protected:
-				ewol::Widget* m_subWidget[2]; //!< subwidget of the button
-			public:
-				/**
-				 * @brief Specify the current widget
-				 * @param[in] _subWidget Widget to add normal
-				 */
-				void setSubWidget(ewol::Widget* _subWidget);
-				/**
-				 * @brief Specify the current widget
-				 * @param[in] _subWidget Widget to add Toggle
-				 */
-				void setSubWidgetToggle(ewol::Widget* _subWidget);
-				/**
-				 * @brief get the current displayed composition
-				 * @return The base widget
-				 */
-				ewol::Widget* getSubWidget(void) const {
-					return m_subWidget[0];
-				};
-				/**
-				 * @brief get the current displayed composition
-				 * @return The toggle widget
-				 */
-				ewol::Widget* getSubWidgetToggle(void) const {
-					return m_subWidget[1];
-				};
 			protected:
 				bool m_value; //!< Current state of the button.
 			public:
@@ -162,11 +135,11 @@ namespace ewol {
 				virtual void calculateMinMaxSize(void);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void onRegenerateDisplay(void);
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual bool loadXML(exml::Element* _node);
-				virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
+				virtual void onDetectPresenceToggleWidget(void) {
+					setToggleMode(true);
+				}
 			private: // derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 		};

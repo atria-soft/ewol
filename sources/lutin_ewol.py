@@ -126,6 +126,7 @@ def create(target):
 		'ewol/widget/ColorBar.cpp',
 		'ewol/widget/Composer.cpp',
 		'ewol/widget/Container.cpp',
+		'ewol/widget/Container2.cpp',
 		'ewol/widget/ContainerN.cpp',
 		'ewol/widget/ContextMenu.cpp',
 		'ewol/widget/Entry.cpp',

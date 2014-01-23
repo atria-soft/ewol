@@ -46,24 +46,18 @@ void ewol::widget::Container::setSubWidget(ewol::Widget* _newWidget) {
 void ewol::widget::Container::subWidgetRemove(void) {
 	if (NULL != m_subWidget) {
 		m_subWidget->removeUpperWidget();
-		delete(m_subWidget);
-		// might have been destroy first here : 
-		if (m_subWidget!=NULL) {
-			EWOL_ERROR("Composer : An error Occured when removing main node");
-		}
-		markToRedraw();
-		requestUpdateSize();
-	}
-}
-
-void ewol::widget::Container::subWidgetRemoveDelayed(void) {
-	if (NULL != m_subWidget) {
-		m_subWidget->removeUpperWidget();
 		m_subWidget->removeObject();
 		m_subWidget=NULL;
 		markToRedraw();
 		requestUpdateSize();
 	}
+}
+
+void ewol::widget::Container::subWidgetUnLink(void) {
+	if (NULL != m_subWidget) {
+		m_subWidget->removeUpperWidget();
+	}
+	m_subWidget=NULL;
 }
 
 ewol::Widget* ewol::widget::Container::getWidgetNamed(const std::string& _widgetName) {
@@ -160,7 +154,7 @@ bool ewol::widget::Container::loadXML(exml::Element* _node) {
 	// parse generic properties :
 	ewol::Widget::loadXML(_node);
 	// remove previous element :
-	subWidgetRemoveDelayed();
+	subWidgetRemove();
 	
 	// parse all the elements :
 	for(size_t iii=0; iii< _node->size(); iii++) {

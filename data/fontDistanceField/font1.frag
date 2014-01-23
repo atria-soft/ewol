@@ -1,6 +1,7 @@
 #ifdef GL_ES
 precision mediump float;
 precision mediump int;
+#extension GL_OES_standard_derivatives : enable
 #endif
 
 // Input :
@@ -24,11 +25,7 @@ vec3 glow_color     = vec3(0.0,0.0,0.0);
 void main(void) {
 	vec4 color = texture2D(EW_texID, f_texcoord );
 	float dist  = color.r;
-	#ifndef GL_ES
 	float width = fwidth(dist);
-	#else
-	float width = dist;
-	#endif
 	float alpha = smoothstep(f_glyphLevel-width, f_glyphLevel+width, dist);
 	
 	// Smooth

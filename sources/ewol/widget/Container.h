@@ -43,13 +43,13 @@ namespace ewol {
 				 */
 				void setSubWidget(ewol::Widget* _newWidget);
 				/**
-				 * @brief remove the subWidget node.
+				 * @brief remove the subWidget node (async).
 				 */
 				void subWidgetRemove(void);
 				/**
-				 * @brief remove the subWidget node (delayed to prevent remove in the callbback).
+				 * @brief Unlink the subwidget Node.
 				 */
-				virtual void subWidgetRemoveDelayed(void);
+				void subWidgetUnLink(void);
 				
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
