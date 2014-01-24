@@ -172,7 +172,7 @@ void ewol::widget::Container2::onRegenerateDisplay(void) {
 		m_subWidget[m_idWidgetDisplayed]->onRegenerateDisplay();
 	}
 }
-
+/*
 ewol::Widget* ewol::widget::Container2::getWidgetAtPos(const vec2& _pos) {
 	if (isHide() == false) {
 		if (m_subWidget[m_idWidgetDisplayed] != NULL) {
@@ -181,7 +181,7 @@ ewol::Widget* ewol::widget::Container2::getWidgetAtPos(const vec2& _pos) {
 	}
 	return NULL;
 }
-
+*/
 
 bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 	if (NULL == _node) {

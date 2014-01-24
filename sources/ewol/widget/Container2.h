@@ -138,6 +138,17 @@ namespace ewol {
 				 * @brief Called when parsing a XML and detect the presence of a second Widget
 				 */
 				virtual void onDetectPresenceToggleWidget(void) {}
+				/**
+				 * @brief convert ID of the widget if not existed
+				 * @param[in] _id Id of the widget to display.
+				 * @return the id of the widget displayable
+				 */
+				int32_t convertId(int32_t _id) {
+					if (m_subWidget[_id] == NULL) {
+						return (_id+1)%2;
+					}
+					return _id;
+				}
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay(void);
@@ -148,7 +159,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize(void) {
 					calculateMinMaxSizePadded();
 				}
-				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+				//virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 				virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
 				virtual bool loadXML(exml::Element* _node);
 				virtual void setOffset(const vec2& _newVal);
