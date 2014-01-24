@@ -52,7 +52,7 @@ namespace ewol {
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)
 				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
-				WidgetScrolled(const std::string& _shaperName="THEME:GUI:WidgetScrolled.conf");
+				WidgetScrolled(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
 				/**
 				 * @brief Scroll widget destructor.
 				 */

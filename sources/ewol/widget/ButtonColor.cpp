@@ -62,7 +62,7 @@ void ewol::widget::ButtonColor::setShaperName(std::string _shaperName) {
 
 
 void ewol::widget::ButtonColor::calculateMinMaxSize(void) {
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	std::string label = m_textColorFg.getString();
 	vec3 minSize = m_text.calculateSize(label);
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
@@ -86,7 +86,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	m_text.clear();
 	m_shaper.clear();
 	
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	
 	std::string label = m_textColorFg.getString();
 	
@@ -108,9 +108,9 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	if (true == m_userFill.y()) {
 		localSize.setY(m_size.y());
 	}
-	tmpOrigin += vec3(padding.x(), padding.y(), 0);
-	tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
-	localSize -= ivec2(2*padding.x(), 2*padding.y());
+	tmpOrigin += vec3(padding.xLeft(), padding.yButtom(), 0);
+	tmpTextOrigin += vec3(padding.xLeft(), padding.yButtom(), 0);
+	localSize -= ivec2(padding.x(), padding.y());
 	
 	// clean the element
 	m_text.reset();
@@ -128,12 +128,12 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	
 	
 	if (true == m_userFill.y()) {
-		tmpOrigin.setY(padding.y());
+		tmpOrigin.setY(padding.yButtom());
 	}
 	
 	// selection area :
-	m_selectableAreaPos = vec2(tmpOrigin.x()-padding.x(), tmpOrigin.y()-padding.y());
-	m_selectableAreaSize = localSize + vec2(2,2)*padding;
+	m_selectableAreaPos = vec2(tmpOrigin.x()-padding.xLeft(), tmpOrigin.y()-padding.yButtom());
+	m_selectableAreaSize = localSize + vec2(padding.x(),padding.y());
 	m_shaper.setOrigin(m_selectableAreaPos );
 	m_shaper.setSize(m_selectableAreaSize);
 	m_shaper.setInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );

@@ -1,0 +1,11 @@
+{
+	element-size:50,
+	element-border:10,
+	padding-left:80,
+	padding-right:8,
+	padding-top:8,
+	padding-buttom:8,
+	change-time:356,
+	program:"THEME:GUI:CheckBox.prog",
+	color:"THEME:COLOR:CheckBox.json"
+}

@@ -1,0 +1,9 @@
+{
+	padding-left:16,
+	padding-right:16,
+	padding-top:16,
+	padding-buttom:16,
+	change-time:200,
+	program:"THEME:GUI:WidgetScrolled.prog",
+	color:"THEME:COLOR:WidgetScrolled.json"
+}

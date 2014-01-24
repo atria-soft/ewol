@@ -10,30 +10,13 @@
 #include <ewol/debug.h>
 #include <ewol/resource/ConfigFile.h>
 #include <ewol/resource/Manager.h>
+#include <ejson/ejson.h>
+#include <ejson/Number.h>
+#include <ejson/String.h>
 #include <stdexcept>
 
 #undef __class__
 #define __class__	"resource::ConfigFile"
-
-
-void ewol::resource::SimpleConfigElement::parse(const std::string& _value) {
-	m_value = _value;
-	#ifdef __EXCEPTIONS
-		try {
-			m_valueInt = std::stoi(_value);
-			m_valuefloat = std::stof(_value);
-		}
-		catch (const std::invalid_argument& ia) {
-			EWOL_VERBOSE(" invalid argument= " << ia.what() << "val='" << _value << "'");
-			m_valueInt = 0;
-			m_valuefloat = 0;
-		}
-	#else
-		m_valueInt = std::stoi(_value);
-		m_valuefloat = std::stof(_value);
-	#endif
-}
-
 
 
 ewol::resource::ConfigFile::ConfigFile(const std::string& _filename) :
@@ -59,102 +42,56 @@ void ewol::resource::ConfigFile::reload(void) {
 	// reset all parameters
 	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
-			m_list[iii]->parse("");
+			m_list[iii] = NULL;
 		}
 	}
-	// acess of the file :
-	etk::FSNode file(m_name);
+	m_doc.load(m_name);
 	
-	if (false == file.exist()) {
-		EWOL_ERROR("File does not Exist : \"" << file << "\"");
-		return;
-	}
-	std::string fileExtention = file.fileGetExtention();
-	if (fileExtention != "conf") {
-		EWOL_ERROR("File does not have extention \".conf\" for program but : \"" << fileExtention << "\"");
-		return;
-	}
-	if (false == file.fileOpenRead()) {
-		EWOL_ERROR("Can not open the file : " << file);
-		return;
-	}
-	#define MAX_LINE_SIZE   (2048)
-	char tmpData[MAX_LINE_SIZE];
-	while (file.fileGets(tmpData, MAX_LINE_SIZE) != NULL) {
-		int32_t len = strlen(tmpData);
-		if(    tmpData[len-1] == '\n'
-			|| tmpData[len-1] == '\r') {
-			tmpData[len-1] = '\0';
-			len--;
-		}
-		//EWOL_DEBUG(" Read data : \"" << tmpData << "\"");
-		if (len == 0) {
-			continue;
-		}
-		std::string tmpData2(tmpData);
-		std::string tmppp("#");
-		if (start_with(tmpData2, tmppp) == true) {
-			// comment ...
-			continue;
-		}
-		tmppp="//";
-		if (start_with(tmpData2, tmppp) == true) {
-			// comment ...
-			continue;
-		}
-		// get parameters :
-		size_t pos = tmpData2.find('=');
-		if (pos == 0){
-			//the element "=" is not find ...
-			continue;
-		}
-		std::string paramName = std::string(tmpData2, 0, pos);
-		std::string paramValue = std::string(tmpData2, pos+1, 0x7FFFF);
-		EWOL_DEBUG("        param name=\"" << paramName << "\" val=\"" << paramValue << "\"");
-		// check if the parameters existed :
-		bool findParam = false;
-		for (size_t iii=0; iii<m_list.size(); iii++){
-			if (NULL != m_list[iii]) {
-				if (m_list[iii]->m_paramName == paramName) {
-					m_list[iii]->parse(paramValue);
-					findParam = true;
-					// stop parsing ...
-					break;
-				}
-			}
-		}
-		if (false == findParam) {
-			ewol::resource::SimpleConfigElement* tmpElement = new ewol::resource::SimpleConfigElement(paramName);
-			if (NULL == tmpElement) {
-				EWOL_DEBUG("error while allocation");
-			} else {
-				tmpElement->parse(paramValue);
-				m_list.push_back(tmpElement);
-			}
+	for (auto elementName : m_list.getKeys()) {
+		if (m_doc.exist(elementName) == true) {
+			m_list[elementName] = m_doc[elementName];
 		}
 	}
-	// close the file:
-	file.fileClose();
 }
 
 
 int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
 	// check if the parameters existed :
-	for (size_t iii=0; iii<m_list.size(); iii++){
-		if (NULL != m_list[iii]) {
-			if (m_list[iii]->m_paramName == _paramName) {
-				return iii;
-			}
-		}
+	if (m_list.exist(_paramName) == false) {
+		m_list.add(_paramName, NULL);
 	}
-	ewol::resource::SimpleConfigElement* tmpElement = new ewol::resource::SimpleConfigElement(_paramName);
-	if (NULL == tmpElement) {
-		EWOL_DEBUG("error while allocation");
-	} else {
-		m_list.push_back(tmpElement);
+	if (m_doc.exist(_paramName) == true) {
+		m_list[_paramName] = m_doc[_paramName];
 	}
-	return m_list.size()-1;
+	return m_list.getId(_paramName);
 }
+
+
+double ewol::resource::ConfigFile::getNumber(int32_t _id) {
+	if (    _id < 0
+	     || m_list[_id] == NULL) {
+		return 0.0;
+	}
+	ejson::Number* tmp = m_list[_id]->toNumber();
+	if (tmp == NULL) {
+		return 0.0;
+	}
+	return tmp->get();
+}
+
+const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
+	static const std::string& errorString("");
+	if (    _id < 0
+	     || m_list[_id] == NULL) {
+		return errorString;
+	}
+	ejson::String* tmp = m_list[_id]->toString();
+	if (tmp == NULL) {
+		return errorString;
+	}
+	return tmp->get();
+}
+
 
 
 ewol::resource::ConfigFile* ewol::resource::ConfigFile::keep(const std::string& _filename) {

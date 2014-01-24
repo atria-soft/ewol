@@ -16,6 +16,7 @@
 #include <ewol/resource/ColorFile.h>
 #include <ewol/resource/Image.h>
 #include <ewol/event/Time.h>
+#include <ewol/Padding.h>
 
 namespace ewol {
 	namespace compositing {
@@ -29,12 +30,14 @@ namespace ewol {
 				std::string m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
 				ewol::resource::ConfigFile* m_config; //!< pointer on the config file resources
-				int32_t m_confIdPaddingX;   //!< ConfigFile padding property X
-				int32_t m_confIdPaddingY;   //!< ConfigFile padding property Y
-				int32_t m_confIdChangeTime; //!< ConfigFile padding transition time property
-				int32_t m_confProgramFile;  //!< ConfigFile opengGl program Name
-				int32_t m_confColorFile;    //!< ConfigFile opengGl color file Name
-				int32_t m_confImageFile;    //!< ConfigFile opengGl program Name
+				int32_t m_confIdPaddingLeft;   //!< ConfigFile padding property X-left
+				int32_t m_confIdPaddingRight;  //!< ConfigFile padding property X-right
+				int32_t m_confIdPaddingTop;    //!< ConfigFile padding property Y-top
+				int32_t m_confIdPaddingButtom; //!< ConfigFile padding property Y-buttom
+				int32_t m_confIdChangeTime;    //!< ConfigFile padding transition time property
+				int32_t m_confProgramFile;     //!< ConfigFile opengGl program Name
+				int32_t m_confColorFile;       //!< ConfigFile opengGl color file Name
+				int32_t m_confImageFile;       //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
 				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
@@ -149,7 +152,7 @@ namespace ewol {
 				 * @brief get the padding declared by the user in the config file
 				 * @return the padding property
 				 */
-				vec2 getPadding(void);
+				ewol::Padding getPadding(void);
 				/**
 				 * @brief change the shaper Source
 				 * @param[in] _newFile New file of the shaper

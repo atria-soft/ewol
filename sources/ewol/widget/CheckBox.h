@@ -43,7 +43,7 @@ namespace ewol {
 				 * @brief Main checkbox constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
-				CheckBox(const std::string& _shaperName="THEME:GUI:CheckBox.conf");
+				CheckBox(const std::string& _shaperName="THEME:GUI:CheckBox.json");
 				/**
 				 * @brief main destructor.
 				 */
@@ -81,6 +81,8 @@ namespace ewol {
 				void CheckStatus(void);
 			protected: // Derived function
 				virtual void onDraw(void);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
+				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void calculateSize(const vec2& _availlable);

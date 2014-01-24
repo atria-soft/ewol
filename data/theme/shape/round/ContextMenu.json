@@ -1,0 +1,9 @@
+{
+	padding-left:13,
+	padding-right:13,
+	padding-top:7,
+	padding-buttom:7,
+	change-time:356,
+	program:"THEME:GUI:ContextMenu.prog",
+	color:"THEME:COLOR:ContextMenu.json"
+}

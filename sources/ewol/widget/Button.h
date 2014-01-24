@@ -54,7 +54,7 @@ namespace ewol {
 				 * @brief Constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
-				Button(const std::string& _shaperName="THEME:GUI:Button.conf");
+				Button(const std::string& _shaperName="THEME:GUI:Button.json");
 				/**
 				 * @brief Destructor
 				 */

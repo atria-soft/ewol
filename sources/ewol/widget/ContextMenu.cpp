@@ -11,6 +11,7 @@
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/Padding.h>
 
 #undef __class__
 #define __class__	"ContextMenu"
@@ -66,7 +67,7 @@ void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG("CalculateSize=" << availlable);
 	// pop-up fill all the display :
 	m_size = _availlable;
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
 	if (NULL != m_subWidget) {
 		vec2 subWidgetSize;
@@ -102,23 +103,23 @@ void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 				break;
 		}
 		// set the widget position at the border of the screen
-		subWidgetOrigin.setX( (int32_t)(   etk_max(0, (subWidgetOrigin.x()-padding.x()*2))
-		                                 + padding.x()*2) );
-		subWidgetOrigin.setY( (int32_t)(   etk_max(0, (subWidgetOrigin.y()-padding.y()*2))
-		                                 + padding.y()*2) );
+		subWidgetOrigin.setX( (int32_t)(   etk_max(0, (subWidgetOrigin.x()-padding.x()))
+		                                 + padding.x()) );
+		subWidgetOrigin.setY( (int32_t)(   etk_max(0, (subWidgetOrigin.y()-padding.y()))
+		                                 + padding.y()) );
 		switch (m_arrawBorder)
 		{
 			default:
 			case markTop:
 			case markButtom:
 				if (m_arrowPos.x() <= m_offset ) {
-					subWidgetOrigin.setX(m_arrowPos.x()+padding.x());
+					subWidgetOrigin.setX(m_arrowPos.x()+padding.xLeft());
 				}
 				break;
 			case markRight:
 			case markLeft:
 				if (m_arrowPos.y() <= m_offset ) {
-					subWidgetOrigin.setY(m_arrowPos.y()+padding.y());
+					subWidgetOrigin.setY(m_arrowPos.y()+padding.yButtom());
 				}
 				break;
 		}
@@ -134,7 +135,8 @@ void ewol::widget::ContextMenu::calculateMinMaxSize(void) {
 	// call main class to calculate the min size...
 	ewol::widget::Container::calculateMinMaxSize();
 	// add padding of the display
-	m_minSize += m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
+	m_minSize += vec2(padding.x(), padding.y());
 	//EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
 	markToRedraw();
 }
@@ -154,7 +156,7 @@ void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 	}
 	m_compositing.clear();
 	m_shaper.clear();
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	
 	if (m_subWidget == NULL) {
 		return;
@@ -169,13 +171,13 @@ void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 			m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
 			m_compositing.addVertex();
 			if (m_arrowPos.x() <= tmpOrigin.x() ) {
-				float laking = m_offset - padding.y();
+				float laking = m_offset - padding.yTop();
 				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
 				m_compositing.addVertex();
 				m_compositing.setPos(vec3(m_arrowPos.x(),        m_arrowPos.y()-laking, 0.0f) );
 				m_compositing.addVertex();
 			} else {
-				float laking = m_offset - padding.y();
+				float laking = m_offset - padding.yTop();
 				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
 				m_compositing.addVertex();
 				m_compositing.setPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()-laking, 0.0f) );
@@ -186,13 +188,13 @@ void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 			m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
 			m_compositing.addVertex();
 			if (m_arrowPos.x() <= tmpOrigin.x() ) {
-				int32_t laking = m_offset - padding.y();
+				int32_t laking = m_offset - padding.yTop();
 				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
 				m_compositing.addVertex();
 				m_compositing.setPos(vec3(m_arrowPos.x(),        m_arrowPos.y()+laking, 0.0f) );
 				m_compositing.addVertex();
 			} else {
-				int32_t laking = m_offset - padding.y();
+				int32_t laking = m_offset - padding.yTop();
 				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
 				m_compositing.addVertex();
 				m_compositing.setPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()+laking, 0.0f) );
@@ -206,12 +208,12 @@ void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 			break;
 	}
 	
-	vec2 shaperOrigin = tmpOrigin-padding;
-	vec2 shaperSize = tmpSize+padding*2.0f;
+	vec2 shaperOrigin = tmpOrigin-vec2(padding.xLeft(), padding.yButtom());
+	vec2 shaperSize = tmpSize+vec2(padding.x(), padding.y());
 	m_shaper.setOrigin(vec2ClipInt32(shaperOrigin));
 	m_shaper.setSize(vec2ClipInt32(shaperSize));
-	m_shaper.setInsidePos(vec2ClipInt32(shaperOrigin+padding));
-	m_shaper.setInsideSize(vec2ClipInt32(shaperSize-padding*2.0f));
+	m_shaper.setInsidePos(vec2ClipInt32(shaperOrigin+vec2(padding.xLeft(), padding.yButtom())));
+	m_shaper.setInsideSize(vec2ClipInt32(shaperSize-vec2(padding.x(), padding.y())));
 }
 
 bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {

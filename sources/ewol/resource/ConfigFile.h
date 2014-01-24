@@ -11,44 +11,15 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
+#include <ejson/ejson.h>
 #include <ewol/resource/Resource.h>
 
 namespace ewol {
 	namespace resource {
-		// TODO : Show if it is possible to integrate this in a json interface ==> simplify code ...
-		/**
-		 * @not-in-doc
-		 */
-		class SimpleConfigElement {
-			public:
-				std::string m_paramName;
-			private:
-				std::string m_value;
-				int32_t m_valueInt;
-				float m_valuefloat;
-			public:
-				SimpleConfigElement(const std::string& _name) :
-					m_paramName(_name),
-					m_value(""),
-					m_valueInt(0),
-					m_valuefloat(0.0) { };
-				~SimpleConfigElement(void) { };
-				void parse(const std::string& value);
-				int32_t getInteger(void) {
-					return m_valueInt;
-				};
-				float getFloat(void) {
-					return m_valuefloat;
-				};
-				std::string& getString(void) {
-					return m_value;
-				};
-		};
-		
 		class ConfigFile : public ewol::Resource {
 			private:
-				std::vector<ewol::resource::SimpleConfigElement*> m_list;
-				std::string m_errorString;
+				ejson::Document m_doc;
+				etk::Hash<ejson::Value*> m_list;
 			protected:
 				ConfigFile(const std::string& _filename);
 				virtual ~ConfigFile(void);
@@ -57,24 +28,8 @@ namespace ewol {
 				
 				int32_t request(const std::string& _paramName);
 				
-				int32_t getInteger(int32_t _id) {
-					if (_id<0) {
-						return 0;
-					}
-					return m_list[_id]->getInteger();
-				};
-				float getFloat(int32_t _id) {
-					if (_id<0) {
-						return 0;
-					}
-					return m_list[_id]->getFloat();
-				};
-				std::string& getString(int32_t _id) {
-					if (_id<0) {
-						return m_errorString;
-					}
-					return m_list[_id]->getString();
-				};
+				double getNumber(int32_t _id);
+				const std::string& getString(int32_t _id);
 			public:
 				/**
 				 * @brief keep the resource pointer.

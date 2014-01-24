@@ -74,16 +74,16 @@ void ewol::widget::CheckBox::setShaperName(const std::string& _shaperName) {
 }
 
 void ewol::widget::CheckBox::calculateSize(const vec2& _availlable) {
-	vec2 padding = m_shaper.getPadding();
-	ewol::Padding ret = calculateSizePadded(_availlable, ewol::Padding(padding.x(), padding.y(), padding.x(), padding.y()));
+	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding ret = calculateSizePadded(_availlable, padding);
 	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
 	m_selectableAreaPos = vec2(ret.xLeft(), ret.yButtom());
 	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
 }
 
 void ewol::widget::CheckBox::calculateMinMaxSize(void) {
-	vec2 padding = m_shaper.getPadding();
-	calculateMinMaxSizePadded(ewol::Padding(padding.x(), padding.y(), padding.x(), padding.y()));
+	ewol::Padding padding = m_shaper.getPadding();
+	calculateMinMaxSizePadded(padding);
 }
 
 void ewol::widget::CheckBox::onDraw(void) {
@@ -94,12 +94,12 @@ void ewol::widget::CheckBox::onDraw(void) {
 void ewol::widget::CheckBox::onRegenerateDisplay(void) {
 	ewol::widget::Container2::onRegenerateDisplay();
 	if (true == needRedraw()) {
-		vec2 padding = m_shaper.getPadding();
+		ewol::Padding padding = m_shaper.getPadding();
 		m_shaper.clear();
 		m_shaper.setOrigin(vec2ClipInt32(m_selectableAreaPos));
-		m_shaper.setSize(vec2ClipInt32(m_selectableAreaSize));
-		m_shaper.setInsidePos(vec2ClipInt32(m_selectableAreaPos+padding));
-		m_shaper.setInsideSize(vec2ClipInt32(m_selectableAreaSize-padding*2.0f));
+		m_shaper.setSize(vec2ClipInt32(m_selectableAreaSize - vec2(m_selectableAreaSize.x(), 0) + vec2(padding.xLeft(), 0)));
+		m_shaper.setInsidePos(vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(), padding.yButtom())));
+		m_shaper.setInsideSize(vec2ClipInt32(m_selectableAreaSize-vec2(padding.x()+ m_selectableAreaSize.x(), padding.y())));
 	}
 }
 

@@ -42,7 +42,7 @@ namespace ewol {
 				 * @param[in] _baseColor basic displayed color.
 				 * @param[in] _shaperName The new shaper filename.
 				 */
-				ButtonColor(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:widgetButton.conf");
+				ButtonColor(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:widgetButton.json");
 				/**
 				 * @brief Main destructor.
 				 */

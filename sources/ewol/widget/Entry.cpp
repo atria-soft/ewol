@@ -11,6 +11,7 @@
 #include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
 #include <ewol/context/Context.h>
+#include <ewol/Padding.h>
 
 
 const char * const ewolEventEntryCut    = "ewol-widget-entry-event-internal-cut";
@@ -48,7 +49,7 @@ const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
 const char* const ewol::widget::Entry::configValue = "value";
 
 ewol::widget::Entry::Entry(std::string _newData) :
-  m_shaper("THEME:GUI:Entry.conf"),
+  m_shaper("THEME:GUI:Entry.json"),
   m_data(""),
   m_maxCharacter(0x7FFFFFFF),
   m_regExp(".*"),
@@ -107,11 +108,11 @@ void ewol::widget::Entry::calculateMinMaxSize(void) {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
 	vec2 minimumSizeBase(20, minHeight);
 	// add padding :
-	minimumSizeBase += padding*2.0f;
+	minimumSizeBase += vec2(padding.x(), padding.y());
 	m_minSize.setMax(minimumSizeBase);
 	// verify the min max of the min size ...
 	checkMinSize();
@@ -152,7 +153,7 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 			m_text.setSelectionColor(m_shaper.getColor(m_colorIdSelection));
 		}
 		updateTextPosition();
-		vec2 padding = m_shaper.getPadding();
+		ewol::Padding padding = m_shaper.getPadding();
 		
 		vec2 tmpSizeShaper = m_minSize;
 		if (true == m_userFill.x()) {
@@ -163,7 +164,7 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 		}
 		
 		vec2 tmpOriginShaper = (m_size - tmpSizeShaper) / 2.0f;
-		vec2 tmpSizeText = tmpSizeShaper - padding * 2.0f;
+		vec2 tmpSizeText = tmpSizeShaper - vec2(padding.x(), padding.y());
 		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 		int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
@@ -199,16 +200,16 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 
 
 void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	
 	vec2 relPos = relativePosition(_pos);
-	relPos.setX(relPos.x()-m_displayStartPosition - padding.x());
+	relPos.setX(relPos.x()-m_displayStartPosition - padding.xLeft());
 	// try to find the new cursor position :
 	std::string tmpDisplay = std::string(m_data, 0, m_displayStartPosition);
 	int32_t displayHidenSize = m_text.calculateSize(tmpDisplay).x();
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
-	int32_t tmpTextOriginX = padding.x();
+	int32_t tmpTextOriginX = padding.xLeft();
 	for (size_t iii=0; iii<m_data.size(); iii++) {
 		tmpDisplay = std::string(m_data, 0, iii);
 		int32_t tmpWidth = m_text.calculateSize(tmpDisplay).x() - displayHidenSize;
@@ -513,13 +514,13 @@ void ewol::widget::Entry::updateTextPosition(void) {
 	if (false == m_needUpdateTextPos) {
 		return;
 	}
-	vec2 padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	
 	int32_t tmpSizeX = m_minSize.x();
 	if (true == m_userFill.x()) {
 		tmpSizeX = m_size.x();
 	}
-	int32_t tmpUserSize = tmpSizeX - 2*(padding.x());
+	int32_t tmpUserSize = tmpSizeX - padding.x();
 	int32_t totalWidth = m_text.calculateSize(m_data).x();
 	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {

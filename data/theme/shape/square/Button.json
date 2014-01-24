@@ -1,0 +1,9 @@
+{
+	padding-left:8,
+	padding-right:8,
+	padding-top:8,
+	padding-buttom:8,
+	change-time:356,
+	program:"THEME:GUI:Button.prog",
+	color:"THEME:COLOR:Button.json"
+}

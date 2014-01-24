@@ -16,8 +16,10 @@
 ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_name(_shaperName),
   m_config(NULL),
-  m_confIdPaddingX(-1),
-  m_confIdPaddingY(-1),
+  m_confIdPaddingLeft(-1),
+  m_confIdPaddingRight(-1),
+  m_confIdPaddingTop(-1),
+  m_confIdPaddingButtom(-1),
   m_confIdChangeTime(-1),
   m_confProgramFile(-1),
   m_confColorFile(-1),
@@ -53,8 +55,10 @@ void ewol::compositing::Shaper::unLoadProgram(void) {
 	ewol::resource::TextureFile::release(m_resourceTexture);
 	ewol::resource::ConfigFile::release(m_config);
 	ewol::resource::ColorFile::release(m_colorProperty);
-	m_confIdPaddingX = -1;
-	m_confIdPaddingY = -1;
+	m_confIdPaddingLeft = -1;
+	m_confIdPaddingRight = -1;
+	m_confIdPaddingTop = -1;
+	m_confIdPaddingButtom = -1;
 	m_confIdChangeTime = -1;
 	m_confProgramFile = -1;
 	m_confImageFile = -1;
@@ -68,12 +72,14 @@ void ewol::compositing::Shaper::loadProgram(void) {
 	}
 	m_config = ewol::resource::ConfigFile::keep(m_name);
 	if (NULL != m_config) {
-		m_confIdPaddingX   = m_config->request("PaddingX");
-		m_confIdPaddingY   = m_config->request("PaddingY");
-		m_confIdChangeTime = m_config->request("ChangeTime");
-		m_confProgramFile  = m_config->request("program");
-		m_confImageFile    = m_config->request("image");
-		m_confColorFile    = m_config->request("color");
+		m_confIdPaddingLeft   = m_config->request("padding-left");
+		m_confIdPaddingRight  = m_config->request("padding-right");
+		m_confIdPaddingTop    = m_config->request("padding-top");
+		m_confIdPaddingButtom = m_config->request("padding-buttom");
+		m_confIdChangeTime    = m_config->request("ChangeTime");
+		m_confProgramFile     = m_config->request("program");
+		m_confImageFile       = m_config->request("image");
+		m_confColorFile       = m_config->request("color");
 	}
 	std::string basicShaderFile = m_config->getString(m_confProgramFile);
 	if (basicShaderFile != "") {
@@ -229,7 +235,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 				m_nextStatusRequested = -1;
 			}
 		}
-		float timeRelativity = m_config->getFloat(m_confIdChangeTime) / 1000.0;
+		float timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
 		m_stateTransition = etk_avg(0.0f, m_stateTransition, 1.0f);
@@ -277,11 +283,13 @@ void ewol::compositing::Shaper::setInsidePos(const vec2& _newInsidePos) {
 	m_propertyInsidePosition = _newInsidePos;
 }
 
-vec2 ewol::compositing::Shaper::getPadding(void) {
-	vec2 padding(0,0);
-	if (m_config!=NULL) {
-		padding.setValue(m_config->getFloat(m_confIdPaddingX),
-		                 m_config->getFloat(m_confIdPaddingY));
+ewol::Padding ewol::compositing::Shaper::getPadding(void) {
+	ewol::Padding padding(0,0,0,0);
+	if (m_config != NULL) {
+		padding.setValue(m_config->getNumber(m_confIdPaddingLeft),
+		                 m_config->getNumber(m_confIdPaddingTop),
+		                 m_config->getNumber(m_confIdPaddingRight),
+		                 m_config->getNumber(m_confIdPaddingButtom));
 	}
 	return padding;
 }
