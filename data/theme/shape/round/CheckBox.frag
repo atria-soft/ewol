@@ -11,6 +11,7 @@ struct displayProperty {
 };
 
 struct widgetStateProperty {
+	int   activate;
 	int   stateOld;
 	int   stateNew;
 	float transition;
@@ -25,6 +26,7 @@ varying vec2  v_position; // interpolated position ...
 varying vec4  v_colorTansition;
 varying vec4  v_colorBorder;
 varying vec4  v_colorBackground;
+varying vec4  v_colorInside;
 
 // internal static define
 float S_sizePadding  =  3.0; // must not be NULL
@@ -63,6 +65,14 @@ void main(void) {
 	// set border
 	float tmpVal2 = abs(tmpVal-0.5)*2.0;
 	gl_FragColor = gl_FragColor*tmpVal2 + v_colorBorder*(1.0-tmpVal2);
+	
+	// prevent origin moving ... 
+	position = v_position - EW_widgetProperty.insidePos - EW_widgetProperty.insideSize*0.5;
+	position = position / EW_widgetProperty.insideSize;
+	
+	if (sqrt(dot(position, position)) <= 1.0) {
+		gl_FragColor = v_colorInside;
+	}
 	
 }
 

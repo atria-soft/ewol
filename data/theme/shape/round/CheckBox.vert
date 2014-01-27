@@ -4,6 +4,7 @@ precision mediump int;
 #endif
 
 struct widgetStateProperty {
+	int   activate;
 	int   stateOld;
 	int   stateNew;
 	float transition;
@@ -26,6 +27,7 @@ varying vec2  v_position;       // This will be passed into the fragment shader.
 varying vec4  v_colorTansition;
 varying vec4  v_colorBorder;
 varying vec4  v_colorBackground;
+varying vec4  v_colorInside;
 
 void main(void) {
 	gl_Position = EW_MatrixTransformation * vec4(EW_coord2d, 0.0, 1.0);
@@ -37,16 +39,17 @@ void main(void) {
 		colorOld = EW_foregroundPressed;
 	} else if(EW_status.stateOld == 2) {
 		colorOld = EW_foregroundHover;
-	} else if(EW_status.stateOld == 3) {
-		colorOld = EW_foregroundSelected;
 	}
 	vec4 colorNew = EW_foreground;
 	if(EW_status.stateNew == 1) {
 		colorNew = EW_foregroundPressed;
 	} else if(EW_status.stateNew == 2) {
 		colorNew = EW_foregroundHover;
-	} else if(EW_status.stateNew == 3) {
-		colorNew = EW_foregroundSelected;
+	}
+	
+	v_colorInside = EW_foreground;
+	if (EW_status.activate == 1) {
+		v_colorInside = EW_foregroundSelected;
 	}
 	
 	// note : int() is needed for the OpenGL ES platform

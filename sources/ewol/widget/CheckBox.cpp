@@ -23,7 +23,6 @@ const char* const ewol::widget::CheckBox::configShaper = "shaper";
 #define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
 #define STATUS_PRESSED   (1)
-#define STATUS_DOWN      (3)
 
 #undef __class__
 #define __class__	"CheckBox"
@@ -42,6 +41,8 @@ ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
   m_selectableAreaSize(0,0),
+  m_shaperIdSize(-1),
+  m_shaperIdSizeInsize(-1),
   m_value(false) {
 	addObjectType("ewol::widget::CheckBox");
 	// add basic Event generated :
@@ -53,6 +54,9 @@ ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
 	// add configuration
 	registerConfig(configValue, "bool", NULL, "Basic value of the widget");
 	registerConfig(configShaper, "string", NULL, "the display name for config file");
+	
+	m_shaperIdSize = m_shaper.requestConfig("box-size");
+	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");
 	
 	// shaper satatus update:
 	CheckStatus();
@@ -75,15 +79,22 @@ void ewol::widget::CheckBox::setShaperName(const std::string& _shaperName) {
 
 void ewol::widget::CheckBox::calculateSize(const vec2& _availlable) {
 	ewol::Padding padding = m_shaper.getPadding();
+	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
+	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	ewol::Padding ret = calculateSizePadded(_availlable, padding);
 	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
-	m_selectableAreaPos = vec2(ret.xLeft(), ret.yButtom());
+	m_selectableAreaPos = vec2(ret.xLeft()/*-boxSize*/, ret.yButtom());
 	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
 }
 
 void ewol::widget::CheckBox::calculateMinMaxSize(void) {
 	ewol::Padding padding = m_shaper.getPadding();
+	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
+	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	calculateMinMaxSizePadded(padding);
+	if (m_size.y() < padding.y()+boxSize) {
+		m_size.setY(padding.y()+boxSize);
+	}
 }
 
 void ewol::widget::CheckBox::onDraw(void) {
@@ -93,14 +104,23 @@ void ewol::widget::CheckBox::onDraw(void) {
 
 void ewol::widget::CheckBox::onRegenerateDisplay(void) {
 	ewol::widget::Container2::onRegenerateDisplay();
-	if (true == needRedraw()) {
-		ewol::Padding padding = m_shaper.getPadding();
-		m_shaper.clear();
-		m_shaper.setOrigin(vec2ClipInt32(m_selectableAreaPos));
-		m_shaper.setSize(vec2ClipInt32(m_selectableAreaSize - vec2(m_selectableAreaSize.x(), 0) + vec2(padding.xLeft(), 0)));
-		m_shaper.setInsidePos(vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(), padding.yButtom())));
-		m_shaper.setInsideSize(vec2ClipInt32(m_selectableAreaSize-vec2(padding.x()+ m_selectableAreaSize.x(), padding.y())));
+	if (needRedraw() == false) {
+		return;
 	}
+	ewol::Padding padding = m_shaper.getPadding();
+	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
+	float boxInside = m_shaper.getConfigNumber(m_shaperIdSizeInsize);
+	m_shaper.clear();
+	
+	vec2 origin(m_selectableAreaPos + vec2(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
+	vec2 size = vec2(boxSize+padding.x(), boxSize+padding.y());
+	
+	m_shaper.setOrigin(vec2ClipInt32(origin));
+	m_shaper.setSize(vec2ClipInt32(size));
+	origin = m_selectableAreaPos + vec2((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
+	size = vec2(boxInside+padding.x(), boxInside+padding.y());
+	m_shaper.setInsidePos(vec2ClipInt32(origin+vec2(padding.xLeft(),padding.yButtom()) ));
+	m_shaper.setInsideSize(vec2ClipInt32(size-vec2(padding.x(),padding.y()) ));
 }
 
 void ewol::widget::CheckBox::setValue(bool _val) {
@@ -114,6 +134,7 @@ void ewol::widget::CheckBox::setValue(bool _val) {
 		CheckStatus();
 		markToRedraw();
 	}
+	m_shaper.setActivateState(m_value==true?1:0);
 }
 
 bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
@@ -190,11 +211,7 @@ void ewol::widget::CheckBox::CheckStatus(void) {
 		if (true == m_mouseHover) {
 			changeStatusIn(STATUS_HOVER);
 		} else {
-			if (true == m_value) {
-				changeStatusIn(STATUS_DOWN);
-			} else {
-				changeStatusIn(STATUS_UP);
-			}
+			changeStatusIn(STATUS_UP);
 		}
 	}
 }

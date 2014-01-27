@@ -69,8 +69,9 @@ ewol::widget::FileChooser::FileChooser(void) {
 	      + "<popup >\n"
 	      + "	<sizer mode='vert' lock='true' fill='true' expand='true'>\n"
 	      + "		<sizer mode='hori'>\n"
-	      + "			<checkbox name='[" + std::to_string(getId()) + "]file-shooser:show-hiden-file'/>\n"
-	      + "			<label>Show hiden files</label>\n"
+	      + "			<checkbox name='[" + std::to_string(getId()) + "]file-shooser:show-hiden-file'>\n"
+	      + "				<label>Show hiden files</label>\n"
+	      + "			</checkbox>\n"
 	      + "			<spacer expand='true,false'/>\n"
 	      + "			<button name='[" + std::to_string(getId()) + "]file-shooser:button-validate'>\n"
 	      + "				<sizer mode='hori'>\n"
@@ -116,7 +117,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 	      + "	</sizer>\n"
 	      + "</popup>";
 	loadFromString(myDescription);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:show-hiden-file", "clicked", ewolEventFileChooserHidenFileChange);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:show-hiden-file", "value", ewolEventFileChooserHidenFileChange);
 	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:button-validate", "pressed", eventValidate);
 	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:button-cancel", "pressed", eventCancel);
 	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-folder", "folder-validate", ewolEventFileChooserListFolder);

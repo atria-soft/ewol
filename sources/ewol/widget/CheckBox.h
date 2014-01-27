@@ -38,6 +38,9 @@ namespace ewol {
 				// hover area :
 				vec2 m_selectableAreaPos; //!< Start position of the events
 				vec2 m_selectableAreaSize; //!< size of the event positions
+				// shaper ids:
+				int32_t m_shaperIdSize;
+				int32_t m_shaperIdSizeInsize;
 			public:
 				/**
 				 * @brief Main checkbox constructor

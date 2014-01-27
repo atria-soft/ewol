@@ -46,6 +46,7 @@ namespace ewol {
 				int32_t m_GLPropertyOrigin;     //!< openGL id on the element (widget origin)
 				int32_t m_GLPropertyInsidePos;  //!< openGL id on the element (widget internal element position)
 				int32_t m_GLPropertyInsideSize; //!< openGL id on the element (widget internal element size)
+				int32_t m_GLStateActivate;      //!< openGL id on the element (activate state displayed)
 				int32_t m_GLStateOld;           //!< openGL id on the element (old state displayed)
 				int32_t m_GLStateNew;           //!< openGL id on the element (new state displayed)
 				int32_t m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
@@ -58,6 +59,7 @@ namespace ewol {
 				vec2    m_propertySize;           //!< widget size
 				vec2    m_propertyInsidePosition; //!< internal subwidget position
 				vec2    m_propertyInsideSize;     //!< internal subwidget size
+				int32_t m_stateActivate;          //!< Activate state of the element
 				int32_t m_stateOld;               //!< previous state
 				int32_t m_stateNew;               //!< destination state
 				float   m_stateTransition;        //!< working state between 2 states
@@ -193,6 +195,38 @@ namespace ewol {
 				 * @return the reference on the color
 				 */
 				const etk::Color<float>& getColor(int32_t _id);
+			public:
+				/**
+				 * @brief Get an ID on the configuration instance element
+				 * @param[in] _name Name of the element requested
+				 * @return The Id of the element
+				 */
+				int32_t requestConfig(const std::string& _name) {
+					if (m_config == NULL) {
+						return -1;
+					}
+					return m_config->request(_name);
+				}
+				/**
+				 * @brief Get The number associated at an ID.
+				 * @param[in] _id Id of the parameter
+				 * @return the requested number.
+				 */
+				double getConfigNumber(int32_t _id) {
+					if (    _id == -1
+					     || m_config == NULL) {
+						return 0.0;
+					}
+					return m_config->getNumber(_id);
+				}
+			public:
+				/**
+				 * @brief Set activate state of the element
+				 * @param[in] _status New activate status
+				 */
+				void setActivateState(int32_t _status) {
+					m_stateActivate = _status;
+				}
 		};
 	};
 };

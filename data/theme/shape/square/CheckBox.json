@@ -1,7 +1,7 @@
 {
-	element-size:50,
-	element-border:10,
-	padding-left:80,
+	box-size:20,
+	box-inside:12,
+	padding-left:8,
 	padding-right:8,
 	padding-top:8,
 	padding-buttom:8,

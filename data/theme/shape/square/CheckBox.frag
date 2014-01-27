@@ -18,6 +18,7 @@ varying vec2  v_position; // interpolated position ...
 varying vec4  v_colorTansition;
 varying vec4  v_colorBorder;
 varying vec4  v_colorBackground;
+varying vec4  v_colorInside;
 
 // internal static define
 float S_sizePadding = 3.0;
@@ -46,6 +47,14 @@ void main(void) {
 		}
 	} else {
 		gl_FragColor = v_colorBackground;
+	}
+	position = v_position - EW_widgetProperty.insidePos;
+	if(    position.x> 0.0
+	    && position.y> 0.0
+	    && position.x<= EW_widgetProperty.insideSize.x
+	    && position.y<= EW_widgetProperty.insideSize.y
+	  ) {
+		gl_FragColor = v_colorInside;
 	}
 }
 

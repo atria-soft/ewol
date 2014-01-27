@@ -30,6 +30,7 @@ ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_GLPropertySize(-1),
   m_GLPropertyInsidePos(-1),
   m_GLPropertyInsideSize(-1),
+  m_GLStateActivate(-1),
   m_GLStateOld(-1),
   m_GLStateNew(-1),
   m_GLStateTransition(-1),
@@ -39,6 +40,7 @@ ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_propertySize(0,0),
   m_propertyInsidePosition(0,0),
   m_propertyInsideSize(0,0),
+  m_stateActivate(0),
   m_stateOld(0),
   m_stateNew(0),
   m_stateTransition(1.0) {
@@ -104,6 +106,7 @@ void ewol::compositing::Shaper::loadProgram(void) {
 			m_GLPropertyInsidePos  = m_GLprogram->getUniform("EW_widgetProperty.insidePos");
 			m_GLPropertyInsideSize = m_GLprogram->getUniform("EW_widgetProperty.insideSize");
 			// status property  == > for the fragment shader
+			m_GLStateActivate      = m_GLprogram->getUniform("EW_status.activate");
 			m_GLStateOld           = m_GLprogram->getUniform("EW_status.stateOld");
 			m_GLStateNew           = m_GLprogram->getUniform("EW_status.stateNew");
 			m_GLStateTransition    = m_GLprogram->getUniform("EW_status.transition");
@@ -170,6 +173,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	m_GLprogram->uniform2(m_GLPropertyOrigin,     m_propertyOrigin);
 	m_GLprogram->uniform2(m_GLPropertyInsidePos,  m_propertyInsidePosition);
 	m_GLprogram->uniform2(m_GLPropertyInsideSize, m_propertyInsideSize);
+	m_GLprogram->uniform1i(m_GLStateActivate,     m_stateActivate);
 	m_GLprogram->uniform1i(m_GLStateOld,        m_stateOld);
 	m_GLprogram->uniform1i(m_GLStateNew,        m_stateNew);
 	m_GLprogram->uniform1f(m_GLStateTransition, m_stateTransition);
