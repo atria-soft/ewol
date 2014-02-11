@@ -179,15 +179,19 @@ void ewol::Widget::onObjectRemove(ewol::Object* _removeObject) {
 }
 
 void ewol::Widget::hide(void) {
-	m_hide = true;
-	markToRedraw();
-	requestUpdateSize();
+	if (m_hide == false) {
+		m_hide = true;
+		markToRedraw();
+		requestUpdateSize();
+	}
 }
 
 void ewol::Widget::show(void) {
-	m_hide = false;
-	markToRedraw();
-	requestUpdateSize();
+	if (m_hide == true) {
+		m_hide = false;
+		markToRedraw();
+		requestUpdateSize();
+	}
 }
 
 void ewol::Widget::calculateSize(const vec2& _available) {
@@ -197,27 +201,33 @@ void ewol::Widget::calculateSize(const vec2& _available) {
 }
 
 bool ewol::Widget::setFocus(void) {
-	if (true == m_canFocus) {
-		m_hasFocus = true;
-		onGetFocus();
+	if (m_canFocus == true) {
+		if (m_hasFocus == false) {
+			m_hasFocus = true;
+			onGetFocus();
+		}
 		return true;
 	}
 	return false;
 }
 
 bool ewol::Widget::rmFocus(void) {
-	if (true == m_canFocus) {
-		m_hasFocus = false;
-		onLostFocus();
+	if (m_canFocus == true) {
+		if (m_hasFocus == true) {
+			m_hasFocus = false;
+			onLostFocus();
+		}
 		return true;
 	}
 	return false;
 }
 
 void ewol::Widget::setCanHaveFocus(bool _canFocusState) {
-	m_canFocus = _canFocusState;
-	if (true == m_hasFocus) {
-		(void)rmFocus();
+	if (m_canFocus != _canFocusState) {
+		m_canFocus = _canFocusState;
+		if (m_hasFocus == true) {
+			(void)rmFocus();
+		}
 	}
 }
 
