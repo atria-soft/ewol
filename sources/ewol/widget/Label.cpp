@@ -39,6 +39,7 @@ ewol::widget::Label::Label(std::string _newLabel) :
 	m_label = std::to_u32string(_newLabel);
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
+	setMouseLimit(1);
 	registerConfig(configValue, "string", NULL, "displayed value string"); // TODO : do not store in attibute...
 }
 

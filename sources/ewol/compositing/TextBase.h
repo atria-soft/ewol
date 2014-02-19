@@ -92,7 +92,7 @@ namespace ewol {
 				std::vector<vec3 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
-			protected:
+			public:
 				/**
 				 * @brief load the openGL program and get all the ID needed
 				 */
@@ -117,9 +117,7 @@ namespace ewol {
 				void draw(bool _disableDepthTest=true) {
 					drawD(_disableDepthTest);
 				}
-				/**
-				 * @previous
-				 */
+				//! @previous
 				void draw(const mat4& _transformationMatrix, bool _enableDepthTest=false) {
 					drawMT(_transformationMatrix, _enableDepthTest);
 				}
@@ -127,9 +125,7 @@ namespace ewol {
 				 * @brief draw All the refistered text in the current element on openGL
 				 */
 				virtual void drawD(bool _disableDepthTest) = 0;
-				/**
-				 * @previous
-				 */
+				//! @previous
 				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest) = 0;
 				/**
 				 * @brief clear all the registered element in the current element
@@ -151,9 +147,7 @@ namespace ewol {
 				 * @param[in] _pos Position of the text (in 3D)
 				 */
 				void setPos(const vec3& _pos);
-				/**
-				 * @previous
-				 */
+				//! @previous
 				inline void setPos(const vec2& _pos) {
 					setPos(vec3(_pos.x(),_pos.y(),0));
 				};
@@ -162,9 +156,7 @@ namespace ewol {
 				 * @param[in] _pos ofset apply of the text (in 3D)
 				 */
 				void setRelPos(const vec3& _pos);
-				/**
-				 * @previous
-				 */
+				//! @previous
 				inline void setRelPos(const vec2& _pos) {
 					setRelPos(vec3(_pos.x(),_pos.y(),0));
 				};
@@ -202,9 +194,7 @@ namespace ewol {
 				void setClippingWidth(const vec3& _pos, const vec3& _width) {
 					setClipping(_pos, _pos+_width);
 				}
-				/**
-				 * @previous
-				 */
+				//! @previous
 				void setClippingWidth(const vec2& _pos, const vec2& _width) {
 					setClipping(_pos, _pos+_width);
 				};
@@ -214,9 +204,7 @@ namespace ewol {
 				 * @param[in] _posEnd End position of the clipping
 				 */
 				void setClipping(const vec3& _pos, const vec3& _posEnd);
-				/**
-				 * @previous
-				 */
+				//! @previous
 				void setClipping(const vec2& _pos, const vec2& _posEnd) {
 					setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) );
 				};
@@ -277,9 +265,7 @@ namespace ewol {
 				 * @param[in] _text The string to display.
 				 */
 				void print(const std::string& _text);
-				/**
-				 * @previous
-				 */
+				//! @previous
 				void print(const std::u32string& _text);
 				/**
 				 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
@@ -396,7 +382,7 @@ namespace ewol {
 				 * @return The theoric size used.
 				 */
 				vec3 calculateSizeHTML(const std::string& _text);
-				//!@previous
+				//! @previous
 				vec3 calculateSizeHTML(const std::u32string& _text);
 				/**
 				 * @brief calculate a theoric text size
@@ -404,7 +390,7 @@ namespace ewol {
 				 * @return The theoric size used.
 				 */
 				vec3 calculateSizeDecorated(const std::string& _text);
-				//!@previous
+				//! @previous
 				vec3 calculateSizeDecorated(const std::u32string& _text);
 				/**
 				 * @brief calculate a theoric text size
@@ -412,7 +398,7 @@ namespace ewol {
 				 * @return The theoric size used.
 				 */
 				vec3 calculateSize(const std::string& _text);
-				//!@previous
+				//! @previous
 				vec3 calculateSize(const std::u32string& _text);
 				/**
 				 * @brief calculate a theoric charcode size
@@ -445,9 +431,7 @@ namespace ewol {
 				 * @return false if we find '\n'
 				 */
 				bool extrapolateLastId(const std::string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
-				/**
-				 * @previous
-				 */
+				//! @previous
 				bool extrapolateLastId(const std::u32string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 			protected:
 				// this section is reserved for HTML parsing and display:

@@ -10,6 +10,7 @@
 
 #include <etk/types.h>
 
+#include <etk/tool.h>
 #include <etk/os/FSNode.h>
 #include <etk/os/Mutex.h>
 
@@ -27,6 +28,7 @@
 #include <ewol/openGL/openGL.h>
 
 #include <ewol/widget/Manager.h>
+
 
 
 /**
@@ -289,6 +291,8 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
   m_windowsSize(320,480) {
 	m_commandLine.parse(_argc, _argv);
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
+	// Reset the random system to be sure have real random values...
+	etk::tool::resetRandom();
 	// set the curent interface :
 	lockContext();
 	// By default we set 2 themes (1 color and 1 shape ...) :
