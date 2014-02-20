@@ -57,9 +57,11 @@ namespace ewol {
 				 * @return the ID of the set element
 				 */
 				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
+				//! @previous
 				inline  int32_t subWidgetAddBack(ewol::Widget* _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
+				//! @previous
 				inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
@@ -69,6 +71,7 @@ namespace ewol {
 				 * @return the ID of the set element
 				 */
 				virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
+				//! @previous
 				inline  int32_t subWidgetAddFront(ewol::Widget* _newWidget) {
 					return subWidgetAddStart(_newWidget);
 				};

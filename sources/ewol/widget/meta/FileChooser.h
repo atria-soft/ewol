@@ -45,7 +45,7 @@ namespace ewol {
 		 *  // simply set a folder (by default this is the home folder)
 		 *  //tmpWidget->setFolder("/home/me");
 		 *  // add the widget as windows pop-up ...
-		 *  ewol::widget::Widows* tmpWindows = getWindows();
+		 *  ewol::widget::Windows* tmpWindows = getWindows();
 		 *  if (tmpWindows == NULL) {
 		 *  	APPL_ERROR("Can not get the current windows !!! ");
 		 *  	return -1;

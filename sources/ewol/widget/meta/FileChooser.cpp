@@ -161,10 +161,10 @@ void ewol::widget::FileChooser::setFileName(const std::string& _filename) {
 
 void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
 	EWOL_INFO("Receive Event from the LIST ... : " << _msg);
-	if (ewolEventFileChooserEntryFolder == _msg.getMessage()) {
+	if (_msg.getMessage() == ewolEventFileChooserEntryFolder) {
 		// == > change the folder name
 		// TODO : change the folder, if it exit ...
-	} else if (ewolEventFileChooserEntryFile == _msg.getMessage()) {
+	} else if (_msg.getMessage() == ewolEventFileChooserEntryFile) {
 		// == > change the file name
 		m_file = _msg.getData();
 		// update the selected file in the list :
@@ -173,7 +173,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		// == > Auto remove ...
 		generateEventId(_msg.getMessage());
 		autoDestroy();
-	} else if (ewolEventFileChooserHidenFileChange == _msg.getMessage()) {
+	} else if (_msg.getMessage() == ewolEventFileChooserHidenFileChange) {
 		if (_msg.getData() == "true") {
 			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
 			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
@@ -181,7 +181,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
 			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
 		}
-	} else if (ewolEventFileChooserListFolder == _msg.getMessage()) {
+	} else if (_msg.getMessage() == ewolEventFileChooserListFolder) {
 		// == > this is an internal event ...
 		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << _msg.getData() << "\"");
 		m_folder = m_folder + _msg.getData();
@@ -189,7 +189,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		m_folder = etk::simplifyPath(m_folder);
 		setFileName("");
 		updateCurrentFolder();
-	} else if (ewolEventFileChooserListFile == _msg.getMessage()) {
+	} else if (_msg.getMessage() == ewolEventFileChooserListFile) {
 		setFileName(_msg.getData());
 		std::string tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
@@ -206,7 +206,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		tmpFileCompleatName += m_file;
 		generateEventId(eventValidate, tmpFileCompleatName);
 		autoDestroy();
-	} else if(ewolEventFileChooserHome == _msg.getMessage()) {
+	} else if(_msg.getMessage() == ewolEventFileChooserHome) {
 		std::string tmpUserFolder = etk::getUserHomeFolder();
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		
