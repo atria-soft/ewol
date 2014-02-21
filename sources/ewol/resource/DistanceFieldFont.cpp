@@ -21,8 +21,11 @@
 
 #undef __class__
 #define __class__ "resource::DistanceFieldFont"
-
-#define SIZE_GENERATION (30)
+#ifdef __TARGET_OS__Android
+	#define SIZE_GENERATION (20)
+#else
+	#define SIZE_GENERATION (30)
+#endif
 
 ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontName) :
   ewol::resource::Texture(_fontName),

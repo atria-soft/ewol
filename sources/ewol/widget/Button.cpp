@@ -230,10 +230,7 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 			}
 		}
 	}
-	if(    m_mouseHover != previousHoverState
-	    || m_buttonPressed != previousPressed) {
-		CheckStatus();
-	}
+	CheckStatus();
 	return m_mouseHover;
 }
 
@@ -247,6 +244,12 @@ bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 		return true;
 	}
 	return false;
+}
+
+void ewol::widget::Button::onLostFocus(void) {
+	m_buttonPressed = false;
+	EWOL_VERBOSE(getName() << " : Remove Focus ...");
+	CheckStatus();
 }
 
 void ewol::widget::Button::CheckStatus(void) {

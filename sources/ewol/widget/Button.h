@@ -142,6 +142,7 @@ namespace ewol {
 				}
 			private: // derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
+				virtual void onLostFocus(void);
 		};
 	};
 };
