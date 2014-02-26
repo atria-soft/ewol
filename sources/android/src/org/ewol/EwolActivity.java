@@ -11,6 +11,7 @@ package org.ewol;
 
 import android.app.Activity;
 import android.content.Context;
+import android.Manifest;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 // for the keyboard event :
 import android.view.inputmethod.InputMethodManager;
+import android.Manifest;
 
 import java.io.File;
 import android.content.Context;
@@ -52,6 +54,7 @@ import org.ewol.Ewol;
  *
  */
 public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants {
+	private static Context mContext;
 	private EwolSurfaceViewGL mGLView;
 	private EwolAudioTask     mStreams;
 	private Thread            mAudioThread;
@@ -63,6 +66,10 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		} catch (UnsatisfiedLinkError e) {
 			Log.e("EwolActivity", "error getting lib(): " + e);
 		}
+	}
+	
+	public static Context getAppContext() {
+		return EwolActivity.mContext;
 	}
 	
 	public EwolActivity() {
@@ -92,6 +99,8 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setListnerToRootView();
+		
+		EwolActivity.mContext = getApplicationContext();
 		
 		// Load the application directory
 		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
@@ -238,15 +247,23 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	
 	public void orientationUpdate(int screenMode) {
-		if (screenMode == EWOL_ORIENTATION_LANDSCAPE) {
-			//Force landscape
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		} else if (screenMode == EWOL_ORIENTATION_PORTRAIT) {
-			//Force portrait
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		Context localContext = getAppContext();
+		int result = localContext.checkCallingOrSelfPermission(Manifest.permission.SET_ORIENTATION);
+		if (result != PackageManager.PERMISSION_GRANTED) {
+			if (screenMode == EWOL_ORIENTATION_LANDSCAPE) {
+				//Force landscape
+				//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+			} else if (screenMode == EWOL_ORIENTATION_PORTRAIT) {
+				//Force portrait
+				//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+			} else {
+				//Force auto Rotation
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+			}
 		} else {
-			//Force auto Rotation
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+			Log.e("EwolActivity", "Not the right 'SET_ORIENTATION' to access on the screen orientation...");
 		}
 	}
 	

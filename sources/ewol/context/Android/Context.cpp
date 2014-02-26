@@ -333,10 +333,6 @@ class AndroidContext : public ewol::Context {
 		
 		// mode 0 : auto; 1 landscape, 2 portrait
 		void forceOrientation(enum ewol::orientation _orientation) {
-		#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
-			EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
-			return;
-		#else
 			int status;
 			if(!java_attach_current_thread(&status)) {
 				return;
@@ -349,7 +345,6 @@ class AndroidContext : public ewol::Context {
 			// manage execption : 
 			java_check_exception(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
-		#endif
 		}
 		
 		void setTitle(std::string& _title) {
