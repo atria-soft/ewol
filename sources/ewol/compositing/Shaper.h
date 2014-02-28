@@ -20,6 +20,11 @@
 
 namespace ewol {
 	namespace compositing {
+		enum renderMode {
+			renderSingleSquare, //!< basic historic render mode
+			renderBorder, //!< Render 4 squares for coiner, and renctangle for border, a big rentangle for background and 8 rectangle for the outside part
+			renderOneBorder,
+		};
 		/**
 		 * @brief the Shaper system is a basic theme configuration for every widget, it corespond at a background display described by a pool of files
 		 */
