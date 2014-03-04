@@ -49,21 +49,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 	addEventId(eventCancel);
 	addEventId(eventValidate);
 	
-	ewol::widget::Sizer * mySizerVert = NULL;
-	ewol::widget::Sizer * mySizerHori = NULL;
-	ewol::widget::Spacer * mySpacer = NULL;
-	//ewol::widget::Label * myLabel = NULL;
-	ewol::widget::Image * myImage = NULL;
 	m_folder = etk::getUserHomeFolder();
-	/*
-	#if defined(__TARGET_OS__Android)
-		setMinSize(ewol::Dimension(vec2(90,90),ewol::Dimension::Pourcent));;
-	#elif defined(__TARGET_OS__Windows)
-		setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));;
-	#else
-		setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));;
-	#endif
-	*/
 	m_file = "";
 	std::string myDescription = std::string("")
 	      + "<popup >\n"

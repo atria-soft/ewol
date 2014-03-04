@@ -171,7 +171,6 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	if(ewol::widget::Button::lockAccess == m_lock) {
 		return false;
 	}
-	bool previousHoverState = m_mouseHover;
 	if(    ewol::key::statusLeave == _event.getStatus()
 	    || ewol::key::statusAbort == _event.getStatus()) {
 		m_mouseHover = false;
@@ -189,7 +188,6 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 			m_mouseHover = true;
 		}
 	}
-	bool previousPressed = m_buttonPressed;
 	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {

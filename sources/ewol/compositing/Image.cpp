@@ -303,6 +303,7 @@ vec2 ewol::compositing::Image::getRealSize(void) {
 	if (m_resourceDF != NULL) {
 		return m_resourceDF->getRealSize();
 	}
+	return vec2(0,0);
 }
 
 

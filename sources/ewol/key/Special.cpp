@@ -52,6 +52,8 @@ void ewol::key::Special::update(enum ewol::key::keyboard _move, bool _isDown) {
 		case keyboardNumLock:
 			setNumLock(_isDown);
 			break;
+		default:
+			break;
 	}
 }
 

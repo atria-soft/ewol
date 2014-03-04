@@ -102,3 +102,9 @@ It will create a tree like this :
 :::** souces
 ::::** ewol
 ::** example
+::** youApplication_1
+::** youApplication_2
+::** youOtherLib_1
+::** youOtherLib_2
+::** out
+

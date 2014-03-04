@@ -28,10 +28,19 @@ include_directories(.)
 #Create src file list
 set(src_files
 	date/date.cpp
+	date/date.h
 )
 
 add_definitions( -DDEBUG_LEVEL=3 )
 add_definitions( -DDEBUG=1 )
+if (APPLE)
+	add_definitions( -D__TARGET_OS__MacOs )
+elseif (UNIX)
+	add_definitions( -D__TARGET_OS__Linux )
+elseif (WIN32)
+	add_definitions( -D__TARGET_OS__Windows )
+endif ()
+
 
 if (WIN32)
 	execute_process(COMMAND "cmd" " /C date /T" OUTPUT_VARIABLE RESULT)

@@ -26,7 +26,7 @@ ewol::Object::Object(void) :
 	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
 	getObjectManager().add(this);
-	registerConfig(ewol::Object::configName, "string", NULL, "Object name, might be a unique reference in all the program");
+	registerConfig(configName, "string", NULL, "Object name, might be a unique reference in all the program");
 }
 ewol::Object::Object(const std::string& _name) :
   m_static(false),
@@ -36,7 +36,7 @@ ewol::Object::Object(const std::string& _name) :
 	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
 	getObjectManager().add(this);
-	registerConfig(ewol::Object::configName, "string", NULL, "Object name, might be a unique reference in all the program");
+	registerConfig(configName, "string", NULL, "Object name, might be a unique reference in all the program");
 }
 
 ewol::Object::~Object(void) {
@@ -319,7 +319,7 @@ bool ewol::Object::storeXML(exml::Element* _node) const {
 
 bool ewol::Object::onSetConfig(const ewol::object::Config& _conf) {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config : " << _conf);
-	if (_conf.getConfig() == ewol::Object::configName) {
+	if (_conf.getConfig() == configName) {
 		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config name : \"" << _conf.getData() << "\"");
 		setName(_conf.getData());
 		return true;
@@ -328,7 +328,7 @@ bool ewol::Object::onSetConfig(const ewol::object::Config& _conf) {
 }
 
 bool ewol::Object::onGetConfig(const char* _config, std::string& _result) const {
-	if (_config == ewol::Object::configName) {
+	if (_config == configName) {
 		_result = getName();
 		return true;
 	}

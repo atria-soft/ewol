@@ -1,6 +1,6 @@
 =?= Tutorial 1: Hello Word =?=
 __________________________________________________
-[left][tutorial[000_Build | Previous: Download & Build]][/left] [right][tutorial[002_HelloWord | Next: Hello Word]][/right]
+[left][tutorial[000_Build | Previous: Download & Build]][/left] [right][tutorial[010_ObjectModel | Next: Object model]][/right]
 
 === Objectif ===
 :** Understand basis of ewol
@@ -8,18 +8,13 @@ __________________________________________________
 
 === Application Sources: ===
 
-==== Main Windows: ====
-
-==== Application "main()": ====
-
-=== Build declaration: ===
+==== Application Main: ====
 
 
-=== Build your application ===
-
-
-
-In all the application we need to have a main, for some reason this main is stored by the application and only call the EWOL main:
+In all the application we need to have a main()
+In This version the main neen only to call the ewol::run(void) that is the basic interface.
+To be portable on Android, that have a java main the User might not set other things in this main.
+[note]This basic main will change in the future to be more generic!!![/note]
 
 [code style=c++]
 	int main(int argc, const char *argv[]) {
@@ -28,7 +23,7 @@ In all the application we need to have a main, for some reason this main is stor
 	}
 [/code]
 
-Then the first question, is where is the input of the application:
+Then the first question, is where is the start and stop of the application:
 
 [code style=c++]
 	// application start:
@@ -37,28 +32,41 @@ Then the first question, is where is the input of the application:
 	}
 	// application stop:
 	void APP_UnInit(ewol::Context& _context) {
+		// nothing to do.
 	}
 [/code]
 
 The input [class[ewol::eContext]] is the main application context.
-All the application globals have a reference in this element.
-It is important to note that the system can call you some time in parallele, the basic exemple of this is the Wallpaper on Android.
+All the application globals have a reference in this element (and can get it everyware).
+[note]
+It is important to know that the system can call your application in parallele, the basic exemple of this is the Wallpaper on Android.
 When selected, it create an intance and when it is apply Android create a new instance and remove the previous one...
+[/note]
+
+==== Some configuration are needed ====
+
+In your application you can use many configuration,
+none of them are set in static for compilation and interface reason,
+then you will to set it on dynamic.
 
 
+Select fonts:
 
-Now we will create some generic property:
+This can be a problem when you design an application for some other operating system (OS),
+They do not have the same default font.
 
-In first: set the font availlagle on the global font property (system font).
-This can be a problem when you designe an application for some other operating system (OS), They do not have the same default font.
-and we select an order to search the font names and the system basic size.
+And we select an order to search the font names and the system basic size.
 [code style=c++]
+	// Use External font depending on the system (for specific application, it is better to provide fonts)
 	_context.getFontDefault().setUseExternal(true);
+	// Select font in order you want : if Ewol find FreeSerif, it selected it ...
 	_context.getFontDefault().set("FreeSerif;DejaVuSansMono", 19);
 [/code]
 
 
-In second: we will create a windows.
+==== Main Windows: ====
+
+Create the main Windows:
 
 For this point we will create a class that herited form the basic windows class:
 
@@ -73,7 +81,7 @@ For this point we will create a class that herited form the basic windows class:
 		class Windows : public ewol::widget::Windows {
 			public:
 				Windows(void);
-			public:
+				virtual ~Windows(void) {};
 		};
 	};
 	#endif
@@ -95,7 +103,7 @@ For this point we will create a class that herited form the basic windows class:
 		if (NULL == tmpWidget) {
 			APPL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
-			tmpWidget->setLabel("Hello <font color=\"blue\">Word</font>");
+			tmpWidget->setLabel("Hello <font color='blue'>Word</font>");
 			tmpWidget->setExpand(bvec2(true,true));
 			setSubWidget(tmpWidget);
 		}
@@ -125,14 +133,20 @@ I will take a really long time to create a real html parser, the the availlable 
 :** [b]<right> ... </right>[/b] : Set the text on the right.
 :** [b]<justify> ... </justify>[/b] : Set the text mode in justify.
 
-[note] The xml parser is a little strict on the case and end node, but it support to not have a main node.[/note]
-
+[note]
+The xml parser is a little strict on the case and end node (!! </br> !!),
+but it support to:
+:** Not have a main node.
+:** replace '"' with ''' to simplify xml writing in C code.
+[/note]
 
 The last step is to add the widget on the windows :
 [code style=c++]
 	setSubWidget(tmpWidget);
 [/code]
 
+
+==== Configure Ewol to have display the windows ====
 
 At this point we have created the basic windows.
 But the system does not know it.
@@ -142,7 +156,6 @@ Then we create windows and set it in the main contect main (in the APPL_init()):
 	// create the specific windows
 	_context.setWindows(basicWindows);
 [/code]
-
 
 Then the init fuction is :
 [code style=c++]
@@ -165,3 +178,101 @@ void APP_UnInit(ewol::Context& _context) {
 	// The main windows will be auto-remove after this call if it is not done...
 }
 [/code]
+
+
+[note]
+You can use many windows and select the one you want to display, but I do not think it is the best design.
+[/note]
+
+=== Build declaration: ===
+
+ewol commonly use the [b]lutin.py[/b] build system.
+
+Then we need to add a "lutin_YourApplicationName.py", then for this example: [b]lutin_001_HelloWord.py[/b]
+
+
+[code style=python]
+#!/usr/bin/python
+import lutinModule as module
+import lutinTools as tools
+
+# optionnal : Describe in the "lutin.py --help"
+def get_desc():
+	return "Tutorial 001 : Hello Word"
+
+# Module creation instance (not optionnal)
+def create(target):
+	# module name is '001_HelloWord' and type binary.
+	myModule = module.Module(__file__, '001_HelloWord', 'BINARY')
+	# add the file to compile:
+	myModule.add_src_file([
+		'appl/Main.cpp',
+		'appl/debug.cpp',
+		'appl/Windows.cpp',
+		])
+	# add Library dependency name
+	myModule.add_module_depend(['ewol'])
+	# add application C flags
+	myModule.compile_flags_CC([
+		"-DPROJECT_NAME=\"\\\""+myModule.name+"\\\"\""])
+	# Add current include Path
+	myModule.add_path(tools.get_current_path(__file__))
+	return the created module
+	return myModule
+[/code]
+
+show lutin doc for more information...
+
+[note]
+I do not explain again the lutin file, for next tutorial, show example sources ...
+[/note]
+
+=== Build your application ===
+
+go to your workspace folder and launch
+[code style=shell]
+	./ewol/build/lutin.py -C -mdebug -p 001_HelloWord
+[/code]
+
+Your program example will build correctly...
+
+Launch it :
+[code style=shell]
+	./out/Linux/debug/staging/gcc/001_HelloWord/usr/bin/001_HelloWord -l6
+[/code]
+
+The [b]-l6[/b] is used to specify the Log level of the application display (this log is synchronous)
+
+The output compile in a separate folder depending on the compilation tool (gcc or clang) 
+
+It create a complete final tree in the ./out/Linux/debug/staging/gcc/001_HelloWord/ folder
+
+The final folder contain the package generated
+
+tree of the output
+:** out
+::** MacOs
+::** Android
+::** Windows
+::** ...
+::** Linux
+:::** release
+:::** debug
+::::** build
+:::::** clang
+:::::** gcc
+::::::** ewol
+::::::** exml
+::::::** ejson
+::::::** 001_HelloWord
+::::::** ...
+::::** staging
+:::::** clang
+:::::** gcc
+::::::** 001_HelloWord
+:::::::** usr
+::::::::** bin
+::::::::** share
+::::** final
+:::::** 001_HelloWord.deb
+

@@ -10,6 +10,7 @@
 #define __SIMPLE_CONFIG_FILE_H__
 
 #include <etk/types.h>
+#include <etk/Hash.h>
 #include <ewol/debug.h>
 #include <ejson/ejson.h>
 #include <ewol/resource/Resource.h>
