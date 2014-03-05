@@ -50,3 +50,9 @@
 [submodule "monk"]
 	path = monk
 	url = https://github.com/HeeroYui/monk.git
+[submodule "external/rtaudio/rtaudio"]
+	path = external/rtaudio/rtaudio
+	url = https://github.com/HeeroYui/rtaudio.git
+[submodule "external/eaudiofx"]
+	path = external/eaudiofx
+	url = https://github.com/HeeroYui/eaudiofx.git
