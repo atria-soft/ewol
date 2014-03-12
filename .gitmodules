@@ -56,3 +56,6 @@
 [submodule "external/eaudiofx"]
 	path = external/eaudiofx
 	url = https://github.com/HeeroYui/eaudiofx.git
+[submodule "external/airtaudio"]
+	path = external/airtaudio
+	url = https://github.com/HeeroYui/AirTAudio.git
