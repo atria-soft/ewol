@@ -23,8 +23,8 @@ import org.ewol.Ewol;
 public class EwolAudioTask implements Runnable, EwolConstants
 {
 	public static final int SAMPLE_FREQ_44100  = 44100;
-	private boolean         m_stopAudioThreads = false;
-	private AudioTrack      m_musicTrack       = null;
+	private boolean m_stopAudioThreads = false;
+	private AudioTrack m_musicTrack = null;
 	private Ewol EWOL;
 	
 	// constructor :
@@ -82,5 +82,5 @@ public class EwolAudioTask implements Runnable, EwolConstants
 			return;
 		}
 		m_stopAudioThreads=true;
-    }
-}/* no ; here !!! */
+	}
+}

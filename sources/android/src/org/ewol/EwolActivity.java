@@ -136,13 +136,11 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	
 	@Override protected void onStart() {
 		super.onStart();
-		// call C
 		EWOL.onStart();
 	}
 	
 	@Override protected void onRestart() {
 		super.onRestart();
-		// call C
 		EWOL.onReStart();
 	}
 	
@@ -155,7 +153,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			mAudioThread.start();
 		}
 		*/
-		// call C
 		EWOL.onResume();
 	}
 	
@@ -172,7 +169,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			} catch(InterruptedException e) { }
 		}
 		*/
-		// call C
 		EWOL.onPause();
 	}
 	
