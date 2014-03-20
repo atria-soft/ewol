@@ -188,4 +188,24 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 	public void stop() {
 		Log.d("EwolCallback", "STOP is not implemented ...");
 	}
+	
+	public int audioGetDeviceCount() {
+		Log.e("EwolActivity", "Get device List");
+		return 0;
+	}
+	
+	public String audioGetDeviceProperty(int idDevice) {
+		Log.e("EwolActivity", "Get device property");
+		return "";
+	}
+	
+	public boolean audioOpenDevice(int idDevice, int freq, int nbChannel, int format) {
+		Log.e("EwolActivity", "Open device");
+		return false;
+	}
+	
+	public boolean audioCloseDevice(int idDevice) {
+		Log.e("EwolActivity", "Close device");
+		return false;
+	}
 }

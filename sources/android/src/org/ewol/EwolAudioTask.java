@@ -12,6 +12,7 @@ import android.media.AudioTrack;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
+import android.util.Log;
 
 // import the ewol package :
 /* no need in same package... */
@@ -30,10 +31,13 @@ public class EwolAudioTask implements Runnable, EwolConstants
 	// constructor :
 	public EwolAudioTask(Ewol ewolInstance) {
 		EWOL = ewolInstance;
+		m_stopAudioThreads = false;
 	}
 	
 	public void run() {
+		Log.e("audioEWOL", "RUN (start)");
 		if(m_musicTrack != null) {
+			Log.e("audioEWOL", "  ==> rejected");
 			return;
 		}
 		
@@ -52,18 +56,28 @@ public class EwolAudioTask implements Runnable, EwolConstants
 		                              bufferSize,
 		                              AudioTrack.MODE_STREAM);
 		m_musicTrack.play();
+		m_stopAudioThreads = false;
 		//m_musicTrack.setPositionNotificationPeriod(2048);
 		
 		while (!m_stopAudioThreads) {
 			// Fill buffer with PCM data from C++
 			EWOL.audioPlayback(streamBuffer, NATIVE_AUDIO_BUFFER_SIZE, nbChannels);
-			
+			int xxx = NATIVE_AUDIO_BUFFER_SIZE;
+			/*
+			while (xxx>0) {
+				Log.e("audioEWOL", (NATIVE_AUDIO_BUFFER_SIZE-xxx) + " data : " + streamBuffer[NATIVE_AUDIO_BUFFER_SIZE-xxx]);
+				xxx--;
+			}
+			*/
 			// Stream PCM data into the music AudioTrack
 			m_musicTrack.write(streamBuffer, 0, NATIVE_AUDIO_BUFFER_SIZE);
 		}
 		
 		m_musicTrack.flush();
 		m_musicTrack.stop();
+		m_musicTrack = null;
+		streamBuffer = null;
+		Log.e("audioEWOL", "RUN (stop)");
 	}
 	public void Pause() {
 		if(m_musicTrack == null) {

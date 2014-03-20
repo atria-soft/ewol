@@ -15,6 +15,8 @@ public interface EwolCallback {
 	public void orientationUpdate(int screenMode);
 	public void titleSet(String value);
 	public void stop();
-	public String getClipBoardString();
-	public void setClipBoardString(String data);
+	public int audioGetDeviceCount();
+	public String audioGetDeviceProperty(int idDevice);
+	public boolean audioOpenDevice(int idDevice, int freq, int nbChannel, int format);
+	public boolean audioCloseDevice(int idDevice);
 }

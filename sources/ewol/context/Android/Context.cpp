@@ -33,6 +33,7 @@ int64_t ewol::getTime(void) {
 
 static JavaVM* g_JavaVM=NULL; // global acces on the unique JVM !!!
 etk::Mutex g_interfaceMutex;
+etk::Mutex g_interfaceAudioMutex;
 
 
 void java_check_exception(JNIEnv* _env) {
@@ -64,6 +65,11 @@ class AndroidContext : public ewol::Context {
 		jmethodID m_javaMethodEwolActivitySetTitle;
 		jmethodID m_javaMethodEwolActivitySetClipBoardString;
 		jmethodID m_javaMethodEwolActivityGetClipBoardString;
+		// List of all Audio interface :
+		jmethodID m_javaMethodEwolActivityAudioGetDeviceCount;
+		jmethodID m_javaMethodEwolActivityAudioGetDeviceProperty;
+		jmethodID m_javaMethodEwolActivityAudioOpenDevice;
+		jmethodID m_javaMethodEwolActivityAudioCloseDevice;
 		jclass m_javaDefaultClassString; //!< default string class
 		int32_t m_currentHeight;
 		ewol::key::Special m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
@@ -93,9 +99,15 @@ class AndroidContext : public ewol::Context {
 		  m_javaMethodEwolActivitySetTitle(0),
 		  m_javaMethodEwolActivitySetClipBoardString(0),
 		  m_javaMethodEwolActivityGetClipBoardString(0),
+		  m_javaMethodEwolActivityAudioGetDeviceCount(0),
+		  m_javaMethodEwolActivityAudioGetDeviceProperty(0),
+		  m_javaMethodEwolActivityAudioOpenDevice(0),
+		  m_javaMethodEwolActivityAudioCloseDevice(0),
 		  m_javaDefaultClassString(0),
 		  m_currentHeight(0),
-		  m_clipBoardOwnerStd(false) {
+		  m_clipBoardOwnerStd(false),
+		  m_audioCallBack(NULL),
+		  m_audioCallBackUserData(NULL) {
 			EWOL_DEBUG("*******************************************");
 			if (m_javaApplicationType == appl_application) {
 				EWOL_DEBUG("** set JVM Pointer (application)         **");
@@ -122,6 +134,7 @@ class AndroidContext : public ewol::Context {
 					m_JavaVirtualMachinePointer = NULL;
 					return;
 				}
+				bool functionCallbackIsMissing = false;
 				bool ret= false;
 				ret = safeInitMethodID(m_javaMethodEwolActivitySetTitle,
 				                       m_javaClassEwolCallback,
@@ -129,7 +142,8 @@ class AndroidContext : public ewol::Context {
 				                       "(Ljava/lang/String;)V");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : titleSet");
+					functionCallbackIsMissing = true;
 				}
 				
 				ret = safeInitMethodID(m_javaMethodEwolCallbackStop,
@@ -138,7 +152,8 @@ class AndroidContext : public ewol::Context {
 				                       "()V");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : stop");
+					functionCallbackIsMissing = true;
 				}
 				
 				ret = safeInitMethodID(m_javaMethodEwolCallbackEventNotifier,
@@ -147,7 +162,8 @@ class AndroidContext : public ewol::Context {
 				                       "([Ljava/lang/String;)V");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : eventNotifier");
+					functionCallbackIsMissing = true;
 				}
 				
 				ret = safeInitMethodID(m_javaMethodEwolCallbackKeyboardUpdate,
@@ -156,7 +172,8 @@ class AndroidContext : public ewol::Context {
 				                       "(Z)V");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : keyboardUpdate");
+					functionCallbackIsMissing = true;
 				}
 				
 				ret = safeInitMethodID(m_javaMethodEwolCallbackOrientationUpdate,
@@ -165,7 +182,8 @@ class AndroidContext : public ewol::Context {
 				                       "(I)V");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : orientationUpdate");
+					functionCallbackIsMissing = true;
 				}
 				
 				ret = safeInitMethodID(m_javaMethodEwolActivitySetClipBoardString,
@@ -174,7 +192,8 @@ class AndroidContext : public ewol::Context {
 				                       "(Ljava/lang/String;)V");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : setClipBoardString");
+					functionCallbackIsMissing = true;
 				}
 				
 				ret = safeInitMethodID(m_javaMethodEwolActivityGetClipBoardString,
@@ -183,18 +202,64 @@ class AndroidContext : public ewol::Context {
 				                       "()Ljava/lang/String;");
 				if (ret == false) {
 					java_check_exception(_env);
-					return;
+					EWOL_ERROR("system can not start without function : getClipBoardString");
+					functionCallbackIsMissing = true;
+				}
+				
+				ret = safeInitMethodID(m_javaMethodEwolActivityAudioGetDeviceCount,
+				                       m_javaClassEwolCallback,
+				                       "audioGetDeviceCount",
+				                       "()I");
+				if (ret == false) {
+					java_check_exception(_env);
+					EWOL_ERROR("system can not start without function : audioGetDeviceCount");
+					functionCallbackIsMissing = true;
+				}
+				
+				ret = safeInitMethodID(m_javaMethodEwolActivityAudioGetDeviceProperty,
+				                       m_javaClassEwolCallback,
+				                       "audioGetDeviceProperty",
+				                       "(I)Ljava/lang/String;");
+				if (ret == false) {
+					java_check_exception(_env);
+					EWOL_ERROR("system can not start without function : audioGetDeviceProperty");
+					functionCallbackIsMissing = true;
+				}
+				
+				ret = safeInitMethodID(m_javaMethodEwolActivityAudioOpenDevice,
+				                       m_javaClassEwolCallback,
+				                       "audioOpenDevice",
+				                       "(IIII)Z");
+				if (ret == false) {
+					java_check_exception(_env);
+					EWOL_ERROR("system can not start without function : audioOpenDevice");
+					functionCallbackIsMissing = true;
+				}
+				ret = safeInitMethodID(m_javaMethodEwolActivityAudioCloseDevice,
+				                       m_javaClassEwolCallback,
+				                       "audioCloseDevice",
+				                       "(I)Z");
+				if (ret == false) {
+					java_check_exception(_env);
+					EWOL_ERROR("system can not start without function : audioCloseDevice");
+					functionCallbackIsMissing = true;
 				}
 				
 				m_javaObjectEwolCallback = _env->NewGlobalRef(_objCallback);
 				//javaObjectEwolCallbackAndActivity = objCallback;
+				if (m_javaObjectEwolCallback == NULL) {
+					functionCallbackIsMissing = true;
+				}
 				
 				m_javaDefaultClassString = m_JavaVirtualMachinePointer->FindClass("java/lang/String" );
 				if (m_javaDefaultClassString == 0) {
 					EWOL_ERROR("C->java : Can't find java/lang/String" );
 					// remove access on the virtual machine : 
 					m_JavaVirtualMachinePointer = NULL;
-					return;
+					functionCallbackIsMissing = true;
+				}
+				if (functionCallbackIsMissing == true) {
+					EWOL_CRITICAL(" mission one function ==> system can not work withut it...");
 				}
 			}
 		}
@@ -280,6 +345,110 @@ class AndroidContext : public ewol::Context {
 					EWOL_ERROR("Request an unknow ClipBoard ...");
 					break;
 			}
+		}
+		int32_t audioGetDeviceCount(void) {
+			// Request the clipBoard :
+			EWOL_DEBUG("C->java : audio get device count");
+			if (m_javaApplicationType == appl_application) {
+				int status;
+				if(!java_attach_current_thread(&status)) {
+					return 0;
+				}
+				EWOL_DEBUG("Call CallIntMethod ...");
+				//Call java ...
+				jint ret = m_JavaVirtualMachinePointer->CallIntMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioGetDeviceCount);
+				// manage execption : 
+				java_check_exception(m_JavaVirtualMachinePointer);
+				java_detach_current_thread(status);
+				return (int32_t)ret;
+			} else {
+				EWOL_ERROR("C->java : can not get audio device count");
+			}
+			return 0;
+		}
+		std::string audioGetDeviceProperty(int32_t _idDevice) {
+			// Request the clipBoard :
+			EWOL_DEBUG("C->java : audio get device count");
+			if (m_javaApplicationType == appl_application) {
+				int status;
+				if(!java_attach_current_thread(&status)) {
+					return "";
+				}
+				//Call java ...
+				jstring returnString = (jstring) m_JavaVirtualMachinePointer->CallObjectMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioGetDeviceProperty, _idDevice);
+				const char *js = m_JavaVirtualMachinePointer->GetStringUTFChars(returnString, NULL);
+				std::string retString(js);
+				m_JavaVirtualMachinePointer->ReleaseStringUTFChars(returnString, js);
+				//m_JavaVirtualMachinePointer->DeleteLocalRef(returnString);
+				// manage execption : 
+				java_check_exception(m_JavaVirtualMachinePointer);
+				java_detach_current_thread(status);
+				return retString;
+			} else {
+				EWOL_ERROR("C->java : can not get audio device count");
+			}
+			return "";
+		}
+	private:
+		AndroidAudioCallback m_audioCallBack;
+		void* m_audioCallBackUserData;
+	public:
+		bool audioOpenDevice(int32_t _idDevice,
+		                     int32_t _freq,
+		                     int32_t _nbChannel,
+		                     int32_t _format,
+		                     AndroidAudioCallback _callback,
+		                     void* _userData) {
+			if (m_audioCallBack != NULL) {
+				EWOL_ERROR("AudioCallback already started ...");
+				return false;
+			}
+			// Request the clipBoard :
+			EWOL_DEBUG("C->java : audio get device count");
+			if (m_javaApplicationType == appl_application) {
+				int status;
+				if(!java_attach_current_thread(&status)) {
+					return false;
+				}
+				//Call java ...
+				jboolean ret = m_JavaVirtualMachinePointer->CallBooleanMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioOpenDevice, _idDevice, _freq, _nbChannel, _format);
+				// manage execption : 
+				java_check_exception(m_JavaVirtualMachinePointer);
+				java_detach_current_thread(status);
+				if (ret == true) {
+					m_audioCallBack = _callback;
+					m_audioCallBackUserData = _userData;
+				}
+				return (bool)ret;
+			} else {
+				EWOL_ERROR("C->java : can not get audio device count");
+			}
+			return false;
+		}
+		bool audioCloseDevice(int32_t _idDevice) {
+			if (m_audioCallBack == NULL) {
+				EWOL_ERROR("AudioCallback Not started ...");
+				return false;
+			}
+			// Request the clipBoard :
+			EWOL_DEBUG("C->java : audio get device count");
+			if (m_javaApplicationType == appl_application) {
+				int status;
+				if(!java_attach_current_thread(&status)) {
+					return false;
+				}
+				//Call java ...
+				jboolean ret = m_JavaVirtualMachinePointer->CallBooleanMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioCloseDevice, _idDevice);
+				// manage execption : 
+				java_check_exception(m_JavaVirtualMachinePointer);
+				java_detach_current_thread(status);
+				m_audioCallBack = NULL;
+				m_audioCallBackUserData = NULL;
+				return (bool)ret;
+			} else {
+				EWOL_ERROR("C->java : can not get audio device count");
+			}
+			return false;
 		}
 	private:
 		bool java_attach_current_thread(int *_rstatus) {
@@ -431,6 +600,13 @@ class AndroidContext : public ewol::Context {
 			m_currentHeight = _size.y();
 			ewol::Context::OS_Resize(_size);
 		}
+		
+		void audioPlayback(void* _dataOutput, int32_t _frameRate) {
+			if (m_audioCallBack != NULL) {
+				//EWOL_DEBUG("IO Audio event request: Frames=" << _frameRate);
+				m_audioCallBack(_dataOutput, _frameRate, m_audioCallBackUserData);
+			}
+		}
 };
 
 static std::vector<AndroidContext*> s_listInstance;
@@ -440,6 +616,7 @@ extern "C" {
 	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved) {
 		// get the java virtual machine handle ...
 		etk::AutoLockMutex myLock(g_interfaceMutex);
+		etk::AutoLockMutex myLock2(g_interfaceAudioMutex);
 		g_JavaVM = _jvm;
 		EWOL_DEBUG("JNI-> load the jvm ..." );
 		return JNI_VERSION_1_6;
@@ -447,6 +624,7 @@ extern "C" {
 	// JNI onUnLoad
 	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
+		etk::AutoLockMutex myLock2(g_interfaceAudioMutex);
 		g_JavaVM = NULL;
 		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
 	}
@@ -849,7 +1027,7 @@ extern "C" {
 		s_listInstance[_id]->OS_Resize(vec2(_w, _h));
 	}
 	
-	// TODO : Return tur or foalse to not redraw when the under draw has not be done (processing gain of time)
+	// TODO : Return true or false to not redraw when the under draw has not be done (processing gain of time)
 	void Java_org_ewol_Ewol_EWrenderDraw(JNIEnv* _env,
 	                                     jobject _thiz,
 	                                     jint _id) {
@@ -870,7 +1048,7 @@ extern "C" {
 	                                        jshortArray _location,
 	                                        jint _frameRate,
 	                                        jint _nbChannels) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		etk::AutoLockMutex myLock(g_interfaceAudioMutex);
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -882,9 +1060,10 @@ extern "C" {
 		jboolean isCopy;
 		jshort* dst = _env->GetShortArrayElements(_location, &isCopy);
 		if (NULL != dst) {
-			//ewol::audio::getData(dst, _frameRate, _nbChannels);
+			memset(dst, sizeof(jshort), _frameRate*_nbChannels);
+			//EWOL_DEBUG("IO Audio event request: Frames=" << _frameRate << " channels=" << _nbChannels);
+			s_listInstance[_id]->audioPlayback(dst, _frameRate);
 		}
-		//APPL_DEBUG("IO Audio event request: Frames=" << frameRate << " channels=" << nbChannels);
 		// TODO : Understand why it did not work corectly ...
 		//if (isCopy == JNI_TRUE) {
 		// release the short* pointer
