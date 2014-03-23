@@ -1,8 +1,22 @@
 {
-	padding-left:15,
-	padding-right:15,
-	padding-top:15,
-	padding-buttom:15,
+	mode:2,
+	display-outside:true,
+	
+	padding-out-left:1,
+	padding-out-right:1,
+	padding-out-top:1,
+	padding-out-buttom:1,
+	
+	border-left:1,
+	border-right:1,
+	border-top:1,
+	border-buttom:1,
+	
+	padding-in-left:3,
+	padding-in-right:3,
+	padding-in-top:3,
+	padding-in-buttom:3,
+	
 	change-time:200,
 	program:"THEME:GUI:WidgetScrolled.prog",
 	color:"THEME:COLOR:WidgetScrolled.json"

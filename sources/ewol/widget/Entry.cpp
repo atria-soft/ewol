@@ -193,8 +193,7 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 		}
 		m_text.setClippingMode(false);
 		
-		m_shaper.setOrigin(tmpOriginShaper);
-		m_shaper.setSize(tmpSizeShaper);
+		m_shaper.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 	}
 }
 

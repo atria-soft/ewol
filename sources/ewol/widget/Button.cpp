@@ -110,11 +110,10 @@ void ewol::widget::Button::onRegenerateDisplay(void) {
 		return;
 	}
 	ewol::Padding padding = m_shaper.getPadding();
-	m_shaper.clear();
-	m_shaper.setOrigin(vec2ClipInt32(m_selectableAreaPos));
-	m_shaper.setSize(vec2ClipInt32(m_selectableAreaSize));
-	m_shaper.setInsidePos(vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ));
-	m_shaper.setInsideSize(vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ));
+	m_shaper.setShape(vec2(0,0),
+	                  m_size,
+	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
+	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
 }
 
 void ewol::widget::Button::setLock(enum buttonLock _lock) {

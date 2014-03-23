@@ -22,6 +22,7 @@ def create(target):
 	myModule.add_src_file([
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
+		'ewol/Padding.cpp',
 		'ewol/Dimension.cpp'
 		])
 	

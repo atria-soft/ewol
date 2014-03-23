@@ -210,10 +210,8 @@ void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 	
 	vec2 shaperOrigin = tmpOrigin-vec2(padding.xLeft(), padding.yButtom());
 	vec2 shaperSize = tmpSize+vec2(padding.x(), padding.y());
-	m_shaper.setOrigin(vec2ClipInt32(shaperOrigin));
-	m_shaper.setSize(vec2ClipInt32(shaperSize));
-	m_shaper.setInsidePos(vec2ClipInt32(shaperOrigin+vec2(padding.xLeft(), padding.yButtom())));
-	m_shaper.setInsideSize(vec2ClipInt32(shaperSize-vec2(padding.x(), padding.y())));
+	m_shaper.setShape(vec2ClipInt32(shaperOrigin),
+	                  vec2ClipInt32(shaperSize));
 }
 
 bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {

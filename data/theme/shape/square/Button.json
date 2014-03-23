@@ -1,18 +1,21 @@
 {
-	extern-border-left:2,
-	extern-border-right:2,
-	extern-border-top:2,
-	extern-border-butom:2,
+	mode:2,
+	display-outside:false,
 	
-	border-left:2,
-	border-right:2,
-	border-top:2,
-	border-buttom:2,
+	padding-out-left:1,
+	padding-out-right:1,
+	padding-out-top:1,
+	padding-out-buttom:1,
 	
-	padding-left:8,
-	padding-right:8,
-	padding-top:8,
-	padding-buttom:8,
+	border-left:1,
+	border-right:1,
+	border-top:1,
+	border-buttom:1,
+	
+	padding-in-left:1,
+	padding-in-right:1,
+	padding-in-top:1,
+	padding-in-buttom:1,
 	
 	change-time:356,
 	program:"THEME:GUI:Button.prog",

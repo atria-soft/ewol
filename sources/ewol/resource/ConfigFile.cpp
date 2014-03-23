@@ -92,7 +92,17 @@ const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
 	return tmp->get();
 }
 
-
+bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
+	if (    _id < 0
+	     || m_list[_id] == NULL) {
+		return false;
+	}
+	ejson::Boolean* tmp = m_list[_id]->toBoolean();
+	if (tmp == NULL) {
+		return false;
+	}
+	return tmp->get();
+}
 
 ewol::resource::ConfigFile* ewol::resource::ConfigFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");

@@ -1,8 +1,22 @@
 {
-	padding-left:8,
-	padding-right:8,
-	padding-top:8,
-	padding-buttom:8,
+	mode:2,
+	display-outside:false,
+	
+	padding-out-left:2,
+	padding-out-right:2,
+	padding-out-top:2,
+	padding-out-buttom:2,
+	
+	border-left:3,
+	border-right:3,
+	border-top:3,
+	border-buttom:3,
+	
+	padding-in-left:2,
+	padding-in-right:2,
+	padding-in-top:2,
+	padding-in-buttom:2,
+	
 	change-time:356,
 	program:"THEME:GUI:PopUp.prog",
 	color:"THEME:COLOR:PopUp.json"

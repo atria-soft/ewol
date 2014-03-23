@@ -115,12 +115,12 @@ void ewol::widget::CheckBox::onRegenerateDisplay(void) {
 	vec2 origin(m_selectableAreaPos + vec2(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
 	vec2 size = vec2(boxSize+padding.x(), boxSize+padding.y());
 	
-	m_shaper.setOrigin(vec2ClipInt32(origin));
-	m_shaper.setSize(vec2ClipInt32(size));
-	origin = m_selectableAreaPos + vec2((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
-	size = vec2(boxInside+padding.x(), boxInside+padding.y());
-	m_shaper.setInsidePos(vec2ClipInt32(origin+vec2(padding.xLeft(),padding.yButtom()) ));
-	m_shaper.setInsideSize(vec2ClipInt32(size-vec2(padding.x(),padding.y()) ));
+	vec2 origin2 = m_selectableAreaPos + vec2((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
+	vec2 size2 = vec2(boxInside+padding.x(), boxInside+padding.y());
+	m_shaper.setShape(vec2ClipInt32(origin),
+	                  vec2ClipInt32(size),
+	                  vec2ClipInt32(origin2+vec2(padding.xLeft(),padding.yButtom()) ),
+	                  vec2ClipInt32(size2-vec2(padding.x(),padding.y()) ));
 }
 
 void ewol::widget::CheckBox::setValue(bool _val) {

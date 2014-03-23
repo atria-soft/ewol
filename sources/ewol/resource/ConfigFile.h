@@ -31,6 +31,7 @@ namespace ewol {
 				
 				double getNumber(int32_t _id);
 				const std::string& getString(int32_t _id);
+				bool getBoolean(int32_t _id);
 			public:
 				/**
 				 * @brief keep the resource pointer.

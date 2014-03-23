@@ -134,12 +134,11 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	// selection area :
 	m_selectableAreaPos = vec2(tmpOrigin.x()-padding.xLeft(), tmpOrigin.y()-padding.yButtom());
 	m_selectableAreaSize = localSize + vec2(padding.x(),padding.y());
-	m_shaper.setOrigin(m_selectableAreaPos );
-	m_shaper.setSize(m_selectableAreaSize);
-	m_shaper.setInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );
 	vec3 tmpp = m_text.calculateSize(label);
-	vec2 tmpp2(tmpp.x(), tmpp.y());
-	m_shaper.setInsideSize(tmpp2);
+	m_shaper.setShape(m_selectableAreaPos,
+	                  m_selectableAreaSize,
+	                  vec2(tmpTextOrigin.x(), tmpTextOrigin.y()),
+	                  vec2(tmpp.x(), tmpp.y()));
 }
 
 

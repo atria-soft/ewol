@@ -3,13 +3,6 @@ precision mediump float;
 precision mediump int;
 #endif
 
-struct displayProperty {
-	vec2 size;
-	vec2 origin;
-	vec2 insidePos;
-	vec2 insideSize;
-};
-
 struct widgetStateProperty {
 	int   activate;
 	int   stateOld;
@@ -17,12 +10,11 @@ struct widgetStateProperty {
 	float transition;
 };
 
-uniform displayProperty EW_widgetProperty;
-
 uniform widgetStateProperty EW_status;
 
 // transmit from the vertex shader
 varying vec2  v_position; // interpolated position ...
+varying vec2  v_propPos;
 varying vec4  v_colorTansition;
 varying vec4  v_colorBorder;
 varying vec4  v_colorBackground;

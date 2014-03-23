@@ -1,10 +1,24 @@
 {
+	mode:2,
+	display-outside:false,
+	
+	padding-out-left:1,
+	padding-out-right:1,
+	padding-out-top:1,
+	padding-out-buttom:1,
+	
+	border-left:1,
+	border-right:1,
+	border-top:1,
+	border-buttom:1,
+	
+	padding-in-left:1,
+	padding-in-right:1,
+	padding-in-top:1,
+	padding-in-buttom:1,
+	
 	box-size:20,
 	box-inside:12,
-	padding-left:8,
-	padding-right:8,
-	padding-top:8,
-	padding-buttom:8,
 	change-time:356,
 	program:"THEME:GUI:CheckBox.prog",
 	color:"THEME:COLOR:CheckBox.json"

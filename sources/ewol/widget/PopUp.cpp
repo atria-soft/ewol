@@ -136,10 +136,10 @@ void ewol::widget::PopUp::onRegenerateDisplay(void) {
 		tmpSize.setMax(m_minSize);
 		vec2 tmpOrigin = (m_size-tmpSize)/2.0f;
 		
-		m_shaper.setOrigin(vec2(0,0));
-		m_shaper.setSize(vec2ClipInt32(m_size));
-		m_shaper.setInsidePos(vec2ClipInt32(tmpOrigin-vec2(padding.xLeft(), padding.yButtom())));
-		m_shaper.setInsideSize(vec2ClipInt32(tmpSize + vec2(padding.x(), padding.y())));
+		m_shaper.setShape(vec2(0,0),
+		                  vec2ClipInt32(m_size),
+		                  vec2ClipInt32(tmpOrigin-vec2(padding.xLeft(), padding.yButtom())),
+		                  vec2ClipInt32(tmpSize + vec2(padding.x(), padding.y())));
 	}
 	// SUBwIDGET GENERATION ...
 	if (NULL != m_subWidget) {

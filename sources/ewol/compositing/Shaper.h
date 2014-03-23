@@ -25,6 +25,16 @@ namespace ewol {
 			renderBorder, //!< Render 4 squares for coiner, and renctangle for border, a big rentangle for background and 8 rectangle for the outside part
 			renderOneBorder,
 		};
+		#define SHAPER_NB_MAX_QUAD (5*5)
+		#define SHAPER_NB_MAX_TRIANGLE (SHAPER_NB_MAX_QUAD*2)
+		#define SHAPER_NB_MAX_VERTEX (SHAPER_NB_MAX_TRIANGLE*3)
+		enum {
+			shaperPosLeft,
+			shaperPosRight,
+			shaperPosTop,
+			shaperPosButtom,
+			shaperPosCount,
+		};
 		/**
 		 * @brief the Shaper system is a basic theme configuration for every widget, it corespond at a background display described by a pool of files
 		 */
@@ -35,10 +45,12 @@ namespace ewol {
 				std::string m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
 				ewol::resource::ConfigFile* m_config; //!< pointer on the config file resources
-				int32_t m_confIdPaddingLeft;   //!< ConfigFile padding property X-left
-				int32_t m_confIdPaddingRight;  //!< ConfigFile padding property X-right
-				int32_t m_confIdPaddingTop;    //!< ConfigFile padding property Y-top
-				int32_t m_confIdPaddingButtom; //!< ConfigFile padding property Y-buttom
+				int32_t m_confIdDisplayExternal; //!< Display external border
+				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
+				int32_t m_confIdBorder[shaperPosCount]; //!< border property : X-left X-right Y-top Y-buttom
+				int32_t m_confIdPaddingIn[shaperPosCount]; //!< Padding in property : X-left X-right Y-top Y-buttom
+				int32_t m_confIdMode; //!< Display mode
+				int32_t m_confIdDisplayOutside; //!< Display outside of the shape...
 				int32_t m_confIdChangeTime;    //!< ConfigFile padding transition time property
 				int32_t m_confProgramFile;     //!< ConfigFile opengGl program Name
 				int32_t m_confColorFile;       //!< ConfigFile opengGl color file Name
@@ -47,10 +59,7 @@ namespace ewol {
 				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
-				int32_t m_GLPropertySize;       //!< openGL id on the element (widget size)
-				int32_t m_GLPropertyOrigin;     //!< openGL id on the element (widget origin)
-				int32_t m_GLPropertyInsidePos;  //!< openGL id on the element (widget internal element position)
-				int32_t m_GLPropertyInsideSize; //!< openGL id on the element (widget internal element size)
+				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on vec2(X,Y))
 				int32_t m_GLStateActivate;      //!< openGL id on the element (activate state displayed)
 				int32_t m_GLStateOld;           //!< openGL id on the element (old state displayed)
 				int32_t m_GLStateNew;           //!< openGL id on the element (new state displayed)
@@ -68,7 +77,9 @@ namespace ewol {
 				int32_t m_stateOld;               //!< previous state
 				int32_t m_stateNew;               //!< destination state
 				float   m_stateTransition;        //!< working state between 2 states
-				vec2    m_coord[6];               //!< the double triangle coordonates
+				vec2    m_coord[SHAPER_NB_MAX_VERTEX]; //!< coordonate of the display ...
+				vec2    m_pos[SHAPER_NB_MAX_VERTEX]; //!< podition to display property
+				int32_t m_nbVertexToDisplay;
 				// color management theme:
 				ewol::resource::ColorFile* m_colorProperty; //!< input resource for color management
 				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
@@ -136,30 +147,17 @@ namespace ewol {
 				 */
 				bool periodicCall(const ewol::event::Time& _event);
 				/**
-				 * @brief set the widget origin (needed fot the display)
-				 * @param[in] _newOri : the new widget origin
-				 */
-				void setOrigin(const vec2& _newOri);
-				/**
-				 * @brief set the widget size (needed fot the display)
-				 * @param[in] _newSize : the new widget size
-				 */
-				void setSize(const vec2& _newSize);
-				/**
-				 * @brief set the internal widget size
-				 * @param[in] _newInsidePos : the subelement size.
-				 */
-				void setInsideSize(const vec2& _newInsideSize);
-				/**
-				 * @brief set the internal widget position
-				 * @param[in] _newInsidePos : the subelement position
-				 */
-				void setInsidePos(const vec2& _newInsidePos);
-				/**
 				 * @brief get the padding declared by the user in the config file
 				 * @return the padding property
 				 */
 				ewol::Padding getPadding(void);
+				ewol::Padding getPaddingIn(void);
+				ewol::Padding getPaddingOut(void);
+				/**
+				 * @brief get the padding declared by the user in the config file
+				 * @return the padding property
+				 */
+				ewol::Padding getBorder(void);
 				/**
 				 * @brief change the shaper Source
 				 * @param[in] _newFile New file of the shaper
@@ -177,11 +175,57 @@ namespace ewol {
 				 * @return the validity od the resources.
 				 */
 				bool hasSources(void);
-			private:
+			public:
 				/**
-				 * @brief update the internal vertex table.
+				 * @brief set the shape property:
+				 * 
+				 *   ********************************************************************************
+				 *   *                                                                        _size *
+				 *   *                                                                              *
+				 *   *        * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *       *
+				 *   *                                                                              *
+				 *   *        |                                                             |       *
+				 *   *             ***************************************************              *
+				 *   *        |    *                                                 *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    *     * - - - - - - - - - - - - - - - - - - *     *      |       *
+				 *   *             *                                _insideSize      *              *
+				 *   *        |    *     |                                     |     *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    *     |                                     |     *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    *     |                                     |     *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    *     |                                     |     *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    *     |                                     |     *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    *     |                                     |     *      |       *
+				 *   *             *      _insidePos                                 *              *
+				 *   *        |    *     * - - - - - - - - - - - - - - - - - - *     *      |       *
+				 *   *             *                                                 *              *
+				 *   *        |    ***************************************************      |       *
+				 *   *                                                                              *
+				 *   *        |                                                             |       *
+				 *   *                                                                              *
+				 *   *        * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *       *
+				 *   *                                                                              *
+				 *   *                                                                              *
+				 *   ********************************************************************************
+				 *   _origin
+				 *
+				 *
+				 * @param[in] _origin Origin of the display
+				 * @param[in] _size Size of the display
+				 * @param[in] _insidePos Positin of the internal data
+				 * @param[in] _insideSize Size of the internal data
 				 */
-				void updateVertex(void);
+				void setShape(const vec2& _origin, const vec2& _size, const vec2& _insidePos, const vec2& _insideSize);
+				// @previous
+				void setShape(const vec2& _origin, const vec2& _size) {
+					ewol::Padding tmp = getPadding();
+					setShape(_origin, _size, _origin+vec2(tmp.xLeft(), tmp.yButtom()), _size - vec2(tmp.x(), tmp.y()));
+				}
 			public:
 				/**
 				 * @brief Get an ID on the color instance element
@@ -232,6 +276,21 @@ namespace ewol {
 				void setActivateState(int32_t _status) {
 					m_stateActivate = _status;
 				}
+			private:
+				void addVertexLine(float _yTop,
+				                   float _yButtom,
+				                   float _x1,
+				                   float _x2,
+				                   float _x3,
+				                   float _x4,
+				                   float _x5,
+				                   float _x6,
+				                   float _x7,
+				                   float _x8,
+				                   float _yValTop,
+				                   float _yValButtom,
+				                   const float* _table,
+				                   bool _displayOutside);
 		};
 	};
 };

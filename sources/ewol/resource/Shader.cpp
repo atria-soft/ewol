@@ -114,7 +114,7 @@ void ewol::resource::Shader::removeContextToLate(void) {
 void ewol::resource::Shader::reload(void) {
 	etk::FSNode file(m_name);
 	if (false == file.exist()) {
-		EWOL_ERROR("File does not Exist : \"" << file << "\"");
+		EWOL_ERROR("File does not Exist : '" << file << "' : '" << file.getFileSystemName() << "'");
 		return;
 	}
 	

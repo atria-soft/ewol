@@ -44,31 +44,31 @@ void ewol::widget::WidgetScrolled::onRegenerateDisplay(void) {
 		// nothing to do ...
 		return;
 	}
+	ewol::Padding paddingVert = m_shaperV.getPadding();
+	ewol::Padding paddingHori = m_shaperH.getPadding();
 	if(    m_size.y() < m_maxSize.y()
 	    || m_originScrooled.y()!=0) {
-		ewol::Padding padding = m_shaperV.getPadding();
-		m_shaperV.setOrigin(vec2(m_size.x()-padding.xLeft(), 0));
-		m_shaperV.setSize(vec2(padding.xLeft(), m_size.y()));
 		float lenScrollBar = m_size.y()*m_size.y() / m_maxSize.y();
 		lenScrollBar = etk_avg(10, lenScrollBar, m_size.y());
 		float originScrollBar = m_originScrooled.y() / (m_maxSize.y()-m_size.y()*m_limitScrolling);
 		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 		originScrollBar *= (m_size.y()-lenScrollBar);
-		m_shaperV.setInsidePos(vec2(m_size.x()-padding.xLeft(), m_size.y() - originScrollBar - lenScrollBar));
-		m_shaperV.setInsideSize(vec2(padding.xLeft(), lenScrollBar));
+		m_shaperV.setShape(vec2(m_size.x() - paddingVert.x(), 0),
+		                   vec2(paddingVert.x(), m_size.y()),
+		                   vec2(m_size.x() - paddingVert.xRight(), m_size.y() - originScrollBar - lenScrollBar),
+		                   vec2(0, lenScrollBar));
 	}
 	if(    m_size.x() < m_maxSize.x()
 	    || m_originScrooled.x()!=0) {
-		ewol::Padding padding = m_shaperH.getPadding();
-		m_shaperH.setOrigin(vec2(0, 0));
-		m_shaperH.setSize(vec2(m_size.x()-padding.xLeft(), padding.yButtom()));
-		float lenScrollBar = (m_size.x()-padding.xLeft())*(m_size.x()-padding.xRight()) / m_maxSize.x();
-		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x()-padding.xRight()));
+		float lenScrollBar = (m_size.x()-paddingHori.xLeft())*(m_size.x()-paddingVert.x()) / m_maxSize.x();
+		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x()-paddingVert.x()));
 		float originScrollBar = m_originScrooled.x() / (m_maxSize.x()-m_size.x()*m_limitScrolling);
 		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
-		originScrollBar *= (m_size.x()-padding.xRight()-lenScrollBar);
-		m_shaperH.setInsidePos(vec2(originScrollBar, 0));
-		m_shaperH.setInsideSize(vec2(lenScrollBar, padding.yButtom()));
+		originScrollBar *= (m_size.x()-paddingHori.xRight()-lenScrollBar);
+		m_shaperH.setShape(vec2(0, 0),
+		                   vec2(m_size.x()-paddingVert.x(), paddingHori.y()),
+		                   vec2(originScrollBar, paddingHori.yButtom()),
+		                   vec2(lenScrollBar, 0));
 	}
 }
 
