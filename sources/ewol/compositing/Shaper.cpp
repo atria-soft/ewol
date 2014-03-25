@@ -431,23 +431,40 @@ const float modeDisplay[][8] = {
 void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size, const vec2& _insidePos, const vec2& _insideSize) {
 	ewol::Padding borderTmp = getBorder();
 	ewol::Padding paddingIn = getPaddingIn();
-	//ewol::Padding paddingOut = getPaddingOut();
+	ewol::Padding paddingOut = getPaddingOut();
+	ewol::Padding padding = paddingIn + borderTmp + paddingOut;
 	ewol::Padding enveloppe(_origin.x(),
 	                        _origin.y() + _size.y(),
 	                        _origin.x() + _size.x(),
 	                        _origin.y());
-	ewol::Padding inside(_insidePos.x(),
-	                     _insidePos.y() + _insideSize.y(),
-	                     _insidePos.x() + _insideSize.x(),
-	                     _insidePos.y());
-	ewol::Padding insideBorder(inside.xLeft()   - paddingIn.xLeft(),
-	                           inside.yTop()    + paddingIn.yTop(),
-	                           inside.xRight()  + paddingIn.xRight(),
-	                           inside.yButtom() - paddingIn.yButtom());
-	ewol::Padding border(insideBorder.xLeft()   - borderTmp.xLeft(),
-	                     insideBorder.yTop()    + borderTmp.yTop(),
-	                     insideBorder.xRight()  + borderTmp.xRight(),
-	                     insideBorder.yButtom() - borderTmp.yButtom());
+	#if 0
+		ewol::Padding inside(_insidePos.x(),
+		                     _insidePos.y() + _insideSize.y(),
+		                     _insidePos.x() + _insideSize.x(),
+		                     _insidePos.y());
+		ewol::Padding insideBorder(inside.xLeft()   - paddingIn.xLeft(),
+		                           inside.yTop()    + paddingIn.yTop(),
+		                           inside.xRight()  + paddingIn.xRight(),
+		                           inside.yButtom() - paddingIn.yButtom());
+		ewol::Padding border(insideBorder.xLeft()   - borderTmp.xLeft(),
+		                     insideBorder.yTop()    + borderTmp.yTop(),
+		                     insideBorder.xRight()  + borderTmp.xRight(),
+		                     insideBorder.yButtom() - borderTmp.yButtom());
+	#else
+		ewol::Padding border(_insidePos.x()                   - padding.xLeft()   + paddingOut.xLeft(),
+		                     _insidePos.y() + _insideSize.y() + padding.yTop()    - paddingOut.yTop(),
+		                     _insidePos.x() + _insideSize.x() + padding.xRight()  - paddingOut.xRight(),
+		                     _insidePos.y()                   - padding.yButtom() + paddingOut.yButtom());
+		ewol::Padding insideBorder(border.xLeft()   + borderTmp.xLeft(),
+		                           border.yTop()    - borderTmp.yTop(),
+		                           border.xRight()  - borderTmp.xRight(),
+		                           border.yButtom() + borderTmp.yButtom());
+		ewol::Padding inside(insideBorder.xLeft()   + etk_max(0.0f, paddingIn.xLeft()),
+		                     insideBorder.yTop()    - etk_max(0.0f, paddingIn.yTop()),
+		                     insideBorder.xRight()  - etk_max(0.0f, paddingIn.xRight()),
+		                     insideBorder.yButtom() + etk_max(0.0f, paddingIn.yButtom()));
+		
+	#endif
 	/*
 	EWOL_ERROR(" enveloppe = " << enveloppe);
 	EWOL_ERROR(" border = " << border);
