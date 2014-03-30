@@ -47,5 +47,3 @@ std::string ewol::getVersion(void) {
 	return EWOL_VERSION;
 }
 
-
-

@@ -16,8 +16,8 @@
 
 
 ewol::widget::WidgetScrolled::WidgetScrolled(const std::string& _shaperName) :
-	m_shaperH(_shaperName),
-	m_shaperV(_shaperName) {
+  m_shaperH(_shaperName),
+  m_shaperV(_shaperName) {
 	addObjectType("ewol::widget::WidgetScrolled");
 	m_originScrooled.setValue(0,0);
 	m_pixelScrolling = 20;

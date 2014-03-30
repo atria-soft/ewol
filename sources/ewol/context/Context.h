@@ -328,6 +328,15 @@ namespace ewol {
 			 * @return normal error int for the application error management
 			 */
 			static int main(int _argc, const char *_argv[]);
+		private:
+			size_t m_initStepId;
+			size_t m_initTotalStep;
+		public:
+			/**
+			 * @brief Special for init (main) set the start image when loading data
+			 * @param[in] _fileName Name of the image to load
+			 */
+			void setInitImage(const std::string& _fileName);
 	};
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.
@@ -337,8 +346,18 @@ namespace ewol {
 };
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application
-// return false if an error occured
-bool APP_Init(ewol::Context& _context);
+/**
+ * @brief main application function initialisation
+ * @param[in] _context curent context property
+ * @param[in] _initId current init step
+ * @param[out] _nbInitStep total number of step
+ * @return true, all OK
+ * @return false, an error occured
+ */
+bool APP_Init(ewol::Context& _context, size_t _initId, size_t& _nbInitStep);
+/**
+ * @brief main application function un-initialisation
+ */
 void APP_UnInit(ewol::Context& _context);
 
 

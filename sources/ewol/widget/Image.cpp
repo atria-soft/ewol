@@ -159,6 +159,7 @@ void ewol::widget::Image::onRegenerateDisplay(void) {
 		m_compositing.setPos(origin);
 		m_compositing.print(imageRealSize);
 		//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
+		EWOL_DEBUG("Paint Image :" << m_fileName << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
 	}
 }
 

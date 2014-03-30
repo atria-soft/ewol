@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Manager.h>
 
 namespace ewol {
@@ -37,7 +37,8 @@ namespace ewol {
 			public:
 				static void init(ewol::widget::Manager& _widgetManager);
 			private:
-				ewol::compositing::Drawing m_draw; // TODO : change in shaper ...  == > better for annimation and dynamic display ...
+				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
+				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
 			protected:
 				vec2 m_limit;
 			private:
@@ -47,7 +48,7 @@ namespace ewol {
 				int32_t m_highSpeedButton;
 				enum ewol::key::type m_highSpeedType;
 			public:
-				Scroll(void);
+				Scroll(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
 				virtual ~Scroll(void);
 				/**
 				 * @brief set the limit of scrolling

@@ -151,7 +151,7 @@ void ewol::compositing::Image::setAngle(float _angle) {
 }
 
 void ewol::compositing::Image::print(const vec2& _size) {
-	printPart(_size, vec2(0,0), vec2(1,1));
+	printPart(_size, vec2(0,0), vec2(1.0,1.0));
 }
 
 void ewol::compositing::Image::printPart(const vec2& _size,

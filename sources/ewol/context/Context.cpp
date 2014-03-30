@@ -52,6 +52,14 @@ ewol::Context& ewol::getContext(void) {
 	return *l_curentInterface;
 }
 
+
+
+void ewol::Context::setInitImage(const std::string& _fileName) {
+	//m_initDisplayImageName = _fileName;
+}
+
+
+
 /**
  * @brief set the curent interface.
  * @note this lock the main mutex
@@ -154,7 +162,8 @@ void ewol::Context::processEvents(void) {
 			case eSystemMessage::msgInit:
 				// this is due to the openGL context
 				/*bool returnVal = */
-				APP_Init(*this);
+				APP_Init(*this, m_initStepId, m_initTotalStep);
+				m_initStepId++;
 				break;
 			case eSystemMessage::msgRecalculateSize:
 				forceRedrawAll();
@@ -288,7 +297,9 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
   m_FpsSystem(       "Draw      ", true),
   m_FpsFlush(        "Flush     ", false),
   m_windowsCurrent(NULL),
-  m_windowsSize(320,480) {
+  m_windowsSize(320,480),
+  m_initStepId(0),
+  m_initTotalStep(1) {
 	m_commandLine.parse(_argc, _argv);
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
 	// Reset the random system to be sure have real random values...
@@ -553,6 +564,15 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		// set the curent interface :
 		lockContext();
 		processEvents();
+		if (m_initStepId < m_initTotalStep) {
+			ewol::eSystemMessage *data = new ewol::eSystemMessage();
+			if (data == NULL) {
+				EWOL_ERROR("allocation error of message");
+			} else {
+				data->TypeMessage = eSystemMessage::msgInit;
+				m_msgSystem.post(data);
+			}
+		}
 		// call all the widget that neded to do something periodicly
 		//! ewol::widgetManager::periodicCall(currentTime);
 		m_widgetManager.periodicCall(currentTime);

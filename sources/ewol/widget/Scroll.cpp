@@ -24,7 +24,9 @@ void ewol::widget::Scroll::init(ewol::widget::Manager& _widgetManager) {
 
 const char* const ewol::widget::Scroll::configLimit = "limit";
 
-ewol::widget::Scroll::Scroll(void) :
+ewol::widget::Scroll::Scroll(const std::string& _shaperName) :
+  m_shaperH(_shaperName),
+  m_shaperV(_shaperName),
   m_limit(0.15,0.5),
   m_pixelScrolling(20),
   m_highSpeedStartPos(0,0),
@@ -68,54 +70,56 @@ void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 }
 
 void ewol::widget::Scroll::onDraw(void) {
-	m_draw.draw();
+	m_shaperH.draw();
+	m_shaperV.draw();
 }
 
 void ewol::widget::Scroll::onRegenerateDisplay(void) {
 	// call upper class
 	ewol::widget::Container::onRegenerateDisplay();
-	if (true == needRedraw()) {
-		// clear all previous display
-		m_draw.clear();
-		
-		m_draw.setColor(0xFF00007F);
-		
-		vec2 scrollOffset(0,0);
-		vec2 scrollSize(0,0);
-		if (NULL!=m_subWidget) {
-			scrollOffset = m_subWidget->getOffset();
-			scrollSize = m_subWidget->getSize();
-		}
-		m_draw.setThickness(1);
-		if(    m_size.y() < scrollSize.y()
-		    || scrollOffset.y()!=0) {
-			//EWOL_DEBUG("plop : "  << vec2(m_size.x()-(SCROLL_BAR_SPACE/2), 0) << "  " << vec2(m_size.x()-(SCROLL_BAR_SPACE/2), m_size.y()));
-			m_draw.setPos(vec2(m_size.x()-(SCROLL_BAR_SPACE/2), 0) );
-			m_draw.lineTo(vec2(m_size.x()-(SCROLL_BAR_SPACE/2), m_size.y()) );
-			float lenScrollBar = m_size.y()*m_size.y() / scrollSize.y();
-			lenScrollBar = etk_avg(10, lenScrollBar, m_size.y());
-			float originScrollBar = scrollOffset.y() / (scrollSize.y()-m_size.y()*m_limit.y());
-			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
-			originScrollBar *= (m_size.y()-lenScrollBar);
-			m_draw.setPos(vec2(m_size.x()-SCROLL_BAR_SPACE, m_size.y() - originScrollBar - lenScrollBar) );
-			m_draw.rectangleWidth(vec2(SCROLL_BAR_SPACE, lenScrollBar));
-		}
-		if(    m_size.x() < scrollSize.x()
-		    || scrollOffset.x()!=0) {
-			m_draw.setPos(vec2(0, (SCROLL_BAR_SPACE/2)) );
-			m_draw.lineTo(vec2(m_size.x()-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2)) );
-			float lenScrollBar = m_size.x()*(m_size.x()-SCROLL_BAR_SPACE) / scrollSize.x();
-			lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x()-SCROLL_BAR_SPACE));
-			float originScrollBar = scrollOffset.x() / (scrollSize.x()-m_size.x()*m_limit.x());
-			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
-			originScrollBar *= (m_size.x()-SCROLL_BAR_SPACE-lenScrollBar);
-			m_draw.setPos(vec2(originScrollBar, 0) );
-			m_draw.rectangle(vec2(lenScrollBar, SCROLL_BAR_SPACE) );
-		}
+	if (needRedraw() == false) {
+		return;
+	}
+	// clear all previous display
+	m_shaperH.clear();
+	m_shaperV.clear();
+	ewol::Padding paddingVert = m_shaperV.getPadding();
+	ewol::Padding paddingHori = m_shaperH.getPadding();
+	vec2 scrollOffset(0,0);
+	vec2 scrollSize(0,0);
+	if (NULL!=m_subWidget) {
+		scrollOffset = m_subWidget->getOffset();
+		scrollSize = m_subWidget->getSize();
+	}
+	if(    m_size.y() < scrollSize.y()
+	    || scrollOffset.y()!=0) {
+		float lenScrollBar = m_size.y()*m_size.y() / scrollSize.y();
+		lenScrollBar = etk_avg(10, lenScrollBar, m_size.y());
+		float originScrollBar = scrollOffset.y() / (scrollSize.y()-m_size.y()*m_limit.y());
+		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
+		originScrollBar *= (m_size.y()-lenScrollBar);
+		m_shaperV.setShape(vec2(m_size.x() - paddingVert.x(), 0),
+		                   vec2(paddingVert.x(), m_size.y()),
+		                   vec2(m_size.x() - paddingVert.xRight(), m_size.y() - originScrollBar - lenScrollBar),
+		                   vec2(0, lenScrollBar));
+	}
+	if(    m_size.x() < scrollSize.x()
+	    || scrollOffset.x()!=0) {
+		float lenScrollBar = (m_size.x()-paddingHori.xLeft())*(m_size.x()-paddingVert.x()) / scrollSize.x();
+		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x()-paddingVert.x()));
+		float originScrollBar = scrollOffset.x() / (scrollSize.x()-m_size.x()*m_limit.x());
+		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
+		originScrollBar *= (m_size.x()-paddingHori.xRight()-lenScrollBar);
+		m_shaperH.setShape(vec2(0, 0),
+		                   vec2(m_size.x()-paddingVert.x(), paddingHori.y()),
+		                   vec2(originScrollBar, paddingHori.yButtom()),
+		                   vec2(lenScrollBar, 0));
 	}
 }
 
 bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
+	//ewol::event::Input _event = event;
+	//_event.setType(ewol::key::typeFinger);
 	vec2 relativePos = relativePosition(_event.getPos());
 	vec2 scrollOffset(0,0);
 	vec2 scrollSize(0,0);
@@ -123,6 +127,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
+	EWOL_WARNING("Get Event on scroll : " << _event);
 	relativePos.setY(m_size.y() - relativePos.y());
 	if(    _event.getType() == ewol::key::typeMouse
 	    && (    ewol::key::typeUnknow == m_highSpeedType
@@ -282,12 +287,12 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	           && (    ewol::key::typeUnknow == m_highSpeedType
 	                || ewol::key::typeFinger == m_highSpeedType ) ) {
 		if (1 == _event.getId()) {
-			//EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
+			EWOL_VERBOSE("event: " << _event);
 			if (ewol::key::statusDown == _event.getStatus()) {
 				m_highSpeedMode = speedModeInit;
 				m_highSpeedType = ewol::key::typeFinger;
 				m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
-				EWOL_VERBOSE("SCROOL  == > INIT");
+				EWOL_VERBOSE("SCROOL  == > INIT pos=" << m_highSpeedStartPos << " && curent scrollOffset=" << scrollOffset);
 				return true;
 			} else if (ewol::key::statusUp == _event.getStatus()) {
 				m_highSpeedMode = speedModeDisable;
@@ -310,14 +315,23 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			}
 			if (    m_highSpeedMode == speedModeEnableFinger
 			     && ewol::key::statusMove == _event.getStatus()) {
+				EWOL_VERBOSE("SCROOL  == > INIT scrollOffset=" << scrollOffset.y() << " relativePos=" << relativePos.y() << " m_highSpeedStartPos=" << m_highSpeedStartPos.y());
 				//scrollOffset.x = (int32_t)(scrollSize.x * x / m_size.x);
-				scrollOffset.setX(scrollOffset.x() - relativePos.x() - m_highSpeedStartPos.x());
-				scrollOffset.setY(scrollOffset.y() - relativePos.y() - m_highSpeedStartPos.y());
-				scrollOffset.setX(etk_avg(0, scrollOffset.x(), (scrollSize.x() - m_size.x()*m_limit.x())));
-				scrollOffset.setY(etk_avg(0, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit.y())));
-				m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
-				EWOL_VERBOSE("SCROOL  == > MOVE (" << scrollOffset.x() << "," << scrollOffset.y() << ")");
+				if (m_limit.x() != 0.0f) {
+					scrollOffset.setX(scrollOffset.x() + (relativePos.x() - m_highSpeedStartPos.x()));
+					scrollOffset.setX(etk_avg(0, scrollOffset.x(), (scrollSize.x() - m_size.x()*m_limit.x())));
+				}
+				if (m_limit.y() != 0.0f) {
+					scrollOffset.setY(scrollOffset.y() - (relativePos.y() - m_highSpeedStartPos.y()));
+					scrollOffset.setY(etk_avg(0, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit.y())));
+				}
+				// update current position:
+				m_highSpeedStartPos = relativePos;
+				EWOL_VERBOSE("SCROOL  == > MOVE " << scrollOffset);
 				markToRedraw();
+				if (NULL!=m_subWidget) {
+					m_subWidget->setOffset(scrollOffset);
+				}
 				return true;
 			}
 		} else if (    m_highSpeedMode != speedModeDisable

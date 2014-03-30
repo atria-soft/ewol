@@ -30,7 +30,7 @@ namespace ewol {
 				static const char* const configRemoveOnExternClick;
 				static const char* const configAnimation;
 				static const char* const configLockExpand;
-			private:
+			protected:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			public:
 				/**

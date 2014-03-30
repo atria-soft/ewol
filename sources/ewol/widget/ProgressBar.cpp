@@ -99,18 +99,22 @@ bool ewol::widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
 	}
 	if (_conf.getConfig() == configColorBg) {
 		m_textColorFg = _conf.getData();
+		markToRedraw();
 		return true;
 	}
 	if (_conf.getConfig() == configColorFgOn) {
 		m_textColorBgOn = _conf.getData();
+		markToRedraw();
 		return true;
 	}
 	if (_conf.getConfig() == configColorFgOff) {
 		m_textColorBgOff = _conf.getData();
+		markToRedraw();
 		return true;
 	}
 	if (_conf.getConfig() == configValue) {
 		m_value = stof(_conf.getData());
+		markToRedraw();
 		return true;
 	}
 	return false;

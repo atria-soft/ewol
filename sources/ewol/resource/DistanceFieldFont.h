@@ -95,6 +95,9 @@ namespace ewol {
 				const vec2& getTextureBorderSize(void) {
 					return m_textureBorderSize;
 				}
+			public:
+				void exportOnFile(void);
+				bool importFromFile(void);
 		};
 	};
 };

@@ -337,7 +337,7 @@ ewol::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_
 }
 
 ewol::resource::TexturedFont* ewol::resource::TexturedFont::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : TexturedFont : file : '" << _filename << "'");
+	EWOL_ERROR("KEEP : TexturedFont : file : '" << _filename << "'");
 	ewol::resource::TexturedFont* object = NULL;
 	ewol::Resource* object2 = getManager().localKeep(_filename);
 	if (NULL != object2) {
@@ -351,7 +351,7 @@ ewol::resource::TexturedFont* ewol::resource::TexturedFont::keep(const std::stri
 		return object;
 	}
 	// need to crate a new one ...
-	EWOL_DEBUG("CREATE: TexturedFont : file : '" << _filename << "'");
+	EWOL_ERROR("CREATE: TexturedFont : file : '" << _filename << "'");
 	object = new ewol::resource::TexturedFont(_filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
@@ -365,11 +365,12 @@ void ewol::resource::TexturedFont::release(ewol::resource::TexturedFont*& _objec
 	if (NULL == _object) {
 		return;
 	}
+	EWOL_ERROR("RELEASE: TexturedFont : file : '" << _object->getName() << "' count=" << _object->getCounter());
 	std::string name = _object->getName();
 	int32_t count = _object->getCounter() - 1;
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	if (getManager().release(object2) == true) {
-		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "' count=" << count);
+		EWOL_ERROR("REMOVE: TexturedFont : file : '" << name << "' count=" << count);
 		//etk::displayBacktrace(false);
 	}
 	_object = NULL;

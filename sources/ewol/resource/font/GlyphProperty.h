@@ -53,7 +53,7 @@ namespace ewol {
 	class GlyphProperty {
 		public:
 			char32_t m_UVal; //!< Unicode value
-		private:
+		public:
 			bool m_exist;
 		public:
 			int32_t m_glyphIndex; //!< Glyph index in the system

@@ -18,6 +18,7 @@
 #include <ewol/context/Context.h>
 #include <ewol/resource/DistanceFieldFont.h>
 #include <edtaa3/edtaa3func.h>
+#include <ejson/ejson.h>
 
 #undef __class__
 #define __class__ "resource::DistanceFieldFont"
@@ -97,6 +98,12 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	if (m_font == NULL) {
 		return;
 	}
+	if (importFromFile() == true) {
+		EWOL_INFO("GET distance field from previous file");
+		flush();
+		return;
+	}
+	
 	m_sizeRatio = ((float)SIZE_GENERATION) / ((float)m_font->getHeight(SIZE_GENERATION));
 	// TODO : basic font use 512 is better ...  == > maybe estimate it with the dpi ???
 	setImageSize(ivec2(256,32));
@@ -110,6 +117,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 		addGlyph(iii);
 	}
 	flush();
+	//exportOnFile();
 }
 
 ewol::resource::DistanceFieldFont::~DistanceFieldFont(void) {
@@ -364,4 +372,82 @@ void ewol::resource::DistanceFieldFont::release(ewol::resource::DistanceFieldFon
 		//etk::displayBacktrace(false);
 	}
 	_object = NULL;
+}
+
+void ewol::resource::DistanceFieldFont::exportOnFile(void) {
+	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
+	ejson::Document doc;
+	ejson::Array* tmpList = new ejson::Array();
+	if (tmpList == NULL) {
+		EWOL_ERROR("NULL pointer");
+		return;
+	}
+	for (size_t iii=0; iii<m_listElement.size(); ++iii) {
+		ejson::Object* tmpObj = new ejson::Object();
+		if (tmpObj == NULL) {
+			continue;
+		}
+		tmpObj->addString("m_UVal", std::to_string(m_listElement[iii].m_UVal));
+		tmpObj->addNumber("m_glyphIndex", m_listElement[iii].m_glyphIndex);
+		tmpObj->addString("m_sizeTexture", (std::string)m_listElement[iii].m_sizeTexture);
+		tmpObj->addString("m_bearing", (std::string)m_listElement[iii].m_bearing);
+		tmpObj->addString("m_advance", (std::string)m_listElement[iii].m_advance);
+		tmpObj->addString("m_texturePosStart", (std::string)m_listElement[iii].m_texturePosStart);
+		tmpObj->addString("m_texturePosSize", (std::string)m_listElement[iii].m_texturePosSize);
+		tmpObj->addBoolean("m_exist", m_listElement[iii].m_exist);
+		tmpList->add(tmpObj);
+	}
+	doc.add("m_listElement", tmpList);
+	doc.addNumber("m_sizeRatio", m_sizeRatio);
+	doc.addString("m_lastGlyphPos", (std::string)m_lastGlyphPos);
+	doc.addNumber("m_lastRawHeigh", m_lastRawHeigh);
+	doc.addNumber("m_borderSize", m_borderSize);
+	doc.addString("m_textureBorderSize", (std::string)m_textureBorderSize);
+	doc.store(m_fileName + ".json");
+	egami::store(m_data, m_fileName + ".bmp");
+	egami::store(m_data, m_fileName + ".png");
+}
+
+bool ewol::resource::DistanceFieldFont::importFromFile(void) {
+	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
+	// test file existance:
+	etk::FSNode fileJSON(m_fileName + ".json");
+	etk::FSNode fileBMP(m_fileName + ".bmp");
+	if (    fileJSON.exist() == false
+	     || fileBMP.exist() == false) {
+		EWOL_DEBUG("Does not import file for distance field system");
+		return false;
+	}
+	ejson::Document doc;
+	doc.load(m_fileName + ".json");
+	
+	m_sizeRatio = doc.getNumberValue("m_sizeRatio", 0);
+	m_lastGlyphPos = doc.getStringValue("m_lastGlyphPos", "0,0");
+	m_lastRawHeigh = doc.getNumberValue("m_lastRawHeigh", 0);
+	m_borderSize = doc.getNumberValue("m_borderSize", 2);
+	m_textureBorderSize = doc.addString("m_textureBorderSize", "0,0");
+	ejson::Array* tmpList = doc.getArray("m_listElement");
+	if (tmpList == NULL) {
+		EWOL_ERROR("NULL pointer array");
+		return false;
+	}
+	m_listElement.clear();
+	for (size_t iii=0; iii<tmpList->size(); ++iii) {
+		ejson::Object* tmpObj = tmpList->getObject(iii);
+		if (tmpObj == NULL) {
+			continue;
+		}
+		GlyphProperty prop;
+		prop.m_UVal = std::stoi(tmpObj->getStringValue("m_UVal", "0"));
+		prop.m_glyphIndex = tmpObj->getNumberValue("m_glyphIndex", 0);
+		prop.m_sizeTexture = tmpObj->getStringValue("m_sizeTexture", "0,0");
+		prop.m_bearing = tmpObj->getStringValue("m_bearing", "0,0");
+		prop.m_advance = tmpObj->getStringValue("m_advance", "0,0");
+		prop.m_texturePosStart = tmpObj->getStringValue("m_texturePosStart", "0,0");
+		prop.m_texturePosSize = tmpObj->getStringValue("m_texturePosSize", "0,0");
+		prop.m_exist = tmpObj->getBooleanValue("m_exist", false);
+		m_listElement.push_back(prop);
+	}
+	egami::load(m_data, m_fileName + ".bmp");
+	return true;
 }
