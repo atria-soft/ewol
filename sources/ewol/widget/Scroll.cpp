@@ -127,7 +127,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
-	EWOL_WARNING("Get Event on scroll : " << _event);
+	EWOL_VERBOSE("Get Event on scroll : " << _event);
 	relativePos.setY(m_size.y() - relativePos.y());
 	if(    _event.getType() == ewol::key::typeMouse
 	    && (    ewol::key::typeUnknow == m_highSpeedType

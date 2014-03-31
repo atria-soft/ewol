@@ -56,6 +56,9 @@ namespace ewol {
 				virtual float getSize(void) {
 					return m_size;
 				}
+				virtual void setSize(float _size) {
+					m_size = _size;
+				}
 				virtual ewol::GlyphProperty * getGlyphPointer(char32_t _charcode);
 				
 			public:
