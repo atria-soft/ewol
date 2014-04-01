@@ -294,7 +294,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
 				EWOL_VERBOSE("SCROOL  == > INIT pos=" << m_highSpeedStartPos << " && curent scrollOffset=" << scrollOffset);
 				return true;
-			} else if (ewol::key::statusUp == _event.getStatus()) {
+			} else if (ewol::key::statusUpAfter == _event.getStatus()) {
 				m_highSpeedMode = speedModeDisable;
 				m_highSpeedType = ewol::key::typeUnknow;
 				EWOL_VERBOSE("SCROOL  == > DISABLE");
@@ -332,6 +332,9 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				if (NULL!=m_subWidget) {
 					m_subWidget->setOffset(scrollOffset);
 				}
+				return true;
+			}
+			if (m_highSpeedMode == speedModeEnableFinger) {
 				return true;
 			}
 		} else if (    m_highSpeedMode != speedModeDisable
