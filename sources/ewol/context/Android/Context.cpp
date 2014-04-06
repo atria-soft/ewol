@@ -589,6 +589,9 @@ class AndroidContext : public ewol::Context {
 			OS_SetKeyboard(m_guiKeyBoardSpecialKeyMode, _myChar, _isDown, _isARepeateKey);
 		}
 		
+		bool ANDROID_systemKeyboradEvent(enum ewol::key::keyboardSystem _key, bool _down) {
+			return systemKeyboradEvent(_key, _down);
+		}
 		void ANDROID_SetKeyboardMove(int _move, bool _isDown, bool _isARepeateKey=false) {
 			// direct wrapping :
 			enum ewol::key::keyboard move = (enum ewol::key::keyboard)_move;
@@ -956,7 +959,7 @@ extern "C" {
 	}
 	
 	// TODO : set a return true or false if we want to grep this event ...
-	void Java_org_ewol_Ewol_EWkeyboardEventKeySystem(JNIEnv* _env,
+	bool Java_org_ewol_Ewol_EWkeyboardEventKeySystem(JNIEnv* _env,
 	                                                 jobject _thiz,
 	                                                 jint _id,
 	                                                 jint _keyVal,
@@ -967,31 +970,35 @@ extern "C" {
 		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
-			return;
+			return false;
 		}
 		switch (_keyVal) {
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_VOLUME_UP:
-				EWOL_DEBUG("IO keyboard Key system \"VOLUME_UP\" is down=" << _isdown);
-				break;
+				EWOL_VERBOSE("IO keyboard Key system \"VOLUME_UP\" is down=" << _isdown);
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemVolumeUp, _isdown);
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_VOLUME_DOWN:
 				EWOL_DEBUG("IO keyboard Key system \"VOLUME_DOWN\" is down=" << _isdown);
-				break;
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemVolumeDown, _isdown);
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_MENU:
 				EWOL_DEBUG("IO keyboard Key system \"MENU\" is down=" << _isdown);
-				break;
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemMenu, _isdown);
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_CAMERA:
 				EWOL_DEBUG("IO keyboard Key system \"CAMERA\" is down=" << _isdown);
-				break;
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemCamera, _isdown);
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_HOME:
 				EWOL_DEBUG("IO keyboard Key system \"HOME\" is down=" << _isdown);
-				break;
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemHome, _isdown);
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_POWER:
 				EWOL_DEBUG("IO keyboard Key system \"POWER\" is down=" << _isdown);
-				break;
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemPower, _isdown);
+			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_BACK:
+				EWOL_DEBUG("IO keyboard Key system \"BACK\" is down=" << _isdown);
+				return s_listInstance[_id]->ANDROID_systemKeyboradEvent(ewol::key::keyboardSystemBack, _isdown);
 			default:
-				EWOL_DEBUG("IO keyboard Key system event : \"" << _keyVal << "\" is down=" << _isdown);
+				EWOL_ERROR("IO keyboard Key system event : \"" << _keyVal << "\" is down=" << _isdown);
 				break;
 		}
+		return false;
 	}
 	
 	

@@ -62,6 +62,19 @@ namespace ewol {
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
 		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::key::keyboard _obj);
+		
+		enum keyboardSystem {
+			keyboardSystemUnknow = 0, //!< Unknown keyboard system key
+			keyboardSystemVolumeUp,   //!< Hardware volume UP key
+			keyboardSystemVolumeDown, //!< Hardware volume DOWN key
+			keyboardSystemMenu,       //!< Hardware Menu key
+			keyboardSystemCamera,     //!< Hardware Camera key
+			keyboardSystemHome,       //!< Hardware Home key
+			keyboardSystemPower,      //!< Hardware Power key
+			keyboardSystemBack,       //!< Hardware Back key
+			keyboardSystemCount       //!< number of posible System key
+		};
+		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::key::keyboardSystem _obj);
 	};
 };
 

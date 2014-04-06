@@ -5,6 +5,7 @@
  *
  * @license BSD v3 (see license file)
  */
+
 package org.ewol;
 
 import android.app.ActivityManager;
@@ -209,3 +210,5 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		return false;
 	}
 }
+
+

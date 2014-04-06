@@ -723,3 +723,14 @@ void ewol::Context::keyboardShow(void) {
 void ewol::Context::keyboardHide(void) {
 	EWOL_INFO("keyboardHide: NOT implemented ...");
 }
+
+
+bool ewol::Context::systemKeyboradEvent(enum ewol::key::keyboardSystem _key, bool _down) {
+	if (m_windowsCurrent == NULL) {
+		return false;
+	}
+	lockContext();
+	bool ret = m_windowsCurrent->onEventHardwareInput(_key, _down);
+	unLockContext();
+	return ret;
+}

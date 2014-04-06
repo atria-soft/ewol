@@ -180,6 +180,7 @@ void ewol::Widget::onObjectRemove(ewol::Object* _removeObject) {
 
 void ewol::Widget::hide(void) {
 	if (m_hide == false) {
+		EWOL_WARNING("HIDE widget: '" << getName() << "'");
 		m_hide = true;
 		markToRedraw();
 		requestUpdateSize();
@@ -188,6 +189,7 @@ void ewol::Widget::hide(void) {
 
 void ewol::Widget::show(void) {
 	if (m_hide == true) {
+		EWOL_WARNING("SHOW widget: '" << getName() << "'");
 		m_hide = false;
 		markToRedraw();
 		requestUpdateSize();

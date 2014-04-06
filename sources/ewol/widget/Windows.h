@@ -57,6 +57,10 @@ namespace ewol {
 			public:
 				void setSubWidget(ewol::Widget* _widget);
 				void popUpWidgetPush(ewol::Widget* _widget);
+				void popUpWidgetPop(void);
+				size_t popUpCount(void) {
+					return m_popUpWidgetList.size();
+				}
 			private:
 				etk::Color<float> m_backgroundColor; //!< reset color of the Main windows
 			public:
@@ -121,6 +125,11 @@ namespace ewol {
 				void displayCriticalMessage(const std::string& _message) {
 					createPopUpMessage(messageTypeCritical, _message);
 				}
+				
+				
+				virtual bool onEventHardwareInput(const ewol::key::keyboardSystem& _event, bool _down) {
+					return false;
+				};
 		};
 	};
 };

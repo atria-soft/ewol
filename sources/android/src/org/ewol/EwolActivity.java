@@ -47,15 +47,13 @@ import java.io.IOException;
 
 import org.ewol.Ewol;
 
-
-
 /**
  * @brief Class : 
  *
  */
 public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants {
 	private static Context mContext;
-	private EwolSurfaceViewGL mGLView;
+	protected EwolSurfaceViewGL mGLView = null;
 	private Ewol              EWOL;
 	// clipboard section
 	private String tmpClipBoard; // TODO : Remove this ==> clipboard acces does not work
@@ -63,6 +61,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	private EwolAudioTask mStreams;
 	private Thread mAudioThread;
 	private boolean mAudioStarted;
+	
 	static {
 		try {
 			System.loadLibrary("ewol");

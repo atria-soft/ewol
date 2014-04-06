@@ -201,6 +201,17 @@ void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	getContext().resetIOEvent();
 }
 
+void ewol::widget::Windows::popUpWidgetPop(void) {
+	if (m_popUpWidgetList.size() == 0) {
+		return;
+	}
+	ewol::Widget* widget = m_popUpWidgetList[m_popUpWidgetList.size()-1];
+	if (widget == NULL) {
+		return;
+	}
+	widget->removeObject();
+}
+
 void ewol::widget::Windows::onObjectRemove(ewol::Object* _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);

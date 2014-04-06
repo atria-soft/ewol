@@ -32,6 +32,8 @@ namespace ewol {
 				static const char * const configBorder;
 				static const char * const configSource;
 				static const char * const configDistanceField;
+				static const char * const configPartStart;
+				static const char * const configPartStop;
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
@@ -116,6 +118,36 @@ namespace ewol {
 				 */
 				bool getKeepRatio(void) const {
 					return m_keepRatio;
+				};
+			protected:
+				vec2 m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
+			public:
+				/**
+				 * @brief set the current 'start' position in the image to display.
+				 * @param[in] _keep The new position in the image vec2([0..1],[0..1])
+				 */
+				void setStartPos(const vec2& _pos);
+				/**
+				 * @brief get the current 'start' position in the image to display.
+				 * @return The Position of the display in image
+				 */
+				vec2 getStartPos(void) const {
+					return m_posStart;
+				};
+			protected:
+				vec2 m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
+			public:
+				/**
+				 * @brief set the current 'stop' position in the image to display.
+				 * @param[in] _keep The new position in the image vec2([0..1],[0..1])
+				 */
+				void setStopPos(const vec2& _pos);
+				/**
+				 * @brief get the current 'stop' position in the image to display.
+				 * @return The Position of the display in image
+				 */
+				vec2 getStopPos(void) const {
+					return m_posStop;
 				};
 			public:
 				/**

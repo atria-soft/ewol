@@ -82,8 +82,8 @@ public class Ewol {
 		EWaudioPlayback(instanceID, bufferData, frames, nbChannels);
 	}
 	
-	public void keyboardEventKeySystem(int keyVal, boolean isDown) {
-		EWkeyboardEventKeySystem(instanceID, keyVal, isDown);
+	public boolean keyboardEventKeySystem(int keyVal, boolean isDown) {
+		return EWkeyboardEventKeySystem(instanceID, keyVal, isDown);
 	}
 	// renderer Event : 
 	public void renderInit() {
@@ -127,7 +127,7 @@ public class Ewol {
 	// Audio section ...
 	public native void EWaudioPlayback(int instanceId, short[] bufferData, int frames, int nbChannels);
 	
-	private native void EWkeyboardEventKeySystem(int instanceId, int keyVal, boolean isDown);
+	private native boolean EWkeyboardEventKeySystem(int instanceId, int keyVal, boolean isDown);
 	// renderer Event : 
 	private native void EWrenderInit(int instanceId);
 	private native void EWrenderResize(int instanceId, int w, int h);

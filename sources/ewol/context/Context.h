@@ -337,6 +337,14 @@ namespace ewol {
 			 * @param[in] _fileName Name of the image to load
 			 */
 			void setInitImage(const std::string& _fileName);
+		protected:
+			/**
+			 * @brief HARDWARE keyboard event from the system
+			 * @param[in] _key event type
+			 * @param[in] _status Up or down status
+			 * @return Keep the event or not
+			 */
+			virtual bool systemKeyboradEvent(enum ewol::key::keyboardSystem _key, bool _down);
 	};
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.

@@ -216,27 +216,24 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		Log.i("Surface GL", "get event : " + keyCode + " is down : " + isDown);
 		switch(keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_DOWN, isDown);
-				return false;
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_DOWN, isDown);
 			case KeyEvent.KEYCODE_VOLUME_UP:
-				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_UP, isDown);
-				return false;
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_UP, isDown);
 			case KeyEvent.KEYCODE_MENU:
-				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_MENU, isDown);
-				return false;
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_MENU, isDown);
 			case KeyEvent.KEYCODE_CAMERA:
-				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_CAMERA, isDown);
-				return false;
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_CAMERA, isDown);
 			case KeyEvent.KEYCODE_HOME:
-				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_HOME, isDown);
-				return false;
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_HOME, isDown);
 			case KeyEvent.KEYCODE_POWER:
-				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_POWER, isDown);
-				return false;
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_POWER, isDown);
 			case KeyEvent.KEYCODE_BACK:
 				// the back key is wrapped in the <esc> key to simplify PC validation ...
+				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_BACK, isDown);
+				/*
 				EWOL.keyboardEventKey(EWOL_SYSTEM_KEY_BACK, isDown);
 				return false;
+				*/
 			case KeyEvent.KEYCODE_DEL:
 				EWOL.keyboardEventKey(EWOL_SYSTEM_KEY_DEL, isDown);
 				return true;

@@ -32,12 +32,16 @@ const char * const ewol::widget::Image::configSize = "size";
 const char * const ewol::widget::Image::configBorder = "border";
 const char * const ewol::widget::Image::configSource = "src";
 const char * const ewol::widget::Image::configDistanceField = "distance-field";
+const char * const ewol::widget::Image::configPartStart = "part-start";
+const char * const ewol::widget::Image::configPartStop = "part-stop";
 
 ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
   m_colorProperty(NULL),
   m_colorId(-1),
-  m_imageSize(vec2(0,0)),
-  m_keepRatio(true) {
+  m_imageSize(vec2(0.0f,0.0f)),
+  m_keepRatio(true),
+  m_posStart(0.0f,0.0f),
+  m_posStop(1.0f,1.0f) {
 	addObjectType("ewol::widget::Image");
 	addEventId(eventPressed);
 	registerConfig(configRatio, "bool", NULL, "Keep ratio of the image");
@@ -45,6 +49,8 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
 	registerConfig(configBorder, "Dimension", NULL, "Border of the image");
 	registerConfig(configSource, "string", "Image source path");
 	registerConfig(configDistanceField, "bool", "Distance field mode");
+	registerConfig(configPartStart, "vec2", NULL, "Start display position in the image [0.0 .. 1.0]");
+	registerConfig(configPartStop,  "vec2", NULL, "Stop display position in the image [0.0 .. 1.0]");
 	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Image.json");
 	if (m_colorProperty != NULL) {
 		m_colorId = m_colorProperty->request("foreground");
@@ -79,13 +85,36 @@ void ewol::widget::Image::setBorder(const ewol::Dimension& _border) {
 }
 
 void ewol::widget::Image::setKeepRatio(bool _keep) {
-	if (m_keepRatio != _keep) {
-		// copy data :
-		m_keepRatio = _keep;
-		// force redraw all :
-		markToRedraw();
-		requestUpdateSize();
+	if (m_keepRatio == _keep) {
+		return;
 	}
+	// copy data :
+	m_keepRatio = _keep;
+	// force redraw all :
+	markToRedraw();
+	requestUpdateSize();
+}
+
+void ewol::widget::Image::setStartPos(const vec2& _pos) {
+	if (m_posStart == _pos) {
+		return;
+	}
+	// copy data :
+	m_posStart = _pos;
+	// force redraw all :
+	markToRedraw();
+	requestUpdateSize();
+}
+
+void ewol::widget::Image::setStopPos(const vec2& _pos) {
+	if (m_posStop == _pos) {
+		return;
+	}
+	// copy data :
+	m_posStop = _pos;
+	// force redraw all :
+	markToRedraw();
+	requestUpdateSize();
 }
 
 void ewol::widget::Image::setImageSize(const ewol::Dimension& _size) {
@@ -128,6 +157,9 @@ void ewol::widget::Image::onRegenerateDisplay(void) {
 		vec2 imageRealSize = m_minSize - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
+		vec2 ratioSizeDisplayRequested = m_posStop - m_posStart;
+		//imageRealSizeMax *= ratioSizeDisplayRequested;
+		
 		if (m_userFill.x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {
@@ -140,7 +172,9 @@ void ewol::widget::Image::onRegenerateDisplay(void) {
 		}
 		if (m_keepRatio == true) {
 			vec2 tmpSize = m_compositing.getRealSize();
-			float ratio = tmpSize.x() / tmpSize.y();
+			//float ratio = tmpSize.x() / tmpSize.y();
+			float ratio = (tmpSize.x()*ratioSizeDisplayRequested.x()) / (tmpSize.y() * ratioSizeDisplayRequested.y());
+			//float ratioCurrent = (imageRealSize.x()*ratioSizeDisplayRequested.x()) / (imageRealSize.y() * ratioSizeDisplayRequested.y());
 			float ratioCurrent = imageRealSize.x() / imageRealSize.y();
 			if (ratio == ratioCurrent) {
 				// nothing to do ...
@@ -157,7 +191,7 @@ void ewol::widget::Image::onRegenerateDisplay(void) {
 		
 		// set the somposition properties :
 		m_compositing.setPos(origin);
-		m_compositing.print(imageRealSize);
+		m_compositing.printPart(imageRealSize, m_posStart, m_posStop);
 		//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
 		EWOL_VERBOSE("Paint Image :" << m_fileName << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
 	}
@@ -258,6 +292,14 @@ bool ewol::widget::Image::onSetConfig(const ewol::object::Config& _conf) {
 		setDistanceField(std::stob(_conf.getData()));
 		return true;
 	}
+	if (_conf.getConfig() == configPartStart) {
+		setStartPos(vec2(_conf.getData()));
+		return true;
+	}
+	if (_conf.getConfig() == configPartStop) {
+		setStopPos(vec2(_conf.getData()));
+		return true;
+	}
 	return false;
 }
 
@@ -283,6 +325,14 @@ bool ewol::widget::Image::onGetConfig(const char* _config, std::string& _result)
 	}
 	if (_config == configDistanceField) {
 		_result = std::to_string(getDistanceField());
+		return true;
+	}
+	if (_config == configPartStart) {
+		_result = (std::string)getStartPos();
+		return true;
+	}
+	if (_config == configPartStop) {
+		_result = (std::string)getStopPos();
 		return true;
 	}
 	

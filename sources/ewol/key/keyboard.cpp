@@ -58,3 +58,23 @@ etk::CCout& ewol::key::operator <<(etk::CCout& _os, const enum ewol::key::keyboa
 	return _os;
 }
 
+static const char* keyboardSystemDescriptionString[ewol::key::keyboardSystemCount+1] = {
+	"keyboardSystemUnknow",
+	"keyboardSystemVolumeUp",
+	"keyboardSystemVolumeDown",
+	"keyboardSystemMenu",
+	"keyboardSystemCamera",
+	"keyboardSystemHome",
+	"keyboardSystemPower",
+	"keyboardSystemBack",
+	"keyboardSystemCount"
+};
+
+etk::CCout& ewol::key::operator <<(etk::CCout& _os, const enum ewol::key::keyboardSystem _obj) {
+	if (_obj >= 0 && _obj <ewol::key::keyboardSystemCount) {
+		_os << keyboardSystemDescriptionString[_obj];
+	} else {
+		_os << "[ERROR]";
+	}
+	return _os;
+}
