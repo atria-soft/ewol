@@ -96,7 +96,7 @@ void ewol::widget::Windows::sysDraw(void) {
 	ewol::openGL::disable(ewol::openGL::FLAG_STENCIL_TEST);
 	ewol::openGL::disable(ewol::openGL::FLAG_ALPHA_TEST);
 	ewol::openGL::disable(ewol::openGL::FLAG_FOG);
-	#ifndef __TARGET_OS__Android
+	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__IOs))
 		glPixelZoom(1.0,1.0);
 	#endif
 	ewol::openGL::disable(ewol::openGL::FLAG_TEXTURE_2D);

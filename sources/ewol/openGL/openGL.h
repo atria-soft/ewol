@@ -44,7 +44,7 @@ extern "C" {
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glu.h>
 #elif defined(__TARGET_OS__IOs)
-	
+	#include <OpenGLES/ES2/gl.h>
 #else
 	#error you need to specify a __TAGET_OS__ ...
 #endif

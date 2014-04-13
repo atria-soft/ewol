@@ -17,7 +17,9 @@
 
 #undef __class__
 #define __class__ "ewol"
-
+#ifndef EWOL_VERSION
+#define EWOL_VERSION "0.0.0"
+#endif
 
 std::string ewol::getCompilationMode(void) {
 	#ifdef MODE_RELEASE
