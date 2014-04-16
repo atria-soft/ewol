@@ -11,7 +11,10 @@
 
 #include <ewol/key/key.h>
 
-namespace MacOs {
+namespace IOs {
+	// Create and relaese ewol::Context interface:
+	void createInterface(void);
+	void releaseInterface(void);
 	// return true if a flush is needed
 	bool draw(bool _displayEveryTime);
 	/**
@@ -24,5 +27,6 @@ namespace MacOs {
 	void setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
 	void setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown);
 };
+
 
 #endif

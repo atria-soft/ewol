@@ -18,9 +18,3 @@ int mm_main(int argc, const char *argv[]) {
 	}	// return no error
 	return 0;
 }
-
-int mm_run(void) {
-	//[NSApp run];
-	// return no error
-	return 0;
-}

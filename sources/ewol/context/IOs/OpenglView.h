@@ -43,6 +43,5 @@
 - (void)stopAnimation;
 - (void)drawView;
 
-- (void)setupView;
 
 @end

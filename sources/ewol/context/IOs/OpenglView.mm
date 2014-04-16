@@ -7,6 +7,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
+#include <ewol/context/IOs/Context.h>
 
 #import "OpenglView.h"
 
@@ -55,78 +56,26 @@
 		}
 		
 		animationInterval = 1.0 / 60.0;
-		[self setupView];
+		//self.bounds
+		float width = [self frame].size.width;
+		float height = [self frame].size.height;
+		IOs::resize(width,height);
 	}
 	return self;
 }
 
-- (void)setupView {
-	const GLfloat zNear = 0.1, zFar = 1000.0, fieldOfView = 60.0;
-	GLfloat size;
-	
-	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	size = zNear * tanf(DEGREES_TO_RADIANS(fieldOfView) / 2.0);
-	
-	//Grab the size of the screen
-	CGRect rect = self.bounds;
-	glFrustumf(-size, size,
-			   -size / (rect.size.width / rect.size.height),
-			   size / (rect.size.width / rect.size.height),
-			   zNear, zFar);
-	glViewport(0, 0, rect.size.width, rect.size.height);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	
-	//Initialize touchLocation to 0, 0
-	touchLocation = CGPointMake(160, 240);
-}
-
 - (void)drawView {
-	const GLfloat triangleVertices[] = {
-		0.0, 1.0, -6.0,      // top center
-		-1.0, -1.0, -6.0,    // bottom left
-		1.0, -1.0, -6.0      // bottom right
-	};
-	
-	const GLfloat triangleColors[] = {
-		1.0, 0.0, 0.0, 1.0,  // red
-		0.0, 1.0, 0.0, 1.0,  // green
-		0.0, 0.0, 1.0, 1.0,  // blue
-	};
-	
 	//setting up the draw content
 	[EAGLContext setCurrentContext:context];
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 	
-	//Draw stuff
-	
-	//clear the back color back to our original color and depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	//reset matrix to identity
-	glLoadIdentity();
-	//rough approximation of screen to current 3D space
-	GLfloat x = (touchLocation.x - 160.0) / 38.0;
-	GLfloat y = (240.0 - touchLocation.y) / 38.0;
-	//translate the triangle
-	glTranslatef(x, y, -1.0);
-	//set the format and location for verticies
-	glVertexPointer(3, GL_FLOAT, 0, triangleVertices);
-	//set the opengl state
-	glEnableClientState(GL_VERTEX_ARRAY);
-	//set the format and location for colors
-	glColorPointer(4, GL_FLOAT, 0, triangleColors);
-	//set the opengl state
-	glEnableClientState(GL_COLOR_ARRAY);
-	//draw the triangles
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	
+	// Open GL draw : ...
+	IOs::draw(true);
+	glFlush();
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
 	//show the render buffer
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

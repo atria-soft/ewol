@@ -11,8 +11,7 @@
 
 #include <ewol/key/key.h>
 
-namespace MacOs {
-	// return true if a flush is needed
+IOs	// return true if a flush is needed
 	bool draw(bool _displayEveryTime);
 	/**
 	 * @brief The OS inform that the current windows has change his size.

@@ -63,11 +63,10 @@ def create(target):
 			'ewol/context/MacOs/AppDelegate.mm'])
 	elif target.name=="IOs":
 		myModule.add_src_file([
-			'ewol/context/MacOs/Context.cpp',
-			'ewol/context/MacOs/Interface.mm',
-			'ewol/context/MacOs/Windows.mm',
-			'ewol/context/MacOs/OpenglView.mm',
-			'ewol/context/MacOs/AppDelegate.mm'])
+			'ewol/context/IOs/Context.cpp',
+			'ewol/context/IOs/Interface.m',
+			'ewol/context/IOs/OpenglView.mm',
+			'ewol/context/IOs/AppDelegate.mm'])
 	else:
 		debug.error("unknow mode...")
 	
@@ -223,7 +222,15 @@ def create(target):
 			"-framework OpenGL",
 			"-framework QuartzCore",
 			"-framework AppKit"])
-	
+	elif target.name=="IOs":
+		myModule.add_export_flag_LD([
+			"-framework OpenGLES",
+			"-framework CoreGraphics",
+			"-framework UIKit",
+			"-framework GLKit",
+			"-framework Foundation",
+			"-framework QuartzCore"])
+
 	# add the currrent module at the 
 	return myModule
 

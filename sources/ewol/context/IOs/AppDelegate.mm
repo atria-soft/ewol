@@ -11,6 +11,7 @@
 
 #import <ewol/context/IOs/OpenglView.h>
 #import <ewol/context/IOs/AppDelegate.h>
+#include <ewol/context/IOs/Context.h>
 
 @implementation AppDelegate
 
@@ -24,7 +25,9 @@
 	glView = [[OpenglView alloc] initWithFrame:window.bounds];
 	[window addSubview:glView];
 	[window makeKeyAndVisible];
-	
+	// Create interface of ewol here ....
+	NSLog(@"CREATE EWOL interface creation\n");
+	IOs::createInterface();
 	glView.animationInterval = 1.0 / 60.0;
 	[glView startAnimation];
 }
@@ -63,6 +66,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+	// Create interface of ewol here ....
+	NSLog(@"REMOVE EWOL interface destruction\n");
+	IOs::releaseInterface();
 }
 /*
  - (void)dealloc {
