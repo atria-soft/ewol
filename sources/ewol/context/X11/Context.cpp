@@ -224,12 +224,24 @@ class X11Interface : public ewol::Context {
 							#ifdef DEBUG_X11_EVENT
 							{
 								XSelectionRequestEvent *req=&(event.xselectionrequest);
+								if (req->property == 0) {
+									EWOL_ERROR("Get NULL ATOM ... property");
+									break;
+								}
+								if (req->target == 0) {
+									EWOL_ERROR("Get NULL ATOM ... target");
+									break;
+								}
 								char * atomNameProperty = XGetAtomName(m_display, req->property);
 								char * atomNameTarget = XGetAtomName(m_display, req->target);
 								EWOL_INFO("X11    property: \"" << atomNameProperty << "\"");
 								EWOL_INFO("X11    target:   \"" << atomNameTarget << "\"");
-								if (NULL != atomNameProperty) { XFree(atomNameProperty); }
-								if (NULL != atomNameTarget) { XFree(atomNameTarget); }
+								if (atomNameProperty != NULL) {
+									XFree(atomNameProperty);
+								}
+								if (atomNameTarget != NULL) {
+									XFree(atomNameTarget);
+								}
 							}
 							#endif
 							if (true == m_clipBoardOwnerPrimary) {
@@ -281,6 +293,18 @@ class X11Interface : public ewol::Context {
 							XSelectionRequestEvent *req=&(event.xselectionrequest);
 							#ifdef DEBUG_X11_EVENT
 							{
+								if (req->property == 0) {
+									EWOL_ERROR("Get NULL ATOM ... property");
+									break;
+								}
+								if (req->selection == 0) {
+									EWOL_ERROR("Get NULL ATOM ... selection");
+									break;
+								}
+								if (req->target == 0) {
+									EWOL_ERROR("Get NULL ATOM ... target");
+									break;
+								}
 								char * atomNameProperty = XGetAtomName(m_display, req->property);
 								char * atomNameSelection = XGetAtomName(m_display, req->selection);
 								char * atomNameTarget = XGetAtomName(m_display, req->target);
@@ -664,7 +688,7 @@ class X11Interface : public ewol::Context {
 													// transform it in unicode
 													m_lastKeyPressed = utf8::convertChar32(buf);
 												}
-												//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
+												X11_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << m_lastKeyPressed);
 												OS_SetKeyboard(m_guiKeyBoardMode, m_lastKeyPressed, (event.type == KeyPress), thisIsAReapeateKey);
 												if (true == thisIsAReapeateKey) {
 													OS_SetKeyboard(m_guiKeyBoardMode, m_lastKeyPressed, !(event.type == KeyPress), thisIsAReapeateKey);

@@ -201,7 +201,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 			}
 			if (    _event.getId() == m_highSpeedButton
 			     && m_highSpeedMode != ewol::widget::Scroll::speedModeDisable) {
-				if (_event.getStatus() == ewol::key::statusUp) {
+				if (_event.getStatus() == ewol::key::statusUpAfter) {
 					if (m_highSpeedMode == ewol::widget::Scroll::speedModeInit) {
 						// TODO : generate back the down event ...
 						m_highSpeedMode = ewol::widget::Scroll::speedModeDisable;
