@@ -44,6 +44,22 @@ namespace ewol {
 				int32_t m_highSpeedButton;
 				enum ewol::key::type m_highSpeedType;
 			private: // finger section:
+				bool m_singleFingerMode; //!< in many case the moving in a subwidget is done with one finger, it is enought ==> the user select...
+			public:
+				/**
+				 * @brief Set the single finger capabilities/
+				 * @param[in] _status True if single inger mode, two otherwise/
+				 */
+				void setSingleFinger(bool _status);
+				/**
+				 * @brief Get the single finger capabilities
+				 * @return true The single finger mode is active
+				 * @return false The To finger mode is active
+				 */
+				bool getSingleFinger(void) {
+					return m_singleFingerMode;
+				}
+			private:
 				bool m_fingerPresent[CALCULATE_SIMULTANEOUS_FINGER];
 				bool m_fingerScoolActivated;
 				vec2 m_fingerMoveStartPos[CALCULATE_SIMULTANEOUS_FINGER];
