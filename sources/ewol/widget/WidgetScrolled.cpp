@@ -86,7 +86,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 			if (    _event.getId() == 1
 			     && _event.getStatus() == ewol::key::statusDown) {
 				// check if selected the scrolling position whth the scrolling bar ...
-				if (relativePos.x() >= (m_size.x()-paddingV.xLeft())) {
+				if (relativePos.x() >= (m_size.x()-paddingV.x())) {
 					if(    m_size.y() < m_maxSize.y()
 					    || m_originScrooled.y() != 0) {
 						m_highSpeedMode = ewol::widget::Scroll::speedModeEnableVertical;
@@ -100,7 +100,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						markToRedraw();
 						return true;
 					}
-				} else if (relativePos.y() >= (m_size.y()-paddingH.yButtom())) {
+				} else if (relativePos.y() >= (m_size.y()-paddingH.y())) {
 					if(    m_size.x() < m_maxSize.x()
 					    || m_originScrooled.x()!=0) {
 						m_highSpeedMode = ewol::widget::Scroll::speedModeEnableHorizontal;
@@ -110,7 +110,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						m_highSpeedButton = 1;
 						// force direct scrolling in this case
 						m_originScrooled.setX((int32_t)(m_maxSize.x() * (relativePos.x()-paddingH.xLeft()) / (m_size.x()-paddingH.xLeft()*2)));
-						m_originScrooled.setY(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
+						m_originScrooled.setX(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
 						markToRedraw();
 						return true;
 					}
@@ -202,16 +202,9 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 			if (    _event.getId() == m_highSpeedButton
 			     && m_highSpeedMode != ewol::widget::Scroll::speedModeDisable) {
 				if (_event.getStatus() == ewol::key::statusUpAfter) {
-					if (m_highSpeedMode == ewol::widget::Scroll::speedModeInit) {
-						// TODO : generate back the down event ...
-						m_highSpeedMode = ewol::widget::Scroll::speedModeDisable;
-						m_highSpeedType = ewol::key::typeUnknow;
-						return false;
-					} else {
-						m_highSpeedMode = ewol::widget::Scroll::speedModeGrepEndEvent;
-						markToRedraw();
-						return true;
-					}
+					m_highSpeedMode = ewol::widget::Scroll::speedModeDisable;
+					m_highSpeedType = ewol::key::typeUnknow;
+					return false;
 				} else if (m_highSpeedMode == ewol::widget::Scroll::speedModeGrepEndEvent) {
 					if (_event.getStatus() == ewol::key::statusSingle) {
 						m_highSpeedMode = ewol::widget::Scroll::speedModeDisable;
@@ -219,6 +212,8 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						m_highSpeedButton = -1;
 						markToRedraw();
 					}
+					return true;
+				} else if (_event.getStatus() == ewol::key::statusUp) {
 					return true;
 				} else if (    m_highSpeedMode == ewol::widget::Scroll::speedModeInit
 				            && _event.getStatus() == ewol::key::statusMove) {
