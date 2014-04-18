@@ -45,6 +45,8 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
   ewol::resource::Texture(_fontName) {
 	addObjectType("ewol::resource::TexturedFont");
+	EWOL_DEBUG("Load font : '" << _fontName << "'" );
+
 	m_font[0] = NULL;
 	m_font[1] = NULL;
 	m_font[2] = NULL;
@@ -82,6 +84,10 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 		}
 	}
 	std::string localName(_fontName, 0, (tmpPos - tmpData));
+	if (tmpSize>400) {
+		EWOL_ERROR("Font size too big ==> limit at 400 when exxeed ==> error : " << tmpSize << "==>30");
+		tmpSize = 30;
+	}
 	m_size = tmpSize;
 	
 	std::vector<std::string> folderList;
@@ -207,6 +213,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 	addGlyph(0);
 	// by default we set only the first AINSI char availlable
 	for (int32_t iii=0x20; iii<0x7F; iii++) {
+		EWOL_VERBOSE("Add clyph :" << iii);
 		addGlyph(iii);
 	}
 	flush();

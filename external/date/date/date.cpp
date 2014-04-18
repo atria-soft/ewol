@@ -7,13 +7,23 @@
  */
 
 #include <date/date.h>
-#ifdef __TARGET_OS__IOs
-#define BUILD_YEAR 1070
-#define BUILD_MONTH 1
-#define BUILD_DAY 1
-#define BUILD_HOUR 0
-#define BUILD_MINUTE 0
-#define BUILD_SECOND 0
+#ifndef BUILD_YEAR
+	#define BUILD_YEAR 1070
+#endif
+#ifndef BUILD_MONTH
+	#define BUILD_MONTH 1
+#endif
+#ifndef BUILD_DAY
+	#define BUILD_DAY 1
+#endif
+#ifndef BUILD_HOUR
+	#define BUILD_HOUR 0
+#endif
+#ifndef BUILD_MINUTE
+	#define BUILD_MINUTE 0
+#endif
+#ifndef BUILD_SECOND
+	#define BUILD_SECOND 0
 #endif
 
 int32_t date::getYear(void) {

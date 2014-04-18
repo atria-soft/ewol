@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
 
 /*
  This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
@@ -19,11 +19,14 @@
 @interface OpenglView : UIView {
     
 @private
+    CAEAGLLayer* _eaglLayer;
 	/* The pixel dimensions of the backbuffer */
 	GLint backingWidth;
 	GLint backingHeight;
 	
-	EAGLContext *context;
+	EAGLContext *_context;
+    GLuint _colorRenderBuffer;
+    GLuint _depthRenderBuffer;
 	
 	/* OpenGL names for the renderbuffer and framebuffers used to render to this view */
 	GLuint viewRenderbuffer, viewFramebuffer;
@@ -37,7 +40,7 @@
 	CGPoint touchLocation;
 }
 
-@property NSTimeInterval animationInterval;
+@property (nonatomic) NSTimeInterval animationInterval;
 
 - (void)startAnimation;
 - (void)stopAnimation;
