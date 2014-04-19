@@ -24,6 +24,8 @@ namespace IOs {
 	void resize(float _x, float _y);
 	void setMouseState(int32_t _id, bool _isDown, float _x, float _y);
 	void setMouseMotion(int32_t _id, float _x, float _y);
+	void setInputState(int32_t _id, bool _isDown, float _x, float _y);
+	void setInputMotion(int32_t _id, float _x, float _y);
 	void setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
 	void setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown);
 };

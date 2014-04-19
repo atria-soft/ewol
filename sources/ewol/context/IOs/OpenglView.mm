@@ -15,6 +15,12 @@
 #include <sys/sysctl.h>
 
 #import "OpenglView.h"
+#include <ewol/debug.h>
+
+// tuto de deploiment d'appo$ilcation :
+// http://mobiforge.com/design-development/deploying-iphone-apps-real-devices
+// http://www.techotopia.com/index.php/Testing_Apps_on_the_iPhone_–_Developer_Certificates_and_Provisioning_Profiles
+
 
 #define USE_DEPTH_BUFFER 1
 #define DEGREES_TO_RADIANS(__ANGLE) ((__ANGLE) / 180.0 * M_PI)
@@ -137,13 +143,13 @@
 - (void)configureAspectRatio {
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
 	CGFloat screenScale = [[UIScreen mainScreen] scale];
-	CGSize screenSize = CGSizeMake(screenBounds.size.width * screenScale, screenBounds.size.height * screenScale);
+	m_currentSize = CGSizeMake(screenBounds.size.width * screenScale, screenBounds.size.height * screenScale);
 	
-	NSLog(@"**** screen size : %fx%f\n", screenSize.width, screenSize.height);
+	NSLog(@"**** screen size : %fx%f\n", m_currentSize.width, m_currentSize.height);
 	float ratio = [self getScreenPPP];
 	NSLog(@"**** pixel ratio : %f ppp \n", ratio);
 	ewol::Dimension::setPixelRatio(vec2(1.0f/ratio, 1.0f/ratio), ewol::Dimension::Inch);
-	IOs::resize(screenSize.width, screenSize.height);
+	IOs::resize(m_currentSize.width, m_currentSize.height);
 
 }
 - (void)setupLayer {
@@ -193,7 +199,7 @@
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	IOs::draw(true);
-	NSLog(@"draw...");
+	//NSLog(@"draw...");
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
@@ -228,10 +234,26 @@
 	
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
 	touchLocation = [touch locationInView:self];
+	CGRect localBounds = [self bounds];
+	EWOL_ERROR("touchesBegan: " << vec2(touchLocation.x, localBounds.size.height - touchLocation.y));
+	IOs::setInputState(1, true, touchLocation.x, localBounds.size.height - touchLocation.y);
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = [touches anyObject];
+	touchLocation = [touch locationInView:self];
+	CGRect localBounds = [self bounds];
+	EWOL_ERROR("touchesEnded: " << vec2(touchLocation.x, localBounds.size.height - touchLocation.y));
+	IOs::setInputState(1, false, touchLocation.x, localBounds.size.height - touchLocation.y);
+}
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = [touches anyObject];
+	touchLocation = [touch locationInView:self];
+	CGRect localBounds = [self bounds];
+	EWOL_ERROR("touchesMoved: " << vec2(touchLocation.x, localBounds.size.height - touchLocation.y));
+	IOs::setInputMotion(1, touchLocation.x, localBounds.size.height - touchLocation.y);
 }
 
 - (void)layoutSubviews {
@@ -287,5 +309,6 @@
     //[context release];
     //[super dealloc];
 }
+
 
 @end

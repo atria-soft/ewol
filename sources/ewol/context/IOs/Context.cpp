@@ -77,6 +77,12 @@ public:
 	void MAC_SetMouseMotion(int32_t _id, float _x, float _y) {
 		OS_SetMouseMotion(_id, vec2(_x, _y));
 	}
+	void MAC_SetInputState(int32_t _id, bool _isDown, float _x, float _y) {
+		OS_SetInputState(_id, _isDown, vec2(_x, _y));
+	}
+	void MAC_SetInputMotion(int32_t _id, float _x, float _y) {
+		OS_SetInputMotion(_id, vec2(_x, _y));
+	}
 	void MAC_SetKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
 		if (_unichar == u32char::Delete) {
 			_unichar = u32char::Suppress;
@@ -147,6 +153,20 @@ void IOs::setMouseMotion(int32_t _id, float _x, float _y) {
 		return;
 	}
 	interface->MAC_SetMouseMotion(_id, _x, _y);
+}
+
+void IOs::setInputState(int32_t _id, bool _isDown, float _x, float _y) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_SetInputState(_id, _isDown, _x, _y);
+}
+
+void IOs::setInputMotion(int32_t _id, float _x, float _y) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_SetInputMotion(_id, _x, _y);
 }
 
 void IOs::setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {

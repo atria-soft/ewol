@@ -16,11 +16,12 @@
 @synthesize window=_window;
 
 - (BOOL)application:(MacOsAppDelegate *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	OpenGLView *view=[[OpenGLView alloc]initWithFrame:[[NSScreen mainScreen] bounds]];
+	
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	OpenGLView *view = [[[OpenGLView alloc]initWithFrame:screenBounds] autorelease];
 	// Override point for customization after application launch.
 	[self.window addSubview:view];
 	[self.window makeKeyAndVisible];
-	EWOL_INFO("lkjlkjlkj");
 	return YES;
 }
 

@@ -38,6 +38,7 @@
 	NSTimeInterval animationInterval;
 	
 	CGPoint touchLocation;
+	CGSize m_currentSize;
 }
 
 @property (nonatomic) NSTimeInterval animationInterval;
