@@ -18,3 +18,8 @@ int mm_main(int argc, const char *argv[]) {
 	}	// return no error
 	return 0;
 }
+
+void mm_exit(void) {
+	[[NSThread mainThread] cancel];
+}
+

@@ -37,8 +37,6 @@
 	NSLog(@"CREATE EWOL interface creation\n");
 	IOs::createInterface();
 	IOs::resize(currentSize.width, currentSize.height);
-	glView.animationInterval = 1.0 / 60.0;
-	[glView startAnimation];
 }
 /*
  - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -49,7 +47,6 @@
  */
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	glView.animationInterval = 1.0 / 5.0;
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 	// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	EWOL_INFO("move windows in applicationWillResignActive");
@@ -67,7 +64,6 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	glView.animationInterval = 1.0 / 60.0;
 	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	EWOL_INFO("move windows in applicationDidBecomeActive");
 }

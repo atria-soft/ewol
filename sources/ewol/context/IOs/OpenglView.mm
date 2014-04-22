@@ -17,37 +17,19 @@
 #import "OpenglView.h"
 #include <ewol/debug.h>
 
-// tuto de deploiment d'appo$ilcation :
-// http://mobiforge.com/design-development/deploying-iphone-apps-real-devices
-// http://www.techotopia.com/index.php/Testing_Apps_on_the_iPhone_–_Developer_Certificates_and_Provisioning_Profiles
 
-
-#define USE_DEPTH_BUFFER 1
-#define DEGREES_TO_RADIANS(__ANGLE) ((__ANGLE) / 180.0 * M_PI)
-
-// A class extension to declare private methods
 @interface OpenglView ()
-
-@property (nonatomic, retain) EAGLContext *context;
-@property (nonatomic, assign) NSTimer *animationTimer;
-
-
 @end
 
 
 @implementation OpenglView
 
-@synthesize context;
-@synthesize animationTimer;
-@synthesize animationInterval;
-
-
-// You must implement this method
+// You must implement this method (it does not work without it)
 + (Class)layerClass {
     return [CAEAGLLayer class];
 }
 
-- (NSString *) platform{
+- (NSString *) platform {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     char *machine = (char*)malloc(size);
@@ -57,7 +39,7 @@
     return platform;
 }
 
-- (NSString *) platformString{
+- (NSString *) platformString {
 	NSString *platform = [self platform];
 	if ([platform isEqualToString:@"iPhone1,1"])    return @"iPhone 1G";
 	if ([platform isEqualToString:@"iPhone1,2"])    return @"iPhone 3G";
@@ -174,7 +156,6 @@
         NSLog(@"Failed to initialize OpenGLES 2.0 context");
         exit(1);
     }
-    
     if (![EAGLContext setCurrentContext:_context]) {
         NSLog(@"Failed to set current OpenGL context");
         exit(1);
@@ -204,28 +185,21 @@
 }
 
 - (void)render:(CADisplayLink*)displayLink {
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    
-    glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	IOs::draw(true);
-	//NSLog(@"draw...");
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
-
 
 - (void)setupDisplayLink {
     CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
-	animationInterval = 1.0 / 60.0;
+- (id)initWithFrame:(CGRect)frame {
 	NSLog(@"INIT with size : %fx%f, %fx%f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     self = [super initWithFrame:frame];
     self.contentScaleFactor = 1.0f;
+	// TODO : Enable multi touch ==> but this generate many sub errors ... 3 touch can be appear in 1 event ...
+	//self.multipleTouchEnabled = YES;
 	if (self) {
 		[self configureAspectRatio];
         [self setupLayer];
@@ -238,95 +212,44 @@
     return self;
 }
 
-- (void)drawView {
-	//setting up the draw content
-	[EAGLContext setCurrentContext:_context];
-	// Open GL draw : ...
-	IOs::draw(true);
-	//glFlush();
-	
-}
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
-	touchLocation = [touch locationInView:self];
+	CGPoint touchLocation = [touch locationInView:self];
 	CGRect localBounds = [self bounds];
 	CGFloat screenScale = [[UIScreen mainScreen] scale];
 	vec2 positionEvent(touchLocation.x*screenScale, (localBounds.size.height - touchLocation.y)*screenScale);
-	EWOL_ERROR("touchesBegan: " << positionEvent);
+	EWOL_DEBUG(touches.count << " touchesBegan: " << positionEvent);
 	IOs::setInputState(1, true, positionEvent.x(), positionEvent.y());
 }
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
-	touchLocation = [touch locationInView:self];
+	CGPoint touchLocation = [touch locationInView:self];
 	CGRect localBounds = [self bounds];
 	CGFloat screenScale = [[UIScreen mainScreen] scale];
 	vec2 positionEvent(touchLocation.x*screenScale, (localBounds.size.height - touchLocation.y)*screenScale);
-	EWOL_ERROR("touchesEnded: " << positionEvent);
+	EWOL_DEBUG(touches.count << " touchesEnded: " << positionEvent);
 	IOs::setInputState(1, false, positionEvent.x(), positionEvent.y());
 }
+
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
-	touchLocation = [touch locationInView:self];
+	CGPoint touchLocation = [touch locationInView:self];
 	CGRect localBounds = [self bounds];
 	CGFloat screenScale = [[UIScreen mainScreen] scale];
 	vec2 positionEvent(touchLocation.x*screenScale, (localBounds.size.height - touchLocation.y)*screenScale);
-	EWOL_ERROR("touchesMoved: " << positionEvent);
+	EWOL_DEBUG(touches.count << " touchesMoved: " << positionEvent);
 	IOs::setInputMotion(1, positionEvent.x(), positionEvent.y());
 }
 
 - (void)layoutSubviews {
-    [EAGLContext setCurrentContext:context];
-    [self drawView];
+    [EAGLContext setCurrentContext:_context];
 }
-
-
-- (void)startAnimation {
-	NSLog(@"start annimation\n");
-	/*
-    self.animationTimer = [NSTimer
-						   scheduledTimerWithTimeInterval:animationInterval
-						   target:self
-						   selector:@selector(drawView)
-						   userInfo:nil
-						   repeats:YES];
-	 */
-}
-
-
-- (void)stopAnimation {
-	NSLog(@"Stop annimation\n");
-    self.animationTimer = nil;
-}
-
-
-- (void)setAnimationTimer:(NSTimer *)newTimer {
-    NSLog(@"new timer\n");
-	[animationTimer invalidate];
-    animationTimer = newTimer;
-}
-
-
-- (void)setAnimationInterval:(NSTimeInterval)interval {
-    
-    animationInterval = interval;
-    if (animationTimer) {
-        [self stopAnimation];
-        [self startAnimation];
-    }
-}
-
 
 - (void)dealloc {
-    
-    [self stopAnimation];
-    
-    if ([EAGLContext currentContext] == context) {
+    if ([EAGLContext currentContext] == _context) {
         [EAGLContext setCurrentContext:nil];
     }
-    
-    //[context release];
-    //[super dealloc];
 }
 
 

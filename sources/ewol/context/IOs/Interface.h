@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 int mm_main(int argc, const char *argv[]);
+void mm_exit(void);
 
 #ifdef __cplusplus
 }

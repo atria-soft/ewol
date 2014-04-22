@@ -62,3 +62,6 @@
 [submodule "external/ewolsa"]
 	path = external/ewolsa
 	url = https://github.com/HeeroYui/ewolsa.git
+[submodule "ios-deploy"]
+	path = ios-deploy
+	url = https://github.com/HeeroYui/ios-deploy.git

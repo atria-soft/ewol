@@ -20,9 +20,6 @@
     
 @private
     CAEAGLLayer* _eaglLayer;
-	/* The pixel dimensions of the backbuffer */
-	GLint backingWidth;
-	GLint backingHeight;
 	
 	EAGLContext *_context;
     GLuint _colorRenderBuffer;
@@ -33,19 +30,7 @@
 	
 	/* OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist) */
 	GLuint depthRenderbuffer;
-	
-	//NSTimer *animationTimer;
-	NSTimeInterval animationInterval;
-	
-	CGPoint touchLocation;
 	CGSize m_currentSize;
 }
-
-@property (nonatomic) NSTimeInterval animationInterval;
-
-- (void)startAnimation;
-- (void)stopAnimation;
-- (void)drawView;
-
 
 @end

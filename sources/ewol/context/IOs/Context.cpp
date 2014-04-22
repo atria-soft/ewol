@@ -62,6 +62,9 @@ public:
 		
 		return 0;
 	}
+	virtual void stop(void) {
+		mm_exit();
+	}
 public:
 	//interface MacOS :
 	
