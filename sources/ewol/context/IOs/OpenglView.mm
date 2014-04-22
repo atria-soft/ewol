@@ -135,25 +135,35 @@
 	if ([platform isEqualToString:@"iPad4,2"])      return 264.0f; //@"iPad Air (Cellular)";
 	if ([platform isEqualToString:@"iPad4,4"])      return 326.0f; //@"iPad mini 2G (WiFi)";
 	if ([platform isEqualToString:@"iPad4,5"])      return 326.0f; //@"iPad mini 2G (Cellular)";
-	if ([platform isEqualToString:@"i386"])         return 326.0f; //@"Simulator";
+	if ([platform isEqualToString:@"i386"])         return 200.0f; //@"Simulator";
 	if ([platform isEqualToString:@"x86_64"])       return 326.0f; //@"Simulator";
 	return 326.0f;
 }
 
+- (void)setNeedsDisplay {
+	EWOL_INFO("**** setNeedsDisplay:" << vec2(self.frame.size.width, self.frame.size.height));
+	// TODO : SIZE change ...
+
+}
 - (void)configureAspectRatio {
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
 	CGFloat screenScale = [[UIScreen mainScreen] scale];
 	m_currentSize = CGSizeMake(screenBounds.size.width * screenScale, screenBounds.size.height * screenScale);
+	//self.frame.size = m_currentSize;
 	
-	NSLog(@"**** screen size : %fx%f\n", m_currentSize.width, m_currentSize.height);
+	EWOL_INFO("**** screen size:" << vec2(m_currentSize.width, m_currentSize.height));
 	float ratio = [self getScreenPPP];
-	NSLog(@"**** pixel ratio : %f ppp \n", ratio);
+	EWOL_INFO("**** pixel ratio: " << ratio);
 	ewol::Dimension::setPixelRatio(vec2(1.0f/ratio, 1.0f/ratio), ewol::Dimension::Inch);
 	IOs::resize(m_currentSize.width, m_currentSize.height);
+	CGRect localBounds = [self bounds];
+	EWOL_INFO("**** localBounds:" << vec2(localBounds.size.width, localBounds.size.height));
 
 }
 - (void)setupLayer {
     _eaglLayer = (CAEAGLLayer*) self.layer;
+	CGFloat screenScale = [[UIScreen mainScreen] scale];
+	_eaglLayer.contentsScale = screenScale;
     _eaglLayer.opaque = YES;
 }
 
@@ -181,7 +191,8 @@
 - (void)setupDepthBuffer {
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+	CGFloat screenScale = [[UIScreen mainScreen] scale];
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width*screenScale, self.frame.size.height*screenScale);
 }
 
 - (void)setupFrameBuffer {
@@ -212,8 +223,10 @@
 - (id)initWithFrame:(CGRect)frame
 {
 	animationInterval = 1.0 / 60.0;
+	NSLog(@"INIT with size : %fx%f, %fx%f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     self = [super initWithFrame:frame];
-    if (self) {
+    self.contentScaleFactor = 1.0f;
+	if (self) {
 		[self configureAspectRatio];
         [self setupLayer];
         [self setupContext];
@@ -230,7 +243,7 @@
 	[EAGLContext setCurrentContext:_context];
 	// Open GL draw : ...
 	IOs::draw(true);
-	glFlush();
+	//glFlush();
 	
 }
 
@@ -238,22 +251,28 @@
 	UITouch *touch = [touches anyObject];
 	touchLocation = [touch locationInView:self];
 	CGRect localBounds = [self bounds];
-	EWOL_ERROR("touchesBegan: " << vec2(touchLocation.x, localBounds.size.height - touchLocation.y));
-	IOs::setInputState(1, true, touchLocation.x, localBounds.size.height - touchLocation.y);
+	CGFloat screenScale = [[UIScreen mainScreen] scale];
+	vec2 positionEvent(touchLocation.x*screenScale, (localBounds.size.height - touchLocation.y)*screenScale);
+	EWOL_ERROR("touchesBegan: " << positionEvent);
+	IOs::setInputState(1, true, positionEvent.x(), positionEvent.y());
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
 	touchLocation = [touch locationInView:self];
 	CGRect localBounds = [self bounds];
-	EWOL_ERROR("touchesEnded: " << vec2(touchLocation.x, localBounds.size.height - touchLocation.y));
-	IOs::setInputState(1, false, touchLocation.x, localBounds.size.height - touchLocation.y);
+	CGFloat screenScale = [[UIScreen mainScreen] scale];
+	vec2 positionEvent(touchLocation.x*screenScale, (localBounds.size.height - touchLocation.y)*screenScale);
+	EWOL_ERROR("touchesEnded: " << positionEvent);
+	IOs::setInputState(1, false, positionEvent.x(), positionEvent.y());
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
 	touchLocation = [touch locationInView:self];
 	CGRect localBounds = [self bounds];
-	EWOL_ERROR("touchesMoved: " << vec2(touchLocation.x, localBounds.size.height - touchLocation.y));
-	IOs::setInputMotion(1, touchLocation.x, localBounds.size.height - touchLocation.y);
+	CGFloat screenScale = [[UIScreen mainScreen] scale];
+	vec2 positionEvent(touchLocation.x*screenScale, (localBounds.size.height - touchLocation.y)*screenScale);
+	EWOL_ERROR("touchesMoved: " << positionEvent);
+	IOs::setInputMotion(1, positionEvent.x(), positionEvent.y());
 }
 
 - (void)layoutSubviews {

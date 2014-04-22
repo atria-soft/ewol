@@ -20,15 +20,23 @@
 @synthesize glView;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-	
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	CGFloat screenScale = [[UIScreen mainScreen] scale];
+	NSLog(@"Start with screeen bounds : %fx%f\n", screenBounds.size.width, screenBounds.size.height);
+	CGSize currentSize = CGSizeMake(screenBounds.size.width * screenScale, screenBounds.size.height * screenScale);
+	//screenBounds.size.width *= screenScale;
+	//screenBounds.size.height *= screenScale;
+	NSLog(@"Start with screeen bounds : %fx%f\n", screenBounds.size.width, screenBounds.size.height);
 	window = [[UIWindow alloc] initWithFrame:screenBounds];
-	glView = [[[OpenglView alloc] initWithFrame:window.bounds] autorelease];;
+	window.contentMode = UIViewContentModeRedraw;
+	glView = [[OpenglView alloc] initWithFrame:window.bounds];
+	glView.contentMode = UIViewContentModeRedraw;
 	[window addSubview:glView];
 	[window makeKeyAndVisible];
 	// Create interface of ewol here ....
 	NSLog(@"CREATE EWOL interface creation\n");
 	IOs::createInterface();
+	IOs::resize(currentSize.width, currentSize.height);
 	glView.animationInterval = 1.0 / 60.0;
 	[glView startAnimation];
 }

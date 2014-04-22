@@ -16,9 +16,7 @@
 @synthesize window=_window;
 
 - (BOOL)application:(MacOsAppDelegate *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-	OpenGLView *view = [[[OpenGLView alloc]initWithFrame:screenBounds] autorelease];
+	OpenGLView *view=[[OpenGLView alloc]initWithFrame:[[NSScreen mainScreen] bounds]];
 	// Override point for customization after application launch.
 	[self.window addSubview:view];
 	[self.window makeKeyAndVisible];

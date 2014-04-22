@@ -287,7 +287,7 @@ void ewol::Context::setArchiveDir(int _mode, const char* _str) {
 ewol::Context::Context(int32_t _argc, const char* _argv[]) :
   m_previousDisplayTime(0),
   m_input(*this),
-#if defined(__TARGET_OS__Android)
+#if (defined(__TARGET_OS__Android) || defined(__TARGET_OS__IOs))
   m_displayFps(true),
 #else
   m_displayFps(false),
