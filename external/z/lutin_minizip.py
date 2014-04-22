@@ -21,6 +21,10 @@ def create(target):
 	myModule.compile_flags_CC([
 		"-DNOCRYPT",
 		"-DIOAPI_NO_64"])
+	
+	if target.name=="IOs" or target.name=="MacOs":
+		myModule.compile_flags_CC("-Wno-implicit-function-declaration")
+	
 	# add the currrent module at the 
 	return myModule
 
