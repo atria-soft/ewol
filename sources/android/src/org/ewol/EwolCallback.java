@@ -10,6 +10,7 @@ package org.ewol;
 import android.util.Log;
 
 public interface EwolCallback {
+	public void openURI(String uri);
 	public void keyboardUpdate(boolean show);
 	public void eventNotifier(String[] args);
 	public void orientationUpdate(int screenMode);

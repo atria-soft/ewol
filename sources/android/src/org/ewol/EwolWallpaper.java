@@ -23,6 +23,10 @@ import android.view.SurfaceHolder;
 import org.ewol.EwolSurfaceViewGL;
 import android.view.MotionEvent;
 
+import android.net.Uri;
+import android.content.Intent;
+import android.content.ActivityNotFoundException;
+
 import org.ewol.Ewol;
 
 public abstract class EwolWallpaper extends WallpaperService implements EwolCallback, EwolConstants
@@ -184,6 +188,15 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 	public void titleSet(String value) {
 		// no title in the wallpaper ...
 		Log.d("EwolCallback", "SET TITLE is not implemented ...");
+	}
+	
+	public void openURI(String uri) {
+		try {
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+			startActivity(myIntent);
+		} catch (ActivityNotFoundException e) {
+			Log.e("EwolActivity", "Can not request an URL");
+		}
 	}
 	
 	public void stop() {

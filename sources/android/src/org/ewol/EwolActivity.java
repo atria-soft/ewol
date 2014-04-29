@@ -42,6 +42,10 @@ import android.util.Log;
 import android.content.ClipboardManager;
 import android.content.ClipData;
 
+import android.net.Uri;
+import android.content.Intent;
+import android.content.ActivityNotFoundException;
+
 import java.io.IOException;
 //import activityRootView
 
@@ -275,6 +279,15 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	
 	public void titleSet(String value) {
 		setTitle(value);
+	}
+	
+	public void openURI(String uri) {
+		try {
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+			startActivity(myIntent);
+		} catch (ActivityNotFoundException e) {
+			Log.e("EwolActivity", "Can not request an URL");
+		}
 	}
 	
 	public void stop() {

@@ -63,6 +63,7 @@ class AndroidContext : public ewol::Context {
 		jmethodID m_javaMethodEwolCallbackKeyboardUpdate; //!< basic methode to call ...
 		jmethodID m_javaMethodEwolCallbackOrientationUpdate;
 		jmethodID m_javaMethodEwolActivitySetTitle;
+		jmethodID m_javaMethodEwolActivityOpenURI;
 		jmethodID m_javaMethodEwolActivitySetClipBoardString;
 		jmethodID m_javaMethodEwolActivityGetClipBoardString;
 		// List of all Audio interface :
@@ -97,6 +98,7 @@ class AndroidContext : public ewol::Context {
 		  m_javaMethodEwolCallbackKeyboardUpdate(0),
 		  m_javaMethodEwolCallbackOrientationUpdate(0),
 		  m_javaMethodEwolActivitySetTitle(0),
+		  m_javaMethodEwolActivityOpenURI(0),
 		  m_javaMethodEwolActivitySetClipBoardString(0),
 		  m_javaMethodEwolActivityGetClipBoardString(0),
 		  m_javaMethodEwolActivityAudioGetDeviceCount(0),
@@ -143,6 +145,15 @@ class AndroidContext : public ewol::Context {
 				if (ret == false) {
 					java_check_exception(_env);
 					EWOL_ERROR("system can not start without function : titleSet");
+					functionCallbackIsMissing = true;
+				}
+				ret = safeInitMethodID(m_javaMethodEwolActivityOpenURI,
+				                       m_javaClassEwolCallback,
+				                       "openURI",
+				                       "(Ljava/lang/String;)V");
+				if (ret == false) {
+					java_check_exception(_env);
+					EWOL_ERROR("system can not start without function : openURI");
 					functionCallbackIsMissing = true;
 				}
 				
@@ -533,6 +544,21 @@ class AndroidContext : public ewol::Context {
 			} else {
 				EWOL_ERROR("C->java : can not set title on appliation that is not real application");
 			}
+		}
+		
+		void openURL(const std::string& _url) {
+			EWOL_DEBUG("C->java : send message to the java : open URL'" << _url << "'");
+			int status;
+			if(!java_attach_current_thread(&status)) {
+				return;
+			}
+			//Call java ...
+			jstring url = m_JavaVirtualMachinePointer->NewStringUTF(_url.c_str());
+			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityOpenURI, url);
+			m_JavaVirtualMachinePointer->DeleteLocalRef(url);
+			// manage execption :
+			java_check_exception(m_JavaVirtualMachinePointer);
+			java_detach_current_thread(status);
 		}
 		
 		void sendSystemMessage(const char* _dataString) {

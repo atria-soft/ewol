@@ -28,7 +28,7 @@ namespace ewol {
 		#define SHAPER_NB_MAX_QUAD (5*5)
 		#define SHAPER_NB_MAX_TRIANGLE (SHAPER_NB_MAX_QUAD*2)
 		#define SHAPER_NB_MAX_VERTEX (SHAPER_NB_MAX_TRIANGLE*3)
-		enum {
+		enum shaperPos {
 			shaperPosLeft,
 			shaperPosRight,
 			shaperPosTop,
