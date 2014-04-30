@@ -10,7 +10,6 @@
 #define __EWOL_CLIPBOARD_H__
 
 #include <ewol/debug.h>
-#include <etk/types.h>
 
 // TODO : Remove this ... ==> set it in the context ....
 namespace ewol {
@@ -77,7 +76,7 @@ namespace ewol {
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information
 	 */
-	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::context::clipBoard::clipboardListe _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum ewol::context::clipBoard::clipboardListe _obj);
 };
 
 #endif

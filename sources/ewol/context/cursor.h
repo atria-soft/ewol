@@ -9,8 +9,8 @@
 #ifndef __EWOL_CURSOR_H__
 #define __EWOL_CURSOR_H__
 
-#include <etk/types.h>
-#include <etk/Stream.h>
+#include <ewol/debug.h>
+
 namespace ewol {
 	namespace context {
 		enum cursorDisplay {
@@ -42,7 +42,7 @@ namespace ewol {
 	/**
 	 * @brief Debug operator To display the curent element in a Human readable information
 	 */
-	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::context::cursorDisplay _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum ewol::context::cursorDisplay _obj);
 };
 
 #endif

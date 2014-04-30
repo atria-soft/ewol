@@ -9,8 +9,7 @@
 #ifndef __EWOL_CONFIG_FONT_H__
 #define __EWOL_CONFIG_FONT_H__
 
-#include <etk/types.h>
-#include <etk/types.h>
+#include <ewol/debug.h>
 
 namespace ewol {
 	namespace context {

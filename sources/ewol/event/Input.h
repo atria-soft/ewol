@@ -70,7 +70,7 @@ namespace ewol {
 					// TODO : Call the entry element ant rest it ...
 				}
 		};
-		etk::CCout& operator <<(etk::CCout& _os, const ewol::event::Input& _obj);
+		std::ostream& operator <<(std::ostream& _os, const ewol::event::Input& _obj);
 		
 		class InputSystem {
 			public:
@@ -102,7 +102,7 @@ namespace ewol {
 					return m_realIdEvent;
 				};
 		};
-		etk::CCout& operator <<(etk::CCout& _os, const ewol::event::InputSystem& _obj);
+		std::ostream& operator <<(std::ostream& _os, const ewol::event::InputSystem& _obj);
 	};
 };
 

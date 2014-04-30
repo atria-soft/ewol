@@ -201,7 +201,7 @@ void ewol::key::Special::setInsert(bool _value) {
 	}
 }
 
-etk::CCout& ewol::key::operator <<(etk::CCout& _os, const ewol::key::Special _obj) {
+std::ostream& ewol::key::operator <<(std::ostream& _os, const ewol::key::Special _obj) {
 	_os << " capLock=" << _obj.getCapsLock();
 	_os << " shift=" << _obj.getShift();
 	_os << " ctrl=" << _obj.getCtrl();

@@ -80,7 +80,7 @@ namespace ewol {
 			}
 			
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::Padding& _obj);
+	std::ostream& operator <<(std::ostream& _os, const ewol::Padding& _obj);
 };
 
 #endif

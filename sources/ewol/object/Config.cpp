@@ -13,7 +13,7 @@
 #undef __class__
 #define __class__ "object::Config"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::object::Config& _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const ewol::object::Config& _obj) {
 	_os << "{";
 	_os << "config=\"" << _obj.getConfig() << "\"";
 	_os << " data=\"" << _obj.getData() << "\"}";

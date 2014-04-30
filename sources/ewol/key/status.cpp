@@ -26,7 +26,7 @@ static const char* statusDescriptionString[ewol::key::statusCount+1] = {
 	"statusCount"
 };
 
-etk::CCout& ewol::key::operator <<(etk::CCout& _os, const enum ewol::key::status _obj) {
+std::ostream& ewol::key::operator <<(std::ostream& _os, const enum ewol::key::status _obj) {
 	if (_obj >= 0 && _obj <ewol::key::statusCount) {
 		_os << statusDescriptionString[_obj];
 	} else {

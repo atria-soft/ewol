@@ -204,8 +204,8 @@ namespace ewol {
 		static float getWindowsDiag(enum ewol::Dimension::distance _type);
 		
 	};
-	etk::CCout& operator <<(etk::CCout& _os, enum ewol::Dimension::distance _obj);
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension& _obj);
+	std::ostream& operator <<(std::ostream& _os, enum ewol::Dimension::distance _obj);
+	std::ostream& operator <<(std::ostream& _os, const ewol::Dimension& _obj);
 };
 
 #endif

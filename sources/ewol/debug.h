@@ -9,20 +9,44 @@
 #ifndef __EWOL_DEBUG_H__
 #define __EWOL_DEBUG_H__
 
-#include <etk/types.h>
-#include <etk/debugGeneric.h>
+#include <etk/log.h>
 
-extern const char * g_ewolLibName;
+namespace ewol {
+	int32_t getLogId(void);
+};
+// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
+#define EWOL_BASE(info,data) \
+	do { \
+		if (info <= etk::log::getLevel(ewol::getLogId())) { \
+			std::stringbuf sb; \
+			std::ostream tmpStream(&sb); \
+			tmpStream << data; \
+			etk::log::logStream(ewol::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
+		} \
+	} while(0)
 
-#define EWOL_CRITICAL(data)     ETK_CRITICAL(g_ewolLibName, data)
-#define EWOL_WARNING(data)      ETK_WARNING(g_ewolLibName, data)
-#define EWOL_ERROR(data)        ETK_ERROR(g_ewolLibName, data)
-#define EWOL_INFO(data)         ETK_INFO(g_ewolLibName, data)
-#define EWOL_DEBUG(data)        ETK_DEBUG(g_ewolLibName, data)
-#define EWOL_VERBOSE(data)      ETK_VERBOSE(g_ewolLibName, data)
-#define EWOL_ASSERT(cond, data) ETK_ASSERT(g_ewolLibName, cond, data)
-#define EWOL_CHECK_INOUT(cond)  ETK_CHECK_INOUT(g_ewolLibName, cond)
-#define EWOL_TODO(cond)         ETK_TODO(g_ewolLibName, cond)
+#define EWOL_CRITICAL(data)      EWOL_BASE(1, data)
+#define EWOL_ERROR(data)         EWOL_BASE(2, data)
+#define EWOL_WARNING(data)       EWOL_BASE(3, data)
+#ifdef DEBUG
+	#define EWOL_INFO(data)          EWOL_BASE(4, data)
+	#define EWOL_DEBUG(data)         EWOL_BASE(5, data)
+	#define EWOL_VERBOSE(data)       EWOL_BASE(6, data)
+	#define EWOL_TODO(data)          EWOL_BASE(4, "TODO : " << data)
+#else
+	#define EWOL_INFO(data)          do { } while(false)
+	#define EWOL_DEBUG(data)         do { } while(false)
+	#define EWOL_VERBOSE(data)       do { } while(false)
+	#define EWOL_TODO(data)          do { } while(false)
+#endif
+
+#define EWOL_ASSERT(cond,data) \
+	do { \
+		if (!(cond)) { \
+			EWOL_CRITICAL(data); \
+			assert(!#cond); \
+		} \
+	} while (0)
 
 #endif
 

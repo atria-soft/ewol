@@ -33,7 +33,7 @@ static const char* cursorDescriptionString[ewol::context::cursorCount+1] = {
 	"cursorCount"
 };
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const enum ewol::context::cursorDisplay _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::context::cursorDisplay _obj) {
 	if (_obj >= 0 && _obj <ewol::context::cursorCount) {
 		_os << cursorDescriptionString[_obj];
 	} else {

@@ -9,8 +9,7 @@
 #ifndef __EWOL_KEY_STATUS_H__
 #define __EWOL_KEY_STATUS_H__
 
-#include <etk/types.h>
-#include <etk/Stream.h>
+#include <ewol/debug.h>
 
 namespace ewol {
 	namespace key {
@@ -37,7 +36,7 @@ namespace ewol {
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::key::status _obj);
+		std::ostream& operator <<(std::ostream& _os, const enum ewol::key::status _obj);
 	};
 };
 

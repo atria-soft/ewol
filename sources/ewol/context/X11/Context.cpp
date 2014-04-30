@@ -451,7 +451,7 @@ class X11Interface : public ewol::Context {
 							//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
 							//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (float)event.xcrossing.x, (float)event.xcrossing.y);
 							m_curentGrabDelta -= vec2(m_originX, -m_originY);
-							EWOL_DEBUG("change grab delta of : " << vec2(m_originX, m_originY) );
+							EWOL_VERBOSE("change grab delta of : " << vec2(m_originX, m_originY) );
 							break;
 						case LeaveNotify:
 							X11_INFO("X11 event LeaveNotify");
@@ -459,7 +459,7 @@ class X11Interface : public ewol::Context {
 							m_cursorEventY = (m_currentHeight-event.xcrossing.y);
 							//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
 							m_curentGrabDelta += vec2(m_originX, -m_originY);
-							EWOL_DEBUG("change grab delta of : " << vec2(m_originX, m_originY) );
+							EWOL_VERBOSE("change grab delta of : " << vec2(m_originX, m_originY) );
 							break;
 						case MotionNotify:
 							X11_INFO("X11 event MotionNotify");

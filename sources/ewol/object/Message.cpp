@@ -11,7 +11,7 @@
 #undef __class__
 #define __class__ "object/Message"
 
-etk::CCout& ewol::object::operator <<(etk::CCout& _os, const ewol::object::Message& _obj) {
+std::ostream& ewol::object::operator <<(std::ostream& _os, const ewol::object::Message& _obj) {
 	_os << "{";
 	if (NULL != _obj.getMessage()) {
 		_os << "msg=\"" << _obj.getMessage() << "\"";

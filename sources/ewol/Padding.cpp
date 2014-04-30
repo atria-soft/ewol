@@ -8,7 +8,7 @@
 
 #include <ewol/Padding.h>
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Padding& _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const ewol::Padding& _obj) {
 	_os << "{";
 	_os << _obj.xLeft();
 	_os << ",";

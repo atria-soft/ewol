@@ -25,7 +25,7 @@ namespace ewol {
 			BoldItalic,
 		};
 	};
-	etk::CCout& operator <<(etk::CCout& _os, enum ewol::font::mode _obj);
+	std::ostream& operator <<(std::ostream& _os, enum ewol::font::mode _obj);
 	
 	namespace resource {
 		class TexturedFont : public ewol::resource::Texture {

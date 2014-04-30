@@ -11,7 +11,7 @@
 #undef __class__
 #define __class__ "object::ConfigElement"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::object::ConfigElement& _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const ewol::object::ConfigElement& _obj) {
 	_os << "{";
 	if (NULL != _obj.getConfig()) {
 		_os << "config=\"" << _obj.getConfig() << "\"";

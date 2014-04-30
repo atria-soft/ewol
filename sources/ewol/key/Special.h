@@ -9,8 +9,7 @@
 #ifndef __EWOL_KEY_SPECIAL_H__
 #define __EWOL_KEY_SPECIAL_H__
 
-#include <etk/types.h>
-#include <etk/Stream.h>
+#include <ewol/debug.h>
 #include <ewol/key/keyboard.h>
 
 namespace ewol {
@@ -113,7 +112,7 @@ namespace ewol {
 				 */
 				void update(enum ewol::key::keyboard _move, bool _isDown);
 		};
-		etk::CCout& operator <<(etk::CCout& _os, const ewol::key::Special _obj);
+		std::ostream& operator <<(std::ostream& _os, const ewol::key::Special _obj);
 	};
 };
 

@@ -67,7 +67,7 @@ namespace ewol {
 			ivec2 m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
 			void limit(const vec2& _origin, const vec2& _size);
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj);
+	std::ostream& operator <<(std::ostream& _os, const ewol::DrawProperty& _obj);
 	/**
 	 * @brief Gravity of the widget property
 	 * @not-in-doc
@@ -83,7 +83,7 @@ namespace ewol {
 		gravityButtomLeft=0x0C,
 		gravityLeft=0x08,
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::gravity _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum ewol::gravity _obj);
 	std::string gravityToString(const enum ewol::gravity _obj);
 	enum ewol::gravity stringToGravity(const std::string& _obj);
 	/**

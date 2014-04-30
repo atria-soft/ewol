@@ -312,26 +312,27 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 	// parse the debug level:
 	for(int32_t iii = 0; iii < m_commandLine.size() ; ++iii) {
 		if (m_commandLine.get(iii) == "-l0") {
-			debug::setGeneralLevel(etk::logLevelNone);
+			etk::log::setLevel(etk::log::logLevelNone);
 		} else if (m_commandLine.get(iii) == "-l1") {
-			debug::setGeneralLevel(etk::logLevelCritical);
+			etk::log::setLevel(etk::log::logLevelCritical);
 		} else if (m_commandLine.get(iii) == "-l2") {
-			debug::setGeneralLevel(etk::logLevelError);
+			etk::log::setLevel(etk::log::logLevelError);
 		} else if (m_commandLine.get(iii) == "-l3") {
-			debug::setGeneralLevel(etk::logLevelWarning);
+			etk::log::setLevel(etk::log::logLevelWarning);
 		} else if (m_commandLine.get(iii) == "-l4") {
-			debug::setGeneralLevel(etk::logLevelInfo);
+			etk::log::setLevel(etk::log::logLevelInfo);
 		} else if (m_commandLine.get(iii) == "-l5") {
-			debug::setGeneralLevel(etk::logLevelDebug);
+			etk::log::setLevel(etk::log::logLevelDebug);
 		} else if(    m_commandLine.get(iii) == "-l6"
 		           || m_commandLine.get(iii) == "-l7"
 		           || m_commandLine.get(iii) == "-l8"
 		           || m_commandLine.get(iii) == "-l9") {
-			debug::setGeneralLevel(etk::logLevelVerbose);
+			etk::log::setLevel(etk::log::logLevelVerbose);
 		} else if (m_commandLine.get(iii) == "-fps") {
 			m_displayFps=true;
 		} else if (m_commandLine.get(iii) == "--dbg-file") {
-			etk::cout.setOutputFile(true);
+			// TODO : Set it back ...
+			//etk::cout.setOutputFile(true);
 		} else {
 			continue;
 		}

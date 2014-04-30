@@ -15,7 +15,7 @@ static const char* l_listsladingMode[ewol::widget::WSlider::sladingTransition_co
 	"transition horisantal"
 };
 
-etk::CCout& operator <<(etk::CCout& _os, const enum ewol::widget::WSlider::sladingMode _obj) {
+std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj) {
 	_os << l_listsladingMode[_obj];
 	return _os;
 }

@@ -9,8 +9,7 @@
 #ifndef __EWOL_KEY_KEYBOARD_H__
 #define __EWOL_KEY_KEYBOARD_H__
 
-#include <etk/types.h>
-#include <etk/Stream.h>
+#include <ewol/debug.h>
 
 namespace ewol {
 	namespace key {
@@ -61,7 +60,7 @@ namespace ewol {
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::key::keyboard _obj);
+		std::ostream& operator <<(std::ostream& _os, const enum ewol::key::keyboard _obj);
 		
 		enum keyboardSystem {
 			keyboardSystemUnknow = 0, //!< Unknown keyboard system key
@@ -74,7 +73,7 @@ namespace ewol {
 			keyboardSystemBack,       //!< Hardware Back key
 			keyboardSystemCount       //!< number of posible System key
 		};
-		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::key::keyboardSystem _obj);
+		std::ostream& operator <<(std::ostream& _os, const enum ewol::key::keyboardSystem _obj);
 	};
 };
 

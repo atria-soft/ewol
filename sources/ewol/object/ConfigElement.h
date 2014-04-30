@@ -9,8 +9,7 @@
 #ifndef __EWOL_OBJECT_CONFIG_ELEMENT_H__
 #define __EWOL_OBJECT_CONFIG_ELEMENT_H__
 
-#include <etk/types.h>
-#include <etk/Stream.h>
+#include <ewol/debug.h>
 
 namespace ewol {
 	namespace object {
@@ -52,7 +51,7 @@ namespace ewol {
 				};
 		};
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::object::ConfigElement& _obj);
+	std::ostream& operator <<(std::ostream& _os, const ewol::object::ConfigElement& _obj);
 };
 
 

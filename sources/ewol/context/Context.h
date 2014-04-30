@@ -9,8 +9,8 @@
 #ifndef __EWOL_CONTEXT_H__
 #define __EWOL_CONTEXT_H__
 
-#include <etk/types.h>
 #include <etk/os/Fifo.h>
+#include <ewol/debug.h>
 #include <ewol/ewol.h>
 #include <ewol/key/key.h>
 #include <ewol/object/Manager.h>

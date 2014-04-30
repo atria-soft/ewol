@@ -41,7 +41,7 @@ static const char* clipboardDescriptionString[ewol::context::clipBoard::clipboar
 	"clipboardCount"
 };
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const enum ewol::context::clipBoard::clipboardListe _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::context::clipBoard::clipboardListe _obj) {
 	if (_obj >= 0 && _obj <ewol::context::clipBoard::clipboardCount) {
 		_os << clipboardDescriptionString[_obj];
 	} else {

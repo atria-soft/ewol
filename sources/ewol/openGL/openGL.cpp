@@ -9,6 +9,7 @@
 #include <vector>
 #include <ewol/debug.h>
 #include <ewol/openGL/openGL.h>
+#include <etk/os/Mutex.h>
 
 /**
  * @brief get the draw mutex (ewol render).

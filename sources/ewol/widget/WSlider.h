@@ -106,7 +106,7 @@ namespace ewol {
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::widget::WSlider::sladingMode _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
 };
 
 #endif

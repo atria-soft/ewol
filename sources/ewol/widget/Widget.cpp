@@ -16,7 +16,7 @@
 #undef __class__
 #define __class__ "DrawProperty"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const ewol::DrawProperty& _obj) {
 	_os << "{ windowsSize=" << _obj.m_windowsSize << " start=" << _obj.m_origin << " stop=" << (_obj.m_origin+_obj.m_size) << "}";
 	return _os;
 }
@@ -78,7 +78,7 @@ enum ewol::gravity ewol::stringToGravity(const std::string& _obj) {
 	return ewol::gravityCenter;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const enum ewol::gravity _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj) {
 	_os << ewol::gravityToString(_obj);
 	return _os;
 }

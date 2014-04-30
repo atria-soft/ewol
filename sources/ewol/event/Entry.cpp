@@ -11,7 +11,7 @@
 #undef __class__
 #define __class__ "event::Entry"
 
-etk::CCout& ewol::event::operator <<(etk::CCout& _os, const ewol::event::Entry& _obj) {
+std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Entry& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
 	if (_obj.getType() == ewol::key::keyboardChar) {
@@ -21,7 +21,7 @@ etk::CCout& ewol::event::operator <<(etk::CCout& _os, const ewol::event::Entry& 
 	return _os;
 }
 
-etk::CCout& ewol::event::operator <<(etk::CCout& _os, const ewol::event::EntrySystem& _obj) {
+std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::EntrySystem& _obj) {
 	_os << _obj.m_event;
 	return _os;
 }

@@ -264,7 +264,7 @@ vec2 ewol::Dimension::getFoot(void) const {
 	return ewol::Dimension::getMillimeter()*millimeterToFoot;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::Dimension::distance _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::Dimension::distance _obj) {
 	switch(_obj) {
 		case ewol::Dimension::Pourcent:
 			_os << "%";
@@ -294,7 +294,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::Dimension::distance _o
 	return _os;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Dimension& _obj) {
+std::ostream& ewol::operator <<(std::ostream& _os, const ewol::Dimension& _obj) {
 	_os << _obj.get(_obj.getType()) << _obj.getType();
 	return _os;
 }

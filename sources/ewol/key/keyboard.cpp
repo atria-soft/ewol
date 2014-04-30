@@ -49,7 +49,7 @@ static const char* keyboardDescriptionString[ewol::key::keyboardCount+1] = {
 	"keyboardCount"
 };
 
-etk::CCout& ewol::key::operator <<(etk::CCout& _os, const enum ewol::key::keyboard _obj) {
+std::ostream& ewol::key::operator <<(std::ostream& _os, const enum ewol::key::keyboard _obj) {
 	if (_obj >= 0 && _obj <ewol::key::keyboardCount) {
 		_os << keyboardDescriptionString[_obj];
 	} else {
@@ -70,7 +70,7 @@ static const char* keyboardSystemDescriptionString[ewol::key::keyboardSystemCoun
 	"keyboardSystemCount"
 };
 
-etk::CCout& ewol::key::operator <<(etk::CCout& _os, const enum ewol::key::keyboardSystem _obj) {
+std::ostream& ewol::key::operator <<(std::ostream& _os, const enum ewol::key::keyboardSystem _obj) {
 	if (_obj >= 0 && _obj <ewol::key::keyboardSystemCount) {
 		_os << keyboardSystemDescriptionString[_obj];
 	} else {
