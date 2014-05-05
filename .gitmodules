@@ -65,3 +65,6 @@
 [submodule "ios-deploy"]
 	path = ios-deploy
 	url = https://github.com/HeeroYui/ios-deploy.git
+[submodule "external/enet"]
+	path = external/enet
+	url = https://github.com/HeeroYui/enet.git
