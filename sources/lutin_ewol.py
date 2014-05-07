@@ -23,7 +23,8 @@ def create(target):
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
 		'ewol/Padding.cpp',
-		'ewol/Dimension.cpp'
+		'ewol/Dimension.cpp',
+		'ewol/translate.cpp'
 		])
 	
 	# compositing :
@@ -170,6 +171,7 @@ def create(target):
 	myModule.copy_folder('../data/textured3D.*','')
 	myModule.copy_folder('../data/texturedDF.*','')
 	myModule.copy_folder('../data/fontDistanceField/*','fontDistanceField')
+	myModule.copy_folder('../data/translate/*','translate/ewol/')
 	
 	# name of the dependency
 	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3', 'date'])

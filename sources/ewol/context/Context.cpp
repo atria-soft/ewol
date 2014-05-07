@@ -28,6 +28,7 @@
 #include <ewol/openGL/openGL.h>
 
 #include <ewol/widget/Manager.h>
+#include <ewol/translate.h>
 
 
 
@@ -302,6 +303,9 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
   m_initTotalStep(1) {
 	m_commandLine.parse(_argc, _argv);
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
+	// Add basic ewol translation:
+	ewol::translate::addPath("ewol", "DATA:translate/ewol/");
+	ewol::translate::autoDetectLanguage();
 	// Reset the random system to be sure have real random values...
 	etk::tool::resetRandom();
 	// set the curent interface :

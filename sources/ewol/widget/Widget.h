@@ -29,6 +29,7 @@ namespace ewol {
 #include <ewol/event/Input.h>
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
+#include <ewol/translate.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
