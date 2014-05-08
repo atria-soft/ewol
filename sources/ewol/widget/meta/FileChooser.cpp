@@ -99,7 +99,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 	      + "			<entry name='[" + std::to_string(getId()) + "]file-shooser:entry-folder' expand='true,false' fill='true,false'/>\n"
 	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-home' src='THEME:GUI:Home.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
 	      + "		</sizer>\n"
-	      + "		<label name='[" + std::to_string(getId()) + "]file-shooser:title-label'>" + TRANSLATE("Cancel") + "</label>\n"
+	      + "		<label name='[" + std::to_string(getId()) + "]file-shooser:title-label'>" + TRANSLATE("FileChooser") + "</label>\n"
 	      + "	</sizer>\n"
 	      + "</popup>";
 	loadFromString(myDescription);

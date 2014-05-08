@@ -117,6 +117,45 @@ class LocalInstanceTranslation {
 			if (m_translateLoadad == true) {
 				return;
 			}
+			// start parse language for Major:
+			auto itMajor = m_listPath.find(m_major);
+			if (itMajor != m_listPath.end()) {
+				std::string filename(itMajor->second + "/" + m_language + ".json");
+				ejson::Document doc;
+				doc.load(filename);
+				for (auto element : doc.getKeys()) {
+					std::string val = doc.getStringValue(element);
+					m_translate.insert(make_pair(element, val));
+				}
+				filename = itMajor->second + "/" + m_languageDefault + ".json";
+				doc.load(filename);
+				for (auto element : doc.getKeys()) {
+					std::string val = doc.getStringValue(element);
+					auto itTrans = m_translate.find(element);
+					if (itTrans == m_translate.end()) {
+						m_translate.insert(make_pair(element, val));
+					}
+				}
+			}
+			// start parse language:
+			for (auto &it : m_listPath) {
+				if (it.first == m_major) {
+					continue;
+				}
+				std::string filename(it.second + "/" + m_languageDefault + ".json");
+				if (etk::FSNodeExist(filename) == false) {
+					continue;
+				}
+				ejson::Document doc;
+				doc.load(filename);
+				for (auto element : doc.getKeys()) {
+					std::string val = doc.getStringValue(element);
+					auto itTrans = m_translate.find(element);
+					if (itTrans == m_translate.end()) {
+						m_translate.insert(make_pair(element, val));
+					}
+				}
+			}
 			// start parse default language:
 			for (auto &it : m_listPath) {
 				if (it.first == m_major) {
@@ -128,21 +167,13 @@ class LocalInstanceTranslation {
 				}
 				ejson::Document doc;
 				doc.load(filename);
-			}
-			// start parse default language for Major:
-			auto itMajor = m_listPath.find(m_major);
-			if (itMajor != m_listPath.end()) {
-				
-			}
-			// start parse language:
-			for (auto &it : m_listPath) {
-				if (it.first == m_major) {
-					continue;
+				for (auto element : doc.getKeys()) {
+					std::string val = doc.getStringValue(element);
+					auto itTrans = m_translate.find(element);
+					if (itTrans == m_translate.end()) {
+						m_translate.insert(make_pair(element, val));
+					}
 				}
-			}
-			// start parse language for Major:
-			if (itMajor != m_listPath.end()) {
-				
 			}
 		}
 		
