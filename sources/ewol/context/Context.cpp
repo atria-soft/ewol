@@ -556,7 +556,6 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		return false;
 	}
 	#endif
-	//EWOL_DEBUG("DRAW");
 	m_previousDisplayTime = currentTime;
 	
 	// process the events

@@ -82,7 +82,7 @@ namespace ewol {
 					int64_t currentTime = ewol::getTime();
 					int64_t processTimeLocal = (currentTime - ticTime);
 					if (displayTime == true) {
-						EWOL_DEBUG(m_displayName << " : processTime : " << (float)((float)processTimeLocal / 1000.0) << "ms ");
+						EWOL_INFO(m_displayName << " : processTime : " << (float)((float)processTimeLocal / 1000.0) << "ms ");
 					}
 					if (drwingDone) {
 						min = etk_min(min, processTimeLocal);
@@ -108,19 +108,19 @@ namespace ewol {
 				void draw(void) {
 					if (true == display) {
 						if (nbDisplayTime>0) {
-							EWOL_DEBUG(m_displayName << " : Active : "
+							EWOL_INFO(m_displayName << " : Active : "
 							                             << (float)((float)min / 1000.0) << "ms "
 							                             << (float)((float)avg / (float)nbDisplayTime / 1000.0) << "ms "
 							                             << (float)((float)max / 1000.0) << "ms ");
 						}
 						if (nbCallTime-nbDisplayTime>0) {
-							EWOL_DEBUG(m_displayName << " : idle   : "
+							EWOL_INFO(m_displayName << " : idle   : "
 							                             << (float)((float)min_idle / 1000.0) << "ms "
 							                             << (float)((float)avg_idle / (float)(nbCallTime-nbDisplayTime) / 1000.0) << "ms "
 							                             << (float)((float)max_idle / 1000.0) << "ms ");
 						}
 						if (true == m_displayFPS) {
-							EWOL_DEBUG("FPS : " << nbDisplayTime << "/" << nbCallTime << "fps");
+							EWOL_INFO("FPS : " << nbDisplayTime << "/" << nbCallTime << "fps");
 						}
 						max = 0;
 						min = 99999999999999LL;
