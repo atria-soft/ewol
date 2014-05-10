@@ -121,6 +121,15 @@ namespace ewol {
 			 * @brief The current context is resumed
 			 */
 			virtual void OS_Resume(void);
+		
+			/**
+			 * @brief The current context is set in foreground (framerate is maximum speed)
+			 */
+			virtual void OS_Foreground(void);
+			/**
+			 * @brief The current context is set in background (framerate is slowing down (max fps)/5 # 4fps)
+			 */
+			virtual void OS_Background(void);
 			
 			void requestUpdateSize(void);
 			

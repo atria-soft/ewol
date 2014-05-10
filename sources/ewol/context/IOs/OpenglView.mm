@@ -185,16 +185,41 @@
 }
 
 - (void)render:(CADisplayLink*)displayLink {
-	IOs::draw(true);
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+	displayCounter++;
+	if (displayCounter >= deltaDisplay) {
+		displayCounter = 0;
+		IOs::draw(true);
+		[_context presentRenderbuffer:GL_RENDERBUFFER];
+	}
 }
 
-- (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
+- (void)speedSlow {
+	deltaDisplay = 5;
+}
+
+- (void)speedNormal {
+	deltaDisplay = 1;
+}
+
+- (void)startDisplayLink {
+	if (displayLink != NULL) {
+		return;
+	}
+	displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
+- (void)stopDisplayLink {
+	if (displayLink == NULL) {
+		return;
+	}
+    [displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	displayLink = NULL;
+}
+
 - (id)initWithFrame:(CGRect)frame {
+	deltaDisplay = 1;
+	displayCounter = 0;
 	NSLog(@"INIT with size : %fx%f, %fx%f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     self = [super initWithFrame:frame];
     self.contentScaleFactor = 1.0f;
@@ -207,7 +232,7 @@
         [self setupDepthBuffer];
         [self setupRenderBuffer];
         [self setupFrameBuffer];
-        [self setupDisplayLink];
+		[self startDisplayLink];
     }
     return self;
 }

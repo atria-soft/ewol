@@ -674,24 +674,67 @@ void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
 }
 
 void ewol::Context::forceRedrawAll(void) {
-	if (NULL != m_windowsCurrent) {
-		m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
+	if (m_windowsCurrent == NULL) {
+		return;
 	}
+	m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
 }
 
 void ewol::Context::OS_Stop(void) {
-	if (NULL != m_windowsCurrent) {
+	// set the curent interface :
+	lockContext();
+	EWOL_INFO("OS_Stop...");
+	if (m_windowsCurrent != NULL) {
 		m_windowsCurrent->sysOnKill();
 	}
+	// release the curent interface :
+	unLockContext();
 }
 
 void ewol::Context::OS_Suspend(void) {
+	// set the curent interface :
+	lockContext();
+	EWOL_INFO("OS_Suspend...");
 	m_previousDisplayTime = -1;
+	if (m_windowsCurrent != NULL) {
+		m_windowsCurrent->onStateSuspend();
+	}
+	// release the curent interface :
+	unLockContext();
 }
 
 void ewol::Context::OS_Resume(void) {
+	// set the curent interface :
+	lockContext();
+	EWOL_INFO("OS_Resume...");
 	m_previousDisplayTime = ewol::getTime();
 	m_widgetManager.periodicCallResume(m_previousDisplayTime);
+	if (m_windowsCurrent != NULL) {
+		m_windowsCurrent->onStateResume();
+	}
+	// release the curent interface :
+	unLockContext();
+}
+void ewol::Context::OS_Foreground(void) {
+	// set the curent interface :
+	lockContext();
+	EWOL_INFO("OS_Foreground...");
+	if (m_windowsCurrent != NULL) {
+		m_windowsCurrent->onStateForeground();
+	}
+	// release the curent interface :
+	unLockContext();
+}
+
+void ewol::Context::OS_Background(void) {
+	// set the curent interface :
+	lockContext();
+	EWOL_INFO("OS_Background...");
+	if (m_windowsCurrent != NULL) {
+		m_windowsCurrent->onStateBackground();
+	}
+	// release the curent interface :
+	unLockContext();
 }
 
 

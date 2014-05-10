@@ -31,6 +31,12 @@
 	/* OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist) */
 	GLuint depthRenderbuffer;
 	CGSize m_currentSize;
+	CADisplayLink* displayLink; //!< link to start and stop display of the view...
+	int deltaDisplay;
+	int displayCounter;
 }
-
+- (void)stopDisplayLink;
+- (void)startDisplayLink;
+- (void)speedSlow;
+- (void)speedNormal;
 @end

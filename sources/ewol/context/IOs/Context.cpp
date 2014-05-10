@@ -186,6 +186,47 @@ void IOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::key
 	interface->MAC_SetKeyboardMove(_keyboardMode, _move, _isDown);
 }
 
+void IOs::start(void) {
+	if (interface == NULL) {
+		return;
+	}
+	//interface->OS_Start();
+}
+
+void IOs::resume(void) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->OS_Resume();
+}
+
+void IOs::suspend(void) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->OS_Suspend();
+}
+
+void IOs::stop(void) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->OS_Stop();
+}
+void IOs::background(void) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->OS_Background();
+}
+void IOs::foreground(void) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->OS_Foreground();
+}
+
+
 static int l_argc = 0;
 static const char **l_argv = NULL;
 /**

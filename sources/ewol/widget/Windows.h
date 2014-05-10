@@ -40,6 +40,10 @@ namespace ewol {
 					return true;
 				};
 				virtual void onReduce(void) { };
+				virtual void onStateBackground(void) {};
+				virtual void onStateForeground(void) {};
+				virtual void onStateSuspend(void) {};
+				virtual void onStateResume(void) {};
 				virtual void on(void) { };
 			private:
 				bool m_hasDecoration;
