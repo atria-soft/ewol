@@ -15,6 +15,7 @@ extern "C" {
 
 int mm_main(int argc, const char *argv[]);
 void mm_exit(void);
+void mm_openURL(const char *_url);
 
 #ifdef __cplusplus
 }

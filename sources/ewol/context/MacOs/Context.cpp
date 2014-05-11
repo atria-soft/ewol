@@ -107,10 +107,14 @@ class MacOSInterface : public ewol::Context {
 				OS_SetKeyboard(_keyboardMode, _unichar, !_isDown, _isAReapeateKey);
 			}
 		}
-	void MAC_SetKeyboardMove(ewol::key::Special& _special,
+		void MAC_SetKeyboardMove(ewol::key::Special& _special,
 								enum ewol::key::keyboard _move,
 								 bool _isDown) {
 			OS_SetKeyboardMove(_special, _move, _isDown);
+		}
+		void openURL(const std::string& _url) {
+			std::string req = "open " + _url;
+			system(req.c_str());
 		}
 };
 

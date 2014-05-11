@@ -122,6 +122,9 @@ public:
 							 bool _isDown) {
 		OS_SetKeyboardMove(_special, _move, _isDown);
 	}
+	void openURL(const std::string& _url) {
+		mm_openURL(_url.c_str());
+	}
 };
 
 

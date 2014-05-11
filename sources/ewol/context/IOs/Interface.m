@@ -23,3 +23,7 @@ void mm_exit(void) {
 	[[NSThread mainThread] cancel];
 }
 
+void mm_openURL(const char *_url) {
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:_url]];
+}
+

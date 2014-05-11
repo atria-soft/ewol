@@ -273,7 +273,7 @@ namespace ewol {
 			 * @brief Open an URL on an eternal brother.
 			 * @param[in] _url URL to open.
 			 */
-			virtual void openURL(const std::string& _url) {};
+			virtual void openURL(const std::string& _url) { };
 			/**
 			 * @brief force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.

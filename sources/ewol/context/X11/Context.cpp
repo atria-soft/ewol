@@ -1246,6 +1246,34 @@ class X11Interface : public ewol::Context {
 			XSetWMIconName(m_display, m_WindowHandle, &tp);
 			X11_INFO("X11: set Title (END)");
 		}
+		
+		void openURL(const std::string& _url) {
+			// TODO : call user to select his browser
+			// TODO : try to find the prefered browser ...
+			std::vector<std::string> listBrowser;
+			listBrowser.push_back("chrome");
+			listBrowser.push_back("chromium-browser");
+			listBrowser.push_back("firefox");
+			listBrowser.push_back("opera");
+			listBrowser.push_back("konqueror");
+			listBrowser.push_back("epiphany");
+			
+			for (auto browser : listBrowser) {
+				// heck if the browser is installed
+				std::string req = "which ";
+				req += browser;
+				if (system(req.c_str()) != 0) {
+					continue;
+				}
+				// call it to open the page ...
+				req = browser;
+				req += " ";
+				req += _url;
+				req += " &"; // disociate from this process ...
+				system(req.c_str());
+				return;
+			}
+		}
 		/****************************************************************************************/
 		void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 			switch (_clipboardID) {
