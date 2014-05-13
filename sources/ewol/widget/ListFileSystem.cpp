@@ -70,6 +70,7 @@ ewol::widget::ListFileSystem::ListFileSystem(void) :
 
 ewol::widget::ListFileSystem::~ListFileSystem(void) {
 	clearList();
+	ewol::resource::ColorFile::release(m_colorProperty);
 };
 
 void ewol::widget::ListFileSystem::clearList(void) {
@@ -156,6 +157,7 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std
 	    && _raw-offset < (int32_t)m_list.size()
 	    && NULL != m_list[_raw-offset]) {
 		_myTextToWrite = m_list[_raw-offset]->getNameFile();
+		EWOL_VERBOSE("get filename for : '" << *m_list[_raw-offset] << ":'" << _myTextToWrite << "'");
 	}
 	_fg = m_colorProperty->get(m_colorIdText);
 	if (_raw % 2) {
@@ -181,7 +183,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 		offset = 2;
 	}
 	if (_typeEvent == ewol::key::statusSingle) {
-		EWOL_INFO("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
+		EWOL_DEBUG("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;
 			if (_raw > (int32_t)m_list.size()+offset ) {

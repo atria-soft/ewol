@@ -181,16 +181,14 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		tmpFileCompleatName += m_file;
 		generateEventId(_msg.getMessage(), tmpFileCompleatName);
 	} else if(     _msg.getMessage() == ewolEventFileChooserListFileValidate 
-	           || (_msg.getMessage() == eventValidate       && m_file != "" )
+	           || (_msg.getMessage() == eventValidate && m_file != "" )
 	           || (_msg.getMessage() == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the file  == > generate a validate
 		if (_msg.getData() != "") {
 			setFileName(_msg.getData());
 		}
 		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
-		std::string tmpFileCompleatName = m_folder;
-		tmpFileCompleatName += m_file;
-		generateEventId(eventValidate, tmpFileCompleatName);
+		generateEventId(eventValidate, getCompleateFileName());
 		autoDestroy();
 	} else if(_msg.getMessage() == ewolEventFileChooserHome) {
 		std::string tmpUserFolder = etk::getUserHomeFolder();
@@ -220,5 +218,6 @@ std::string ewol::widget::FileChooser::getCompleateFileName(void) {
 	std::string tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;
-	return tmpString;
+	etk::FSNode node(tmpString);
+	return node.getName();
 }
