@@ -137,19 +137,28 @@ bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTit
 
 uint32_t ewol::widget::ListFileSystem::getNuberOfRaw(void) {
 	int32_t offset = 0;
-	if (true == m_showFolder) {
-		offset = 2;
+	if (m_showFolder == true) {
+		if (m_folder == "/") {
+			offset = 1;
+		} else {
+			offset = 2;
+		}
 	}
 	return m_list.size() + offset;
 }
 
 bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
-	if (true == m_showFolder) {
-		offset = 2;
+	if (m_showFolder == true) {
+		if (m_folder == "/") {
+			offset = 1;
+		} else {
+			offset = 2;
+		}
 		if (_raw == 0) {
 			_myTextToWrite = ".";
-		} else if (_raw == 1) {
+		} else if (    _raw == 1
+		            && m_folder != "/") {
 			_myTextToWrite = "..";
 		}
 	}
@@ -179,8 +188,12 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
                                                float _x,
                                                float _y) {
 	int32_t offset = 0;
-	if (true == m_showFolder) {
-		offset = 2;
+	if (m_showFolder == true) {
+		if (m_folder == "/") {
+			offset = 1;
+		} else {
+			offset = 2;
+		}
 	}
 	if (_typeEvent == ewol::key::statusSingle) {
 		EWOL_DEBUG("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
