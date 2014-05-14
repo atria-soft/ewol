@@ -43,8 +43,6 @@ const char * const ewol::widget::Entry::eventModify = "modify";
 
 const char* const ewol::widget::Entry::configMaxChar = "max";
 const char* const ewol::widget::Entry::configRegExp  = "regExp";
-const char* const ewol::widget::Entry::configColorFg = "color";
-const char* const ewol::widget::Entry::configColorBg = "background";
 const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
 const char* const ewol::widget::Entry::configValue = "value";
 
@@ -58,11 +56,8 @@ ewol::widget::Entry::Entry(std::string _newData) :
   m_displayCursor(false),
   m_displayCursorPos(0),
   m_displayCursorPosSelection(0),
-  m_textColorFg(etk::color::black),
-  m_textColorBg(etk::color::white),
   m_textWhenNothing("") {
 	addObjectType("ewol::widget::Entry");
-	m_textColorBg.setA(0xAF);
 	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
 	m_colorIdTextBg = m_shaper.requestColor("text-background");
 	m_colorIdCursor = m_shaper.requestColor("text-cursor");
@@ -80,8 +75,6 @@ ewol::widget::Entry::Entry(std::string _newData) :
 	
 	registerConfig(configMaxChar, "int", NULL, "Maximum cgar that can be set on the Entry");
 	registerConfig(configRegExp, "string", NULL, "Control what it is write with a regular expression");
-	registerConfig(configColorFg, "color", NULL, "Color of the text displayed");
-	registerConfig(configColorBg, "color", NULL, "Color of the text selected");
 	registerConfig(configEmptyMessage, "string", NULL, "Text that is displayed when the Entry is empty (decorated text)");
 	registerConfig(configValue, "string", NULL, "Value display in the entry (decorated text)");
 	
@@ -177,6 +170,7 @@ void ewol::widget::Entry::onRegenerateDisplay(void) {
 		tmpSizeText = vec2ClipInt32(tmpSizeText);
 		tmpOriginText = vec2ClipInt32(tmpOriginText);
 		
+		m_text.reset();
 		m_text.setClippingWidth(tmpOriginText, tmpSizeText);
 		m_text.setPos(tmpOriginText+vec2(m_displayStartPosition,0));
 		if (m_displayCursorPosSelection != m_displayCursorPos) {
@@ -452,6 +446,7 @@ void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 		}
 	}
 	m_data = _newData;
+	markToRedraw();
 }
 
 void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
@@ -582,16 +577,6 @@ void ewol::widget::Entry::setRegExp(const std::string& _expression) {
 	}
 }
 
-void ewol::widget::Entry::setColorText(const etk::Color<>& _color) {
-	m_textColorFg = _color;
-	markToRedraw();
-}
-
-void ewol::widget::Entry::setColorTextSelected(const etk::Color<>& _color) {
-	m_textColorBg = _color;
-	markToRedraw();
-}
-
 void ewol::widget::Entry::setEmptyText(const std::string& _text) {
 	m_textWhenNothing = _text;
 	markToRedraw();
@@ -607,14 +592,6 @@ bool ewol::widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
 	}
 	if (_conf.getConfig() == configRegExp) {
 		setRegExp(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configColorFg) {
-		setColorText(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configColorBg) {
-		setColorTextSelected(_conf.getData());
 		return true;
 	}
 	if (_conf.getConfig() == configEmptyMessage) {
@@ -638,14 +615,6 @@ bool ewol::widget::Entry::onGetConfig(const char* _config, std::string& _result)
 	}
 	if (_config == configRegExp) {
 		_result = getRegExp();
-		return true;
-	}
-	if (_config == configColorFg) {
-		_result = getColorText().getString();
-		return true;
-	}
-	if (_config == configColorBg) {
-		_result = getColorTextSelected().getString();
 		return true;
 	}
 	if (_config == configEmptyMessage) {

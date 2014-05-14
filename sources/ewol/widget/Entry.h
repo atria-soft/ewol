@@ -40,8 +40,6 @@ namespace ewol {
 				// Config list of properties
 				static const char* const configMaxChar;
 				static const char* const configRegExp;
-				static const char* const configColorFg;
-				static const char* const configColorBg;
 				static const char* const configEmptyMessage;
 				static const char* const configValue;
 			public:
@@ -150,39 +148,6 @@ namespace ewol {
 				 * @note This request a regeneration of the display
 				 */
 				virtual void removeSelected(void);
-			
-			private:
-				etk::Color<> m_textColorFg; //!< Text color.
-			public:
-				/**
-				 * @brief set text color.
-				 * @param _color Color that is selected.
-				 */
-				void setColorText(const etk::Color<>& _color);
-				/**
-				 * @brief get the color for the text.
-				 * @return The color requested.
-				 */
-				const etk::Color<>& getColorText(void) const {
-					return m_textColorFg;
-				};
-			
-			private:
-				etk::Color<> m_textColorBg; //!< Background color.
-			public:
-				/**
-				 * @brief set text backgroung color when selected.
-				 * @param _color Color that is selected.
-				 */
-				void setColorTextSelected(const etk::Color<>& _color);
-				/**
-				 * @brief get the selected color for the text in selection mode.
-				 * @return The color requested.
-				 */
-				const etk::Color<>& getColorTextSelected(void) const {
-					return m_textColorBg;
-				};
-			
 			private:
 				std::string m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			public:
