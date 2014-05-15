@@ -29,11 +29,11 @@ namespace ewol {
 				/**
 				 * @brief Constructor
 				 */
-				Layer(void);
+				Layer();
 				/**
 				 * @brief Desstructor
 				 */
-				virtual ~Layer(void);
+				virtual ~Layer();
 			public: // Derived function
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 		};

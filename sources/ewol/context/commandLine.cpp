@@ -17,7 +17,7 @@ void ewol::context::CommandLine::parse(int32_t _argc, const char* _argv[]) {
 	}
 }
 
-int32_t ewol::context::CommandLine::size(void) {
+int32_t ewol::context::CommandLine::size() {
 	return m_listArgs.size();
 }
 

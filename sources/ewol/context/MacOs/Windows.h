@@ -13,7 +13,7 @@
 }
 + (id)alloc;
 - (id)init;
-+ (void)dealloc;
++ ()dealloc;
 @end
 
 

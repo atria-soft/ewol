@@ -24,7 +24,7 @@ namespace ewol {
 			public:
 				FontBase(const std::string& _fontName) : ewol::Resource(_fontName) {};
 				
-				virtual ~FontBase(void) { };
+				virtual ~FontBase() { };
 				
 				virtual bool getGlyphProperty(int32_t _fontSize,
 				                              ewol::GlyphProperty& _property) = 0;
@@ -47,7 +47,7 @@ namespace ewol {
 				
 				virtual void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph) { };
 				
-				virtual void display(void) {};
+				virtual void display() {};
 		};
 	};
 };

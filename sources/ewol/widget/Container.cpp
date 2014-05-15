@@ -22,11 +22,11 @@ ewol::widget::Container::Container(ewol::Widget* _subElement) :
 	// nothing to do ...
 }
 
-ewol::widget::Container::~Container(void) {
+ewol::widget::Container::~Container() {
 	subWidgetRemove();
 }
 
-ewol::Widget* ewol::widget::Container::getSubWidget(void) {
+ewol::Widget* ewol::widget::Container::getSubWidget() {
 	return m_subWidget;
 }
 
@@ -43,7 +43,7 @@ void ewol::widget::Container::setSubWidget(ewol::Widget* _newWidget) {
 	requestUpdateSize();
 }
 
-void ewol::widget::Container::subWidgetRemove(void) {
+void ewol::widget::Container::subWidgetRemove() {
 	if (NULL != m_subWidget) {
 		m_subWidget->removeUpperWidget();
 		m_subWidget->removeObject();
@@ -53,7 +53,7 @@ void ewol::widget::Container::subWidgetRemove(void) {
 	}
 }
 
-void ewol::widget::Container::subWidgetUnLink(void) {
+void ewol::widget::Container::subWidgetUnLink() {
 	if (NULL != m_subWidget) {
 		m_subWidget->removeUpperWidget();
 	}
@@ -119,7 +119,7 @@ void ewol::widget::Container::calculateSize(const vec2& _availlable) {
 	ewol::Widget::calculateSize(_availlable);
 }
 
-void ewol::widget::Container::calculateMinMaxSize(void) {
+void ewol::widget::Container::calculateMinMaxSize() {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
@@ -131,7 +131,7 @@ void ewol::widget::Container::calculateMinMaxSize(void) {
 	//EWOL_ERROR("[" << getId() << "] Result min size : " <<  m_minSize);
 }
 
-void ewol::widget::Container::onRegenerateDisplay(void) {
+void ewol::widget::Container::onRegenerateDisplay() {
 	if (NULL!=m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}

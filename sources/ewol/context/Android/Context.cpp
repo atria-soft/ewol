@@ -21,7 +21,7 @@
 
 
 
-int64_t ewol::getTime(void) {
+int64_t ewol::getTime() {
 	struct timeval	now;
 	gettimeofday(&now, NULL);
 	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
@@ -275,7 +275,7 @@ class AndroidContext : public ewol::Context {
 			}
 		}
 		
-		~AndroidContext(void) {
+		~AndroidContext() {
 			// TODO ...
 		}
 		
@@ -284,12 +284,12 @@ class AndroidContext : public ewol::Context {
 			m_javaObjectEwolCallback = NULL;
 		}
 		
-		int32_t run(void) {
+		int32_t run() {
 			// might never be called !!!
 			return -1;
 		}
 		
-		void stop(void) {
+		void stop() {
 			EWOL_DEBUG("C->java : send message to the java : STOP REQUESTED");
 			int status;
 			if(!java_attach_current_thread(&status)) {
@@ -357,7 +357,7 @@ class AndroidContext : public ewol::Context {
 					break;
 			}
 		}
-		int32_t audioGetDeviceCount(void) {
+		int32_t audioGetDeviceCount() {
 			// Request the clipBoard :
 			EWOL_DEBUG("C->java : audio get device count");
 			if (m_javaApplicationType == appl_application) {
@@ -504,10 +504,10 @@ class AndroidContext : public ewol::Context {
 			java_check_exception(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
-		void keyboardShow(void) {
+		void keyboardShow() {
 			sendJavaKeyboardUpdate(JNI_TRUE);
 		};
-		void keyboardHide(void) {
+		void keyboardHide() {
 			sendJavaKeyboardUpdate(JNI_FALSE);
 		};
 		

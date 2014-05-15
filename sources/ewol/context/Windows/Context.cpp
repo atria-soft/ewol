@@ -27,7 +27,7 @@
 
 
 
-int64_t ewol::getTime(void) {
+int64_t ewol::getTime() {
     struct timeval now;
     gettimeofday(&now, NULL);
     //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
@@ -54,11 +54,11 @@ class WindowsContext : public ewol::eContext {
 			}
 		}
 		
-		~WindowsContext(void) {
+		~WindowsContext() {
 			
 		}
 		
-		int32_t Run(void) {
+		int32_t Run() {
 			HINSTANCE hInstance = 0;
 			WNDCLASS wc;
 			HWND hWnd;
@@ -104,7 +104,7 @@ class WindowsContext : public ewol::eContext {
 						DispatchMessage( &msg );
 					}
 				} else {
-					(void)Draw(true);
+					()Draw(true);
 					SwapBuffers( hDC );
 				}
 			}
@@ -115,7 +115,7 @@ class WindowsContext : public ewol::eContext {
 			return msg.wParam;
 		}
 		
-		void Stop(void) {
+		void Stop() {
 			m_run = false;
 			// To exit program ...
 			PostQuitMessage(0);

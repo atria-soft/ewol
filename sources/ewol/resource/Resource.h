@@ -24,7 +24,7 @@ namespace ewol {
 	// class resources is pure virtual
 	class Resource : public ewol::Object {
 		public:
-			Resource(void) :
+			Resource() :
 			  m_counter(1),
 			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
 				addObjectType("ewol::Resource");
@@ -37,33 +37,33 @@ namespace ewol {
 				addObjectType("ewol::Resource");
 				setStatusResource(true);
 			};
-			virtual ~Resource(void) {
+			virtual ~Resource() {
 				
 			};
 		private:
 			uint32_t m_counter; //!< number of time the element was loaded.
 		public:
-			void increment(void) {
+			void increment() {
 				m_counter++;
 			};
-			bool decrement(void) {
+			bool decrement() {
 				m_counter--;
 				return (m_counter == 0)?true:false;
 			};
-			int32_t getCounter(void) {
+			int32_t getCounter() {
 				return m_counter;
 			};
 		protected:
 			uint8_t m_resourceLevel; //!< Level of the resource ==> for updata priority [0..5] 0 must be update first.
 		public:
-			uint8_t  getResourceLevel(void) {
+			uint8_t  getResourceLevel() {
 				return m_resourceLevel;
 			};
-			virtual void updateContext(void);
-			virtual void removeContext(void);
-			virtual void removeContextToLate(void);
-			virtual void reload(void);
-			static ewol::resource::Manager& getManager(void);
+			virtual void updateContext();
+			virtual void removeContext();
+			virtual void removeContextToLate();
+			virtual void reload();
+			static ewol::resource::Manager& getManager();
 	};
 };
 

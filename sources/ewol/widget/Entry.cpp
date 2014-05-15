@@ -29,7 +29,7 @@ const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-sele
 #define STATUS_HOVER     (1)
 #define STATUS_SELECTED  (2)
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Entry();
 }
 
@@ -83,7 +83,7 @@ ewol::widget::Entry::Entry(std::string _newData) :
 }
 
 
-ewol::widget::Entry::~Entry(void) {
+ewol::widget::Entry::~Entry() {
 	
 }
 
@@ -97,7 +97,7 @@ void ewol::widget::Entry::setMaxChar(int32_t _nbMax) {
 }
 
 
-void ewol::widget::Entry::calculateMinMaxSize(void) {
+void ewol::widget::Entry::calculateMinMaxSize() {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
@@ -129,13 +129,13 @@ void ewol::widget::Entry::setValue(const std::string& _newData) {
 }
 
 
-void ewol::widget::Entry::onDraw(void) {
+void ewol::widget::Entry::onDraw() {
 	m_shaper.draw();
 	m_text.draw();
 }
 
 
-void ewol::widget::Entry::onRegenerateDisplay(void) {
+void ewol::widget::Entry::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		m_shaper.clear();
 		m_text.clear();
@@ -229,7 +229,7 @@ void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection
 }
 
 
-void ewol::widget::Entry::removeSelected(void) {
+void ewol::widget::Entry::removeSelected() {
 	if (m_displayCursorPosSelection == m_displayCursorPos) {
 		// nothing to cut ...
 		return;
@@ -500,11 +500,11 @@ void ewol::widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
 	}
 }
 
-void ewol::widget::Entry::markToUpdateTextPosition(void) {
+void ewol::widget::Entry::markToUpdateTextPosition() {
 	m_needUpdateTextPos=true;
 }
 
-void ewol::widget::Entry::updateTextPosition(void) {
+void ewol::widget::Entry::updateTextPosition() {
 	if (false == m_needUpdateTextPos) {
 		return;
 	}
@@ -539,14 +539,14 @@ void ewol::widget::Entry::updateTextPosition(void) {
 	}
 }
 
-void ewol::widget::Entry::onGetFocus(void) {
+void ewol::widget::Entry::onGetFocus() {
 	m_displayCursor = true;
 	changeStatusIn(STATUS_SELECTED);
 	showKeyboard();
 	markToRedraw();
 }
 
-void ewol::widget::Entry::onLostFocus(void) {
+void ewol::widget::Entry::onLostFocus() {
 	m_displayCursor = false;
 	changeStatusIn(STATUS_NORMAL);
 	hideKeyboard();

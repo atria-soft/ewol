@@ -53,7 +53,7 @@ bool hasDisplay = false;
 	#define X11_CRITICAL   EWOL_VERBOSE
 #endif
 
-int64_t ewol::getTime(void) {
+int64_t ewol::getTime() {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
 	if (ret != 0) {
@@ -191,11 +191,11 @@ class X11Interface : public ewol::Context {
 			m_run = true;
 		}
 		
-		~X11Interface(void) {
+		~X11Interface() {
 			// TODO : ...
 		}
 		
-		int32_t run(void) {
+		int32_t run() {
 			bool specialEventThatNeedARedraw = false;
 			// main cycle
 			while(true == m_run) {
@@ -740,7 +740,7 @@ class X11Interface : public ewol::Context {
 			return 0;
 		}
 		/****************************************************************************************/
-		virtual void stop(void) {
+		virtual void stop() {
 			X11_INFO("X11-API: Stop");
 			m_run = false;
 		}
@@ -909,7 +909,7 @@ class X11Interface : public ewol::Context {
 			}
 		}
 		/****************************************************************************************/
-		bool createX11Context(void) {
+		bool createX11Context() {
 			X11_INFO("X11: CreateX11Context");
 			int x,y, attr_mask;
 			XSizeHints hints;
@@ -1215,7 +1215,7 @@ class X11Interface : public ewol::Context {
 			}
 		}
 		/****************************************************************************************/
-		bool createOGlContext(void) {
+		bool createOGlContext() {
 			X11_INFO("X11:CreateOGlContext");
 			/* create a GLX context */
 			GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);

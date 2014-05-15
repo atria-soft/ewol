@@ -36,15 +36,15 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~Text(void);
+				virtual ~Text();
 			public:
 				virtual void drawD(bool _disableDepthTest);
 				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);
 			protected:
 				float m_size;
 			public:
-				virtual float getHeight(void);
-				virtual float getSize(void);
+				virtual float getHeight();
+				virtual float getSize();
 				virtual ewol::GlyphProperty * getGlyphPointer(char32_t _charcode);
 				
 			public:

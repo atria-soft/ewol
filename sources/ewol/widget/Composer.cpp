@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__	"ewol::widget::Composer"
 
-ewol::widget::Composer::Composer(void) {
+ewol::widget::Composer::Composer() {
 	// nothing to do ...
 }
 
@@ -34,7 +34,7 @@ ewol::widget::Composer::Composer(enum composerMode _mode, const std::string& _fi
 	}
 }
 
-ewol::widget::Composer::~Composer(void) {
+ewol::widget::Composer::~Composer() {
 	
 }
 

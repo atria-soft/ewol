@@ -34,7 +34,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Container2(void);
+				~Container2();
 			private:
 				/**
 				 * @brief Specify the current widget
@@ -71,14 +71,14 @@ namespace ewol {
 				 * @brief get the current displayed composition
 				 * @return The base widget
 				 */
-				ewol::Widget* getSubWidget(void) const {
+				ewol::Widget* getSubWidget() const {
 					return getSubWidget(0);
 				};
 				/**
 				 * @brief get the current displayed composition
 				 * @return The toggle widget
 				 */
-				ewol::Widget* getSubWidgetToggle(void) const {
+				ewol::Widget* getSubWidgetToggle() const {
 					return getSubWidget(1);
 				};
 			private:
@@ -91,13 +91,13 @@ namespace ewol {
 				/**
 				 * @brief remove the subWidget node (async).
 				 */
-				void subWidgetRemove(void) {
+				void subWidgetRemove() {
 					subWidgetRemove(0);
 				}
 				/**
 				 * @brief remove the subWidget Toggle node (async).
 				 */
-				void subWidgetRemoveToggle(void) {
+				void subWidgetRemoveToggle() {
 					subWidgetRemove(1);
 				}
 			private:
@@ -110,13 +110,13 @@ namespace ewol {
 				/**
 				 * @brief Unlink the subwidget Node.
 				 */
-				void subWidgetUnLink(void) {
+				void subWidgetUnLink() {
 					subWidgetUnLink(0);
 				}
 				/**
 				 * @brief Unlink the subwidget Toggle Node.
 				 */
-				void subWidgetUnLinkToggle(void) {
+				void subWidgetUnLinkToggle() {
 					subWidgetUnLink(1);
 				}
 			protected:
@@ -137,7 +137,7 @@ namespace ewol {
 				/**
 				 * @brief Called when parsing a XML and detect the presence of a second Widget
 				 */
-				virtual void onDetectPresenceToggleWidget(void) {}
+				virtual void onDetectPresenceToggleWidget() {}
 				/**
 				 * @brief convert ID of the widget if not existed
 				 * @param[in] _id Id of the widget to display.
@@ -151,12 +151,12 @@ namespace ewol {
 				}
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual void onObjectRemove(ewol::Object* _removeObject);
 				virtual void calculateSize(const vec2& _availlable) {
 					calculateSizePadded(_availlable);
 				}
-				virtual void calculateMinMaxSize(void) {
+				virtual void calculateMinMaxSize() {
 					calculateMinMaxSizePadded();
 				}
 				//virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);

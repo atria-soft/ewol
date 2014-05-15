@@ -30,7 +30,7 @@ const char* const ewol::widget::WSlider::eventStopSlide = "ewol-widget-wslider-e
 const char* const ewol::widget::WSlider::configMode = "mode";
 const char* const ewol::widget::WSlider::configSpeed = "speed";
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::WSlider();
 }
 
@@ -38,7 +38,7 @@ void ewol::widget::WSlider::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-ewol::widget::WSlider::WSlider(void) :
+ewol::widget::WSlider::WSlider() :
   m_windowsSources(0),
   m_windowsDestination(0),
   m_windowsRequested(-1),
@@ -53,7 +53,7 @@ ewol::widget::WSlider::WSlider(void) :
 	registerConfig(configSpeed, "float", NULL, "Transition speed of the slider");
 }
 
-ewol::widget::WSlider::~WSlider(void) {
+ewol::widget::WSlider::~WSlider() {
 	
 }
 
@@ -247,7 +247,7 @@ void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 	}
 }
 
-void ewol::widget::WSlider::onRegenerateDisplay(void) {
+void ewol::widget::WSlider::onRegenerateDisplay() {
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {

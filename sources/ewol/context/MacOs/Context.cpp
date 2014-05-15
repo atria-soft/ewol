@@ -31,7 +31,7 @@
 #include <mach/mach.h>
 
 
-int64_t ewol::getTime(void) {
+int64_t ewol::getTime() {
 	struct timespec now;
 	clock_serv_t cclock;
 	mach_timespec_t mts;
@@ -58,7 +58,7 @@ class MacOSInterface : public ewol::Context {
 			mm_main(_argc, _argv);
 		}
 		
-		int32_t Run(void) {
+		int32_t Run() {
 			return mm_run();
 		}
 	public:

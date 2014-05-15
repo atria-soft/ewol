@@ -30,19 +30,19 @@ namespace ewol {
 				void setCaller(ewol::Object* _caller) {
 					m_callerObject = _caller;
 				};
-				inline ewol::Object* getCaller(void) const {
+				inline ewol::Object* getCaller() const {
 					return m_callerObject;
 				};
 				void setMessage(const char* _message) {
 					m_event = _message;
 				};
-				inline const char* getMessage(void) const {
+				inline const char* getMessage() const {
 					return m_event;
 				};
 				void setData(const std::string& _data) {
 					m_data = _data;
 				};
-				inline const std::string& getData(void) const {
+				inline const std::string& getData() const {
 					return m_data;
 				};
 		};

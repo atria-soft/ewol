@@ -30,7 +30,7 @@ const char * const ewol::widget::ButtonColor::eventChange = "change";
 
 static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
 
-static ewol::Widget* Create(void) {
+static ewol::Widget* Create() {
 	return new ewol::widget::ButtonColor();
 }
 
@@ -51,7 +51,7 @@ ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _sha
 }
 
 
-ewol::widget::ButtonColor::~ButtonColor(void) {
+ewol::widget::ButtonColor::~ButtonColor() {
 	
 }
 
@@ -61,7 +61,7 @@ void ewol::widget::ButtonColor::setShaperName(std::string _shaperName) {
 }
 
 
-void ewol::widget::ButtonColor::calculateMinMaxSize(void) {
+void ewol::widget::ButtonColor::calculateMinMaxSize() {
 	ewol::Padding padding = m_shaper.getPadding();
 	std::string label = m_textColorFg.getString();
 	vec3 minSize = m_text.calculateSize(label);
@@ -72,13 +72,13 @@ void ewol::widget::ButtonColor::calculateMinMaxSize(void) {
 
 
 
-void ewol::widget::ButtonColor::onDraw(void) {
+void ewol::widget::ButtonColor::onDraw() {
 	m_shaper.draw();
 	m_text.draw();
 }
 
 
-void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
+void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
@@ -223,7 +223,7 @@ void ewol::widget::ButtonColor::setValue(etk::Color<> _color) {
 	markToRedraw();
 }
 
-etk::Color<> ewol::widget::ButtonColor::getValue(void) {
+etk::Color<> ewol::widget::ButtonColor::getValue() {
 	return m_textColorFg;
 }
 

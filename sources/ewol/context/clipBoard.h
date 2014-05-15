@@ -66,11 +66,11 @@ namespace ewol {
 			/**
 			 * @brief initialize the clipboard system (done by ewol)
 			 */
-			void init(void);
+			void init();
 			/**
 			 * @brief Un-Initialize the clipboard system (done by ewol)
 			 */
-			void unInit(void);
+			void unInit();
 		};
 	};
 	/**

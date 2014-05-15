@@ -217,7 +217,7 @@ static void SutherlandHodgman(std::vector<vec2 > & input, std::vector<vec2 > & o
 }
 #endif
 
-ewol::compositing::Drawing::Drawing(void) :
+ewol::compositing::Drawing::Drawing() :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -237,11 +237,11 @@ ewol::compositing::Drawing::Drawing(void) :
 	}
 }
 
-ewol::compositing::Drawing::~Drawing(void) {
+ewol::compositing::Drawing::~Drawing() {
 	unLoadProgram();
 }
 
-void ewol::compositing::Drawing::generateTriangle(void) {
+void ewol::compositing::Drawing::generateTriangle() {
 	m_triElement = 0;
 	
 	m_coord.push_back(m_triangle[0]);
@@ -272,15 +272,15 @@ void ewol::compositing::Drawing::setPoint(const vec3& _point) {
 	}
 }
 
-void ewol::compositing::Drawing::resetCount(void) {
+void ewol::compositing::Drawing::resetCount() {
 	m_triElement = 0;
 }
 
-void ewol::compositing::Drawing::unLoadProgram(void) {
+void ewol::compositing::Drawing::unLoadProgram() {
 	ewol::resource::Program::release(m_GLprogram);
 }
 
-void ewol::compositing::Drawing::loadProgram(void) {
+void ewol::compositing::Drawing::loadProgram() {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
@@ -316,7 +316,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::compositing::Drawing::clear(void) {
+void ewol::compositing::Drawing::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
@@ -372,7 +372,7 @@ void ewol::compositing::Drawing::setThickness(float _thickness) {
 	}
 }
 
-void ewol::compositing::Drawing::addVertex(void) {
+void ewol::compositing::Drawing::addVertex() {
 	internalSetColor(m_color);
 	setPoint(m_position);
 }

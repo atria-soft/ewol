@@ -31,7 +31,7 @@
 #undef __class__
 #define __class__ "ewol::widget::Manager"
 
-ewol::widget::Manager::Manager(void) :
+ewol::widget::Manager::Manager() :
   m_focusWidgetDefault(NULL),
   m_focusWidgetCurrent(NULL),
   m_havePeriodic(false),
@@ -62,7 +62,7 @@ ewol::widget::Manager::Manager(void) :
 	ewol::widget::ListFileSystem::init(*this);
 }
 
-ewol::widget::Manager::~Manager(void) {
+ewol::widget::Manager::~Manager() {
 	EWOL_DEBUG(" == > Un-Init Widget-Manager");
 	EWOL_INFO("Realease all FOCUS");
 	focusSetDefault(NULL);
@@ -126,7 +126,7 @@ void ewol::widget::Manager::focusSetDefault(ewol::Widget * _newWidget) {
 	m_focusWidgetDefault = _newWidget;
 }
 
-void ewol::widget::Manager::focusRelease(void) {
+void ewol::widget::Manager::focusRelease() {
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
 		// nothink to do ...
 		return;
@@ -143,7 +143,7 @@ void ewol::widget::Manager::focusRelease(void) {
 }
 
 
-ewol::Widget * ewol::widget::Manager::focusGet(void) {
+ewol::Widget * ewol::widget::Manager::focusGet() {
 	return m_focusWidgetCurrent;
 }
 
@@ -228,15 +228,15 @@ void ewol::widget::Manager::periodicCall(int64_t _localTime) {
 	}
 }
 
-bool ewol::widget::Manager::periodicCallHave(void) {
+bool ewol::widget::Manager::periodicCallHave() {
 	return m_havePeriodic;
 }
 
-void ewol::widget::Manager::markDrawingIsNeeded(void) {
+void ewol::widget::Manager::markDrawingIsNeeded() {
 	m_haveRedraw = true;
 }
 
-bool ewol::widget::Manager::isDrawingNeeded(void) {
+bool ewol::widget::Manager::isDrawingNeeded() {
 	bool tmp = m_haveRedraw;
 	m_haveRedraw = false;
 	return tmp;
@@ -276,7 +276,7 @@ bool ewol::widget::Manager::exist(const std::string& _name) {
 	return m_creatorList.exist(nameLower);
 }
 
-std::string ewol::widget::Manager::list(void) {
+std::string ewol::widget::Manager::list() {
 	std::string tmpVal;
 	for (int32_t iii=0; iii<m_creatorList.size() ; iii++) {
 		tmpVal += m_creatorList.getKey(iii);

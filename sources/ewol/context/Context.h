@@ -41,47 +41,47 @@ namespace ewol {
 		private:
 			ewol::context::CommandLine m_commandLine; //!< Start command line information
 		public:
-			ewol::context::CommandLine& getCmd(void) {
+			ewol::context::CommandLine& getCmd() {
 				return m_commandLine;
 			};
 		private:
 			ewol::context::ConfigFont m_configFont; //!< global font configuration
 		public:
-			ewol::context::ConfigFont& getFontDefault(void) {
+			ewol::context::ConfigFont& getFontDefault() {
 				return m_configFont;
 			};
 		private:
 			ewol::widget::Manager m_widgetManager; //!< global widget manager
 		public:
-			ewol::widget::Manager& getWidgetManager(void) {
+			ewol::widget::Manager& getWidgetManager() {
 				return m_widgetManager;
 			};
 		private:
 			ewol::object::Manager m_objectManager; //!< Object Manager main instance
 		public:
-			ewol::object::Manager& getEObjectManager(void) {
+			ewol::object::Manager& getEObjectManager() {
 				return m_objectManager;
 			};
 		private:
 			ewol::resource::Manager m_resourceManager; //!< global resources Manager
 		public:
-			ewol::resource::Manager& getResourcesManager(void) {
+			ewol::resource::Manager& getResourcesManager() {
 				return m_resourceManager;
 			};
 		public:
 			Context(int32_t _argc=0, const char* _argv[]=NULL);
-			virtual ~Context(void);
+			virtual ~Context();
 		protected:
 			/**
 			 * @brief set the curent interface.
 			 * @note this lock the main mutex
 			 */
-			void lockContext(void);
+			void lockContext();
 			/**
 			 * @brief set the curent interface at NULL.
 			 * @note this un-lock the main mutex
 			 */
-			void unLockContext(void);
+			void unLockContext();
 		private:
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
 			ewol::context::InputManager m_input;
@@ -94,7 +94,7 @@ namespace ewol {
 			/**
 			 * @brief Processing all the event arrived ... (commoly called in draw function)
 			 */
-			void processEvents(void);
+			void processEvents();
 		public:
 			
 			virtual void setArchiveDir(int _mode, const char* _str);
@@ -116,22 +116,22 @@ namespace ewol {
 			/**
 			 * @brief The current context is suspended
 			 */
-			virtual void OS_Suspend(void);
+			virtual void OS_Suspend();
 			/**
 			 * @brief The current context is resumed
 			 */
-			virtual void OS_Resume(void);
+			virtual void OS_Resume();
 		
 			/**
 			 * @brief The current context is set in foreground (framerate is maximum speed)
 			 */
-			virtual void OS_Foreground(void);
+			virtual void OS_Foreground();
 			/**
 			 * @brief The current context is set in background (framerate is slowing down (max fps)/5 # 4fps)
 			 */
-			virtual void OS_Background(void);
+			virtual void OS_Background();
 			
-			void requestUpdateSize(void);
+			void requestUpdateSize();
 			
 			// return true if a flush is needed
 			bool OS_Draw(bool _displayEveryTime);
@@ -144,19 +144,19 @@ namespace ewol {
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
-			void resetIOEvent(void);
+			void resetIOEvent();
 			/**
 			 * @brief The OS inform that the openGL constext has been destroy  == > use to automaticly reload the texture and other thinks ...
 			 */
-			void OS_OpenGlContextDestroy(void);
+			void OS_OpenGlContextDestroy();
 			/**
 			 * @brief The OS Inform that the Window has been killed
 			 */
-			void OS_Stop(void);
+			void OS_Stop();
 			/**
 			 * @brief The application request that the Window will be killed
 			 */
-			virtual void stop(void);
+			virtual void stop();
 		private:
 			ewol::widget::Windows* m_windowsCurrent; //!< curent displayed windows
 		public:
@@ -169,7 +169,7 @@ namespace ewol {
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::widget::Windows* getWindows(void) {
+			ewol::widget::Windows* getWindows() {
 				return m_windowsCurrent;
 			};
 		private:
@@ -179,7 +179,7 @@ namespace ewol {
 			 * @brief get the current windows size
 			 * @return the current size ...
 			 */
-			const vec2& getSize(void) {
+			const vec2& getSize() {
 				return m_windowsSize;
 			};
 			/**
@@ -205,23 +205,23 @@ namespace ewol {
 			/**
 			 * @brief The OS inform that the Windows is now Hidden.
 			 */
-			void OS_Hide(void);
+			void OS_Hide();
 			/**
 			 * @brief The Application request that the Windows will be Hidden.
 			 */
-			virtual void hide(void);
+			virtual void hide();
 			/**
 			 * @brief The OS inform that the Windows is now visible.
 			 */
-			void OS_Show(void);
+			void OS_Show();
 			/**
 			 * @brief The Application request that the Windows will be visible.
 			 */
-			virtual void show(void);
+			virtual void show();
 			/**
 			 * @brief Redraw all the windows
 			 */
-			void forceRedrawAll(void);
+			void forceRedrawAll();
 			
 			// TODO : Later ...
 			/**
@@ -238,16 +238,16 @@ namespace ewol {
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */
-			void inputEventUnGrabPointer(void);
+			void inputEventUnGrabPointer();
 			
 			/**
 			 * @brief display the virtal keyboard (for touch system only)
 			 */
-			virtual void keyboardShow(void);
+			virtual void keyboardShow();
 			/**
 			 * @brief Hide the virtal keyboard (for touch system only)
 			 */
-			virtual void keyboardHide(void);
+			virtual void keyboardHide();
 			
 			/**
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
@@ -300,14 +300,14 @@ namespace ewol {
 			 * @note : must be implemented in all system OS implementation
 			 * @return The curent time of the process
 			 */
-			static int64_t getTime(void);
+			static int64_t getTime();
 		#if defined(__TARGET_OS__Android)
 		public:
 			typedef void (*AndroidAudioCallback)(void* _data,
 			                                     int32_t _size,
 			                                     void* _userData);
 			// Android specific audio interface :
-			virtual int32_t audioGetDeviceCount(void) {
+			virtual int32_t audioGetDeviceCount() {
 				return 0;
 			}
 			virtual std::string audioGetDeviceProperty(int32_t _idDevice) {
@@ -364,7 +364,7 @@ namespace ewol {
 	 * @brief From everyware in the program, we can get the context inteface.
 	 * @return current reference on the instance.
 	 */
-	Context& getContext(void);
+	Context& getContext();
 };
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application

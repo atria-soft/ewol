@@ -78,8 +78,8 @@ namespace ewol {
 				static const char* const eventValidate;
 				// Config list of properties
 			public:
-				FileChooser(void);
-				virtual ~FileChooser(void);
+				FileChooser();
+				virtual ~FileChooser();
 			private:
 				std::string m_folder;
 				std::string m_file;
@@ -89,8 +89,8 @@ namespace ewol {
 				void setCancelLabel(const std::string& _label);
 				void setFolder(const std::string& _folder);
 				void setFileName(const std::string& _filename);
-				std::string getCompleateFileName(void);
-				void updateCurrentFolder(void);
+				std::string getCompleateFileName();
+				void updateCurrentFolder();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 		};

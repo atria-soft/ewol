@@ -18,17 +18,17 @@
 #undef __class__
 #define __class__ "Menu"
 
-ewol::widget::Menu::Menu(void) {
+ewol::widget::Menu::Menu() {
 	addObjectType("ewol::widget::Menu");
 	m_staticId = 0;
 	m_widgetContextMenu = NULL;
 }
 
-ewol::widget::Menu::~Menu(void) {
+ewol::widget::Menu::~Menu() {
 	clear();
 }
 
-void ewol::widget::Menu::subWidgetRemoveAll(void) {
+void ewol::widget::Menu::subWidgetRemoveAll() {
 	clear();
 	ewol::widget::Sizer::subWidgetRemoveAll();
 }
@@ -46,7 +46,7 @@ void ewol::widget::Menu::subWidgetUnLink(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void ewol::widget::Menu::clear(void) {
+void ewol::widget::Menu::clear() {
 	for (size_t iii=0; iii < m_listElement.size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
@@ -111,7 +111,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 	return tmpObject->m_localId;
 }
 
-void ewol::widget::Menu::addSpacer(void) {
+void ewol::widget::Menu::addSpacer() {
 	EWOL_TODO("NOT now...");
 }
 

@@ -25,7 +25,7 @@ namespace ewol {
 				 * @brief get the number of element in the Command line
 				 * @return the number of element
 				 */
-				int32_t size(void);
+				int32_t size();
 				/**
 				 * @brief get an element with a specific ID
 				 * @return _id The cmdLine Id element

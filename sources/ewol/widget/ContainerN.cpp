@@ -15,19 +15,19 @@
 #define __class__	"ContainerN"
 
 
-ewol::widget::ContainerN::ContainerN(void) :
+ewol::widget::ContainerN::ContainerN() :
   m_lockExpand(false,false),
   m_subExpend(false,false) {
 	addObjectType("ewol::widget::ContainerN");
 	// nothing to do ...
 }
 
-ewol::widget::ContainerN::~ContainerN(void) {
+ewol::widget::ContainerN::~ContainerN() {
 	subWidgetRemoveAll();
 }
 
 
-bvec2 ewol::widget::ContainerN::canExpand(void) {
+bvec2 ewol::widget::ContainerN::canExpand() {
 	bvec2 res = m_userExpand;
 	if (false == m_lockExpand.x()) {
 		if (true == m_subExpend.x()) {
@@ -119,7 +119,7 @@ void ewol::widget::ContainerN::subWidgetUnLink(ewol::Widget* _newWidget) {
 	}
 }
 
-void ewol::widget::ContainerN::subWidgetRemoveAll(void) {
+void ewol::widget::ContainerN::subWidgetRemoveAll() {
 	size_t errorControl = m_subWidget.size();
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	while (m_subWidget.size() > 0 ) {
@@ -140,7 +140,7 @@ void ewol::widget::ContainerN::subWidgetRemoveAll(void) {
 	m_subWidget.clear();
 }
 
-void ewol::widget::ContainerN::subWidgetRemoveAllDelayed(void) {
+void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -211,7 +211,7 @@ void ewol::widget::ContainerN::calculateSize(const vec2& _availlable) {
 	markToRedraw();
 }
 
-void ewol::widget::ContainerN::calculateMinMaxSize(void) {
+void ewol::widget::ContainerN::calculateMinMaxSize() {
 	m_subExpend.setValue(false, false);
 	m_minSize.setValue(0,0);
 	m_maxSize.setValue(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
@@ -234,7 +234,7 @@ void ewol::widget::ContainerN::calculateMinMaxSize(void) {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-void ewol::widget::ContainerN::onRegenerateDisplay(void) {
+void ewol::widget::ContainerN::onRegenerateDisplay() {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->onRegenerateDisplay();

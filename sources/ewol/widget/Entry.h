@@ -60,7 +60,7 @@ namespace ewol {
 				/**
 				 * @brief Destuctor
 				 */
-				virtual ~Entry(void);
+				virtual ~Entry();
 			
 			private:
 				std::string m_data; //!< sting that must be displayed
@@ -80,7 +80,7 @@ namespace ewol {
 				 * @brief get the current value in the entry
 				 * @return The current display value
 				 */
-				std::string getValue(void) const {
+				std::string getValue() const {
 					return m_data;
 				};
 			
@@ -96,7 +96,7 @@ namespace ewol {
 				 * @brief Limit the number of Unicode character in the entry
 				 * @return Number of max character set in the List.
 				 */
-				int32_t getMaxChar(void) const {
+				int32_t getMaxChar() const {
 					return m_maxCharacter;
 				};
 			private:
@@ -111,7 +111,7 @@ namespace ewol {
 				 * @brief get the regualar expression limitation
 				 * @param The regExp string
 				 */
-				std::string getRegExp(void) const {
+				std::string getRegExp() const {
 					return m_regExp.getRegExp();
 				};
 			private:
@@ -124,12 +124,12 @@ namespace ewol {
 				/**
 				 * @brief informe the system thet the text change and the start position change
 				 */
-				virtual void markToUpdateTextPosition(void);
+				virtual void markToUpdateTextPosition();
 				/**
 				 * @brief update the display position start  == > depending of the position of the Cursor and the size of the Data inside
 				 * @change m_displayStartPosition < ==  updated
 				 */
-				virtual void updateTextPosition(void);
+				virtual void updateTextPosition();
 				/**
 				 * @brief change the cursor position with the curent position requested on the display
 				 * @param[in] _pos Absolute position of the event
@@ -147,7 +147,7 @@ namespace ewol {
 				 * @brief remove the selected area
 				 * @note This request a regeneration of the display
 				 */
-				virtual void removeSelected(void);
+				virtual void removeSelected();
 			private:
 				std::string m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			public:
@@ -160,20 +160,20 @@ namespace ewol {
 				 * @brief get The text displayed when nothing is in the entry.
 				 * @return Text display when nothing
 				 */
-				const std::string& getEmptyText(void) const {
+				const std::string& getEmptyText() const {
 					return m_textWhenNothing;
 				};
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 			protected: // Derived function
-				virtual void onDraw(void);
-				virtual void onGetFocus(void);
-				virtual void onLostFocus(void);
+				virtual void onDraw();
+				virtual void onGetFocus();
+				virtual void onLostFocus();
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

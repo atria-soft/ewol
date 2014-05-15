@@ -12,12 +12,12 @@
 #include <stdint.h>
 
 namespace date {
-	int32_t getYear(void);
-	int32_t getMonth(void);
-	int32_t getDay(void);
-	int32_t getHour(void);
-	int32_t getMinute(void);
-	int32_t getSecond(void);
+	int32_t getYear();
+	int32_t getMonth();
+	int32_t getDay();
+	int32_t getHour();
+	int32_t getMinute();
+	int32_t getSecond();
 };
 
 

@@ -24,12 +24,12 @@ namespace ewol {
 				/**
 				 * @brief Main constructor
 				 */
-				Special(void);
+				Special();
 				/**
 				 * @brief get the current CapLock Status
 				 * @return The CapLock value
 				 */
-				bool getCapsLock(void) const;
+				bool getCapsLock() const;
 				/**
 				 * @brief set the current CapLock Status
 				 * @param[in] _value The new CapLock value
@@ -39,7 +39,7 @@ namespace ewol {
 				 * @brief Get the current Shift key status
 				 * @return The Shift value
 				 */
-				bool getShift(void) const;
+				bool getShift() const;
 				/**
 				 * @brief Set the current Shift key status
 				 * @param[in] _value The new Shift value
@@ -49,7 +49,7 @@ namespace ewol {
 				 * @brief Get the Current Control key status
 				 * @return The Control value
 				 */
-				bool getCtrl(void) const;
+				bool getCtrl() const;
 				/**
 				 * @brief Set the Current Control key status
 				 * @param[in] _value The new Control value
@@ -59,7 +59,7 @@ namespace ewol {
 				 * @brief Get the current Meta key status (also named windows or apple key)
 				 * @return The Meta value (name Windows key, apple key, command key ...)
 				 */
-				bool getMeta(void) const;
+				bool getMeta() const;
 				/**
 				 * @brief Set the current Meta key status (also named windows or apple key)
 				 * @param[in] _value The new Meta value (name Windows key, apple key, command key ...)
@@ -69,7 +69,7 @@ namespace ewol {
 				 * @brief Get the current Alt key status
 				 * @return The Alt value
 				 */
-				bool getAlt(void) const;
+				bool getAlt() const;
 				/**
 				 * @brief Set the current Alt key status
 				 * @param[in] _value The new Alt value
@@ -79,7 +79,7 @@ namespace ewol {
 				 * @brief Get the current Alt-Gr key status
 				 * @return The Alt-gr value (does not exist on MacOs)
 				 */
-				bool getAltGr(void) const;
+				bool getAltGr() const;
 				/**
 				 * @brief Set the current Alt-Gr key status
 				 * @param[in] _value The new Alt-gr value (does not exist on MacOs)
@@ -89,7 +89,7 @@ namespace ewol {
 				 * @brief Get the current Ver-num key status
 				 * @return The Numerical Lock value
 				 */
-				bool getNumLock(void) const;
+				bool getNumLock() const;
 				/**
 				 * @brief Set the current Ver-num key status
 				 * @param[in] _value The new Numerical Lock value
@@ -99,7 +99,7 @@ namespace ewol {
 				 * @brief Get the current Intert key status
 				 * @return The Insert value
 				 */
-				bool getInsert(void) const;
+				bool getInsert() const;
 				/**
 				 * @brief Set the current Intert key status
 				 * @param[in] _value The new Insert value

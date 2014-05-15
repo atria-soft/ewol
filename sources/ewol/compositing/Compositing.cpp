@@ -13,17 +13,17 @@
 #include <ewol/compositing/Compositing.h>
 
 
-ewol::Compositing::Compositing(void) {
+ewol::Compositing::Compositing() {
 	// nothing to do
 }
 
 
-ewol::Compositing::~Compositing(void) {
+ewol::Compositing::~Compositing() {
 	// nothing to do
 }
 
 
-void ewol::Compositing::resetMatrix(void) {
+void ewol::Compositing::resetMatrix() {
 	m_matrixApply.identity();
 }
 
@@ -43,7 +43,7 @@ void ewol::Compositing::scale(const vec3& _vect) {
 }
 
 
-void ewol::Compositing::clear(void) {
+void ewol::Compositing::clear() {
 	m_matrixApply.identity();
 }
 

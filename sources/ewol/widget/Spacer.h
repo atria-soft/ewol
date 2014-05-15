@@ -32,11 +32,11 @@ namespace ewol {
 				/**
 				 * @brief Main constructer
 				 */
-				Spacer(void);
+				Spacer();
 				/**
 				 * @brief Main destructer
 				 */
-				virtual ~Spacer(void);
+				virtual ~Spacer();
 			protected:
 				etk::Color<> m_color; //!< Background color
 			public:
@@ -47,8 +47,8 @@ namespace ewol {
 				void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
 			public: // Derived function
 				virtual ewol::Widget * getWidgetAtPos(const vec2& _pos) { return NULL; };
-				virtual void onRegenerateDisplay(void);
-				virtual void onDraw(void);
+				virtual void onRegenerateDisplay();
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};

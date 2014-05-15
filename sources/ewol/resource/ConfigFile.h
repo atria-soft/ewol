@@ -23,9 +23,9 @@ namespace ewol {
 				etk::Hash<ejson::Value*> m_list;
 			protected:
 				ConfigFile(const std::string& _filename);
-				virtual ~ConfigFile(void);
+				virtual ~ConfigFile();
 			public:
-				void reload(void);
+				void reload();
 				
 				int32_t request(const std::string& _paramName);
 				

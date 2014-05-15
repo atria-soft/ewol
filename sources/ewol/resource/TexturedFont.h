@@ -46,7 +46,7 @@ namespace ewol {
 				int32_t m_lastRawHeigh[4];
 			protected:
 				TexturedFont(const std::string& _fontName);
-				~TexturedFont(void);
+				~TexturedFont();
 			public:
 				/**
 				 * @brief get the display height of this font
@@ -60,7 +60,7 @@ namespace ewol {
 				 * @brief get the font height (user friendly)
 				 * @return Dimention of the font the user requested
 				 */
-				int32_t getFontSize(void) {
+				int32_t getFontSize() {
 					return m_size;
 				};
 				/**

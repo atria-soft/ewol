@@ -19,7 +19,7 @@
 
 // TODO : Update to support the Left and right of some key ...
 
-ewol::key::Special::Special(void) :
+ewol::key::Special::Special() :
   m_value(0) {
 	
 }
@@ -57,7 +57,7 @@ void ewol::key::Special::update(enum ewol::key::keyboard _move, bool _isDown) {
 	}
 }
 
-bool ewol::key::Special::getCapsLock(void) const {
+bool ewol::key::Special::getCapsLock() const {
 	if ((m_value & EWOL_FLAG_KEY_CAPS_LOCK) != 0) {
 		return true;
 	}
@@ -75,7 +75,7 @@ void ewol::key::Special::setCapsLock(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getShift(void) const {
+bool ewol::key::Special::getShift() const {
 	if ((m_value & EWOL_FLAG_KEY_SHIFT) != 0) {
 		return true;
 	}
@@ -93,7 +93,7 @@ void ewol::key::Special::setShift(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getCtrl(void) const {
+bool ewol::key::Special::getCtrl() const {
 	if ((m_value & EWOL_FLAG_KEY_CTRL) != 0) {
 		return true;
 	}
@@ -111,7 +111,7 @@ void ewol::key::Special::setCtrl(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getMeta(void) const {
+bool ewol::key::Special::getMeta() const {
 	if ((m_value & EWOL_FLAG_KEY_META) != 0) {
 		return true;
 	}
@@ -129,7 +129,7 @@ void ewol::key::Special::setMeta(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getAlt(void) const {
+bool ewol::key::Special::getAlt() const {
 	if ((m_value & EWOL_FLAG_KEY_ALT) != 0) {
 		return true;
 	}
@@ -147,7 +147,7 @@ void ewol::key::Special::setAlt(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getAltGr(void) const {
+bool ewol::key::Special::getAltGr() const {
 	if ((m_value & EWOL_FLAG_KEY_ALTGR) != 0) {
 		return true;
 	}
@@ -165,7 +165,7 @@ void ewol::key::Special::setAltGr(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getNumLock(void) const {
+bool ewol::key::Special::getNumLock() const {
 	if ((m_value & EWOL_FLAG_KEY_NUM_LOCK) != 0) {
 		return true;
 	}
@@ -183,7 +183,7 @@ void ewol::key::Special::setNumLock(bool _value) {
 	}
 }
 
-bool ewol::key::Special::getInsert(void) const {
+bool ewol::key::Special::getInsert() const {
 	if ((m_value & EWOL_FLAG_KEY_INSERT) != 0) {
 		return true;
 	}

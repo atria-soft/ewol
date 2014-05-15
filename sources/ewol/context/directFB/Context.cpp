@@ -47,7 +47,7 @@
 #include <directfbgl.h>
 
 
-int64_t guiInterface::getTime(void) {
+int64_t guiInterface::getTime() {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
 	if (ret != 0) {
@@ -190,7 +190,7 @@ void DirectFB_Init(int argc, const char *argv[]) {
 	EWOL_INFO("DirectFB init (STOP)");
 }
 
-void DirectFB_UnInit(void) {
+void DirectFB_UnInit() {
 	// release our interfaces to shutdown DirectFB
 	primary_gl->release(primary_gl);
 	primary->release(primary);
@@ -198,7 +198,7 @@ void DirectFB_UnInit(void) {
 	dfb->release(dfb);
 }
 
-void DirectFB_Run(void) {
+void DirectFB_Run() {
 	EWOL_INFO("X11 configure windows size : (" << screen_height << "," << screen_width << ")");
 	eSystem::Resize(screen_width, screen_height);
 	
@@ -384,17 +384,17 @@ void guiInterface::ClipBoardSet(enum ewol::context::clipBoard::clipboardListe _c
 #define __class__ "guiInterface"
 
 
-void guiInterface::Stop(void) {
+void guiInterface::Stop() {
 	EWOL_INFO("X11-API: Stop");
 	m_run = false;
 }
 
-void guiInterface::KeyboardShow(void) {
+void guiInterface::KeyboardShow() {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-void guiInterface::KeyboardHide(void) {
+void guiInterface::KeyboardHide() {
 	// nothing to do : No keyboard on computer ...
 }
 

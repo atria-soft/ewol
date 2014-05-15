@@ -30,7 +30,7 @@ namespace ewol {
 				  m_image(_image) {
 					
 				};
-				~elementPL(void) {};
+				~elementPL() {};
 		};
 		
 		/**
@@ -44,15 +44,15 @@ namespace ewol {
 				int32_t m_idSelected;
 				std::vector<ewol::widget::elementPL *> m_list;
 			public:
-				ParameterList(void);
-				virtual ~ParameterList(void);
+				ParameterList();
+				virtual ~ParameterList();
 				void setLabel(std::string _newLabel);
 			// drawing capabilities ....
 			private:
 				std::vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 			public:
 				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
-				void clearOObjectList(void);
+				void clearOObjectList();
 			// list properties ...
 			private:
 				int32_t m_paddingSizeX;
@@ -62,17 +62,17 @@ namespace ewol {
 			public:
 				void menuAdd(std::string& _label, int32_t _refId, std::string& _image);
 				void menuAddGroup(std::string& _label);
-				void menuClear(void);
-				void menuSeparator(void);
+				void menuClear();
+				void menuSeparator();
 				
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 			protected: // Derived function
-				virtual void onGetFocus(void);
-				virtual void onLostFocus(void);
-				virtual void onDraw(void);
+				virtual void onGetFocus();
+				virtual void onLostFocus();
+				virtual void onDraw();
 		};
 	};
 };

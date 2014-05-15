@@ -46,7 +46,7 @@ ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _load
 }
 
 
-ewol::compositing::TextBase::~TextBase(void) {
+ewol::compositing::TextBase::~TextBase() {
 	ewol::resource::Program::release(m_GLprogram);
 }
 
@@ -87,7 +87,7 @@ void ewol::compositing::TextBase::scale(const vec3& _vect) {
 	m_vectorialDraw.scale(_vect);
 }
 
-void ewol::compositing::TextBase::clear(void) {
+void ewol::compositing::TextBase::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// remove sub draw system
@@ -100,7 +100,7 @@ void ewol::compositing::TextBase::clear(void) {
 	reset();
 }
 
-void ewol::compositing::TextBase::reset(void) {
+void ewol::compositing::TextBase::reset() {
 	m_position = vec3(0,0,0);
 	m_clippingPosStart = vec3(0,0,0);
 	m_clippingPosStop = vec3(0,0,0);
@@ -382,7 +382,7 @@ void ewol::compositing::TextBase::printHTML(const std::string& _text) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;
 	}
-	(void)parseHtmlNode(bodyNode);
+	parseHtmlNode(bodyNode);
 	htmlFlush();
 }
 
@@ -410,7 +410,7 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;
 	}
-	(void)parseHtmlNode(bodyNode);
+	parseHtmlNode(bodyNode);
 	htmlFlush();
 }
 
@@ -787,7 +787,7 @@ void ewol::compositing::TextBase::print(const std::u32string& _text, const std::
 
 
 
-void ewol::compositing::TextBase::forceLineReturn(void) {
+void ewol::compositing::TextBase::forceLineReturn() {
 	// reset position : 
 	setPos(vec3(m_startTextpos, m_position.y() - getHeight(), 0) );
 }
@@ -801,11 +801,11 @@ void ewol::compositing::TextBase::setTextAlignement(float _startTextpos, float _
 	}
 }
 
-enum ewol::compositing::aligneMode ewol::compositing::TextBase::getAlignement(void) {
+enum ewol::compositing::aligneMode ewol::compositing::TextBase::getAlignement() {
 	return m_alignement;
 }
 
-void ewol::compositing::TextBase::disableAlignement(void) {
+void ewol::compositing::TextBase::disableAlignement() {
 	m_alignement = alignDisable;
 }
 
@@ -1071,7 +1071,7 @@ void ewol::compositing::TextBase::htmlAddData(const std::u32string& _data) {
 	}
 }
 
-void ewol::compositing::TextBase::htmlFlush(void) {
+void ewol::compositing::TextBase::htmlFlush() {
 	if (m_htmlCurrrentLine.size()>0) {
 		print(m_htmlCurrrentLine, m_htmlDecoration);
 	}
@@ -1079,7 +1079,7 @@ void ewol::compositing::TextBase::htmlFlush(void) {
 	m_htmlDecoration.clear();
 }
 
-void ewol::compositing::TextBase::disableCursor(void) {
+void ewol::compositing::TextBase::disableCursor() {
 	m_selectionStartPos = -100;
 	m_cursorPos = -100;
 }

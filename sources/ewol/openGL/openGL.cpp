@@ -16,7 +16,7 @@
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& mutexOpenGl(void) {
+static etk::Mutex& mutexOpenGl() {
 	static etk::Mutex s_drawMutex;
 	return s_drawMutex;
 }
@@ -29,7 +29,7 @@ static uint32_t l_textureflags = 0;
 static int32_t  l_programId = 0;
 
 
-void ewol::openGL::lock(void) {
+void ewol::openGL::lock() {
 	mutexOpenGl().lock();
 	l_matrixList.clear();
 	mat4 tmpMat;
@@ -41,7 +41,7 @@ void ewol::openGL::lock(void) {
 	l_programId = -1;
 }
 
-void ewol::openGL::unLock(void) {
+void ewol::openGL::unLock() {
 	mutexOpenGl().unLock();
 }
 
@@ -62,7 +62,7 @@ void ewol::openGL::setMatrix(const mat4& _newOne) {
 	l_matrixList[l_matrixList.size()-1] = _newOne;
 }
 
-void ewol::openGL::push(void) {
+void ewol::openGL::push() {
 	if (l_matrixList.size() == 0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
 		mat4 tmp;
@@ -73,7 +73,7 @@ void ewol::openGL::push(void) {
 	l_matrixList.push_back(tmp);
 }
 
-void ewol::openGL::pop(void) {
+void ewol::openGL::pop() {
 	if (l_matrixList.size() <= 1) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
 		l_matrixList.clear();
@@ -86,7 +86,7 @@ void ewol::openGL::pop(void) {
 	l_matrixCamera.identity();
 }
 
-const mat4& ewol::openGL::getMatrix(void) {
+const mat4& ewol::openGL::getMatrix() {
 	if (l_matrixList.size() == 0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
 		mat4 tmp;
@@ -95,7 +95,7 @@ const mat4& ewol::openGL::getMatrix(void) {
 	return l_matrixList[l_matrixList.size()-1];
 }
 
-const mat4& ewol::openGL::getCameraMatrix(void) {
+const mat4& ewol::openGL::getCameraMatrix() {
 	return l_matrixCamera;
 }
 
@@ -103,17 +103,17 @@ void ewol::openGL::setCameraMatrix(const mat4& _newOne) {
 	l_matrixCamera = _newOne;
 }
 
-void ewol::openGL::finish(void) {
+void ewol::openGL::finish() {
 	l_programId = -1;
 	l_textureflags = 0;
 }
 
-void ewol::openGL::flush(void) {
+void ewol::openGL::flush() {
 	l_programId = -1;
 	l_textureflags = 0;
 }
 
-void ewol::openGL::swap(void) {
+void ewol::openGL::swap() {
 	
 }
 
@@ -211,7 +211,7 @@ void ewol::openGL::disable(enum ewol::openGL::openGlFlags _flagID) {
 	#endif
 }
 
-void ewol::openGL::updateAllFlags(void) {
+void ewol::openGL::updateAllFlags() {
 	#ifdef DIRECT_MODE
 		return;
 	#endif

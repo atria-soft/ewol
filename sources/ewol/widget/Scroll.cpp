@@ -14,7 +14,7 @@
 #undef __class__
 #define __class__ "Scroll"
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Scroll();
 }
 
@@ -37,7 +37,7 @@ ewol::widget::Scroll::Scroll(const std::string& _shaperName) :
 	registerConfig(configLimit, "vec2", NULL, "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end");
 }
 
-ewol::widget::Scroll::~Scroll(void) {
+ewol::widget::Scroll::~Scroll() {
 	
 }
 
@@ -48,7 +48,7 @@ void ewol::widget::Scroll::setLimit(const vec2& _limit) {
 
 #define SCROLL_BAR_SPACE      (15)
 
-void ewol::widget::Scroll::calculateMinMaxSize(void) {
+void ewol::widget::Scroll::calculateMinMaxSize() {
 	// call main class !! and not containter class ...
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
@@ -69,12 +69,12 @@ void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 }
 
-void ewol::widget::Scroll::onDraw(void) {
+void ewol::widget::Scroll::onDraw() {
 	m_shaperH.draw();
 	m_shaperV.draw();
 }
 
-void ewol::widget::Scroll::onRegenerateDisplay(void) {
+void ewol::widget::Scroll::onRegenerateDisplay() {
 	// call upper class
 	ewol::widget::Container::onRegenerateDisplay();
 	if (needRedraw() == false) {

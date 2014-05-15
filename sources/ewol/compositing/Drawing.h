@@ -39,20 +39,20 @@ namespace ewol {
 				/**
 				 * @brief Basic constructor
 				 */
-				Drawing(void);
+				Drawing();
 				/**
 				 * @brief Basic destructor
 				 */
-				~Drawing(void);
+				~Drawing();
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed
 				 */
-				void loadProgram(void);
+				void loadProgram();
 				/**
 				 * @brief Un-Load the openGL program and get all the ID needed
 				 */
-				void unLoadProgram(void);
+				void unLoadProgram();
 				float m_thickness; //!< when drawing line and other things
 				int32_t m_triElement; //!< special counter of the single dot generated
 				vec3 m_triangle[3]; //!< Register every system with a combinaison of tiangle
@@ -61,11 +61,11 @@ namespace ewol {
 				/**
 				 * @brief Lunch the generation of triangle
 				 */
-				void generateTriangle(void);
+				void generateTriangle();
 				/**
 				 * @brief in case of some error the count can be reset
 				 */
-				void resetCount(void);
+				void resetCount();
 				/**
 				 * @brief set the Color of the current triangle drawing
 				 * @param[in] _color Color to current dots generated
@@ -85,12 +85,12 @@ namespace ewol {
 				/**
 				 * @brief clear alll tre registered element in the current element
 				 */
-				void clear(void);
+				void clear();
 				/**
 				 * @brief get the current display position (sometime needed in the gui control)
 				 * @return the current position.
 				 */
-				const vec3& getPos(void) {
+				const vec3& getPos() {
 					return m_position;
 				};
 				/**
@@ -124,7 +124,7 @@ namespace ewol {
 				 * @brief Get the foreground color of the font.
 				 * @return Foreground color.
 				 */
-				const etk::Color<>& getColor(void) {
+				const etk::Color<>& getColor() {
 					return m_color;
 				};
 				/**
@@ -138,7 +138,7 @@ namespace ewol {
 				 * @brief Get the background color of the font.
 				 * @return Background color.
 				 */
-				const etk::Color<>& getColorBg(void) {
+				const etk::Color<>& getColorBg() {
 					return m_colorBg;
 				};
 				/**
@@ -176,7 +176,7 @@ namespace ewol {
 				/**
 				 * @brief add a point reference at the current position (this is a vertex reference at the current position
 				 */
-				void addVertex(void);
+				void addVertex();
 				/**
 				 * @brief draw a line to a specific position
 				 * @param[in] _dest Position of the end of the line.

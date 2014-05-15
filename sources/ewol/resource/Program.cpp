@@ -95,7 +95,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 	updateContext();
 }
 
-ewol::resource::Program::~Program(void) {
+ewol::resource::Program::~Program() {
 	for (size_t iii=0; iii<m_shaderList.size(); iii++) {
 		ewol::resource::Shader::release(m_shaderList[iii]);
 		m_shaderList[iii] = 0;
@@ -158,7 +158,7 @@ int32_t ewol::resource::Program::getUniform(std::string _elementName) {
 	return m_elementList.size()-1;
 }
 
-void ewol::resource::Program::updateContext(void) {
+void ewol::resource::Program::updateContext() {
 	if (true == m_exist) {
 		// Do nothing  == > too dangerous ...
 	} else {
@@ -246,7 +246,7 @@ void ewol::resource::Program::updateContext(void) {
 	}
 }
 
-void ewol::resource::Program::removeContext(void) {
+void ewol::resource::Program::removeContext() {
 	if (true == m_exist) {
 		glDeleteProgram(m_program);
 		m_program = 0;
@@ -257,12 +257,12 @@ void ewol::resource::Program::removeContext(void) {
 	}
 }
 
-void ewol::resource::Program::removeContextToLate(void) {
+void ewol::resource::Program::removeContextToLate() {
 	m_exist = false;
 	m_program = 0;
 }
 
-void ewol::resource::Program::reload(void) {
+void ewol::resource::Program::reload() {
 /* TODO : ...
 	etk::file file(m_name, etk::FILE_TYPE_DATA);
 	if (false == file.Exist()) {
@@ -687,7 +687,7 @@ void ewol::resource::Program::uniform4iv(int32_t _idElem, int32_t _nbElement, co
 #endif
 
 
-void ewol::resource::Program::use(void) {
+void ewol::resource::Program::use() {
 	#ifdef PROGRAM_DISPLAY_SPEED
 		g_startTime = ewol::getTime();
 	#endif
@@ -748,7 +748,7 @@ void ewol::resource::Program::setTexture1(int32_t _idElem, GLint _textureOpenGlI
 }
 
 
-void ewol::resource::Program::unUse(void) {
+void ewol::resource::Program::unUse() {
 	//EWOL_WARNING("Will use program : " << m_program);
 	if (0 == m_program) {
 		return;

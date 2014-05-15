@@ -27,10 +27,10 @@ namespace ewol {
 			public:
 				static void init(ewol::widget::Manager& _widgetManager);
 			public:
-				Slider(void);
-				virtual ~Slider(void);
+				Slider();
+				virtual ~Slider();
 				void setValue(int32_t _val);
-				int32_t getValue(void);
+				int32_t getValue();
 				void setMin(int32_t _val);
 				void setMax(int32_t _val);
 				void setColor(etk::Color<> _newColor) {
@@ -44,9 +44,9 @@ namespace ewol {
 				etk::Color<> m_textColorFg; //!< Text color
 				etk::Color<> m_textColorBg; //!< Background color
 			public: // Derived function
-				virtual void onDraw(void);
-				virtual void calculateMinMaxSize(void);
-				virtual void onRegenerateDisplay(void);
+				virtual void onDraw();
+				virtual void calculateMinMaxSize();
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};

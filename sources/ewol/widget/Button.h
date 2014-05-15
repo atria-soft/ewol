@@ -58,7 +58,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~Button(void);
+				virtual ~Button();
 				/**
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 				 * @param[in] _shaperName The new shaper filename
@@ -78,7 +78,7 @@ namespace ewol {
 				 * @return True : The button is pressed.
 				 * @return false : The button is released.
 				 */
-				bool getValue(void) const {
+				bool getValue() const {
 					return m_value;
 				};
 			protected:
@@ -93,7 +93,7 @@ namespace ewol {
 				 * @brief get the current button lock value.
 				 * @return The requested lock mode
 				 */
-				enum buttonLock getLock(void) const {
+				enum buttonLock getLock() const {
 					return m_lock;
 				};
 			protected:
@@ -108,7 +108,7 @@ namespace ewol {
 				 * @brief get the current toggle mode.
 				 * @return the current toggle mode.
 				 */
-				bool getToggleMode(void) const {
+				bool getToggleMode() const {
 					return m_toggleMode;
 				};
 			private:
@@ -126,23 +126,23 @@ namespace ewol {
 				/**
 				 * @brief update the status with the internal satte of the button ...
 				 */
-				void CheckStatus(void);
+				void CheckStatus();
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 				virtual void calculateSize(const vec2& _availlable);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void onDetectPresenceToggleWidget(void) {
+				virtual void onDetectPresenceToggleWidget() {
 					setToggleMode(true);
 				}
 			private: // derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual void onLostFocus(void);
+				virtual void onLostFocus();
 		};
 	};
 };

@@ -46,7 +46,7 @@ namespace ewol {
 				/**
 				 * @brief Main destructor.
 				 */
-				virtual ~ButtonColor(void);
+				virtual ~ButtonColor();
 				/**
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper).
 				 * @param[in] _shaperName The new shaper filename.
@@ -56,17 +56,17 @@ namespace ewol {
 				 * @brief get the current color of the color selection widget
 				 * @return The current color
 				 */
-				etk::Color<> getValue(void);
+				etk::Color<> getValue();
 				/**
 				 * @brief Specify the current color.
 				 * @param[in] _color The new display color.
 				 */
 				void setValue(etk::Color<> _color);
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 			public: // Derived function
-				virtual void calculateMinMaxSize(void);
-				virtual void onRegenerateDisplay(void);
+				virtual void calculateMinMaxSize();
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			private:

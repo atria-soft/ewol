@@ -31,8 +31,8 @@ namespace ewol {
 				// Event list of properties
 				static const char * const eventClose;
 			public:
-				Parameter(void);
-				~Parameter(void);
+				Parameter();
+				~Parameter();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onObjectRemove(ewol::Object * _removeObject);
@@ -40,8 +40,8 @@ namespace ewol {
 				void setTitle(std::string _label);
 				void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
 				void menuAddGroup(std::string _label);
-				void menuClear(void);
-				void menuSeparator(void);
+				void menuClear();
+				void menuSeparator();
 			private:
 				int32_t                 m_currentIdList;
 				ewol::widget::Label*          m_widgetTitle;

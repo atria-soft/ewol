@@ -36,37 +36,37 @@ namespace ewol {
 				void setType(enum ewol::key::type _type) {
 					m_type = _type;
 				};
-				inline const enum ewol::key::type& getType(void) const {
+				inline const enum ewol::key::type& getType() const {
 					return m_type;
 				};
 				void setStatus(enum ewol::key::status _status) {
 					m_status = _status;
 				};
-				inline const enum ewol::key::status& getStatus(void) const {
+				inline const enum ewol::key::status& getStatus() const {
 					return m_status;
 				};
 				void setId(uint8_t _id) {
 					m_inputId = _id;
 				};
-				inline const uint8_t& getId(void) const {
+				inline const uint8_t& getId() const {
 					return m_inputId;
 				};
 				void setPos(const vec2& _pos) {
 					m_pos = _pos;
 				};
-				inline const vec2& getPos(void) const {
+				inline const vec2& getPos() const {
 					return m_pos;
 				};
 				void setSpecialKey(const ewol::key::Special& _specialKey) {
 					m_specialKey = _specialKey;
 				};
-				inline const ewol::key::Special& getSpecialKey(void) const {
+				inline const ewol::key::Special& getSpecialKey() const {
 					return m_specialKey;
 				};
 				/**
 				 * @brief Reset the input property of the curent event.
 				 */
-				void reset(void) const {
+				void reset() const {
 					// TODO : Call the entry element ant rest it ...
 				}
 		};
@@ -92,13 +92,13 @@ namespace ewol {
 				void setDestWidget(ewol::Widget* _dest) {
 					m_dest = _dest;
 				};
-				inline ewol::Widget* getDestWidget(void) const {
+				inline ewol::Widget* getDestWidget() const {
 					return m_dest;
 				};
 				void setRealId(int32_t _realIdEvent) {
 					m_realIdEvent = _realIdEvent;
 				};
-				inline int32_t getRealId(void) const {
+				inline int32_t getRealId() const {
 					return m_realIdEvent;
 				};
 		};

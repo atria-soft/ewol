@@ -37,7 +37,7 @@ ewol::resource::Shader::Shader(const std::string& _filename) :
 	reload();
 }
 
-ewol::resource::Shader::~Shader(void) {
+ewol::resource::Shader::~Shader() {
 	if (NULL != m_fileData) {
 		delete [] m_fileData;
 		m_fileData = NULL;
@@ -57,7 +57,7 @@ static void checkGlError(const char* _op) {
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
-void ewol::resource::Shader::updateContext(void) {
+void ewol::resource::Shader::updateContext() {
 	if (true == m_exist) {
 		// Do nothing  == > too dangerous ...
 	} else {
@@ -98,7 +98,7 @@ void ewol::resource::Shader::updateContext(void) {
 	}
 }
 
-void ewol::resource::Shader::removeContext(void) {
+void ewol::resource::Shader::removeContext() {
 	if (true == m_exist) {
 		glDeleteShader(m_shader);
 		m_exist = false;
@@ -106,12 +106,12 @@ void ewol::resource::Shader::removeContext(void) {
 	}
 }
 
-void ewol::resource::Shader::removeContextToLate(void) {
+void ewol::resource::Shader::removeContextToLate() {
 	m_exist = false;
 	m_shader = 0;
 }
 
-void ewol::resource::Shader::reload(void) {
+void ewol::resource::Shader::reload() {
 	etk::FSNode file(m_name);
 	if (false == file.exist()) {
 		EWOL_ERROR("File does not Exist : '" << file << "' : '" << file.getFileSystemName() << "'");

@@ -37,14 +37,14 @@
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& mutexInterface(void) {
+static etk::Mutex& mutexInterface() {
 	static etk::Mutex s_interfaceMutex;
 	return s_interfaceMutex;
 }
 
 
 static ewol::Context* l_curentInterface=NULL;
-ewol::Context& ewol::getContext(void) {
+ewol::Context& ewol::getContext() {
 	#if DEBUG_LEVEL > 2
 		if(NULL == l_curentInterface){
 			EWOL_CRITICAL("[CRITICAL] try acces at an empty interface");
@@ -65,7 +65,7 @@ void ewol::Context::setInitImage(const std::string& _fileName) {
  * @brief set the curent interface.
  * @note this lock the main mutex
  */
-void ewol::Context::lockContext(void) {
+void ewol::Context::lockContext() {
 	mutexInterface().lock();
 	l_curentInterface = this;
 }
@@ -74,7 +74,7 @@ void ewol::Context::lockContext(void) {
  * @brief set the curent interface at NULL.
  * @note this un-lock the main mutex
  */
-void ewol::Context::unLockContext(void) {
+void ewol::Context::unLockContext() {
 	l_curentInterface = NULL;
 	mutexInterface().unLock();
 }
@@ -116,7 +116,7 @@ namespace ewol {
 			enum ewol::key::keyboard keyboardMove;
 			ewol::key::Special            keyboardSpecial;
 			
-			eSystemMessage(void) :
+			eSystemMessage() :
 				TypeMessage(msgNone),
 				clipboardID(ewol::context::clipBoard::clipboardStd),
 				inputType(ewol::key::typeUnknow),
@@ -143,11 +143,11 @@ void ewol::Context::inputEventGrabPointer(ewol::Widget* _widget) {
 	m_input.grabPointer(_widget);
 }
 
-void ewol::Context::inputEventUnGrabPointer(void) {
+void ewol::Context::inputEventUnGrabPointer() {
 	m_input.unGrabPointer();
 }
 
-void ewol::Context::processEvents(void) {
+void ewol::Context::processEvents() {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
 	ewol::eSystemMessage* data = NULL;
@@ -373,7 +373,7 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 	EWOL_INFO(" == > Ewol system init (END)");
 }
 
-ewol::Context::~Context(void) {
+ewol::Context::~Context() {
 	EWOL_INFO(" == > Ewol system Un-Init (BEGIN)");
 	// TODO : Clean the message list ...
 	// set the curent interface :
@@ -395,7 +395,7 @@ ewol::Context::~Context(void) {
 	EWOL_INFO(" == > Ewol system Un-Init (END)");
 }
 
-void ewol::Context::requestUpdateSize(void) {
+void ewol::Context::requestUpdateSize() {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
 	if (data == NULL) {
 		EWOL_ERROR("allocationerror of message");
@@ -515,7 +515,7 @@ void ewol::Context::OS_SetKeyboardMove(ewol::key::Special& _special,
 	m_msgSystem.post(data);
 }
 
-void ewol::Context::OS_Hide(void) {
+void ewol::Context::OS_Hide() {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
 	if (data == NULL) {
 		EWOL_ERROR("allocationerror of message");
@@ -525,7 +525,7 @@ void ewol::Context::OS_Hide(void) {
 	m_msgSystem.post(data);
 }
 
-void ewol::Context::OS_Show(void) {
+void ewol::Context::OS_Show() {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
 	if (data == NULL) {
 		EWOL_ERROR("allocationerror of message");
@@ -653,11 +653,11 @@ void ewol::Context::onObjectRemove(ewol::Object * _removeObject) {
 	m_input.onObjectRemove(_removeObject);
 }
 
-void ewol::Context::resetIOEvent(void) {
+void ewol::Context::resetIOEvent() {
 	m_input.newLayerSet();
 }
 
-void ewol::Context::OS_OpenGlContextDestroy(void) {
+void ewol::Context::OS_OpenGlContextDestroy() {
 	m_resourceManager.contextHasBeenDestroyed();
 }
 
@@ -673,14 +673,14 @@ void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
 	forceRedrawAll();
 }
 
-void ewol::Context::forceRedrawAll(void) {
+void ewol::Context::forceRedrawAll() {
 	if (m_windowsCurrent == NULL) {
 		return;
 	}
 	m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
 }
 
-void ewol::Context::OS_Stop(void) {
+void ewol::Context::OS_Stop() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Stop...");
@@ -691,7 +691,7 @@ void ewol::Context::OS_Stop(void) {
 	unLockContext();
 }
 
-void ewol::Context::OS_Suspend(void) {
+void ewol::Context::OS_Suspend() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Suspend...");
@@ -703,7 +703,7 @@ void ewol::Context::OS_Suspend(void) {
 	unLockContext();
 }
 
-void ewol::Context::OS_Resume(void) {
+void ewol::Context::OS_Resume() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Resume...");
@@ -715,7 +715,7 @@ void ewol::Context::OS_Resume(void) {
 	// release the curent interface :
 	unLockContext();
 }
-void ewol::Context::OS_Foreground(void) {
+void ewol::Context::OS_Foreground() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Foreground...");
@@ -726,7 +726,7 @@ void ewol::Context::OS_Foreground(void) {
 	unLockContext();
 }
 
-void ewol::Context::OS_Background(void) {
+void ewol::Context::OS_Background() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Background...");
@@ -738,7 +738,7 @@ void ewol::Context::OS_Background(void) {
 }
 
 
-void ewol::Context::stop(void) {
+void ewol::Context::stop() {
 	
 }
 
@@ -750,11 +750,11 @@ void ewol::Context::setPos(const vec2& _pos) {
 	EWOL_INFO("setPos: NOT implemented ...");
 }
 
-void ewol::Context::hide(void) {
+void ewol::Context::hide() {
 	EWOL_INFO("hide: NOT implemented ...");
 };
 
-void ewol::Context::show(void) {
+void ewol::Context::show() {
 	EWOL_INFO("show: NOT implemented ...");
 }
 
@@ -762,12 +762,12 @@ void ewol::Context::setTitle(const std::string& _title) {
 	EWOL_INFO("setTitle: NOT implemented ...");
 }
 
-void ewol::Context::keyboardShow(void) {
+void ewol::Context::keyboardShow() {
 	EWOL_INFO("keyboardShow: NOT implemented ...");
 }
 
 
-void ewol::Context::keyboardHide(void) {
+void ewol::Context::keyboardHide() {
 	EWOL_INFO("keyboardHide: NOT implemented ...");
 }
 

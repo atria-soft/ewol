@@ -41,7 +41,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~PopUp(void);
+				virtual ~PopUp();
 				/**
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 				 * @param[in] _shaperName The new shaper filename
@@ -69,23 +69,23 @@ namespace ewol {
 				 * @brief get the status of the request the Auto-remove when the event input is set outside the widget.
 				 * @return the status of the removing
 				 */
-				bool getRemoveOnExternClick(void) const {
+				bool getRemoveOnExternClick() const {
 					return m_closeOutEvent;
 				};
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual void calculateSize(const vec2& _available);
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 			protected:
 				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
-				virtual void onStopAnnimation(void);
+				virtual void onStopAnnimation();
 		};
 	};
 };

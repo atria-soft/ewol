@@ -52,7 +52,7 @@ namespace ewol {
 				int32_t m_dpi;
 				InputLimit m_eventInputLimit;
 				InputLimit m_eventMouseLimit;
-				void calculateLimit(void);
+				void calculateLimit();
 				InputPoperty m_eventInputSaved[MAX_MANAGE_INPUT];
 				InputPoperty m_eventMouseSaved[MAX_MANAGE_INPUT];
 				void abortElement(InputPoperty* _eventTable, int32_t _idInput, enum ewol::key::type _type);
@@ -87,7 +87,7 @@ namespace ewol {
 				ewol::Context& m_context;
 			public:
 				InputManager(ewol::Context& _context);
-				~InputManager(void);
+				~InputManager();
 				void setDpi(int32_t _newDPI);
 				
 				// note if id<0  == > the it was finger event ...
@@ -103,7 +103,7 @@ namespace ewol {
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
 				 */
-				void newLayerSet(void);
+				void newLayerSet();
 				/**
 				 * @brief This is to transfert the event from one widget to another one
 				 * @param _source the widget where the event came from
@@ -118,7 +118,7 @@ namespace ewol {
 				/**
 				 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 				 */
-				void unGrabPointer(void);
+				void unGrabPointer();
 			private:
 				ewol::key::Special m_specialKey;
 			public:

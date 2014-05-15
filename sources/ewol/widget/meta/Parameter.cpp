@@ -27,7 +27,7 @@ static const char * const ewolEventParameterValidate = "ewol-event-parameter-val
 static const char * const ewolEventParameterSave     = "ewol-event-parameter-save";
 static const char * const l_eventMenuSelected = "local-event-menu-selected";
 
-ewol::widget::Parameter::Parameter(void) :
+ewol::widget::Parameter::Parameter() :
   m_currentIdList(0),
   m_widgetTitle(NULL),
   m_paramList(NULL) {
@@ -184,7 +184,7 @@ ewol::widget::Parameter::Parameter(void) :
 	markToRedraw();
 }
 
-ewol::widget::Parameter::~Parameter(void) {
+ewol::widget::Parameter::~Parameter() {
 	
 }
 
@@ -262,14 +262,14 @@ void ewol::widget::Parameter::menuAddGroup(std::string _label) {
 	}
 }
 
-void ewol::widget::Parameter::menuClear(void) {
+void ewol::widget::Parameter::menuClear() {
 	if (NULL != m_paramList) {
 		m_paramList->menuClear();
 		m_currentIdList = 0;
 	}
 }
 
-void ewol::widget::Parameter::menuSeparator(void) {
+void ewol::widget::Parameter::menuSeparator() {
 	if (NULL != m_paramList) {
 		m_paramList->menuSeparator();
 	}

@@ -29,41 +29,41 @@ namespace ewol {
 				bool m_loaded;
 			// Ewol internal API:
 			public:
-				void updateContext(void);
-				void removeContext(void);
-				void removeContextToLate(void);
+				void updateContext();
+				void removeContext();
+				void removeContextToLate();
 			// middleware interface:
 			public:
-				GLuint getId(void) const {
+				GLuint getId() const {
 					return m_texId;
 				};
-				const vec2& getUsableSize(void) const {
+				const vec2& getUsableSize() const {
 					return m_endPointSize;
 				};
-				const ivec2& getOpenGlSize(void) const {
+				const ivec2& getOpenGlSize() const {
 					return m_data.getSize();
 				};
 			// Public API:
 			protected:
 				Texture(const std::string& _filename);
-				Texture(void);
-				~Texture(void);
+				Texture();
+				~Texture();
 			public:
 				// you must set the size here, because it will be set in multiple of pow(2)
 				void setImageSize(ivec2 newSize);
 				// get the reference on this image to draw nomething on it ...
-				inline egami::Image& get(void) {
+				inline egami::Image& get() {
 					return m_data;
 				};
 				// flush the data to send it at the openGl system
-				void flush(void);
+				void flush();
 			public:
 				/**
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @return pointer on the resource or NULL if an error occured.
 				 */
-				static ewol::resource::Texture* keep(void);
+				static ewol::resource::Texture* keep();
 				/**
 				 * @brief release the keeped resources
 				 * @param[in,out] reference on the object pointer

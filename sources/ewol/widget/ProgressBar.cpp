@@ -14,7 +14,7 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::ProgressBar();
 }
 
@@ -29,7 +29,7 @@ const char* const ewol::widget::ProgressBar::configValue = "value";
 
 const int32_t dotRadius = 6;
 
-ewol::widget::ProgressBar::ProgressBar(void) {
+ewol::widget::ProgressBar::ProgressBar() {
 	addObjectType("ewol::widget::ProgressBar");
 	m_value = 0.0;
 	
@@ -47,11 +47,11 @@ ewol::widget::ProgressBar::ProgressBar(void) {
 	
 }
 
-ewol::widget::ProgressBar::~ProgressBar(void) {
+ewol::widget::ProgressBar::~ProgressBar() {
 	
 }
 
-void ewol::widget::ProgressBar::calculateMinMaxSize(void) {
+void ewol::widget::ProgressBar::calculateMinMaxSize() {
 	vec2 tmpMin = m_userMinSize.getPixel();
 	m_minSize.setValue( etk_max(tmpMin.x(), 40),
 	                    etk_max(tmpMin.y(), dotRadius*2) );
@@ -63,11 +63,11 @@ void ewol::widget::ProgressBar::setValue(float _val) {
 	markToRedraw();
 }
 
-void ewol::widget::ProgressBar::onDraw(void) {
+void ewol::widget::ProgressBar::onDraw() {
 	m_draw.draw();
 }
 
-void ewol::widget::ProgressBar::onRegenerateDisplay(void) {
+void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		m_draw.clear();

@@ -16,7 +16,7 @@
 #undef __class__
 #define __class__ "Image"
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Image();
 }
 
@@ -58,7 +58,7 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
 	set(_file, _border);
 }
 
-ewol::widget::Image::~Image(void) {
+ewol::widget::Image::~Image() {
 	ewol::resource::ColorFile::release(m_colorProperty);
 }
 
@@ -139,11 +139,11 @@ void ewol::widget::Image::set(const std::string& _file, const ewol::Dimension& _
 	setFile(_file);
 }
 
-void ewol::widget::Image::onDraw(void) {
+void ewol::widget::Image::onDraw() {
 	m_compositing.draw();
 }
 
-void ewol::widget::Image::onRegenerateDisplay(void) {
+void ewol::widget::Image::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// remove data of the previous composition :
 		m_compositing.clear();
@@ -197,7 +197,7 @@ void ewol::widget::Image::onRegenerateDisplay(void) {
 	}
 }
 
-void ewol::widget::Image::calculateMinMaxSize(void) {
+void ewol::widget::Image::calculateMinMaxSize() {
 	vec2 imageBoder = m_border.getPixel()*2.0f;
 	vec2 imageSize = m_imageSize.getPixel();
 	if (imageSize!=vec2(0,0)) {

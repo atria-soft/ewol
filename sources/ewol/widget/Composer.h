@@ -30,7 +30,7 @@ namespace ewol {
 				/**
 				 * @brief Constructor
 				 */
-				Composer(void);
+				Composer();
 				/**
 				 * @brief Constructor
 				 * @param[in] _mode mode of parsing the string
@@ -40,7 +40,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Composer(void);
+				~Composer();
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _fileName Name of the file

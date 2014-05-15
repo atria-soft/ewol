@@ -32,7 +32,7 @@ namespace ewol {
 				int32_t m_lastRawHeigh;
 			protected:
 				DistanceFieldFont(const std::string& _fontName);
-				~DistanceFieldFont(void);
+				~DistanceFieldFont();
 			public:
 				float getDisplayRatio(float _size);
 				/**
@@ -89,15 +89,15 @@ namespace ewol {
 				float m_borderSize; //!< number of pixel added on the border of a glyph
 				vec2 m_textureBorderSize; //!< Transformed the border size in the texture dimention
 			public:
-				float getPixelBorderSize(void) {
+				float getPixelBorderSize() {
 					return m_borderSize;
 				}
-				const vec2& getTextureBorderSize(void) {
+				const vec2& getTextureBorderSize() {
 					return m_textureBorderSize;
 				}
 			public:
-				void exportOnFile(void);
-				bool importFromFile(void);
+				void exportOnFile();
+				bool importFromFile();
 		};
 	};
 };

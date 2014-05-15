@@ -23,19 +23,19 @@ namespace ewol {
 				// Event list of properties
 				static const char * const eventChange;
 			public:
-				ColorBar(void);
-				virtual ~ColorBar(void);
-				etk::Color<> getCurrentColor(void);
+				ColorBar();
+				virtual ~ColorBar();
+				etk::Color<> getCurrentColor();
 				void setCurrentColor(etk::Color<> _newOne);
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
 				etk::Color<> m_currentColor;
 				vec2 m_currentUserPos;
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 			public: // Derived function
-				virtual void calculateMinMaxSize(void);
-				virtual void onRegenerateDisplay(void);
+				virtual void calculateMinMaxSize();
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};

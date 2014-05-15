@@ -23,9 +23,9 @@ namespace ewol {
 			private:
 				TextureFile(const std::string& _genName);
 				TextureFile(std::string _genName, const std::string& _fileName, const ivec2& _size);
-				virtual ~TextureFile(void) { };
+				virtual ~TextureFile() { };
 			public:
-				const vec2& getRealSize(void) {
+				const vec2& getRealSize() {
 					return m_realImageSize;
 				};
 			public:

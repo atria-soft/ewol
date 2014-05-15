@@ -35,8 +35,8 @@ namespace ewol {
 					sladingTransition_count,
 				};
 			public:
-				WSlider(void);
-				virtual ~WSlider(void);
+				WSlider();
+				virtual ~WSlider();
 			private:
 				int32_t m_windowsSources; //!< widget source viewed
 				int32_t m_windowsDestination; //!< widget destinated viewed
@@ -78,7 +78,7 @@ namespace ewol {
 				 * @brief get transition speed element.
 				 * @return number of second needed to do the transition.
 				 */
-				float getTransitionSpeed(void) const {
+				float getTransitionSpeed() const {
 					return m_transitionSpeed;
 				};
 			private:
@@ -93,13 +93,13 @@ namespace ewol {
 				 * @brief get a new mode of sliding element
 				 * @return The current sliding mode
 				 */
-				enum sladingMode getTransitionMode(void) {
+				enum sladingMode getTransitionMode() {
 					return m_transitionSlide;
 				};
 			public: // Derived function
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

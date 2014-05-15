@@ -29,23 +29,23 @@ namespace ewol {
 	 * @brief get EWOL version
 	 * @return The string that describe ewol version
 	 */
-	std::string getVersion(void);
+	std::string getVersion();
 	/**
 	 * @brief get current time in us...
 	 * @return The current time
 	 * @note is implemented by the OS implementation cf renderer/X11/...
 	 */
-	int64_t getTime(void);
+	int64_t getTime();
 	/**
 	 * @brief get compilation mode (release/debug)
 	 * @return the string of the mode of commpilation
 	 */
-	std::string getCompilationMode(void);
+	std::string getCompilationMode();
 	/**
 	 * @brief get the board type (Android/Linux/MacOs/...)
 	 * @return the string of the mode of commpilation
 	 */
-	std::string getBoardType(void);
+	std::string getBoardType();
 };
 
 #endif

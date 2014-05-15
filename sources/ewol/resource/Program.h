@@ -63,7 +63,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor, remove the current Program.
 				 */
-				virtual ~Program(void);
+				virtual ~Program();
 			public:
 				/**
 				 * @brief User request an attribute on this program.
@@ -263,7 +263,7 @@ namespace ewol {
 				/**
 				 * @brief Request the processing of this program
 				 */
-				void use(void);
+				void use();
 				/**
 				 * @brief set the testure Id on the specify uniform element.
 				 * @param[in] _idElem Id of the uniform that might be sended.
@@ -274,24 +274,24 @@ namespace ewol {
 				/**
 				 * @brief Stop the processing of this program
 				 */
-				void unUse(void);
+				void unUse();
 				/**
 				 * @brief This load/reload the data in the opengl context, needed when removed previously.
 				 */
-				void updateContext(void);
+				void updateContext();
 				/**
 				 * @brief remove the data from the opengl context.
 				 */
-				void removeContext(void);
+				void removeContext();
 				/**
 				 * @brief Special android spec! It inform us that all context is removed and after notify us...
 				 */
-				void removeContextToLate(void);
+				void removeContextToLate();
 				/**
 				 * @brief Relode the shader from the file. used when a request of resouces reload is done.
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
-				void reload(void);
+				void reload();
 			public:
 				/**
 				 * @brief keep the resource pointer.

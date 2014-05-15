@@ -36,8 +36,8 @@ namespace ewol {
 				static const char* const configSelect;
 				// TODO : Add a standalone configuration ..
 			public:
-				ListFileSystem(void);
-				~ListFileSystem(void);
+				ListFileSystem();
+				~ListFileSystem();
 			protected:
 				ewol::resource::ColorFile* m_colorProperty; //!< theme color property.
 				int32_t m_colorIdText; //!< Color of the text.
@@ -45,10 +45,10 @@ namespace ewol {
 				int32_t m_colorIdBackground2; //!< Color of the Background 2.
 				int32_t m_colorIdBackgroundSelected; //!< Color of line selected.
 			protected : // Derived function from the List...
-				virtual etk::Color<> getBasicBG(void);
-				virtual uint32_t getNuberOfColomn(void);
+				virtual etk::Color<> getBasicBG();
+				virtual uint32_t getNuberOfColomn();
 				virtual bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
-				virtual uint32_t getNuberOfRaw(void);
+				virtual uint32_t getNuberOfRaw();
 				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
 				virtual bool onItemEvent(int32_t _IdInput, enum ewol::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
 			protected:
@@ -56,11 +56,11 @@ namespace ewol {
 				/**
 				 * @brief Clean the list of element.
 				 */
-				void clearList(void);
+				void clearList();
 				/**
 				 * @brief Regenerate the content of the view. this is actually not automation on the system update.
 				 */
-				virtual void regenerateView(void);
+				virtual void regenerateView();
 			protected:
 				int32_t m_selectedLine; //!< Current Line ID that is selected
 			public:
@@ -73,7 +73,7 @@ namespace ewol {
 				 * @brief Get the current selected file/folder/... in the list
 				 * @return the String of the element selected.
 				 */
-				std::string getSelect(void) const ;
+				std::string getSelect() const ;
 			protected:
 				std::string m_folder; //!< Current folder that display point on.
 			public:
@@ -89,7 +89,7 @@ namespace ewol {
 				 * @brief Get the element current displaying folder path.
 				 * @return Path on the folder.
 				 */
-				const std::string& getFolder(void) const {
+				const std::string& getFolder() const {
 					return m_folder;
 				};
 			protected:
@@ -107,7 +107,7 @@ namespace ewol {
 				 * @brief Get the status of the displaying files or Not.
 				 * @return The status on displaying the 'file'.
 				 */
-				bool getShowFiles(void) const {
+				bool getShowFiles() const {
 					return m_showFile;
 				};
 			protected:
@@ -125,7 +125,7 @@ namespace ewol {
 				 * @brief Get the status of the displaying fodlers or Not.
 				 * @return The status on displaying the 'folder'.
 				 */
-				bool getShowFolder(void) const {
+				bool getShowFolder() const {
 					return m_showFile;
 				};
 			protected:
@@ -143,7 +143,7 @@ namespace ewol {
 				 * @brief Get the status of the displaying hidden files or folder or Not.
 				 * @return The status on displaying the hidden element.
 				 */
-				bool getShowHidden(void) const {
+				bool getShowHidden() const {
 					return m_showFile;
 				};
 			protected:
@@ -161,7 +161,7 @@ namespace ewol {
 				 * @brief Get the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
 				 * @return The status on displaying temporary files.
 				 */
-				bool getShowTemporaryFiles(void) const {
+				bool getShowTemporaryFiles() const {
 					return m_showFile;
 				};
 			public: // glocal derived functions

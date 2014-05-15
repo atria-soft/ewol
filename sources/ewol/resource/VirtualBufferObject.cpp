@@ -26,15 +26,15 @@ ewol::resource::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
 	EWOL_DEBUG("OGL : load VBO count=\"" << _number << "\"");
 }
 
-ewol::resource::VirtualBufferObject::~VirtualBufferObject(void) {
+ewol::resource::VirtualBufferObject::~VirtualBufferObject() {
 	removeContext();
 }
 
-void ewol::resource::VirtualBufferObject::retreiveData(void) {
+void ewol::resource::VirtualBufferObject::retreiveData() {
 	EWOL_ERROR("TODO ... ");
 }
 
-void ewol::resource::VirtualBufferObject::updateContext(void) {
+void ewol::resource::VirtualBufferObject::updateContext() {
 	if (false == m_exist) {
 		// Allocate and assign a Vertex Array Object to our handle
 		glGenBuffers(m_nbVBO, m_vbo);
@@ -54,7 +54,7 @@ void ewol::resource::VirtualBufferObject::updateContext(void) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ewol::resource::VirtualBufferObject::removeContext(void) {
+void ewol::resource::VirtualBufferObject::removeContext() {
 	if (true == m_exist) {
 		EWOL_INFO("VBO: remove [" << getId() << "] OGl_Id=" << m_vbo[0]
 		                                             << "/" << m_vbo[1]
@@ -68,19 +68,19 @@ void ewol::resource::VirtualBufferObject::removeContext(void) {
 	}
 }
 
-void ewol::resource::VirtualBufferObject::removeContextToLate(void) {
+void ewol::resource::VirtualBufferObject::removeContextToLate() {
 	m_exist = false;
 	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii] = 0;
 	}
 }
 
-void ewol::resource::VirtualBufferObject::reload(void) {
+void ewol::resource::VirtualBufferObject::reload() {
 	removeContext();
 	updateContext();
 }
 
-void ewol::resource::VirtualBufferObject::flush(void) {
+void ewol::resource::VirtualBufferObject::flush() {
 	// request to the manager to be call at the next update ...
 	getManager().update(this);
 }

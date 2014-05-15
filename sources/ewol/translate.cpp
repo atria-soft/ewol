@@ -21,7 +21,7 @@ class LocalInstanceTranslation {
 		bool m_translateLoadad;
 		std::map<std::string,std::string> m_translate;
 	public:
-		LocalInstanceTranslation(void) :
+		LocalInstanceTranslation() :
 		  m_major("ewol"),
 		  m_languageDefault("EN"),
 		  m_language(""),
@@ -63,7 +63,7 @@ class LocalInstanceTranslation {
 			m_translate.clear();
 		};
 		
-		const std::string& getLanguageDefault(void) {
+		const std::string& getLanguageDefault() {
 			return m_languageDefault;
 		};
 		
@@ -99,7 +99,7 @@ class LocalInstanceTranslation {
 			}
 		};
 		
-		const std::string& getLanguage(void) {
+		const std::string& getLanguage() {
 			return m_language;
 		};
 		
@@ -113,7 +113,7 @@ class LocalInstanceTranslation {
 			return it->second;
 		};
 	private:
-		void loadTranslation(void) {
+		void loadTranslation() {
 			if (m_translateLoadad == true) {
 				return;
 			}
@@ -179,7 +179,7 @@ class LocalInstanceTranslation {
 		
 };
 
-static LocalInstanceTranslation& getInstanceTranslation(void) {
+static LocalInstanceTranslation& getInstanceTranslation() {
 	static LocalInstanceTranslation g_val;
 	return g_val;
 }
@@ -196,7 +196,7 @@ void ewol::translate::setLanguageDefault(const std::string& _lang) {
 	getInstanceTranslation().setLanguageDefault(_lang);
 }
 
-const std::string& ewol::translate::getLanguageDefault(void) {
+const std::string& ewol::translate::getLanguageDefault() {
 	return getInstanceTranslation().getLanguageDefault();
 }
 
@@ -204,11 +204,11 @@ void ewol::translate::setLanguage(const std::string& _lang) {
 	getInstanceTranslation().setLanguage(_lang);
 }
 
-const std::string& ewol::translate::getLanguage(void) {
+const std::string& ewol::translate::getLanguage() {
 	return getInstanceTranslation().getLanguage();
 }
 
-void ewol::translate::autoDetectLanguage(void) {
+void ewol::translate::autoDetectLanguage() {
 	EWOL_INFO("Auto-detect language of system");
 	#if defined(__TARGET_OS__Linux)
 		char *s = getenv("LANG");

@@ -39,7 +39,7 @@ namespace ewol {
 				static const char* const configShaper;
 			public:
 				ContextMenu(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
-				virtual ~ContextMenu(void);
+				virtual ~ContextMenu();
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			public:
@@ -61,14 +61,14 @@ namespace ewol {
 			public:
 				void setPositionMark(enum markPosition position, vec2 arrowPos);
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void calculateSize(const vec2& availlable);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 		};
 	};

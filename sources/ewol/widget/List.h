@@ -22,9 +22,9 @@ namespace ewol {
 		 */
 		class List : public ewol::widget::WidgetScrolled {
 			public:
-				List(void);
-				virtual ~List(void);
-				virtual void calculateMinMaxSize(void);
+				List();
+				virtual ~List();
+				virtual void calculateMinMaxSize();
 				void setLabel(std::string _newLabel);
 			// drawing capabilities ....
 			private:
@@ -32,7 +32,7 @@ namespace ewol {
 				std::vector<ivec2 > m_lineSize;
 			public:
 				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
-				void clearOObjectList(void);
+				void clearOObjectList();
 			// list properties ...
 			private:
 				int32_t m_paddingSizeX;
@@ -42,17 +42,17 @@ namespace ewol {
 				int32_t m_nbVisibleRaw; // set the number of visible raw (calculate don display)
 			protected:
 				// function call to display the list :
-				virtual etk::Color<> getBasicBG(void) {
+				virtual etk::Color<> getBasicBG() {
 					return etk::Color<>(0xFFFFFFFF);
 				}
-				virtual uint32_t getNuberOfColomn(void) {
+				virtual uint32_t getNuberOfColomn() {
 					return 1;
 				};
 				virtual bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
 					_myTitle = "";
 					return false;
 				};
-				virtual uint32_t getNuberOfRaw(void) {
+				virtual uint32_t getNuberOfRaw() {
 					return 0;
 				};
 				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
@@ -75,11 +75,11 @@ namespace ewol {
 				 */
 				void setRawVisible(int32_t _id);
 			protected: // Derived function
-				virtual void onGetFocus(void);
-				virtual void onLostFocus(void);
-				virtual void onDraw(void);
+				virtual void onGetFocus();
+				virtual void onLostFocus();
+				virtual void onDraw();
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};

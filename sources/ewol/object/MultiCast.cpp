@@ -13,12 +13,12 @@
 #undef __class__
 #define __class__ "object::MultiCast"
 
-ewol::object::MultiCast::MultiCast(void) {
+ewol::object::MultiCast::MultiCast() {
 	EWOL_INFO("EObject message Multi-Cast");
 }
 
 
-ewol::object::MultiCast::~MultiCast(void) {
+ewol::object::MultiCast::~MultiCast() {
 	EWOL_INFO("EObject message Multi-Cast");
 	m_messageList.clear();
 }

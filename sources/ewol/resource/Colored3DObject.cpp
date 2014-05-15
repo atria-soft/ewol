@@ -14,7 +14,7 @@
 #define __class__	"resource::Colored3DObject"
 
 
-ewol::resource::Colored3DObject::Colored3DObject(void) :
+ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(NULL) {
 	addObjectType("ewol::Colored3DObject");
 	// get the shader resource :
@@ -27,7 +27,7 @@ ewol::resource::Colored3DObject::Colored3DObject(void) :
 	}
 }
 
-ewol::resource::Colored3DObject::~Colored3DObject(void) {
+ewol::resource::Colored3DObject::~Colored3DObject() {
 	// remove dynamics dependencies :
 	ewol::resource::Program::release(m_GLprogram);
 }
@@ -155,7 +155,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	}
 }
 
-ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep(void) {
+ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep() {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
 	ewol::resource::Colored3DObject* object = new ewol::resource::Colored3DObject();

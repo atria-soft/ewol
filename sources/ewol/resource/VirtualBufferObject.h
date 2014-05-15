@@ -38,7 +38,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor of this VBO.
 				 */
-				virtual ~VirtualBufferObject(void);
+				virtual ~VirtualBufferObject();
 			public:
 				/**
 				 * @brief get the real openGL ID.
@@ -70,28 +70,28 @@ namespace ewol {
 				/**
 				 * @brief get the data from the graphic card.
 				 */
-				void retreiveData(void);
+				void retreiveData();
 				/**
 				 * @brief Send the data to the graphic card.
 				 */
-				void flush(void);
+				void flush();
 				/**
 				 * @brief This load/reload the data in the opengl context, needed when removed previously.
 				 */
-				void updateContext(void);
+				void updateContext();
 				/**
 				 * @brief remove the data from the opengl context.
 				 */
-				void removeContext(void);
+				void removeContext();
 				/**
 				 * @brief Special android spec! It inform us that all context is removed and after notify us...
 				 */
-				void removeContextToLate(void);
+				void removeContextToLate();
 				/**
 				 * @brief Relode the shader from the file. used when a request of resouces reload is done.
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
-				void reload(void);
+				void reload();
 			public:
 				/**
 				 * @brief keep the resource pointer.

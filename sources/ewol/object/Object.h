@@ -56,7 +56,7 @@ namespace ewol {
 			/**
 			 * @brief Constructor.
 			 */
-			Object(void);
+			Object();
 			/**
 			 * @brief Constructor.
 			 * @param[in] _name Name of the Object.
@@ -65,17 +65,17 @@ namespace ewol {
 			/**
 			 * @brief Destructor
 			 */
-			virtual ~Object(void);
+			virtual ~Object();
 		protected:
 			/**
 			 * @brief Auto-destroy the object
 			 */
-			void autoDestroy(void);
+			void autoDestroy();
 		public:
 			/**
 			 * @brief Asynchronous removing the object
 			 */
-			void removeObject(void);
+			void removeObject();
 		private:
 			std::vector<const char*> m_listType;
 		public:
@@ -83,12 +83,12 @@ namespace ewol {
 			 * @brief get the current Object type of the Object
 			 * @return the last type name of the element
 			 */
-			const char * const getObjectType(void);
+			const char * const getObjectType();
 			/**
 			 * @brief Get the herarchie of the Object type.
 			 * @return descriptive string.
 			 */
-			std::string getTypeDescription(void);
+			std::string getTypeDescription();
 			/**
 			 * @brief check  if the element herited from a specific type
 			 * @param[in] _type Type to check.
@@ -108,7 +108,7 @@ namespace ewol {
 			 * @brief get the static status of the Object  == > mark at true if the user set the object mark as static allocated element ==> not auto remove element
 			 * @return true if it might not be removed  == > usefull for conficuration class
 			 */
-			bool getStatic(void){
+			bool getStatic(){
 				return m_static;
 			};
 		private:
@@ -118,7 +118,7 @@ namespace ewol {
 			 * @brief get the UniqueId of the Object
 			 * @return the requested ID
 			 */
-			int32_t getId(void){
+			int32_t getId(){
 				return m_uniqueId;
 			};
 		private:
@@ -213,7 +213,7 @@ namespace ewol {
 			 * @brief get all the configuration list
 			 * @return The list of all parameter availlable in the widget
 			 */
-			virtual const std::vector<ewol::object::ConfigElement>& getConfigList(void) {
+			virtual const std::vector<ewol::object::ConfigElement>& getConfigList() {
 				return m_listConfig;
 			};
 			/**
@@ -242,7 +242,7 @@ namespace ewol {
 			 * @brief get the Object name
 			 * @return The requested name
 			 */
-			const std::string& getName(void) const {
+			const std::string& getName() const {
 				return m_name;
 			};
 			/**
@@ -272,17 +272,17 @@ namespace ewol {
 			 * @breif get the current Object manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::Manager& getObjectManager(void);
+			ewol::object::Manager& getObjectManager();
 			/**
 			 * @breif get the current Object Message Multicast manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::MultiCast& getMultiCast(void);
+			ewol::object::MultiCast& getMultiCast();
 			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
-			ewol::Context& getContext(void);
+			ewol::Context& getContext();
 		private:
 			bool m_isResource; //!< enable this when you want to declare this element is auto-remove
 		public:
@@ -298,7 +298,7 @@ namespace ewol {
 			 * @brief Get the resource status of the element.
 			 * @return the resource status.
 			 */
-			bool getStatusResource(void) {
+			bool getStatusResource() {
 				return m_isResource;
 			}
 	};

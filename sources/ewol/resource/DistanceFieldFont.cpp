@@ -120,7 +120,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	//exportOnFile();
 }
 
-ewol::resource::DistanceFieldFont::~DistanceFieldFont(void) {
+ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
 	ewol::resource::FontFreeType::release(m_font);
 }
 
@@ -374,7 +374,7 @@ void ewol::resource::DistanceFieldFont::release(ewol::resource::DistanceFieldFon
 	_object = NULL;
 }
 
-void ewol::resource::DistanceFieldFont::exportOnFile(void) {
+void ewol::resource::DistanceFieldFont::exportOnFile() {
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
 	ejson::Array* tmpList = new ejson::Array();
@@ -408,7 +408,7 @@ void ewol::resource::DistanceFieldFont::exportOnFile(void) {
 	egami::store(m_data, m_fileName + ".png");
 }
 
-bool ewol::resource::DistanceFieldFont::importFromFile(void) {
+bool ewol::resource::DistanceFieldFont::importFromFile() {
 	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	// test file existance:
 	etk::FSNode fileJSON(m_fileName + ".json");

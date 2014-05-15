@@ -15,7 +15,7 @@
 #define __class__ "Gird"
 
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Gird();
 }
 
@@ -34,7 +34,7 @@ ewol::widget::Gird::Gird(int32_t _colNumber) :
 	requestUpdateSize();
 }
 
-ewol::widget::Gird::~Gird(void) {
+ewol::widget::Gird::~Gird() {
 	EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "} Gird : destroy");
 	subWidgetRemoveAll();
 }
@@ -91,7 +91,7 @@ void ewol::widget::Gird::calculateSize(const vec2& _availlable) {
 	markToRedraw();
 }
 
-void ewol::widget::Gird::calculateMinMaxSize(void) {
+void ewol::widget::Gird::calculateMinMaxSize() {
 	for (size_t iii=0; iii<m_sizeCol.size(); iii++ ){
 		if (m_sizeCol[iii] <= 0) {
 			m_sizeCol[iii] = 0;
@@ -193,11 +193,11 @@ int32_t ewol::widget::Gird::getColSize(int32_t _colId) {
 	return 0;
 }
 
-int32_t ewol::widget::Gird::getRowSize(void) {
+int32_t ewol::widget::Gird::getRowSize() {
 	return m_sizeRow;
 }
 
-void ewol::widget::Gird::subWidgetRemoveAll(void) {
+void ewol::widget::Gird::subWidgetRemoveAll() {
 	size_t errorControl = m_subWidget.size();
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	while (m_subWidget.size() > 0 ) {
@@ -350,7 +350,7 @@ void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 	}
 }
 
-void ewol::widget::Gird::onRegenerateDisplay(void) {
+void ewol::widget::Gird::onRegenerateDisplay() {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->onRegenerateDisplay();

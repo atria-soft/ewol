@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__ "ListFileSystem"
 
-static ewol::Widget* Create(void) {
+static ewol::Widget* Create() {
 	return new ewol::widget::ListFileSystem();
 }
 
@@ -35,7 +35,7 @@ const char* const ewol::widget::ListFileSystem::configShowTemporary = "show-temp
 const char* const ewol::widget::ListFileSystem::configPath = "path";
 const char* const ewol::widget::ListFileSystem::configSelect = "select";
 
-ewol::widget::ListFileSystem::ListFileSystem(void) :
+ewol::widget::ListFileSystem::ListFileSystem() :
   m_selectedLine(-1),
   m_folder ("/"),
   m_showFile(true),
@@ -68,12 +68,12 @@ ewol::widget::ListFileSystem::ListFileSystem(void) :
 	setMouseLimit(1);
 };
 
-ewol::widget::ListFileSystem::~ListFileSystem(void) {
+ewol::widget::ListFileSystem::~ListFileSystem() {
 	clearList();
 	ewol::resource::ColorFile::release(m_colorProperty);
 };
 
-void ewol::widget::ListFileSystem::clearList(void) {
+void ewol::widget::ListFileSystem::clearList() {
 	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
@@ -82,12 +82,12 @@ void ewol::widget::ListFileSystem::clearList(void) {
 	}
 };
 
-etk::Color<> ewol::widget::ListFileSystem::getBasicBG(void) {
+etk::Color<> ewol::widget::ListFileSystem::getBasicBG() {
 	return m_colorProperty->get(m_colorIdBackground1);
 }
 
 
-void ewol::widget::ListFileSystem::regenerateView(void) {
+void ewol::widget::ListFileSystem::regenerateView() {
 	clearList();
 	m_selectedLine = -1;
 	m_list.clear();
@@ -99,7 +99,7 @@ void ewol::widget::ListFileSystem::regenerateView(void) {
 	markToRedraw();
 }
 
-std::string ewol::widget::ListFileSystem::getSelect(void) const {
+std::string ewol::widget::ListFileSystem::getSelect() const {
 	std::string tmpVal = "";
 	if (m_selectedLine >= 0) {
 		if (m_list[m_selectedLine] != NULL) {
@@ -126,7 +126,7 @@ void ewol::widget::ListFileSystem::setSelect(const std::string& _data) {
 	markToRedraw();
 }
 
-uint32_t ewol::widget::ListFileSystem::getNuberOfColomn(void) {
+uint32_t ewol::widget::ListFileSystem::getNuberOfColomn() {
 	return 1;
 }
 
@@ -135,7 +135,7 @@ bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTit
 	return true;
 }
 
-uint32_t ewol::widget::ListFileSystem::getNuberOfRaw(void) {
+uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 	int32_t offset = 0;
 	if (m_showFolder == true) {
 		if (m_folder == "/") {

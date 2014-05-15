@@ -22,7 +22,7 @@ const char* const ewol::widget::PopUp::configLockExpand="lock";
 
 static const char* annimationIncrease = "increase";
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::PopUp();
 }
 
@@ -46,7 +46,7 @@ ewol::widget::PopUp::PopUp(const std::string& _shaperName) :
 	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
 }
 
-ewol::widget::PopUp::~PopUp(void) {
+ewol::widget::PopUp::~PopUp() {
 	
 }
 
@@ -113,11 +113,11 @@ void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
 	}
 }
 
-void ewol::widget::PopUp::onDraw(void) {
+void ewol::widget::PopUp::onDraw() {
 	m_shaper.draw();
 }
 
-void ewol::widget::PopUp::onRegenerateDisplay(void) {
+void ewol::widget::PopUp::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		m_shaper.clear();
 		ewol::Padding padding = m_shaper.getPadding();
@@ -231,7 +231,7 @@ bool ewol::widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _m
 	return false;
 }
 
-void ewol::widget::PopUp::onStopAnnimation(void) {
+void ewol::widget::PopUp::onStopAnnimation() {
 	periodicCallDisable();
 }
 

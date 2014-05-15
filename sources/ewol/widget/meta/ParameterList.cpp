@@ -21,7 +21,7 @@ const char * const ewol::widget::ParameterList::eventSelect = "select";
 #define __class__ "List"
 
 
-ewol::widget::ParameterList::ParameterList(void) {
+ewol::widget::ParameterList::ParameterList() {
 	addObjectType("ewol::widget::ParameterList");
 	addEventId(eventSelect);
 	
@@ -35,7 +35,7 @@ ewol::widget::ParameterList::ParameterList(void) {
 	setCanHaveFocus(true);
 }
 
-ewol::widget::ParameterList::~ParameterList(void) {
+ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -45,7 +45,7 @@ ewol::widget::ParameterList::~ParameterList(void) {
 	menuClear();
 }
 
-void ewol::widget::ParameterList::calculateMinMaxSize(void) {
+void ewol::widget::ParameterList::calculateMinMaxSize() {
 	/*int32_t fontId = getDefaultFontId();
 	int32_t minWidth = ewol::getWidth(fontId, m_label);
 	int32_t minHeight = ewol::getHeight(fontId);
@@ -67,7 +67,7 @@ void ewol::widget::ParameterList::addOObject(ewol::Compositing* _newObject, int3
 	}
 }
 
-void ewol::widget::ParameterList::clearOObjectList(void) {
+void ewol::widget::ParameterList::clearOObjectList() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
@@ -75,7 +75,7 @@ void ewol::widget::ParameterList::clearOObjectList(void) {
 	m_listOObject.clear();
 }
 
-void ewol::widget::ParameterList::onDraw(void) {
+void ewol::widget::ParameterList::onDraw() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
@@ -84,7 +84,7 @@ void ewol::widget::ParameterList::onDraw(void) {
 	WidgetScrolled::onDraw();
 }
 
-void ewol::widget::ParameterList::onRegenerateDisplay(void) {
+void ewol::widget::ParameterList::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		clearOObjectList();
@@ -200,11 +200,11 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 	return false;
 }
 
-void ewol::widget::ParameterList::onGetFocus(void) {
+void ewol::widget::ParameterList::onGetFocus() {
 	EWOL_DEBUG("Ewol::List get focus");
 }
 
-void ewol::widget::ParameterList::onLostFocus(void) {
+void ewol::widget::ParameterList::onLostFocus() {
 	EWOL_DEBUG("Ewol::List Lost focus");
 }
 
@@ -228,7 +228,7 @@ void ewol::widget::ParameterList::menuAddGroup(std::string& _label) {
 	}
 }
 
-void ewol::widget::ParameterList::menuClear(void) {
+void ewol::widget::ParameterList::menuClear() {
 	m_idSelected = -1;
 	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
@@ -239,7 +239,7 @@ void ewol::widget::ParameterList::menuClear(void) {
 	m_list.clear();
 }
 
-void ewol::widget::ParameterList::menuSeparator(void) {
+void ewol::widget::ParameterList::menuSeparator() {
 	if (m_list.size()>0) {
 		std::string label = "";
 		std::string image = "";

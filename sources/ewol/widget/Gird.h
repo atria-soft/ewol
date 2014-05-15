@@ -44,7 +44,7 @@ namespace ewol {
 				/**
 				 * @brief Desstructor
 				 */
-				virtual ~Gird(void);
+				virtual ~Gird();
 				/**
 				 * @brief set the number of colomn
 				 * @param[in] colNumber Nuber of colomn
@@ -71,18 +71,18 @@ namespace ewol {
 				 * @brief get the size view of the lines.
 				 * @return The size of the lines.
 				 */
-				int32_t getRowSize(void);
+				int32_t getRowSize();
 				/**
 				 * @brief set the gravity of the widget on the Button (index 0 is on buttom)
 				 */
-				void setGravityButtom(void) {
+				void setGravityButtom() {
 					m_gavityButtom = true;
 					markToRedraw();
 				}
 				/**
 				 * @brief set the gravity of the widget on the Top (index 0 is on top)
 				 */
-				void setGravityTop(void) {
+				void setGravityTop() {
 					m_gavityButtom = false;
 					markToRedraw();
 				}
@@ -90,7 +90,7 @@ namespace ewol {
 				/**
 				 * @brief remove all sub element from the widget.
 				 */
-				virtual void subWidgetRemoveAll(void);
+				virtual void subWidgetRemoveAll();
 				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -132,14 +132,14 @@ namespace ewol {
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const ivec2& getBorderSize(void) { return m_borderSize; };
+				const ivec2& getBorderSize() { return m_borderSize; };
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 				virtual void onObjectRemove(ewol::Object* _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 		};
 	};
 };

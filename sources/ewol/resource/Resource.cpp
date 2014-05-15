@@ -14,22 +14,22 @@
 #include <ewol/context/Context.h>
 
 
-void ewol::Resource::updateContext(void) {
+void ewol::Resource::updateContext() {
 	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << m_counter << " time(s)");
 }
 
-void ewol::Resource::removeContext(void) {
+void ewol::Resource::removeContext() {
 	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << m_counter << " time(s)");
 }
 
-void ewol::Resource::removeContextToLate(void) {
+void ewol::Resource::removeContextToLate() {
 	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << m_counter << " time(s)");
 }
 
-void ewol::Resource::reload(void) {
+void ewol::Resource::reload() {
 	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << m_counter << " time(s)");
 }
 
-ewol::resource::Manager& ewol::Resource::getManager(void) {
+ewol::resource::Manager& ewol::Resource::getManager() {
 	return ewol::getContext().getResourcesManager();
 }

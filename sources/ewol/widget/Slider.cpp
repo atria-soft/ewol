@@ -15,7 +15,7 @@ const char * const ewol::widget::Slider::eventChange = "change";
 #undef __class__
 #define __class__ "Slider"
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Slider();
 }
 
@@ -25,7 +25,7 @@ void ewol::widget::Slider::init(ewol::widget::Manager& _widgetManager) {
 
 const int32_t dotRadius = 6;
 
-ewol::widget::Slider::Slider(void) {
+ewol::widget::Slider::Slider() {
 	addObjectType("ewol::widget::Slider");
 	addEventId(eventChange);
 	
@@ -42,11 +42,11 @@ ewol::widget::Slider::Slider(void) {
 	setMouseLimit(1);
 }
 
-ewol::widget::Slider::~Slider(void) {
+ewol::widget::Slider::~Slider() {
 	
 }
 
-void ewol::widget::Slider::calculateMinMaxSize(void) {
+void ewol::widget::Slider::calculateMinMaxSize() {
 	vec2 minTmp = m_userMinSize.getPixel();
 	m_minSize.setValue(etk_max(minTmp.x(), 40),
 	                   etk_max(minTmp.y(), dotRadius*2) );
@@ -58,7 +58,7 @@ void ewol::widget::Slider::setValue(int32_t _val) {
 	markToRedraw();
 }
 
-int32_t ewol::widget::Slider::getValue(void) {
+int32_t ewol::widget::Slider::getValue() {
 	return m_value;
 }
 
@@ -74,11 +74,11 @@ void ewol::widget::Slider::setMax(int32_t _val) {
 	markToRedraw();
 }
 
-void ewol::widget::Slider::onDraw(void) {
+void ewol::widget::Slider::onDraw() {
 	m_draw.draw();
 }
 
-void ewol::widget::Slider::onRegenerateDisplay(void) {
+void ewol::widget::Slider::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}

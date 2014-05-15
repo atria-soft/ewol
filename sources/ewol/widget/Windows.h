@@ -25,34 +25,34 @@ namespace ewol {
 				ewol::resource::ColorFile* m_colorProperty; //!< theme color property
 				int32_t m_colorBg; //!< Default background color of the windows
 			public:
-				Windows(void);
-				virtual ~Windows(void);
+				Windows();
+				virtual ~Windows();
 			// internal event at ewol system :
 			public:
-				void sysDraw(void);
-				void sysOnShow(void) {};
-				void sysOnHide(void) {};
-				void sysOnKill(void) {};
+				void sysDraw();
+				void sysOnShow() {};
+				void sysOnHide() {};
+				void sysOnKill() {};
 			public:
-				virtual void onShow(void) { };
-				virtual void onHide(void) { };
-				virtual bool onKill(void) {
+				virtual void onShow() { };
+				virtual void onHide() { };
+				virtual bool onKill() {
 					return true;
 				};
-				virtual void onReduce(void) { };
-				virtual void onStateBackground(void) {};
-				virtual void onStateForeground(void) {};
-				virtual void onStateSuspend(void) {};
-				virtual void onStateResume(void) {};
-				virtual void on(void) { };
+				virtual void onReduce() { };
+				virtual void onStateBackground() {};
+				virtual void onStateForeground() {};
+				virtual void onStateSuspend() {};
+				virtual void onStateResume() {};
+				virtual void on() { };
 			private:
 				bool m_hasDecoration;
 			public:
-				void setDecorationDisable(void) {
+				void setDecorationDisable() {
 					m_hasDecoration = false;
 				}
 				
-				void setDecorationEnable(void) {
+				void setDecorationEnable() {
 					m_hasDecoration = true;
 				}
 			private:
@@ -61,8 +61,8 @@ namespace ewol {
 			public:
 				void setSubWidget(ewol::Widget* _widget);
 				void popUpWidgetPush(ewol::Widget* _widget);
-				void popUpWidgetPop(void);
-				size_t popUpCount(void) {
+				void popUpWidgetPop();
+				size_t popUpCount() {
 					return m_popUpWidgetList.size();
 				}
 			private:
@@ -72,7 +72,7 @@ namespace ewol {
 				 * @brief get the background color.
 				 * @return A reference on the color
 				 */
-				const etk::Color<float>& getBackgroundColor(void) {
+				const etk::Color<float>& getBackgroundColor() {
 					return m_backgroundColor;
 				};
 				/**
@@ -83,7 +83,7 @@ namespace ewol {
 			protected: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual void onObjectRemove(ewol::Object * _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual ewol::Widget * getWidgetAtPos(const vec2& _pos);

@@ -20,19 +20,19 @@ namespace ewol {
 				std::vector<ewol::Object*> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				std::vector<ewol::Object*> m_eObjectAutoRemoveList; // all widget allocated
 			public:
-				Manager(void);
-				~Manager(void);
+				Manager();
+				~Manager();
 				/**
 				 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
 				 */
-				void unInit(void);
+				void unInit();
 				
 				void add(ewol::Object* _object);
 				void rm(ewol::Object* _object);
-				int32_t getNumberObject(void);
+				int32_t getNumberObject();
 				
 				void autoRemove(ewol::Object* _object);
-				void removeAllAutoRemove(void);
+				void removeAllAutoRemove();
 				
 				ewol::Object* get(const std::string& _name);
 			private:
@@ -40,7 +40,7 @@ namespace ewol {
 			private:
 				ewol::object::MultiCast m_multiCast; //!< muticast manager
 			public:
-				ewol::object::MultiCast& multiCast(void) {
+				ewol::object::MultiCast& multiCast() {
 					return m_multiCast;
 				};
 		};

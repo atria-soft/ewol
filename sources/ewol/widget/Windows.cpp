@@ -23,7 +23,7 @@
 extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
 
 
-ewol::widget::Windows::Windows(void) :
+ewol::widget::Windows::Windows() :
   m_colorProperty(NULL),
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
@@ -37,7 +37,7 @@ ewol::widget::Windows::Windows(void) :
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
-ewol::widget::Windows::~Windows(void) {
+ewol::widget::Windows::~Windows() {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
 		m_subWidget=NULL;
@@ -86,7 +86,7 @@ ewol::Widget * ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	return this;
 }
 
-void ewol::widget::Windows::sysDraw(void) {
+void ewol::widget::Windows::sysDraw() {
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x(),m_size.y());
@@ -118,7 +118,7 @@ void ewol::widget::Windows::sysDraw(void) {
 	return;
 }
 
-void ewol::widget::Windows::onRegenerateDisplay(void) {
+void ewol::widget::Windows::onRegenerateDisplay() {
 	if (NULL != m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
@@ -201,7 +201,7 @@ void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	getContext().resetIOEvent();
 }
 
-void ewol::widget::Windows::popUpWidgetPop(void) {
+void ewol::widget::Windows::popUpWidgetPop() {
 	if (m_popUpWidgetList.size() == 0) {
 		return;
 	}

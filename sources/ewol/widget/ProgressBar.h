@@ -32,10 +32,10 @@ namespace ewol {
 			private:
 				ewol::compositing::Drawing m_draw; // basic drawing element
 			public:
-				ProgressBar(void);
-				virtual ~ProgressBar(void);
+				ProgressBar();
+				virtual ~ProgressBar();
 				void setValue(float _val);
-				float getValue(void) const {
+				float getValue() const {
 					return m_value;
 				};
 				void setColor(etk::Color<> _newColor) {
@@ -47,12 +47,12 @@ namespace ewol {
 				etk::Color<> m_textColorBgOn; //!< bar color enable
 				etk::Color<> m_textColorBgOff; //!< bar color disable
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
-				virtual void calculateMinMaxSize(void);
+				virtual void onRegenerateDisplay();
+				virtual void calculateMinMaxSize();
 		};
 	};
 };

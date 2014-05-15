@@ -104,7 +104,7 @@ const char* const ewol::Widget::eventAnnimationStart = "annimation-start";
 const char* const ewol::Widget::eventAnnimationRatio = "annimation-ratio";
 const char* const ewol::Widget::eventAnnimationStop = "annimation-stop";
 
-ewol::Widget::Widget(void) :
+ewol::Widget::Widget() :
   m_up(NULL),
   m_size(10,10),
   m_minSize(0,0),
@@ -152,7 +152,7 @@ ewol::Widget::Widget(void) :
 }
 
 
-ewol::Widget::~Widget(void) {
+ewol::Widget::~Widget() {
 	// remove his own focus...
 	getWidgetManager().rm(this);
 	// clean all the short-cut ...
@@ -178,7 +178,7 @@ void ewol::Widget::onObjectRemove(ewol::Object* _removeObject) {
 	}
 }
 
-void ewol::Widget::hide(void) {
+void ewol::Widget::hide() {
 	if (m_hide == false) {
 		EWOL_WARNING("HIDE widget: '" << getName() << "'");
 		m_hide = true;
@@ -187,7 +187,7 @@ void ewol::Widget::hide(void) {
 	}
 }
 
-void ewol::Widget::show(void) {
+void ewol::Widget::show() {
 	if (m_hide == true) {
 		EWOL_WARNING("SHOW widget: '" << getName() << "'");
 		m_hide = false;
@@ -202,7 +202,7 @@ void ewol::Widget::calculateSize(const vec2& _available) {
 	markToRedraw();
 }
 
-bool ewol::Widget::setFocus(void) {
+bool ewol::Widget::setFocus() {
 	if (m_canFocus == true) {
 		if (m_hasFocus == false) {
 			m_hasFocus = true;
@@ -213,7 +213,7 @@ bool ewol::Widget::setFocus(void) {
 	return false;
 }
 
-bool ewol::Widget::rmFocus(void) {
+bool ewol::Widget::rmFocus() {
 	if (m_canFocus == true) {
 		if (m_hasFocus == true) {
 			m_hasFocus = false;
@@ -228,12 +228,12 @@ void ewol::Widget::setCanHaveFocus(bool _canFocusState) {
 	if (m_canFocus != _canFocusState) {
 		m_canFocus = _canFocusState;
 		if (m_hasFocus == true) {
-			(void)rmFocus();
+			rmFocus();
 		}
 	}
 }
 
-void ewol::Widget::keepFocus(void) {
+void ewol::Widget::keepFocus() {
 	getWidgetManager().focusKeep(this);
 }
 
@@ -367,7 +367,7 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	return;
 }
 
-void ewol::Widget::periodicCallDisable(void) {
+void ewol::Widget::periodicCallDisable() {
 	m_periodicCallDeltaTime=0;
 	m_periodicCallTime=-1;
 	getWidgetManager().periodicCallRm(this);
@@ -383,7 +383,7 @@ void ewol::Widget::periodicCallEnable(float _callInSecond) {
 	}
 }
 
-void ewol::Widget::markToRedraw(void) {
+void ewol::Widget::markToRedraw() {
 	if (m_needRegenerateDisplay == true) {
 		return;
 	}
@@ -399,7 +399,7 @@ void ewol::Widget::setZoom(float _newVal) {
 	markToRedraw();
 }
 
-float ewol::Widget::getZoom(void) {
+float ewol::Widget::getZoom() {
 	return m_zoom;
 }
 
@@ -413,7 +413,7 @@ void ewol::Widget::setOrigin(const vec2& _pos) {
 	m_origin = _pos;
 }
 
-vec2 ewol::Widget::getOrigin(void) {
+vec2 ewol::Widget::getOrigin() {
 	return m_origin;
 }
 
@@ -421,21 +421,21 @@ vec2 ewol::Widget::relativePosition(const vec2& _pos) {
 	return _pos - m_origin;
 }
 
-void ewol::Widget::calculateMinMaxSize(void) {
+void ewol::Widget::calculateMinMaxSize() {
 	m_minSize = m_userMinSize.getPixel();
 	//EWOL_ERROR("[" << getId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
 	m_maxSize = m_userMaxSize.getPixel();
 	markToRedraw();
 }
 
-vec2 ewol::Widget::getCalculateMinSize(void) {
+vec2 ewol::Widget::getCalculateMinSize() {
 	if (false == isHide()) {
 		return m_minSize;
 	}
 	return vec2(0,0);
 }
 
-vec2 ewol::Widget::getCalculateMaxSize(void) {
+vec2 ewol::Widget::getCalculateMaxSize() {
 	if (false == isHide()) {
 		return m_maxSize;
 	}
@@ -461,11 +461,11 @@ void ewol::Widget::setMinSize(const ewol::Dimension& _size) {
 	requestUpdateSize();
 }
 
-void ewol::Widget::setNoMinSize(void) {
+void ewol::Widget::setNoMinSize() {
 	m_userMinSize.set(vec2(0,0),ewol::Dimension::Pixel);
 }
 
-void ewol::Widget::checkMinSize(void) {
+void ewol::Widget::checkMinSize() {
 	vec2 pixelSize = m_userMinSize.getPixel();
 	m_minSize.setX(etk_max(m_minSize.x(), pixelSize.x()));
 	m_minSize.setY(etk_max(m_minSize.y(), pixelSize.y()));
@@ -490,17 +490,17 @@ void ewol::Widget::setMaxSize(const ewol::Dimension& _size) {
 	requestUpdateSize();
 }
 
-void ewol::Widget::setNoMaxSize(void) {
+void ewol::Widget::setNoMaxSize() {
 	m_userMaxSize.set(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
 }
 
-void ewol::Widget::checkMaxSize(void) {
+void ewol::Widget::checkMaxSize() {
 	vec2 pixelSize = m_userMaxSize.getPixel();
 	m_maxSize.setX(etk_min(m_maxSize.x(), pixelSize.x()));
 	m_maxSize.setY(etk_min(m_maxSize.y(), pixelSize.y()));
 }
 
-vec2 ewol::Widget::getSize(void) {
+vec2 ewol::Widget::getSize() {
 	if (false == isHide()) {
 		return m_size;
 	}
@@ -516,7 +516,7 @@ void ewol::Widget::setExpand(const bvec2& _newExpand) {
 	}
 }
 
-bvec2 ewol::Widget::canExpand(void) {
+bvec2 ewol::Widget::canExpand() {
 	if (false == isHide()) {
 		return m_userExpand;
 	}
@@ -532,7 +532,7 @@ void ewol::Widget::setFill(const bvec2& _newFill) {
 	}
 }
 
-const bvec2& ewol::Widget::canFill(void) {
+const bvec2& ewol::Widget::canFill() {
 	return m_userFill;
 }
 
@@ -636,7 +636,7 @@ void ewol::Widget::shortCutAdd(const char * _descriptiveString,
 	m_localShortcut.push_back(tmpElement);
 }
 
-void ewol::Widget::shortCutClean(void) {
+void ewol::Widget::shortCutClean() {
 	for (size_t iii=0; iii<m_localShortcut.size(); iii++) {
 		if (NULL != m_localShortcut[iii]) {
 			delete(m_localShortcut[iii]);
@@ -682,21 +682,21 @@ bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
 }
 
 
-void ewol::Widget::grabCursor(void) {
+void ewol::Widget::grabCursor() {
 	if (false == m_grabCursor) {
 		getContext().inputEventGrabPointer(this);
 		m_grabCursor = true;
 	}
 }
 
-void ewol::Widget::unGrabCursor(void) {
+void ewol::Widget::unGrabCursor() {
 	if (true == m_grabCursor) {
 		getContext().inputEventUnGrabPointer();
 		m_grabCursor = false;
 	}
 }
 
-bool ewol::Widget::getGrabStatus(void) {
+bool ewol::Widget::getGrabStatus() {
 	return m_grabCursor;
 }
 
@@ -706,7 +706,7 @@ void ewol::Widget::setCursor(enum ewol::context::cursorDisplay _newCursor) {
 	getContext().setCursor(m_cursorDisplay);
 }
 
-enum ewol::context::cursorDisplay ewol::Widget::getCursor(void) {
+enum ewol::context::cursorDisplay ewol::Widget::getCursor() {
 	return m_cursorDisplay;
 }
 
@@ -864,23 +864,23 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 	return false;
 }
 
-void ewol::Widget::requestUpdateSize(void) {
+void ewol::Widget::requestUpdateSize() {
 	getContext().requestUpdateSize();
 }
 
-ewol::widget::Manager& ewol::Widget::getWidgetManager(void) {
+ewol::widget::Manager& ewol::Widget::getWidgetManager() {
 	return getContext().getWidgetManager();
 }
 
-ewol::widget::Windows* ewol::Widget::getWindows(void) {
+ewol::widget::Windows* ewol::Widget::getWindows() {
 	return getContext().getWindows();
 }
 
-void ewol::Widget::showKeyboard(void) {
+void ewol::Widget::showKeyboard() {
 	getContext().keyboardShow();
 }
 
-void ewol::Widget::hideKeyboard(void) {
+void ewol::Widget::hideKeyboard() {
 	getContext().keyboardHide();
 }
 
@@ -931,7 +931,7 @@ bool ewol::Widget::startAnnimation(enum ewol::Widget::annimationMode _mode) {
 	return onStartAnnimation(_mode);
 }
 
-bool ewol::Widget::stopAnnimation(void) {
+bool ewol::Widget::stopAnnimation() {
 	m_annimationMode = ewol::Widget::annimationModeDisable;
 	onStopAnnimation();
 	return true; // ???

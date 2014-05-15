@@ -65,7 +65,7 @@ namespace ewol {
 		private:
 			std::vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
-			GlyphProperty(void) :
+			GlyphProperty() :
 			  m_UVal(0),
 			  m_exist(true),
 			  m_glyphIndex(0),
@@ -87,20 +87,20 @@ namespace ewol {
 			void kerningAdd(const char32_t _charcode, float _value) {
 				m_kerning.push_back(ewol::Kerning(_charcode, _value));
 			};
-			void kerningClear(void) {
+			void kerningClear() {
 				m_kerning.clear();
 			};
 			/**
 			 * @brief get the status of the char, if it exist or not in the FONT
 			 * @return true if the char is availlable, false otherwise
 			 */
-			bool exist(void) const {
+			bool exist() const {
 				return m_exist;
 			};
 			/**
 			 * @brief set the element doen not exist !!!
 			 */
-			void setNotExist(void) {
+			void setNotExist() {
 				m_exist = false;
 			};
 	};

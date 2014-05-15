@@ -46,7 +46,7 @@ namespace ewol {
 				/**
 				 * @brief load the openGL program and get all the ID needed
 				 */
-				void loadProgram(void);
+				void loadProgram();
 			public:
 				/**
 				 * @brief generic constructor
@@ -57,7 +57,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~Image(void);
+				virtual ~Image();
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL
@@ -67,12 +67,12 @@ namespace ewol {
 				/**
 				 * @brief clear alll tre registered element in the current element
 				 */
-				void clear(void);
+				void clear();
 				/**
 				 * @brief get the current display position (sometime needed in the gui control)
 				 * @return the current position.
 				 */
-				const vec3& getPos(void) {
+				const vec3& getPos() {
 					return m_position;
 				};
 				/**
@@ -164,12 +164,12 @@ namespace ewol {
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 				 * @return the validity od the resources.
 				 */
-				bool hasSources(void);
+				bool hasSources();
 				/**
 				 * @brief get the source image registered size in the file (<0 when multiple size image)
 				 * @return tre image registered size
 				 */
-				vec2 getRealSize(void);
+				vec2 getRealSize();
 			public:
 				/**
 				 * @brief Set render mode of the image
@@ -180,7 +180,7 @@ namespace ewol {
 				 * @brief Get the render methode.
 				 * @return The render mode of the image.
 				 */
-				bool getDistanceFieldMode(void) const {
+				bool getDistanceFieldMode() const {
 					return m_distanceFieldMode;
 				}
 		};

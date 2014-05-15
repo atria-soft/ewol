@@ -34,13 +34,13 @@ ewol::compositing::Image::Image(const std::string& _imageName, bool _df) :
 	loadProgram();
 }
 
-ewol::compositing::Image::~Image(void) {
+ewol::compositing::Image::~Image() {
 	ewol::resource::TextureFile::release(m_resource);
 	ewol::resource::ImageDF::release(m_resourceDF);
 	ewol::resource::Program::release(m_GLprogram);
 }
 
-void ewol::compositing::Image::loadProgram(void) {
+void ewol::compositing::Image::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
 	ewol::resource::Program::release(m_GLprogram);
@@ -104,7 +104,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::compositing::Image::clear(void) {
+void ewol::compositing::Image::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
@@ -287,12 +287,12 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 	}
 }
 
-bool ewol::compositing::Image::hasSources(void) {
+bool ewol::compositing::Image::hasSources() {
 	return (m_resource != NULL || m_resourceDF != NULL);
 }
 
 
-vec2 ewol::compositing::Image::getRealSize(void) {
+vec2 ewol::compositing::Image::getRealSize() {
 	if (    m_resource == NULL
 	     && m_resourceDF == NULL) {
 		return vec2(0,0);

@@ -16,7 +16,7 @@
 #define __class__ "List"
 
 
-ewol::widget::List::List(void) {
+ewol::widget::List::List() {
 	addObjectType("ewol::widget::List");
 	m_paddingSizeX = 2;
 	#ifdef __TARGET_OS__Android
@@ -28,7 +28,7 @@ ewol::widget::List::List(void) {
 	setCanHaveFocus(true);
 }
 
-ewol::widget::List::~List(void) {
+ewol::widget::List::~List() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -63,7 +63,7 @@ void ewol::widget::List::setRawVisible(int32_t _id) {
 	markToRedraw();
 }
 
-void ewol::widget::List::calculateMinMaxSize(void) {
+void ewol::widget::List::calculateMinMaxSize() {
 	/*int32_t fontId = getDefaultFontId();
 	int32_t minWidth = ewol::getWidth(fontId, m_label);
 	int32_t minHeight = ewol::getHeight(fontId);
@@ -85,7 +85,7 @@ void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos)
 	}
 }
 
-void ewol::widget::List::clearOObjectList(void) {
+void ewol::widget::List::clearOObjectList() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
@@ -93,7 +93,7 @@ void ewol::widget::List::clearOObjectList(void) {
 	m_listOObject.clear();
 }
 
-void ewol::widget::List::onDraw(void) {
+void ewol::widget::List::onDraw() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
@@ -102,7 +102,7 @@ void ewol::widget::List::onDraw(void) {
 	WidgetScrolled::onDraw();
 }
 
-void ewol::widget::List::onRegenerateDisplay(void) {
+void ewol::widget::List::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		
 		// clean the object list ...
@@ -240,10 +240,10 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	return isUsed;
 }
 
-void ewol::widget::List::onGetFocus(void) {
+void ewol::widget::List::onGetFocus() {
 	EWOL_DEBUG("Ewol::List get focus");
 }
 
-void ewol::widget::List::onLostFocus(void) {
+void ewol::widget::List::onLostFocus() {
 	EWOL_DEBUG("Ewol::List Lost focus");
 }

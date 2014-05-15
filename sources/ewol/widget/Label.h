@@ -46,7 +46,7 @@ namespace ewol {
 				/**
 				 * @brief destructor
 				 */
-				virtual ~Label(void);
+				virtual ~Label();
 				/**
 				 * @brief change the label displayed
 				 * @param[in] _newLabel The displayed decorated text.
@@ -60,18 +60,18 @@ namespace ewol {
 				 * @brief get the current displayed label
 				 * @return The displayed decorated text.
 				 */
-				std::string getLabel(void) const;
+				std::string getLabel() const;
 				//! @previous
-				inline std::string getValue(void) const {
+				inline std::string getValue() const {
 					return getLabel();
 				};
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
-				virtual void calculateMinMaxSize(void);
-				virtual void onRegenerateDisplay(void);
+				virtual void calculateMinMaxSize();
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool loadXML(exml::Element* _node);
 		};

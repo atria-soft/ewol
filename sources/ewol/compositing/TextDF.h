@@ -37,7 +37,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~TextDF(void);
+				virtual ~TextDF();
 			public:
 				/**
 				 * @brief Calculate size to be at the best size for a render in this special size.
@@ -46,14 +46,14 @@ namespace ewol {
 				 */
 				void updateSizeToRender(const vec2& _size);
 			public:
-				virtual void clear(void);
+				virtual void clear();
 				virtual void drawD(bool _disableDepthTest);
 				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);
 			protected:
 				float m_size;
 			public:
-				virtual float getHeight(void);
-				virtual float getSize(void) {
+				virtual float getHeight();
+				virtual float getSize() {
 					return m_size;
 				}
 				virtual void setSize(float _size) {

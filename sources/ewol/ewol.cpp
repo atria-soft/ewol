@@ -21,7 +21,7 @@
 #define EWOL_VERSION "0.0.0"
 #endif
 
-std::string ewol::getCompilationMode(void) {
+std::string ewol::getCompilationMode() {
 	#ifdef MODE_RELEASE
 		return "Release";
 	#else
@@ -29,7 +29,7 @@ std::string ewol::getCompilationMode(void) {
 	#endif
 }
 
-std::string ewol::getBoardType(void) {
+std::string ewol::getBoardType() {
 	#ifdef __TARGET_OS__Linux
 		return "Linux";
 	#elif defined(__TARGET_OS__Android)
@@ -45,7 +45,7 @@ std::string ewol::getBoardType(void) {
 	#endif
 }
 
-std::string ewol::getVersion(void) {
+std::string ewol::getVersion() {
 	return EWOL_VERSION;
 }
 

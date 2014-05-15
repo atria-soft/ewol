@@ -13,7 +13,7 @@
 #undef __class__
 #define __class__ "Layer"
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Layer();
 }
 
@@ -21,11 +21,11 @@ void ewol::widget::Layer::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-ewol::widget::Layer::Layer(void) {
+ewol::widget::Layer::Layer() {
 	addObjectType("ewol::widget::Layer");
 }
 
-ewol::widget::Layer::~Layer(void) {
+ewol::widget::Layer::~Layer() {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 

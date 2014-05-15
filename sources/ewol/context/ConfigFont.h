@@ -18,8 +18,8 @@ namespace ewol {
 				/**
 				 * Constructor / destructor
 				 */
-				ConfigFont(void);
-				~ConfigFont(void);
+				ConfigFont();
+				~ConfigFont();
 			private:
 				std::string m_folder;
 			public:
@@ -34,7 +34,7 @@ namespace ewol {
 				 * @brief get the default font folder.
 				 * @return The default font folder.
 				 */
-				const std::string& getFolder(void) {
+				const std::string& getFolder() {
 					return m_folder;
 				};
 			private:
@@ -51,14 +51,14 @@ namespace ewol {
 				 * @brief get the current default font name
 				 * @raturn a reference on the font name string
 				 */
-				const std::string& getName(void) {
+				const std::string& getName() {
 					return m_name;
 				};
 				/**
 				 * @brief get the default font size.
 				 * @return the font size.
 				 */
-				int32_t getSize(void) {
+				int32_t getSize() {
 					return m_size;
 				};
 			private:
@@ -75,7 +75,7 @@ namespace ewol {
 				 * @brief get the use of internal/external Font
 				 * @return true to enable search of internal data.
 				 */
-				bool getUseExternal(void) {
+				bool getUseExternal() {
 					return m_useExternal;
 				};
 		};

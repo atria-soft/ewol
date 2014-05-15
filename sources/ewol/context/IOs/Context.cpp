@@ -31,7 +31,7 @@
 #include <mach/mach.h>
 
 
-int64_t ewol::getTime(void) {
+int64_t ewol::getTime() {
 	struct timespec now;
 	clock_serv_t cclock;
 	mach_timespec_t mts;
@@ -58,11 +58,11 @@ public:
 		// nothing to do ...
 	}
 	
-	int32_t Run(void) {
+	int32_t Run() {
 		
 		return 0;
 	}
-	virtual void stop(void) {
+	virtual void stop() {
 		mm_exit();
 	}
 public:
@@ -189,40 +189,40 @@ void IOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::key
 	interface->MAC_SetKeyboardMove(_keyboardMode, _move, _isDown);
 }
 
-void IOs::start(void) {
+void IOs::start() {
 	if (interface == NULL) {
 		return;
 	}
 	//interface->OS_Start();
 }
 
-void IOs::resume(void) {
+void IOs::resume() {
 	if (interface == NULL) {
 		return;
 	}
 	interface->OS_Resume();
 }
 
-void IOs::suspend(void) {
+void IOs::suspend() {
 	if (interface == NULL) {
 		return;
 	}
 	interface->OS_Suspend();
 }
 
-void IOs::stop(void) {
+void IOs::stop() {
 	if (interface == NULL) {
 		return;
 	}
 	interface->OS_Stop();
 }
-void IOs::background(void) {
+void IOs::background() {
 	if (interface == NULL) {
 		return;
 	}
 	interface->OS_Background();
 }
-void IOs::foreground(void) {
+void IOs::foreground() {
 	if (interface == NULL) {
 		return;
 	}
@@ -244,7 +244,7 @@ int ewol::run(int _argc, const char *_argv[]) {
 }
 
 // Creat and relaese ewol::Context interface:
-void IOs::createInterface(void) {
+void IOs::createInterface() {
 	etk::setArgZero(l_argv[0]);
 	EWOL_INFO("Create new interface");
 	interface = new MacOSInterface(l_argc, l_argv);
@@ -254,7 +254,7 @@ void IOs::createInterface(void) {
 	}
 }
 
-void IOs::releaseInterface(void) {
+void IOs::releaseInterface() {
 	if (interface == NULL) {
 		return;
 	}

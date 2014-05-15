@@ -52,11 +52,11 @@ ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
 	loadProgram();
 }
 
-ewol::compositing::Shaper::~Shaper(void) {
+ewol::compositing::Shaper::~Shaper() {
 	unLoadProgram();
 }
 
-void ewol::compositing::Shaper::unLoadProgram(void) {
+void ewol::compositing::Shaper::unLoadProgram() {
 	ewol::resource::Program::release(m_GLprogram);
 	ewol::resource::TextureFile::release(m_resourceTexture);
 	ewol::resource::ConfigFile::release(m_config);
@@ -79,7 +79,7 @@ void ewol::compositing::Shaper::unLoadProgram(void) {
 	m_listAssiciatedId.clear();
 }
 
-void ewol::compositing::Shaper::loadProgram(void) {
+void ewol::compositing::Shaper::loadProgram() {
 	if (m_name == "") {
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
@@ -207,7 +207,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::compositing::Shaper::clear(void) {
+void ewol::compositing::Shaper::clear() {
 	// nothing to do ...
 	m_propertySize = vec2(0,0);
 	m_propertyOrigin = vec2(0,0);
@@ -566,11 +566,11 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 	}
 }
 
-ewol::Padding ewol::compositing::Shaper::getPadding(void) {
+ewol::Padding ewol::compositing::Shaper::getPadding() {
 	return getPaddingOut() + getBorder() + getPaddingIn();
 }
 
-ewol::Padding ewol::compositing::Shaper::getPaddingIn(void) {
+ewol::Padding ewol::compositing::Shaper::getPaddingIn() {
 	ewol::Padding padding(0,0,0,0);
 	if (m_config != NULL) {
 		padding.setValue(m_config->getNumber(m_confIdPaddingIn[shaperPosLeft]),
@@ -581,7 +581,7 @@ ewol::Padding ewol::compositing::Shaper::getPaddingIn(void) {
 	return padding;
 }
 
-ewol::Padding ewol::compositing::Shaper::getPaddingOut(void) {
+ewol::Padding ewol::compositing::Shaper::getPaddingOut() {
 	ewol::Padding padding(0,0,0,0);
 	if (m_config != NULL) {
 		padding.setValue(m_config->getNumber(m_confIdPaddingOut[shaperPosLeft]),
@@ -592,7 +592,7 @@ ewol::Padding ewol::compositing::Shaper::getPaddingOut(void) {
 	return padding;
 }
 
-ewol::Padding ewol::compositing::Shaper::getBorder(void) {
+ewol::Padding ewol::compositing::Shaper::getBorder() {
 	ewol::Padding padding(0,0,0,0);
 	if (m_config != NULL) {
 		padding.setValue(m_config->getNumber(m_confIdBorder[shaperPosLeft]),
@@ -610,7 +610,7 @@ void ewol::compositing::Shaper::setSource(const std::string& _newFile) {
 	loadProgram();
 }
 
-bool ewol::compositing::Shaper::hasSources(void) {
+bool ewol::compositing::Shaper::hasSources() {
 	return m_GLprogram!=NULL;
 }
 

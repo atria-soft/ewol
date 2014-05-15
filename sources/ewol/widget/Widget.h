@@ -98,14 +98,14 @@ namespace ewol {
 			ewol::key::Special specialKey; //!< special board key
 			char32_t unicodeValue; //!< 0 if not used
 			enum ewol::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
-			EventShortCut(void) {
+			EventShortCut() {
 				broadcastEvent = false;
 				generateEventId = NULL;
 				eventData = "";
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::key::keyboardUnknow;
 			};
-			~EventShortCut(void) { };
+			~EventShortCut() { };
 	};
 	/**
 	 * @brief Widget class is the main widget interface, it hase some generic properties: 
@@ -130,11 +130,11 @@ namespace ewol {
 			 * @brief Constructor of the widget classes
 			 * @return (no execption generated (not managed in embended platform))
 			 */
-			Widget(void);
+			Widget();
 			/**
 			 * @brief Destructor of the widget classes
 			 */
-			virtual ~Widget(void);
+			virtual ~Widget();
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Hierarchy management:
 		// ----------------------------------------------------------------------------------------------------------------
@@ -149,14 +149,14 @@ namespace ewol {
 			/**
 			 * @brief remove the upper widget of this widget.
 			 */
-			void removeUpperWidget(void) {
+			void removeUpperWidget() {
 				setUpperWidget(NULL);
 			};
 			/**
 			 * @brief get the upper widget (father).
 			 * @ return the requested widget (if NULL , 2 case : root widget or error implementation).
 			 */
-			ewol::Widget* getUpperWidget(void) {
+			ewol::Widget* getUpperWidget() {
 				return m_up;
 			};
 		// ----------------------------------------------------------------------------------------------------------------
@@ -185,24 +185,24 @@ namespace ewol {
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 getSize(void);
+			virtual vec2 getSize();
 			/**
 			 * @brief calculate the minimum and maximum size (need to estimate expend properties of the widget)
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void calculateMinMaxSize(void);
+			virtual void calculateMinMaxSize();
 			/**
 			 * @brief get the widget minimum size calculated
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 getCalculateMinSize(void);
+			virtual vec2 getCalculateMinSize();
 			/**
 			 * @brief get the widget maximum size calculated
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 getCalculateMaxSize(void);
+			virtual vec2 getCalculateMaxSize();
 		protected:
 			vec2 m_offset; //!< Offset of the display in the viewport
 		public:
@@ -215,7 +215,7 @@ namespace ewol {
 			 * @brief get the offset property of the widget.
 			 * @return The current offset value.
 			 */
-			virtual const vec2& getOffset(void) {
+			virtual const vec2& getOffset() {
 				return m_offset;
 			};
 		protected:
@@ -231,7 +231,7 @@ namespace ewol {
 			 * @brief get the zoom property of the widget
 			 * @return the current zoom value
 			 */
-			virtual float getZoom(void);
+			virtual float getZoom();
 			/**
 			 * @brief Change Zoom property.
 			 * @param[in] _range Range of the zoom change.
@@ -251,7 +251,7 @@ namespace ewol {
 			 * @brief get the origin (obsolute position in the windows)
 			 * @return coordonate of the origin requested
 			 */
-			virtual vec2 getOrigin(void);
+			virtual vec2 getOrigin();
 		protected:
 			ewol::Dimension m_userMinSize; //!< user define the minimum size of the widget
 		public:
@@ -263,12 +263,12 @@ namespace ewol {
 			/**
 			 * @brief User set No minimum size.
 			 */
-			void setNoMinSize(void);
+			void setNoMinSize();
 			/**
 			 * @brief get the current calculated min size
 			 * @return the size requested
 			 */
-			const ewol::Dimension& getMinSize(void) {
+			const ewol::Dimension& getMinSize() {
 				return m_userMinSize;
 			};
 			/**
@@ -276,7 +276,7 @@ namespace ewol {
 			 *        If it is not the user minimum size will overWrite the minimum size set.
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void checkMinSize(void);
+			virtual void checkMinSize();
 		protected:
 			ewol::Dimension m_userMaxSize; //!< user define the maximum size of the widget
 		public:
@@ -288,12 +288,12 @@ namespace ewol {
 			/**
 			 * @brief User set No maximum size.
 			 */
-			void setNoMaxSize(void);
+			void setNoMaxSize();
 			/**
 			 * @brief get the current maximum size
 			 * @return the size requested
 			 */
-			const ewol::Dimension& getMaxSize(void) {
+			const ewol::Dimension& getMaxSize() {
 				return m_userMaxSize;
 			};
 			/**
@@ -301,7 +301,7 @@ namespace ewol {
 			 *        If it is not the user maximum size will overWrite the maximum size set.
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void checkMaxSize(void);
+			virtual void checkMaxSize();
 		protected:
 			bvec2 m_userExpand;
 		public:
@@ -314,7 +314,7 @@ namespace ewol {
 			 * @brief get the expend capabilities (x&y) (set by the user)
 			 * @return 2D boolean repensent the capacity to expend
 			 */
-			virtual bvec2 getExpand(void) {
+			virtual bvec2 getExpand() {
 				return m_userExpand;
 			};
 			/**
@@ -322,7 +322,7 @@ namespace ewol {
 			 * @return 2D boolean repensent the capacity to expend
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual bvec2 canExpand(void);
+			virtual bvec2 canExpand();
 		protected:
 			bvec2 m_userFill;
 		public:
@@ -335,7 +335,7 @@ namespace ewol {
 			 * @brief set the x&y filling capacity set by the user
 			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
 			 */
-			virtual const bvec2& getFill(void) {
+			virtual const bvec2& getFill() {
 				return m_userFill;
 			};
 			/**
@@ -343,23 +343,23 @@ namespace ewol {
 			 * @return bvec2 repensent the capacity to x&y filling
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			const bvec2& canFill(void);
+			const bvec2& canFill();
 		protected:
 			bool m_hide; //!< hide a widget on the display
 		public:
 			/**
 			 * @brief set the widget hidden
 			 */
-			virtual void hide(void);
+			virtual void hide();
 			/**
 			 * @brief set the widget visible
 			 */
-			virtual void show(void);
+			virtual void show();
 			/**
 			 * @brief get the visibility of the widget
 			 * @return true: if the widget is hiden, false: it is visible
 			 */
-			virtual bool isHide(void) {
+			virtual bool isHide() {
 				return m_hide;
 			};
 		
@@ -375,7 +375,7 @@ namespace ewol {
 			 * @brief get the widget gravity
 			 * @return the gravity type
 			 */
-			virtual enum ewol::gravity getGravity(void) {
+			virtual enum ewol::gravity getGravity() {
 				return m_gravity;
 			};
 		// ----------------------------------------------------------------------------------------------------------------
@@ -389,26 +389,26 @@ namespace ewol {
 			 * @brief get the focus state of the widget
 			 * @return focus state
 			 */
-			virtual bool getFocus(void) {
+			virtual bool getFocus() {
 				return m_hasFocus;
 			};
 			/**
 			 * @brief get the capability to have focus
 			 * @return State capability to have focus
 			 */
-			virtual bool canHaveFocus(void) {
+			virtual bool canHaveFocus() {
 				return m_canFocus;
 			};
 			/**
 			 * @brief set focus on this widget
 			 * @return return true if the widget keep the focus
 			 */
-			virtual bool setFocus(void);
+			virtual bool setFocus();
 			/**
 			 * @brief remove the focus on this widget
 			 * @return return true if the widget have release his focus (if he has it)
 			 */
-			virtual bool rmFocus(void);
+			virtual bool rmFocus();
 			/**
 			 * @brief set the capability to have the focus
 			 * @param[in] _canFocusState new focus capability
@@ -417,16 +417,16 @@ namespace ewol {
 			/**
 			 * @brief keep the focus on this widget  == > this remove the previous focus on all other widget
 			 */
-			virtual void keepFocus(void);
+			virtual void keepFocus();
 		protected:
 			/**
 			 * @brief Event of the focus has been grep by the current widget
 			 */
-			virtual void onGetFocus(void) {};
+			virtual void onGetFocus() {};
 			/**
 			 * @brief Event of the focus has been lost by the current widget
 			 */
-			virtual void onLostFocus(void) {};
+			virtual void onLostFocus() {};
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Mouse event properties Area
@@ -438,7 +438,7 @@ namespace ewol {
 			 * @brief get the number of mouse event supported
 			 * @return return the number of event that the mouse supported [0..3]
 			 */
-			virtual int32_t getMouseLimit(void) {
+			virtual int32_t getMouseLimit() {
 				return m_limitMouseEvent;
 			};
 			/**
@@ -459,7 +459,7 @@ namespace ewol {
 			 * @return true : the event can be repeated.
 			 * @return false : the event must not be repeated.
 			 */
-			virtual bool getKeyboardRepeate(void) {
+			virtual bool getKeyboardRepeate() {
 				return m_allowRepeateKeyboardEvent;
 			};
 		protected:
@@ -473,11 +473,11 @@ namespace ewol {
 			/**
 			 * @brief display the virtual keyboard (if needed)
 			 */
-			virtual void showKeyboard(void);
+			virtual void showKeyboard();
 			/**
 			 * @brief Hide the virtual keyboard (if needed)
 			 */
-			virtual void hideKeyboard(void);
+			virtual void hideKeyboard();
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- periodic call Area
 		// ----------------------------------------------------------------------------------------------------------------
@@ -488,7 +488,7 @@ namespace ewol {
 			/**
 			 * @brief disable the periodic call.
 			 */
-			void periodicCallDisable(void);
+			void periodicCallDisable();
 			/**
 			 * @brief disable the periodic call.
 			 * @param[in] _callInSecond periodic call in second (float)
@@ -499,14 +499,14 @@ namespace ewol {
 			 * @brief {SYSTEM} get a reference of the periodic call delta time
 			 * @return the perodic time delta call -1 : disable / 0 : every time / else in US
 			 */
-			int64_t systemGetCallDeltaTime(void) const {
+			int64_t systemGetCallDeltaTime() const {
 				return m_periodicCallDeltaTime;
 			};
 			/**
 			 * @brief {SYSTEM} get a reference of the periodic call time
 			 * @return Last call from the periodic call
 			 */
-			int64_t systemGetLastCallTime(void) const {
+			int64_t systemGetLastCallTime() const {
 				return m_periodicCallTime;
 			};
 			/**
@@ -612,7 +612,7 @@ namespace ewol {
 			/**
 			 * @brief remove all curent shortCut
 			 */
-			virtual void shortCutClean(void);
+			virtual void shortCutClean();
 		public:
 			/**
 			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref onEventKb).
@@ -635,13 +635,13 @@ namespace ewol {
 			/**
 			 * @brief The widget mark itself that it need to regenerate the nest time.
 			 */
-			virtual void markToRedraw(void);
+			virtual void markToRedraw();
 			/**
 			 * @brief get the need of the redrawing of the widget and reset it to false
 			 * @return true if we need to redraw
 			 * @return false if we have no need to redraw
 			 */
-			virtual bool needRedraw(void) {
+			virtual bool needRedraw() {
 				bool tmpData = m_needRegenerateDisplay;
 				m_needRegenerateDisplay = false;
 				return tmpData;
@@ -659,12 +659,12 @@ namespace ewol {
 			/**
 			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
 			 */
-			virtual void onDraw(void) { };
+			virtual void onDraw() { };
 		public:
 			/**
 			 * @brief Event generated when a redraw is needed
 			 */
-			virtual void onRegenerateDisplay(void) { };
+			virtual void onRegenerateDisplay() { };
 		// grab cursor mode
 		private:
 			bool m_grabCursor;
@@ -674,16 +674,16 @@ namespace ewol {
 			 * @note : the generation of the offset is due to the fact the cursor position is forced at the center of the widget.
 			 * @note This done nothing in "Finger" or "Stylet" mode.
 			 */
-			virtual void grabCursor(void);
+			virtual void grabCursor();
 			/**
 			 * @brief Un-Grab the cursor (default mode cursor offset)
 			 */
-			virtual void unGrabCursor(void);
+			virtual void unGrabCursor();
 			/**
 			 * @brief get the grabbing status of the cursor.
 			 * @return true if the cursor is curently grabbed
 			 */
-			virtual bool getGrabStatus(void);
+			virtual bool getGrabStatus();
 		private:
 			enum ewol::context::cursorDisplay m_cursorDisplay;
 		public:
@@ -696,7 +696,7 @@ namespace ewol {
 			 * @brief get the currrent cursor.
 			 * @return the type of the cursor.
 			 */
-			virtual enum ewol::context::cursorDisplay getCursor(void);
+			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
 			virtual void onObjectRemove(ewol::Object* _removeObject);
 			virtual bool loadXML(exml::Element* _node);
@@ -707,15 +707,15 @@ namespace ewol {
 			/**
 			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions
 			 */
-			void requestUpdateSize(void);
+			void requestUpdateSize();
 			/**
 			 * @brief get the current Widget Manager
 			 */
-			ewol::widget::Manager& getWidgetManager(void);
+			ewol::widget::Manager& getWidgetManager();
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::widget::Windows* getWindows(void);
+			ewol::widget::Windows* getWindows();
 		/*
 		 * Annimation section :
 		 */
@@ -772,7 +772,7 @@ namespace ewol {
 			 * @brief Stop/Break the annimation.
 			 * @return true if an annimation will be stoped, false ==> no curent annimation and no event wil be generated
 			 */
-			bool stopAnnimation(void);
+			bool stopAnnimation();
 		protected:
 			/**
 			 * @brief Event when start the annimation.
@@ -785,7 +785,7 @@ namespace ewol {
 			/**
 			 * @brief Event when Stop the annimation.
 			 */
-			virtual void onStopAnnimation(void) { };
+			virtual void onStopAnnimation() { };
 			
 	};
 };

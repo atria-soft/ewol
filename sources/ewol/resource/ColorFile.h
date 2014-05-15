@@ -33,7 +33,7 @@ namespace ewol {
 				/**
 				 * @brief Simple Destructor of this class (nothing specific ...)
 				 */
-				virtual ~ColorFile(void);
+				virtual ~ColorFile();
 			public:
 				/**
 				 * @brief Set the error color.
@@ -63,11 +63,11 @@ namespace ewol {
 				 * @brief Get All color name
 				 * @return list of all color existing
 				 */
-				std::vector<std::string> getColors(void) const {
+				std::vector<std::string> getColors() const {
 					return m_list.getKeys();
 				}
 			public: // herited function:
-				void reload(void);
+				void reload();
 			public:
 				/**
 				 * @brief keep the resource pointer.

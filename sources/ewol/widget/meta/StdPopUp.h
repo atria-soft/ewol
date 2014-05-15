@@ -44,11 +44,11 @@ namespace ewol {
 				/**
 				 * @brief std-pop-up constructor.
 				 */
-				StdPopUp(void);
+				StdPopUp();
 				/**
 				 * @brief std-pop-up destructor.
 				 */
-				~StdPopUp(void);
+				~StdPopUp();
 			protected:
 				ewol::widget::Label* m_title; //!< Title Label widget
 			public:

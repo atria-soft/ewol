@@ -26,27 +26,27 @@
 	#define BUILD_SECOND 0
 #endif
 
-int32_t date::getYear(void) {
+int32_t date::getYear() {
 	return BUILD_YEAR;
 }
 
-int32_t date::getMonth(void) {
+int32_t date::getMonth() {
 	return BUILD_MONTH;
 }
 
-int32_t date::getDay(void) {
+int32_t date::getDay() {
 	return BUILD_DAY;
 }
 
-int32_t date::getHour(void) {
+int32_t date::getHour() {
 	return BUILD_HOUR;
 }
 
-int32_t date::getMinute(void) {
+int32_t date::getMinute() {
 	return BUILD_MINUTE;
 }
 
-int32_t date::getSecond(void) {
+int32_t date::getSecond() {
 	return BUILD_SECOND;
 }
 

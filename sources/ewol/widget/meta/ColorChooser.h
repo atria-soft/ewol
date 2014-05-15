@@ -29,14 +29,14 @@ namespace ewol {
 				// Event list of properties
 				static const char * const eventChange;
 			public:
-				ColorChooser(void);
-				~ColorChooser(void);
+				ColorChooser();
+				~ColorChooser();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onObjectRemove(ewol::Object* _removeObject);
 			public:
 				void setColor(etk::Color<> _newColor);
-				etk::Color<> getColor(void);
+				etk::Color<> getColor();
 			private:
 				ewol::widget::ColorBar* m_widgetColorBar;
 				ewol::widget::Slider* m_widgetRed;

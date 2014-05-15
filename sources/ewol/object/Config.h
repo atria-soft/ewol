@@ -27,13 +27,13 @@ namespace ewol {
 				void setConfig(const char* _config) {
 					m_config = _config;
 				};
-				inline const char* getConfig(void) const {
+				inline const char* getConfig() const {
 					return m_config;
 				};
 				void setData(const std::string& _data) {
 					m_data = _data;
 				};
-				inline const std::string& getData(void) const {
+				inline const std::string& getData() const {
 					return m_data;
 				};
 		};

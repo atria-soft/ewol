@@ -27,10 +27,10 @@ namespace ewol {
 				int32_t m_FileSize;
 				FT_Face m_fftFace;
 				bool m_init;
-				void display(void);
+				void display();
 			protected:
 				FontFreeType(const std::string& _fontName);
-				~FontFreeType(void);
+				~FontFreeType();
 			public:
 				
 				bool getGlyphProperty(int32_t _fontSize,
@@ -67,8 +67,8 @@ namespace ewol {
 				 */
 				static void release(ewol::resource::FontBase*& _object);
 		};
-		void freeTypeInit(void);
-		void freeTypeUnInit(void);
+		void freeTypeInit();
+		void freeTypeUnInit();
 	};
 };
 

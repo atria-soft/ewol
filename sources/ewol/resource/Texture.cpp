@@ -41,18 +41,18 @@ ewol::resource::Texture::Texture(const std::string& _filename) :
 	m_endPointSize.setValue(1.0,1.0);
 }
 
-ewol::resource::Texture::Texture(void) {
+ewol::resource::Texture::Texture() {
 	addObjectType("ewol::compositing::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
-ewol::resource::Texture::~Texture(void) {
+ewol::resource::Texture::~Texture() {
 	removeContext();
 }
 
-void ewol::resource::Texture::updateContext(void) {
+void ewol::resource::Texture::updateContext() {
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
@@ -83,7 +83,7 @@ void ewol::resource::Texture::updateContext(void) {
 	m_loaded = true;
 }
 
-void ewol::resource::Texture::removeContext(void) {
+void ewol::resource::Texture::removeContext() {
 	if (true == m_loaded) {
 		// Request remove texture ...
 		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
@@ -92,12 +92,12 @@ void ewol::resource::Texture::removeContext(void) {
 	}
 }
 
-void ewol::resource::Texture::removeContextToLate(void) {
+void ewol::resource::Texture::removeContextToLate() {
 	m_loaded = false;
 	m_texId=0;
 }
 
-void ewol::resource::Texture::flush(void) {
+void ewol::resource::Texture::flush() {
 	// request to the manager to be call at the next update ...
 	getManager().update(this);
 }
@@ -107,7 +107,7 @@ void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 	m_data.resize(_newSize);
 }
 
-ewol::resource::Texture* ewol::resource::Texture::keep(void) {
+ewol::resource::Texture* ewol::resource::Texture::keep() {
 	// this element create a new one every time ....
 	ewol::resource::Texture* object = new ewol::resource::Texture();
 	if (NULL == object) {

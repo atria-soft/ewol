@@ -31,7 +31,7 @@ static const float millimeterToCentimeter = 10.0f;
 static const float millimeterToKilometer = 1000000.0f;
 
 
-void ewol::Dimension::init(void) {
+void ewol::Dimension::init() {
 	if (true == isInit) {
 		return;
 	}
@@ -42,7 +42,7 @@ void ewol::Dimension::init(void) {
 	isInit = true;
 }
 
-void ewol::Dimension::unInit(void) {
+void ewol::Dimension::unInit() {
 	isInit = false;
 	ratio.setValue(9999999,888888);
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
@@ -73,7 +73,7 @@ float ewol::Dimension::getWindowsDiag(enum ewol::Dimension::distance _type) {
 	return size.length();
 }
 
-ewol::Dimension::Dimension(void) :
+ewol::Dimension::Dimension() :
   m_data(0,0),
   m_type(ewol::Dimension::Pixel) {
 	// notinh to do ...
@@ -122,11 +122,11 @@ void ewol::Dimension::set(std::string _config) {
 	EWOL_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
 }
 
-ewol::Dimension::~Dimension(void) {
+ewol::Dimension::~Dimension() {
 	// nothing to do ...
 }
 
-ewol::Dimension::operator std::string(void) const {
+ewol::Dimension::operator std::string() const {
 	std::string str;
 	str = get(getType());
 	
@@ -218,7 +218,7 @@ void ewol::Dimension::set(const vec2& _size, enum ewol::Dimension::distance _typ
 	m_type = _type;
 }
 
-vec2 ewol::Dimension::getPixel(void) const {
+vec2 ewol::Dimension::getPixel() const {
 	if (m_type!=ewol::Dimension::Pourcent) {
 		return m_data;
 	} else {
@@ -229,7 +229,7 @@ vec2 ewol::Dimension::getPixel(void) const {
 	}
 }
 
-vec2 ewol::Dimension::getPourcent(void) const {
+vec2 ewol::Dimension::getPourcent() const {
 	if (m_type!=ewol::Dimension::Pourcent) {
 		vec2 windDim = windowsSize.getPixel();
 		//EWOL_DEBUG(" windows dimention : " /*<< windowsSize*/ << "  == > " << windDim << "px"); // ==> infinite loop ...
@@ -240,27 +240,27 @@ vec2 ewol::Dimension::getPourcent(void) const {
 	return vec2(m_data.x()*100.0f, m_data.y()*100.0f);;
 }
 
-vec2 ewol::Dimension::getMeter(void) const {
+vec2 ewol::Dimension::getMeter() const {
 	return ewol::Dimension::getMillimeter()*millimeterToMeter;
 }
 
-vec2 ewol::Dimension::getCentimeter(void) const {
+vec2 ewol::Dimension::getCentimeter() const {
 	return ewol::Dimension::getMillimeter()*millimeterToCentimeter;
 }
 
-vec2 ewol::Dimension::getMillimeter(void) const {
+vec2 ewol::Dimension::getMillimeter() const {
 	return ewol::Dimension::getPixel()*invRatio;
 }
 
-vec2 ewol::Dimension::getKilometer(void) const {
+vec2 ewol::Dimension::getKilometer() const {
 	return ewol::Dimension::getMillimeter()*millimeterToKilometer;
 }
 
-vec2 ewol::Dimension::getInch(void) const {
+vec2 ewol::Dimension::getInch() const {
 	return ewol::Dimension::getMillimeter()*millimeterToInch;
 }
 
-vec2 ewol::Dimension::getFoot(void) const {
+vec2 ewol::Dimension::getFoot() const {
 	return ewol::Dimension::getMillimeter()*millimeterToFoot;
 }
 

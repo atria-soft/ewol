@@ -49,7 +49,7 @@ namespace ewol {
 				enum ewol::key::type m_highSpeedType;
 			public:
 				Scroll(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
-				virtual ~Scroll(void);
+				virtual ~Scroll();
 				/**
 				 * @brief set the limit of scrolling
 				 * @note This permit to scoll element upper the end of the display
@@ -60,16 +60,16 @@ namespace ewol {
 				 * @brief get the limit of scrolling
 				 * @return scrolling limit
 				 */
-				const vec2& getLimit(void) const { return m_limit; };
+				const vec2& getLimit() const { return m_limit; };
 				
 			public: // Derived function
-				void calculateMinMaxSize(void);
-				virtual void onRegenerateDisplay(void);
+				void calculateMinMaxSize();
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};

@@ -34,19 +34,19 @@ namespace ewol {
 				  m_default(_default) {
 					
 				};
-				inline const char* getConfig(void) const {
+				inline const char* getConfig() const {
 					return m_config;
 				};
-				inline const char* getType(void) const {
+				inline const char* getType() const {
 					return m_type;
 				};
-				inline const char* getControl(void) const {
+				inline const char* getControl() const {
 					return m_control;
 				};
-				inline const char* getDescription(void) const {
+				inline const char* getDescription() const {
 					return m_description;
 				};
-				inline const char* getDefault(void) const {
+				inline const char* getDefault() const {
 					return m_default;
 				};
 		};

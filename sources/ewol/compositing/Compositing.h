@@ -21,11 +21,11 @@ namespace ewol {
 			/**
 			 * @brief generic constructor
 			 */
-			Compositing(void);
+			Compositing();
 			/**
 			 * @brief Generic destructor
 			 */
-			virtual ~Compositing(void);
+			virtual ~Compositing();
 			/**
 			 * @brief Virtal pure function that request the draw of all openGl elements
 			 */
@@ -33,11 +33,11 @@ namespace ewol {
 			/**
 			 * @brief clear alll tre registered element in the current element
 			 */
-			virtual void clear(void);
+			virtual void clear();
 			/**
 			 * @brief reset to the eye matrix the openGL mouving system
 			 */
-			virtual void resetMatrix(void);
+			virtual void resetMatrix();
 			/**
 			 * @brief translate the current display of this element
 			 * @param[in] _vect The translation vector to apply at the transformation matrix

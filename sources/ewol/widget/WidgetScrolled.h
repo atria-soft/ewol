@@ -56,7 +56,7 @@ namespace ewol {
 				 * @return true The single finger mode is active
 				 * @return false The To finger mode is active
 				 */
-				bool getSingleFinger(void) {
+				bool getSingleFinger() {
 					return m_singleFingerMode;
 				}
 			private:
@@ -72,11 +72,11 @@ namespace ewol {
 				/**
 				 * @brief Scroll widget destructor.
 				 */
-				virtual ~WidgetScrolled(void);
+				virtual ~WidgetScrolled();
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 			public: // Derived function
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			protected:

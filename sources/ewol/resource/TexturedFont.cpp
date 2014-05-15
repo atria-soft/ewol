@@ -224,7 +224,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 	EWOL_DEBUG("    " << ewol::font::BoldItalic << " == >" << getWrappingMode(ewol::font::BoldItalic));
 }
 
-ewol::resource::TexturedFont::~TexturedFont(void) {
+ewol::resource::TexturedFont::~TexturedFont() {
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		ewol::resource::FontFreeType::release(m_font[iiiFontId]);
 	}

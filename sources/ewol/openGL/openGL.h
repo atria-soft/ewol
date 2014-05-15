@@ -58,11 +58,11 @@ namespace ewol {
 		/**
 		 * @brief Lock the openGL context for one user only  == > better to keep flags and other things ...
 		 */
-		void lock(void);
+		void lock();
 		/**
 		 * @brief Un-lock the openGL context for an other user...
 		 */
-		void unLock(void);
+		void unLock();
 		/**
 		 * @brief When you will done an opengl rendering, you might call this reset matrix first. It remove all the stach of the matrix pushed.
 		 * @param[in] _newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived
@@ -77,21 +77,21 @@ namespace ewol {
 		/**
 		 * @brief store current matrix in the matrix stack.
 		 */
-		void push(void);
+		void push();
 		/**
 		 * @brief remove the current matrix and get the last one from the matrix stack.
 		 */
-		void pop(void);
+		void pop();
 		/**
 		 * @brief get a reference on the current matrix destinate to opengl renderer.
 		 * @return The requested matrix.
 		 */
-		const mat4& getMatrix(void);
+		const mat4& getMatrix();
 		/**
 		 * @brief get a reference on the current matrix camera destinate to opengl renderer.
 		 * @return The requested matrix.
 		 */
-		const mat4& getCameraMatrix(void);
+		const mat4& getCameraMatrix();
 		/**
 		 * @brief set a reference on the current camera to opengl renderer.
 		 * @param[in] _newOne The requested matrix.
@@ -100,15 +100,15 @@ namespace ewol {
 		/**
 		 * @brief
 		 */
-		void finish(void);
+		void finish();
 		/**
 		 * @brief
 		 */
-		void flush(void);
+		void flush();
 		/**
 		 * @brief
 		 */
-		void swap(void);
+		void swap();
 		
 		enum openGlFlags {
 			FLAG_BLEND = 1<<0, //!< If enabled, blend the computed fragment color values with the values in the color buffers. See glBlendFunc.
@@ -155,7 +155,7 @@ namespace ewol {
 		/**
 		 * @brieg update all the internal flag needed to be set from tre previous element set ...
 		 */
-		void updateAllFlags(void);
+		void updateAllFlags();
 		/**
 		 * @brief enable Texture on the system
 		 * @param[in] flagID The flag requested

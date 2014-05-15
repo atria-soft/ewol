@@ -30,7 +30,7 @@ static const char * const eventColorBarHasChange          = "event-color-bar-has
 static const char * const eventColorSpecificHasChange     = "event-color-specific-has-change";
 
 
-ewol::widget::ColorChooser::ColorChooser(void) :
+ewol::widget::ColorChooser::ColorChooser() :
   ewol::widget::Sizer(ewol::widget::Sizer::modeVert) {
 	addObjectType("ewol::widget::ColorChooser");
 	addEventId(eventChange);
@@ -91,7 +91,7 @@ ewol::widget::ColorChooser::ColorChooser(void) :
 }
 
 
-ewol::widget::ColorChooser::~ColorChooser(void) {
+ewol::widget::ColorChooser::~ColorChooser() {
 	
 }
 
@@ -116,7 +116,7 @@ void ewol::widget::ColorChooser::setColor(etk::Color<> _newColor) {
 }
 
 
-etk::Color<> ewol::widget::ColorChooser::getColor(void) {
+etk::Color<> ewol::widget::ColorChooser::getColor() {
 	return m_currentColor;
 }
 

@@ -49,7 +49,7 @@ namespace ewol {
 			/**
 			 * @brief Simple constructor that allow to allocate the std::vector element
 			 */
-			Kerning(void) :
+			Kerning() :
 			  m_UVal(0),
 			  m_value(0) {
 				
@@ -67,7 +67,7 @@ namespace ewol {
 			/**
 			 * @brief normal destructor
 			 */
-			~Kerning(void) { };
+			~Kerning() { };
 	};
 };
 

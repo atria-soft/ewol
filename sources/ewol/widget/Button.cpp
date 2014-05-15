@@ -34,7 +34,7 @@ const char* const ewol::widget::Button::configShaper = "shaper";
 #define STATUS_DOWN      (3)
 
 
-static ewol::Widget* Create(void) {
+static ewol::Widget* Create() {
 	return new ewol::widget::Button();
 }
 
@@ -74,7 +74,7 @@ ewol::widget::Button::Button(const std::string& _shaperName) :
 }
 
 
-ewol::widget::Button::~Button(void) {
+ewol::widget::Button::~Button() {
 	
 }
 
@@ -94,17 +94,17 @@ void ewol::widget::Button::calculateSize(const vec2& _availlable) {
 }
 
 
-void ewol::widget::Button::calculateMinMaxSize(void) {
+void ewol::widget::Button::calculateMinMaxSize() {
 	ewol::Padding padding = m_shaper.getPadding();
 	calculateMinMaxSizePadded(padding);
 }
 
-void ewol::widget::Button::onDraw(void) {
+void ewol::widget::Button::onDraw() {
 	// draw the shaaper (if needed indeed)
 	m_shaper.draw();
 }
 
-void ewol::widget::Button::onRegenerateDisplay(void) {
+void ewol::widget::Button::onRegenerateDisplay() {
 	ewol::widget::Container2::onRegenerateDisplay();
 	if (needRedraw() == false) {
 		return;
@@ -243,13 +243,13 @@ bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 	return false;
 }
 
-void ewol::widget::Button::onLostFocus(void) {
+void ewol::widget::Button::onLostFocus() {
 	m_buttonPressed = false;
 	EWOL_VERBOSE(getName() << " : Remove Focus ...");
 	CheckStatus();
 }
 
-void ewol::widget::Button::CheckStatus(void) {
+void ewol::widget::Button::CheckStatus() {
 	if (true == m_buttonPressed) {
 		changeStatusIn(STATUS_PRESSED);
 	} else {

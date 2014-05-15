@@ -29,7 +29,7 @@ namespace ewol {
 				etk::Color<> m_colorBg; //!< display background color
 				etk::Color<> m_colorFg; //!< display foreground color
 				enum ewol::font::mode m_mode; //!< display mode Regular/Bold/Italic/BoldItalic
-				TextDecoration(void) {
+				TextDecoration() {
 					m_colorBg = etk::color::blue;
 					m_colorBg = etk::color::green;
 					m_mode = ewol::font::Regular;
@@ -48,7 +48,7 @@ namespace ewol {
 			protected:
 				ewol::compositing::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 			public:
-				virtual ewol::compositing::Drawing& getDrawing(void) {
+				virtual ewol::compositing::Drawing& getDrawing() {
 					return m_vectorialDraw;
 				};
 			protected:
@@ -105,7 +105,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~TextBase(void);
+				virtual ~TextBase();
 			public: // Derived function
 				void translate(const vec3& _vect);
 				void rotate(const vec3& _vect, float _angle);
@@ -130,16 +130,16 @@ namespace ewol {
 				/**
 				 * @brief clear all the registered element in the current element
 				 */
-				virtual void clear(void);
+				virtual void clear();
 				/**
 				 * @brief clear all the intermediate result detween 2 prints
 				 */
-				virtual void reset(void);
+				virtual void reset();
 				/**
 				 * @brief get the current display position (sometime needed in the gui control)
 				 * @return the current position.
 				 */
-				const vec3& getPos(void) {
+				const vec3& getPos() {
 					return m_position;
 				};
 				/**
@@ -239,11 +239,11 @@ namespace ewol {
 				 * @brief get the current font mode
 				 * @return The font mode applied
 				 */
-				enum ewol::font::mode getFontMode(void) {
+				enum ewol::font::mode getFontMode() {
 					return m_mode;
 				};
-				virtual float getHeight(void) = 0;
-				virtual float getSize(void) = 0;
+				virtual float getHeight() = 0;
+				virtual float getSize() = 0;
 				virtual ewol::GlyphProperty * getGlyphPointer(char32_t _charcode) = 0;
 				/**
 				 * @brief enable or disable the bold mode
@@ -351,7 +351,7 @@ namespace ewol {
 				/**
 				 * @brief This generate the line return  == > it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
 				 */
-				void forceLineReturn(void);
+				void forceLineReturn();
 			protected:
 				/**
 				 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include).
@@ -370,12 +370,12 @@ namespace ewol {
 				/**
 				 * @brief disable the alignement system
 				 */
-				void disableAlignement(void);
+				void disableAlignement();
 				/**
 				 * @brief get the current alignement property
 				 * @return the curent alignement type
 				 */
-				enum ewol::compositing::aligneMode getAlignement(void);
+				enum ewol::compositing::aligneMode getAlignement();
 				/**
 				 * @brief calculate a theoric text size
 				 * @param[in] _text The string to calculate dimention.
@@ -446,12 +446,12 @@ namespace ewol {
 				/**
 				 * @brief draw the current line
 				 */
-				void htmlFlush(void);
+				void htmlFlush();
 			public:
 				/**
 				 * @brief remove the cursor display
 				 */
-				void disableCursor(void);
+				void disableCursor();
 				/**
 				 * @brief set a cursor at a specific position:
 				 * @param[in] _cursorPos id of the cursor position

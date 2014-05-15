@@ -16,12 +16,12 @@
 
 
 
-ewol::resource::Manager::Manager(void) :
+ewol::resource::Manager::Manager() :
   m_contextHasBeenRemoved(true) {
 	// nothing to do ...
 }
 
-ewol::resource::Manager::~Manager(void) {
+ewol::resource::Manager::~Manager() {
 	bool hasError = false;
 	if (m_resourceListToUpdate.size()!=0) {
 		EWOL_ERROR("Must not have anymore resources to update !!!");
@@ -36,7 +36,7 @@ ewol::resource::Manager::~Manager(void) {
 	}
 }
 
-void ewol::resource::Manager::unInit(void) {
+void ewol::resource::Manager::unInit() {
 	display();
 	m_resourceListToUpdate.clear();
 	// remove all resources ...
@@ -52,7 +52,7 @@ void ewol::resource::Manager::unInit(void) {
 	m_resourceList.clear();
 }
 
-void ewol::resource::Manager::display(void) {
+void ewol::resource::Manager::display() {
 	EWOL_INFO("Resources loaded : ");
 	// remove all resources ...
 	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
@@ -66,7 +66,7 @@ void ewol::resource::Manager::display(void) {
 	EWOL_INFO("Resources ---");
 }
 
-void ewol::resource::Manager::reLoadResources(void) {
+void ewol::resource::Manager::reLoadResources() {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");
 	// remove all resources ...
 	if (m_resourceList.size() != 0) {
@@ -102,7 +102,7 @@ void ewol::resource::Manager::update(ewol::Resource* _object) {
 }
 
 // Specific to load or update the data in the openGl context  == > system use only
-void ewol::resource::Manager::updateContext(void) {
+void ewol::resource::Manager::updateContext() {
 	if (true == m_contextHasBeenRemoved) {
 		// need to update all ...
 		m_contextHasBeenRemoved = false;
@@ -138,7 +138,7 @@ void ewol::resource::Manager::updateContext(void) {
 }
 
 // in this case, it is really too late ...
-void ewol::resource::Manager::contextHasBeenDestroyed(void) {
+void ewol::resource::Manager::contextHasBeenDestroyed() {
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
 			m_resourceList[iii]->removeContextToLate();

@@ -19,7 +19,7 @@
 const char* const ewol::Object::configName = "name";
 size_t ewol::Object::m_valUID = 0;
 
-ewol::Object::Object(void) :
+ewol::Object::Object() :
   m_static(false),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
@@ -39,7 +39,7 @@ ewol::Object::Object(const std::string& _name) :
 	registerConfig(configName, "string", NULL, "Object name, might be a unique reference in all the program");
 }
 
-ewol::Object::~Object(void) {
+ewol::Object::~Object() {
 	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
 	getObjectManager().rm(this);
 	getMultiCast().rm(this);
@@ -54,7 +54,7 @@ ewol::Object::~Object(void) {
 	m_uniqueId = -1;
 }
 
-const char * const ewol::Object::getObjectType(void) {
+const char * const ewol::Object::getObjectType() {
 	if (m_listType.size() == 0) {
 		return "ewol::Object";
 	}
@@ -68,7 +68,7 @@ void ewol::Object::addObjectType(const char* _type) {
 	}
 	m_listType.push_back(_type);
 }
-std::string ewol::Object::getTypeDescription(void) {
+std::string ewol::Object::getTypeDescription() {
 	std::string ret("ewol::Object");
 	for(auto element : m_listType) {
 		ret += "|";
@@ -89,11 +89,11 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 	return false;
 }
 
-void ewol::Object::autoDestroy(void) {
+void ewol::Object::autoDestroy() {
 	getObjectManager().autoRemove(this);
 }
 
-void ewol::Object::removeObject(void) {
+void ewol::Object::removeObject() {
 	getObjectManager().autoRemove(this);
 }
 
@@ -351,7 +351,7 @@ bool ewol::Object::setConfig(const std::string& _config, const std::string& _val
 std::string ewol::Object::getConfig(const char* _config) const {
 	std::string res="";
 	if (NULL != _config) {
-		(void)onGetConfig(_config, res);
+		onGetConfig(_config, res);
 	}
 	return res;
 }
@@ -385,14 +385,14 @@ bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::str
 	return object->setConfig(_config, _value);
 }
 
-ewol::object::Manager& ewol::Object::getObjectManager(void) {
+ewol::object::Manager& ewol::Object::getObjectManager() {
 	return ewol::getContext().getEObjectManager();
 }
 
-ewol::object::MultiCast& ewol::Object::getMultiCast(void) {
+ewol::object::MultiCast& ewol::Object::getMultiCast() {
 	return ewol::getContext().getEObjectManager().multiCast();
 }
 
-ewol::Context& ewol::Object::getContext(void) {
+ewol::Context& ewol::Object::getContext() {
 	return ewol::getContext();
 }

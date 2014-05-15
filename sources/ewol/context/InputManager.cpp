@@ -28,7 +28,7 @@
 #define EVENT_DEBUG  EWOL_VERBOSE
 //#define EVENT_DEBUG  EWOL_DEBUG
 
-void ewol::context::InputManager::calculateLimit(void) {
+void ewol::context::InputManager::calculateLimit() {
 	m_eventInputLimit.sepatateTime = 300000; // µs
 	m_eventInputLimit.DpiOffset = m_dpi*100;
 	m_eventMouseLimit.sepatateTime = 300000; // µs
@@ -133,7 +133,7 @@ void ewol::context::InputManager::grabPointer(ewol::Widget* _widget) {
 	                                          _widget->getSize().y()/2.0f) );
 }
 
-void ewol::context::InputManager::unGrabPointer(void) {
+void ewol::context::InputManager::unGrabPointer() {
 	m_grabWidget = NULL;
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
@@ -151,7 +151,7 @@ void ewol::context::InputManager::onObjectRemove(ewol::Object * removeObject) {
 	}
 }
 
-void ewol::context::InputManager::newLayerSet(void) {
+void ewol::context::InputManager::newLayerSet() {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
 		abortElement(m_eventInputSaved, iii, ewol::key::typeFinger);
@@ -174,7 +174,7 @@ ewol::context::InputManager::InputManager(ewol::Context& _context) :
 	EWOL_INFO("Init (end)");
 }
 
-ewol::context::InputManager::~InputManager(void) {
+ewol::context::InputManager::~InputManager() {
 	EWOL_INFO("Un-Init (start)");
 	EWOL_INFO("Un-Init (end)");
 }

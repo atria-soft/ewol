@@ -50,7 +50,7 @@ namespace ewol {
 		 * @brief Get the current language selected
 		 * @return The 2/3 char defining the language
 		 */
-		const std::string& getLanguageDefault(void);
+		const std::string& getLanguageDefault();
 		/**
 		 * @brief Set the language to load data. when no data availlable, we get the default language.
 		 * @param[in] _lang Language to load : ("EN" for english, "FR" for french, "DE" for German, "SP" for spanish ...)
@@ -60,11 +60,11 @@ namespace ewol {
 		 * @brief Get the current language loaded
 		 * @return The 2/3 char defining the language
 		 */
-		const std::string& getLanguage(void);
+		const std::string& getLanguage();
 		/**
 		 * @brief Automatic detection of the system language
 		 */
-		void autoDetectLanguage(void);
+		void autoDetectLanguage();
 		/**
 		 * @brief Translate a specific text (if not find, it will be retured the same text).
 		 * @param[in] _instance Text to translate.

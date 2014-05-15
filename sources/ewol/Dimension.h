@@ -37,7 +37,7 @@ namespace ewol {
 			/**
 			 * @brief Constructor (default :0,0 mode pixel)
 			 */
-			Dimension(void);
+			Dimension();
 			/**
 			 * @brief Constructor
 			 * @param[in] _size Requested dimention
@@ -65,12 +65,12 @@ namespace ewol {
 			/**
 			 * @brief Destructor
 			 */
-			~Dimension(void);
+			~Dimension();
 			
 			/**
 			 * @brief string cast :
 			 */
-			operator std::string(void) const;
+			operator std::string() const;
 			
 			/**
 			 * @brief get the current dimention in requested type
@@ -96,42 +96,42 @@ namespace ewol {
 			 * @brief get the current dimention in pixel
 			 * @return dimention in Pixel
 			 */
-			vec2 getPixel(void) const;
+			vec2 getPixel() const;
 			/**
 			 * @brief get the current dimention in Pourcent
 			 * @return dimention in Pourcent
 			 */
-			vec2 getPourcent(void) const;
+			vec2 getPourcent() const;
 			/**
 			 * @brief get the current dimention in Meter
 			 * @return dimention in Meter
 			 */
-			vec2 getMeter(void) const;
+			vec2 getMeter() const;
 			/**
 			 * @brief get the current dimention in Centimeter
 			 * @return dimention in Centimeter
 			 */
-			vec2 getCentimeter(void) const;
+			vec2 getCentimeter() const;
 			/**
 			 * @brief get the current dimention in Millimeter
 			 * @return dimention in Millimeter
 			 */
-			vec2 getMillimeter(void) const;
+			vec2 getMillimeter() const;
 			/**
 			 * @brief get the current dimention in Kilometer
 			 * @return dimention in Kilometer
 			 */
-			vec2 getKilometer(void) const;
+			vec2 getKilometer() const;
 			/**
 			 * @brief get the current dimention in Inch
 			 * @return dimention in Inch
 			 */
-			vec2 getInch(void) const;
+			vec2 getInch() const;
 			/**
 			 * @brief get the current dimention in Foot
 			 * @return dimention in Foot
 			 */
-			vec2 getFoot(void) const;
+			vec2 getFoot() const;
 			/*****************************************************
 			 *    = assigment
 			 *****************************************************/
@@ -166,18 +166,18 @@ namespace ewol {
 			 * @breif get the dimension type
 			 * @return the type
 			 */
-			enum distance getType(void) const {
+			enum distance getType() const {
 				return m_type;
 			};
 		public : // Global static access :
 		/**
 		 * @brief basic init
 		 */
-		static void init(void);
+		static void init();
 		/**
 		 * @brief basic un-init
 		 */
-		static void unInit(void);
+		static void unInit();
 		/**
 		 * @brief set the Milimeter ratio for calculation
 		 * @param[in] Ratio Milimeter ration for the screen calculation interpolation

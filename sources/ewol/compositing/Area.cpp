@@ -28,12 +28,12 @@ ewol::compositing::Area::Area(const ivec2& _size) :
 	loadProgram();
 }
 
-ewol::compositing::Area::~Area(void) {
+ewol::compositing::Area::~Area() {
 	ewol::resource::Texture::release(m_resource);
 	ewol::resource::Program::release(m_GLprogram);
 }
 
-void ewol::compositing::Area::loadProgram(void) {
+void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
@@ -76,7 +76,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::compositing::Area::clear(void) {
+void ewol::compositing::Area::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :

@@ -24,7 +24,7 @@ namespace ewol {
 			protected:
 				ImageDF(const std::string& _genName);
 				ImageDF(std::string _genName, const std::string& _fileName, const ivec2& _size);
-				virtual ~ImageDF(void) { };
+				virtual ~ImageDF() { };
 				/**
 				 * @brief Generate distance field of this Image input.
 				 * @param[in] _input Input image to change in distance field mode.
@@ -32,7 +32,7 @@ namespace ewol {
 				 */
 				void generateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
 			public:
-				const vec2& getRealSize(void) {
+				const vec2& getRealSize() {
 					return m_realImageSize;
 				};
 			public:

@@ -25,7 +25,7 @@
 static int32_t l_countLoaded=0;
 static FT_Library library;
 
-void ewol::resource::freeTypeInit(void) {
+void ewol::resource::freeTypeInit() {
 	EWOL_DEBUG(" == > init Font-Manager");
 	l_countLoaded++;
 	if (l_countLoaded>1) {
@@ -38,7 +38,7 @@ void ewol::resource::freeTypeInit(void) {
 	}
 }
 
-void ewol::resource::freeTypeUnInit(void) {
+void ewol::resource::freeTypeUnInit() {
 	EWOL_DEBUG(" == > Un-Init Font-Manager");
 	l_countLoaded--;
 	if (l_countLoaded>0) {
@@ -97,7 +97,7 @@ ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
 	}
 }
 
-ewol::resource::FontFreeType::~FontFreeType(void) {
+ewol::resource::FontFreeType::~FontFreeType() {
 	// clean the tmp memory
 	if (NULL != m_FileBuffer) {
 		delete[] m_FileBuffer;
@@ -304,7 +304,7 @@ void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, std::vector
 }
 
 
-void ewol::resource::FontFreeType::display(void) {
+void ewol::resource::FontFreeType::display() {
 	if(false == m_init) {
 		return;
 	}

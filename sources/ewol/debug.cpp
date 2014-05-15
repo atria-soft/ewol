@@ -8,7 +8,7 @@
 
 #include <ewol/debug.h>
 
-int32_t ewol::getLogId(void) {
+int32_t ewol::getLogId() {
 	static int32_t g_val = etk::log::registerInstance("ewol");
 	return g_val;
 }

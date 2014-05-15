@@ -18,7 +18,7 @@
 const char * const ewol::widget::Label::eventPressed = "pressed";
 const char* const ewol::widget::Label::configValue  = "value";
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Label();
 }
 
@@ -43,11 +43,11 @@ ewol::widget::Label::Label(std::string _newLabel) :
 	registerConfig(configValue, "string", NULL, "displayed value string"); // TODO : do not store in attibute...
 }
 
-ewol::widget::Label::~Label(void) {
+ewol::widget::Label::~Label() {
 	ewol::resource::ColorFile::release(m_colorProperty);
 }
 
-void ewol::widget::Label::calculateMinMaxSize(void) {
+void ewol::widget::Label::calculateMinMaxSize() {
 	vec2 tmpMax = m_userMaxSize.getPixel();
 	vec2 tmpMin = m_userMinSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
@@ -69,15 +69,15 @@ void ewol::widget::Label::setLabel(const std::string& _newLabel) {
 	requestUpdateSize();
 }
 
-std::string ewol::widget::Label::getLabel(void) const {
+std::string ewol::widget::Label::getLabel() const {
 	return std::to_string(m_label);
 }
 
-void ewol::widget::Label::onDraw(void) {
+void ewol::widget::Label::onDraw() {
 	m_text.draw();
 }
 
-void ewol::widget::Label::onRegenerateDisplay(void) {
+void ewol::widget::Label::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}

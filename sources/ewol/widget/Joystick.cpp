@@ -24,7 +24,7 @@ static float   l_ratio(1.0/7.0);
 #undef __class__
 #define __class__ "Joystick"
 
-ewol::widget::Joystick::Joystick(void) {
+ewol::widget::Joystick::Joystick() {
 	addObjectType("ewol::widget::Joystick");
 	addEventId(eventEnable);
 	addEventId(eventDisable);
@@ -51,7 +51,7 @@ ewol::widget::Joystick::Joystick(void) {
 }
 
 
-ewol::widget::Joystick::~Joystick(void) {
+ewol::widget::Joystick::~Joystick() {
 	
 }
 
@@ -62,7 +62,7 @@ void ewol::widget::Joystick::calculateSize(const vec2& availlable) {
 	markToRedraw();
 }
 
-void ewol::widget::Joystick::onRegenerateDisplay(void) {
+void ewol::widget::Joystick::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		

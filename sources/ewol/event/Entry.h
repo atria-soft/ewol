@@ -34,25 +34,25 @@ namespace ewol {
 				void setType(enum ewol::key::keyboard _type) {
 					m_type = _type;
 				};
-				inline const enum ewol::key::keyboard& getType(void) const {
+				inline const enum ewol::key::keyboard& getType() const {
 					return m_type;
 				};
 				void setStatus(enum ewol::key::status _status) {
 					m_status = _status;
 				};
-				inline const enum ewol::key::status& getStatus(void) const {
+				inline const enum ewol::key::status& getStatus() const {
 					return m_status;
 				};
 				void setSpecialKey(const ewol::key::Special& _specialKey) {
 					m_specialKey = _specialKey;
 				};
-				inline const ewol::key::Special& getSpecialKey(void) const {
+				inline const ewol::key::Special& getSpecialKey() const {
 					return m_specialKey;
 				};
 				void setChar(char32_t _char) {
 					m_unicodeData = _char;
 				};
-				inline const char32_t& getChar(void) const {
+				inline const char32_t& getChar() const {
 					return m_unicodeData;
 				};
 		};

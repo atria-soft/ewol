@@ -46,8 +46,8 @@ namespace ewol {
 				std::string m_foreground;
 				float m_ratio;
 			public:
-				Joystick(void);
-				virtual ~Joystick(void);
+				Joystick();
+				virtual ~Joystick();
 			public:
 				void setLockMode(bool _lockWhenOut) {
 					m_lock = _lockWhenOut;
@@ -80,7 +80,7 @@ namespace ewol {
 				
 			public: // Derived function
 				virtual void calculateSize(const vec2& _availlable);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};

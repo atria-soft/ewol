@@ -44,7 +44,7 @@ namespace ewol {
 				/**
 				 * @brief Desstructor
 				 */
-				virtual ~Sizer(void);
+				virtual ~Sizer();
 				/**
 				 * @brief set the mode to display elements.
 				 * @param[in] _mode The mode to display the elements.
@@ -54,7 +54,7 @@ namespace ewol {
 				 * @brief get the mode to display elements.
 				 * @return The current mode to display the elements.
 				 */
-				enum displayMode getMode(void) const {
+				enum displayMode getMode() const {
 					return m_mode;
 				}
 			private:
@@ -69,7 +69,7 @@ namespace ewol {
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const ewol::Dimension& getBorderSize(void) const {
+				const ewol::Dimension& getBorderSize() const {
 					return m_borderSize;
 				};
 			public:
@@ -95,7 +95,7 @@ namespace ewol {
 				 * @brief get the current animation mode.
 				 * @return The animation mode.
 				 */
-				enum animation getAnimationMode(void) {
+				enum animation getAnimationMode() {
 					return m_animation;
 				};
 			private:
@@ -112,12 +112,12 @@ namespace ewol {
 				 * @brief get the current animation time.
 				 * @return The time to produce the animation.
 				 */
-				float getAnimationTime(void) {
+				float getAnimationTime() {
 					return m_animationTime;
 				};
 			public: // Derived function
 				virtual void calculateSize(const vec2& _availlable);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
 				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
 				virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);

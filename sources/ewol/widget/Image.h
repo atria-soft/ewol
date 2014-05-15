@@ -52,7 +52,7 @@ namespace ewol {
 				/**
 				 * @brief 
 				 */
-				virtual ~Image(void);
+				virtual ~Image();
 				/**
 				 * @brief set All the configuration of the current image
 				 * @param[in] _file Filaneme of the new image
@@ -71,7 +71,7 @@ namespace ewol {
 				 * @brief get the file displayed
 				 * @return the filename of the image
 				 */
-				const std::string& getFile(void) const {
+				const std::string& getFile() const {
 					return m_fileName;
 				};
 			protected:
@@ -86,7 +86,7 @@ namespace ewol {
 				 * @brief get the current border request at the image
 				 * @return the border size
 				 */
-				const ewol::Dimension& getBorder(void) const {
+				const ewol::Dimension& getBorder() const {
 					return m_border;
 				};
 			protected:
@@ -101,7 +101,7 @@ namespace ewol {
 				 * @brief get the current border request at the image
 				 * @return the border size
 				 */
-				const ewol::Dimension& getImageSize(void) const {
+				const ewol::Dimension& getImageSize() const {
 					return m_imageSize;
 				};
 			protected:
@@ -116,7 +116,7 @@ namespace ewol {
 				 * @brief get the current status of keeping ratio.
 				 * @return The status of keeping the ratio of this image.
 				 */
-				bool getKeepRatio(void) const {
+				bool getKeepRatio() const {
 					return m_keepRatio;
 				};
 			protected:
@@ -131,7 +131,7 @@ namespace ewol {
 				 * @brief get the current 'start' position in the image to display.
 				 * @return The Position of the display in image
 				 */
-				vec2 getStartPos(void) const {
+				vec2 getStartPos() const {
 					return m_posStart;
 				};
 			protected:
@@ -146,7 +146,7 @@ namespace ewol {
 				 * @brief get the current 'stop' position in the image to display.
 				 * @return The Position of the display in image
 				 */
-				vec2 getStopPos(void) const {
+				vec2 getStopPos() const {
 					return m_posStop;
 				};
 			public:
@@ -161,16 +161,16 @@ namespace ewol {
 				 * @brief Get the distance field render mode.
 				 * @return Status of the distance field render mode.
 				 */
-				bool getDistanceField(void) const {
+				bool getDistanceField() const {
 					return m_compositing.getDistanceFieldMode();
 				}
 			protected: // Derived function
-				virtual void onDraw(void);
+				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
-				virtual void calculateMinMaxSize(void);
-				virtual void onRegenerateDisplay(void);
+				virtual void calculateMinMaxSize();
+				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool loadXML(exml::Element* _node);
 		};

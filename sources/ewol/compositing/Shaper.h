@@ -87,11 +87,11 @@ namespace ewol {
 				/**
 				 * @brief load the openGL program and get all the ID needed
 				 */
-				void loadProgram(void);
+				void loadProgram();
 				/**
 				 * @brief Un-Load the openGL program and get all the ID needed
 				 */
-				void unLoadProgram(void);
+				void unLoadProgram();
 			public:
 				/**
 				 * @brief generic constructor
@@ -101,7 +101,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				~Shaper(void);
+				~Shaper();
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL
@@ -110,7 +110,7 @@ namespace ewol {
 				/**
 				 * @brief clear alll tre registered element in the current element
 				 */
-				void clear(void);
+				void clear();
 				/**
 				 * @brief change the current status in an other
 				 * @param[in] _newStatusId the next new status requested
@@ -122,21 +122,21 @@ namespace ewol {
 				 * @brief get the current displayed status of the shaper
 				 * @return The Status Id
 				 */
-				int32_t getCurrentDisplayedStatus(void) {
+				int32_t getCurrentDisplayedStatus() {
 					return m_stateNew;
 				};
 				/**
 				 * @brief get the next displayed status of the shaper
 				 * @return The next status Id (-1 if no status in next)
 				 */
-				int32_t getNextDisplayedStatus(void) {
+				int32_t getNextDisplayedStatus() {
 					return m_nextStatusRequested;
 				};
 				/**
 				 * @brief get the current trasion status
 				 * @return value of the transition status (0.0f when no activity)
 				 */
-				float getTransitionStatus(void) {
+				float getTransitionStatus() {
 					return m_stateTransition;
 				};
 				/**
@@ -150,14 +150,14 @@ namespace ewol {
 				 * @brief get the padding declared by the user in the config file
 				 * @return the padding property
 				 */
-				ewol::Padding getPadding(void);
-				ewol::Padding getPaddingIn(void);
-				ewol::Padding getPaddingOut(void);
+				ewol::Padding getPadding();
+				ewol::Padding getPaddingIn();
+				ewol::Padding getPaddingOut();
 				/**
 				 * @brief get the padding declared by the user in the config file
 				 * @return the padding property
 				 */
-				ewol::Padding getBorder(void);
+				ewol::Padding getBorder();
 				/**
 				 * @brief change the shaper Source
 				 * @param[in] _newFile New file of the shaper
@@ -167,14 +167,14 @@ namespace ewol {
 				 * @brief get the shaper file Source
 				 * @return the shapper file name
 				 */
-				const std::string& getSource(void) const {
+				const std::string& getSource() const {
 					return m_name;
 				};
 				/**
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 				 * @return the validity od the resources.
 				 */
-				bool hasSources(void);
+				bool hasSources();
 			public:
 				/**
 				 * @brief set the shape property:

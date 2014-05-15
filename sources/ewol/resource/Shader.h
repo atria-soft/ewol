@@ -34,39 +34,39 @@ namespace ewol {
 				/**
 				 * @brief Destructor, remove the current Shader
 				 */
-				virtual ~Shader(void);
+				virtual ~Shader();
 			public:
 				/**
 				 * @brief get the opengl reference id of this shader.
 				 * @return The opengl id.
 				 */
-				GLuint getGL_ID(void) {
+				GLuint getGL_ID() {
 					return m_shader;
 				};
 				/**
 				 * @brief get the opengl type of this shader.
 				 * @return The type of this loaded shader.
 				 */
-				GLenum getShaderType(void) {
+				GLenum getShaderType() {
 					return m_type;
 				};
 				/**
 				 * @brief This load/reload the data in the opengl context, needed when removed previously.
 				 */
-				void updateContext(void);
+				void updateContext();
 				/**
 				 * @brief remove the data from the opengl context.
 				 */
-				void removeContext(void);
+				void removeContext();
 				/**
 				 * @brief Special android spec! It inform us that all context is removed and after notify us...
 				 */
-				void removeContextToLate(void);
+				void removeContextToLate();
 				/**
 				 * @brief Relode the shader from the file. used when a request of resouces reload is done.
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
-				void reload(void);
+				void reload();
 			public:
 				/**
 				 * @brief keep the resource pointer.

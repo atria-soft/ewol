@@ -26,11 +26,11 @@ namespace ewol {
 				/**
 				 * @brief Constructor
 				 */
-				ContainerN(void);
+				ContainerN();
 				/**
 				 * @brief Destructor
 				 */
-				~ContainerN(void);
+				~ContainerN();
 			protected:
 				bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 				bvec2 m_subExpend; //!< reference of the sub element expention requested.
@@ -41,16 +41,16 @@ namespace ewol {
 				 */
 				void lockExpand(const bvec2& _lockExpand);
 				// herited function
-				virtual bvec2 canExpand(void);
+				virtual bvec2 canExpand();
 			public:
 				/**
 				 * @brief remove all sub element from the widget.
 				 */
-				virtual void subWidgetRemoveAll(void);
+				virtual void subWidgetRemoveAll();
 				/**
 				 * @brief remove all sub element from the widget (delayed to prevent remove in the callbback).
 				 */
-				virtual void subWidgetRemoveAllDelayed(void);
+				virtual void subWidgetRemoveAllDelayed();
 				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _newWidget the element pointer
@@ -87,10 +87,10 @@ namespace ewol {
 				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
 			public:// Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual void onObjectRemove(ewol::Object* _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 				virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
 				virtual bool loadXML(exml::Element* _node);

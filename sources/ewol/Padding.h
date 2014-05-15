@@ -19,7 +19,7 @@ namespace ewol {
 		private:
 			float m_value[4]; //!< this represent the 4 padding value Left top right buttom (like css)
 		public:
-			Padding(void) { }
+			Padding() { }
 			Padding(float _xl, float _yt=0, float _xr=0, float _yb=0) {
 				setValue(_xl, _yt, _xr, _yb);
 			}
@@ -30,31 +30,31 @@ namespace ewol {
 				m_value[3] = _yb;
 			}
 			
-			float x(void) const {
+			float x() const {
 				return m_value[0] + m_value[2];
 			}
-			float y(void) const {
+			float y() const {
 				return m_value[1] + m_value[3];
 			}
-			float xLeft(void) const {
+			float xLeft() const {
 				return m_value[0];
 			}
 			void setXLeft(float _val) {
 				m_value[0] = _val;
 			}
-			float xRight(void) const {
+			float xRight() const {
 				return m_value[2];
 			}
 			void setXRight(float _val) {
 				m_value[2] = _val;
 			}
-			float yTop(void) const {
+			float yTop() const {
 				return m_value[1];
 			}
 			void setYTop(float _val) {
 				m_value[1] = _val;
 			}
-			float yButtom(void) const {
+			float yButtom() const {
 				return m_value[3];
 			}
 			void setYButtom(float _val) {

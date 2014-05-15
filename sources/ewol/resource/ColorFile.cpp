@@ -27,12 +27,12 @@ ewol::resource::ColorFile::ColorFile(const std::string& _filename) :
 }
 
 
-ewol::resource::ColorFile::~ColorFile(void) {
+ewol::resource::ColorFile::~ColorFile() {
 	// remove all element
 	m_list.clear();
 }
 
-void ewol::resource::ColorFile::reload(void) {
+void ewol::resource::ColorFile::reload() {
 	// remove all previous set of value :
 	for (int32_t iii = 0; iii < m_list.size() ; ++iii) {
 		m_list[iii] = m_errorColor;

@@ -18,7 +18,7 @@
 
 static const char * const eventButtonExit = "ewol-event-pop-up-exit-button";
 
-ewol::widget::StdPopUp::StdPopUp(void) :
+ewol::widget::StdPopUp::StdPopUp() :
   m_title(NULL),
   m_comment(NULL),
   m_subBar(NULL) {
@@ -72,7 +72,7 @@ ewol::widget::StdPopUp::StdPopUp(void) :
 			mySizerVert->subWidgetAdd(m_title);
 }
 
-ewol::widget::StdPopUp::~StdPopUp(void) {
+ewol::widget::StdPopUp::~StdPopUp() {
 	
 }
 

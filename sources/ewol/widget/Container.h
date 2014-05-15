@@ -30,13 +30,13 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Container(void);
+				~Container();
 			public:
 				/**
 				 * @brief get the main node widget
 				 * @return the requested pointer on the node
 				 */
-				ewol::Widget* getSubWidget(void);
+				ewol::Widget* getSubWidget();
 				/**
 				 * @brief set the subWidget node widget.
 				 * @param[in] _newWidget The widget to add.
@@ -45,18 +45,18 @@ namespace ewol {
 				/**
 				 * @brief remove the subWidget node (async).
 				 */
-				void subWidgetRemove(void);
+				void subWidgetRemove();
 				/**
 				 * @brief Unlink the subwidget Node.
 				 */
-				void subWidgetUnLink(void);
+				void subWidgetUnLink();
 				
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay(void);
+				virtual void onRegenerateDisplay();
 				virtual void onObjectRemove(ewol::Object* _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
-				virtual void calculateMinMaxSize(void);
+				virtual void calculateMinMaxSize();
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 				virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
 				virtual bool loadXML(exml::Element* _node);

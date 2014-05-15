@@ -16,7 +16,7 @@ const char* const ewol::widget::Sizer::configMode = "mode";
 #undef __class__
 #define __class__ "Sizer"
 
-static ewol::Widget* create(void) {
+static ewol::Widget* create() {
 	return new ewol::widget::Sizer();
 }
 
@@ -36,7 +36,7 @@ ewol::widget::Sizer::Sizer(enum displayMode _mode):
 	
 }
 
-ewol::widget::Sizer::~Sizer(void) {
+ewol::widget::Sizer::~Sizer() {
 	// disable annimation to remore "remove" error
 	m_animation = animationNone;
 	m_animationTime = 0;
@@ -129,7 +129,7 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	markToRedraw();
 }
 
-void ewol::widget::Sizer::calculateMinMaxSize(void) {
+void ewol::widget::Sizer::calculateMinMaxSize() {
 	EWOL_VERBOSE("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
 	m_minSize = m_userMinSize.getPixel();

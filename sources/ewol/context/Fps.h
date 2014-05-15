@@ -56,13 +56,13 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Fps(void) {
+				~Fps() {
 					
 				}
 				/**
 				 * @brief this might be call every time a diplay start
 				 */
-				void tic(void) {
+				void tic() {
 					int64_t currentTime = ewol::getTime();
 					ticTime = currentTime;
 					nbCallTime++;
@@ -98,14 +98,14 @@ namespace ewol {
 				/**
 				 * @brief this might be call when a display is really done
 				 */
-				void incrementCounter(void) {
+				void incrementCounter() {
 					nbDisplayTime++;
 					drwingDone = true;
 				}
 				/**
 				 * @brief draw debug display ...
 				 */
-				void draw(void) {
+				void draw() {
 					if (true == display) {
 						if (nbDisplayTime>0) {
 							EWOL_INFO(m_displayName << " : Active : "

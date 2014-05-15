@@ -51,7 +51,7 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::context::cli
 }
 
 
-void ewol::context::clipBoard::init(void) {
+void ewol::context::clipBoard::init() {
 	EWOL_INFO("Initialyse ClipBoards");
 	for(int32_t i=0; i<ewol::context::clipBoard::clipboardCount; i++) {
 		mesCopy[i].clear();
@@ -59,7 +59,7 @@ void ewol::context::clipBoard::init(void) {
 }
 
 
-void ewol::context::clipBoard::unInit(void) {
+void ewol::context::clipBoard::unInit() {
 	EWOL_INFO("Initialyse ClipBoards");
 	for(int32_t i=0; i<ewol::context::clipBoard::clipboardCount; i++) {
 		mesCopy[i].clear();

@@ -34,11 +34,11 @@ ewol::widget::WidgetScrolled::WidgetScrolled(const std::string& _shaperName) :
 	}
 }
 
-ewol::widget::WidgetScrolled::~WidgetScrolled(void) {
+ewol::widget::WidgetScrolled::~WidgetScrolled() {
 	
 }
 
-void ewol::widget::WidgetScrolled::onRegenerateDisplay(void) {
+void ewol::widget::WidgetScrolled::onRegenerateDisplay() {
 	m_shaperH.clear();
 	m_shaperV.clear();
 	if (m_scroollingMode == scroolModeGame) {
@@ -396,7 +396,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 }
 
 
-void ewol::widget::WidgetScrolled::onDraw(void) {
+void ewol::widget::WidgetScrolled::onDraw() {
 	m_shaperH.draw();
 	m_shaperV.draw();
 }

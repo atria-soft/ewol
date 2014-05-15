@@ -44,7 +44,7 @@ static const char * const ewolEventFileChooserListFileValidate = "ewol-event-fil
 static const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
-ewol::widget::FileChooser::FileChooser(void) {
+ewol::widget::FileChooser::FileChooser() {
 	addObjectType("ewol::widget::FileChooser");
 	addEventId(eventCancel);
 	addEventId(eventValidate);
@@ -119,7 +119,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 }
 
 
-ewol::widget::FileChooser::~FileChooser(void) {
+ewol::widget::FileChooser::~FileChooser() {
 	
 }
 
@@ -202,7 +202,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 	return;
 };
 
-void ewol::widget::FileChooser::updateCurrentFolder(void) {
+void ewol::widget::FileChooser::updateCurrentFolder() {
 	if (m_folder != "" ) {
 		if (m_folder[m_folder.size()-1] != '/') {
 			m_folder +=  "/";
@@ -214,7 +214,7 @@ void ewol::widget::FileChooser::updateCurrentFolder(void) {
 	markToRedraw();
 }
 
-std::string ewol::widget::FileChooser::getCompleateFileName(void) {
+std::string ewol::widget::FileChooser::getCompleateFileName() {
 	std::string tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;

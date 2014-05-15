@@ -21,7 +21,7 @@ const char* const ewol::widget::ContextMenu::configArrowPosition = "arrow-positi
 const char* const ewol::widget::ContextMenu::configArrowMode     = "arrow-mode";
 const char* const ewol::widget::ContextMenu::configShaper        = "shaper";
 
-static ewol::Widget* Create(void) {
+static ewol::Widget* Create() {
 	return new ewol::widget::ContextMenu();
 }
 
@@ -53,7 +53,7 @@ ewol::widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
 	setMouseLimit(1);
 }
 
-ewol::widget::ContextMenu::~ContextMenu(void) {
+ewol::widget::ContextMenu::~ContextMenu() {
 	
 }
 
@@ -131,7 +131,7 @@ void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 }
 
 
-void ewol::widget::ContextMenu::calculateMinMaxSize(void) {
+void ewol::widget::ContextMenu::calculateMinMaxSize() {
 	// call main class to calculate the min size...
 	ewol::widget::Container::calculateMinMaxSize();
 	// add padding of the display
@@ -142,13 +142,13 @@ void ewol::widget::ContextMenu::calculateMinMaxSize(void) {
 }
 
 
-void ewol::widget::ContextMenu::onDraw(void) {
+void ewol::widget::ContextMenu::onDraw() {
 	m_compositing.draw();
 	m_shaper.draw();
 }
 
 
-void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
+void ewol::widget::ContextMenu::onRegenerateDisplay() {
 	// call upper class :
 	ewol::widget::Container::onRegenerateDisplay();
 	if (needRedraw() == false) {

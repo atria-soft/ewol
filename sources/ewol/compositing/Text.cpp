@@ -21,7 +21,7 @@ ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
 }
 
 
-ewol::compositing::Text::~Text(void) {
+ewol::compositing::Text::~Text() {
 	ewol::resource::TexturedFont::release(m_font);
 }
 
@@ -106,14 +106,14 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-float ewol::compositing::Text::getSize(void) {
+float ewol::compositing::Text::getSize() {
 	if (m_font == NULL) {
 		EWOL_WARNING("no font...");
 		return 1.0f;
 	}
 	return m_font->getFontSize();
 }
-float ewol::compositing::Text::getHeight(void) {
+float ewol::compositing::Text::getHeight() {
 	if (m_font == NULL) {
 		EWOL_WARNING("no font...");
 		return 10.0f;

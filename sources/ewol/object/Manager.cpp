@@ -14,14 +14,14 @@
 #undef __class__
 #define __class__ "ewol::object::Manager"
 
-ewol::object::Manager::Manager(void) {
+ewol::object::Manager::Manager() {
 	EWOL_DEBUG(" == > init Object-Manager");
 	// Can create mlemory leak ...  == > but not predictable comportement otherwise ...
 	m_eObjectAutoRemoveList.clear();
 	m_eObjectList.clear();
 }
 
-ewol::object::Manager::~Manager(void) {
+ewol::object::Manager::~Manager() {
 	bool hasError = false;
 	if (m_eObjectAutoRemoveList.size()!=0) {
 		EWOL_ERROR("Must not have anymore eObject to auto-remove !!!");
@@ -36,7 +36,7 @@ ewol::object::Manager::~Manager(void) {
 	}
 }
 
-void ewol::object::Manager::unInit(void) {
+void ewol::object::Manager::unInit() {
 	EWOL_DEBUG(" == > Un-Init Object-Manager");
 	removeAllAutoRemove();
 	EWOL_INFO(" remove missing user widget");
@@ -91,7 +91,7 @@ void ewol::object::Manager::add(ewol::Object* _object) {
 	}
 }
 
-int32_t ewol::object::Manager::getNumberObject(void) {
+int32_t ewol::object::Manager::getNumberObject() {
 	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
 }
 
@@ -176,7 +176,7 @@ void ewol::object::Manager::autoRemove(ewol::Object* _object) {
 }
 
 // clean all Object that request an autoRemove ...
-void ewol::object::Manager::removeAllAutoRemove(void) {
+void ewol::object::Manager::removeAllAutoRemove() {
 	//EWOL_DEBUG("Auto-Remove Object section : " << m_eObjectAutoRemoveList.size() << " elemeents");
 	while(0<m_eObjectAutoRemoveList.size()) {
 		if (m_eObjectAutoRemoveList[0] != NULL) {

@@ -34,28 +34,28 @@ namespace ewol {
 				void setTime(int64_t _timeSystem) {
 					m_timeSystem=_timeSystem;
 				};
-				inline int64_t getTime(void) const {
+				inline int64_t getTime() const {
 					return m_timeSystem;
 				};
 				void setApplWakeUpTime(int64_t _timeUpAppl) {
 					m_timeUpAppl=_timeUpAppl;
 				};
-				inline int64_t getApplWakeUpTime(void) const {
+				inline int64_t getApplWakeUpTime() const {
 					return m_timeUpAppl;
 				};
-				inline int64_t getApplUpTime(void) const {
+				inline int64_t getApplUpTime() const {
 					return m_timeSystem-m_timeUpAppl;
 				};
 				void setDelta(float _timeDelta) {
 					m_timeDelta=_timeDelta;
 				};
-				inline float getDelta(void) const {
+				inline float getDelta() const {
 					return m_timeDelta;
 				};
 				void setDeltaCall(float _timeDeltaCall) {
 					m_timeDeltaCall=_timeDeltaCall;
 				};
-				inline float getDeltaCall(void) const {
+				inline float getDeltaCall() const {
 					return m_timeDeltaCall;
 				};
 		};

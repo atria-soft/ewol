@@ -25,7 +25,7 @@ ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSiz
 }
 
 
-ewol::compositing::TextDF::~TextDF(void) {
+ewol::compositing::TextDF::~TextDF() {
 	ewol::resource::DistanceFieldFont::release(m_fontDF);
 }
 
@@ -114,7 +114,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::compositing::TextDF::clear(void) {
+void ewol::compositing::TextDF::clear() {
 	ewol::compositing::TextBase::clear();
 	m_glyphLevel.clear();
 }
@@ -126,7 +126,7 @@ void ewol::compositing::TextDF::loadProgram(const std::string& _shaderName) {
 }
 
 
-float ewol::compositing::TextDF::getHeight(void) {
+float ewol::compositing::TextDF::getHeight() {
 	if (m_fontDF == NULL) {
 		EWOL_WARNING("no font...");
 		return 1;

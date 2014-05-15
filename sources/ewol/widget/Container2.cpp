@@ -24,7 +24,7 @@ ewol::widget::Container2::Container2(ewol::Widget* _subElement, ewol::Widget* _s
 	// nothing to do ...
 }
 
-ewol::widget::Container2::~Container2(void) {
+ewol::widget::Container2::~Container2() {
 	subWidgetRemove();
 	subWidgetRemoveToggle();
 }
@@ -167,7 +167,7 @@ void ewol::widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _p
 	markToRedraw();
 }
 
-void ewol::widget::Container2::onRegenerateDisplay(void) {
+void ewol::widget::Container2::onRegenerateDisplay() {
 	if (m_subWidget[m_idWidgetDisplayed] != NULL) {
 		m_subWidget[m_idWidgetDisplayed]->onRegenerateDisplay();
 	}
