@@ -16,33 +16,33 @@
 #define __class__ "ListFileSystem"
 
 static ewol::Widget* Create() {
-	return new ewol::widget::ListFileSystem();
+	return new ewol::Widget::ListFileSystem();
 }
 
-void ewol::widget::ListFileSystem::init(ewol::widget::Manager& _widgetManager) {
+void ewol::Widget::ListFileSystem::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
-const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";
-const char * const ewol::widget::ListFileSystem::eventFileValidate   = "file-validate";
-const char * const ewol::widget::ListFileSystem::eventFolderSelect   = "folder-select";
-const char * const ewol::widget::ListFileSystem::eventFolderValidate = "folder-validate";
+const char * const ewol::Widget::ListFileSystem::eventFileSelect     = "file-select";
+const char * const ewol::Widget::ListFileSystem::eventFileValidate   = "file-validate";
+const char * const ewol::Widget::ListFileSystem::eventFolderSelect   = "folder-select";
+const char * const ewol::Widget::ListFileSystem::eventFolderValidate = "folder-validate";
 
-const char* const ewol::widget::ListFileSystem::configShowHidden = "show-hidden";
-const char* const ewol::widget::ListFileSystem::configShowFile = "show-file";
-const char* const ewol::widget::ListFileSystem::configShowFolder = "show-folder";
-const char* const ewol::widget::ListFileSystem::configShowTemporary = "show-temporary";
-const char* const ewol::widget::ListFileSystem::configPath = "path";
-const char* const ewol::widget::ListFileSystem::configSelect = "select";
+const char* const ewol::Widget::ListFileSystem::configShowHidden = "show-hidden";
+const char* const ewol::Widget::ListFileSystem::configShowFile = "show-file";
+const char* const ewol::Widget::ListFileSystem::configShowFolder = "show-folder";
+const char* const ewol::Widget::ListFileSystem::configShowTemporary = "show-temporary";
+const char* const ewol::Widget::ListFileSystem::configPath = "path";
+const char* const ewol::Widget::ListFileSystem::configSelect = "select";
 
-ewol::widget::ListFileSystem::ListFileSystem() :
+ewol::Widget::ListFileSystem::ListFileSystem() :
   m_selectedLine(-1),
   m_folder ("/"),
   m_showFile(true),
   m_showFolder(true),
   m_showHidden(true),
   m_showTemporaryFile(true) {
-	addObjectType("ewol::widget::ListFileSystem");
+	addObjectType("ewol::Widget::ListFileSystem");
 	#if defined(__TARGET_OS__Windows)
 		m_folder = "c:/";
 	#endif
@@ -68,12 +68,12 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	setMouseLimit(1);
 };
 
-ewol::widget::ListFileSystem::~ListFileSystem() {
+ewol::Widget::ListFileSystem::~ListFileSystem() {
 	clearList();
 	ewol::resource::ColorFile::release(m_colorProperty);
 };
 
-void ewol::widget::ListFileSystem::clearList() {
+void ewol::Widget::ListFileSystem::clearList() {
 	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
@@ -82,12 +82,12 @@ void ewol::widget::ListFileSystem::clearList() {
 	}
 };
 
-etk::Color<> ewol::widget::ListFileSystem::getBasicBG() {
+etk::Color<> ewol::Widget::ListFileSystem::getBasicBG() {
 	return m_colorProperty->get(m_colorIdBackground1);
 }
 
 
-void ewol::widget::ListFileSystem::regenerateView() {
+void ewol::Widget::ListFileSystem::regenerateView() {
 	clearList();
 	m_selectedLine = -1;
 	m_list.clear();
@@ -99,7 +99,7 @@ void ewol::widget::ListFileSystem::regenerateView() {
 	markToRedraw();
 }
 
-std::string ewol::widget::ListFileSystem::getSelect() const {
+std::string ewol::Widget::ListFileSystem::getSelect() const {
 	std::string tmpVal = "";
 	if (m_selectedLine >= 0) {
 		if (m_list[m_selectedLine] != NULL) {
@@ -110,7 +110,7 @@ std::string ewol::widget::ListFileSystem::getSelect() const {
 }
 
 // select the specific file
-void ewol::widget::ListFileSystem::setSelect(const std::string& _data) {
+void ewol::Widget::ListFileSystem::setSelect(const std::string& _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
@@ -126,16 +126,16 @@ void ewol::widget::ListFileSystem::setSelect(const std::string& _data) {
 	markToRedraw();
 }
 
-uint32_t ewol::widget::ListFileSystem::getNuberOfColomn() {
+uint32_t ewol::Widget::ListFileSystem::getNuberOfColomn() {
 	return 1;
 }
 
-bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
+bool ewol::Widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
 	_myTitle = "title";
 	return true;
 }
 
-uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
+uint32_t ewol::Widget::ListFileSystem::getNuberOfRaw() {
 	int32_t offset = 0;
 	if (m_showFolder == true) {
 		if (m_folder == "/") {
@@ -147,7 +147,7 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 	return m_list.size() + offset;
 }
 
-bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
+bool ewol::Widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
 	if (m_showFolder == true) {
 		if (m_folder == "/") {
@@ -181,7 +181,7 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std
 };
 
 
-bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
+bool ewol::Widget::ListFileSystem::onItemEvent(int32_t _IdInput,
                                                enum ewol::key::status _typeEvent,
                                                int32_t _colomn,
                                                int32_t _raw,
@@ -264,8 +264,8 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 }
 
 
-bool ewol::widget::ListFileSystem::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::List::onSetConfig(_conf)) {
+bool ewol::Widget::ListFileSystem::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::Widget::List::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configShowHidden) {
@@ -295,8 +295,8 @@ bool ewol::widget::ListFileSystem::onSetConfig(const ewol::object::Config& _conf
 	return false;
 }
 
-bool ewol::widget::ListFileSystem::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::List::onGetConfig(_config, _result)) {
+bool ewol::Widget::ListFileSystem::onGetConfig(const char* _config, std::string& _result) const {
+	if (true == ewol::Widget::List::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configShowHidden) {

@@ -9,6 +9,10 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
+#include <vector>
+#include <etk/types.h>
+#include <etk/math/Vector2D.h>
+
 #include <ewol/object/Object.h>
 #include <ewol/Dimension.h>
 
@@ -19,9 +23,6 @@ namespace ewol {
 		class Windows;
 	};
 };
-#include <etk/types.h>
-#include <vector>
-#include <etk/math/Vector2D.h>
 #include <ewol/debug.h>
 #include <ewol/context/clipBoard.h>
 #include <ewol/key/key.h>
@@ -115,7 +116,7 @@ namespace ewol {
 	 * :** Receive Event (keyboard / mouse / ...)
 	 * 
 	 */
-	class Widget : public ewol::Object {
+	class Widget : public ewol::object::Shared<ewol::Object> {
 		public:
 			// Config list of properties
 			static const char* const configFill;
@@ -139,13 +140,13 @@ namespace ewol {
 		// -- Hierarchy management:
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			ewol::Widget* m_up; //!< uppper widget in the tree of widget
+			ewol::object::Shared<ewol::Widget> m_up; //!< uppper widget in the tree of widget
 		public:
 			/**
 			 * @brief set the upper widget of this widget.
 			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with NULL.
 			 */
-			void setUpperWidget(ewol::Widget* _upper);
+			void setUpperWidget(ewol::object::Shared<ewol::Widget> _upper);
 			/**
 			 * @brief remove the upper widget of this widget.
 			 */
@@ -156,7 +157,7 @@ namespace ewol {
 			 * @brief get the upper widget (father).
 			 * @ return the requested widget (if NULL , 2 case : root widget or error implementation).
 			 */
-			ewol::Widget* getUpperWidget() {
+			ewol::object::Shared<ewol::Widget> getUpperWidget() {
 				return m_up;
 			};
 		// ----------------------------------------------------------------------------------------------------------------
@@ -531,7 +532,7 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos) {
+			virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
 				if (false == isHide()) {
 					return this;
 				}
@@ -542,7 +543,7 @@ namespace ewol {
 			 * @param[in] _widgetName name of the widget
 			 * @return the requested pointer on the node (or NULL pointer)
 			 */
-			virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
+			virtual ewol::object::Shared<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:
@@ -698,7 +699,7 @@ namespace ewol {
 			 */
 			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
-			virtual void onObjectRemove(ewol::Object* _removeObject);
+			virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
 			virtual bool onSetConfig(const ewol::object::Config& _conf);
@@ -711,11 +712,11 @@ namespace ewol {
 			/**
 			 * @brief get the current Widget Manager
 			 */
-			ewol::widget::Manager& getWidgetManager();
+			ewol::object::Shared<ewol::Widget::Manager> getWidgetManager();
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::widget::Windows* getWindows();
+			ewol::object::Shared<ewol::Widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */

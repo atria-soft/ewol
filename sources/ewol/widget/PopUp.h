@@ -22,9 +22,9 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class PopUp : public ewol::widget::Container {
+		class PopUp : public ewol::Widget::Container {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configShaper;
 				static const char* const configRemoveOnExternClick;
@@ -82,7 +82,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual void calculateSize(const vec2& _available);
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected:
 				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
 				virtual void onStopAnnimation();

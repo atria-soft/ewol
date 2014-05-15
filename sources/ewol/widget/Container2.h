@@ -20,9 +20,9 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
-		class Container2 : public ewol::Widget {
+		class Container2 : public ewol::object::Shared<ewol::Widget> {
 			protected:
-				ewol::Widget* m_subWidget[2]; //!< 2 subwidget possible
+				ewol::object::Owner<ewol::Widget> m_subWidget[2]; //!< 2 subwidget possible
 				int32_t m_idWidgetDisplayed; //!< current widget displayed
 			public:
 				/**
@@ -30,7 +30,7 @@ namespace ewol {
 				 * @param[in] _subElement Widget to set on the normal position
 				 * @param[in] _subElementToggle Widget to set on the toggle position
 				 */
-				Container2(ewol::Widget* _subElement = NULL, ewol::Widget* _subElementToggle = NULL);
+				Container2(ewol::Widget* _subElement = nullptr, ewol::Widget* _subElementToggle = nullptr);
 				/**
 				 * @brief Destructor
 				 */
@@ -63,7 +63,7 @@ namespace ewol {
 				 * @param[in] _idWidget Id of the widget to set
 				 * @return The base widget
 				 */
-				ewol::Widget* getSubWidget(int32_t _idWidget) const {
+				ewol::object::Shared<ewol::Widget> getSubWidget(int32_t _idWidget) const {
 					return m_subWidget[_idWidget];
 				};
 			public:
@@ -71,14 +71,14 @@ namespace ewol {
 				 * @brief get the current displayed composition
 				 * @return The base widget
 				 */
-				ewol::Widget* getSubWidget() const {
+				ewol::object::Shared<ewol::Widget> getSubWidget() const {
 					return getSubWidget(0);
 				};
 				/**
 				 * @brief get the current displayed composition
 				 * @return The toggle widget
 				 */
-				ewol::Widget* getSubWidgetToggle() const {
+				ewol::object::Shared<ewol::Widget> getSubWidgetToggle() const {
 					return getSubWidget(1);
 				};
 			private:
@@ -152,15 +152,15 @@ namespace ewol {
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual void onObjectRemove(ewol::Object* _removeObject);
+				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 				virtual void calculateSize(const vec2& _availlable) {
 					calculateSizePadded(_availlable);
 				}
 				virtual void calculateMinMaxSize() {
 					calculateMinMaxSizePadded();
 				}
-				//virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
-				virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
+				//virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 				virtual bool loadXML(exml::Element* _node);
 				virtual void setOffset(const vec2& _newVal);
 		};

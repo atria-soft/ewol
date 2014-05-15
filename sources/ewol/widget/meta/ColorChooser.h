@@ -24,7 +24,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ColorChooser : public ewol::widget::Sizer {
+		class ColorChooser : public ewol::Widget::Sizer {
 			public:
 				// Event list of properties
 				static const char * const eventChange;
@@ -33,16 +33,16 @@ namespace ewol {
 				~ColorChooser();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(ewol::Object* _removeObject);
+				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 			public:
 				void setColor(etk::Color<> _newColor);
 				etk::Color<> getColor();
 			private:
-				ewol::widget::ColorBar* m_widgetColorBar;
-				ewol::widget::Slider* m_widgetRed;
-				ewol::widget::Slider* m_widgetGreen;
-				ewol::widget::Slider* m_widgetBlue;
-				ewol::widget::Slider* m_widgetAlpha;
+				ewol::object::Shared<ewol::Widget::ColorBar> m_widgetColorBar;
+				ewol::object::Shared<ewol::Widget::Slider> m_widgetRed;
+				ewol::object::Shared<ewol::Widget::Slider> m_widgetGreen;
+				ewol::object::Shared<ewol::Widget::Slider> m_widgetBlue;
+				ewol::object::Shared<ewol::Widget::Slider> m_widgetAlpha;
 				etk::Color<> m_currentColor;
 		};
 	};

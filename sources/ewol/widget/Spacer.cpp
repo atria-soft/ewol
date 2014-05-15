@@ -14,18 +14,18 @@
 #undef __class__
 #define __class__ "Spacer"
 
-const char* const ewol::widget::Spacer::configColor = "color";
+const char* const ewol::Widget::Spacer::configColor = "color";
 
 static ewol::Widget* create() {
-	return new ewol::widget::Spacer();
+	return new ewol::Widget::Spacer();
 }
 
-void ewol::widget::Spacer::init(ewol::widget::Manager& _widgetManager) {
+void ewol::Widget::Spacer::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-ewol::widget::Spacer::Spacer() {
-	addObjectType("ewol::widget::Spacer");
+ewol::Widget::Spacer::Spacer() {
+	addObjectType("ewol::Widget::Spacer");
 	m_userMinSize = ewol::Dimension(vec2(10,10));
 	setCanHaveFocus(false);
 	m_color = etk::color::black;
@@ -33,16 +33,16 @@ ewol::widget::Spacer::Spacer() {
 	registerConfig(configColor, "color", NULL, "background of the spacer");
 }
 
-ewol::widget::Spacer::~Spacer() {
+ewol::Widget::Spacer::~Spacer() {
 	
 }
 
-void ewol::widget::Spacer::onDraw() {
+void ewol::Widget::Spacer::onDraw() {
 	m_draw.draw();
 }
 
 #define BORDER_SIZE_TMP  (4)
-void ewol::widget::Spacer::onRegenerateDisplay() {
+void ewol::Widget::Spacer::onRegenerateDisplay() {
 	if (false == needRedraw()) {
 		return;
 	}
@@ -56,7 +56,7 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
-bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
+bool ewol::Widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
@@ -68,7 +68,7 @@ bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::Widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

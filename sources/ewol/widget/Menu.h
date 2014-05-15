@@ -23,7 +23,7 @@ namespace ewol {
 				MenuElement() : m_widgetPointer(NULL) { };
 				int32_t m_localId;
 				int32_t m_parentId;
-				ewol::Object* m_widgetPointer;
+				ewol::object::Shared<ewol::Object> m_widgetPointer;
 				std::string m_label;
 				std::string m_image;
 				const char *m_generateEvent;
@@ -32,19 +32,19 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Menu :public ewol::widget::Sizer {
+		class Menu :public ewol::Widget::Sizer {
 			public:
 				Menu();
 				virtual ~Menu();
 			private:
 				virtual void subWidgetRemoveAll();
-				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
-				virtual void subWidgetRemove(ewol::Widget* _newWidget);
-				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
+				virtual int32_t subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
 			private:
-				std::vector<ewol::widget::MenuElement*> m_listElement;
+				std::vector<ewol::Widget::MenuElement*> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
-				ewol::widget::ContextMenu* m_widgetContextMenu;
+				ewol::Widget::ContextMenu* m_widgetContextMenu;
 			public:
 				void clear();
 				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
@@ -52,7 +52,7 @@ namespace ewol {
 				void addSpacer();
 				// Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(ewol::Object * _removeObject);
+				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject);
 		};
 	};
 };

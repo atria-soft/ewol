@@ -17,8 +17,8 @@ namespace ewol {
 	namespace object {
 		class Manager {
 			private:
-				std::vector<ewol::Object::Shared<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
-				std::vector<ewol::Object::Shared<ewol::Object>> m_eObjectAutoRemoveList; // all widget allocated
+				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
+				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectAutoRemoveList; // all widget allocated
 			public:
 				Manager();
 				~Manager();
@@ -27,16 +27,16 @@ namespace ewol {
 				 */
 				void unInit();
 				
-				void add(ewol::Object* _object);
-				void rm(ewol::Object* _object);
+				void add(ewol::object::Shared<ewol::Object> _object);
+				void rm(ewol::object::Shared<ewol::Object> _object);
 				int32_t getNumberObject();
 				
-				void autoRemove(ewol::Object* _object);
+				void autoRemove(ewol::object::Shared<ewol::Object> _object);
 				void removeAllAutoRemove();
 				
-				ewol::Object* get(const std::string& _name);
+				ewol::object::Shared<ewol::Object> get(const std::string& _name);
 			private:
-				void informOneObjectIsRemoved(ewol::Object* _object);
+				void informOneObjectIsRemoved(ewol::object::Shared<ewol::Object> _object);
 			private:
 				ewol::object::MultiCast m_multiCast; //!< muticast manager
 			public:

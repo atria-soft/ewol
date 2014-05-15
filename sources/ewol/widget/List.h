@@ -20,7 +20,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class List : public ewol::widget::WidgetScrolled {
+		class List : public ewol::Widget::WidgetScrolled {
 			public:
 				List();
 				virtual ~List();

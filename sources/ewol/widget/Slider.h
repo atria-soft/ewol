@@ -20,12 +20,12 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Slider :public ewol::Widget {
+		class Slider : public ewol::Widget {
 			public:
 				// Event list of properties
 				static const char * const eventChange;
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 			public:
 				Slider();
 				virtual ~Slider();

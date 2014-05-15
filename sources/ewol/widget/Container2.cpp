@@ -16,20 +16,20 @@
 #define __class__	"Container2"
 
 
-ewol::widget::Container2::Container2(ewol::Widget* _subElement, ewol::Widget* _subElementToggle) :
+ewol::Widget::Container2::Container2(ewol::Widget* _subElement, ewol::Widget* _subElementToggle) :
   m_idWidgetDisplayed(0) {
 	m_subWidget[0] = _subElement;
 	m_subWidget[1] = _subElementToggle;
-	addObjectType("ewol::widget::Container2");
+	addObjectType("ewol::Widget::Container2");
 	// nothing to do ...
 }
 
-ewol::widget::Container2::~Container2() {
+ewol::Widget::Container2::~Container2() {
 	subWidgetRemove();
 	subWidgetRemoveToggle();
 }
 
-void ewol::widget::Container2::setSubWidget(ewol::Widget* _newWidget, int32_t _idWidget) {
+void ewol::Widget::Container2::setSubWidget(ewol::Widget* _newWidget, int32_t _idWidget) {
 	subWidgetRemove(_idWidget);
 	m_subWidget[_idWidget] = _newWidget;
 	if (m_subWidget[_idWidget] != NULL) {
@@ -41,7 +41,7 @@ void ewol::widget::Container2::setSubWidget(ewol::Widget* _newWidget, int32_t _i
 }
 
 
-void ewol::widget::Container2::subWidgetRemove(int32_t _idWidget) {
+void ewol::Widget::Container2::subWidgetRemove(int32_t _idWidget) {
 	if (m_subWidget[_idWidget] != NULL) {
 		EWOL_VERBOSE("Remove widget : " << _idWidget);
 		m_subWidget[_idWidget]->removeUpperWidget();
@@ -52,7 +52,7 @@ void ewol::widget::Container2::subWidgetRemove(int32_t _idWidget) {
 	}
 }
 
-void ewol::widget::Container2::subWidgetUnLink(int32_t _idWidget) {
+void ewol::Widget::Container2::subWidgetUnLink(int32_t _idWidget) {
 	if (m_subWidget[_idWidget] != NULL) {
 		m_subWidget[_idWidget]->removeUpperWidget();
 		EWOL_VERBOSE("Unlink widget : " << _idWidget);
@@ -60,8 +60,8 @@ void ewol::widget::Container2::subWidgetUnLink(int32_t _idWidget) {
 	m_subWidget[_idWidget] = NULL;
 }
 
-ewol::Widget* ewol::widget::Container2::getWidgetNamed(const std::string& _widgetName) {
-	ewol::Widget* tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
+ewol::object::Shared<ewol::Widget> ewol::Widget::Container2::getWidgetNamed(const std::string& _widgetName) {
+	ewol::object::Shared<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (tmpUpperWidget != NULL) {
 		return tmpUpperWidget;
 	}
@@ -74,7 +74,7 @@ ewol::Widget* ewol::widget::Container2::getWidgetNamed(const std::string& _widge
 	return NULL;
 }
 
-void ewol::widget::Container2::onObjectRemove(ewol::Object* _removeObject) {
+void ewol::Widget::Container2::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	if (m_subWidget[0] == _removeObject) {
 		m_subWidget[0] = NULL;
 		markToRedraw();
@@ -87,7 +87,7 @@ void ewol::widget::Container2::onObjectRemove(ewol::Object* _removeObject) {
 	}
 }
 
-void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::Widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -98,7 +98,7 @@ void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp
 	}
 }
 
-ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availlable, const ewol::Padding& _padding) {
+ewol::Padding ewol::Widget::Container2::calculateSizePadded(const vec2& _availlable, const ewol::Padding& _padding) {
 	vec2 localAvaillable = _availlable - vec2(_padding.x(), _padding.y());
 	ewol::Widget::calculateSize(_availlable);
 	// set minimal size
@@ -149,7 +149,7 @@ ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availla
 	return ewol::Padding(selectableAreaPos.x(), selectableAreaEndPos.y(), selectableAreaEndPos.x(), selectableAreaPos.y());
 }
 
-void ewol::widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _padding) {
+void ewol::Widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _padding) {
 	// call main class
 	m_minSize = vec2(0,0);
 	// call sub classes
@@ -167,13 +167,13 @@ void ewol::widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _p
 	markToRedraw();
 }
 
-void ewol::widget::Container2::onRegenerateDisplay() {
+void ewol::Widget::Container2::onRegenerateDisplay() {
 	if (m_subWidget[m_idWidgetDisplayed] != NULL) {
 		m_subWidget[m_idWidgetDisplayed]->onRegenerateDisplay();
 	}
 }
 /*
-ewol::Widget* ewol::widget::Container2::getWidgetAtPos(const vec2& _pos) {
+ewol::object::Shared<ewol::Widget> ewol::Widget::Container2::getWidgetAtPos(const vec2& _pos) {
 	if (isHide() == false) {
 		if (m_subWidget[m_idWidgetDisplayed] != NULL) {
 			return m_subWidget[m_idWidgetDisplayed]->getWidgetAtPos(_pos);
@@ -183,7 +183,7 @@ ewol::Widget* ewol::widget::Container2::getWidgetAtPos(const vec2& _pos) {
 }
 */
 
-bool ewol::widget::Container2::loadXML(exml::Element* _node) {
+bool ewol::Widget::Container2::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}
@@ -213,7 +213,7 @@ bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 			}
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::Widget* tmpWidget = getWidgetManager().create(widgetName);
+		ewol::object::Shared<ewol::Widget> tmpWidget = getWidgetManager().create(widgetName);
 		if (tmpWidget == NULL) {
 			EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
@@ -232,7 +232,7 @@ bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 	return true;
 }
 
-void ewol::widget::Container2::setOffset(const vec2& _newVal) {
+void ewol::Widget::Container2::setOffset(const vec2& _newVal) {
 	if (m_offset != _newVal) {
 		ewol::Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...

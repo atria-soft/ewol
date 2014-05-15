@@ -133,13 +133,13 @@ namespace ewol {
 };
 
 
-void ewol::Context::inputEventTransfertWidget(ewol::Widget* _source,
-                                               ewol::Widget* _destination) {
+void ewol::Context::inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source,
+                                               ewol::object::Shared<ewol::Widget> _destination) {
 	m_input.transfertEvent(_source, _destination);
 }
 
 
-void ewol::Context::inputEventGrabPointer(ewol::Widget* _widget) {
+void ewol::Context::inputEventGrabPointer(ewol::object::Shared<ewol::Widget> _widget) {
 	m_input.grabPointer(_widget);
 }
 
@@ -194,7 +194,7 @@ void ewol::Context::processEvents() {
 					                                             data->keyboardMove,
 					                                             data->stateIsDown) ) {
 						// get the current focused Widget :
-						ewol::Widget * tmpWidget = m_widgetManager.focusGet();
+						ewol::object::Shared<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
 						if (NULL != tmpWidget) {
 							// check if the widget allow repeating key events.
 							//EWOL_DEBUG("repeating test :" << data->repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data->stateIsDown);
@@ -237,7 +237,7 @@ void ewol::Context::processEvents() {
 				break;
 			case eSystemMessage::msgClipboardArrive:
 				{
-					ewol::Widget * tmpWidget = m_widgetManager.focusGet();
+					ewol::object::Shared<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
 					if (tmpWidget != NULL) {
 						tmpWidget->onEventClipboard(data->clipboardID);
 					}
@@ -581,7 +581,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		//! ewol::widgetManager::periodicCall(currentTime);
 		m_widgetManager.periodicCall(currentTime);
 		// remove all widget that they are no more usefull (these who decided to destroy themself)
-		//! ewol::ObjectManager::removeAllAutoRemove();
+		//! ewol::object::Shared<ewol::Object>Manager::removeAllAutoRemove();
 		m_objectManager.removeAllAutoRemove();
 		// check if the user selected a windows
 		if (NULL != m_windowsCurrent) {
@@ -648,7 +648,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(ewol::Object * _removeObject) {
+void ewol::Context::onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject) {
 	//EWOL_CRITICAL("element removed");
 	m_input.onObjectRemove(_removeObject);
 }

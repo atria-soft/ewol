@@ -15,26 +15,26 @@
 #undef __class__
 #define __class__ "PopUp"
 
-const char* const ewol::widget::PopUp::configShaper="shaper";
-const char* const ewol::widget::PopUp::configRemoveOnExternClick="out-click-remove";
-const char* const ewol::widget::PopUp::configAnimation="animation";
-const char* const ewol::widget::PopUp::configLockExpand="lock";
+const char* const ewol::Widget::PopUp::configShaper="shaper";
+const char* const ewol::Widget::PopUp::configRemoveOnExternClick="out-click-remove";
+const char* const ewol::Widget::PopUp::configAnimation="animation";
+const char* const ewol::Widget::PopUp::configLockExpand="lock";
 
 static const char* annimationIncrease = "increase";
 
-static ewol::Widget* create() {
-	return new ewol::widget::PopUp();
+static ewol::object::Shared<ewol::Widget> create() {
+	return new ewol::Widget::PopUp();
 }
 
-void ewol::widget::PopUp::init(ewol::widget::Manager& _widgetManager) {
+void ewol::Widget::PopUp::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-ewol::widget::PopUp::PopUp(const std::string& _shaperName) :
+ewol::Widget::PopUp::PopUp(const std::string& _shaperName) :
   m_shaper(_shaperName),
   m_lockExpand(true,true),
   m_closeOutEvent(false) {
-	addObjectType("ewol::widget::PopUp");
+	addObjectType("ewol::Widget::PopUp");
 	m_userExpand.setValue(false, false);
 	setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	registerConfig(configShaper, "string", NULL, "The shaper properties");
@@ -46,11 +46,11 @@ ewol::widget::PopUp::PopUp(const std::string& _shaperName) :
 	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
 }
 
-ewol::widget::PopUp::~PopUp() {
+ewol::Widget::PopUp::~PopUp() {
 	
 }
 
-void ewol::widget::PopUp::lockExpand(const bvec2& _lockExpand) {
+void ewol::Widget::PopUp::lockExpand(const bvec2& _lockExpand) {
 	if (_lockExpand != m_lockExpand) {
 		m_lockExpand = _lockExpand;
 		markToRedraw();
@@ -58,12 +58,12 @@ void ewol::widget::PopUp::lockExpand(const bvec2& _lockExpand) {
 	}
 }
 
-void ewol::widget::PopUp::setShaperName(const std::string& _shaperName) {
+void ewol::Widget::PopUp::setShaperName(const std::string& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
 
-void ewol::widget::PopUp::calculateSize(const vec2& _available) {
+void ewol::Widget::PopUp::calculateSize(const vec2& _available) {
 	ewol::Widget::calculateSize(_available);
 	if (NULL != m_subWidget) {
 		ewol::Padding padding = m_shaper.getPadding();
@@ -97,7 +97,7 @@ void ewol::widget::PopUp::calculateSize(const vec2& _available) {
 	markToRedraw();
 }
 
-void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::Widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -113,11 +113,11 @@ void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
 	}
 }
 
-void ewol::widget::PopUp::onDraw() {
+void ewol::Widget::PopUp::onDraw() {
 	m_shaper.draw();
 }
 
-void ewol::widget::PopUp::onRegenerateDisplay() {
+void ewol::Widget::PopUp::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		m_shaper.clear();
 		ewol::Padding padding = m_shaper.getPadding();
@@ -147,16 +147,16 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 	}
 }
 
-ewol::Widget* ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
-	ewol::Widget* val = ewol::widget::Container::getWidgetAtPos(_pos);
+ewol::object::Shared<ewol::Widget> ewol::Widget::PopUp::getWidgetAtPos(const vec2& _pos) {
+	ewol::object::Shared<ewol::Widget> val = ewol::Widget::Container::getWidgetAtPos(_pos);
 	if (NULL != val) {
 		return val;
 	}
 	return this;
 }
 
-bool ewol::widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::Container::onSetConfig(_conf)) {
+bool ewol::Widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::Widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configShaper) {
@@ -174,8 +174,8 @@ bool ewol::widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::widget::PopUp::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
+bool ewol::Widget::PopUp::onGetConfig(const char* _config, std::string& _result) const {
+	if (true == ewol::Widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configShaper) {
@@ -193,7 +193,7 @@ bool ewol::widget::PopUp::onGetConfig(const char* _config, std::string& _result)
 	return false;
 }
 
-bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
+bool ewol::Widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 	if (0 != _event.getId()) {
 		if (true == m_closeOutEvent) {
 			ewol::Padding padding = m_shaper.getPadding();
@@ -220,7 +220,7 @@ bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 }
 
 
-bool ewol::widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _mode) {
+bool ewol::Widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _mode) {
 	if (m_annimationType[_mode] != annimationIncrease) {
 		return false;
 	}
@@ -231,11 +231,11 @@ bool ewol::widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _m
 	return false;
 }
 
-void ewol::widget::PopUp::onStopAnnimation() {
+void ewol::Widget::PopUp::onStopAnnimation() {
 	periodicCallDisable();
 }
 
-void ewol::widget::PopUp::periodicCall(const ewol::event::Time& _event) {
+void ewol::Widget::PopUp::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		stopAnnimation();
 	}

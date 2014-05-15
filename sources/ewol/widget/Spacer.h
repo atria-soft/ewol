@@ -21,9 +21,9 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Spacer :public ewol::Widget {
+		class Spacer : public ewol::Widget {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configColor;
 			private:
@@ -46,7 +46,7 @@ namespace ewol {
 				 */
 				void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
 			public: // Derived function
-				virtual ewol::Widget * getWidgetAtPos(const vec2& _pos) { return NULL; };
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return NULL; };
 				virtual void onRegenerateDisplay();
 				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

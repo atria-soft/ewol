@@ -19,12 +19,12 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Sizer : public ewol::widget::ContainerN {
+		class Sizer : public ewol::Widget::ContainerN {
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configBorder;
 				static const char* const configMode;
@@ -40,7 +40,7 @@ namespace ewol {
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
-				Sizer(enum displayMode _mode=ewol::widget::Sizer::modeHori);
+				Sizer(enum displayMode _mode=ewol::Widget::Sizer::modeHori);
 				/**
 				 * @brief Desstructor
 				 */
@@ -119,10 +119,10 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
-				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
-				virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
-				virtual void subWidgetRemove(ewol::Widget* _newWidget);
-				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
+				virtual int32_t subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};

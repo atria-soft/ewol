@@ -24,7 +24,7 @@ namespace ewol {
 				bool                 isUsed;
 				int32_t              destinationInputId;
 				int64_t              lastTimeEvent;
-				ewol::Widget*        curentWidgetEvent;
+				ewol::object::Shared<ewol::Widget>        curentWidgetEvent;
 				vec2                 origin;
 				vec2                 size;
 				vec2                 downStart;
@@ -47,7 +47,7 @@ namespace ewol {
 		class InputManager {
 			// special grab pointer mode : 
 			private:
-				ewol::Widget* m_grabWidget; //!< widget that grab the curent pointer.
+				ewol::object::Shared<ewol::Widget> m_grabWidget; //!< widget that grab the curent pointer.
 			private:
 				int32_t m_dpi;
 				InputLimit m_eventInputLimit;
@@ -67,7 +67,7 @@ namespace ewol {
 				 * @return true if event has been greped
 				 */
 				bool localEventInput(enum ewol::key::type _type,
-				                     ewol::Widget* _destWidget,
+				                     ewol::object::Shared<ewol::Widget> _destWidget,
 				                     int32_t _IdInput,
 				                     enum ewol::key::status _typeEvent,
 				                     vec2 _pos);
@@ -81,7 +81,7 @@ namespace ewol {
 				 * @return the ewol input id
 				 */
 				int32_t localGetDestinationId(enum ewol::key::type _type,
-				                              ewol::Widget* _destWidget,
+				                              ewol::object::Shared<ewol::Widget> _destWidget,
 				                              int32_t _realInputId);
 			private:
 				ewol::Context& m_context;
@@ -99,7 +99,7 @@ namespace ewol {
 				 * @param[in] removeObject Pointer on the Object remeved  == > the user must remove all reference on this Object
 				 * @note : Sub classes must call this class
 				 */
-				void onObjectRemove(ewol::Object* _removeObject);
+				void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
 				 */
@@ -109,12 +109,12 @@ namespace ewol {
 				 * @param _source the widget where the event came from
 				 * @param _destination the widget where the event mitgh be generated now
 				 */
-				void transfertEvent(ewol::Widget* _source, ewol::Widget* _destination);
+				void transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::Widget* _destination);
 				/**
 				 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 				 * @param[in] _widget The widget that lock the pointer events
 				 */
-				void grabPointer(ewol::Widget* _widget);
+				void grabPointer(ewol::object::Shared<ewol::Widget> _widget);
 				/**
 				 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 				 */

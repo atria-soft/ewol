@@ -43,7 +43,7 @@ namespace ewol {
 				static const char* const configEmptyMessage;
 				static const char* const configValue;
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground

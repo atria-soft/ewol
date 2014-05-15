@@ -19,9 +19,9 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class WSlider :public ewol::widget::ContainerN {
+		class WSlider :public ewol::Widget::ContainerN {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 				// Event list of properties
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;
@@ -58,7 +58,7 @@ namespace ewol {
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
 				 */
-				void subWidgetSelectSet(ewol::Widget* _widgetPointer);
+				void subWidgetSelectSet(ewol::object::Shared<ewol::Widget> _widgetPointer);
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetName Name of the subwidget name
@@ -100,13 +100,13 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};
-	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum ewol::Widget::WSlider::sladingMode _obj);
 };
 
 #endif

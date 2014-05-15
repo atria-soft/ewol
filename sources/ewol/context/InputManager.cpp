@@ -42,7 +42,7 @@ void ewol::context::InputManager::setDpi(int32_t newDPI) {
 }
 
 bool ewol::context::InputManager::localEventInput(enum ewol::key::type _type,
-                                                  ewol::Widget* _destWidget,
+                                                  ewol::object::Shared<ewol::Widget> _destWidget,
                                                   int32_t _IdInput,
                                                   enum ewol::key::status _status,
                                                   vec2 _pos) {
@@ -93,7 +93,7 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 	_eventTable[_idInput].posEvent.setValue(0,0);
 }
 
-void ewol::context::InputManager::transfertEvent(ewol::Widget* _source, ewol::Widget* _destination) {
+void ewol::context::InputManager::transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::Widget* _destination) {
 	if(    NULL == _source
 	    || NULL == _destination) {
 		// prevent errors ...
@@ -123,7 +123,7 @@ void ewol::context::InputManager::transfertEvent(ewol::Widget* _source, ewol::Wi
 	}
 }
 
-void ewol::context::InputManager::grabPointer(ewol::Widget* _widget) {
+void ewol::context::InputManager::grabPointer(ewol::object::Shared<ewol::Widget> _widget) {
 	if(NULL == _widget) {
 		return;
 	}
@@ -138,7 +138,7 @@ void ewol::context::InputManager::unGrabPointer() {
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
 
-void ewol::context::InputManager::onObjectRemove(ewol::Object * removeObject) {
+void ewol::context::InputManager::onObjectRemove(ewol::object::Shared<ewol::Object> * removeObject) {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		if (m_eventInputSaved[iii].curentWidgetEvent == removeObject) {
 			// remove the property of this input ...
@@ -180,7 +180,7 @@ ewol::context::InputManager::~InputManager() {
 }
 
 int32_t ewol::context::InputManager::localGetDestinationId(enum ewol::key::type _type,
-                                                           ewol::Widget* _destWidget,
+                                                           ewol::object::Shared<ewol::Widget> _destWidget,
                                                            int32_t _realInputId) {
 	if (_type == ewol::key::typeFinger) {
 		int32_t lastMinimum = 0;
@@ -226,7 +226,7 @@ void ewol::context::InputManager::motion(enum ewol::key::type _type,
 	if (_type == ewol::key::typeMouse && _pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
-		ewol::Widget* tmpWidget = NULL;
+		ewol::object::Shared<ewol::Widget> tmpWidget = NULL;
 		if (m_grabWidget != NULL) {
 			// grab all events ...
 			tmpWidget = m_grabWidget;

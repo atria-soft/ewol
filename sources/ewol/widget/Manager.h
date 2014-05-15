@@ -22,9 +22,9 @@ namespace ewol {
 				typedef ewol::Widget* (*creator_tf)();
 			private:
 				// For the focus Management
-				ewol::Widget* m_focusWidgetDefault;
-				ewol::Widget* m_focusWidgetCurrent;
-				std::vector<ewol::Widget*> m_listOfPeriodicWidget;
+				ewol::object::Shared<ewol::Widget> m_focusWidgetDefault;
+				ewol::object::Shared<ewol::Widget> m_focusWidgetCurrent;
+				std::vector<ewol::object::Shared<ewol::Widget>> m_listOfPeriodicWidget;
 				bool m_havePeriodic;
 				bool m_haveRedraw;
 				etk::Hash<creator_tf> m_creatorList;
@@ -34,16 +34,16 @@ namespace ewol {
 				Manager();
 				~Manager();
 				// need to call when remove a widget to clear all dependency of the focus system
-				void rm(ewol::Widget* _newWidget);
+				void rm(ewol::object::Shared<ewol::Widget> _newWidget);
 				
-				void focusKeep(ewol::Widget* _newWidget); // set the focus at the specific widget
-				void focusSetDefault(ewol::Widget* _newWidget); // select the default focus getter
+				void focusKeep(ewol::object::Shared<ewol::Widget> _newWidget); // set the focus at the specific widget
+				void focusSetDefault(ewol::object::Shared<ewol::Widget> _newWidget); // select the default focus getter
 				void focusRelease(); // release focus from the current widget to the default
-				ewol::Widget* focusGet();
-				void focusRemoveIfRemove(ewol::Widget* _newWidget);
+				ewol::object::Shared<ewol::Widget> focusGet();
+				void focusRemoveIfRemove(ewol::object::Shared<ewol::Widget> _newWidget);
 				
-				void periodicCallAdd(ewol::Widget* _pWidget);
-				void periodicCallRm(ewol::Widget* _pWidget);
+				void periodicCallAdd(ewol::object::Shared<ewol::Widget> _pWidget);
+				void periodicCallRm(ewol::object::Shared<ewol::Widget> _pWidget);
 				void periodicCall(int64_t _localTime);
 				void periodicCallResume(int64_t _localTime);
 				bool periodicCallHave();

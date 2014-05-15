@@ -140,7 +140,7 @@ namespace ewol {
 			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void onObjectRemove(ewol::Object* _removeObject);
+			void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
@@ -229,12 +229,12 @@ namespace ewol {
 			 * @param source the widget where the event came from
 			 * @param destination the widget where the event mitgh be generated now
 			 */
-			void inputEventTransfertWidget(ewol::Widget* _source, ewol::Widget* _destination);
+			void inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source, ewol::Widget* _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 			 * @param[in] widget The widget that lock the pointer events
 			 */
-			void inputEventGrabPointer(ewol::Widget* _widget);
+			void inputEventGrabPointer(ewol::object::Shared<ewol::Widget> _widget);
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */

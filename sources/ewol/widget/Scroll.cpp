@@ -14,17 +14,17 @@
 #undef __class__
 #define __class__ "Scroll"
 
-static ewol::Widget* create() {
-	return new ewol::widget::Scroll();
+static ewol::object::Shared<ewol::Widget> create() {
+	return new ewol::Widget::Scroll();
 }
 
-void ewol::widget::Scroll::init(ewol::widget::Manager& _widgetManager) {
+void ewol::Widget::Scroll::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-const char* const ewol::widget::Scroll::configLimit = "limit";
+const char* const ewol::Widget::Scroll::configLimit = "limit";
 
-ewol::widget::Scroll::Scroll(const std::string& _shaperName) :
+ewol::Widget::Scroll::Scroll(const std::string& _shaperName) :
   m_shaperH(_shaperName),
   m_shaperV(_shaperName),
   m_limit(0.15,0.5),
@@ -33,22 +33,22 @@ ewol::widget::Scroll::Scroll(const std::string& _shaperName) :
   m_highSpeedMode(speedModeDisable),
   m_highSpeedButton(-1),
   m_highSpeedType(ewol::key::typeUnknow) {
-	addObjectType("ewol::widget::Scroll");
+	addObjectType("ewol::Widget::Scroll");
 	registerConfig(configLimit, "vec2", NULL, "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end");
 }
 
-ewol::widget::Scroll::~Scroll() {
+ewol::Widget::Scroll::~Scroll() {
 	
 }
 
-void ewol::widget::Scroll::setLimit(const vec2& _limit) {
+void ewol::Widget::Scroll::setLimit(const vec2& _limit) {
 	m_limit = _limit;
 	markToRedraw();
 }
 
 #define SCROLL_BAR_SPACE      (15)
 
-void ewol::widget::Scroll::calculateMinMaxSize() {
+void ewol::Widget::Scroll::calculateMinMaxSize() {
 	// call main class !! and not containter class ...
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
@@ -57,7 +57,7 @@ void ewol::widget::Scroll::calculateMinMaxSize() {
 	}
 }
 
-void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::Widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (m_hide == true) {
 		return;
 	}
@@ -69,14 +69,14 @@ void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 }
 
-void ewol::widget::Scroll::onDraw() {
+void ewol::Widget::Scroll::onDraw() {
 	m_shaperH.draw();
 	m_shaperV.draw();
 }
 
-void ewol::widget::Scroll::onRegenerateDisplay() {
+void ewol::Widget::Scroll::onRegenerateDisplay() {
 	// call upper class
-	ewol::widget::Container::onRegenerateDisplay();
+	ewol::Widget::Container::onRegenerateDisplay();
 	if (needRedraw() == false) {
 		return;
 	}
@@ -117,7 +117,7 @@ void ewol::widget::Scroll::onRegenerateDisplay() {
 	}
 }
 
-bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
+bool ewol::Widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	//ewol::event::Input _event = event;
 	//_event.setType(ewol::key::typeFinger);
 	vec2 relativePos = relativePosition(_event.getPos());
@@ -349,16 +349,16 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-ewol::Widget* ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
-	ewol::Widget* tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
+ewol::object::Shared<ewol::Widget> ewol::Widget::Scroll::getWidgetAtPos(const vec2& _pos) {
+	ewol::object::Shared<ewol::Widget> tmpWidget = ewol::Widget::Container::getWidgetAtPos(_pos);
 	if (NULL != tmpWidget) {
 		return tmpWidget;
 	}
 	return this;
 }
 
-bool ewol::widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::Container::onSetConfig(_conf)) {
+bool ewol::Widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::Widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configLimit) {
@@ -368,8 +368,8 @@ bool ewol::widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::widget::Scroll::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
+bool ewol::Widget::Scroll::onGetConfig(const char* _config, std::string& _result) const {
+	if (true == ewol::Widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configLimit) {

@@ -29,7 +29,7 @@ namespace ewol {
 		 *  
 		 *  The first step is to create the file chooser pop-up :
 		 *  [code style=c++]
-		 *  ewol::widget::FileChooser* tmpWidget = new ewol::widget::FileChooser();
+		 *  ewol::Widget::FileChooser* tmpWidget = new ewol::Widget::FileChooser();
 		 *  if (tmpWidget == NULL) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;
@@ -45,7 +45,7 @@ namespace ewol {
 		 *  // simply set a folder (by default this is the home folder)
 		 *  //tmpWidget->setFolder("/home/me");
 		 *  // add the widget as windows pop-up ...
-		 *  ewol::widget::Windows* tmpWindows = getWindows();
+		 *  ewol::Widget::Windows* tmpWindows = getWindows();
 		 *  if (tmpWindows == NULL) {
 		 *  	APPL_ERROR("Can not get the current windows !!! ");
 		 *  	return -1;
@@ -71,7 +71,7 @@ namespace ewol {
 		 *  [/code]
 		 *  This is the best example of a Meta-widget.
 		 */
-		class FileChooser : public ewol::widget::Composer {
+		class FileChooser : public ewol::Widget::Composer {
 			public:
 				// Event list of properties
 				static const char* const eventCancel;

@@ -78,7 +78,7 @@ namespace ewol {
 				            enum ewol::key::status _status,
 				            uint8_t _id,
 				            const vec2& _pos,
-				            ewol::Widget* _dest,
+				            ewol::object::Shared<ewol::Widget> _dest,
 				            int32_t _realIdEvent,
 				            ewol::key::Special _specialKey) :
 				  m_event(_type, _status, _id, _pos, _specialKey),
@@ -86,13 +86,13 @@ namespace ewol {
 				  m_realIdEvent(_realIdEvent) { };
 				ewol::event::Input m_event;
 			private:
-				ewol::Widget* m_dest;
+				ewol::object::Shared<ewol::Widget> m_dest;
 				int32_t m_realIdEvent;
 			public:
-				void setDestWidget(ewol::Widget* _dest) {
+				void setDestWidget(ewol::object::Shared<ewol::Widget> _dest) {
 					m_dest = _dest;
 				};
-				inline ewol::Widget* getDestWidget() const {
+				inline ewol::object::Shared<ewol::Widget> getDestWidget() const {
 					return m_dest;
 				};
 				void setRealId(int32_t _realIdEvent) {

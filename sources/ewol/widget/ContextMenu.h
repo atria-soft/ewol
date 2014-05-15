@@ -22,7 +22,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ContextMenu : public ewol::widget::Container {
+		class ContextMenu : public ewol::Widget::Container {
 			public:
 				enum markPosition {
 					markTop,
@@ -32,7 +32,7 @@ namespace ewol {
 					markNone
 				};
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configArrowPosition;
 				static const char* const configArrowMode;
@@ -67,9 +67,9 @@ namespace ewol {
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void calculateSize(const vec2& availlable);
+				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
-				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 		};
 	};
 };

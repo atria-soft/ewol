@@ -36,13 +36,13 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ParameterList :public ewol::widget::WidgetScrolled {
+		class ParameterList :public ewol::Widget::WidgetScrolled {
 			public:
 				// Event list of properties
 				static const char * const eventSelect;
 			private:
 				int32_t m_idSelected;
-				std::vector<ewol::widget::elementPL *> m_list;
+				std::vector<ewol::Widget::elementPL *> m_list;
 			public:
 				ParameterList();
 				virtual ~ParameterList();

@@ -13,7 +13,7 @@
 #include <ewol/object/MultiCast.h>
 
 #undef __class__
-#define __class__	"ewol::Object"
+#define __class__	"ewol::object::Shared<ewol::Object>"
 
 
 const char* const ewol::Object::configName = "name";
@@ -21,19 +21,42 @@ size_t ewol::Object::m_valUID = 0;
 
 
 void ewol::Object::objRefCountIncrement() {
+	std::scoped_lock lock(m_lockRefCount);
 	m_objRefCount++;
 }
 
 void ewol::Object::objRefCountDecrement() {
+	std::scoped_lock lock(m_lockRefCount);
 	m_objRefCount--;
+}
+
+bool ewol::Object::setRefOwner(bool _haveOwner) {
+	std::scoped_lock lock(m_lockRefCount);
+	if (_haveOwner == true) {
+		if (m_hasReferenceOwner == true) {
+			EWOL_CRITICAL("Object have already an owner");
+			return false;;
+		}
+		m_hasReferenceOwner == true;
+		return true;
+	}
+	if (m_hasReferenceOwner == false) {
+		EWOL_CRITICAL("Object have already NO owner");
+		return false;
+	}
+	m_hasReferenceOwner == false;
+	return true;
 }
 
 void ewol::Object::operator delete(void* _ptr, std::size_t _sz) {
 	EWOL_DEBUG("custom delete for size " << _sz);
-	ewol::Object* obj = (ewol::Object*)_ptr;
+	ewol::object::Shared<ewol::Object> obj = (ewol::Object*)_ptr;
 	obj->objRefCountDecrement();
 	if (obj->m_objRefCount <= 0) {
 		EWOL_DEBUG("    ==> real remove");
+		if (m_hasReferenceOwner == true) {
+			EWOL_ERROR("    ==> Remove ofject that have not a reference owner removed");
+		}
 		::operator delete(_ptr);
 	} else {
 		EWOL_DEBUG("    ==> Some user is link on it ...");
@@ -49,6 +72,7 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 
 ewol::Object::Object() :
   m_objRefCount(1),
+  m_hasReferenceOwner(false),
   m_static(false),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
@@ -86,7 +110,7 @@ ewol::Object::~Object() {
 
 const char * const ewol::Object::getObjectType() {
 	if (m_listType.size() == 0) {
-		return "ewol::Object";
+		return "ewol::object::Shared<ewol::Object>";
 	}
 	return m_listType.back();
 }
@@ -99,7 +123,7 @@ void ewol::Object::addObjectType(const char* _type) {
 	m_listType.push_back(_type);
 }
 std::string ewol::Object::getTypeDescription() {
-	std::string ret("ewol::Object");
+	std::string ret("ewol::object::Shared<ewol::Object>");
 	for(auto element : m_listType) {
 		ret += "|";
 		ret += element;
@@ -108,7 +132,7 @@ std::string ewol::Object::getTypeDescription() {
 }
 
 bool ewol::Object::isTypeCompatible(const std::string& _type) {
-	if (_type == "ewol::Object") {
+	if (_type == "ewol::object::Shared<ewol::Object>") {
 		return true;
 	}
 	for(auto element : m_listType) {
@@ -179,7 +203,7 @@ void ewol::Object::registerMultiCast(const char* const _messageId) {
 	getMultiCast().add(this, _messageId);
 }
 
-void ewol::Object::registerOnEvent(ewol::Object * _destinationObject,
+void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
                                     const std::string& _overloadData) {
@@ -251,7 +275,7 @@ void ewol::Object::registerOnEvent(ewol::Object * _destinationObject,
 	m_externEvent.push_back(tmpEvent);
 }
 
-void ewol::Object::unRegisterOnEvent(ewol::Object * _destinationObject,
+void ewol::Object::unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
                                       const char * _eventId) {
 	if (NULL == _destinationObject) {
 		EWOL_ERROR("Input ERROR NULL pointer Object ...");
@@ -273,11 +297,9 @@ void ewol::Object::unRegisterOnEvent(ewol::Object * _destinationObject,
 	}
 }
 
-void ewol::Object::onObjectRemove(ewol::Object * _removObject) {
+void ewol::Object::onObjectRemove(ewol::object::Shared<ewol::Object> _object) {
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
-		if (NULL == m_externEvent[iii]) {
-			m_externEvent.erase(m_externEvent.begin()+iii);
-		} else if (m_externEvent[iii]->destObject == _removObject) {
+		if (m_externEvent[iii].hasOwner() == false) {
 			m_externEvent.erase(m_externEvent.begin()+iii);
 		}
 	}
@@ -285,10 +307,10 @@ void ewol::Object::onObjectRemove(ewol::Object * _removObject) {
 
 
 void ewol::Object::registerConfig(const char* _config,
-                                   const char* _type,
-                                   const char* _control,
-                                   const char* _description,
-                                   const char* _default) {
+                                  const char* _type,
+                                  const char* _control,
+                                  const char* _description,
+                                  const char* _default) {
 	if (NULL == _config) {
 		EWOL_ERROR("Try to add NULL config");
 		return;
@@ -400,7 +422,7 @@ std::string ewol::Object::getConfig(const std::string& _config) const {
 }
 
 bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf) {
-	ewol::Object* object = getObjectManager().get(_objectName);
+	ewol::object::Shared<ewol::Object> object = getObjectManager().get(_objectName);
 	if (object == NULL) {
 		return false;
 	}
@@ -408,7 +430,7 @@ bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::ob
 }
 
 bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
-	ewol::Object* object = getObjectManager().get(_objectName);
+	ewol::object::Shared<ewol::Object> object = getObjectManager().get(_objectName);
 	if (object == NULL) {
 		return false;
 	}

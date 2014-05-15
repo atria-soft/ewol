@@ -21,9 +21,9 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ProgressBar : public ewol::Widget {
+		class ProgressBar : public ewol::object::Shared<ewol::Widget> {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
+				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configColorBg;
 				static const char* const configColorFgOn;

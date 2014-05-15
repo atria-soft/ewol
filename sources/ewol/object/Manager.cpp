@@ -81,7 +81,7 @@ void ewol::object::Manager::unInit() {
 	}
 }
 
-void ewol::object::Manager::add(ewol::Object* _object) {
+void ewol::object::Manager::add(ewol::object::Shared<ewol::Object> _object) {
 	if (_object == NULL) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
@@ -93,7 +93,7 @@ int32_t ewol::object::Manager::getNumberObject() {
 	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
 }
 
-void ewol::object::Manager::informOneObjectIsRemoved(ewol::Object* _object) {
+void ewol::object::Manager::informOneObjectIsRemoved(ewol::object::Shared<ewol::Object> _object) {
 	size_t mbElement = m_eObjectList.size();
 	for (int64_t iii=0; iii<(int64_t)m_eObjectList.size(); ++iii) {
 		if (    m_eObjectList[iii] != NULL
@@ -125,8 +125,8 @@ void ewol::object::Manager::informOneObjectIsRemoved(ewol::Object* _object) {
 	ewol::getContext().onObjectRemove(_object);
 }
 
-void ewol::object::Manager::rm(ewol::Object* _object) {
-	if (NULL == _object) {
+void ewol::object::Manager::rm(ewol::object::Shared<ewol::Object> _object) {
+	if (_object == NULL) {
 		EWOL_ERROR("Try to remove (NULL) Object");
 		return;
 	}
@@ -150,7 +150,7 @@ void ewol::object::Manager::rm(ewol::Object* _object) {
 	EWOL_ERROR("Try to remove Object that is not referenced ...");
 }
 
-void ewol::object::Manager::autoRemove(ewol::Object* _object) {
+void ewol::object::Manager::autoRemove(ewol::object::Shared<ewol::Object> _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to Auto-Remove (NULL) Object");
 		return;
@@ -185,7 +185,7 @@ void ewol::object::Manager::removeAllAutoRemove() {
 	m_eObjectAutoRemoveList.clear();
 }
 
-ewol::Object* ewol::object::Manager::get(const std::string& _name) {
+ewol::object::Shared<ewol::Object> ewol::object::Manager::get(const std::string& _name) {
 	if (_name == "") {
 		return NULL;
 	}

@@ -133,7 +133,7 @@ ewol::Widget::Widget() :
 	m_annimationType[1] = NULL;
 	m_annimationTime[0] = 0.1f; // annimation will be 100ms at the first state
 	m_annimationTime[1] = 0.1f; // annimation will be 100ms at the first state
-	addObjectType("ewol::Widget");
+	addObjectType("ewol::object::Shared<ewol::Widget>");
 	// set all the config in the list :
 	registerConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget available size");
 	registerConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is available");
@@ -159,22 +159,22 @@ ewol::Widget::~Widget() {
 	shortCutClean();
 }
 
-void ewol::Widget::setUpperWidget(ewol::Widget* _upper) {
-	if (NULL == _upper) {
+void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
+	if (_upper == nullptr) {
 		//just remove father :
 		m_up = NULL;
 		return;
 	}
-	if (NULL != m_up) {
+	if (m_up != nullptr) {
 		EWOL_WARNING("[" << getId() << "] Replace upper widget of this one ...");
 	}
 	m_up = _upper;
 }
 
-void ewol::Widget::onObjectRemove(ewol::Object* _removeObject) {
+void ewol::Widget::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	if (_removeObject == m_up) {
-		EWOL_WARNING("[" << getId() << "] remove upper widget befor removing this widget ...");
-		m_up = NULL;
+		EWOL_WARNING("[" << getId() << "] remove upper widget before removing this widget ...");
+		m_up = nullptr;
 	}
 }
 
@@ -717,7 +717,7 @@ bool ewol::Widget::loadXML(exml::Element* _node) {
 	return true;
 }
 
-ewol::Widget* ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
+ewol::object::Shared<ewol::Widget> ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} compare : " << getName() << " == " << _widgetName );
 	if (getName() == _widgetName) {
 		return this;
@@ -868,11 +868,11 @@ void ewol::Widget::requestUpdateSize() {
 	getContext().requestUpdateSize();
 }
 
-ewol::widget::Manager& ewol::Widget::getWidgetManager() {
+ewol::object::Shared<ewol::Widget::Manager> ewol::Widget::getWidgetManager() {
 	return getContext().getWidgetManager();
 }
 
-ewol::widget::Windows* ewol::Widget::getWindows() {
+ewol::object::Shared<ewol::Widget::Windows> ewol::Widget::getWindows() {
 	return getContext().getWindows();
 }
 
