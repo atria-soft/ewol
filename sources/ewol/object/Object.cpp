@@ -19,7 +19,36 @@
 const char* const ewol::Object::configName = "name";
 size_t ewol::Object::m_valUID = 0;
 
+
+void ewol::Object::objRefCountIncrement() {
+	m_objRefCount++;
+}
+
+void ewol::Object::objRefCountDecrement() {
+	m_objRefCount--;
+}
+
+void ewol::Object::operator delete(void* _ptr, std::size_t _sz) {
+	EWOL_DEBUG("custom delete for size " << _sz);
+	ewol::Object* obj = (ewol::Object*)_ptr;
+	obj->objRefCountDecrement();
+	if (obj->m_objRefCount <= 0) {
+		EWOL_DEBUG("    ==> real remove");
+		::operator delete(_ptr);
+	} else {
+		EWOL_DEBUG("    ==> Some user is link on it ...");
+	}
+}
+
+void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
+	EWOL_CRITICAL("custom delete for size ==> not implemented ..." << _sz);
+	::operator delete(_ptr);
+}
+
+
+
 ewol::Object::Object() :
+  m_objRefCount(1),
   m_static(false),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
@@ -29,6 +58,7 @@ ewol::Object::Object() :
 	registerConfig(configName, "string", NULL, "Object name, might be a unique reference in all the program");
 }
 ewol::Object::Object(const std::string& _name) :
+  m_objRefCount(1),
   m_static(false),
   m_name(_name),
   m_isResource(false) {

@@ -17,8 +17,8 @@ namespace ewol {
 	namespace object {
 		class Manager {
 			private:
-				std::vector<ewol::Object*> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
-				std::vector<ewol::Object*> m_eObjectAutoRemoveList; // all widget allocated
+				std::vector<ewol::Object::Shared<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
+				std::vector<ewol::Object::Shared<ewol::Object>> m_eObjectAutoRemoveList; // all widget allocated
 			public:
 				Manager();
 				~Manager();

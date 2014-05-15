@@ -48,7 +48,7 @@ void ewol::object::Manager::unInit() {
 				iii++;
 			} else {
 				EWOL_WARNING("Un-INIT : remove Object type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
-				delete(m_eObjectList[iii]);
+				m_eObjectList[iii].reset();
 				m_eObjectList[iii] = NULL;
 			}
 		} else {
@@ -63,8 +63,7 @@ void ewol::object::Manager::unInit() {
 				iii++;
 			} else {
 				EWOL_WARNING("Un-INIT : remove Object type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
-				delete(m_eObjectList[iii]);
-				m_eObjectList[iii] = NULL;
+				m_eObjectList[iii].reset();
 			}
 		} else {
 			m_eObjectList.erase(m_eObjectList.begin()+iii);
@@ -75,8 +74,7 @@ void ewol::object::Manager::unInit() {
 	while(iii < m_eObjectList.size()) {
 		if (m_eObjectList[iii] != NULL) {
 			EWOL_WARNING("Un-INIT : remove Object type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
-			delete(m_eObjectList[iii]);
-			m_eObjectList[iii] = NULL;
+			m_eObjectList[iii].reset();
 		} else {
 			m_eObjectList.erase(m_eObjectList.begin()+iii);
 		}
@@ -84,11 +82,11 @@ void ewol::object::Manager::unInit() {
 }
 
 void ewol::object::Manager::add(ewol::Object* _object) {
-	if (NULL != _object) {
-		m_eObjectList.push_back(_object);
-	} else {
+	if (_object == NULL) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
+	// ! < it might benerate a shared object !!!
+	m_eObjectList.push_back(_object);
 }
 
 int32_t ewol::object::Manager::getNumberObject() {
@@ -181,11 +179,8 @@ void ewol::object::Manager::removeAllAutoRemove() {
 	while(0<m_eObjectAutoRemoveList.size()) {
 		if (m_eObjectAutoRemoveList[0] != NULL) {
 			EWOL_DEBUG("Real Auto-Remove Object [" << m_eObjectAutoRemoveList[0]->getId() << "]type='" << m_eObjectAutoRemoveList[0]->getObjectType() << "'");
-			delete(m_eObjectAutoRemoveList[0]);
-			m_eObjectAutoRemoveList[0] = NULL;
-		} else {
-			m_eObjectAutoRemoveList.erase(m_eObjectAutoRemoveList.begin());
 		}
+		m_eObjectAutoRemoveList.erase(m_eObjectAutoRemoveList.begin());
 	}
 	m_eObjectAutoRemoveList.clear();
 }
@@ -197,7 +192,7 @@ ewol::Object* ewol::object::Manager::get(const std::string& _name) {
 	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
 			if (m_eObjectList[iii]->getName() == _name) {
-				return m_eObjectList[iii];
+				return m_eObjectList[iii].get();
 			}
 		}
 	}
