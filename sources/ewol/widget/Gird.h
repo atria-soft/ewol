@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Gird :public ewol::Widget {
 			public:
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 			private:
 				class GirdProperties {
 					public:

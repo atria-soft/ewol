@@ -21,30 +21,30 @@ size_t ewol::Object::m_valUID = 0;
 
 
 void ewol::Object::objRefCountIncrement() {
-	std::scoped_lock lock(m_lockRefCount);
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
 	m_objRefCount++;
 }
 
 void ewol::Object::objRefCountDecrement() {
-	std::scoped_lock lock(m_lockRefCount);
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
 	m_objRefCount--;
 }
 
 bool ewol::Object::setRefOwner(bool _haveOwner) {
-	std::scoped_lock lock(m_lockRefCount);
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
 	if (_haveOwner == true) {
 		if (m_hasReferenceOwner == true) {
 			EWOL_CRITICAL("Object have already an owner");
 			return false;;
 		}
-		m_hasReferenceOwner == true;
+		m_hasReferenceOwner = true;
 		return true;
 	}
 	if (m_hasReferenceOwner == false) {
 		EWOL_CRITICAL("Object have already NO owner");
 		return false;
 	}
-	m_hasReferenceOwner == false;
+	m_hasReferenceOwner = false;
 	return true;
 }
 
@@ -54,7 +54,7 @@ void ewol::Object::operator delete(void* _ptr, std::size_t _sz) {
 	obj->objRefCountDecrement();
 	if (obj->m_objRefCount <= 0) {
 		EWOL_DEBUG("    ==> real remove");
-		if (m_hasReferenceOwner == true) {
+		if (obj->m_hasReferenceOwner == true) {
 			EWOL_ERROR("    ==> Remove ofject that have not a reference owner removed");
 		}
 		::operator delete(_ptr);
@@ -299,7 +299,8 @@ void ewol::Object::unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destina
 
 void ewol::Object::onObjectRemove(ewol::object::Shared<ewol::Object> _object) {
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
-		if (m_externEvent[iii].hasOwner() == false) {
+		if (    m_externEvent[iii] != nullptr
+		     && m_externEvent[iii]->destObject.hasOwner() == false) {
 			m_externEvent.erase(m_externEvent.begin()+iii);
 		}
 	}

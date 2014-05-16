@@ -23,10 +23,10 @@
 extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
 
 
-ewol::Widget::Windows::Windows() :
+ewol::widget::Windows::Windows() :
   m_colorProperty(NULL),
   m_colorBg(-1) {
-	addObjectType("ewol::Widget::Windows");
+	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
 	m_subWidget = NULL;
 	setDecorationDisable();
@@ -37,7 +37,7 @@ ewol::Widget::Windows::Windows() :
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
-ewol::Widget::Windows::~Windows() {
+ewol::widget::Windows::~Windows() {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
 		m_subWidget=NULL;
@@ -51,7 +51,7 @@ ewol::Widget::Windows::~Windows() {
 	m_popUpWidgetList.clear();
 }
 
-void ewol::Widget::Windows::calculateSize(const vec2& _availlable) {
+void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
 	if (NULL != m_subWidget) {
@@ -68,7 +68,7 @@ void ewol::Widget::Windows::calculateSize(const vec2& _availlable) {
 	}
 }
 
-ewol::object::Shared<ewol::Widget> * ewol::Widget::Windows::getWidgetAtPos(const vec2& _pos) {
+ewol::object::Shared<ewol::Widget> * ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	// calculate relative position
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
@@ -86,7 +86,7 @@ ewol::object::Shared<ewol::Widget> * ewol::Widget::Windows::getWidgetAtPos(const
 	return this;
 }
 
-void ewol::Widget::Windows::sysDraw() {
+void ewol::widget::Windows::sysDraw() {
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x(),m_size.y());
@@ -118,7 +118,7 @@ void ewol::Widget::Windows::sysDraw() {
 	return;
 }
 
-void ewol::Widget::Windows::onRegenerateDisplay() {
+void ewol::widget::Windows::onRegenerateDisplay() {
 	if (NULL != m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
@@ -131,7 +131,7 @@ void ewol::Widget::Windows::onRegenerateDisplay() {
 
 //#define TEST_PERFO_WINDOWS
 
-void ewol::Widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::getTime();
@@ -175,7 +175,7 @@ void ewol::Widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 }
 
-void ewol::Widget::Windows::setSubWidget(ewol::Widget* _widget) {
+void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
 	if (m_subWidget != NULL) {
 		EWOL_INFO("Remove current main windows Widget...");
 		delete(m_subWidget);
@@ -186,7 +186,7 @@ void ewol::Widget::Windows::setSubWidget(ewol::Widget* _widget) {
 	calculateSize(m_size);
 }
 
-void ewol::Widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
+void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	if (_widget == NULL) {
 		// nothing to do an error appear :
 		EWOL_ERROR("can not set widget pop-up (null pointer)");
@@ -201,7 +201,7 @@ void ewol::Widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	getContext().resetIOEvent();
 }
 
-void ewol::Widget::Windows::popUpWidgetPop() {
+void ewol::widget::Windows::popUpWidgetPop() {
 	if (m_popUpWidgetList.size() == 0) {
 		return;
 	}
@@ -212,7 +212,7 @@ void ewol::Widget::Windows::popUpWidgetPop() {
 	widget->removeObject();
 }
 
-void ewol::Widget::Windows::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::Windows::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
@@ -230,21 +230,21 @@ void ewol::Widget::Windows::onObjectRemove(ewol::object::Shared<ewol::Object> _r
 	}
 }
 
-void ewol::Widget::Windows::setBackgroundColor(const etk::Color<float>& _color) {
+void ewol::widget::Windows::setBackgroundColor(const etk::Color<float>& _color) {
 	if (m_backgroundColor != _color) {
 		m_backgroundColor = _color;
 		markToRedraw();
 	}
 }
 
-void ewol::Widget::Windows::setTitle(const std::string& _title) {
+void ewol::widget::Windows::setTitle(const std::string& _title) {
 	// TODO : remove this ...
 	std::string title = _title;
 	getContext().setTitle(title);
 }
 
 
-void ewol::Widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
+void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
 {
 	ewol::Widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
 	if (tmpPopUp == NULL) {

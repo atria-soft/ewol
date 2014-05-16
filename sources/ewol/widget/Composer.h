@@ -19,7 +19,7 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 		 */
-		class Composer : public ewol::Widget::Container {
+		class Composer : public ewol::widget::Container {
 			public:
 				enum composerMode {
 					None,

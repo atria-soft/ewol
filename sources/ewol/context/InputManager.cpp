@@ -93,9 +93,9 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 	_eventTable[_idInput].posEvent.setValue(0,0);
 }
 
-void ewol::context::InputManager::transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::Widget* _destination) {
-	if(    NULL == _source
-	    || NULL == _destination) {
+void ewol::context::InputManager::transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::object::Shared<ewol::Widget> _destination) {
+	if(    _source == nullptr
+	    || _destination == nullptr) {
 		// prevent errors ...
 		return;
 	}
@@ -138,7 +138,7 @@ void ewol::context::InputManager::unGrabPointer() {
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
 
-void ewol::context::InputManager::onObjectRemove(ewol::object::Shared<ewol::Object> * removeObject) {
+void ewol::context::InputManager::onObjectRemove(ewol::object::Shared<ewol::Object> removeObject) {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		if (m_eventInputSaved[iii].curentWidgetEvent == removeObject) {
 			// remove the property of this input ...
@@ -221,7 +221,7 @@ void ewol::context::InputManager::motion(enum ewol::key::type _type,
 		// not manage input
 		return;
 	}
-	ewol::widget::Windows* tmpWindows = m_context.getWindows();
+	ewol::object::Shared<ewol::widget::Windows> tmpWindows = m_context.getWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
 	if (_type == ewol::key::typeMouse && _pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
@@ -358,7 +358,7 @@ void ewol::context::InputManager::state(enum ewol::key::type _type,
 	}
 	// get the curent time ...
 	int64_t currentTime = ewol::getTime();
-	ewol::widget::Windows* tmpWindows = m_context.getWindows();
+	ewol::object::Shared<ewol::widget::Windows> tmpWindows = m_context.getWindows();
 	
 	if (true == _isDown) {
 		EVENT_DEBUG("GUI : Input ID=" << _pointerID

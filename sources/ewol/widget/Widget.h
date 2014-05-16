@@ -13,6 +13,7 @@
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
 
+#include <ewol/debug.h>
 #include <ewol/object/Object.h>
 #include <ewol/Dimension.h>
 
@@ -23,7 +24,6 @@ namespace ewol {
 		class Windows;
 	};
 };
-#include <ewol/debug.h>
 #include <ewol/context/clipBoard.h>
 #include <ewol/key/key.h>
 #include <ewol/context/cursor.h>
@@ -116,7 +116,7 @@ namespace ewol {
 	 * :** Receive Event (keyboard / mouse / ...)
 	 * 
 	 */
-	class Widget : public ewol::object::Shared<ewol::Object> {
+	class Widget : public ewol::Object {
 		public:
 			// Config list of properties
 			static const char* const configFill;
@@ -712,11 +712,11 @@ namespace ewol {
 			/**
 			 * @brief get the current Widget Manager
 			 */
-			ewol::object::Shared<ewol::Widget::Manager> getWidgetManager();
+			ewol::widget::Manager& getWidgetManager();
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::object::Shared<ewol::Widget::Windows> getWindows();
+			ewol::object::Shared<ewol::widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */

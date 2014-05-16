@@ -12,20 +12,20 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/widget/Manager.h>
 
-const char * const ewol::Widget::Joystick::eventEnable   = "enable";
-const char * const ewol::Widget::Joystick::eventDisable  = "disable";
-const char * const ewol::Widget::Joystick::eventMove     = "move";
+const char * const ewol::widget::Joystick::eventEnable   = "enable";
+const char * const ewol::widget::Joystick::eventDisable  = "disable";
+const char * const ewol::widget::Joystick::eventMove     = "move";
 
-static bool         l_displayBackground(true);
+static bool l_displayBackground(true);
 static std::string l_background("");
 static std::string l_foreground("");
-static float   l_ratio(1.0/7.0);
+static float l_ratio(1.0/7.0);
 
 #undef __class__
 #define __class__ "Joystick"
 
-ewol::Widget::Joystick::Joystick() {
-	addObjectType("ewol::Widget::Joystick");
+ewol::widget::Joystick::Joystick() {
+	addObjectType("ewol::widget::Joystick");
 	addEventId(eventEnable);
 	addEventId(eventDisable);
 	addEventId(eventMove);
@@ -51,18 +51,18 @@ ewol::Widget::Joystick::Joystick() {
 }
 
 
-ewol::Widget::Joystick::~Joystick() {
+ewol::widget::Joystick::~Joystick() {
 	
 }
 
 
-void ewol::Widget::Joystick::calculateSize(const vec2& availlable) {
+void ewol::widget::Joystick::calculateSize(const vec2& availlable) {
 	float minimumSize = etk_min(availlable.x(), availlable.y());
 	m_size.setValue(minimumSize, minimumSize);
 	markToRedraw();
 }
 
-void ewol::Widget::Joystick::onRegenerateDisplay() {
+void ewol::widget::Joystick::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		
@@ -114,7 +114,7 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool ewol::Widget::Joystick::onEventInput(const ewol::event::Input& _event) {
+bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 /*
 	if (1 == IdInput) {
 		if(    ewol::key::statusDown == typeEvent
@@ -173,7 +173,7 @@ bool ewol::Widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 }
 
 
-void ewol::Widget::Joystick::ratio(float newRatio) {
+void ewol::widget::Joystick::ratio(float newRatio) {
 	if (newRatio > 1) {
 		newRatio = 1;
 	}
@@ -182,7 +182,7 @@ void ewol::Widget::Joystick::ratio(float newRatio) {
 }
 
 
-void ewol::Widget::Joystick::background(std::string imageNameInData, bool display) {
+void ewol::widget::Joystick::background(std::string imageNameInData, bool display) {
 	// TODO : check if it existed
 	m_background = imageNameInData;
 	m_displayBackground = display;
@@ -190,14 +190,14 @@ void ewol::Widget::Joystick::background(std::string imageNameInData, bool displa
 }
 
 
-void ewol::Widget::Joystick::foreground(std::string imageNameInData) {
+void ewol::widget::Joystick::foreground(std::string imageNameInData) {
 	// TODO : check if it existed
 	m_foreground = imageNameInData;
 	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);
 }
 
 
-void ewol::Widget::Joystick::getProperty(float& distance, float& angle) {
+void ewol::widget::Joystick::getProperty(float& distance, float& angle) {
 	distance = m_distance;
 	angle = m_angle+M_PI/2;
 }

@@ -29,24 +29,24 @@ const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-sele
 #define STATUS_HOVER     (1)
 #define STATUS_SELECTED  (2)
 
-static ewol::object::Shared<ewol::Widget> create() {
-	return new ewol::Widget::Entry();
+static ewol::Widget* create() {
+	return new ewol::widget::Entry();
 }
 
-void ewol::Widget::Entry::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::widget::Entry::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
-const char * const ewol::Widget::Entry::eventClick  = "click";
-const char * const ewol::Widget::Entry::eventEnter  = "enter";
-const char * const ewol::Widget::Entry::eventModify = "modify";
+const char * const ewol::widget::Entry::eventClick  = "click";
+const char * const ewol::widget::Entry::eventEnter  = "enter";
+const char * const ewol::widget::Entry::eventModify = "modify";
 
-const char* const ewol::Widget::Entry::configMaxChar = "max";
-const char* const ewol::Widget::Entry::configRegExp  = "regExp";
-const char* const ewol::Widget::Entry::configEmptyMessage = "emptytext";
-const char* const ewol::Widget::Entry::configValue = "value";
+const char* const ewol::widget::Entry::configMaxChar = "max";
+const char* const ewol::widget::Entry::configRegExp  = "regExp";
+const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
+const char* const ewol::widget::Entry::configValue = "value";
 
-ewol::Widget::Entry::Entry(std::string _newData) :
+ewol::widget::Entry::Entry(std::string _newData) :
   m_shaper("THEME:GUI:Entry.json"),
   m_data(""),
   m_maxCharacter(0x7FFFFFFF),
@@ -57,7 +57,7 @@ ewol::Widget::Entry::Entry(std::string _newData) :
   m_displayCursorPos(0),
   m_displayCursorPosSelection(0),
   m_textWhenNothing("") {
-	addObjectType("ewol::Widget::Entry");
+	addObjectType("ewol::widget::Entry");
 	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
 	m_colorIdTextBg = m_shaper.requestColor("text-background");
 	m_colorIdCursor = m_shaper.requestColor("text-cursor");
@@ -83,12 +83,12 @@ ewol::Widget::Entry::Entry(std::string _newData) :
 }
 
 
-ewol::Widget::Entry::~Entry() {
+ewol::widget::Entry::~Entry() {
 	
 }
 
 
-void ewol::Widget::Entry::setMaxChar(int32_t _nbMax) {
+void ewol::widget::Entry::setMaxChar(int32_t _nbMax) {
 	if (_nbMax <= 0) {
 		m_maxCharacter = 0x7FFFFFFF;
 	} else {
@@ -97,7 +97,7 @@ void ewol::Widget::Entry::setMaxChar(int32_t _nbMax) {
 }
 
 
-void ewol::Widget::Entry::calculateMinMaxSize() {
+void ewol::widget::Entry::calculateMinMaxSize() {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
@@ -112,7 +112,7 @@ void ewol::Widget::Entry::calculateMinMaxSize() {
 }
 
 
-void ewol::Widget::Entry::setValue(const std::string& _newData) {
+void ewol::widget::Entry::setValue(const std::string& _newData) {
 	std::string newData = _newData;
 	if ((int64_t)newData.size() > m_maxCharacter) {
 		newData = std::string(_newData, 0, m_maxCharacter);
@@ -129,13 +129,13 @@ void ewol::Widget::Entry::setValue(const std::string& _newData) {
 }
 
 
-void ewol::Widget::Entry::onDraw() {
+void ewol::widget::Entry::onDraw() {
 	m_shaper.draw();
 	m_text.draw();
 }
 
 
-void ewol::Widget::Entry::onRegenerateDisplay() {
+void ewol::widget::Entry::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		m_shaper.clear();
 		m_text.clear();
@@ -192,7 +192,7 @@ void ewol::Widget::Entry::onRegenerateDisplay() {
 }
 
 
-void ewol::Widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
+void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
 	ewol::Padding padding = m_shaper.getPadding();
 	
 	vec2 relPos = relativePosition(_pos);
@@ -229,7 +229,7 @@ void ewol::Widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection
 }
 
 
-void ewol::Widget::Entry::removeSelected() {
+void ewol::widget::Entry::removeSelected() {
 	if (m_displayCursorPosSelection == m_displayCursorPos) {
 		// nothing to cut ...
 		return;
@@ -248,7 +248,7 @@ void ewol::Widget::Entry::removeSelected() {
 }
 
 
-void ewol::Widget::Entry::copySelectionToClipBoard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+void ewol::widget::Entry::copySelectionToClipBoard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 	if (m_displayCursorPosSelection == m_displayCursorPos) {
 		// nothing to cut ...
 		return;
@@ -265,7 +265,7 @@ void ewol::Widget::Entry::copySelectionToClipBoard(enum ewol::context::clipBoard
 }
 
 
-bool ewol::Widget::Entry::onEventInput(const ewol::event::Input& _event) {
+bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == _event.getId()) {
 		if (ewol::key::statusSingle == _event.getStatus()) {
@@ -358,7 +358,7 @@ bool ewol::Widget::Entry::onEventInput(const ewol::event::Input& _event) {
 }
 
 
-bool ewol::Widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
+bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 	if (_event.getType() == ewol::key::keyboardChar) {
 		if(_event.getStatus() == ewol::key::statusDown) {
 			//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
@@ -430,7 +430,7 @@ bool ewol::Widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 	return false;
 }
 
-void ewol::Widget::Entry::setInternalValue(const std::string& _newData) {
+void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 	std::string previous = m_data;
 	// check the RegExp :
 	if (_newData.size()>0) {
@@ -449,7 +449,7 @@ void ewol::Widget::Entry::setInternalValue(const std::string& _newData) {
 	markToRedraw();
 }
 
-void ewol::Widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 	// remove curent selected data ...
 	removeSelected();
 	// get current selection / Copy :
@@ -473,7 +473,7 @@ void ewol::Widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipbo
 }
 
 
-void ewol::Widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
+void ewol::widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
 	ewol::Widget::onReceiveMessage(_msg);
 	if(_msg.getMessage() == ewolEventEntryClean) {
 		m_data = "";
@@ -500,11 +500,11 @@ void ewol::Widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
 	}
 }
 
-void ewol::Widget::Entry::markToUpdateTextPosition() {
+void ewol::widget::Entry::markToUpdateTextPosition() {
 	m_needUpdateTextPos=true;
 }
 
-void ewol::Widget::Entry::updateTextPosition() {
+void ewol::widget::Entry::updateTextPosition() {
 	if (false == m_needUpdateTextPos) {
 		return;
 	}
@@ -539,35 +539,35 @@ void ewol::Widget::Entry::updateTextPosition() {
 	}
 }
 
-void ewol::Widget::Entry::onGetFocus() {
+void ewol::widget::Entry::onGetFocus() {
 	m_displayCursor = true;
 	changeStatusIn(STATUS_SELECTED);
 	showKeyboard();
 	markToRedraw();
 }
 
-void ewol::Widget::Entry::onLostFocus() {
+void ewol::widget::Entry::onLostFocus() {
 	m_displayCursor = false;
 	changeStatusIn(STATUS_NORMAL);
 	hideKeyboard();
 	markToRedraw();
 }
 
-void ewol::Widget::Entry::changeStatusIn(int32_t _newStatusId) {
+void ewol::widget::Entry::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
 	}
 }
 
-void ewol::Widget::Entry::periodicCall(const ewol::event::Time& _event) {
+void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}
 	markToRedraw();
 }
 
-void ewol::Widget::Entry::setRegExp(const std::string& _expression) {
+void ewol::widget::Entry::setRegExp(const std::string& _expression) {
 	std::string previousRegExp = m_regExp.getRegExp();
 	EWOL_DEBUG("change input regExp \"" << previousRegExp << "\"  == > \"" << _expression << "\"");
 	m_regExp.compile(_expression);
@@ -577,12 +577,12 @@ void ewol::Widget::Entry::setRegExp(const std::string& _expression) {
 	}
 }
 
-void ewol::Widget::Entry::setEmptyText(const std::string& _text) {
+void ewol::widget::Entry::setEmptyText(const std::string& _text) {
 	m_textWhenNothing = _text;
 	markToRedraw();
 }
 
-bool ewol::Widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
+bool ewol::widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
@@ -605,7 +605,7 @@ bool ewol::Widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::Widget::Entry::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::widget::Entry::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

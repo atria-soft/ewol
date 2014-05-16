@@ -18,10 +18,10 @@
 
 namespace ewol {
 	namespace widget {
-		class CheckBox : public ewol::Widget::Container2 {
+		class CheckBox : public ewol::widget::Container2 {
 			public:
 				//! @not-in-doc
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;
 				static const char* const eventDown;

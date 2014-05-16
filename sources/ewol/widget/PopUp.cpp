@@ -22,12 +22,12 @@ const char* const ewol::Widget::PopUp::configLockExpand="lock";
 
 static const char* annimationIncrease = "increase";
 
-static ewol::object::Shared<ewol::Widget> create() {
+static ewol::Widget* create() {
 	return new ewol::Widget::PopUp();
 }
 
-void ewol::Widget::PopUp::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::Widget::PopUp::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
 ewol::Widget::PopUp::PopUp(const std::string& _shaperName) :
@@ -148,7 +148,7 @@ void ewol::Widget::PopUp::onRegenerateDisplay() {
 }
 
 ewol::object::Shared<ewol::Widget> ewol::Widget::PopUp::getWidgetAtPos(const vec2& _pos) {
-	ewol::object::Shared<ewol::Widget> val = ewol::Widget::Container::getWidgetAtPos(_pos);
+	ewol::object::Shared<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (NULL != val) {
 		return val;
 	}
@@ -156,7 +156,7 @@ ewol::object::Shared<ewol::Widget> ewol::Widget::PopUp::getWidgetAtPos(const vec
 }
 
 bool ewol::Widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::Container::onSetConfig(_conf)) {
+	if (true == ewol::widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configShaper) {
@@ -175,7 +175,7 @@ bool ewol::Widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
 }
 
 bool ewol::Widget::PopUp::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::Container::onGetConfig(_config, _result)) {
+	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configShaper) {

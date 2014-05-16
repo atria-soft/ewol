@@ -14,6 +14,9 @@
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
+#include <ewol/object/Owner.h>
+#include <ewol/object/Shared.h>
+
 namespace ewol {
 	// some class need to define element befor other ...
 	class Object;
@@ -26,8 +29,6 @@ namespace ewol {
 
 #include <ewol/object/Config.h>
 #include <ewol/object/ConfigElement.h>
-#include <ewol/object/Owner.h>
-#include <ewol/object/Shared.h>
 #include <ewol/object/Message.h>
 
 namespace ewol {

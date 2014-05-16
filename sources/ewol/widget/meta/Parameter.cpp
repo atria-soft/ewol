@@ -34,8 +34,8 @@ ewol::Widget::Parameter::Parameter() :
 	addObjectType("ewol::Widget::Parameter");
 	addEventId(eventClose);
 	
-	ewol::Widget::Sizer * mySizerVert = NULL;
-	ewol::Widget::Sizer * mySizerHori = NULL;
+	ewol::widget::Sizer * mySizerVert = NULL;
+	ewol::widget::Sizer * mySizerHori = NULL;
 	ewol::Widget::Spacer * mySpacer = NULL;
 	#ifdef __TARGET_OS__Android
 		setMinSize(ewol::Dimension(vec2(90, 90), ewol::Dimension::Pourcent));
@@ -43,7 +43,7 @@ ewol::Widget::Parameter::Parameter() :
 		setMinSize(ewol::Dimension(vec2(80, 80), ewol::Dimension::Pourcent));
 	#endif
 	
-	mySizerVert = new ewol::Widget::Sizer(widget::Sizer::modeVert);
+	mySizerVert = new ewol::widget::Sizer(widget::Sizer::modeVert);
 	if (NULL == mySizerVert) {
 		EWOL_ERROR("Can not allocate widget  == > display might be in error");
 	} else {
@@ -53,7 +53,7 @@ ewol::Widget::Parameter::Parameter() :
 		// set it in the pop-up-system :
 		setSubWidget(mySizerVert);
 		
-		mySizerHori = new ewol::Widget::Sizer(widget::Sizer::modeHori);
+		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
@@ -67,12 +67,12 @@ ewol::Widget::Parameter::Parameter() :
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
-			ewol::Widget::Button* tmpButton = new widget::Button();
+			ewol::widget::Button* tmpButton = new widget::Button();
 			if (NULL == tmpButton) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				tmpButton->setSubWidget(
-				    new ewol::Widget::Composer(widget::Composer::String,
+				    new ewol::widget::Composer(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
 				        "		<image src=\"THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
@@ -92,12 +92,12 @@ ewol::Widget::Parameter::Parameter() :
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
-			tmpButton = new ewol::Widget::Button();
+			tmpButton = new ewol::widget::Button();
 			if (NULL == tmpButton) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				tmpButton->setSubWidget(
-				    new ewol::Widget::Composer(widget::Composer::String,
+				    new ewol::widget::Composer(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
 				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
@@ -109,7 +109,7 @@ ewol::Widget::Parameter::Parameter() :
 			}
 		}
 		
-		mySizerHori = new ewol::Widget::Sizer(widget::Sizer::modeHori);
+		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
@@ -135,7 +135,7 @@ ewol::Widget::Parameter::Parameter() :
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
-			ewol::Widget::Sizer * mySizerVert2 = new widget::Sizer(widget::Sizer::modeVert);
+			ewol::widget::Sizer * mySizerVert2 = new widget::Sizer(widget::Sizer::modeVert);
 			if (NULL == mySizerVert2) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
@@ -173,7 +173,7 @@ ewol::Widget::Parameter::Parameter() :
 			mySizerVert->subWidgetAdd(mySpacer);
 		}
 		
-		m_widgetTitle = new ewol::Widget::Label("File chooser ...");
+		m_widgetTitle = new ewol::widget::Label("File chooser ...");
 		if (NULL == m_widgetTitle) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
@@ -240,7 +240,7 @@ void ewol::Widget::Parameter::menuAdd(std::string _label, std::string _image, ew
 				m_wSlider->subWidgetAdd(_associateWidget);
 			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
-				ewol::Widget::Label * myLabel = new widget::Label((std::string("No widget for : ") + _label));
+				ewol::widget::Label * myLabel = new widget::Label((std::string("No widget for : ") + _label));
 				if (NULL == myLabel) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {

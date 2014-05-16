@@ -109,7 +109,7 @@ namespace ewol {
 				 * @param _source the widget where the event came from
 				 * @param _destination the widget where the event mitgh be generated now
 				 */
-				void transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::Widget* _destination);
+				void transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::object::Shared<ewol::Widget> _destination);
 				/**
 				 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 				 * @param[in] _widget The widget that lock the pointer events

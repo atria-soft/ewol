@@ -158,7 +158,7 @@ namespace ewol {
 			 */
 			virtual void stop();
 		private:
-			ewol::widget::Windows* m_windowsCurrent; //!< curent displayed windows
+			ewol::object::Shared<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
 		public:
 			/**
 			 * @brief set the current windows to display :
@@ -169,9 +169,7 @@ namespace ewol {
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::widget::Windows* getWindows() {
-				return m_windowsCurrent;
-			};
+			ewol::object::Shared<ewol::widget::Windows> getWindows();
 		private:
 			vec2 m_windowsSize; //!< current size of the system
 		public:
@@ -229,7 +227,7 @@ namespace ewol {
 			 * @param source the widget where the event came from
 			 * @param destination the widget where the event mitgh be generated now
 			 */
-			void inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source, ewol::Widget* _destination);
+			void inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source, ewol::object::Shared<ewol::Widget> _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 			 * @param[in] widget The widget that lock the pointer events

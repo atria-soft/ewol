@@ -9,14 +9,14 @@
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/Manager.h>
 
-const char* const ewol::Widget::CheckBox::eventPressed    = "pressed";
-const char* const ewol::Widget::CheckBox::eventDown       = "down";
-const char* const ewol::Widget::CheckBox::eventUp         = "up";
-const char* const ewol::Widget::CheckBox::eventEnter      = "enter";
-const char* const ewol::Widget::CheckBox::eventValue      = "value";
+const char* const ewol::widget::CheckBox::eventPressed    = "pressed";
+const char* const ewol::widget::CheckBox::eventDown       = "down";
+const char* const ewol::widget::CheckBox::eventUp         = "up";
+const char* const ewol::widget::CheckBox::eventEnter      = "enter";
+const char* const ewol::widget::CheckBox::eventValue      = "value";
 
-const char* const ewol::Widget::CheckBox::configValue  = "value";
-const char* const ewol::Widget::CheckBox::configShaper = "shaper";
+const char* const ewol::widget::CheckBox::configValue  = "value";
+const char* const ewol::widget::CheckBox::configShaper = "shaper";
 
 
 // DEFINE for the shader display system :
@@ -28,14 +28,14 @@ const char* const ewol::Widget::CheckBox::configShaper = "shaper";
 #define __class__	"CheckBox"
 
 static ewol::Widget* Create() {
-	return new ewol::Widget::CheckBox();
+	return new ewol::widget::CheckBox();
 }
 
-void ewol::Widget::CheckBox::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+void ewol::widget::CheckBox::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&Create);
 }
 
-ewol::Widget::CheckBox::CheckBox(const std::string& _shaperName) :
+ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
   m_shaper(_shaperName),
   m_mouseHover(false),
   m_buttonPressed(false),
@@ -44,7 +44,7 @@ ewol::Widget::CheckBox::CheckBox(const std::string& _shaperName) :
   m_shaperIdSize(-1),
   m_shaperIdSizeInsize(-1),
   m_value(false) {
-	addObjectType("ewol::Widget::CheckBox");
+	addObjectType("ewol::widget::CheckBox");
 	// add basic Event generated :
 	addEventId(eventPressed);
 	addEventId(eventDown);
@@ -67,17 +67,17 @@ ewol::Widget::CheckBox::CheckBox(const std::string& _shaperName) :
 }
 
 
-ewol::Widget::CheckBox::~CheckBox() {
+ewol::widget::CheckBox::~CheckBox() {
 	
 }
 
-void ewol::Widget::CheckBox::setShaperName(const std::string& _shaperName) {
+void ewol::widget::CheckBox::setShaperName(const std::string& _shaperName) {
 	EWOL_WARNING("set shaper name : '" << _shaperName << "'");
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
 
-void ewol::Widget::CheckBox::calculateSize(const vec2& _availlable) {
+void ewol::widget::CheckBox::calculateSize(const vec2& _availlable) {
 	ewol::Padding padding = m_shaper.getPadding();
 	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
@@ -87,7 +87,7 @@ void ewol::Widget::CheckBox::calculateSize(const vec2& _availlable) {
 	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
 }
 
-void ewol::Widget::CheckBox::calculateMinMaxSize() {
+void ewol::widget::CheckBox::calculateMinMaxSize() {
 	ewol::Padding padding = m_shaper.getPadding();
 	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
@@ -97,13 +97,13 @@ void ewol::Widget::CheckBox::calculateMinMaxSize() {
 	}
 }
 
-void ewol::Widget::CheckBox::onDraw() {
+void ewol::widget::CheckBox::onDraw() {
 	// draw the shaaper (if needed indeed)
 	m_shaper.draw();
 }
 
-void ewol::Widget::CheckBox::onRegenerateDisplay() {
-	ewol::Widget::Container2::onRegenerateDisplay();
+void ewol::widget::CheckBox::onRegenerateDisplay() {
+	ewol::widget::Container2::onRegenerateDisplay();
 	if (needRedraw() == false) {
 		return;
 	}
@@ -123,7 +123,7 @@ void ewol::Widget::CheckBox::onRegenerateDisplay() {
 	                  vec2ClipInt32(size2-vec2(padding.x(),padding.y()) ));
 }
 
-void ewol::Widget::CheckBox::setValue(bool _val) {
+void ewol::widget::CheckBox::setValue(bool _val) {
 	if (m_value != _val) {
 		m_value = _val;
 		if (m_value == false) {
@@ -137,7 +137,7 @@ void ewol::Widget::CheckBox::setValue(bool _val) {
 	m_shaper.setActivateState(m_value==true?1:0);
 }
 
-bool ewol::Widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
+bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("Event on BT : " << _event);
 	
 	bool previousHoverState = m_mouseHover;
@@ -193,7 +193,7 @@ bool ewol::Widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 }
 
 
-bool ewol::Widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
+bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    _event.getType() == ewol::key::keyboardChar
 	    && _event.getStatus() == ewol::key::statusDown
@@ -204,7 +204,7 @@ bool ewol::Widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 	return false;
 }
 
-void ewol::Widget::CheckBox::CheckStatus() {
+void ewol::widget::CheckBox::CheckStatus() {
 	if (true == m_buttonPressed) {
 		changeStatusIn(STATUS_PRESSED);
 	} else {
@@ -216,7 +216,7 @@ void ewol::Widget::CheckBox::CheckStatus() {
 	}
 }
 
-void ewol::Widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
+void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
@@ -224,7 +224,7 @@ void ewol::Widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
 }
 
 
-void ewol::Widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
+void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}
@@ -232,8 +232,8 @@ void ewol::Widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 }
 
 
-bool ewol::Widget::CheckBox::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::Container2::onSetConfig(_conf)) {
+bool ewol::widget::CheckBox::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::widget::Container2::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configValue) {
@@ -247,8 +247,8 @@ bool ewol::Widget::CheckBox::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::Widget::CheckBox::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::Container2::onGetConfig(_config, _result)) {
+bool ewol::widget::CheckBox::onGetConfig(const char* _config, std::string& _result) const {
+	if (true == ewol::widget::Container2::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configValue) {

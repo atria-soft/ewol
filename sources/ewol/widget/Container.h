@@ -19,7 +19,7 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
-		class Container : public ewol::object::Shared<ewol::Widget> {
+		class Container : public ewol::Widget {
 			protected:
 				ewol::object::Owner<ewol::Widget> m_subWidget;
 			public:

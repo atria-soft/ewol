@@ -22,7 +22,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ContextMenu : public ewol::Widget::Container {
+		class ContextMenu : public ewol::widget::Container {
 			public:
 				enum markPosition {
 					markTop,
@@ -32,7 +32,7 @@ namespace ewol {
 					markNone
 				};
 			public:
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configArrowPosition;
 				static const char* const configArrowMode;

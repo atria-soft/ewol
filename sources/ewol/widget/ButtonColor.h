@@ -25,12 +25,12 @@ namespace ewol {
 				// Event list of properties
 				static const char * const eventChange;
 			public:
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
 				etk::Color<> m_textColorFg; //!< Current color.
-				ewol::object::Shared<ewol::Widget::ContextMenu> m_widgetContextMenu; //!< Specific context menu.
+				ewol::object::Shared<ewol::widget::ContextMenu> m_widgetContextMenu; //!< Specific context menu.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :

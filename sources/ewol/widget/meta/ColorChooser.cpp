@@ -23,16 +23,16 @@ extern "C" {
 #define __class__	"ColorChooser"
 
 
-const char * const ewol::Widget::ColorChooser::eventChange = "change";
+const char * const ewol::widget::ColorChooser::eventChange = "change";
 
 
 static const char * const eventColorBarHasChange          = "event-color-bar-has-change";
 static const char * const eventColorSpecificHasChange     = "event-color-specific-has-change";
 
 
-ewol::Widget::ColorChooser::ColorChooser() :
-  ewol::Widget::Sizer(ewol::Widget::Sizer::modeVert) {
-	addObjectType("ewol::Widget::ColorChooser");
+ewol::widget::ColorChooser::ColorChooser() :
+  ewol::widget::Sizer(ewol::Widget::Sizer::modeVert) {
+	addObjectType("ewol::widget::ColorChooser");
 	addEventId(eventChange);
 	m_widgetColorBar = NULL;
 	m_widgetRed = NULL;
@@ -40,7 +40,7 @@ ewol::Widget::ColorChooser::ColorChooser() :
 	m_widgetBlue = NULL;
 	m_widgetAlpha = NULL;
 	lockExpand(bvec2(true,true));
-		m_widgetColorBar = new ewol::Widget::ColorBar();
+		m_widgetColorBar = new ewol::widget::ColorBar();
 			m_widgetColorBar->registerOnEvent(this, "change", eventColorBarHasChange);
 			m_widgetColorBar->setFill(bvec2(true,true));
 			/*
@@ -52,7 +52,7 @@ ewol::Widget::ColorChooser::ColorChooser() :
 		etk::Color<> sliderColor;
 		sliderColor = etk::color::black;
 		
-		m_widgetRed = new ewol::Widget::Slider();
+		m_widgetRed = new ewol::widget::Slider();
 			m_widgetRed->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetRed->setExpand(bvec2(true,false));
 			m_widgetRed->setFill(bvec2(true,false));
@@ -61,7 +61,7 @@ ewol::Widget::ColorChooser::ColorChooser() :
 			sliderColor = 0xFF0000FF;
 			m_widgetRed->setColor(sliderColor);
 			subWidgetAdd(m_widgetRed.get());
-		m_widgetGreen = new ewol::Widget::Slider();
+		m_widgetGreen = new ewol::widget::Slider();
 			m_widgetGreen->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetGreen->setExpand(bvec2(true,false));
 			m_widgetGreen->setFill(bvec2(true,false));
@@ -70,7 +70,7 @@ ewol::Widget::ColorChooser::ColorChooser() :
 			m_widgetGreen->setColor(sliderColor);
 			m_widgetGreen->setMax(255);
 			subWidgetAdd(m_widgetGreen.get());
-		m_widgetBlue = new ewol::Widget::Slider();
+		m_widgetBlue = new ewol::widget::Slider();
 			m_widgetBlue->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetBlue->setExpand(bvec2(true,false));
 			m_widgetBlue->setFill(bvec2(true,false));
@@ -79,7 +79,7 @@ ewol::Widget::ColorChooser::ColorChooser() :
 			m_widgetBlue->setColor(sliderColor);
 			m_widgetBlue->setMax(255);
 			subWidgetAdd(m_widgetBlue.get());
-		m_widgetAlpha = new ewol::Widget::Slider();
+		m_widgetAlpha = new ewol::widget::Slider();
 			m_widgetAlpha->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetAlpha->setExpand(bvec2(true,false));
 			m_widgetAlpha->setFill(bvec2(true,false));
@@ -91,12 +91,12 @@ ewol::Widget::ColorChooser::ColorChooser() :
 }
 
 
-ewol::Widget::ColorChooser::~ColorChooser() {
+ewol::widget::ColorChooser::~ColorChooser() {
 	
 }
 
 
-void ewol::Widget::ColorChooser::setColor(etk::Color<> _newColor) {
+void ewol::widget::ColorChooser::setColor(etk::Color<> _newColor) {
 	m_currentColor = _newColor;
 	if (NULL != m_widgetRed) {
 		m_widgetRed->setValue(m_currentColor.r());
@@ -116,12 +116,12 @@ void ewol::Widget::ColorChooser::setColor(etk::Color<> _newColor) {
 }
 
 
-etk::Color<> ewol::Widget::ColorChooser::getColor() {
+etk::Color<> ewol::widget::ColorChooser::getColor() {
 	return m_currentColor;
 }
 
 
-void ewol::Widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _msg) {
+void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _msg) {
 	if (NULL == _msg.getCaller()) {
 		return;
 	}
@@ -169,9 +169,9 @@ void ewol::Widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 };
 
 
-void ewol::Widget::ColorChooser::onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject) {
+void ewol::widget::ColorChooser::onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject) {
 	// First step call parrent : 
-	ewol::Widget::Sizer::onObjectRemove(_removeObject);
+	ewol::widget::Sizer::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
 	if(_removeObject == m_widgetRed) {
 		m_widgetRed.reset();

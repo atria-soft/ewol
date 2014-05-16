@@ -215,7 +215,7 @@ bool ewol::resource::Manager::release(ewol::Resource*& _object) {
 }
 
 // in case of error ...
-void ewol::resource::Manager::onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject) {
+void ewol::resource::Manager::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	for (size_t iii=0; iii<m_resourceList.size(); ++iii) {
 		if (m_resourceList[iii] == _removeObject) {
 			EWOL_WARNING("Remove Resource that is not removed ... ");

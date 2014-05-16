@@ -19,12 +19,12 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Sizer : public ewol::Widget::ContainerN {
+		class Sizer : public ewol::widget::ContainerN {
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configBorder;
 				static const char* const configMode;
@@ -40,7 +40,7 @@ namespace ewol {
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
-				Sizer(enum displayMode _mode=ewol::Widget::Sizer::modeHori);
+				Sizer(enum displayMode _mode=ewol::widget::Sizer::modeHori);
 				/**
 				 * @brief Desstructor
 				 */

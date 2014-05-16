@@ -34,8 +34,8 @@ static ewol::Widget* create() {
 	return new ewol::Widget::WSlider();
 }
 
-void ewol::Widget::WSlider::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::Widget::WSlider::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
 ewol::Widget::WSlider::WSlider() :
@@ -60,7 +60,7 @@ ewol::Widget::WSlider::~WSlider() {
 
 void ewol::Widget::WSlider::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG("Update size");
-	ewol::Widget::ContainerN::calculateSize(_availlable);
+	ewol::widget::ContainerN::calculateSize(_availlable);
 	
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
@@ -272,7 +272,7 @@ void ewol::Widget::WSlider::onRegenerateDisplay() {
 }
 
 bool ewol::Widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::ContainerN::onSetConfig(_conf)) {
+	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configMode) {
@@ -293,7 +293,7 @@ bool ewol::Widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
 }
 
 bool ewol::Widget::WSlider::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::ContainerN::onGetConfig(_config, _result)) {
+	if (true == ewol::widget::ContainerN::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configMode) {

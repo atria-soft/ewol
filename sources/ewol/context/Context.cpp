@@ -20,15 +20,17 @@
 #include <ewol/Dimension.h>
 #include <ewol/debug.h>
 
+#include <ewol/translate.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/object/Object.h>
 #include <ewol/object/Manager.h>
+#include <ewol/widget/Widget.h>
+#include <ewol/widget/Windows.h>
+#include <ewol/widget/Manager.h>
 
 #include <ewol/context/Context.h>
 #include <ewol/resource/Manager.h>
-#include <ewol/openGL/openGL.h>
 
-#include <ewol/widget/Manager.h>
-#include <ewol/translate.h>
 
 
 
@@ -134,7 +136,7 @@ namespace ewol {
 
 
 void ewol::Context::inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source,
-                                               ewol::object::Shared<ewol::Widget> _destination) {
+                                              ewol::object::Shared<ewol::Widget> _destination) {
 	m_input.transfertEvent(_source, _destination);
 }
 
@@ -380,10 +382,10 @@ ewol::Context::~Context() {
 	lockContext();
 	// call application to uninit
 	APP_UnInit(*this);
-	if (m_windowsCurrent != NULL) {
+	if (m_windowsCurrent != nullptr) {
 		EWOL_DEBUG("Main windows has not been auto-removed...");
 		m_windowsCurrent->removeObject();
-		m_windowsCurrent = NULL;
+		m_windowsCurrent.reset();
 	}
 	// unset all windows
 	m_msgSystem.clean();
@@ -648,7 +650,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject) {
+void ewol::Context::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	//EWOL_CRITICAL("element removed");
 	m_input.onObjectRemove(_removeObject);
 }
@@ -663,7 +665,7 @@ void ewol::Context::OS_OpenGlContextDestroy() {
 
 void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
 	// remove current focus :
-	m_widgetManager.focusSetDefault(NULL);
+	m_widgetManager.focusSetDefault(nullptr);
 	m_widgetManager.focusRelease();
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;
@@ -672,6 +674,10 @@ void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
 	// request all the widget redrawing
 	forceRedrawAll();
 }
+
+ewol::object::Shared<ewol::widget::Windows> ewol::Context::getWindows() {
+	return m_windowsCurrent;
+};
 
 void ewol::Context::forceRedrawAll() {
 	if (m_windowsCurrent == NULL) {

@@ -21,7 +21,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Scroll : public ewol::Widget::Container {
+		class Scroll : public ewol::widget::Container {
 			public:
 				enum highSpeedMode {
 					speedModeDisable,
@@ -35,7 +35,7 @@ namespace ewol {
 				// Cinfig parameter list:
 				static const char* const configLimit;
 			public:
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.

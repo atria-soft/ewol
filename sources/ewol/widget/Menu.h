@@ -32,7 +32,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Menu :public ewol::Widget::Sizer {
+		class Menu :public ewol::widget::Sizer {
 			public:
 				Menu();
 				virtual ~Menu();
@@ -44,7 +44,7 @@ namespace ewol {
 			private:
 				std::vector<ewol::Widget::MenuElement*> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
-				ewol::Widget::ContextMenu* m_widgetContextMenu;
+				ewol::widget::ContextMenu* m_widgetContextMenu;
 			public:
 				void clear();
 				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");

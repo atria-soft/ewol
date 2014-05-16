@@ -14,12 +14,12 @@
 #undef __class__
 #define __class__ "Scroll"
 
-static ewol::object::Shared<ewol::Widget> create() {
+static ewol::Widget* create() {
 	return new ewol::Widget::Scroll();
 }
 
-void ewol::Widget::Scroll::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::Widget::Scroll::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
 const char* const ewol::Widget::Scroll::configLimit = "limit";
@@ -76,7 +76,7 @@ void ewol::Widget::Scroll::onDraw() {
 
 void ewol::Widget::Scroll::onRegenerateDisplay() {
 	// call upper class
-	ewol::Widget::Container::onRegenerateDisplay();
+	ewol::widget::Container::onRegenerateDisplay();
 	if (needRedraw() == false) {
 		return;
 	}
@@ -350,7 +350,7 @@ bool ewol::Widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 }
 
 ewol::object::Shared<ewol::Widget> ewol::Widget::Scroll::getWidgetAtPos(const vec2& _pos) {
-	ewol::object::Shared<ewol::Widget> tmpWidget = ewol::Widget::Container::getWidgetAtPos(_pos);
+	ewol::object::Shared<ewol::Widget> tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (NULL != tmpWidget) {
 		return tmpWidget;
 	}
@@ -358,7 +358,7 @@ ewol::object::Shared<ewol::Widget> ewol::Widget::Scroll::getWidgetAtPos(const ve
 }
 
 bool ewol::Widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::Container::onSetConfig(_conf)) {
+	if (true == ewol::widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configLimit) {
@@ -369,7 +369,7 @@ bool ewol::Widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {
 }
 
 bool ewol::Widget::Scroll::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::Container::onGetConfig(_config, _result)) {
+	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configLimit) {

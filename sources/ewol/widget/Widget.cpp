@@ -162,7 +162,7 @@ ewol::Widget::~Widget() {
 void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
 	if (_upper == nullptr) {
 		//just remove father :
-		m_up = NULL;
+		m_up.reset();
 		return;
 	}
 	if (m_up != nullptr) {
@@ -868,11 +868,11 @@ void ewol::Widget::requestUpdateSize() {
 	getContext().requestUpdateSize();
 }
 
-ewol::object::Shared<ewol::Widget::Manager> ewol::Widget::getWidgetManager() {
+ewol::widget::Manager& ewol::Widget::getWidgetManager() {
 	return getContext().getWidgetManager();
 }
 
-ewol::object::Shared<ewol::Widget::Windows> ewol::Widget::getWindows() {
+ewol::object::Shared<ewol::widget::Windows> ewol::Widget::getWindows() {
 	return getContext().getWindows();
 }
 

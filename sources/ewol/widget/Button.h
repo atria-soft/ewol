@@ -25,10 +25,10 @@ namespace ewol {
 		 * @brief a composed button is a button with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple
 		 */
-		class Button : public ewol::Widget::Container2 {
+		class Button : public ewol::widget::Container2 {
 			public:
 				//! @not-in-doc
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;
 				static const char* const eventDown;

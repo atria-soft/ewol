@@ -44,7 +44,7 @@ namespace ewol {
 				void menuSeparator();
 			private:
 				int32_t                 m_currentIdList;
-				ewol::Widget::Label*          m_widgetTitle;
+				ewol::widget::Label*          m_widgetTitle;
 				ewol::Widget::ParameterList*  m_paramList;
 				ewol::Widget::WSlider*        m_wSlider;
 		};

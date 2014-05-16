@@ -14,12 +14,12 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-static ewol::object::Shared<ewol::Widget> create() {
+static ewol::Widget* create() {
 	return new ewol::Widget::ProgressBar();
 }
 
-void ewol::Widget::ProgressBar::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::Widget::ProgressBar::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
 const char* const ewol::Widget::ProgressBar::configColorBg = "color-bg";

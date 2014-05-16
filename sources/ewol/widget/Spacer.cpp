@@ -20,8 +20,8 @@ static ewol::Widget* create() {
 	return new ewol::Widget::Spacer();
 }
 
-void ewol::Widget::Spacer::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::Widget::Spacer::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
 ewol::Widget::Spacer::Spacer() {

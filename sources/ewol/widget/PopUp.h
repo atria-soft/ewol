@@ -22,9 +22,9 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class PopUp : public ewol::Widget::Container {
+		class PopUp : public ewol::widget::Container {
 			public:
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 				// Config list of properties
 				static const char* const configShaper;
 				static const char* const configRemoveOnExternClick;

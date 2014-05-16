@@ -14,22 +14,22 @@
 #define __class__ "Layer"
 
 static ewol::Widget* create() {
-	return new ewol::Widget::Layer();
+	return new ewol::widget::Layer();
 }
 
-void ewol::Widget::Layer::init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
+void ewol::widget::Layer::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+	_widgetManager->addWidgetCreator(__class__,&create);
 }
 
-ewol::Widget::Layer::Layer() {
-	addObjectType("ewol::Widget::Layer");
+ewol::widget::Layer::Layer() {
+	addObjectType("ewol::widget::Layer");
 }
 
-ewol::Widget::Layer::~Layer() {
+ewol::widget::Layer::~Layer() {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-ewol::object::Shared<ewol::Widget> ewol::Widget::Layer::getWidgetAtPos(const vec2& _pos) {
+ewol::object::Shared<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return NULL;
 	}
@@ -41,7 +41,7 @@ ewol::object::Shared<ewol::Widget> ewol::Widget::Layer::getWidgetAtPos(const vec
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> * tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
+				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
 				if (NULL != tmpWidget) {
 					return tmpWidget;
 				}

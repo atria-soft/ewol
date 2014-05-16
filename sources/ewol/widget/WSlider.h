@@ -19,9 +19,9 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class WSlider :public ewol::Widget::ContainerN {
+		class WSlider :public ewol::widget::ContainerN {
 			public:
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 				// Event list of properties
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;

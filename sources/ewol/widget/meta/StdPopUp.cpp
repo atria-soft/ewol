@@ -25,14 +25,14 @@ ewol::Widget::StdPopUp::StdPopUp() :
 	addObjectType("ewol::Widget::StdPopUp");
 	setMinSize(ewol::Dimension(vec2(20,10),ewol::Dimension::Pourcent));
 	
-	ewol::Widget::Sizer* mySizerVert = NULL;
+	ewol::widget::Sizer* mySizerVert = NULL;
 	ewol::Widget::Spacer* mySpacer = NULL;
 	
-	mySizerVert = new ewol::Widget::Sizer(widget::Sizer::modeVert);
+	mySizerVert = new ewol::widget::Sizer(widget::Sizer::modeVert);
 		// set it in the pop-up-system : 
 		setSubWidget(mySizerVert);
 		
-		m_subBar = new ewol::Widget::Sizer(widget::Sizer::modeHori);
+		m_subBar = new ewol::widget::Sizer(widget::Sizer::modeHori);
 			m_subBar->lockExpand(bvec2(true,true));
 			m_subBar->setExpand(bvec2(true,false));
 			mySizerVert->subWidgetAdd(m_subBar->get());
@@ -51,7 +51,7 @@ ewol::Widget::StdPopUp::StdPopUp() :
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,5),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
-		m_comment = new ewol::Widget::Label("No Label");
+		m_comment = new ewol::widget::Label("No Label");
 			m_comment->setExpand(bvec2(true,true));
 			mySizerVert->subWidgetAdd(m_comment->get());
 		
@@ -66,7 +66,7 @@ ewol::Widget::StdPopUp::StdPopUp() :
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
-		m_title = new ewol::Widget::Label("<bold>Message</bold>");
+		m_title = new ewol::widget::Label("<bold>Message</bold>");
 			m_title->setExpand(bvec2(true,false));
 			m_title->setFill(bvec2(true,true));
 			mySizerVert->subWidgetAdd(m_title->get());
@@ -92,19 +92,19 @@ void ewol::Widget::StdPopUp::setComment(const std::string& _text) {
 	markToRedraw();
 }
 
-ewol::object::Shared<ewol::Widget::Button> ewol::Widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
+ewol::object::Shared<ewol::widget::Button> ewol::Widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
 	if (m_subBar == NULL) {
 		EWOL_ERROR("button-bar does not existed ...");
 		return NULL;
 	}
-	ewol::Widget::Button* myButton = new widget::Button();
+	ewol::widget::Button* myButton = new widget::Button();
 	if (myButton == NULL) {
 		EWOL_ERROR("Can not allocate new button ...");
 		return NULL;
 	}
-	myButton->setSubWidget(new ewol::Widget::Label(_text));
+	myButton->setSubWidget(new ewol::widget::Label(_text));
 	if(_autoExit == true) {
-		myButton->registerOnEvent(this, ewol::Widget::Button::eventPressed, eventButtonExit);
+		myButton->registerOnEvent(this, ewol::widget::Button::eventPressed, eventButtonExit);
 	}
 	m_subBar->subWidgetAdd(myButton);
 	markToRedraw();

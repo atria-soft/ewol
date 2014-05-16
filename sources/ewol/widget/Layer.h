@@ -19,12 +19,12 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Layer : public ewol::Widget::ContainerN {
+		class Layer : public ewol::widget::ContainerN {
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 			public:
 				/**
 				 * @brief Constructor

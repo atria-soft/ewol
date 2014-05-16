@@ -38,7 +38,7 @@ namespace ewol {
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::object::Shared<ewol::Widget::Manager> _widgetManager);
+				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
 				ewol::resource::ColorFile* m_colorProperty; //!< theme color property

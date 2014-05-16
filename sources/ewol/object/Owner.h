@@ -9,11 +9,11 @@
 #ifndef __EWOL_OBJECT_OWNER_H__
 #define __EWOL_OBJECT_OWNER_H__
 
+#include <ewol/debug.h>
 
 namespace ewol {
-	class Object;
 	namespace object {
-		template<typename T, typename = typename std::enable_if<std::is_convertible<T*, ewol::Object*>::value>::type>
+		template<typename T>
 			class Owner {
 				private:
 					T* m_pointer;
