@@ -15,22 +15,22 @@
 #define __class__	"ProgressBar"
 
 static ewol::Widget* create() {
-	return new ewol::Widget::ProgressBar();
+	return new ewol::widget::ProgressBar();
 }
 
-void ewol::Widget::ProgressBar::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&create);
+void ewol::widget::ProgressBar::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-const char* const ewol::Widget::ProgressBar::configColorBg = "color-bg";
-const char* const ewol::Widget::ProgressBar::configColorFgOn = "color-on";
-const char* const ewol::Widget::ProgressBar::configColorFgOff = "color-off";
-const char* const ewol::Widget::ProgressBar::configValue = "value";
+const char* const ewol::widget::ProgressBar::configColorBg = "color-bg";
+const char* const ewol::widget::ProgressBar::configColorFgOn = "color-on";
+const char* const ewol::widget::ProgressBar::configColorFgOff = "color-off";
+const char* const ewol::widget::ProgressBar::configValue = "value";
 
 const int32_t dotRadius = 6;
 
-ewol::Widget::ProgressBar::ProgressBar() {
-	addObjectType("ewol::Widget::ProgressBar");
+ewol::widget::ProgressBar::ProgressBar() {
+	addObjectType("ewol::widget::ProgressBar");
 	m_value = 0.0;
 	
 	m_textColorFg = etk::color::black;
@@ -47,27 +47,27 @@ ewol::Widget::ProgressBar::ProgressBar() {
 	
 }
 
-ewol::Widget::ProgressBar::~ProgressBar() {
+ewol::widget::ProgressBar::~ProgressBar() {
 	
 }
 
-void ewol::Widget::ProgressBar::calculateMinMaxSize() {
+void ewol::widget::ProgressBar::calculateMinMaxSize() {
 	vec2 tmpMin = m_userMinSize.getPixel();
 	m_minSize.setValue( etk_max(tmpMin.x(), 40),
 	                    etk_max(tmpMin.y(), dotRadius*2) );
 	markToRedraw();
 }
 
-void ewol::Widget::ProgressBar::setValue(float _val) {
+void ewol::widget::ProgressBar::setValue(float _val) {
 	m_value = etk_avg(0, _val, 1);
 	markToRedraw();
 }
 
-void ewol::Widget::ProgressBar::onDraw() {
+void ewol::widget::ProgressBar::onDraw() {
 	m_draw.draw();
 }
 
-void ewol::Widget::ProgressBar::onRegenerateDisplay() {
+void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		m_draw.clear();
@@ -93,7 +93,7 @@ void ewol::Widget::ProgressBar::onRegenerateDisplay() {
 
 
 
-bool ewol::Widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
+bool ewol::widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
@@ -120,7 +120,7 @@ bool ewol::Widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::Widget::ProgressBar::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::widget::ProgressBar::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

@@ -33,8 +33,8 @@ static ewol::Widget* create() {
 	return new ewol::widget::Entry();
 }
 
-void ewol::widget::Entry::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&create);
+void ewol::widget::Entry::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 const char * const ewol::widget::Entry::eventClick  = "click";

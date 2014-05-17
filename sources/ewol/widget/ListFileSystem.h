@@ -21,7 +21,7 @@ namespace ewol {
 		class ListFileSystem : public ewol::widget::List {
 			public:
 				//! @not-in-doc
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char * const eventFileSelect; //!< @event "file-select" Generated when a file is selected.
 				static const char * const eventFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element

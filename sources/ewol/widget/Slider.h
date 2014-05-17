@@ -25,7 +25,7 @@ namespace ewol {
 				// Event list of properties
 				static const char * const eventChange;
 			public:
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			public:
 				Slider();
 				virtual ~Slider();

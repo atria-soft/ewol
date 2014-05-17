@@ -31,8 +31,8 @@ static ewol::Widget* Create() {
 	return new ewol::widget::CheckBox();
 }
 
-void ewol::widget::CheckBox::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&Create);
+void ewol::widget::CheckBox::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
 ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :

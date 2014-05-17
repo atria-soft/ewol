@@ -30,7 +30,7 @@ namespace ewol {
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
 				std::u32string m_label; //!< decorated text to display.

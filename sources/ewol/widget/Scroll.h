@@ -35,7 +35,7 @@ namespace ewol {
 				// Cinfig parameter list:
 				static const char* const configLimit;
 			public:
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.

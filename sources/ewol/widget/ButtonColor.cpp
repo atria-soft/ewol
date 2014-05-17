@@ -34,8 +34,8 @@ static ewol::Widget* Create() {
 	return new ewol::widget::ButtonColor();
 }
 
-void ewol::widget::ButtonColor::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&Create);
+void ewol::widget::ButtonColor::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
 ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :

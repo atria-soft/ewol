@@ -24,7 +24,7 @@ namespace ewol {
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			public:
 				/**
 				 * @brief Constructor

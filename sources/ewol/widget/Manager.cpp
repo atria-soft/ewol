@@ -45,20 +45,20 @@ ewol::widget::Manager::Manager() :
 	
 	ewol::widget::Button::init(*this);
 	ewol::widget::ButtonColor::init(*this);
-	ewol::Widget::Spacer::init(*this);
+	ewol::widget::Spacer::init(*this);
 	ewol::widget::Slider::init(*this);
 	ewol::widget::Sizer::init(*this);
-	ewol::Widget::ProgressBar::init(*this);
+	ewol::widget::ProgressBar::init(*this);
 	ewol::widget::Layer::init(*this);
 	ewol::widget::Label::init(*this);
 	ewol::widget::Image::init(*this);
 	ewol::widget::Gird::init(*this);
 	ewol::widget::Entry::init(*this);
 	ewol::widget::CheckBox::init(*this);
-	ewol::Widget::Scroll::init(*this);
+	ewol::widget::Scroll::init(*this);
 	ewol::widget::ContextMenu::init(*this);
-	ewol::Widget::PopUp::init(*this);
-	ewol::Widget::WSlider::init(*this);
+	ewol::widget::PopUp::init(*this);
+	ewol::widget::WSlider::init(*this);
 	ewol::widget::ListFileSystem::init(*this);
 }
 
@@ -72,7 +72,7 @@ ewol::widget::Manager::~Manager() {
 	m_creatorList.clear();
 }
 
-void ewol::widget::Manager::rm(ewol::Widget* _newWidget) {
+void ewol::widget::Manager::rm(ewol::object::Shared<ewol::Widget> _newWidget) {
 	periodicCallRm(_newWidget);
 	focusRemoveIfRemove(_newWidget);
 }
@@ -81,7 +81,7 @@ void ewol::widget::Manager::rm(ewol::Widget* _newWidget) {
  * focus Area : 
  * *************************************************************************/
 
-void ewol::widget::Manager::focusKeep(ewol::Widget* _newWidget) {
+void ewol::widget::Manager::focusKeep(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		// nothing to do ...
 		return;
@@ -106,7 +106,7 @@ void ewol::widget::Manager::focusKeep(ewol::Widget* _newWidget) {
 	}
 }
 
-void ewol::widget::Manager::focusSetDefault(ewol::Widget * _newWidget) {
+void ewol::widget::Manager::focusSetDefault(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if(    NULL != _newWidget
 	    && false == _newWidget->canHaveFocus() ) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
@@ -143,7 +143,7 @@ void ewol::widget::Manager::focusRelease() {
 }
 
 
-ewol::object::Shared<ewol::Widget> * ewol::widget::Manager::focusGet() {
+ewol::object::Shared<ewol::Widget> ewol::widget::Manager::focusGet() {
 	return m_focusWidgetCurrent;
 }
 
@@ -244,7 +244,7 @@ bool ewol::widget::Manager::isDrawingNeeded() {
 
 // element that generate the list of elements
 void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
-                                           ewol::widget::Manager::creator_tf _pointer) {
+                                             ewol::widget::Manager::creator_tf _pointer) {
 	if (NULL == _pointer) {
 		return;
 	}

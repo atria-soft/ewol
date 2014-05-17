@@ -42,7 +42,7 @@ namespace ewol {
 				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
 			private:
-				std::vector<ewol::Widget::MenuElement*> m_listElement;
+				std::vector<ewol::widget::MenuElement*> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
 				ewol::widget::ContextMenu* m_widgetContextMenu;
 			public:
@@ -52,7 +52,7 @@ namespace ewol {
 				void addSpacer();
 				// Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject);
+				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 		};
 	};
 };

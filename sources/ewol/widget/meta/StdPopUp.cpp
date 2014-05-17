@@ -18,15 +18,15 @@
 
 static const char * const eventButtonExit = "ewol-event-pop-up-exit-button";
 
-ewol::Widget::StdPopUp::StdPopUp() :
+ewol::widget::StdPopUp::StdPopUp() :
   m_title(NULL),
   m_comment(NULL),
   m_subBar(NULL) {
-	addObjectType("ewol::Widget::StdPopUp");
+	addObjectType("ewol::widget::StdPopUp");
 	setMinSize(ewol::Dimension(vec2(20,10),ewol::Dimension::Pourcent));
 	
 	ewol::widget::Sizer* mySizerVert = NULL;
-	ewol::Widget::Spacer* mySpacer = NULL;
+	ewol::widget::Spacer* mySpacer = NULL;
 	
 	mySizerVert = new ewol::widget::Sizer(widget::Sizer::modeVert);
 		// set it in the pop-up-system : 
@@ -35,32 +35,32 @@ ewol::Widget::StdPopUp::StdPopUp() :
 		m_subBar = new ewol::widget::Sizer(widget::Sizer::modeHori);
 			m_subBar->lockExpand(bvec2(true,true));
 			m_subBar->setExpand(bvec2(true,false));
-			mySizerVert->subWidgetAdd(m_subBar->get());
-			mySpacer = new ewol::Widget::Spacer();
+			mySizerVert->subWidgetAdd(m_subBar.get());
+			mySpacer = new ewol::widget::Spacer();
 				mySpacer->setExpand(bvec2(true,false));
 				m_subBar->subWidgetAdd(mySpacer);
 		
-		mySpacer = new ewol::Widget::Spacer();
+		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
 			mySpacer->setColor(etk::Color<>(0x888888FF));
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
-		mySpacer = new ewol::Widget::Spacer();
+		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,5),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_comment = new ewol::widget::Label("No Label");
 			m_comment->setExpand(bvec2(true,true));
-			mySizerVert->subWidgetAdd(m_comment->get());
+			mySizerVert->subWidgetAdd(m_comment.get());
 		
-		mySpacer = new ewol::Widget::Spacer();
+		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,5),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
-		mySpacer = new ewol::Widget::Spacer();
+		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
 			mySpacer->setColor(etk::Color<>(0x888888FF));
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
@@ -69,14 +69,14 @@ ewol::Widget::StdPopUp::StdPopUp() :
 		m_title = new ewol::widget::Label("<bold>Message</bold>");
 			m_title->setExpand(bvec2(true,false));
 			m_title->setFill(bvec2(true,true));
-			mySizerVert->subWidgetAdd(m_title->get());
+			mySizerVert->subWidgetAdd(m_title.get());
 }
 
-ewol::Widget::StdPopUp::~StdPopUp() {
+ewol::widget::StdPopUp::~StdPopUp() {
 	
 }
 
-void ewol::Widget::StdPopUp::setTitle(const std::string& _text) {
+void ewol::widget::StdPopUp::setTitle(const std::string& _text) {
 	if (m_title == NULL) {
 		return;
 	}
@@ -84,7 +84,7 @@ void ewol::Widget::StdPopUp::setTitle(const std::string& _text) {
 	markToRedraw();
 }
 
-void ewol::Widget::StdPopUp::setComment(const std::string& _text) {
+void ewol::widget::StdPopUp::setComment(const std::string& _text) {
 	if (m_comment == NULL) {
 		return;
 	}
@@ -92,7 +92,7 @@ void ewol::Widget::StdPopUp::setComment(const std::string& _text) {
 	markToRedraw();
 }
 
-ewol::object::Shared<ewol::widget::Button> ewol::Widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
+ewol::object::Shared<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
 	if (m_subBar == NULL) {
 		EWOL_ERROR("button-bar does not existed ...");
 		return NULL;
@@ -111,9 +111,9 @@ ewol::object::Shared<ewol::widget::Button> ewol::Widget::StdPopUp::addButton(con
 	return myButton;
 }
 
-void ewol::Widget::StdPopUp::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::StdPopUp::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	// call parent:
-	ewol::Widget::PopUp::onObjectRemove(_removeObject);
+	ewol::widget::PopUp::onObjectRemove(_removeObject);
 	if (_removeObject == m_subBar) {
 		m_subBar = NULL;
 		markToRedraw();
@@ -131,9 +131,9 @@ void ewol::Widget::StdPopUp::onObjectRemove(ewol::object::Shared<ewol::Object> _
 	}
 }
 
-void ewol::Widget::StdPopUp::onReceiveMessage(const ewol::object::Message& _msg) {
+void ewol::widget::StdPopUp::onReceiveMessage(const ewol::object::Message& _msg) {
 	// call parent:
-	ewol::Widget::PopUp::onReceiveMessage(_msg);
+	ewol::widget::PopUp::onReceiveMessage(_msg);
 	if (_msg.getMessage() == eventButtonExit) {
 		autoDestroy();
 	}

@@ -19,8 +19,8 @@ static ewol::Widget* create() {
 	return new ewol::widget::Slider();
 }
 
-void ewol::widget::Slider::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&create);
+void ewol::widget::Slider::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 const int32_t dotRadius = 6;

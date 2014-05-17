@@ -23,7 +23,7 @@ namespace ewol {
 		 */
 		class Spacer : public ewol::Widget {
 			public:
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configColor;
 			private:

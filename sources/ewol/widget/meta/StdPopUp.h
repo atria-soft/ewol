@@ -39,7 +39,7 @@ namespace ewol {
 		 * 	+---------------------------------------------+
 		 * [/pre]
 		 */
-		class StdPopUp : public ewol::Widget::PopUp {
+		class StdPopUp : public ewol::widget::PopUp {
 			public:
 				/**
 				 * @brief std-pop-up constructor.

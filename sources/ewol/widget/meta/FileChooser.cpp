@@ -30,8 +30,8 @@ extern "C" {
 #define __class__ "FileChooser"
 
 
-const char * const ewol::Widget::FileChooser::eventCancel     = "cancel";
-const char * const ewol::Widget::FileChooser::eventValidate   = "validate";
+const char * const ewol::widget::FileChooser::eventCancel     = "cancel";
+const char * const ewol::widget::FileChooser::eventValidate   = "validate";
 
 static const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
 static const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
@@ -44,8 +44,8 @@ static const char * const ewolEventFileChooserListFileValidate = "ewol-event-fil
 static const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
-ewol::Widget::FileChooser::FileChooser() {
-	addObjectType("ewol::Widget::FileChooser");
+ewol::widget::FileChooser::FileChooser() {
+	addObjectType("ewol::widget::FileChooser");
 	addEventId(eventCancel);
 	addEventId(eventValidate);
 	
@@ -119,33 +119,33 @@ ewol::Widget::FileChooser::FileChooser() {
 }
 
 
-ewol::Widget::FileChooser::~FileChooser() {
+ewol::widget::FileChooser::~FileChooser() {
 	
 }
 
-void ewol::Widget::FileChooser::setTitle(const std::string& _label) {
+void ewol::widget::FileChooser::setTitle(const std::string& _label) {
 	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:title-label", "value", _label);
 }
 
-void ewol::Widget::FileChooser::setValidateLabel(const std::string& _label) {
+void ewol::widget::FileChooser::setValidateLabel(const std::string& _label) {
 	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:validate-label", "value", _label);
 }
 
-void ewol::Widget::FileChooser::setCancelLabel(const std::string& _label) {
+void ewol::widget::FileChooser::setCancelLabel(const std::string& _label) {
 	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:cancel-label", "value", _label);
 }
 
-void ewol::Widget::FileChooser::setFolder(const std::string& _folder) {
+void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
 	m_folder = _folder + "/";
 	updateCurrentFolder();
 }
 
-void ewol::Widget::FileChooser::setFileName(const std::string& _filename) {
+void ewol::widget::FileChooser::setFileName(const std::string& _filename) {
 	m_file = _filename;
 	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
 }
 
-void ewol::Widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
+void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
 	EWOL_INFO("Receive Event from the LIST ... : " << _msg);
 	if (_msg.getMessage() == ewolEventFileChooserEntryFolder) {
 		// == > change the folder name
@@ -202,7 +202,7 @@ void ewol::Widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 	return;
 };
 
-void ewol::Widget::FileChooser::updateCurrentFolder() {
+void ewol::widget::FileChooser::updateCurrentFolder() {
 	if (m_folder != "" ) {
 		if (m_folder[m_folder.size()-1] != '/') {
 			m_folder +=  "/";
@@ -214,7 +214,7 @@ void ewol::Widget::FileChooser::updateCurrentFolder() {
 	markToRedraw();
 }
 
-std::string ewol::Widget::FileChooser::getCompleateFileName() {
+std::string ewol::widget::FileChooser::getCompleateFileName() {
 	std::string tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;

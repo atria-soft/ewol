@@ -26,7 +26,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Parameter : public ewol::Widget::PopUp {
+		class Parameter : public ewol::widget::PopUp {
 			public:
 				// Event list of properties
 				static const char * const eventClose;
@@ -38,15 +38,15 @@ namespace ewol {
 				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 			public:
 				void setTitle(std::string _label);
-				void menuAdd(std::string _label, std::string _image, ewol::object::Shared<ewol::Widget> _associateWidget);
+				void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
 				void menuAddGroup(std::string _label);
 				void menuClear();
 				void menuSeparator();
 			private:
-				int32_t                 m_currentIdList;
-				ewol::widget::Label*          m_widgetTitle;
-				ewol::Widget::ParameterList*  m_paramList;
-				ewol::Widget::WSlider*        m_wSlider;
+				int32_t m_currentIdList;
+				ewol::object::Shared<ewol::widget::Label> m_widgetTitle;
+				ewol::object::Shared<ewol::widget::ParameterList> m_paramList;
+				ewol::object::Shared<ewol::widget::WSlider> m_wSlider;
 		};
 	};
 };

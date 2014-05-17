@@ -19,8 +19,8 @@ static ewol::Widget* create() {
 	return new ewol::widget::Gird();
 }
 
-void ewol::widget::Gird::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&create);
+void ewol::widget::Gird::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 

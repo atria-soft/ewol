@@ -31,7 +31,7 @@ static const char * const eventColorSpecificHasChange     = "event-color-specifi
 
 
 ewol::widget::ColorChooser::ColorChooser() :
-  ewol::widget::Sizer(ewol::Widget::Sizer::modeVert) {
+  ewol::widget::Sizer(ewol::widget::Sizer::modeVert) {
 	addObjectType("ewol::widget::ColorChooser");
 	addEventId(eventChange);
 	m_widgetColorBar = NULL;
@@ -169,7 +169,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 };
 
 
-void ewol::widget::ColorChooser::onObjectRemove(ewol::object::Shared<ewol::Object> * _removeObject) {
+void ewol::widget::ColorChooser::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
 	// First step call parrent : 
 	ewol::widget::Sizer::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

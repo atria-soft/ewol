@@ -16,11 +16,11 @@ const char* const ewol::widget::Sizer::configMode = "mode";
 #undef __class__
 #define __class__ "Sizer"
 
-static ewol::object::Shared<ewol::Widget> create() {
+static ewol::Widget* create() {
 	return new ewol::widget::Sizer();
 }
 
-void ewol::widget::Sizer::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
+void ewol::widget::Sizer::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 

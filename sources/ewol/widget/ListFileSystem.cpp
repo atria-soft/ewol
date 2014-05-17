@@ -19,8 +19,8 @@ static ewol::Widget* Create() {
 	return new ewol::widget::ListFileSystem();
 }
 
-void ewol::widget::ListFileSystem::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&Create);
+void ewol::widget::ListFileSystem::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
 const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";

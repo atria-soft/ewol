@@ -38,8 +38,8 @@ static ewol::Widget* Create() {
 	return new ewol::widget::Button();
 }
 
-void ewol::widget::Button::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__, &Create);
+void ewol::widget::Button::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__, &Create);
 }
 
 ewol::widget::Button::Button(const std::string& _shaperName) :

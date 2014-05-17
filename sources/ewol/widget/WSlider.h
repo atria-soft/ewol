@@ -21,7 +21,7 @@ namespace ewol {
 		 */
 		class WSlider :public ewol::widget::ContainerN {
 			public:
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;
@@ -106,7 +106,7 @@ namespace ewol {
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};
-	std::ostream& operator <<(std::ostream& _os, const enum ewol::Widget::WSlider::sladingMode _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
 };
 
 #endif

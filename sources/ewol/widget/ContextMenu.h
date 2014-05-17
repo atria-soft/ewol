@@ -32,7 +32,7 @@ namespace ewol {
 					markNone
 				};
 			public:
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configArrowPosition;
 				static const char* const configArrowMode;

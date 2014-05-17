@@ -22,8 +22,8 @@ static ewol::Widget* create() {
 	return new ewol::widget::Label();
 }
 
-void ewol::widget::Label::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&create);
+void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label(std::string _newLabel) :

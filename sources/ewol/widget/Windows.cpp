@@ -38,16 +38,7 @@ ewol::widget::Windows::Windows() :
 }
 
 ewol::widget::Windows::~Windows() {
-	if (NULL != m_subWidget) {
-		delete(m_subWidget);
-		m_subWidget=NULL;
-	}
-	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
-		if (NULL != m_popUpWidgetList[iii]) {
-			delete(m_popUpWidgetList[iii]);
-			m_popUpWidgetList[iii]=NULL;
-		}
-	}
+	m_subWidget.reset();
 	m_popUpWidgetList.clear();
 }
 
@@ -68,7 +59,7 @@ void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
 	}
 }
 
-ewol::object::Shared<ewol::Widget> * ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
+ewol::object::Shared<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	// calculate relative position
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
@@ -178,8 +169,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
 	if (m_subWidget != NULL) {
 		EWOL_INFO("Remove current main windows Widget...");
-		delete(m_subWidget);
-		m_subWidget = NULL;
+		m_subWidget.reset();
 	}
 	m_subWidget = _widget;
 	// Regenerate the size calculation :
@@ -246,7 +236,7 @@ void ewol::widget::Windows::setTitle(const std::string& _title) {
 
 void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
 {
-	ewol::Widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
+	ewol::widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
 	if (tmpPopUp == NULL) {
 		EWOL_ERROR("Can not create a simple pop-up");
 		return;

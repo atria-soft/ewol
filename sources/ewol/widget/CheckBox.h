@@ -21,7 +21,7 @@ namespace ewol {
 		class CheckBox : public ewol::widget::Container2 {
 			public:
 				//! @not-in-doc
-				static void init(ewol::object::Shared<ewol::widget::Manager> _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;
 				static const char* const eventDown;

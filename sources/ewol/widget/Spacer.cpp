@@ -14,18 +14,18 @@
 #undef __class__
 #define __class__ "Spacer"
 
-const char* const ewol::Widget::Spacer::configColor = "color";
+const char* const ewol::widget::Spacer::configColor = "color";
 
 static ewol::Widget* create() {
-	return new ewol::Widget::Spacer();
+	return new ewol::widget::Spacer();
 }
 
-void ewol::Widget::Spacer::init(ewol::object::Shared<ewol::widget::Manager> _widgetManager) {
-	_widgetManager->addWidgetCreator(__class__,&create);
+void ewol::widget::Spacer::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-ewol::Widget::Spacer::Spacer() {
-	addObjectType("ewol::Widget::Spacer");
+ewol::widget::Spacer::Spacer() {
+	addObjectType("ewol::widget::Spacer");
 	m_userMinSize = ewol::Dimension(vec2(10,10));
 	setCanHaveFocus(false);
 	m_color = etk::color::black;
@@ -33,16 +33,16 @@ ewol::Widget::Spacer::Spacer() {
 	registerConfig(configColor, "color", NULL, "background of the spacer");
 }
 
-ewol::Widget::Spacer::~Spacer() {
+ewol::widget::Spacer::~Spacer() {
 	
 }
 
-void ewol::Widget::Spacer::onDraw() {
+void ewol::widget::Spacer::onDraw() {
 	m_draw.draw();
 }
 
 #define BORDER_SIZE_TMP  (4)
-void ewol::Widget::Spacer::onRegenerateDisplay() {
+void ewol::widget::Spacer::onRegenerateDisplay() {
 	if (false == needRedraw()) {
 		return;
 	}
@@ -56,7 +56,7 @@ void ewol::Widget::Spacer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
-bool ewol::Widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
+bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
@@ -68,7 +68,7 @@ bool ewol::Widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
 	return false;
 }
 
-bool ewol::Widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}
