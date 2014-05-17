@@ -26,7 +26,7 @@ namespace ewol {
 				/**
 				 * @brief Constructor
 				 */
-				Container(ewol::object::Shared<ewol::Widget> _subElement=NULL);
+				Container(ewol::object::Shared<ewol::Widget> _subElement=nullptr);
 				/**
 				 * @brief Destructor
 				 */

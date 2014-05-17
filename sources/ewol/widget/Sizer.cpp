@@ -31,7 +31,7 @@ ewol::widget::Sizer::Sizer(enum displayMode _mode):
   m_animation(animationNone),
   m_animationTime(0) {
 	addObjectType("ewol::widget::Sizer");
-	registerConfig(configBorder, "dimension", NULL, "The sizer border size");
+	registerConfig(configBorder, "dimension", nullptr, "The sizer border size");
 	registerConfig(configMode, "list", "{vert,hori}", "The display mode");
 	
 }
@@ -66,7 +66,7 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
 			if (m_mode == ewol::widget::Sizer::modeVert) {
 				unexpandableSize += tmpSize.y();
@@ -100,7 +100,7 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	}
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
 			// set the origin :
 			EWOL_VERBOSE("[" << getId() << "] set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
@@ -137,7 +137,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
 	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			m_subWidget[iii]->calculateMinMaxSize();
 			if (true == m_subWidget[iii]->canExpand().x()) {
 				m_subExpend.setX(true);

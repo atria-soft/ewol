@@ -39,7 +39,7 @@ ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
-		m_listOObject[iii] = NULL;
+		m_listOObject[iii] = nullptr;
 	}
 	m_listOObject.clear();
 	menuClear();
@@ -56,7 +56,7 @@ void ewol::widget::ParameterList::calculateMinMaxSize() {
 }
 
 void ewol::widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
-	if (NULL == _newObject) {
+	if (nullptr == _newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
@@ -70,14 +70,14 @@ void ewol::widget::ParameterList::addOObject(ewol::Compositing* _newObject, int3
 void ewol::widget::ParameterList::clearOObjectList() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
-		m_listOObject[iii] = NULL;
+		m_listOObject[iii] = nullptr;
 	}
 	m_listOObject.clear();
 }
 
 void ewol::widget::ParameterList::onDraw() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		if (NULL != m_listOObject[iii]) {
+		if (nullptr != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
 		}
 	}
@@ -141,7 +141,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		for (int32_t iii=startRaw; iii<nbRaw && iii<(int32_t)(startRaw+displayableRaw); iii++) {
 			std::string myTextToWrite = "???";
 			etk::Color<> fg(0x000000FF);
-			if (m_list[iii] != NULL) {
+			if (m_list[iii] != nullptr) {
 				myTextToWrite = m_list[iii]->m_label;
 			}
 			
@@ -187,7 +187,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		int32_t rawID = (relativePos.y()+m_originScrooled.y()) / (minHeight + 2*m_paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
 		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
-			if (m_list[rawID]!=NULL) {
+			if (m_list[rawID]!=nullptr) {
 				if (m_list[rawID]->m_refId >= 0) {
 					generateEventId(eventSelect, std::to_string(m_list[rawID]->m_refId));
 					m_idSelected = rawID;
@@ -210,7 +210,7 @@ void ewol::widget::ParameterList::onLostFocus() {
 
 void ewol::widget::ParameterList::menuAdd(std::string& _label, int32_t _refId, std::string& _image) {
 	ewol::widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
-	if (NULL != tmpEmement) {
+	if (nullptr != tmpEmement) {
 		m_list.push_back(tmpEmement);
 		if (m_idSelected == -1 && _label != "---" && _refId>0) {
 			m_idSelected = m_list.size()-1;
@@ -222,7 +222,7 @@ void ewol::widget::ParameterList::menuAdd(std::string& _label, int32_t _refId, s
 void ewol::widget::ParameterList::menuAddGroup(std::string& _label) {
 	std::string image = "";
 	ewol::widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
-	if (NULL != tmpEmement) {
+	if (nullptr != tmpEmement) {
 		m_list.push_back(tmpEmement);
 		markToRedraw();
 	}
@@ -231,9 +231,9 @@ void ewol::widget::ParameterList::menuAddGroup(std::string& _label) {
 void ewol::widget::ParameterList::menuClear() {
 	m_idSelected = -1;
 	for (size_t iii=0; iii<m_list.size(); iii++) {
-		if (NULL != m_list[iii]) {
+		if (nullptr != m_list[iii]) {
 			delete(m_list[iii]);
-			m_list[iii] = NULL;
+			m_list[iii] = nullptr;
 		}
 	}
 	m_list.clear();

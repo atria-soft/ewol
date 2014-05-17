@@ -26,7 +26,7 @@ void ewol::widget::Gird::init(ewol::widget::Manager& _widgetManager) {
 
 ewol::widget::Gird::Gird(int32_t _colNumber) :
   m_sizeRow(0),
-  m_tmpWidget(NULL),
+  m_tmpWidget(nullptr),
   m_gavityButtom(true),
   m_borderSize(0,0) {
 	addObjectType("ewol::widget::Gird");
@@ -59,7 +59,7 @@ void ewol::widget::Gird::calculateSize(const vec2& _availlable) {
 	m_size -= m_borderSize*2;
 	
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii].widget) {
+		if (nullptr != m_subWidget[iii].widget) {
 			//calculate the origin :
 			vec2 tmpOrigin = m_origin + m_borderSize;
 			if (false == m_gavityButtom) {
@@ -108,7 +108,7 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 			// change of line : 
 			lastLineID = m_subWidget[iii].row;
 		}
-		if (NULL != m_subWidget[iii].widget) {
+		if (nullptr != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->calculateMinMaxSize();
 			vec2 tmpSize = m_subWidget[iii].widget->getCalculateMinSize();
 			EWOL_DEBUG("     [" << iii << "] subWidgetMinSize=" << tmpSize);
@@ -144,7 +144,7 @@ void ewol::widget::Gird::setColNumber(int32_t _colNumber) {
 		for (int64_t iii=m_subWidget.size(); iii >= 0; iii--) {
 			if (m_subWidget[iii].col>(_colNumber-1)) {
 				// out of bounds : must remove it ...
-				if (m_subWidget[iii].widget != NULL) {
+				if (m_subWidget[iii].widget != nullptr) {
 					m_subWidget[iii].widget.reset();
 					// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 					if (errorControl == m_subWidget.size()) {
@@ -200,7 +200,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 	size_t errorControl = m_subWidget.size();
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	while (m_subWidget.size() > 0 ) {
-		if (NULL != m_subWidget[0].widget) {
+		if (nullptr != m_subWidget[0].widget) {
 			m_subWidget[0].widget.reset();
 			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 			if (errorControl == m_subWidget.size()) {
@@ -217,7 +217,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 
 
 void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (NULL == _newWidget) {
+	if (nullptr == _newWidget) {
 		return;
 	}
 	GirdProperties prop;
@@ -244,11 +244,11 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::obje
 				// The element already exist  == > replace it ...
 				m_tmpWidget = m_subWidget[iii].widget;
 				m_subWidget[iii].widget = _newWidget;
-				if (NULL != m_tmpWidget) {
+				if (nullptr != m_tmpWidget) {
 					m_tmpWidget.reset();
-					if (m_tmpWidget != NULL) {
+					if (m_tmpWidget != nullptr) {
 						EWOL_CRITICAL("[" << getId() << "] Error while replacing a widget ...  == > never call when free");
-						m_tmpWidget = NULL;
+						m_tmpWidget = nullptr;
 					}
 				}
 			}
@@ -286,7 +286,7 @@ void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 }
 
 void ewol::widget::Gird::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (NULL == _newWidget) {
+	if (nullptr == _newWidget) {
 		return;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
@@ -316,7 +316,7 @@ void ewol::widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii].widget) {
+		if (nullptr != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->systemDraw(_displayProp);
 		}
 	}
@@ -324,7 +324,7 @@ void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 
 void ewol::widget::Gird::onRegenerateDisplay() {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii].widget) {
+		if (nullptr != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->onRegenerateDisplay();
 		}
 	}
@@ -332,18 +332,18 @@ void ewol::widget::Gird::onRegenerateDisplay() {
 
 ewol::object::Shared<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
-		return NULL;
+		return nullptr;
 	}
 	// for all element in the sizer ...
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii].widget) {
+		if (nullptr != m_subWidget[iii].widget) {
 			vec2 tmpSize = m_subWidget[iii].widget->getSize();
 			vec2 tmpOrigin = m_subWidget[iii].widget->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii].widget->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
+				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
 				// stop searching
@@ -351,7 +351,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void ewol::widget::Gird::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
@@ -361,11 +361,11 @@ void ewol::widget::Gird::onObjectRemove(ewol::object::Shared<ewol::Object> _remo
 	for(int32_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
 		if(m_subWidget[iii].widget == _removeObject) {
 			EWOL_VERBOSE("[" << getId() << "]={" << getObjectType() << "} remove sizer sub Element [" << iii << "/" << m_subWidget.size()-1 << "]  == > destroyed object");
-			m_subWidget[iii].widget = NULL;
+			m_subWidget[iii].widget = nullptr;
 			m_subWidget.erase(m_subWidget.begin()+iii);
 		}
 	}
 	if (m_tmpWidget == _removeObject) {
-		m_tmpWidget = NULL;
+		m_tmpWidget = nullptr;
 	}
 }

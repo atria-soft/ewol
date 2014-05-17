@@ -41,12 +41,12 @@ void ewol::resource::Manager::unInit() {
 	m_resourceListToUpdate.clear();
 	// remove all resources ...
 	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
-		if (m_resourceList[iii] != NULL) {
+		if (m_resourceList[iii] != nullptr) {
 			EWOL_WARNING("Find a resource that is not removed : [" << m_resourceList[iii]->getId() << "]"
 			             << "=\"" << m_resourceList[iii]->getName() << "\" "
 			             << m_resourceList[iii]->getCounter() << " elements");
 			delete(m_resourceList[iii]);
-			m_resourceList[iii] = NULL;
+			m_resourceList[iii] = nullptr;
 		}
 	}
 	m_resourceList.clear();
@@ -56,7 +56,7 @@ void ewol::resource::Manager::display() {
 	EWOL_INFO("Resources loaded : ");
 	// remove all resources ...
 	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
-		if (m_resourceList[iii] != NULL) {
+		if (m_resourceList[iii] != nullptr) {
 			EWOL_INFO("    [" << m_resourceList[iii]->getId() << "]"
 			          << m_resourceList[iii]->getObjectType()
 			          << "=\"" << m_resourceList[iii]->getName() << "\" "
@@ -73,7 +73,7 @@ void ewol::resource::Manager::reLoadResources() {
 		for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 			EWOL_INFO("    Reload level : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 			for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
-				if(m_resourceList[iii] != NULL) {
+				if(m_resourceList[iii] != nullptr) {
 					if (jjj == m_resourceList[iii]->getResourceLevel()) {
 						m_resourceList[iii]->reload();
 						EWOL_INFO("        [" << m_resourceList[iii]->getId() << "]="<< m_resourceList[iii]->getObjectType());
@@ -90,7 +90,7 @@ void ewol::resource::Manager::reLoadResources() {
 void ewol::resource::Manager::update(ewol::Resource* _object) {
 	// chek if not added before
 	for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
-		if (m_resourceListToUpdate[iii] != NULL) {
+		if (m_resourceListToUpdate[iii] != nullptr) {
 			if (m_resourceListToUpdate[iii] == _object) {
 				// just prevent some double add ...
 				return;
@@ -110,7 +110,7 @@ void ewol::resource::Manager::updateContext() {
 			for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    updateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 				for (size_t iii=0; iii<m_resourceList.size(); iii++) {
-					if(m_resourceList[iii] != NULL) {
+					if(m_resourceList[iii] != nullptr) {
 						if (jjj == m_resourceList[iii]->getResourceLevel()) {
 							//EWOL_DEBUG("Update context of " << iii << " named : " << l_resourceList[iii]->getName());
 							m_resourceList[iii]->updateContext();
@@ -124,7 +124,7 @@ void ewol::resource::Manager::updateContext() {
 			for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    updateContext level (U) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 				for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
-					if(m_resourceListToUpdate[iii] != NULL) {
+					if(m_resourceListToUpdate[iii] != nullptr) {
 						if (jjj == m_resourceListToUpdate[iii]->getResourceLevel()) {
 							m_resourceListToUpdate[iii]->updateContext();
 						}
@@ -140,7 +140,7 @@ void ewol::resource::Manager::updateContext() {
 // in this case, it is really too late ...
 void ewol::resource::Manager::contextHasBeenDestroyed() {
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
-		if (m_resourceList[iii] != NULL) {
+		if (m_resourceList[iii] != nullptr) {
 			m_resourceList[iii]->removeContextToLate();
 		}
 	}
@@ -152,7 +152,7 @@ void ewol::resource::Manager::contextHasBeenDestroyed() {
 ewol::Resource* ewol::resource::Manager::localKeep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
-		if (m_resourceList[iii] != NULL) {
+		if (m_resourceList[iii] != nullptr) {
 			if(m_resourceList[iii]->getName() == _filename) {
 				m_resourceList[iii]->increment();
 				return m_resourceList[iii];
@@ -160,14 +160,14 @@ ewol::Resource* ewol::resource::Manager::localKeep(const std::string& _filename)
 		}
 	}
 	// we did not find it ...
-	return NULL;
+	return nullptr;
 }
 
 // internal generic keeper ...
 void ewol::resource::Manager::localAdd(ewol::Resource* _object) {
 	//Add ... find empty slot
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
-		if (m_resourceList[iii] == NULL) {
+		if (m_resourceList[iii] == nullptr) {
 			m_resourceList[iii] = _object;
 			return;
 		}
@@ -177,19 +177,19 @@ void ewol::resource::Manager::localAdd(ewol::Resource* _object) {
 }
 
 bool ewol::resource::Manager::release(ewol::Resource*& _object) {
-	if (NULL == _object) {
+	if (nullptr == _object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return false;
 	}
 	for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] == _object) {
-			m_resourceListToUpdate[iii] = NULL;
+			m_resourceListToUpdate[iii] = nullptr;
 			//l_resourceListToUpdate.Erase(iii);
 		}
 	}
 	EWOL_VERBOSE("RELEASE (default) : file : \"" << _object->getName() << "\"");
 	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
-		if (m_resourceList[iii] == NULL) {
+		if (m_resourceList[iii] == nullptr) {
 			continue;
 		}
 		if(m_resourceList[iii] != _object) {
@@ -197,20 +197,20 @@ bool ewol::resource::Manager::release(ewol::Resource*& _object) {
 		}
 		if (m_resourceList[iii]->decrement() == true) {
 			// remove element from the list :
-			m_resourceList[iii] = NULL;
+			m_resourceList[iii] = nullptr;
 			// delete element
 			_object->removeObject();
 			// insidiously remove the pointer for the caller ...
-			_object = NULL;
+			_object = nullptr;
 			return true; // object really removed
 		}
 		// insidiously remove the pointer for the caller ...
-		_object = NULL;
+		_object = nullptr;
 		return false; // just decrement ...
 	}
 	EWOL_ERROR("Can not find the resources in the list : " << (int64_t)_object);
 	// insidiously remove the pointer for the caller ...
-	_object = NULL;
+	_object = nullptr;
 	return false;
 }
 
@@ -219,13 +219,13 @@ void ewol::resource::Manager::onObjectRemove(ewol::object::Shared<ewol::Object> 
 	for (size_t iii=0; iii<m_resourceList.size(); ++iii) {
 		if (m_resourceList[iii] == _removeObject) {
 			EWOL_WARNING("Remove Resource that is not removed ... ");
-			m_resourceList[iii] = NULL;
+			m_resourceList[iii] = nullptr;
 		}
 	}
 	for (size_t iii=0; iii<m_resourceListToUpdate.size(); ++iii) {
 		if (m_resourceListToUpdate[iii] == _removeObject) {
 			EWOL_WARNING("Remove Resource that is not removed .2. ");
-			m_resourceListToUpdate[iii] = NULL;
+			m_resourceListToUpdate[iii] = nullptr;
 		}
 	}
 }

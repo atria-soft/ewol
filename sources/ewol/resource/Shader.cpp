@@ -18,7 +18,7 @@
 ewol::resource::Shader::Shader(const std::string& _filename) :
   ewol::Resource(_filename),
   m_exist(false),
-  m_fileData(NULL),
+  m_fileData(nullptr),
   m_shader(0),
   m_type(0) {
 	addObjectType("ewol::Shader");
@@ -38,9 +38,9 @@ ewol::resource::Shader::Shader(const std::string& _filename) :
 }
 
 ewol::resource::Shader::~Shader() {
-	if (NULL != m_fileData) {
+	if (nullptr != m_fileData) {
 		delete [] m_fileData;
-		m_fileData = NULL;
+		m_fileData = nullptr;
 	}
 	if (0!=m_shader) {
 		glDeleteShader(m_shader);
@@ -62,7 +62,7 @@ void ewol::resource::Shader::updateContext() {
 		// Do nothing  == > too dangerous ...
 	} else {
 		// create the Shader
-		if (NULL == m_fileData) {
+		if (nullptr == m_fileData) {
 			m_shader = 0;
 			return;
 		}
@@ -73,7 +73,7 @@ void ewol::resource::Shader::updateContext() {
 			return;
 		} else {
 			//EWOL_INFO("Creater shader with GLID=" << m_shader);
-			glShaderSource(m_shader, 1, (const char**)&m_fileData, NULL);
+			glShaderSource(m_shader, 1, (const char**)&m_fileData, nullptr);
 			glCompileShader(m_shader);
 			GLint compiled = 0;
 			glGetShaderiv(m_shader, GL_COMPILE_STATUS, &compiled);
@@ -128,13 +128,13 @@ void ewol::resource::Shader::reload() {
 		return;
 	}
 	// remove previous data ...
-	if (NULL != m_fileData) {
+	if (nullptr != m_fileData) {
 		delete[] m_fileData;
 		m_fileData = 0;
 	}
 	// allocate data
 	m_fileData = new char[fileSize+5];
-	if (NULL == m_fileData) {
+	if (nullptr == m_fileData) {
 		EWOL_ERROR("Error Memory allocation size=" << fileSize);
 		return;
 	}
@@ -151,33 +151,33 @@ void ewol::resource::Shader::reload() {
 
 ewol::resource::Shader* ewol::resource::Shader::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
-	ewol::resource::Shader* object = NULL;
+	ewol::resource::Shader* object = nullptr;
 	ewol::Resource* object2 = getManager().localKeep(_filename);
-	if (NULL != object2) {
+	if (nullptr != object2) {
 		object = dynamic_cast<ewol::resource::Shader*>(object2);
-		if (NULL == object) {
+		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return NULL;
+			return nullptr;
 		}
 	}
-	if (NULL != object) {
+	if (nullptr != object) {
 		return object;
 	}
 	// need to crate a new one ...
 	object = new ewol::resource::Shader(_filename);
-	if (NULL == object) {
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
 }
 
 void ewol::resource::Shader::release(ewol::resource::Shader*& _object) {
-	if (NULL == _object) {
+	if (nullptr == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
-	_object = NULL;
+	_object = nullptr;
 }

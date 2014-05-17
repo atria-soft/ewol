@@ -17,7 +17,7 @@
 
 ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSize) :
   ewol::compositing::TextBase("", false),
-  m_fontDF(NULL),
+  m_fontDF(nullptr),
   m_GLglyphLevel(-1),
   m_size(12.0) {
 	setFont(_fontName, _fontSize);
@@ -31,7 +31,7 @@ ewol::compositing::TextDF::~TextDF() {
 
 void ewol::compositing::TextDF::updateSizeToRender(const vec2& _size) {
 	float minSize = etk_min(_size.x(), _size.y());
-	if (m_fontDF != NULL) {
+	if (m_fontDF != nullptr) {
 		setFontSize(m_fontDF->getSize(minSize));
 	}
 }
@@ -42,15 +42,15 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || m_fontDF == NULL) {
+	if (m_coord.size() <= 0 || m_fontDF == nullptr) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_fontDF == NULL) {
+	if (m_fontDF == nullptr) {
 		EWOL_WARNING("no font...");
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -84,16 +84,16 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || m_fontDF == NULL) {
+	if (m_coord.size() <= 0 || m_fontDF == nullptr) {
 		// TODO : a remètre ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_fontDF == NULL) {
+	if (m_fontDF == nullptr) {
 		EWOL_WARNING("no font...");
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -120,14 +120,14 @@ void ewol::compositing::TextDF::clear() {
 }
 void ewol::compositing::TextDF::loadProgram(const std::string& _shaderName) {
 	ewol::compositing::TextBase::loadProgram(_shaderName);
-	if (m_GLprogram != NULL) {
+	if (m_GLprogram != nullptr) {
 		m_GLglyphLevel = m_GLprogram->getAttribute("EW_glyphLevel");
 	}
 }
 
 
 float ewol::compositing::TextDF::getHeight() {
-	if (m_fontDF == NULL) {
+	if (m_fontDF == nullptr) {
 		EWOL_WARNING("no font...");
 		return 1;
 	}
@@ -135,9 +135,9 @@ float ewol::compositing::TextDF::getHeight() {
 }
 
 ewol::GlyphProperty * ewol::compositing::TextDF::getGlyphPointer(char32_t _charcode) {
-	if (m_fontDF == NULL) {
+	if (m_fontDF == nullptr) {
 		EWOL_WARNING("no font...");
-		return NULL;
+		return nullptr;
 	}
 	return m_fontDF->getGlyphPointer(_charcode);
 }
@@ -165,7 +165,7 @@ void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	EWOL_VERBOSE("Set font name: '" << fontName << "'");
 	// link to new one
 	m_fontDF = ewol::resource::DistanceFieldFont::keep(fontName);
-	if (m_fontDF == NULL) {
+	if (m_fontDF == nullptr) {
 		EWOL_ERROR("Can not get find resource");
 		m_fontDF = previousFont;
 	} else {
@@ -189,7 +189,7 @@ void ewol::compositing::TextDF::setFontMode(enum ewol::font::mode _mode) {
 void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty* myGlyph = getGlyphPointer(_charcode);
-	if (NULL == myGlyph) {
+	if (nullptr == myGlyph) {
 		EWOL_ERROR(" font does not really existed ...");
 		return;
 	}

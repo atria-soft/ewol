@@ -97,7 +97,7 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _number Number of VBO needed
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
 				static ewol::resource::VirtualBufferObject* keep(int32_t _number);
 				/**

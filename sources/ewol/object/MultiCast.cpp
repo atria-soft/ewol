@@ -25,12 +25,12 @@ ewol::object::MultiCast::~MultiCast() {
 
 
 void ewol::object::MultiCast::add(ewol::object::Shared<ewol::Object> _object, const char* const _message) {
-	if (NULL == _object) {
-		EWOL_ERROR("Add with NULL object");
+	if (nullptr == _object) {
+		EWOL_ERROR("Add with nullptr object");
 		return;
 	}
-	if (NULL == _message) {
-		EWOL_ERROR("Add with NULL Message");
+	if (nullptr == _message) {
+		EWOL_ERROR("Add with nullptr Message");
 		return;
 	}
 	m_messageList.push_back(MessageList(_message, _object));
@@ -39,16 +39,16 @@ void ewol::object::MultiCast::add(ewol::object::Shared<ewol::Object> _object, co
 
 
 void ewol::object::MultiCast::rm(ewol::object::Shared<ewol::Object> _object) {
-	if (NULL == _object) {
-		EWOL_ERROR("Rm with NULL object");
+	if (nullptr == _object) {
+		EWOL_ERROR("Rm with nullptr object");
 		return;
 	}
 	// send the message at all registered widget ...
 	for (int32_t iii=m_messageList.size()-1; iii >= 0; iii--) {
 		if(m_messageList[iii].m_object == _object) {
 			EWOL_DEBUG("SendMulticast RM listener :" << _object->getId());
-			m_messageList[iii].m_message = NULL;
-			m_messageList[iii].m_object = NULL;
+			m_messageList[iii].m_message = nullptr;
+			m_messageList[iii].m_object = nullptr;
 			m_messageList.erase(m_messageList.begin()+iii);
 		}
 	}
@@ -62,7 +62,7 @@ void ewol::object::MultiCast::send(ewol::object::Shared<ewol::Object> _object, c
 		if(    m_messageList[iii].m_message == _message
 		    && m_messageList[iii].m_object != _object)
 		{
-			if (NULL != m_messageList[iii].m_object) {
+			if (nullptr != m_messageList[iii].m_object) {
 				EWOL_VERBOSE("        id = " << m_messageList[iii].m_object->getId() << " type=" << m_messageList[iii].m_object->getObjectType());
 				// generate event ... (create message before ...
 				ewol::object::Message tmpMsg(_object, m_messageList[iii].m_message, _data);

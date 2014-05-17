@@ -74,7 +74,7 @@ namespace ewol {
 				 * @brief get the pointer on the coresponding glyph
 				 * @param[in] _charcode The unicodeValue
 				 * @param[in] _displayMode Mode to display the currrent font
-				 * @return The pointer on the glyph  == > never NULL
+				 * @return The pointer on the glyph  == > never nullptr
 				 */
 				ewol::GlyphProperty* getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode);
 				/**
@@ -91,7 +91,7 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the texture font.
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
 				static ewol::resource::TexturedFont* keep(const std::string& _filename);
 				/**

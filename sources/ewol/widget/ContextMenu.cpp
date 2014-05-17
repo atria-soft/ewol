@@ -35,9 +35,9 @@ ewol::widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
   m_shaper(_shaperName) {
 	addObjectType("ewol::widget::ContextMenu");
 	// add basic configurations :
-	registerConfig(configArrowPosition, "vec2", NULL, "position of the arrow");
+	registerConfig(configArrowPosition, "vec2", nullptr, "position of the arrow");
 	registerConfig(configArrowMode, "list", "none;left;buttom;right;top", "Position of the arrow in the pop-up");
-	registerConfig(configShaper, "string", NULL, "the display name for config file");
+	registerConfig(configShaper, "string", nullptr, "the display name for config file");
 	
 	m_userExpand.setValue(false,false);
 	
@@ -69,7 +69,7 @@ void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 	m_size = _availlable;
 	ewol::Padding padding = m_shaper.getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
-	if (NULL != m_subWidget) {
+	if (nullptr != m_subWidget) {
 		vec2 subWidgetSize;
 		vec2 subWidgetOrigin;
 		subWidgetSize = m_subWidget->getCalculateMinSize();
@@ -158,7 +158,7 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 	m_shaper.clear();
 	ewol::Padding padding = m_shaper.getPadding();
 	
-	if (m_subWidget == NULL) {
+	if (m_subWidget == nullptr) {
 		return;
 	}
 	vec2 tmpSize = m_subWidget->getSize();
@@ -216,7 +216,7 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 
 bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 	if (_event.getId() > 0) {
-		if (NULL != ewol::widget::Container::getWidgetAtPos(_event.getPos())) {
+		if (nullptr != ewol::widget::Container::getWidgetAtPos(_event.getPos())) {
 			return false;
 		}
 		if(    _event.getStatus() == ewol::key::statusDown
@@ -243,7 +243,7 @@ void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, vec
 
 ewol::object::Shared<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 	ewol::object::Shared<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
-	if (NULL != val) {
+	if (nullptr != val) {
 		return val;
 	}
 	return this;

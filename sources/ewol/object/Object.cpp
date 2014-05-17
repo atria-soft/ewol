@@ -79,7 +79,7 @@ ewol::Object::Object() :
 	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
 	getObjectManager().add(this);
-	registerConfig(configName, "string", NULL, "Object name, might be a unique reference in all the program");
+	registerConfig(configName, "string", nullptr, "Object name, might be a unique reference in all the program");
 }
 ewol::Object::Object(const std::string& _name) :
   m_objRefCount(1),
@@ -90,7 +90,7 @@ ewol::Object::Object(const std::string& _name) :
 	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
 	getObjectManager().add(this);
-	registerConfig(configName, "string", NULL, "Object name, might be a unique reference in all the program");
+	registerConfig(configName, "string", nullptr, "Object name, might be a unique reference in all the program");
 }
 
 ewol::Object::~Object() {
@@ -98,9 +98,9 @@ ewol::Object::~Object() {
 	getObjectManager().rm(this);
 	getMultiCast().rm(this);
 	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
-		if (NULL!=m_externEvent[iii]) {
+		if (nullptr!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
-			m_externEvent[iii] = NULL;
+			m_externEvent[iii] = nullptr;
 		}
 	}
 	m_externEvent.clear();
@@ -116,7 +116,7 @@ const char * const ewol::Object::getObjectType() {
 }
 
 void ewol::Object::addObjectType(const char* _type) {
-	if (_type == NULL) {
+	if (_type == nullptr) {
 		EWOL_ERROR(" try to add a type with no value...");
 		return;
 	}
@@ -152,7 +152,7 @@ void ewol::Object::removeObject() {
 }
 
 void ewol::Object::addEventId(const char * _generateEventId) {
-	if (NULL != _generateEventId) {
+	if (nullptr != _generateEventId) {
 		m_availlableEventId.push_back(_generateEventId);
 	}
 }
@@ -162,7 +162,7 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 	EWOL_VERBOSE("try send message '" << _generateEventId << "'");
 	// for every element registered ...
 	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
-		if (NULL==m_externEvent[iii]) {
+		if (nullptr==m_externEvent[iii]) {
 			EWOL_VERBOSE("    Null pointer");
 			continue;
 		}
@@ -171,8 +171,8 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 			EWOL_VERBOSE("    wrong event '" << m_externEvent[iii]->localEventId << "' != '" << _generateEventId << "'");
 			continue;
 		}
-		if (m_externEvent[iii]->destObject == NULL) {
-			EWOL_VERBOSE("    NULL dest");
+		if (m_externEvent[iii]->destObject == nullptr) {
+			EWOL_VERBOSE("    nullptr dest");
 			continue;
 		}
 		if (m_externEvent[iii]->overloadData.size() <= 0){
@@ -207,12 +207,12 @@ void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinati
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
                                     const std::string& _overloadData) {
-	if (NULL == _destinationObject) {
-		EWOL_ERROR("Input ERROR NULL pointer Object ...");
+	if (nullptr == _destinationObject) {
+		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;
 	}
-	if (NULL == _eventId) {
-		EWOL_ERROR("Input ERROR NULL pointer Event Id...");
+	if (nullptr == _eventId) {
+		EWOL_ERROR("Input ERROR nullptr pointer Event Id...");
 		return;
 	}
 	if (    _eventId[0] == '*'
@@ -220,14 +220,14 @@ void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinati
 		EWOL_VERBOSE("Register on all event ...");
 		for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
 			ewol::object::EventExtGen * tmpEvent = new ewol::object::EventExtGen();
-			if (NULL == tmpEvent) {
+			if (nullptr == tmpEvent) {
 				EWOL_ERROR("Allocation error in Register Event...");
 				continue;
 			}
 			tmpEvent->localEventId = m_availlableEventId[iii];
 			tmpEvent->destObject = _destinationObject;
 			tmpEvent->overloadData = _overloadData;
-			if (NULL != _eventIdgenerated) {
+			if (nullptr != _eventIdgenerated) {
 				tmpEvent->destEventId = _eventIdgenerated;
 			} else {
 				tmpEvent->destEventId = m_availlableEventId[iii];
@@ -260,14 +260,14 @@ void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinati
 		return;
 	}
 	ewol::object::EventExtGen * tmpEvent = new ewol::object::EventExtGen();
-	if (NULL == tmpEvent) {
+	if (nullptr == tmpEvent) {
 		EWOL_ERROR("Allocation error in Register Event...");
 		return;
 	}
 	tmpEvent->localEventId = _eventId;
 	tmpEvent->destObject = _destinationObject;
 	tmpEvent->overloadData = _overloadData;
-	if (NULL != _eventIdgenerated) {
+	if (nullptr != _eventIdgenerated) {
 		tmpEvent->destEventId = _eventIdgenerated;
 	} else {
 		tmpEvent->destEventId = _eventId;
@@ -277,19 +277,19 @@ void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinati
 
 void ewol::Object::unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
                                       const char * _eventId) {
-	if (NULL == _destinationObject) {
-		EWOL_ERROR("Input ERROR NULL pointer Object ...");
+	if (nullptr == _destinationObject) {
+		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;
 	}
 	// check if event existed :
 	for(int64_t iii = m_externEvent.size()-1; iii >= 0; --iii) {
-		if (m_externEvent[iii] == NULL) {
+		if (m_externEvent[iii] == nullptr) {
 			continue;
 		}
 		if (m_externEvent[iii]->destObject != _destinationObject) {
 			continue;
 		}
-		if (_eventId == NULL) {
+		if (_eventId == nullptr) {
 			m_externEvent.erase(m_externEvent.begin()+iii);
 		} else if (m_externEvent[iii]->localEventId == _eventId) {
 			m_externEvent.erase(m_externEvent.begin()+iii);
@@ -312,12 +312,12 @@ void ewol::Object::registerConfig(const char* _config,
                                   const char* _control,
                                   const char* _description,
                                   const char* _default) {
-	if (NULL == _config) {
-		EWOL_ERROR("Try to add NULL config");
+	if (nullptr == _config) {
+		EWOL_ERROR("Try to add nullptr config");
 		return;
 	}
 	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (NULL != m_listConfig[iii].getConfig()) {
+		if (nullptr != m_listConfig[iii].getConfig()) {
 			if (0 == strcmp(m_listConfig[iii].getConfig(), _config) ) {
 				EWOL_ERROR("Try to add config already added : " << _config << " at pos=" << iii);
 			}
@@ -328,12 +328,12 @@ void ewol::Object::registerConfig(const char* _config,
 
 
 bool ewol::Object::loadXML(exml::Element* _node) {
-	if (NULL == _node) {
+	if (nullptr == _node) {
 		return false;
 	}
 	bool errorOccured = true;
 	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (m_listConfig[iii].getConfig() == NULL) {
+		if (m_listConfig[iii].getConfig() == nullptr) {
 			continue;
 		}
 		if (_node->existAttribute(m_listConfig[iii].getConfig()) == false) {
@@ -348,16 +348,16 @@ bool ewol::Object::loadXML(exml::Element* _node) {
 }
 
 bool ewol::Object::storeXML(exml::Element* _node) const {
-	if (NULL == _node) {
+	if (nullptr == _node) {
 		return false;
 	}
 	bool errorOccured = true;
 	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (m_listConfig[iii].getConfig() == NULL) {
+		if (m_listConfig[iii].getConfig() == nullptr) {
 			continue;
 		}
 		std::string value = getConfig(m_listConfig[iii].getConfig());
-		if (NULL != m_listConfig[iii].getDefault() ) {
+		if (nullptr != m_listConfig[iii].getDefault() ) {
 			if (value == m_listConfig[iii].getDefault() ) {
 				// nothing to add on the XML :
 				continue;
@@ -390,7 +390,7 @@ bool ewol::Object::onGetConfig(const char* _config, std::string& _result) const 
 
 bool ewol::Object::setConfig(const std::string& _config, const std::string& _value) {
 	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (NULL != m_listConfig[iii].getConfig()) {
+		if (nullptr != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
 				return setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), _value));
@@ -403,7 +403,7 @@ bool ewol::Object::setConfig(const std::string& _config, const std::string& _val
 
 std::string ewol::Object::getConfig(const char* _config) const {
 	std::string res="";
-	if (NULL != _config) {
+	if (nullptr != _config) {
 		onGetConfig(_config, res);
 	}
 	return res;
@@ -411,7 +411,7 @@ std::string ewol::Object::getConfig(const char* _config) const {
 
 std::string ewol::Object::getConfig(const std::string& _config) const {
 	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (NULL != m_listConfig[iii].getConfig()) {
+		if (nullptr != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
 				return getConfig(m_listConfig[iii].getConfig());
@@ -424,7 +424,7 @@ std::string ewol::Object::getConfig(const std::string& _config) const {
 
 bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf) {
 	ewol::object::Shared<ewol::Object> object = getObjectManager().get(_objectName);
-	if (object == NULL) {
+	if (object == nullptr) {
 		return false;
 	}
 	return object->setConfig(_conf);
@@ -432,7 +432,7 @@ bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::ob
 
 bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
 	ewol::object::Shared<ewol::Object> object = getObjectManager().get(_objectName);
-	if (object == NULL) {
+	if (object == nullptr) {
 		return false;
 	}
 	return object->setConfig(_config, _value);

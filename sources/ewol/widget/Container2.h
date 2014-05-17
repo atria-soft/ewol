@@ -144,7 +144,7 @@ namespace ewol {
 				 * @return the id of the widget displayable
 				 */
 				int32_t convertId(int32_t _id) {
-					if (m_subWidget[_id] == NULL) {
+					if (m_subWidget[_id] == nullptr) {
 						return (_id+1)%2;
 					}
 					return _id;

@@ -45,10 +45,10 @@ bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 		return false;
 	}
 	exml::Element* root = (exml::Element*)doc.getNamed("composer");
-	if (NULL == root ) {
+	if (nullptr == root ) {
 		// Maybe a multiple node XML for internal config:
 		root = doc.toElement();
-		if (NULL == root ) {
+		if (nullptr == root ) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
 		}
@@ -70,10 +70,10 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 		return false;
 	}
 	exml::Element* root = (exml::Element*)doc.getNamed("composer");
-	if (NULL == root ) {
+	if (nullptr == root ) {
 		// Maybe a multiple node XML for internal config:
 		root = doc.toElement();
-		if (NULL == root ) {
+		if (nullptr == root ) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
 		}
@@ -102,7 +102,7 @@ void ewol::widget::Composer::registerOnEventNameWidget(ewol::object::Shared<ewol
                                                        const char * _eventIdgenerated,
                                                        const std::string& _overloadData) {
 	ewol::object::Shared<ewol::Widget> tmpWidget = getWidgetNamed(_subWidgetName);
-	if (NULL != tmpWidget) {
+	if (nullptr != tmpWidget) {
 		EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
 		tmpWidget->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
 	} else {

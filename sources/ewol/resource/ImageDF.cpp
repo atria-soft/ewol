@@ -155,9 +155,9 @@ ewol::resource::ImageDF* ewol::resource::ImageDF::keep(const std::string& _filen
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
 		ewol::resource::ImageDF* object = new ewol::resource::ImageDF("");
-		if (NULL == object) {
+		if (nullptr == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
-			return NULL;
+			return nullptr;
 		}
 		getManager().localAdd(object);
 		return object;
@@ -190,24 +190,24 @@ ewol::resource::ImageDF* ewol::resource::ImageDF::keep(const std::string& _filen
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::resource::ImageDF* object = NULL;
+	ewol::resource::ImageDF* object = nullptr;
 	ewol::Resource* object2 = getManager().localKeep("DF__" + TmpFilename);
-	if (NULL != object2) {
+	if (nullptr != object2) {
 		object = dynamic_cast<ewol::resource::ImageDF*>(object2);
-		if (NULL == object) {
+		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
-			return NULL;
+			return nullptr;
 		}
 	}
-	if (NULL != object) {
+	if (nullptr != object) {
 		return object;
 	}
 	EWOL_INFO("CREATE: ImageDF: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = new ewol::resource::ImageDF("DF__" + TmpFilename, _filename, _size);
-	if (NULL == object) {
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
@@ -215,11 +215,11 @@ ewol::resource::ImageDF* ewol::resource::ImageDF::keep(const std::string& _filen
 
 
 void ewol::resource::ImageDF::release(ewol::resource::ImageDF*& _object) {
-	if (NULL == _object) {
+	if (nullptr == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
-	_object = NULL;
+	_object = nullptr;
 }
 

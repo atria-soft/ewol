@@ -20,7 +20,7 @@ namespace ewol {
 	namespace widget {
 		class MenuElement {
 			public : 
-				MenuElement() : m_widgetPointer(NULL) { };
+				MenuElement() : m_widgetPointer(nullptr) { };
 				int32_t m_localId;
 				int32_t m_parentId;
 				ewol::object::Shared<ewol::Object> m_widgetPointer;
@@ -47,8 +47,8 @@ namespace ewol {
 				ewol::widget::ContextMenu* m_widgetContextMenu;
 			public:
 				void clear();
-				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
-				int32_t add(int32_t parent, std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
+				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
+				int32_t add(int32_t parent, std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
 				void addSpacer();
 				// Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);

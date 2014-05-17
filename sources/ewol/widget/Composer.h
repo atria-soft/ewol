@@ -66,7 +66,7 @@ namespace ewol {
 				 */
 				void registerOnEventNameWidget(const std::string& _subWidgetName,
 				                               const char * _eventId,
-				                               const char * _eventIdgenerated = NULL,
+				                               const char * _eventIdgenerated = nullptr,
 				                               const std::string& _overloadData="");
 			public:
 				/**
@@ -81,7 +81,7 @@ namespace ewol {
 				void registerOnEventNameWidget(ewol::object::Shared<ewol::Object> _destinationObject,
 				                               const std::string& _subWidgetName,
 				                               const char * _eventId,
-				                               const char * _eventIdgenerated = NULL,
+				                               const char * _eventIdgenerated = nullptr,
 				                               const std::string& _overloadData="");
 		};
 	};

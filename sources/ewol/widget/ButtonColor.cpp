@@ -41,7 +41,7 @@ void ewol::widget::ButtonColor::init(ewol::widget::Manager& _widgetManager) {
 ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :
   m_shaper(_shaperName),
   m_textColorFg(_baseColor),
-  m_widgetContextMenu(NULL) {
+  m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
 	addEventId(eventChange);
 	changeStatusIn(STATUS_UP);
@@ -177,7 +177,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_mouseHover = false;
 				// create a context menu : 
 				m_widgetContextMenu = new ewol::widget::ContextMenu();
-				if (NULL == m_widgetContextMenu) {
+				if (nullptr == m_widgetContextMenu) {
 					EWOL_ERROR("Allocation Error");
 					return true;
 				}

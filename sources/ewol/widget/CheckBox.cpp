@@ -52,8 +52,8 @@ ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
 	addEventId(eventEnter);
 	addEventId(eventValue);
 	// add configuration
-	registerConfig(configValue, "bool", NULL, "Basic value of the widget");
-	registerConfig(configShaper, "string", NULL, "the display name for config file");
+	registerConfig(configValue, "bool", nullptr, "Basic value of the widget");
+	registerConfig(configShaper, "string", nullptr, "the display name for config file");
 	
 	m_shaperIdSize = m_shaper.requestConfig("box-size");
 	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");

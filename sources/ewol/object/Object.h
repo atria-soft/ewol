@@ -184,15 +184,15 @@ namespace ewol {
 			 */
 			void registerOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
 			                     const char * _eventId,
-			                     const char * _eventIdgenerated = NULL,
+			                     const char * _eventIdgenerated = nullptr,
 			                     const std::string& _overloadData = "");
 			/**
 			 * @brief Un-Register an Object over an other.
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] _eventId Event generate inside the object (NULL to remove all event on this object)
+			 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
 			 */
 			void unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
-			                       const char * _eventId = NULL);
+			                       const char * _eventId = nullptr);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @note : Sub classes must call this class
@@ -217,10 +217,10 @@ namespace ewol {
 			 * @param[in] _default Default value of this parameter.
 			 */
 			void registerConfig(const char* _config,
-			                    const char* _type = NULL,
-			                    const char* _control = NULL,
-			                    const char* _description = NULL,
-			                    const char* _default = NULL);
+			                    const char* _type = nullptr,
+			                    const char* _control = nullptr,
+			                    const char* _description = nullptr,
+			                    const char* _default = nullptr);
 			/**
 			 * @brief Configuration requested to the curent Object
 			 * @param[in] _conf Configuration handle.

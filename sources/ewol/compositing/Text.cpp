@@ -16,7 +16,7 @@
 
 
 ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
-  m_font(NULL) {
+  m_font(nullptr) {
 	setFont(_fontName, _fontSize);
 }
 
@@ -30,16 +30,16 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || m_font == NULL) {
+	if (m_coord.size() <= 0 || m_font == nullptr) {
 		// TODO : a remÃtre ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_WARNING("no font...");
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -74,16 +74,16 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || m_font == NULL) {
+	if (m_coord.size() <= 0 || m_font == nullptr) {
 		// TODO : a remèe ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_WARNING("no font...");
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -107,23 +107,23 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 }
 
 float ewol::compositing::Text::getSize() {
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_WARNING("no font...");
 		return 1.0f;
 	}
 	return m_font->getFontSize();
 }
 float ewol::compositing::Text::getHeight() {
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_WARNING("no font...");
 		return 10.0f;
 	}
 	return m_font->getHeight(m_mode);
 }
 ewol::GlyphProperty * ewol::compositing::Text::getGlyphPointer(char32_t _charcode) {
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_WARNING("no font...");
-		return NULL;
+		return nullptr;
 	}
 	return m_font->getGlyphPointer(_charcode, m_mode);
 }
@@ -131,7 +131,7 @@ ewol::GlyphProperty * ewol::compositing::Text::getGlyphPointer(char32_t _charcod
 void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 	// get old size
 	std::string fontName = "";
-	if (m_font != NULL) {
+	if (m_font != nullptr) {
 		fontName = m_font->getName();
 		// Remove the :XX for the size ...
 		size_t pos = fontName.rfind(':');
@@ -143,7 +143,7 @@ void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 	// get old size
 	int32_t fontSize = -1;
-	if (m_font != NULL) {
+	if (m_font != nullptr) {
 		fontSize = m_font->getFontSize();
 	}
 	setFont(_fontName, fontSize);
@@ -164,7 +164,7 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
 	m_font = ewol::resource::TexturedFont::keep(_fontName);
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_ERROR("Can not get font resource");
 		m_font = previousFont;
 	} else {
@@ -173,7 +173,7 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 }
 
 void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
-	if (m_font != NULL) {
+	if (m_font != nullptr) {
 		m_mode = m_font->getWrappingMode(_mode);
 	}
 }
@@ -181,7 +181,7 @@ void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
 void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty* myGlyph = getGlyphPointer(_charcode);
-	if (NULL == myGlyph) {
+	if (nullptr == myGlyph) {
 		EWOL_ERROR(" font does not really existed ...");
 		return;
 	}

@@ -126,19 +126,19 @@ int32_t ewol::resource::VirtualBufferObject::sizeOnBufferVec2(int32_t _id) {
 ewol::resource::VirtualBufferObject* ewol::resource::VirtualBufferObject::keep(int32_t _number) {
 	// this element create a new one every time ....
 	ewol::resource::VirtualBufferObject* object = new ewol::resource::VirtualBufferObject(_number);
-	if (NULL == object) {
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : ??VBO??");
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
 }
 
 void ewol::resource::VirtualBufferObject::release(ewol::resource::VirtualBufferObject*& _object) {
-	if (NULL == _object) {
+	if (nullptr == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
-	_object = NULL;
+	_object = nullptr;
 }

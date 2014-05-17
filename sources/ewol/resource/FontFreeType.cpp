@@ -46,7 +46,7 @@ void ewol::resource::freeTypeUnInit() {
 		return;
 	}
 	int32_t error = FT_Done_FreeType( library );
-	library = NULL;
+	library = nullptr;
 	if(0 != error) {
 		EWOL_CRITICAL(" when Un-loading FreeType Librairy ...");
 	}
@@ -56,7 +56,7 @@ ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
   FontBase(_fontName) {
 	addObjectType("ewol::FontFreeType");
 	m_init = false;
-	m_FileBuffer = NULL;
+	m_FileBuffer = nullptr;
 	m_FileSize = 0;
 	
 	etk::FSNode myfile(_fontName);
@@ -75,7 +75,7 @@ ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
 	}
 	// allocate data
 	m_FileBuffer = new FT_Byte[m_FileSize];
-	if (NULL == m_FileBuffer) {
+	if (nullptr == m_FileBuffer) {
 		EWOL_ERROR("Error Memory allocation size=" << _fontName);
 		return;
 	}
@@ -99,9 +99,9 @@ ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
 
 ewol::resource::FontFreeType::~FontFreeType() {
 	// clean the tmp memory
-	if (NULL != m_FileBuffer) {
+	if (nullptr != m_FileBuffer) {
 		delete[] m_FileBuffer;
-		m_FileBuffer = NULL;
+		m_FileBuffer = nullptr;
 	}
 	// must be deleted fftFace
 	FT_Done_Face( m_fftFace );
@@ -392,34 +392,34 @@ void ewol::resource::FontFreeType::display() {
 
 ewol::resource::FontBase* ewol::resource::FontFreeType::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
-	ewol::resource::FontBase* object = NULL;
+	ewol::resource::FontBase* object = nullptr;
 	ewol::Resource* object2 = getManager().localKeep(_filename);
-	if (NULL != object2) {
+	if (nullptr != object2) {
 		object = dynamic_cast<ewol::resource::FontBase*>(object2);
-		if (NULL == object) {
+		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return NULL;
+			return nullptr;
 		}
 	}
-	if (NULL != object) {
+	if (nullptr != object) {
 		return object;
 	}
 	// need to crate a new one ...
 	object = new ewol::resource::FontFreeType(_filename);
-	if (NULL == object) {
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
 }
 
 void ewol::resource::FontFreeType::release(ewol::resource::FontBase*& _object) {
-	if (NULL == _object) {
+	if (nullptr == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
-	_object = NULL;
+	_object = nullptr;
 }
 

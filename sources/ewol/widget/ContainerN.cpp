@@ -53,11 +53,11 @@ void ewol::widget::ContainerN::lockExpand(const bvec2& _lockExpand) {
 
 
 int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (NULL == _newWidget) {
+	if (nullptr == _newWidget) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add An empty Widget ... ");
 		return -1;
 	}
-	if (_newWidget!=NULL) {
+	if (_newWidget!=nullptr) {
 		_newWidget->setUpperWidget(this);
 	}
 	m_subWidget.push_back(_newWidget);
@@ -68,11 +68,11 @@ int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::object::Shared<ewol::Widget
 }
 
 int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (NULL == _newWidget) {
+	if (nullptr == _newWidget) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add start An empty Widget ... ");
 		return -1;
 	}
-	if (_newWidget!=NULL) {
+	if (_newWidget!=nullptr) {
 		_newWidget->setUpperWidget(this);
 	}
 	m_subWidget.insert(m_subWidget.begin(), _newWidget);
@@ -82,7 +82,7 @@ int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::object::Shared<ewol::W
 }
 
 void ewol::widget::ContainerN::subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (NULL == _newWidget) {
+	if (nullptr == _newWidget) {
 		return;
 	}
 	size_t errorControl = m_subWidget.size();
@@ -93,7 +93,7 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::object::Shared<ewol::Widget
 			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 			if (errorControl == m_subWidget.size()) {
 				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-				m_subWidget[iii] = NULL;
+				m_subWidget[iii] = nullptr;
 				m_subWidget.erase(m_subWidget.begin()+iii);
 			}
 			markToRedraw();
@@ -104,13 +104,13 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::object::Shared<ewol::Widget
 }
 
 void ewol::widget::ContainerN::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (NULL == _newWidget) {
+	if (nullptr == _newWidget) {
 		return;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii]) {
 			m_subWidget[iii]->removeUpperWidget();
-			m_subWidget[iii] = NULL;
+			m_subWidget[iii] = nullptr;
 			m_subWidget.erase(m_subWidget.begin()+iii);
 			markToRedraw();
 			requestUpdateSize();
@@ -123,13 +123,13 @@ void ewol::widget::ContainerN::subWidgetRemoveAll() {
 	size_t errorControl = m_subWidget.size();
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	while (m_subWidget.size() > 0 ) {
-		if (NULL != m_subWidget[0]) {
+		if (nullptr != m_subWidget[0]) {
 			m_subWidget[0]->removeUpperWidget();
 			m_subWidget[0]->removeObject();
 			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 			if (errorControl == m_subWidget.size()) {
 				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-				m_subWidget[0] = NULL;
+				m_subWidget[0] = nullptr;
 			}
 		} else {
 			EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Must not have null pointer on the subWidget list ...");
@@ -143,10 +143,10 @@ void ewol::widget::ContainerN::subWidgetRemoveAll() {
 void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			m_subWidget[iii]->removeUpperWidget();
 			m_subWidget[iii]->removeObject();
-			m_subWidget[iii] = NULL;
+			m_subWidget[iii] = nullptr;
 		} else {
 			EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Must not have null pointer on the subWidget list ...");
 		}
@@ -156,18 +156,18 @@ void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 
 ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(const std::string& _widgetName) {
 	ewol::object::Shared<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
-	if (NULL!=tmpUpperWidget) {
+	if (nullptr!=tmpUpperWidget) {
 		return tmpUpperWidget;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetNamed(_widgetName);
-			if (NULL != tmpWidget) {
+			if (nullptr != tmpWidget) {
 				return tmpWidget;
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void ewol::widget::ContainerN::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
@@ -177,7 +177,7 @@ void ewol::widget::ContainerN::onObjectRemove(ewol::object::Shared<ewol::Object>
 	for (int64_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
 		if(m_subWidget[iii] == _removeObject) {
 			EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} remove sizer sub Element [" << iii << "/" << m_subWidget.size()-1 << "]  == > destroyed object");
-			m_subWidget[iii] = NULL;
+			m_subWidget[iii] = nullptr;
 			m_subWidget.erase(m_subWidget.begin()+iii);
 		}
 	}
@@ -194,7 +194,7 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 	ewol::DrawProperty prop = _displayProp;
 	prop.limit(m_origin, m_size);
 	for (int64_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			m_subWidget[iii]->systemDraw(prop);
 		}
 	}
@@ -203,7 +203,7 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 void ewol::widget::ContainerN::calculateSize(const vec2& _availlable) {
 	m_size = _availlable;
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			m_subWidget[iii]->setOrigin(m_origin+m_offset);
 			m_subWidget[iii]->calculateSize(m_size);
 		}
@@ -217,7 +217,7 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 	m_maxSize.setValue(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			m_subWidget[iii]->calculateMinMaxSize();
 			bvec2 subExpendProp = m_subWidget[iii]->canExpand();
 			if (true == subExpendProp.x()) {
@@ -236,7 +236,7 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 
 void ewol::widget::ContainerN::onRegenerateDisplay() {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			m_subWidget[iii]->onRegenerateDisplay();
 		}
 	}
@@ -244,18 +244,18 @@ void ewol::widget::ContainerN::onRegenerateDisplay() {
 
 ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
-		return NULL;
+		return nullptr;
 	}
 	// for all element in the sizer ...
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getSize();
 			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
+				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
 				// stop searching
@@ -263,12 +263,12 @@ ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(cons
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 };
 
 
 bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
-	if (NULL == _node) {
+	if (nullptr == _node) {
 		return false;
 	}
 	// parse generic properties :
@@ -288,7 +288,7 @@ bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
 	// parse all the elements :
 	for (size_t iii=0; iii < _node->size(); iii++) {
 		exml::Element* pNode = _node->getElement(iii);
-		if (pNode == NULL) {
+		if (pNode == nullptr) {
 			// trash here all that is not element
 			continue;
 		}
@@ -299,7 +299,7 @@ bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
 		}
 		EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} load new element : \"" << widgetName << "\"");
 		ewol::object::Shared<ewol::Widget> subWidget = getWidgetManager().create(widgetName);
-		if (subWidget == NULL) {
+		if (subWidget == nullptr) {
 			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}

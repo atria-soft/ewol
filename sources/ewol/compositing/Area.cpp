@@ -15,13 +15,13 @@
 ewol::compositing::Area::Area(const ivec2& _size) :
   m_position(0.0, 0.0, 0.0),
   m_color(etk::color::white),
-  m_GLprogram(NULL),
+  m_GLprogram(nullptr),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLColor(-1),
   m_GLtexture(-1),
   m_GLtexID(-1),
-  m_resource(NULL) {
+  m_resource(nullptr) {
 	m_resource = ewol::resource::Texture::keep();
 	m_resource->setImageSize(_size);
 	m_resource->flush();
@@ -37,7 +37,7 @@ void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
-	if (NULL != m_GLprogram) {
+	if (nullptr != m_GLprogram) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
@@ -51,11 +51,11 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_resource == NULL) {
+	if (m_resource == nullptr) {
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}

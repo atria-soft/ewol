@@ -101,7 +101,7 @@ namespace ewol {
 			enum ewol::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut() {
 				broadcastEvent = false;
-				generateEventId = NULL;
+				generateEventId = nullptr;
 				eventData = "";
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::key::keyboardUnknow;
@@ -144,18 +144,18 @@ namespace ewol {
 		public:
 			/**
 			 * @brief set the upper widget of this widget.
-			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with NULL.
+			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with nullptr.
 			 */
 			void setUpperWidget(ewol::object::Shared<ewol::Widget> _upper);
 			/**
 			 * @brief remove the upper widget of this widget.
 			 */
 			void removeUpperWidget() {
-				setUpperWidget(NULL);
+				setUpperWidget(nullptr);
 			};
 			/**
 			 * @brief get the upper widget (father).
-			 * @ return the requested widget (if NULL , 2 case : root widget or error implementation).
+			 * @ return the requested widget (if nullptr , 2 case : root widget or error implementation).
 			 */
 			ewol::object::Shared<ewol::Widget> getUpperWidget() {
 				return m_up;
@@ -528,7 +528,7 @@ namespace ewol {
 			/**
 			 * @brief get the widget at the specific windows absolute position
 			 * @param[in] _pos gAbsolute position of the requested widget knowledge
-			 * @return NULL No widget found
+			 * @return nullptr No widget found
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
@@ -536,12 +536,12 @@ namespace ewol {
 				if (false == isHide()) {
 					return this;
 				}
-				return NULL;
+				return nullptr;
 			};
 			/**
 			 * @brief get the widget if it have this name or one of the subwidget with the same name
 			 * @param[in] _widgetName name of the widget
-			 * @return the requested pointer on the node (or NULL pointer)
+			 * @return the requested pointer on the node (or nullptr pointer)
 			 */
 			virtual ewol::object::Shared<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
@@ -741,7 +741,7 @@ namespace ewol {
 		private:
 			std::vector<const char*> m_annimationList[2]; //!< List of all annimation type ADD
 		protected:
-			const char* m_annimationType[2]; //!< type of start annimation (default NULL ==> no annimation)
+			const char* m_annimationType[2]; //!< type of start annimation (default nullptr ==> no annimation)
 			float m_annimationTime[2]; //!< time to produce start annimation
 		protected:
 			/**

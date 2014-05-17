@@ -37,7 +37,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 		// remove extention ...
 		tmpFilename.erase(tmpFilename.size()-4, 4);
 		ewol::resource::Shader* tmpShader = ewol::resource::Shader::keep(tmpFilename+"vert");
-		if (NULL == tmpShader) {
+		if (nullptr == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
@@ -45,7 +45,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 			m_shaderList.push_back(tmpShader);
 		}
 		tmpShader = ewol::resource::Shader::keep(tmpFilename+"frag");
-		if (NULL == tmpShader) {
+		if (nullptr == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
@@ -64,7 +64,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 		}
 		#define MAX_LINE_SIZE   (2048)
 		char tmpData[MAX_LINE_SIZE];
-		while (file.fileGets(tmpData, MAX_LINE_SIZE) != NULL) {
+		while (file.fileGets(tmpData, MAX_LINE_SIZE) != nullptr) {
 			int32_t len = strlen(tmpData);
 			if(    tmpData[len-1] == '\n'
 				|| tmpData[len-1] == '\r') {
@@ -81,7 +81,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 			// get it with relative position :
 			std::string tmpFilename = file.getRelativeFolder() + tmpData;
 			ewol::resource::Shader* tmpShader = ewol::resource::Shader::keep(tmpFilename);
-			if (NULL == tmpShader) {
+			if (nullptr == tmpShader) {
 				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			} else {
 				EWOL_DEBUG("Add shader on program : "<< tmpFilename);
@@ -173,7 +173,7 @@ void ewol::resource::Program::updateContext() {
 		EWOL_DEBUG("Create program with oglID=" << m_program);
 		// first attach vertex shader, and after fragment shader
 		for (size_t iii=0; iii<m_shaderList.size(); iii++) {
-			if (NULL != m_shaderList[iii]) {
+			if (nullptr != m_shaderList[iii]) {
 				if (m_shaderList[iii]->getShaderType() == GL_VERTEX_SHADER) {
 					glAttachShader(m_program, m_shaderList[iii]->getGL_ID());
 					checkGlError("glAttachShader", __LINE__);
@@ -181,7 +181,7 @@ void ewol::resource::Program::updateContext() {
 			}
 		}
 		for (size_t iii=0; iii<m_shaderList.size(); iii++) {
-			if (NULL != m_shaderList[iii]) {
+			if (nullptr != m_shaderList[iii]) {
 				if (m_shaderList[iii]->getShaderType() == GL_FRAGMENT_SHADER) {
 					glAttachShader(m_program, m_shaderList[iii]->getGL_ID());
 					checkGlError("glAttachShader", __LINE__);
@@ -280,13 +280,13 @@ void ewol::resource::Program::reload() {
 		return;
 	}
 	// remove previous data ...
-	if (NULL != m_fileData) {
+	if (nullptr != m_fileData) {
 		delete[] m_fileData;
 		m_fileData = 0;
 	}
 	// allocate data
 	m_fileData = new char[fileSize+5];
-	if (NULL == m_fileData) {
+	if (nullptr == m_fileData) {
 		EWOL_ERROR("Error Memory allocation size=" << fileSize);
 		return;
 	}
@@ -514,8 +514,8 @@ void ewol::resource::Program::uniform1fv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform1fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -536,8 +536,8 @@ void ewol::resource::Program::uniform2fv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform2fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -558,8 +558,8 @@ void ewol::resource::Program::uniform3fv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform3fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -580,8 +580,8 @@ void ewol::resource::Program::uniform4fv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform4fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -605,8 +605,8 @@ void ewol::resource::Program::uniform1iv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform1iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -627,8 +627,8 @@ void ewol::resource::Program::uniform2iv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform2iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -649,8 +649,8 @@ void ewol::resource::Program::uniform3iv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform3iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -671,8 +671,8 @@ void ewol::resource::Program::uniform4iv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == _value) {
-		EWOL_ERROR("NULL Input pointer to send at open GL ...");
+	if (nullptr == _value) {
+		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
 	glUniform4iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
@@ -777,23 +777,23 @@ void ewol::resource::Program::unUse() {
 
 ewol::resource::Program* ewol::resource::Program::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Program : file : \"" << _filename << "\"");
-	ewol::resource::Program* object = NULL;
+	ewol::resource::Program* object = nullptr;
 	ewol::Resource* object2 = getManager().localKeep(_filename);
-	if (NULL != object2) {
+	if (nullptr != object2) {
 		object = dynamic_cast<ewol::resource::Program*>(object2);
-		if (NULL == object) {
+		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return NULL;
+			return nullptr;
 		}
 	}
-	if (NULL != object) {
+	if (nullptr != object) {
 		return object;
 	}
 	// need to crate a new one ...
 	object = new ewol::resource::Program(_filename);
-	if (NULL == object) {
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
@@ -801,10 +801,10 @@ ewol::resource::Program* ewol::resource::Program::keep(const std::string& _filen
 
 
 void ewol::resource::Program::release(ewol::resource::Program*& _object) {
-	if (NULL == _object) {
+	if (nullptr == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
-	_object = NULL;
+	_object = nullptr;
 }

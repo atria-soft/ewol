@@ -19,14 +19,14 @@
 static const char * const eventButtonExit = "ewol-event-pop-up-exit-button";
 
 ewol::widget::StdPopUp::StdPopUp() :
-  m_title(NULL),
-  m_comment(NULL),
-  m_subBar(NULL) {
+  m_title(nullptr),
+  m_comment(nullptr),
+  m_subBar(nullptr) {
 	addObjectType("ewol::widget::StdPopUp");
 	setMinSize(ewol::Dimension(vec2(20,10),ewol::Dimension::Pourcent));
 	
-	ewol::widget::Sizer* mySizerVert = NULL;
-	ewol::widget::Spacer* mySpacer = NULL;
+	ewol::widget::Sizer* mySizerVert = nullptr;
+	ewol::widget::Spacer* mySpacer = nullptr;
 	
 	mySizerVert = new ewol::widget::Sizer(widget::Sizer::modeVert);
 		// set it in the pop-up-system : 
@@ -77,7 +77,7 @@ ewol::widget::StdPopUp::~StdPopUp() {
 }
 
 void ewol::widget::StdPopUp::setTitle(const std::string& _text) {
-	if (m_title == NULL) {
+	if (m_title == nullptr) {
 		return;
 	}
 	m_title->setLabel(_text);
@@ -85,7 +85,7 @@ void ewol::widget::StdPopUp::setTitle(const std::string& _text) {
 }
 
 void ewol::widget::StdPopUp::setComment(const std::string& _text) {
-	if (m_comment == NULL) {
+	if (m_comment == nullptr) {
 		return;
 	}
 	m_comment->setLabel(_text);
@@ -93,14 +93,14 @@ void ewol::widget::StdPopUp::setComment(const std::string& _text) {
 }
 
 ewol::object::Shared<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
-	if (m_subBar == NULL) {
+	if (m_subBar == nullptr) {
 		EWOL_ERROR("button-bar does not existed ...");
-		return NULL;
+		return nullptr;
 	}
 	ewol::widget::Button* myButton = new widget::Button();
-	if (myButton == NULL) {
+	if (myButton == nullptr) {
 		EWOL_ERROR("Can not allocate new button ...");
-		return NULL;
+		return nullptr;
 	}
 	myButton->setSubWidget(new ewol::widget::Label(_text));
 	if(_autoExit == true) {
@@ -115,17 +115,17 @@ void ewol::widget::StdPopUp::onObjectRemove(ewol::object::Shared<ewol::Object> _
 	// call parent:
 	ewol::widget::PopUp::onObjectRemove(_removeObject);
 	if (_removeObject == m_subBar) {
-		m_subBar = NULL;
+		m_subBar = nullptr;
 		markToRedraw();
 		return;
 	}
 	if (_removeObject == m_comment) {
-		m_comment = NULL;
+		m_comment = nullptr;
 		markToRedraw();
 		return;
 	}
 	if (_removeObject == m_title) {
-		m_title = NULL;
+		m_title = nullptr;
 		markToRedraw();
 		return;
 	}

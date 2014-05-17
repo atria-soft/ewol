@@ -29,7 +29,7 @@
 
 int64_t ewol::getTime() {
     struct timeval now;
-    gettimeofday(&now, NULL);
+    gettimeofday(&now, nullptr);
     //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
     return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
 }
@@ -72,10 +72,10 @@ class WindowsContext : public ewol::eContext {
 			wc.cbClsExtra = 0;
 			wc.cbWndExtra = 0;
 			wc.hInstance = hInstance;
-			wc.hIcon = loadIcon( NULL, IDI_APPLICATION );
-			wc.hCursor = loadCursor( NULL, IDC_ARROW );
+			wc.hIcon = loadIcon( nullptr, IDI_APPLICATION );
+			wc.hCursor = loadCursor( nullptr, IDC_ARROW );
 			wc.hbrBackground = (HBRUSH)GetStockObject( BLACK_BRUSH );
-			wc.lpszMenuName = NULL;
+			wc.lpszMenuName = nullptr;
 			wc.lpszClassName = "EwolMainWindows";
 			RegisterClass( &wc );
 			
@@ -83,7 +83,7 @@ class WindowsContext : public ewol::eContext {
 			hWnd = CreateWindow( "EwolMainWindows", "Ewol ... TODO Title", 
 			                     WS_CAPTION | WS_POPUPWINDOW | WS_VISIBLE | WS_SIZEBOX,
 			                     0, 0, 800, 600,
-			                     NULL, NULL, hInstance, NULL );
+			                     nullptr, NULL, hInstance, NULL );
 			int border_thickness = getSystemMetrics(SM_CXSIZEFRAME);
 			int title_size = getSystemMetrics(SM_CYCAPTION);
 			m_currentHeight = 600-2*border_thickness -title_size;
@@ -95,7 +95,7 @@ class WindowsContext : public ewol::eContext {
 			// program main loop
 			while(true == m_run) {
 				// check for messages
-				if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE )) {
+				if ( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE )) {
 					// handle or dispatch messages
 					if ( msg.message == WM_QUIT ) {
 						m_run = false;
@@ -204,7 +204,7 @@ class WindowsContext : public ewol::eContext {
 		// disable openGL
 		
 		void disableOpenGL(HWND _hWnd, HDC _hDC, HGLRC _hRC) {
-			wglMakeCurrent( NULL, NULL );
+			wglMakeCurrent( nullptr, NULL );
 			wglDeleteContext( _hRC );
 			releaseDC( _hWnd, _hDC );
 		}
@@ -256,7 +256,7 @@ class WindowsContext : public ewol::eContext {
 				*/
 				case WM_WINDOWPOSCHANGING: {
 					WINDOWPOS* tmpVal = (WINDOWPOS*)_lParam;
-					if (NULL != tmpVal) {
+					if (nullptr != tmpVal) {
 						//EWOL_DEBUG("WM_WINDOWPOSCHANGING : : (" << tmpVal->x << "," << tmpVal->y << ") ( " << tmpVal->cx << "," << tmpVal->cy << ")");
 						// in windows system, we need to remove the size of the border elements : 
 						int border_thickness = getSystemMetrics(SM_CXSIZEFRAME);
@@ -465,14 +465,14 @@ int ewol::Run(int _argc, const char *_argv[]) {
 		//return 1;
 	}
 	WindowsContext* interface = new WindowsContext(_argc, _argv);
-	if (NULL == interface) {
+	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
 	}
 	
 	int32_t retValue = interface->Run();
 	delete(interface);
-	interface = NULL;
+	interface = nullptr;
 	return retValue;
 }
 

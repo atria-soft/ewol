@@ -224,7 +224,7 @@ ewol::compositing::Drawing::Drawing() :
   m_clippingEnable(false),
   m_color(etk::color::black),
   m_colorBg(etk::color::none),
-  m_GLprogram(NULL),
+  m_GLprogram(nullptr),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLColor(-1),
@@ -286,7 +286,7 @@ void ewol::compositing::Drawing::loadProgram() {
 	// oad the new ...
 	m_GLprogram = ewol::resource::Program::keep("DATA:color3.prog");
 	// get the shader resource :
-	if (NULL != m_GLprogram ) {
+	if (nullptr != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
 		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -299,7 +299,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}

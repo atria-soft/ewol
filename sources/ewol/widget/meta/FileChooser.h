@@ -30,7 +30,7 @@ namespace ewol {
 		 *  The first step is to create the file chooser pop-up :
 		 *  [code style=c++]
 		 *  ewol::widget::FileChooser* tmpWidget = new ewol::Widget::FileChooser();
-		 *  if (tmpWidget == NULL) {
+		 *  if (tmpWidget == nullptr) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;
 		 *  }
@@ -46,7 +46,7 @@ namespace ewol {
 		 *  //tmpWidget->setFolder("/home/me");
 		 *  // add the widget as windows pop-up ...
 		 *  ewol::widget::Windows* tmpWindows = getWindows();
-		 *  if (tmpWindows == NULL) {
+		 *  if (tmpWindows == nullptr) {
 		 *  	APPL_ERROR("Can not get the current windows !!! ");
 		 *  	return -1;
 		 *  }

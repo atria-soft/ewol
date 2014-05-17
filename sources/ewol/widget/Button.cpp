@@ -60,10 +60,10 @@ ewol::widget::Button::Button(const std::string& _shaperName) :
 	addEventId(eventLeave);
 	addEventId(eventValue);
 	// add configuration
-	registerConfig(configToggle, "bool", NULL, "The Button can toogle");
-	registerConfig(configValue, "bool", NULL, "Basic value of the widget");
+	registerConfig(configToggle, "bool", nullptr, "The Button can toogle");
+	registerConfig(configValue, "bool", nullptr, "Basic value of the widget");
 	registerConfig(configLock, "list", "none;true;released;pressed", "Lock the button in a special state to permit changing state only by the coder");
-	registerConfig(configShaper, "string", NULL, "the display name for config file");
+	registerConfig(configShaper, "string", nullptr, "the display name for config file");
 	
 	// shaper satatus update:
 	CheckStatus();

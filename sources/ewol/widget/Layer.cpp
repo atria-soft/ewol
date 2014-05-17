@@ -31,24 +31,24 @@ ewol::widget::Layer::~Layer() {
 
 ewol::object::Shared<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
-		return NULL;
+		return nullptr;
 	}
 	// for all element in the sizer ...
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
+		if (nullptr != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getSize();
 			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
+				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
 				// parse the next layer ...
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 };
 

@@ -233,7 +233,7 @@ namespace ewol {
 				 * @return The Id of the color
 				 */
 				int32_t requestColor(const std::string& _name) {
-					if (m_colorProperty == NULL) {
+					if (m_colorProperty == nullptr) {
 						return -1;
 					}
 					return m_colorProperty->request(_name);
@@ -251,7 +251,7 @@ namespace ewol {
 				 * @return The Id of the element
 				 */
 				int32_t requestConfig(const std::string& _name) {
-					if (m_config == NULL) {
+					if (m_config == nullptr) {
 						return -1;
 					}
 					return m_config->request(_name);
@@ -263,7 +263,7 @@ namespace ewol {
 				 */
 				double getConfigNumber(int32_t _id) {
 					if (    _id == -1
-					     || m_config == NULL) {
+					     || m_config == nullptr) {
 						return 0.0;
 					}
 					return m_config->getNumber(_id);

@@ -69,7 +69,7 @@ namespace ewol {
 				return m_resourceManager;
 			};
 		public:
-			Context(int32_t _argc=0, const char* _argv[]=NULL);
+			Context(int32_t _argc=0, const char* _argv[]=nullptr);
 			virtual ~Context();
 		protected:
 			/**
@@ -78,7 +78,7 @@ namespace ewol {
 			 */
 			void lockContext();
 			/**
-			 * @brief set the curent interface at NULL.
+			 * @brief set the curent interface at nullptr.
 			 * @note this un-lock the main mutex
 			 */
 			void unLockContext();

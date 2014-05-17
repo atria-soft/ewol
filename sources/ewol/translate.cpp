@@ -212,7 +212,7 @@ void ewol::translate::autoDetectLanguage() {
 	EWOL_INFO("Auto-detect language of system");
 	#if defined(__TARGET_OS__Linux)
 		char *s = getenv("LANG");
-		if (s == NULL || strlen(s) < 2) {
+		if (s == nullptr || strlen(s) < 2) {
 			EWOL_INFO("Try to determine system language FAIL ...");
 		} else {
 			std::string lang;

@@ -46,7 +46,7 @@ namespace ewol {
 				 */
 				void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
 			public: // Derived function
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return NULL; };
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return nullptr; };
 				virtual void onRegenerateDisplay();
 				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

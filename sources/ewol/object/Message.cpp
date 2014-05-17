@@ -13,10 +13,10 @@
 
 std::ostream& ewol::object::operator <<(std::ostream& _os, const ewol::object::Message& _obj) {
 	_os << "{";
-	if (NULL != _obj.getMessage()) {
+	if (nullptr != _obj.getMessage()) {
 		_os << "msg=\"" << _obj.getMessage() << "\"";
 	} else {
-		_os << "msg={NULL}";
+		_os << "msg={nullptr}";
 	}
 	_os << " data=\"" << _obj.getData() << "\"}";
 	return _os;

@@ -29,14 +29,14 @@ static const char * const l_eventMenuSelected = "local-event-menu-selected";
 
 ewol::widget::Parameter::Parameter() :
   m_currentIdList(0),
-  m_widgetTitle(NULL),
-  m_paramList(NULL) {
+  m_widgetTitle(nullptr),
+  m_paramList(nullptr) {
 	addObjectType("ewol::widget::Parameter");
 	addEventId(eventClose);
 	
-	ewol::widget::Sizer * mySizerVert = NULL;
-	ewol::widget::Sizer * mySizerHori = NULL;
-	ewol::widget::Spacer * mySpacer = NULL;
+	ewol::widget::Sizer * mySizerVert = nullptr;
+	ewol::widget::Sizer * mySizerHori = nullptr;
+	ewol::widget::Spacer * mySpacer = nullptr;
 	#ifdef __TARGET_OS__Android
 		setMinSize(ewol::Dimension(vec2(90, 90), ewol::Dimension::Pourcent));
 	#else
@@ -44,7 +44,7 @@ ewol::widget::Parameter::Parameter() :
 	#endif
 	
 	mySizerVert = new ewol::widget::Sizer(widget::Sizer::modeVert);
-	if (NULL == mySizerVert) {
+	if (nullptr == mySizerVert) {
 		EWOL_ERROR("Can not allocate widget  == > display might be in error");
 	} else {
 		EWOL_INFO("add widget");
@@ -54,13 +54,13 @@ ewol::widget::Parameter::Parameter() :
 		setSubWidget(mySizerVert);
 		
 		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
-		if (NULL == mySizerHori) {
+		if (nullptr == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
 			mySizerVert->subWidgetAdd(mySizerHori);
 			
 			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
+			if (nullptr == mySpacer) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				mySpacer->setExpand(bvec2(true,false));
@@ -68,7 +68,7 @@ ewol::widget::Parameter::Parameter() :
 			}
 			
 			ewol::widget::Button* tmpButton = new widget::Button();
-			if (NULL == tmpButton) {
+			if (nullptr == tmpButton) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				tmpButton->setSubWidget(
@@ -84,7 +84,7 @@ ewol::widget::Parameter::Parameter() :
 			}
 			
 			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
+			if (nullptr == mySpacer) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				mySpacer->setExpand(bvec2(false,false));
@@ -93,7 +93,7 @@ ewol::widget::Parameter::Parameter() :
 			}
 			
 			tmpButton = new ewol::widget::Button();
-			if (NULL == tmpButton) {
+			if (nullptr == tmpButton) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				tmpButton->setSubWidget(
@@ -110,13 +110,13 @@ ewol::widget::Parameter::Parameter() :
 		}
 		
 		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
-		if (NULL == mySizerHori) {
+		if (nullptr == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
 			mySizerVert->subWidgetAdd(mySizerHori);
 			
 			m_paramList = new ewol::widget::ParameterList();
-			if (NULL == m_paramList) {
+			if (nullptr == m_paramList) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 			
@@ -126,7 +126,7 @@ ewol::widget::Parameter::Parameter() :
 				mySizerHori->subWidgetAdd(m_paramList.get());
 			}
 			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
+			if (nullptr == mySpacer) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				mySpacer->setFill(bvec2(false,true));
@@ -136,13 +136,13 @@ ewol::widget::Parameter::Parameter() :
 			}
 			
 			ewol::widget::Sizer * mySizerVert2 = new widget::Sizer(widget::Sizer::modeVert);
-			if (NULL == mySizerVert2) {
+			if (nullptr == mySizerVert2) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				mySizerHori->subWidgetAdd(mySizerVert2);
 				
 				mySpacer = new ewol::widget::Spacer();
-				if (NULL == mySpacer) {
+				if (nullptr == mySpacer) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
 					mySpacer->setExpand(bvec2(true,false));
@@ -152,7 +152,7 @@ ewol::widget::Parameter::Parameter() :
 				}
 				
 				m_wSlider = new ewol::widget::WSlider();
-				if (NULL == m_wSlider) {
+				if (nullptr == m_wSlider) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
 					m_wSlider->setTransitionSpeed(0.5);
@@ -164,7 +164,7 @@ ewol::widget::Parameter::Parameter() :
 		}
 		
 		mySpacer = new ewol::widget::Spacer();
-		if (NULL == mySpacer) {
+		if (nullptr == mySpacer) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
 			mySpacer->setExpand(bvec2(true,false));
@@ -174,7 +174,7 @@ ewol::widget::Parameter::Parameter() :
 		}
 		
 		m_widgetTitle = new ewol::widget::Label("File chooser ...");
-		if (NULL == m_widgetTitle) {
+		if (nullptr == m_widgetTitle) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
 			m_widgetTitle->setExpand(bvec2(true,false));
@@ -189,7 +189,7 @@ ewol::widget::Parameter::~Parameter() {
 }
 
 void ewol::widget::Parameter::setTitle(std::string _label) {
-	if (NULL == m_widgetTitle) {
+	if (nullptr == m_widgetTitle) {
 		return;
 	}
 	m_widgetTitle->setLabel(_label);
@@ -207,7 +207,7 @@ void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg
 		//ewol::userConfig::Save();
 		EWOL_TODO("Save Parameter !!! ");
 	} else if (_msg.getMessage() == l_eventMenuSelected) {
-		if (NULL != m_wSlider) {
+		if (nullptr != m_wSlider) {
 			int32_t value = 0;
 			sscanf(_msg.getData().c_str(), "%d", &value);
 			EWOL_DEBUG("event on the parameter : " << _msg.getMessage() << " select ID=" << value << "");
@@ -222,26 +222,26 @@ void ewol::widget::Parameter::onObjectRemove(ewol::object::Shared<ewol::Object> 
 	ewol::widget::PopUp::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
 	if(_removeObject == m_widgetTitle) {
-		m_widgetTitle = NULL;
+		m_widgetTitle = nullptr;
 	}
 	if(_removeObject == m_paramList) {
-		m_paramList = NULL;
+		m_paramList = nullptr;
 	}
 	if(_removeObject == m_wSlider) {
-		m_wSlider = NULL;
+		m_wSlider = nullptr;
 	}
 }
 
 void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::object::Shared<ewol::Widget> _associateWidget) {
-	if (NULL != m_paramList) {
+	if (nullptr != m_paramList) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
-		if (NULL != m_wSlider) {
-			if (NULL != _associateWidget) {
+		if (nullptr != m_wSlider) {
+			if (nullptr != _associateWidget) {
 				m_wSlider->subWidgetAdd(_associateWidget);
 			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
 				ewol::widget::Label * myLabel = new widget::Label((std::string("No widget for : ") + _label));
-				if (NULL == myLabel) {
+				if (nullptr == myLabel) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
 					myLabel->setExpand(bvec2(true,true));
@@ -256,21 +256,21 @@ void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ew
 	}
 }
 void ewol::widget::Parameter::menuAddGroup(std::string _label) {
-	if (NULL != m_paramList) {
+	if (nullptr != m_paramList) {
 		m_paramList->menuSeparator();
 		m_paramList->menuAddGroup(_label);
 	}
 }
 
 void ewol::widget::Parameter::menuClear() {
-	if (NULL != m_paramList) {
+	if (nullptr != m_paramList) {
 		m_paramList->menuClear();
 		m_currentIdList = 0;
 	}
 }
 
 void ewol::widget::Parameter::menuSeparator() {
-	if (NULL != m_paramList) {
+	if (nullptr != m_paramList) {
 		m_paramList->menuSeparator();
 	}
 }

@@ -50,7 +50,7 @@ ewol::widget::WSlider::WSlider() :
 	addEventId(eventStopSlide);
 	// add configuration
 	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
-	registerConfig(configSpeed, "float", NULL, "Transition speed of the slider");
+	registerConfig(configSpeed, "float", nullptr, "Transition speed of the slider");
 }
 
 ewol::widget::WSlider::~WSlider() {
@@ -65,7 +65,7 @@ void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
 		if (iii < (int32_t)m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->setOrigin(m_origin+m_offset);
 				m_subWidget[iii]->calculateSize(m_size);
 			}
@@ -77,7 +77,7 @@ void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 		}
 		int32_t iii = m_windowsSources;
 		if (iii < (int32_t)m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				if (m_transitionSlide == sladingTransitionHori) {
 					m_subWidget[iii]->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress),
 					                                    m_origin.y())
@@ -92,7 +92,7 @@ void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 		}
 		iii = m_windowsDestination;
 		if (iii < (int32_t)m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				if (m_transitionSlide == sladingTransitionHori) {
 					m_subWidget[iii]->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress - m_size.x()),
 					                                    m_origin.y())
@@ -126,7 +126,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	int32_t elementID = -1;
 	// search element in the list : 
 	for (size_t iii=0 ; iii<m_subWidget.size() ; iii++) {
-		if (m_subWidget[iii] != NULL) {
+		if (m_subWidget[iii] != nullptr) {
 			if (m_subWidget[iii]->getId() == _id) {
 				elementID = iii;
 				break;
@@ -137,12 +137,12 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 }
 
 void ewol::widget::WSlider::subWidgetSelectSet(ewol::object::Shared<ewol::Widget> _widgetPointer) {
-	if (_widgetPointer == NULL) {
-		EWOL_ERROR("Can not change to a widget NULL");
+	if (_widgetPointer == nullptr) {
+		EWOL_ERROR("Can not change to a widget nullptr");
 		return;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (m_subWidget[iii] != NULL) {
+		if (m_subWidget[iii] != nullptr) {
 			if (m_subWidget[iii] == _widgetPointer) {
 				subWidgetSelectSetVectorId(iii);
 				return;
@@ -158,7 +158,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 		return;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (m_subWidget[iii] != NULL) {
+		if (m_subWidget[iii] != nullptr) {
 			if (m_subWidget[iii]->getName() == _widgetName) {
 				subWidgetSelectSetVectorId(iii);
 				return;
@@ -224,7 +224,7 @@ void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 		//EWOL_DEBUG("Draw : " << m_windowsDestination);
 		int32_t iii = m_windowsDestination;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->systemDraw(prop);
 			}
 		}
@@ -233,14 +233,14 @@ void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 		// draw Sources :
 		int32_t iii = m_windowsSources;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->systemDraw(prop);
 			}
 		}
 		// draw Destination : 
 		iii = m_windowsDestination;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->systemDraw(prop);
 			}
 		}
@@ -251,20 +251,20 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->onRegenerateDisplay();
 			}
 		}
 	} else {
 		int32_t iii = m_windowsSources;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->onRegenerateDisplay();
 			}
 		}
 		iii = m_windowsDestination;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
-			if (NULL != m_subWidget[iii]) {
+			if (nullptr != m_subWidget[iii]) {
 				m_subWidget[iii]->onRegenerateDisplay();
 			}
 		}
@@ -317,7 +317,7 @@ bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _resul
 
 ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
-		return NULL;
+		return nullptr;
 	}
 	if (m_windowsDestination == m_windowsSources) {
 		if (m_windowsDestination < (int64_t)m_subWidget.size()) {
@@ -327,10 +327,10 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[m_windowsDestination]->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
+				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
-				return NULL;
+				return nullptr;
 			}
 		}
 	} else {
@@ -341,10 +341,10 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[m_windowsDestination]->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
+				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
-				return NULL;
+				return nullptr;
 			}
 		}
 		if (m_windowsSources < (int64_t)m_subWidget.size()) {
@@ -354,13 +354,13 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[m_windowsSources]->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
+				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
-				return NULL;
+				return nullptr;
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 

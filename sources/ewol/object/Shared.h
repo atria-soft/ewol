@@ -124,12 +124,12 @@ namespace ewol {
 	//! @not in doc
 	template<typename T2>
 	inline bool operator==(const object::Shared<T2>& _obj, std::nullptr_t) noexcept {
-		return _obj.get() == NULL;
+		return _obj.get() == nullptr;
 	}
 	//! @not in doc
 	template<typename T2>
 	inline bool operator==(std::nullptr_t, const object::Shared<T2>& _obj) noexcept {
-		return _obj.get() == NULL;
+		return _obj.get() == nullptr;
 	}
 	//! @not in doc
 	template<typename T, typename T2, typename = typename
@@ -162,12 +162,12 @@ namespace ewol {
 	//! @not in doc
 	template<typename T>
 	inline bool operator!=(const object::Shared<T>& _obj, std::nullptr_t) noexcept {
-		return _obj.get() != NULL;
+		return _obj.get() != nullptr;
 	}
 	//! @not in doc
 	template<typename T>
 	inline bool operator!=(std::nullptr_t, const object::Shared<T>& _obj) noexcept {
-		return _obj.get() != NULL;
+		return _obj.get() != nullptr;
 	}
 	//! @not in doc
 	template<typename T, typename T2, typename = typename

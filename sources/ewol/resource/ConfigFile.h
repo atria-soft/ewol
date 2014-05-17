@@ -37,7 +37,7 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the configuration file.
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
 				static ewol::resource::ConfigFile* keep(const std::string& _filename);
 				/**

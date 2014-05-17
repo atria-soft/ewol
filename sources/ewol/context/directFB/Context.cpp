@@ -52,7 +52,7 @@ int64_t guiInterface::getTime() {
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
 	if (ret != 0) {
 		// Error to get the time ...
-		now.tv_sec = time(NULL);
+		now.tv_sec = time(nullptr);
 		now.tv_nsec = 0;
 	}
 	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
@@ -71,16 +71,16 @@ bool m_grabAllEvent = false;
 
 
 // the super interface
-IDirectFB *dfb = NULL;
+IDirectFB *dfb = nullptr;
 
 // the primary surface (surface of primary layer)
-IDirectFBSurface *primary = NULL;
+IDirectFBSurface *primary = nullptr;
 
 // the GL context
-IDirectFBGL *primary_gl = NULL;
+IDirectFBGL *primary_gl = nullptr;
 
 // event buffer
-IDirectFBEventBuffer *events = NULL;
+IDirectFBEventBuffer *events = nullptr;
 
 static int screen_width =800;
 static int screen_height = 600;
@@ -152,7 +152,7 @@ void DirectFB_Init(int argc, const char *argv[]) {
 	primary->setDstBlendFunction(primary, DSBF_SRCALPHA);
 	primary->setDrawingFlags(primary, DSDRAW_BLEND);
 	
-	primary->Blit(primary, primary, NULL, 0, 0);
+	primary->Blit(primary, primary, nullptr, 0, 0);
 	
 	
 	EWOL_INFO("call getSize");
@@ -175,7 +175,7 @@ void DirectFB_Init(int argc, const char *argv[]) {
 	}
 	
 	EWOL_INFO("call Flip");
-	primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
+	primary->Flip(primary, nullptr, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
 
 	// NOTE : we need to force it on X11 display ...
 	EWOL_INFO("call getGL");
@@ -212,7 +212,7 @@ void DirectFB_Run() {
 	primary->FillRectangle(primary, 0, 0, screen_width, screen_height);
 	primary->setColor (primary, 0xFF, (uint8_t)position, 0x00, 0xFF);
 	primary->FillRectangle(primary, position, position, 300, 300);
-	primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
+	primary->Flip(primary, nullptr, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
 		position++;
 		if (position>600) {
 			position = 0;
@@ -234,7 +234,7 @@ void DirectFB_Run() {
 				EWOL_ERROR("primary_gl->Unlock");
 				DirectFBErrorFatal("primary_gl->Unlock", err);
 			}
-			primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
+			primary->Flip(primary, nullptr, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
 		}
 		
 		while (events->getEvent(events, DFB_EVENT(&evt)) == DFB_OK) {
