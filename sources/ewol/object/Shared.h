@@ -103,8 +103,15 @@ namespace ewol {
 						return m_pointer;
 					}
 			};
+			// after calling this function, you might never call a delete on this pointer. (if you want to be able to use a delete, simply Shared<>(pointer)
 			template<typename T> Shared<T> makeShared(T* _pointer) {
-				return Shared<T>(_pointer);
+				if (_pointer == nullptr) {
+					return Shared<T>();
+				}
+				Shared<T> tmp(_pointer);
+				// remove one element to permit to remove at the last instance
+				_pointer->objRefCountDecrement();
+				return tmp;
 			}
 	};
 	// section to compare shared pointer of an object with an other

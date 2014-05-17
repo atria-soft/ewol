@@ -92,9 +92,6 @@ namespace ewol {
 						return m_pointer;
 					}
 			};
-			template<typename T> Owner<T> makeOwner(T* _pointer) {
-				return Owner<T>(_pointer);
-			}
 	};
 	// section to compare Owner pointer of an object with an other
 	

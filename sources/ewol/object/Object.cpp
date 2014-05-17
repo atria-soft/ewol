@@ -13,7 +13,7 @@
 #include <ewol/object/MultiCast.h>
 
 #undef __class__
-#define __class__	"ewol::object::Shared<ewol::Object>"
+#define __class__ "Object"
 
 
 const char* const ewol::Object::configName = "name";

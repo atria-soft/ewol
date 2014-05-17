@@ -264,7 +264,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Manager::create(const std::stri
 	if (m_creatorList.exist(nameLower) == true) {
 		ewol::widget::Manager::creator_tf pointerFunction = m_creatorList[nameLower];
 		if (pointerFunction != nullptr) {
-			return pointerFunction();
+			return ewol::object::makeShared<ewol::Widget>(pointerFunction());
 		}
 	}
 	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);
