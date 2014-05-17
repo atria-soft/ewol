@@ -99,7 +99,7 @@ namespace ewol {
 				 * @param[in] removeObject Pointer on the Object remeved  == > the user must remove all reference on this Object
 				 * @note : Sub classes must call this class
 				 */
-				void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
+				void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
 				 */

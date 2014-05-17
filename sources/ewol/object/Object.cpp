@@ -203,7 +203,7 @@ void ewol::Object::registerMultiCast(const char* const _messageId) {
 	getMultiCast().add(this, _messageId);
 }
 
-void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
+void ewol::Object::registerOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
                                     const std::string& _overloadData) {
@@ -275,7 +275,7 @@ void ewol::Object::registerOnEvent(ewol::object::Shared<ewol::Object> _destinati
 	m_externEvent.push_back(tmpEvent);
 }
 
-void ewol::Object::unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
+void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
                                       const char * _eventId) {
 	if (nullptr == _destinationObject) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
@@ -297,7 +297,7 @@ void ewol::Object::unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destina
 	}
 }
 
-void ewol::Object::onObjectRemove(ewol::object::Shared<ewol::Object> _object) {
+void ewol::Object::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
 		if (    m_externEvent[iii] != nullptr
 		     && m_externEvent[iii]->destObject.hasOwner() == false) {

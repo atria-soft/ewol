@@ -111,7 +111,7 @@ ewol::object::Shared<ewol::widget::Button> ewol::widget::StdPopUp::addButton(con
 	return myButton;
 }
 
-void ewol::widget::StdPopUp::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::StdPopUp::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	// call parent:
 	ewol::widget::PopUp::onObjectRemove(_removeObject);
 	if (_removeObject == m_subBar) {

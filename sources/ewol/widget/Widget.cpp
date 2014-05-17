@@ -171,7 +171,7 @@ void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
 	m_up = _upper;
 }
 
-void ewol::Widget::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::Widget::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	if (_removeObject == m_up) {
 		EWOL_WARNING("[" << getId() << "] remove upper widget before removing this widget ...");
 		m_up = nullptr;

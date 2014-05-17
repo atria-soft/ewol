@@ -68,7 +68,7 @@ namespace ewol {
 				 */
 				bool release(ewol::Resource*& _object);
 			public: // herited function
-				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 		};
 	};
 };

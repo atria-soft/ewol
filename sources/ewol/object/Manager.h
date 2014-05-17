@@ -27,16 +27,16 @@ namespace ewol {
 				 */
 				void unInit();
 				
-				void add(ewol::object::Shared<ewol::Object> _object);
-				void rm(ewol::object::Shared<ewol::Object> _object);
+				void add(const ewol::object::Shared<ewol::Object>& _object);
+				void rm(const ewol::object::Shared<ewol::Object>& _object);
 				int32_t getNumberObject();
 				
-				void autoRemove(ewol::object::Shared<ewol::Object> _object);
+				void autoRemove(const ewol::object::Shared<ewol::Object>& _object);
 				void removeAllAutoRemove();
 				
 				ewol::object::Shared<ewol::Object> get(const std::string& _name);
 			private:
-				void informOneObjectIsRemoved(ewol::object::Shared<ewol::Object> _object);
+				void informOneObjectIsRemoved(const ewol::object::Shared<ewol::Object>& _object);
 			private:
 				ewol::object::MultiCast m_multiCast; //!< muticast manager
 			public:

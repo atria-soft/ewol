@@ -152,7 +152,7 @@ namespace ewol {
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 				virtual void calculateSize(const vec2& _availlable) {
 					calculateSizePadded(_availlable);
 				}

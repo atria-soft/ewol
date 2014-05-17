@@ -96,7 +96,7 @@ void ewol::widget::Composer::registerOnEventNameWidget(const std::string& _subWi
 	registerOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
 }
 
-void ewol::widget::Composer::registerOnEventNameWidget(ewol::object::Shared<ewol::Object> _destinationObject,
+void ewol::widget::Composer::registerOnEventNameWidget(const ewol::object::Shared<ewol::Object>& _destinationObject,
                                                        const std::string& _subWidgetName,
                                                        const char * _eventId,
                                                        const char * _eventIdgenerated,

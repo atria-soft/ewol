@@ -140,7 +140,7 @@ namespace ewol {
 			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
+			void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */

@@ -52,7 +52,7 @@ namespace ewol {
 				void addSpacer();
 				// Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 		};
 	};
 };

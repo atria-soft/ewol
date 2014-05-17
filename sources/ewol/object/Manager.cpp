@@ -81,7 +81,7 @@ void ewol::object::Manager::unInit() {
 	}
 }
 
-void ewol::object::Manager::add(ewol::object::Shared<ewol::Object> _object) {
+void ewol::object::Manager::add(const ewol::object::Shared<ewol::Object>& _object) {
 	if (_object == nullptr) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
@@ -93,7 +93,7 @@ int32_t ewol::object::Manager::getNumberObject() {
 	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
 }
 
-void ewol::object::Manager::informOneObjectIsRemoved(ewol::object::Shared<ewol::Object> _object) {
+void ewol::object::Manager::informOneObjectIsRemoved(const ewol::object::Shared<ewol::Object>& _object) {
 	size_t mbElement = m_eObjectList.size();
 	for (int64_t iii=0; iii<(int64_t)m_eObjectList.size(); ++iii) {
 		if (    m_eObjectList[iii] != nullptr
@@ -125,7 +125,7 @@ void ewol::object::Manager::informOneObjectIsRemoved(ewol::object::Shared<ewol::
 	ewol::getContext().onObjectRemove(_object);
 }
 
-void ewol::object::Manager::rm(ewol::object::Shared<ewol::Object> _object) {
+void ewol::object::Manager::rm(const ewol::object::Shared<ewol::Object>& _object) {
 	if (_object == nullptr) {
 		EWOL_ERROR("Try to remove (nullptr) Object");
 		return;
@@ -150,7 +150,7 @@ void ewol::object::Manager::rm(ewol::object::Shared<ewol::Object> _object) {
 	EWOL_ERROR("Try to remove Object that is not referenced ...");
 }
 
-void ewol::object::Manager::autoRemove(ewol::object::Shared<ewol::Object> _object) {
+void ewol::object::Manager::autoRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	if (nullptr == _object) {
 		EWOL_ERROR("Try to Auto-Remove (nullptr) Object");
 		return;

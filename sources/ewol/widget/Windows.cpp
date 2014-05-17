@@ -202,7 +202,7 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	widget->removeObject();
 }
 
-void ewol::widget::Windows::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::Windows::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

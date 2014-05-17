@@ -138,7 +138,7 @@ void ewol::context::InputManager::unGrabPointer() {
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
 
-void ewol::context::InputManager::onObjectRemove(ewol::object::Shared<ewol::Object> removeObject) {
+void ewol::context::InputManager::onObjectRemove(const ewol::object::Shared<ewol::Object>& removeObject) {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		if (m_eventInputSaved[iii].curentWidgetEvent == removeObject) {
 			// remove the property of this input ...

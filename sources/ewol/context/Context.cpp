@@ -650,7 +650,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::Context::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	//EWOL_CRITICAL("element removed");
 	m_input.onObjectRemove(_removeObject);
 }

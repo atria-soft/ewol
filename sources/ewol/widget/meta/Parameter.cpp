@@ -217,7 +217,7 @@ void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg
 	return;
 }
 
-void ewol::widget::Parameter::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::Parameter::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	// First step call parrent : 
 	ewol::widget::PopUp::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

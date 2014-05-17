@@ -24,7 +24,7 @@ ewol::object::MultiCast::~MultiCast() {
 }
 
 
-void ewol::object::MultiCast::add(ewol::object::Shared<ewol::Object> _object, const char* const _message) {
+void ewol::object::MultiCast::add(const ewol::object::Shared<ewol::Object>& _object, const char* const _message) {
 	if (nullptr == _object) {
 		EWOL_ERROR("Add with nullptr object");
 		return;
@@ -38,7 +38,7 @@ void ewol::object::MultiCast::add(ewol::object::Shared<ewol::Object> _object, co
 }
 
 
-void ewol::object::MultiCast::rm(ewol::object::Shared<ewol::Object> _object) {
+void ewol::object::MultiCast::rm(const ewol::object::Shared<ewol::Object>& _object) {
 	if (nullptr == _object) {
 		EWOL_ERROR("Rm with nullptr object");
 		return;
@@ -54,7 +54,7 @@ void ewol::object::MultiCast::rm(ewol::object::Shared<ewol::Object> _object) {
 	}
 }
 
-void ewol::object::MultiCast::send(ewol::object::Shared<ewol::Object> _object, const char* const _message, const std::string& _data) {
+void ewol::object::MultiCast::send(const ewol::object::Shared<ewol::Object>& _object, const char* const _message, const std::string& _data) {
 	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
 	
 	// send the message at all registered widget ...

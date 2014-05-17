@@ -36,9 +36,9 @@ namespace ewol {
 				void anonymousSend(const char* const _messageId, const std::string& _data) {
 					send(nullptr, _messageId, _data);
 				};
-				void send(ewol::object::Shared<ewol::Object> _object, const char* const _message, const std::string& _data);
-				void rm(ewol::object::Shared<ewol::Object> _object);
-				void add(ewol::object::Shared<ewol::Object> _object, const char* const _message);
+				void send(const ewol::object::Shared<ewol::Object>& _object, const char* const _message, const std::string& _data);
+				void rm(const ewol::object::Shared<ewol::Object>& _object);
+				void add(const ewol::object::Shared<ewol::Object>& _object, const char* const _message);
 		};
 	};
 };

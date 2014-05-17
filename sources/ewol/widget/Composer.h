@@ -78,7 +78,7 @@ namespace ewol {
 				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 				 * @note : To used when NOT herited from this object.
 				 */
-				void registerOnEventNameWidget(ewol::object::Shared<ewol::Object> _destinationObject,
+				void registerOnEventNameWidget(const ewol::object::Shared<ewol::Object>& _destinationObject,
 				                               const std::string& _subWidgetName,
 				                               const char * _eventId,
 				                               const char * _eventIdgenerated = nullptr,

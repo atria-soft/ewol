@@ -258,7 +258,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 }
 
 
-void ewol::widget::Menu::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::Menu::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	ewol::widget::Sizer::onObjectRemove(_removeObject);
 	if (m_widgetContextMenu == _removeObject) {
 		delete(m_widgetContextMenu);

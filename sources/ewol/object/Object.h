@@ -182,7 +182,7 @@ namespace ewol {
 			 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void registerOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
+			void registerOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
 			                     const char * _eventId,
 			                     const char * _eventIdgenerated = nullptr,
 			                     const std::string& _overloadData = "");
@@ -191,13 +191,13 @@ namespace ewol {
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
 			 */
-			void unRegisterOnEvent(ewol::object::Shared<ewol::Object> _destinationObject,
+			void unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
 			                       const char * _eventId = nullptr);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @note : Sub classes must call this class
 			 */
-			virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _object);
+			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
 			/**
 			 * @brief Receive a message from an other Object with a specific eventId and data
 			 * @param[in] _msg Message handle

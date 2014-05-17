@@ -169,7 +169,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 };
 
 
-void ewol::widget::ColorChooser::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::ColorChooser::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	// First step call parrent : 
 	ewol::widget::Sizer::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

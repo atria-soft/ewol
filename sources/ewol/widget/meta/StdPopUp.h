@@ -74,7 +74,7 @@ namespace ewol {
 				 */
 				ewol::object::Shared<ewol::widget::Button> addButton(const std::string& _text, bool _autoExit=false);
 			public: // Derived function
-				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 		};
 	};

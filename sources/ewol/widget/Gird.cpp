@@ -354,7 +354,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2
 	return nullptr;
 }
 
-void ewol::widget::Gird::onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject) {
+void ewol::widget::Gird::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
