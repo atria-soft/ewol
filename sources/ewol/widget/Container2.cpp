@@ -16,7 +16,7 @@
 #define __class__	"Container2"
 
 
-ewol::widget::Container2::Container2(ewol::Widget* _subElement, ewol::Widget* _subElementToggle) :
+ewol::widget::Container2::Container2(ewol::object::Shared<ewol::Widget> _subElement, ewol::object::Shared<ewol::Widget> _subElementToggle) :
   m_idWidgetDisplayed(0) {
 	m_subWidget[0] = _subElement;
 	m_subWidget[1] = _subElementToggle;
@@ -29,7 +29,7 @@ ewol::widget::Container2::~Container2() {
 	subWidgetRemoveToggle();
 }
 
-void ewol::widget::Container2::setSubWidget(ewol::Widget* _newWidget, int32_t _idWidget) {
+void ewol::widget::Container2::setSubWidget(ewol::object::Shared<ewol::Widget> _newWidget, int32_t _idWidget) {
 	subWidgetRemove(_idWidget);
 	m_subWidget[_idWidget] = _newWidget;
 	if (m_subWidget[_idWidget] != NULL) {
@@ -213,7 +213,7 @@ bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 			}
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::Widget* tmpWidget = getWidgetManager().create(widgetName);
+		ewol::object::Shared<ewol::Widget> tmpWidget = getWidgetManager().create(widgetName);
 		if (tmpWidget == NULL) {
 			EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;

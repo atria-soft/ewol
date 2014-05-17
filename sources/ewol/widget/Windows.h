@@ -59,8 +59,8 @@ namespace ewol {
 				ewol::object::Owner<ewol::Widget> m_subWidget;
 				std::vector<ewol::object::Owner<ewol::Widget>> m_popUpWidgetList;
 			public:
-				void setSubWidget(ewol::Widget* _widget);
-				void popUpWidgetPush(ewol::Widget* _widget);
+				void setSubWidget(ewol::object::Shared<ewol::Widget> _widget);
+				void popUpWidgetPush(ewol::object::Shared<ewol::Widget> _widget);
 				void popUpWidgetPop();
 				size_t popUpCount() {
 					return m_popUpWidgetList.size();

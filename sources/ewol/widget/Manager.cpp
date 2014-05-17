@@ -259,7 +259,7 @@ void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
 	m_creatorList.add(nameLower, _pointer);
 }
 
-ewol::Widget* ewol::widget::Manager::create(const std::string& _name) {
+ewol::object::Shared<ewol::Widget> ewol::widget::Manager::create(const std::string& _name) {
 	std::string nameLower = std::tolower(_name);
 	if (m_creatorList.exist(nameLower) == true) {
 		ewol::widget::Manager::creator_tf pointerFunction = m_creatorList[nameLower];

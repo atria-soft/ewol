@@ -97,7 +97,7 @@ namespace ewol {
 				 * @param[in] _rowId Id of the row [0..y].
 				 * @param[in] _newWidget the element pointer
 				 */
-				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widget* _newWidget);
+				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::object::Shared<ewol::Widget> _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _newWidget the element pointer.

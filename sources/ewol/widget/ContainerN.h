@@ -56,13 +56,13 @@ namespace ewol {
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element
 				 */
-				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
+				virtual int32_t subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget);
 				//! @previous
-				inline  int32_t subWidgetAddBack(ewol::Widget* _newWidget) {
+				inline  int32_t subWidgetAddBack(ewol::object::Shared<ewol::Widget> _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
 				//! @previous
-				inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget) {
+				inline  int32_t subWidgetAddEnd(ewol::object::Shared<ewol::Widget> _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
 				/**
@@ -70,21 +70,21 @@ namespace ewol {
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element
 				 */
-				virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
+				virtual int32_t subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget);
 				//! @previous
-				inline  int32_t subWidgetAddFront(ewol::Widget* _newWidget) {
+				inline  int32_t subWidgetAddFront(ewol::object::Shared<ewol::Widget> _newWidget) {
 					return subWidgetAddStart(_newWidget);
 				};
 				/**
 				 * @brief remove definitly a widget from the system and this layer.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(ewol::Widget* _newWidget);
+				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
+				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
 			public:// Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();

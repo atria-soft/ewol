@@ -16,7 +16,7 @@
 #define __class__	"Container"
 
 
-ewol::widget::Container::Container(ewol::Widget* _subElement) :
+ewol::widget::Container::Container(ewol::object::Shared<ewol::Widget> _subElement) :
   m_subWidget(_subElement) {
 	addObjectType("ewol::widget::Container");
 	// nothing to do ...
@@ -30,7 +30,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Container::getSubWidget() {
 	return m_subWidget;
 }
 
-void ewol::widget::Container::setSubWidget(ewol::Widget* _newWidget) {
+void ewol::widget::Container::setSubWidget(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		return;
 	}
@@ -173,7 +173,7 @@ bool ewol::widget::Container::loadXML(exml::Element* _node) {
 			continue;
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::Widget* tmpWidget = getWidgetManager().create(widgetName);
+		ewol::object::Shared<ewol::Widget> tmpWidget = getWidgetManager().create(widgetName);
 		if (tmpWidget == NULL) {
 			EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;

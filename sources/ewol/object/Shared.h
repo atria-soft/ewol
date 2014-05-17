@@ -99,6 +99,9 @@ namespace ewol {
 					T* operator->() const noexcept {
 						return m_pointer;
 					}
+					operator ewol::object::Owner<T>() const noexcept {
+						return m_pointer;
+					}
 			};
 			template<typename T> Shared<T> makeShared(T* _pointer) {
 				return Shared<T>(_pointer);

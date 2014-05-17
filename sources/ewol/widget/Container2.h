@@ -30,7 +30,7 @@ namespace ewol {
 				 * @param[in] _subElement Widget to set on the normal position
 				 * @param[in] _subElementToggle Widget to set on the toggle position
 				 */
-				Container2(ewol::Widget* _subElement = nullptr, ewol::Widget* _subElementToggle = nullptr);
+				Container2(ewol::object::Shared<ewol::Widget> _subElement = nullptr, ewol::object::Shared<ewol::Widget> _subElementToggle = nullptr);
 				/**
 				 * @brief Destructor
 				 */
@@ -41,20 +41,20 @@ namespace ewol {
 				 * @param[in] _subWidget Widget to add normal
 				 * @param[in] _idWidget Id of the widget to set
 				 */
-				void setSubWidget(ewol::Widget* _subWidget, int32_t _idWidget);
+				void setSubWidget(ewol::object::Shared<ewol::Widget> _subWidget, int32_t _idWidget);
 			public:
 				/**
 				 * @brief Specify the current widget
 				 * @param[in] _subWidget Widget to add normal
 				 */
-				void setSubWidget(ewol::Widget* _subWidget) {
+				void setSubWidget(ewol::object::Shared<ewol::Widget> _subWidget) {
 					setSubWidget(_subWidget, 0);
 				}
 				/**
 				 * @brief Specify the current toggle widget
 				 * @param[in] _subWidget Widget to add Toggle
 				 */
-				void setSubWidgetToggle(ewol::Widget* _subWidget) {
+				void setSubWidgetToggle(ewol::object::Shared<ewol::Widget> _subWidget) {
 					setSubWidget(_subWidget, 1);
 				}
 			private:

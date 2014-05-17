@@ -53,7 +53,7 @@ namespace ewol {
 				
 				// element that generate the list of elements
 				void addWidgetCreator(const std::string& _name, creator_tf _pointer);
-				ewol::Widget* create(const std::string& _name);
+				ewol::object::Shared<ewol::Widget> create(const std::string& _name);
 				bool exist(const std::string& _name);
 				std::string list();
 		};

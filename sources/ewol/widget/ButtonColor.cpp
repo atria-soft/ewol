@@ -30,12 +30,12 @@ const char * const ewol::widget::ButtonColor::eventChange = "change";
 
 static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::ButtonColor();
 }
 
 void ewol::widget::ButtonColor::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :

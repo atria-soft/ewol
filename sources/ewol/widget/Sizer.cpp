@@ -164,7 +164,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-int32_t ewol::widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
+int32_t ewol::widget::Sizer::subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 	}
@@ -172,7 +172,7 @@ int32_t ewol::widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
 	return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 }
 
-int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
+int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
@@ -180,7 +180,7 @@ int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
 	return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 }
 
-void ewol::widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
+void ewol::widget::Sizer::subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
@@ -189,7 +189,7 @@ void ewol::widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
 	ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 }
 
-void ewol::widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget) {
+void ewol::widget::Sizer::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;

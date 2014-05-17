@@ -119,10 +119,10 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
-				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
-				virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
-				virtual void subWidgetRemove(ewol::Widget* _newWidget);
-				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
+				virtual int32_t subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};

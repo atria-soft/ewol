@@ -216,7 +216,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 }
 
 
-void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widget* _newWidget) {
+void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		return;
 	}

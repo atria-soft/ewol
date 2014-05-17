@@ -52,7 +52,7 @@ void ewol::widget::ContainerN::lockExpand(const bvec2& _lockExpand) {
 }
 
 
-int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::Widget* _newWidget) {
+int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add An empty Widget ... ");
 		return -1;
@@ -67,7 +67,7 @@ int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::Widget* _newWidget) {
 	return _newWidget->getId();
 }
 
-int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::Widget* _newWidget) {
+int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add start An empty Widget ... ");
 		return -1;
@@ -81,7 +81,7 @@ int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::Widget* _newWidget) {
 	return _newWidget->getId();
 }
 
-void ewol::widget::ContainerN::subWidgetRemove(ewol::Widget* _newWidget) {
+void ewol::widget::ContainerN::subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		return;
 	}
@@ -103,7 +103,7 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::Widget* _newWidget) {
 	}
 }
 
-void ewol::widget::ContainerN::subWidgetUnLink(ewol::Widget* _newWidget) {
+void ewol::widget::ContainerN::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
 	if (NULL == _newWidget) {
 		return;
 	}
@@ -298,7 +298,7 @@ bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
 			continue;
 		}
 		EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} load new element : \"" << widgetName << "\"");
-		ewol::Widget* subWidget = getWidgetManager().create(widgetName);
+		ewol::object::Shared<ewol::Widget> subWidget = getWidgetManager().create(widgetName);
 		if (subWidget == NULL) {
 			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;

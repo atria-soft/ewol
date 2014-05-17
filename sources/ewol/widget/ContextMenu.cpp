@@ -21,12 +21,12 @@ const char* const ewol::widget::ContextMenu::configArrowPosition = "arrow-positi
 const char* const ewol::widget::ContextMenu::configArrowMode     = "arrow-mode";
 const char* const ewol::widget::ContextMenu::configShaper        = "shaper";
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::ContextMenu();
 }
 
 void ewol::widget::ContextMenu::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 

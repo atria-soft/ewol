@@ -38,7 +38,7 @@ namespace ewol {
 				virtual void onObjectRemove(ewol::object::Shared<ewol::Object> _removeObject);
 			public:
 				void setTitle(std::string _label);
-				void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
+				void menuAdd(std::string _label, std::string _image, ewol::object::Shared<ewol::Widget> _associateWidget);
 				void menuAddGroup(std::string _label);
 				void menuClear();
 				void menuSeparator();

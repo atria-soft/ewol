@@ -166,7 +166,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 }
 
-void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
+void ewol::widget::Windows::setSubWidget(ewol::object::Shared<ewol::Widget> _widget) {
 	if (m_subWidget != NULL) {
 		EWOL_INFO("Remove current main windows Widget...");
 		m_subWidget.reset();
@@ -176,7 +176,7 @@ void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
 	calculateSize(m_size);
 }
 
-void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
+void ewol::widget::Windows::popUpWidgetPush(ewol::object::Shared<ewol::Widget> _widget) {
 	if (_widget == NULL) {
 		// nothing to do an error appear :
 		EWOL_ERROR("can not set widget pop-up (null pointer)");

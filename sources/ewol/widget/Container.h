@@ -26,7 +26,7 @@ namespace ewol {
 				/**
 				 * @brief Constructor
 				 */
-				Container(ewol::Widget* _subElement=NULL);
+				Container(ewol::object::Shared<ewol::Widget> _subElement=NULL);
 				/**
 				 * @brief Destructor
 				 */
@@ -41,7 +41,7 @@ namespace ewol {
 				 * @brief set the subWidget node widget.
 				 * @param[in] _newWidget The widget to add.
 				 */
-				void setSubWidget(ewol::Widget* _newWidget);
+				void setSubWidget(ewol::object::Shared<ewol::Widget> _newWidget);
 				/**
 				 * @brief remove the subWidget node (async).
 				 */

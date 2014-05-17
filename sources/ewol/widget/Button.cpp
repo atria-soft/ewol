@@ -34,12 +34,12 @@ const char* const ewol::widget::Button::configShaper = "shaper";
 #define STATUS_DOWN      (3)
 
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::Button();
 }
 
 void ewol::widget::Button::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__, &Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 ewol::widget::Button::Button(const std::string& _shaperName) :

@@ -232,7 +232,7 @@ void ewol::widget::Parameter::onObjectRemove(ewol::object::Shared<ewol::Object> 
 	}
 }
 
-void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget) {
+void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::object::Shared<ewol::Widget> _associateWidget) {
 	if (NULL != m_paramList) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
 		if (NULL != m_wSlider) {

@@ -27,12 +27,12 @@ const char* const ewol::widget::CheckBox::configShaper = "shaper";
 #undef __class__
 #define __class__	"CheckBox"
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::CheckBox();
 }
 
 void ewol::widget::CheckBox::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :

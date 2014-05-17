@@ -15,12 +15,12 @@
 #undef __class__
 #define __class__ "ListFileSystem"
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::ListFileSystem();
 }
 
 void ewol::widget::ListFileSystem::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";
