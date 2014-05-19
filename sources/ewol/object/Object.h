@@ -93,6 +93,8 @@ namespace ewol {
 			 * @brief Destructor
 			 */
 			virtual ~Object();
+		private:
+			bool m_isDestroyed;
 		protected:
 			/**
 			 * @brief Auto-destroy the object
@@ -103,6 +105,11 @@ namespace ewol {
 			 * @brief Asynchronous removing the object
 			 */
 			void removeObject();
+		public:
+			/**
+			 * @brief Respown a removed object
+			 */
+			void respownObject();
 		private:
 			std::vector<const char*> m_listType;
 		public:

@@ -29,9 +29,12 @@ namespace ewol {
 				
 				void add(const ewol::object::Shared<ewol::Object>& _object);
 				void rm(const ewol::object::Shared<ewol::Object>& _object);
+				void addOwned(const ewol::object::Shared<ewol::Object>& _object);
+				void rmOwned(const ewol::object::Shared<ewol::Object>& _object);
 				int32_t getNumberObject();
 				
 				void autoRemove(const ewol::object::Shared<ewol::Object>& _object);
+				void autoRespown(const ewol::object::Shared<ewol::Object>& _object);
 				void removeAllAutoRemove();
 				
 				ewol::object::Shared<ewol::Object> get(const std::string& _name);

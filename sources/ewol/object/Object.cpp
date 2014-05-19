@@ -38,12 +38,14 @@ bool ewol::Object::setRefOwner(bool _haveOwner) {
 			return false;;
 		}
 		m_hasReferenceOwner = true;
+		getObjectManager().addOwned(this);
 		return true;
 	}
 	if (m_hasReferenceOwner == false) {
 		EWOL_CRITICAL("Object have already NO owner");
 		return false;
 	}
+	getObjectManager().rmOwned(this);
 	m_hasReferenceOwner = false;
 	return true;
 }
@@ -67,6 +69,31 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 	EWOL_CRITICAL("custom delete for size ==> not implemented ..." << _sz);
 	::operator delete(_ptr);
 }
+
+void ewol::Object::autoDestroy() {
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
+	if (m_isDestroyed == true) {
+		EWOL_WARNING("Request remove of a removed object");
+		return;
+	}
+	m_isDestroyed = true;
+	getObjectManager().autoRemove(this);
+}
+
+void ewol::Object::removeObject() {
+	autoDestroy();
+}
+
+void respownObject() {
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
+	if (m_isDestroyed == false) {
+		EWOL_WARNING("Respawn an alive object");
+		return;
+	}
+	m_isDestroyed = false;
+	getObjectManager().autoRespown(this);
+}
+
 
 
 
@@ -141,14 +168,6 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 		}
 	}
 	return false;
-}
-
-void ewol::Object::autoDestroy() {
-	getObjectManager().autoRemove(this);
-}
-
-void ewol::Object::removeObject() {
-	getObjectManager().autoRemove(this);
 }
 
 void ewol::Object::addEventId(const char * _generateEventId) {

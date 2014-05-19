@@ -89,6 +89,41 @@ void ewol::object::Manager::add(const ewol::object::Shared<ewol::Object>& _objec
 	m_eObjectList.push_back(_object);
 }
 
+void ewol::object::Manager::rm(const ewol::object::Shared<ewol::Object>& _object) {
+	if (_object == nullptr) {
+		EWOL_ERROR("Try to remove (nullptr) Object");
+		return;
+	}
+	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
+		if (m_eObjectList[iii] == _object) {
+			// remove Element
+			m_eObjectList[iii] = nullptr;
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
+			informOneObjectIsRemoved(_object);
+			return;
+		}
+	}
+	// check if the object has not been auto removed ... or remove in defered time ...
+	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
+		if(    m_eObjectAutoRemoveList[iii] != nullptr
+		    && m_eObjectAutoRemoveList[iii] == _object) {
+			return;
+		}
+	}
+	// in this case, we have an error ...
+	EWOL_ERROR("Try to remove Object that is not referenced ...");
+}
+
+
+void ewol::object::Manager::addOwned(const ewol::object::Shared<ewol::Object>& _object) {
+	// What I need to do ...
+}
+
+void ewol::object::Manager::rmOwned(const ewol::object::Shared<ewol::Object>& _object) {
+	// What I need to do ...
+}
+
+
 int32_t ewol::object::Manager::getNumberObject() {
 	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
 }
@@ -125,29 +160,8 @@ void ewol::object::Manager::informOneObjectIsRemoved(const ewol::object::Shared<
 	ewol::getContext().onObjectRemove(_object);
 }
 
-void ewol::object::Manager::rm(const ewol::object::Shared<ewol::Object>& _object) {
-	if (_object == nullptr) {
-		EWOL_ERROR("Try to remove (nullptr) Object");
-		return;
-	}
-	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
-		if (m_eObjectList[iii] == _object) {
-			// remove Element
-			m_eObjectList[iii] = nullptr;
-			m_eObjectList.erase(m_eObjectList.begin()+iii);
-			informOneObjectIsRemoved(_object);
-			return;
-		}
-	}
-	// check if the object has not been auto removed ... or remove in defered time ...
-	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
-		if(    m_eObjectAutoRemoveList[iii] != nullptr
-		    && m_eObjectAutoRemoveList[iii] == _object) {
-			return;
-		}
-	}
-	// in this case, we have an error ...
-	EWOL_ERROR("Try to remove Object that is not referenced ...");
+void ewol::object::Manager::autoRespown(const ewol::object::Shared<ewol::Object>& _object){
+	
 }
 
 void ewol::object::Manager::autoRemove(const ewol::object::Shared<ewol::Object>& _object) {
