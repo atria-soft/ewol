@@ -84,7 +84,7 @@ void ewol::Object::removeObject() {
 	autoDestroy();
 }
 
-void respownObject() {
+void ewol::Object::respownObject() {
 	std::unique_lock<std::mutex> lock(m_lockRefCount);
 	if (m_isDestroyed == false) {
 		EWOL_WARNING("Respawn an alive object");
@@ -93,9 +93,6 @@ void respownObject() {
 	m_isDestroyed = false;
 	getObjectManager().autoRespown(this);
 }
-
-
-
 
 ewol::Object::Object() :
   m_objRefCount(1),

@@ -102,6 +102,9 @@ namespace ewol {
 					operator ewol::object::Owner<T>() const noexcept {
 						return m_pointer;
 					}
+					template<typename T2> operator ewol::object::Shared<T2>() const noexcept {
+						return m_pointer;
+					}
 			};
 			// after calling this function, you might never call a delete on this pointer. (if you want to be able to use a delete, simply Shared<>(pointer)
 			template<typename T> Shared<T> makeShared(T* _pointer) {
