@@ -29,8 +29,7 @@ ewol::compositing::Area::Area(const ivec2& _size) :
 }
 
 ewol::compositing::Area::~Area() {
-	ewol::resource::Texture::release(m_resource);
-	ewol::resource::Program::release(m_GLprogram);
+	
 }
 
 void ewol::compositing::Area::loadProgram() {

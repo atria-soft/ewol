@@ -121,7 +121,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 }
 
 ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
-	ewol::resource::FontFreeType::release(m_font);
+	
 }
 
 
@@ -335,12 +335,12 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 	return &((m_listElement)[index]);
 }
 
-ewol::resource::DistanceFieldFont* ewol::resource::DistanceFieldFont::keep(const std::string& _filename) {
+ewol::object::Shared<ewol::resource::DistanceFieldFont> ewol::resource::DistanceFieldFont::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : DistanceFieldFont : file : '" << _filename << "'");
-	ewol::resource::DistanceFieldFont* object = nullptr;
-	ewol::Resource* object2 = getManager().localKeep(_filename);
+	ewol::object::Shared<ewol::resource::DistanceFieldFont> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
 	if (nullptr != object2) {
-		object = dynamic_cast<ewol::resource::DistanceFieldFont*>(object2);
+		object = ewol::dynamic_pointer_cast<ewol::resource::DistanceFieldFont>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -351,7 +351,7 @@ ewol::resource::DistanceFieldFont* ewol::resource::DistanceFieldFont::keep(const
 	}
 	// need to crate a new one ...
 	EWOL_DEBUG("CREATE: DistanceFieldFont : file : '" << _filename << "'");
-	object = new ewol::resource::DistanceFieldFont(_filename);
+	object = ewol::object::makeShared(new ewol::resource::DistanceFieldFont(_filename));
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
@@ -360,19 +360,6 @@ ewol::resource::DistanceFieldFont* ewol::resource::DistanceFieldFont::keep(const
 	return object;
 }
 
-void ewol::resource::DistanceFieldFont::release(ewol::resource::DistanceFieldFont*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	std::string name = _object->getName();
-	int32_t count = _object->getCounter() - 1;
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	if (getManager().release(object2) == true) {
-		EWOL_DEBUG("REMOVE: DistanceFieldFont : file : '" << name << "' count=" << count);
-		//etk::displayBacktrace(false);
-	}
-	_object = nullptr;
-}
 
 void ewol::resource::DistanceFieldFont::exportOnFile() {
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");

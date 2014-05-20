@@ -225,9 +225,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 }
 
 ewol::resource::TexturedFont::~TexturedFont() {
-	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		ewol::resource::FontFreeType::release(m_font[iiiFontId]);
-	}
+	
 }
 
 bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
@@ -343,12 +341,12 @@ ewol::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_
 	return &((m_listElement[_displayMode])[index]);
 }
 
-ewol::resource::TexturedFont* ewol::resource::TexturedFont::keep(const std::string& _filename) {
+ewol::object::Shared<ewol::resource::TexturedFont> ewol::resource::TexturedFont::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : TexturedFont : file : '" << _filename << "'");
-	ewol::resource::TexturedFont* object = nullptr;
-	ewol::Resource* object2 = getManager().localKeep(_filename);
+	ewol::object::Shared<ewol::resource::TexturedFont> object;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
 	if (nullptr != object2) {
-		object = dynamic_cast<ewol::resource::TexturedFont*>(object2);
+		object = ewol::dynamic_pointer_cast<ewol::resource::TexturedFont>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -359,26 +357,11 @@ ewol::resource::TexturedFont* ewol::resource::TexturedFont::keep(const std::stri
 	}
 	// need to crate a new one ...
 	EWOL_INFO("CREATE: TexturedFont : file : '" << _filename << "'");
-	object = new ewol::resource::TexturedFont(_filename);
+	object = ewol::object::makeShared(new ewol::resource::TexturedFont(_filename));
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
-}
-
-void ewol::resource::TexturedFont::release(ewol::resource::TexturedFont*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	EWOL_VERBOSE("RELEASE: TexturedFont : file : '" << _object->getName() << "' count=" << _object->getCounter());
-	std::string name = _object->getName();
-	int32_t count = _object->getCounter() - 1;
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	if (getManager().release(object2) == true) {
-		EWOL_ERROR("REMOVE: TexturedFont : file : '" << name << "' count=" << count);
-		//etk::displayBacktrace(false);
-	}
-	_object = nullptr;
 }

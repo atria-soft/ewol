@@ -17,8 +17,8 @@ namespace ewol {
 	namespace resource {
 		class Manager {
 			private:
-				std::vector<ewol::Resource*> m_resourceList;
-				std::vector<ewol::Resource*> m_resourceListToUpdate;
+				std::vector<ewol::object::Owner<ewol::Resource>> m_resourceList;
+				std::vector<ewol::object::Shared<ewol::Resource>> m_resourceListToUpdate;
 				bool m_contextHasBeenRemoved;
 			public:
 				/**
@@ -47,7 +47,7 @@ namespace ewol {
 				 * @brief Call by the system to send all the needed data on the graphic card chen they change ...
 				 * @param[in] _object The resources that might be updated
 				 */
-				void update(ewol::Resource* _object);
+				void update(const ewol::object::Shared<ewol::Resource>& _object);
 				/**
 				 * @brief Call by the system chen the openGL Context has been unexpectially removed  == > This reload all the texture, VBO and other ....
 				 */
@@ -58,15 +58,8 @@ namespace ewol {
 				void contextHasBeenDestroyed();
 			public:
 				// internal API to extent eResources in extern Soft
-				ewol::Resource* localKeep(const std::string& _filename);
-				void localAdd(ewol::Resource* _object);
-			public:
-				/**
-				 * @brief release a resources and free it if the Last release is call.
-				 * @param[in,out] _object element to realease  == > is return at nullptr value.
-				 * @return true, if element is removed, and false for just decreasing counter
-				 */
-				bool release(ewol::Resource*& _object);
+				ewol::object::Shared<ewol::Resource> localKeep(const std::string& _filename);
+				void localAdd(const ewol::object::Shared<ewol::Resource>& _object);
 			public: // herited function
 				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 		};

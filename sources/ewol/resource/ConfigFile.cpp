@@ -104,12 +104,12 @@ bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
 	return tmp->get();
 }
 
-ewol::resource::ConfigFile* ewol::resource::ConfigFile::keep(const std::string& _filename) {
+ewol::object::Shared<ewol::resource::ConfigFile> ewol::resource::ConfigFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
-	ewol::resource::ConfigFile* object = nullptr;
-	ewol::Resource* object2 = getManager().localKeep(_filename);
+	ewol::object::Shared<ewol::resource::ConfigFile> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
 	if (nullptr != object2) {
-		object = dynamic_cast<ewol::resource::ConfigFile*>(object2);
+		object = ewol::dynamic_pointer_cast<ewol::resource::ConfigFile>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -119,22 +119,13 @@ ewol::resource::ConfigFile* ewol::resource::ConfigFile::keep(const std::string& 
 		return object;
 	}
 	// this element create a new one every time ....
-	object = new ewol::resource::ConfigFile(_filename);
+	object = ewol::object::makeShared(new ewol::resource::ConfigFile(_filename));
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : '" << _filename << "'");
 		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
-}
-
-void ewol::resource::ConfigFile::release(ewol::resource::ConfigFile*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = nullptr;
 }
 
 

@@ -59,7 +59,7 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
 }
 
 ewol::widget::Image::~Image() {
-	ewol::resource::ColorFile::release(m_colorProperty);
+	
 }
 
 void ewol::widget::Image::setFile(const std::string& _file) {

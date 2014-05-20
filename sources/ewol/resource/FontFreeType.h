@@ -30,6 +30,7 @@ namespace ewol {
 				void display();
 			protected:
 				FontFreeType(const std::string& _fontName);
+			public:
 				~FontFreeType();
 			public:
 				
@@ -60,12 +61,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the base font.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::FontBase* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::FontBase*& _object);
+				static ewol::object::Shared<ewol::resource::FontBase> keep(const std::string& _filename);
 		};
 		void freeTypeInit();
 		void freeTypeUnInit();

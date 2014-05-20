@@ -22,7 +22,7 @@ ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
 
 
 ewol::compositing::Text::~Text() {
-	ewol::resource::TexturedFont::release(m_font);
+	
 }
 
 void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _enableDepthTest) {
@@ -152,7 +152,7 @@ void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
-	ewol::resource::TexturedFont * previousFont = m_font;
+	ewol::object::Shared<ewol::resource::TexturedFont> previousFont = m_font;
 	if (_fontSize <= 0) {
 		_fontSize = ewol::getContext().getFontDefault().getSize();
 	}
@@ -167,8 +167,6 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 	if (m_font == nullptr) {
 		EWOL_ERROR("Can not get font resource");
 		m_font = previousFont;
-	} else {
-		ewol::resource::TexturedFont::release(previousFont);
 	}
 }
 

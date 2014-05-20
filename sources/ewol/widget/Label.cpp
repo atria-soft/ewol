@@ -44,7 +44,7 @@ ewol::widget::Label::Label(std::string _newLabel) :
 }
 
 ewol::widget::Label::~Label() {
-	ewol::resource::ColorFile::release(m_colorProperty);
+	
 }
 
 void ewol::widget::Label::calculateMinMaxSize() {

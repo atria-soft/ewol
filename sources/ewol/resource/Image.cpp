@@ -62,10 +62,10 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ewol::resource::TextureFile* ewol::resource::TextureFile::keep(const std::string& _filename, ivec2 _size) {
+ewol::object::Shared<ewol::resource::TextureFile> ewol::resource::TextureFile::keep(const std::string& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
-		ewol::resource::TextureFile* object = new ewol::resource::TextureFile("");
+		ewol::object::Shared<ewol::resource::TextureFile> object = ewol::object::makeShared(new ewol::resource::TextureFile(""));
 		if (nullptr == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
@@ -101,10 +101,10 @@ ewol::resource::TextureFile* ewol::resource::TextureFile::keep(const std::string
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::resource::TextureFile* object = nullptr;
-	ewol::Resource* object2 = getManager().localKeep(TmpFilename);
+	ewol::object::Shared<ewol::resource::TextureFile> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(TmpFilename);
 	if (nullptr != object2) {
-		object = dynamic_cast<ewol::resource::TextureFile*>(object2);
+		object = ewol::dynamic_pointer_cast<ewol::resource::TextureFile>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -115,7 +115,7 @@ ewol::resource::TextureFile* ewol::resource::TextureFile::keep(const std::string
 	}
 	EWOL_INFO("CREATE: TextureFile: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = new ewol::resource::TextureFile(TmpFilename, _filename, _size);
+	object = ewol::object::makeShared(new ewol::resource::TextureFile(TmpFilename, _filename, _size));
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
@@ -123,14 +123,3 @@ ewol::resource::TextureFile* ewol::resource::TextureFile::keep(const std::string
 	getManager().localAdd(object);
 	return object;
 }
-
-
-void ewol::resource::TextureFile::release(ewol::resource::TextureFile*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = nullptr;
-}
-

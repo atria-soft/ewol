@@ -151,10 +151,10 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ewol::resource::ImageDF* ewol::resource::ImageDF::keep(const std::string& _filename, ivec2 _size) {
+ewol::object::Shared<ewol::resource::ImageDF> ewol::resource::ImageDF::keep(const std::string& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
-		ewol::resource::ImageDF* object = new ewol::resource::ImageDF("");
+		ewol::object::Shared<ewol::resource::ImageDF> object = ewol::object::makeShared(new ewol::resource::ImageDF(""));
 		if (nullptr == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
@@ -190,10 +190,10 @@ ewol::resource::ImageDF* ewol::resource::ImageDF::keep(const std::string& _filen
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::resource::ImageDF* object = nullptr;
-	ewol::Resource* object2 = getManager().localKeep("DF__" + TmpFilename);
+	ewol::object::Shared<ewol::resource::ImageDF> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
 	if (nullptr != object2) {
-		object = dynamic_cast<ewol::resource::ImageDF*>(object2);
+		object = ewol::dynamic_pointer_cast<ewol::resource::ImageDF>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -204,22 +204,12 @@ ewol::resource::ImageDF* ewol::resource::ImageDF::keep(const std::string& _filen
 	}
 	EWOL_INFO("CREATE: ImageDF: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = new ewol::resource::ImageDF("DF__" + TmpFilename, _filename, _size);
+	object = ewol::object::makeShared(new ewol::resource::ImageDF("DF__" + TmpFilename, _filename, _size));
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
-}
-
-
-void ewol::resource::ImageDF::release(ewol::resource::ImageDF*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = nullptr;
 }
 

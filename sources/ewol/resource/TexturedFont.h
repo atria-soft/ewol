@@ -36,7 +36,7 @@ namespace ewol {
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				ewol::resource::FontBase* m_font[4];
+				ewol::object::Shared<ewol::resource::FontBase> m_font[4];
 				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
 				std::vector<GlyphProperty> m_listElement[4];
@@ -46,6 +46,7 @@ namespace ewol {
 				int32_t m_lastRawHeigh[4];
 			protected:
 				TexturedFont(const std::string& _fontName);
+			public:
 				~TexturedFont();
 			public:
 				/**
@@ -93,12 +94,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the texture font.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::TexturedFont* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::TexturedFont*& _object);
+				static ewol::object::Shared<ewol::resource::TexturedFont> keep(const std::string& _filename);
 			private:
 				/**
 				 * @brief add a glyph in a texture font.

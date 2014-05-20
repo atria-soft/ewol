@@ -35,15 +35,12 @@ ewol::compositing::Image::Image(const std::string& _imageName, bool _df) :
 }
 
 ewol::compositing::Image::~Image() {
-	ewol::resource::TextureFile::release(m_resource);
-	ewol::resource::ImageDF::release(m_resourceDF);
-	ewol::resource::Program::release(m_GLprogram);
+	
 }
 
 void ewol::compositing::Image::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
-	ewol::resource::Program::release(m_GLprogram);
 	if (m_distanceFieldMode == true) {
 		m_GLprogram = ewol::resource::Program::keep("DATA:texturedDF.prog");
 	} else {
@@ -249,8 +246,8 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
-	ewol::resource::TextureFile* resource = m_resource;
-	ewol::resource::ImageDF* resourceDF = m_resourceDF;
+	ewol::object::Shared<ewol::resource::TextureFile> resource = m_resource;
+	ewol::object::Shared<ewol::resource::ImageDF> resourceDF = m_resourceDF;
 	m_filename = _newFile;
 	m_requestSize = _size;
 	m_resource = nullptr;
@@ -281,9 +278,6 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 			EWOL_WARNING("Retrive previous resource (DF)");
 			m_resourceDF = resourceDF;
 		}
-	} else {
-		ewol::resource::TextureFile::release(resource);
-		ewol::resource::ImageDF::release(resourceDF);
 	}
 }
 

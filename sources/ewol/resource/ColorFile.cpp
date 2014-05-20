@@ -75,12 +75,12 @@ int32_t ewol::resource::ColorFile::request(const std::string& _paramName) {
 }
 
 
-ewol::resource::ColorFile* ewol::resource::ColorFile::keep(const std::string& _filename) {
+ewol::object::Shared<ewol::resource::ColorFile> ewol::resource::ColorFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : ColorFile : file : \"" << _filename << "\"");
-	ewol::resource::ColorFile* object = nullptr;
-	ewol::Resource* object2 = getManager().localKeep(_filename);
+	ewol::object::Shared<ewol::resource::ColorFile> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
 	if (nullptr != object2) {
-		object = dynamic_cast<ewol::resource::ColorFile*>(object2);
+		object = ewol::dynamic_pointer_cast<ewol::resource::ColorFile>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -90,7 +90,7 @@ ewol::resource::ColorFile* ewol::resource::ColorFile::keep(const std::string& _f
 		return object;
 	}
 	// this element create a new one every time ....
-	object = new ewol::resource::ColorFile(_filename);
+	object = ewol::object::makeShared(new ewol::resource::ColorFile(_filename));
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
@@ -98,15 +98,4 @@ ewol::resource::ColorFile* ewol::resource::ColorFile::keep(const std::string& _f
 	getManager().localAdd(object);
 	return object;
 }
-
-void ewol::resource::ColorFile::release(ewol::resource::ColorFile*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = nullptr;
-}
-
-
 

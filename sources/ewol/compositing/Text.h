@@ -25,7 +25,7 @@ namespace ewol {
 	namespace compositing {
 		class Text : public ewol::compositing::TextBase {
 			protected:
-				ewol::resource::TexturedFont* m_font; //!< Font resources
+				ewol::object::Shared<ewol::resource::TexturedFont> m_font; //!< Font resources
 			public:
 				/**
 				 * @brief generic constructor

@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Windows : public ewol::Widget {
 			protected:
-				ewol::resource::ColorFile* m_colorProperty; //!< theme color property
+				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorBg; //!< Default background color of the windows
 			public:
 				Windows();

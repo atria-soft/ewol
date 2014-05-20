@@ -35,6 +35,7 @@ namespace ewol {
 				 * @param[in] accesMode Acces mode : ???
 				 */
 				VirtualBufferObject(int32_t _number);
+			public:
 				/**
 				 * @brief Destructor of this VBO.
 				 */
@@ -99,12 +100,7 @@ namespace ewol {
 				 * @param[in] _number Number of VBO needed
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::VirtualBufferObject* keep(int32_t _number);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::VirtualBufferObject*& _object);
+				static ewol::object::Shared<ewol::resource::VirtualBufferObject> keep(int32_t _number);
 		};
 	};
 };

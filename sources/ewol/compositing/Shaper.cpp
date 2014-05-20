@@ -57,10 +57,6 @@ ewol::compositing::Shaper::~Shaper() {
 }
 
 void ewol::compositing::Shaper::unLoadProgram() {
-	ewol::resource::Program::release(m_GLprogram);
-	ewol::resource::TextureFile::release(m_resourceTexture);
-	ewol::resource::ConfigFile::release(m_config);
-	ewol::resource::ColorFile::release(m_colorProperty);
 	for (size_t iii=0; iii<shaperPosCount; ++iii) {
 		m_confIdPaddingOut[iii] = -1;
 		m_confIdBorder[iii] = -1;

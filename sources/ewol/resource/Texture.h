@@ -47,6 +47,7 @@ namespace ewol {
 			protected:
 				Texture(const std::string& _filename);
 				Texture();
+			public:
 				~Texture();
 			public:
 				// you must set the size here, because it will be set in multiple of pow(2)
@@ -63,12 +64,7 @@ namespace ewol {
 				 * @note Never free this pointer by your own...
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::Texture* keep();
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::Texture*& _object);
+				static ewol::object::Shared<ewol::resource::Texture> keep();
 		};
 	};
 };

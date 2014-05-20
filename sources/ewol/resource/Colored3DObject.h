@@ -19,12 +19,13 @@ namespace ewol {
 	namespace resource {
 		class Colored3DObject : public ewol::Resource {
 			protected:
-				ewol::resource::Program* m_GLprogram;
+				ewol::object::Shared<ewol::resource::Program> m_GLprogram;
 				int32_t m_GLPosition;
 				int32_t m_GLMatrix;
 				int32_t m_GLColor;
 			protected:
 				Colored3DObject();
+			public:
 				virtual ~Colored3DObject();
 			public:
 				virtual void draw(std::vector<vec3>& _vertices,
@@ -47,12 +48,7 @@ namespace ewol {
 				 * @note Never free this pointer by your own...
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::Colored3DObject* keep();
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::Colored3DObject*& _object);
+				static ewol::object::Shared<ewol::resource::Colored3DObject> keep();
 		};
 	};
 };

@@ -50,7 +50,7 @@ namespace ewol {
 			private :
 				bool m_exist; //!< the file existed
 				GLuint m_program; //!< openGL id of the current program
-				std::vector<ewol::resource::Shader*> m_shaderList; //!< List of all the shader loaded
+				std::vector<ewol::object::Shared<ewol::resource::Shader>> m_shaderList; //!< List of all the shader loaded
 				std::vector<ewol::resource::progAttributeElement> m_elementList; //!< List of all the attribute requested by the user
 				bool m_hasTexture; //!< A texture has been set to the current shader
 				bool m_hasTexture1; //!< A texture has been set to the current shader
@@ -60,6 +60,7 @@ namespace ewol {
 				 * @param[in] filename Standard file name format. see @ref etk::FSNode
 				 */
 				Program(const std::string& filename);
+			public:
 				/**
 				 * @brief Destructor, remove the current Program.
 				 */
@@ -299,12 +300,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the openGL program.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::Program* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::Program*& _object);
+				static ewol::object::Shared<ewol::resource::Program> keep(const std::string& _filename);
 		};
 	};
 };

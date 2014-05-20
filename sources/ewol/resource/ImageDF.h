@@ -24,7 +24,9 @@ namespace ewol {
 			protected:
 				ImageDF(const std::string& _genName);
 				ImageDF(std::string _genName, const std::string& _fileName, const ivec2& _size);
+			public:
 				virtual ~ImageDF() { };
+			protected:
 				/**
 				 * @brief Generate distance field of this Image input.
 				 * @param[in] _input Input image to change in distance field mode.
@@ -43,12 +45,7 @@ namespace ewol {
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::ImageDF* keep(const std::string& _filename, ivec2 _size=ivec2(-1,-1));
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::ImageDF*& _object);
+				static ewol::object::Shared<ewol::resource::ImageDF> keep(const std::string& _filename, ivec2 _size=ivec2(-1,-1));
 		};
 	};
 };

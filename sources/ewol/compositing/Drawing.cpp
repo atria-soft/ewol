@@ -277,7 +277,7 @@ void ewol::compositing::Drawing::resetCount() {
 }
 
 void ewol::compositing::Drawing::unLoadProgram() {
-	ewol::resource::Program::release(m_GLprogram);
+	m_GLprogram.reset();
 }
 
 void ewol::compositing::Drawing::loadProgram() {

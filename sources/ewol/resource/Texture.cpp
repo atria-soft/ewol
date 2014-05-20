@@ -107,9 +107,9 @@ void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 	m_data.resize(_newSize);
 }
 
-ewol::resource::Texture* ewol::resource::Texture::keep() {
+ewol::object::Shared<ewol::resource::Texture> ewol::resource::Texture::keep() {
 	// this element create a new one every time ....
-	ewol::resource::Texture* object = new ewol::resource::Texture();
+	ewol::object::Shared<ewol::resource::Texture> object = ewol::object::makeShared(new ewol::resource::Texture());
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : ??TEX??");
 		return nullptr;
@@ -118,11 +118,3 @@ ewol::resource::Texture* ewol::resource::Texture::keep() {
 	return object;
 }
 
-void ewol::resource::Texture::release(ewol::resource::Texture*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = nullptr;
-}

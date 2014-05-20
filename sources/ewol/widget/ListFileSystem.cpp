@@ -70,7 +70,6 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 
 ewol::widget::ListFileSystem::~ListFileSystem() {
 	clearList();
-	ewol::resource::ColorFile::release(m_colorProperty);
 };
 
 void ewol::widget::ListFileSystem::clearList() {

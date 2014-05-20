@@ -41,7 +41,7 @@ namespace ewol {
 				static void init(ewol::widget::Manager& _widgetManager);
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
-				ewol::resource::ColorFile* m_colorProperty; //!< theme color property
+				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorId; //!< Color of the image.
 			public:
 				/**

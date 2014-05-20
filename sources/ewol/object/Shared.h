@@ -217,9 +217,9 @@ namespace ewol {
 	template<typename T2, typename T>
 	inline object::Shared<T2> dynamic_pointer_cast(const object::Shared<T>& _obj) noexcept {
 		if (T2* obj = dynamic_cast<T2*>(_obj.get())) {
-			return object::Shared<T2>(_obj, obj);
+			return ewol::object::Shared<T2>(obj);
 		}
-		return object::Shared<T2>();
+		return ewol::object::Shared<T2>();
 	}
 };
 

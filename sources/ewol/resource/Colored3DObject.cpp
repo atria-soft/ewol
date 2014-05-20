@@ -28,8 +28,7 @@ ewol::resource::Colored3DObject::Colored3DObject() :
 }
 
 ewol::resource::Colored3DObject::~Colored3DObject() {
-	// remove dynamics dependencies :
-	ewol::resource::Program::release(m_GLprogram);
+	
 }
 
 
@@ -155,11 +154,11 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	}
 }
 
-ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep() {
+ewol::object::Shared<ewol::resource::Colored3DObject> ewol::resource::Colored3DObject::keep() {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
-	ewol::resource::Colored3DObject* object = new ewol::resource::Colored3DObject();
-	if (nullptr == object) {
+	ewol::object::Shared<ewol::resource::Colored3DObject> object = ewol::object::makeShared(new ewol::resource::Colored3DObject());
+	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : ???Colored3DObject??? ");
 		return nullptr;
 	}
@@ -167,11 +166,3 @@ ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep() {
 	return object;
 }
 
-void ewol::resource::Colored3DObject::release(ewol::resource::Colored3DObject*& _object) {
-	if (nullptr == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = nullptr;
-}
