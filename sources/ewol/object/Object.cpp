@@ -71,12 +71,14 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 }
 
 void ewol::Object::autoDestroy() {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	if (m_isDestroyed == true) {
-		EWOL_WARNING("Request remove of a removed object");
-		return;
+	{
+		std::unique_lock<std::mutex> lock(m_lockRefCount);
+		if (m_isDestroyed == true) {
+			EWOL_WARNING("Request remove of a removed object");
+			return;
+		}
+		m_isDestroyed = true;
 	}
-	m_isDestroyed = true;
 	getObjectManager().autoRemove(this);
 }
 

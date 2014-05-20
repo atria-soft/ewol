@@ -21,7 +21,7 @@ namespace ewol {
 		 */
 		class Container : public ewol::Widget {
 			protected:
-				ewol::object::Owner<ewol::Widget> m_subWidget;
+				ewol::object::Shared<ewol::Widget> m_subWidget;
 			public:
 				/**
 				 * @brief Constructor

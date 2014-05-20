@@ -26,7 +26,7 @@ namespace ewol {
 			private:
 				class GirdProperties {
 					public:
-						ewol::object::Owner<ewol::Widget> widget;
+						ewol::object::Shared<ewol::Widget> widget;
 						int32_t row;
 						int32_t col;
 				};

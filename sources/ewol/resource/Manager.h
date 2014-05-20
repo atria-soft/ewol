@@ -17,7 +17,7 @@ namespace ewol {
 	namespace resource {
 		class Manager {
 			private:
-				std::vector<ewol::object::Owner<ewol::Resource>> m_resourceList;
+				std::vector<ewol::object::Shared<ewol::Resource>> m_resourceList;
 				std::vector<ewol::object::Shared<ewol::Resource>> m_resourceListToUpdate;
 				bool m_contextHasBeenRemoved;
 			public:
