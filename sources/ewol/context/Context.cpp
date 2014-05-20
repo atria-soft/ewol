@@ -663,7 +663,7 @@ void ewol::Context::OS_OpenGlContextDestroy() {
 	m_resourceManager.contextHasBeenDestroyed();
 }
 
-void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
+void ewol::Context::setWindows(const ewol::object::Shared<ewol::widget::Windows>& _windows) {
 	// remove current focus :
 	m_widgetManager.focusSetDefault(nullptr);
 	m_widgetManager.focusRelease();

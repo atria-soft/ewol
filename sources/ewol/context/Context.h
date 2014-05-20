@@ -164,7 +164,7 @@ namespace ewol {
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void setWindows(ewol::widget::Windows* _windows);
+			void setWindows(const ewol::object::Shared<ewol::widget::Windows>& _windows);
 			/**
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
