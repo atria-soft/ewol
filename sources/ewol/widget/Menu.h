@@ -20,13 +20,13 @@ namespace ewol {
 	namespace widget {
 		class MenuElement {
 			public : 
-				MenuElement() : m_widgetPointer(nullptr) { };
+				MenuElement() { };
 				int32_t m_localId;
 				int32_t m_parentId;
-				ewol::object::Shared<ewol::Object> m_widgetPointer;
+				ewol::object::Shared<ewol::Widget> m_widgetPointer;
 				std::string m_label;
 				std::string m_image;
-				const char *m_generateEvent;
+				const char* m_generateEvent;
 				std::string m_message;
 		};
 		/**
@@ -44,7 +44,7 @@ namespace ewol {
 			private:
 				std::vector<ewol::widget::MenuElement*> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
-				ewol::widget::ContextMenu* m_widgetContextMenu;
+				ewol::object::Shared<ewol::widget::ContextMenu> m_widgetContextMenu;
 			public:
 				void clear();
 				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");

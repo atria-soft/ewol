@@ -390,8 +390,10 @@ ewol::Context::~Context() {
 	// unset all windows
 	m_msgSystem.clean();
 	
-	m_objectManager.unInit();
+	// Resource is an lower element as objects ...
 	m_resourceManager.unInit();
+	// now All must be removed !!!
+	m_objectManager.unInit();
 	// release the curent interface :
 	unLockContext();
 	EWOL_INFO(" == > Ewol system Un-Init (END)");
@@ -580,11 +582,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			}
 		}
 		// call all the widget that neded to do something periodicly
-		//! ewol::widgetManager::periodicCall(currentTime);
 		m_widgetManager.periodicCall(currentTime);
-		// remove all widget that they are no more usefull (these who decided to destroy themself)
-		//! ewol::object::Shared<ewol::Object>Manager::removeAllAutoRemove();
-		m_objectManager.removeAllAutoRemove();
 		// check if the user selected a windows
 		if (nullptr != m_windowsCurrent) {
 			// Redraw all needed elements
@@ -647,6 +645,9 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_FpsSystem.draw();
 		m_FpsFlush.draw();
 	}
+	// while The Gui is drawing in OpenGl, we do some not realTime things
+	m_objectManager.removeAllRemovedObject();
+	
 	return hasDisplayDone;
 }
 

@@ -30,38 +30,16 @@ void ewol::Object::objRefCountDecrement() {
 	m_objRefCount--;
 }
 
-bool ewol::Object::setRefOwner(bool _haveOwner) {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	if (_haveOwner == true) {
-		if (m_hasReferenceOwner == true) {
-			EWOL_CRITICAL("Object have already an owner");
-			return false;;
-		}
-		m_hasReferenceOwner = true;
-		getObjectManager().addOwned(this);
-		return true;
-	}
-	if (m_hasReferenceOwner == false) {
-		EWOL_CRITICAL("Object have already NO owner");
-		return false;
-	}
-	getObjectManager().rmOwned(this);
-	m_hasReferenceOwner = false;
-	return true;
-}
-
 void ewol::Object::operator delete(void* _ptr, std::size_t _sz) {
 	EWOL_DEBUG("custom delete for size " << _sz);
 	ewol::object::Shared<ewol::Object> obj = (ewol::Object*)_ptr;
 	obj->objRefCountDecrement();
 	if (obj->m_objRefCount <= 0) {
 		EWOL_DEBUG("    ==> real remove");
-		if (obj->m_hasReferenceOwner == true) {
-			EWOL_ERROR("    ==> Remove ofject that have not a reference owner removed");
-		}
 		::operator delete(_ptr);
 	} else {
-		EWOL_DEBUG("    ==> Some user is link on it ...");
+		EWOL_DEBUG("    ==> Some user is link on it : " << obj->m_objRefCount);
+		etk::log::displayBacktrace();
 	}
 }
 
@@ -79,7 +57,7 @@ void ewol::Object::autoDestroy() {
 		}
 		m_isDestroyed = true;
 	}
-	getObjectManager().autoRemove(this);
+	getObjectManager().remove(this);
 }
 
 void ewol::Object::removeObject() {
@@ -93,12 +71,12 @@ void ewol::Object::respownObject() {
 		return;
 	}
 	m_isDestroyed = false;
-	getObjectManager().autoRespown(this);
+	getObjectManager().respown(this);
 }
 
 ewol::Object::Object() :
   m_objRefCount(1),
-  m_hasReferenceOwner(false),
+  m_isDestroyed(false),
   m_static(false),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
@@ -109,6 +87,7 @@ ewol::Object::Object() :
 }
 ewol::Object::Object(const std::string& _name) :
   m_objRefCount(1),
+  m_isDestroyed(false),
   m_static(false),
   m_name(_name),
   m_isResource(false) {
@@ -121,10 +100,9 @@ ewol::Object::Object(const std::string& _name) :
 
 ewol::Object::~Object() {
 	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
-	getObjectManager().rm(this);
 	getMultiCast().rm(this);
-	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
-		if (nullptr!=m_externEvent[iii]) {
+	for (size_t iii=0; iii<m_externEvent.size(); ++iii) {
+		if (m_externEvent[iii] != nullptr) {
 			delete(m_externEvent[iii]);
 			m_externEvent[iii] = nullptr;
 		}
@@ -179,7 +157,7 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 	int32_t nbObject = getObjectManager().getNumberObject();
 	EWOL_VERBOSE("try send message '" << _generateEventId << "'");
 	// for every element registered ...
-	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
+	for (size_t iii=0; iii<m_externEvent.size(); ++iii) {
 		if (nullptr==m_externEvent[iii]) {
 			EWOL_VERBOSE("    Null pointer");
 			continue;
@@ -317,8 +295,7 @@ void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _
 
 void ewol::Object::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
-		if (    m_externEvent[iii] != nullptr
-		     && m_externEvent[iii]->destObject.hasOwner() == false) {
+		if (m_externEvent[iii] != nullptr) {
 			m_externEvent.erase(m_externEvent.begin()+iii);
 		}
 	}

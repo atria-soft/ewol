@@ -18,7 +18,7 @@ namespace ewol {
 		class Manager {
 			private:
 				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
-				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectAutoRemoveList; // all widget allocated
+				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectListActive; // all active widget
 			public:
 				Manager();
 				~Manager();
@@ -26,16 +26,31 @@ namespace ewol {
 				 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
 				 */
 				void unInit();
-				
-				void add(const ewol::object::Shared<ewol::Object>& _object);
-				void rm(const ewol::object::Shared<ewol::Object>& _object);
-				void addOwned(const ewol::object::Shared<ewol::Object>& _object);
-				void rmOwned(const ewol::object::Shared<ewol::Object>& _object);
+				/**
+				 * @brief Get the number of loaded object in the system
+				 * @return number of Object
+				 */
 				int32_t getNumberObject();
-				
-				void autoRemove(const ewol::object::Shared<ewol::Object>& _object);
-				void autoRespown(const ewol::object::Shared<ewol::Object>& _object);
-				void removeAllAutoRemove();
+			private:
+				friend class ewol::Object;
+				/**
+				 * @brief Internal API that used only with Object toi reference itself in the manager.
+				 * @note The manager remove the object when the refecence Low down 1 (last keeper)
+				 * @param[in] _object Reference shared pointer on the object
+				 */
+				void add(const ewol::object::Shared<ewol::Object>& _object);
+				/**
+				 * @brief Called when an object request to be removed
+				 * @param[in] _object Reference shared pointer on the object
+				 */
+				void remove(const ewol::object::Shared<ewol::Object>& _object);
+				/**
+				 * @brief Called when a user want to reuse an object that have been removed previously
+				 * @param[in] _object Reference shared pointer on the object
+				 */
+				void respown(const ewol::object::Shared<ewol::Object>& _object);
+			public:
+				void removeAllRemovedObject();
 				
 				ewol::object::Shared<ewol::Object> get(const std::string& _name);
 			private:
