@@ -58,7 +58,7 @@ namespace ewol {
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
 				 */
-				void subWidgetSelectSet(ewol::object::Shared<ewol::Widget> _widgetPointer);
+				void subWidgetSelectSet(const ewol::object::Shared<ewol::Widget>& _widgetPointer);
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetName Name of the subwidget name
