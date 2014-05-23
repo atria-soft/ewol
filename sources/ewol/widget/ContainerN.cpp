@@ -86,16 +86,10 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::object::Shared<ewol::Widget
 		return;
 	}
 	size_t errorControl = m_subWidget.size();
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (_newWidget == m_subWidget[iii]) {
-			m_subWidget[iii]->removeUpperWidget();
-			m_subWidget[iii]->removeObject();
-			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
-			if (errorControl == m_subWidget.size()) {
-				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-				m_subWidget[iii] = nullptr;
-				m_subWidget.erase(m_subWidget.begin()+iii);
-			}
+	for (auto it(m_subWidget.begin()) ; it != m_subWidget.end() ; ++it) {
+		if (_newWidget == *it) {
+			(*it)->removeUpperWidget();
+			m_subWidget.erase(it);
 			markToRedraw();
 			requestUpdateSize();
 			return;
@@ -107,11 +101,11 @@ void ewol::widget::ContainerN::subWidgetUnLink(ewol::object::Shared<ewol::Widget
 	if (nullptr == _newWidget) {
 		return;
 	}
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (_newWidget == m_subWidget[iii]) {
-			m_subWidget[iii]->removeUpperWidget();
-			m_subWidget[iii] = nullptr;
-			m_subWidget.erase(m_subWidget.begin()+iii);
+	for (auto it(m_subWidget.begin()) ; it != m_subWidget.end() ; ++it) {
+		if (_newWidget == *it) {
+			(*it)->removeUpperWidget();
+			(*it).resetShared();
+			m_subWidget.erase(it);
 			markToRedraw();
 			requestUpdateSize();
 			return;
@@ -120,38 +114,16 @@ void ewol::widget::ContainerN::subWidgetUnLink(ewol::object::Shared<ewol::Widget
 }
 
 void ewol::widget::ContainerN::subWidgetRemoveAll() {
-	size_t errorControl = m_subWidget.size();
-	// the size automaticly decrement with the auto call of the onObjectRemove function
-	while (m_subWidget.size() > 0 ) {
-		if (nullptr != m_subWidget[0]) {
-			m_subWidget[0]->removeUpperWidget();
-			m_subWidget[0]->removeObject();
-			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
-			if (errorControl == m_subWidget.size()) {
-				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-				m_subWidget[0] = nullptr;
-			}
-		} else {
-			EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Must not have null pointer on the subWidget list ...");
-			m_subWidget.erase(m_subWidget.begin());
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			it->removeUpperWidget();
 		}
-		errorControl = m_subWidget.size();
 	}
 	m_subWidget.clear();
 }
 
 void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
-	// the size automaticly decrement with the auto call of the onObjectRemove function
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			m_subWidget[iii]->removeUpperWidget();
-			m_subWidget[iii]->removeObject();
-			m_subWidget[iii] = nullptr;
-		} else {
-			EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Must not have null pointer on the subWidget list ...");
-		}
-	}
-	m_subWidget.clear();
+	subWidgetRemoveAll();
 }
 
 ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(const std::string& _widgetName) {
@@ -159,10 +131,10 @@ ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(cons
 	if (nullptr!=tmpUpperWidget) {
 		return tmpUpperWidget;
 	}
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetNamed(_widgetName);
-			if (nullptr != tmpWidget) {
+	for (auto it : m_subWidget) {
+		if (nullptr != it) {
+			ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetNamed(_widgetName);
+			if (tmpWidget != nullptr) {
 				return tmpWidget;
 			}
 		}
@@ -174,11 +146,9 @@ void ewol::widget::ContainerN::onObjectRemove(const ewol::object::Shared<ewol::O
 	// First step call parrent :
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
-	for (int64_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
-		if(m_subWidget[iii] == _removeObject) {
-			EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} remove sizer sub Element [" << iii << "/" << m_subWidget.size()-1 << "]  == > destroyed object");
-			m_subWidget[iii] = nullptr;
-			m_subWidget.erase(m_subWidget.begin()+iii);
+	for (auto it(m_subWidget.begin()) ; it != m_subWidget.end() ; ++it) {
+		if(*it == _removeObject) {
+			m_subWidget.erase(it);
 		}
 	}
 }
@@ -193,19 +163,19 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 	// subwidget draw
 	ewol::DrawProperty prop = _displayProp;
 	prop.limit(m_origin, m_size);
-	for (int64_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
-		if (nullptr != m_subWidget[iii]) {
-			m_subWidget[iii]->systemDraw(prop);
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			it->systemDraw(prop);
 		}
 	}
 }
 
 void ewol::widget::ContainerN::calculateSize(const vec2& _availlable) {
 	m_size = _availlable;
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			m_subWidget[iii]->setOrigin(m_origin+m_offset);
-			m_subWidget[iii]->calculateSize(m_size);
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			it->setOrigin(m_origin+m_offset);
+			it->calculateSize(m_size);
 		}
 	}
 	markToRedraw();
@@ -216,17 +186,17 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 	m_minSize.setValue(0,0);
 	m_maxSize.setValue(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			m_subWidget[iii]->calculateMinMaxSize();
-			bvec2 subExpendProp = m_subWidget[iii]->canExpand();
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			it->calculateMinMaxSize();
+			bvec2 subExpendProp = it->canExpand();
 			if (true == subExpendProp.x()) {
 				m_subExpend.setX(true);
 			}
 			if (true == subExpendProp.y()) {
 				m_subExpend.setY(true);
 			}
-			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+			vec2 tmpSize = it->getCalculateMinSize();
 			m_minSize.setValue( etk_max(tmpSize.x(), m_minSize.x()),
 			                    etk_max(tmpSize.y(), m_minSize.y()) );
 		}
@@ -235,9 +205,9 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 }
 
 void ewol::widget::ContainerN::onRegenerateDisplay() {
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			m_subWidget[iii]->onRegenerateDisplay();
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			it->onRegenerateDisplay();
 		}
 	}
 }
@@ -247,14 +217,14 @@ ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(cons
 		return nullptr;
 	}
 	// for all element in the sizer ...
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->getSize();
-			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			vec2 tmpSize = it->getSize();
+			vec2 tmpOrigin = it->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
+				ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}

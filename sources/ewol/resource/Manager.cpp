@@ -215,16 +215,26 @@ bool ewol::resource::Manager::release(ewol::object::Shared<ewol::Resource> _obje
 */
 // in case of error ...
 void ewol::resource::Manager::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
-	for (size_t iii=0; iii<m_resourceList.size(); ++iii) {
-		if (m_resourceList[iii] == _removeObject) {
-			EWOL_WARNING("Remove Resource that is not removed ... ");
-			m_resourceList[iii].reset();
+	EWOL_INFO("remove object in Manager");
+	for (int64_t iii = (int64_t)m_resourceListToUpdate.size()-1; iii>=0; --iii) {
+		if (m_resourceListToUpdate[iii] == nullptr) {
+			continue;
 		}
-	}
-	for (size_t iii=0; iii<m_resourceListToUpdate.size(); ++iii) {
-		if (m_resourceListToUpdate[iii] == _removeObject) {
-			EWOL_WARNING("Remove Resource that is not removed .2. ");
-			m_resourceListToUpdate[iii].reset();
+		if (m_resourceListToUpdate[iii]->getRefCount() >= 3) {
+			continue;
 		}
+		m_resourceListToUpdate.erase(m_resourceListToUpdate.begin() + iii);
+		break;
 	}
+	for (int64_t iii = (int64_t)m_resourceList.size()-1; iii>=0; --iii) {
+		if (m_resourceList[iii] == nullptr) {
+			continue;
+		}
+		if (m_resourceList[iii]->getRefCount() >= 2) {
+			continue;
+		}
+		m_resourceList.erase(m_resourceList.begin() + iii);
+		break;
+	}
+	
 }

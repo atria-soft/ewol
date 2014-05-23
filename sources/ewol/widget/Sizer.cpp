@@ -65,19 +65,19 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	float unexpandableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			vec2 tmpSize = it->getCalculateMinSize();
 			if (m_mode == ewol::widget::Sizer::modeVert) {
 				unexpandableSize += tmpSize.y();
-				if (false == m_subWidget[iii]->canExpand().y()) {
+				if (false == it->canExpand().y()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
 				}
 			} else {
 				unexpandableSize += tmpSize.x();
-				if (false == m_subWidget[iii]->canExpand().x()) {
+				if (false == it->canExpand().x()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
@@ -99,27 +99,27 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 		}
 	}
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			vec2 tmpSize = it->getCalculateMinSize();
 			// set the origin :
-			EWOL_VERBOSE("[" << getId() << "] set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
-			m_subWidget[iii]->setOrigin(vec2ClipInt32(tmpOrigin+m_offset));
+			EWOL_VERBOSE("[" << getId() << "] set ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
+			it->setOrigin(vec2ClipInt32(tmpOrigin+m_offset));
 			// Now update his size  his size in X and the curent sizer size in Y:
 			if (m_mode == ewol::widget::Sizer::modeVert) {
-				if (true == m_subWidget[iii]->canExpand().y()) {
-					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
+				if (it->canExpand().y() == true) {
+					it->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y())));
+					it->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y())));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
 				}
 			} else {
-				if (true == m_subWidget[iii]->canExpand().x()) {
-					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y())));
+				if (it->canExpand().x() == true) {
+					it->calculateSize(vec2ClipInt32(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y())));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(tmpSize.x(), m_size.y())));
+					it->calculateSize(vec2ClipInt32(vec2(tmpSize.x(), m_size.y())));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x());
 				}
 			}
@@ -136,18 +136,18 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	vec2 tmpBorderSize = m_borderSize.getPixel();
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			m_subWidget[iii]->calculateMinMaxSize();
-			if (true == m_subWidget[iii]->canExpand().x()) {
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			it->calculateMinMaxSize();
+			if (it->canExpand().x() == true) {
 				m_subExpend.setX(true);
 			}
-			if (true == m_subWidget[iii]->canExpand().y()) {
+			if (it->canExpand().y() == true) {
 				m_subExpend.setY(true);
 			}
-			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+			vec2 tmpSize = it->getCalculateMinSize();
 			EWOL_VERBOSE("[" << getId() << "] NewMinSize=" << tmpSize);
-			EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "}     Get minSize[" << iii << "] "<< tmpSize);
+			EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "}     Get minSize="<< tmpSize);
 			if (m_mode == ewol::widget::Sizer::modeVert) {
 				m_minSize.setY(m_minSize.y() + tmpSize.y());
 				if (tmpSize.x()>m_minSize.x()) {

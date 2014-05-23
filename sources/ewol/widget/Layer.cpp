@@ -34,14 +34,14 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec
 		return nullptr;
 	}
 	// for all element in the sizer ...
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->getSize();
-			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();
+	for (auto it : m_subWidget) {
+		if (it != nullptr) {
+			vec2 tmpSize = it->getSize();
+			vec2 tmpOrigin = it->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
+				ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}

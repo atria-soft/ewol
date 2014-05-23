@@ -12,6 +12,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <list>
 
 namespace ewol {
 	namespace widget {
@@ -21,7 +22,7 @@ namespace ewol {
 		 */
 		class ContainerN : public ewol::Widget {
 			protected:
-				std::vector<ewol::object::Shared<ewol::Widget>> m_subWidget;
+				std::list<ewol::object::Owner<ewol::Widget>> m_subWidget;
 			public:
 				/**
 				 * @brief Constructor

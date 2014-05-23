@@ -12,11 +12,13 @@
 #include <etk/types.h>
 #include <ewol/object/Object.h>
 #include <ewol/object/MultiCast.h>
+#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	namespace object {
 		class Manager {
 			private:
+				std::vector<ewol::object::RemoveEvent*> m_removeEventList;
 				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectListActive; // all active widget
 			public:
@@ -61,6 +63,9 @@ namespace ewol {
 				ewol::object::MultiCast& multiCast() {
 					return m_multiCast;
 				};
+				
+				void add(ewol::object::RemoveEvent* _class);
+				void rm(ewol::object::RemoveEvent* _class);
 		};
 	};
 };

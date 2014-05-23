@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Container2 : public ewol::Widget {
 			protected:
-				ewol::object::Shared<ewol::Widget> m_subWidget[2]; //!< 2 subwidget possible
+				ewol::object::Owner<ewol::Widget> m_subWidget[2]; //!< 2 subwidget possible
 				int32_t m_idWidgetDisplayed; //!< current widget displayed
 			public:
 				/**

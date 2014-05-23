@@ -93,7 +93,8 @@ def create(target):
 		'ewol/object/Manager.cpp',
 		'ewol/object/Message.cpp',
 		'ewol/object/MultiCast.cpp',
-		'ewol/object/Object.cpp'
+		'ewol/object/Object.cpp',
+		'ewol/object/RemoveEvent.cpp'
 		])
 	
 	# OpenGL interface :

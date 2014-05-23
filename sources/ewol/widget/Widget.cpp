@@ -133,7 +133,7 @@ ewol::Widget::Widget() :
 	m_annimationType[1] = nullptr;
 	m_annimationTime[0] = 0.1f; // annimation will be 100ms at the first state
 	m_annimationTime[1] = 0.1f; // annimation will be 100ms at the first state
-	addObjectType("ewol::object::Shared<ewol::Widget>");
+	addObjectType("ewol::Widget");
 	// set all the config in the list :
 	registerConfig(ewol::Widget::configFill, "bvec2", nullptr, "Fill the widget available size");
 	registerConfig(ewol::Widget::configExpand, "bvec2", nullptr, "Request the widget Expand size wile space is available");
@@ -171,8 +171,9 @@ void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
 	m_up = _upper;
 }
 
-void ewol::Widget::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
-	if (_removeObject == m_up) {
+void ewol::Widget::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	ewol::Object::onObjectRemove(_object);
+	if (_object == m_up) {
 		EWOL_WARNING("[" << getId() << "] remove upper widget before removing this widget ...");
 		m_up = nullptr;
 	}

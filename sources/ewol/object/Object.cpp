@@ -49,6 +49,7 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 }
 
 void ewol::Object::autoDestroy() {
+	EWOL_VERBOSE("Destroy object : [" << m_valUID << "] type:" << getTypeDescription());
 	{
 		std::unique_lock<std::mutex> lock(m_lockRefCount);
 		if (m_isDestroyed == true) {
@@ -114,7 +115,7 @@ ewol::Object::~Object() {
 
 const char * const ewol::Object::getObjectType() {
 	if (m_listType.size() == 0) {
-		return "ewol::object::Shared<ewol::Object>";
+		return "ewol::Object";
 	}
 	return m_listType.back();
 }
@@ -127,7 +128,7 @@ void ewol::Object::addObjectType(const char* _type) {
 	m_listType.push_back(_type);
 }
 std::string ewol::Object::getTypeDescription() {
-	std::string ret("ewol::object::Shared<ewol::Object>");
+	std::string ret("ewol::Object");
 	for(auto element : m_listType) {
 		ret += "|";
 		ret += element;
@@ -136,7 +137,7 @@ std::string ewol::Object::getTypeDescription() {
 }
 
 bool ewol::Object::isTypeCompatible(const std::string& _type) {
-	if (_type == "ewol::object::Shared<ewol::Object>") {
+	if (_type == "ewol::Object") {
 		return true;
 	}
 	for(auto element : m_listType) {

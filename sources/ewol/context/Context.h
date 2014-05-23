@@ -158,7 +158,7 @@ namespace ewol {
 			 */
 			virtual void stop();
 		private:
-			ewol::object::Shared<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
+			ewol::object::Owner<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
 		public:
 			/**
 			 * @brief set the current windows to display :

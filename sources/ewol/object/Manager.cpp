@@ -35,17 +35,19 @@ ewol::object::Manager::~Manager() {
 
 void ewol::object::Manager::unInit() {
 	EWOL_DEBUG(" == > Un-Init Object-Manager");
+	for (auto &it : m_eObjectList) {
+		if (it != nullptr) {
+			//it->removeObject();
+		}
+	}
 	removeAllRemovedObject();
 	EWOL_INFO(" remove missing user object");
 	size_t iii=0;
 	if (m_eObjectListActive.size() != 0) {
 		EWOL_ERROR("Have " << m_eObjectListActive.size() << " active Object");
 	}
-	while(iii < m_eObjectListActive.size()) {
-		if (m_eObjectListActive[iii] != nullptr) {
-			m_eObjectListActive.erase(m_eObjectListActive.begin()+iii);
-		}
-	}
+	m_eObjectListActive.clear();
+	m_eObjectList.clear();
 	removeAllRemovedObject();
 }
 
@@ -67,6 +69,9 @@ void ewol::object::Manager::informOneObjectIsRemoved(const ewol::object::Shared<
 		     && it != _object) {
 			it->onObjectRemove(_object);
 		}
+	}
+	for (auto &it : m_removeEventList) {
+		it->onObjectRemove(_object);
 	}
 	// inform the context ...
 	ewol::getContext().onObjectRemove(_object);
@@ -134,5 +139,19 @@ ewol::object::Shared<ewol::Object> ewol::object::Manager::get(const std::string&
 		}
 	}
 	return nullptr;
+}
+
+
+void ewol::object::Manager::add(ewol::object::RemoveEvent* _class) {
+	m_removeEventList.push_back(_class);
+}
+
+void ewol::object::Manager::rm(ewol::object::RemoveEvent* _class) {
+	for (size_t iii=0; iii<m_removeEventList.size(); ++iii) {
+		if (m_removeEventList[iii] == _class) {
+			m_removeEventList.erase(m_removeEventList.begin() + iii);
+			return;
+		}
+	}
 }
 

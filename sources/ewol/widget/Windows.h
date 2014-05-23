@@ -56,8 +56,8 @@ namespace ewol {
 					m_hasDecoration = true;
 				}
 			private:
-				ewol::object::Shared<ewol::Widget> m_subWidget;
-				std::vector<ewol::object::Shared<ewol::Widget>> m_popUpWidgetList;
+				ewol::object::Owner<ewol::Widget> m_subWidget;
+				std::vector<ewol::object::Owner<ewol::Widget>> m_popUpWidgetList;
 			public:
 				void setSubWidget(ewol::object::Shared<ewol::Widget> _widget);
 				void popUpWidgetPush(ewol::object::Shared<ewol::Widget> _widget);

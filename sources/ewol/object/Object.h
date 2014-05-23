@@ -14,6 +14,7 @@
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
+#include <ewol/object/Owner.h>
 #include <ewol/object/Shared.h>
 
 namespace ewol {
@@ -50,6 +51,7 @@ namespace ewol {
 	 */
 	class Object {
 		template<typename T> friend class ewol::object::Shared;
+		template<typename T> friend class ewol::object::Owner;
 		private:
 			//! @not-in-doc
 			std::mutex m_lockRefCount;

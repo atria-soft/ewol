@@ -380,13 +380,10 @@ ewol::Context::~Context() {
 	// TODO : Clean the message list ...
 	// set the curent interface :
 	lockContext();
+	// Remove current windows
+	m_windowsCurrent.reset();
 	// call application to uninit
 	APP_UnInit(*this);
-	if (m_windowsCurrent != nullptr) {
-		EWOL_DEBUG("Main windows has not been auto-removed...");
-		m_windowsCurrent->removeObject();
-		m_windowsCurrent.reset();
-	}
 	// unset all windows
 	m_msgSystem.clean();
 	
