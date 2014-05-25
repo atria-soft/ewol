@@ -9,6 +9,8 @@
 #ifndef __RESOURCES_MANAGER_H__
 #define __RESOURCES_MANAGER_H__
 
+#include <list>
+#include <vector>
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/resource/Resource.h>
@@ -16,9 +18,9 @@
 
 namespace ewol {
 	namespace resource {
-		class Manager : private ewol::object::RemoveEvent {
+		class Manager{
 			private:
-				std::vector<ewol::object::Shared<ewol::Resource>> m_resourceList;
+				std::list<ewol::object::Owner<ewol::Resource>> m_resourceList;
 				std::vector<ewol::object::Shared<ewol::Resource>> m_resourceListToUpdate;
 				bool m_contextHasBeenRemoved;
 			public:
@@ -61,8 +63,7 @@ namespace ewol {
 				// internal API to extent eResources in extern Soft
 				ewol::object::Shared<ewol::Resource> localKeep(const std::string& _filename);
 				void localAdd(const ewol::object::Shared<ewol::Resource>& _object);
-			public: // herited function
-				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+				virtual bool checkResourceToRemove();
 		};
 	};
 };

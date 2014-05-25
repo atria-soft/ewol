@@ -72,16 +72,11 @@ ewol::widget::Manager::~Manager() {
 	m_creatorList.clear();
 }
 
-void ewol::widget::Manager::rm(ewol::object::Shared<ewol::Widget> _newWidget) {
-	periodicCallRm(_newWidget);
-	focusRemoveIfRemove(_newWidget);
-}
-
 /* *************************************************************************
  * focus Area : 
  * *************************************************************************/
 
-void ewol::widget::Manager::focusKeep(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Manager::focusKeep(const ewol::object::Shared<ewol::Widget>& _newWidget) {
 	if (nullptr == _newWidget) {
 		// nothing to do ...
 		return;
@@ -106,7 +101,7 @@ void ewol::widget::Manager::focusKeep(ewol::object::Shared<ewol::Widget> _newWid
 	}
 }
 
-void ewol::widget::Manager::focusSetDefault(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Manager::focusSetDefault(const ewol::object::Shared<ewol::Widget>& _newWidget) {
 	if(    nullptr != _newWidget
 	    && false == _newWidget->canHaveFocus() ) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
@@ -143,11 +138,11 @@ void ewol::widget::Manager::focusRelease() {
 }
 
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Manager::focusGet() {
+const ewol::object::Shared<ewol::Widget>& ewol::widget::Manager::focusGet() {
 	return m_focusWidgetCurrent;
 }
 
-void ewol::widget::Manager::focusRemoveIfRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Manager::focusRemoveIfRemove(const ewol::object::Shared<ewol::Widget>& _newWidget) {
 	if (m_focusWidgetCurrent == _newWidget) {
 		EWOL_WARNING("Release focus when remove widget");
 		focusRelease();
@@ -158,35 +153,48 @@ void ewol::widget::Manager::focusRemoveIfRemove(ewol::object::Shared<ewol::Widge
 	}
 }
 
-void ewol::widget::Manager::periodicCallAdd(ewol::object::Shared<ewol::Widget> _pWidget) {
-	for (size_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
-		if (m_listOfPeriodicWidget[iii] == _pWidget) {
+void ewol::widget::Manager::periodicCallAdd(const ewol::object::Shared<ewol::Widget>& _pWidget) {
+	if (_pWidget == nullptr) {
+		return;
+	}
+	m_havePeriodic = true;
+	for (auto &it : m_listOfPeriodicWidget) {
+		if (it == _pWidget) {
 			return;
 		}
 	}
-	for (size_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
-		if (nullptr == m_listOfPeriodicWidget[iii]) {
-			m_listOfPeriodicWidget[iii] = _pWidget;
+	for (auto &it : m_listOfPeriodicWidget) {
+		if (it == nullptr) {
+			it = _pWidget;
+			
 			return;
 		}
 	}
 	m_listOfPeriodicWidget.push_back(_pWidget);
-	m_havePeriodic = true;
 }
 
-void ewol::widget::Manager::periodicCallRm(ewol::object::Shared<ewol::Widget> _pWidget) {
+void ewol::widget::Manager::periodicCallRm(const ewol::object::Shared<ewol::Widget>& _pWidget) {
+	for (auto &it : m_listOfPeriodicWidget) {
+		if (it == _pWidget) {
+			it.reset();
+		}
+	}
+	periodicCallUpdateCount();
+}
+void ewol::widget::Manager::periodicCallUpdateCount() {
 	int32_t nbElement = 0;
-	for (int32_t iii=m_listOfPeriodicWidget.size()-1; iii >= 0 ; iii--) {
-		if (m_listOfPeriodicWidget[iii] == _pWidget) {
-			m_listOfPeriodicWidget[iii] = nullptr;
-		} else {
+	for (auto &it : m_listOfPeriodicWidget) {
+		if (it != nullptr) {
 			nbElement++;
 		}
 	}
 	if (0 == nbElement) {
 		m_havePeriodic = false;
+	} else {
+		m_havePeriodic = true;
 	}
 }
+
 
 void ewol::widget::Manager::periodicCallResume(int64_t _localTime) {
 	m_lastPeriodicCallTime = _localTime;
@@ -285,4 +293,20 @@ std::string ewol::widget::Manager::list() {
 	return tmpVal;
 }
 
-
+void ewol::widget::Manager::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	if (m_focusWidgetDefault == _object) {
+		EWOL_VERBOSE("Remove object ==> rm default focus !!!");
+		m_focusWidgetDefault.reset();
+	}
+	if (m_focusWidgetCurrent == _object) {
+		EWOL_VERBOSE("Remove object ==> rm current focus !!!");
+		m_focusWidgetCurrent.reset();
+	}
+	for (auto &it : m_listOfPeriodicWidget) {
+		if (it == _object) {
+			EWOL_VERBOSE("Remove object ==> rm periodic call !!!");
+			it.reset();
+		}
+	}
+	periodicCallUpdateCount();
+}

@@ -83,7 +83,7 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 	_eventTable[_idInput].isUsed = false;
 	_eventTable[_idInput].destinationInputId = 0;
 	_eventTable[_idInput].lastTimeEvent = 0;
-	_eventTable[_idInput].curentWidgetEvent = nullptr;
+	_eventTable[_idInput].curentWidgetEvent.reset();
 	_eventTable[_idInput].origin.setValue(0,0);
 	_eventTable[_idInput].size.setValue(99999999,99999999);
 	_eventTable[_idInput].downStart.setValue(0,0);
@@ -138,16 +138,22 @@ void ewol::context::InputManager::unGrabPointer() {
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
 
-void ewol::context::InputManager::onObjectRemove(const ewol::object::Shared<ewol::Object>& removeObject) {
+void ewol::context::InputManager::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		if (m_eventInputSaved[iii].curentWidgetEvent == removeObject) {
+		if (m_eventInputSaved[iii].curentWidgetEvent == _object) {
 			// remove the property of this input ...
+			EWOL_VERBOSE("Remove object ==> rm Input Event !!!");
 			cleanElement(m_eventInputSaved, iii);
 		}
-		if (m_eventMouseSaved[iii].curentWidgetEvent == removeObject) {
+		if (m_eventMouseSaved[iii].curentWidgetEvent == _object) {
 			// remove the property of this input ...
+			EWOL_VERBOSE("Remove object ==> rm Mouse Event !!!");
 			cleanElement(m_eventMouseSaved, iii);
 		}
+	}
+	if (m_grabWidget == _object) {
+		EWOL_VERBOSE("Remove object ==> rm Grab widget !!!");
+		m_grabWidget.reset();
 	}
 }
 

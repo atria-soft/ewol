@@ -22,6 +22,7 @@
 #include <ewol/context/commandLine.h>
 #include <ewol/context/InputManager.h>
 #include <ewol/context/Fps.h>
+#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	/**
@@ -37,7 +38,7 @@ namespace ewol {
 		screenPortrait
 	};
 	
-	class Context {
+	class Context/* : private ewol::object::RemoveEvent */{
 		private:
 			ewol::context::CommandLine m_commandLine; //!< Start command line information
 		public:
@@ -51,16 +52,16 @@ namespace ewol {
 				return m_configFont;
 			};
 		private:
-			ewol::widget::Manager m_widgetManager; //!< global widget manager
-		public:
-			ewol::widget::Manager& getWidgetManager() {
-				return m_widgetManager;
-			};
-		private:
 			ewol::object::Manager m_objectManager; //!< Object Manager main instance
 		public:
 			ewol::object::Manager& getEObjectManager() {
 				return m_objectManager;
+			};
+		private:
+			ewol::widget::Manager m_widgetManager; //!< global widget manager
+		public:
+			ewol::widget::Manager& getWidgetManager() {
+				return m_widgetManager;
 			};
 		private:
 			ewol::resource::Manager m_resourceManager; //!< global resources Manager
@@ -121,7 +122,7 @@ namespace ewol {
 			 * @brief The current context is resumed
 			 */
 			virtual void OS_Resume();
-		
+			
 			/**
 			 * @brief The current context is set in foreground (framerate is maximum speed)
 			 */
@@ -135,12 +136,9 @@ namespace ewol {
 			
 			// return true if a flush is needed
 			bool OS_Draw(bool _displayEveryTime);
-			/**
-			 * @brief Inform object that an other object is removed ...
-			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
-			 * @note : Sub classes must call this class
-			 */
-			void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+			
+			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+		public:
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */

@@ -32,15 +32,6 @@ namespace ewol {
 					~Shared() {
 						reset();
 					}
-					// shared to private constructor
-					Shared(const Owner<T>& _obj) :
-					  m_pointer(nullptr) {
-						m_pointer = _obj.get();
-						if (m_pointer == nullptr) {
-							return;
-						}
-						m_pointer->objRefCountIncrement();
-					}
 					// copy constructor
 					Shared(const Shared& _obj) :
 					  m_pointer(nullptr) {
@@ -56,12 +47,6 @@ namespace ewol {
 						// transfert pointer
 						m_pointer = _obj.m_pointer;
 						_obj.m_pointer = nullptr;
-					}
-					bool hasOwner() {
-						if (m_pointer == nullptr) {
-							return false;
-						}
-						return m_pointer->getRefOwner();
 					}
 					
 					Shared& operator=(const Shared<T>& _obj) noexcept {
@@ -80,15 +65,17 @@ namespace ewol {
 						if (m_pointer == nullptr) {
 							return;
 						}
-						if (m_pointer->m_objRefCount <= 0) {
-							EWOL_ERROR("Object is already removed");
-						} else if (m_pointer->m_objRefCount == 1) {
-							EWOL_ERROR("Remove object (in shared)");
-							delete m_pointer;
-						} else {
-							m_pointer->objRefCountDecrement();
-						}
+						// To prevent cyclisme
+						T* tmp = m_pointer;
 						m_pointer = nullptr;
+						if (tmp->m_objRefCount <= 0) {
+							EWOL_WARNING("Object is already removed");
+						} else if (tmp->m_objRefCount == 1) {
+							EWOL_VERBOSE("Remove object (in shared)");
+							delete tmp;
+						} else {
+							tmp->objRefCountDecrement();
+						}
 					}
 					T* get() const noexcept {
 						return m_pointer;
@@ -97,9 +84,6 @@ namespace ewol {
 						return *m_pointer;
 					}
 					T* operator->() const noexcept {
-						return m_pointer;
-					}
-					operator ewol::object::Owner<T>() const noexcept {
 						return m_pointer;
 					}
 					template<typename T2> operator ewol::object::Shared<T2>() const noexcept {
@@ -146,16 +130,6 @@ namespace ewol {
 	inline bool operator==(const T* _obj, const object::Shared<T2>& _obj2) noexcept {
 		return _obj == _obj2.get();
 	}
-	//! @not in doc
-	template<typename T, typename T2>
-	inline bool operator==(const object::Owner<T>& _obj, const object::Shared<T2>& _obj2) noexcept {
-		return _obj.get() == _obj2.get();
-	}
-	//! @not in doc
-	template<typename T, typename T2>
-	inline bool operator==(const object::Shared<T>& _obj, const object::Owner<T2>& _obj2) noexcept {
-		return _obj.get() == _obj2.get();
-	}
 	
 	//! @not in doc
 	template<typename T, typename T2>
@@ -183,16 +157,6 @@ namespace ewol {
 	       std::enable_if<std::is_convertible<T*, T2*>::value>::type>
 	inline bool operator!=(const T* _obj, const object::Shared<T2>& _obj2) noexcept {
 		return _obj != _obj2.get();
-	}
-	//! @not in doc
-	template<typename T, typename T2>
-	inline bool operator!=(const object::Owner<T>& _obj, const object::Shared<T2>& _obj2) noexcept {
-		return _obj.get() != _obj2.get();
-	}
-	//! @not in doc
-	template<typename T, typename T2>
-	inline bool operator!=(const object::Shared<T>& _obj, const object::Owner<T2>& _obj2) noexcept {
-		return _obj.get() != _obj2.get();
 	}
 	
 	//! @not in doc

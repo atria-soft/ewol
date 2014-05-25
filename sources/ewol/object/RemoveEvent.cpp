@@ -7,11 +7,17 @@
  */
 
 #include <ewol/object/RemoveEvent.h>
+#include <ewol/context/Context.h>
 
 ewol::object::RemoveEvent::RemoveEvent() {
+	Context& tmp = ewol::getContext();
+	ewol::object::Manager& manager = tmp.getEObjectManager();
+	manager.add(this);
 	
 }
 
 ewol::object::RemoveEvent::~RemoveEvent() {
-	
+	Context& tmp = ewol::getContext();
+	ewol::object::Manager& manager = tmp.getEObjectManager();
+	manager.rm(this);
 }

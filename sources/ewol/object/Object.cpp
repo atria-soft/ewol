@@ -22,23 +22,35 @@ size_t ewol::Object::m_valUID = 0;
 
 void ewol::Object::objRefCountIncrement() {
 	std::unique_lock<std::mutex> lock(m_lockRefCount);
+	/*
+	if (std::string("ewol::widget::Windows") == getObjectType()) {
+		EWOL_ERROR("increment Windows count ++" << m_objRefCount);
+		//etk::log::displayBacktrace();
+	}
+	*/
 	m_objRefCount++;
 }
 
 void ewol::Object::objRefCountDecrement() {
 	std::unique_lock<std::mutex> lock(m_lockRefCount);
+	/*
+	if (std::string("ewol::widget::Windows") == getObjectType()) {
+		EWOL_ERROR("Decrement Windows count --" << m_objRefCount);
+		//etk::log::displayBacktrace();
+	}
+	*/
 	m_objRefCount--;
 }
 
 void ewol::Object::operator delete(void* _ptr, std::size_t _sz) {
-	EWOL_DEBUG("custom delete for size " << _sz);
-	ewol::object::Shared<ewol::Object> obj = (ewol::Object*)_ptr;
+	EWOL_VERBOSE("custom delete for size " << _sz);
+	ewol::Object* obj = (ewol::Object*)_ptr;
 	obj->objRefCountDecrement();
 	if (obj->m_objRefCount <= 0) {
-		EWOL_DEBUG("    ==> real remove");
+		EWOL_VERBOSE("    ==> real remove");
 		::operator delete(_ptr);
 	} else {
-		EWOL_DEBUG("    ==> Some user is link on it : " << obj->m_objRefCount);
+		EWOL_ERROR("    ==> Some user is link on it : " << obj->m_objRefCount);
 		etk::log::displayBacktrace();
 	}
 }
@@ -49,7 +61,7 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 }
 
 void ewol::Object::autoDestroy() {
-	EWOL_VERBOSE("Destroy object : [" << m_valUID << "] type:" << getTypeDescription());
+	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getTypeDescription());
 	{
 		std::unique_lock<std::mutex> lock(m_lockRefCount);
 		if (m_isDestroyed == true) {
@@ -100,7 +112,7 @@ ewol::Object::Object(const std::string& _name) :
 }
 
 ewol::Object::~Object() {
-	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
+	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription() << " refcount=" << m_objRefCount);
 	getMultiCast().rm(this);
 	for (size_t iii=0; iii<m_externEvent.size(); ++iii) {
 		if (m_externEvent[iii] != nullptr) {
@@ -295,9 +307,11 @@ void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _
 }
 
 void ewol::Object::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	EWOL_VERBOSE("[" << getId() << "] onObjectRemove(" << _object->getId() << ")");
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
 		if (m_externEvent[iii] != nullptr) {
 			m_externEvent.erase(m_externEvent.begin()+iii);
+			EWOL_VERBOSE("[" << getId() << "] Remove extern event : to object id=" << _object->getId());
 		}
 	}
 }

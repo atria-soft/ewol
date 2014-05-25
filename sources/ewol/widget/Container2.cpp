@@ -45,8 +45,7 @@ void ewol::widget::Container2::subWidgetRemove(int32_t _idWidget) {
 	if (m_subWidget[_idWidget] != nullptr) {
 		EWOL_VERBOSE("Remove widget : " << _idWidget);
 		m_subWidget[_idWidget]->removeUpperWidget();
-		m_subWidget[_idWidget]->removeObject();
-		m_subWidget[_idWidget] = nullptr;
+		m_subWidget[_idWidget].reset();
 		markToRedraw();
 		requestUpdateSize();
 	}
@@ -57,7 +56,7 @@ void ewol::widget::Container2::subWidgetUnLink(int32_t _idWidget) {
 		m_subWidget[_idWidget]->removeUpperWidget();
 		EWOL_VERBOSE("Unlink widget : " << _idWidget);
 	}
-	m_subWidget[_idWidget] = nullptr;
+	m_subWidget[_idWidget].resetShared();
 }
 
 ewol::object::Shared<ewol::Widget> ewol::widget::Container2::getWidgetNamed(const std::string& _widgetName) {
@@ -76,12 +75,12 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Container2::getWidgetNamed(cons
 
 void ewol::widget::Container2::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	if (m_subWidget[0] == _removeObject) {
-		m_subWidget[0] = nullptr;
+		m_subWidget[0].reset();
 		markToRedraw();
 		requestUpdateSize();
 	}
 	if (m_subWidget[1] == _removeObject) {
-		m_subWidget[1] = nullptr;
+		m_subWidget[1].reset();
 		markToRedraw();
 		requestUpdateSize();
 	}

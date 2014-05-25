@@ -28,7 +28,6 @@ ewol::widget::Windows::Windows() :
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
-	m_subWidget = nullptr;
 	setDecorationDisable();
 	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Windows.json");
 	if (m_colorProperty != nullptr) {
@@ -45,16 +44,16 @@ ewol::widget::Windows::~Windows() {
 void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
-	if (nullptr != m_subWidget) {
+	if (m_subWidget != nullptr) {
 		m_subWidget->calculateMinMaxSize();
 		// TODO : Check if min size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
 		m_subWidget->calculateSize(m_size);
 	}
-	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
-		if (nullptr != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->calculateMinMaxSize();
-			m_popUpWidgetList[iii]->calculateSize(m_size);
+	for (auto &it : m_popUpWidgetList) {
+		if(it != nullptr) {
+			it->calculateMinMaxSize();
+			it->calculateSize(m_size);
 		}
 	}
 }
@@ -64,11 +63,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const v
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
 	if (0 < m_popUpWidgetList.size()) {
-		if (nullptr == m_popUpWidgetList[m_popUpWidgetList.size()-1]) {
-			m_popUpWidgetList.pop_back();
-		} else {
-			return m_popUpWidgetList[m_popUpWidgetList.size()-1]->getWidgetAtPos(_pos);
-		}
+		return m_popUpWidgetList.back()->getWidgetAtPos(_pos);
 	// otherwise in the normal windows
 	} else if (nullptr != m_subWidget) {
 		return m_subWidget->getWidgetAtPos(_pos);
@@ -113,9 +108,9 @@ void ewol::widget::Windows::onRegenerateDisplay() {
 	if (nullptr != m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
-	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
-		if (nullptr != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->onRegenerateDisplay();
+	for (auto &it : m_popUpWidgetList) {
+		if (it != nullptr) {
+			it->onRegenerateDisplay();
 		}
 	}
 }
@@ -154,9 +149,9 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	int64_t ___startTime2 = ewol::getTime();
 	#endif
 	// second display the pop-up
-	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
-		if (nullptr != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->systemDraw(_displayProp);
+	for (auto &it : m_popUpWidgetList) {
+		if (it != nullptr) {
+			it->systemDraw(_displayProp);
 			//EWOL_DEBUG("Draw Pop-up");
 		}
 	}
@@ -169,9 +164,14 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 void ewol::widget::Windows::setSubWidget(ewol::object::Shared<ewol::Widget> _widget) {
 	if (m_subWidget != nullptr) {
 		EWOL_INFO("Remove current main windows Widget...");
+		m_subWidget->removeUpperWidget();
 		m_subWidget.reset();
 	}
-	m_subWidget = _widget;
+	if (_widget != nullptr) {
+		m_subWidget = _widget;
+		m_subWidget->setUpperWidget(this);
+	}
+	
 	// Regenerate the size calculation :
 	calculateSize(m_size);
 }
@@ -183,6 +183,7 @@ void ewol::widget::Windows::popUpWidgetPush(ewol::object::Shared<ewol::Widget> _
 		return;
 	}
 	m_popUpWidgetList.push_back(_widget);
+	_widget->setUpperWidget(this);
 	// force the focus on the basic widget ==> this remove many time the virual keyboard area
 	_widget->keepFocus();
 	// Regenerate the size calculation :
@@ -195,11 +196,8 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	if (m_popUpWidgetList.size() == 0) {
 		return;
 	}
-	ewol::object::Shared<ewol::Widget> widget = m_popUpWidgetList[m_popUpWidgetList.size()-1];
-	if (widget == nullptr) {
-		return;
-	}
-	widget->removeObject();
+	m_popUpWidgetList.back()->removeUpperWidget();
+	m_popUpWidgetList.pop_back();
 }
 
 void ewol::widget::Windows::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
@@ -209,13 +207,13 @@ void ewol::widget::Windows::onObjectRemove(const ewol::object::Shared<ewol::Obje
 	
 	if (m_subWidget == _removeObject) {
 		EWOL_DEBUG("Remove main element of the windows  == > destroyed object");
-		m_subWidget = nullptr;
+		m_subWidget.reset();
 	}
-	for(int32_t iii=m_popUpWidgetList.size()-1; iii >= 0; --iii) {
-		if(m_popUpWidgetList[iii] == _removeObject) {
-			EWOL_DEBUG("Remove Pop-up [" << iii << "] element of the windows  == > destroyed object");
-			m_popUpWidgetList[iii] = nullptr;
-			m_popUpWidgetList.erase(m_popUpWidgetList.begin()+iii);
+	for (auto it(m_popUpWidgetList.begin()) ; it != m_popUpWidgetList.end() ; ++it) {
+		if(*it == _removeObject) {
+			EWOL_DEBUG("Remove Pop-up element of the windows  == > destroyed object");
+			m_popUpWidgetList.erase(it);
+			it = m_popUpWidgetList.begin();
 		}
 	}
 }

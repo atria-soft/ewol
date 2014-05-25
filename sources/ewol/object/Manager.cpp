@@ -14,7 +14,8 @@
 #undef __class__
 #define __class__ "ewol::object::Manager"
 
-ewol::object::Manager::Manager() {
+ewol::object::Manager::Manager(ewol::Context& _context) :
+  m_context(_context) {
 	EWOL_DEBUG(" == > init Object-Manager");
 }
 
@@ -30,6 +31,13 @@ ewol::object::Manager::~Manager() {
 	}
 	if (true == hasError) {
 		EWOL_ERROR("Check if the function UnInit has been called !!!");
+	}
+	displayListObject();
+}
+
+void ewol::object::Manager::displayListObject() {
+	for (auto &it : m_eObjectList) {
+		EWOL_ERROR("List object : " << it->getName() << " : " << it->getTypeDescription() << " nb ref=" << it->getRefCount());
 	}
 }
 
@@ -67,14 +75,17 @@ void ewol::object::Manager::informOneObjectIsRemoved(const ewol::object::Shared<
 	for (auto &it : m_eObjectList) {
 		if (    it != nullptr
 		     && it != _object) {
+			EWOL_VERBOSE("[" << _object->getId() << "] Inform remove Element : " << it->getId() << " type : " << it->getTypeDescription());
 			it->onObjectRemove(_object);
 		}
 	}
+	// inform context that 	n object is removed ...
+	m_context.onObjectRemove(_object);
+	EWOL_VERBOSE("m_removeEventList.size() = " << m_removeEventList.size());
 	for (auto &it : m_removeEventList) {
+		EWOL_VERBOSE("[" << _object->getId() << "] Inform Event Remove Object List : ...");
 		it->onObjectRemove(_object);
 	}
-	// inform the context ...
-	ewol::getContext().onObjectRemove(_object);
 }
 
 void ewol::object::Manager::respown(const ewol::object::Shared<ewol::Object>& _object){
@@ -99,13 +110,11 @@ void ewol::object::Manager::remove(const ewol::object::Shared<ewol::Object>& _ob
 	for (int64_t iii = (int64_t)m_eObjectListActive.size()-1; iii>=0; --iii) {
 		if (m_eObjectListActive[iii] == _object) {
 			// remove Element
-			m_eObjectListActive.erase(m_eObjectListActive.begin()+iii);
 			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "'");
-			if (_object->getStatusResource() == false) {
-				informOneObjectIsRemoved(_object);
-			}
+			informOneObjectIsRemoved(_object);
 			ewol::getContext().forceRedrawAll();
-			EWOL_DEBUG("Auto-Remove Object ... done");
+			EWOL_DEBUG("Auto-Remove Object ... done (have " << _object->getRefCount() << " references)");
+			m_eObjectListActive.erase(m_eObjectListActive.begin()+iii);
 			return;
 		}
 	}
@@ -114,16 +123,22 @@ void ewol::object::Manager::remove(const ewol::object::Shared<ewol::Object>& _ob
 
 // clean all Object that request an autoRemove ...
 void ewol::object::Manager::removeAllRemovedObject() {
-	//EWOL_DEBUG("Auto-Remove Object section : " << m_eObjectAutoRemoveList.size() << " elemeents");
-	for (int64_t iii = (int64_t)m_eObjectList.size()-1; iii>=0; --iii) {
-		if (m_eObjectList[iii] == nullptr) {
-			continue;
+	EWOL_VERBOSE("Clean Object List (if needed) : " << m_eObjectListActive.size() << "/" << m_eObjectList.size() << " elemeents");
+	bool haveRemoveElement = true;
+	while (haveRemoveElement == true) {
+		haveRemoveElement = false;
+		for (int64_t iii = (int64_t)m_eObjectList.size()-1; iii>=0; --iii) {
+			if (m_eObjectList[iii] == nullptr) {
+				continue;
+			}
+			if (m_eObjectList[iii]->getRefCount() > 1) {
+				continue;
+			}
+			EWOL_DEBUG("remove definitly : [" << m_eObjectList[iii]->getId() << "] type='" << m_eObjectList[iii]->getObjectType() << "'");
+			m_eObjectList.erase(m_eObjectList.begin() + iii);
+			haveRemoveElement = true;
+			break;
 		}
-		if (m_eObjectList[iii]->getRefCount() >= 1) {
-			continue;
-		}
-		EWOL_DEBUG("remove definitly : [" << m_eObjectList[iii]->getId() << "] type='" << m_eObjectList[iii]->getObjectType() << "'");
-		m_eObjectList.erase(m_eObjectList.begin() + iii);
 	}
 }
 

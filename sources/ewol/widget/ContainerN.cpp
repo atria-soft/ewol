@@ -114,7 +114,7 @@ void ewol::widget::ContainerN::subWidgetUnLink(ewol::object::Shared<ewol::Widget
 }
 
 void ewol::widget::ContainerN::subWidgetRemoveAll() {
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->removeUpperWidget();
 		}
@@ -128,11 +128,13 @@ void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 
 ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(const std::string& _widgetName) {
 	ewol::object::Shared<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
-	if (nullptr!=tmpUpperWidget) {
+	if (tmpUpperWidget != nullptr) {
 		return tmpUpperWidget;
 	}
-	for (auto it : m_subWidget) {
-		if (nullptr != it) {
+	EWOL_ERROR("plop");
+	for (auto &it : m_subWidget) {
+		EWOL_ERROR("plop2");
+		if (it != nullptr) {
 			ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetNamed(_widgetName);
 			if (tmpWidget != nullptr) {
 				return tmpWidget;
@@ -163,7 +165,7 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 	// subwidget draw
 	ewol::DrawProperty prop = _displayProp;
 	prop.limit(m_origin, m_size);
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->systemDraw(prop);
 		}
@@ -172,7 +174,7 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 
 void ewol::widget::ContainerN::calculateSize(const vec2& _availlable) {
 	m_size = _availlable;
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->setOrigin(m_origin+m_offset);
 			it->calculateSize(m_size);
@@ -186,7 +188,7 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 	m_minSize.setValue(0,0);
 	m_maxSize.setValue(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->calculateMinMaxSize();
 			bvec2 subExpendProp = it->canExpand();
@@ -205,7 +207,7 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 }
 
 void ewol::widget::ContainerN::onRegenerateDisplay() {
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->onRegenerateDisplay();
 		}
@@ -217,7 +219,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(cons
 		return nullptr;
 	}
 	// for all element in the sizer ...
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			vec2 tmpSize = it->getSize();
 			vec2 tmpOrigin = it->getOrigin();

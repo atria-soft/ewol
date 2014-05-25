@@ -125,7 +125,7 @@ void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
 void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	int32_t elementID = 0;
 	// search element in the list : 
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		elementID ++;
 		if (it != nullptr) {
 			if (it->getId() == _id) {
@@ -146,7 +146,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const ewol::object::Shared<ewol::
 		return;
 	}
 	int32_t iii = 0;
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (    it != nullptr
 		     && it == _widgetPointer) {
 			subWidgetSelectSetVectorId(iii);
@@ -163,7 +163,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 		return;
 	}
 	int32_t iii = 0;
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (    it != nullptr
 		     && it->getName() == _widgetName) {
 			subWidgetSelectSetVectorId(iii);

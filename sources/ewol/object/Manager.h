@@ -15,14 +15,16 @@
 #include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
+	class Context;
 	namespace object {
 		class Manager {
 			private:
 				std::vector<ewol::object::RemoveEvent*> m_removeEventList;
 				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				std::vector<ewol::object::Shared<ewol::Object>> m_eObjectListActive; // all active widget
+				Context& m_context;
 			public:
-				Manager();
+				Manager(Context& _context);
 				~Manager();
 				/**
 				 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
@@ -33,6 +35,7 @@ namespace ewol {
 				 * @return number of Object
 				 */
 				int32_t getNumberObject();
+				void displayListObject();
 			private:
 				friend class ewol::Object;
 				/**

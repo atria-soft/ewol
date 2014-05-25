@@ -65,7 +65,7 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	float unexpandableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			vec2 tmpSize = it->getCalculateMinSize();
 			if (m_mode == ewol::widget::Sizer::modeVert) {
@@ -99,7 +99,7 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 		}
 	}
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			vec2 tmpSize = it->getCalculateMinSize();
 			// set the origin :
@@ -136,7 +136,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	vec2 tmpBorderSize = m_borderSize.getPixel();
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
-	for (auto it : m_subWidget) {
+	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->calculateMinMaxSize();
 			if (it->canExpand().x() == true) {

@@ -288,6 +288,7 @@ void ewol::Context::setArchiveDir(int _mode, const char* _str) {
 
 
 ewol::Context::Context(int32_t _argc, const char* _argv[]) :
+  m_objectManager(*this),
   m_previousDisplayTime(0),
   m_input(*this),
 #if (defined(__TARGET_OS__Android) || defined(__TARGET_OS__IOs))
@@ -382,6 +383,11 @@ ewol::Context::~Context() {
 	lockContext();
 	// Remove current windows
 	m_windowsCurrent.reset();
+	// clean all widget and sub widget with their resources:
+	do {
+		m_objectManager.removeAllRemovedObject();
+	} while (m_resourceManager.checkResourceToRemove() == true);
+	m_objectManager.displayListObject();
 	// call application to uninit
 	APP_UnInit(*this);
 	// unset all windows
@@ -643,14 +649,23 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_FpsFlush.draw();
 	}
 	// while The Gui is drawing in OpenGl, we do some not realTime things
-	m_objectManager.removeAllRemovedObject();
+	m_resourceManager.updateContext();
+	do {
+		m_objectManager.removeAllRemovedObject();
+	} while (m_resourceManager.checkResourceToRemove() == true);
 	
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
+void ewol::Context::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	//EWOL_CRITICAL("element removed");
-	m_input.onObjectRemove(_removeObject);
+	if (m_windowsCurrent == _object) {
+		m_windowsCurrent.reset(); // This might never arrived, the owner is the current element (expected when the widget auto remove itself)
+	}
+	// inform all manager that can not be directly linked with the object manager
+	m_input.onObjectRemove(_object);
+	m_widgetManager.onObjectRemove(_object);
+	m_resourceManager.checkResourceToRemove();
 }
 
 void ewol::Context::resetIOEvent() {

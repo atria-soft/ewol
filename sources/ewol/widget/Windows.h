@@ -14,6 +14,7 @@
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
 #include <ewol/resource/ColorFile.h>
+#include <list>
 
 namespace ewol {
 	namespace widget {
@@ -57,7 +58,7 @@ namespace ewol {
 				}
 			private:
 				ewol::object::Owner<ewol::Widget> m_subWidget;
-				std::vector<ewol::object::Owner<ewol::Widget>> m_popUpWidgetList;
+				std::list<ewol::object::Owner<ewol::Widget>> m_popUpWidgetList;
 			public:
 				void setSubWidget(ewol::object::Shared<ewol::Widget> _widget);
 				void popUpWidgetPush(ewol::object::Shared<ewol::Widget> _widget);

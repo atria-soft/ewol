@@ -153,14 +153,13 @@ ewol::Widget::Widget() :
 
 
 ewol::Widget::~Widget() {
-	// remove his own focus...
-	getWidgetManager().rm(this);
 	// clean all the short-cut ...
 	shortCutClean();
 }
 
 void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
 	if (_upper == nullptr) {
+		EWOL_VERBOSE("[" << getId() << "] remove upper widget");
 		//just remove father :
 		m_up.reset();
 		return;
@@ -172,6 +171,7 @@ void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
 }
 
 void ewol::Widget::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	EWOL_VERBOSE("[" << getId() << "] onObjectRemove(" << _object->getId() << ")");
 	ewol::Object::onObjectRemove(_object);
 	if (_object == m_up) {
 		EWOL_WARNING("[" << getId() << "] remove upper widget before removing this widget ...");
