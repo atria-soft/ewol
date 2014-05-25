@@ -131,9 +131,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(cons
 	if (tmpUpperWidget != nullptr) {
 		return tmpUpperWidget;
 	}
-	EWOL_ERROR("plop");
 	for (auto &it : m_subWidget) {
-		EWOL_ERROR("plop2");
 		if (it != nullptr) {
 			ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetNamed(_widgetName);
 			if (tmpWidget != nullptr) {

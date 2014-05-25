@@ -648,12 +648,21 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_FpsSystem.draw();
 		m_FpsFlush.draw();
 	}
-	// while The Gui is drawing in OpenGl, we do some not realTime things
-	m_resourceManager.updateContext();
-	do {
-		m_objectManager.removeAllRemovedObject();
-	} while (m_resourceManager.checkResourceToRemove() == true);
-	
+	{
+		// set the curent interface :
+		lockContext();
+		// release open GL Context
+		ewol::openGL::lock();
+		// while The Gui is drawing in OpenGl, we do some not realTime things
+		m_resourceManager.updateContext();
+		// release open GL Context
+		ewol::openGL::unLock();
+		do {
+			m_objectManager.removeAllRemovedObject();
+		} while (m_resourceManager.checkResourceToRemove() == true);
+		// release the curent interface :
+		unLockContext();
+	}
 	return hasDisplayDone;
 }
 
