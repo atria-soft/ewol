@@ -387,12 +387,17 @@ ewol::Context::~Context() {
 	do {
 		m_objectManager.removeAllRemovedObject();
 	} while (m_resourceManager.checkResourceToRemove() == true);
-	m_objectManager.displayListObject();
 	// call application to uninit
 	APP_UnInit(*this);
-	// unset all windows
+	// clean all messages
 	m_msgSystem.clean();
+	// an other cycle of removing ...
+	do {
+		m_objectManager.removeAllRemovedObject();
+	} while (m_resourceManager.checkResourceToRemove() == true);
 	
+	EWOL_INFO("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
+	m_objectManager.displayListObject();
 	// Resource is an lower element as objects ...
 	m_resourceManager.unInit();
 	// now All must be removed !!!

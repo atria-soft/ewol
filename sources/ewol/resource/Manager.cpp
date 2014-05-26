@@ -40,13 +40,15 @@ void ewol::resource::Manager::unInit() {
 	display();
 	m_resourceListToUpdate.clear();
 	// remove all resources ...
-	for (auto &it : m_resourceList) {
-		if (it != nullptr) {
-			EWOL_WARNING("Find a resource that is not removed : [" << it->getId() << "]"
-			             << "=\"" << it->getName() << "\" "
-			             << it->getRefCount() << " elements");
-			it.reset();
+	auto it(m_resourceList.begin());
+	while(it != m_resourceList.end()) {
+		if ((*it) != nullptr) {
+			EWOL_WARNING("Find a resource that is not removed : [" << (*it)->getId() << "]"
+			             << "=\"" << (*it)->getName() << "\" "
+			             << (*it)->getRefCount() << " elements");
 		}
+		m_resourceList.erase(it);
+		it = m_resourceList.begin();
 	}
 	m_resourceList.clear();
 }

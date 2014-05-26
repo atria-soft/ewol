@@ -23,6 +23,22 @@ ewol::object::MultiCast::~MultiCast() {
 	m_messageList.clear();
 }
 
+void ewol::object::MultiCast::clear() {
+	EWOL_INFO("EObject message Multi-Cast");
+	m_messageList.clear();
+}
+
+void ewol::object::MultiCast::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	auto it(m_messageList.begin());
+	while (it != m_messageList.end()) {
+		if (it->m_object == _object) {
+			m_messageList.erase(it);
+			it = m_messageList.begin();
+		} else {
+			++it;
+		}
+	}
+}
 
 void ewol::object::MultiCast::add(const ewol::object::Shared<ewol::Object>& _object, const char* const _message) {
 	if (nullptr == _object) {
@@ -44,12 +60,14 @@ void ewol::object::MultiCast::rm(const ewol::object::Shared<ewol::Object>& _obje
 		return;
 	}
 	// send the message at all registered widget ...
-	for (int32_t iii=m_messageList.size()-1; iii >= 0; iii--) {
-		if(m_messageList[iii].m_object == _object) {
+	auto it(m_messageList.begin());
+	while (it != m_messageList.end()) {
+		if(it->m_object == _object) {
 			EWOL_DEBUG("SendMulticast RM listener :" << _object->getId());
-			m_messageList[iii].m_message = nullptr;
-			m_messageList[iii].m_object = nullptr;
-			m_messageList.erase(m_messageList.begin()+iii);
+			m_messageList.erase(it);
+			it = m_messageList.begin();
+		} else {
+			++it;
 		}
 	}
 }
@@ -58,15 +76,14 @@ void ewol::object::MultiCast::send(const ewol::object::Shared<ewol::Object>& _ob
 	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
 	
 	// send the message at all registered widget ...
-	for (size_t iii=0; iii<m_messageList.size(); iii++) {
-		if(    m_messageList[iii].m_message == _message
-		    && m_messageList[iii].m_object != _object)
-		{
-			if (nullptr != m_messageList[iii].m_object) {
-				EWOL_VERBOSE("        id = " << m_messageList[iii].m_object->getId() << " type=" << m_messageList[iii].m_object->getObjectType());
+	for (auto &it : m_messageList) {
+		if(    it.m_message == _message
+		    && it.m_object != _object) {
+			if (it.m_object != nullptr) {
+				EWOL_VERBOSE("        id = " << it.m_object->getId() << " type=" << it.m_object->getObjectType());
 				// generate event ... (create message before ...
-				ewol::object::Message tmpMsg(_object, m_messageList[iii].m_message, _data);
-				m_messageList[iii].m_object->onReceiveMessage(tmpMsg);
+				ewol::object::Message tmpMsg(_object, it.m_message, _data);
+				it.m_object->onReceiveMessage(tmpMsg);
 			}
 		}
 	}

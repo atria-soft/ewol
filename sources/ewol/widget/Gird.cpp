@@ -366,6 +366,6 @@ void ewol::widget::Gird::onObjectRemove(const ewol::object::Shared<ewol::Object>
 		}
 	}
 	if (m_tmpWidget == _removeObject) {
-		m_tmpWidget = nullptr;
+		m_tmpWidget.reset();
 	}
 }

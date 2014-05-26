@@ -61,7 +61,7 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 }
 
 void ewol::Object::autoDestroy() {
-	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getTypeDescription());
+	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getObjectType());
 	{
 		std::unique_lock<std::mutex> lock(m_lockRefCount);
 		if (m_isDestroyed == true) {

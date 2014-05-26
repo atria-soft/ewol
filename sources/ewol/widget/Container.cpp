@@ -71,8 +71,9 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Container::getWidgetNamed(const
 	return nullptr;
 }
 
-void ewol::widget::Container::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
-	if (m_subWidget == _removeObject) {
+void ewol::widget::Container::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	ewol::Widget::onObjectRemove(_object);
+	if (m_subWidget == _object) {
 		m_subWidget.reset();
 		markToRedraw();
 		requestUpdateSize();

@@ -73,13 +73,14 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Container2::getWidgetNamed(cons
 	return nullptr;
 }
 
-void ewol::widget::Container2::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
-	if (m_subWidget[0] == _removeObject) {
+void ewol::widget::Container2::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+	ewol::Widget::onObjectRemove(_object);
+	if (m_subWidget[0] == _object) {
 		m_subWidget[0].reset();
 		markToRedraw();
 		requestUpdateSize();
 	}
-	if (m_subWidget[1] == _removeObject) {
+	if (m_subWidget[1] == _object) {
 		m_subWidget[1].reset();
 		markToRedraw();
 		requestUpdateSize();

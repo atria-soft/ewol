@@ -100,11 +100,17 @@ namespace ewol {
 			 * @brief Asynchronous removing the object
 			 */
 			void removeObject();
-		public:
 			/**
 			 * @brief Respown a removed object
 			 */
 			void respownObject();
+			/**
+			 * @brief Get if the element is destroyed or not
+			 * @return true The element in destroyed
+			 */
+			bool isDestroyed() {
+				return m_isDestroyed;
+			}
 		private:
 			std::vector<const char*> m_listType;
 		public:

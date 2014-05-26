@@ -142,13 +142,17 @@ ewol::object::Shared<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(cons
 	return nullptr;
 }
 
-void ewol::widget::ContainerN::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
+void ewol::widget::ContainerN::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	// First step call parrent :
-	ewol::Widget::onObjectRemove(_removeObject);
+	ewol::Widget::onObjectRemove(_object);
 	// second step find if in all the elements ...
-	for (auto it(m_subWidget.begin()) ; it != m_subWidget.end() ; ++it) {
-		if(*it == _removeObject) {
+	auto it(m_subWidget.begin());
+	while (it != m_subWidget.end()) {
+		if(*it == _object) {
 			m_subWidget.erase(it);
+			it = m_subWidget.begin();
+		} else {
+			++it;
 		}
 	}
 }
