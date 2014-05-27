@@ -149,7 +149,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 						return;
 					}
 					// create a context menu : 
-					m_widgetContextMenu = new ewol::widget::ContextMenu();
+					m_widgetContextMenu = ewol::object::makeShared(new ewol::widget::ContextMenu());
 					if (nullptr == m_widgetContextMenu) {
 						EWOL_ERROR("Allocation Error");
 						return;
