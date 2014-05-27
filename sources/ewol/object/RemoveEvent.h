@@ -19,7 +19,7 @@ namespace ewol {
 				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) = 0;
 			public:
 				RemoveEvent();
-				~RemoveEvent();
+				virtual ~RemoveEvent();
 		};
 	}
 };

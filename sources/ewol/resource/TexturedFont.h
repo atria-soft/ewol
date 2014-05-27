@@ -47,7 +47,7 @@ namespace ewol {
 			protected:
 				TexturedFont(const std::string& _fontName);
 			public:
-				~TexturedFont();
+				virtual ~TexturedFont();
 			public:
 				/**
 				 * @brief get the display height of this font

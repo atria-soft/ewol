@@ -112,6 +112,7 @@ void ewol::object::Manager::remove(const ewol::object::Shared<ewol::Object>& _ob
 		EWOL_ERROR("Try to Auto-Remove (nullptr) Object");
 		return;
 	}
+	int32_t count = 0;
 	auto it(m_eObjectListActive.begin());
 	while (it != m_eObjectListActive.end()) {
 		if (*it == _object) {
@@ -120,13 +121,19 @@ void ewol::object::Manager::remove(const ewol::object::Shared<ewol::Object>& _ob
 			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "' name=" << _object->getName());
 			informOneObjectIsRemoved(_object);
 			ewol::getContext().forceRedrawAll();
-			EWOL_DEBUG("Auto-Remove Object ... done (have " << _object->getRefCount() << " references)");
+			EWOL_VERBOSE("Auto-Remove Object ... done (have " << _object->getRefCount() << " references)");
 			it = m_eObjectListActive.begin();
+			count++;
 		} else {
 			++it;
 		}
 	}
-	EWOL_ERROR("Try to Auto-Remove Object that is not referenced ...");
+	if (count == 0) {
+		EWOL_ERROR("Try to Auto-Remove Object that is not referenced ...");
+	} else if (    count>1
+	            || count<0) {
+		EWOL_ERROR("Remove more than one object in the system list ==> this is a real problem ...");
+	}
 }
 
 // clean all Object that request an autoRemove ...

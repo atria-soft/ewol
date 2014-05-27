@@ -17,13 +17,12 @@
  Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
  */
 @interface OpenglView : UIView {
-    
 @private
-    CAEAGLLayer* _eaglLayer;
+	CAEAGLLayer* _eaglLayer;
 	
 	EAGLContext *_context;
-    GLuint _colorRenderBuffer;
-    GLuint _depthRenderBuffer;
+	GLuint _colorRenderBuffer;
+	GLuint _depthRenderBuffer;
 	
 	/* OpenGL names for the renderbuffer and framebuffers used to render to this view */
 	GLuint viewRenderbuffer, viewFramebuffer;

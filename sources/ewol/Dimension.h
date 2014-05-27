@@ -65,7 +65,7 @@ namespace ewol {
 			/**
 			 * @brief Destructor
 			 */
-			~Dimension();
+			virtual ~Dimension();
 			
 			/**
 			 * @brief string cast :

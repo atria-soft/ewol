@@ -30,7 +30,7 @@ namespace ewol {
 				static const char * const eventChange;
 			public:
 				ColorChooser();
-				~ColorChooser();
+				virtual ~ColorChooser();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);

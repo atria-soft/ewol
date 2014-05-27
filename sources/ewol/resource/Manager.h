@@ -32,7 +32,7 @@ namespace ewol {
 				 * @brief Uninitiamize the resource manager, free all resources previously requested
 				 * @note when not free  == > generate warning, because the segfault can appear after...
 				 */
-				~Manager();
+				virtual ~Manager();
 				/**
 				 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
 				 */

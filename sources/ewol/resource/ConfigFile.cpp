@@ -29,7 +29,7 @@ ewol::resource::ConfigFile::ConfigFile(const std::string& _filename) :
 
 ewol::resource::ConfigFile::~ConfigFile() {
 	// remove all element
-	for (size_t iii=0; iii<m_list.size(); iii++){
+	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (nullptr != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = nullptr;
@@ -40,7 +40,7 @@ ewol::resource::ConfigFile::~ConfigFile() {
 
 void ewol::resource::ConfigFile::reload() {
 	// reset all parameters
-	for (size_t iii=0; iii<m_list.size(); iii++){
+	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (nullptr != m_list[iii]) {
 			m_list[iii] = nullptr;
 		}

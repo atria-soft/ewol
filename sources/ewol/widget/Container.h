@@ -30,7 +30,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Container();
+				virtual ~Container();
 			public:
 				/**
 				 * @brief get the main node widget

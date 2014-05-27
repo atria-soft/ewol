@@ -17,7 +17,7 @@ def create(target):
 	myModule = module.Module(__file__, 'ewol', 'LIBRARY')
 	
 	# add extra compilation flags :
-	#myModule.add_extra_compile_flags()
+	myModule.add_extra_compile_flags()
 	# add the file to compile:
 	myModule.add_src_file([
 		'ewol/ewol.cpp',

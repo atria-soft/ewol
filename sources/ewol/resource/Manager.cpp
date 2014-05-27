@@ -186,6 +186,7 @@ bool ewol::resource::Manager::checkResourceToRemove() {
 		if ((*it)->getRefCount() > 3) {
 			continue;
 		}
+		EWOL_DEBUG("Request remove of an resource (refcount in Low : " << (*it)->getRefCount() << ")");
 		m_resourceList.erase(it);
 		it = m_resourceList.begin();
 		return true;

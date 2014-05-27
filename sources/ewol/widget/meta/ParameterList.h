@@ -30,7 +30,7 @@ namespace ewol {
 				  m_image(_image) {
 					
 				};
-				~elementPL() {};
+				virtual ~elementPL() {};
 		};
 		
 		/**

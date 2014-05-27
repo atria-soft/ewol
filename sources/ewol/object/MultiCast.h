@@ -32,7 +32,7 @@ namespace ewol {
 				std::vector<MessageList> m_messageList; //!< List of all message ...
 			public:
 				MultiCast();
-				~MultiCast();
+				virtual ~MultiCast();
 				void clear();
 				void anonymousSend(const char* const _messageId, const std::string& _data) {
 					send(nullptr, _messageId, _data);

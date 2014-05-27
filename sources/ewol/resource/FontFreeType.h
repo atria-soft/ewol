@@ -31,7 +31,7 @@ namespace ewol {
 			protected:
 				FontFreeType(const std::string& _fontName);
 			public:
-				~FontFreeType();
+				virtual ~FontFreeType();
 			public:
 				
 				bool getGlyphProperty(int32_t _fontSize,

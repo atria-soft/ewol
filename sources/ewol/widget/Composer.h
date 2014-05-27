@@ -40,7 +40,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Composer();
+				virtual ~Composer();
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _fileName Name of the file

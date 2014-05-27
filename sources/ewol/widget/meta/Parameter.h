@@ -32,7 +32,7 @@ namespace ewol {
 				static const char * const eventClose;
 			public:
 				Parameter();
-				~Parameter();
+				virtual ~Parameter();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);

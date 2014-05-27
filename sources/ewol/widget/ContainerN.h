@@ -31,7 +31,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~ContainerN();
+				virtual ~ContainerN();
 			protected:
 				bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 				bvec2 m_subExpend; //!< reference of the sub element expention requested.

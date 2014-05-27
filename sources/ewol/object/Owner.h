@@ -54,6 +54,9 @@ namespace ewol {
 							return;
 						}
 						m_pointer->objRefCountIncrement();
+						#ifdef DEBUG
+							m_pointer->incOwnerCount();
+						#endif
 					}
 					template<typename T2, typename = typename
 					       std::enable_if<std::is_convertible<T*, T2*>::value>::type>
@@ -65,6 +68,9 @@ namespace ewol {
 						m_pointer = _obj.get();
 						if (m_pointer != nullptr) {
 							m_pointer->objRefCountIncrement();
+							#ifdef DEBUG
+								m_pointer->incOwnerCount();
+							#endif
 						}
 						return *this;
 					}
@@ -75,6 +81,9 @@ namespace ewol {
 						m_pointer = _obj.get();
 						if (m_pointer != nullptr) {
 							m_pointer->objRefCountIncrement();
+							#ifdef DEBUG
+								m_pointer->incOwnerCount();
+							#endif
 						}
 						return *this;
 					}
@@ -95,6 +104,9 @@ namespace ewol {
 							delete tmp;
 						} else {
 							tmp->objRefCountDecrement();
+							#ifdef DEBUG
+								tmp->decOwnerCount();
+							#endif
 						}
 					}
 					void resetShared() {
@@ -111,6 +123,9 @@ namespace ewol {
 							delete tmp;
 						} else {
 							tmp->objRefCountDecrement();
+							#ifdef DEBUG
+								tmp->decOwnerCount();
+							#endif
 						}
 					}
 					T* get() noexcept {

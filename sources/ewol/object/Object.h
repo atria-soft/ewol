@@ -69,6 +69,12 @@ namespace ewol {
 			static void operator delete(void* _ptr, std::size_t _sz);
 			//! @not-in-doc
 			static void operator delete[](void* _ptr, std::size_t _sz);
+		#ifdef DEBUG
+		public:
+			int32_t m_ownerCount;
+			void incOwnerCount();
+			void decOwnerCount();
+		#endif
 		private:
 			static size_t m_valUID; //!< stic used for the unique ID definition
 		public:
@@ -157,7 +163,7 @@ namespace ewol {
 				return m_uniqueId;
 			};
 		private:
-			std::vector<object::EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
+			std::vector<object::EventExtGen> m_externEvent; //!< Generic list of event generation for output link
 			std::vector<const char*> m_availlableEventId; //!< List of all event availlable for this widget
 		protected:
 			/**

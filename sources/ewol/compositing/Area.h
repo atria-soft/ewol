@@ -47,7 +47,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				~Area();
+				virtual ~Area();
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL

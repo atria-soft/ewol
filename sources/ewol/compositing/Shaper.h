@@ -101,7 +101,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				~Shaper();
+				virtual ~Shaper();
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL

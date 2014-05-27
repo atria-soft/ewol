@@ -48,7 +48,7 @@ namespace ewol {
 				Texture(const std::string& _filename);
 				Texture();
 			public:
-				~Texture();
+				virtual ~Texture();
 			public:
 				// you must set the size here, because it will be set in multiple of pow(2)
 				void setImageSize(ivec2 newSize);

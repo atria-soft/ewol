@@ -33,7 +33,7 @@ namespace ewol {
 			protected:
 				DistanceFieldFont(const std::string& _fontName);
 			public:
-				~DistanceFieldFont();
+				virtual ~DistanceFieldFont();
 			public:
 				float getDisplayRatio(float _size);
 				/**

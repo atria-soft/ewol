@@ -25,7 +25,7 @@ namespace ewol {
 				Context& m_context;
 			public:
 				Manager(Context& _context);
-				~Manager();
+				virtual ~Manager();
 				/**
 				 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
 				 */

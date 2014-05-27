@@ -106,7 +106,7 @@ namespace ewol {
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::key::keyboardUnknow;
 			};
-			~EventShortCut() { };
+			virtual ~EventShortCut() { };
 	};
 	/**
 	 * @brief Widget class is the main widget interface, it hase some generic properties: 

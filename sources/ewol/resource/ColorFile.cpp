@@ -48,7 +48,7 @@ void ewol::resource::ColorFile::reload() {
 		EWOL_ERROR("Can not get basic array : 'color'");
 		return;
 	}
-	for (int32_t iii = 0; iii < baseArray->size(); ++iii) {
+	for (size_t iii = 0; iii < baseArray->size(); ++iii) {
 		ejson::Object* tmpObj = baseArray->getObject(iii);
 		if (tmpObj == nullptr) {
 			EWOL_DEBUG(" can not get object in 'color' id=" << iii);

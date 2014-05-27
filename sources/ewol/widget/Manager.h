@@ -33,7 +33,7 @@ namespace ewol {
 				int64_t m_lastPeriodicCallTime; //!< last call time ...
 			public:
 				Manager();
-				~Manager();
+				virtual ~Manager();
 				
 				void focusKeep(const ewol::object::Shared<ewol::Widget>& _newWidget); // set the focus at the specific widget
 				void focusSetDefault(const ewol::object::Shared<ewol::Widget>& _newWidget); // select the default focus getter

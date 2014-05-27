@@ -59,18 +59,40 @@ void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
 	EWOL_CRITICAL("custom delete for size ==> not implemented ..." << _sz);
 	::operator delete(_ptr);
 }
+#ifdef DEBUG
+void ewol::Object::incOwnerCount() {
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
+	m_ownerCount++;
+	if (m_ownerCount>1) {
+		EWOL_CRITICAL("Multiple Owner on one Object ==> very bad ... " << m_ownerCount);
+	}
+}
+
+void ewol::Object::decOwnerCount() {
+	std::unique_lock<std::mutex> lock(m_lockRefCount);
+	m_ownerCount--;
+	if (m_ownerCount<0) {
+		EWOL_CRITICAL("Owner remove the owner counter under 1 ==> very bad ... " << m_ownerCount);
+	}
+}
+#endif
 
 void ewol::Object::autoDestroy() {
 	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getObjectType());
+	bool needRemove = false;
 	{
 		std::unique_lock<std::mutex> lock(m_lockRefCount);
 		if (m_isDestroyed == true) {
 			EWOL_WARNING("Request remove of a removed object");
 			return;
+		} else {
+			m_isDestroyed = true;
+			needRemove = true;
 		}
-		m_isDestroyed = true;
 	}
-	getObjectManager().remove(this);
+	if (needRemove == true) {
+		getObjectManager().remove(this);
+	}
 }
 
 void ewol::Object::removeObject() {
@@ -89,6 +111,9 @@ void ewol::Object::respownObject() {
 
 ewol::Object::Object() :
   m_objRefCount(1),
+  #ifdef DEBUG
+    m_ownerCount(0),
+  #endif
   m_isDestroyed(false),
   m_static(false),
   m_isResource(false) {
@@ -100,6 +125,9 @@ ewol::Object::Object() :
 }
 ewol::Object::Object(const std::string& _name) :
   m_objRefCount(1),
+  #ifdef DEBUG
+    m_ownerCount(0),
+  #endif
   m_isDestroyed(false),
   m_static(false),
   m_name(_name),
@@ -114,12 +142,6 @@ ewol::Object::Object(const std::string& _name) :
 ewol::Object::~Object() {
 	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription() << " refcount=" << m_objRefCount);
 	getMultiCast().rm(this);
-	for (size_t iii=0; iii<m_externEvent.size(); ++iii) {
-		if (m_externEvent[iii] != nullptr) {
-			delete(m_externEvent[iii]);
-			m_externEvent[iii] = nullptr;
-		}
-	}
 	m_externEvent.clear();
 	m_availlableEventId.clear();
 	m_uniqueId = -1;
@@ -161,7 +183,13 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 }
 
 void ewol::Object::addEventId(const char * _generateEventId) {
-	if (nullptr != _generateEventId) {
+	for (auto &it : m_availlableEventId) {
+		if (std::string(it) == _generateEventId) {
+			EWOL_WARNING("Event already existed : '" << it << "' == '" << _generateEventId << "'");
+			return;
+		}
+	}
+	if (_generateEventId != nullptr) {
 		m_availlableEventId.push_back(_generateEventId);
 	}
 }
@@ -170,29 +198,25 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 	int32_t nbObject = getObjectManager().getNumberObject();
 	EWOL_VERBOSE("try send message '" << _generateEventId << "'");
 	// for every element registered ...
-	for (size_t iii=0; iii<m_externEvent.size(); ++iii) {
-		if (nullptr==m_externEvent[iii]) {
-			EWOL_VERBOSE("    Null pointer");
-			continue;
-		}
+	for (auto &it : m_externEvent) {
 		// if we find the event ...
-		if (m_externEvent[iii]->localEventId != _generateEventId) {
-			EWOL_VERBOSE("    wrong event '" << m_externEvent[iii]->localEventId << "' != '" << _generateEventId << "'");
+		if (it.localEventId != _generateEventId) {
+			EWOL_VERBOSE("    wrong event '" << it.localEventId << "' != '" << _generateEventId << "'");
 			continue;
 		}
-		if (m_externEvent[iii]->destObject == nullptr) {
+		if (it.destObject == nullptr) {
 			EWOL_VERBOSE("    nullptr dest");
 			continue;
 		}
-		if (m_externEvent[iii]->overloadData.size() <= 0){
-			ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, _data);
+		if (it.overloadData.size() <= 0){
+			ewol::object::Message tmpMsg(this, it.destEventId, _data);
 			EWOL_VERBOSE("send message " << tmpMsg);
-			m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
+			it.destObject->onReceiveMessage(tmpMsg);
 		} else {
 			// set the user requested data ...
-			ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+			ewol::object::Message tmpMsg(this, it.destEventId, it.overloadData);
 			EWOL_VERBOSE("send message " << tmpMsg);
-			m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
+			it.destObject->onReceiveMessage(tmpMsg);
 		}
 	}
 	if (nbObject > getObjectManager().getNumberObject()) {
@@ -227,19 +251,15 @@ void ewol::Object::registerOnEvent(const ewol::object::Shared<ewol::Object>& _de
 	if (    _eventId[0] == '*'
 	     && _eventId[1] == '\0') {
 		EWOL_VERBOSE("Register on all event ...");
-		for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
-			ewol::object::EventExtGen * tmpEvent = new ewol::object::EventExtGen();
-			if (nullptr == tmpEvent) {
-				EWOL_ERROR("Allocation error in Register Event...");
-				continue;
-			}
-			tmpEvent->localEventId = m_availlableEventId[iii];
-			tmpEvent->destObject = _destinationObject;
-			tmpEvent->overloadData = _overloadData;
+		for(auto &it : m_availlableEventId) {
+			ewol::object::EventExtGen tmpEvent;
+			tmpEvent.localEventId = it;
+			tmpEvent.destObject = _destinationObject;
+			tmpEvent.overloadData = _overloadData;
 			if (nullptr != _eventIdgenerated) {
-				tmpEvent->destEventId = _eventIdgenerated;
+				tmpEvent.destEventId = _eventIdgenerated;
 			} else {
-				tmpEvent->destEventId = m_availlableEventId[iii];
+				tmpEvent.destEventId = it;
 			}
 			m_externEvent.push_back(tmpEvent);
 		}
@@ -247,18 +267,18 @@ void ewol::Object::registerOnEvent(const ewol::object::Shared<ewol::Object>& _de
 	}
 	// check if event existed :
 	bool findIt = false;
-	for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
-		if (m_availlableEventId[iii] == _eventId) {
+	for(auto &it : m_availlableEventId) {
+		if (it == _eventId) {
 			findIt = true;
 			break;
 		}
 	}
 	if (false == findIt) {
 		EWOL_VERBOSE("Try to register with a NON direct string name");
-		for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
-			if (0 == strncmp(m_availlableEventId[iii], _eventId, 1024)) {
+		for(auto &it : m_availlableEventId) {
+			if (0 == strncmp(it, _eventId, 1024)) {
 				findIt = true;
-				_eventId = m_availlableEventId[iii];
+				_eventId = it;
 				EWOL_VERBOSE("find event ID : '" << _eventId << "' ==> '" << _eventIdgenerated << "'");
 				break;
 			}
@@ -268,50 +288,54 @@ void ewol::Object::registerOnEvent(const ewol::object::Shared<ewol::Object>& _de
 		EWOL_ERROR("Can not register event on this Type=" << getObjectType() << " event=\"" << _eventId << "\"  == > unknow event");
 		return;
 	}
-	ewol::object::EventExtGen * tmpEvent = new ewol::object::EventExtGen();
-	if (nullptr == tmpEvent) {
-		EWOL_ERROR("Allocation error in Register Event...");
-		return;
-	}
-	tmpEvent->localEventId = _eventId;
-	tmpEvent->destObject = _destinationObject;
-	tmpEvent->overloadData = _overloadData;
+	ewol::object::EventExtGen tmpEvent;
+	tmpEvent.localEventId = _eventId;
+	tmpEvent.destObject = _destinationObject;
+	tmpEvent.overloadData = _overloadData;
 	if (nullptr != _eventIdgenerated) {
-		tmpEvent->destEventId = _eventIdgenerated;
+		tmpEvent.destEventId = _eventIdgenerated;
 	} else {
-		tmpEvent->destEventId = _eventId;
+		tmpEvent.destEventId = _eventId;
 	}
 	m_externEvent.push_back(tmpEvent);
 }
 
 void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
-                                      const char * _eventId) {
-	if (nullptr == _destinationObject) {
+                                     const char * _eventId) {
+	if (_destinationObject == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;
 	}
 	// check if event existed :
-	for(int64_t iii = m_externEvent.size()-1; iii >= 0; --iii) {
-		if (m_externEvent[iii] == nullptr) {
-			continue;
-		}
-		if (m_externEvent[iii]->destObject != _destinationObject) {
-			continue;
-		}
-		if (_eventId == nullptr) {
-			m_externEvent.erase(m_externEvent.begin()+iii);
-		} else if (m_externEvent[iii]->localEventId == _eventId) {
-			m_externEvent.erase(m_externEvent.begin()+iii);
+	auto it(m_externEvent.begin());
+	while(it != m_externEvent.end()) {
+		if (it->destObject == nullptr) {
+			m_externEvent.erase(it);
+			it = m_externEvent.begin();
+		} else if (    it->destObject == _destinationObject
+		            && it->localEventId == _eventId) {
+			m_externEvent.erase(it);
+			it = m_externEvent.begin();
+			EWOL_INFO("[" << getId() << "] Remove extern event : to object id=" << _destinationObject->getId() << " event=" << _eventId);
+		} else {
+			++it;
 		}
 	}
 }
 
 void ewol::Object::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	EWOL_VERBOSE("[" << getId() << "] onObjectRemove(" << _object->getId() << ")");
-	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
-		if (m_externEvent[iii] != nullptr) {
-			m_externEvent.erase(m_externEvent.begin()+iii);
-			EWOL_VERBOSE("[" << getId() << "] Remove extern event : to object id=" << _object->getId());
+	auto it(m_externEvent.begin());
+	while(it != m_externEvent.end()) {
+		if (it->destObject == nullptr) {
+			m_externEvent.erase(it);
+			it = m_externEvent.begin();
+		} else if (it->destObject == _object) {
+			m_externEvent.erase(it);
+			it = m_externEvent.begin();
+			EWOL_INFO("[" << getId() << "] Remove extern event : to object id=" << _object->getId());
+		} else {
+			++it;
 		}
 	}
 }

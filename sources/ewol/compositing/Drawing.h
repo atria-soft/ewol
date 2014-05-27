@@ -43,7 +43,7 @@ namespace ewol {
 				/**
 				 * @brief Basic destructor
 				 */
-				~Drawing();
+				virtual ~Drawing();
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed

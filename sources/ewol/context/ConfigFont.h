@@ -19,7 +19,7 @@ namespace ewol {
 				 * Constructor / destructor
 				 */
 				ConfigFont();
-				~ConfigFont();
+				virtual ~ConfigFont();
 			private:
 				std::string m_folder;
 			public:

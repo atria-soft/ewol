@@ -48,7 +48,7 @@ namespace ewol {
 				/**
 				 * @brief std-pop-up destructor.
 				 */
-				~StdPopUp();
+				virtual ~StdPopUp();
 			protected:
 				ewol::object::Shared<ewol::widget::Label> m_title; //!< Title Label widget
 			public:

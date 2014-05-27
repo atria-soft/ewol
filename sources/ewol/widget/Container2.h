@@ -34,7 +34,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Container2();
+				virtual ~Container2();
 			private:
 				/**
 				 * @brief Specify the current widget
