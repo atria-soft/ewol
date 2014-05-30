@@ -175,7 +175,7 @@ void ewol::resource::Manager::localAdd(const ewol::object::Shared<ewol::Resource
 // in case of error ...
 bool ewol::resource::Manager::checkResourceToRemove() {
 	//EWOL_INFO("remove object in Manager");
-	m_resourceListToUpdate.clear();
+	updateContext();
 	for (auto it(m_resourceList.begin()); it!=m_resourceList.end(); ++it) {
 		if ((*it) == nullptr) {
 			m_resourceList.erase(it);
