@@ -327,7 +327,7 @@ void ewol::resource::Program::sendAttribute(int32_t _idElem,
 
 void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
                                                    int32_t _nbElement,
-                                                   ewol::resource::VirtualBufferObject* _vbo,
+                                                   const ewol::object::Shared<ewol::resource::VirtualBufferObject>& _vbo,
                                                    int32_t _index,
                                                    int32_t _jumpBetweenSample,
                                                    int32_t _offset) {

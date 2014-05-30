@@ -39,6 +39,8 @@ def create(target):
 		'bullet/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp',
 		'bullet/src/BulletCollision/NarrowPhaseCollision/btGjkEpa2.cpp',
 		'bullet/src/BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.cpp',
+		'bullet/src/BulletCollision/CollisionDispatch/btCompoundCompoundCollisionAlgorithm.cpp',
+		'bullet/src/BulletCollision/CollisionDispatch/btHashedSimplePairCache.cpp',
 		'bullet/src/BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.cpp',
 		'bullet/src/BulletCollision/CollisionDispatch/btCollisionObject.cpp',
 		'bullet/src/BulletCollision/CollisionDispatch/btEmptyCollisionAlgorithm.cpp',

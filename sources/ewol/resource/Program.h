@@ -86,7 +86,7 @@ namespace ewol {
 				                   int32_t _jumpBetweenSample=0);
 				void sendAttributePointer(int32_t _idElem,
 				                          int32_t _nbElement,
-				                          ewol::resource::VirtualBufferObject* _vbo,
+				                          const ewol::object::Shared<ewol::resource::VirtualBufferObject>& _vbo,
 				                          int32_t _index,
 				                          int32_t _jumpBetweenSample=0,
 				                          int32_t _offset=0);
