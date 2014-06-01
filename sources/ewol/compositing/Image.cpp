@@ -41,6 +41,7 @@ ewol::compositing::Image::~Image() {
 void ewol::compositing::Image::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
+	m_GLprogram.reset();
 	if (m_distanceFieldMode == true) {
 		m_GLprogram = ewol::resource::Program::keep("DATA:texturedDF.prog");
 	} else {
@@ -246,24 +247,24 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
-	ewol::object::Shared<ewol::resource::TextureFile> resource = m_resource;
-	ewol::object::Shared<ewol::resource::ImageDF> resourceDF = m_resourceDF;
+	ewol::object::Shared<ewol::resource::TextureFile> resource(m_resource);
+	ewol::object::Shared<ewol::resource::ImageDF> resourceDF(m_resourceDF);
 	m_filename = _newFile;
 	m_requestSize = _size;
-	m_resource = nullptr;
-	m_resourceDF = nullptr;
+	m_resource.reset();
+	m_resourceDF.reset();
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
 		// link to new one
 		if (m_distanceFieldMode == false) {
 			m_resource = ewol::resource::TextureFile::keep(m_filename, tmpSize);
-			if (nullptr == m_resource) {
+			if (m_resource == nullptr) {
 				EWOL_ERROR("Can not get Image resource");
 			}
 		} else {
 			m_resourceDF = ewol::resource::ImageDF::keep(m_filename, tmpSize);
-			if (nullptr == m_resourceDF) {
+			if (m_resourceDF == nullptr) {
 				EWOL_ERROR("Can not get Image resource DF");
 			}
 		}
@@ -282,7 +283,7 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 }
 
 bool ewol::compositing::Image::hasSources() {
-	return (m_resource != nullptr || m_resourceDF != NULL);
+	return (m_resource != nullptr || m_resourceDF != nullptr);
 }
 
 

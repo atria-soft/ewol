@@ -57,6 +57,10 @@ ewol::compositing::Shaper::~Shaper() {
 }
 
 void ewol::compositing::Shaper::unLoadProgram() {
+	m_GLprogram.reset();
+	m_resourceTexture.reset();
+	m_config.reset();
+	m_colorProperty.reset();
 	for (size_t iii=0; iii<shaperPosCount; ++iii) {
 		m_confIdPaddingOut[iii] = -1;
 		m_confIdBorder[iii] = -1;

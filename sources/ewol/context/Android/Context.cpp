@@ -665,7 +665,7 @@ extern "C" {
 	                                             jint _mode,
 	                                             jstring _myString) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -716,7 +716,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** remove JVM Pointer                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			return;
@@ -732,7 +732,7 @@ extern "C" {
 	void Java_org_ewol_Ewol_EWtouchEvent(JNIEnv* _env, jobject _thiz, jint _id) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
 		EWOL_DEBUG("  == > Touch Event");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -747,7 +747,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Create                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -762,7 +762,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Start                     **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -776,7 +776,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Re-Start                  **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -789,7 +789,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on resume                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -803,7 +803,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on pause                     **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -819,7 +819,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Stop                      **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -833,7 +833,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Destroy                   **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -855,7 +855,7 @@ extern "C" {
 	                                           jfloat _x,
 	                                           jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -873,7 +873,7 @@ extern "C" {
 	                                          jfloat _x,
 	                                          jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -890,7 +890,7 @@ extern "C" {
 	                                           jfloat _x,
 	                                           jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -908,7 +908,7 @@ extern "C" {
 	                                          jfloat _x,
 	                                          jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -923,7 +923,7 @@ extern "C" {
 	                                      jint _id,
 	                                      jint _pointerID) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -939,7 +939,7 @@ extern "C" {
 	                                            jint _type,
 	                                            jboolean _isdown) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -956,7 +956,7 @@ extern "C" {
 	                                           jint _uniChar,
 	                                           jboolean _isdown) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -973,7 +973,7 @@ extern "C" {
 	                                                 jfloat _ratioX,
 	                                                 jfloat _ratioY) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -991,7 +991,7 @@ extern "C" {
 	                                                 jint _keyVal,
 	                                                 jboolean _isdown) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -1035,7 +1035,7 @@ extern "C" {
 	                                     jobject _thiz,
 	                                     jint _id) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -1050,7 +1050,7 @@ extern "C" {
 	                                       jint _w,
 	                                       jint _h) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -1065,7 +1065,7 @@ extern "C" {
 	                                     jobject _thiz,
 	                                     jint _id) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
@@ -1082,7 +1082,7 @@ extern "C" {
 	                                        jint _frameRate,
 	                                        jint _nbChannels) {
 		etk::AutoLockMutex myLock(g_interfaceAudioMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);

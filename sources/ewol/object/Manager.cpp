@@ -52,7 +52,6 @@ void ewol::object::Manager::unInit() {
 	}
 	removeAllRemovedObject();
 	EWOL_INFO(" remove missing user object");
-	size_t iii=0;
 	if (m_eObjectListActive.size() != 0) {
 		EWOL_ERROR("Have " << m_eObjectListActive.size() << " active Object");
 	}
