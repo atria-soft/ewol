@@ -116,8 +116,13 @@ ewol::widget::FileChooser::FileChooser() {
 	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:img-home", "pressed", ewolEventFileChooserHome);
 	// set the default Folder properties:
 	updateCurrentFolder();
+	setCanHaveFocus(true);
 }
 
+void ewol::widget::FileChooser::onGetFocus() {
+	// transfert focus on a specific widget...
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-file", "focus", "true");
+}
 
 ewol::widget::FileChooser::~FileChooser() {
 	

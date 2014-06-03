@@ -77,43 +77,45 @@ ewol::widget::Manager::~Manager() {
  * *************************************************************************/
 
 void ewol::widget::Manager::focusKeep(const ewol::object::Shared<ewol::Widget>& _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		// nothing to do ...
 		return;
 	}
+	EWOL_VERBOSE("focusKeep=" << _newWidget->getId() );
+	//etk::log::displayBacktrace();
 	if (_newWidget == m_focusWidgetCurrent) {
 		// nothing to do ...
 		return;
 	}
-	if (nullptr != m_focusWidgetCurrent) {
+	if (m_focusWidgetCurrent != nullptr) {
 		EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
 		m_focusWidgetCurrent->rmFocus();
 		m_focusWidgetCurrent = nullptr;
 	}
-	if (false == _newWidget->canHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
+	if (_newWidget->canHaveFocus() == false) {
+		EWOL_DEBUG("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
 	m_focusWidgetCurrent = _newWidget;
-	if (nullptr != m_focusWidgetCurrent) {
+	if (m_focusWidgetCurrent != nullptr) {
 		EWOL_DEBUG("Set focus on WidgetID=" << m_focusWidgetCurrent->getId() );
 		m_focusWidgetCurrent->setFocus();
 	}
 }
 
 void ewol::widget::Manager::focusSetDefault(const ewol::object::Shared<ewol::Widget>& _newWidget) {
-	if(    nullptr != _newWidget
-	    && false == _newWidget->canHaveFocus() ) {
+	if(    _newWidget != nullptr
+	    && _newWidget->canHaveFocus() == false) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
-		if (nullptr != m_focusWidgetCurrent) {
+		if (m_focusWidgetCurrent != nullptr) {
 			EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
 			m_focusWidgetCurrent->rmFocus();
 		}
 		m_focusWidgetCurrent = _newWidget;
-		if (nullptr != m_focusWidgetCurrent) {
+		if (m_focusWidgetCurrent != nullptr) {
 			EWOL_DEBUG("Set focus on WidgetID=" << m_focusWidgetCurrent->getId() );
 			m_focusWidgetCurrent->setFocus();
 		}
@@ -126,7 +128,7 @@ void ewol::widget::Manager::focusRelease() {
 		// nothink to do ...
 		return;
 	}
-	if (nullptr != m_focusWidgetCurrent) {
+	if (m_focusWidgetCurrent != nullptr) {
 		EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
 		m_focusWidgetCurrent->rmFocus();
 	}
