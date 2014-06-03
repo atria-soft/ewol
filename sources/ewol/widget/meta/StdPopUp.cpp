@@ -19,14 +19,14 @@
 static const char * const eventButtonExit = "ewol-event-pop-up-exit-button";
 
 ewol::widget::StdPopUp::StdPopUp() :
-  m_title(NULL),
-  m_comment(NULL),
-  m_subBar(NULL) {
+  m_title(nullptr),
+  m_comment(nullptr),
+  m_subBar(nullptr) {
 	addObjectType("ewol::widget::StdPopUp");
 	setMinSize(ewol::Dimension(vec2(20,10),ewol::Dimension::Pourcent));
 	
-	ewol::widget::Sizer* mySizerVert = NULL;
-	ewol::widget::Spacer* mySpacer = NULL;
+	ewol::widget::Sizer* mySizerVert = nullptr;
+	ewol::widget::Spacer* mySpacer = nullptr;
 	
 	mySizerVert = new ewol::widget::Sizer(widget::Sizer::modeVert);
 		// set it in the pop-up-system : 
@@ -35,7 +35,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 		m_subBar = new ewol::widget::Sizer(widget::Sizer::modeHori);
 			m_subBar->lockExpand(bvec2(true,true));
 			m_subBar->setExpand(bvec2(true,false));
-			mySizerVert->subWidgetAdd(m_subBar);
+			mySizerVert->subWidgetAdd(m_subBar.get());
 			mySpacer = new ewol::widget::Spacer();
 				mySpacer->setExpand(bvec2(true,false));
 				m_subBar->subWidgetAdd(mySpacer);
@@ -53,7 +53,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 		
 		m_comment = new ewol::widget::Label("No Label");
 			m_comment->setExpand(bvec2(true,true));
-			mySizerVert->subWidgetAdd(m_comment);
+			mySizerVert->subWidgetAdd(m_comment.get());
 		
 		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
@@ -69,7 +69,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 		m_title = new ewol::widget::Label("<bold>Message</bold>");
 			m_title->setExpand(bvec2(true,false));
 			m_title->setFill(bvec2(true,true));
-			mySizerVert->subWidgetAdd(m_title);
+			mySizerVert->subWidgetAdd(m_title.get());
 }
 
 ewol::widget::StdPopUp::~StdPopUp() {
@@ -77,7 +77,7 @@ ewol::widget::StdPopUp::~StdPopUp() {
 }
 
 void ewol::widget::StdPopUp::setTitle(const std::string& _text) {
-	if (m_title == NULL) {
+	if (m_title == nullptr) {
 		return;
 	}
 	m_title->setLabel(_text);
@@ -85,22 +85,22 @@ void ewol::widget::StdPopUp::setTitle(const std::string& _text) {
 }
 
 void ewol::widget::StdPopUp::setComment(const std::string& _text) {
-	if (m_comment == NULL) {
+	if (m_comment == nullptr) {
 		return;
 	}
 	m_comment->setLabel(_text);
 	markToRedraw();
 }
 
-ewol::widget::Button* ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
-	if (m_subBar == NULL) {
+ewol::object::Shared<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
+	if (m_subBar == nullptr) {
 		EWOL_ERROR("button-bar does not existed ...");
-		return NULL;
+		return nullptr;
 	}
 	ewol::widget::Button* myButton = new widget::Button();
-	if (myButton == NULL) {
+	if (myButton == nullptr) {
 		EWOL_ERROR("Can not allocate new button ...");
-		return NULL;
+		return nullptr;
 	}
 	myButton->setSubWidget(new ewol::widget::Label(_text));
 	if(_autoExit == true) {
@@ -111,21 +111,21 @@ ewol::widget::Button* ewol::widget::StdPopUp::addButton(const std::string& _text
 	return myButton;
 }
 
-void ewol::widget::StdPopUp::onObjectRemove(ewol::Object* _removeObject) {
+void ewol::widget::StdPopUp::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
 	// call parent:
 	ewol::widget::PopUp::onObjectRemove(_removeObject);
 	if (_removeObject == m_subBar) {
-		m_subBar = NULL;
+		m_subBar = nullptr;
 		markToRedraw();
 		return;
 	}
 	if (_removeObject == m_comment) {
-		m_comment = NULL;
+		m_comment = nullptr;
 		markToRedraw();
 		return;
 	}
 	if (_removeObject == m_title) {
-		m_title = NULL;
+		m_title = nullptr;
 		markToRedraw();
 		return;
 	}

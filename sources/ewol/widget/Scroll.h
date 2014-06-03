@@ -67,7 +67,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
 				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

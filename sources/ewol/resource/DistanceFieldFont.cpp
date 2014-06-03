@@ -29,7 +29,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
   m_borderSize(10),
   m_textureBorderSize(0,0) {
 	addObjectType("ewol::resource::DistanceFieldFont");
-	m_font = NULL;
+	m_font = nullptr;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
 	m_sizeRatio = 1.0f;
@@ -84,18 +84,18 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	
 	if (m_fileName.size() == 0) {
 		EWOL_ERROR("can not load FONT name : '" << m_fileName << "'" );
-		m_font = NULL;
+		m_font = nullptr;
 		return;
 	}
 	EWOL_INFO("Load FONT name : '" << m_fileName << "'");
 	m_font = ewol::resource::FontFreeType::keep(m_fileName);
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		EWOL_ERROR("Pb Loading FONT name : '" << m_fileName << "'" );
 	}
 	
 	// set the bassic charset:
 	m_listElement.clear();
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		return;
 	}
 	if (importFromFile() == true) {
@@ -121,7 +121,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 }
 
 ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
-	ewol::resource::FontFreeType::release(m_font);
+	
 }
 
 
@@ -211,7 +211,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 
 bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	bool hasChange = false;
-	if (m_font == NULL) {
+	if (m_font == nullptr) {
 		return false;
 	}
 	// add the curent "char"
@@ -325,7 +325,7 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 		if (m_listElement.size() > 0) {
 			return &((m_listElement)[0]);
 		}
-		return NULL;
+		return nullptr;
 	}
 	//EWOL_ERROR("      index=" << index);
 	//EWOL_ERROR("      m_UVal=" << m_listElement[_displayMode][index].m_UVal);
@@ -335,56 +335,43 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 	return &((m_listElement)[index]);
 }
 
-ewol::resource::DistanceFieldFont* ewol::resource::DistanceFieldFont::keep(const std::string& _filename) {
+ewol::object::Shared<ewol::resource::DistanceFieldFont> ewol::resource::DistanceFieldFont::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : DistanceFieldFont : file : '" << _filename << "'");
-	ewol::resource::DistanceFieldFont* object = NULL;
-	ewol::Resource* object2 = getManager().localKeep(_filename);
-	if (NULL != object2) {
-		object = dynamic_cast<ewol::resource::DistanceFieldFont*>(object2);
-		if (NULL == object) {
+	ewol::object::Shared<ewol::resource::DistanceFieldFont> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
+	if (nullptr != object2) {
+		object = ewol::dynamic_pointer_cast<ewol::resource::DistanceFieldFont>(object2);
+		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return NULL;
+			return nullptr;
 		}
 	}
-	if (NULL != object) {
+	if (nullptr != object) {
 		return object;
 	}
 	// need to crate a new one ...
 	EWOL_DEBUG("CREATE: DistanceFieldFont : file : '" << _filename << "'");
-	object = new ewol::resource::DistanceFieldFont(_filename);
-	if (NULL == object) {
+	object = ewol::object::makeShared(new ewol::resource::DistanceFieldFont(_filename));
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::resource::DistanceFieldFont::release(ewol::resource::DistanceFieldFont*& _object) {
-	if (NULL == _object) {
-		return;
-	}
-	std::string name = _object->getName();
-	int32_t count = _object->getCounter() - 1;
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	if (getManager().release(object2) == true) {
-		EWOL_DEBUG("REMOVE: DistanceFieldFont : file : '" << name << "' count=" << count);
-		//etk::displayBacktrace(false);
-	}
-	_object = NULL;
-}
 
 void ewol::resource::DistanceFieldFont::exportOnFile() {
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
 	ejson::Array* tmpList = new ejson::Array();
-	if (tmpList == NULL) {
-		EWOL_ERROR("NULL pointer");
+	if (tmpList == nullptr) {
+		EWOL_ERROR("nullptr pointer");
 		return;
 	}
 	for (size_t iii=0; iii<m_listElement.size(); ++iii) {
 		ejson::Object* tmpObj = new ejson::Object();
-		if (tmpObj == NULL) {
+		if (tmpObj == nullptr) {
 			continue;
 		}
 		tmpObj->addString("m_UVal", std::to_string(m_listElement[iii].m_UVal));
@@ -427,14 +414,14 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 	m_borderSize = doc.getNumberValue("m_borderSize", 2);
 	m_textureBorderSize = doc.addString("m_textureBorderSize", "0,0");
 	ejson::Array* tmpList = doc.getArray("m_listElement");
-	if (tmpList == NULL) {
-		EWOL_ERROR("NULL pointer array");
+	if (tmpList == nullptr) {
+		EWOL_ERROR("nullptr pointer array");
 		return false;
 	}
 	m_listElement.clear();
 	for (size_t iii=0; iii<tmpList->size(); ++iii) {
 		ejson::Object* tmpObj = tmpList->getObject(iii);
-		if (tmpObj == NULL) {
+		if (tmpObj == nullptr) {
 			continue;
 		}
 		GlyphProperty prop;

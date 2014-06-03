@@ -48,9 +48,9 @@ namespace ewol {
 				/**
 				 * @brief std-pop-up destructor.
 				 */
-				~StdPopUp();
+				virtual ~StdPopUp();
 			protected:
-				ewol::widget::Label* m_title; //!< Title Label widget
+				ewol::object::Shared<ewol::widget::Label> m_title; //!< Title Label widget
 			public:
 				/**
 				 * @brief Set the title string.
@@ -58,7 +58,7 @@ namespace ewol {
 				 */
 				void setTitle(const std::string& _text);
 			protected:
-				ewol::widget::Label* m_comment; //!< Comment label widget
+				ewol::object::Shared<ewol::widget::Label> m_comment; //!< Comment label widget
 			public:
 				/**
 				 * @brief Set the commentary string.
@@ -66,15 +66,15 @@ namespace ewol {
 				 */
 				void setComment(const std::string& _text);
 			protected:
-				ewol::widget::Sizer* m_subBar; //!< subwidget bar containing all the button.
+				ewol::object::Shared<ewol::widget::Sizer> m_subBar; //!< subwidget bar containing all the button.
 			public:
 				/**
 				 * @brief Add a buttom button.
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
-				ewol::widget::Button* addButton(const std::string& _text, bool _autoExit=false);
+				ewol::object::Shared<ewol::widget::Button> addButton(const std::string& _text, bool _autoExit=false);
 			public: // Derived function
-				virtual void onObjectRemove(ewol::Object* _removeObject);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 		};
 	};

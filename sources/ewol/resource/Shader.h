@@ -31,6 +31,7 @@ namespace ewol {
 				 * @param[in] filename Standard file name format. see @ref etk::FSNode
 				 */
 				Shader(const std::string& _filename);
+			public:
 				/**
 				 * @brief Destructor, remove the current Shader
 				 */
@@ -72,14 +73,9 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the openGL Shader.
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::Shader* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::Shader*& _object);
+				static ewol::object::Shared<ewol::resource::Shader> keep(const std::string& _filename);
 		};
 	};
 };

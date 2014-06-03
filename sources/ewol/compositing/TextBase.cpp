@@ -32,7 +32,7 @@ ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _load
   m_startTextpos(0),
   m_stopTextPos(0),
   m_alignement(alignDisable),
-  m_GLprogram(NULL),
+  m_GLprogram(nullptr),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLColor(-1),
@@ -47,15 +47,15 @@ ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _load
 
 
 ewol::compositing::TextBase::~TextBase() {
-	ewol::resource::Program::release(m_GLprogram);
+	
 }
 
 void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	ewol::resource::Program* old = m_GLprogram;
+	ewol::object::Shared<ewol::resource::Program> old = m_GLprogram;
 	m_GLprogram = ewol::resource::Program::keep(_shaderName);
-	if (m_GLprogram != NULL) {
+	if (m_GLprogram != nullptr) {
 		m_GLPosition   = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor      = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture    = m_GLprogram->getAttribute("EW_texture2d");
@@ -66,10 +66,8 @@ void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
 	} else {
 		EWOL_ERROR("Can not load the program => keep previous one...");
 		m_GLprogram = old;
-		old = NULL;
+		old = nullptr;
 	}
-	// Release old program if needed ...
-	ewol::resource::Program::release(old);
 }
 
 void ewol::compositing::TextBase::translate(const vec3& _vect) {
@@ -249,7 +247,7 @@ void ewol::compositing::TextBase::print(const std::string& _text) {
 
 void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 	// get the static real pointer
-	if (_element == NULL) {
+	if (_element == nullptr) {
 		EWOL_ERROR( "Error Input node does not existed ...");
 	}
 	for(size_t iii=0; iii< _element->size(); iii++) {
@@ -265,7 +263,7 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			continue;
 		}
 		exml::Element* elem = _element->getElement(iii);
-		if (elem == NULL) {
+		if (elem == nullptr) {
 			EWOL_ERROR("Cast error ...");
 			continue;
 		}
@@ -372,13 +370,13 @@ void ewol::compositing::TextBase::printHTML(const std::string& _text) {
 	}
 	
 	exml::Element* root = (exml::Element*)doc.getNamed( "html" );
-	if (root == NULL) {
+	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		doc.display();
 		return;
 	}
 	exml::Element* bodyNode = (exml::Element*)root->getNamed( "body" );
-	if (root == NULL) {
+	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;
 	}
@@ -400,13 +398,13 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 	}
 	
 	exml::Element* root = (exml::Element*)doc.getNamed( "html" );
-	if (root == NULL) {
+	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		doc.display();
 		return;
 	}
 	exml::Element* bodyNode = (exml::Element*)root->getNamed( "body" );
-	if (root == NULL) {
+	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;
 	}

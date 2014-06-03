@@ -15,12 +15,12 @@
 
 
 ewol::resource::Colored3DObject::Colored3DObject() :
-  m_GLprogram(NULL) {
+  m_GLprogram(nullptr) {
 	addObjectType("ewol::Colored3DObject");
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::resource::Program::keep("DATA:simple3D.prog");
-	if (NULL != m_GLprogram ) {
+	if (nullptr != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -28,8 +28,7 @@ ewol::resource::Colored3DObject::Colored3DObject() :
 }
 
 ewol::resource::Colored3DObject::~Colored3DObject() {
-	// remove dynamics dependencies :
-	ewol::resource::Program::release(m_GLprogram);
+	
 }
 
 
@@ -40,7 +39,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -83,7 +82,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -123,7 +122,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == NULL) {
+	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -155,23 +154,15 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	}
 }
 
-ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep() {
+ewol::object::Shared<ewol::resource::Colored3DObject> ewol::resource::Colored3DObject::keep() {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
-	ewol::resource::Colored3DObject* object = new ewol::resource::Colored3DObject();
-	if (NULL == object) {
+	ewol::object::Shared<ewol::resource::Colored3DObject> object = ewol::object::makeShared(new ewol::resource::Colored3DObject());
+	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : ???Colored3DObject??? ");
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::resource::Colored3DObject::release(ewol::resource::Colored3DObject*& _object) {
-	if (NULL == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = NULL;
-}

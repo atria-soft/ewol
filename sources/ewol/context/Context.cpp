@@ -20,15 +20,17 @@
 #include <ewol/Dimension.h>
 #include <ewol/debug.h>
 
+#include <ewol/translate.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/object/Object.h>
 #include <ewol/object/Manager.h>
+#include <ewol/widget/Widget.h>
+#include <ewol/widget/Windows.h>
+#include <ewol/widget/Manager.h>
 
 #include <ewol/context/Context.h>
 #include <ewol/resource/Manager.h>
-#include <ewol/openGL/openGL.h>
 
-#include <ewol/widget/Manager.h>
-#include <ewol/translate.h>
 
 
 
@@ -43,10 +45,10 @@ static etk::Mutex& mutexInterface() {
 }
 
 
-static ewol::Context* l_curentInterface=NULL;
+static ewol::Context* l_curentInterface=nullptr;
 ewol::Context& ewol::getContext() {
 	#if DEBUG_LEVEL > 2
-		if(NULL == l_curentInterface){
+		if(nullptr == l_curentInterface){
 			EWOL_CRITICAL("[CRITICAL] try acces at an empty interface");
 		}
 	#endif
@@ -71,11 +73,11 @@ void ewol::Context::lockContext() {
 }
 
 /**
- * @brief set the curent interface at NULL.
+ * @brief set the curent interface at nullptr.
  * @note this un-lock the main mutex
  */
 void ewol::Context::unLockContext() {
-	l_curentInterface = NULL;
+	l_curentInterface = nullptr;
 	mutexInterface().unLock();
 }
 
@@ -133,13 +135,13 @@ namespace ewol {
 };
 
 
-void ewol::Context::inputEventTransfertWidget(ewol::Widget* _source,
-                                               ewol::Widget* _destination) {
+void ewol::Context::inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source,
+                                              ewol::object::Shared<ewol::Widget> _destination) {
 	m_input.transfertEvent(_source, _destination);
 }
 
 
-void ewol::Context::inputEventGrabPointer(ewol::Widget* _widget) {
+void ewol::Context::inputEventGrabPointer(ewol::object::Shared<ewol::Widget> _widget) {
 	m_input.grabPointer(_widget);
 }
 
@@ -150,12 +152,12 @@ void ewol::Context::inputEventUnGrabPointer() {
 void ewol::Context::processEvents() {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
-	ewol::eSystemMessage* data = NULL;
+	ewol::eSystemMessage* data = nullptr;
 	while (m_msgSystem.count()>0) {
 		nbEvent++;
-		if (data != NULL) {
+		if (data != nullptr) {
 			delete(data);
-			data = NULL;
+			data = nullptr;
 		}
 		m_msgSystem.wait(data);
 		//EWOL_DEBUG("EVENT");
@@ -188,14 +190,14 @@ void ewol::Context::processEvents() {
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				// store the keyboard special key status for mouse event...
 				m_input.setLastKeyboardSpecial(data->keyboardSpecial);
-				if (NULL != m_windowsCurrent) {
+				if (nullptr != m_windowsCurrent) {
 					if (false == m_windowsCurrent->onEventShortCut(data->keyboardSpecial,
 					                                             data->keyboardChar,
 					                                             data->keyboardMove,
 					                                             data->stateIsDown) ) {
 						// get the current focused Widget :
-						ewol::Widget * tmpWidget = m_widgetManager.focusGet();
-						if (NULL != tmpWidget) {
+						ewol::object::Shared<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
+						if (nullptr != tmpWidget) {
 							// check if the widget allow repeating key events.
 							//EWOL_DEBUG("repeating test :" << data->repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data->stateIsDown);
 							if(    false == data->repeateKey
@@ -237,8 +239,8 @@ void ewol::Context::processEvents() {
 				break;
 			case eSystemMessage::msgClipboardArrive:
 				{
-					ewol::Widget * tmpWidget = m_widgetManager.focusGet();
-					if (tmpWidget != NULL) {
+					ewol::object::Shared<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
+					if (tmpWidget != nullptr) {
 						tmpWidget->onEventClipboard(data->clipboardID);
 					}
 				}
@@ -286,6 +288,7 @@ void ewol::Context::setArchiveDir(int _mode, const char* _str) {
 
 
 ewol::Context::Context(int32_t _argc, const char* _argv[]) :
+  m_objectManager(*this),
   m_previousDisplayTime(0),
   m_input(*this),
 #if (defined(__TARGET_OS__Android) || defined(__TARGET_OS__IOs))
@@ -297,7 +300,7 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
   m_FpsSystemContext("Context   ", false),
   m_FpsSystem(       "Draw      ", true),
   m_FpsFlush(        "Flush     ", false),
-  m_windowsCurrent(NULL),
+  m_windowsCurrent(nullptr),
   m_windowsSize(320,480),
   m_initStepId(0),
   m_initTotalStep(1) {
@@ -352,7 +355,7 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 	// request the init of the application in the main context of openGL ...
 	{
 		ewol::eSystemMessage *data = new ewol::eSystemMessage();
-		if (data == NULL) {
+		if (data == nullptr) {
 			EWOL_ERROR("allocationerror of message");
 		} else {
 			data->TypeMessage = eSystemMessage::msgInit;
@@ -378,18 +381,27 @@ ewol::Context::~Context() {
 	// TODO : Clean the message list ...
 	// set the curent interface :
 	lockContext();
+	// Remove current windows
+	m_windowsCurrent.reset();
+	// clean all widget and sub widget with their resources:
+	do {
+		m_objectManager.removeAllRemovedObject();
+	} while (m_resourceManager.checkResourceToRemove() == true);
 	// call application to uninit
 	APP_UnInit(*this);
-	if (m_windowsCurrent != NULL) {
-		EWOL_DEBUG("Main windows has not been auto-removed...");
-		m_windowsCurrent->removeObject();
-		m_windowsCurrent = NULL;
-	}
-	// unset all windows
+	// clean all messages
 	m_msgSystem.clean();
+	// an other cycle of removing ...
+	do {
+		m_objectManager.removeAllRemovedObject();
+	} while (m_resourceManager.checkResourceToRemove() == true);
 	
-	m_objectManager.unInit();
+	EWOL_INFO("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
+	m_objectManager.displayListObject();
+	// Resource is an lower element as objects ...
 	m_resourceManager.unInit();
+	// now All must be removed !!!
+	m_objectManager.unInit();
 	// release the curent interface :
 	unLockContext();
 	EWOL_INFO(" == > Ewol system Un-Init (END)");
@@ -397,7 +409,7 @@ ewol::Context::~Context() {
 
 void ewol::Context::requestUpdateSize() {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -409,7 +421,7 @@ void ewol::Context::OS_Resize(const vec2& _size) {
 	// TODO : Better in the thread ...  == > but generate some init error ...
 	ewol::Dimension::setPixelWindowsSize(_size);
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -429,7 +441,7 @@ void ewol::Context::OS_Move(const vec2& _pos) {
 
 void ewol::Context::OS_SetInputMotion(int _pointerID, const vec2& _pos ) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -442,7 +454,7 @@ void ewol::Context::OS_SetInputMotion(int _pointerID, const vec2& _pos ) {
 
 void ewol::Context::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos ) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -456,7 +468,7 @@ void ewol::Context::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _
 
 void ewol::Context::OS_SetMouseMotion(int _pointerID, const vec2& _pos ) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -469,7 +481,7 @@ void ewol::Context::OS_SetMouseMotion(int _pointerID, const vec2& _pos ) {
 
 void ewol::Context::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos ) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -486,7 +498,7 @@ void ewol::Context::OS_SetKeyboard(ewol::key::Special& _special,
                                     bool _isDown,
                                     bool _isARepeateKey) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -503,7 +515,7 @@ void ewol::Context::OS_SetKeyboardMove(ewol::key::Special& _special,
                                         bool _isDown,
                                         bool _isARepeateKey) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -517,7 +529,7 @@ void ewol::Context::OS_SetKeyboardMove(ewol::key::Special& _special,
 
 void ewol::Context::OS_Hide() {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -527,7 +539,7 @@ void ewol::Context::OS_Hide() {
 
 void ewol::Context::OS_Show() {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -538,7 +550,7 @@ void ewol::Context::OS_Show() {
 
 void ewol::Context::OS_ClipBoardArrive(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 	ewol::eSystemMessage *data = new ewol::eSystemMessage();
-	if (data == NULL) {
+	if (data == nullptr) {
 		EWOL_ERROR("allocationerror of message");
 		return;
 	}
@@ -570,7 +582,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		processEvents();
 		if (m_initStepId < m_initTotalStep) {
 			ewol::eSystemMessage *data = new ewol::eSystemMessage();
-			if (data == NULL) {
+			if (data == nullptr) {
 				EWOL_ERROR("allocation error of message");
 			} else {
 				data->TypeMessage = eSystemMessage::msgInit;
@@ -578,13 +590,9 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			}
 		}
 		// call all the widget that neded to do something periodicly
-		//! ewol::widgetManager::periodicCall(currentTime);
 		m_widgetManager.periodicCall(currentTime);
-		// remove all widget that they are no more usefull (these who decided to destroy themself)
-		//! ewol::ObjectManager::removeAllAutoRemove();
-		m_objectManager.removeAllAutoRemove();
 		// check if the user selected a windows
-		if (NULL != m_windowsCurrent) {
+		if (nullptr != m_windowsCurrent) {
 			// Redraw all needed elements
 			m_windowsCurrent->onRegenerateDisplay();
 		}
@@ -605,7 +613,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		if (m_displayFps == true) {
 			m_FpsSystemContext.tic();
 		}
-		if (NULL != m_windowsCurrent) {
+		if (nullptr != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
 				m_resourceManager.updateContext();
@@ -618,7 +626,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			m_FpsSystemContext.toc();
 			m_FpsSystem.tic();
 		}
-		if (NULL != m_windowsCurrent) {
+		if (nullptr != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
 				m_FpsSystem.incrementCounter();
@@ -645,12 +653,33 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_FpsSystem.draw();
 		m_FpsFlush.draw();
 	}
+	{
+		// set the curent interface :
+		lockContext();
+		// release open GL Context
+		ewol::openGL::lock();
+		// while The Gui is drawing in OpenGl, we do some not realTime things
+		m_resourceManager.updateContext();
+		// release open GL Context
+		ewol::openGL::unLock();
+		do {
+			m_objectManager.removeAllRemovedObject();
+		} while (m_resourceManager.checkResourceToRemove() == true);
+		// release the curent interface :
+		unLockContext();
+	}
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(ewol::Object * _removeObject) {
+void ewol::Context::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
 	//EWOL_CRITICAL("element removed");
-	m_input.onObjectRemove(_removeObject);
+	if (m_windowsCurrent == _object) {
+		m_windowsCurrent.reset(); // This might never arrived, the owner is the current element (expected when the widget auto remove itself)
+	}
+	// inform all manager that can not be directly linked with the object manager
+	m_input.onObjectRemove(_object);
+	m_widgetManager.onObjectRemove(_object);
+	m_resourceManager.checkResourceToRemove();
 }
 
 void ewol::Context::resetIOEvent() {
@@ -661,9 +690,9 @@ void ewol::Context::OS_OpenGlContextDestroy() {
 	m_resourceManager.contextHasBeenDestroyed();
 }
 
-void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
+void ewol::Context::setWindows(const ewol::object::Shared<ewol::widget::Windows>& _windows) {
 	// remove current focus :
-	m_widgetManager.focusSetDefault(NULL);
+	m_widgetManager.focusSetDefault(nullptr);
 	m_widgetManager.focusRelease();
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;
@@ -673,8 +702,12 @@ void ewol::Context::setWindows(ewol::widget::Windows* _windows) {
 	forceRedrawAll();
 }
 
+ewol::object::Shared<ewol::widget::Windows> ewol::Context::getWindows() {
+	return m_windowsCurrent;
+};
+
 void ewol::Context::forceRedrawAll() {
-	if (m_windowsCurrent == NULL) {
+	if (m_windowsCurrent == nullptr) {
 		return;
 	}
 	m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
@@ -684,7 +717,7 @@ void ewol::Context::OS_Stop() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Stop...");
-	if (m_windowsCurrent != NULL) {
+	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->sysOnKill();
 	}
 	// release the curent interface :
@@ -696,7 +729,7 @@ void ewol::Context::OS_Suspend() {
 	lockContext();
 	EWOL_INFO("OS_Suspend...");
 	m_previousDisplayTime = -1;
-	if (m_windowsCurrent != NULL) {
+	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateSuspend();
 	}
 	// release the curent interface :
@@ -709,7 +742,7 @@ void ewol::Context::OS_Resume() {
 	EWOL_INFO("OS_Resume...");
 	m_previousDisplayTime = ewol::getTime();
 	m_widgetManager.periodicCallResume(m_previousDisplayTime);
-	if (m_windowsCurrent != NULL) {
+	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateResume();
 	}
 	// release the curent interface :
@@ -719,7 +752,7 @@ void ewol::Context::OS_Foreground() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Foreground...");
-	if (m_windowsCurrent != NULL) {
+	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateForeground();
 	}
 	// release the curent interface :
@@ -730,7 +763,7 @@ void ewol::Context::OS_Background() {
 	// set the curent interface :
 	lockContext();
 	EWOL_INFO("OS_Background...");
-	if (m_windowsCurrent != NULL) {
+	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateBackground();
 	}
 	// release the curent interface :
@@ -773,7 +806,7 @@ void ewol::Context::keyboardHide() {
 
 
 bool ewol::Context::systemKeyboradEvent(enum ewol::key::keyboardSystem _key, bool _down) {
-	if (m_windowsCurrent == NULL) {
+	if (m_windowsCurrent == nullptr) {
 		return false;
 	}
 	lockContext();

@@ -15,12 +15,12 @@
 #undef __class__
 #define __class__ "ListFileSystem"
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::ListFileSystem();
 }
 
 void ewol::widget::ListFileSystem::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";
@@ -47,7 +47,7 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 		m_folder = "c:/";
 	#endif
 	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:ListFileSystem.json");
-	if (m_colorProperty != NULL) {
+	if (m_colorProperty != nullptr) {
 		m_colorIdText = m_colorProperty->request("text");
 		m_colorIdBackground1 = m_colorProperty->request("background1");
 		m_colorIdBackground2 = m_colorProperty->request("background2");
@@ -58,26 +58,25 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	addEventId(eventFolderSelect);
 	addEventId(eventFolderValidate);
 	
-	registerConfig(configShowHidden, "bool", NULL, "Show the hidden element (file, folder, ...)");
-	registerConfig(configShowFile, "bool", NULL, "display files");
-	registerConfig(configShowFolder, "bool", NULL, "display folders");
-	registerConfig(configShowTemporary, "bool", NULL, "display temporary files");
-	registerConfig(configPath, "string", NULL, "Path to display");
-	registerConfig(configSelect, "string", NULL, "selection af a specific file");
+	registerConfig(configShowHidden, "bool", nullptr, "Show the hidden element (file, folder, ...)");
+	registerConfig(configShowFile, "bool", nullptr, "display files");
+	registerConfig(configShowFolder, "bool", nullptr, "display folders");
+	registerConfig(configShowTemporary, "bool", nullptr, "display temporary files");
+	registerConfig(configPath, "string", nullptr, "Path to display");
+	registerConfig(configSelect, "string", nullptr, "selection af a specific file");
 	
 	setMouseLimit(1);
 };
 
 ewol::widget::ListFileSystem::~ListFileSystem() {
 	clearList();
-	ewol::resource::ColorFile::release(m_colorProperty);
 };
 
 void ewol::widget::ListFileSystem::clearList() {
 	for (size_t iii=0; iii<m_list.size(); iii++) {
-		if (NULL != m_list[iii]) {
+		if (nullptr != m_list[iii]) {
 			delete(m_list[iii]);
-			m_list[iii] = NULL;
+			m_list[iii] = nullptr;
 		}
 	}
 };
@@ -102,7 +101,7 @@ void ewol::widget::ListFileSystem::regenerateView() {
 std::string ewol::widget::ListFileSystem::getSelect() const {
 	std::string tmpVal = "";
 	if (m_selectedLine >= 0) {
-		if (m_list[m_selectedLine] != NULL) {
+		if (m_list[m_selectedLine] != nullptr) {
 			tmpVal = m_list[m_selectedLine]->getNameFile();
 		}
 	}
@@ -115,7 +114,7 @@ void ewol::widget::ListFileSystem::setSelect(const std::string& _data) {
 	m_selectedLine = -1;
 	// search the coresponding file :
 	for (size_t iii=0; iii<m_list.size(); iii++) {
-		if (NULL!=m_list[iii]) {
+		if (nullptr!=m_list[iii]) {
 			if (m_list[iii]->getNameFile() == _data) {
 				// we find the line :
 				m_selectedLine = iii;
@@ -164,7 +163,7 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std
 	}
 	if(    _raw-offset >= 0
 	    && _raw-offset < (int32_t)m_list.size()
-	    && NULL != m_list[_raw-offset]) {
+	    && nullptr != m_list[_raw-offset]) {
 		_myTextToWrite = m_list[_raw-offset]->getNameFile();
 		EWOL_VERBOSE("get filename for : '" << *m_list[_raw-offset] << ":'" << _myTextToWrite << "'");
 	}
@@ -215,7 +214,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					generateEventId(eventFolderSelect, "..");
 				} else if(    m_selectedLine-offset  >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && NULL != m_list[m_selectedLine-offset] ) {
+				           && nullptr != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
@@ -240,7 +239,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					generateEventId(eventFolderValidate, "..");
 				} else if(    m_selectedLine-offset >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && NULL != m_list[m_selectedLine-offset] ) {
+				           && nullptr != m_list[m_selectedLine-offset] ) {
 					switch(m_list[m_selectedLine-offset]->getNodeType())
 					{
 						case etk::FSN_FILE :

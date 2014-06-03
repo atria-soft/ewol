@@ -40,10 +40,10 @@ ewol::widget::ProgressBar::ProgressBar() {
 	m_textColorBgOff = etk::color::black;
 	m_textColorBgOff.setA(0x3F);
 	setCanHaveFocus(true);
-	registerConfig(configColorBg, "color", NULL, "Background color");
-	registerConfig(configColorFgOn, "color", NULL, "Corlor of the true value");
-	registerConfig(configColorFgOff, "color", NULL, "Corlor of the false value");
-	registerConfig(configValue, "integer", NULL, "Value of the progress bar");
+	registerConfig(configColorBg, "color", nullptr, "Background color");
+	registerConfig(configColorFgOn, "color", nullptr, "Corlor of the true value");
+	registerConfig(configColorFgOff, "color", nullptr, "Corlor of the false value");
+	registerConfig(configValue, "integer", nullptr, "Value of the progress bar");
 	
 }
 

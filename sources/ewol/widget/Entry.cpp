@@ -73,10 +73,10 @@ ewol::widget::Entry::Entry(std::string _newData) :
 	shortCutAdd("ctrl+a", ewolEventEntrySelect, "ALL");
 	shortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
 	
-	registerConfig(configMaxChar, "int", NULL, "Maximum cgar that can be set on the Entry");
-	registerConfig(configRegExp, "string", NULL, "Control what it is write with a regular expression");
-	registerConfig(configEmptyMessage, "string", NULL, "Text that is displayed when the Entry is empty (decorated text)");
-	registerConfig(configValue, "string", NULL, "Value display in the entry (decorated text)");
+	registerConfig(configMaxChar, "int", nullptr, "Maximum cgar that can be set on the Entry");
+	registerConfig(configRegExp, "string", nullptr, "Control what it is write with a regular expression");
+	registerConfig(configEmptyMessage, "string", nullptr, "Text that is displayed when the Entry is empty (decorated text)");
+	registerConfig(configValue, "string", nullptr, "Value display in the entry (decorated text)");
 	
 	setValue(_newData);
 	markToRedraw();

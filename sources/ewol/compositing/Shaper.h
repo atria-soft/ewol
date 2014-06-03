@@ -44,7 +44,7 @@ namespace ewol {
 			private:
 				std::string m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
-				ewol::resource::ConfigFile* m_config; //!< pointer on the config file resources
+				ewol::object::Shared<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
 				int32_t m_confIdDisplayExternal; //!< Display external border
 				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
 				int32_t m_confIdBorder[shaperPosCount]; //!< border property : X-left X-right Y-top Y-buttom
@@ -56,7 +56,7 @@ namespace ewol {
 				int32_t m_confColorFile;       //!< ConfigFile opengGl color file Name
 				int32_t m_confImageFile;       //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
-				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
+				ewol::object::Shared<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
 				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on vec2(X,Y))
@@ -66,7 +66,7 @@ namespace ewol {
 				int32_t m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
 				int32_t m_GLtexID;              //!< openGL id on the element (texture image)
 				// For the Image :
-				ewol::resource::TextureFile* m_resourceTexture; //!< texture resources (for the image)
+				ewol::object::Shared<ewol::resource::TextureFile> m_resourceTexture; //!< texture resources (for the image)
 				// internal needed data :
 				int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
 				vec2    m_propertyOrigin;         //!< widget origin
@@ -81,7 +81,7 @@ namespace ewol {
 				vec2    m_pos[SHAPER_NB_MAX_VERTEX]; //!< podition to display property
 				int32_t m_nbVertexToDisplay;
 				// color management theme:
-				ewol::resource::ColorFile* m_colorProperty; //!< input resource for color management
+				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
 				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
 			private:
 				/**
@@ -101,7 +101,7 @@ namespace ewol {
 				/**
 				 * @brief generic destructor
 				 */
-				~Shaper();
+				virtual ~Shaper();
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL
@@ -233,7 +233,7 @@ namespace ewol {
 				 * @return The Id of the color
 				 */
 				int32_t requestColor(const std::string& _name) {
-					if (m_colorProperty == NULL) {
+					if (m_colorProperty == nullptr) {
 						return -1;
 					}
 					return m_colorProperty->request(_name);
@@ -251,7 +251,7 @@ namespace ewol {
 				 * @return The Id of the element
 				 */
 				int32_t requestConfig(const std::string& _name) {
-					if (m_config == NULL) {
+					if (m_config == nullptr) {
 						return -1;
 					}
 					return m_config->request(_name);
@@ -263,7 +263,7 @@ namespace ewol {
 				 */
 				double getConfigNumber(int32_t _id) {
 					if (    _id == -1
-					     || m_config == NULL) {
+					     || m_config == nullptr) {
 						return 0.0;
 					}
 					return m_config->getNumber(_id);

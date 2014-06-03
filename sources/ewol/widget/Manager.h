@@ -14,6 +14,7 @@
 #include <vector>
 #include <etk/Hash.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,9 +23,9 @@ namespace ewol {
 				typedef ewol::Widget* (*creator_tf)();
 			private:
 				// For the focus Management
-				ewol::Widget* m_focusWidgetDefault;
-				ewol::Widget* m_focusWidgetCurrent;
-				std::vector<ewol::Widget*> m_listOfPeriodicWidget;
+				ewol::object::Shared<ewol::Widget> m_focusWidgetDefault;
+				ewol::object::Shared<ewol::Widget> m_focusWidgetCurrent;
+				std::vector<ewol::object::Shared<ewol::Widget>> m_listOfPeriodicWidget;
 				bool m_havePeriodic;
 				bool m_haveRedraw;
 				etk::Hash<creator_tf> m_creatorList;
@@ -32,18 +33,16 @@ namespace ewol {
 				int64_t m_lastPeriodicCallTime; //!< last call time ...
 			public:
 				Manager();
-				~Manager();
-				// need to call when remove a widget to clear all dependency of the focus system
-				void rm(ewol::Widget* _newWidget);
+				virtual ~Manager();
 				
-				void focusKeep(ewol::Widget* _newWidget); // set the focus at the specific widget
-				void focusSetDefault(ewol::Widget* _newWidget); // select the default focus getter
+				void focusKeep(const ewol::object::Shared<ewol::Widget>& _newWidget); // set the focus at the specific widget
+				void focusSetDefault(const ewol::object::Shared<ewol::Widget>& _newWidget); // select the default focus getter
 				void focusRelease(); // release focus from the current widget to the default
-				ewol::Widget* focusGet();
-				void focusRemoveIfRemove(ewol::Widget* _newWidget);
+				const ewol::object::Shared<ewol::Widget>& focusGet();
+				void focusRemoveIfRemove(const ewol::object::Shared<ewol::Widget>& _newWidget);
 				
-				void periodicCallAdd(ewol::Widget* _pWidget);
-				void periodicCallRm(ewol::Widget* _pWidget);
+				void periodicCallAdd(const ewol::object::Shared<ewol::Widget>& _pWidget);
+				void periodicCallRm(const ewol::object::Shared<ewol::Widget>& _pWidget);
 				void periodicCall(int64_t _localTime);
 				void periodicCallResume(int64_t _localTime);
 				bool periodicCallHave();
@@ -53,9 +52,12 @@ namespace ewol {
 				
 				// element that generate the list of elements
 				void addWidgetCreator(const std::string& _name, creator_tf _pointer);
-				ewol::Widget* create(const std::string& _name);
+				ewol::object::Shared<ewol::Widget> create(const std::string& _name);
 				bool exist(const std::string& _name);
 				std::string list();
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
+			private:
+				void periodicCallUpdateCount();
 		};
 	};
 };

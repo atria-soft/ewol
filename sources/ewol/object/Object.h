@@ -13,7 +13,10 @@
 #include <etk/types.h>
 #include <vector>
 #include <exml/exml.h>
-#include <vector>
+#include <mutex>
+#include <ewol/object/Shared.h>
+#include <ewol/object/Owner.h>
+
 namespace ewol {
 	// some class need to define element befor other ...
 	class Object;
@@ -37,7 +40,7 @@ namespace ewol {
 		class EventExtGen {
 			public:
 				const char* localEventId; //!< local event Id generation
-				ewol::Object* destObject; //!< destination widget that might be call
+				ewol::object::Shared<ewol::Object> destObject; //!< destination widget that might be call
 				const char* destEventId; //!< generated event ID on the distant widget
 				std::string overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
 		};
@@ -47,92 +50,31 @@ namespace ewol {
 	 * this class mermit at every Object to communicate between them.
 	 */
 	class Object {
-		public:
-			template<typename T, typename = typename std::enable_if<std::is_convertible<T*, Object*>::value>::type>
-			class Shared {
-				private:
-					T* m_pointer;
-				public:
-					Shared() :
-					  m_pointer(nullptr) {
-						// nothing to do ...
-					}
-					Shared(T* _pointer) :
-					  m_pointer(_pointer) {
-						if (m_pointer == nullptr) {
-							return;
-						}
-						m_pointer->objRefCountIncrement();
-					}
-					~Shared() {
-						reset();
-					}
-					// copy constructor
-					Shared(const Shared& _obj) :
-					  m_pointer(nullptr) {
-						m_pointer = _obj.get();
-						if (m_pointer == nullptr) {
-							return;
-						}
-						m_pointer->objRefCountIncrement();
-					}
-					// Move Constructor
-					Shared(Shared&& _obj) :
-					  m_pointer(nullptr) {
-						// transfert pointer
-						m_pointer = _obj.m_pointer;
-						_obj.m_pointer = nullptr;
-					}
-					Shared& operator=(const Shared<T>& _obj) noexcept {
-						if(this == &_obj) {
-							return *this;
-						}
-						reset();
-						m_pointer = _obj.get();
-						if (m_pointer != nullptr) {
-							m_pointer->objRefCountIncrement();
-						}
-						return *this;
-					}
-					
-					void reset() {
-						if (m_pointer == nullptr) {
-							return;
-						}
-						if (m_pointer->m_objRefCount <= 0) {
-							TK_ERROR("Object is already removed");
-						} else if (m_pointer->m_objRefCount == 1) {
-							TK_ERROR("Remove object (in shared)");
-							delete m_pointer;
-						} else {
-							m_pointer->objRefCountDecrement();
-						}
-						m_pointer = nullptr;
-					}
-					T* get() noexcept {
-						return m_pointer;
-					}
-					T* get() const noexcept {
-						return m_pointer;
-					}
-					T& operator*() const noexcept {
-						return *m_pointer;
-					}
-					T* operator->() const noexcept {
-						return m_pointer;
-					}
-			};
-			template<typename T> Shared<T> makeShared(T* _pointer) {
-				return Shared<T>(_pointer);
-			}
+		template<typename T> friend class ewol::object::Shared;
+		template<typename T> friend class ewol::object::Owner;
 		private:
-			// TODO : Lock Refcounting ...
+			//! @not-in-doc
+			std::mutex m_lockRefCount;
+			//! @not-in-doc
 			int32_t m_objRefCount;
 		public:
+			//! @not-in-doc
 			void objRefCountIncrement();
+			//! @not-in-doc
 			void objRefCountDecrement();
+			int32_t getRefCount() {
+				return m_objRefCount;
+			}
+			//! @not-in-doc
 			static void operator delete(void* _ptr, std::size_t _sz);
+			//! @not-in-doc
 			static void operator delete[](void* _ptr, std::size_t _sz);
+		#ifdef DEBUG
+		public:
+			int32_t m_ownerCount;
+			void incOwnerCount();
+			void decOwnerCount();
+		#endif
 		private:
 			static size_t m_valUID; //!< stic used for the unique ID definition
 		public:
@@ -152,6 +94,8 @@ namespace ewol {
 			 * @brief Destructor
 			 */
 			virtual ~Object();
+		private:
+			bool m_isDestroyed;
 		protected:
 			/**
 			 * @brief Auto-destroy the object
@@ -162,6 +106,17 @@ namespace ewol {
 			 * @brief Asynchronous removing the object
 			 */
 			void removeObject();
+			/**
+			 * @brief Respown a removed object
+			 */
+			void respownObject();
+			/**
+			 * @brief Get if the element is destroyed or not
+			 * @return true The element in destroyed
+			 */
+			bool isDestroyed() {
+				return m_isDestroyed;
+			}
 		private:
 			std::vector<const char*> m_listType;
 		public:
@@ -208,7 +163,7 @@ namespace ewol {
 				return m_uniqueId;
 			};
 		private:
-			std::vector<object::EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
+			std::vector<object::EventExtGen> m_externEvent; //!< Generic list of event generation for output link
 			std::vector<const char*> m_availlableEventId; //!< List of all event availlable for this widget
 		protected:
 			/**
@@ -241,23 +196,22 @@ namespace ewol {
 			 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void registerOnEvent(ewol::Object * _destinationObject,
+			void registerOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
 			                     const char * _eventId,
-			                     const char * _eventIdgenerated = NULL,
+			                     const char * _eventIdgenerated = nullptr,
 			                     const std::string& _overloadData = "");
 			/**
 			 * @brief Un-Register an Object over an other.
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] _eventId Event generate inside the object (NULL to remove all event on this object)
+			 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
 			 */
-			void unRegisterOnEvent(ewol::Object * _destinationObject,
-			                       const char * _eventId = NULL);
+			void unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			                       const char * _eventId = nullptr);
 			/**
 			 * @brief Inform object that an other object is removed ...
-			 * @param[in] _removObject Pointer on the Object remeved  == > the user must remove all reference on this Object
 			 * @note : Sub classes must call this class
 			 */
-			virtual void onObjectRemove(ewol::Object * _removeObject);
+			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
 			/**
 			 * @brief Receive a message from an other Object with a specific eventId and data
 			 * @param[in] _msg Message handle
@@ -277,10 +231,10 @@ namespace ewol {
 			 * @param[in] _default Default value of this parameter.
 			 */
 			void registerConfig(const char* _config,
-			                    const char* _type = NULL,
-			                    const char* _control = NULL,
-			                    const char* _description = NULL,
-			                    const char* _default = NULL);
+			                    const char* _type = nullptr,
+			                    const char* _control = nullptr,
+			                    const char* _description = nullptr,
+			                    const char* _default = nullptr);
 			/**
 			 * @brief Configuration requested to the curent Object
 			 * @param[in] _conf Configuration handle.
@@ -388,91 +342,6 @@ namespace ewol {
 				return m_isResource;
 			}
 	};
-	
-	// section to compare shared pointer of an object with an other
-	
-	//! @not in doc
-	template<typename T, typename T2>
-	inline bool operator==(const Object::Shared<T>& _obj, const Object::Shared<T2>& _obj2) noexcept {
-		return _obj.get() == _obj2.get();
-	}
-	//! @not in doc
-	template<typename T2>
-	inline bool operator==(const Object::Shared<T2>& _obj, std::nullptr_t) noexcept {
-		return _obj.get() == NULL;
-	}
-	//! @not in doc
-	template<typename T2>
-	inline bool operator==(std::nullptr_t, const Object::Shared<T2>& _obj) noexcept {
-		return _obj.get() == NULL;
-	}
-	//! @not in doc
-	template<typename T, typename T2, typename = typename
-	       std::enable_if<std::is_convertible<T*, T2*>::value>::type>
-	inline bool operator==(const Object::Shared<T>& _obj, const T2* _obj2) noexcept {
-		return _obj.get() == _obj2;
-	}
-	//! @not in doc
-	template<typename T, typename T2, typename = typename
-	       std::enable_if<std::is_convertible<T*, T2*>::value>::type>
-	inline bool operator==(const T* _obj, const Object::Shared<T2>& _obj2) noexcept {
-		return _obj == _obj2.get();
-	}
-	
-	//! @not in doc
-	template<typename T, typename T2>
-	inline bool operator!=(const Object::Shared<T>& _obj, const Object::Shared<T2>& _obj2) noexcept {
-		return _obj.get() != _obj2.get();
-	}
-	//! @not in doc
-	template<typename T>
-	inline bool operator!=(const Object::Shared<T>& _obj, std::nullptr_t) noexcept {
-		return _obj.get() != NULL;
-	}
-	//! @not in doc
-	template<typename T>
-	inline bool operator!=(std::nullptr_t, const Object::Shared<T>& _obj) noexcept {
-		return _obj.get() != NULL;
-	}
-	//! @not in doc
-	template<typename T, typename T2, typename = typename
-	       std::enable_if<std::is_convertible<T*, T2*>::value>::type>
-	inline bool operator!=(const Object::Shared<T>& _obj, const T2* _obj2) noexcept {
-		return _obj.get() != _obj2;
-	}
-	//! @not in doc
-	template<typename T, typename T2, typename = typename
-	       std::enable_if<std::is_convertible<T*, T2*>::value>::type>
-	inline bool operator!=(const T* _obj, const Object::Shared<T2>& _obj2) noexcept {
-		return _obj != _obj2.get();
-	}
-	
-	//! @not in doc
-	template<typename T>
-	inline void swap(Object::Shared<T>& _obj, Object::Shared<T>& _obj2) noexcept {
-		_obj2.swap(_obj);
-	}
-	
-	//! @not in doc
-	template<typename T2, typename T>
-	inline Object::Shared<T2> static_pointer_cast(const Object::Shared<T>& _obj) noexcept {
-		return Object::Shared<T2>(_obj, static_cast<T2*>(_obj.get()));
-	}
-	
-	//! @not in doc
-	template<typename T2, typename T>
-	inline Object::Shared<T2> const_pointer_cast(const Object::Shared<T>& _obj) noexcept {
-		return Object::Shared<T2>(_obj, const_cast<T2*>(_obj.get()));
-	}
-	
-	//! @not in doc
-	template<typename T2, typename T>
-	inline Object::Shared<T2> dynamic_pointer_cast(const Object::Shared<T>& _obj) noexcept {
-		if (T2* obj = dynamic_cast<T2*>(_obj.get())) {
-			return Object::Shared<T2>(_obj, obj);
-		}
-		return Object::Shared<T2>();
-	}
 };
 
 #endif

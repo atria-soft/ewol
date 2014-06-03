@@ -9,6 +9,11 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
+#include <vector>
+#include <etk/types.h>
+#include <etk/math/Vector2D.h>
+
+#include <ewol/debug.h>
 #include <ewol/object/Object.h>
 #include <ewol/Dimension.h>
 
@@ -19,10 +24,6 @@ namespace ewol {
 		class Windows;
 	};
 };
-#include <etk/types.h>
-#include <vector>
-#include <etk/math/Vector2D.h>
-#include <ewol/debug.h>
 #include <ewol/context/clipBoard.h>
 #include <ewol/key/key.h>
 #include <ewol/context/cursor.h>
@@ -100,12 +101,12 @@ namespace ewol {
 			enum ewol::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut() {
 				broadcastEvent = false;
-				generateEventId = NULL;
+				generateEventId = nullptr;
 				eventData = "";
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::key::keyboardUnknow;
 			};
-			~EventShortCut() { };
+			virtual ~EventShortCut() { };
 	};
 	/**
 	 * @brief Widget class is the main widget interface, it hase some generic properties: 
@@ -139,24 +140,24 @@ namespace ewol {
 		// -- Hierarchy management:
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			ewol::Widget* m_up; //!< uppper widget in the tree of widget
+			ewol::object::Shared<ewol::Widget> m_up; //!< uppper widget in the tree of widget
 		public:
 			/**
 			 * @brief set the upper widget of this widget.
-			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with NULL.
+			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with nullptr.
 			 */
-			void setUpperWidget(ewol::Widget* _upper);
+			void setUpperWidget(ewol::object::Shared<ewol::Widget> _upper);
 			/**
 			 * @brief remove the upper widget of this widget.
 			 */
 			void removeUpperWidget() {
-				setUpperWidget(NULL);
+				setUpperWidget(nullptr);
 			};
 			/**
 			 * @brief get the upper widget (father).
-			 * @ return the requested widget (if NULL , 2 case : root widget or error implementation).
+			 * @ return the requested widget (if nullptr , 2 case : root widget or error implementation).
 			 */
-			ewol::Widget* getUpperWidget() {
+			ewol::object::Shared<ewol::Widget> getUpperWidget() {
 				return m_up;
 			};
 		// ----------------------------------------------------------------------------------------------------------------
@@ -527,22 +528,22 @@ namespace ewol {
 			/**
 			 * @brief get the widget at the specific windows absolute position
 			 * @param[in] _pos gAbsolute position of the requested widget knowledge
-			 * @return NULL No widget found
+			 * @return nullptr No widget found
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos) {
+			virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
 				if (false == isHide()) {
 					return this;
 				}
-				return NULL;
+				return nullptr;
 			};
 			/**
 			 * @brief get the widget if it have this name or one of the subwidget with the same name
 			 * @param[in] _widgetName name of the widget
-			 * @return the requested pointer on the node (or NULL pointer)
+			 * @return the requested pointer on the node (or nullptr pointer)
 			 */
-			virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
+			virtual ewol::object::Shared<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:
@@ -698,7 +699,7 @@ namespace ewol {
 			 */
 			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
-			virtual void onObjectRemove(ewol::Object* _removeObject);
+			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
 			virtual bool onSetConfig(const ewol::object::Config& _conf);
@@ -715,7 +716,7 @@ namespace ewol {
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::widget::Windows* getWindows();
+			ewol::object::Shared<ewol::widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */
@@ -740,7 +741,7 @@ namespace ewol {
 		private:
 			std::vector<const char*> m_annimationList[2]; //!< List of all annimation type ADD
 		protected:
-			const char* m_annimationType[2]; //!< type of start annimation (default NULL ==> no annimation)
+			const char* m_annimationType[2]; //!< type of start annimation (default nullptr ==> no annimation)
 			float m_annimationTime[2]; //!< time to produce start annimation
 		protected:
 			/**

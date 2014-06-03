@@ -32,21 +32,21 @@ namespace ewol {
 				static const char * const eventClose;
 			public:
 				Parameter();
-				~Parameter();
+				virtual ~Parameter();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(ewol::Object * _removeObject);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 			public:
 				void setTitle(std::string _label);
-				void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
+				void menuAdd(std::string _label, std::string _image, ewol::object::Shared<ewol::Widget> _associateWidget);
 				void menuAddGroup(std::string _label);
 				void menuClear();
 				void menuSeparator();
 			private:
-				int32_t                 m_currentIdList;
-				ewol::widget::Label*          m_widgetTitle;
-				ewol::widget::ParameterList*  m_paramList;
-				ewol::widget::WSlider*        m_wSlider;
+				int32_t m_currentIdList;
+				ewol::object::Shared<ewol::widget::Label> m_widgetTitle;
+				ewol::object::Shared<ewol::widget::ParameterList> m_paramList;
+				ewol::object::Shared<ewol::widget::WSlider> m_wSlider;
 		};
 	};
 };

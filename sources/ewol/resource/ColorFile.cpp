@@ -44,13 +44,13 @@ void ewol::resource::ColorFile::reload() {
 		return;
 	}
 	ejson::Array* baseArray = doc.getArray("color");
-	if (baseArray == NULL) {
+	if (baseArray == nullptr) {
 		EWOL_ERROR("Can not get basic array : 'color'");
 		return;
 	}
-	for (int32_t iii = 0; iii < baseArray->size(); ++iii) {
+	for (size_t iii = 0; iii < baseArray->size(); ++iii) {
 		ejson::Object* tmpObj = baseArray->getObject(iii);
-		if (tmpObj == NULL) {
+		if (tmpObj == nullptr) {
 			EWOL_DEBUG(" can not get object in 'color' id=" << iii);
 			continue;
 		}
@@ -75,38 +75,27 @@ int32_t ewol::resource::ColorFile::request(const std::string& _paramName) {
 }
 
 
-ewol::resource::ColorFile* ewol::resource::ColorFile::keep(const std::string& _filename) {
+ewol::object::Shared<ewol::resource::ColorFile> ewol::resource::ColorFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : ColorFile : file : \"" << _filename << "\"");
-	ewol::resource::ColorFile* object = NULL;
-	ewol::Resource* object2 = getManager().localKeep(_filename);
-	if (NULL != object2) {
-		object = dynamic_cast<ewol::resource::ColorFile*>(object2);
-		if (NULL == object) {
+	ewol::object::Shared<ewol::resource::ColorFile> object = nullptr;
+	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
+	if (nullptr != object2) {
+		object = ewol::dynamic_pointer_cast<ewol::resource::ColorFile>(object2);
+		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return NULL;
+			return nullptr;
 		}
 	}
-	if (NULL != object) {
+	if (nullptr != object) {
 		return object;
 	}
 	// this element create a new one every time ....
-	object = new ewol::resource::ColorFile(_filename);
-	if (NULL == object) {
+	object = ewol::object::makeShared(new ewol::resource::ColorFile(_filename));
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
 }
-
-void ewol::resource::ColorFile::release(ewol::resource::ColorFile*& _object) {
-	if (NULL == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = NULL;
-}
-
-
 

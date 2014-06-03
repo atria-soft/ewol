@@ -22,11 +22,11 @@ namespace ewol {
 				const char* m_default; //!< default value ...
 			public:
 				// note : no parameter capability is needed to create element in case of vector stoarage.
-				ConfigElement(const char* _config = NULL,
-				              const char* _type = NULL,
-				              const char* _control = NULL,
-				              const char* _description = NULL,
-				              const char* _default = NULL) :
+				ConfigElement(const char* _config = nullptr,
+				              const char* _type = nullptr,
+				              const char* _control = nullptr,
+				              const char* _description = nullptr,
+				              const char* _default = nullptr) :
 				  m_config(_config),
 				  m_type(_type),
 				  m_control(_control),

@@ -22,23 +22,25 @@ namespace ewol {
 			private:
 				class MessageList {
 					public:
-						MessageList(const char* _message=NULL, ewol::Object* _object=NULL) :
+						MessageList(const char* _message=nullptr, ewol::object::Shared<ewol::Object> _object=nullptr) :
 						  m_message(_message), m_object(_object) {
 							
 						}
 						const char* m_message;
-						ewol::Object* m_object;
+						ewol::object::Shared<ewol::Object> m_object;
 				};
 				std::vector<MessageList> m_messageList; //!< List of all message ...
 			public:
 				MultiCast();
-				~MultiCast();
+				virtual ~MultiCast();
+				void clear();
 				void anonymousSend(const char* const _messageId, const std::string& _data) {
-					send(NULL, _messageId, _data);
+					send(nullptr, _messageId, _data);
 				};
-				void send(ewol::Object* _object, const char* const _message, const std::string& _data);
-				void rm(ewol::Object* _object);
-				void add(ewol::Object* _object, const char* const _message);
+				void send(const ewol::object::Shared<ewol::Object>& _object, const char* const _message, const std::string& _data);
+				void rm(const ewol::object::Shared<ewol::Object>& _object);
+				void add(const ewol::object::Shared<ewol::Object>& _object, const char* const _message);
+				void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
 		};
 	};
 };

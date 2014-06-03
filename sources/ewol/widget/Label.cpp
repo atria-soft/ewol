@@ -27,12 +27,12 @@ void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
 }
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label(std::string _newLabel) :
-  m_colorProperty(NULL),
+  m_colorProperty(nullptr),
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
 	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Label.json");
-	if (m_colorProperty != NULL) {
+	if (m_colorProperty != nullptr) {
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
@@ -40,11 +40,11 @@ ewol::widget::Label::Label(std::string _newLabel) :
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
 	setMouseLimit(1);
-	registerConfig(configValue, "string", NULL, "displayed value string"); // TODO : do not store in attibute...
+	registerConfig(configValue, "string", nullptr, "displayed value string"); // TODO : do not store in attibute...
 }
 
 ewol::widget::Label::~Label() {
-	ewol::resource::ColorFile::release(m_colorProperty);
+	
 }
 
 void ewol::widget::Label::calculateMinMaxSize() {
@@ -124,7 +124,7 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	
 	// clean the element
 	m_text.reset();
-	if (m_colorProperty != NULL) {
+	if (m_colorProperty != nullptr) {
 		m_text.setDefaultColorFg(m_colorProperty->get(m_colorDefaultFgText));
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
 	}
@@ -148,7 +148,7 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 }
 
 bool ewol::widget::Label::loadXML(exml::Element* _node) {
-	if (NULL == _node) {
+	if (nullptr == _node) {
 		return false;
 	}
 	ewol::Widget::loadXML(_node);

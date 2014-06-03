@@ -9,21 +9,20 @@
 #include <ewol/object/Manager.h>
 #include <ewol/context/Context.h>
 #include <ewol/ewol.h>
+#include <etk/stdTools.h>
 #include <unistd.h>
 
 #undef __class__
 #define __class__ "ewol::object::Manager"
 
-ewol::object::Manager::Manager() {
+ewol::object::Manager::Manager(ewol::Context& _context) :
+  m_context(_context) {
 	EWOL_DEBUG(" == > init Object-Manager");
-	// Can create mlemory leak ...  == > but not predictable comportement otherwise ...
-	m_eObjectAutoRemoveList.clear();
-	m_eObjectList.clear();
 }
 
 ewol::object::Manager::~Manager() {
 	bool hasError = false;
-	if (m_eObjectAutoRemoveList.size()!=0) {
+	if (m_eObjectListActive.size()!=0) {
 		EWOL_ERROR("Must not have anymore eObject to auto-remove !!!");
 		hasError = true;
 	}
@@ -34,168 +33,148 @@ ewol::object::Manager::~Manager() {
 	if (true == hasError) {
 		EWOL_ERROR("Check if the function UnInit has been called !!!");
 	}
+	displayListObject();
+}
+
+void ewol::object::Manager::displayListObject() {
+	EWOL_INFO("List loaded object : ");
+	for (auto &it : m_eObjectList) {
+		EWOL_INFO("  Ref=" << it->getRefCount() << " remove=" << it->isDestroyed() << " name='" << it->getName() << "' type=" << it->getObjectType());
+	}
 }
 
 void ewol::object::Manager::unInit() {
 	EWOL_DEBUG(" == > Un-Init Object-Manager");
-	removeAllAutoRemove();
-	EWOL_INFO(" remove missing user widget");
-	size_t iii=0;
-	while(iii < m_eObjectList.size()) {
-		if (m_eObjectList[iii] != NULL) {
-			if (    m_eObjectList[iii]->getStatic() == true
-			     || m_eObjectList[iii]->getStatusResource() == true) {
-				iii++;
-			} else {
-				EWOL_WARNING("Un-INIT : remove Object type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
-				m_eObjectList[iii].reset();
-				m_eObjectList[iii] = NULL;
-			}
-		} else {
-			m_eObjectList.erase(m_eObjectList.begin()+iii);
+	for (auto &it : m_eObjectList) {
+		if (it != nullptr) {
+			//it->removeObject();
 		}
 	}
-	removeAllAutoRemove();
-	EWOL_INFO(" remove resources user widgets");
-	while(iii < m_eObjectList.size()) {
-		if (m_eObjectList[iii] != NULL) {
-			if (m_eObjectList[iii]->getStatic() == true) {
-				iii++;
-			} else {
-				EWOL_WARNING("Un-INIT : remove Object type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
-				m_eObjectList[iii].reset();
-			}
-		} else {
-			m_eObjectList.erase(m_eObjectList.begin()+iii);
-		}
+	removeAllRemovedObject();
+	EWOL_INFO(" remove missing user object");
+	if (m_eObjectListActive.size() != 0) {
+		EWOL_ERROR("Have " << m_eObjectListActive.size() << " active Object");
 	}
-	removeAllAutoRemove();
-	EWOL_INFO(" remove static user widgets");
-	while(iii < m_eObjectList.size()) {
-		if (m_eObjectList[iii] != NULL) {
-			EWOL_WARNING("Un-INIT : remove Object type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
-			m_eObjectList[iii].reset();
-		} else {
-			m_eObjectList.erase(m_eObjectList.begin()+iii);
-		}
-	}
+	m_multiCast.clear();
+	m_eObjectListActive.clear();
+	m_eObjectList.clear();
+	removeAllRemovedObject();
+	
 }
 
-void ewol::object::Manager::add(ewol::Object* _object) {
-	if (_object == NULL) {
+void ewol::object::Manager::add(const ewol::object::Shared<ewol::Object>& _object) {
+	if (_object == nullptr) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
-	// ! < it might benerate a shared object !!!
 	m_eObjectList.push_back(_object);
+	m_eObjectListActive.push_back(_object);
 }
 
 int32_t ewol::object::Manager::getNumberObject() {
-	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
+	return m_eObjectList.size();
 }
 
-void ewol::object::Manager::informOneObjectIsRemoved(ewol::Object* _object) {
-	size_t mbElement = m_eObjectList.size();
-	for (int64_t iii=0; iii<(int64_t)m_eObjectList.size(); ++iii) {
-		if (    m_eObjectList[iii] != NULL
-		     && m_eObjectList[iii] != _object) {
-			//EWOL_DEBUG("inform " << iii+1 << "/" << m_eObjectList.size());
-			//EWOL_DEBUG("    id=" << m_eObjectList[iii]->getId() << " named '" << m_eObjectList[iii]->getName() << "' type=" << m_eObjectList[iii]->getObjectType());
-			m_eObjectList[iii]->onObjectRemove(_object);
-			if (mbElement != m_eObjectList.size()) {
-				iii = -1;
-				mbElement = m_eObjectList.size();
-			}
+void ewol::object::Manager::informOneObjectIsRemoved(const ewol::object::Shared<ewol::Object>& _object) {
+	for (auto &it : m_eObjectList) {
+		if (    it != nullptr
+		     && it != _object) {
+			EWOL_VERBOSE("[" << _object->getId() << "] onObjectRemove() : " << it->getId() << " type=" << it->getObjectType() << " name='" << it->getName() << "'");
+			it->onObjectRemove(_object);
 		}
 	}
-	//EWOL_DEBUG("inform active done");
-	mbElement = m_eObjectAutoRemoveList.size();
-	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
-		if(    m_eObjectAutoRemoveList[iii] != NULL
-		    && m_eObjectAutoRemoveList[iii] != _object) {
-			//EWOL_DEBUG("inform2 " << iii+1 << "/" << m_eObjectAutoRemoveList.size());
-			m_eObjectAutoRemoveList[iii]->onObjectRemove(_object);
-			if (mbElement != m_eObjectAutoRemoveList.size()) {
-				iii = -1;
-				mbElement = m_eObjectAutoRemoveList.size();
-			}
-		}
+	// inform context that 	n object is removed ...
+	m_context.onObjectRemove(_object);
+	m_multiCast.onObjectRemove(_object);
+	EWOL_VERBOSE("m_removeEventList.size() = " << m_removeEventList.size());
+	for (auto &it : m_removeEventList) {
+		EWOL_VERBOSE("[" << _object->getId() << "] Inform Event Remove Object List : ...");
+		it->onObjectRemove(_object);
 	}
-	//EWOL_DEBUG("inform in-active done");
-	// call input event manager to remove linked widget ...
-	ewol::getContext().onObjectRemove(_object);
 }
 
-void ewol::object::Manager::rm(ewol::Object* _object) {
-	if (NULL == _object) {
-		EWOL_ERROR("Try to remove (NULL) Object");
+void ewol::object::Manager::respown(const ewol::object::Shared<ewol::Object>& _object){
+	if (_object == nullptr) {
+		EWOL_ERROR("Try to respown nullptr Object");
 		return;
 	}
-	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
-		if (m_eObjectList[iii] == _object) {
+	for (auto it : m_eObjectListActive) {
+		if (it == _object) {
+			EWOL_ERROR("try to respawn an existing active Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "'");
+			return;
+		}
+	}
+	m_eObjectListActive.push_back(_object);
+}
+
+void ewol::object::Manager::remove(const ewol::object::Shared<ewol::Object>& _object) {
+	if (_object == nullptr) {
+		EWOL_ERROR("Try to Auto-Remove (nullptr) Object");
+		return;
+	}
+	int32_t count = 0;
+	auto it(m_eObjectListActive.begin());
+	while (it != m_eObjectListActive.end()) {
+		if (*it == _object) {
+			m_eObjectListActive.erase(it);
 			// remove Element
-			m_eObjectList[iii] = NULL;
-			m_eObjectList.erase(m_eObjectList.begin()+iii);
+			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "' name=" << _object->getName());
 			informOneObjectIsRemoved(_object);
-			return;
-		}
-	}
-	// check if the object has not been auto removed ... or remove in defered time ...
-	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
-		if(    m_eObjectAutoRemoveList[iii] != NULL
-		    && m_eObjectAutoRemoveList[iii] == _object) {
-			return;
-		}
-	}
-	// in this case, we have an error ...
-	EWOL_ERROR("Try to remove Object that is not referenced ...");
-}
-
-void ewol::object::Manager::autoRemove(ewol::Object* _object) {
-	if (NULL == _object) {
-		EWOL_ERROR("Try to Auto-Remove (NULL) Object");
-		return;
-	}
-	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
-		if (m_eObjectList[iii] == _object) {
-			// remove Element
-			m_eObjectList[iii] = NULL;
-			m_eObjectList.erase(m_eObjectList.begin()+iii);
-			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "'");
-			if (_object->getStatusResource() == false) {
-				informOneObjectIsRemoved(_object);
-			}
-			m_eObjectAutoRemoveList.push_back(_object);
 			ewol::getContext().forceRedrawAll();
-			EWOL_DEBUG("Auto-Remove Object ... done");
-			return;
+			EWOL_VERBOSE("Auto-Remove Object ... done (have " << _object->getRefCount() << " references)");
+			it = m_eObjectListActive.begin();
+			count++;
+		} else {
+			++it;
 		}
 	}
-	EWOL_ERROR("Try to Auto-Remove Object that is not referenced ...");
+	if (count == 0) {
+		EWOL_ERROR("Try to Auto-Remove Object that is not referenced ...");
+	} else if (    count>1
+	            || count<0) {
+		EWOL_ERROR("Remove more than one object in the system list ==> this is a real problem ...");
+	}
 }
 
 // clean all Object that request an autoRemove ...
-void ewol::object::Manager::removeAllAutoRemove() {
-	//EWOL_DEBUG("Auto-Remove Object section : " << m_eObjectAutoRemoveList.size() << " elemeents");
-	while(0<m_eObjectAutoRemoveList.size()) {
-		if (m_eObjectAutoRemoveList[0] != NULL) {
-			EWOL_DEBUG("Real Auto-Remove Object [" << m_eObjectAutoRemoveList[0]->getId() << "]type='" << m_eObjectAutoRemoveList[0]->getObjectType() << "'");
+void ewol::object::Manager::removeAllRemovedObject() {
+	EWOL_VERBOSE("Clean Object List (if needed) : " << m_eObjectListActive.size() << "/" << m_eObjectList.size() << " elemeents");
+	auto it(m_eObjectList.begin());
+	while (it != m_eObjectList.end()) {
+		if (    *it != nullptr
+		     && (*it)->getRefCount() <= 1) {
+			EWOL_DEBUG("remove definitly : [" << (*it)->getId() << "] type='" << (*it)->getObjectType() << "'");
+			m_eObjectList.erase(it);
+			it = m_eObjectList.begin();
+		} else {
+			++it;
 		}
-		m_eObjectAutoRemoveList.erase(m_eObjectAutoRemoveList.begin());
 	}
-	m_eObjectAutoRemoveList.clear();
 }
 
-ewol::Object* ewol::object::Manager::get(const std::string& _name) {
+ewol::object::Shared<ewol::Object> ewol::object::Manager::get(const std::string& _name) {
 	if (_name == "") {
-		return NULL;
+		return nullptr;
 	}
-	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
-		if (m_eObjectList[iii] != NULL) {
-			if (m_eObjectList[iii]->getName() == _name) {
-				return m_eObjectList[iii].get();
-			}
+	for (auto &it : m_eObjectList) {
+		if (    it != nullptr
+		     && it->getName() == _name) {
+			return it;
 		}
 	}
-	return NULL;
+	return nullptr;
+}
+
+
+void ewol::object::Manager::add(ewol::object::RemoveEvent* _class) {
+	m_removeEventList.push_back(_class);
+}
+
+void ewol::object::Manager::rm(ewol::object::RemoveEvent* _class) {
+	for (size_t iii=0; iii<m_removeEventList.size(); ++iii) {
+		if (m_removeEventList[iii] == _class) {
+			m_removeEventList.erase(m_removeEventList.begin() + iii);
+			return;
+		}
+	}
 }
 

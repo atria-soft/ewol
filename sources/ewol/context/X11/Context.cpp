@@ -58,7 +58,7 @@ int64_t ewol::getTime() {
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
 	if (ret != 0) {
 		// Error to get the time ...
-		now.tv_sec = time(NULL);
+		now.tv_sec = time(nullptr);
 		now.tv_nsec = 0;
 	}
 	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
@@ -144,14 +144,14 @@ class X11Interface : public ewol::Context {
 	public:
 		X11Interface(int32_t _argc, const char* _argv[]) :
 		  ewol::Context(_argc, _argv),
-		  m_display(NULL),
+		  m_display(nullptr),
 		  m_originX(0),
 		  m_originY(0),
 		  m_cursorEventX(0),
 		  m_cursorEventY(0),
 		  m_currentHeight(0),
 		  m_currentWidth(0),
-		  m_visual(NULL),
+		  m_visual(nullptr),
 		  m_doubleBuffered(0),
 		  m_run(false),
 		  m_grabAllEvent(false),
@@ -225,21 +225,21 @@ class X11Interface : public ewol::Context {
 							{
 								XSelectionRequestEvent *req=&(event.xselectionrequest);
 								if (req->property == 0) {
-									EWOL_ERROR("Get NULL ATOM ... property");
+									EWOL_ERROR("Get nullptr ATOM ... property");
 									break;
 								}
 								if (req->target == 0) {
-									EWOL_ERROR("Get NULL ATOM ... target");
+									EWOL_ERROR("Get nullptr ATOM ... target");
 									break;
 								}
 								char * atomNameProperty = XGetAtomName(m_display, req->property);
 								char * atomNameTarget = XGetAtomName(m_display, req->target);
 								EWOL_INFO("X11    property: \"" << atomNameProperty << "\"");
 								EWOL_INFO("X11    target:   \"" << atomNameTarget << "\"");
-								if (atomNameProperty != NULL) {
+								if (atomNameProperty != nullptr) {
 									XFree(atomNameProperty);
 								}
-								if (atomNameTarget != NULL) {
+								if (atomNameTarget != nullptr) {
 									XFree(atomNameTarget);
 								}
 							}
@@ -294,24 +294,24 @@ class X11Interface : public ewol::Context {
 							#ifdef DEBUG_X11_EVENT
 							{
 								if (req->property == 0) {
-									EWOL_ERROR("Get NULL ATOM ... property");
+									EWOL_ERROR("Get nullptr ATOM ... property");
 									break;
 								}
 								if (req->selection == 0) {
-									EWOL_ERROR("Get NULL ATOM ... selection");
+									EWOL_ERROR("Get nullptr ATOM ... selection");
 									break;
 								}
 								if (req->target == 0) {
-									EWOL_ERROR("Get NULL ATOM ... target");
+									EWOL_ERROR("Get nullptr ATOM ... target");
 									break;
 								}
 								char * atomNameProperty = XGetAtomName(m_display, req->property);
 								char * atomNameSelection = XGetAtomName(m_display, req->selection);
 								char * atomNameTarget = XGetAtomName(m_display, req->target);
 								EWOL_INFO("    from: " << atomNameProperty << "  request=" << atomNameSelection << " in " << atomNameTarget);
-								if (NULL != atomNameProperty) { XFree(atomNameProperty); }
-								if (NULL != atomNameSelection) { XFree(atomNameSelection); }
-								if (NULL != atomNameTarget) { XFree(atomNameTarget); }
+								if (nullptr != atomNameProperty) { XFree(atomNameProperty); }
+								if (nullptr != atomNameSelection) { XFree(atomNameSelection); }
+								if (nullptr != atomNameTarget) { XFree(atomNameTarget); }
 							}
 							#endif
 							
@@ -920,8 +920,8 @@ class X11Interface : public ewol::Context {
 			static char *title = (char*)"Ewol";
 			
 			// Connect to the X server
-			m_display = XOpenDisplay(NULL);
-			if(NULL == m_display) {
+			m_display = XOpenDisplay(nullptr);
+			if(nullptr == m_display) {
 				EWOL_CRITICAL("Could not open display X.");
 				exit(-1);
 			} else {
@@ -934,7 +934,7 @@ class X11Interface : public ewol::Context {
 			                               ewol::Dimension::Millimeter);
 			// get an appropriate visual
 			m_visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
-			if (NULL == m_visual) {
+			if (nullptr == m_visual) {
 				m_visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
 				m_doubleBuffered = false;
 				EWOL_INFO("GL-X singlebuffered rendering will be used, no doublebuffering available");
@@ -1012,10 +1012,10 @@ class X11Interface : public ewol::Context {
 			StartupState->flags = StateHint;
 			
 			XSetWMProperties(m_display, m_WindowHandle,&textprop, &textprop,/* Window title/icon title*/
-				NULL, 0,/* Argv[], argc for program*/
+				nullptr, 0,/* Argv[], argc for program*/
 				&hints, /* Start position/size*/
 				StartupState,/* Iconised/not flag   */
-				NULL);
+				nullptr);
 			
 			XFree(StartupState);
 			
@@ -1024,15 +1024,15 @@ class X11Interface : public ewol::Context {
 			//XIfEvent(m_display, &event, WaitForMapNotify, (char*)&m_WindowHandle);
 			
 			
-			m_xim = XOpenIM(m_display, NULL, NULL, NULL);
-			if (m_xim == NULL) {
+			m_xim = XOpenIM(m_display, nullptr, NULL, NULL);
+			if (m_xim == nullptr) {
 				EWOL_ERROR("Could not open input method");
 				return false;
 			}
 			/*
-			XIMStyles *styles=NULL;
-			char* failed_arg = XGetIMValues(m_xim, XNQueryInputStyle, &styles, NULL);
-			if (failed_arg != NULL) {
+			XIMStyles *styles=nullptr;
+			char* failed_arg = XGetIMValues(m_xim, XNQueryInputStyle, &styles, nullptr);
+			if (failed_arg != nullptr) {
 				EWOL_ERROR("XIM Can't get styles");
 				return false;
 			}
@@ -1040,8 +1040,8 @@ class X11Interface : public ewol::Context {
 				EWOL_INFO("style " << styles->supported_styles[iii]);
 			}
 			*/
-			m_xic = XCreateIC(m_xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing, XNClientWindow, m_WindowHandle, NULL);
-			if (m_xic == NULL) {
+			m_xic = XCreateIC(m_xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing, XNClientWindow, m_WindowHandle, nullptr);
+			if (m_xic == nullptr) {
 				EWOL_ERROR("Could not open IC");
 				return false;
 			}
@@ -1083,7 +1083,7 @@ class X11Interface : public ewol::Context {
 					return;
 			}
 			char* tmpVal = new char[4*dataImage.getWidth()*dataImage.getHeight()];
-			if (NULL == tmpVal) {
+			if (nullptr == tmpVal) {
 				EWOL_CRITICAL("Allocation error ...");
 				return;
 			}
@@ -1191,7 +1191,7 @@ class X11Interface : public ewol::Context {
 			// Note when we free the pixmap ... the icon is removed ...  == > this is a real memory leek ...
 			//XFreePixmap(m_display, tmpPixmap);
 			
-			myImage->data = NULL;
+			myImage->data = nullptr;
 			XDestroyImage(myImage);
 			delete[] tmpVal;
 			
@@ -1346,12 +1346,12 @@ class X11Interface : public ewol::Context {
 int ewol::run(int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
 	X11Interface* interface = new X11Interface(_argc, _argv);
-	if (NULL == interface) {
+	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
 	}
 	int32_t retValue = interface->run();
 	delete(interface);
-	interface = NULL;
+	interface = nullptr;
 	return retValue;
 }

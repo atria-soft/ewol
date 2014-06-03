@@ -119,19 +119,19 @@ class MacOSInterface : public ewol::Context {
 };
 
 
-MacOSInterface* interface = NULL;
+MacOSInterface* interface = nullptr;
 
 
 
 bool MacOs::draw(bool _displayEveryTime) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return false;
 	}
 	return interface->MAC_Draw(_displayEveryTime);
 }
 
 void MacOs::resize(float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_Resize(_x, _y);
@@ -139,28 +139,28 @@ void MacOs::resize(float _x, float _y) {
 
 
 void MacOs::setMouseState(int32_t _id, bool _isDown, float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetMouseState(_id, _isDown, _x, _y);
 }
 
 void MacOs::setMouseMotion(int32_t _id, float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetMouseMotion(_id, _x, _y);
 }
 
 void MacOs::setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetKeyboard(_keyboardMode, _unichar, _isDown, _isAReapeateKey);
 }
 
 void MacOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetKeyboardMove(_keyboardMode, _move, _isDown);
@@ -175,14 +175,14 @@ void MacOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::k
 int ewol::run(int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
 	interface = new MacOSInterface(_argc, _argv);
-	if (NULL == interface) {
+	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
 	}
 	
 	int32_t retValue = interface->Run();
 	delete(interface);
-	interface = NULL;
+	interface = nullptr;
 	return retValue;
 }
 

@@ -13,19 +13,19 @@
 
 std::ostream& ewol::operator <<(std::ostream& _os, const ewol::object::ConfigElement& _obj) {
 	_os << "{";
-	if (NULL != _obj.getConfig()) {
+	if (nullptr != _obj.getConfig()) {
 		_os << "config=\"" << _obj.getConfig() << "\"";
 	}
-	if (NULL != _obj.getType()) {
+	if (nullptr != _obj.getType()) {
 		_os << " type=\"" << _obj.getType() << "\"";
 	}
-	if (NULL != _obj.getControl()) {
+	if (nullptr != _obj.getControl()) {
 		_os << " ctrl=\"" << _obj.getControl() << "\"";
 	}
-	if (NULL != _obj.getDescription()) {
+	if (nullptr != _obj.getDescription()) {
 		_os << " desc=\"" << _obj.getDescription() << "\"";
 	}
-	if (NULL != _obj.getDefault()) {
+	if (nullptr != _obj.getDefault()) {
 		_os << " default=\"" << _obj.getDefault() << "\"";
 	}
 	_os << "}";

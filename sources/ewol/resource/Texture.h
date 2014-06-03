@@ -47,7 +47,8 @@ namespace ewol {
 			protected:
 				Texture(const std::string& _filename);
 				Texture();
-				~Texture();
+			public:
+				virtual ~Texture();
 			public:
 				// you must set the size here, because it will be set in multiple of pow(2)
 				void setImageSize(ivec2 newSize);
@@ -61,14 +62,9 @@ namespace ewol {
 				/**
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::Texture* keep();
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::Texture*& _object);
+				static ewol::object::Shared<ewol::resource::Texture> keep();
 		};
 	};
 };

@@ -30,18 +30,18 @@ const char * const ewol::widget::ButtonColor::eventChange = "change";
 
 static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::ButtonColor();
 }
 
 void ewol::widget::ButtonColor::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :
   m_shaper(_shaperName),
   m_textColorFg(_baseColor),
-  m_widgetContextMenu(NULL) {
+  m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
 	addEventId(eventChange);
 	changeStatusIn(STATUS_UP);
@@ -177,7 +177,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_mouseHover = false;
 				// create a context menu : 
 				m_widgetContextMenu = new ewol::widget::ContextMenu();
-				if (NULL == m_widgetContextMenu) {
+				if (nullptr == m_widgetContextMenu) {
 					EWOL_ERROR("Allocation Error");
 					return true;
 				}
@@ -190,13 +190,12 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
 				myColorChooser->registerOnEvent(this, "change", eventColorHasChange);
-				ewol::widget::Windows* currentWindows = getWindows();
-				if (NULL == currentWindows) {
+				ewol::object::Shared<ewol::widget::Windows> currentWindows = getWindows();
+				if (currentWindows == nullptr) {
 					EWOL_ERROR("Can not get the curent Windows...");
-					delete(m_widgetContextMenu);
-					m_widgetContextMenu=NULL;
+					m_widgetContextMenu.reset();
 				} else {
-					currentWindows->popUpWidgetPush(m_widgetContextMenu);
+					currentWindows->popUpWidgetPush(m_widgetContextMenu.get());
 				}
 				markToRedraw();
 			}

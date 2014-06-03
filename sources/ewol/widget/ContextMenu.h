@@ -67,9 +67,9 @@ namespace ewol {
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void calculateSize(const vec2& availlable);
+				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
-				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 		};
 	};
 };

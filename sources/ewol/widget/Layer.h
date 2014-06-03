@@ -35,7 +35,7 @@ namespace ewol {
 				 */
 				virtual ~Layer();
 			public: // Derived function
-				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 		};
 	};
 };

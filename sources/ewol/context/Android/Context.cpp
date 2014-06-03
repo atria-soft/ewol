@@ -23,7 +23,7 @@
 
 int64_t ewol::getTime() {
 	struct timeval	now;
-	gettimeofday(&now, NULL);
+	gettimeofday(&now, nullptr);
 	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
 	return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
 }
@@ -31,7 +31,7 @@ int64_t ewol::getTime() {
 
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
-static JavaVM* g_JavaVM=NULL; // global acces on the unique JVM !!!
+static JavaVM* g_JavaVM=nullptr; // global acces on the unique JVM !!!
 etk::Mutex g_interfaceMutex;
 etk::Mutex g_interfaceAudioMutex;
 
@@ -78,10 +78,10 @@ class AndroidContext : public ewol::Context {
 	private:
 		bool safeInitMethodID(jmethodID& _mid, jclass& _cls, const char* _name, const char* _sign) {
 			_mid = m_JavaVirtualMachinePointer->GetMethodID(_cls, _name, _sign);
-			if(_mid == NULL) {
+			if(_mid == nullptr) {
 				EWOL_ERROR("C->java : Can't find the method " << _name);
 				/* remove access on the virtual machine : */
-				m_JavaVirtualMachinePointer = NULL;
+				m_JavaVirtualMachinePointer = nullptr;
 				return false;
 			}
 			return true;
@@ -89,7 +89,7 @@ class AndroidContext : public ewol::Context {
 	public:
 		AndroidContext(JNIEnv* _env, jclass _classBase, jobject _objCallback, enum application _typeAPPL) :
 		  m_javaApplicationType(_typeAPPL),
-		  m_JavaVirtualMachinePointer(NULL),
+		  m_JavaVirtualMachinePointer(nullptr),
 		  m_javaClassEwol(0),
 		  m_javaClassEwolCallback(0),
 		  m_javaObjectEwolCallback(0),
@@ -108,8 +108,8 @@ class AndroidContext : public ewol::Context {
 		  m_javaDefaultClassString(0),
 		  m_currentHeight(0),
 		  m_clipBoardOwnerStd(false),
-		  m_audioCallBack(NULL),
-		  m_audioCallBackUserData(NULL) {
+		  m_audioCallBack(nullptr),
+		  m_audioCallBackUserData(nullptr) {
 			EWOL_DEBUG("*******************************************");
 			if (m_javaApplicationType == appl_application) {
 				EWOL_DEBUG("** set JVM Pointer (application)         **");
@@ -119,21 +119,21 @@ class AndroidContext : public ewol::Context {
 			EWOL_DEBUG("*******************************************");
 			m_JavaVirtualMachinePointer = _env;
 			// get default needed all time elements : 
-			if (NULL != m_JavaVirtualMachinePointer) {
+			if (nullptr != m_JavaVirtualMachinePointer) {
 				EWOL_DEBUG("C->java : try load org/ewol/Ewol class");
 				m_javaClassEwol = m_JavaVirtualMachinePointer->FindClass("org/ewol/Ewol" );
 				if (m_javaClassEwol == 0) {
 					EWOL_ERROR("C->java : Can't find org/ewol/Ewol class");
 					// remove access on the virtual machine : 
-					m_JavaVirtualMachinePointer = NULL;
+					m_JavaVirtualMachinePointer = nullptr;
 					return;
 				}
 				/* The object field extends Activity and implement EwolCallback */
 				m_javaClassEwolCallback = m_JavaVirtualMachinePointer->GetObjectClass(_objCallback);
-				if(m_javaClassEwolCallback == NULL) {
+				if(m_javaClassEwolCallback == nullptr) {
 					EWOL_ERROR("C->java : Can't find org/ewol/EwolCallback class");
 					// remove access on the virtual machine : 
-					m_JavaVirtualMachinePointer = NULL;
+					m_JavaVirtualMachinePointer = nullptr;
 					return;
 				}
 				bool functionCallbackIsMissing = false;
@@ -258,7 +258,7 @@ class AndroidContext : public ewol::Context {
 				
 				m_javaObjectEwolCallback = _env->NewGlobalRef(_objCallback);
 				//javaObjectEwolCallbackAndActivity = objCallback;
-				if (m_javaObjectEwolCallback == NULL) {
+				if (m_javaObjectEwolCallback == nullptr) {
 					functionCallbackIsMissing = true;
 				}
 				
@@ -266,7 +266,7 @@ class AndroidContext : public ewol::Context {
 				if (m_javaDefaultClassString == 0) {
 					EWOL_ERROR("C->java : Can't find java/lang/String" );
 					// remove access on the virtual machine : 
-					m_JavaVirtualMachinePointer = NULL;
+					m_JavaVirtualMachinePointer = nullptr;
 					functionCallbackIsMissing = true;
 				}
 				if (functionCallbackIsMissing == true) {
@@ -281,7 +281,7 @@ class AndroidContext : public ewol::Context {
 		
 		void unInit(JNIEnv* _env) {
 			_env->DeleteGlobalRef(m_javaObjectEwolCallback);
-			m_javaObjectEwolCallback = NULL;
+			m_javaObjectEwolCallback = nullptr;
 		}
 		
 		int32_t run() {
@@ -387,7 +387,7 @@ class AndroidContext : public ewol::Context {
 				}
 				//Call java ...
 				jstring returnString = (jstring) m_JavaVirtualMachinePointer->CallObjectMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioGetDeviceProperty, _idDevice);
-				const char *js = m_JavaVirtualMachinePointer->GetStringUTFChars(returnString, NULL);
+				const char *js = m_JavaVirtualMachinePointer->GetStringUTFChars(returnString, nullptr);
 				std::string retString(js);
 				m_JavaVirtualMachinePointer->ReleaseStringUTFChars(returnString, js);
 				//m_JavaVirtualMachinePointer->DeleteLocalRef(returnString);
@@ -410,7 +410,7 @@ class AndroidContext : public ewol::Context {
 		                     int32_t _format,
 		                     AndroidAudioCallback _callback,
 		                     void* _userData) {
-			if (m_audioCallBack != NULL) {
+			if (m_audioCallBack != nullptr) {
 				EWOL_ERROR("AudioCallback already started ...");
 				return false;
 			}
@@ -437,7 +437,7 @@ class AndroidContext : public ewol::Context {
 			return false;
 		}
 		bool audioCloseDevice(int32_t _idDevice) {
-			if (m_audioCallBack == NULL) {
+			if (m_audioCallBack == nullptr) {
 				EWOL_ERROR("AudioCallback Not started ...");
 				return false;
 			}
@@ -453,8 +453,8 @@ class AndroidContext : public ewol::Context {
 				// manage execption : 
 				java_check_exception(m_JavaVirtualMachinePointer);
 				java_detach_current_thread(status);
-				m_audioCallBack = NULL;
-				m_audioCallBackUserData = NULL;
+				m_audioCallBack = nullptr;
+				m_audioCallBackUserData = nullptr;
 				return (bool)ret;
 			} else {
 				EWOL_ERROR("C->java : can not get audio device count");
@@ -464,9 +464,9 @@ class AndroidContext : public ewol::Context {
 	private:
 		bool java_attach_current_thread(int *_rstatus) {
 			EWOL_DEBUG("C->java : call java");
-			if (g_JavaVM == NULL) {
+			if (g_JavaVM == nullptr) {
 				EWOL_ERROR("C->java : JVM not initialised");
-				m_JavaVirtualMachinePointer = NULL;
+				m_JavaVirtualMachinePointer = nullptr;
 				return false;
 			}
 			*_rstatus = g_JavaVM->GetEnv((void **) &m_JavaVirtualMachinePointer, JNI_VERSION_1_6);
@@ -474,12 +474,12 @@ class AndroidContext : public ewol::Context {
 				JavaVMAttachArgs lJavaVMAttachArgs;
 				lJavaVMAttachArgs.version = JNI_VERSION_1_6;
 				lJavaVMAttachArgs.name = "EwolNativeThread";
-				lJavaVMAttachArgs.group = NULL; 
+				lJavaVMAttachArgs.group = nullptr; 
 				int status = g_JavaVM->AttachCurrentThread(&m_JavaVirtualMachinePointer, &lJavaVMAttachArgs);
 				java_check_exception(m_JavaVirtualMachinePointer);
 				if (status != JNI_OK) {
 					EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
-					m_JavaVirtualMachinePointer = NULL;
+					m_JavaVirtualMachinePointer = nullptr;
 					return false;
 				}
 			}
@@ -489,7 +489,7 @@ class AndroidContext : public ewol::Context {
 		void java_detach_current_thread(int _status) {
 			if(_status == JNI_EDETACHED) {
 				g_JavaVM->DetachCurrentThread();
-				m_JavaVirtualMachinePointer = NULL;
+				m_JavaVirtualMachinePointer = nullptr;
 			}
 		}
 		
@@ -568,7 +568,7 @@ class AndroidContext : public ewol::Context {
 				return;
 			}
 			EWOL_DEBUG("C->java : 222");
-			if (NULL == _dataString) {
+			if (nullptr == _dataString) {
 				EWOL_ERROR("C->java : No data to send ...");
 				return;
 			}
@@ -631,7 +631,7 @@ class AndroidContext : public ewol::Context {
 		}
 		
 		void audioPlayback(void* _dataOutput, int32_t _frameRate) {
-			if (m_audioCallBack != NULL) {
+			if (m_audioCallBack != nullptr) {
 				//EWOL_DEBUG("IO Audio event request: Frames=" << _frameRate);
 				m_audioCallBack(_dataOutput, _frameRate, m_audioCallBackUserData);
 			}
@@ -654,7 +654,7 @@ extern "C" {
 	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
 		etk::AutoLockMutex myLock2(g_interfaceAudioMutex);
-		g_JavaVM = NULL;
+		g_JavaVM = nullptr;
 		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
 	}
 	
@@ -665,9 +665,9 @@ extern "C" {
 	                                             jint _mode,
 	                                             jstring _myString) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -680,7 +680,7 @@ extern "C" {
 		if (isCopy == JNI_TRUE) {
 			// from here str is reset ...
 			_env->ReleaseStringUTFChars(_myString, str);
-			str = NULL;
+			str = nullptr;
 		}
 	}
 	
@@ -692,7 +692,7 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Creating EWOL context                 **");
 		EWOL_DEBUG("*******************************************");
-		AndroidContext* tmpContext = NULL;
+		AndroidContext* tmpContext = nullptr;
 		if (org_ewol_EwolConstants_EWOL_APPL_TYPE_ACTIVITY == _typeApplication) {
 			tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_application);
 		} else if (org_ewol_EwolConstants_EWOL_APPL_TYPE_WALLPAPER == _typeApplication) {
@@ -701,7 +701,7 @@ extern "C" {
 			EWOL_CRITICAL(" try to create an instance with no apply type: " << _typeApplication);
 			return -1;
 		}
-		if (NULL == tmpContext) {
+		if (nullptr == tmpContext) {
 			EWOL_ERROR("Can not allocate the main context instance _id=" << (s_listInstance.size()-1));
 			return -1;
 		}
@@ -716,25 +716,25 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** remove JVM Pointer                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			return;
 		}
-		if (NULL == s_listInstance[_id]) {
+		if (nullptr == s_listInstance[_id]) {
 			EWOL_ERROR("the requested instance _id=" << (int32_t)_id << " is already removed ...");
 			return;
 		}
 		s_listInstance[_id]->unInit(_env);
 		delete(s_listInstance[_id]);
-		s_listInstance[_id]=NULL;
+		s_listInstance[_id]=nullptr;
 	}
 	void Java_org_ewol_Ewol_EWtouchEvent(JNIEnv* _env, jobject _thiz, jint _id) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
 		EWOL_DEBUG("  == > Touch Event");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -747,9 +747,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Create                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -762,9 +762,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Start                     **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -776,9 +776,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Re-Start                  **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -789,9 +789,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on resume                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -803,9 +803,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on pause                     **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -819,9 +819,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Stop                      **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -833,9 +833,9 @@ extern "C" {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Destroy                   **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -855,9 +855,9 @@ extern "C" {
 	                                           jfloat _x,
 	                                           jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -873,9 +873,9 @@ extern "C" {
 	                                          jfloat _x,
 	                                          jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -890,9 +890,9 @@ extern "C" {
 	                                           jfloat _x,
 	                                           jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -908,9 +908,9 @@ extern "C" {
 	                                          jfloat _x,
 	                                          jfloat _y) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -923,9 +923,9 @@ extern "C" {
 	                                      jint _id,
 	                                      jint _pointerID) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -939,9 +939,9 @@ extern "C" {
 	                                            jint _type,
 	                                            jboolean _isdown) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -956,9 +956,9 @@ extern "C" {
 	                                           jint _uniChar,
 	                                           jboolean _isdown) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -973,9 +973,9 @@ extern "C" {
 	                                                 jfloat _ratioX,
 	                                                 jfloat _ratioY) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -991,9 +991,9 @@ extern "C" {
 	                                                 jint _keyVal,
 	                                                 jboolean _isdown) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return false;
@@ -1035,9 +1035,9 @@ extern "C" {
 	                                     jobject _thiz,
 	                                     jint _id) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -1050,9 +1050,9 @@ extern "C" {
 	                                       jint _w,
 	                                       jint _h) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -1065,9 +1065,9 @@ extern "C" {
 	                                     jobject _thiz,
 	                                     jint _id) {
 		etk::AutoLockMutex myLock(g_interfaceMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -1082,9 +1082,9 @@ extern "C" {
 	                                        jint _frameRate,
 	                                        jint _nbChannels) {
 		etk::AutoLockMutex myLock(g_interfaceAudioMutex);
-		if(    _id >= s_listInstance.size()
+		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
-		    || NULL == s_listInstance[_id] ) {
+		    || nullptr == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			// TODO : generate error in java to stop the current instance
 			return;
@@ -1092,7 +1092,7 @@ extern "C" {
 		// get the short* pointer from the Java array
 		jboolean isCopy;
 		jshort* dst = _env->GetShortArrayElements(_location, &isCopy);
-		if (NULL != dst) {
+		if (nullptr != dst) {
 			memset(dst, sizeof(jshort), _frameRate*_nbChannels);
 			//EWOL_DEBUG("IO Audio event request: Frames=" << _frameRate << " channels=" << _nbChannels);
 			s_listInstance[_id]->audioPlayback(dst, _frameRate);

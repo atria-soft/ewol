@@ -128,19 +128,19 @@ public:
 };
 
 
-MacOSInterface* interface = NULL;
+MacOSInterface* interface = nullptr;
 
 
 
 bool IOs::draw(bool _displayEveryTime) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return false;
 	}
 	return interface->MAC_Draw(_displayEveryTime);
 }
 
 void IOs::resize(float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_Resize(_x, _y);
@@ -148,82 +148,82 @@ void IOs::resize(float _x, float _y) {
 
 
 void IOs::setMouseState(int32_t _id, bool _isDown, float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetMouseState(_id, _isDown, _x, _y);
 }
 
 void IOs::setMouseMotion(int32_t _id, float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetMouseMotion(_id, _x, _y);
 }
 
 void IOs::setInputState(int32_t _id, bool _isDown, float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetInputState(_id, _isDown, _x, _y);
 }
 
 void IOs::setInputMotion(int32_t _id, float _x, float _y) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetInputMotion(_id, _x, _y);
 }
 
 void IOs::setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetKeyboard(_keyboardMode, _unichar, _isDown, _isAReapeateKey);
 }
 
 void IOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown) {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->MAC_SetKeyboardMove(_keyboardMode, _move, _isDown);
 }
 
 void IOs::start() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	//interface->OS_Start();
 }
 
 void IOs::resume() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->OS_Resume();
 }
 
 void IOs::suspend() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->OS_Suspend();
 }
 
 void IOs::stop() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->OS_Stop();
 }
 void IOs::background() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->OS_Background();
 }
 void IOs::foreground() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	interface->OS_Foreground();
@@ -231,7 +231,7 @@ void IOs::foreground() {
 
 
 static int l_argc = 0;
-static const char **l_argv = NULL;
+static const char **l_argv = nullptr;
 /**
  * @brief Main of the program
  * @param std IO
@@ -248,19 +248,19 @@ void IOs::createInterface() {
 	etk::setArgZero(l_argv[0]);
 	EWOL_INFO("Create new interface");
 	interface = new MacOSInterface(l_argc, l_argv);
-	if (NULL == interface) {
+	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return;
 	}
 }
 
 void IOs::releaseInterface() {
-	if (interface == NULL) {
+	if (interface == nullptr) {
 		return;
 	}
 	EWOL_INFO("Remove interface");
 	delete(interface);
-	interface = NULL;
+	interface = nullptr;
 }
 
 

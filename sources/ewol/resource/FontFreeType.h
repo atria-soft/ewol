@@ -30,7 +30,8 @@ namespace ewol {
 				void display();
 			protected:
 				FontFreeType(const std::string& _fontName);
-				~FontFreeType();
+			public:
+				virtual ~FontFreeType();
 			public:
 				
 				bool getGlyphProperty(int32_t _fontSize,
@@ -58,14 +59,9 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the base font.
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::FontBase* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::FontBase*& _object);
+				static ewol::object::Shared<ewol::resource::FontBase> keep(const std::string& _filename);
 		};
 		void freeTypeInit();
 		void freeTypeUnInit();

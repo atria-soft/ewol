@@ -20,7 +20,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Slider :public ewol::Widget {
+		class Slider : public ewol::Widget {
 			public:
 				// Event list of properties
 				static const char * const eventChange;

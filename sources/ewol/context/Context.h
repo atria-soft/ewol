@@ -22,6 +22,7 @@
 #include <ewol/context/commandLine.h>
 #include <ewol/context/InputManager.h>
 #include <ewol/context/Fps.h>
+#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	/**
@@ -37,7 +38,7 @@ namespace ewol {
 		screenPortrait
 	};
 	
-	class Context {
+	class Context/* : private ewol::object::RemoveEvent */{
 		private:
 			ewol::context::CommandLine m_commandLine; //!< Start command line information
 		public:
@@ -51,16 +52,16 @@ namespace ewol {
 				return m_configFont;
 			};
 		private:
-			ewol::widget::Manager m_widgetManager; //!< global widget manager
-		public:
-			ewol::widget::Manager& getWidgetManager() {
-				return m_widgetManager;
-			};
-		private:
 			ewol::object::Manager m_objectManager; //!< Object Manager main instance
 		public:
 			ewol::object::Manager& getEObjectManager() {
 				return m_objectManager;
+			};
+		private:
+			ewol::widget::Manager m_widgetManager; //!< global widget manager
+		public:
+			ewol::widget::Manager& getWidgetManager() {
+				return m_widgetManager;
 			};
 		private:
 			ewol::resource::Manager m_resourceManager; //!< global resources Manager
@@ -69,7 +70,7 @@ namespace ewol {
 				return m_resourceManager;
 			};
 		public:
-			Context(int32_t _argc=0, const char* _argv[]=NULL);
+			Context(int32_t _argc=0, const char* _argv[]=nullptr);
 			virtual ~Context();
 		protected:
 			/**
@@ -78,7 +79,7 @@ namespace ewol {
 			 */
 			void lockContext();
 			/**
-			 * @brief set the curent interface at NULL.
+			 * @brief set the curent interface at nullptr.
 			 * @note this un-lock the main mutex
 			 */
 			void unLockContext();
@@ -121,7 +122,7 @@ namespace ewol {
 			 * @brief The current context is resumed
 			 */
 			virtual void OS_Resume();
-		
+			
 			/**
 			 * @brief The current context is set in foreground (framerate is maximum speed)
 			 */
@@ -135,12 +136,9 @@ namespace ewol {
 			
 			// return true if a flush is needed
 			bool OS_Draw(bool _displayEveryTime);
-			/**
-			 * @brief Inform object that an other object is removed ...
-			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
-			 * @note : Sub classes must call this class
-			 */
-			void onObjectRemove(ewol::Object* _removeObject);
+			
+			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+		public:
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
@@ -158,20 +156,18 @@ namespace ewol {
 			 */
 			virtual void stop();
 		private:
-			ewol::widget::Windows* m_windowsCurrent; //!< curent displayed windows
+			ewol::object::Owner<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
 		public:
 			/**
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void setWindows(ewol::widget::Windows* _windows);
+			void setWindows(const ewol::object::Shared<ewol::widget::Windows>& _windows);
 			/**
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::widget::Windows* getWindows() {
-				return m_windowsCurrent;
-			};
+			ewol::object::Shared<ewol::widget::Windows> getWindows();
 		private:
 			vec2 m_windowsSize; //!< current size of the system
 		public:
@@ -229,12 +225,12 @@ namespace ewol {
 			 * @param source the widget where the event came from
 			 * @param destination the widget where the event mitgh be generated now
 			 */
-			void inputEventTransfertWidget(ewol::Widget* _source, ewol::Widget* _destination);
+			void inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source, ewol::object::Shared<ewol::Widget> _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 			 * @param[in] widget The widget that lock the pointer events
 			 */
-			void inputEventGrabPointer(ewol::Widget* _widget);
+			void inputEventGrabPointer(ewol::object::Shared<ewol::Widget> _widget);
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */

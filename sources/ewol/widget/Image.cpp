@@ -36,7 +36,7 @@ const char * const ewol::widget::Image::configPartStart = "part-start";
 const char * const ewol::widget::Image::configPartStop = "part-stop";
 
 ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
-  m_colorProperty(NULL),
+  m_colorProperty(nullptr),
   m_colorId(-1),
   m_imageSize(vec2(0.0f,0.0f)),
   m_keepRatio(true),
@@ -44,22 +44,22 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
   m_posStop(1.0f,1.0f) {
 	addObjectType("ewol::widget::Image");
 	addEventId(eventPressed);
-	registerConfig(configRatio, "bool", NULL, "Keep ratio of the image");
-	registerConfig(configSize, "Dimension", NULL, "Basic display size of the image");
-	registerConfig(configBorder, "Dimension", NULL, "Border of the image");
+	registerConfig(configRatio, "bool", nullptr, "Keep ratio of the image");
+	registerConfig(configSize, "Dimension", nullptr, "Basic display size of the image");
+	registerConfig(configBorder, "Dimension", nullptr, "Border of the image");
 	registerConfig(configSource, "string", "Image source path");
 	registerConfig(configDistanceField, "bool", "Distance field mode");
-	registerConfig(configPartStart, "vec2", NULL, "Start display position in the image [0.0 .. 1.0]");
-	registerConfig(configPartStop,  "vec2", NULL, "Stop display position in the image [0.0 .. 1.0]");
+	registerConfig(configPartStart, "vec2", nullptr, "Start display position in the image [0.0 .. 1.0]");
+	registerConfig(configPartStop,  "vec2", nullptr, "Stop display position in the image [0.0 .. 1.0]");
 	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Image.json");
-	if (m_colorProperty != NULL) {
+	if (m_colorProperty != nullptr) {
 		m_colorId = m_colorProperty->request("foreground");
 	}
 	set(_file, _border);
 }
 
 ewol::widget::Image::~Image() {
-	ewol::resource::ColorFile::release(m_colorProperty);
+	
 }
 
 void ewol::widget::Image::setFile(const std::string& _file) {
@@ -147,7 +147,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// remove data of the previous composition :
 		m_compositing.clear();
-		if (m_colorProperty != NULL) {
+		if (m_colorProperty != nullptr) {
 			m_compositing.setColor(m_colorProperty->get(m_colorId));
 		}
 		// calculate the new position and size :
@@ -230,7 +230,7 @@ bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 }
 
 bool ewol::widget::Image::loadXML(exml::Element* _node) {
-	if (NULL == _node) {
+	if (nullptr == _node) {
 		return false;
 	}
 	ewol::Widget::loadXML(_node);

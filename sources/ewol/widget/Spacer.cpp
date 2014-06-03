@@ -30,7 +30,7 @@ ewol::widget::Spacer::Spacer() {
 	setCanHaveFocus(false);
 	m_color = etk::color::black;
 	m_color.setA(0);
-	registerConfig(configColor, "color", NULL, "background of the spacer");
+	registerConfig(configColor, "color", nullptr, "background of the spacer");
 }
 
 ewol::widget::Spacer::~Spacer() {

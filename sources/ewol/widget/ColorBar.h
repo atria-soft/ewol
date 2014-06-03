@@ -18,7 +18,7 @@
 
 namespace ewol {
 	namespace widget {
-		class ColorBar :public ewol::Widget {
+		class ColorBar : public ewol::Widget {
 			public:
 				// Event list of properties
 				static const char * const eventChange;

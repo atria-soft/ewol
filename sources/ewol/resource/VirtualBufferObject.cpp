@@ -123,22 +123,13 @@ int32_t ewol::resource::VirtualBufferObject::sizeOnBufferVec2(int32_t _id) {
 	return m_buffer[_id].size()/2;
 }
 
-ewol::resource::VirtualBufferObject* ewol::resource::VirtualBufferObject::keep(int32_t _number) {
+ewol::object::Shared<ewol::resource::VirtualBufferObject> ewol::resource::VirtualBufferObject::keep(int32_t _number) {
 	// this element create a new one every time ....
-	ewol::resource::VirtualBufferObject* object = new ewol::resource::VirtualBufferObject(_number);
-	if (NULL == object) {
+	ewol::object::Shared<ewol::resource::VirtualBufferObject> object = ewol::object::makeShared(new ewol::resource::VirtualBufferObject(_number));
+	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : ??VBO??");
-		return NULL;
+		return nullptr;
 	}
 	getManager().localAdd(object);
 	return object;
-}
-
-void ewol::resource::VirtualBufferObject::release(ewol::resource::VirtualBufferObject*& _object) {
-	if (NULL == _object) {
-		return;
-	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
-	_object = NULL;
 }

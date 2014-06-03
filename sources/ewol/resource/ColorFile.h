@@ -30,6 +30,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the file needed
 				 */
 				ColorFile(const std::string& _filename);
+			public:
 				/**
 				 * @brief Simple Destructor of this class (nothing specific ...)
 				 */
@@ -73,14 +74,9 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the configuration file.
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::ColorFile* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::ColorFile*& _object);
+				static ewol::object::Shared<ewol::resource::ColorFile> keep(const std::string& _filename);
 		};
 	};
 };

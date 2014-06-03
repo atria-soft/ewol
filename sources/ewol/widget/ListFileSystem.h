@@ -37,9 +37,9 @@ namespace ewol {
 				// TODO : Add a standalone configuration ..
 			public:
 				ListFileSystem();
-				~ListFileSystem();
+				virtual ~ListFileSystem();
 			protected:
-				ewol::resource::ColorFile* m_colorProperty; //!< theme color property.
+				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
 				int32_t m_colorIdText; //!< Color of the text.
 				int32_t m_colorIdBackground1; //!< Color of the Background.
 				int32_t m_colorIdBackground2; //!< Color of the Background 2.

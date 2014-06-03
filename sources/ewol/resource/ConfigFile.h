@@ -23,6 +23,7 @@ namespace ewol {
 				etk::Hash<ejson::Value*> m_list;
 			protected:
 				ConfigFile(const std::string& _filename);
+			public:
 				virtual ~ConfigFile();
 			public:
 				void reload();
@@ -37,14 +38,9 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the configuration file.
-				 * @return pointer on the resource or NULL if an error occured.
+				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::resource::ConfigFile* keep(const std::string& _filename);
-				/**
-				 * @brief release the keeped resources
-				 * @param[in,out] reference on the object pointer
-				 */
-				static void release(ewol::resource::ConfigFile*& _object);
+				static ewol::object::Shared<ewol::resource::ConfigFile> keep(const std::string& _filename);
 		};
 	};
 };

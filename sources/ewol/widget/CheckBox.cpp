@@ -27,12 +27,12 @@ const char* const ewol::widget::CheckBox::configShaper = "shaper";
 #undef __class__
 #define __class__	"CheckBox"
 
-static ewol::Widget* Create() {
+static ewol::Widget* create() {
 	return new ewol::widget::CheckBox();
 }
 
 void ewol::widget::CheckBox::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__, &create);
 }
 
 ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
@@ -52,8 +52,8 @@ ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
 	addEventId(eventEnter);
 	addEventId(eventValue);
 	// add configuration
-	registerConfig(configValue, "bool", NULL, "Basic value of the widget");
-	registerConfig(configShaper, "string", NULL, "the display name for config file");
+	registerConfig(configValue, "bool", nullptr, "Basic value of the widget");
+	registerConfig(configShaper, "string", nullptr, "the display name for config file");
 	
 	m_shaperIdSize = m_shaper.requestConfig("box-size");
 	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");

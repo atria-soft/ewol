@@ -29,26 +29,27 @@ ewol::widget::Layer::~Layer() {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-ewol::Widget* ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
+ewol::object::Shared<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
-		return NULL;
+		return nullptr;
 	}
 	// for all element in the sizer ...
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->getSize();
-			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();
-			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
-			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
-			{
-				ewol::Widget * tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
-				if (NULL != tmpWidget) {
-					return tmpWidget;
-				}
-				// parse the next layer ...
+	for (auto &it : m_subWidget) {
+		if (it == nullptr) {
+			continue;
+		}
+		vec2 tmpSize = it->getSize();
+		vec2 tmpOrigin = it->getOrigin();
+		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
+		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
+		{
+			ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
+			if (nullptr != tmpWidget) {
+				return tmpWidget;
 			}
+			// parse the next layer ...
 		}
 	}
-	return NULL;
+	return nullptr;
 };
 

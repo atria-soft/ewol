@@ -26,7 +26,7 @@ namespace ewol {
 			private:
 				class GirdProperties {
 					public:
-						ewol::Widget* widget;
+						ewol::object::Shared<ewol::Widget> widget;
 						int32_t row;
 						int32_t col;
 				};
@@ -34,7 +34,7 @@ namespace ewol {
 				int32_t m_uniformSizeRow;
 				std::vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
 				std::vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
-				ewol::Widget* m_tmpWidget; //!< use when replace a widget ...
+				ewol::object::Shared<ewol::Widget> m_tmpWidget; //!< use when replace a widget ...
 				bool m_gavityButtom;
 			public:
 				/**
@@ -97,12 +97,12 @@ namespace ewol {
 				 * @param[in] _rowId Id of the row [0..y].
 				 * @param[in] _newWidget the element pointer
 				 */
-				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widget* _newWidget);
+				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::object::Shared<ewol::Widget> _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(ewol::Widget* _newWidget);
+				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -113,7 +113,7 @@ namespace ewol {
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
+				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -132,12 +132,14 @@ namespace ewol {
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const ivec2& getBorderSize() { return m_borderSize; };
+				const ivec2& getBorderSize() {
+					return m_borderSize;
+				};
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
-				virtual void onObjectRemove(ewol::Object* _removeObject);
+				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& pos);
+				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 		};

@@ -40,7 +40,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				~Composer();
+				virtual ~Composer();
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _fileName Name of the file
@@ -66,7 +66,7 @@ namespace ewol {
 				 */
 				void registerOnEventNameWidget(const std::string& _subWidgetName,
 				                               const char * _eventId,
-				                               const char * _eventIdgenerated = NULL,
+				                               const char * _eventIdgenerated = nullptr,
 				                               const std::string& _overloadData="");
 			public:
 				/**
@@ -78,10 +78,10 @@ namespace ewol {
 				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 				 * @note : To used when NOT herited from this object.
 				 */
-				void registerOnEventNameWidget(ewol::Object * _destinationObject,
+				void registerOnEventNameWidget(const ewol::object::Shared<ewol::Object>& _destinationObject,
 				                               const std::string& _subWidgetName,
 				                               const char * _eventId,
-				                               const char * _eventIdgenerated = NULL,
+				                               const char * _eventIdgenerated = nullptr,
 				                               const std::string& _overloadData="");
 		};
 	};
