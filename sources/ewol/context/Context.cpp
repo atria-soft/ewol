@@ -165,7 +165,7 @@ void ewol::Context::processEvents() {
 			case eSystemMessage::msgInit:
 				// this is due to the openGL context
 				/*bool returnVal = */
-				APP_Init(*this, m_initStepId, m_initTotalStep);
+				m_application->init(*this, m_initStepId);
 				m_initStepId++;
 				break;
 			case eSystemMessage::msgRecalculateSize:
@@ -287,7 +287,9 @@ void ewol::Context::setArchiveDir(int _mode, const char* _str) {
 
 
 
-ewol::Context::Context(int32_t _argc, const char* _argv[]) :
+ewol::Context::Context(ewol::context::Application* _application, int32_t _argc, const char* _argv[]) :
+  //m_application(std::make_shared<ewol::context::Application>(_application)),
+  m_application(_application),
   m_objectManager(*this),
   m_previousDisplayTime(0),
   m_input(*this),
@@ -302,8 +304,10 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
   m_FpsFlush(        "Flush     ", false),
   m_windowsCurrent(nullptr),
   m_windowsSize(320,480),
-  m_initStepId(0),
-  m_initTotalStep(1) {
+  m_initStepId(0) {
+	if (m_application == nullptr) {
+		EWOL_CRITICAL("Can not start context with no Application ==> rtfm ...");
+	}
 	m_commandLine.parse(_argc, _argv);
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
 	// Add basic ewol translation:
@@ -388,7 +392,8 @@ ewol::Context::~Context() {
 		m_objectManager.removeAllRemovedObject();
 	} while (m_resourceManager.checkResourceToRemove() == true);
 	// call application to uninit
-	APP_UnInit(*this);
+	m_application->unInit(*this);
+	m_application.reset();
 	// clean all messages
 	m_msgSystem.clean();
 	// an other cycle of removing ...
@@ -580,7 +585,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		// set the curent interface :
 		lockContext();
 		processEvents();
-		if (m_initStepId < m_initTotalStep) {
+		if (m_initStepId < m_application->getNbStepInit()) {
 			ewol::eSystemMessage *data = new ewol::eSystemMessage();
 			if (data == nullptr) {
 				EWOL_ERROR("allocation error of message");

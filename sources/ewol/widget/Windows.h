@@ -19,7 +19,7 @@
 namespace ewol {
 	namespace widget {
 		/**
-		 * @ingroup ewolWidgetGroup
+		 * @brief Windows basic interface
 		 */
 		class Windows : public ewol::Widget {
 			protected:

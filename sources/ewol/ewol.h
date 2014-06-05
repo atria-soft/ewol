@@ -10,7 +10,7 @@
 #define __EWOL_H__
 
 #include <etk/types.h>
-#include <etk/types.h>
+#include <ewol/context/Application.h>
 
 namespace ewol {
 	/**
@@ -20,11 +20,12 @@ namespace ewol {
 	 *       Does not exist in the android platform, then ewol call other start 
 	 *       and stop function, to permit to have only one code
 	 * @note The main can not be in the ewol, due to the fact thet is an librairy
+	 * @param[in] _application just created instance of the applicationo
 	 * @param[in] _argc Standard argc
 	 * @param[in] _argv Standard argv
 	 * @return normal error int for the application error management
 	 */
-	int32_t run(int32_t _argc, const char* _argv[]);
+	int32_t run(ewol::context::Application* _application, int32_t _argc = 0, const char* _argv[] = NULL);
 	/**
 	 * @brief get EWOL version
 	 * @return The string that describe ewol version

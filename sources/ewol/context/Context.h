@@ -17,12 +17,14 @@
 #include <ewol/resource/Manager.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/widget/Windows.h>
+#include <ewol/context/Application.h>
 #include <ewol/context/clipBoard.h>
 #include <ewol/context/ConfigFont.h>
 #include <ewol/context/commandLine.h>
 #include <ewol/context/InputManager.h>
 #include <ewol/context/Fps.h>
 #include <ewol/object/RemoveEvent.h>
+#include <memory>
 
 namespace ewol {
 	/**
@@ -39,6 +41,12 @@ namespace ewol {
 	};
 	
 	class Context/* : private ewol::object::RemoveEvent */{
+		private:
+			std::shared_ptr<ewol::context::Application> m_application; //!< Application handle
+		public:
+			std::shared_ptr<ewol::context::Application> getApplication() {
+				return m_application;
+			}
 		private:
 			ewol::context::CommandLine m_commandLine; //!< Start command line information
 		public:
@@ -70,7 +78,7 @@ namespace ewol {
 				return m_resourceManager;
 			};
 		public:
-			Context(int32_t _argc=0, const char* _argv[]=nullptr);
+			Context(ewol::context::Application* _application, int32_t _argc=0, const char* _argv[]=nullptr);
 			virtual ~Context();
 		protected:
 			/**
@@ -362,22 +370,6 @@ namespace ewol {
 	 */
 	Context& getContext();
 };
-
-//!< must be define in CPP by the application ... this are the main init and unInit of the Application
-/**
- * @brief main application function initialisation
- * @param[in] _context curent context property
- * @param[in] _initId current init step
- * @param[out] _nbInitStep total number of step
- * @return true, all OK
- * @return false, an error occured
- */
-bool APP_Init(ewol::Context& _context, size_t _initId, size_t& _nbInitStep);
-/**
- * @brief main application function un-initialisation
- */
-void APP_UnInit(ewol::Context& _context);
-
 
 #endif
 

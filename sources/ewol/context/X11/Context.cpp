@@ -142,8 +142,8 @@ class X11Interface : public ewol::Context {
 		enum ewol::context::cursorDisplay m_currentCursor; //!< select the current cursor to display :
 		char32_t m_lastKeyPressed; //!< The last element key presed...
 	public:
-		X11Interface(int32_t _argc, const char* _argv[]) :
-		  ewol::Context(_argc, _argv),
+		X11Interface(ewol::context::Application* _application, int32_t _argc, const char* _argv[]) :
+		  ewol::Context(_application, _argc, _argv),
 		  m_display(nullptr),
 		  m_originX(0),
 		  m_originY(0),
@@ -1343,9 +1343,9 @@ class X11Interface : public ewol::Context {
  * @param std IO
  * @return std IO
  */
-int ewol::run(int _argc, const char *_argv[]) {
+int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
-	X11Interface* interface = new X11Interface(_argc, _argv);
+	X11Interface* interface = new X11Interface(_application, _argc, _argv);
 	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
