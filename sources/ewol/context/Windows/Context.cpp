@@ -47,8 +47,8 @@ class WindowsContext : public ewol::eContext {
 		bool m_run = true;
 		bool m_clipBoardOwnerStd = false;
 	public:
-		WindowsContext(int32_t _argc, char* _argv[]) :
-		  ewol::eContext(_argc, _argv) {
+		WindowsContext(ewol::context::Application* _application, int32_t _argc, char* _argv[]) :
+		  ewol::eContext(_application, _argc, _argv) {
 			for (int32_t iii=0; iii<MAX_MANAGE_INPUT; ++iii) {
 				m_inputIsPressed[iii] = false;
 			}
@@ -454,7 +454,7 @@ class WindowsContext : public ewol::eContext {
  * @param std IO
  * @return std IO
  */
-int ewol::Run(int _argc, const char *_argv[]) {
+int ewol::Run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
 		/* Problem: glewInit failed, something is seriously wrong. */
@@ -464,7 +464,7 @@ int ewol::Run(int _argc, const char *_argv[]) {
 		EWOL_ERROR("OpenGL 2.0 not available");
 		//return 1;
 	}
-	WindowsContext* interface = new WindowsContext(_argc, _argv);
+	WindowsContext* interface = new WindowsContext(_application, _argc, _argv);
 	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;

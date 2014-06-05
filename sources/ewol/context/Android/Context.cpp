@@ -87,7 +87,8 @@ class AndroidContext : public ewol::Context {
 			return true;
 		}
 	public:
-		AndroidContext(JNIEnv* _env, jclass _classBase, jobject _objCallback, enum application _typeAPPL) :
+		AndroidContext(ewol::context::Application* _application, JNIEnv* _env, jclass _classBase, jobject _objCallback, enum application _typeAPPL) :
+		  ewol::Context(_application),
 		  m_javaApplicationType(_typeAPPL),
 		  m_JavaVirtualMachinePointer(nullptr),
 		  m_javaClassEwol(0),
@@ -639,6 +640,7 @@ class AndroidContext : public ewol::Context {
 };
 
 static std::vector<AndroidContext*> s_listInstance;
+ewol::context::Application* s_applicationInit = NULL;
 
 extern "C" {
 	// JNI onLoad
@@ -693,10 +695,16 @@ extern "C" {
 		EWOL_DEBUG("** Creating EWOL context                 **");
 		EWOL_DEBUG("*******************************************");
 		AndroidContext* tmpContext = nullptr;
+		s_applicationInit = NULL;
+		ewol::context::Application* localApplication = NULL;
+		// call the basic init of all application (that call us ...)
+		main(0,NULL);
+		localApplication = s_applicationInit;
+		s_applicationInit = NULL;
 		if (org_ewol_EwolConstants_EWOL_APPL_TYPE_ACTIVITY == _typeApplication) {
-			tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_application);
+			tmpContext = new AndroidContext(localApplication, _env, _classBase, _objCallback, AndroidContext::appl_application);
 		} else if (org_ewol_EwolConstants_EWOL_APPL_TYPE_WALLPAPER == _typeApplication) {
-			tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_wallpaper);
+			tmpContext = new AndroidContext(localApplication, _env, _classBase, _objCallback, AndroidContext::appl_wallpaper);
 		} else {
 			EWOL_CRITICAL(" try to create an instance with no apply type: " << _typeApplication);
 			return -1;
@@ -1106,7 +1114,7 @@ extern "C" {
 };
 
 
-int ewol::run(int _argc, const char *_argv[]) {
-	// Never call but needed ...
-	return -1;
+int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
+	s_applicationInit = _application;
+	return 0;
 }

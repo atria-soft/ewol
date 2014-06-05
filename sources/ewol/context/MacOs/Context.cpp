@@ -53,8 +53,8 @@ class MacOSInterface : public ewol::Context {
 	private:
 	ewol::key::Special m_guiKeyBoardMode;
 	public:
-		MacOSInterface(int32_t _argc, const char* _argv[]) :
-		  ewol::Context(_argc, _argv) {
+		MacOSInterface(ewol::context::Application* _application, int32_t _argc, const char* _argv[]) :
+		  ewol::Context(_application, _argc, _argv) {
 			mm_main(_argc, _argv);
 		}
 		
@@ -172,9 +172,9 @@ void MacOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::k
  * @param std IO
  * @return std IO
  */
-int ewol::run(int _argc, const char *_argv[]) {
+int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
-	interface = new MacOSInterface(_argc, _argv);
+	interface = new MacOSInterface(_application, _argc, _argv);
 	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;

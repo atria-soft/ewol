@@ -53,8 +53,8 @@ class MacOSInterface : public ewol::Context {
 private:
 	ewol::key::Special m_guiKeyBoardMode;
 public:
-	MacOSInterface(int32_t _argc, const char* _argv[]) :
-	ewol::Context(_argc, _argv) {
+	MacOSInterface(ewol::context::Application* _application, int32_t _argc, const char* _argv[]) :
+	ewol::Context(_application, _argc, _argv) {
 		// nothing to do ...
 	}
 	
@@ -237,10 +237,10 @@ static const char **l_argv = nullptr;
  * @param std IO
  * @return std IO
  */
-int ewol::run(int _argc, const char *_argv[]) {
+int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
 	l_argc = _argc;
 	l_argv = _argv;
-	return mm_main(_argc, _argv);
+	return mm_main(_application, _argc, _argv);
 }
 
 // Creat and relaese ewol::Context interface:
