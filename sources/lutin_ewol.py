@@ -215,7 +215,7 @@ def create(target):
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
 		lutinMultiprocess.run_command("javac " + java_tmp_src + ".java")
 		lutinMultiprocess.run_command("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
-		tools.copy_file(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", True)
+		tools.copy_file(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", force=True)
 		tools.remove_file(java_tmp_src + ".class")
 	elif target.name=="Windows":
 		myModule.add_module_depend("glew")
