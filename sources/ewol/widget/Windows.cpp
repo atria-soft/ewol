@@ -234,7 +234,7 @@ void ewol::widget::Windows::setTitle(const std::string& _title) {
 
 void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
 {
-	ewol::widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
+	ewol::object::Shared<ewol::widget::StdPopUp> tmpPopUp = ewol::object::makeShared(new widget::StdPopUp());
 	if (tmpPopUp == nullptr) {
 		EWOL_ERROR("Can not create a simple pop-up");
 		return;
