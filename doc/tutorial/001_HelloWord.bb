@@ -10,38 +10,50 @@ __________________________________________________
 
 ==== Application Main: ====
 
+A generic Ewol application is manage by creating an [class[ewol::context::Application]] that is the basis of your application.
 
-In all the application we need to have a main()
-In This version the main neen only to call the ewol::run(void) that is the basic interface.
-To be portable on Android, that have a java main the User might not set other things in this main.
-[note]This basic main will change in the future to be more generic!!![/note]
+Due to the fact the ewol librairy is a multi-platform framework, then you need to think all you will do with only one 
+application and only one windows displayable at the same time.
+
+Then we will create the application:
+
+[code style=c++]
+	class MainApplication : public ewol::context::Application {
+		public:
+			bool init(ewol::Context& _context, size_t _initId) {
+				APPL_INFO("==> Init APPL (START)");
+				// nothing to do ...
+				APPL_INFO("==> Init APPL (END)");
+				return true;
+			}
+			void unInit(ewol::Context& _context) {
+				APPL_INFO("==> Un-Init APPL (START)");
+				// nothing to do ...
+				APPL_INFO("==> Un-Init APPL (END)");
+			}
+	};
+[/code]
+
+The input [class[ewol::Context]] is the main system context.
+
+[note]
+It is important to know that the system can call your application in parallele, the basic exemple of this is the Wallpaper on Android.
+
+What is done:
+** When selected, it create an intance and when it is apply Android create a new instance and remove the previous one...
+[/note]
+
+In all program we need to have a main()
+
+To be portable on Android, that have a java main the User might the Wrapper call the generic main() (please do not add other things in this main).
 
 [code style=c++]
 	int main(int argc, const char *argv[]) {
 		// only one things to do : 
-		return ewol::run(argc, argv);
+		return ewol::run(new MainApplication(), _argc, _argv);
 	}
 [/code]
 
-Then the first question, is where is the start and stop of the application:
-
-[code style=c++]
-	// application start:
-	bool APP_Init(ewol::Context& _context) {
-		return true;
-	}
-	// application stop:
-	void APP_UnInit(ewol::Context& _context) {
-		// nothing to do.
-	}
-[/code]
-
-The input [class[ewol::eContext]] is the main application context.
-All the application globals have a reference in this element (and can get it everyware).
-[note]
-It is important to know that the system can call your application in parallele, the basic exemple of this is the Wallpaper on Android.
-When selected, it create an intance and when it is apply Android create a new instance and remove the previous one...
-[/note]
 
 ==== Some configuration are needed ====
 
@@ -99,7 +111,7 @@ For this point we will create a class that herited form the basic windows class:
 	
 	appl::Windows::Windows(void) {
 		setTitle("example 001_HelloWord");
-		ewol::widget::Label* tmpWidget = new ewol::widget::Label();
+		ewol::object::Shared<ewol::widget::Label> tmpWidget = new ewol::widget::Label();
 		if (NULL == tmpWidget) {
 			APPL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
@@ -118,7 +130,7 @@ The fist basic property to set is the Title:
 After we simple create a [class[widget::Label]] in the main windows constructor.
 And we set the widget property (label).
 [code style=c++]
-	ewol::widget::Label* tmpWidget = new ewol::widget::Label();
+	ewol::object::Shared<ewol::widget::Label> tmpWidget = ewol::object::makeShared(new ewol::widget::Label());
 	tmpWidget->setLabel("Hello <font color=\"blue\">Word</font>");
 	tmpWidget->setExpand(bvec2(true,true));
 [/code]
@@ -150,16 +162,17 @@ The last step is to add the widget on the windows :
 
 At this point we have created the basic windows.
 But the system does not know it.
-Then we create windows and set it in the main contect main (in the APPL_init()):
+Then we create windows and set it in the main contect main (in the MainApplication::init()):
 [code style=c++]
-	ewol::Windows* basicWindows = new appl::Windows();
+	ewol::object::Shared<ewol::Windows> basicWindows = ewol::object::makeShared(new appl::Windows());
 	// create the specific windows
 	_context.setWindows(basicWindows);
 [/code]
 
 Then the init fuction is :
 [code style=c++]
-bool APP_Init(ewol::Context& _context) {
+bool MainApplication::init(ewol::Context& _context, size_t _initId) {
+	APPL_INFO("==> Init APPL (START)");
 	// select internal data for font ...
 	_context.getFontDefault().setUseExternal(true);
 	_context.getFontDefault().set("FreeSerif;DejaVuSansMono", 19);
@@ -167,15 +180,18 @@ bool APP_Init(ewol::Context& _context) {
 	ewol::Windows* basicWindows = new appl::Windows();
 	// create the specific windows
 	_context.setWindows(basicWindows);
+	APPL_INFO("==> Init APPL (END)");
 	return true;
 }
 [/code]
 
-To un-init the application, the context call a generic function [b]APP_UnInit[/b].
+To un-init the application, the context call a generic function [b]MainApplication::unInit[/b].
 In this function we just need to remove the windows and un-init all needed by the system.
 [code style=c++]
-void APP_UnInit(ewol::Context& _context) {
-	// The main windows will be auto-remove after this call if it is not done...
+void MainApplication::unInit(ewol::Context& _context) {
+	APPL_INFO("==> Un-Init APPL (START)");
+	// Windows is auto-removed just before
+	APPL_INFO("==> Un-Init APPL (END)");
 }
 [/code]
 

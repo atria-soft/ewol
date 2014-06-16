@@ -3,8 +3,8 @@ __________________________________________________
 [left][tutorial[001_HelloWord | Previous: Hello Word]][/left] [right][tutorial[011_ObjectConfig | Next: Object config]][/right]
 
 === Objectif ===
-:** Understand ewol basic object
-:** Use ewol::Object correctly
+:** Understand ewol basic [class[ewol::Object]]
+:** Use [class[ewol::Object]] correctly
 
 == Basis of the Object ==
 
@@ -13,7 +13,7 @@ This is designed to manage basis element of complexe structure:
 
 :** Unique ID
 :** Name
-:** Config
+:** Configuration (decriptive naming of parameters)
 :** Event generation and receving
 :** Xml configuration
 :** Delayed removing
@@ -25,9 +25,11 @@ Please do not compare with the gObject basic class...
 
 == Create an Object: ==
 
-This is a really simple way to create an Object, simply generate a new on it :
+In theory you can use a simple new on an object, but you need to remove the refcounting of this one by yoursef ... really awfull.
+
+It is really better to use the ewol::object::Shared<> declaration to auto manage it. (same as std::shared_ptr)
 [code style=c++]
-	widget::Label* tmpObject = new widget::Label();
+	ewol::object::Shared<widget::Label> tmpObject = ewol::object::makeShared(new widget::Label());
 	if (tmpObject == NULL) {
 		APPL_ERROR("An error occured");
 		return;
@@ -48,8 +50,6 @@ Force the set of the name :
 
 This is important to note that many element can have a reference on the Object.
 
-And we did not use "ref-counting" for philosophic reasons ...
-
 Then we need to use the fuction:
 [b]removeObject()[/b] to remove the Object, This will notify avery object in the system that this 
 specific object has been removed.
@@ -60,22 +60,31 @@ Then to remove an object call:
 	tmpObject->removeObject();
 [/code]
 
-On every object we can have an herited function: [b]virtual void onObjectRemove(ewol::Object * _removeObject);[/b]
+On every object we can have an herited function: [b]virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);[/b]
 
 
 We need to implement this fuction to be notify an object is removed:
 [code style=c++]
-	void namespeceName::ClassName::onObjectRemove(ewol::Object * _removeObject) {
+	void namespeceName::ClassName::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
+		// Never forget to call upper Object (otherwise many object will keep theire reference)
+		upperClass::onObjectRemove(_removeObject);
 		if (_removeObject == m_object) {
-			m_object = NULL;
+			m_object.reset();
 			markToRedraw(); // set only for graphical object ...
 		}
 	}
 [/code]
 
 [note]
-If you have well follow the idea, you will never declare an object in local, just use pointer on them.
+If you have well follow the idea, you will never declare an object in local, just use shared pointer on them.
 [/note]
+
+[note]
+For some case it could be interesting to see the [class[ewol::object::Owner<T>]] class that provide an automatic auto remove of object.
+
+See [class[ewol::widget::Container]] for an example.
+[/note]
+
 
 === Particularity ===
 
@@ -87,7 +96,7 @@ An object can remove itself, just use the function:
 
 == Retrieve an Object: ==
 
-In Ewol this is possible to get a widget with his name.
+In Ewol this is possible to get a object with his name.
 This is really simple.
 
 === In an Object ===
@@ -99,7 +108,7 @@ Call a simple function define in the Object:
 	
 	...
 	
-	ewol::Object* tmpObject = getObjectManager().get("name of the object");
+	ewol::object::Shared<ewol::Object> tmpObject = getObjectManager().get("name of the object");
 	if (tmpObject == NULL) {
 		APPL_ERROR("The Object does not exist");
 	}
@@ -115,13 +124,21 @@ In this case, we need to get the context manager and after the object manager:
 	
 	...
 	
-	ewol::Object* tmpObject = ewol::getContext().getObjectManager().get("name of the object");
+	ewol::object::Shared<ewol::Object> tmpObject = ewol::getContext().getObjectManager().get("name of the object");
 	if (tmpObject == NULL) {
 		APPL_ERROR("The Object does not exist");
 	}
 [/code]
 
+=== Casting your object ===
 
+It could be really interesting to retrive your own instance:
+
+[code style=c++]
+	ewol::object::Shared<ewol::Object> tmpObject ...;
+	
+	ewol::object::Shared<appl::MyOwnObject> myObject = ewol::dynamic_pointer_cast<appl::MyOwnObject>(tmpObject);
+[/code]
 
 == conclusion ==
 
@@ -129,6 +146,8 @@ If you follow these rules, you will not have memory leek and no segmentation fau
 
 [note]
 To be sure that the name is unique, just add the current creator object Id in the name.
+
+See [class[ewol::widget::FileChooser]] class for an example.
 [/note]
 
 

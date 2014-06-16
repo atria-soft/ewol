@@ -29,7 +29,7 @@ namespace ewol {
 		 *  
 		 *  The first step is to create the file chooser pop-up :
 		 *  [code style=c++]
-		 *  ewol::widget::FileChooser* tmpWidget = new ewol::Widget::FileChooser();
+		 *  ewol::object::Shared<ewol::widget::FileChooser> tmpWidget = ewol::object::makeShared(new ewol::Widget::FileChooser());
 		 *  if (tmpWidget == nullptr) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;
