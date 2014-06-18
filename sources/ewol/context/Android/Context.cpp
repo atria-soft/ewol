@@ -528,7 +528,7 @@ class AndroidContext : public ewol::Context {
 			java_detach_current_thread(status);
 		}
 		
-		void setTitle(std::string& _title) {
+		void setTitle(const std::string& _title) {
 			EWOL_DEBUG("C->java : send message to the java : \"" << _title << "\"");
 			if (m_javaApplicationType == appl_application) {
 				int status;
@@ -686,6 +686,8 @@ extern "C" {
 		}
 	}
 	
+	// declare main application instance like an application:
+	int main(int argc, char**argv);
 	jint Java_org_ewol_Ewol_EWsetJavaVirtualMachineStart(JNIEnv* _env,
 	                                                     jclass _classBase,
 	                                                     jobject _objCallback,
