@@ -178,3 +178,13 @@ void ewol::object::Manager::rm(ewol::object::RemoveEvent* _class) {
 	}
 }
 
+ewol::object::Shared<ewol::Object> ewol::object::Manager::getObjectNamed(const std::string& _name) {
+	for (auto &it : m_eObjectList) {
+		if (    it != nullptr
+		     && _name == it->getName()) {
+			return it;
+		}
+	}
+	return nullptr;
+}
+

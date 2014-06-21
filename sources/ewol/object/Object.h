@@ -312,17 +312,17 @@ namespace ewol {
 			 * @breif get the current Object manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::Manager& getObjectManager();
+			ewol::object::Manager& getObjectManager() const;
 			/**
 			 * @breif get the current Object Message Multicast manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::MultiCast& getMultiCast();
+			ewol::object::MultiCast& getMultiCast() const;
 			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
-			ewol::Context& getContext();
+			ewol::Context& getContext() const;
 		private:
 			bool m_isResource; //!< enable this when you want to declare this element is auto-remove
 		public:
@@ -338,9 +338,29 @@ namespace ewol {
 			 * @brief Get the resource status of the element.
 			 * @return the resource status.
 			 */
-			bool getStatusResource() {
+			bool getStatusResource() const {
 				return m_isResource;
 			}
+			/**
+			 * @brief Register an Event an named widget. @see registerOnEvent
+			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
+			 * @param[in] _objectName Name of the object.
+			 * @param[in] _eventId Event generate inside the object.
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
+			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
+			 * @note : To used when NOT herited from this object.
+			 */
+			void registerOnObjectEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			                           const std::string& _objectName,
+			                           const char * _eventId,
+			                           const char * _eventIdgenerated = nullptr,
+			                           const std::string& _overloadData="");
+			/**
+			 * @brief Retrive an object with his name (in the global list)
+			 * @param[in] _name Name of the object
+			 * @return the requested object or nullptr
+			 */
+			ewol::object::Shared<ewol::Object> getObjectNamed(const std::string& _objectName) const;
 	};
 };
 

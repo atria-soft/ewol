@@ -69,6 +69,14 @@ namespace ewol {
 				
 				void add(ewol::object::RemoveEvent* _class);
 				void rm(ewol::object::RemoveEvent* _class);
+			
+			public:
+				/**
+				 * @brief retrive an object with his name
+				 * @param[in] _name Name of the object
+				 * @return the requested object or nullptr
+				 */
+				ewol::object::Shared<ewol::Object> getObjectNamed(const std::string& _name);
 		};
 	};
 };

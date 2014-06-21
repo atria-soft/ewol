@@ -29,6 +29,7 @@ namespace ewol {
 				// TODO : remove the dynamic transition and set this in annimation ...
 				static const char* const configMode;
 				static const char* const configSpeed;
+				static const char* const configSelect;
 				enum sladingMode {
 					sladingTransitionVert,
 					sladingTransitionHori,

@@ -86,13 +86,17 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::object::Shared<ewol::Widget
 		return;
 	}
 	size_t errorControl = m_subWidget.size();
-	for (auto it(m_subWidget.begin()) ; it != m_subWidget.end() ; ++it) {
+	
+	auto it(m_subWidget.begin());
+	while (it != m_subWidget.end()) {
 		if (_newWidget == *it) {
 			(*it)->removeUpperWidget();
 			m_subWidget.erase(it);
+			it = m_subWidget.begin();
 			markToRedraw();
 			requestUpdateSize();
-			return;
+		} else {
+			++it;
 		}
 	}
 }
@@ -101,23 +105,27 @@ void ewol::widget::ContainerN::subWidgetUnLink(ewol::object::Shared<ewol::Widget
 	if (nullptr == _newWidget) {
 		return;
 	}
-	for (auto it(m_subWidget.begin()) ; it != m_subWidget.end() ; ++it) {
+	auto it(m_subWidget.begin());
+	while (it != m_subWidget.end()) {
 		if (_newWidget == *it) {
 			(*it)->removeUpperWidget();
 			(*it).resetShared();
 			m_subWidget.erase(it);
+			it = m_subWidget.begin();
 			markToRedraw();
 			requestUpdateSize();
-			return;
+		} else {
+			++it;
 		}
 	}
 }
 
 void ewol::widget::ContainerN::subWidgetRemoveAll() {
-	for (auto &it : m_subWidget) {
+	for(auto &it : m_subWidget) {
 		if (it != nullptr) {
 			it->removeUpperWidget();
 		}
+		it.reset();
 	}
 	m_subWidget.clear();
 }

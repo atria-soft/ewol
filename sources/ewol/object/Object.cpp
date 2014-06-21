@@ -472,14 +472,32 @@ bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::str
 	return object->setConfig(_config, _value);
 }
 
-ewol::object::Manager& ewol::Object::getObjectManager() {
+ewol::object::Manager& ewol::Object::getObjectManager() const {
 	return ewol::getContext().getEObjectManager();
 }
 
-ewol::object::MultiCast& ewol::Object::getMultiCast() {
+ewol::object::MultiCast& ewol::Object::getMultiCast() const {
 	return ewol::getContext().getEObjectManager().multiCast();
 }
 
-ewol::Context& ewol::Object::getContext() {
+ewol::Context& ewol::Object::getContext() const {
 	return ewol::getContext();
+}
+
+void ewol::Object::registerOnObjectEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+                                         const std::string& _objectName,
+                                         const char * _eventId,
+                                         const char * _eventIdgenerated,
+                                         const std::string& _overloadData) {
+	ewol::object::Shared<ewol::Object> tmpObject = getObjectManager().getObjectNamed(_objectName);
+	if (nullptr != tmpObject) {
+		EWOL_DEBUG("Find widget named : '" << _objectName << "' register event='" << _eventId << "'");
+		tmpObject->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
+	} else {
+		EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Can not register event : \"" << _eventId << "\" the object named=\"" << _objectName << "\" does not exist");
+	}
+}
+
+ewol::object::Shared<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) const {
+	return getObjectManager().getObjectNamed(_objectName);
 }

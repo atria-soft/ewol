@@ -29,6 +29,7 @@ const char* const ewol::widget::WSlider::eventStopSlide = "ewol-widget-wslider-e
 // Config list of properties
 const char* const ewol::widget::WSlider::configMode = "mode";
 const char* const ewol::widget::WSlider::configSpeed = "speed";
+const char* const ewol::widget::WSlider::configSelect = "select";
 
 static ewol::Widget* create() {
 	return new ewol::widget::WSlider();
@@ -51,6 +52,7 @@ ewol::widget::WSlider::WSlider() :
 	// add configuration
 	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
 	registerConfig(configSpeed, "float", nullptr, "Transition speed of the slider");
+	registerConfig(configSelect, "strin", nullptr, "Select the requested widget to display");
 }
 
 ewol::widget::WSlider::~WSlider() {
@@ -295,6 +297,10 @@ bool ewol::widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
 		setTransitionSpeed(std::stof(_conf.getData()));
 		return true;
 	}
+	if (_conf.getConfig() == configSelect) {
+		subWidgetSelectSet(_conf.getData());
+		return true;
+	}
 	return false;
 }
 
@@ -316,6 +322,15 @@ bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _resul
 	}
 	if (_config == configMode) {
 		_result = std::to_string(getTransitionSpeed());
+		return true;
+	}
+	if (_config == configSelect) {
+		auto it = m_subWidget.begin();
+		std::advance(it, m_windowsRequested);
+		if (    it != m_subWidget.end()
+		     && *it != nullptr) {
+			_result = (*it)->getName();
+		}
 		return true;
 	}
 	return false;

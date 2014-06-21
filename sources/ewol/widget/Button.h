@@ -39,6 +39,7 @@ namespace ewol {
 				// Config list of properties
 				static const char* const configToggle;
 				static const char* const configLock;
+				static const char* const configEnableSingle;
 				static const char* const configValue;
 				static const char* const configShaper;
 				enum buttonLock{
@@ -110,6 +111,21 @@ namespace ewol {
 				 */
 				bool getToggleMode() const {
 					return m_toggleMode;
+				};
+			protected:
+				bool m_enableSingle; //!< When a single subwidget is set display all time it.
+			public:
+				/**
+				 * @brief Chane the display single widget mode availlable.
+				 * @param[in] _single single mode widget set
+				 */
+				void setEnableSingle(bool _single);
+				/**
+				 * @brief get the current single mode enableling.
+				 * @return the current value.
+				 */
+				bool getEnableSingle() const {
+					return m_enableSingle;
 				};
 			private:
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).

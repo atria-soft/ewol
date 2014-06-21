@@ -23,6 +23,7 @@ const char* const ewol::widget::Button::eventValue      = "value";
 
 const char* const ewol::widget::Button::configToggle = "toggle";
 const char* const ewol::widget::Button::configLock   = "lock";
+const char* const ewol::widget::Button::configEnableSingle = "enable-single";
 const char* const ewol::widget::Button::configValue  = "value";
 const char* const ewol::widget::Button::configShaper = "shaper";
 
@@ -47,6 +48,7 @@ ewol::widget::Button::Button(const std::string& _shaperName) :
   m_value(false),
   m_lock(ewol::widget::Button::lockNone),
   m_toggleMode(false),
+  m_enableSingle(false),
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
@@ -62,6 +64,7 @@ ewol::widget::Button::Button(const std::string& _shaperName) :
 	// add configuration
 	registerConfig(configToggle, "bool", nullptr, "The Button can toogle");
 	registerConfig(configValue, "bool", nullptr, "Basic value of the widget");
+	registerConfig(configEnableSingle, "bool", nullptr, "If one element set in the Button ==> display only set");
 	registerConfig(configLock, "list", "none;true;released;pressed", "Lock the button in a special state to permit changing state only by the coder");
 	registerConfig(configShaper, "string", nullptr, "the display name for config file");
 	
@@ -117,51 +120,93 @@ void ewol::widget::Button::onRegenerateDisplay() {
 }
 
 void ewol::widget::Button::setLock(enum buttonLock _lock) {
-	if (m_lock != _lock) {
-		m_lock = _lock;
-		if(ewol::widget::Button::lockAccess == _lock) {
-			m_buttonPressed = false;
-			m_mouseHover = false;
+	if (m_lock == _lock) {
+		return;
+	}
+	m_lock = _lock;
+	if(ewol::widget::Button::lockAccess == _lock) {
+		m_buttonPressed = false;
+		m_mouseHover = false;
+	}
+	CheckStatus();
+	markToRedraw();
+}
+void ewol::widget::Button::setEnableSingle(bool _single){
+	if (m_enableSingle == _single) {
+		return;
+	}
+	m_enableSingle = _single;
+	if (m_enableSingle == true) {
+		if (    m_idWidgetDisplayed == 0
+		     && m_subWidget[0] == nullptr
+		     && m_subWidget[1] != nullptr) {
+			m_idWidgetDisplayed = 1;
+		} else if (    m_idWidgetDisplayed == 1
+		            && m_subWidget[1] == nullptr
+		            && m_subWidget[0] != nullptr) {
+			m_idWidgetDisplayed = 0;
 		}
-		CheckStatus();
-		markToRedraw();
 	}
 }
 
 void ewol::widget::Button::setValue(bool _val) {
-	if (m_value != _val) {
-		m_value = _val;
-		if (m_toggleMode == true) {
-			if (m_value == false) {
-				m_idWidgetDisplayed = 0;
-			} else {
-				m_idWidgetDisplayed = 1;
-			}
-		}
-		CheckStatus();
-		markToRedraw();
+	if (m_value == _val) {
+		return;
 	}
+	m_value = _val;
+	if (m_toggleMode == true) {
+		if (m_value == false) {
+			m_idWidgetDisplayed = 0;
+		} else {
+			m_idWidgetDisplayed = 1;
+		}
+	}
+	if (m_enableSingle == true) {
+		if (    m_idWidgetDisplayed == 0
+		     && m_subWidget[0] == nullptr
+		     && m_subWidget[1] != nullptr) {
+			m_idWidgetDisplayed = 1;
+		} else if (    m_idWidgetDisplayed == 1
+		            && m_subWidget[1] == nullptr
+		            && m_subWidget[0] != nullptr) {
+			m_idWidgetDisplayed = 0;
+		}
+	}
+	CheckStatus();
+	markToRedraw();
 }
 
 void ewol::widget::Button::setToggleMode(bool _togg) {
-	if (m_toggleMode != _togg) {
-		m_toggleMode = _togg;
-		if (m_value == true) {
-			m_value = false;
-			// TODO : change display and send event ...
-		}
-		if (m_toggleMode == false) {
+	if (m_toggleMode == _togg) {
+		return;
+	}
+	m_toggleMode = _togg;
+	if (m_value == true) {
+		m_value = false;
+		// TODO : change display and send event ...
+	}
+	if (m_toggleMode == false) {
+		m_idWidgetDisplayed = 0;
+	} else {
+		if (m_value == false) {
 			m_idWidgetDisplayed = 0;
 		} else {
-			if (m_value == false) {
-				m_idWidgetDisplayed = 0;
-			} else {
-				m_idWidgetDisplayed = 1;
-			}
+			m_idWidgetDisplayed = 1;
 		}
-		CheckStatus();
-		markToRedraw();
 	}
+	if (m_enableSingle == true) {
+		if (    m_idWidgetDisplayed == 0
+		     && m_subWidget[0] == nullptr
+		     && m_subWidget[1] != nullptr) {
+			m_idWidgetDisplayed = 1;
+		} else if (    m_idWidgetDisplayed == 1
+		            && m_subWidget[1] == nullptr
+		            && m_subWidget[0] != nullptr) {
+			m_idWidgetDisplayed = 0;
+		}
+	}
+	CheckStatus();
+	markToRedraw();
 }
 
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
@@ -312,6 +357,10 @@ bool ewol::widget::Button::onSetConfig(const ewol::object::Config& _conf) {
 		setShaperName(_conf.getData());
 		return true;
 	}
+	if (_conf.getConfig() == configEnableSingle) {
+		setEnableSingle(std::stob(_conf.getData()));
+		return true;
+	}
 	return false;
 }
 
@@ -349,6 +398,11 @@ bool ewol::widget::Button::onGetConfig(const char* _config, std::string& _result
 		_result = m_shaper.getSource();
 		return true;
 	}
+	if (_config == configEnableSingle) {
+		_result = getEnableSingle();
+		return true;
+	}
+	
 	return false;
 }
 
