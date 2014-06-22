@@ -15,6 +15,11 @@
 #undef __class__
 #define __class__	"ewol::widget::Composer"
 
+#include <ewol/widget/Manager.h>
+void ewol::widget::Composer::init(ewol::widget::Manager& _widgetManager) {
+	_widgetManager.addWidgetCreator("Composer",[]() -> ewol::Widget* { return new ewol::widget::Composer(); });
+}
+
 ewol::widget::Composer::Composer() {
 	// nothing to do ...
 }
@@ -45,10 +50,10 @@ bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 		return false;
 	}
 	exml::Element* root = (exml::Element*)doc.getNamed("composer");
-	if (nullptr == root ) {
+	if (root == nullptr) {
 		// Maybe a multiple node XML for internal config:
 		root = doc.toElement();
-		if (nullptr == root ) {
+		if (root == nullptr) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
 		}
@@ -70,10 +75,10 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 		return false;
 	}
 	exml::Element* root = (exml::Element*)doc.getNamed("composer");
-	if (nullptr == root ) {
+	if (root == nullptr) {
 		// Maybe a multiple node XML for internal config:
 		root = doc.toElement();
-		if (nullptr == root ) {
+		if (root == nullptr) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
 		}
@@ -84,7 +89,7 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 	}
 	// call upper class to parse his elements ...
 	ewol::widget::Container::loadXML(root);
-	
+	requestUpdateSize();
 	return true;
 }
 

@@ -145,6 +145,9 @@ void ewol::widget::Button::setEnableSingle(bool _single){
 		            && m_subWidget[1] == nullptr
 		            && m_subWidget[0] != nullptr) {
 			m_idWidgetDisplayed = 0;
+		} else if (    m_subWidget[0] == nullptr
+		            && m_subWidget[1] == nullptr) {
+			m_idWidgetDisplayed = 0;
 		}
 	}
 }

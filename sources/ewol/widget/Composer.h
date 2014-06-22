@@ -21,6 +21,8 @@ namespace ewol {
 		 */
 		class Composer : public ewol::widget::Container {
 			public:
+				static void init(ewol::widget::Manager& _widgetManager);
+			public:
 				enum composerMode {
 					None,
 					String,
