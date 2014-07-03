@@ -35,7 +35,7 @@ ewol::widget::ProgressBar::ProgressBar() {
 	
 	m_textColorFg = etk::color::black;
 	
-	m_textColorBgOn = 0x00FF00FF;
+	m_textColorBgOn = etk::Color<>(0x00, 0xFF, 0x00, 0xFF);
 	
 	m_textColorBgOff = etk::color::black;
 	m_textColorBgOff.setA(0x3F);
@@ -53,13 +53,13 @@ ewol::widget::ProgressBar::~ProgressBar() {
 
 void ewol::widget::ProgressBar::calculateMinMaxSize() {
 	vec2 tmpMin = m_userMinSize.getPixel();
-	m_minSize.setValue( etk_max(tmpMin.x(), 40),
-	                    etk_max(tmpMin.y(), dotRadius*2) );
+	m_minSize.setValue( std::max(tmpMin.x(), 40.0f),
+	                    std::max(tmpMin.y(), dotRadius*2.0f) );
 	markToRedraw();
 }
 
 void ewol::widget::ProgressBar::setValue(float _val) {
-	m_value = etk_avg(0, _val, 1);
+	m_value = std::avg(0.0f, _val, 1.0f);
 	markToRedraw();
 }
 

@@ -197,7 +197,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 		return false;
 	}
 	// draw it on the output Image :
-	etk::Color<> tlpppp(0xFFFFFF00);
+	etk::Color<> tlpppp(0xFF, 0xFF, 0xFF, 0x00);
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
 			tlpppp = _imageOut.get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));

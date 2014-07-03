@@ -194,7 +194,7 @@ int32_t ewol::context::InputManager::localGetDestinationId(enum ewol::key::type 
 			if (true == m_eventInputSaved[iii].isUsed) {
 				if (m_eventInputSaved[iii].curentWidgetEvent == _destWidget) {
 					if (iii != _realInputId) {
-						lastMinimum = etk_max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
+						lastMinimum = std::max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
 					}
 				}
 			}

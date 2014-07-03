@@ -58,7 +58,7 @@ ewol::widget::ColorChooser::ColorChooser() :
 			m_widgetRed->setFill(bvec2(true,false));
 			m_widgetRed->setMin(0);
 			m_widgetRed->setMax(255);
-			sliderColor = 0xFF0000FF;
+			sliderColor = etk::Color<>(0xFF, 0x00, 0x00, 0xFF);
 			m_widgetRed->setColor(sliderColor);
 			subWidgetAdd(m_widgetRed.get());
 		m_widgetGreen = new ewol::widget::Slider();
@@ -66,7 +66,7 @@ ewol::widget::ColorChooser::ColorChooser() :
 			m_widgetGreen->setExpand(bvec2(true,false));
 			m_widgetGreen->setFill(bvec2(true,false));
 			m_widgetGreen->setMin(0);
-			sliderColor = 0x00FF00FF;
+			sliderColor = etk::Color<>(0x00, 0xFF, 0x00, 0xFF);
 			m_widgetGreen->setColor(sliderColor);
 			m_widgetGreen->setMax(255);
 			subWidgetAdd(m_widgetGreen.get());
@@ -75,7 +75,7 @@ ewol::widget::ColorChooser::ColorChooser() :
 			m_widgetBlue->setExpand(bvec2(true,false));
 			m_widgetBlue->setFill(bvec2(true,false));
 			m_widgetBlue->setMin(0);
-			sliderColor = 0x0000FFFF;
+			sliderColor = etk::Color<>(0x00, 0x00, 0xFF, 0xFF);
 			m_widgetBlue->setColor(sliderColor);
 			m_widgetBlue->setMax(255);
 			subWidgetAdd(m_widgetBlue.get());

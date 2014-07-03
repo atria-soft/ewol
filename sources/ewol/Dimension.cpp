@@ -183,12 +183,12 @@ vec2 ewol::Dimension::get(enum ewol::Dimension::distance _type) const {
 
 void ewol::Dimension::set(const vec2& _size, enum ewol::Dimension::distance _type) {
 	// set min max on input to limit error : 
-	vec2 size(etk_avg(0.0f,_size.x(),9999999.0f),
-	          etk_avg(0.0f,_size.y(),9999999.0f));
+	vec2 size(std::avg(0.0f,_size.x(),9999999.0f),
+	          std::avg(0.0f,_size.y(),9999999.0f));
 	switch(_type) {
 		case ewol::Dimension::Pourcent: {
-			vec2 size2(etk_avg(0.0f,_size.x(),100.0f),
-			           etk_avg(0.0f,_size.y(),100.0f));
+			vec2 size2(std::avg(0.0f,_size.x(),100.0f),
+			           std::avg(0.0f,_size.y(),100.0f));
 			m_data = vec2(size2.x()*0.01f, size2.y()*0.01f);
 			//EWOL_VERBOSE("Set % : " << size2 << "  == > " << m_data);
 			break;

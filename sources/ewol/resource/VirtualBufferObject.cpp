@@ -17,7 +17,7 @@
 ewol::resource::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
   m_exist(false) {
 	addObjectType("ewol::VirtualBufferObject");
-	m_nbVBO = etk_avg(1, _number, NB_VBO_MAX);
+	m_nbVBO = std::avg(1, _number, NB_VBO_MAX);
 	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii]=0;
 		m_vboUsed[iii]=false;

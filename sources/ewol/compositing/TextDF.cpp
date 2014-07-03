@@ -30,7 +30,7 @@ ewol::compositing::TextDF::~TextDF() {
 }
 
 void ewol::compositing::TextDF::updateSizeToRender(const vec2& _size) {
-	float minSize = etk_min(_size.x(), _size.y());
+	float minSize = std::min(_size.x(), _size.y());
 	if (m_fontDF != nullptr) {
 		setFontSize(m_fontDF->getSize(minSize));
 	}

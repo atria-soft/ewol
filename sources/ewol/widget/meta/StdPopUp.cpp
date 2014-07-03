@@ -42,7 +42,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 		
 		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
-			mySpacer->setColor(etk::Color<>(0x888888FF));
+			mySpacer->setColor(etk::Color<>(0x88, 0x88, 0x88, 0xFF));
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
@@ -62,7 +62,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 		
 		mySpacer = new ewol::widget::Spacer();
 			mySpacer->setExpand(bvec2(true,false));
-			mySpacer->setColor(etk::Color<>(0x888888FF));
+			mySpacer->setColor(etk::Color<>(0x88, 0x88, 0x88, 0xFF));
 			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		

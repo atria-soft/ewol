@@ -39,18 +39,17 @@ void ewol::widget::ColorBar::calculateMinMaxSize() {
 	markToRedraw();
 }
 
-static etk::Color<> s_listColorWhite(0xFFFFFFFF);
-static etk::Color<> s_listColorBlack(0x000000FF);
+static etk::Color<> s_listColorWhite(0xFF, 0xFF, 0xFF, 0xFF);
+static etk::Color<> s_listColorBlack(0x00, 0x00, 0x00, 0xFF);
 #define NB_BAND_COLOR		(6)
 static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
-	0xFF0000FF,
-	0xFFFF00FF,
-	0x00FF00FF,
-	0x00FFFFFF,
-	0x0000FFFF,
-	0xFF00FFFF,
-	0xFF0000FF
-};
+	etk::Color<>(0xFF, 0x00, 0x00, 0xFF),
+	etk::Color<>(0xFF, 0xFF, 0x00, 0xFF),
+	etk::Color<>(0x00, 0xFF, 0x00, 0xFF),
+	etk::Color<>(0x00, 0xFF, 0xFF, 0xFF),
+	etk::Color<>(0x00, 0x00, 0xFF, 0xFF),
+	etk::Color<>(0xFF, 0x00, 0xFF, 0xFF),
+	etk::Color<>(0xFF, 0x00, 0x00, 0xFF)};
 
 etk::Color<> ewol::widget::ColorBar::getCurrentColor() {
 	return m_currentColor;
@@ -169,8 +168,8 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
-		relativePos.setValue( etk_max(etk_min(relativePos.x(), m_size.x()),0),
-		                      etk_max(etk_min(relativePos.y(), m_size.y()),0));
+		relativePos.setValue( std::avg(0.0f, m_size.x(),relativePos.x()),
+		                      std::avg(0.0f, m_size.y(),relativePos.y()) );
 		if(    ewol::key::statusSingle == _event.getStatus()
 		    || ewol::key::statusMove   == _event.getStatus()) {
 			// nothing to do ...

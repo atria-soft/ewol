@@ -43,7 +43,7 @@ namespace ewol {
 			protected:
 				// function call to display the list :
 				virtual etk::Color<> getBasicBG() {
-					return etk::Color<>(0xFFFFFFFF);
+					return etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
 				}
 				virtual uint32_t getNuberOfColomn() {
 					return 1;
@@ -57,12 +57,12 @@ namespace ewol {
 				};
 				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
 					_myTextToWrite = "";
-					_bg = 0xFFFFFFFF;
-					_fg = 0x000000FF;
+					_bg = etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
+					_fg = etk::Color<>(0x00, 0x00, 0x00, 0xFF);
 					if (_raw % 2) {
-						_bg = 0xFFFFFFFF;
+						_bg = etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
 					} else {
-						_bg = 0x7F7F7FFF;
+						_bg = etk::Color<>(0x7F, 0x7F, 0x7F, 0xFF);
 					}
 					return false;
 				};

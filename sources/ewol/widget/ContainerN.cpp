@@ -209,8 +209,8 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 				m_subExpend.setY(true);
 			}
 			vec2 tmpSize = it->getCalculateMinSize();
-			m_minSize.setValue( etk_max(tmpSize.x(), m_minSize.x()),
-			                    etk_max(tmpSize.y(), m_minSize.y()) );
+			m_minSize.setValue( std::max(tmpSize.x(), m_minSize.x()),
+			                    std::max(tmpSize.y(), m_minSize.y()) );
 		}
 	}
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);

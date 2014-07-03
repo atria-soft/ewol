@@ -125,10 +125,10 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
 		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(etk_max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(etk_max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(etk_min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(etk_min(m_position.y(), m_sizeDisplayStart.y()));
+		m_sizeDisplayStop.setX(std::max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(std::max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(std::min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(std::min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 	// update position
@@ -143,10 +143,10 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	} else {
 		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(etk_max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(etk_max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(etk_min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(etk_min(m_position.y(), m_sizeDisplayStart.y()));
+		m_sizeDisplayStop.setX(std::max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(std::max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(std::min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(std::min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 }
@@ -821,11 +821,11 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::string& _text) {
 	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
+	m_sizeDisplayStop.setValue(std::max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           std::max(m_position.y(), m_sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(etk_min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
+	m_sizeDisplayStart.setValue(std::min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            std::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
 	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
@@ -852,11 +852,11 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::u32string& _text)
 	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
+	m_sizeDisplayStop.setValue(std::max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           std::max(m_position.y(), m_sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(etk_min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
+	m_sizeDisplayStart.setValue(std::min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            std::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
 	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);

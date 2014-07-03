@@ -373,7 +373,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				// SUPPR :
 				if (m_data.size() > 0 && m_displayCursorPos < (int64_t)m_data.size()) {
 					m_data.erase(m_displayCursorPos, 1);
-					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+					m_displayCursorPos = std::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if (_event.getChar() == 0x08) {
@@ -381,7 +381,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				if (m_data.size() > 0 && m_displayCursorPos != 0) {
 					m_data.erase(m_displayCursorPos-1, 1);
 					m_displayCursorPos--;
-					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+					m_displayCursorPos = std::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
@@ -421,7 +421,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				default:
 					return false;
 			}
-			m_displayCursorPos = etk_avg(0, m_displayCursorPos, (int64_t)m_data.size());
+			m_displayCursorPos = std::avg(0, m_displayCursorPos, (int32_t)m_data.size());
 			m_displayCursorPosSelection = m_displayCursorPos;
 			markToRedraw();
 			return true;
@@ -529,10 +529,10 @@ void ewol::widget::Entry::updateTextPosition() {
 		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
 		if (tmp1<10) {
 			// set the cursor on le left
-			m_displayStartPosition = etk_min(-pixelCursorPos+10, 0);
+			m_displayStartPosition = std::min(-pixelCursorPos+10, 0);
 		} else if (tmp1>tmpUserSize-10) {
 			// set the cursor of the Right
-			m_displayStartPosition = etk_min(-pixelCursorPos + tmpUserSize - 10, 0);
+			m_displayStartPosition = std::min(-pixelCursorPos + tmpUserSize - 10, 0);
 		}
 		// else : the cursor is inside the display
 		//m_displayStartPosition = -totalWidth + tmpUserSize;

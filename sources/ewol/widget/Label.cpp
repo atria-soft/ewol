@@ -58,8 +58,8 @@ void ewol::widget::Label::calculateMinMaxSize() {
 	vec3 minSize = m_text.calculateSizeDecorated(m_label);
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
 	
-	m_minSize.setX(etk_avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
-	m_minSize.setY(etk_avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
+	m_minSize.setX(std::avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
+	m_minSize.setY(std::avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
 }
 
@@ -88,8 +88,8 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	// to know the size of one line : 
 	vec3 minSize = m_text.calculateSize(char32_t('A'));
 	
-	//minSize.setX(etk_max(minSize.x(), m_minSize.x()));
-	//minSize.setY(etk_max(minSize.y(), m_minSize.y()));
+	//minSize.setX(std::max(minSize.x(), m_minSize.x()));
+	//minSize.setY(std::max(minSize.y(), m_minSize.y()));
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}

@@ -113,10 +113,10 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 			vec2 tmpSize = m_subWidget[iii].widget->getCalculateMinSize();
 			EWOL_DEBUG("     [" << iii << "] subWidgetMinSize=" << tmpSize);
 			// for all we get the max size :
-			m_uniformSizeRow = etk_max(tmpSize.y(), m_uniformSizeRow);
+			m_uniformSizeRow = std::max((int32_t)tmpSize.y(), m_uniformSizeRow);
 			// for the colomn size : We set the autamatic value in negative : 
 			if (m_sizeCol[m_subWidget[iii].col] <= 0) {
-				m_sizeCol[m_subWidget[iii].col] = etk_min(m_sizeCol[m_subWidget[iii].col], -tmpSize.x() );
+				m_sizeCol[m_subWidget[iii].col] = std::min(m_sizeCol[m_subWidget[iii].col], (int32_t)-tmpSize.x() );
 			}
 		}
 	}

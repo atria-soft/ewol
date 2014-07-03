@@ -124,7 +124,7 @@ void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _inp
 			}
 			uint8_t val = 255 - (unsigned char) outside[iii];
 			// TODO : Remove multiple size of the map ...
-			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,256));
+			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,255));
 		}
 	}
 }

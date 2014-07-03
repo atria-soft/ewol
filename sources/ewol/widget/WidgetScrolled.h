@@ -111,7 +111,7 @@ namespace ewol {
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 				 */
 				void setLimitScrolling(float _poucentageLimit) {
-					m_limitScrolling = etk_avg(0.1f, _poucentageLimit,0.9f);
+					m_limitScrolling = std::avg(0.1f, _poucentageLimit,0.9f);
 				};
 		};
 	};

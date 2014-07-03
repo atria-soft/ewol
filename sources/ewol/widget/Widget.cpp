@@ -322,15 +322,15 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if(    (_displayProp.m_origin.x() > m_origin.x())
 	    || (_displayProp.m_origin.x() + _displayProp.m_size.x() < m_size.x() + m_origin.x()) ) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
-		int32_t tmpOriginX = etk_max(_displayProp.m_origin.x(), m_origin.x());
+		int32_t tmpOriginX = std::max(_displayProp.m_origin.x(), m_origin.x());
 		int32_t tmppp1 = _displayProp.m_origin.x() + _displayProp.m_size.x();
 		int32_t tmppp2 = m_origin.x() + m_size.x();
-		int32_t tmpclipX = etk_min(tmppp1, tmppp2) - tmpOriginX;
+		int32_t tmpclipX = std::min(tmppp1, tmppp2) - tmpOriginX;
 		
-		int32_t tmpOriginY = etk_max(_displayProp.m_origin.y(), m_origin.y());
+		int32_t tmpOriginY = std::max(_displayProp.m_origin.y(), m_origin.y());
 		tmppp1 = _displayProp.m_origin.y() + _displayProp.m_size.y();
 		tmppp2 = m_origin.y() + m_size.y();
-		//int32_t tmpclipY = etk_min(tmppp1, tmppp2) - tmpOriginX;
+		//int32_t tmpclipY = std::min(tmppp1, tmppp2) - tmpOriginX;
 		
 		glViewport( tmpOriginX,
 		            tmpOriginY,
@@ -396,7 +396,7 @@ void ewol::Widget::setZoom(float _newVal) {
 	if (m_zoom == _newVal) {
 		return;
 	}
-	m_zoom = etk_avg(0.0000001,_newVal,1000000.0);
+	m_zoom = std::avg(0.0000001f,_newVal,1000000.0f);
 	markToRedraw();
 }
 
@@ -468,8 +468,8 @@ void ewol::Widget::setNoMinSize() {
 
 void ewol::Widget::checkMinSize() {
 	vec2 pixelSize = m_userMinSize.getPixel();
-	m_minSize.setX(etk_max(m_minSize.x(), pixelSize.x()));
-	m_minSize.setY(etk_max(m_minSize.y(), pixelSize.y()));
+	m_minSize.setX(std::max(m_minSize.x(), pixelSize.x()));
+	m_minSize.setY(std::max(m_minSize.y(), pixelSize.y()));
 }
 
 void ewol::Widget::setMaxSize(const ewol::Dimension& _size) {
@@ -497,8 +497,8 @@ void ewol::Widget::setNoMaxSize() {
 
 void ewol::Widget::checkMaxSize() {
 	vec2 pixelSize = m_userMaxSize.getPixel();
-	m_maxSize.setX(etk_min(m_maxSize.x(), pixelSize.x()));
-	m_maxSize.setY(etk_min(m_maxSize.y(), pixelSize.y()));
+	m_maxSize.setX(std::min(m_maxSize.x(), pixelSize.x()));
+	m_maxSize.setY(std::min(m_maxSize.y(), pixelSize.y()));
 }
 
 vec2 ewol::Widget::getSize() {

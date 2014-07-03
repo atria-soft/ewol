@@ -48,13 +48,13 @@ ewol::widget::Slider::~Slider() {
 
 void ewol::widget::Slider::calculateMinMaxSize() {
 	vec2 minTmp = m_userMinSize.getPixel();
-	m_minSize.setValue(etk_max(minTmp.x(), 40),
-	                   etk_max(minTmp.y(), dotRadius*2) );
+	m_minSize.setValue(std::max(minTmp.x(), 40.0f),
+	                   std::max(minTmp.y(), dotRadius*2.0f) );
 	markToRedraw();
 }
 
 void ewol::widget::Slider::setValue(int32_t _val) {
-	m_value = etk_max(etk_min(_val, m_max), m_min);
+	m_value = std::max(std::min(_val, m_max), m_min);
 	markToRedraw();
 }
 
@@ -64,13 +64,13 @@ int32_t ewol::widget::Slider::getValue() {
 
 void ewol::widget::Slider::setMin(int32_t _val) {
 	m_min = _val;
-	m_value = etk_max(etk_min(m_value, m_max), m_min);
+	m_value = std::max(std::min(m_value, m_max), m_min);
 	markToRedraw();
 }
 
 void ewol::widget::Slider::setMax(int32_t _val) {
 	m_max = _val;
-	m_value = etk_max(etk_min(m_value, m_max), m_min);
+	m_value = std::max(std::min(m_value, m_max), m_min);
 	markToRedraw();
 }
 
@@ -110,7 +110,7 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
 			int32_t oldValue = m_value;
 			m_value = m_min + (float)(relativePos.x() - dotRadius) / (float)(m_size.x()-2*dotRadius) * (float)(m_max-m_min);
-			m_value = etk_max(etk_min(m_value, m_max), m_min);
+			m_value = std::max(std::min(m_value, m_max), m_min);
 			if (oldValue != m_value) {
 				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
 				generateEventId(eventChange, std::to_string(m_value));

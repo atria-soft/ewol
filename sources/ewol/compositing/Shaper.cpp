@@ -260,7 +260,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 		float timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
-		m_stateTransition = etk_avg(0.0f, m_stateTransition, 1.0f);
+		m_stateTransition = std::avg(0.0f, m_stateTransition, 1.0f);
 		//EWOL_DEBUG("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
@@ -459,10 +459,10 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 		                           border.yTop()    - borderTmp.yTop(),
 		                           border.xRight()  - borderTmp.xRight(),
 		                           border.yButtom() + borderTmp.yButtom());
-		ewol::Padding inside(insideBorder.xLeft()   + etk_max(0.0f, paddingIn.xLeft()),
-		                     insideBorder.yTop()    - etk_max(0.0f, paddingIn.yTop()),
-		                     insideBorder.xRight()  - etk_max(0.0f, paddingIn.xRight()),
-		                     insideBorder.yButtom() + etk_max(0.0f, paddingIn.yButtom()));
+		ewol::Padding inside(insideBorder.xLeft()   + std::max(0.0f, paddingIn.xLeft()),
+		                     insideBorder.yTop()    - std::max(0.0f, paddingIn.yTop()),
+		                     insideBorder.xRight()  - std::max(0.0f, paddingIn.xRight()),
+		                     insideBorder.yButtom() + std::max(0.0f, paddingIn.yButtom()));
 		
 	#endif
 	/*

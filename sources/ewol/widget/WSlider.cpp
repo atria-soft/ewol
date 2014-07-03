@@ -210,7 +210,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 			}
 		}
 		m_slidingProgress += _event.getDeltaCall()/m_transitionSpeed;
-		m_slidingProgress = etk_avg(0.0f, m_slidingProgress, 1.0f);
+		m_slidingProgress = std::avg(0.0f, m_slidingProgress, 1.0f);
 	}
 	calculateSize(m_size);
 	markToRedraw();

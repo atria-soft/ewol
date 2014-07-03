@@ -185,7 +185,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 					
 					// get the maximum size of the colomn :
 					vec3 textSize = tmpText->calculateSize(myTextToWrite);
-					sizeColom = etk_max(sizeColom, textSize.x());
+					sizeColom = std::max(sizeColom, (int32_t)textSize.x());
 					
 					tmpText->setColor(fg);
 					tmpText->setPos(vec3(tmpOriginX + displayPositionX, displayPositionY, 0) );
