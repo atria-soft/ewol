@@ -275,9 +275,13 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			std::string colorValue = elem->getAttribute("color");
-			m_htmlDecoTmp.m_colorFg = colorValue;
+			if (colorValue.size() != 0) {
+				m_htmlDecoTmp.m_colorFg = colorValue;
+			}
 			colorValue = elem->getAttribute("colorBg");
-			m_htmlDecoTmp.m_colorBg = colorValue;
+			if (colorValue.size() != 0) {
+				m_htmlDecoTmp.m_colorBg = colorValue;
+			}
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
 		} else if(    compare_no_case(elem->getValue(), "b") == true
