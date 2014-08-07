@@ -33,12 +33,11 @@ static int32_t nextP2(int32_t _value) {
 }
 
 
-ewol::resource::Texture::Texture(const std::string& _filename) :
- ewol::Resource(_filename) {
-	addObjectType("ewol::resource::Texture");
-	m_loaded = false;
-	m_texId = 0;
-	m_endPointSize.setValue(1.0,1.0);
+void ewol::resource::Texture::init(const std::string& _filename) {
+	ewol::Resource::init(_filename);
+}
+void ewol::resource::Texture::init() {
+	ewol::Resource::init();
 }
 
 ewol::resource::Texture::Texture() {
@@ -99,22 +98,10 @@ void ewol::resource::Texture::removeContextToLate() {
 
 void ewol::resource::Texture::flush() {
 	// request to the manager to be call at the next update ...
-	getManager().update(this);
+	getManager().update(std::dynamic_pointer_cast<ewol::Resource>(shared_from_this()));
 }
 
 void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }
-
-ewol::object::Shared<ewol::resource::Texture> ewol::resource::Texture::keep() {
-	// this element create a new one every time ....
-	ewol::object::Shared<ewol::resource::Texture> object = ewol::object::makeShared(new ewol::resource::Texture());
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : ??TEX??");
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}
-

@@ -34,17 +34,7 @@ const char* const ewol::widget::Button::configShaper = "shaper";
 #define STATUS_PRESSED   (1)
 #define STATUS_DOWN      (3)
 
-
-static ewol::Widget* create() {
-	return new ewol::widget::Button();
-}
-
-void ewol::widget::Button::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__, &create);
-}
-
-ewol::widget::Button::Button(const std::string& _shaperName) :
-  m_shaper(_shaperName),
+ewol::widget::Button::Button() :
   m_value(false),
   m_lock(ewol::widget::Button::lockNone),
   m_toggleMode(false),
@@ -74,6 +64,11 @@ ewol::widget::Button::Button(const std::string& _shaperName) :
 	setCanHaveFocus(true);
 	// Limit event at 1:
 	setMouseLimit(1);
+}
+
+void ewol::widget::Button::init(const std::string& _shaperName) {
+	ewol::widget::Container2::init();
+	m_shaper.setSource(_shaperName);
 }
 
 

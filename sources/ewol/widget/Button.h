@@ -27,8 +27,6 @@ namespace ewol {
 		 */
 		class Button : public ewol::widget::Container2 {
 			public:
-				//! @not-in-doc
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;
 				static const char* const eventDown;
@@ -50,12 +48,15 @@ namespace ewol {
 				};
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
-				Button(const std::string& _shaperName="THEME:GUI:Button.json");
+				Button();
+				void init(const std::string& _shaperName="THEME:GUI:Button.json");
+			public:
+				DECLARE_WIDGET_FACTORY(Button, "Button");
 				/**
 				 * @brief Destructor
 				 */

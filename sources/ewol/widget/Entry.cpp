@@ -29,14 +29,6 @@ const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-sele
 #define STATUS_HOVER     (1)
 #define STATUS_SELECTED  (2)
 
-static ewol::Widget* create() {
-	return new ewol::widget::Entry();
-}
-
-void ewol::widget::Entry::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 const char * const ewol::widget::Entry::eventClick  = "click";
 const char * const ewol::widget::Entry::eventEnter  = "enter";
 const char * const ewol::widget::Entry::eventModify = "modify";
@@ -46,7 +38,7 @@ const char* const ewol::widget::Entry::configRegExp  = "regExp";
 const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
 const char* const ewol::widget::Entry::configValue = "value";
 
-ewol::widget::Entry::Entry(std::string _newData) :
+ewol::widget::Entry::Entry() :
   m_shaper("THEME:GUI:Entry.json"),
   m_data(""),
   m_maxCharacter(0x7FFFFFFF),
@@ -78,8 +70,13 @@ ewol::widget::Entry::Entry(std::string _newData) :
 	registerConfig(configEmptyMessage, "string", nullptr, "Text that is displayed when the Entry is empty (decorated text)");
 	registerConfig(configValue, "string", nullptr, "Value display in the entry (decorated text)");
 	
-	setValue(_newData);
 	markToRedraw();
+}
+
+
+void ewol::widget::Entry::init(const std::string& _newData) {
+	ewol::Widget::init();
+	setValue(_newData);
 }
 
 

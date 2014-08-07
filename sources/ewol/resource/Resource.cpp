@@ -13,21 +13,28 @@
 #include <ewol/ewol.h>
 #include <ewol/context/Context.h>
 
+void ewol::Resource::init() {
+	ewol::Object::init();
+}
+
+void ewol::Resource::init(const std::string& _name) {
+	ewol::Object::init(_name);
+}
 
 void ewol::Resource::updateContext() {
-	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << getRefCount() << " time(s)");
+	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << shared_from_this().use_count() << " time(s)");
 }
 
 void ewol::Resource::removeContext() {
-	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << getRefCount() << " time(s)");
+	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << shared_from_this().use_count() << " time(s)");
 }
 
 void ewol::Resource::removeContextToLate() {
-	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << getRefCount() << " time(s)");
+	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << shared_from_this().use_count() << " time(s)");
 }
 
 void ewol::Resource::reload() {
-	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << getRefCount() << " time(s)");
+	EWOL_DEBUG("Not set for : [" << getId() << "]" << getName() << " loaded " << shared_from_this().use_count() << " time(s)");
 }
 
 ewol::resource::Manager& ewol::Resource::getManager() {

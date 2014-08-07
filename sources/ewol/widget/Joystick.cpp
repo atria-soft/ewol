@@ -50,6 +50,10 @@ ewol::widget::Joystick::Joystick() {
 	setCanHaveFocus(true);
 }
 
+void ewol::widget::Joystick::init() {
+	ewol::Widget::init();
+}
+
 
 ewol::widget::Joystick::~Joystick() {
 	

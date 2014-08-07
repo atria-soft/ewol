@@ -22,8 +22,9 @@ namespace ewol {
 			protected:
 				vec2 m_realImageSize;
 			protected:
-				ImageDF(const std::string& _genName);
-				ImageDF(std::string _genName, const std::string& _fileName, const ivec2& _size);
+				ImageDF();
+				void init();
+				void init(std::string _genName, const std::string& _fileName, const ivec2& _size);
 			public:
 				virtual ~ImageDF() { };
 			protected:
@@ -45,7 +46,7 @@ namespace ewol {
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::object::Shared<ewol::resource::ImageDF> keep(const std::string& _filename, ivec2 _size=ivec2(-1,-1));
+				static std::shared_ptr<ewol::resource::ImageDF> create(const std::string& _filename, ivec2 _size=ivec2(-1,-1));
 		};
 	};
 };

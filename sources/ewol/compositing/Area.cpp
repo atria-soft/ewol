@@ -22,7 +22,7 @@ ewol::compositing::Area::Area(const ivec2& _size) :
   m_GLtexture(-1),
   m_GLtexID(-1),
   m_resource(nullptr) {
-	m_resource = ewol::resource::Texture::keep();
+	m_resource = ewol::resource::Texture::create();
 	m_resource->setImageSize(_size);
 	m_resource->flush();
 	loadProgram();
@@ -35,7 +35,7 @@ ewol::compositing::Area::~Area() {
 void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
+	m_GLprogram = ewol::resource::Program::create(std::string("DATA:textured3D.prog"));
 	if (nullptr != m_GLprogram) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");

@@ -34,21 +34,19 @@ namespace ewol {
 				static const char * const configDistanceField;
 				static const char * const configPartStart;
 				static const char * const configPartStop;
-			public:
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorId; //!< Color of the image.
 			public:
 				/**
 				 * @brief 
 				 */
-				Image(const std::string& _file="",
-				      const ewol::Dimension& _border=ewol::Dimension(vec2(0,0),ewol::Dimension::Millimeter));
+				Image();
+				void init(const std::string& _file="",
+				          const ewol::Dimension& _border=ewol::Dimension(vec2(0,0),ewol::Dimension::Millimeter));
+			public:
+				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**
 				 * @brief 
 				 */

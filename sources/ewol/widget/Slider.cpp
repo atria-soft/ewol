@@ -15,14 +15,6 @@ const char * const ewol::widget::Slider::eventChange = "change";
 #undef __class__
 #define __class__ "Slider"
 
-static ewol::Widget* create() {
-	return new ewol::widget::Slider();
-}
-
-void ewol::widget::Slider::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 const int32_t dotRadius = 6;
 
 ewol::widget::Slider::Slider() {
@@ -40,6 +32,10 @@ ewol::widget::Slider::Slider() {
 	setCanHaveFocus(true);
 	// Limit event at 1:
 	setMouseLimit(1);
+}
+
+void ewol::widget::Slider::init() {
+	ewol::Widget::init();
 }
 
 ewol::widget::Slider::~Slider() {

@@ -21,14 +21,12 @@ namespace ewol {
 		 */
 		class Composer : public ewol::widget::Container {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
-			public:
 				enum composerMode {
 					None,
 					String,
 					file
 				};
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 */
@@ -38,7 +36,9 @@ namespace ewol {
 				 * @param[in] _mode mode of parsing the string
 				 * @param[in] _data file/directString data to generate compositing of the widget..
 				 */
-				Composer(enum composerMode _mode, const std::string& _data);
+				void init(enum composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
+			public:
+				DECLARE_WIDGET_FACTORY(Composer, "Composer");
 				/**
 				 * @brief Destructor
 				 */
@@ -80,7 +80,7 @@ namespace ewol {
 				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 				 * @note : To used when NOT herited from this object.
 				 */
-				void registerOnEventNameWidget(const ewol::object::Shared<ewol::Object>& _destinationObject,
+				void registerOnEventNameWidget(const std::shared_ptr<ewol::Object>& _destinationObject,
 				                               const std::string& _subWidgetName,
 				                               const char * _eventId,
 				                               const char * _eventIdgenerated = nullptr,

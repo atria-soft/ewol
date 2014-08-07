@@ -31,14 +31,6 @@ const char* const ewol::widget::WSlider::configMode = "mode";
 const char* const ewol::widget::WSlider::configSpeed = "speed";
 const char* const ewol::widget::WSlider::configSelect = "select";
 
-static ewol::Widget* create() {
-	return new ewol::widget::WSlider();
-}
-
-void ewol::widget::WSlider::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 ewol::widget::WSlider::WSlider() :
   m_windowsSources(0),
   m_windowsDestination(0),
@@ -142,7 +134,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	}
 }
 
-void ewol::widget::WSlider::subWidgetSelectSet(const ewol::object::Shared<ewol::Widget>& _widgetPointer) {
+void ewol::widget::WSlider::subWidgetSelectSet(const std::shared_ptr<ewol::Widget>& _widgetPointer) {
 	if (_widgetPointer == nullptr) {
 		EWOL_ERROR("Can not change to a widget nullptr");
 		return;
@@ -336,7 +328,7 @@ bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _resul
 	return false;
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
+std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return nullptr;
 	}
@@ -350,7 +342,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -367,7 +359,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -383,7 +375,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}

@@ -84,7 +84,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
 	}
-	m_config = ewol::resource::ConfigFile::keep(m_name);
+	m_config = ewol::resource::ConfigFile::create(m_name);
 	if (nullptr != m_config) {
 		m_confIdMode = m_config->request("mode");
 		m_confIdDisplayOutside = m_config->request("display-outside");
@@ -118,7 +118,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		}
 		// get the shader resource :
 		m_GLPosition = 0;
-		m_GLprogram = ewol::resource::Program::keep(tmpFilename);
+		m_GLprogram = ewol::resource::Program::create(tmpFilename);
 		if (m_GLprogram != nullptr) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -144,7 +144,7 @@ void ewol::compositing::Shaper::loadProgram() {
 				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "'");
 			}
 			ivec2 size(64,64);
-			m_resourceTexture = ewol::resource::TextureFile::keep(tmpFilename, size);
+			m_resourceTexture = ewol::resource::TextureFile::create(tmpFilename, size);
 		}
 	}
 	std::string basicColorFile = m_config->getString(m_confColorFile);
@@ -158,7 +158,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		} else {
 			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "'");
 		}
-		m_colorProperty = ewol::resource::ColorFile::keep(tmpFilename);
+		m_colorProperty = ewol::resource::ColorFile::create(tmpFilename);
 		if (    m_GLprogram != nullptr
 		     && m_colorProperty != nullptr) {
 			std::vector<std::string> listColor = m_colorProperty->getColors();

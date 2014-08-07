@@ -21,7 +21,6 @@ namespace ewol {
 		 */
 		class WSlider :public ewol::widget::ContainerN {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;
@@ -35,8 +34,13 @@ namespace ewol {
 					sladingTransitionHori,
 					sladingTransition_count,
 				};
-			public:
+			protected:
 				WSlider();
+				void init() {
+					ewol::widget::ContainerN::init();
+				};
+			public:
+				DECLARE_WIDGET_FACTORY(WSlider, "WSlider");
 				virtual ~WSlider();
 			private:
 				int32_t m_windowsSources; //!< widget source viewed
@@ -59,7 +63,7 @@ namespace ewol {
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
 				 */
-				void subWidgetSelectSet(const ewol::object::Shared<ewol::Widget>& _widgetPointer);
+				void subWidgetSelectSet(const std::shared_ptr<ewol::Widget>& _widgetPointer);
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetName Name of the subwidget name
@@ -101,7 +105,7 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;

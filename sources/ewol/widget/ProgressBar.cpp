@@ -14,14 +14,6 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-static ewol::Widget* create() {
-	return new ewol::widget::ProgressBar();
-}
-
-void ewol::widget::ProgressBar::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 const char* const ewol::widget::ProgressBar::configColorBg = "color-bg";
 const char* const ewol::widget::ProgressBar::configColorFgOn = "color-on";
 const char* const ewol::widget::ProgressBar::configColorFgOff = "color-off";
@@ -45,6 +37,10 @@ ewol::widget::ProgressBar::ProgressBar() {
 	registerConfig(configColorFgOff, "color", nullptr, "Corlor of the false value");
 	registerConfig(configValue, "integer", nullptr, "Value of the progress bar");
 	
+}
+
+void ewol::widget::ProgressBar::init() {
+	ewol::Widget::init();
 }
 
 ewol::widget::ProgressBar::~ProgressBar() {

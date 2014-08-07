@@ -13,23 +13,19 @@
 #undef __class__
 #define __class__ "Layer"
 
-static ewol::Widget* create() {
-	return new ewol::widget::Layer();
-}
-
-void ewol::widget::Layer::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 ewol::widget::Layer::Layer() {
 	addObjectType("ewol::widget::Layer");
+}
+
+void ewol::widget::Layer::init() {
+	ewol::widget::ContainerN::init();
 }
 
 ewol::widget::Layer::~Layer() {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
+std::shared_ptr<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return nullptr;
 	}
@@ -43,7 +39,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec
 		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 		{
-			ewol::object::Shared<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
+			std::shared_ptr<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
 			if (nullptr != tmpWidget) {
 				return tmpWidget;
 			}

@@ -40,17 +40,20 @@ namespace ewol {
 		 * [/pre]
 		 */
 		class StdPopUp : public ewol::widget::PopUp {
-			public:
+			protected:
 				/**
 				 * @brief std-pop-up constructor.
 				 */
 				StdPopUp();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(StdPopUp, "StdPopUp");
 				/**
 				 * @brief std-pop-up destructor.
 				 */
 				virtual ~StdPopUp();
 			protected:
-				ewol::object::Shared<ewol::widget::Label> m_title; //!< Title Label widget
+				std::shared_ptr<ewol::widget::Label> m_title; //!< Title Label widget
 			public:
 				/**
 				 * @brief Set the title string.
@@ -58,7 +61,7 @@ namespace ewol {
 				 */
 				void setTitle(const std::string& _text);
 			protected:
-				ewol::object::Shared<ewol::widget::Label> m_comment; //!< Comment label widget
+				std::shared_ptr<ewol::widget::Label> m_comment; //!< Comment label widget
 			public:
 				/**
 				 * @brief Set the commentary string.
@@ -66,15 +69,15 @@ namespace ewol {
 				 */
 				void setComment(const std::string& _text);
 			protected:
-				ewol::object::Shared<ewol::widget::Sizer> m_subBar; //!< subwidget bar containing all the button.
+				std::shared_ptr<ewol::widget::Sizer> m_subBar; //!< subwidget bar containing all the button.
 			public:
 				/**
 				 * @brief Add a buttom button.
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
-				ewol::object::Shared<ewol::widget::Button> addButton(const std::string& _text, bool _autoExit=false);
+				std::shared_ptr<ewol::widget::Button> addButton(const std::string& _text, bool _autoExit=false);
 			public: // Derived function
-				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 		};
 	};

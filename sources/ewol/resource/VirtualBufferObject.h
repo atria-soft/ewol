@@ -34,8 +34,10 @@ namespace ewol {
 				 * @brief Constructor of this VBO.
 				 * @param[in] accesMode Acces mode : ???
 				 */
-				VirtualBufferObject(int32_t _number);
+				VirtualBufferObject();
+				void init(int32_t _number);
 			public:
+				DECLARE_RESOURCE_FACTORY(VirtualBufferObject);
 				/**
 				 * @brief Destructor of this VBO.
 				 */
@@ -93,14 +95,6 @@ namespace ewol {
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
 				void reload();
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @param[in] _number Number of VBO needed
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::VirtualBufferObject> keep(int32_t _number);
 		};
 	};
 };

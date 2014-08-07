@@ -23,10 +23,14 @@ namespace ewol {
 		 */
 		class Windows : public ewol::Widget {
 			protected:
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorBg; //!< Default background color of the windows
-			public:
+			protected:
 				Windows();
+				void init() {
+					ewol::Widget::init();
+				};
+			public:
 				virtual ~Windows();
 			// internal event at ewol system :
 			public:
@@ -57,11 +61,11 @@ namespace ewol {
 					m_hasDecoration = true;
 				}
 			private:
-				ewol::object::Owner<ewol::Widget> m_subWidget;
-				std::list<ewol::object::Owner<ewol::Widget>> m_popUpWidgetList;
+				std::shared_ptr<ewol::Widget> m_subWidget;
+				std::list<std::shared_ptr<ewol::Widget>> m_popUpWidgetList;
 			public:
-				void setSubWidget(ewol::object::Shared<ewol::Widget> _widget);
-				void popUpWidgetPush(ewol::object::Shared<ewol::Widget> _widget);
+				void setSubWidget(std::shared_ptr<ewol::Widget> _widget);
+				void popUpWidgetPush(std::shared_ptr<ewol::Widget> _widget);
 				void popUpWidgetPop();
 				size_t popUpCount() {
 					return m_popUpWidgetList.size();
@@ -85,9 +89,10 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
-				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
 				void setTitle(const std::string& _title);
 			public:
 				enum popUpMessageType {

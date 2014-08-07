@@ -14,19 +14,9 @@
 #undef __class__
 #define __class__ "Scroll"
 
-static ewol::Widget* create() {
-	return new ewol::widget::Scroll();
-}
-
-void ewol::widget::Scroll::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 const char* const ewol::widget::Scroll::configLimit = "limit";
 
-ewol::widget::Scroll::Scroll(const std::string& _shaperName) :
-  m_shaperH(_shaperName),
-  m_shaperV(_shaperName),
+ewol::widget::Scroll::Scroll() :
   m_limit(0.15,0.5),
   m_pixelScrolling(20),
   m_highSpeedStartPos(0,0),
@@ -36,6 +26,13 @@ ewol::widget::Scroll::Scroll(const std::string& _shaperName) :
 	addObjectType("ewol::widget::Scroll");
 	registerConfig(configLimit, "vec2", nullptr, "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end");
 }
+
+void ewol::widget::Scroll::init(const std::string& _shaperName) {
+	ewol::widget::Container::init();
+	m_shaperH.setSource(_shaperName);
+	m_shaperV.setSource(_shaperName);
+}
+
 
 ewol::widget::Scroll::~Scroll() {
 	
@@ -349,12 +346,12 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
-	ewol::object::Shared<ewol::Widget> tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
+std::shared_ptr<ewol::Widget> ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
+	std::shared_ptr<ewol::Widget> tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (nullptr != tmpWidget) {
 		return tmpWidget;
 	}
-	return this;
+	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());;
 }
 
 bool ewol::widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {

@@ -31,8 +31,11 @@ namespace ewol {
 				static const char* const configValue;
 			private:
 				ewol::compositing::Drawing m_draw; // basic drawing element
-			public:
+			protected:
 				ProgressBar();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ProgressBar, "ProgressBar");
 				virtual ~ProgressBar();
 				void setValue(float _val);
 				float getValue() const {

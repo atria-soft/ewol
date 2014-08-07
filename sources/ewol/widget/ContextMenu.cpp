@@ -21,18 +21,7 @@ const char* const ewol::widget::ContextMenu::configArrowPosition = "arrow-positi
 const char* const ewol::widget::ContextMenu::configArrowMode     = "arrow-mode";
 const char* const ewol::widget::ContextMenu::configShaper        = "shaper";
 
-static ewol::Widget* create() {
-	return new ewol::widget::ContextMenu();
-}
-
-void ewol::widget::ContextMenu::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__, &create);
-}
-
-
-
-ewol::widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
-  m_shaper(_shaperName) {
+ewol::widget::ContextMenu::ContextMenu() {
 	addObjectType("ewol::widget::ContextMenu");
 	// add basic configurations :
 	registerConfig(configArrowPosition, "vec2", nullptr, "position of the arrow");
@@ -51,6 +40,11 @@ ewol::widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
 	m_arrowPos.setValue(0,0);
 	m_arrawBorder = markTop;
 	setMouseLimit(1);
+}
+
+void ewol::widget::ContextMenu::init(const std::string& _shaperName) {
+	ewol::widget::Container::init();
+	m_shaper.setSource(_shaperName);
 }
 
 ewol::widget::ContextMenu::~ContextMenu() {
@@ -241,12 +235,12 @@ void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, vec
 	markToRedraw();
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
-	ewol::object::Shared<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
+std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
+	std::shared_ptr<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (nullptr != val) {
 		return val;
 	}
-	return this;
+	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
 

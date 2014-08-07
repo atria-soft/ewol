@@ -23,7 +23,7 @@ namespace ewol {
 	namespace compositing {
 		class TextDF : public ewol::compositing::TextBase {
 			protected:
-				ewol::object::Shared<ewol::resource::DistanceFieldFont> m_fontDF; //!< Font resources
+				std::shared_ptr<ewol::resource::DistanceFieldFont> m_fontDF; //!< Font resources
 				std::vector<float> m_glyphLevel; //!< Level of display of the glyph (notmal : 0.50, bold : 0.40, super bold : 0.30 ...)
 			protected:
 				int32_t m_GLglyphLevel; //!< openGL Id on the glyph level display

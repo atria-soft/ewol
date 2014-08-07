@@ -32,13 +32,15 @@ namespace ewol {
 					markNone
 				};
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configArrowPosition;
 				static const char* const configArrowMode;
 				static const char* const configShaper;
 			public:
-				ContextMenu(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
+				ContextMenu();
+				void init(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
+			public:
+				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
@@ -69,7 +71,7 @@ namespace ewol {
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 		};
 	};
 };

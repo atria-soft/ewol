@@ -21,8 +21,10 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class List : public ewol::widget::WidgetScrolled {
-			public:
+			protected:
 				List();
+				void init();
+			public:
 				virtual ~List();
 				virtual void calculateMinMaxSize();
 				void setLabel(std::string _newLabel);

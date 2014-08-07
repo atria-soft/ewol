@@ -15,14 +15,18 @@
 #undef __class__
 #define __class__ "resource::Shader"
 
-ewol::resource::Shader::Shader(const std::string& _filename) :
-  ewol::Resource(_filename),
+ewol::resource::Shader::Shader() :
+  ewol::Resource(),
   m_exist(false),
   m_fileData(nullptr),
   m_shader(0),
   m_type(0) {
 	addObjectType("ewol::Shader");
 	m_resourceLevel = 0;
+}
+
+void ewol::resource::Shader::init(const std::string& _filename) {
+	ewol::Resource::init(_filename);
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
 	
@@ -149,26 +153,3 @@ void ewol::resource::Shader::reload() {
 	updateContext();
 }
 
-ewol::object::Shared<ewol::resource::Shader> ewol::resource::Shader::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
-	ewol::object::Shared<ewol::resource::Shader> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::Shader>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// need to crate a new one ...
-	object = ewol::object::makeShared(new ewol::resource::Shader(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}

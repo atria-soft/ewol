@@ -15,17 +15,13 @@
 #undef __class__
 #define __class__	"ewol::widget::Composer"
 
-#include <ewol/widget/Manager.h>
-void ewol::widget::Composer::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator("Composer",[]() -> ewol::Widget* { return new ewol::widget::Composer(); });
-}
-
 ewol::widget::Composer::Composer() {
+	addObjectType("ewol::widget::Composer");
 	// nothing to do ...
 }
 
-ewol::widget::Composer::Composer(enum composerMode _mode, const std::string& _fileName) {
-	addObjectType("ewol::widget::Composer");
+void ewol::widget::Composer::init(enum composerMode _mode, const std::string& _fileName) {
+	ewol::widget::Container::init();
 	switch(_mode) {
 		case ewol::widget::Composer::None:
 			// nothing to do ...
@@ -98,16 +94,16 @@ void ewol::widget::Composer::registerOnEventNameWidget(const std::string& _subWi
                                                        const char * _eventId,
                                                        const char * _eventIdgenerated,
                                                        const std::string& _overloadData) {
-	registerOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
+	registerOnEventNameWidget(shared_from_this(), _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
 }
 
-void ewol::widget::Composer::registerOnEventNameWidget(const ewol::object::Shared<ewol::Object>& _destinationObject,
+void ewol::widget::Composer::registerOnEventNameWidget(const std::shared_ptr<ewol::Object>& _destinationObject,
                                                        const std::string& _subWidgetName,
                                                        const char * _eventId,
                                                        const char * _eventIdgenerated,
                                                        const std::string& _overloadData) {
-	ewol::object::Shared<ewol::Widget> tmpWidget = getWidgetNamed(_subWidgetName);
-	if (nullptr != tmpWidget) {
+	std::shared_ptr<ewol::Widget> tmpWidget = getWidgetNamed(_subWidgetName);
+	if (tmpWidget != nullptr) {
 		EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
 		tmpWidget->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
 	} else {

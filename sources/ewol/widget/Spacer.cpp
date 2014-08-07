@@ -16,14 +16,6 @@
 
 const char* const ewol::widget::Spacer::configColor = "color";
 
-static ewol::Widget* create() {
-	return new ewol::widget::Spacer();
-}
-
-void ewol::widget::Spacer::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 ewol::widget::Spacer::Spacer() {
 	addObjectType("ewol::widget::Spacer");
 	m_userMinSize = ewol::Dimension(vec2(10,10));
@@ -31,6 +23,10 @@ ewol::widget::Spacer::Spacer() {
 	m_color = etk::color::black;
 	m_color.setA(0);
 	registerConfig(configColor, "color", nullptr, "background of the spacer");
+}
+
+void ewol::widget::Spacer::init() {
+	ewol::Widget::init();
 }
 
 ewol::widget::Spacer::~Spacer() {

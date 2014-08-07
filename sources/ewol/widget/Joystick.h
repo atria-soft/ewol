@@ -45,8 +45,11 @@ namespace ewol {
 				std::string m_background;
 				std::string m_foreground;
 				float m_ratio;
-			public:
+			protected:
 				Joystick();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(Joystick, "Joystick");
 				virtual ~Joystick();
 			public:
 				void setLockMode(bool _lockWhenOut) {

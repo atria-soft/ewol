@@ -45,9 +45,11 @@ namespace ewol {
 				};
 			// Public API:
 			protected:
-				Texture(const std::string& _filename);
+				void init(const std::string& _filename);
+				void init();
 				Texture();
 			public:
+				DECLARE_RESOURCE_FACTORY(Texture);
 				virtual ~Texture();
 			public:
 				// you must set the size here, because it will be set in multiple of pow(2)
@@ -58,13 +60,6 @@ namespace ewol {
 				};
 				// flush the data to send it at the openGl system
 				void flush();
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::Texture> keep();
 		};
 	};
 };

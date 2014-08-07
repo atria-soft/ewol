@@ -23,16 +23,18 @@ namespace ewol {
 		 */
 		class Spacer : public ewol::Widget {
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configColor;
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
-			public:
+			protected:
 				/**
 				 * @brief Main constructer
 				 */
 				Spacer();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(Spacer, "Spacer");
 				/**
 				 * @brief Main destructer
 				 */
@@ -44,9 +46,12 @@ namespace ewol {
 				 * @brief Spziby the background color (basicly transparent)
 				 * @param[in] newColor the display background color
 				 */
-				void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
+				void setColor(etk::Color<> _newColor) {
+					m_color = _newColor;
+					markToRedraw();
+				};
 			public: // Derived function
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return nullptr; };
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return nullptr; };
 				virtual void onRegenerateDisplay();
 				virtual void onDraw();
 				virtual bool onSetConfig(const ewol::object::Config& _conf);

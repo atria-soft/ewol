@@ -20,22 +20,20 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Layer : public ewol::widget::ContainerN {
-			public:
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 */
 				Layer();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(Layer, "Layer");
 				/**
 				 * @brief Desstructor
 				 */
 				virtual ~Layer();
 			public: // Derived function
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 		};
 	};
 };

@@ -48,7 +48,10 @@ ewol::widget::FileChooser::FileChooser() {
 	addObjectType("ewol::widget::FileChooser");
 	addEventId(eventCancel);
 	addEventId(eventValidate);
-	
+}
+
+void ewol::widget::FileChooser::init() {
+	ewol::widget::Composer::init();
 	m_folder = etk::getUserHomeFolder();
 	m_file = "";
 	std::string myDescription = std::string("")

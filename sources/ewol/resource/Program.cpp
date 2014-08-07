@@ -19,14 +19,18 @@
 #undef __class__
 #define __class__ "resource::Program"
 
-ewol::resource::Program::Program(const std::string& _filename) :
-  ewol::Resource(_filename),
+ewol::resource::Program::Program() :
+  ewol::Resource(),
   m_exist(false),
   m_program(0),
   m_hasTexture(false),
   m_hasTexture1(false) {
 	addObjectType("ewol::resource::Program");
 	m_resourceLevel = 1;
+}
+
+void ewol::resource::Program::init(const std::string& _filename) {
+	ewol::Resource::init(_filename);
 	EWOL_DEBUG("OGL : load PROGRAM '" << m_name << "'");
 	// load data from file "all the time ..."
 	
@@ -36,7 +40,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 		std::string tmpFilename = m_name;
 		// remove extention ...
 		tmpFilename.erase(tmpFilename.size()-4, 4);
-		ewol::object::Shared<ewol::resource::Shader> tmpShader = ewol::resource::Shader::keep(tmpFilename+"vert");
+		std::shared_ptr<ewol::resource::Shader> tmpShader = ewol::resource::Shader::create(tmpFilename+"vert");
 		if (nullptr == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
@@ -44,7 +48,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "vert");
 			m_shaderList.push_back(tmpShader);
 		}
-		tmpShader = ewol::resource::Shader::keep(tmpFilename+"frag");
+		tmpShader = ewol::resource::Shader::create(tmpFilename+"frag");
 		if (nullptr == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
@@ -80,7 +84,7 @@ ewol::resource::Program::Program(const std::string& _filename) :
 			}
 			// get it with relative position :
 			std::string tmpFilename = file.getRelativeFolder() + tmpData;
-			ewol::object::Shared<ewol::resource::Shader> tmpShader = ewol::resource::Shader::keep(tmpFilename);
+			std::shared_ptr<ewol::resource::Shader> tmpShader = ewol::resource::Shader::create(tmpFilename);
 			if (nullptr == tmpShader) {
 				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			} else {
@@ -327,7 +331,7 @@ void ewol::resource::Program::sendAttribute(int32_t _idElem,
 
 void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
                                                    int32_t _nbElement,
-                                                   const ewol::object::Shared<ewol::resource::VirtualBufferObject>& _vbo,
+                                                   const std::shared_ptr<ewol::resource::VirtualBufferObject>& _vbo,
                                                    int32_t _index,
                                                    int32_t _jumpBetweenSample,
                                                    int32_t _offset) {
@@ -769,28 +773,3 @@ void ewol::resource::Program::unUse() {
 	//checkGlError("glUseProgram", __LINE__);
 }
 
-
-
-ewol::object::Shared<ewol::resource::Program> ewol::resource::Program::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : Program : file : \"" << _filename << "\"");
-	ewol::object::Shared<ewol::resource::Program> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::Program>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// need to crate a new one ...
-	object = ewol::object::makeShared(new ewol::resource::Program(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}

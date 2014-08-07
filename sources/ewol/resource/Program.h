@@ -50,7 +50,7 @@ namespace ewol {
 			private :
 				bool m_exist; //!< the file existed
 				GLuint m_program; //!< openGL id of the current program
-				std::vector<ewol::object::Shared<ewol::resource::Shader>> m_shaderList; //!< List of all the shader loaded
+				std::vector<std::shared_ptr<ewol::resource::Shader>> m_shaderList; //!< List of all the shader loaded
 				std::vector<ewol::resource::progAttributeElement> m_elementList; //!< List of all the attribute requested by the user
 				bool m_hasTexture; //!< A texture has been set to the current shader
 				bool m_hasTexture1; //!< A texture has been set to the current shader
@@ -59,8 +59,10 @@ namespace ewol {
 				 * @brief Contructor of an opengl Program.
 				 * @param[in] filename Standard file name format. see @ref etk::FSNode
 				 */
-				Program(const std::string& filename);
+				Program();
+				void init(const std::string& _filename);
 			public:
+				DECLARE_RESOURCE_NAMED_FACTORY(Program);
 				/**
 				 * @brief Destructor, remove the current Program.
 				 */
@@ -86,7 +88,7 @@ namespace ewol {
 				                   int32_t _jumpBetweenSample=0);
 				void sendAttributePointer(int32_t _idElem,
 				                          int32_t _nbElement,
-				                          const ewol::object::Shared<ewol::resource::VirtualBufferObject>& _vbo,
+				                          const std::shared_ptr<ewol::resource::VirtualBufferObject>& _vbo,
 				                          int32_t _index,
 				                          int32_t _jumpBetweenSample=0,
 				                          int32_t _offset=0);
@@ -293,14 +295,6 @@ namespace ewol {
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
 				void reload();
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @param[in] _filename Name of the openGL program.
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::Program> keep(const std::string& _filename);
 		};
 	};
 };

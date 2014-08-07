@@ -42,9 +42,12 @@ std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::font::mode _obj) {
 #undef __class__
 #define __class__ "resource::TexturedFont"
 
-ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
-  ewol::resource::Texture(_fontName) {
+ewol::resource::TexturedFont::TexturedFont() {
 	addObjectType("ewol::resource::TexturedFont");
+}
+
+void ewol::resource::TexturedFont::init(const std::string& _fontName) {
+	ewol::resource::Texture::init(_fontName);
 	EWOL_DEBUG("Load font : '" << _fontName << "'" );
 
 	m_font[0] = nullptr;
@@ -192,7 +195,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 			continue;
 		}
 		EWOL_INFO("Load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size);
-		m_font[iiiFontId] = ewol::resource::FontFreeType::keep(m_fileName[iiiFontId]);
+		m_font[iiiFontId] = ewol::resource::FontFreeType::create(m_fileName[iiiFontId]);
 		if (m_font[iiiFontId] == nullptr) {
 			EWOL_DEBUG("error in loading FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size );
 		}
@@ -341,27 +344,3 @@ ewol::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_
 	return &((m_listElement[_displayMode])[index]);
 }
 
-ewol::object::Shared<ewol::resource::TexturedFont> ewol::resource::TexturedFont::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : TexturedFont : file : '" << _filename << "'");
-	ewol::object::Shared<ewol::resource::TexturedFont> object;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::TexturedFont>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// need to crate a new one ...
-	EWOL_INFO("CREATE: TexturedFont : file : '" << _filename << "'");
-	object = ewol::object::makeShared(new ewol::resource::TexturedFont(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}

@@ -43,8 +43,11 @@ namespace ewol {
 			private:
 				int32_t m_idSelected;
 				std::vector<ewol::widget::elementPL *> m_list;
-			public:
+			protected:
 				ParameterList();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ParameterList, "ParameterList");
 				virtual ~ParameterList();
 				void setLabel(std::string _newLabel);
 			// drawing capabilities ....

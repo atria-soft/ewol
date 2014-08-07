@@ -14,25 +14,19 @@
 #undef __class__
 #define __class__ "Gird"
 
-
-static ewol::Widget* create() {
-	return new ewol::widget::Gird();
-}
-
-void ewol::widget::Gird::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
-
-ewol::widget::Gird::Gird(int32_t _colNumber) :
+ewol::widget::Gird::Gird() :
   m_sizeRow(0),
   m_tmpWidget(nullptr),
   m_gavityButtom(true),
   m_borderSize(0,0) {
 	addObjectType("ewol::widget::Gird");
-	setColNumber(_colNumber);
 	requestUpdateSize();
 }
+void ewol::widget::Gird::init(int32_t _colNumber) {
+	ewol::Widget::init();
+	setColNumber(_colNumber);
+}
+
 
 ewol::widget::Gird::~Gird() {
 	EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "} Gird : destroy");
@@ -216,7 +210,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 }
 
 
-void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, std::shared_ptr<ewol::Widget> _newWidget) {
 	if (nullptr == _newWidget) {
 		return;
 	}
@@ -258,7 +252,7 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::obje
 	m_subWidget.push_back(prop);
 }
 
-void ewol::widget::Gird::subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Gird::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii].widget) {
 			m_subWidget.erase(m_subWidget.begin()+iii);
@@ -285,7 +279,7 @@ void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 	EWOL_WARNING("[" << getId() << "] Can not remove unExistant widget");
 }
 
-void ewol::widget::Gird::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Gird::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
 	if (nullptr == _newWidget) {
 		return;
 	}
@@ -330,7 +324,7 @@ void ewol::widget::Gird::onRegenerateDisplay() {
 	}
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
+std::shared_ptr<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return nullptr;
 	}
@@ -342,7 +336,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = m_subWidget[iii].widget->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = m_subWidget[iii].widget->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -354,7 +348,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2
 	return nullptr;
 }
 
-void ewol::widget::Gird::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
+void ewol::widget::Gird::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

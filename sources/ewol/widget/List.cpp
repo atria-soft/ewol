@@ -28,6 +28,10 @@ ewol::widget::List::List() {
 	setCanHaveFocus(true);
 }
 
+void ewol::widget::List::init() {
+	ewol::widget::WidgetScrolled::init();
+}
+
 ewol::widget::List::~List() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
@@ -235,7 +239,7 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), 0, rawID, _event.getPos().x(), _event.getPos().y());
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
-		//ewol::object::Shared<ewol::Widget>Manager::focusKeep(this);
+		//std::shared_ptr<ewol::Widget>Manager::focusKeep(this);
 	}
 	return isUsed;
 }

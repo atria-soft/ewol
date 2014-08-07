@@ -19,9 +19,13 @@
 #define __class__	"resource::ConfigFile"
 
 
-ewol::resource::ConfigFile::ConfigFile(const std::string& _filename) :
-  ewol::Resource(_filename) {
+ewol::resource::ConfigFile::ConfigFile() :
+  ewol::Resource() {
 	addObjectType("ewol::ConfigFile");
+}
+
+void ewol::resource::ConfigFile::init(const std::string& _filename) {
+	ewol::Resource::init(_filename);
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
 }
@@ -103,30 +107,3 @@ bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
 	}
 	return tmp->get();
 }
-
-ewol::object::Shared<ewol::resource::ConfigFile> ewol::resource::ConfigFile::keep(const std::string& _filename) {
-	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
-	ewol::object::Shared<ewol::resource::ConfigFile> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::ConfigFile>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// this element create a new one every time ....
-	object = ewol::object::makeShared(new ewol::resource::ConfigFile(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : '" << _filename << "'");
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}
-
-
-

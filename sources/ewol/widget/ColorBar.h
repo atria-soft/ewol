@@ -22,8 +22,11 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventChange;
-			public:
+			protected:
 				ColorBar();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ColorBar, "ColorBar");
 				virtual ~ColorBar();
 				etk::Color<> getCurrentColor();
 				void setCurrentColor(etk::Color<> _newOne);

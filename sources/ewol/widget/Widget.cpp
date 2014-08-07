@@ -105,7 +105,6 @@ const char* const ewol::Widget::eventAnnimationRatio = "annimation-ratio";
 const char* const ewol::Widget::eventAnnimationStop = "annimation-stop";
 
 ewol::Widget::Widget() :
-  m_up(nullptr),
   m_size(10,10),
   m_minSize(0,0),
   m_maxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)),
@@ -151,32 +150,17 @@ ewol::Widget::Widget() :
 	addEventId(eventAnnimationStop);
 }
 
+void ewol::Widget::init() {
+	ewol::Object::init();
+}
+
+void ewol::Widget::init(const std::string& _name) {
+	ewol::Object::init(_name);
+}
 
 ewol::Widget::~Widget() {
 	// clean all the short-cut ...
 	shortCutClean();
-}
-
-void ewol::Widget::setUpperWidget(ewol::object::Shared<ewol::Widget> _upper) {
-	if (_upper == nullptr) {
-		EWOL_VERBOSE("[" << getId() << "] remove upper widget");
-		//just remove father :
-		m_up.reset();
-		return;
-	}
-	if (m_up != nullptr) {
-		EWOL_WARNING("[" << getId() << "] Replace upper widget of this one ...");
-	}
-	m_up = _upper;
-}
-
-void ewol::Widget::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
-	EWOL_VERBOSE("[" << getId() << "] onObjectRemove(" << _object->getId() << ")");
-	ewol::Object::onObjectRemove(_object);
-	if (_object == m_up) {
-		EWOL_WARNING("[" << getId() << "] remove upper widget before removing this widget ...");
-		m_up = nullptr;
-	}
 }
 
 void ewol::Widget::hide() {
@@ -235,7 +219,7 @@ void ewol::Widget::setCanHaveFocus(bool _canFocusState) {
 }
 
 void ewol::Widget::keepFocus() {
-	getWidgetManager().focusKeep(this);
+	getWidgetManager().focusKeep(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
 }
 
 void ewol::Widget::setOffset(const vec2& _newVal) {
@@ -371,14 +355,14 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 void ewol::Widget::periodicCallDisable() {
 	m_periodicCallDeltaTime=0;
 	m_periodicCallTime=-1;
-	getWidgetManager().periodicCallRm(this);
+	getWidgetManager().periodicCallRm(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
 }
 
 void ewol::Widget::periodicCallEnable(float _callInSecond) {
 	if (_callInSecond < 0) {
 		periodicCallDisable();
 	} else {
-		getWidgetManager().periodicCallAdd(this);
+		getWidgetManager().periodicCallAdd(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
 		m_periodicCallDeltaTime = _callInSecond*1000000.0;
 		m_periodicCallTime = ewol::getTime();
 	}
@@ -672,7 +656,7 @@ bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
 						sendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					}
 					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
-					ewol::object::Message tmpMsg(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					ewol::object::Message tmpMsg(shared_from_this(), m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					onReceiveMessage(tmpMsg);
 				} // no else
 				return true;
@@ -685,7 +669,7 @@ bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
 
 void ewol::Widget::grabCursor() {
 	if (false == m_grabCursor) {
-		getContext().inputEventGrabPointer(this);
+		getContext().inputEventGrabPointer(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
 		m_grabCursor = true;
 	}
 }
@@ -718,17 +702,18 @@ bool ewol::Widget::loadXML(exml::Element* _node) {
 	return true;
 }
 
-ewol::object::Shared<ewol::Widget> ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
+std::shared_ptr<ewol::Widget> ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} compare : " << getName() << " == " << _widgetName );
 	if (getName() == _widgetName) {
-		return this;
+		return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 	}
 	return nullptr;
 }
 
 bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
-	if (nullptr != m_up) {
-		if (true == m_up->systemEventEntry(_event)) {
+	std::shared_ptr<ewol::Widget> up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
+	if (up != nullptr) {
+		if (up->systemEventEntry(_event) == true) {
 			return true;
 		}
 	}
@@ -736,8 +721,9 @@ bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 }
 
 bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
-	if (nullptr != m_up) {
-		if (true == m_up->systemEventInput(_event)) {
+	std::shared_ptr<ewol::Widget> up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
+	if (up != nullptr) {
+		if (up->systemEventInput(_event) == true) {
 			return true;
 		}
 	}
@@ -873,7 +859,7 @@ ewol::widget::Manager& ewol::Widget::getWidgetManager() {
 	return getContext().getWidgetManager();
 }
 
-ewol::object::Shared<ewol::widget::Windows> ewol::Widget::getWindows() {
+std::shared_ptr<ewol::widget::Windows> ewol::Widget::getWindows() {
 	return getContext().getWindows();
 }
 

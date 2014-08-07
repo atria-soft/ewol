@@ -15,14 +15,6 @@
 #undef __class__
 #define __class__ "ListFileSystem"
 
-static ewol::Widget* create() {
-	return new ewol::widget::ListFileSystem();
-}
-
-void ewol::widget::ListFileSystem::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__, &create);
-}
-
 const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";
 const char * const ewol::widget::ListFileSystem::eventFileValidate   = "file-validate";
 const char * const ewol::widget::ListFileSystem::eventFolderSelect   = "folder-select";
@@ -46,7 +38,7 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	#if defined(__TARGET_OS__Windows)
 		m_folder = "c:/";
 	#endif
-	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:ListFileSystem.json");
+	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:ListFileSystem.json");
 	if (m_colorProperty != nullptr) {
 		m_colorIdText = m_colorProperty->request("text");
 		m_colorIdBackground1 = m_colorProperty->request("background1");
@@ -67,6 +59,11 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	
 	setMouseLimit(1);
 };
+
+void ewol::widget::ListFileSystem::init() {
+	ewol::widget::List::init();
+};
+
 
 ewol::widget::ListFileSystem::~ListFileSystem() {
 	clearList();

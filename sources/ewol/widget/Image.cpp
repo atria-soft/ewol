@@ -16,15 +16,6 @@
 #undef __class__
 #define __class__ "Image"
 
-static ewol::Widget* create() {
-	return new ewol::widget::Image();
-}
-
-void ewol::widget::Image::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
-
 const char * const ewol::widget::Image::eventPressed = "pressed";
 
 const char * const ewol::widget::Image::configRatio = "ratio";
@@ -35,7 +26,7 @@ const char * const ewol::widget::Image::configDistanceField = "distance-field";
 const char * const ewol::widget::Image::configPartStart = "part-start";
 const char * const ewol::widget::Image::configPartStop = "part-stop";
 
-ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
+ewol::widget::Image::Image() :
   m_colorProperty(nullptr),
   m_colorId(-1),
   m_imageSize(vec2(0.0f,0.0f)),
@@ -51,12 +42,17 @@ ewol::widget::Image::Image(const std::string& _file, const ewol::Dimension& _bor
 	registerConfig(configDistanceField, "bool", "Distance field mode");
 	registerConfig(configPartStart, "vec2", nullptr, "Start display position in the image [0.0 .. 1.0]");
 	registerConfig(configPartStop,  "vec2", nullptr, "Stop display position in the image [0.0 .. 1.0]");
-	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Image.json");
+	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Image.json");
 	if (m_colorProperty != nullptr) {
 		m_colorId = m_colorProperty->request("foreground");
 	}
+}
+
+void ewol::widget::Image::init(const std::string& _file, const ewol::Dimension& _border) {
+	ewol::Widget::init();
 	set(_file, _border);
 }
+
 
 ewol::widget::Image::~Image() {
 	

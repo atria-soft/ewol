@@ -34,6 +34,12 @@ namespace ewol {
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
+#define DECLARE_WIDGET_FACTORY(className, name) \
+	DECLARE_FACTORY(className); \
+	static void createManagerWidget(ewol::widget::Manager& _widgetManager) { \
+		_widgetManager.addWidgetCreator(name,[]() -> std::shared_ptr<ewol::Widget> { return className::create(); }); \
+	}
+
 namespace ewol {
 	/**
 	 * @not-in-doc
@@ -126,40 +132,20 @@ namespace ewol {
 			static const char* const configMinSize;
 			static const char* const configMaxSize;
 			static const char* const configGravity;
-		public:
+		protected:
 			/**
 			 * @brief Constructor of the widget classes
 			 * @return (no execption generated (not managed in embended platform))
 			 */
 			Widget();
+			
+			void init();
+			void init(const std::string& _name);
+		public:
 			/**
 			 * @brief Destructor of the widget classes
 			 */
 			virtual ~Widget();
-		// ----------------------------------------------------------------------------------------------------------------
-		// -- Hierarchy management:
-		// ----------------------------------------------------------------------------------------------------------------
-		protected:
-			ewol::object::Shared<ewol::Widget> m_up; //!< uppper widget in the tree of widget
-		public:
-			/**
-			 * @brief set the upper widget of this widget.
-			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with nullptr.
-			 */
-			void setUpperWidget(ewol::object::Shared<ewol::Widget> _upper);
-			/**
-			 * @brief remove the upper widget of this widget.
-			 */
-			void removeUpperWidget() {
-				setUpperWidget(nullptr);
-			};
-			/**
-			 * @brief get the upper widget (father).
-			 * @ return the requested widget (if nullptr , 2 case : root widget or error implementation).
-			 */
-			ewol::object::Shared<ewol::Widget> getUpperWidget() {
-				return m_up;
-			};
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget size:
 		// ----------------------------------------------------------------------------------------------------------------
@@ -532,9 +518,9 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
+			virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
 				if (false == isHide()) {
-					return this;
+					return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 				}
 				return nullptr;
 			};
@@ -543,7 +529,7 @@ namespace ewol {
 			 * @param[in] _widgetName name of the widget
 			 * @return the requested pointer on the node (or nullptr pointer)
 			 */
-			virtual ewol::object::Shared<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
+			virtual std::shared_ptr<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:
@@ -699,7 +685,7 @@ namespace ewol {
 			 */
 			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
-			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
+			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {};
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
 			virtual bool onSetConfig(const ewol::object::Config& _conf);
@@ -716,7 +702,7 @@ namespace ewol {
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::object::Shared<ewol::widget::Windows> getWindows();
+			std::shared_ptr<ewol::widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */
@@ -791,5 +777,6 @@ namespace ewol {
 	};
 };
 
+#include <ewol/widget/Manager.h>
 
 #endif

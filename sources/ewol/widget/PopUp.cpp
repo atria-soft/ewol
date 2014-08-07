@@ -22,16 +22,7 @@ const char* const ewol::widget::PopUp::configLockExpand="lock";
 
 static const char* annimationIncrease = "increase";
 
-static ewol::Widget* create() {
-	return new ewol::widget::PopUp();
-}
-
-void ewol::widget::PopUp::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
-ewol::widget::PopUp::PopUp(const std::string& _shaperName) :
-  m_shaper(_shaperName),
+ewol::widget::PopUp::PopUp() :
   m_lockExpand(true,true),
   m_closeOutEvent(false) {
 	addObjectType("ewol::widget::PopUp");
@@ -46,6 +37,10 @@ ewol::widget::PopUp::PopUp(const std::string& _shaperName) :
 	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
 }
 
+void ewol::widget::PopUp::init(const std::string& _shaperName) {
+	ewol::widget::Container::init();
+	m_shaper.setSource(_shaperName);
+}
 ewol::widget::PopUp::~PopUp() {
 	
 }
@@ -147,12 +142,12 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 	}
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
-	ewol::object::Shared<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
+std::shared_ptr<ewol::Widget> ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
+	std::shared_ptr<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (nullptr != val) {
 		return val;
 	}
-	return this;
+	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
 bool ewol::widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {

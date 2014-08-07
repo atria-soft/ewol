@@ -24,10 +24,11 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventChange;
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
-			public:
+			protected:
 				Slider();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				virtual ~Slider();
 				void setValue(int32_t _val);
 				int32_t getValue();

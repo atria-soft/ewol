@@ -42,8 +42,6 @@ namespace ewol {
 				static const char* const configRegExp;
 				static const char* const configEmptyMessage;
 				static const char* const configValue;
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
@@ -56,7 +54,10 @@ namespace ewol {
 				 * @brief Contuctor
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
-				Entry(std::string _newData = "");
+				Entry();
+				void init(const std::string& _newData = "");
+			public:
+				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**
 				 * @brief Destuctor
 				 */

@@ -22,17 +22,17 @@ namespace ewol {
 		 */
 		class InputPoperty {
 			public:
-				bool                 isUsed;
-				int32_t              destinationInputId;
-				int64_t              lastTimeEvent;
-				ewol::object::Shared<ewol::Widget> curentWidgetEvent;
-				vec2                 origin;
-				vec2                 size;
-				vec2                 downStart;
-				vec2                 posEvent;
-				bool                 isDown;
-				bool                 isInside;
-				int32_t              nbClickEvent; // 0 .. 1 .. 2 .. 3
+				bool isUsed;
+				int32_t destinationInputId;
+				int64_t lastTimeEvent;
+				std::weak_ptr<ewol::Widget> curentWidgetEvent;
+				vec2 origin;
+				vec2 size;
+				vec2 downStart;
+				vec2 posEvent;
+				bool isDown;
+				bool isInside;
+				int32_t nbClickEvent; // 0 .. 1 .. 2 .. 3
 		};
 		
 		/**
@@ -48,7 +48,7 @@ namespace ewol {
 		class InputManager{
 			// special grab pointer mode : 
 			private:
-				ewol::object::Shared<ewol::Widget> m_grabWidget; //!< widget that grab the curent pointer.
+				std::weak_ptr<ewol::Widget> m_grabWidget; //!< widget that grab the curent pointer.
 			private:
 				int32_t m_dpi;
 				InputLimit m_eventInputLimit;
@@ -68,7 +68,7 @@ namespace ewol {
 				 * @return true if event has been greped
 				 */
 				bool localEventInput(enum ewol::key::type _type,
-				                     ewol::object::Shared<ewol::Widget> _destWidget,
+				                     std::shared_ptr<ewol::Widget> _destWidget,
 				                     int32_t _IdInput,
 				                     enum ewol::key::status _typeEvent,
 				                     vec2 _pos);
@@ -82,7 +82,7 @@ namespace ewol {
 				 * @return the ewol input id
 				 */
 				int32_t localGetDestinationId(enum ewol::key::type _type,
-				                              ewol::object::Shared<ewol::Widget> _destWidget,
+				                              std::shared_ptr<ewol::Widget> _destWidget,
 				                              int32_t _realInputId);
 			private:
 				ewol::Context& m_context;
@@ -95,7 +95,7 @@ namespace ewol {
 				void motion(enum ewol::key::type _type, int _pointerID, vec2 _pos );
 				void state(enum ewol::key::type _type, int _pointerID, bool _isDown, vec2 _pos);
 				
-				void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
+				void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
 			public:
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
@@ -106,12 +106,12 @@ namespace ewol {
 				 * @param _source the widget where the event came from
 				 * @param _destination the widget where the event mitgh be generated now
 				 */
-				void transfertEvent(ewol::object::Shared<ewol::Widget> _source, ewol::object::Shared<ewol::Widget> _destination);
+				void transfertEvent(std::shared_ptr<ewol::Widget> _source, std::shared_ptr<ewol::Widget> _destination);
 				/**
 				 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 				 * @param[in] _widget The widget that lock the pointer events
 				 */
-				void grabPointer(ewol::object::Shared<ewol::Widget> _widget);
+				void grabPointer(std::shared_ptr<ewol::Widget> _widget);
 				/**
 				 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 				 */

@@ -18,16 +18,17 @@
 #undef __class__
 #define __class__ "resource::TextureFile"
 
-ewol::resource::ImageDF::ImageDF(const std::string& _genName) :
-  Texture(_genName) {
-	EWOL_DEBUG("create a new resource::ImageDF : _genName=" << _genName << " _tmpfileName=--- size=---");
-	
+ewol::resource::ImageDF::ImageDF() {
+	addObjectType("ewol::resource::ImageDF");
 }
 
 
-ewol::resource::ImageDF::ImageDF(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
-  ewol::resource::Texture(_genName) {
-	addObjectType("ewol::resource::ImageDF");
+void ewol::resource::ImageDF::init() {
+	ewol::resource::Texture::init();
+}
+
+void ewol::resource::ImageDF::init(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) {
+	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
@@ -151,14 +152,15 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ewol::object::Shared<ewol::resource::ImageDF> ewol::resource::ImageDF::keep(const std::string& _filename, ivec2 _size) {
+std::shared_ptr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const std::string& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
-		ewol::object::Shared<ewol::resource::ImageDF> object = ewol::object::makeShared(new ewol::resource::ImageDF(""));
+		std::shared_ptr<ewol::resource::ImageDF> object(new ewol::resource::ImageDF());
 		if (nullptr == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
 		}
+		object->init();
 		getManager().localAdd(object);
 		return object;
 	}
@@ -190,10 +192,10 @@ ewol::object::Shared<ewol::resource::ImageDF> ewol::resource::ImageDF::keep(cons
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::object::Shared<ewol::resource::ImageDF> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
+	std::shared_ptr<ewol::resource::ImageDF> object = nullptr;
+	std::shared_ptr<ewol::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
 	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::ImageDF>(object2);
+		object = std::dynamic_pointer_cast<ewol::resource::ImageDF>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -204,11 +206,12 @@ ewol::object::Shared<ewol::resource::ImageDF> ewol::resource::ImageDF::keep(cons
 	}
 	EWOL_INFO("CREATE: ImageDF: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = ewol::object::makeShared(new ewol::resource::ImageDF("DF__" + TmpFilename, _filename, _size));
+	object = std::shared_ptr<ewol::resource::ImageDF>(new ewol::resource::ImageDF());
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}
+	object->init("DF__" + TmpFilename, _filename, _size);
 	getManager().localAdd(object);
 	return object;
 }

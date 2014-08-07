@@ -15,11 +15,11 @@ namespace ewol {
 	namespace object {
 		class Message {
 			private:
-				ewol::object::Shared<ewol::Object> m_callerObject; //!< Caller class.
+				std::shared_ptr<ewol::Object> m_callerObject; //!< Caller class.
 				const char* m_event; //!< Event pointer  == > unique Id define by the system ...
 				std::string m_data; //!< compositing additionnal message Value.
 			public:
-				Message(const ewol::object::Shared<ewol::Object>& _caller,
+				Message(const std::shared_ptr<ewol::Object>& _caller,
 				        const char* _message,
 				        const std::string& _data) :
 				  m_callerObject(_caller),
@@ -27,10 +27,10 @@ namespace ewol {
 				  m_data(_data) {
 					
 				};
-				void setCaller(const ewol::object::Shared<ewol::Object>& _caller) {
+				void setCaller(const std::shared_ptr<ewol::Object>& _caller) {
 					m_callerObject = _caller;
 				};
-				inline ewol::object::Shared<ewol::Object> getCaller() const {
+				inline std::shared_ptr<ewol::Object> getCaller() const {
 					return m_callerObject;
 				};
 				void setMessage(const char* _message) {

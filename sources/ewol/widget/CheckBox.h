@@ -20,8 +20,6 @@ namespace ewol {
 	namespace widget {
 		class CheckBox : public ewol::widget::Container2 {
 			public:
-				//! @not-in-doc
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;
 				static const char* const eventDown;
@@ -41,12 +39,15 @@ namespace ewol {
 				// shaper ids:
 				int32_t m_shaperIdSize;
 				int32_t m_shaperIdSizeInsize;
-			public:
+			protected:
 				/**
 				 * @brief Main checkbox constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
-				CheckBox(const std::string& _shaperName="THEME:GUI:CheckBox.json");
+				CheckBox();
+				void init(const std::string& _shaperName="THEME:GUI:CheckBox.json");
+			public:
+				DECLARE_WIDGET_FACTORY(CheckBox, "CheckBox");
 				/**
 				 * @brief main destructor.
 				 */

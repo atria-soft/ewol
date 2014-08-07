@@ -28,21 +28,24 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventChange;
-			public:
+			protected:
 				ColorChooser();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
 				virtual ~ColorChooser();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 			public:
 				void setColor(etk::Color<> _newColor);
 				etk::Color<> getColor();
 			private:
-				ewol::object::Shared<ewol::widget::ColorBar> m_widgetColorBar;
-				ewol::object::Shared<ewol::widget::Slider> m_widgetRed;
-				ewol::object::Shared<ewol::widget::Slider> m_widgetGreen;
-				ewol::object::Shared<ewol::widget::Slider> m_widgetBlue;
-				ewol::object::Shared<ewol::widget::Slider> m_widgetAlpha;
+				std::shared_ptr<ewol::widget::ColorBar> m_widgetColorBar;
+				std::shared_ptr<ewol::widget::Slider> m_widgetRed;
+				std::shared_ptr<ewol::widget::Slider> m_widgetGreen;
+				std::shared_ptr<ewol::widget::Slider> m_widgetBlue;
+				std::shared_ptr<ewol::widget::Slider> m_widgetAlpha;
 				etk::Color<> m_currentColor;
 		};
 	};

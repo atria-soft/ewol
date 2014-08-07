@@ -152,7 +152,7 @@ void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
-	ewol::object::Shared<ewol::resource::TexturedFont> previousFont = m_font;
+	std::shared_ptr<ewol::resource::TexturedFont> previousFont = m_font;
 	if (_fontSize <= 0) {
 		_fontSize = ewol::getContext().getFontDefault().getSize();
 	}
@@ -163,7 +163,7 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 	_fontName += std::to_string(_fontSize);
 	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
-	m_font = ewol::resource::TexturedFont::keep(_fontName);
+	m_font = ewol::resource::TexturedFont::create(_fontName);
 	if (m_font == nullptr) {
 		EWOL_ERROR("Can not get font resource");
 		m_font = previousFont;

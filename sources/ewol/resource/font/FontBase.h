@@ -22,7 +22,12 @@ namespace ewol {
 	namespace resource {
 		class FontBase : public ewol::Resource {
 			public:
-				FontBase(const std::string& _fontName) : ewol::Resource(_fontName) {};
+				FontBase() {
+					addObjectType("ewol::FontFreeType");
+				}
+				void init(const std::string& _fontName) {
+					ewol::Resource::init(_fontName);
+				};
 				
 				virtual ~FontBase() { };
 				

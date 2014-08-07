@@ -16,17 +16,8 @@ const char* const ewol::widget::Sizer::configMode = "mode";
 #undef __class__
 #define __class__ "Sizer"
 
-static ewol::Widget* create() {
-	return new ewol::widget::Sizer();
-}
-
-void ewol::widget::Sizer::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
-
-ewol::widget::Sizer::Sizer(enum displayMode _mode):
-  m_mode(_mode),
+ewol::widget::Sizer::Sizer() :
+  m_mode(ewol::widget::Sizer::modeHori),
   m_borderSize(),
   m_animation(animationNone),
   m_animationTime(0) {
@@ -34,6 +25,11 @@ ewol::widget::Sizer::Sizer(enum displayMode _mode):
 	registerConfig(configBorder, "dimension", nullptr, "The sizer border size");
 	registerConfig(configMode, "list", "{vert,hori}", "The display mode");
 	
+}
+
+void ewol::widget::Sizer::init(enum displayMode _mode) {
+	ewol::widget::ContainerN::init();
+	m_mode = _mode;
 }
 
 ewol::widget::Sizer::~Sizer() {
@@ -164,7 +160,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-int32_t ewol::widget::Sizer::subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget) {
+int32_t ewol::widget::Sizer::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 	}
@@ -172,7 +168,7 @@ int32_t ewol::widget::Sizer::subWidgetAdd(ewol::object::Shared<ewol::Widget> _ne
 	return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 }
 
-int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget) {
+int32_t ewol::widget::Sizer::subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
@@ -180,7 +176,7 @@ int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::object::Shared<ewol::Widget
 	return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 }
 
-void ewol::widget::Sizer::subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Sizer::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
@@ -189,7 +185,7 @@ void ewol::widget::Sizer::subWidgetRemove(ewol::object::Shared<ewol::Widget> _ne
 	ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 }
 
-void ewol::widget::Sizer::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
 	if (m_animation == animationNone) {
 		ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;

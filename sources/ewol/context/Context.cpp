@@ -135,13 +135,13 @@ namespace ewol {
 };
 
 
-void ewol::Context::inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source,
-                                              ewol::object::Shared<ewol::Widget> _destination) {
+void ewol::Context::inputEventTransfertWidget(std::shared_ptr<ewol::Widget> _source,
+                                              std::shared_ptr<ewol::Widget> _destination) {
 	m_input.transfertEvent(_source, _destination);
 }
 
 
-void ewol::Context::inputEventGrabPointer(ewol::object::Shared<ewol::Widget> _widget) {
+void ewol::Context::inputEventGrabPointer(std::shared_ptr<ewol::Widget> _widget) {
 	m_input.grabPointer(_widget);
 }
 
@@ -196,7 +196,7 @@ void ewol::Context::processEvents() {
 					                                             data->keyboardMove,
 					                                             data->stateIsDown) ) {
 						// get the current focused Widget :
-						ewol::object::Shared<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
+						std::shared_ptr<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
 						if (nullptr != tmpWidget) {
 							// check if the widget allow repeating key events.
 							//EWOL_DEBUG("repeating test :" << data->repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data->stateIsDown);
@@ -239,7 +239,7 @@ void ewol::Context::processEvents() {
 				break;
 			case eSystemMessage::msgClipboardArrive:
 				{
-					ewol::object::Shared<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
+					std::shared_ptr<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
 					if (tmpWidget != nullptr) {
 						tmpWidget->onEventClipboard(data->clipboardID);
 					}
@@ -676,7 +676,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
+void ewol::Context::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
 	//EWOL_CRITICAL("element removed");
 	if (m_windowsCurrent == _object) {
 		m_windowsCurrent.reset(); // This might never arrived, the owner is the current element (expected when the widget auto remove itself)
@@ -695,7 +695,7 @@ void ewol::Context::OS_OpenGlContextDestroy() {
 	m_resourceManager.contextHasBeenDestroyed();
 }
 
-void ewol::Context::setWindows(const ewol::object::Shared<ewol::widget::Windows>& _windows) {
+void ewol::Context::setWindows(const std::shared_ptr<ewol::widget::Windows>& _windows) {
 	// remove current focus :
 	m_widgetManager.focusSetDefault(nullptr);
 	m_widgetManager.focusRelease();
@@ -707,7 +707,7 @@ void ewol::Context::setWindows(const ewol::object::Shared<ewol::widget::Windows>
 	forceRedrawAll();
 }
 
-ewol::object::Shared<ewol::widget::Windows> ewol::Context::getWindows() {
+std::shared_ptr<ewol::widget::Windows> ewol::Context::getWindows() {
 	return m_windowsCurrent;
 };
 

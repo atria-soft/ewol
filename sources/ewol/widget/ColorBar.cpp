@@ -29,6 +29,10 @@ ewol::widget::ColorBar::ColorBar() {
 	setMouseLimit(1);
 }
 
+void ewol::widget::ColorBar::init() {
+	ewol::Widget::init();
+}
+
 ewol::widget::ColorBar::~ColorBar() {
 	
 }

@@ -155,7 +155,7 @@ void ewol::compositing::TextDF::setFontSize(int32_t _fontSize) {
 void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	clear();
 	// remove old one
-	ewol::object::Shared<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
+	std::shared_ptr<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
 	std::string fontName;
 	if (_fontName == "") {
 		fontName = ewol::getContext().getFontDefault().getName();
@@ -164,7 +164,7 @@ void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	}
 	EWOL_VERBOSE("Set font name: '" << fontName << "'");
 	// link to new one
-	m_fontDF = ewol::resource::DistanceFieldFont::keep(fontName);
+	m_fontDF = ewol::resource::DistanceFieldFont::create(fontName);
 	if (m_fontDF == nullptr) {
 		EWOL_ERROR("Can not get find resource");
 		m_fontDF = previousFont;

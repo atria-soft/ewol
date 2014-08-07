@@ -15,9 +15,9 @@
 
 
 
-ewol::widget::WidgetScrolled::WidgetScrolled(const std::string& _shaperName) :
-  m_shaperH(_shaperName),
-  m_shaperV(_shaperName),
+ewol::widget::WidgetScrolled::WidgetScrolled() :
+  m_shaperH(),
+  m_shaperV(),
   m_singleFingerMode(true) {
 	addObjectType("ewol::widget::WidgetScrolled");
 	m_originScrooled.setValue(0,0);
@@ -32,6 +32,12 @@ ewol::widget::WidgetScrolled::WidgetScrolled(const std::string& _shaperName) :
 	for (size_t iii = 0; iii < CALCULATE_SIMULTANEOUS_FINGER; ++iii) {
 		m_fingerPresent[iii] = false;
 	}
+}
+
+void ewol::widget::WidgetScrolled::init(const std::string& _shaperName) {
+	ewol::Widget::init();
+	m_shaperH.setSource(_shaperName);
+	m_shaperV.setSource(_shaperName);
 }
 
 ewol::widget::WidgetScrolled::~WidgetScrolled() {

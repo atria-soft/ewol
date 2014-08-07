@@ -29,7 +29,7 @@ namespace ewol {
 		 *  
 		 *  The first step is to create the file chooser pop-up :
 		 *  [code style=c++]
-		 *  ewol::object::Shared<ewol::widget::FileChooser> tmpWidget = ewol::object::makeShared(new ewol::Widget::FileChooser());
+		 *  std::shared_ptr<ewol::widget::FileChooser> tmpWidget = ewol::object::makeShared(new ewol::Widget::FileChooser());
 		 *  if (tmpWidget == nullptr) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;
@@ -77,8 +77,11 @@ namespace ewol {
 				static const char* const eventCancel;
 				static const char* const eventValidate;
 				// Config list of properties
-			public:
+			protected:
 				FileChooser();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(FileChooser, "FileChooser");
 				virtual ~FileChooser();
 			private:
 				std::string m_folder;

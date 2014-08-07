@@ -14,8 +14,7 @@
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
-#include <ewol/object/Shared.h>
-#include <ewol/object/Owner.h>
+#include <memory>
 
 namespace ewol {
 	// some class need to define element befor other ...
@@ -31,6 +30,20 @@ namespace ewol {
 #include <ewol/object/ConfigElement.h>
 #include <ewol/object/Message.h>
 
+#define DECLARE_FACTORY(className) \
+	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
+		std::shared_ptr<className> object(new className()); \
+		if (object == nullptr) { \
+			EWOL_ERROR("Factory error"); \
+			return nullptr; \
+		} \
+		object->init(std::forward<T>(all)... ); \
+		if (object->objectHasBeenCorectlyInit() == false) { \
+			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+		} \
+		return object; \
+	}
+
 namespace ewol {
 	namespace object {
 		/**
@@ -40,7 +53,7 @@ namespace ewol {
 		class EventExtGen {
 			public:
 				const char* localEventId; //!< local event Id generation
-				ewol::object::Shared<ewol::Object> destObject; //!< destination widget that might be call
+				std::weak_ptr<ewol::Object> destObject; //!< destination widget that might be call
 				const char* destEventId; //!< generated event ID on the distant widget
 				std::string overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
 		};
@@ -49,74 +62,48 @@ namespace ewol {
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every Object to communicate between them.
 	 */
-	class Object {
-		template<typename T> friend class ewol::object::Shared;
-		template<typename T> friend class ewol::object::Owner;
-		private:
-			//! @not-in-doc
-			std::mutex m_lockRefCount;
-			//! @not-in-doc
-			int32_t m_objRefCount;
-		public:
-			//! @not-in-doc
-			void objRefCountIncrement();
-			//! @not-in-doc
-			void objRefCountDecrement();
-			int32_t getRefCount() {
-				return m_objRefCount;
-			}
-			//! @not-in-doc
-			static void operator delete(void* _ptr, std::size_t _sz);
-			//! @not-in-doc
-			static void operator delete[](void* _ptr, std::size_t _sz);
-		#ifdef DEBUG
-		public:
-			int32_t m_ownerCount;
-			void incOwnerCount();
-			void decOwnerCount();
-		#endif
+	class Object : public std::enable_shared_from_this<Object> {
 		private:
 			static size_t m_valUID; //!< stic used for the unique ID definition
 		public:
 			// Config list of properties
 			static const char* const configName;
-		public:
+		private:
+			bool m_objectHasBeenInit; //!< Know if the init function has bben called
+		protected:
 			/**
 			 * @brief Constructor.
 			 */
 			Object();
+			void init();
+			void init(const std::string& _name);
+		public:
 			/**
-			 * @brief Constructor.
-			 * @param[in] _name Name of the Object.
+			 * @brief Factory
 			 */
-			Object(const std::string& _name);
+			DECLARE_FACTORY(Object);
 			/**
 			 * @brief Destructor
 			 */
 			virtual ~Object();
-		private:
-			bool m_isDestroyed;
+			bool objectHasBeenCorectlyInit() {
+				return m_objectHasBeenInit;
+			}
+		protected:
+			std::weak_ptr<Object> m_parent;
 		protected:
 			/**
 			 * @brief Auto-destroy the object
 			 */
 			void autoDestroy();
 		public:
-			/**
-			 * @brief Asynchronous removing the object
-			 */
-			void removeObject();
-			/**
-			 * @brief Respown a removed object
-			 */
-			void respownObject();
-			/**
-			 * @brief Get if the element is destroyed or not
-			 * @return true The element in destroyed
-			 */
-			bool isDestroyed() {
-				return m_isDestroyed;
+			void destroy() {
+				autoDestroy();
 			}
+		public:
+			virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+			virtual void setParent(const std::shared_ptr<Object>& _newParent);
+			virtual void removeParent();
 		private:
 			std::vector<const char*> m_listType;
 		public:
@@ -196,7 +183,7 @@ namespace ewol {
 			 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void registerOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			void registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 			                     const char * _eventId,
 			                     const char * _eventIdgenerated = nullptr,
 			                     const std::string& _overloadData = "");
@@ -205,13 +192,13 @@ namespace ewol {
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
 			 */
-			void unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			void unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 			                       const char * _eventId = nullptr);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @note : Sub classes must call this class
 			 */
-			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
+			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
 			/**
 			 * @brief Receive a message from an other Object with a specific eventId and data
 			 * @param[in] _msg Message handle
@@ -350,7 +337,7 @@ namespace ewol {
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 * @note : To used when NOT herited from this object.
 			 */
-			void registerOnObjectEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			void registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 			                           const std::string& _objectName,
 			                           const char * _eventId,
 			                           const char * _eventIdgenerated = nullptr,
@@ -360,8 +347,9 @@ namespace ewol {
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
-			ewol::object::Shared<ewol::Object> getObjectNamed(const std::string& _objectName) const;
+			std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName) const;
 	};
+	
 };
 
 #endif

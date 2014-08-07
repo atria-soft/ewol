@@ -44,7 +44,7 @@ namespace ewol {
 			private:
 				std::string m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
-				ewol::object::Shared<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
+				std::shared_ptr<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
 				int32_t m_confIdDisplayExternal; //!< Display external border
 				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
 				int32_t m_confIdBorder[shaperPosCount]; //!< border property : X-left X-right Y-top Y-buttom
@@ -56,7 +56,7 @@ namespace ewol {
 				int32_t m_confColorFile;       //!< ConfigFile opengGl color file Name
 				int32_t m_confImageFile;       //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
-				ewol::object::Shared<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
+				std::shared_ptr<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
 				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on vec2(X,Y))
@@ -66,7 +66,7 @@ namespace ewol {
 				int32_t m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
 				int32_t m_GLtexID;              //!< openGL id on the element (texture image)
 				// For the Image :
-				ewol::object::Shared<ewol::resource::TextureFile> m_resourceTexture; //!< texture resources (for the image)
+				std::shared_ptr<ewol::resource::TextureFile> m_resourceTexture; //!< texture resources (for the image)
 				// internal needed data :
 				int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
 				vec2    m_propertyOrigin;         //!< widget origin
@@ -81,7 +81,7 @@ namespace ewol {
 				vec2    m_pos[SHAPER_NB_MAX_VERTEX]; //!< podition to display property
 				int32_t m_nbVertexToDisplay;
 				// color management theme:
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
 				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
 			private:
 				/**

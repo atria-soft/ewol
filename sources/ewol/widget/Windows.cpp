@@ -29,7 +29,7 @@ ewol::widget::Windows::Windows() :
 	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
 	setDecorationDisable();
-	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Windows.json");
+	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Windows.json");
 	if (m_colorProperty != nullptr) {
 		m_colorBg = m_colorProperty->request("background");
 	}
@@ -58,7 +58,7 @@ void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
 	}
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
+std::shared_ptr<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	// calculate relative position
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
@@ -69,7 +69,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const v
 		return m_subWidget->getWidgetAtPos(_pos);
 	}
 	// otherwise the event go to this widget ...
-	return this;
+	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
 void ewol::widget::Windows::sysDraw() {
@@ -161,29 +161,29 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 }
 
-void ewol::widget::Windows::setSubWidget(ewol::object::Shared<ewol::Widget> _widget) {
+void ewol::widget::Windows::setSubWidget(std::shared_ptr<ewol::Widget> _widget) {
 	if (m_subWidget != nullptr) {
 		EWOL_INFO("Remove current main windows Widget...");
-		m_subWidget->removeUpperWidget();
+		m_subWidget->removeParent();
 		m_subWidget.reset();
 	}
 	if (_widget != nullptr) {
 		m_subWidget = _widget;
-		m_subWidget->setUpperWidget(this);
+		m_subWidget->setParent(shared_from_this());
 	}
 	
 	// Regenerate the size calculation :
 	calculateSize(m_size);
 }
 
-void ewol::widget::Windows::popUpWidgetPush(ewol::object::Shared<ewol::Widget> _widget) {
+void ewol::widget::Windows::popUpWidgetPush(std::shared_ptr<ewol::Widget> _widget) {
 	if (_widget == nullptr) {
 		// nothing to do an error appear :
 		EWOL_ERROR("can not set widget pop-up (null pointer)");
 		return;
 	}
 	m_popUpWidgetList.push_back(_widget);
-	_widget->setUpperWidget(this);
+	_widget->setParent(shared_from_this());
 	// force the focus on the basic widget ==> this remove many time the virual keyboard area
 	_widget->keepFocus();
 	// Regenerate the size calculation :
@@ -196,11 +196,11 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	if (m_popUpWidgetList.size() == 0) {
 		return;
 	}
-	m_popUpWidgetList.back()->removeUpperWidget();
+	m_popUpWidgetList.back()->removeParent();
 	m_popUpWidgetList.pop_back();
 }
 
-void ewol::widget::Windows::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
+void ewol::widget::Windows::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
@@ -232,9 +232,8 @@ void ewol::widget::Windows::setTitle(const std::string& _title) {
 }
 
 
-void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
-{
-	ewol::object::Shared<ewol::widget::StdPopUp> tmpPopUp = ewol::object::makeShared(new widget::StdPopUp());
+void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message) {
+	std::shared_ptr<ewol::widget::StdPopUp> tmpPopUp = widget::StdPopUp::create();
 	if (tmpPopUp == nullptr) {
 		EWOL_ERROR("Can not create a simple pop-up");
 		return;
@@ -257,4 +256,30 @@ void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, cons
 	tmpPopUp->addButton("close", true);
 	tmpPopUp->setRemoveOnExternClick(true);
 	popUpWidgetPush(tmpPopUp);
+}
+
+void ewol::widget::Windows::requestDestroyFromChild(const std::shared_ptr<Object>& _child) {
+	auto it = m_popUpWidgetList.begin();
+	while (it != m_popUpWidgetList.end()) {
+		if (*it == _child) {
+			if (*it == nullptr) {
+				m_popUpWidgetList.erase(it);
+				it = m_popUpWidgetList.begin();
+				continue;
+			}
+			(*it)->removeParent();
+			(*it).reset();
+			m_popUpWidgetList.erase(it);
+			it = m_popUpWidgetList.begin();
+			continue;
+		}
+		++it;
+	}
+	if (m_subWidget == _child) {
+		if (m_subWidget == nullptr) {
+			return;
+		}
+		m_subWidget->removeParent();
+		m_subWidget.reset();
+	}
 }

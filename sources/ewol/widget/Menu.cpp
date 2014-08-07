@@ -23,6 +23,10 @@ ewol::widget::Menu::Menu() {
 	m_staticId = 0;
 }
 
+void ewol::widget::Menu::init() {
+	ewol::widget::Sizer::init();
+}
+
 ewol::widget::Menu::~Menu() {
 	clear();
 }
@@ -32,16 +36,16 @@ void ewol::widget::Menu::subWidgetRemoveAll() {
 	ewol::widget::Sizer::subWidgetRemoveAll();
 }
 
-int32_t ewol::widget::Menu::subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget) {
+int32_t ewol::widget::Menu::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
 	EWOL_ERROR("Not availlable");
 	return -1;
 }
 
-void ewol::widget::Menu::subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Menu::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void ewol::widget::Menu::subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget) {
+void ewol::widget::Menu::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
@@ -81,7 +85,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 	tmpObject->m_message = _message;
 	m_listElement.push_back(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
-		ewol::object::Shared<ewol::widget::Button> myButton = ewol::object::makeShared(new ewol::widget::Button());
+		std::shared_ptr<ewol::widget::Button> myButton = ewol::widget::Button::create();
 		if (myButton == nullptr) {
 			EWOL_ERROR("Allocation button error");
 			return tmpObject->m_localId;
@@ -95,15 +99,15 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			}
 			composeString+="    <label>" + tmpObject->m_label + "</label>\n";
 			composeString+="</sizer>\n";
-			myButton->setSubWidget(ewol::object::makeShared(new ewol::widget::Composer(widget::Composer::String, composeString)));
+			myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String, composeString));
 		} else {
-			myButton->setSubWidget(ewol::object::makeShared(new ewol::widget::Label(tmpObject->m_label)) );
+			myButton->setSubWidget(ewol::widget::Label::create(tmpObject->m_label) );
 		}
 		
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
 		// keep the specific event ...
-		myButton->registerOnEvent(this, ewol::widget::Button::eventPressed, widget::Button::eventPressed);
+		myButton->registerOnEvent(shared_from_this(), ewol::widget::Button::eventPressed, widget::Button::eventPressed);
 		tmpObject->m_widgetPointer = myButton;
 	}
 	return tmpObject->m_localId;
@@ -131,8 +135,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 					sendMultiCast(m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
 					if (nullptr != m_widgetContextMenu) {
 						EWOL_DEBUG("Mark the menu to remove ...");
-						m_widgetContextMenu->removeObject();
-						m_widgetContextMenu = nullptr;
+						m_widgetContextMenu.reset();
 					}
 					return;
 				} else{
@@ -149,14 +152,14 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 						return;
 					}
 					// create a context menu : 
-					m_widgetContextMenu = ewol::object::makeShared(new ewol::widget::ContextMenu());
+					m_widgetContextMenu = ewol::widget::ContextMenu::create();
 					if (nullptr == m_widgetContextMenu) {
 						EWOL_ERROR("Allocation Error");
 						return;
 					}
 					// get the button widget : 
 					vec2 newPosition;
-					ewol::object::Shared<ewol::Widget> eventFromWidget = dynamic_pointer_cast<ewol::Widget>(_msg.getCaller());
+					std::shared_ptr<ewol::Widget> eventFromWidget = std::dynamic_pointer_cast<ewol::Widget>(_msg.getCaller());
 					if (eventFromWidget != nullptr) {
 						vec2 tmpOri  = eventFromWidget->getOrigin();
 						vec2 tmpSize = eventFromWidget->getSize();
@@ -166,10 +169,10 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 					}
 					m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition );
 					
-					ewol::object::Shared<ewol::widget::Sizer> mySizer;
-					ewol::object::Shared<ewol::widget::Button> myButton;
+					std::shared_ptr<ewol::widget::Sizer> mySizer;
+					std::shared_ptr<ewol::widget::Button> myButton;
 					
-					mySizer = ewol::object::makeShared(new ewol::widget::Sizer(widget::Sizer::modeVert));
+					mySizer = ewol::widget::Sizer::create(widget::Sizer::modeVert);
 					if (nullptr != mySizer) {
 						mySizer->lockExpand(vec2(true,true));
 						// set it in the pop-up-system : 
@@ -189,7 +192,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 						for (int64_t jjj=m_listElement.size()-1; jjj >= 0; jjj--) {
 							if (m_listElement[iii]!=nullptr) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
-									myButton = ewol::object::makeShared(new ewol::widget::Button());
+									myButton = ewol::widget::Button::create();
 									if (nullptr == myButton) {
 										EWOL_ERROR("Allocation Error");
 									} else {
@@ -205,19 +208,18 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 											composeString+="        <label exand=\"true,true\" fill=\"true,true\">" + m_listElement[jjj]->m_label + "</label>\n";
 											composeString+="    </sizer>\n";
 											composeString+="</composer>\n";
-											myButton->setSubWidget(ewol::object::makeShared(new ewol::widget::Composer(widget::Composer::String, composeString)));
+											myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String, composeString));
 										} else {
 											if (true == menuHaveImage) {
-												myButton->setSubWidget(ewol::object::makeShared(
-												    new ewol::widget::Composer(widget::Composer::String,
+												myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
 												        std::string("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
 												        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
 												        "		<spacer min-size=\"8,0mm\"/>\n"
 												        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + "]]></label>\n"
 												        "	</sizer>\n"
-												        "</composer>\n")));
+												        "</composer>\n"));
 											} else {
-												ewol::object::Shared<ewol::widget::Label> tmpLabel = ewol::object::makeShared(new widget::Label(std::string("<left>") + m_listElement[jjj]->m_label + "</left>\n"));
+												std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create(std::string("<left>") + m_listElement[jjj]->m_label + "</left>\n");
 												if (tmpLabel != nullptr) {
 													tmpLabel->setExpand(bvec2(true,false));
 													tmpLabel->setFill(bvec2(true,true));
@@ -226,7 +228,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 											}
 										}
 										// set the image if one is present ...
-										myButton->registerOnEvent(this, ewol::widget::Button::eventPressed, widget::Button::eventPressed);
+										myButton->registerOnEvent(shared_from_this(), ewol::widget::Button::eventPressed, widget::Button::eventPressed);
 										myButton->setExpand(bvec2(true,false));
 										myButton->setFill(bvec2(true,false));
 										// add it in the widget list
@@ -237,11 +239,10 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 							}
 						}
 					}
-					ewol::object::Shared<ewol::widget::Windows> currentWindows = getWindows();
+					std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
 					if (currentWindows == nullptr) {
 						EWOL_ERROR("Can not get the curent Windows...");
-						m_widgetContextMenu->removeObject();
-						m_widgetContextMenu = nullptr;
+						m_widgetContextMenu.reset();
 					} else {
 						currentWindows->popUpWidgetPush(m_widgetContextMenu);
 					}
@@ -253,7 +254,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 }
 
 
-void ewol::widget::Menu::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
+void ewol::widget::Menu::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
 	ewol::widget::Sizer::onObjectRemove(_removeObject);
 	if (m_widgetContextMenu == _removeObject) {
 		m_widgetContextMenu.reset();

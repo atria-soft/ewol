@@ -17,16 +17,17 @@
 #undef __class__
 #define __class__ "resource::TextureFile"
 
-ewol::resource::TextureFile::TextureFile(const std::string& _genName) :
-  Texture(_genName) {
-	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=--- size=---");
+ewol::resource::TextureFile::TextureFile() {
+	addObjectType("ewol::resource::Image");
 	
 }
 
+void ewol::resource::TextureFile::init() {
+	ewol::resource::Texture::init();
+}
 
-ewol::resource::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
-  ewol::resource::Texture(_genName) {
-	addObjectType("ewol::resource::Image");
+void ewol::resource::TextureFile::init(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) {
+	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
@@ -62,14 +63,15 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ewol::object::Shared<ewol::resource::TextureFile> ewol::resource::TextureFile::keep(const std::string& _filename, ivec2 _size) {
+std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
-		ewol::object::Shared<ewol::resource::TextureFile> object = ewol::object::makeShared(new ewol::resource::TextureFile(""));
+		std::shared_ptr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
 		if (nullptr == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
 		}
+		object->init();
 		getManager().localAdd(object);
 		return object;
 	}
@@ -101,10 +103,10 @@ ewol::object::Shared<ewol::resource::TextureFile> ewol::resource::TextureFile::k
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::object::Shared<ewol::resource::TextureFile> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(TmpFilename);
+	std::shared_ptr<ewol::resource::TextureFile> object = nullptr;
+	std::shared_ptr<ewol::Resource> object2 = getManager().localKeep(TmpFilename);
 	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::TextureFile>(object2);
+		object = std::dynamic_pointer_cast<ewol::resource::TextureFile>(object2);
 		if (nullptr == object) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -115,11 +117,12 @@ ewol::object::Shared<ewol::resource::TextureFile> ewol::resource::TextureFile::k
 	}
 	EWOL_INFO("CREATE: TextureFile: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = ewol::object::makeShared(new ewol::resource::TextureFile(TmpFilename, _filename, _size));
+	object = std::shared_ptr<ewol::resource::TextureFile>(new ewol::resource::TextureFile());
 	if (nullptr == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}
+	object->init(TmpFilename, _filename, _size);
 	getManager().localAdd(object);
 	return object;
 }

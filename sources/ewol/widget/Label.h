@@ -27,22 +27,21 @@ namespace ewol {
 				static const char * const eventPressed;
 				// Config list of properties
 				static const char* const configValue;
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
 				std::u32string m_label; //!< decorated text to display.
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
-				Label(std::string _newLabel="---");
+				Label();
+				void init(std::string _newLabel="---");
+			public:
+				DECLARE_WIDGET_FACTORY(Label, "Label");
 				/**
 				 * @brief destructor
 				 */

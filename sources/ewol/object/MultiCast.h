@@ -22,12 +22,12 @@ namespace ewol {
 			private:
 				class MessageList {
 					public:
-						MessageList(const char* _message=nullptr, ewol::object::Shared<ewol::Object> _object=nullptr) :
+						MessageList(const char* _message=nullptr, std::shared_ptr<ewol::Object> _object=nullptr) :
 						  m_message(_message), m_object(_object) {
 							
 						}
 						const char* m_message;
-						ewol::object::Shared<ewol::Object> m_object;
+						std::weak_ptr<ewol::Object> m_object;
 				};
 				std::vector<MessageList> m_messageList; //!< List of all message ...
 			public:
@@ -37,10 +37,10 @@ namespace ewol {
 				void anonymousSend(const char* const _messageId, const std::string& _data) {
 					send(nullptr, _messageId, _data);
 				};
-				void send(const ewol::object::Shared<ewol::Object>& _object, const char* const _message, const std::string& _data);
-				void rm(const ewol::object::Shared<ewol::Object>& _object);
-				void add(const ewol::object::Shared<ewol::Object>& _object, const char* const _message);
-				void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
+				void send(const std::shared_ptr<ewol::Object>& _object, const char* const _message, const std::string& _data);
+				void rm(const std::shared_ptr<ewol::Object>& _object);
+				void add(const std::shared_ptr<ewol::Object>& _object, const char* const _message);
+				void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
 		};
 	};
 };

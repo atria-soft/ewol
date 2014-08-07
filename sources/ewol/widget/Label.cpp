@@ -18,29 +18,26 @@
 const char * const ewol::widget::Label::eventPressed = "pressed";
 const char* const ewol::widget::Label::configValue  = "value";
 
-static ewol::Widget* create() {
-	return new ewol::widget::Label();
-}
-
-void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
 // TODO : Remove the label name in the constructor ...
-ewol::widget::Label::Label(std::string _newLabel) :
+ewol::widget::Label::Label() :
   m_colorProperty(nullptr),
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
-	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Label.json");
+	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Label.json");
 	if (m_colorProperty != nullptr) {
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
-	m_label = std::to_u32string(_newLabel);
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
 	setMouseLimit(1);
 	registerConfig(configValue, "string", nullptr, "displayed value string"); // TODO : do not store in attibute...
+}
+
+void ewol::widget::Label::init(std::string _newLabel) {
+	ewol::Widget::init();
+	m_label = std::to_u32string(_newLabel);
 }
 
 ewol::widget::Label::~Label() {

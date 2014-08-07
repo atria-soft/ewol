@@ -20,8 +20,6 @@ namespace ewol {
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public:
-				//! @not-in-doc
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char * const eventFileSelect; //!< @event "file-select" Generated when a file is selected.
 				static const char * const eventFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
@@ -35,11 +33,14 @@ namespace ewol {
 				static const char* const configPath;
 				static const char* const configSelect;
 				// TODO : Add a standalone configuration ..
-			public:
+			protected:
 				ListFileSystem();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ListFileSystem, "ListFileSystem");
 				virtual ~ListFileSystem();
 			protected:
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
 				int32_t m_colorIdText; //!< Color of the text.
 				int32_t m_colorIdBackground1; //!< Color of the Background.
 				int32_t m_colorIdBackground2; //!< Color of the Background 2.

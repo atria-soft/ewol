@@ -35,12 +35,15 @@ namespace ewol {
 				};
 			private:
 				enum displayMode m_mode; //!< Methode to display the widget list (vert/hory ...)
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
-				Sizer(enum displayMode _mode=ewol::widget::Sizer::modeHori);
+				Sizer();
+				void init(enum displayMode _mode=ewol::widget::Sizer::modeHori);
+			public:
+				DECLARE_WIDGET_FACTORY(Sizer, "Sizer");
 				/**
 				 * @brief Desstructor
 				 */
@@ -119,10 +122,10 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
-				virtual int32_t subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual int32_t subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};

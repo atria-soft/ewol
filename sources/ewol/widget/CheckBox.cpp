@@ -27,16 +27,8 @@ const char* const ewol::widget::CheckBox::configShaper = "shaper";
 #undef __class__
 #define __class__	"CheckBox"
 
-static ewol::Widget* create() {
-	return new ewol::widget::CheckBox();
-}
 
-void ewol::widget::CheckBox::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__, &create);
-}
-
-ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
-  m_shaper(_shaperName),
+ewol::widget::CheckBox::CheckBox() :
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
@@ -66,6 +58,11 @@ ewol::widget::CheckBox::CheckBox(const std::string& _shaperName) :
 	setMouseLimit(1);
 }
 
+
+void ewol::widget::CheckBox::init(const std::string& _shaperName) {
+	ewol::widget::Container2::init();
+	m_shaper.setSource(_shaperName);
+}
 
 ewol::widget::CheckBox::~CheckBox() {
 	

@@ -24,25 +24,26 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventChange;
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
 				etk::Color<> m_textColorFg; //!< Current color.
-				ewol::object::Shared<ewol::widget::ContextMenu> m_widgetContextMenu; //!< Specific context menu.
+				std::shared_ptr<ewol::widget::ContextMenu> m_widgetContextMenu; //!< Specific context menu.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
 				vec2 m_selectableAreaPos; //!< Start position of the events
 				vec2 m_selectableAreaSize; //!< size of the event positions
-			public:
+			protected:
 				/**
 				 * @brief Main constructor.
 				 * @param[in] _baseColor basic displayed color.
 				 * @param[in] _shaperName The new shaper filename.
 				 */
-				ButtonColor(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:widgetButton.json");
+				ButtonColor();
+				void init(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:widgetButton.json");
+			public:
+				DECLARE_WIDGET_FACTORY(ButtonColor, "ButtonColor");
 				/**
 				 * @brief Main destructor.
 				 */

@@ -52,13 +52,15 @@ void ewol::resource::freeTypeUnInit() {
 	}
 }
 
-ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
-  FontBase(_fontName) {
+ewol::resource::FontFreeType::FontFreeType() {
 	addObjectType("ewol::FontFreeType");
 	m_init = false;
 	m_FileBuffer = nullptr;
 	m_FileSize = 0;
-	
+}
+
+void ewol::resource::FontFreeType::init(const std::string& _fontName) {
+	ewol::resource::FontBase::init(_fontName);
 	etk::FSNode myfile(_fontName);
 	if (false == myfile.exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
@@ -388,28 +390,4 @@ void ewol::resource::FontFreeType::display() {
 	//EWOL_INFO("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
 	
 	//EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
-}
-
-ewol::object::Shared<ewol::resource::FontBase> ewol::resource::FontFreeType::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
-	ewol::object::Shared<ewol::resource::FontBase> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::FontBase>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// need to crate a new one ...
-	object = ewol::object::makeShared(new ewol::resource::FontFreeType(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
 }
