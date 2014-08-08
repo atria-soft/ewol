@@ -34,7 +34,7 @@ void ewol::Object::autoDestroy() {
 }
 
 void ewol::Object::requestDestroyFromChild(const std::shared_ptr<ewol::Object>& _child) {
-	EWOL_WARNING("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
+	EWOL_CRITICAL("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
 }
 void ewol::Object::setParent(const std::shared_ptr<ewol::Object>& _newParent) {
 	// TODO : Implement change of parent ...
@@ -59,8 +59,6 @@ ewol::Object::Object() :
 
 ewol::Object::~Object() {
 	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
-	//getObjectManager().remove(shared_from_this());
-	// TODO : getMultiCast().rm();
 	m_externEvent.clear();
 	m_availlableEventId.clear();
 	m_uniqueId = -1;

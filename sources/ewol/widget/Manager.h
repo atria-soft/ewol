@@ -23,9 +23,9 @@ namespace ewol {
 				typedef std::shared_ptr<ewol::Widget> (*creator_tf)();
 			private:
 				// For the focus Management
-				std::shared_ptr<ewol::Widget> m_focusWidgetDefault;
-				std::shared_ptr<ewol::Widget> m_focusWidgetCurrent;
-				std::vector<std::shared_ptr<ewol::Widget>> m_listOfPeriodicWidget;
+				std::weak_ptr<ewol::Widget> m_focusWidgetDefault;
+				std::weak_ptr<ewol::Widget> m_focusWidgetCurrent;
+				std::vector<std::weak_ptr<ewol::Widget>> m_listOfPeriodicWidget;
 				bool m_havePeriodic;
 				bool m_haveRedraw;
 				etk::Hash<creator_tf> m_creatorList;
@@ -38,7 +38,7 @@ namespace ewol {
 				void focusKeep(const std::shared_ptr<ewol::Widget>& _newWidget); // set the focus at the specific widget
 				void focusSetDefault(const std::shared_ptr<ewol::Widget>& _newWidget); // select the default focus getter
 				void focusRelease(); // release focus from the current widget to the default
-				const std::shared_ptr<ewol::Widget>& focusGet();
+				std::shared_ptr<ewol::Widget> focusGet();
 				void focusRemoveIfRemove(const std::shared_ptr<ewol::Widget>& _newWidget);
 				
 				void periodicCallAdd(const std::shared_ptr<ewol::Widget>& _pWidget);
@@ -55,7 +55,6 @@ namespace ewol {
 				std::shared_ptr<ewol::Widget> create(const std::string& _name);
 				bool exist(const std::string& _name);
 				std::string list();
-				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
 			private:
 				void periodicCallUpdateCount();
 		};

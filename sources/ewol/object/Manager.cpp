@@ -37,7 +37,7 @@ void ewol::object::Manager::displayListObject() {
 	for (auto &it : m_eObjectList) {
 		std::shared_ptr<ewol::Object> element = it.lock();
 		if (element != nullptr) {
-			EWOL_INFO("  name='" << element->getName() << "' type=" << element->getObjectType());
+			EWOL_INFO("  [" << element->getId() << "] ref=" << element.use_count()-1 << " name='" << element->getName() << "' type=" << element->getObjectType());
 		}
 	}
 }
@@ -68,65 +68,8 @@ int32_t ewol::object::Manager::getNumberObject() {
 	return m_eObjectList.size();
 }
 
-void ewol::object::Manager::informOneObjectIsRemoved(const std::shared_ptr<ewol::Object>& _object) {
-	EWOL_TODO("ewol::object::Manager::informOneObjectIsRemoved()");
-	/*
-	for (auto &it : m_eObjectList) {
-		std::shared_ptr<ewol::Object> element = it.lock();
-		if (    element != nullptr
-		     && element != _object) {
-			EWOL_VERBOSE("[" << _object->getId() << "] onObjectRemove() : " << element->getId() << " type=" << element->getObjectType() << " name='" << element->getName() << "'");
-			element->onObjectRemove(_object);
-		}
-	}
-	// inform context that 	n object is removed ...
-	m_context.onObjectRemove(_object);
-	m_multiCast.onObjectRemove(_object);
-	EWOL_VERBOSE("m_removeEventList.size() = " << m_removeEventList.size());
-	for (auto &it : m_removeEventList) {
-		EWOL_VERBOSE("[" << _object->getId() << "] Inform Event Remove Object List : ...");
-		std::shared_ptr<ewol::Object> element = it.lock();
-		if (element != nullptr) {
-			element->onObjectRemove(_object);
-		}
-	}
-	*/
-}
-
-void ewol::object::Manager::remove(const std::shared_ptr<ewol::Object>& _object) {
-	EWOL_TODO("ewol::object::Manager::remove()");
-	/*
-	if (_object == nullptr) {
-		EWOL_ERROR("Try to Auto-Remove (nullptr) Object");
-		return;
-	}
-	int32_t count = 0;
-	auto it(m_eObjectListActive.begin());
-	while (it != m_eObjectListActive.end()) {
-		if (*it == _object) {
-			m_eObjectListActive.erase(it);
-			// remove Element
-			EWOL_DEBUG("Auto-Remove Object : [" << _object->getId() << "] type='" << _object->getObjectType() << "' name=" << _object->getName());
-			informOneObjectIsRemoved(_object);
-			ewol::getContext().forceRedrawAll();
-			EWOL_VERBOSE("Auto-Remove Object ... done (have " << _object->getRefCount() << " references)");
-			it = m_eObjectListActive.begin();
-			count++;
-		} else {
-			++it;
-		}
-	}
-	if (count == 0) {
-		EWOL_ERROR("Try to Auto-Remove Object that is not referenced ...");
-	} else if (    count>1
-	            || count<0) {
-		EWOL_ERROR("Remove more than one object in the system list ==> this is a real problem ...");
-	}
-	*/
-}
-
 // clean all Object that request an autoRemove ...
-void ewol::object::Manager::removeAllRemovedObject() {
+void ewol::object::Manager::cleanInternalRemoved() {
 	size_t nbObject = m_eObjectList.size();
 	EWOL_VERBOSE("Clean Object List (if needed) : " << m_eObjectList.size() << " elements");
 	auto it(m_eObjectList.begin());

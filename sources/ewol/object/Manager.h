@@ -43,17 +43,10 @@ namespace ewol {
 				 * @param[in] _object Reference shared pointer on the object
 				 */
 				void add(const std::shared_ptr<ewol::Object>& _object);
-				/**
-				 * @brief Called when an object request to be removed
-				 * @param[in] _object Reference shared pointer on the object
-				 */
-				void remove(const std::shared_ptr<ewol::Object>& _object);
 			public:
-				void removeAllRemovedObject();
+				void cleanInternalRemoved();
 				
 				std::shared_ptr<ewol::Object> get(const std::string& _name);
-			private:
-				void informOneObjectIsRemoved(const std::shared_ptr<ewol::Object>& _object);
 			private:
 				ewol::object::MultiCast m_multiCast; //!< muticast manager
 			public:

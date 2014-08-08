@@ -388,18 +388,15 @@ ewol::Context::~Context() {
 	// Remove current windows
 	m_windowsCurrent.reset();
 	// clean all widget and sub widget with their resources:
-	do {
-		m_objectManager.removeAllRemovedObject();
-	} while (m_resourceManager.checkResourceToRemove() == true);
+	m_objectManager.cleanInternalRemoved();
 	// call application to uninit
 	m_application->unInit(*this);
 	m_application.reset();
 	// clean all messages
 	m_msgSystem.clean();
-	// an other cycle of removing ...
-	do {
-		m_objectManager.removeAllRemovedObject();
-	} while (m_resourceManager.checkResourceToRemove() == true);
+	// internal clean elements
+	m_objectManager.cleanInternalRemoved();
+	m_resourceManager.cleanInternalRemoved();
 	
 	EWOL_INFO("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
 	m_objectManager.displayListObject();
@@ -667,9 +664,8 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_resourceManager.updateContext();
 		// release open GL Context
 		ewol::openGL::unLock();
-		do {
-			m_objectManager.removeAllRemovedObject();
-		} while (m_resourceManager.checkResourceToRemove() == true);
+		m_objectManager.cleanInternalRemoved();
+		m_resourceManager.cleanInternalRemoved();
 		// release the curent interface :
 		unLockContext();
 	}
@@ -683,8 +679,7 @@ void ewol::Context::onObjectRemove(const std::shared_ptr<ewol::Object>& _object)
 	}
 	// inform all manager that can not be directly linked with the object manager
 	m_input.onObjectRemove(_object);
-	m_widgetManager.onObjectRemove(_object);
-	m_resourceManager.checkResourceToRemove();
+	m_resourceManager.cleanInternalRemoved();
 }
 
 void ewol::Context::resetIOEvent() {

@@ -63,7 +63,7 @@ namespace ewol {
 				// internal API to extent eResources in extern Soft
 				std::shared_ptr<ewol::Resource> localKeep(const std::string& _filename);
 				void localAdd(const std::shared_ptr<ewol::Resource>& _object);
-				virtual bool checkResourceToRemove();
+				virtual void cleanInternalRemoved();
 		};
 	};
 };

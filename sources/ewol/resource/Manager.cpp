@@ -154,15 +154,15 @@ void ewol::resource::Manager::contextHasBeenDestroyed() {
 
 // internal generic keeper ...
 std::shared_ptr<ewol::Resource> ewol::resource::Manager::localKeep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
+	EWOL_VERBOSE("KEEP (DEFAULT) : file : '" << _filename << "' in " << m_resourceList.size() << " resources");
 	for (auto &it : m_resourceList) {
 		std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
-		if (    tmpRessource != nullptr
-		     && tmpRessource->getName() == _filename) {
-			return tmpRessource;
+		if (tmpRessource != nullptr) {
+			if (tmpRessource->getName() == _filename) {
+				return tmpRessource;
+			}
 		}
 	}
-	// we did not find it ...
 	return nullptr;
 }
 
@@ -181,18 +181,13 @@ void ewol::resource::Manager::localAdd(const std::shared_ptr<ewol::Resource>& _o
 }
 
 // in case of error ...
-bool ewol::resource::Manager::checkResourceToRemove() {
+void ewol::resource::Manager::cleanInternalRemoved() {
 	//EWOL_INFO("remove object in Manager");
 	updateContext();
 	for (auto it(m_resourceList.begin()); it!=m_resourceList.end(); ++it) {
-		if ((*it).lock() == nullptr) {
+		if ((*it).expired() == true) {
 			m_resourceList.erase(it);
 			it = m_resourceList.begin();
-			continue;
 		}
-		m_resourceList.erase(it);
-		it = m_resourceList.begin();
-		return true;
 	}
-	return false;
 }

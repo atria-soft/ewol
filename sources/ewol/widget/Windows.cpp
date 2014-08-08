@@ -196,7 +196,6 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	if (m_popUpWidgetList.size() == 0) {
 		return;
 	}
-	m_popUpWidgetList.back()->removeParent();
 	m_popUpWidgetList.pop_back();
 }
 
@@ -271,6 +270,7 @@ void ewol::widget::Windows::requestDestroyFromChild(const std::shared_ptr<Object
 			(*it).reset();
 			m_popUpWidgetList.erase(it);
 			it = m_popUpWidgetList.begin();
+			markToRedraw();
 			continue;
 		}
 		++it;
@@ -281,5 +281,6 @@ void ewol::widget::Windows::requestDestroyFromChild(const std::shared_ptr<Object
 		}
 		m_subWidget->removeParent();
 		m_subWidget.reset();
+		markToRedraw();
 	}
 }
