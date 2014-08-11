@@ -6,8 +6,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#ifndef __EWOL_PARAM_H__
-#define __EWOL_PARAM_H__
+#ifndef __EWOL_PARAM_RANGE_H__
+#define __EWOL_PARAM_RANGE_H__
 
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Parameter.h>
@@ -16,9 +16,11 @@
 
 namespace ewol {
 	namespace object {
-		template<typename MY_TYPE> class Param : public Parameter {
+		template<typename MY_TYPE> class ParamRange : public Parameter {
 			private:
 				MY_TYPE m_value; //!< Current value.
+				MY_TYPE m_min; //!< Minimum value.
+				MY_TYPE m_max; //!< Maximum value.
 				MY_TYPE m_default; //!< Default value.
 			public:
 				/**
@@ -30,19 +32,23 @@ namespace ewol {
 				 * @param[in] _max Maximum value.
 				 * @param[in] _description description of the parameter.
 				 */
-				Param(ewol::object::ParameterList& _objectLink,
+				ParamRange(ewol::object::ParameterList& _objectLink,
 				      const std::string& _name,
 				      const TYPE& _defaultValue,
+				      const TYPE& _min,
+				      const TYPE& _max,
 				      const std::string& _description = "") :
 				  Parameter(_objectLink, _name),
 				  m_value(_defaultValue),
+				  m_min(_min),
+				  m_max(_max),
 				  m_default(_defaultValue) {
 					
 				};
 				/**
 				 * @brief Destructor.
 				 */
-				virtual ~Param() { };
+				virtual ~ParamRange() { };
 				// herited methode
 				virtual std::string getType() const;
 				// herited methode

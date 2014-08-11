@@ -67,10 +67,7 @@ namespace ewol {
 	 */
 	class Object : public std::enable_shared_from_this<Object>, public ewol::object::ParameterList {
 		private:
-			static size_t m_valUID; //!< stic used for the unique ID definition
-		public:
-			// Config list of properties
-			static const char* const configName;
+			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
 			bool m_objectHasBeenInit; //!< Know if the init function has bben called
 		protected:
@@ -209,62 +206,29 @@ namespace ewol {
 			virtual void onReceiveMessage(const ewol::object::Message& _msg) {
 				
 			};
-		private:
-			std::vector<ewol::object::ConfigElement> m_listConfig;
-		protected:
-			/**
-			 * @brief the Object add a configuration capabilities
-			 * @param[in] _config Configuration name.
-			 * @param[in] _type Type of the config.
-			 * @param[in] _control control of the current type.
-			 * @param[in] _description Descritpion on the current type.
-			 * @param[in] _default Default value of this parameter.
-			 */
-			void registerConfig(const char* _config,
-			                    const char* _type = nullptr,
-			                    const char* _control = nullptr,
-			                    const char* _description = nullptr,
-			                    const char* _default = nullptr);
-			/**
-			 * @brief Configuration requested to the curent Object
-			 * @param[in] _conf Configuration handle.
-			 * @return true if the parametere has been used
-			 */
-			virtual bool onSetConfig(const ewol::object::Config& _conf);
-			/**
-			 * @brief Receive a configuration message from an other element system or from the curent Object
-			 * @param[in] _config Configuration name.
-			 * @param[out] _result Result of the request.
-			 * @return true if the config is set
-			 */
-			virtual bool onGetConfig(const char* _config, std::string& _result) const ;
 		public:
-			/** 
-			 * @brief get all the configuration list
-			 * @return The list of all parameter availlable in the widget
-			 */
-			virtual const std::vector<ewol::object::ConfigElement>& getConfigList() {
-				return m_listConfig;
-			};
 			/**
 			 * @brief Configuration requested to the curent Object (systrem mode)
 			 * @param[in] _conf Configuration handle.
 			 * @return true if config set correctly...
 			 */
-			bool setConfig(const ewol::object::Config& _conf) {
-				return onSetConfig(_conf);
-			};
-			bool setConfig(const std::string& _config, const std::string& _value); // need a search ...
-			// TODO : Distingish global search and sub search ...
-			bool setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value); // need a search ...
-			bool setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf);
+			// TODO : Remove this function .... ==> parameterSet(_config, _value);
+			bool setConfig(const std::string& _config, const std::string& _value) {
+				return parameterSet(_config, _value);
+			}
+			// TODO : Rework the position on this function ...
+			bool setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 			/**
 			 * @brief Configuration get from the curent Object (systrem mode)
 			 * @param[in] _config Configuration name.
 			 * @return the config properties
 			 */
-			std::string getConfig(const char* _config) const;
-			std::string getConfig(const std::string& _config) const; // need search
+			// TODO : Remove this :
+			std::string getConfig(const std::string& _config) const {
+				return parameterGet(_config);
+			}
+			// herited function :
+			virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		protected:
 			ewol::object::Param<std::string> m_name; //!< name of the element ...
 		public:

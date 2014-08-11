@@ -21,12 +21,6 @@ const char* const ewol::widget::Button::eventEnter      = "enter";
 const char* const ewol::widget::Button::eventLeave      = "leave";
 const char* const ewol::widget::Button::eventValue      = "value";
 
-const char* const ewol::widget::Button::configToggle = "toggle";
-const char* const ewol::widget::Button::configLock   = "lock";
-const char* const ewol::widget::Button::configEnableSingle = "enable-single";
-const char* const ewol::widget::Button::configValue  = "value";
-const char* const ewol::widget::Button::configShaper = "shaper";
-
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
@@ -35,10 +29,11 @@ const char* const ewol::widget::Button::configShaper = "shaper";
 #define STATUS_DOWN      (3)
 
 ewol::widget::Button::Button() :
-  m_value(false),
-  m_lock(ewol::widget::Button::lockNone),
-  m_toggleMode(false),
-  m_enableSingle(false),
+  m_shaper(*this, "shaper", "", "The display name for config file"),
+  m_value(*this, "value", false, "Value of the Button"),
+  m_lock(*this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder"),
+  m_toggleMode(*this, "toggle", false, "The Button can toogle"),
+  m_enableSingle(*this, "enable-single", false, "If one element set in the Button ==> display only set"),
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
@@ -51,12 +46,12 @@ ewol::widget::Button::Button() :
 	addEventId(eventEnter);
 	addEventId(eventLeave);
 	addEventId(eventValue);
-	// add configuration
-	registerConfig(configToggle, "bool", nullptr, "The Button can toogle");
-	registerConfig(configValue, "bool", nullptr, "Basic value of the widget");
-	registerConfig(configEnableSingle, "bool", nullptr, "If one element set in the Button ==> display only set");
-	registerConfig(configLock, "list", "none;true;released;pressed", "Lock the button in a special state to permit changing state only by the coder");
-	registerConfig(configShaper, "string", nullptr, "the display name for config file");
+	
+	// set property list:
+	m_lock.add(lockNone, "none");
+	m_lock.add(lockWhenPressed, "pressed");
+	m_lock.add(lockWhenReleased, "released");
+	m_lock.add(lockAccess, "access");
 	
 	// shaper satatus update:
 	CheckStatus();
@@ -68,7 +63,7 @@ ewol::widget::Button::Button() :
 
 void ewol::widget::Button::init(const std::string& _shaperName) {
 	ewol::widget::Container2::init();
-	m_shaper.setSource(_shaperName);
+	m_shaper.get().setSource(_shaperName);
 }
 
 
@@ -79,12 +74,12 @@ ewol::widget::Button::~Button() {
 
 void ewol::widget::Button::setShaperName(const std::string& _shaperName) {
 	EWOL_WARNING("set shaper name : '" << _shaperName << "'");
-	m_shaper.setSource(_shaperName);
+	m_shaper.get().setSource(_shaperName);
 	markToRedraw();
 }
 
 void ewol::widget::Button::calculateSize(const vec2& _availlable) {
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.get().getPadding();
 	ewol::Padding ret = calculateSizePadded(_availlable, padding);
 	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
 	m_selectableAreaPos = vec2(ret.xLeft(), ret.yButtom());
@@ -93,13 +88,13 @@ void ewol::widget::Button::calculateSize(const vec2& _availlable) {
 
 
 void ewol::widget::Button::calculateMinMaxSize() {
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper.get().getPadding();
 	calculateMinMaxSizePadded(padding);
 }
 
 void ewol::widget::Button::onDraw() {
 	// draw the shaaper (if needed indeed)
-	m_shaper.draw();
+	m_shaper.get().draw();
 }
 
 void ewol::widget::Button::onRegenerateDisplay() {
@@ -107,8 +102,8 @@ void ewol::widget::Button::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	ewol::Padding padding = m_shaper.getPadding();
-	m_shaper.setShape(vec2(0,0),
+	ewol::Padding padding = m_shaper.get().getPadding();
+	m_shaper.get().setShape(vec2(0,0),
 	                  m_size,
 	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
 	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
@@ -309,7 +304,7 @@ void ewol::widget::Button::CheckStatus() {
 }
 
 void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
-	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
+	if (true == m_shaper.get().changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -317,7 +312,7 @@ void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 
 
 void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
-	if (false == m_shaper.periodicCall(_event) ) {
+	if (false == m_shaper.get().periodicCall(_event) ) {
 		periodicCallDisable();
 	}
 	markToRedraw();
@@ -393,7 +388,7 @@ bool ewol::widget::Button::onGetConfig(const char* _config, std::string& _result
 		return true;
 	}
 	if (_config == configShaper) {
-		_result = m_shaper.getSource();
+		_result = m_shaper.get().getSource();
 		return true;
 	}
 	if (_config == configEnableSingle) {

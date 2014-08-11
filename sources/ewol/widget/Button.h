@@ -47,7 +47,7 @@ namespace ewol {
 					lockAccess, //!< all event are trashed  == > acctivity of the button is disable
 				};
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
@@ -67,7 +67,7 @@ namespace ewol {
 				 */
 				void setShaperName(const std::string& _shaperName);
 			protected:
-				bool m_value; //!< Current state of the button.
+				ewol::object::Param<bool> m_value; //!< Current state of the button.
 			public:
 				/**
 				 * @brief set the currentValue of the Button (pressed or not)
@@ -84,7 +84,7 @@ namespace ewol {
 					return m_value;
 				};
 			protected:
-				enum buttonLock m_lock; //!< Current lock state of the button.
+				ewol::object::ParamList<enum buttonLock> m_lock; //!< Current lock state of the button.
 			public:
 				/**
 				 * @brief set the button lock state.
@@ -99,7 +99,7 @@ namespace ewol {
 					return m_lock;
 				};
 			protected:
-				bool m_toggleMode; //!< The button is able to toggle.
+				ewol::object::Param<bool> m_toggleMode; //!< The button is able to toggle.
 			public:
 				/**
 				 * @brief change the toggle mode.
@@ -114,7 +114,7 @@ namespace ewol {
 					return m_toggleMode;
 				};
 			protected:
-				bool m_enableSingle; //!< When a single subwidget is set display all time it.
+				ewol::object::Param<bool> m_enableSingle; //!< When a single subwidget is set display all time it.
 			public:
 				/**
 				 * @brief Chane the display single widget mode availlable.

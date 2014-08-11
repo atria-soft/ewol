@@ -11,10 +11,12 @@
 #define __EWOL_PARAMETER_LIST_H__
 
 #include <vector>
+#include <map>
 
 namespace ewol {
 	namespace object {
 		class Parameter;
+		class ParameterRef;
 		class ParameterList {
 			friend class ewol::object::Parameter; // to register parameter in the list.
 			private:
@@ -27,7 +29,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor.
 				 */
-				~ParameterList();
+				virtual ~ParameterList();
 				/**
 				 * @brief Register a parameter class pointer in the List of parameters
 				 * @note This class does not destroy the parameter pointer!!!
@@ -52,12 +54,22 @@ namespace ewol {
 				 * @param[in] parameter The parameter string name.
 				 * @return The value of the parameter (string).
 				 */
-				std::string parameterGet(const std::string& _parameter);
+				std::string parameterGet(const std::string& _parameter) const;
 				/**
 				 * @brief Display all the parameter value with there name.
 				 * @param[in] changeOnly check at true if the user want to display only parameter that are not at default value.
 				 */
-				void parameterDisplay(bool _changeOnly = false);
+				void parameterDisplay(bool _changeOnly = false) const;
+				/**
+				 * @brief Called when a parameter change value.
+				 * @param[in] _paramPointer Pointer on the parameter (to know which parameter have change);
+				 */
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) { };
+				/**
+				 * @brief Get All the parameter configuration:
+				 * @return map on the parameters
+				 */
+				std::map<std::string, std::string> parameterGetAll(bool _notIfDefault=true) const;
 		};
 	};
 };

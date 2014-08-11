@@ -240,7 +240,7 @@ namespace ewol {
 			 */
 			virtual vec2 getOrigin();
 		protected:
-			ewol::Dimension m_userMinSize; //!< user define the minimum size of the widget
+			ewol::object::Param<ewol::Dimension> m_userMinSize; //!< user define the minimum size of the widget
 		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
@@ -256,7 +256,7 @@ namespace ewol {
 			 * @return the size requested
 			 */
 			const ewol::Dimension& getMinSize() {
-				return m_userMinSize;
+				return m_userMinSize.get();
 			};
 			/**
 			 * @brief Check if the current min size is compatible with the user minimum size
@@ -265,7 +265,7 @@ namespace ewol {
 			 */
 			virtual void checkMinSize();
 		protected:
-			ewol::Dimension m_userMaxSize; //!< user define the maximum size of the widget
+			ewol::object::Param<ewol::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
@@ -281,7 +281,7 @@ namespace ewol {
 			 * @return the size requested
 			 */
 			const ewol::Dimension& getMaxSize() {
-				return m_userMaxSize;
+				return m_userMaxSize.get();
 			};
 			/**
 			 * @brief Check if the current max size is compatible with the user maximum size
@@ -290,7 +290,7 @@ namespace ewol {
 			 */
 			virtual void checkMaxSize();
 		protected:
-			bvec2 m_userExpand;
+			ewol::object::Param<bvec2> m_userExpand;
 		public:
 			/**
 			 * @brief set the expend capabilities (x&y)
@@ -332,7 +332,7 @@ namespace ewol {
 			 */
 			const bvec2& canFill();
 		protected:
-			bool m_hide; //!< hide a widget on the display
+			ewol::object::Param<bool> m_hide; //!< hide a widget on the display
 		public:
 			/**
 			 * @brief set the widget hidden
@@ -351,7 +351,7 @@ namespace ewol {
 			};
 		
 		protected:
-			enum ewol::gravity m_gravity; //!< Gravity of the widget
+			ewol::object::Param<enum ewol::gravity> m_gravity; //!< Gravity of the widget
 		public:
 			/**
 			 * @brief set the widget gravity
@@ -370,7 +370,7 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
 			bool m_hasFocus; //!< set the focus on this widget
-			bool m_canFocus; //!< the focus can be done on this widget
+			ewol::object::Param<bool> m_canFocus; //!< the focus can be done on this widget
 		public:
 			/**
 			 * @brief get the focus state of the widget
@@ -707,11 +707,6 @@ namespace ewol {
 		 * Annimation section :
 		 */
 		public:
-			// configuration :
-			static const char* const configAnnimationAddType;
-			static const char* const configAnnimationAddTime;
-			static const char* const configAnnimationRemoveType;
-			static const char* const configAnnimationRemoveTime;
 			// event generated :
 			static const char* const eventAnnimationStart; //!< event when start annimation
 			static const char* const eventAnnimationRatio; //!< event when % of annimation change (integer)
@@ -724,11 +719,11 @@ namespace ewol {
 			};
 			enum annimationMode m_annimationMode; //!< true when the annimation is started
 			float m_annimationratio; //!< Ratio of the annimation [0..1]
-		private:
-			std::vector<const char*> m_annimationList[2]; //!< List of all annimation type ADD
 		protected:
-			const char* m_annimationType[2]; //!< type of start annimation (default nullptr ==> no annimation)
-			float m_annimationTime[2]; //!< time to produce start annimation
+			ewol::object::ParamList<int32_t> m_annimationTypeStart; //!< type of start annimation
+			ewol::object::Param<float> m_annimationTimeStart; //!< time to produce start annimation
+			ewol::object::ParamList<int32_t> m_annimationTypeStop; //!< type of start annimation
+			ewol::object::Param<float> m_annimationTimeStop; //!< time to produce start annimation
 		protected:
 			/**
 			 * @brief Add a annimation type capabilities of this widget.

@@ -15,8 +15,6 @@
 #undef __class__
 #define __class__ "Object"
 
-
-const char* const ewol::Object::configName = "name";
 size_t ewol::Object::m_valUID = 0;
 
 void ewol::Object::autoDestroy() {
@@ -50,12 +48,11 @@ void ewol::Object::removeParent() {
 ewol::Object::Object() :
   m_objectHasBeenInit(false),
   m_static(false),
-  m_name(*this, "name", ""),
+  m_name(*this, "name", "", "Object name, might be a unique reference in all the program"),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
-	registerConfig(configName, "string", nullptr, "Object name, might be a unique reference in all the program");
 }
 
 ewol::Object::~Object() {
@@ -285,42 +282,19 @@ void ewol::Object::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) 
 	}
 }
 
-
-void ewol::Object::registerConfig(const char* _config,
-                                  const char* _type,
-                                  const char* _control,
-                                  const char* _description,
-                                  const char* _default) {
-	if (nullptr == _config) {
-		EWOL_ERROR("Try to add nullptr config");
-		return;
-	}
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (nullptr != m_listConfig[iii].getConfig()) {
-			if (0 == strcmp(m_listConfig[iii].getConfig(), _config) ) {
-				EWOL_ERROR("Try to add config already added : " << _config << " at pos=" << iii);
-			}
-		}
-	}
-	m_listConfig.push_back(ewol::object::ConfigElement(_config, _type, _control, _description, _default));
-}
-
-
 bool ewol::Object::loadXML(exml::Element* _node) {
 	if (nullptr == _node) {
 		return false;
 	}
-	bool errorOccured = true;
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (m_listConfig[iii].getConfig() == nullptr) {
+	bool errorOccured = false;
+	
+	for(size_t iii=0 ; iii<_node->sizeAttribute() ; iii++) {
+		auto pair = _node->getAttrPair(iii);
+		if (pair.first == "") {
 			continue;
 		}
-		if (_node->existAttribute(m_listConfig[iii].getConfig()) == false) {
-			continue;
-		}
-		std::string value = _node->getAttribute(m_listConfig[iii].getConfig());
-		if (false == setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), value) ) ) {
-			errorOccured = false;
+		if (parameterSet(pair.first, pair.second) == false) {
+			errorOccured = true;
 		}
 	}
 	return errorOccured;
@@ -331,82 +305,16 @@ bool ewol::Object::storeXML(exml::Element* _node) const {
 		return false;
 	}
 	bool errorOccured = true;
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (m_listConfig[iii].getConfig() == nullptr) {
-			continue;
-		}
-		std::string value = getConfig(m_listConfig[iii].getConfig());
-		if (nullptr != m_listConfig[iii].getDefault() ) {
-			if (value == m_listConfig[iii].getDefault() ) {
-				// nothing to add on the XML :
-				continue;
-			}
-		}
-		// add attribute ...  == > note : add special element when '"' element detected ...
-		_node->setAttribute(m_listConfig[iii].getConfig(), value);
+	for (auto &it : parameterGetAll(true)) {
+		_node->setAttribute(it.first, it.second);
 	}
 	return errorOccured;
 }
 
-
-bool ewol::Object::onSetConfig(const ewol::object::Config& _conf) {
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config : " << _conf);
-	if (_conf.getConfig() == configName) {
-		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config name : \"" << _conf.getData() << "\"");
-		setName(_conf.getData());
-		return true;
+void ewol::Object::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	if (_paramPointer == m_name) {
+		EWOL_CRITICAL("[" << getId() << "] Parameter name change : " << m_name);
 	}
-	return false;
-}
-
-bool ewol::Object::onGetConfig(const char* _config, std::string& _result) const {
-	if (_config == configName) {
-		_result = getName();
-		return true;
-	}
-	return false;
-}
-
-bool ewol::Object::setConfig(const std::string& _config, const std::string& _value) {
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (nullptr != m_listConfig[iii].getConfig()) {
-			if (_config == m_listConfig[iii].getConfig() ) {
-				// call config with standard parameter
-				return setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), _value));
-			}
-		}
-	}
-	EWOL_ERROR(" parameter is not in the list : \"" << _config << "\"" );
-	return false;
-}
-
-std::string ewol::Object::getConfig(const char* _config) const {
-	std::string res="";
-	if (nullptr != _config) {
-		onGetConfig(_config, res);
-	}
-	return res;
-}
-
-std::string ewol::Object::getConfig(const std::string& _config) const {
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (nullptr != m_listConfig[iii].getConfig()) {
-			if (_config == m_listConfig[iii].getConfig() ) {
-				// call config with standard parameter
-				return getConfig(m_listConfig[iii].getConfig());
-			}
-		}
-	}
-	EWOL_ERROR(" parameter is not in the list : \"" << _config << "\"" );
-	return "";
-}
-
-bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf) {
-	std::shared_ptr<ewol::Object> object = getObjectManager().get(_objectName);
-	if (object == nullptr) {
-		return false;
-	}
-	return object->setConfig(_conf);
 }
 
 bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {

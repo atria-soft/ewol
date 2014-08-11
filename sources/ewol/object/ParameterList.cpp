@@ -46,7 +46,7 @@ bool ewol::object::ParameterList::parameterSet(const std::string& _parameter, co
 	return false;
 }
 
-std::string ewol::object::ParameterList::parameterGet(const std::string& _parameter) {
+std::string ewol::object::ParameterList::parameterGet(const std::string& _parameter) const {
 	for (auto &it : m_list) {
 		if(    it != nullptr
 		    && it->getName() == _parameter) {
@@ -56,7 +56,7 @@ std::string ewol::object::ParameterList::parameterGet(const std::string& _parame
 	return "???";
 }
 
-void ewol::object::ParameterList::parameterDisplay(bool _changeOnly) {
+void ewol::object::ParameterList::parameterDisplay(bool _changeOnly) const {
 	EWOL_INFO("    Object parameters:");
 	for (auto &it : m_list) {
 		if(it != nullptr) {
@@ -73,3 +73,17 @@ void ewol::object::ParameterList::parameterDisplay(bool _changeOnly) {
 	}
 }
 
+std::map<std::string, std::string> ewol::object::ParameterList::parameterGetAll(bool _notIfDefault) const {
+	std::map<std::string, std::string> out;
+	for (auto &it : m_list) {
+		if(it != nullptr) {
+			std::string paramName = it->getName();
+			std::string paramVal = it->getString();
+			if (    _notIfDefault == false
+			     || it->isDefault() == false) {
+				out.insert(std::make_pair(paramName, paramVal));
+			}
+		}
+	}
+	return out;
+}

@@ -86,13 +86,8 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj
 #undef __class__
 #define __class__ "Widget"
 
-const char* const ewol::Widget::configFill = "fill";
-const char* const ewol::Widget::configExpand = "expand";
-const char* const ewol::Widget::configHide = "hide";
+// TODO : Event config :
 const char* const ewol::Widget::configFocus = "focus";
-const char* const ewol::Widget::configMinSize = "min-size";
-const char* const ewol::Widget::configMaxSize = "max-size";
-const char* const ewol::Widget::configGravity = "gravity";
 
 // configuration :
 const char* const ewol::Widget::configAnnimationAddType = "annimation-start-type";
@@ -111,12 +106,12 @@ ewol::Widget::Widget() :
   m_offset(0,0),
   m_zoom(1.0f),
   m_origin(0,0),
-  m_userMinSize(vec2(0,0),ewol::Dimension::Pixel),
-  m_userMaxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel),
-  m_userExpand(false,false),
-  m_userFill(*this, "fill", bvec2(false,false)),
-  m_hide(false),
-  m_gravity(ewol::gravityButtomLeft),
+  m_userMinSize(*this, "min-size", ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel), "User minimum size"),
+  m_userMaxSize(*this, "max-size", ewol::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel), "User maximum size"),
+  m_userExpand(*this, "expand", bvec2(false,false), "Request the widget Expand size wile space is available"),
+  m_userFill(*this, "fill", bvec2(false,false), "Fill the widget available size"),
+  m_hide(*this, "hide", false, "The widget start hided"),
+  m_gravity(*this, "gravity", ewol::gravityButtomLeft, "Gravity orientation"),
   m_hasFocus(false),
   m_canFocus(false),
   m_limitMouseEvent(3),
@@ -127,24 +122,37 @@ ewol::Widget::Widget() :
   m_grabCursor(false),
   m_cursorDisplay(ewol::context::cursorArrow),
   m_annimationMode(annimationModeDisable),
-  m_annimationratio(0.0f) {
+  m_annimationratio(0.0f),
+  m_annimationTypeStart(*this, "annimation-start-type", "Annimation type, when adding/show a widget"),
+  m_annimationTimeStart(*this, "annimation-start-time", "Annimation time in second, when adding/show a widget", 0.2f, 0.0f, 200.0f),
+  m_annimationTypeStop(*this, "annimation-stop-type", "Annimation type, when removing/hide a widget"),
+  m_annimationTimeStop(*this, "annimation-stop-time", "Annimation time in second, when removing/hide a widget", 0.2f, 0.0f, 200.0f){
 	m_annimationType[0] = nullptr;
 	m_annimationType[1] = nullptr;
 	m_annimationTime[0] = 0.1f; // annimation will be 100ms at the first state
 	m_annimationTime[1] = 0.1f; // annimation will be 100ms at the first state
 	addObjectType("ewol::Widget");
 	// set all the config in the list :
-	registerConfig(ewol::Widget::configFill, "bvec2", nullptr, "Fill the widget available size");
-	registerConfig(ewol::Widget::configExpand, "bvec2", nullptr, "Request the widget Expand size wile space is available");
-	registerConfig(ewol::Widget::configHide, "bool", nullptr, "The widget start hided");
 	registerConfig(ewol::Widget::configFocus, "bool", nullptr, "The widget request focus");
-	registerConfig(ewol::Widget::configMinSize, "dimension", nullptr, "User minimum size");
-	registerConfig(ewol::Widget::configMaxSize, "dimension", nullptr, "User maximum size");
-	registerConfig(ewol::Widget::configGravity, "list", "center;top-left;top;top-right;right;buttom-right;buttom;buttom-left;left", "User maximum size");
-	registerConfig(ewol::Widget::configAnnimationAddType, "list", nullptr /* no control */, "Annimation type, when adding/show a widget");
-	registerConfig(ewol::Widget::configAnnimationAddTime, "float", nullptr /* no control */, "Annimation time in second, when adding/show a widget");
-	registerConfig(ewol::Widget::configAnnimationRemoveType, "list", nullptr /* no control */, "Annimation type, when removing/hide a widget");
-	registerConfig(ewol::Widget::configAnnimationRemoveTime, "float", nullptr /* no control */, "Annimation time in second, when removing/hide a widget");
+	
+	// TODO : Set a static interface for list ==> this methode create a multiple allocation
+	m_gravity.add(ewol::gravityCenter, "center");
+	m_gravity.add(ewol::gravityTopLeft, "top-left");
+	m_gravity.add(ewol::gravityTop, "top");
+	m_gravity.add(ewol::gravityTopRight, "top-right");
+	m_gravity.add(ewol::gravityRight, "right");
+	m_gravity.add(ewol::gravityButtomRight, "buttom-right");
+	m_gravity.add(ewol::gravityButtom, "buttom");
+	m_gravity.add(ewol::gravityButtomLeft, "buttom-left");
+	m_gravity.add(ewol::gravityLeft, "left");
+	
+	
+	m_annimationTypeStart.add(0, "none");
+	m_annimationTypeStart.setDefault(0);
+	
+	m_annimationTypeStop.add(0, "none");
+	m_annimationTypeStop.setDefault(0);
+	
 	addEventId(eventAnnimationStart);
 	addEventId(eventAnnimationRatio);
 	addEventId(eventAnnimationStop);

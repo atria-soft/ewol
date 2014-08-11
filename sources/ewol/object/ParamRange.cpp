@@ -149,13 +149,20 @@ template<> std::string ewol::object::Param<int64_t>::getValueSpecific(const int6
 	return std::to_string(_valueRequested);
 }
 template<> void ewol::object::Param<int64_t>::set(const int64_t& _newVal) {
-	m_value = _newVal;
+	if (m_min == m_max) {
+		m_value = _newVal;
+	} else {
+		m_value = std::avg(m_min, _newVal, m_max);
+	}
 }
 template<> void ewol::object::Param<int64_t>::setString(const std::string& _newVal) {
 	set(std::stoll(_newVal));
 }
 template<> std::string ewol::object::Param<int64_t>::getInfo() const {
-	return getType() + " default=" + std::to_string(m_default);
+	if (m_min == m_max) {
+		return getType() + " default=" + std::to_string(m_default);
+	}
+	return getType() + " [" + std::to_string(m_min) + ".." + std::to_string(m_max) + "] default=" + std::to_string(m_default);
 }
 
 
@@ -169,13 +176,20 @@ template<> std::string ewol::object::Param<float>::getValueSpecific(const float&
 	return std::to_string(_valueRequested);
 }
 template<> void ewol::object::Param<float>::set(const float& _newVal) {
-	m_value = _newVal;
+	if (m_min == m_max) {
+		m_value = _newVal;
+	} else {
+		m_value = std::avg(m_min, _newVal, m_max);
+	}
 }
 template<> void ewol::object::Param<float>::setString(const std::string& _newVal) {
 	set(std::stof(_newVal));
 }
 template<> std::string ewol::object::Param<float>::getInfo() const {
-	return getType() + " default=" + std::to_string(m_default);
+	if (m_min == m_max) {
+		return getType() + " default=" + std::to_string(m_default);
+	}
+	return getType() + " [" + std::to_string(m_min) + ".." + std::to_string(m_max) + "] default=" + std::to_string(m_default);
 }
 
 
@@ -189,13 +203,20 @@ template<> std::string ewol::object::Param<double>::getValueSpecific(const doubl
 	return std::to_string(_valueRequested);
 }
 template<> void ewol::object::Param<double>::set(const double& _newVal) {
-	m_value = _newVal;
+	if (m_min == m_max) {
+		m_value = _newVal;
+	} else {
+		m_value = std::avg(m_min, _newVal, m_max);
+	}
 }
 template<> void ewol::object::Param<double>::setString(const std::string& _newVal) {
 	set(std::stod(_newVal));
 }
 template<> std::string ewol::object::Param<double>::getInfo() const {
-	return getType() + " default=" + std::to_string(m_default);
+	if (m_min == m_max) {
+		return getType() + " default=" + std::to_string(m_default);
+	}
+	return getType() + " [" + std::to_string(m_min) + ".." + std::to_string(m_max) + "] default=" + std::to_string(m_default);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

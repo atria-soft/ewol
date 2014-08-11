@@ -15,22 +15,25 @@
 
 namespace ewol {
 	namespace object {
-		class ParamList : public Parameter {
+		template<typename MY_TYPE> class ParamList : public Parameter {
 			private:
-				int64_t m_value; //!< Element value ==> can be directly used.
-				int64_t m_default; //!< Default value.
-				std::map<std::string, int64_t> m_list; //!< pointer on the list of all elements.
+				MY_TYPE m_value; //!< Element value ==> can be directly used.
+				MY_TYPE m_default; //!< Default value.
+				std::map<std::string, MY_TYPE> m_list; //!< pointer on the list of all elements.
 			public:
 				/**
 				 * @brief Create a parameter with List of element parameter.
-				 * @param[in] blockLink Pointer on the reference block (must be define for upper class).
-				 * @param[in] name Static name of the parameter.
+				 * @param[in] _objectLink reference on the parameter lister.
+				 * @param[in] _name Static name of the parameter.
+				 * @param[in] _description description of the parameter.
 				 */
 				ParamList(ewol::object::ParameterList& _objectLink,
-				          const std::string& _name) :
+				          const std::string& _name,
+				          const MY_TYPE& _defaultValue,
+				          const std::string& _description="") :
 				  Parameter(_objectLink, _name),
-				  m_value(0),
-				  m_default(0) {
+				  m_value(_defaultValue),
+				  m_default(_defaultValue) {
 					
 				};
 				/**
@@ -39,60 +42,111 @@ namespace ewol {
 				virtual ~ParamList() {
 					
 				};
-				void add(int64_t _value, const std::string& _name, const std::string& _description = "");
+				void add(const MY_TYPE& _value, const std::string& _name, const std::string& _description = "") {
+					auto it = m_list.find(_name);
+					if (it != m_list.end()) {
+						it->second = _value;
+						return;
+					}
+					m_list.insert(std::make_pair(_name, _value));
+				}
 				// herited methode
-				virtual std::string getType() {
-					return "list";
+				virtual std::string getType() const {
+					return "list...";
 				};
 				// herited methode
-				virtual std::string getString();
+				virtual std::string getString() const {
+					return getElement(m_value);
+				}
 				// herited methode
-				virtual std::string getDefault();
+				virtual std::string getDefault() const {
+					return getElement(m_default);
+				}
 				// herited methode
-				virtual void setString(const std::string& _newVal);
+				virtual void setString(const std::string& _newVal) {
+					auto it = m_list.find(_newVal);
+					if (it != m_list.end()) {
+						m_value = it->second;
+						return;
+					}
+					EWOL_WARNING("paramList value='" << _newVal << "' is not un the list ... ==> no change");
+					for (auto &it : m_list) {
+						EWOL_VERBOSE("        element : " << it.first);
+					}
+				}
 				// herited methode
-				virtual std::string getInfo();
+				virtual std::string getInfo() const {
+					std::string list = "List default=" + getElement(m_default) + " in : [";
+					for (auto &it : m_list) {
+						list += it.first + "/";
+					}
+					return list + "]";
+				}
 				// herited methode
-				virtual bool isDefault() {
+				virtual bool isDefault() const {
 					return m_value == m_default;
 				}
 				// herited methode
 				virtual void setDefault() {
 					m_value = m_default;
 				}
+				void setDefaultValue(const MY_TYPE& _value) {
+					m_default = _value;
+				}
 				/**
 				 * @brief Get the value of the current parameter.
 				 * @return the Reference value
 				 */
-				const inline int64_t& get() const {
+				inline MY_TYPE& get() {
+					return m_value;
+				};
+				const inline MY_TYPE& get() const {
 					return m_value;
 				};
 				/**
 				 * @brief Set the value of the current parameter.
 				 * @param[in] _newVal New value of the parameter. (not set if out of range)
 				 */
-				void set(int64_t _newVal);
+				void set(MY_TYPE _newVal) {
+					for (auto &it : m_list) {
+						if (it.second == _newVal) {
+							m_value = it.second;
+							return;
+						}
+					}
+					EWOL_WARNING("paramList value=??? is not un the list ... ==> no change");
+				}
 			private:
 				/**
 				 * @brief Get the element description from real Value.
 				 * @param[in] _intValue value that might be converted in string.
 				 * @return the description string coresponding to this ID.
 				 */
-				std::string getElement(int64_t _intValue);
+				std::string getElement(MY_TYPE _intValue) const {
+					for (auto &it : m_list) {
+						if (it.second == _intValue) {
+							return it.first;
+						}
+					}
+					return "???";
+				}
 			public:
 				/**
 				 * @brief assignement operator.
 				 * @param[in] newVal The new value of the parameter.
 				 */
-				const ParamList& operator= (int64_t _newVal) {
+				const ParamList& operator= (MY_TYPE _newVal) {
 					set(_newVal);
 					return *this;
 				}
-				operator int64_t() {
+				operator MY_TYPE() const {
 					return m_value;
 				}
 		};
-		std::ostream& operator <<(std::ostream& _os, const ewol::object::ParamList& _obj);
+		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::object::ParamList<MY_TYPE>& _obj) {
+			_os << _obj.get();
+			return _os;
+		}
 	};
 };
 #endif
