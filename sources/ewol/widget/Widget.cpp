@@ -114,7 +114,7 @@ ewol::Widget::Widget() :
   m_userMinSize(vec2(0,0),ewol::Dimension::Pixel),
   m_userMaxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel),
   m_userExpand(false,false),
-  m_userFill(false,false),
+  m_userFill(*this, "fill", bvec2(false,false)),
   m_hide(false),
   m_gravity(ewol::gravityButtomLeft),
   m_hasFocus(false),
@@ -509,8 +509,8 @@ bvec2 ewol::Widget::canExpand() {
 }
 
 void ewol::Widget::setFill(const bvec2& _newFill) {
-	if(    m_userFill.x() != _newFill.x()
-	    || m_userFill.y() != _newFill.y()) {
+	if(    m_userFill.get().x() != _newFill.x()
+	    || m_userFill.get().y() != _newFill.y()) {
 		m_userFill = _newFill;
 		requestUpdateSize();
 		markToRedraw();
@@ -518,7 +518,7 @@ void ewol::Widget::setFill(const bvec2& _newFill) {
 }
 
 const bvec2& ewol::Widget::canFill() {
-	return m_userFill;
+	return m_userFill.get();
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -799,7 +799,7 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 		return true;
 	}
 	if (_config == ewol::Widget::configFill) {
-		_result = m_userFill;
+		_result = m_userFill.get();
 		return true;
 	}
 	if (_config == ewol::Widget::configExpand) {

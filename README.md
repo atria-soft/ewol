@@ -31,11 +31,6 @@ Dependency packages
 	# on 64 bits processor for compatibility
 	sudo apt-get install ia32-libs
 
-Copyright (c)
-=============
-
-2011, Edouard DUPIN
-
 License (APACHE v2.0)
 =====================
 

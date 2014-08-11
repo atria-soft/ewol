@@ -94,7 +94,11 @@ def create(target):
 		'ewol/object/Message.cpp',
 		'ewol/object/MultiCast.cpp',
 		'ewol/object/Object.cpp',
-		'ewol/object/RemoveEvent.cpp'
+		'ewol/object/RemoveEvent.cpp',
+		'ewol/object/Parameter.cpp',
+		'ewol/object/ParameterList.cpp',
+		'ewol/object/ParamList.cpp',
+		'ewol/object/Param.cpp'
 		])
 	
 	# OpenGL interface :

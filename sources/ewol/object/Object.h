@@ -29,6 +29,9 @@ namespace ewol {
 #include <ewol/object/Config.h>
 #include <ewol/object/ConfigElement.h>
 #include <ewol/object/Message.h>
+#include <ewol/object/ParameterList.h>
+#include <ewol/object/Param.h>
+#include <ewol/object/ParamList.h>
 
 #define DECLARE_FACTORY(className) \
 	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
@@ -62,7 +65,7 @@ namespace ewol {
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every Object to communicate between them.
 	 */
-	class Object : public std::enable_shared_from_this<Object> {
+	class Object : public std::enable_shared_from_this<Object>, public ewol::object::ParameterList {
 		private:
 			static size_t m_valUID; //!< stic used for the unique ID definition
 		public:
@@ -263,14 +266,14 @@ namespace ewol {
 			std::string getConfig(const char* _config) const;
 			std::string getConfig(const std::string& _config) const; // need search
 		protected:
-			std::string m_name; //!< name of the element ...
+			ewol::object::Param<std::string> m_name; //!< name of the element ...
 		public:
 			/**
 			 * @brief get the Object name
 			 * @return The requested name
 			 */
 			const std::string& getName() const {
-				return m_name;
+				return m_name.get();
 			};
 			/**
 			 * @brief get the Widget name

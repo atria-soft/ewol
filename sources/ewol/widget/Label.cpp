@@ -99,11 +99,11 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
-	if (m_userFill.x() == true) {
+	if (m_userFill.get().x() == true) {
 		localSize.setX(m_size.x());
 		tmpTextOrigin.setX(0);
 	}
-	if (m_userFill.y() == true) {
+	if (m_userFill.get().y() == true) {
 		localSize.setY(m_size.y());
 		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 	}

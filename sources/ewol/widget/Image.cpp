@@ -156,12 +156,12 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		vec2 ratioSizeDisplayRequested = m_posStop - m_posStart;
 		//imageRealSizeMax *= ratioSizeDisplayRequested;
 		
-		if (m_userFill.x() == true) {
+		if (m_userFill.get().x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {
 			origin.setX(origin.x() + (m_size.x()-m_minSize.x())*0.5f);
 		}
-		if (m_userFill.y() == true) {
+		if (m_userFill.get().y() == true) {
 			imageRealSize.setY(imageRealSizeMax.y());
 		} else {
 			origin.setY(origin.y() + (m_size.y()-m_minSize.y())*0.5f);

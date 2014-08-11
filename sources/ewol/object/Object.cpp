@@ -50,6 +50,7 @@ void ewol::Object::removeParent() {
 ewol::Object::Object() :
   m_objectHasBeenInit(false),
   m_static(false),
+  m_name(*this, "name", ""),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = m_valUID++;
@@ -67,6 +68,7 @@ ewol::Object::~Object() {
 
 void ewol::Object::init() {
 	getObjectManager().add(shared_from_this());
+	parameterDisplay();
 	m_objectHasBeenInit = true;
 }
 

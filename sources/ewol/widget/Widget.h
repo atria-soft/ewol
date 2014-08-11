@@ -311,7 +311,7 @@ namespace ewol {
 			 */
 			virtual bvec2 canExpand();
 		protected:
-			bvec2 m_userFill;
+			ewol::object::Param<bvec2> m_userFill;
 		public:
 			/**
 			 * @brief set the x&y filling capacity
@@ -323,7 +323,7 @@ namespace ewol {
 			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
 			 */
 			virtual const bvec2& getFill() {
-				return m_userFill;
+				return m_userFill.get();
 			};
 			/**
 			 * @brief get the filling capabilities x&y

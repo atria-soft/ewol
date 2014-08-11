@@ -114,10 +114,10 @@ ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availla
 	}
 	// Checkin the filling properties  == > for the subElements:
 	vec2 subElementSize = m_minSize;
-	if (m_userFill.x() == true) {
+	if (m_userFill.get().x() == true) {
 		subElementSize.setX(m_size.x());
 	}
-	if (m_userFill.y() == true) {
+	if (m_userFill.get().y() == true) {
 		subElementSize.setY(m_size.y());
 	}
 	vec2 origin = (m_size - subElementSize)*0.5f + vec2(_padding.xLeft(), _padding.yButtom());

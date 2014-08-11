@@ -146,10 +146,10 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 		ewol::Padding padding = m_shaper.getPadding();
 		
 		vec2 tmpSizeShaper = m_minSize;
-		if (true == m_userFill.x()) {
+		if (true == m_userFill.get().x()) {
 			tmpSizeShaper.setX(m_size.x());
 		}
-		if (true == m_userFill.y()) {
+		if (true == m_userFill.get().y()) {
 			tmpSizeShaper.setY(m_size.y());
 		}
 		
@@ -508,7 +508,7 @@ void ewol::widget::Entry::updateTextPosition() {
 	ewol::Padding padding = m_shaper.getPadding();
 	
 	int32_t tmpSizeX = m_minSize.x();
-	if (true == m_userFill.x()) {
+	if (true == m_userFill.get().x()) {
 		tmpSizeX = m_size.x();
 	}
 	int32_t tmpUserSize = tmpSizeX - padding.x();

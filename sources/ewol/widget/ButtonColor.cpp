@@ -96,12 +96,12 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
-	if (true == m_userFill.x()) {
+	if (true == m_userFill.get().x()) {
 		localSize.setX(m_size.x());
 		tmpOrigin.setX(0);
 		tmpTextOrigin.setX(0);
 	}
-	if (true == m_userFill.y()) {
+	if (true == m_userFill.get().y()) {
 		localSize.setY(m_size.y());
 	}
 	tmpOrigin += vec3(padding.xLeft(), padding.yButtom(), 0);
@@ -123,7 +123,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	m_text.print(label);
 	
 	
-	if (true == m_userFill.y()) {
+	if (true == m_userFill.get().y()) {
 		tmpOrigin.setY(padding.yButtom());
 	}
 	
