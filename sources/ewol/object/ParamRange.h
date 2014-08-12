@@ -12,7 +12,7 @@
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Parameter.h>
 #include <etk/math/Vector2D.h>
-
+#include <typeinfo>
 
 namespace ewol {
 	namespace object {
@@ -34,9 +34,9 @@ namespace ewol {
 				 */
 				ParamRange(ewol::object::ParameterList& _objectLink,
 				      const std::string& _name,
-				      const TYPE& _defaultValue,
-				      const TYPE& _min,
-				      const TYPE& _max,
+				      const MY_TYPE& _defaultValue,
+				      const MY_TYPE& _min,
+				      const MY_TYPE& _max,
 				      const std::string& _description = "") :
 				  Parameter(_objectLink, _name),
 				  m_value(_defaultValue),
@@ -50,7 +50,9 @@ namespace ewol {
 				 */
 				virtual ~ParamRange() { };
 				// herited methode
-				virtual std::string getType() const;
+				virtual std::string getType() const {
+					return typeid(MY_TYPE).name();
+				}
 				// herited methode
 				virtual std::string getString() const {
 					return getValueSpecific(m_value);
@@ -60,9 +62,16 @@ namespace ewol {
 					return getValueSpecific(m_default);
 				};
 				// herited methode
-				virtual void setString(const std::string& _newVal);
+				virtual void setString(const std::string& _newVal) {
+					MY_TYPE val;
+					// when you want to set an element in parameter you will implement the function template std::from_string
+					std::from_string(val, _newVal);
+					set(val);
+				}
 				// herited methode
-				virtual std::string getInfo() const;
+				virtual std::string getInfo() const {
+					return getType() + " default=" + getDefault();
+				}
 				// herited methode
 				virtual bool isDefault() const {
 					return m_value == m_default;
@@ -87,13 +96,21 @@ namespace ewol {
 				 * @brief Set a new value for this parameter
 				 * @param[in] newVal New value to set (set the nearest value if range is set)
 				 */
-				void set(const MY_TYPE& _newVal);
+				void set(const MY_TYPE& _newVal) {
+					if (m_min == m_max) {
+						m_value = _newVal;
+					} else {
+						m_value = std::avg(m_min, _newVal, m_max);
+					}
+				}
 			private:
 				/**
 				 * @brief Get the string of the specify value.
 				 * @return convetion of the velue in string.
 				 */
-				std::string getValueSpecific(const MY_TYPE& _valueRequested) const;
+				std::string getValueSpecific(const MY_TYPE& _valueRequested) const {
+					return std::to_string(_valueRequested);
+				}
 			public:
 				/**
 				 * @brief assignement operator.

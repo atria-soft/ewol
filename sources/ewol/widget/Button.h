@@ -12,10 +12,10 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Container2.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/compositing/Shaper.h>
+#include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
 
 
@@ -34,12 +34,6 @@ namespace ewol {
 				static const char* const eventEnter;
 				static const char* const eventLeave;
 				static const char* const eventValue;
-				// Config list of properties
-				static const char* const configToggle;
-				static const char* const configLock;
-				static const char* const configEnableSingle;
-				static const char* const configValue;
-				static const char* const configShaper;
 				enum buttonLock{
 					lockNone, //!< normal status of the button
 					lockWhenPressed, //!< When the state is set in pressed, the status stay in this one

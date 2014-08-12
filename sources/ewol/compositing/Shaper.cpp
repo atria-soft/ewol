@@ -622,3 +622,21 @@ const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
 	}
 	return m_colorProperty->get(_id);
 }
+
+
+
+std::string std::to_string(const ewol::compositing::Shaper& _obj) {
+	return _obj.getSource();
+}
+
+std::u32string std::to_u32string(const ewol::compositing::Shaper& _obj) {
+	return std::to_u32string(std::to_string(_obj));
+}
+
+bool std::from_string(ewol::compositing::Shaper& _variableRet, const std::string& _value) {
+	_variableRet.setSource(_value);
+	return true;
+}
+bool std::from_string(ewol::compositing::Shaper& _variableRet, const std::u32string& _value) {
+	return from_string(_variableRet,  std::to_string(_value));
+}

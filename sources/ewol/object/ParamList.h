@@ -12,6 +12,7 @@
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Parameter.h>
 #include <map>
+#include <typeinfo>
 
 namespace ewol {
 	namespace object {
@@ -52,8 +53,8 @@ namespace ewol {
 				}
 				// herited methode
 				virtual std::string getType() const {
-					return "list...";
-				};
+					return typeid(MY_TYPE).name();
+				}
 				// herited methode
 				virtual std::string getString() const {
 					return getElement(m_value);

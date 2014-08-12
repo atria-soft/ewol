@@ -32,11 +32,19 @@ namespace ewol {
 				 */
 				Param(ewol::object::ParameterList& _objectLink,
 				      const std::string& _name,
-				      const TYPE& _defaultValue,
+				      const MY_TYPE& _defaultValue,
 				      const std::string& _description = "") :
 				  Parameter(_objectLink, _name),
 				  m_value(_defaultValue),
 				  m_default(_defaultValue) {
+					
+				};
+				Param(ewol::object::ParameterList& _objectLink,
+				      const std::string& _name,
+				      const std::string& _description = "") :
+				  Parameter(_objectLink, _name),
+				  m_value(),
+				  m_default() {
 					
 				};
 				/**
@@ -44,19 +52,26 @@ namespace ewol {
 				 */
 				virtual ~Param() { };
 				// herited methode
-				virtual std::string getType() const;
+				virtual std::string getType() const {
+					return typeid(MY_TYPE).name();
+				}
 				// herited methode
 				virtual std::string getString() const {
 					return getValueSpecific(m_value);
-				};
+				}
 				// herited methode
 				virtual std::string getDefault() const {
 					return getValueSpecific(m_default);
-				};
+				}
 				// herited methode
-				virtual void setString(const std::string& _newVal);
+				virtual void setString(const std::string& _newVal) {
+					// when you want to set an element in parameter you will implement the function template std::from_string
+					std::from_string(m_value, _newVal);
+				}
 				// herited methode
-				virtual std::string getInfo() const;
+				virtual std::string getInfo() const {
+					return getType() + " default=" + getDefault();
+				}
 				// herited methode
 				virtual bool isDefault() const {
 					return m_value == m_default;
@@ -81,13 +96,17 @@ namespace ewol {
 				 * @brief Set a new value for this parameter
 				 * @param[in] newVal New value to set (set the nearest value if range is set)
 				 */
-				void set(const MY_TYPE& _newVal);
+				void set(const MY_TYPE& _newVal) {
+					m_value = _newVal;
+				}
 			private:
 				/**
 				 * @brief Get the string of the specify value.
 				 * @return convetion of the velue in string.
 				 */
-				std::string getValueSpecific(const MY_TYPE& _valueRequested) const;
+				std::string getValueSpecific(const MY_TYPE& _valueRequested) const {
+					return std::to_string(_valueRequested);
+				}
 			public:
 				/**
 				 * @brief assignement operator.

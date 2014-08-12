@@ -12,6 +12,7 @@
 #define __EWOL_PARAMETER_H__
 
 #include <string>
+#include <typeinfo>
 
 namespace ewol {
 	namespace object {

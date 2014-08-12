@@ -295,5 +295,12 @@ namespace ewol {
 	};
 };
 
+namespace std {
+	std::string to_string(const ewol::compositing::Shaper& _obj);
+	std::u32string to_u32string(const ewol::compositing::Shaper& _obj);
+	bool from_string(ewol::compositing::Shaper& _variableRet, const std::string& _value);
+	bool from_string(ewol::compositing::Shaper& _variableRet, const std::u32string& _value);
+};
+
 #endif
 
