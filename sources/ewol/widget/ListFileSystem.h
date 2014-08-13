@@ -25,14 +25,6 @@ namespace ewol {
 				static const char * const eventFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
 				static const char * const eventFolderSelect;
 				static const char * const eventFolderValidate;
-				// Config list of properties
-				static const char* const configShowHidden; //!< @config "show-hidden"
-				static const char* const configShowFile;
-				static const char* const configShowFolder;
-				static const char* const configShowTemporary;
-				static const char* const configPath;
-				static const char* const configSelect;
-				// TODO : Add a standalone configuration ..
 			protected:
 				ListFileSystem();
 				void init();
@@ -76,7 +68,8 @@ namespace ewol {
 				 */
 				std::string getSelect() const ;
 			protected:
-				std::string m_folder; //!< Current folder that display point on.
+				ewol::object::Param<std::string> m_folder; //!< Current folder that display point on.
+				ewol::object::Param<std::string> m_selectFile; //!< current selected file
 			public:
 				/**
 				 * @brief Set a folder to display (might be a valid folder !!!)
@@ -94,7 +87,7 @@ namespace ewol {
 					return m_folder;
 				};
 			protected:
-				bool m_showFile; //!< Show files elements
+				ewol::object::Param<bool> m_showFile; //!< Show files elements
 			public:
 				/**
 				 * @brief Set the status of the displaying files or Not.
@@ -112,7 +105,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				bool m_showFolder; //!< Display the folders elements
+				ewol::object::Param<bool> m_showFolder; //!< Display the folders elements
 			public:
 				/**
 				 * @brief Set the status of the displaying fodlers or Not.
@@ -130,7 +123,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				bool m_showHidden; //!< Display hidden elements
+				ewol::object::Param<bool> m_showHidden; //!< Display hidden elements
 			public:
 				/**
 				 * @brief Set the status of the displaying hidden files or folder or Not.
@@ -148,7 +141,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				bool m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
+				ewol::object::Param<bool> m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
 			public:
 				/**
 				 * @brief Set the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.

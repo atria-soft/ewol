@@ -10,26 +10,22 @@
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/Manager.h>
 
-const char* const ewol::widget::Sizer::configBorder = "border";
-const char* const ewol::widget::Sizer::configMode = "mode";
-
 #undef __class__
 #define __class__ "Sizer"
 
 ewol::widget::Sizer::Sizer() :
-  m_mode(ewol::widget::Sizer::modeHori),
-  m_borderSize(),
+  m_mode(*this, "mode", modeHori, "The display mode"),
+  m_borderSize(*this, "border", vec2(0,0), "The sizer border size"),
   m_animation(animationNone),
   m_animationTime(0) {
 	addObjectType("ewol::widget::Sizer");
-	registerConfig(configBorder, "dimension", nullptr, "The sizer border size");
-	registerConfig(configMode, "list", "{vert,hori}", "The display mode");
-	
+	m_mode.add(modeHori, "hori");
+	m_mode.add(modeVert, "vert");
 }
 
 void ewol::widget::Sizer::init(enum displayMode _mode) {
 	ewol::widget::ContainerN::init();
-	m_mode = _mode;
+	m_mode.set(_mode);
 }
 
 ewol::widget::Sizer::~Sizer() {
@@ -41,20 +37,20 @@ ewol::widget::Sizer::~Sizer() {
 
 
 void ewol::widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize) {
-	m_borderSize = _newBorderSize;
+	m_borderSize.set(_newBorderSize);
 	markToRedraw();
 	requestUpdateSize();
 }
 
 void ewol::widget::Sizer::setMode(enum displayMode _mode) {
-	m_mode = _mode;
+	m_mode.set(_mode);
 	markToRedraw();
 	requestUpdateSize();
 }
 
 void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	ewol::Widget::calculateSize(_availlable);
-	vec2 tmpBorderSize = m_borderSize.getPixel();
+	vec2 tmpBorderSize = m_borderSize->getPixel();
 	EWOL_VERBOSE("[" << getId() << "] update size : " << _availlable << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
 	m_size -= tmpBorderSize*2;
 	// calculate unExpandable size :
@@ -128,8 +124,8 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 void ewol::widget::Sizer::calculateMinMaxSize() {
 	EWOL_VERBOSE("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
-	m_minSize = m_userMinSize.getPixel();
-	vec2 tmpBorderSize = m_borderSize.getPixel();
+	m_minSize = m_userMinSize->getPixel();
+	vec2 tmpBorderSize = m_borderSize->getPixel();
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
 	for (auto &it : m_subWidget) {
@@ -193,7 +189,7 @@ void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidg
 	// TODO : ...
 	ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 }
-
+/*
 bool ewol::widget::Sizer::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
 		return true;
@@ -231,5 +227,5 @@ bool ewol::widget::Sizer::onGetConfig(const char* _config, std::string& _result)
 	}
 	return false;
 }
-
+*/
 

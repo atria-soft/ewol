@@ -25,11 +25,9 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventPressed;
-				// Config list of properties
-				static const char* const configValue;
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
-				std::u32string m_label; //!< decorated text to display.
+				ewol::object::Param<std::u32string> m_label; //!< decorated text to display.
 				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
@@ -66,8 +64,10 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

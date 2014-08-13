@@ -173,7 +173,7 @@ std::shared_ptr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const s
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
 	std::string TmpFilename = _filename;
-	if (false == end_with(_filename, ".svg") ) {
+	if (false == etk::end_with(_filename, ".svg") ) {
 		_size = ivec2(-1,-1);
 	}
 	#ifdef __TARGET_OS__MacOs
@@ -186,9 +186,9 @@ std::shared_ptr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const s
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
 		TmpFilename += ":";
-		TmpFilename += std::to_string(_size.x());
+		TmpFilename += etk::to_string(_size.x());
 		TmpFilename += "x";
-		TmpFilename += std::to_string(_size.y());
+		TmpFilename += etk::to_string(_size.y());
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);

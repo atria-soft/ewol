@@ -78,12 +78,8 @@ namespace ewol {
 					// nothing to do ...
 				}
 		};
-		bool operator==(const ParameterRef& _obj, const Parameter& _obj2) noexcept {
-			return &_obj2 == _obj.m_ref;
-		}
-		bool operator==(const Parameter& _obj2, const ParameterRef& _obj) noexcept {
-			return &_obj2 == _obj.m_ref;
-		}
+		bool operator==(const ParameterRef& _obj, const Parameter& _obj2) noexcept;
+		bool operator==(const Parameter& _obj2, const ParameterRef& _obj) noexcept;
 	};
 };
 

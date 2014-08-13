@@ -58,26 +58,26 @@ void ewol::widget::FileChooser::init() {
 	      + "<popup >\n"
 	      + "	<sizer mode='vert' lock='true' fill='true' expand='true'>\n"
 	      + "		<sizer mode='hori'>\n"
-	      + "			<checkbox name='[" + std::to_string(getId()) + "]file-shooser:show-hiden-file'>\n"
+	      + "			<checkbox name='[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file'>\n"
 	      + "				<label>" + TRANSLATE("ShowHiddenFiles") + "</label>\n"
 	      + "			</checkbox>\n"
 	      + "			<spacer expand='true,false'/>\n"
-	      + "			<button name='[" + std::to_string(getId()) + "]file-shooser:button-validate'>\n"
+	      + "			<button name='[" + etk::to_string(getId()) + "]file-shooser:button-validate'>\n"
 	      + "				<sizer mode='hori'>\n"
 	      + "					<image src='THEME:GUI:Load.edf' fill='true' size='7,7mm' distance-field='true'/>\n"
-	      + "					<label name='[" + std::to_string(getId()) + "]file-shooser:validate-label'>" + TRANSLATE("Validate") + "</label>\n"
+	      + "					<label name='[" + etk::to_string(getId()) + "]file-shooser:validate-label'>" + TRANSLATE("Validate") + "</label>\n"
 	      + "				</sizer>\n"
 	      + "			</button>\n"
-	      + "			<button name='[" + std::to_string(getId()) + "]file-shooser:button-cancel'>\n"
+	      + "			<button name='[" + etk::to_string(getId()) + "]file-shooser:button-cancel'>\n"
 	      + "				<sizer mode='hori'>\n"
 	      + "					<image src='THEME:GUI:Remove.edf' fill='true' size='7,7mm' distance-field='true'/>\n"
-	      + "					<label name='[" + std::to_string(getId()) + "]file-shooser:cancel-label'>" + TRANSLATE("Cancel") + "</label>\n"
+	      + "					<label name='[" + etk::to_string(getId()) + "]file-shooser:cancel-label'>" + TRANSLATE("Cancel") + "</label>\n"
 	      + "				</sizer>\n"
 	      + "			</button>\n"
 	      + "		</sizer>\n"
 	      + "		<sizer mode='hori'>\n"
 	      + "			<spacer min-size='2,2mm'/>\n"
-	      + "			<ListFileSystem name='[" + std::to_string(getId()) + "]file-shooser:list-folder'\n"
+	      + "			<ListFileSystem name='[" + etk::to_string(getId()) + "]file-shooser:list-folder'\n"
 	      + "			                min-size='20,0%'\n"
 	      + "			                expand='false,true'\n"
 	      + "			                show-hidden='false'\n"
@@ -85,7 +85,7 @@ void ewol::widget::FileChooser::init() {
 	      + "			                show-folder='true'\n"
 	      + "			                show-temporary='false'/>\n"
 	      + "			<spacer min-size='2,2mm'/>\n"
-	      + "			<ListFileSystem name='[" + std::to_string(getId()) + "]file-shooser:list-files'\n"
+	      + "			<ListFileSystem name='[" + etk::to_string(getId()) + "]file-shooser:list-files'\n"
 	      + "			                expand='true,true'\n"
 	      + "			                show-hidden='false'\n"
 	      + "			                show-file='true'\n"
@@ -94,29 +94,29 @@ void ewol::widget::FileChooser::init() {
 	      + "			<spacer min-size='2,2mm'/>\n"
 	      + "		</sizer>\n"
 	      + "		<sizer mode='hori'>\n"
-	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-file' src='THEME:GUI:File.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
-	      + "			<entry name='[" + std::to_string(getId()) + "]file-shooser:entry-file' expand='true,false' fill='true,false'/>\n"
+	      + "			<image name='[" + etk::to_string(getId()) + "]file-shooser:img-file' src='THEME:GUI:File.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
+	      + "			<entry name='[" + etk::to_string(getId()) + "]file-shooser:entry-file' expand='true,false' fill='true,false'/>\n"
 	      + "		</sizer>\n"
 	      + "		<sizer mode='hori'>\n"
-	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-folder' src='THEME:GUI:Folder.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
-	      + "			<entry name='[" + std::to_string(getId()) + "]file-shooser:entry-folder' expand='true,false' fill='true,false'/>\n"
-	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-home' src='THEME:GUI:Home.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
+	      + "			<image name='[" + etk::to_string(getId()) + "]file-shooser:img-folder' src='THEME:GUI:Folder.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
+	      + "			<entry name='[" + etk::to_string(getId()) + "]file-shooser:entry-folder' expand='true,false' fill='true,false'/>\n"
+	      + "			<image name='[" + etk::to_string(getId()) + "]file-shooser:img-home' src='THEME:GUI:Home.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
 	      + "		</sizer>\n"
-	      + "		<label name='[" + std::to_string(getId()) + "]file-shooser:title-label'>" + TRANSLATE("FileChooser") + "</label>\n"
+	      + "		<label name='[" + etk::to_string(getId()) + "]file-shooser:title-label'>" + TRANSLATE("FileChooser") + "</label>\n"
 	      + "	</sizer>\n"
 	      + "</popup>";
 	loadFromString(myDescription);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:show-hiden-file", "value", ewolEventFileChooserHidenFileChange);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:button-validate", "pressed", eventValidate);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:button-cancel", "pressed", eventCancel);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-folder", "folder-validate", ewolEventFileChooserListFolder);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-files", "file-select", ewolEventFileChooserListFile);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-files", "file-validate", ewolEventFileChooserListFileValidate);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-file", "modify", ewolEventFileChooserEntryFile);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-file", "enter",  ewolEventFileChooserEntryFileEnter);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-folder", "modify", ewolEventFileChooserEntryFolder);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-folder", "enter",  ewolEventFileChooserEntryFolderEnter);
-	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:img-home", "pressed", ewolEventFileChooserHome);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file", "value", ewolEventFileChooserHidenFileChange);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-validate", "pressed", eventValidate);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-cancel", "pressed", eventCancel);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "folder-validate", ewolEventFileChooserListFolder);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-files", "file-select", ewolEventFileChooserListFile);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-files", "file-validate", ewolEventFileChooserListFileValidate);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "modify", ewolEventFileChooserEntryFile);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "enter",  ewolEventFileChooserEntryFileEnter);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "modify", ewolEventFileChooserEntryFolder);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "enter",  ewolEventFileChooserEntryFolderEnter);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:img-home", "pressed", ewolEventFileChooserHome);
 	// set the default Folder properties:
 	updateCurrentFolder();
 	setCanHaveFocus(true);
@@ -124,7 +124,7 @@ void ewol::widget::FileChooser::init() {
 
 void ewol::widget::FileChooser::onGetFocus() {
 	// transfert focus on a specific widget...
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-file", "focus", "true");
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "focus", "true");
 }
 
 ewol::widget::FileChooser::~FileChooser() {
@@ -132,15 +132,15 @@ ewol::widget::FileChooser::~FileChooser() {
 }
 
 void ewol::widget::FileChooser::setTitle(const std::string& _label) {
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:title-label", "value", _label);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setValidateLabel(const std::string& _label) {
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:validate-label", "value", _label);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setCancelLabel(const std::string& _label) {
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:cancel-label", "value", _label);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
@@ -150,7 +150,7 @@ void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
 
 void ewol::widget::FileChooser::setFileName(const std::string& _filename) {
 	m_file = _filename;
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
 }
 
 void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
@@ -162,18 +162,18 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		// == > change the file name
 		m_file = _msg.getData();
 		// update the selected file in the list :
-		setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
+		setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
 	} else if (eventCancel == _msg.getMessage()) {
 		// == > Auto remove ...
 		generateEventId(_msg.getMessage());
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventFileChooserHidenFileChange) {
 		if (_msg.getData() == "true") {
-			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
-			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
+			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
+			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
 		} else {
-			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
-			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
+			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
+			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
 		}
 	} else if (_msg.getMessage() == ewolEventFileChooserListFolder) {
 		// == > this is an internal event ...
@@ -216,9 +216,9 @@ void ewol::widget::FileChooser::updateCurrentFolder() {
 			m_folder +=  "/";
 		}
 	}
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "path", m_folder);
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "path", m_folder);
-	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-folder", "value", m_folder);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "path", m_folder);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "path", m_folder);
+	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "value", m_folder);
 	markToRedraw();
 }
 

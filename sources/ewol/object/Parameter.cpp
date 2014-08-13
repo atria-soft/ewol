@@ -21,3 +21,10 @@ ewol::object::Parameter::Parameter(ewol::object::ParameterList& _objectLink, con
 void ewol::object::Parameter::notifyChange() const {
 	m_objectLink.onParameterChangeValue(ewol::object::ParameterRef(this));
 }
+
+bool ewol::object::operator==(const ParameterRef& _obj, const Parameter& _obj2) noexcept {
+	return &_obj2 == _obj.m_ref;
+}
+bool ewol::object::operator==(const Parameter& _obj2, const ParameterRef& _obj) noexcept {
+	return &_obj2 == _obj.m_ref;
+}

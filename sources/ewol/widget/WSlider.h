@@ -47,6 +47,7 @@ namespace ewol {
 				int32_t m_windowsDestination; //!< widget destinated viewed
 				int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
 				float m_slidingProgress; //!< ratio progression of a sliding
+				ewol::object::Param<std::string> m_selectNewWidget; // input config requesting
 			protected:
 				/**
 				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
@@ -70,14 +71,14 @@ namespace ewol {
 				 */
 				void subWidgetSelectSet(const std::string& _widgetName);
 			private:
-				float m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
+				ewol::object::ParamRange<float> m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
 			public:
 				/** 
 				 * @brief set transition speed element.
 				 * @param[in] _timeSecond number of second needed to do the transition.
 				 */
 				void setTransitionSpeed(float _timeSecond) {
-					m_transitionSpeed = _timeSecond;
+					m_transitionSpeed.set(_timeSecond);
 				};
 				/** 
 				 * @brief get transition speed element.
@@ -87,7 +88,7 @@ namespace ewol {
 					return m_transitionSpeed;
 				};
 			private:
-				enum sladingMode m_transitionSlide; //!< mode to slide the widgets
+				ewol::object::ParamList<enum sladingMode> m_transitionSlide; //!< mode to slide the widgets
 			public:
 				/** 
 				 * @brief set a new mode of sliding element
@@ -107,8 +108,10 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 		};
 	};
 	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);

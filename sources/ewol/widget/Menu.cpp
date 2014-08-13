@@ -92,7 +92,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 		}
 		if (tmpObject->m_image.size()!=0) {
 			std::string composeString ="<sizer mode=\"hori\">\n";
-			if (std::end_with(tmpObject->m_image, ".edf") == true) {
+			if (etk::end_with(tmpObject->m_image, ".edf") == true) {
 				composeString+="    <image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\" distance-field='true'/>\n";
 			} else {
 				composeString+="    <image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n";
@@ -200,7 +200,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 										
 											std::string composeString = "<composer expand=\"true,false\" fill=\"true,true\">\n";
 											composeString+= "    <sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n";
-											if (std::end_with(m_listElement[jjj]->m_image, ".edf") == true) {
+											if (etk::end_with(m_listElement[jjj]->m_image, ".edf") == true) {
 												composeString+="        <image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"  distance-field='true'/>\n";
 											} else {
 												composeString+="        <image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n";

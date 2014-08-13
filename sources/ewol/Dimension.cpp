@@ -89,28 +89,28 @@ void ewol::Dimension::set(std::string _config) {
 	m_data.setValue(0,0);
 	m_type = ewol::Dimension::Pixel;
 	enum distance type = ewol::Dimension::Pixel;
-	if (end_with(_config, "%", false) == true) {
+	if (etk::end_with(_config, "%", false) == true) {
 		type = ewol::Dimension::Pourcent;
 		_config.erase(_config.size()-1, 1);
-	} else if (end_with(_config, "px",false) == true) {
+	} else if (etk::end_with(_config, "px",false) == true) {
 		type = ewol::Dimension::Pixel;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "ft",false) == true) {
+	} else if (etk::end_with(_config, "ft",false) == true) {
 		type = ewol::Dimension::foot;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "in",false) == true) {
+	} else if (etk::end_with(_config, "in",false) == true) {
 		type = ewol::Dimension::Inch;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "km",false) == true) {
+	} else if (etk::end_with(_config, "km",false) == true) {
 		type = ewol::Dimension::Kilometer;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "mm",false) == true) {
+	} else if (etk::end_with(_config, "mm",false) == true) {
 		type = ewol::Dimension::Millimeter;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "cm",false) == true) {
+	} else if (etk::end_with(_config, "cm",false) == true) {
 		type = ewol::Dimension::Centimeter;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "m",false) == true) {
+	} else if (etk::end_with(_config, "m",false) == true) {
 		type = ewol::Dimension::Meter;
 		_config.erase(_config.size()-1, 1);
 	} else {

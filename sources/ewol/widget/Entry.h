@@ -37,13 +37,8 @@ namespace ewol {
 				static const char * const eventClick;
 				static const char * const eventEnter;
 				static const char * const eventModify; // return in the data the new string inside it ...
-				// Config list of properties
-				static const char* const configMaxChar;
-				static const char* const configRegExp;
-				static const char* const configEmptyMessage;
-				static const char* const configValue;
 			private:
-				ewol::compositing::Shaper m_shaper;
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
 				int32_t m_colorIdTextBg; //!< color property of the text background
 				int32_t m_colorIdCursor; //!< color property of the text cursor
@@ -64,7 +59,7 @@ namespace ewol {
 				virtual ~Entry();
 			
 			private:
-				std::string m_data; //!< sting that must be displayed
+				ewol::object::Param<std::string> m_data; //!< sting that must be displayed
 			protected:
 				/**
 				 * @brief internal check the value with RegExp checking
@@ -86,7 +81,7 @@ namespace ewol {
 				};
 			
 			private:
-				int32_t m_maxCharacter; //!< number max of xharacter in the list
+				ewol::object::Param<int32_t> m_maxCharacter; //!< number max of xharacter in the list
 			public:
 				/**
 				 * @brief Limit the number of Unicode character in the entry
@@ -101,7 +96,7 @@ namespace ewol {
 					return m_maxCharacter;
 				};
 			private:
-				etk::RegExp<std::string> m_regExp; //!< regular expression to limit the input of an entry
+				ewol::object::Param<etk::RegExp<std::string>> m_regExp; //!< regular expression to limit the input of an entry
 			public:
 				/**
 				 * @brief Limit the input entry at a regular expression... (by default it is "*")
@@ -113,7 +108,7 @@ namespace ewol {
 				 * @param The regExp string
 				 */
 				std::string getRegExp() const {
-					return m_regExp.getRegExp();
+					return m_regExp->getRegExp();
 				};
 			private:
 				bool m_needUpdateTextPos; //!< text position can have change
@@ -150,7 +145,7 @@ namespace ewol {
 				 */
 				virtual void removeSelected();
 			private:
-				std::string m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
+				ewol::object::Param<std::string> m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			public:
 				/**
 				 * @brief set The text displayed when nothing is in the entry.
@@ -177,8 +172,10 @@ namespace ewol {
 				virtual void onLostFocus();
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 		};
 	};
 };

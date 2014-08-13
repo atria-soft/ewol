@@ -52,7 +52,7 @@ void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
 		// find the real Font name :
 		std::vector<std::string> output;
 		myFolder.folderGetRecursiveFiles(output);
-		std::vector<std::string> split = std::split(localName, ';');
+		std::vector<std::string> split = etk::split(localName, ';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
@@ -60,11 +60,11 @@ void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
 			EWOL_INFO("    try with : '" << split[jjj] << "'");
 			for (size_t iii=0; iii<output.size(); iii++) {
 				//EWOL_DEBUG(" file : " << output[iii]);
-				if(    true == end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+"regular"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+"r"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+".ttf", false)) {
+				if(    true == etk::end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+"regular"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+"r"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+".ttf", false)) {
 					EWOL_INFO(" find Font [Regular]     : " << output[iii]);
 					m_fileName = output[iii];
 					hasFindAFont=true;
@@ -352,7 +352,7 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 		if (tmpObj == nullptr) {
 			continue;
 		}
-		tmpObj->addString("m_UVal", std::to_string(m_listElement[iii].m_UVal));
+		tmpObj->addString("m_UVal", etk::to_string(m_listElement[iii].m_UVal));
 		tmpObj->addNumber("m_glyphIndex", m_listElement[iii].m_glyphIndex);
 		tmpObj->addString("m_sizeTexture", (std::string)m_listElement[iii].m_sizeTexture);
 		tmpObj->addString("m_bearing", (std::string)m_listElement[iii].m_bearing);
@@ -403,7 +403,7 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 			continue;
 		}
 		GlyphProperty prop;
-		prop.m_UVal = std::stoi(tmpObj->getStringValue("m_UVal", "0"));
+		prop.m_UVal = etk::string_to_int32_t(tmpObj->getStringValue("m_UVal", "0"));
 		prop.m_glyphIndex = tmpObj->getNumberValue("m_glyphIndex", 0);
 		prop.m_sizeTexture = tmpObj->getStringValue("m_sizeTexture", "0,0");
 		prop.m_bearing = tmpObj->getStringValue("m_bearing", "0,0");

@@ -36,15 +36,14 @@ ewol::widget::WSlider::WSlider() :
   m_windowsDestination(0),
   m_windowsRequested(-1),
   m_slidingProgress(1.0f),
-  m_transitionSpeed(1.0f),
-  m_transitionSlide(sladingTransitionHori) {
+  m_selectNewWidget(*this, "select", "", "Select the requested widget to display"),
+  m_transitionSpeed(*this, "speed", 1.0f, 0.0f, 200.0f, "Transition speed of the slider"),
+  m_transitionSlide(*this, "mode", sladingTransitionHori, "Transition mode of the slider") {
 	addObjectType("ewol::widget::WSlider");
 	addEventId(eventStartSlide);
 	addEventId(eventStopSlide);
-	// add configuration
-	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
-	registerConfig(configSpeed, "float", nullptr, "Transition speed of the slider");
-	registerConfig(configSelect, "strin", nullptr, "Select the requested widget to display");
+	m_transitionSlide.add(sladingTransitionVert, "vert");
+	m_transitionSlide.add(sladingTransitionHori, "hori");
 }
 
 ewol::widget::WSlider::~WSlider() {
@@ -270,23 +269,23 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 		}
 	}
 }
-
+/*
 bool ewol::widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configMode) {
 		enum sladingMode tmpTransition = sladingTransitionHori;
-		if(compare_no_case(_conf.getData(), "vert") == true) {
+		if(etk::compare_no_case(_conf.getData(), "vert") == true) {
 			tmpTransition = sladingTransitionVert;
-		} else if(compare_no_case(_conf.getData(), "hori") == true) {
+		} else if(etk::compare_no_case(_conf.getData(), "hori") == true) {
 			tmpTransition = sladingTransitionHori;
 		}
 		setTransitionMode(tmpTransition);
 		return true;
 	}
 	if (_conf.getConfig() == configSpeed) {
-		setTransitionSpeed(std::stof(_conf.getData()));
+		setTransitionSpeed(etk::string_to_float(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configSelect) {
@@ -313,7 +312,7 @@ bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _resul
 		return true;
 	}
 	if (_config == configMode) {
-		_result = std::to_string(getTransitionSpeed());
+		_result = etk::to_string(getTransitionSpeed());
 		return true;
 	}
 	if (_config == configSelect) {
@@ -327,6 +326,7 @@ bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _resul
 	}
 	return false;
 }
+*/
 
 std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {

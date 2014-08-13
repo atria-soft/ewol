@@ -218,7 +218,7 @@ void ewol::translate::autoDetectLanguage() {
 			std::string lang;
 			lang += s[0];
 			lang += s[1];
-			lang = toupper(lang);
+			lang = etk::toupper(lang);
 			getInstanceTranslation().setLanguage(lang);
 		}
 	#else

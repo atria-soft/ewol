@@ -32,18 +32,13 @@ namespace ewol {
 					markNone
 				};
 			public:
-				// Config list of properties
-				static const char* const configArrowPosition;
-				static const char* const configArrowMode;
-				static const char* const configShaper;
-			public:
 				ContextMenu();
 				void init(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
 			public:
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			public:
 				/**
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
@@ -58,8 +53,8 @@ namespace ewol {
 				
 				float m_offset;
 			private:
-				vec2 m_arrowPos;
-				enum markPosition m_arrawBorder;
+				ewol::object::Param<vec2> m_arrowPos;
+				ewol::object::ParamList<enum markPosition> m_arrawBorder;
 			public:
 				void setPositionMark(enum markPosition position, vec2 arrowPos);
 			protected: // Derived function

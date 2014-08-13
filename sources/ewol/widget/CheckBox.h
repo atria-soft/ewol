@@ -26,11 +26,8 @@ namespace ewol {
 				static const char* const eventUp;
 				static const char* const eventEnter;
 				static const char* const eventValue;
-				// Config list of properties
-				static const char* const configValue;
-				static const char* const configShaper;
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
@@ -58,7 +55,7 @@ namespace ewol {
 				 */
 				void setShaperName(const std::string& _shaperName);
 			protected:
-				bool m_value; //!< Current state of the checkbox.
+				ewol::object::Param<bool> m_value; //!< Current state of the checkbox.
 			public:
 				/**
 				 * @brief set the current value of the checkbox (check or not)
@@ -85,8 +82,10 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void calculateSize(const vec2& _availlable);

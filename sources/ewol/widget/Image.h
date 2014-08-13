@@ -26,14 +26,6 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventPressed;
-				// Config list of properties
-				static const char * const configRatio;
-				static const char * const configSize;
-				static const char * const configBorder;
-				static const char * const configSource;
-				static const char * const configDistanceField;
-				static const char * const configPartStart;
-				static const char * const configPartStop;
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
 				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
@@ -58,7 +50,7 @@ namespace ewol {
 				 */
 				void set(const std::string& _file, const ewol::Dimension& _border);
 			protected:
-				std::string m_fileName; //!< file name of the image.
+				ewol::object::Param<std::string> m_fileName; //!< file name of the image.
 			public:
 				/**
 				 * @brief set the new filename
@@ -73,7 +65,7 @@ namespace ewol {
 					return m_fileName;
 				};
 			protected:
-				ewol::Dimension m_border; //!< border to add at the image.
+				ewol::object::Param<ewol::Dimension> m_border; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -88,7 +80,7 @@ namespace ewol {
 					return m_border;
 				};
 			protected:
-				ewol::Dimension m_imageSize; //!< border to add at the image.
+				ewol::object::Param<ewol::Dimension> m_imageSize; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -103,7 +95,7 @@ namespace ewol {
 					return m_imageSize;
 				};
 			protected:
-				bool m_keepRatio; //!< keep the image ratio between width and hight
+				ewol::object::Param<bool> m_keepRatio; //!< keep the image ratio between width and hight
 			public:
 				/**
 				 * @brief set the current status of keeping ratio.
@@ -118,7 +110,7 @@ namespace ewol {
 					return m_keepRatio;
 				};
 			protected:
-				vec2 m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
+				ewol::object::ParamRange<vec2> m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
 			public:
 				/**
 				 * @brief set the current 'start' position in the image to display.
@@ -133,7 +125,7 @@ namespace ewol {
 					return m_posStart;
 				};
 			protected:
-				vec2 m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
+				ewol::object::ParamRange<vec2> m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
 			public:
 				/**
 				 * @brief set the current 'stop' position in the image to display.
@@ -147,6 +139,8 @@ namespace ewol {
 				vec2 getStopPos() const {
 					return m_posStop;
 				};
+			public:
+				ewol::object::Param<bool> m_distanceFieldMode; //!< to have a parameter
 			public:
 				/**
 				 * @brief Set distance field rendering mode
@@ -164,8 +158,10 @@ namespace ewol {
 				}
 			protected: // Derived function
 				virtual void onDraw();
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

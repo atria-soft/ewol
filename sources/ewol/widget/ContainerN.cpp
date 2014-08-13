@@ -268,7 +268,7 @@ bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
 	}
 	bool invertAdding=false;
 	tmpAttributeValue = _node->getAttribute("addmode");
-	if(compare_no_case(tmpAttributeValue, "invert")) {
+	if(etk::compare_no_case(tmpAttributeValue, "invert")) {
 		invertAdding=true;
 	}
 	// parse all the elements :

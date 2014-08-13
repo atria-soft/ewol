@@ -23,14 +23,8 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class PopUp : public ewol::widget::Container {
-			public:
-				// Config list of properties
-				static const char* const configShaper;
-				static const char* const configRemoveOnExternClick;
-				static const char* const configAnimation;
-				static const char* const configLockExpand;
 			protected:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
@@ -50,7 +44,7 @@ namespace ewol {
 				 */
 				void setShaperName(const std::string& _shaperName);
 			protected:
-				bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
+				ewol::object::Param<bvec2> m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			public:
 				/**
 				 * @brief Limit the expend properties to the current widget (no contamination)
@@ -58,7 +52,7 @@ namespace ewol {
 				 */
 				void lockExpand(const bvec2& _lockExpand);
 			private:
-				bool m_closeOutEvent; //!< ratio progression of a sliding
+				ewol::object::Param<bool> m_closeOutEvent; //!< ratio progression of a sliding
 			public:
 				/**
 				 * @brief Request the Auto-remove when the event input is set outside the widget
@@ -76,8 +70,10 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 			public: // Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);

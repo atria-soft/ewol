@@ -25,16 +25,13 @@ namespace ewol {
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
 				static void init(ewol::widget::Manager& _widgetManager);
-				// Config list of properties
-				static const char* const configBorder;
-				static const char* const configMode;
 			public:
 				enum displayMode {
 					modeVert, //!< Vertical mode
 					modeHori, //!< Horizontal mode
 				};
 			private:
-				enum displayMode m_mode; //!< Methode to display the widget list (vert/hory ...)
+				ewol::object::ParamList<enum displayMode> m_mode; //!< Methode to display the widget list (vert/hory ...)
 			protected:
 				/**
 				 * @brief Constructor
@@ -61,7 +58,7 @@ namespace ewol {
 					return m_mode;
 				}
 			private:
-				ewol::Dimension m_borderSize; //!< Border size needed for all the display
+				ewol::object::Param<ewol::Dimension> m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
 				 * @brief set the current border size of the current element:
@@ -126,8 +123,10 @@ namespace ewol {
 				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 		};
 	};
 };

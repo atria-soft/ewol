@@ -323,7 +323,7 @@ namespace ewol {
 			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
 			 */
 			virtual const bvec2& getFill() {
-				return m_userFill.get();
+				return m_userFill;
 			};
 			/**
 			 * @brief get the filling capabilities x&y
@@ -351,7 +351,7 @@ namespace ewol {
 			};
 		
 		protected:
-			ewol::object::Param<enum ewol::gravity> m_gravity; //!< Gravity of the widget
+			ewol::object::ParamList<enum ewol::gravity> m_gravity; //!< Gravity of the widget
 		public:
 			/**
 			 * @brief set the widget gravity
@@ -688,8 +688,10 @@ namespace ewol {
 			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {};
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
+			/*
 			virtual bool onSetConfig(const ewol::object::Config& _conf);
 			virtual bool onGetConfig(const char* _config, std::string& _result) const;
+			*/
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions
@@ -721,9 +723,9 @@ namespace ewol {
 			float m_annimationratio; //!< Ratio of the annimation [0..1]
 		protected:
 			ewol::object::ParamList<int32_t> m_annimationTypeStart; //!< type of start annimation
-			ewol::object::Param<float> m_annimationTimeStart; //!< time to produce start annimation
+			ewol::object::ParamRange<float> m_annimationTimeStart; //!< time to produce start annimation
 			ewol::object::ParamList<int32_t> m_annimationTypeStop; //!< type of start annimation
-			ewol::object::Param<float> m_annimationTimeStop; //!< time to produce start annimation
+			ewol::object::ParamRange<float> m_annimationTimeStop; //!< time to produce start annimation
 		protected:
 			/**
 			 * @brief Add a annimation type capabilities of this widget.

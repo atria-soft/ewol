@@ -14,29 +14,15 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-const char* const ewol::widget::ProgressBar::configColorBg = "color-bg";
-const char* const ewol::widget::ProgressBar::configColorFgOn = "color-on";
-const char* const ewol::widget::ProgressBar::configColorFgOff = "color-off";
-const char* const ewol::widget::ProgressBar::configValue = "value";
-
 const int32_t dotRadius = 6;
 
-ewol::widget::ProgressBar::ProgressBar() {
+ewol::widget::ProgressBar::ProgressBar() :
+  m_value(*this, "value", 0.0f, "Value of the progress bar"),
+  m_textColorFg(*this, "color-bg", etk::color::black, "Background color"),
+  m_textColorBgOn(*this, "color-on", etk::Color<>(0x00, 0xFF, 0x00, 0xFF), "Color of the true value"),
+  m_textColorBgOff(*this, "color-off", etk::color::none, "Color of the false value") {
 	addObjectType("ewol::widget::ProgressBar");
-	m_value = 0.0;
-	
-	m_textColorFg = etk::color::black;
-	
-	m_textColorBgOn = etk::Color<>(0x00, 0xFF, 0x00, 0xFF);
-	
-	m_textColorBgOff = etk::color::black;
-	m_textColorBgOff.setA(0x3F);
 	setCanHaveFocus(true);
-	registerConfig(configColorBg, "color", nullptr, "Background color");
-	registerConfig(configColorFgOn, "color", nullptr, "Corlor of the true value");
-	registerConfig(configColorFgOff, "color", nullptr, "Corlor of the false value");
-	registerConfig(configValue, "integer", nullptr, "Value of the progress bar");
-	
 }
 
 void ewol::widget::ProgressBar::init() {
@@ -48,7 +34,7 @@ ewol::widget::ProgressBar::~ProgressBar() {
 }
 
 void ewol::widget::ProgressBar::calculateMinMaxSize() {
-	vec2 tmpMin = m_userMinSize.getPixel();
+	vec2 tmpMin = m_userMinSize->getPixel();
 	m_minSize.setValue( std::max(tmpMin.x(), 40.0f),
 	                    std::max(tmpMin.y(), dotRadius*2.0f) );
 	markToRedraw();
@@ -88,6 +74,7 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 }
 
 
+/*
 
 bool ewol::widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
@@ -138,5 +125,7 @@ bool ewol::widget::ProgressBar::onGetConfig(const char* _config, std::string& _r
 	}
 	return false;
 }
+
+*/
 
 

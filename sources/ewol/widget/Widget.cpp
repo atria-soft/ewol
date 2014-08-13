@@ -86,14 +86,6 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj
 #undef __class__
 #define __class__ "Widget"
 
-// TODO : Event config :
-const char* const ewol::Widget::configFocus = "focus";
-
-// configuration :
-const char* const ewol::Widget::configAnnimationAddType = "annimation-start-type";
-const char* const ewol::Widget::configAnnimationAddTime = "annimation-start-time";
-const char* const ewol::Widget::configAnnimationRemoveType = "annimation-remove-type";
-const char* const ewol::Widget::configAnnimationRemoveTime = "annimation-remove-time";
 // event generated :
 const char* const ewol::Widget::eventAnnimationStart = "annimation-start";
 const char* const ewol::Widget::eventAnnimationRatio = "annimation-ratio";
@@ -113,7 +105,7 @@ ewol::Widget::Widget() :
   m_hide(*this, "hide", false, "The widget start hided"),
   m_gravity(*this, "gravity", ewol::gravityButtomLeft, "Gravity orientation"),
   m_hasFocus(false),
-  m_canFocus(false),
+  m_canFocus(*this, "focus", false, "enable the widget to have the focus capacity"), // TODO : je pense que c'est une erreur, c'st surement un event to get the cocus ...
   m_limitMouseEvent(3),
   m_allowRepeateKeyboardEvent(true),
   m_periodicCallDeltaTime(-1),
@@ -123,17 +115,11 @@ ewol::Widget::Widget() :
   m_cursorDisplay(ewol::context::cursorArrow),
   m_annimationMode(annimationModeDisable),
   m_annimationratio(0.0f),
-  m_annimationTypeStart(*this, "annimation-start-type", "Annimation type, when adding/show a widget"),
-  m_annimationTimeStart(*this, "annimation-start-time", "Annimation time in second, when adding/show a widget", 0.2f, 0.0f, 200.0f),
-  m_annimationTypeStop(*this, "annimation-stop-type", "Annimation type, when removing/hide a widget"),
-  m_annimationTimeStop(*this, "annimation-stop-time", "Annimation time in second, when removing/hide a widget", 0.2f, 0.0f, 200.0f){
-	m_annimationType[0] = nullptr;
-	m_annimationType[1] = nullptr;
-	m_annimationTime[0] = 0.1f; // annimation will be 100ms at the first state
-	m_annimationTime[1] = 0.1f; // annimation will be 100ms at the first state
+  m_annimationTypeStart(*this, "annimation-start-type", 0, "Annimation type, when adding/show a widget"),
+  m_annimationTimeStart(*this, "annimation-start-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when adding/show a widget"),
+  m_annimationTypeStop(*this, "annimation-stop-type", 0, "Annimation type, when removing/hide a widget"),
+  m_annimationTimeStop(*this, "annimation-stop-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when removing/hide a widget"){
 	addObjectType("ewol::Widget");
-	// set all the config in the list :
-	registerConfig(ewol::Widget::configFocus, "bool", nullptr, "The widget request focus");
 	
 	// TODO : Set a static interface for list ==> this methode create a multiple allocation
 	m_gravity.add(ewol::gravityCenter, "center");
@@ -145,13 +131,8 @@ ewol::Widget::Widget() :
 	m_gravity.add(ewol::gravityButtom, "buttom");
 	m_gravity.add(ewol::gravityButtomLeft, "buttom-left");
 	m_gravity.add(ewol::gravityLeft, "left");
-	
-	
 	m_annimationTypeStart.add(0, "none");
-	m_annimationTypeStart.setDefault(0);
-	
 	m_annimationTypeStop.add(0, "none");
-	m_annimationTypeStop.setDefault(0);
 	
 	addEventId(eventAnnimationStart);
 	addEventId(eventAnnimationRatio);
@@ -415,9 +396,9 @@ vec2 ewol::Widget::relativePosition(const vec2& _pos) {
 }
 
 void ewol::Widget::calculateMinMaxSize() {
-	m_minSize = m_userMinSize.getPixel();
+	m_minSize = m_userMinSize->getPixel();
 	//EWOL_ERROR("[" << getId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
-	m_maxSize = m_userMaxSize.getPixel();
+	m_maxSize = m_userMaxSize->getPixel();
 	markToRedraw();
 }
 
@@ -437,7 +418,7 @@ vec2 ewol::Widget::getCalculateMaxSize() {
 
 void ewol::Widget::setMinSize(const ewol::Dimension& _size) {
 	vec2 pixelMin = _size.getPixel();
-	vec2 pixelMax = m_userMaxSize.getPixel();
+	vec2 pixelMax = m_userMaxSize->getPixel();
 	// check minimum & maximum compatibility :
 	bool error=false;
 	if (pixelMin.x()>pixelMax.x()) {
@@ -455,17 +436,17 @@ void ewol::Widget::setMinSize(const ewol::Dimension& _size) {
 }
 
 void ewol::Widget::setNoMinSize() {
-	m_userMinSize.set(vec2(0,0),ewol::Dimension::Pixel);
+	m_userMinSize.set(ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel));
 }
 
 void ewol::Widget::checkMinSize() {
-	vec2 pixelSize = m_userMinSize.getPixel();
+	vec2 pixelSize = m_userMinSize->getPixel();
 	m_minSize.setX(std::max(m_minSize.x(), pixelSize.x()));
 	m_minSize.setY(std::max(m_minSize.y(), pixelSize.y()));
 }
 
 void ewol::Widget::setMaxSize(const ewol::Dimension& _size) {
-	vec2 pixelMin = m_userMinSize.getPixel();
+	vec2 pixelMin = m_userMinSize->getPixel();
 	vec2 pixelMax = _size.getPixel();
 	// check minimum & maximum compatibility :
 	bool error=false;
@@ -484,11 +465,11 @@ void ewol::Widget::setMaxSize(const ewol::Dimension& _size) {
 }
 
 void ewol::Widget::setNoMaxSize() {
-	m_userMaxSize.set(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
+	m_userMaxSize.set(ewol::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel));
 }
 
 void ewol::Widget::checkMaxSize() {
-	vec2 pixelSize = m_userMaxSize.getPixel();
+	vec2 pixelSize = m_userMaxSize->getPixel();
 	m_maxSize.setX(std::min(m_maxSize.x(), pixelSize.x()));
 	m_maxSize.setY(std::min(m_maxSize.y(), pixelSize.y()));
 }
@@ -501,9 +482,9 @@ vec2 ewol::Widget::getSize() {
 }
 
 void ewol::Widget::setExpand(const bvec2& _newExpand) {
-	if(    m_userExpand.x() != _newExpand.x()
-	    || m_userExpand.y() != _newExpand.y()) {
-		m_userExpand = _newExpand;
+	if(    m_userExpand->x() != _newExpand.x()
+	    || m_userExpand->y() != _newExpand.y()) {
+		m_userExpand.set(_newExpand);
 		requestUpdateSize();
 		markToRedraw();
 	}
@@ -517,8 +498,8 @@ bvec2 ewol::Widget::canExpand() {
 }
 
 void ewol::Widget::setFill(const bvec2& _newFill) {
-	if(    m_userFill.get().x() != _newFill.x()
-	    || m_userFill.get().y() != _newFill.y()) {
+	if(    m_userFill->x() != _newFill.x()
+	    || m_userFill->y() != _newFill.y()) {
 		m_userFill = _newFill;
 		requestUpdateSize();
 		markToRedraw();
@@ -526,7 +507,7 @@ void ewol::Widget::setFill(const bvec2& _newFill) {
 }
 
 const bvec2& ewol::Widget::canFill() {
-	return m_userFill.get();
+	return m_userFill;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -743,6 +724,7 @@ void ewol::Widget::setGravity(enum gravity _gravity) {
 	markToRedraw();
 }
 
+/*
 bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Object::onSetConfig(_conf)) {
 		return true;
@@ -756,7 +738,7 @@ bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configHide) {
-		if(true == std::stob(_conf.getData())) {
+		if(true == etk::string_to_bool(_conf.getData())) {
 			hide();
 		} else {
 			show();
@@ -764,7 +746,7 @@ bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configFocus) {
-		if(true == std::stob(_conf.getData())) {
+		if(true == etk::string_to_bool(_conf.getData())) {
 			keepFocus();
 		} else {
 			//nothing to do ...
@@ -788,7 +770,7 @@ bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configAnnimationAddTime) {
-		setAnnimationTime(ewol::Widget::annimationModeEnableAdd, std::stof(_conf.getData()));
+		setAnnimationTime(ewol::Widget::annimationModeEnableAdd, etk::string_to_float(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configAnnimationRemoveType) {
@@ -796,7 +778,7 @@ bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configAnnimationRemoveTime) {
-		setAnnimationTime(ewol::Widget::annimationModeEnableRemove, std::stof(_conf.getData()));
+		setAnnimationTime(ewol::Widget::annimationModeEnableRemove, etk::string_to_float(_conf.getData()));
 		return true;
 	}
 	return false;
@@ -807,7 +789,7 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 		return true;
 	}
 	if (_config == ewol::Widget::configFill) {
-		_result = m_userFill.get();
+		_result = m_userFill;
 		return true;
 	}
 	if (_config == ewol::Widget::configExpand) {
@@ -815,7 +797,7 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 		return true;
 	}
 	if (_config == ewol::Widget::configHide) {
-		_result = std::to_string(m_hide);
+		_result = etk::to_string(m_hide);
 		return true;
 	}
 	if (_config == ewol::Widget::configMinSize) {
@@ -840,7 +822,7 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 		return true;
 	}
 	if (_config == ewol::Widget::configAnnimationAddTime) {
-		_result = std::to_string(m_annimationType[ewol::Widget::annimationModeEnableAdd]);
+		_result = etk::to_string(m_annimationType[ewol::Widget::annimationModeEnableAdd]);
 		return true;
 	}
 	if (_config == ewol::Widget::configAnnimationRemoveType) {
@@ -853,11 +835,12 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 		return true;
 	}
 	if (_config == ewol::Widget::configAnnimationRemoveTime) {
-		_result = std::to_string(m_annimationType[ewol::Widget::annimationModeEnableRemove]);
+		_result = etk::to_string(m_annimationType[ewol::Widget::annimationModeEnableRemove]);
 		return true;
 	}
 	return false;
 }
+*/
 
 void ewol::Widget::requestUpdateSize() {
 	getContext().requestUpdateSize();
@@ -884,36 +867,29 @@ void ewol::Widget::addAnnimationType(enum ewol::Widget::annimationMode _mode, co
 		EWOL_CRITICAL("Not suported mode ==> only for internal properties");
 		return;
 	}
+	/*
 	for (size_t iii = 0; iii < m_annimationList[_mode].size(); ++iii) {
 		if (m_annimationList[_mode][iii] == _type) {
 			return;
 		}
 	}
 	m_annimationList[_mode].push_back(_type);
+	*/
 }
 
 void ewol::Widget::setAnnimationType(enum ewol::Widget::annimationMode _mode, const std::string& _type) {
-	if (_mode == ewol::Widget::annimationModeDisable) {
-		EWOL_CRITICAL("Not suported mode ==> only for internal properties");
-		return;
+	if (_mode==0) {
+		m_annimationTypeStart.setString(_type);
+	} else {
+		m_annimationTypeStop.setString(_type);
 	}
-	for (size_t iii = 0; iii < m_annimationList[_mode].size(); ++iii) {
-		if (compare_no_case(m_annimationList[_mode][iii], _type) == true) {
-			m_annimationType[_mode] = m_annimationList[_mode][iii];
-			return;
-		}
-	}
-	EWOL_ERROR("Can not find annimation type='" << _type << "'");
 }
 
 void ewol::Widget::setAnnimationTime(enum ewol::Widget::annimationMode _mode, float _time) {
-	if (_mode == ewol::Widget::annimationModeDisable) {
-		EWOL_CRITICAL("Not suported mode ==> only for internal properties");
-		return;
-	}
-	m_annimationTime[_mode] = _time;
-	if (m_annimationTime[_mode] > 36000.0f) {
-		EWOL_WARNING("Are you kidding ? Your annimation time : " << m_annimationTime[_mode] << " s is greater than 10 hours");
+	if (_mode==0) {
+		m_annimationTimeStart.set(_time);
+	} else {
+		m_annimationTimeStop.set(_time);
 	}
 }
 

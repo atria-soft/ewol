@@ -66,7 +66,7 @@ namespace ewol {
 				// herited methode
 				virtual void setString(const std::string& _newVal) {
 					// when you want to set an element in parameter you will implement the function template std::from_string
-					std::from_string(m_value, _newVal);
+					etk::from_string(m_value, _newVal);
 				}
 				// herited methode
 				virtual std::string getInfo() const {
@@ -105,7 +105,7 @@ namespace ewol {
 				 * @return convetion of the velue in string.
 				 */
 				std::string getValueSpecific(const MY_TYPE& _valueRequested) const {
-					return std::to_string(_valueRequested);
+					return etk::to_string(_valueRequested);
 				}
 			public:
 				/**
@@ -116,11 +116,17 @@ namespace ewol {
 					set(_newVal);
 					return *this;
 				};
-				operator MY_TYPE() const {
+				operator const MY_TYPE&() const {
 					return m_value;
 				}
-				inline MY_TYPE& operator *() const {
+				MY_TYPE& operator *() const noexcept {
 					return m_value;
+				}
+				const MY_TYPE* operator->() const noexcept {
+					return &m_value;
+				}
+				MY_TYPE* operator->() noexcept {
+					return &m_value;
 				}
 		};
 		

@@ -160,7 +160,7 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 		_fontName = ewol::getContext().getFontDefault().getName();
 	}
 	_fontName += ":";
-	_fontName += std::to_string(_fontSize);
+	_fontName += etk::to_string(_fontSize);
 	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
 	m_font = ewol::resource::TexturedFont::create(_fontName);

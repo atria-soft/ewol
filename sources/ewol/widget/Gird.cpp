@@ -92,8 +92,8 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 		}
 	}
 	//EWOL_DEBUG("Update minimum size");
-	m_minSize = m_userMinSize.getPixel();
-	m_maxSize = m_userMaxSize.getPixel();
+	m_minSize = m_userMinSize->getPixel();
+	m_maxSize = m_userMaxSize->getPixel();
 	m_uniformSizeRow = 0;
 	m_minSize += m_borderSize*2;
 	int32_t lastLineID = 0;

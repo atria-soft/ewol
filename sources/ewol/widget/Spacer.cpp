@@ -14,15 +14,11 @@
 #undef __class__
 #define __class__ "Spacer"
 
-const char* const ewol::widget::Spacer::configColor = "color";
-
-ewol::widget::Spacer::Spacer() {
+ewol::widget::Spacer::Spacer() :
+  m_color(*this, "color", etk::color::none, "background of the spacer") {
 	addObjectType("ewol::widget::Spacer");
 	m_userMinSize = ewol::Dimension(vec2(10,10));
 	setCanHaveFocus(false);
-	m_color = etk::color::black;
-	m_color.setA(0);
-	registerConfig(configColor, "color", nullptr, "background of the spacer");
 }
 
 void ewol::widget::Spacer::init() {
@@ -44,14 +40,14 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	}
 	m_draw.clear();
 	
-	if (m_color.a() == 0) {
+	if (m_color->a() == 0) {
 		return;
 	}
 	m_draw.setColor(m_color);
 	m_draw.setPos(vec3(0, 0, 0) );
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
-
+/*
 bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
@@ -74,5 +70,5 @@ bool ewol::widget::Spacer::onGetConfig(const char* _config, std::string& _result
 	}
 	return false;
 }
-
+*/
 

@@ -255,7 +255,7 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			// nothing to do ...
 		} else if (_element->getType(iii) == exml::typeText) {
 			exml::Node* child = _element->getNode(iii);
-			htmlAddData(std::to_u32string(child->getValue()));
+			htmlAddData(etk::to_u32string(child->getValue()));
 			EWOL_VERBOSE("XML add : " << child->getValue());
 			continue;
 		} else if (_element->getType(iii)!=exml::typeElement) {
@@ -267,11 +267,11 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			EWOL_ERROR("Cast error ...");
 			continue;
 		}
-		if(compare_no_case(elem->getValue(), "br") == true) {
+		if(etk::compare_no_case(elem->getValue(), "br") == true) {
 			htmlFlush();
 			EWOL_VERBOSE("XML flush & newLine");
 			forceLineReturn();
-		} else if (compare_no_case(elem->getValue(), "font") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "font") == true) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			std::string colorValue = elem->getAttribute("color");
@@ -284,8 +284,8 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			}
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    compare_no_case(elem->getValue(), "b") == true
-		           || compare_no_case(elem->getValue(), "bold") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "b") == true
+		           || etk::compare_no_case(elem->getValue(), "bold") == true) {
 			EWOL_VERBOSE("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -295,8 +295,8 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    compare_no_case(elem->getValue(), "i") == true
-		           || compare_no_case(elem->getValue(), "italic") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "i") == true
+		           || etk::compare_no_case(elem->getValue(), "italic") == true) {
 			EWOL_VERBOSE("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -306,34 +306,34 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    compare_no_case(elem->getValue(), "u") == true
-		           || compare_no_case(elem->getValue(), "underline") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "u") == true
+		           || etk::compare_no_case(elem->getValue(), "underline") == true) {
 			EWOL_VERBOSE("XML underline ...");
 			parseHtmlNode(elem);
-		} else if(    compare_no_case(elem->getValue(), "p") == true
-		           || compare_no_case(elem->getValue(), "paragraph") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "p") == true
+		           || etk::compare_no_case(elem->getValue(), "paragraph") == true) {
 			EWOL_VERBOSE("XML paragraph ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
-		} else if (compare_no_case(elem->getValue(), "center") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "center") == true) {
 			EWOL_VERBOSE("XML center ...");
 			htmlFlush();
 			m_alignement = alignCenter;
 			parseHtmlNode(elem);
-		} else if (compare_no_case(elem->getValue(), "left") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "left") == true) {
 			EWOL_VERBOSE("XML left ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			parseHtmlNode(elem);
-		} else if (compare_no_case(elem->getValue(), "right") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "right") == true) {
 			EWOL_VERBOSE("XML right ...");
 			htmlFlush();
 			m_alignement = alignRight;
 			parseHtmlNode(elem);
-		} else if (compare_no_case(elem->getValue(), "justify") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "justify") == true) {
 			EWOL_VERBOSE("XML justify ...");
 			htmlFlush();
 			m_alignement = alignJustify;
@@ -396,7 +396,7 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	// TODO : Create an instance of xml parser to manage std::u32string...
-	if (doc.parse(std::to_string(_text)) == false) {
+	if (doc.parse(etk::to_string(_text)) == false) {
 		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}

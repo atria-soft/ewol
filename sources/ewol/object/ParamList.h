@@ -140,8 +140,17 @@ namespace ewol {
 					set(_newVal);
 					return *this;
 				}
-				operator MY_TYPE() const {
+				operator const MY_TYPE&() const {
 					return m_value;
+				}
+				MY_TYPE& operator *() const noexcept {
+					return m_value;
+				}
+				const MY_TYPE* operator->() const noexcept {
+					return &m_value;
+				}
+				MY_TYPE* operator->() noexcept {
+					return &m_value;
 				}
 		};
 		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::object::ParamList<MY_TYPE>& _obj) {
