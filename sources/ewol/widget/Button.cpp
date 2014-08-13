@@ -318,7 +318,7 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-
+/*
 bool ewol::widget::Button::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::widget::Container2::onSetConfig(_conf)) {
 		return true;
@@ -398,5 +398,5 @@ bool ewol::widget::Button::onGetConfig(const char* _config, std::string& _result
 	
 	return false;
 }
-
+*/
 

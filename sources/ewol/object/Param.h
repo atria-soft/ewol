@@ -119,6 +119,9 @@ namespace ewol {
 				operator MY_TYPE() const {
 					return m_value;
 				}
+				inline MY_TYPE& operator *() const {
+					return m_value;
+				}
 		};
 		
 		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::object::Param<MY_TYPE>& _obj) {

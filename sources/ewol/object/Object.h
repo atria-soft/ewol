@@ -31,6 +31,7 @@ namespace ewol {
 #include <ewol/object/Message.h>
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Param.h>
+#include <ewol/object/ParamRange.h>
 #include <ewol/object/ParamList.h>
 
 #define DECLARE_FACTORY(className) \

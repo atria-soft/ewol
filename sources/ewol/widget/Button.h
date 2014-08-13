@@ -19,6 +19,7 @@
 #include <ewol/widget/Manager.h>
 
 
+
 namespace ewol {
 	namespace widget {
 		/**
@@ -140,8 +141,10 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void calculateSize(const vec2& _availlable);
