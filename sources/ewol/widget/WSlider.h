@@ -24,11 +24,6 @@ namespace ewol {
 				// Event list of properties
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;
-				// Config list of properties
-				// TODO : remove the dynamic transition and set this in annimation ...
-				static const char* const configMode;
-				static const char* const configSpeed;
-				static const char* const configSelect;
 				enum sladingMode {
 					sladingTransitionVert,
 					sladingTransitionHori,
@@ -47,7 +42,7 @@ namespace ewol {
 				int32_t m_windowsDestination; //!< widget destinated viewed
 				int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
 				float m_slidingProgress; //!< ratio progression of a sliding
-				ewol::object::Param<std::string> m_selectNewWidget; // input config requesting
+				ewol::object::Param<std::string, true> m_selectNewWidget; // input config requesting
 			protected:
 				/**
 				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
@@ -94,7 +89,9 @@ namespace ewol {
 				 * @brief set a new mode of sliding element
 				 * @param[in] _mode new display mode
 				 */
-				void setTransitionMode(enum sladingMode _mode);
+				void setTransitionMode(enum sladingMode _mode) {
+					m_transitionSlide.set(_mode);
+				}
 				/** 
 				 * @brief get a new mode of sliding element
 				 * @return The current sliding mode
@@ -108,10 +105,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);

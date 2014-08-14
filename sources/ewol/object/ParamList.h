@@ -16,7 +16,7 @@
 
 namespace ewol {
 	namespace object {
-		template<typename MY_TYPE> class ParamList : public Parameter {
+		template<typename MY_TYPE, bool isEventReceiving=false> class ParamList : public Parameter {
 			private:
 				MY_TYPE m_value; //!< Element value ==> can be directly used.
 				MY_TYPE m_default; //!< Default value.
@@ -67,7 +67,10 @@ namespace ewol {
 				virtual void setString(const std::string& _newVal) {
 					auto it = m_list.find(_newVal);
 					if (it != m_list.end()) {
-						m_value = it->second;
+						if (it->second != m_value) {
+							m_value = it->second;
+							notifyChange();
+						}
 						return;
 					}
 					EWOL_WARNING("paramList value='" << _newVal << "' is not un the list ... ==> no change");
@@ -89,7 +92,7 @@ namespace ewol {
 				}
 				// herited methode
 				virtual void setDefault() {
-					m_value = m_default;
+					set(m_default);
 				}
 				void setDefaultValue(const MY_TYPE& _value) {
 					m_default = _value;
@@ -109,9 +112,13 @@ namespace ewol {
 				 * @param[in] _newVal New value of the parameter. (not set if out of range)
 				 */
 				void set(MY_TYPE _newVal) {
+					if (_newVal == m_value) {
+						return;
+					}
 					for (auto &it : m_list) {
 						if (it.second == _newVal) {
 							m_value = it.second;
+							notifyChange();
 							return;
 						}
 					}

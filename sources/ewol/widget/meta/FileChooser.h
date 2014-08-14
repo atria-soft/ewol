@@ -76,7 +76,6 @@ namespace ewol {
 				// Event list of properties
 				static const char* const eventCancel;
 				static const char* const eventValidate;
-				// Config list of properties
 			protected:
 				FileChooser();
 				void init();

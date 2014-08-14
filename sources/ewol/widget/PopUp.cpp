@@ -36,13 +36,6 @@ ewol::widget::PopUp::~PopUp() {
 	
 }
 
-void ewol::widget::PopUp::lockExpand(const bvec2& _lockExpand) {
-	if (_lockExpand != m_lockExpand) {
-		m_lockExpand = _lockExpand;
-		markToRedraw();
-		requestUpdateSize();
-	}
-}
 
 void ewol::widget::PopUp::setShaperName(const std::string& _shaperName) {
 	m_shaper.setString(_shaperName);
@@ -141,45 +134,18 @@ std::shared_ptr<ewol::Widget> ewol::widget::PopUp::getWidgetAtPos(const vec2& _p
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
-/*
-bool ewol::widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::Container::onSetConfig(_conf)) {
-		return true;
+void ewol::widget::PopUp::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::Container::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_shaper) {
+		markToRedraw();
+		requestUpdateSize();
+	} else if (_paramPointer == m_lockExpand) {
+		markToRedraw();
+		requestUpdateSize();
+	} else if (_paramPointer == m_closeOutEvent) {
+		// nothing to do ...
 	}
-	if (_conf.getConfig() == configShaper) {
-		setShaperName(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configRemoveOnExternClick) {
-		setRemoveOnExternClick(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configLockExpand) {
-		lockExpand(_conf.getData());
-		return true;
-	}
-	return false;
 }
-
-bool ewol::widget::PopUp::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configShaper) {
-		_result = m_shaper.getSource();
-		return true;
-	}
-	if (_config == configLockExpand) {
-		_result = m_lockExpand;
-		return true;
-	}
-	if (_config == configRemoveOnExternClick) {
-		_result = etk::to_string(getRemoveOnExternClick());
-		return true;
-	}
-	return false;
-}
-*/
 
 bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 	if (0 != _event.getId()) {

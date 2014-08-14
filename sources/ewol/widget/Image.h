@@ -56,7 +56,9 @@ namespace ewol {
 				 * @brief set the new filename
 				 * @param[in] _file Filaneme of the new image
 				 */
-				void setFile(const std::string& _file);
+				void setFile(const std::string& _file) {
+					m_fileName.set(_file);
+				}
 				/**
 				 * @brief get the file displayed
 				 * @return the filename of the image
@@ -158,10 +160,7 @@ namespace ewol {
 				}
 			protected: // Derived function
 				virtual void onDraw();
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

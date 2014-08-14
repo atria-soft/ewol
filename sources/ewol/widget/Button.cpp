@@ -72,12 +72,6 @@ ewol::widget::Button::~Button() {
 }
 
 
-void ewol::widget::Button::setShaperName(const std::string& _shaperName) {
-	EWOL_WARNING("set shaper name : '" << _shaperName << "'");
-	m_shaper->setSource(_shaperName);
-	markToRedraw();
-}
-
 void ewol::widget::Button::calculateSize(const vec2& _availlable) {
 	ewol::Padding padding = m_shaper->getPadding();
 	ewol::Padding ret = calculateSizePadded(_availlable, padding);
@@ -107,99 +101,6 @@ void ewol::widget::Button::onRegenerateDisplay() {
 	                  m_size,
 	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
 	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
-}
-
-void ewol::widget::Button::setLock(enum buttonLock _lock) {
-	if (m_lock == _lock) {
-		return;
-	}
-	m_lock = _lock;
-	if(ewol::widget::Button::lockAccess == _lock) {
-		m_buttonPressed = false;
-		m_mouseHover = false;
-	}
-	CheckStatus();
-	markToRedraw();
-}
-void ewol::widget::Button::setEnableSingle(bool _single){
-	if (m_enableSingle == _single) {
-		return;
-	}
-	m_enableSingle = _single;
-	if (m_enableSingle == true) {
-		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == nullptr
-		     && m_subWidget[1] != nullptr) {
-			m_idWidgetDisplayed = 1;
-		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == nullptr
-		            && m_subWidget[0] != nullptr) {
-			m_idWidgetDisplayed = 0;
-		} else if (    m_subWidget[0] == nullptr
-		            && m_subWidget[1] == nullptr) {
-			m_idWidgetDisplayed = 0;
-		}
-	}
-}
-
-void ewol::widget::Button::setValue(bool _val) {
-	if (m_value == _val) {
-		return;
-	}
-	m_value = _val;
-	if (m_toggleMode == true) {
-		if (m_value == false) {
-			m_idWidgetDisplayed = 0;
-		} else {
-			m_idWidgetDisplayed = 1;
-		}
-	}
-	if (m_enableSingle == true) {
-		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == nullptr
-		     && m_subWidget[1] != nullptr) {
-			m_idWidgetDisplayed = 1;
-		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == nullptr
-		            && m_subWidget[0] != nullptr) {
-			m_idWidgetDisplayed = 0;
-		}
-	}
-	CheckStatus();
-	markToRedraw();
-}
-
-void ewol::widget::Button::setToggleMode(bool _togg) {
-	if (m_toggleMode == _togg) {
-		return;
-	}
-	m_toggleMode = _togg;
-	if (m_value == true) {
-		m_value = false;
-		// TODO : change display and send event ...
-	}
-	if (m_toggleMode == false) {
-		m_idWidgetDisplayed = 0;
-	} else {
-		if (m_value == false) {
-			m_idWidgetDisplayed = 0;
-		} else {
-			m_idWidgetDisplayed = 1;
-		}
-	}
-	if (m_enableSingle == true) {
-		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == nullptr
-		     && m_subWidget[1] != nullptr) {
-			m_idWidgetDisplayed = 1;
-		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == nullptr
-		            && m_subWidget[0] != nullptr) {
-			m_idWidgetDisplayed = 0;
-		}
-	}
-	CheckStatus();
-	markToRedraw();
 }
 
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
@@ -318,85 +219,79 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-/*
-bool ewol::widget::Button::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::Container2::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configToggle) {
-		setToggleMode(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configLock) {
-		enum buttonLock tmpLock = lockNone;
-		if(    etk::compare_no_case(_conf.getData(), "true") == true
-		    || etk::compare_no_case(_conf.getData(), "1") == true) {
-			tmpLock = lockAccess;
-		} else if(    etk::compare_no_case(_conf.getData(), "down") == true
-		           || etk::compare_no_case(_conf.getData(), "pressed") == true) {
-			tmpLock = lockWhenPressed;
-		} else if(    etk::compare_no_case(_conf.getData(), "up") == true
-		           || etk::compare_no_case(_conf.getData(), "released") == true) {
-			tmpLock = lockWhenReleased;
+void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::Container2::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_shaper) {
+		markToRedraw();
+	} else if (_paramPointer == m_value) {
+		if (m_toggleMode == true) {
+			if (m_value == false) {
+				m_idWidgetDisplayed = 0;
+			} else {
+				m_idWidgetDisplayed = 1;
+			}
 		}
-		setLock(tmpLock);
-		return true;
-	}
-	if (_conf.getConfig() == configValue) {
-		setValue(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configShaper) {
-		setShaperName(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configEnableSingle) {
-		setEnableSingle(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	return false;
-}
-
-bool ewol::widget::Button::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::Container2::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configToggle) {
-		_result = etk::to_string(getToggleMode());
-		return true;
-	}
-	if (_config == configLock) {
-		switch(getLock()){
-			default:
-			case lockNone:
-				_result = "none";
-				break;
-			case lockAccess:
-				_result = "true";
-				break;
-			case lockWhenPressed:
-				_result = "pressed";
-				break;
-			case lockWhenReleased:
-				_result = "released";
-				break;
+		if (m_enableSingle == true) {
+			if (    m_idWidgetDisplayed == 0
+			     && m_subWidget[0] == nullptr
+			     && m_subWidget[1] != nullptr) {
+				m_idWidgetDisplayed = 1;
+			} else if (    m_idWidgetDisplayed == 1
+			            && m_subWidget[1] == nullptr
+			            && m_subWidget[0] != nullptr) {
+				m_idWidgetDisplayed = 0;
+			}
 		}
-		return true;
+		CheckStatus();
+		markToRedraw();
+	} else if (_paramPointer == m_lock) {
+		if(ewol::widget::Button::lockAccess == m_lock.get()) {
+			m_buttonPressed = false;
+			m_mouseHover = false;
+		}
+		CheckStatus();
+		markToRedraw();
+	} else if (_paramPointer == m_toggleMode) {
+		if (m_value == true) {
+			m_value = false;
+			// TODO : change display and send event ...
+		}
+		if (m_toggleMode == false) {
+			m_idWidgetDisplayed = 0;
+		} else {
+			if (m_value == false) {
+				m_idWidgetDisplayed = 0;
+			} else {
+				m_idWidgetDisplayed = 1;
+			}
+		}
+		if (m_enableSingle == true) {
+			if (    m_idWidgetDisplayed == 0
+			     && m_subWidget[0] == nullptr
+			     && m_subWidget[1] != nullptr) {
+				m_idWidgetDisplayed = 1;
+			} else if (    m_idWidgetDisplayed == 1
+			            && m_subWidget[1] == nullptr
+			            && m_subWidget[0] != nullptr) {
+				m_idWidgetDisplayed = 0;
+			}
+		}
+		CheckStatus();
+		markToRedraw();
+	} else if (_paramPointer == m_enableSingle) {
+		if (m_enableSingle == true) {
+			if (    m_idWidgetDisplayed == 0
+			     && m_subWidget[0] == nullptr
+			     && m_subWidget[1] != nullptr) {
+				m_idWidgetDisplayed = 1;
+			} else if (    m_idWidgetDisplayed == 1
+			            && m_subWidget[1] == nullptr
+			            && m_subWidget[0] != nullptr) {
+				m_idWidgetDisplayed = 0;
+			} else if (    m_subWidget[0] == nullptr
+			            && m_subWidget[1] == nullptr) {
+				m_idWidgetDisplayed = 0;
+			}
+		}
 	}
-	if (_config == configValue) {
-		_result = etk::to_string(getValue());
-		return true;
-	}
-	if (_config == configShaper) {
-		_result = m_shaper->getSource();
-		return true;
-	}
-	if (_config == configEnableSingle) {
-		_result = getEnableSingle();
-		return true;
-	}
-	
-	return false;
 }
-*/
-

@@ -313,7 +313,7 @@ bool ewol::Object::storeXML(exml::Element* _node) const {
 
 void ewol::Object::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
 	if (_paramPointer == m_name) {
-		EWOL_CRITICAL("[" << getId() << "] Parameter name change : " << m_name);
+		EWOL_VERBOSE("[" << getId() << "] Parameter name change : " << m_name);
 	}
 }
 

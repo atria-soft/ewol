@@ -36,7 +36,7 @@ const char * const ewol::widget::Entry::eventModify = "modify";
 ewol::widget::Entry::Entry() :
   m_shaper(*this, "shaper", "Shaper to display the background"),
   m_data(*this, "value", "", "Value display in the entry (decorated text)"),
-  m_maxCharacter(*this, "max", 0x7FFFFFFF, "Maximum cgar that can be set on the Entry"),
+  m_maxCharacter(*this, "max", 0x7FFFFFFF, 0, 0x7FFFFFFF, "Maximum cgar that can be set on the Entry"),
   m_regExp(*this, "regExp", "Control what it is write with a regular expression"),
   m_needUpdateTextPos(true),
   m_displayStartPosition(0),
@@ -64,26 +64,12 @@ void ewol::widget::Entry::init(const std::string& _newData) {
 	ewol::Widget::init();
 	m_data.set(_newData);
 	m_shaper.setString("THEME:GUI:Entry.json");
-	m_colorIdTextFg = m_shaper->requestColor("text-foreground");
-	m_colorIdTextBg = m_shaper->requestColor("text-background");
-	m_colorIdCursor = m_shaper->requestColor("text-cursor");
-	m_colorIdSelection = m_shaper->requestColor("text-selection");
 }
 
 
 ewol::widget::Entry::~Entry() {
 	
 }
-
-
-void ewol::widget::Entry::setMaxChar(int32_t _nbMax) {
-	if (_nbMax <= 0) {
-		m_maxCharacter = 0x7FFFFFFF;
-	} else {
-		m_maxCharacter = _nbMax;
-	}
-}
-
 
 void ewol::widget::Entry::calculateMinMaxSize() {
 	// call main class
@@ -99,7 +85,7 @@ void ewol::widget::Entry::calculateMinMaxSize() {
 	checkMinSize();
 }
 
-
+// TODO : ... Set it a a generic parameter...
 void ewol::widget::Entry::setValue(const std::string& _newData) {
 	std::string newData = _newData;
 	if ((int64_t)newData.size() > m_maxCharacter) {
@@ -555,67 +541,27 @@ void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::Entry::setRegExp(const std::string& _expression) {
-	std::string previousRegExp = m_regExp->getRegExp();
-	EWOL_DEBUG("change input regExp \"" << previousRegExp << "\"  == > \"" << _expression << "\"");
-	m_regExp->compile(_expression);
-	if (m_regExp->getStatus() == false) {
-		EWOL_ERROR("error when adding regExp ...  == > set the previous back ...");
-		m_regExp->compile(previousRegExp);
+void ewol::widget::Entry::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_shaper) {
+		m_colorIdTextFg = m_shaper->requestColor("text-foreground");
+		m_colorIdTextBg = m_shaper->requestColor("text-background");
+		m_colorIdCursor = m_shaper->requestColor("text-cursor");
+		m_colorIdSelection = m_shaper->requestColor("text-selection");
+	} else if (_paramPointer == m_data) {
+		// to late to update data ... with control.
+		markToRedraw();
+	} else if (_paramPointer == m_maxCharacter) {
+		// nothing to do ...
+	} else if (_paramPointer == m_regExp) {
+		if (m_regExp->getStatus() == false) {
+			EWOL_ERROR("error when adding regExp ...  == > set the '\".*\"' ...");
+			m_regExp->compile(".*");
+		}
+		markToRedraw();
+	} else if (_paramPointer == m_textWhenNothing) {
+		markToRedraw();
 	}
 }
-
-void ewol::widget::Entry::setEmptyText(const std::string& _text) {
-	m_textWhenNothing = _text;
-	markToRedraw();
-}
-
-/*
-bool ewol::widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configMaxChar) {
-		setMaxChar(stoi(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configRegExp) {
-		setRegExp(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configEmptyMessage) {
-		setEmptyText(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configValue) {
-		setValue(_conf.getData());
-		return true;
-	}
-	return false;
-}
-
-bool ewol::widget::Entry::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configMaxChar) {
-		_result = etk::to_string(getMaxChar());
-		return true;
-	}
-	if (_config == configRegExp) {
-		_result = getRegExp();
-		return true;
-	}
-	if (_config == configEmptyMessage) {
-		_result = getEmptyText();
-		return true;
-	}
-	if (_config == configValue) {
-		_result = getValue();
-		return true;
-	}
-	return false;
-}
-*/
 
 

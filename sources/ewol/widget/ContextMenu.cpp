@@ -49,12 +49,6 @@ ewol::widget::ContextMenu::~ContextMenu() {
 	
 }
 
-void ewol::widget::ContextMenu::setShaperName(const std::string& _shaperName) {
-	m_shaper.set(_shaperName);
-	markToRedraw();
-}
-
-
 void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG("CalculateSize=" << availlable);
 	// pop-up fill all the display :
@@ -224,14 +218,6 @@ bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-
-void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, vec2 _arrowPos) {
-	EWOL_DEBUG("set context menu at the position : " << _arrowPos);
-	m_arrawBorder.set(_position);
-	m_arrowPos.set(_arrowPos);
-	markToRedraw();
-}
-
 std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 	std::shared_ptr<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (nullptr != val) {
@@ -240,6 +226,16 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const ve
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
+void ewol::widget::ContextMenu::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::Container::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_shaper) {
+		markToRedraw();
+	} else if (_paramPointer == m_arrowPos) {
+		markToRedraw();
+	} else if (_paramPointer == m_arrawBorder) {
+		markToRedraw();
+	}
+}
 /*
 bool ewol::widget::ContextMenu::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::widget::Container::onSetConfig(_conf)) {

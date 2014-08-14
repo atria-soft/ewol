@@ -247,67 +247,20 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 	return false;
 }
 
-/*
-bool ewol::widget::ListFileSystem::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::List::onSetConfig(_conf)) {
-		return true;
+void ewol::widget::ListFileSystem::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::List::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_folder) {
+		regenerateView();
+	} else if (_paramPointer == m_selectFile) {
+		setSelect(m_selectFile);
+	} else if (_paramPointer == m_showFile) {
+		regenerateView();
+	} else if (_paramPointer == m_showFolder) {
+		regenerateView();
+	} else if (_paramPointer == m_showHidden) {
+		regenerateView();
+	} else if (_paramPointer == m_showTemporaryFile) {
+		regenerateView();
 	}
-	if (_conf.getConfig() == configShowHidden) {
-		setShowHidden(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configShowFile) {
-		setShowFiles(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configShowFolder) {
-		setShowFolder(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configShowTemporary) {
-		setShowTemporaryFiles(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configPath) {
-		setFolder(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configSelect) {
-		setSelect(_conf.getData());
-		return true;
-	}
-	return false;
 }
-
-bool ewol::widget::ListFileSystem::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::List::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configShowHidden) {
-		_result = etk::to_string(getShowHidden());
-		return true;
-	}
-	if (_config == configShowFile) {
-		_result = etk::to_string(getShowFiles());
-		return true;
-	}
-	if (_config == configShowFolder) {
-		_result = etk::to_string(getShowFolder());
-		return true;
-	}
-	if (_config == configShowTemporary) {
-		_result = etk::to_string(getShowTemporaryFiles());
-		return true;
-	}
-	if (_config == configPath) {
-		_result = getFolder();
-		return true;
-	}
-	if (_config == configSelect) {
-		_result = getSelect();
-		return true;
-	}
-	return false;
-}
-*/
 

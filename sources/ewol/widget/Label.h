@@ -48,26 +48,27 @@ namespace ewol {
 				 * @brief change the label displayed
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
-				void setLabel(const std::string& _newLabel);
+				void setLabel(const std::string& _newLabel) {
+					m_label.set(etk::to_u32string(_newLabel));
+				}
 				//! @previous
 				inline void setValue(const std::string& _newLabel) {
-					setLabel(_newLabel);
+					m_label.set(etk::to_u32string(_newLabel));
 				};
 				/**
 				 * @brief get the current displayed label
 				 * @return The displayed decorated text.
 				 */
-				std::string getLabel() const;
+				std::string getLabel() const {
+					return etk::to_string(m_label);
+				}
 				//! @previous
 				inline std::string getValue() const {
-					return getLabel();
+					return etk::to_string(m_label);
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

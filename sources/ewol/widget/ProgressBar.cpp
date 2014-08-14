@@ -73,59 +73,17 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	}
 }
 
-
-/*
-
-bool ewol::widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configColorBg) {
-		m_textColorFg = _conf.getData();
+void ewol::widget::ProgressBar::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_value) {
 		markToRedraw();
-		return true;
-	}
-	if (_conf.getConfig() == configColorFgOn) {
-		m_textColorBgOn = _conf.getData();
+	} else if (_paramPointer == m_textColorFg) {
 		markToRedraw();
-		return true;
-	}
-	if (_conf.getConfig() == configColorFgOff) {
-		m_textColorBgOff = _conf.getData();
+	} else if (_paramPointer == m_textColorBgOn) {
 		markToRedraw();
-		return true;
-	}
-	if (_conf.getConfig() == configValue) {
-		m_value = stof(_conf.getData());
+	} else if (_paramPointer == m_textColorBgOff) {
 		markToRedraw();
-		return true;
 	}
-	return false;
 }
-
-bool ewol::widget::ProgressBar::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configColorBg) {
-		_result = m_textColorFg.getString();
-		return true;
-	}
-	if (_config == configColorFgOn) {
-		_result = m_textColorBgOn.getString();
-		return true;
-	}
-	if (_config == configColorFgOff) {
-		_result = m_textColorBgOff.getString();
-		return true;
-	}
-	if (_config == configValue) {
-		_result = m_value;
-		return true;
-	}
-	return false;
-}
-
-*/
 
 

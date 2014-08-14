@@ -57,7 +57,6 @@ namespace ewol {
 				 * @brief Destuctor
 				 */
 				virtual ~Entry();
-			
 			private:
 				ewol::object::Param<std::string> m_data; //!< sting that must be displayed
 			protected:
@@ -79,15 +78,16 @@ namespace ewol {
 				std::string getValue() const {
 					return m_data;
 				};
-			
 			private:
-				ewol::object::Param<int32_t> m_maxCharacter; //!< number max of xharacter in the list
+				ewol::object::ParamRange<int32_t> m_maxCharacter; //!< number max of xharacter in the list
 			public:
 				/**
 				 * @brief Limit the number of Unicode character in the entry
 				 * @param[in] _nbMax Number of max character set in the List (0x7FFFFFFF for no limit)
 				 */
-				void setMaxChar(int32_t _nbMax);
+				void setMaxChar(int32_t _nbMax) {
+					m_maxCharacter.set(_nbMax);
+				}
 				/**
 				 * @brief Limit the number of Unicode character in the entry
 				 * @return Number of max character set in the List.
@@ -102,7 +102,9 @@ namespace ewol {
 				 * @brief Limit the input entry at a regular expression... (by default it is "*")
 				 * @param _expression New regular expression
 				 */
-				void setRegExp(const std::string& _expression);
+				void setRegExp(const std::string& _expression) {
+					m_regExp.setString(_expression);
+				}
 				/**
 				 * @brief get the regualar expression limitation
 				 * @param The regExp string
@@ -132,7 +134,6 @@ namespace ewol {
 				 * @note The display is automaticly requested when change apear.
 				 */
 				virtual void updateCursorPosition(const vec2& _pos, bool _Selection=false);
-			
 			public:
 				/**
 				 * @brief Copy the selected data on the specify clipboard
@@ -151,7 +152,9 @@ namespace ewol {
 				 * @brief set The text displayed when nothing is in the entry.
 				 * @param _text Text to display when the entry box is empty (this text can be decorated).
 				 */
-				void setEmptyText(const std::string& _text);
+				void setEmptyText(const std::string& _text) {
+					m_textWhenNothing.set(_text);
+				}
 				/**
 				 * @brief get The text displayed when nothing is in the entry.
 				 * @return Text display when nothing
@@ -172,10 +175,7 @@ namespace ewol {
 				virtual void onLostFocus();
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

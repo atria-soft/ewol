@@ -16,7 +16,7 @@
 
 namespace ewol {
 	namespace object {
-		template<typename MY_TYPE> class Param : public Parameter {
+		template<typename MY_TYPE, bool isEventReceiving=false> class Param : public Parameter {
 			private:
 				MY_TYPE m_value; //!< Current value.
 				MY_TYPE m_default; //!< Default value.
@@ -67,6 +67,8 @@ namespace ewol {
 				virtual void setString(const std::string& _newVal) {
 					// when you want to set an element in parameter you will implement the function template std::from_string
 					etk::from_string(m_value, _newVal);
+					// TODO : Do it better ...
+					notifyChange();
 				}
 				// herited methode
 				virtual std::string getInfo() const {
@@ -78,7 +80,7 @@ namespace ewol {
 				}
 				// herited methode
 				virtual void setDefault() {
-					m_value = m_default;
+					set(m_default);
 				}
 			public:
 				/**
@@ -97,7 +99,10 @@ namespace ewol {
 				 * @param[in] newVal New value to set (set the nearest value if range is set)
 				 */
 				void set(const MY_TYPE& _newVal) {
-					m_value = _newVal;
+					if (_newVal != m_value) {
+						m_value = _newVal;
+						notifyChange();
+					}
 				}
 			private:
 				/**

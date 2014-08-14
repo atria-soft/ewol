@@ -59,16 +59,6 @@ void ewol::widget::Label::calculateMinMaxSize() {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
 }
 
-void ewol::widget::Label::setLabel(const std::string& _newLabel) {
-	m_label.setString(_newLabel);
-	markToRedraw();
-	requestUpdateSize();
-}
-
-std::string ewol::widget::Label::getLabel() const {
-	return etk::to_string(m_label.get());
-}
-
 void ewol::widget::Label::onDraw() {
 	m_text.draw();
 }
@@ -154,27 +144,11 @@ bool ewol::widget::Label::loadXML(exml::Element* _node) {
 	return true;
 }
 
-/*
-bool ewol::widget::Label::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
+void ewol::widget::Label::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_label) {
+		markToRedraw();
+		requestUpdateSize();
 	}
-	if (_conf.getConfig() == configValue) {
-		setLabel(_conf.getData());
-		return true;
-	}
-	return false;
 }
-
-bool ewol::widget::Label::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configValue) {
-		_result = getLabel();
-		return true;
-	}
-	return false;
-}
-*/
 

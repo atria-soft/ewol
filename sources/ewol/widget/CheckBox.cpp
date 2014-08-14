@@ -63,12 +63,6 @@ ewol::widget::CheckBox::~CheckBox() {
 	
 }
 
-void ewol::widget::CheckBox::setShaperName(const std::string& _shaperName) {
-	EWOL_WARNING("set shaper name : '" << _shaperName << "'");
-	m_shaper->setSource(_shaperName);
-	markToRedraw();
-}
-
 void ewol::widget::CheckBox::calculateSize(const vec2& _availlable) {
 	ewol::Padding padding = m_shaper->getPadding();
 	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
@@ -113,20 +107,6 @@ void ewol::widget::CheckBox::onRegenerateDisplay() {
 	                   vec2ClipInt32(size),
 	                   vec2ClipInt32(origin2+vec2(padding.xLeft(),padding.yButtom()) ),
 	                   vec2ClipInt32(size2-vec2(padding.x(),padding.y()) ));
-}
-
-void ewol::widget::CheckBox::setValue(bool _val) {
-	if (m_value != _val) {
-		m_value = _val;
-		if (m_value == false) {
-			m_idWidgetDisplayed = convertId(0);
-		} else {
-			m_idWidgetDisplayed = convertId(1);
-		}
-		CheckStatus();
-		markToRedraw();
-	}
-	m_shaper->setActivateState(m_value==true?1:0);
 }
 
 bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
@@ -223,35 +203,18 @@ void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-/*
-bool ewol::widget::CheckBox::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::Container2::onSetConfig(_conf)) {
-		return true;
+void ewol::widget::CheckBox::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::Container2::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_shaper) {
+		markToRedraw();
+	} else if (_paramPointer == m_value) {
+		if (m_value == false) {
+			m_idWidgetDisplayed = convertId(0);
+		} else {
+			m_idWidgetDisplayed = convertId(1);
+		}
+		CheckStatus();
+		markToRedraw();
+		m_shaper->setActivateState(m_value==true?1:0);
 	}
-	if (_conf.getConfig() == configValue) {
-		setValue(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configShaper) {
-		setShaperName(_conf.getData());
-		return true;
-	}
-	return false;
 }
-
-bool ewol::widget::CheckBox::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::Container2::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configValue) {
-		_result = etk::to_string(getValue());
-		return true;
-	}
-	if (_config == configShaper) {
-		_result = m_shaper.getSource();
-		return true;
-	}
-	return false;
-}
-*/
-

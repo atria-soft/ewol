@@ -53,7 +53,9 @@ namespace ewol {
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 				 * @param[in] _shaperName The new shaper filename
 				 */
-				void setShaperName(const std::string& _shaperName);
+				void setShaperName(const std::string& _shaperName) {
+					m_shaper.set(_shaperName);
+				}
 			protected:
 				ewol::object::Param<bool> m_value; //!< Current state of the checkbox.
 			public:
@@ -61,7 +63,9 @@ namespace ewol {
 				 * @brief set the current value of the checkbox (check or not)
 				 * @param[in] _val New value of the button
 				 */
-				void setValue(bool _val);
+				void setValue(bool _val) {
+					m_value.set(_val);
+				}
 				/**
 				 * @brief get the current button value.
 				 * @return True : The checkbox is active.
@@ -82,10 +86,7 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void calculateSize(const vec2& _availlable);

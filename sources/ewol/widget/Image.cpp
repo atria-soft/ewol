@@ -46,78 +46,10 @@ ewol::widget::Image::~Image() {
 	
 }
 
-void ewol::widget::Image::setFile(const std::string& _file) {
-	EWOL_VERBOSE("Set Image : " << _file);
-	if (m_fileName.get() != _file) {
-		// copy data :
-		m_fileName.set(_file);
-		// force redraw all :
-		markToRedraw();
-		EWOL_VERBOSE("Set sources : " << m_fileName << " size=" << m_imageSize);
-		m_compositing.setSource(m_fileName, m_imageSize->getPixel());
-	}
-}
-
-void ewol::widget::Image::setBorder(const ewol::Dimension& _border) {
-	EWOL_VERBOSE("Set border=" << _border);
-	// copy data :
-	m_border.set(_border);
-	// force redraw all :
-	markToRedraw();
-	// TODO : change the size with no size requested ...
-	requestUpdateSize();
-}
-
-void ewol::widget::Image::setKeepRatio(bool _keep) {
-	if (m_keepRatio.get() == _keep) {
-		return;
-	}
-	// copy data :
-	m_keepRatio.set(_keep);
-	// force redraw all :
-	markToRedraw();
-	requestUpdateSize();
-}
-
-void ewol::widget::Image::setStartPos(const vec2& _pos) {
-	if (m_posStart.get() == _pos) {
-		return;
-	}
-	// copy data :
-	m_posStart.set(_pos);
-	// force redraw all :
-	markToRedraw();
-	requestUpdateSize();
-}
-
-void ewol::widget::Image::setStopPos(const vec2& _pos) {
-	// copy data :
-	m_posStop.set(_pos);
-	// force redraw all :
-	markToRedraw();
-	requestUpdateSize();
-}
-
-void ewol::widget::Image::setImageSize(const ewol::Dimension& _size) {
-	EWOL_VERBOSE("Set Image size : " << _size);
-	if (_size != m_imageSize.get()) {
-		m_imageSize.set(_size);
-		markToRedraw();
-		requestUpdateSize();
-		EWOL_VERBOSE("Set sources : " << m_fileName << " size=" << m_imageSize);
-		m_compositing.setSource(m_fileName, m_imageSize->getPixel());
-	}
-}
-
 void ewol::widget::Image::set(const std::string& _file, const ewol::Dimension& _border) {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
-	// copy data :
-	if (m_border.get() != _border) {
-		m_border.set(_border);
-		requestUpdateSize();
-		markToRedraw();
-	}
-	setFile(_file);
+	m_border.set(_border);
+	m_fileName.set(_file);
 }
 
 void ewol::widget::Image::onDraw() {
@@ -249,75 +181,21 @@ bool ewol::widget::Image::loadXML(exml::Element* _node) {
 	return true;
 }
 
-/*
-bool ewol::widget::Image::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
+void ewol::widget::Image::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (    _paramPointer == m_fileName
+	     || _paramPointer == m_imageSize) {
+		markToRedraw();
+		requestUpdateSize();
+		EWOL_VERBOSE("Set sources : " << m_fileName << " size=" << m_imageSize);
+		m_compositing.setSource(m_fileName, m_imageSize->getPixel());
+	} else if (    _paramPointer == m_border
+	            || _paramPointer == m_keepRatio
+	            || _paramPointer == m_posStart
+	            || _paramPointer == m_posStop) {
+		markToRedraw();
+		requestUpdateSize();
+	} else if (_paramPointer == m_distanceFieldMode) {
+		markToRedraw();
 	}
-	if (_conf.getConfig() == configRatio) {
-		setKeepRatio(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configSize) {
-		setImageSize(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configBorder) {
-		setBorder(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configSource) {
-		setFile(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configDistanceField) {
-		setDistanceField(etk::string_to_bool(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configPartStart) {
-		setStartPos(vec2(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configPartStop) {
-		setStopPos(vec2(_conf.getData()));
-		return true;
-	}
-	return false;
 }
-
-bool ewol::widget::Image::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configRatio) {
-		_result = etk::to_string(getKeepRatio());
-		return true;
-	}
-	if (_config == configSize) {
-		_result = getImageSize();
-		return true;
-	}
-	if (_config == configBorder) {
-		_result = getBorder();
-		return true;
-	}
-	if (_config == configSource) {
-		_result = getFile();
-		return true;
-	}
-	if (_config == configDistanceField) {
-		_result = etk::to_string(getDistanceField());
-		return true;
-	}
-	if (_config == configPartStart) {
-		_result = (std::string)getStartPos();
-		return true;
-	}
-	if (_config == configPartStop) {
-		_result = (std::string)getStopPos();
-		return true;
-	}
-	
-	return false;
-}
-*/

@@ -69,15 +69,14 @@ namespace ewol {
 				std::string getSelect() const ;
 			protected:
 				ewol::object::Param<std::string> m_folder; //!< Current folder that display point on.
-				ewol::object::Param<std::string> m_selectFile; //!< current selected file
+				ewol::object::Param<std::string, true> m_selectFile; //!< current selected file
 			public:
 				/**
 				 * @brief Set a folder to display (might be a valid folder !!!)
 				 * @param[in] _newFolder Path on the folder to display content.
 				 */
 				void setFolder(const std::string& _newFolder) {
-					m_folder = _newFolder;
-					regenerateView();
+					m_folder.set(_newFolder);
 				};
 				/**
 				 * @brief Get the element current displaying folder path.
@@ -94,8 +93,7 @@ namespace ewol {
 				 * @param[in] _state New state to apply on display the 'file'.
 				 */
 				void setShowFiles(bool _state) {
-					m_showFile = _state;
-					regenerateView();
+					m_showFile.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying files or Not.
@@ -112,8 +110,7 @@ namespace ewol {
 				 * @param[in] _state New state to apply on display the 'folder'.
 				 */
 				void setShowFolder(bool _state) {
-					m_showFolder = _state;
-					regenerateView();
+					m_showFolder.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying fodlers or Not.
@@ -130,8 +127,7 @@ namespace ewol {
 				 * @param[in] _state New state to apply on display the hidden element.
 				 */
 				void setShowHidden(bool _state) {
-					m_showHidden = _state;
-					regenerateView();
+					m_showHidden.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying hidden files or folder or Not.
@@ -148,8 +144,7 @@ namespace ewol {
 				 * @param[in] _state New state to apply on display temporary files.
 				 */
 				void setShowTemporaryFiles(bool _state) {
-					m_showTemporaryFile = _state;
-					regenerateView();
+					m_showTemporaryFile.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
@@ -158,11 +153,8 @@ namespace ewol {
 				bool getShowTemporaryFiles() const {
 					return m_showFile;
 				};
-				/*
 			public: // glocal derived functions
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

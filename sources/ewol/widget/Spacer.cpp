@@ -47,28 +47,11 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	m_draw.setPos(vec3(0, 0, 0) );
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
-/*
-bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configColor) {
-		m_color = _conf.getData();
-		markToRedraw();
-		return true;
-	}
-	return false;
-}
 
-bool ewol::widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
+void ewol::widget::Spacer::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_color) {
+		markToRedraw();
 	}
-	if (_config == configColor) {
-		_result = m_color.getString();
-		return true;
-	}
-	return false;
 }
-*/
 

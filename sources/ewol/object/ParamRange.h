@@ -16,7 +16,7 @@
 
 namespace ewol {
 	namespace object {
-		template<typename MY_TYPE> class ParamRange : public Parameter {
+		template<typename MY_TYPE, bool isEventReceiving=false> class ParamRange : public Parameter {
 			private:
 				MY_TYPE m_value; //!< Current value.
 				MY_TYPE m_min; //!< Minimum value.
@@ -78,7 +78,7 @@ namespace ewol {
 				}
 				// herited methode
 				virtual void setDefault() {
-					m_value = m_default;
+					set(m_default);
 				}
 			public:
 				/**
@@ -98,9 +98,16 @@ namespace ewol {
 				 */
 				void set(const MY_TYPE& _newVal) {
 					if (m_min == m_max) {
-						m_value = _newVal;
+						if (_newVal != m_value) {
+							m_value = _newVal;
+							notifyChange();
+						}
 					} else {
-						m_value = std::avg(m_min, _newVal, m_max);
+						MY_TYPE newVal = std::avg(m_min, _newVal, m_max);
+						if (newVal != m_value) {
+							m_value = newVal;
+							notifyChange();
+						}
 					}
 				}
 			private:

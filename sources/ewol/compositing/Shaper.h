@@ -298,6 +298,9 @@ namespace ewol {
 				bool operator== (const Shaper& _obj) const {
 					return _obj.m_name == m_name;
 				}
+				bool operator!= (const Shaper& _obj) const {
+					return _obj.m_name != m_name;
+				}
 		};
 	};
 };

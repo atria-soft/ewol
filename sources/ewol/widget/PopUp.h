@@ -50,7 +50,9 @@ namespace ewol {
 				 * @brief Limit the expend properties to the current widget (no contamination)
 				 * @param[in] _lockExpend Lock mode of the expend properties
 				 */
-				void lockExpand(const bvec2& _lockExpand);
+				void lockExpand(const bvec2& _lockExpand) {
+					m_lockExpand.set(_lockExpand);
+				}
 			private:
 				ewol::object::Param<bool> m_closeOutEvent; //!< ratio progression of a sliding
 			public:
@@ -59,7 +61,7 @@ namespace ewol {
 				 * @param[in] _state New status
 				 */
 				void setRemoveOnExternClick(bool _state) {
-					m_closeOutEvent = _state;
+					m_closeOutEvent.set(_state);
 				};
 				/**
 				 * @brief get the status of the request the Auto-remove when the event input is set outside the widget.
@@ -70,10 +72,7 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);

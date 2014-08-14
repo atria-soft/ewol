@@ -123,15 +123,6 @@ namespace ewol {
 	 * 
 	 */
 	class Widget : public ewol::Object {
-		public:
-			// Config list of properties
-			static const char* const configFill;
-			static const char* const configExpand;
-			static const char* const configHide;
-			static const char* const configFocus;
-			static const char* const configMinSize;
-			static const char* const configMaxSize;
-			static const char* const configGravity;
 		protected:
 			/**
 			 * @brief Constructor of the widget classes
@@ -246,7 +237,9 @@ namespace ewol {
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] _size set minimum size (none : 0)
 			 */
-			void setMinSize(const ewol::Dimension& _size);
+			void setMinSize(const ewol::Dimension& _size) {
+				m_userMinSize.set(_size);
+			}
 			/**
 			 * @brief User set No minimum size.
 			 */
@@ -271,7 +264,9 @@ namespace ewol {
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] _size The new maximum size requested (vec2(0,0) to unset)
 			 */
-			void setMaxSize(const ewol::Dimension& _size);
+			void setMaxSize(const ewol::Dimension& _size) {
+				m_userMaxSize.set(_size);
+			}
 			/**
 			 * @brief User set No maximum size.
 			 */
@@ -296,7 +291,9 @@ namespace ewol {
 			 * @brief set the expend capabilities (x&y)
 			 * @param[in] _newExpend 2D boolean repensent the capacity to expend
 			 */
-			virtual void setExpand(const bvec2& _newExpand);
+			virtual void setExpand(const bvec2& _newExpand) {
+				m_userExpand.set(_newExpand);
+			}
 			/**
 			 * @brief get the expend capabilities (x&y) (set by the user)
 			 * @return 2D boolean repensent the capacity to expend
@@ -317,7 +314,9 @@ namespace ewol {
 			 * @brief set the x&y filling capacity
 			 * @param[in] _newFill new x&y fill state
 			 */
-			virtual void setFill(const bvec2& _newFill);
+			virtual void setFill(const bvec2& _newFill) {
+				m_userFill.set(_newFill);
+			}
 			/**
 			 * @brief set the x&y filling capacity set by the user
 			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
@@ -337,11 +336,15 @@ namespace ewol {
 			/**
 			 * @brief set the widget hidden
 			 */
-			virtual void hide();
+			virtual void hide() {
+				m_hide.set(true);
+			}
 			/**
 			 * @brief set the widget visible
 			 */
-			virtual void show();
+			virtual void show() {
+				m_hide.set(false);
+			}
 			/**
 			 * @brief get the visibility of the widget
 			 * @return true: if the widget is hiden, false: it is visible
@@ -357,7 +360,9 @@ namespace ewol {
 			 * @brief set the widget gravity
 			 * @param[in] _gravity New gravity of the widget
 			 */
-			virtual void setGravity(enum ewol::gravity _gravity);
+			virtual void setGravity(enum ewol::gravity _gravity) {
+				m_gravity.set(_gravity);
+			}
 			/**
 			 * @brief get the widget gravity
 			 * @return the gravity type
@@ -400,7 +405,9 @@ namespace ewol {
 			 * @brief set the capability to have the focus
 			 * @param[in] _canFocusState new focus capability
 			 */
-			virtual void setCanHaveFocus(bool _canFocusState);
+			virtual void setCanHaveFocus(bool _canFocusState) {
+				m_canFocus.set(_canFocusState);
+			}
 			/**
 			 * @brief keep the focus on this widget  == > this remove the previous focus on all other widget
 			 */
@@ -688,10 +695,7 @@ namespace ewol {
 			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {};
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
-			/*
-			virtual bool onSetConfig(const ewol::object::Config& _conf);
-			virtual bool onGetConfig(const char* _config, std::string& _result) const;
-			*/
+			virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions

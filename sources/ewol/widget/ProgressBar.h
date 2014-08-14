@@ -44,10 +44,7 @@ namespace ewol {
 				ewol::object::Param<etk::Color<>> m_textColorBgOff; //!< bar color disable
 			protected: // Derived function
 				virtual void onDraw();
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual void calculateMinMaxSize();

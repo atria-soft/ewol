@@ -36,18 +36,6 @@ ewol::widget::Sizer::~Sizer() {
 }
 
 
-void ewol::widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize) {
-	m_borderSize.set(_newBorderSize);
-	markToRedraw();
-	requestUpdateSize();
-}
-
-void ewol::widget::Sizer::setMode(enum displayMode _mode) {
-	m_mode.set(_mode);
-	markToRedraw();
-	requestUpdateSize();
-}
-
 void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	ewol::Widget::calculateSize(_availlable);
 	vec2 tmpBorderSize = m_borderSize->getPixel();
@@ -189,43 +177,14 @@ void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidg
 	// TODO : ...
 	ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 }
-/*
-bool ewol::widget::Sizer::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configBorder) {
-		setBorderSize(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configMode) {
-		if (_conf.getData() == "vert") {
-			setMode(modeVert);
-		} else {
-			setMode(modeHori);
-		}
-		return true;
-	}
-	return false;
-}
 
-bool ewol::widget::Sizer::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::ContainerN::onGetConfig(_config, _result)) {
-		return true;
+void ewol::widget::Sizer::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::ContainerN::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_mode) {
+		markToRedraw();
+		requestUpdateSize();
+	} else if (_paramPointer == m_borderSize) {
+		markToRedraw();
+		requestUpdateSize();
 	}
-	if (_config == configBorder) {
-		_result = (std::string)getBorderSize();
-		return true;
-	}
-	if (_config == configMode) {
-		if (getMode() == modeVert) {
-			_result = "vert";
-		} else {
-			_result = "hori";
-		}
-		return true;
-	}
-	return false;
 }
-*/
-

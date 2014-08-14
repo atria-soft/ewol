@@ -49,7 +49,9 @@ namespace ewol {
 				 * @brief set the mode to display elements.
 				 * @param[in] _mode The mode to display the elements.
 				 */
-				void setMode(enum displayMode _mode);
+				void setMode(enum displayMode _mode) {
+					m_mode.set(_mode);
+				}
 				/**
 				 * @brief get the mode to display elements.
 				 * @return The current mode to display the elements.
@@ -64,7 +66,9 @@ namespace ewol {
 				 * @brief set the current border size of the current element:
 				 * @param[in] _newBorderSize The border size to set (0 if not used)
 				 */
-				void setBorderSize(const ewol::Dimension& _newBorderSize);
+				void setBorderSize(const ewol::Dimension& _newBorderSize) {
+					m_borderSize.set(_newBorderSize);
+				}
 				/**
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
@@ -123,10 +127,7 @@ namespace ewol {
 				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

@@ -152,24 +152,6 @@ ewol::Widget::~Widget() {
 	shortCutClean();
 }
 
-void ewol::Widget::hide() {
-	if (m_hide == false) {
-		EWOL_WARNING("HIDE widget: '" << getName() << "'");
-		m_hide = true;
-		markToRedraw();
-		requestUpdateSize();
-	}
-}
-
-void ewol::Widget::show() {
-	if (m_hide == true) {
-		EWOL_WARNING("SHOW widget: '" << getName() << "'");
-		m_hide = false;
-		markToRedraw();
-		requestUpdateSize();
-	}
-}
-
 void ewol::Widget::calculateSize(const vec2& _available) {
 	m_size = _available;
 	m_size.setMax(m_minSize);
@@ -196,15 +178,6 @@ bool ewol::Widget::rmFocus() {
 		return true;
 	}
 	return false;
-}
-
-void ewol::Widget::setCanHaveFocus(bool _canFocusState) {
-	if (m_canFocus != _canFocusState) {
-		m_canFocus = _canFocusState;
-		if (m_hasFocus == true) {
-			rmFocus();
-		}
-	}
 }
 
 void ewol::Widget::keepFocus() {
@@ -416,25 +389,6 @@ vec2 ewol::Widget::getCalculateMaxSize() {
 	return vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 }
 
-void ewol::Widget::setMinSize(const ewol::Dimension& _size) {
-	vec2 pixelMin = _size.getPixel();
-	vec2 pixelMax = m_userMaxSize->getPixel();
-	// check minimum & maximum compatibility :
-	bool error=false;
-	if (pixelMin.x()>pixelMax.x()) {
-		error=true;
-	}
-	if (pixelMin.y()>pixelMax.y()) {
-		error=true;
-	}
-	if (error == true) {
-		EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-		return;
-	}
-	m_userMinSize = _size;
-	requestUpdateSize();
-}
-
 void ewol::Widget::setNoMinSize() {
 	m_userMinSize.set(ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel));
 }
@@ -443,25 +397,6 @@ void ewol::Widget::checkMinSize() {
 	vec2 pixelSize = m_userMinSize->getPixel();
 	m_minSize.setX(std::max(m_minSize.x(), pixelSize.x()));
 	m_minSize.setY(std::max(m_minSize.y(), pixelSize.y()));
-}
-
-void ewol::Widget::setMaxSize(const ewol::Dimension& _size) {
-	vec2 pixelMin = m_userMinSize->getPixel();
-	vec2 pixelMax = _size.getPixel();
-	// check minimum & maximum compatibility :
-	bool error=false;
-	if (pixelMin.x()>pixelMax.x()) {
-		error=true;
-	}
-	if (pixelMin.y()>pixelMax.y()) {
-		error=true;
-	}
-	if (error == true) {
-		EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-		return;
-	}
-	m_userMaxSize = _size;
-	requestUpdateSize();
 }
 
 void ewol::Widget::setNoMaxSize() {
@@ -481,29 +416,11 @@ vec2 ewol::Widget::getSize() {
 	return vec2(0,0);
 }
 
-void ewol::Widget::setExpand(const bvec2& _newExpand) {
-	if(    m_userExpand->x() != _newExpand.x()
-	    || m_userExpand->y() != _newExpand.y()) {
-		m_userExpand.set(_newExpand);
-		requestUpdateSize();
-		markToRedraw();
-	}
-}
-
 bvec2 ewol::Widget::canExpand() {
 	if (false == isHide()) {
 		return m_userExpand;
 	}
 	return bvec2(false,false);
-}
-
-void ewol::Widget::setFill(const bvec2& _newFill) {
-	if(    m_userFill->x() != _newFill.x()
-	    || m_userFill->y() != _newFill.y()) {
-		m_userFill = _newFill;
-		requestUpdateSize();
-		markToRedraw();
-	}
 }
 
 const bvec2& ewol::Widget::canFill() {
@@ -719,9 +636,64 @@ bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
 	return onEventInput(_event.m_event);
 }
 
-void ewol::Widget::setGravity(enum gravity _gravity) {
-	m_gravity = _gravity;
-	markToRedraw();
+void ewol::Widget::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Object::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_canFocus) {
+		if (m_hasFocus == true) {
+			rmFocus();
+		}
+	} else if (_paramPointer == m_gravity) {
+		markToRedraw();
+	} else if (_paramPointer == m_hide) {
+		markToRedraw();
+		requestUpdateSize();
+	} else if (_paramPointer == m_userFill) {
+		markToRedraw();
+		requestUpdateSize();
+	} else if (_paramPointer == m_userExpand) {
+		requestUpdateSize();
+		markToRedraw();
+	} else if (_paramPointer == m_userMaxSize) {
+		vec2 pixelMin = m_userMinSize->getPixel();
+		vec2 pixelMax = m_userMaxSize->getPixel();
+		// check minimum & maximum compatibility :
+		bool error=false;
+		if (pixelMin.x()>pixelMax.x()) {
+			error=true;
+		}
+		if (pixelMin.y()>pixelMax.y()) {
+			error=true;
+		}
+		if (error == true) {
+			EWOL_ERROR("Can not set a 'min size' > 'max size' reset to maximum ...");
+			m_userMaxSize = ewol::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
+		}
+		requestUpdateSize();
+	} else if (_paramPointer == m_userMinSize) {
+		vec2 pixelMin = m_userMinSize->getPixel();
+		vec2 pixelMax = m_userMaxSize->getPixel();
+		// check minimum & maximum compatibility :
+		bool error=false;
+		if (pixelMin.x()>pixelMax.x()) {
+			error=true;
+		}
+		if (pixelMin.y()>pixelMax.y()) {
+			error=true;
+		}
+		if (error == true) {
+			EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
+			m_userMinSize = ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel);
+		}
+		requestUpdateSize();
+	} else if (_paramPointer == m_annimationTypeStart) {
+		
+	} else if (_paramPointer == m_annimationTimeStart) {
+		
+	} else if (_paramPointer == m_annimationTypeStop) {
+		
+	} else if (_paramPointer == m_annimationTimeStop) {
+		
+	}
 }
 
 /*

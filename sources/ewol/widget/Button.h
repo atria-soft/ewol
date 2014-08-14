@@ -60,7 +60,9 @@ namespace ewol {
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 				 * @param[in] _shaperName The new shaper filename
 				 */
-				void setShaperName(const std::string& _shaperName);
+				void setShaperName(const std::string& _shaperName) {
+					m_shaper.setString(_shaperName);
+				}
 			protected:
 				ewol::object::Param<bool> m_value; //!< Current state of the button.
 			public:
@@ -69,7 +71,9 @@ namespace ewol {
 				 * @note Work only in toggle mode
 				 * @param[in] _val New value of the button
 				 */
-				void setValue(bool _val);
+				void setValue(bool _val) {
+					m_value.set(_val);
+				}
 				/**
 				 * @brief get the current button value.
 				 * @return True : The button is pressed.
@@ -85,7 +89,9 @@ namespace ewol {
 				 * @brief set the button lock state.
 				 * @param[in] _lock New lock mode of the button
 				 */
-				void setLock(enum buttonLock _lock);
+				void setLock(enum buttonLock _lock) {
+					m_lock.set(_lock);
+				}
 				/**
 				 * @brief get the current button lock value.
 				 * @return The requested lock mode
@@ -100,7 +106,9 @@ namespace ewol {
 				 * @brief change the toggle mode.
 				 * @param[in] _togg New toggle mode
 				 */
-				void setToggleMode(bool _togg);
+				void setToggleMode(bool _togg) {
+					m_toggleMode.set(_togg);
+				}
 				/**
 				 * @brief get the current toggle mode.
 				 * @return the current toggle mode.
@@ -115,7 +123,9 @@ namespace ewol {
 				 * @brief Chane the display single widget mode availlable.
 				 * @param[in] _single single mode widget set
 				 */
-				void setEnableSingle(bool _single);
+				void setEnableSingle(bool _single) {
+					m_enableSingle.set(_single);
+				}
 				/**
 				 * @brief get the current single mode enableling.
 				 * @return the current value.
@@ -141,10 +151,7 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
-				/*
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
-				*/
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void calculateSize(const vec2& _availlable);
