@@ -158,9 +158,11 @@ namespace ewol {
 				bool getShowTemporaryFiles() const {
 					return m_showFile;
 				};
+				/*
 			public: // glocal derived functions
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 		};
 	};
 };

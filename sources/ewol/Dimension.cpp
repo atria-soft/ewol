@@ -298,3 +298,20 @@ std::ostream& ewol::operator <<(std::ostream& _os, const ewol::Dimension& _obj) 
 	_os << _obj.get(_obj.getType()) << _obj.getType();
 	return _os;
 }
+
+
+template<> std::string etk::to_string<ewol::Dimension>(const ewol::Dimension& _obj) {
+	return _obj;
+}
+template<> std::u32string etk::to_u32string<ewol::Dimension>(const ewol::Dimension& _obj) {
+	return etk::to_u32string(etk::to_string(_obj));
+}
+
+
+template<> bool etk::from_string<ewol::Dimension>(ewol::Dimension& _variableRet, const std::string& _value) {
+	_variableRet = ewol::Dimension(_value);
+	return true;
+}
+template<> bool etk::from_string<ewol::Dimension>(ewol::Dimension& _variableRet, const std::u32string& _value) {
+	return from_string(_variableRet, etk::to_string(_value));
+}

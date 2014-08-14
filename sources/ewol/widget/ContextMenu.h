@@ -59,8 +59,10 @@ namespace ewol {
 				void setPositionMark(enum markPosition position, vec2 arrowPos);
 			protected: // Derived function
 				virtual void onDraw();
+				/*
 				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				*/
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);

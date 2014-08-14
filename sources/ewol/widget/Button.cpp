@@ -253,12 +253,12 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 					EWOL_VERBOSE(getName() << " : Generate event : " << eventPressed);
 					generateEventId(eventPressed);
 					EWOL_VERBOSE(getName() << " : Generate event : " << eventValue << " val=" << m_value );
-					generateEventId(eventValue, etk::to_string(m_value));
+					generateEventId(eventValue, etk::to_string(m_value.get()));
 					if(    false == m_toggleMode
 					    && true == m_value) {
 						setValue(false);
 						EWOL_VERBOSE(getName() << " : Generate event : " << ewol::widget::Button::eventValue << " val=" << m_value);
-						generateEventId(eventValue, etk::to_string(m_value));
+						generateEventId(eventValue, etk::to_string(m_value.get()));
 					}
 				}
 				markToRedraw();
