@@ -23,7 +23,7 @@ namespace ewol {
 				MenuElement() { };
 				int32_t m_localId;
 				int32_t m_parentId;
-				std::shared_ptr<ewol::Widget> m_widgetPointer;
+				std::weak_ptr<ewol::Widget> m_widgetPointer;
 				std::string m_label;
 				std::string m_image;
 				const char* m_generateEvent;
@@ -45,17 +45,16 @@ namespace ewol {
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
 			private:
-				std::vector<ewol::widget::MenuElement*> m_listElement;
+				std::vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
-				std::shared_ptr<ewol::widget::ContextMenu> m_widgetContextMenu;
+				std::weak_ptr<ewol::widget::ContextMenu> m_widgetContextMenu;
 			public:
 				void clear();
 				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
-				int32_t add(int32_t parent, std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
+				int32_t add(int32_t _parent, std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
 				void addSpacer();
 				// Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 		};
 	};
 };
