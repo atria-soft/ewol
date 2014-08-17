@@ -692,7 +692,6 @@ namespace ewol {
 			 */
 			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
-			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {};
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
 			virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);

@@ -140,28 +140,6 @@ void ewol::context::InputManager::unGrabPointer() {
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
 
-void ewol::context::InputManager::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
-	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		std::shared_ptr<ewol::Widget> tmpWidget = m_eventInputSaved[iii].curentWidgetEvent.lock();
-		if (tmpWidget == _object) {
-			// remove the property of this input ...
-			EWOL_VERBOSE("Remove object ==> rm Input Event !!!");
-			cleanElement(m_eventInputSaved, iii);
-		}
-		tmpWidget = m_eventMouseSaved[iii].curentWidgetEvent.lock();
-		if (tmpWidget == _object) {
-			// remove the property of this input ...
-			EWOL_VERBOSE("Remove object ==> rm Mouse Event !!!");
-			cleanElement(m_eventMouseSaved, iii);
-		}
-	}
-	std::shared_ptr<ewol::Widget> tmpWidgetGrab = m_grabWidget.lock();
-	if (tmpWidgetGrab == _object) {
-		EWOL_VERBOSE("Remove object ==> rm Grab widget !!!");
-		tmpWidgetGrab.reset();
-	}
-}
-
 void ewol::context::InputManager::newLayerSet() {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...

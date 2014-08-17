@@ -28,19 +28,6 @@ void ewol::object::MultiCast::clear() {
 	m_messageList.clear();
 }
 
-void ewol::object::MultiCast::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
-	auto it(m_messageList.begin());
-	while (it != m_messageList.end()) {
-		std::shared_ptr<ewol::Object> obj = it->m_object.lock();
-		if (obj == _object) {
-			m_messageList.erase(it);
-			it = m_messageList.begin();
-		} else {
-			++it;
-		}
-	}
-}
-
 void ewol::object::MultiCast::add(const std::shared_ptr<ewol::Object>& _object, const char* const _message) {
 	if (_object == nullptr) {
 		EWOL_ERROR("Add with nullptr object");
@@ -75,8 +62,7 @@ void ewol::object::MultiCast::rm(const std::shared_ptr<ewol::Object>& _object) {
 }
 
 void ewol::object::MultiCast::send(const std::shared_ptr<ewol::Object>& _object, const char* const _message, const std::string& _data) {
-	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
-	
+	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to:");
 	// send the message at all registered widget ...
 	for (auto &it : m_messageList) {
 		std::shared_ptr<ewol::Object> obj = it.m_object.lock();

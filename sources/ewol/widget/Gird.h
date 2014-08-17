@@ -140,7 +140,6 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& pos);
-				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 		};

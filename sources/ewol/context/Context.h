@@ -144,8 +144,6 @@ namespace ewol {
 			
 			// return true if a flush is needed
 			bool OS_Draw(bool _displayEveryTime);
-			
-			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 		public:
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad

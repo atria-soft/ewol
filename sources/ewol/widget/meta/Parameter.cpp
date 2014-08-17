@@ -219,21 +219,6 @@ void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg
 	return;
 }
 
-void ewol::widget::Parameter::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
-	// First step call parrent : 
-	ewol::widget::PopUp::onObjectRemove(_removeObject);
-	// second step find if in all the elements ...
-	if(_removeObject == m_widgetTitle) {
-		m_widgetTitle = nullptr;
-	}
-	if(_removeObject == m_paramList) {
-		m_paramList = nullptr;
-	}
-	if(_removeObject == m_wSlider) {
-		m_wSlider = nullptr;
-	}
-}
-
 void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, std::shared_ptr<ewol::Widget> _associateWidget) {
 	if (nullptr != m_paramList) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);

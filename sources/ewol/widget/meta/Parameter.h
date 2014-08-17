@@ -38,7 +38,6 @@ namespace ewol {
 				virtual ~Parameter();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 			public:
 				void setTitle(std::string _label);
 				void menuAdd(std::string _label, std::string _image, std::shared_ptr<ewol::Widget> _associateWidget);

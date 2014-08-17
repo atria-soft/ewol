@@ -672,16 +672,6 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	return hasDisplayDone;
 }
 
-void ewol::Context::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
-	//EWOL_CRITICAL("element removed");
-	if (m_windowsCurrent == _object) {
-		m_windowsCurrent.reset(); // This might never arrived, the owner is the current element (expected when the widget auto remove itself)
-	}
-	// inform all manager that can not be directly linked with the object manager
-	m_input.onObjectRemove(_object);
-	m_resourceManager.cleanInternalRemoved();
-}
-
 void ewol::Context::resetIOEvent() {
 	m_input.newLayerSet();
 }

@@ -199,7 +199,7 @@ namespace ewol {
 			 * @brief Inform object that an other object is removed ...
 			 * @note : Sub classes must call this class
 			 */
-			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
+			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object, bool _deprecated) { /* Deprecated */};
 			/**
 			 * @brief Receive a message from an other Object with a specific eventId and data
 			 * @param[in] _msg Message handle

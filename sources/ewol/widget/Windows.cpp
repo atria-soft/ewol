@@ -199,24 +199,6 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	m_popUpWidgetList.pop_back();
 }
 
-void ewol::widget::Windows::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
-	// First step call parrent : 
-	ewol::Widget::onObjectRemove(_removeObject);
-	// second step find if in all the elements ...
-	
-	if (m_subWidget == _removeObject) {
-		EWOL_DEBUG("Remove main element of the windows  == > destroyed object");
-		m_subWidget.reset();
-	}
-	for (auto it(m_popUpWidgetList.begin()) ; it != m_popUpWidgetList.end() ; ++it) {
-		if(*it == _removeObject) {
-			EWOL_DEBUG("Remove Pop-up element of the windows  == > destroyed object");
-			m_popUpWidgetList.erase(it);
-			it = m_popUpWidgetList.begin();
-		}
-	}
-}
-
 void ewol::widget::Windows::setBackgroundColor(const etk::Color<float>& _color) {
 	if (m_backgroundColor != _color) {
 		m_backgroundColor = _color;

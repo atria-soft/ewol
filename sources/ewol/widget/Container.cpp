@@ -75,15 +75,6 @@ std::shared_ptr<ewol::Widget> ewol::widget::Container::getWidgetNamed(const std:
 	return nullptr;
 }
 
-void ewol::widget::Container::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
-	ewol::Widget::onObjectRemove(_object);
-	if (m_subWidget == _object) {
-		m_subWidget.reset();
-		markToRedraw();
-		requestUpdateSize();
-	}
-}
-
 void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...

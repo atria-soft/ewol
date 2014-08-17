@@ -162,25 +162,3 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 	}
 };
 
-
-void ewol::widget::ColorChooser::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
-	// First step call parrent : 
-	ewol::widget::Sizer::onObjectRemove(_removeObject);
-	// second step find if in all the elements ...
-	if(_removeObject == m_widgetRed) {
-		m_widgetRed.reset();
-	}
-	if(_removeObject == m_widgetGreen) {
-		m_widgetGreen.reset();
-	}
-	if(_removeObject == m_widgetBlue) {
-		m_widgetBlue.reset();
-	}
-	if(_removeObject == m_widgetAlpha) {
-		m_widgetAlpha.reset();
-	}
-	if(_removeObject == m_widgetColorBar) {
-		m_widgetColorBar.reset();
-	}
-}
-

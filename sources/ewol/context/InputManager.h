@@ -94,8 +94,6 @@ namespace ewol {
 				// note if id<0  == > the it was finger event ...
 				void motion(enum ewol::key::type _type, int _pointerID, vec2 _pos );
 				void state(enum ewol::key::type _type, int _pointerID, bool _isDown, vec2 _pos);
-				
-				void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
 			public:
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...

@@ -40,7 +40,6 @@ namespace ewol {
 				void send(const std::shared_ptr<ewol::Object>& _object, const char* const _message, const std::string& _data);
 				void rm(const std::shared_ptr<ewol::Object>& _object);
 				void add(const std::shared_ptr<ewol::Object>& _object, const char* const _message);
-				void onObjectRemove(const std::shared_ptr<ewol::Object>& _object);
 		};
 	};
 };

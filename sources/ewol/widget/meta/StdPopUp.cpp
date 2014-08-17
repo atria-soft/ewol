@@ -114,26 +114,6 @@ std::shared_ptr<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const st
 	return myButton;
 }
 
-void ewol::widget::StdPopUp::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
-	// call parent:
-	ewol::widget::PopUp::onObjectRemove(_removeObject);
-	if (_removeObject == m_subBar) {
-		m_subBar = nullptr;
-		markToRedraw();
-		return;
-	}
-	if (_removeObject == m_comment) {
-		m_comment = nullptr;
-		markToRedraw();
-		return;
-	}
-	if (_removeObject == m_title) {
-		m_title = nullptr;
-		markToRedraw();
-		return;
-	}
-}
-
 void ewol::widget::StdPopUp::onReceiveMessage(const ewol::object::Message& _msg) {
 	// call parent:
 	ewol::widget::PopUp::onReceiveMessage(_msg);

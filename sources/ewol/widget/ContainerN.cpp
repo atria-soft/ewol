@@ -154,21 +154,6 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(const std
 	return nullptr;
 }
 
-void ewol::widget::ContainerN::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
-	// First step call parrent :
-	ewol::Widget::onObjectRemove(_object);
-	// second step find if in all the elements ...
-	auto it(m_subWidget.begin());
-	while (it != m_subWidget.end()) {
-		if(*it == _object) {
-			m_subWidget.erase(it);
-			it = m_subWidget.begin();
-		} else {
-			++it;
-		}
-	}
-}
-
 void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...

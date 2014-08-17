@@ -36,7 +36,6 @@ namespace ewol {
 				virtual ~ColorChooser();
 			public: // Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
-				virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject);
 			public:
 				void setColor(etk::Color<> _newColor);
 				etk::Color<> getColor();

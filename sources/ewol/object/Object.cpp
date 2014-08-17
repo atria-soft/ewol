@@ -170,7 +170,7 @@ void ewol::Object::sendMultiCast(const char* const _messageId, const std::string
 
 void ewol::Object::registerMultiCast(const char* const _messageId) {
 	if (m_objectHasBeenInit == false) {
-		EWOL_WARNING("try to generate an event inside a constructor");
+		EWOL_ERROR("Try to Register multicast inside a constructor (move it in the init function)");
 		return;
 	}
 	getMultiCast().add(shared_from_this(), _messageId);
@@ -258,24 +258,6 @@ void ewol::Object::unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _desti
 			m_externEvent.erase(it);
 			it = m_externEvent.begin();
 			EWOL_INFO("[" << getId() << "] Remove extern event : to object id=" << _destinationObject->getId() << " event=" << _eventId);
-		} else {
-			++it;
-		}
-	}
-}
-
-void ewol::Object::onObjectRemove(const std::shared_ptr<ewol::Object>& _object) {
-	EWOL_VERBOSE("[" << getId() << "] onObjectRemove(" << _object->getId() << ")");
-	auto it(m_externEvent.begin());
-	while(it != m_externEvent.end()) {
-		std::shared_ptr<ewol::Object> obj = it->destObject.lock();
-		if (obj == nullptr) {
-			m_externEvent.erase(it);
-			it = m_externEvent.begin();
-		} else if (obj == _object) {
-			m_externEvent.erase(it);
-			it = m_externEvent.begin();
-			EWOL_INFO("[" << getId() << "] Remove extern event : to object id=" << _object->getId());
 		} else {
 			++it;
 		}

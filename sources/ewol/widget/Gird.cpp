@@ -347,19 +347,3 @@ std::shared_ptr<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _po
 	}
 	return nullptr;
 }
-
-void ewol::widget::Gird::onObjectRemove(const std::shared_ptr<ewol::Object>& _removeObject) {
-	// First step call parrent : 
-	ewol::Widget::onObjectRemove(_removeObject);
-	// second step find if in all the elements ...
-	for(int32_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
-		if(m_subWidget[iii].widget == _removeObject) {
-			EWOL_VERBOSE("[" << getId() << "]={" << getObjectType() << "} remove sizer sub Element [" << iii << "/" << m_subWidget.size()-1 << "]  == > destroyed object");
-			m_subWidget[iii].widget = nullptr;
-			m_subWidget.erase(m_subWidget.begin()+iii);
-		}
-	}
-	if (m_tmpWidget == _removeObject) {
-		m_tmpWidget.reset();
-	}
-}
