@@ -26,8 +26,6 @@ namespace ewol {
 	class Context;
 };
 
-#include <ewol/object/Config.h>
-#include <ewol/object/ConfigElement.h>
 #include <ewol/object/Message.h>
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Param.h>

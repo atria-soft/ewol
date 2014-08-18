@@ -88,8 +88,6 @@ def create(target):
 	
 	# object :
 	myModule.add_src_file([
-		'ewol/object/Config.cpp',
-		'ewol/object/ConfigElement.cpp',
 		'ewol/object/Manager.cpp',
 		'ewol/object/Message.cpp',
 		'ewol/object/MultiCast.cpp',
