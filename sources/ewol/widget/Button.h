@@ -31,12 +31,11 @@ namespace ewol {
 			public:
 				// Event list of properties
 				ewol::object::Signal<int> signalPressed;
-				static const char* const eventPressed;
-				static const char* const eventDown;
-				static const char* const eventUp;
-				static const char* const eventEnter;
-				static const char* const eventLeave;
-				static const char* const eventValue;
+				ewol::object::Signal<void> signalDown;
+				ewol::object::Signal<void> signalUp;
+				ewol::object::Signal<void> signalEnter;
+				ewol::object::Signal<void> signalLeave;
+				ewol::object::Signal<void> signalValue;
 				enum buttonLock{
 					lockNone, //!< normal status of the button
 					lockWhenPressed, //!< When the state is set in pressed, the status stay in this one
