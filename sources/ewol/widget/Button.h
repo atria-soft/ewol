@@ -17,6 +17,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/object/Signal.h>
 
 
 
@@ -29,6 +30,7 @@ namespace ewol {
 		class Button : public ewol::widget::Container2 {
 			public:
 				// Event list of properties
+				ewol::object::Signal<int> signalPressed;
 				static const char* const eventPressed;
 				static const char* const eventDown;
 				static const char* const eventUp;

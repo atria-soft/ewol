@@ -29,6 +29,7 @@ const char* const ewol::widget::Button::eventValue      = "value";
 #define STATUS_DOWN      (3)
 
 ewol::widget::Button::Button() :
+  signalPressed(*this, "pressed", "Button is pressed"),
   m_shaper(*this, "shaper", "The display name for config file"),
   m_value(*this, "value", false, "Value of the Button"),
   m_lock(*this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder"),

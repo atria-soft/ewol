@@ -97,7 +97,10 @@ def create(target):
 		'ewol/object/ParameterList.cpp',
 		'ewol/object/ParamList.cpp',
 		'ewol/object/Param.cpp',
-		'ewol/object/ParamRange.cpp'
+		'ewol/object/ParamRange.cpp',
+		'ewol/object/SignalList.cpp',
+		'ewol/object/SignalBase.cpp',
+		'ewol/object/Signal.cpp'
 		])
 	
 	# OpenGL interface :

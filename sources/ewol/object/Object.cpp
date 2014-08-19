@@ -57,8 +57,6 @@ ewol::Object::Object() :
 
 ewol::Object::~Object() {
 	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
-	m_externEvent.clear();
-	m_availlableEventId.clear();
 	m_uniqueId = -1;
 }
 
@@ -109,6 +107,8 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 	return false;
 }
 
+/*
+
 void ewol::Object::addEventId(const char * _generateEventId) {
 	for (auto &it : m_availlableEventId) {
 		if (std::string(it) == _generateEventId) {
@@ -155,6 +155,7 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->removObject() which is asynchronous");
 	}
 }
+*/
 
 void ewol::Object::sendMultiCast(const char* const _messageId, const std::string& _data) {
 	if (m_objectHasBeenInit == false) {
@@ -175,7 +176,7 @@ void ewol::Object::registerMultiCast(const char* const _messageId) {
 	}
 	getMultiCast().add(shared_from_this(), _messageId);
 }
-
+/*
 void ewol::Object::registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
@@ -263,6 +264,7 @@ void ewol::Object::unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _desti
 		}
 	}
 }
+*/
 
 bool ewol::Object::loadXML(exml::Element* _node) {
 	if (nullptr == _node) {
@@ -313,7 +315,7 @@ ewol::object::MultiCast& ewol::Object::getMultiCast() const {
 ewol::Context& ewol::Object::getContext() const {
 	return ewol::getContext();
 }
-
+/*
 void ewol::Object::registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
                                          const std::string& _objectName,
                                          const char * _eventId,
@@ -327,7 +329,7 @@ void ewol::Object::registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _d
 		EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Can not register event : \"" << _eventId << "\" the object named=\"" << _objectName << "\" does not exist");
 	}
 }
-
+*/
 std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) const {
 	return getObjectManager().getObjectNamed(_objectName);
 }
