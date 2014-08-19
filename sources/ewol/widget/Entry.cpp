@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/types.h>
@@ -29,39 +29,22 @@ const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-sele
 #define STATUS_HOVER     (1)
 #define STATUS_SELECTED  (2)
 
-static ewol::Widget* create() {
-	return new ewol::widget::Entry();
-}
-
-void ewol::widget::Entry::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
 const char * const ewol::widget::Entry::eventClick  = "click";
 const char * const ewol::widget::Entry::eventEnter  = "enter";
 const char * const ewol::widget::Entry::eventModify = "modify";
 
-const char* const ewol::widget::Entry::configMaxChar = "max";
-const char* const ewol::widget::Entry::configRegExp  = "regExp";
-const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
-const char* const ewol::widget::Entry::configValue = "value";
-
-ewol::widget::Entry::Entry(std::string _newData) :
-  m_shaper("THEME:GUI:Entry.json"),
-  m_data(""),
-  m_maxCharacter(0x7FFFFFFF),
-  m_regExp(".*"),
+ewol::widget::Entry::Entry() :
+  m_shaper(*this, "shaper", "Shaper to display the background"),
+  m_data(*this, "value", "", "Value display in the entry (decorated text)"),
+  m_maxCharacter(*this, "max", 0x7FFFFFFF, 0, 0x7FFFFFFF, "Maximum cgar that can be set on the Entry"),
+  m_regExp(*this, "regExp", "Control what it is write with a regular expression"),
   m_needUpdateTextPos(true),
   m_displayStartPosition(0),
   m_displayCursor(false),
   m_displayCursorPos(0),
   m_displayCursorPosSelection(0),
-  m_textWhenNothing("") {
+  m_textWhenNothing(*this, "emptytext", "", "Text that is displayed when the Entry is empty (decorated text)") {
 	addObjectType("ewol::widget::Entry");
-	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
-	m_colorIdTextBg = m_shaper.requestColor("text-background");
-	m_colorIdCursor = m_shaper.requestColor("text-cursor");
-	m_colorIdSelection = m_shaper.requestColor("text-selection");
 	setCanHaveFocus(true);
 	addEventId(eventClick);
 	addEventId(eventEnter);
@@ -72,14 +55,15 @@ ewol::widget::Entry::Entry(std::string _newData) :
 	shortCutAdd("ctrl+v", ewolEventEntryPaste);
 	shortCutAdd("ctrl+a", ewolEventEntrySelect, "ALL");
 	shortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
-	
-	registerConfig(configMaxChar, "int", nullptr, "Maximum cgar that can be set on the Entry");
-	registerConfig(configRegExp, "string", nullptr, "Control what it is write with a regular expression");
-	registerConfig(configEmptyMessage, "string", nullptr, "Text that is displayed when the Entry is empty (decorated text)");
-	registerConfig(configValue, "string", nullptr, "Value display in the entry (decorated text)");
-	
-	setValue(_newData);
+	m_regExp.setString(".*");
 	markToRedraw();
+}
+
+
+void ewol::widget::Entry::init(const std::string& _newData) {
+	ewol::Widget::init();
+	m_data.set(_newData);
+	m_shaper.setString("THEME:GUI:Entry.json");
 }
 
 
@@ -87,21 +71,11 @@ ewol::widget::Entry::~Entry() {
 	
 }
 
-
-void ewol::widget::Entry::setMaxChar(int32_t _nbMax) {
-	if (_nbMax <= 0) {
-		m_maxCharacter = 0x7FFFFFFF;
-	} else {
-		m_maxCharacter = _nbMax;
-	}
-}
-
-
 void ewol::widget::Entry::calculateMinMaxSize() {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper->getPadding();
 	int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
 	vec2 minimumSizeBase(20, minHeight);
 	// add padding :
@@ -111,7 +85,7 @@ void ewol::widget::Entry::calculateMinMaxSize() {
 	checkMinSize();
 }
 
-
+// TODO : ... Set it a a generic parameter...
 void ewol::widget::Entry::setValue(const std::string& _newData) {
 	std::string newData = _newData;
 	if ((int64_t)newData.size() > m_maxCharacter) {
@@ -120,8 +94,8 @@ void ewol::widget::Entry::setValue(const std::string& _newData) {
 	}
 	// set the value with the check of the RegExp ...
 	setInternalValue(newData);
-	if (m_data == newData) {
-		m_displayCursorPos = m_data.size();
+	if (newData == m_data.get()) {
+		m_displayCursorPos = m_data->size();
 		m_displayCursorPosSelection = m_displayCursorPos;
 		EWOL_VERBOSE("Set : '" << newData << "'");
 	}
@@ -130,29 +104,29 @@ void ewol::widget::Entry::setValue(const std::string& _newData) {
 
 
 void ewol::widget::Entry::onDraw() {
-	m_shaper.draw();
+	m_shaper->draw();
 	m_text.draw();
 }
 
 
 void ewol::widget::Entry::onRegenerateDisplay() {
 	if (true == needRedraw()) {
-		m_shaper.clear();
+		m_shaper->clear();
 		m_text.clear();
 		if (m_colorIdTextFg >= 0) {
-			m_text.setDefaultColorFg(m_shaper.getColor(m_colorIdTextFg));
-			m_text.setDefaultColorBg(m_shaper.getColor(m_colorIdTextBg));
-			m_text.setCursorColor(m_shaper.getColor(m_colorIdCursor));
-			m_text.setSelectionColor(m_shaper.getColor(m_colorIdSelection));
+			m_text.setDefaultColorFg(m_shaper->getColor(m_colorIdTextFg));
+			m_text.setDefaultColorBg(m_shaper->getColor(m_colorIdTextBg));
+			m_text.setCursorColor(m_shaper->getColor(m_colorIdCursor));
+			m_text.setSelectionColor(m_shaper->getColor(m_colorIdSelection));
 		}
 		updateTextPosition();
-		ewol::Padding padding = m_shaper.getPadding();
+		ewol::Padding padding = m_shaper->getPadding();
 		
 		vec2 tmpSizeShaper = m_minSize;
-		if (true == m_userFill.x()) {
+		if (true == m_userFill->x()) {
 			tmpSizeShaper.setX(m_size.x());
 		}
-		if (true == m_userFill.y()) {
+		if (true == m_userFill->y()) {
 			tmpSizeShaper.setY(m_size.y());
 		}
 		
@@ -178,22 +152,22 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 		} else {
 			m_text.setCursorPos(m_displayCursorPos);
 		}
-		if (0!=m_data.size()) {
+		if (0!=m_data->size()) {
 			m_text.print(m_data);
 		} else {
-			if (0!=m_textWhenNothing.size()) {
+			if (0!=m_textWhenNothing->size()) {
 				m_text.printDecorated(m_textWhenNothing);
 			}
 		}
 		m_text.setClippingMode(false);
 		
-		m_shaper.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
+		m_shaper->setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 	}
 }
 
 
 void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper->getPadding();
 	
 	vec2 relPos = relativePosition(_pos);
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.xLeft());
@@ -203,7 +177,7 @@ void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = padding.xLeft();
-	for (size_t iii=0; iii<m_data.size(); iii++) {
+	for (size_t iii=0; iii<m_data->size(); iii++) {
 		tmpDisplay = std::string(m_data, 0, iii);
 		int32_t tmpWidth = m_text.calculateSize(tmpDisplay).x() - displayHidenSize;
 		if (tmpWidth >= relPos.x()-tmpTextOriginX) {
@@ -212,7 +186,7 @@ void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection
 		}
 	}
 	if (newCursorPosition == -1) {
-		newCursorPosition = m_data.size();
+		newCursorPosition = m_data->size();
 	}
 	if (false == _selection) {
 		m_displayCursorPos = newCursorPosition;
@@ -243,7 +217,7 @@ void ewol::widget::Entry::removeSelected() {
 	// remove data ...
 	m_displayCursorPos = pos1;
 	m_displayCursorPosSelection = pos1;
-	m_data.erase(pos1, pos2-pos1);
+	m_data->erase(pos1, pos2-pos1);
 	markToRedraw();
 }
 
@@ -278,19 +252,19 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 			// select word
 			m_displayCursorPosSelection = m_displayCursorPos-1;
 			// search forward
-			for (size_t iii=m_displayCursorPos; iii <= m_data.size(); iii++) {
-				if(iii == m_data.size()) {
+			for (size_t iii=m_displayCursorPos; iii <= m_data->size(); iii++) {
+				if(iii == m_data->size()) {
 					m_displayCursorPos = iii;
 					break;
 				}
-				if(!(    (    m_data[iii] >= 'a'
-				           && m_data[iii] <= 'z')
-				      || (    m_data[iii] >= 'A'
-				           && m_data[iii] <= 'Z')
-				      || (    m_data[iii] >= '0'
-				           && m_data[iii] <= '9')
-				      || m_data[iii] == '_'
-				      || m_data[iii] == '-'
+				if(!(    (    m_data.get()[iii] >= 'a'
+				           && m_data.get()[iii] <= 'z')
+				      || (    m_data.get()[iii] >= 'A'
+				           && m_data.get()[iii] <= 'Z')
+				      || (    m_data.get()[iii] >= '0'
+				           && m_data.get()[iii] <= '9')
+				      || m_data.get()[iii] == '_'
+				      || m_data.get()[iii] == '-'
 				  ) ) {
 					m_displayCursorPos = iii;
 					break;
@@ -302,14 +276,14 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 					m_displayCursorPosSelection = 0;
 					break;
 				}
-				if(!(    (    m_data[iii] >= 'a'
-				           && m_data[iii] <= 'z')
-				      || (    m_data[iii] >= 'A'
-				           && m_data[iii] <= 'Z')
-				      || (    m_data[iii] >= '0'
-				           && m_data[iii] <= '9')
-				      || m_data[iii] == '_'
-				      || m_data[iii] == '-'
+				if(!(    (    m_data.get()[iii] >= 'a'
+				           && m_data.get()[iii] <= 'z')
+				      || (    m_data.get()[iii] >= 'A'
+				           && m_data.get()[iii] <= 'Z')
+				      || (    m_data.get()[iii] >= '0'
+				           && m_data.get()[iii] <= '9')
+				      || m_data.get()[iii] == '_'
+				      || m_data.get()[iii] == '-'
 				  ) ) {
 					m_displayCursorPosSelection = iii+1;
 					break;
@@ -321,7 +295,7 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 		} else if (ewol::key::statusTriple == _event.getStatus()) {
 			keepFocus();
 			m_displayCursorPosSelection = 0;
-			m_displayCursorPos = m_data.size();
+			m_displayCursorPos = m_data->size();
 		} else if (ewol::key::statusDown == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos());
@@ -371,27 +345,27 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				return true;
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
-				if (m_data.size() > 0 && m_displayCursorPos < (int64_t)m_data.size()) {
-					m_data.erase(m_displayCursorPos, 1);
-					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+				if (m_data->size() > 0 && m_displayCursorPos < (int64_t)m_data->size()) {
+					m_data->erase(m_displayCursorPos, 1);
+					m_displayCursorPos = std::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if (_event.getChar() == 0x08) {
 				// DEL :
-				if (m_data.size() > 0 && m_displayCursorPos != 0) {
-					m_data.erase(m_displayCursorPos-1, 1);
+				if (m_data->size() > 0 && m_displayCursorPos != 0) {
+					m_data->erase(m_displayCursorPos-1, 1);
 					m_displayCursorPos--;
-					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+					m_displayCursorPos = std::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
-				if ((int64_t)m_data.size() > m_maxCharacter) {
+				if ((int64_t)m_data->size() > m_maxCharacter) {
 					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
 					std::string newData = m_data;
 					newData.insert(newData.begin()+m_displayCursorPos, _event.getChar());
 					setInternalValue(newData);
-					if (m_data == newData) {
+					if (m_data.get() == newData) {
 						m_displayCursorPos++;
 						m_displayCursorPosSelection = m_displayCursorPos;
 					}
@@ -416,12 +390,12 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 					m_displayCursorPos = 0;
 					break;
 				case ewol::key::keyboardEnd:
-					m_displayCursorPos = m_data.size();
+					m_displayCursorPos = m_data->size();
 					break;
 				default:
 					return false;
 			}
-			m_displayCursorPos = etk_avg(0, m_displayCursorPos, (int64_t)m_data.size());
+			m_displayCursorPos = std::avg(0, m_displayCursorPos, (int32_t)m_data->size());
 			m_displayCursorPosSelection = m_displayCursorPos;
 			markToRedraw();
 			return true;
@@ -434,14 +408,14 @@ void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 	std::string previous = m_data;
 	// check the RegExp :
 	if (_newData.size()>0) {
-		if (false == m_regExp.processOneElement(_newData,0,_newData.size()) ) {
-			EWOL_INFO("the input data does not match with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp.getRegExp() << "\" start=" << m_regExp.start() << " stop=" << m_regExp.stop() );
+		if (false == m_regExp->processOneElement(_newData,0,_newData.size()) ) {
+			EWOL_INFO("the input data does not match with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp->getRegExp() << "\" start=" << m_regExp->start() << " stop=" << m_regExp->stop() );
 			return;
 		}
 		//EWOL_INFO("find regExp : \"" << m_data << "\" start=" << m_regExp.Start() << " stop=" << m_regExp.Stop() );
-		if(    0 != m_regExp.start()
-		    || _newData.size() != (size_t)m_regExp.stop() ) {
-			EWOL_INFO("The input data match not entirely with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp.getRegExp() << "\" start=" << m_regExp.start() << " stop=" << m_regExp.stop() );
+		if(    0 != m_regExp->start()
+		    || _newData.size() != (size_t)m_regExp->stop() ) {
+			EWOL_INFO("The input data match not entirely with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp->getRegExp() << "\" start=" << m_regExp->start() << " stop=" << m_regExp->stop() );
 			return;
 		}
 	}
@@ -459,8 +433,8 @@ void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipbo
 		std::string newData = m_data;
 		newData.insert(m_displayCursorPos, &tmpData[0]);
 		setInternalValue(newData);
-		if (m_data == newData) {
-			if (m_data.size() == tmpData.size()) {
+		if (m_data.get() == newData) {
+			if (m_data->size() == tmpData.size()) {
 				m_displayCursorPos = tmpData.size();
 			} else {
 				m_displayCursorPos += tmpData.size();
@@ -492,7 +466,7 @@ void ewol::widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
 	} else if(_msg.getMessage() == ewolEventEntrySelect) {
 		if(_msg.getData() == "ALL") {
 			m_displayCursorPosSelection = 0;
-			m_displayCursorPos = m_data.size();
+			m_displayCursorPos = m_data->size();
 		} else {
 			m_displayCursorPosSelection = m_displayCursorPos;
 		}
@@ -508,10 +482,10 @@ void ewol::widget::Entry::updateTextPosition() {
 	if (false == m_needUpdateTextPos) {
 		return;
 	}
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = m_shaper->getPadding();
 	
 	int32_t tmpSizeX = m_minSize.x();
-	if (true == m_userFill.x()) {
+	if (true == m_userFill->x()) {
 		tmpSizeX = m_size.x();
 	}
 	int32_t tmpUserSize = tmpSizeX - padding.x();
@@ -529,10 +503,10 @@ void ewol::widget::Entry::updateTextPosition() {
 		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
 		if (tmp1<10) {
 			// set the cursor on le left
-			m_displayStartPosition = etk_min(-pixelCursorPos+10, 0);
+			m_displayStartPosition = std::min(-pixelCursorPos+10, 0);
 		} else if (tmp1>tmpUserSize-10) {
 			// set the cursor of the Right
-			m_displayStartPosition = etk_min(-pixelCursorPos + tmpUserSize - 10, 0);
+			m_displayStartPosition = std::min(-pixelCursorPos + tmpUserSize - 10, 0);
 		}
 		// else : the cursor is inside the display
 		//m_displayStartPosition = -totalWidth + tmpUserSize;
@@ -554,79 +528,40 @@ void ewol::widget::Entry::onLostFocus() {
 }
 
 void ewol::widget::Entry::changeStatusIn(int32_t _newStatusId) {
-	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
+	if (true == m_shaper->changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
 	}
 }
 
 void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
-	if (false == m_shaper.periodicCall(_event) ) {
+	if (false == m_shaper->periodicCall(_event) ) {
 		periodicCallDisable();
 	}
 	markToRedraw();
 }
 
-void ewol::widget::Entry::setRegExp(const std::string& _expression) {
-	std::string previousRegExp = m_regExp.getRegExp();
-	EWOL_DEBUG("change input regExp \"" << previousRegExp << "\"  == > \"" << _expression << "\"");
-	m_regExp.compile(_expression);
-	if (m_regExp.getStatus() == false) {
-		EWOL_ERROR("error when adding regExp ...  == > set the previous back ...");
-		m_regExp.compile(previousRegExp);
+void ewol::widget::Entry::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_shaper) {
+		m_colorIdTextFg = m_shaper->requestColor("text-foreground");
+		m_colorIdTextBg = m_shaper->requestColor("text-background");
+		m_colorIdCursor = m_shaper->requestColor("text-cursor");
+		m_colorIdSelection = m_shaper->requestColor("text-selection");
+	} else if (_paramPointer == m_data) {
+		// to late to update data ... with control.
+		markToRedraw();
+	} else if (_paramPointer == m_maxCharacter) {
+		// nothing to do ...
+	} else if (_paramPointer == m_regExp) {
+		if (m_regExp->getStatus() == false) {
+			EWOL_ERROR("error when adding regExp ...  == > set the '\".*\"' ...");
+			m_regExp->compile(".*");
+		}
+		markToRedraw();
+	} else if (_paramPointer == m_textWhenNothing) {
+		markToRedraw();
 	}
 }
-
-void ewol::widget::Entry::setEmptyText(const std::string& _text) {
-	m_textWhenNothing = _text;
-	markToRedraw();
-}
-
-bool ewol::widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configMaxChar) {
-		setMaxChar(stoi(_conf.getData()));
-		return true;
-	}
-	if (_conf.getConfig() == configRegExp) {
-		setRegExp(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configEmptyMessage) {
-		setEmptyText(_conf.getData());
-		return true;
-	}
-	if (_conf.getConfig() == configValue) {
-		setValue(_conf.getData());
-		return true;
-	}
-	return false;
-}
-
-bool ewol::widget::Entry::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configMaxChar) {
-		_result = std::to_string(getMaxChar());
-		return true;
-	}
-	if (_config == configRegExp) {
-		_result = getRegExp();
-		return true;
-	}
-	if (_config == configEmptyMessage) {
-		_result = getEmptyText();
-		return true;
-	}
-	if (_config == configValue) {
-		_result = getValue();
-		return true;
-	}
-	return false;
-}
-
 
 

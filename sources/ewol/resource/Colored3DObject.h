@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __COLORED_3D_OBJECT_H__
@@ -19,13 +19,15 @@ namespace ewol {
 	namespace resource {
 		class Colored3DObject : public ewol::Resource {
 			protected:
-				ewol::object::Shared<ewol::resource::Program> m_GLprogram;
+				std::shared_ptr<ewol::resource::Program> m_GLprogram;
 				int32_t m_GLPosition;
 				int32_t m_GLMatrix;
 				int32_t m_GLColor;
 			protected:
 				Colored3DObject();
+				void init();
 			public:
+				DECLARE_RESOURCE_FACTORY(Colored3DObject);
 				virtual ~Colored3DObject();
 			public:
 				virtual void draw(std::vector<vec3>& _vertices,
@@ -42,13 +44,6 @@ namespace ewol {
 				                      mat4& _transformationMatrix,
 				                      bool _updateDepthBuffer=true,
 				                      bool _depthtest=true);
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::Colored3DObject> keep();
 		};
 	};
 };

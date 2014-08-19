@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/Label.h>
@@ -16,31 +16,27 @@
 #define __class__ "Label"
 
 const char * const ewol::widget::Label::eventPressed = "pressed";
-const char* const ewol::widget::Label::configValue  = "value";
 
-static ewol::Widget* create() {
-	return new ewol::widget::Label();
-}
-
-void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
 // TODO : Remove the label name in the constructor ...
-ewol::widget::Label::Label(std::string _newLabel) :
+ewol::widget::Label::Label() :
+  m_label(*this, "value", U"", "displayed value string"),
   m_colorProperty(nullptr),
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
-	m_colorProperty = ewol::resource::ColorFile::keep("THEME:COLOR:Label.json");
+	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Label.json");
 	if (m_colorProperty != nullptr) {
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
-	m_label = std::to_u32string(_newLabel);
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
 	setMouseLimit(1);
-	registerConfig(configValue, "string", nullptr, "displayed value string"); // TODO : do not store in attibute...
+}
+
+void ewol::widget::Label::init(std::string _newLabel) {
+	ewol::Widget::init();
+	m_label.setString(_newLabel);
 }
 
 ewol::widget::Label::~Label() {
@@ -48,29 +44,19 @@ ewol::widget::Label::~Label() {
 }
 
 void ewol::widget::Label::calculateMinMaxSize() {
-	vec2 tmpMax = m_userMaxSize.getPixel();
-	vec2 tmpMin = m_userMinSize.getPixel();
+	vec2 tmpMax = m_userMaxSize->getPixel();
+	vec2 tmpMin = m_userMinSize->getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::alignLeft);
 		//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
 	}
-	vec3 minSize = m_text.calculateSizeDecorated(m_label);
+	vec3 minSize = m_text.calculateSizeDecorated(m_label.get());
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
 	
-	m_minSize.setX(etk_avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
-	m_minSize.setY(etk_avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
+	m_minSize.setX(std::avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
+	m_minSize.setY(std::avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
-}
-
-void ewol::widget::Label::setLabel(const std::string& _newLabel) {
-	m_label = std::to_u32string(_newLabel);
-	markToRedraw();
-	requestUpdateSize();
-}
-
-std::string ewol::widget::Label::getLabel() const {
-	return std::to_string(m_label);
 }
 
 void ewol::widget::Label::onDraw() {
@@ -84,16 +70,16 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	m_text.clear();
 	int32_t paddingSize = 2;
 	
-	vec2 tmpMax = m_userMaxSize.getPixel();
+	vec2 tmpMax = m_userMaxSize->getPixel();
 	// to know the size of one line : 
 	vec3 minSize = m_text.calculateSize(char32_t('A'));
 	
-	//minSize.setX(etk_max(minSize.x(), m_minSize.x()));
-	//minSize.setY(etk_max(minSize.y(), m_minSize.y()));
+	//minSize.setX(std::max(minSize.x(), m_minSize.x()));
+	//minSize.setY(std::max(minSize.y(), m_minSize.y()));
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}
-	vec3 curentTextSize = m_text.calculateSizeDecorated(m_label);
+	vec3 curentTextSize = m_text.calculateSizeDecorated(m_label.get());
 	
 	ivec2 localSize = m_minSize;
 	
@@ -102,11 +88,11 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
-	if (m_userFill.x() == true) {
+	if (m_userFill->x() == true) {
 		localSize.setX(m_size.x());
 		tmpTextOrigin.setX(0);
 	}
-	if (m_userFill.y() == true) {
+	if (m_userFill->y() == true) {
 		localSize.setY(m_size.y());
 		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 	}
@@ -129,10 +115,10 @@ void ewol::widget::Label::onRegenerateDisplay() {
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
 	}
 	m_text.setPos(tmpTextOrigin);
-	EWOL_VERBOSE("[" << getId() << "] {" << m_label << "} display at pos : " << tmpTextOrigin);
+	EWOL_VERBOSE("[" << getId() << "] {" << m_label.get() << "} display at pos : " << tmpTextOrigin);
 	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);
 	m_text.setClipping(drawClippingPos, drawClippingSize);
-	m_text.printDecorated(m_label);
+	m_text.printDecorated(m_label.get());
 }
 
 bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
@@ -158,27 +144,11 @@ bool ewol::widget::Label::loadXML(exml::Element* _node) {
 	return true;
 }
 
-
-bool ewol::widget::Label::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
+void ewol::widget::Label::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_label) {
+		markToRedraw();
+		requestUpdateSize();
 	}
-	if (_conf.getConfig() == configValue) {
-		setLabel(_conf.getData());
-		return true;
-	}
-	return false;
 }
-
-bool ewol::widget::Label::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configValue) {
-		_result = getLabel();
-		return true;
-	}
-	return false;
-}
-
 

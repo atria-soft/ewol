@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __SIMPLE_COLOR_FILE_H__
@@ -29,8 +29,10 @@ namespace ewol {
 				 * @brief Constructor of the color property file
 				 * @param[in] _filename Name of the file needed
 				 */
-				ColorFile(const std::string& _filename);
+				ColorFile();
+				void init(const std::string& _filename);
 			public:
+				DECLARE_RESOURCE_NAMED_FACTORY(ColorFile);
 				/**
 				 * @brief Simple Destructor of this class (nothing specific ...)
 				 */
@@ -69,14 +71,6 @@ namespace ewol {
 				}
 			public: // herited function:
 				void reload();
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @param[in] _filename Name of the configuration file.
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::ColorFile> keep(const std::string& _filename);
 		};
 	};
 };

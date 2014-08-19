@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_WIDGET_GIRD_H__
@@ -21,12 +21,10 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Gird :public ewol::Widget {
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				class GirdProperties {
 					public:
-						ewol::object::Shared<ewol::Widget> widget;
+						std::shared_ptr<ewol::Widget> widget;
 						int32_t row;
 						int32_t col;
 				};
@@ -34,13 +32,16 @@ namespace ewol {
 				int32_t m_uniformSizeRow;
 				std::vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
 				std::vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
-				ewol::object::Shared<ewol::Widget> m_tmpWidget; //!< use when replace a widget ...
+				std::shared_ptr<ewol::Widget> m_tmpWidget; //!< use when replace a widget ...
 				bool m_gavityButtom;
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 */
-				Gird(int32_t _colNumber=1);
+				Gird();
+				void init(int32_t _colNumber=1);
+			public:
+				DECLARE_WIDGET_FACTORY(Gird, "Gird");
 				/**
 				 * @brief Desstructor
 				 */
@@ -97,12 +98,12 @@ namespace ewol {
 				 * @param[in] _rowId Id of the row [0..y].
 				 * @param[in] _newWidget the element pointer
 				 */
-				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, std::shared_ptr<ewol::Widget> _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -113,7 +114,7 @@ namespace ewol {
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -138,8 +139,7 @@ namespace ewol {
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& pos);
-				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& pos);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 		};

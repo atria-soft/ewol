@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_TEXTURED_FONT_H__
@@ -36,7 +36,7 @@ namespace ewol {
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				ewol::object::Shared<ewol::resource::FontBase> m_font[4];
+				std::shared_ptr<ewol::resource::FontBase> m_font[4];
 				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
 				std::vector<GlyphProperty> m_listElement[4];
@@ -45,8 +45,10 @@ namespace ewol {
 				ivec2 m_lastGlyphPos[4];
 				int32_t m_lastRawHeigh[4];
 			protected:
-				TexturedFont(const std::string& _fontName);
+				TexturedFont();
+				void init(const std::string& _fontName);
 			public:
+				DECLARE_RESOURCE_NAMED_FACTORY(TexturedFont);
 				virtual ~TexturedFont();
 			public:
 				/**
@@ -87,14 +89,6 @@ namespace ewol {
 				enum ewol::font::mode getWrappingMode(const enum ewol::font::mode _source) {
 					return m_modeWraping[_source];
 				};
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @param[in] _filename Name of the texture font.
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::TexturedFont> keep(const std::string& _filename);
 			private:
 				/**
 				 * @brief add a glyph in a texture font.

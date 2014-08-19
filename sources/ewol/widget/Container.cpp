@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 
@@ -16,37 +16,41 @@
 #define __class__	"Container"
 
 
-ewol::widget::Container::Container(ewol::object::Shared<ewol::Widget> _subElement) :
-  m_subWidget(_subElement) {
+ewol::widget::Container::Container() {
 	addObjectType("ewol::widget::Container");
 	// nothing to do ...
 }
+
+void ewol::widget::Container::init(std::shared_ptr<ewol::Widget> _subElement) {
+	ewol::Widget::init();
+	m_subWidget = _subElement;
+}
+
 
 ewol::widget::Container::~Container() {
 	subWidgetRemove();
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Container::getSubWidget() {
+std::shared_ptr<ewol::Widget> ewol::widget::Container::getSubWidget() {
 	return m_subWidget;
 }
 
-void ewol::widget::Container::setSubWidget(ewol::object::Shared<ewol::Widget> _newWidget) {
-	if (nullptr == _newWidget) {
+void ewol::widget::Container::setSubWidget(std::shared_ptr<ewol::Widget> _newWidget) {
+	if (_newWidget == nullptr) {
 		return;
 	}
 	subWidgetRemove();
 	m_subWidget = _newWidget;
-	if (m_subWidget!=nullptr) {
-		m_subWidget->setUpperWidget(this);
+	if (m_subWidget != nullptr) {
+		m_subWidget->setParent(shared_from_this());
 	}
 	markToRedraw();
 	requestUpdateSize();
 }
 
 void ewol::widget::Container::subWidgetRemove() {
-	if (nullptr != m_subWidget) {
-		m_subWidget->removeUpperWidget();
-		m_subWidget->removeObject();
+	if (m_subWidget != nullptr) {
+		m_subWidget->removeParent();
 		m_subWidget.reset();
 		markToRedraw();
 		requestUpdateSize();
@@ -54,14 +58,14 @@ void ewol::widget::Container::subWidgetRemove() {
 }
 
 void ewol::widget::Container::subWidgetUnLink() {
-	if (nullptr != m_subWidget) {
-		m_subWidget->removeUpperWidget();
+	if (m_subWidget != nullptr) {
+		m_subWidget->removeParent();
 	}
 	m_subWidget.reset();
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Container::getWidgetNamed(const std::string& _widgetName) {
-	ewol::object::Shared<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
+std::shared_ptr<ewol::Widget> ewol::widget::Container::getWidgetNamed(const std::string& _widgetName) {
+	std::shared_ptr<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (nullptr!=tmpUpperWidget) {
 		return tmpUpperWidget;
 	}
@@ -69,15 +73,6 @@ ewol::object::Shared<ewol::Widget> ewol::widget::Container::getWidgetNamed(const
 		return m_subWidget->getWidgetNamed(_widgetName);
 	}
 	return nullptr;
-}
-
-void ewol::widget::Container::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
-	ewol::Widget::onObjectRemove(_object);
-	if (m_subWidget == _object) {
-		m_subWidget.reset();
-		markToRedraw();
-		requestUpdateSize();
-	}
 }
 
 void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp) {
@@ -138,7 +133,7 @@ void ewol::widget::Container::onRegenerateDisplay() {
 	}
 }
 
-ewol::object::Shared<ewol::Widget> ewol::widget::Container::getWidgetAtPos(const vec2& _pos) {
+std::shared_ptr<ewol::Widget> ewol::widget::Container::getWidgetAtPos(const vec2& _pos) {
 	if (false == isHide()) {
 		if (nullptr!=m_subWidget) {
 			return m_subWidget->getWidgetAtPos(_pos);
@@ -174,7 +169,7 @@ bool ewol::widget::Container::loadXML(exml::Element* _node) {
 			continue;
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::object::Shared<ewol::Widget> tmpWidget = getWidgetManager().create(widgetName);
+		std::shared_ptr<ewol::Widget> tmpWidget = getWidgetManager().create(widgetName);
 		if (tmpWidget == nullptr) {
 			EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
@@ -197,4 +192,14 @@ void ewol::widget::Container::setOffset(const vec2& _newVal) {
 	}
 }
 
-
+void ewol::widget::Container::requestDestroyFromChild(const std::shared_ptr<Object>& _child) {
+	if (m_subWidget != _child) {
+		return;
+	}
+	if (m_subWidget == nullptr) {
+		return;
+	}
+	m_subWidget->removeParent();
+	m_subWidget.reset();
+	markToRedraw();
+}

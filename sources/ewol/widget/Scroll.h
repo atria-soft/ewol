@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_WIDGET_SCROLL_H__
@@ -31,24 +31,22 @@ namespace ewol {
 					speedModeEnableVertical,   // Specific for mouse
 					speedModeGrepEndEvent
 				};
-			public:
-				// Cinfig parameter list:
-				static const char* const configLimit;
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
 			protected:
-				vec2 m_limit;
+				ewol::object::ParamRange<vec2> m_limit;
 			private:
 				float m_pixelScrolling;
 				vec2 m_highSpeedStartPos;
 				enum highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
 				enum ewol::key::type m_highSpeedType;
+			protected:
+				Scroll();
+				void init(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
 			public:
-				Scroll(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
+				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
 				virtual ~Scroll();
 				/**
 				 * @brief set the limit of scrolling
@@ -67,11 +65,10 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
 				virtual void onDraw();
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

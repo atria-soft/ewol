@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/types.h>
@@ -24,8 +24,8 @@
 #define __class__ "resource::DistanceFieldFont"
 #define SIZE_GENERATION (30)
 
-ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontName) :
-  ewol::resource::Texture(_fontName),
+ewol::resource::DistanceFieldFont::DistanceFieldFont() :
+  ewol::resource::Texture(),
   m_borderSize(10),
   m_textureBorderSize(0,0) {
 	addObjectType("ewol::resource::DistanceFieldFont");
@@ -33,6 +33,10 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
 	m_sizeRatio = 1.0f;
+}
+
+void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
+	ewol::resource::Texture::init(_fontName);
 	std::string localName = _fontName;
 	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
@@ -48,7 +52,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 		// find the real Font name :
 		std::vector<std::string> output;
 		myFolder.folderGetRecursiveFiles(output);
-		std::vector<std::string> split = std::split(localName, ';');
+		std::vector<std::string> split = etk::split(localName, ';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
@@ -56,11 +60,11 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 			EWOL_INFO("    try with : '" << split[jjj] << "'");
 			for (size_t iii=0; iii<output.size(); iii++) {
 				//EWOL_DEBUG(" file : " << output[iii]);
-				if(    true == end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+"regular"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+"r"+".ttf", false)
-				    || true == end_with(output[iii], split[jjj]+".ttf", false)) {
+				if(    true == etk::end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+"regular"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+"r"+".ttf", false)
+				    || true == etk::end_with(output[iii], split[jjj]+".ttf", false)) {
 					EWOL_INFO(" find Font [Regular]     : " << output[iii]);
 					m_fileName = output[iii];
 					hasFindAFont=true;
@@ -88,7 +92,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 		return;
 	}
 	EWOL_INFO("Load FONT name : '" << m_fileName << "'");
-	m_font = ewol::resource::FontFreeType::keep(m_fileName);
+	m_font = ewol::resource::FontFreeType::create(m_fileName);
 	if (m_font == nullptr) {
 		EWOL_ERROR("Pb Loading FONT name : '" << m_fileName << "'" );
 	}
@@ -204,7 +208,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 			}
 			uint8_t val = 255 - (unsigned char) outside[iii];
 			// TODO : Remove multiple size of the map ...
-			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,256));
+			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,255));
 		}
 	}
 }
@@ -335,32 +339,6 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 	return &((m_listElement)[index]);
 }
 
-ewol::object::Shared<ewol::resource::DistanceFieldFont> ewol::resource::DistanceFieldFont::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : DistanceFieldFont : file : '" << _filename << "'");
-	ewol::object::Shared<ewol::resource::DistanceFieldFont> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::DistanceFieldFont>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// need to crate a new one ...
-	EWOL_DEBUG("CREATE: DistanceFieldFont : file : '" << _filename << "'");
-	object = ewol::object::makeShared(new ewol::resource::DistanceFieldFont(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}
-
-
 void ewol::resource::DistanceFieldFont::exportOnFile() {
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
@@ -374,7 +352,7 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 		if (tmpObj == nullptr) {
 			continue;
 		}
-		tmpObj->addString("m_UVal", std::to_string(m_listElement[iii].m_UVal));
+		tmpObj->addString("m_UVal", etk::to_string(m_listElement[iii].m_UVal));
 		tmpObj->addNumber("m_glyphIndex", m_listElement[iii].m_glyphIndex);
 		tmpObj->addString("m_sizeTexture", (std::string)m_listElement[iii].m_sizeTexture);
 		tmpObj->addString("m_bearing", (std::string)m_listElement[iii].m_bearing);
@@ -425,7 +403,7 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 			continue;
 		}
 		GlyphProperty prop;
-		prop.m_UVal = std::stoi(tmpObj->getStringValue("m_UVal", "0"));
+		prop.m_UVal = etk::string_to_int32_t(tmpObj->getStringValue("m_UVal", "0"));
 		prop.m_glyphIndex = tmpObj->getNumberValue("m_glyphIndex", 0);
 		prop.m_sizeTexture = tmpObj->getStringValue("m_sizeTexture", "0,0");
 		prop.m_bearing = tmpObj->getStringValue("m_bearing", "0,0");

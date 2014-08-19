@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_LIST_FILE_H__
@@ -20,26 +20,19 @@ namespace ewol {
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public:
-				//! @not-in-doc
-				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char * const eventFileSelect; //!< @event "file-select" Generated when a file is selected.
 				static const char * const eventFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
 				static const char * const eventFolderSelect;
 				static const char * const eventFolderValidate;
-				// Config list of properties
-				static const char* const configShowHidden; //!< @config "show-hidden"
-				static const char* const configShowFile;
-				static const char* const configShowFolder;
-				static const char* const configShowTemporary;
-				static const char* const configPath;
-				static const char* const configSelect;
-				// TODO : Add a standalone configuration ..
-			public:
+			protected:
 				ListFileSystem();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ListFileSystem, "ListFileSystem");
 				virtual ~ListFileSystem();
 			protected:
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
 				int32_t m_colorIdText; //!< Color of the text.
 				int32_t m_colorIdBackground1; //!< Color of the Background.
 				int32_t m_colorIdBackground2; //!< Color of the Background 2.
@@ -75,15 +68,15 @@ namespace ewol {
 				 */
 				std::string getSelect() const ;
 			protected:
-				std::string m_folder; //!< Current folder that display point on.
+				ewol::object::Param<std::string> m_folder; //!< Current folder that display point on.
+				ewol::object::Param<std::string, true> m_selectFile; //!< current selected file
 			public:
 				/**
 				 * @brief Set a folder to display (might be a valid folder !!!)
 				 * @param[in] _newFolder Path on the folder to display content.
 				 */
 				void setFolder(const std::string& _newFolder) {
-					m_folder = _newFolder;
-					regenerateView();
+					m_folder.set(_newFolder);
 				};
 				/**
 				 * @brief Get the element current displaying folder path.
@@ -93,15 +86,14 @@ namespace ewol {
 					return m_folder;
 				};
 			protected:
-				bool m_showFile; //!< Show files elements
+				ewol::object::Param<bool> m_showFile; //!< Show files elements
 			public:
 				/**
 				 * @brief Set the status of the displaying files or Not.
 				 * @param[in] _state New state to apply on display the 'file'.
 				 */
 				void setShowFiles(bool _state) {
-					m_showFile = _state;
-					regenerateView();
+					m_showFile.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying files or Not.
@@ -111,15 +103,14 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				bool m_showFolder; //!< Display the folders elements
+				ewol::object::Param<bool> m_showFolder; //!< Display the folders elements
 			public:
 				/**
 				 * @brief Set the status of the displaying fodlers or Not.
 				 * @param[in] _state New state to apply on display the 'folder'.
 				 */
 				void setShowFolder(bool _state) {
-					m_showFolder = _state;
-					regenerateView();
+					m_showFolder.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying fodlers or Not.
@@ -129,15 +120,14 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				bool m_showHidden; //!< Display hidden elements
+				ewol::object::Param<bool> m_showHidden; //!< Display hidden elements
 			public:
 				/**
 				 * @brief Set the status of the displaying hidden files or folder or Not.
 				 * @param[in] _state New state to apply on display the hidden element.
 				 */
 				void setShowHidden(bool _state) {
-					m_showHidden = _state;
-					regenerateView();
+					m_showHidden.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying hidden files or folder or Not.
@@ -147,15 +137,14 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				bool m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
+				ewol::object::Param<bool> m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
 			public:
 				/**
 				 * @brief Set the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
 				 * @param[in] _state New state to apply on display temporary files.
 				 */
 				void setShowTemporaryFiles(bool _state) {
-					m_showTemporaryFile = _state;
-					regenerateView();
+					m_showTemporaryFile.set(_state);
 				};
 				/**
 				 * @brief Get the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
@@ -165,8 +154,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			public: // glocal derived functions
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

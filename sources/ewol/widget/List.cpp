@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/List.h>
@@ -26,6 +26,10 @@ ewol::widget::List::List() {
 	#endif
 	m_nbVisibleRaw=0;
 	setCanHaveFocus(true);
+}
+
+void ewol::widget::List::init() {
+	ewol::widget::WidgetScrolled::init();
 }
 
 ewol::widget::List::~List() {
@@ -185,7 +189,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 					
 					// get the maximum size of the colomn :
 					vec3 textSize = tmpText->calculateSize(myTextToWrite);
-					sizeColom = etk_max(sizeColom, textSize.x());
+					sizeColom = std::max(sizeColom, (int32_t)textSize.x());
 					
 					tmpText->setColor(fg);
 					tmpText->setPos(vec3(tmpOriginX + displayPositionX, displayPositionY, 0) );
@@ -235,7 +239,7 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), 0, rawID, _event.getPos().x(), _event.getPos().y());
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
-		//ewol::object::Shared<ewol::Widget>Manager::focusKeep(this);
+		//std::shared_ptr<ewol::Widget>Manager::focusKeep(this);
 	}
 	return isUsed;
 }

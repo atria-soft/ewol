@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_JOYSTICK_H__
@@ -45,8 +45,11 @@ namespace ewol {
 				std::string m_background;
 				std::string m_foreground;
 				float m_ratio;
-			public:
+			protected:
 				Joystick();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(Joystick, "Joystick");
 				virtual ~Joystick();
 			public:
 				void setLockMode(bool _lockWhenOut) {

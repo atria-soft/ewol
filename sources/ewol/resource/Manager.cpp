@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/types.h>
@@ -27,6 +27,7 @@ ewol::resource::Manager::~Manager() {
 		EWOL_ERROR("Must not have anymore resources to update !!!");
 		hasError = true;
 	}
+	// TODO : Remove unneeded elements
 	if (m_resourceList.size()!=0) {
 		EWOL_ERROR("Must not have anymore resources !!!");
 		hasError = true;
@@ -42,10 +43,11 @@ void ewol::resource::Manager::unInit() {
 	// remove all resources ...
 	auto it(m_resourceList.begin());
 	while(it != m_resourceList.end()) {
-		if ((*it) != nullptr) {
-			EWOL_WARNING("Find a resource that is not removed : [" << (*it)->getId() << "]"
-			             << "=\"" << (*it)->getName() << "\" "
-			             << (*it)->getRefCount() << " elements");
+		std::shared_ptr<ewol::Resource> tmpRessource = (*it).lock();
+		if (tmpRessource != nullptr) {
+			EWOL_WARNING("Find a resource that is not removed : [" << tmpRessource->getId() << "]"
+			             << "=\"" << tmpRessource->getName() << "\" "
+			             << tmpRessource.use_count() << " elements");
 		}
 		m_resourceList.erase(it);
 		it = m_resourceList.begin();
@@ -57,11 +59,12 @@ void ewol::resource::Manager::display() {
 	EWOL_INFO("Resources loaded : ");
 	// remove all resources ...
 	for (auto &it : m_resourceList) {
-		if (it != nullptr) {
-			EWOL_INFO("    [" << it->getId() << "]"
-			          << it->getObjectType()
-			          << "=\"" << it->getName() << "\" "
-			          << it->getRefCount() << " elements");
+		std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
+		if (tmpRessource != nullptr) {
+			EWOL_INFO("    [" << tmpRessource->getId() << "]"
+			          << tmpRessource->getObjectType()
+			          << "=\"" << tmpRessource->getName() << "\" "
+			          << tmpRessource.use_count() << " elements");
 		}
 	}
 	EWOL_INFO("Resources ---");
@@ -74,10 +77,11 @@ void ewol::resource::Manager::reLoadResources() {
 		for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 			EWOL_INFO("    Reload level : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 			for (auto &it : m_resourceList) {
-				if(it != nullptr) {
-					if (jjj == it->getResourceLevel()) {
-						it->reload();
-						EWOL_INFO("        [" << it->getId() << "]="<< it->getObjectType());
+				std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
+				if(tmpRessource != nullptr) {
+					if (jjj == tmpRessource->getResourceLevel()) {
+						tmpRessource->reload();
+						EWOL_INFO("        [" << tmpRessource->getId() << "]="<< tmpRessource->getObjectType());
 					}
 				}
 			}
@@ -88,7 +92,7 @@ void ewol::resource::Manager::reLoadResources() {
 	EWOL_INFO("-------------  Resources  -------------");
 }
 
-void ewol::resource::Manager::update(const ewol::object::Shared<ewol::Resource>& _object) {
+void ewol::resource::Manager::update(const std::shared_ptr<ewol::Resource>& _object) {
 	// chek if not added before
 	for (auto &it : m_resourceListToUpdate) {
 		if (    it != nullptr
@@ -110,10 +114,11 @@ void ewol::resource::Manager::updateContext() {
 			for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    updateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 				for (auto &it : m_resourceList) {
-					if(    it != nullptr
-					    && jjj == it->getResourceLevel()) {
+					std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
+					if(    tmpRessource != nullptr
+					    && jjj == tmpRessource->getResourceLevel()) {
 						//EWOL_DEBUG("Update context named : " << l_resourceList[iii]->getName());
-						it->updateContext();
+						tmpRessource->updateContext();
 					}
 				}
 			}
@@ -138,8 +143,9 @@ void ewol::resource::Manager::updateContext() {
 // in this case, it is really too late ...
 void ewol::resource::Manager::contextHasBeenDestroyed() {
 	for (auto &it : m_resourceList) {
-		if (it != nullptr) {
-			it->removeContextToLate();
+		std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
+		if (tmpRessource != nullptr) {
+			tmpRessource->removeContextToLate();
 		}
 	}
 	// no context preent ...
@@ -147,23 +153,25 @@ void ewol::resource::Manager::contextHasBeenDestroyed() {
 }
 
 // internal generic keeper ...
-ewol::object::Shared<ewol::Resource> ewol::resource::Manager::localKeep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
+std::shared_ptr<ewol::Resource> ewol::resource::Manager::localKeep(const std::string& _filename) {
+	EWOL_VERBOSE("KEEP (DEFAULT) : file : '" << _filename << "' in " << m_resourceList.size() << " resources");
 	for (auto &it : m_resourceList) {
-		if (    it != nullptr
-		     && it->getName() == _filename) {
-			return it;
+		std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
+		if (tmpRessource != nullptr) {
+			if (tmpRessource->getName() == _filename) {
+				return tmpRessource;
+			}
 		}
 	}
-	// we did not find it ...
 	return nullptr;
 }
 
 // internal generic keeper ...
-void ewol::resource::Manager::localAdd(const ewol::object::Shared<ewol::Resource>& _object) {
+void ewol::resource::Manager::localAdd(const std::shared_ptr<ewol::Resource>& _object) {
 	//Add ... find empty slot
 	for (auto &it : m_resourceList) {
-		if (it == nullptr) {
+		std::shared_ptr<ewol::Resource> tmpRessource = it.lock();
+		if (tmpRessource == nullptr) {
 			it = _object;
 			return;
 		}
@@ -173,23 +181,13 @@ void ewol::resource::Manager::localAdd(const ewol::object::Shared<ewol::Resource
 }
 
 // in case of error ...
-bool ewol::resource::Manager::checkResourceToRemove() {
+void ewol::resource::Manager::cleanInternalRemoved() {
 	//EWOL_INFO("remove object in Manager");
 	updateContext();
 	for (auto it(m_resourceList.begin()); it!=m_resourceList.end(); ++it) {
-		if ((*it) == nullptr) {
+		if ((*it).expired() == true) {
 			m_resourceList.erase(it);
 			it = m_resourceList.begin();
-			continue;
 		}
-		// 1 in object list, 1 in reference active list, and one here
-		if ((*it)->getRefCount() > 3) {
-			continue;
-		}
-		EWOL_DEBUG("Request remove of an resource (refcount in Low : " << (*it)->getRefCount() << ")");
-		m_resourceList.erase(it);
-		it = m_resourceList.begin();
-		return true;
 	}
-	return false;
 }

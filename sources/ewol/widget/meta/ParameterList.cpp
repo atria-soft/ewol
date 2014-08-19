@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/meta/ParameterList.h>
@@ -35,6 +35,9 @@ ewol::widget::ParameterList::ParameterList() {
 	setCanHaveFocus(true);
 }
 
+void ewol::widget::ParameterList::init() {
+	ewol::widget::WidgetScrolled::init();
+}
 ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
@@ -121,7 +124,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		
 		// set background color :
 		ewol::compositing::Drawing * tmpDraw = new ewol::compositing::Drawing();
-		tmpDraw->setColor(0xFFFFFFFF);
+		tmpDraw->setColor(etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF));
 		tmpDraw->setPos(vec3(0,0,0) );
 		tmpDraw->rectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
 		
@@ -140,7 +143,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		
 		for (int32_t iii=startRaw; iii<nbRaw && iii<(int32_t)(startRaw+displayableRaw); iii++) {
 			std::string myTextToWrite = "???";
-			etk::Color<> fg(0x000000FF);
+			etk::Color<> fg(0x00, 0x00, 0x00, 0xFF);
 			if (m_list[iii] != nullptr) {
 				myTextToWrite = m_list[iii]->m_label;
 			}
@@ -189,7 +192,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
 			if (m_list[rawID]!=nullptr) {
 				if (m_list[rawID]->m_refId >= 0) {
-					generateEventId(eventSelect, std::to_string(m_list[rawID]->m_refId));
+					generateEventId(eventSelect, etk::to_string(m_list[rawID]->m_refId));
 					m_idSelected = rawID;
 					markToRedraw();
 					return true;

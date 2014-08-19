@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_COMPOSITING_TEXT_BASE_H__
@@ -77,7 +77,7 @@ namespace ewol {
 				float m_stopTextPos; //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
 				enum aligneMode m_alignement; //!< Current Alignement mode (justify/left/right ...)
 			protected:
-				ewol::object::Shared<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
+				std::shared_ptr<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)

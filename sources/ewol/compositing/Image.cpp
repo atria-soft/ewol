@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/debug.h>
@@ -43,9 +43,9 @@ void ewol::compositing::Image::loadProgram() {
 	m_GLPosition = 0;
 	m_GLprogram.reset();
 	if (m_distanceFieldMode == true) {
-		m_GLprogram = ewol::resource::Program::keep("DATA:texturedDF.prog");
+		m_GLprogram = ewol::resource::Program::create("DATA:texturedDF.prog");
 	} else {
-		m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
+		m_GLprogram = ewol::resource::Program::create("DATA:textured3D.prog");
 	}
 	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
@@ -247,8 +247,8 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
-	ewol::object::Shared<ewol::resource::TextureFile> resource(m_resource);
-	ewol::object::Shared<ewol::resource::ImageDF> resourceDF(m_resourceDF);
+	std::shared_ptr<ewol::resource::TextureFile> resource(m_resource);
+	std::shared_ptr<ewol::resource::ImageDF> resourceDF(m_resourceDF);
 	m_filename = _newFile;
 	m_requestSize = _size;
 	m_resource.reset();
@@ -258,12 +258,12 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 	if (_newFile != "") {
 		// link to new one
 		if (m_distanceFieldMode == false) {
-			m_resource = ewol::resource::TextureFile::keep(m_filename, tmpSize);
+			m_resource = ewol::resource::TextureFile::create(m_filename, tmpSize);
 			if (m_resource == nullptr) {
 				EWOL_ERROR("Can not get Image resource");
 			}
 		} else {
-			m_resourceDF = ewol::resource::ImageDF::keep(m_filename, tmpSize);
+			m_resourceDF = ewol::resource::ImageDF::create(m_filename, tmpSize);
 			if (m_resourceDF == nullptr) {
 				EWOL_ERROR("Can not get Image resource DF");
 			}

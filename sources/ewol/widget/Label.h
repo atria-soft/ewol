@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_LABEL_H__
@@ -25,24 +25,21 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventPressed;
-				// Config list of properties
-				static const char* const configValue;
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
-				std::u32string m_label; //!< decorated text to display.
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				ewol::object::Param<std::u32string> m_label; //!< decorated text to display.
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
-			public:
+			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
-				Label(std::string _newLabel="---");
+				Label();
+				void init(std::string _newLabel="---");
+			public:
+				DECLARE_WIDGET_FACTORY(Label, "Label");
 				/**
 				 * @brief destructor
 				 */
@@ -51,24 +48,27 @@ namespace ewol {
 				 * @brief change the label displayed
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
-				void setLabel(const std::string& _newLabel);
+				void setLabel(const std::string& _newLabel) {
+					m_label.set(etk::to_u32string(_newLabel));
+				}
 				//! @previous
 				inline void setValue(const std::string& _newLabel) {
-					setLabel(_newLabel);
+					m_label.set(etk::to_u32string(_newLabel));
 				};
 				/**
 				 * @brief get the current displayed label
 				 * @return The displayed decorated text.
 				 */
-				std::string getLabel() const;
+				std::string getLabel() const {
+					return etk::to_string(m_label);
+				}
 				//! @previous
 				inline std::string getValue() const {
-					return getLabel();
+					return etk::to_string(m_label);
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

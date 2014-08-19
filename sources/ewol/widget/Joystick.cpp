@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/Joystick.h>
@@ -50,6 +50,10 @@ ewol::widget::Joystick::Joystick() {
 	setCanHaveFocus(true);
 }
 
+void ewol::widget::Joystick::init() {
+	ewol::Widget::init();
+}
+
 
 ewol::widget::Joystick::~Joystick() {
 	
@@ -57,7 +61,7 @@ ewol::widget::Joystick::~Joystick() {
 
 
 void ewol::widget::Joystick::calculateSize(const vec2& availlable) {
-	float minimumSize = etk_min(availlable.x(), availlable.y());
+	float minimumSize = std::min(availlable.x(), availlable.y());
 	m_size.setValue(minimumSize, minimumSize);
 	markToRedraw();
 }

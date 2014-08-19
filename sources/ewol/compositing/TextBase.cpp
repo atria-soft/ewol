@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/debug.h>
@@ -53,8 +53,8 @@ ewol::compositing::TextBase::~TextBase() {
 void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	ewol::object::Shared<ewol::resource::Program> old = m_GLprogram;
-	m_GLprogram = ewol::resource::Program::keep(_shaderName);
+	std::shared_ptr<ewol::resource::Program> old = m_GLprogram;
+	m_GLprogram = ewol::resource::Program::create(_shaderName);
 	if (m_GLprogram != nullptr) {
 		m_GLPosition   = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor      = m_GLprogram->getAttribute("EW_color");
@@ -64,7 +64,7 @@ void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
 		m_GLtextWidth  = m_GLprogram->getUniform("EW_texWidth");
 		m_GLtextHeight = m_GLprogram->getUniform("EW_texHeight");
 	} else {
-		EWOL_ERROR("Can not load the program => keep previous one...");
+		EWOL_ERROR("Can not load the program => create previous one...");
 		m_GLprogram = old;
 		old = nullptr;
 	}
@@ -125,10 +125,10 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
 		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(etk_max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(etk_max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(etk_min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(etk_min(m_position.y(), m_sizeDisplayStart.y()));
+		m_sizeDisplayStop.setX(std::max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(std::max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(std::min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(std::min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 	// update position
@@ -143,10 +143,10 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	} else {
 		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(etk_max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(etk_max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(etk_min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(etk_min(m_position.y(), m_sizeDisplayStart.y()));
+		m_sizeDisplayStop.setX(std::max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(std::max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(std::min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(std::min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 }
@@ -255,7 +255,7 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			// nothing to do ...
 		} else if (_element->getType(iii) == exml::typeText) {
 			exml::Node* child = _element->getNode(iii);
-			htmlAddData(std::to_u32string(child->getValue()));
+			htmlAddData(etk::to_u32string(child->getValue()));
 			EWOL_VERBOSE("XML add : " << child->getValue());
 			continue;
 		} else if (_element->getType(iii)!=exml::typeElement) {
@@ -267,21 +267,25 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			EWOL_ERROR("Cast error ...");
 			continue;
 		}
-		if(compare_no_case(elem->getValue(), "br") == true) {
+		if(etk::compare_no_case(elem->getValue(), "br") == true) {
 			htmlFlush();
 			EWOL_VERBOSE("XML flush & newLine");
 			forceLineReturn();
-		} else if (compare_no_case(elem->getValue(), "font") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "font") == true) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			std::string colorValue = elem->getAttribute("color");
-			m_htmlDecoTmp.m_colorFg = colorValue;
+			if (colorValue.size() != 0) {
+				m_htmlDecoTmp.m_colorFg = colorValue;
+			}
 			colorValue = elem->getAttribute("colorBg");
-			m_htmlDecoTmp.m_colorBg = colorValue;
+			if (colorValue.size() != 0) {
+				m_htmlDecoTmp.m_colorBg = colorValue;
+			}
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    compare_no_case(elem->getValue(), "b") == true
-		           || compare_no_case(elem->getValue(), "bold") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "b") == true
+		           || etk::compare_no_case(elem->getValue(), "bold") == true) {
 			EWOL_VERBOSE("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -291,8 +295,8 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    compare_no_case(elem->getValue(), "i") == true
-		           || compare_no_case(elem->getValue(), "italic") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "i") == true
+		           || etk::compare_no_case(elem->getValue(), "italic") == true) {
 			EWOL_VERBOSE("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -302,34 +306,34 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    compare_no_case(elem->getValue(), "u") == true
-		           || compare_no_case(elem->getValue(), "underline") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "u") == true
+		           || etk::compare_no_case(elem->getValue(), "underline") == true) {
 			EWOL_VERBOSE("XML underline ...");
 			parseHtmlNode(elem);
-		} else if(    compare_no_case(elem->getValue(), "p") == true
-		           || compare_no_case(elem->getValue(), "paragraph") == true) {
+		} else if(    etk::compare_no_case(elem->getValue(), "p") == true
+		           || etk::compare_no_case(elem->getValue(), "paragraph") == true) {
 			EWOL_VERBOSE("XML paragraph ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
-		} else if (compare_no_case(elem->getValue(), "center") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "center") == true) {
 			EWOL_VERBOSE("XML center ...");
 			htmlFlush();
 			m_alignement = alignCenter;
 			parseHtmlNode(elem);
-		} else if (compare_no_case(elem->getValue(), "left") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "left") == true) {
 			EWOL_VERBOSE("XML left ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			parseHtmlNode(elem);
-		} else if (compare_no_case(elem->getValue(), "right") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "right") == true) {
 			EWOL_VERBOSE("XML right ...");
 			htmlFlush();
 			m_alignement = alignRight;
 			parseHtmlNode(elem);
-		} else if (compare_no_case(elem->getValue(), "justify") == true) {
+		} else if (etk::compare_no_case(elem->getValue(), "justify") == true) {
 			EWOL_VERBOSE("XML justify ...");
 			htmlFlush();
 			m_alignement = alignJustify;
@@ -392,7 +396,7 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	// TODO : Create an instance of xml parser to manage std::u32string...
-	if (doc.parse(std::to_string(_text)) == false) {
+	if (doc.parse(etk::to_string(_text)) == false) {
 		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
@@ -821,11 +825,11 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::string& _text) {
 	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
+	m_sizeDisplayStop.setValue(std::max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           std::max(m_position.y(), m_sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(etk_min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
+	m_sizeDisplayStart.setValue(std::min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            std::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
 	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
@@ -852,11 +856,11 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::u32string& _text)
 	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
+	m_sizeDisplayStop.setValue(std::max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           std::max(m_position.y(), m_sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(etk_min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
+	m_sizeDisplayStart.setValue(std::min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            std::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
 	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);

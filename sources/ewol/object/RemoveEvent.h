@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD 3 clauses (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_OBJECT_REMOVE_EVENT_H__
@@ -15,8 +15,6 @@
 namespace ewol {
 	namespace object {
 		class RemoveEvent {
-			public:
-				virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) = 0;
 			public:
 				RemoveEvent();
 				virtual ~RemoveEvent();

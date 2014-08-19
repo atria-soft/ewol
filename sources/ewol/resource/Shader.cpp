@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/types.h>
@@ -15,20 +15,24 @@
 #undef __class__
 #define __class__ "resource::Shader"
 
-ewol::resource::Shader::Shader(const std::string& _filename) :
-  ewol::Resource(_filename),
+ewol::resource::Shader::Shader() :
+  ewol::Resource(),
   m_exist(false),
   m_fileData(nullptr),
   m_shader(0),
   m_type(0) {
 	addObjectType("ewol::Shader");
 	m_resourceLevel = 0;
+}
+
+void ewol::resource::Shader::init(const std::string& _filename) {
+	ewol::Resource::init(_filename);
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
 	
-	if (std::end_with(m_name, ".frag") == true) {
+	if (etk::end_with(m_name, ".frag") == true) {
 		m_type = GL_FRAGMENT_SHADER;
-	} else if (std::end_with(m_name, ".vert") == true) {
+	} else if (etk::end_with(m_name, ".vert") == true) {
 		m_type = GL_VERTEX_SHADER;
 	} else {
 		EWOL_ERROR("File does not have extention \".vert\" for Vertex Shader or \".frag\" for Fragment Shader. but : \"" << m_name << "\"");
@@ -87,7 +91,7 @@ void ewol::resource::Shader::updateContext() {
 				}
 				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\" name='" << m_name << "'");
 				EWOL_ERROR("Error " << l_bufferDisplayError);
-				std::vector<std::string> lines = std::split(m_fileData, '\n');
+				std::vector<std::string> lines = etk::split(m_fileData, '\n');
 				for (size_t iii=0 ; iii<lines.size() ; iii++) {
 					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
 				}
@@ -149,26 +153,3 @@ void ewol::resource::Shader::reload() {
 	updateContext();
 }
 
-ewol::object::Shared<ewol::resource::Shader> ewol::resource::Shader::keep(const std::string& _filename) {
-	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
-	ewol::object::Shared<ewol::resource::Shader> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::Shader>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// need to crate a new one ...
-	object = ewol::object::makeShared(new ewol::resource::Shader(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}

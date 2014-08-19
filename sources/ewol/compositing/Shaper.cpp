@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/os/FSNode.h>
@@ -84,7 +84,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
 	}
-	m_config = ewol::resource::ConfigFile::keep(m_name);
+	m_config = ewol::resource::ConfigFile::create(m_name);
 	if (nullptr != m_config) {
 		m_confIdMode = m_config->request("mode");
 		m_confIdDisplayOutside = m_config->request("display-outside");
@@ -118,7 +118,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		}
 		// get the shader resource :
 		m_GLPosition = 0;
-		m_GLprogram = ewol::resource::Program::keep(tmpFilename);
+		m_GLprogram = ewol::resource::Program::create(tmpFilename);
 		if (m_GLprogram != nullptr) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -144,7 +144,7 @@ void ewol::compositing::Shaper::loadProgram() {
 				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "'");
 			}
 			ivec2 size(64,64);
-			m_resourceTexture = ewol::resource::TextureFile::keep(tmpFilename, size);
+			m_resourceTexture = ewol::resource::TextureFile::create(tmpFilename, size);
 		}
 	}
 	std::string basicColorFile = m_config->getString(m_confColorFile);
@@ -158,7 +158,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		} else {
 			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "'");
 		}
-		m_colorProperty = ewol::resource::ColorFile::keep(tmpFilename);
+		m_colorProperty = ewol::resource::ColorFile::create(tmpFilename);
 		if (    m_GLprogram != nullptr
 		     && m_colorProperty != nullptr) {
 			std::vector<std::string> listColor = m_colorProperty->getColors();
@@ -260,7 +260,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 		float timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
-		m_stateTransition = etk_avg(0.0f, m_stateTransition, 1.0f);
+		m_stateTransition = std::avg(0.0f, m_stateTransition, 1.0f);
 		//EWOL_DEBUG("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
@@ -459,10 +459,10 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 		                           border.yTop()    - borderTmp.yTop(),
 		                           border.xRight()  - borderTmp.xRight(),
 		                           border.yButtom() + borderTmp.yButtom());
-		ewol::Padding inside(insideBorder.xLeft()   + etk_max(0.0f, paddingIn.xLeft()),
-		                     insideBorder.yTop()    - etk_max(0.0f, paddingIn.yTop()),
-		                     insideBorder.xRight()  - etk_max(0.0f, paddingIn.xRight()),
-		                     insideBorder.yButtom() + etk_max(0.0f, paddingIn.yButtom()));
+		ewol::Padding inside(insideBorder.xLeft()   + std::max(0.0f, paddingIn.xLeft()),
+		                     insideBorder.yTop()    - std::max(0.0f, paddingIn.yTop()),
+		                     insideBorder.xRight()  - std::max(0.0f, paddingIn.xRight()),
+		                     insideBorder.yButtom() + std::max(0.0f, paddingIn.yButtom()));
 		
 	#endif
 	/*
@@ -621,4 +621,22 @@ const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
 		return errorValue;
 	}
 	return m_colorProperty->get(_id);
+}
+
+
+
+template<> std::string etk::to_string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+	return _obj.getSource();
+}
+
+template<> std::u32string etk::to_u32string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+	return etk::to_u32string(etk::to_string(_obj));
+}
+
+template<> bool etk::from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::string& _value) {
+	_variableRet.setSource(_value);
+	return true;
+}
+template<> bool etk::from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::u32string& _value) {
+	return from_string(_variableRet,  etk::to_string(_value));
 }

@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_SIZER_H__
@@ -25,22 +25,22 @@ namespace ewol {
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
 				static void init(ewol::widget::Manager& _widgetManager);
-				// Config list of properties
-				static const char* const configBorder;
-				static const char* const configMode;
 			public:
 				enum displayMode {
 					modeVert, //!< Vertical mode
 					modeHori, //!< Horizontal mode
 				};
 			private:
-				enum displayMode m_mode; //!< Methode to display the widget list (vert/hory ...)
-			public:
+				ewol::object::ParamList<enum displayMode> m_mode; //!< Methode to display the widget list (vert/hory ...)
+			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
-				Sizer(enum displayMode _mode=ewol::widget::Sizer::modeHori);
+				Sizer();
+				void init(enum displayMode _mode=ewol::widget::Sizer::modeHori);
+			public:
+				DECLARE_WIDGET_FACTORY(Sizer, "Sizer");
 				/**
 				 * @brief Desstructor
 				 */
@@ -49,7 +49,9 @@ namespace ewol {
 				 * @brief set the mode to display elements.
 				 * @param[in] _mode The mode to display the elements.
 				 */
-				void setMode(enum displayMode _mode);
+				void setMode(enum displayMode _mode) {
+					m_mode.set(_mode);
+				}
 				/**
 				 * @brief get the mode to display elements.
 				 * @return The current mode to display the elements.
@@ -58,13 +60,15 @@ namespace ewol {
 					return m_mode;
 				}
 			private:
-				ewol::Dimension m_borderSize; //!< Border size needed for all the display
+				ewol::object::Param<ewol::Dimension> m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
 				 * @brief set the current border size of the current element:
 				 * @param[in] _newBorderSize The border size to set (0 if not used)
 				 */
-				void setBorderSize(const ewol::Dimension& _newBorderSize);
+				void setBorderSize(const ewol::Dimension& _newBorderSize) {
+					m_borderSize.set(_newBorderSize);
+				}
 				/**
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
@@ -119,12 +123,11 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
-				virtual int32_t subWidgetAdd(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual int32_t subWidgetAddStart(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual void subWidgetRemove(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual void subWidgetUnLink(ewol::object::Shared<ewol::Widget> _newWidget);
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual int32_t subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

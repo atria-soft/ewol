@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_COMPOSITING_TEXT_H__
@@ -25,7 +25,7 @@ namespace ewol {
 	namespace compositing {
 		class Text : public ewol::compositing::TextBase {
 			protected:
-				ewol::object::Shared<ewol::resource::TexturedFont> m_font; //!< Font resources
+				std::shared_ptr<ewol::resource::TexturedFont> m_font; //!< Font resources
 			public:
 				/**
 				 * @brief generic constructor

@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_OBJECT_H__
@@ -14,8 +14,7 @@
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
-#include <ewol/object/Shared.h>
-#include <ewol/object/Owner.h>
+#include <memory>
 
 namespace ewol {
 	// some class need to define element befor other ...
@@ -27,9 +26,25 @@ namespace ewol {
 	class Context;
 };
 
-#include <ewol/object/Config.h>
-#include <ewol/object/ConfigElement.h>
 #include <ewol/object/Message.h>
+#include <ewol/object/ParameterList.h>
+#include <ewol/object/Param.h>
+#include <ewol/object/ParamRange.h>
+#include <ewol/object/ParamList.h>
+
+#define DECLARE_FACTORY(className) \
+	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
+		std::shared_ptr<className> object(new className()); \
+		if (object == nullptr) { \
+			EWOL_ERROR("Factory error"); \
+			return nullptr; \
+		} \
+		object->init(std::forward<T>(all)... ); \
+		if (object->objectHasBeenCorectlyInit() == false) { \
+			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+		} \
+		return object; \
+	}
 
 namespace ewol {
 	namespace object {
@@ -40,7 +55,7 @@ namespace ewol {
 		class EventExtGen {
 			public:
 				const char* localEventId; //!< local event Id generation
-				ewol::object::Shared<ewol::Object> destObject; //!< destination widget that might be call
+				std::weak_ptr<ewol::Object> destObject; //!< destination widget that might be call
 				const char* destEventId; //!< generated event ID on the distant widget
 				std::string overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
 		};
@@ -49,74 +64,45 @@ namespace ewol {
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every Object to communicate between them.
 	 */
-	class Object {
-		template<typename T> friend class ewol::object::Shared;
-		template<typename T> friend class ewol::object::Owner;
+	class Object : public std::enable_shared_from_this<Object>, public ewol::object::ParameterList {
 		private:
-			//! @not-in-doc
-			std::mutex m_lockRefCount;
-			//! @not-in-doc
-			int32_t m_objRefCount;
-		public:
-			//! @not-in-doc
-			void objRefCountIncrement();
-			//! @not-in-doc
-			void objRefCountDecrement();
-			int32_t getRefCount() {
-				return m_objRefCount;
-			}
-			//! @not-in-doc
-			static void operator delete(void* _ptr, std::size_t _sz);
-			//! @not-in-doc
-			static void operator delete[](void* _ptr, std::size_t _sz);
-		#ifdef DEBUG
-		public:
-			int32_t m_ownerCount;
-			void incOwnerCount();
-			void decOwnerCount();
-		#endif
+			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
-			static size_t m_valUID; //!< stic used for the unique ID definition
-		public:
-			// Config list of properties
-			static const char* const configName;
-		public:
+			bool m_objectHasBeenInit; //!< Know if the init function has bben called
+		protected:
 			/**
 			 * @brief Constructor.
 			 */
 			Object();
+			void init();
+			void init(const std::string& _name);
+		public:
 			/**
-			 * @brief Constructor.
-			 * @param[in] _name Name of the Object.
+			 * @brief Factory
 			 */
-			Object(const std::string& _name);
+			DECLARE_FACTORY(Object);
 			/**
 			 * @brief Destructor
 			 */
 			virtual ~Object();
-		private:
-			bool m_isDestroyed;
+			bool objectHasBeenCorectlyInit() {
+				return m_objectHasBeenInit;
+			}
+		protected:
+			std::weak_ptr<Object> m_parent;
 		protected:
 			/**
 			 * @brief Auto-destroy the object
 			 */
 			void autoDestroy();
 		public:
-			/**
-			 * @brief Asynchronous removing the object
-			 */
-			void removeObject();
-			/**
-			 * @brief Respown a removed object
-			 */
-			void respownObject();
-			/**
-			 * @brief Get if the element is destroyed or not
-			 * @return true The element in destroyed
-			 */
-			bool isDestroyed() {
-				return m_isDestroyed;
+			void destroy() {
+				autoDestroy();
 			}
+		public:
+			virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+			virtual void setParent(const std::shared_ptr<Object>& _newParent);
+			virtual void removeParent();
 		private:
 			std::vector<const char*> m_listType;
 		public:
@@ -196,7 +182,7 @@ namespace ewol {
 			 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void registerOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			void registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 			                     const char * _eventId,
 			                     const char * _eventIdgenerated = nullptr,
 			                     const std::string& _overloadData = "");
@@ -205,85 +191,25 @@ namespace ewol {
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
 			 */
-			void unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+			void unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 			                       const char * _eventId = nullptr);
-			/**
-			 * @brief Inform object that an other object is removed ...
-			 * @note : Sub classes must call this class
-			 */
-			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
 			/**
 			 * @brief Receive a message from an other Object with a specific eventId and data
 			 * @param[in] _msg Message handle
 			 */
-			virtual void onReceiveMessage(const ewol::object::Message& _msg) {
-				
-			};
-		private:
-			std::vector<ewol::object::ConfigElement> m_listConfig;
-		protected:
-			/**
-			 * @brief the Object add a configuration capabilities
-			 * @param[in] _config Configuration name.
-			 * @param[in] _type Type of the config.
-			 * @param[in] _control control of the current type.
-			 * @param[in] _description Descritpion on the current type.
-			 * @param[in] _default Default value of this parameter.
-			 */
-			void registerConfig(const char* _config,
-			                    const char* _type = nullptr,
-			                    const char* _control = nullptr,
-			                    const char* _description = nullptr,
-			                    const char* _default = nullptr);
-			/**
-			 * @brief Configuration requested to the curent Object
-			 * @param[in] _conf Configuration handle.
-			 * @return true if the parametere has been used
-			 */
-			virtual bool onSetConfig(const ewol::object::Config& _conf);
-			/**
-			 * @brief Receive a configuration message from an other element system or from the curent Object
-			 * @param[in] _config Configuration name.
-			 * @param[out] _result Result of the request.
-			 * @return true if the config is set
-			 */
-			virtual bool onGetConfig(const char* _config, std::string& _result) const ;
+			virtual void onReceiveMessage(const ewol::object::Message& _msg) { };
 		public:
-			/** 
-			 * @brief get all the configuration list
-			 * @return The list of all parameter availlable in the widget
-			 */
-			virtual const std::vector<ewol::object::ConfigElement>& getConfigList() {
-				return m_listConfig;
-			};
-			/**
-			 * @brief Configuration requested to the curent Object (systrem mode)
-			 * @param[in] _conf Configuration handle.
-			 * @return true if config set correctly...
-			 */
-			bool setConfig(const ewol::object::Config& _conf) {
-				return onSetConfig(_conf);
-			};
-			bool setConfig(const std::string& _config, const std::string& _value); // need a search ...
-			// TODO : Distingish global search and sub search ...
-			bool setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value); // need a search ...
-			bool setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf);
-			/**
-			 * @brief Configuration get from the curent Object (systrem mode)
-			 * @param[in] _config Configuration name.
-			 * @return the config properties
-			 */
-			std::string getConfig(const char* _config) const;
-			std::string getConfig(const std::string& _config) const; // need search
+			// TODO : Rework the position on this function ...
+			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		protected:
-			std::string m_name; //!< name of the element ...
+			ewol::object::Param<std::string> m_name; //!< name of the element ...
 		public:
 			/**
 			 * @brief get the Object name
 			 * @return The requested name
 			 */
 			const std::string& getName() const {
-				return m_name;
+				return m_name.get();
 			};
 			/**
 			 * @brief get the Widget name
@@ -312,17 +238,17 @@ namespace ewol {
 			 * @breif get the current Object manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::Manager& getObjectManager();
+			ewol::object::Manager& getObjectManager() const;
 			/**
 			 * @breif get the current Object Message Multicast manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::MultiCast& getMultiCast();
+			ewol::object::MultiCast& getMultiCast() const;
 			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
-			ewol::Context& getContext();
+			ewol::Context& getContext() const;
 		private:
 			bool m_isResource; //!< enable this when you want to declare this element is auto-remove
 		public:
@@ -338,10 +264,31 @@ namespace ewol {
 			 * @brief Get the resource status of the element.
 			 * @return the resource status.
 			 */
-			bool getStatusResource() {
+			bool getStatusResource() const {
 				return m_isResource;
 			}
+			/**
+			 * @brief Register an Event an named widget. @see registerOnEvent
+			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
+			 * @param[in] _objectName Name of the object.
+			 * @param[in] _eventId Event generate inside the object.
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
+			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
+			 * @note : To used when NOT herited from this object.
+			 */
+			void registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
+			                           const std::string& _objectName,
+			                           const char * _eventId,
+			                           const char * _eventIdgenerated = nullptr,
+			                           const std::string& _overloadData="");
+			/**
+			 * @brief Retrive an object with his name (in the global list)
+			 * @param[in] _name Name of the object
+			 * @return the requested object or nullptr
+			 */
+			std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName) const;
 	};
+	
 };
 
 #endif

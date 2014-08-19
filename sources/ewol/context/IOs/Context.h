@@ -3,7 +3,7 @@
  *
  * @copyright 2011, Edouard DUPIN, all right reserved
  *
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __MAC_OS_CONTEXT_H__

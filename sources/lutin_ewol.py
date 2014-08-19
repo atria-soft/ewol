@@ -88,13 +88,16 @@ def create(target):
 	
 	# object :
 	myModule.add_src_file([
-		'ewol/object/Config.cpp',
-		'ewol/object/ConfigElement.cpp',
 		'ewol/object/Manager.cpp',
 		'ewol/object/Message.cpp',
 		'ewol/object/MultiCast.cpp',
 		'ewol/object/Object.cpp',
-		'ewol/object/RemoveEvent.cpp'
+		'ewol/object/RemoveEvent.cpp',
+		'ewol/object/Parameter.cpp',
+		'ewol/object/ParameterList.cpp',
+		'ewol/object/ParamList.cpp',
+		'ewol/object/Param.cpp',
+		'ewol/object/ParamRange.cpp'
 		])
 	
 	# OpenGL interface :

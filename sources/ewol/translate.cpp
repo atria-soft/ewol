@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/debug.h>
@@ -218,7 +218,7 @@ void ewol::translate::autoDetectLanguage() {
 			std::string lang;
 			lang += s[0];
 			lang += s[1];
-			lang = toupper(lang);
+			lang = etk::toupper(lang);
 			getInstanceTranslation().setLanguage(lang);
 		}
 	#else

@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_ENTRY_H__
@@ -37,15 +37,8 @@ namespace ewol {
 				static const char * const eventClick;
 				static const char * const eventEnter;
 				static const char * const eventModify; // return in the data the new string inside it ...
-				// Config list of properties
-				static const char* const configMaxChar;
-				static const char* const configRegExp;
-				static const char* const configEmptyMessage;
-				static const char* const configValue;
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
 			private:
-				ewol::compositing::Shaper m_shaper;
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
 				int32_t m_colorIdTextBg; //!< color property of the text background
 				int32_t m_colorIdCursor; //!< color property of the text cursor
@@ -56,14 +49,16 @@ namespace ewol {
 				 * @brief Contuctor
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
-				Entry(std::string _newData = "");
+				Entry();
+				void init(const std::string& _newData = "");
+			public:
+				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**
 				 * @brief Destuctor
 				 */
 				virtual ~Entry();
-			
 			private:
-				std::string m_data; //!< sting that must be displayed
+				ewol::object::Param<std::string> m_data; //!< sting that must be displayed
 			protected:
 				/**
 				 * @brief internal check the value with RegExp checking
@@ -83,15 +78,16 @@ namespace ewol {
 				std::string getValue() const {
 					return m_data;
 				};
-			
 			private:
-				int32_t m_maxCharacter; //!< number max of xharacter in the list
+				ewol::object::ParamRange<int32_t> m_maxCharacter; //!< number max of xharacter in the list
 			public:
 				/**
 				 * @brief Limit the number of Unicode character in the entry
 				 * @param[in] _nbMax Number of max character set in the List (0x7FFFFFFF for no limit)
 				 */
-				void setMaxChar(int32_t _nbMax);
+				void setMaxChar(int32_t _nbMax) {
+					m_maxCharacter.set(_nbMax);
+				}
 				/**
 				 * @brief Limit the number of Unicode character in the entry
 				 * @return Number of max character set in the List.
@@ -100,19 +96,21 @@ namespace ewol {
 					return m_maxCharacter;
 				};
 			private:
-				etk::RegExp<std::string> m_regExp; //!< regular expression to limit the input of an entry
+				ewol::object::Param<etk::RegExp<std::string>> m_regExp; //!< regular expression to limit the input of an entry
 			public:
 				/**
 				 * @brief Limit the input entry at a regular expression... (by default it is "*")
 				 * @param _expression New regular expression
 				 */
-				void setRegExp(const std::string& _expression);
+				void setRegExp(const std::string& _expression) {
+					m_regExp.setString(_expression);
+				}
 				/**
 				 * @brief get the regualar expression limitation
 				 * @param The regExp string
 				 */
 				std::string getRegExp() const {
-					return m_regExp.getRegExp();
+					return m_regExp->getRegExp();
 				};
 			private:
 				bool m_needUpdateTextPos; //!< text position can have change
@@ -136,7 +134,6 @@ namespace ewol {
 				 * @note The display is automaticly requested when change apear.
 				 */
 				virtual void updateCursorPosition(const vec2& _pos, bool _Selection=false);
-			
 			public:
 				/**
 				 * @brief Copy the selected data on the specify clipboard
@@ -149,13 +146,15 @@ namespace ewol {
 				 */
 				virtual void removeSelected();
 			private:
-				std::string m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
+				ewol::object::Param<std::string> m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			public:
 				/**
 				 * @brief set The text displayed when nothing is in the entry.
 				 * @param _text Text to display when the entry box is empty (this text can be decorated).
 				 */
-				void setEmptyText(const std::string& _text);
+				void setEmptyText(const std::string& _text) {
+					m_textWhenNothing.set(_text);
+				}
 				/**
 				 * @brief get The text displayed when nothing is in the entry.
 				 * @return Text display when nothing
@@ -176,8 +175,7 @@ namespace ewol {
 				virtual void onLostFocus();
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };

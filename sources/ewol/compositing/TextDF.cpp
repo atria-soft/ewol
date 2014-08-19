@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/debug.h>
@@ -30,7 +30,7 @@ ewol::compositing::TextDF::~TextDF() {
 }
 
 void ewol::compositing::TextDF::updateSizeToRender(const vec2& _size) {
-	float minSize = etk_min(_size.x(), _size.y());
+	float minSize = std::min(_size.x(), _size.y());
 	if (m_fontDF != nullptr) {
 		setFontSize(m_fontDF->getSize(minSize));
 	}
@@ -155,7 +155,7 @@ void ewol::compositing::TextDF::setFontSize(int32_t _fontSize) {
 void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	clear();
 	// remove old one
-	ewol::object::Shared<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
+	std::shared_ptr<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
 	std::string fontName;
 	if (_fontName == "") {
 		fontName = ewol::getContext().getFontDefault().getName();
@@ -164,7 +164,7 @@ void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	}
 	EWOL_VERBOSE("Set font name: '" << fontName << "'");
 	// link to new one
-	m_fontDF = ewol::resource::DistanceFieldFont::keep(fontName);
+	m_fontDF = ewol::resource::DistanceFieldFont::create(fontName);
 	if (m_fontDF == nullptr) {
 		EWOL_ERROR("Can not get find resource");
 		m_fontDF = previousFont;

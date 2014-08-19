@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_CONTEXT_H__
@@ -144,8 +144,6 @@ namespace ewol {
 			
 			// return true if a flush is needed
 			bool OS_Draw(bool _displayEveryTime);
-			
-			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);
 		public:
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
@@ -164,18 +162,18 @@ namespace ewol {
 			 */
 			virtual void stop();
 		private:
-			ewol::object::Owner<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
+			std::shared_ptr<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
 		public:
 			/**
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void setWindows(const ewol::object::Shared<ewol::widget::Windows>& _windows);
+			void setWindows(const std::shared_ptr<ewol::widget::Windows>& _windows);
 			/**
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::object::Shared<ewol::widget::Windows> getWindows();
+			std::shared_ptr<ewol::widget::Windows> getWindows();
 		private:
 			vec2 m_windowsSize; //!< current size of the system
 		public:
@@ -233,12 +231,12 @@ namespace ewol {
 			 * @param source the widget where the event came from
 			 * @param destination the widget where the event mitgh be generated now
 			 */
-			void inputEventTransfertWidget(ewol::object::Shared<ewol::Widget> _source, ewol::object::Shared<ewol::Widget> _destination);
+			void inputEventTransfertWidget(std::shared_ptr<ewol::Widget> _source, std::shared_ptr<ewol::Widget> _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 			 * @param[in] widget The widget that lock the pointer events
 			 */
-			void inputEventGrabPointer(ewol::object::Shared<ewol::Widget> _widget);
+			void inputEventGrabPointer(std::shared_ptr<ewol::Widget> _widget);
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */

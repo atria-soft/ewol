@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_WIDGET_H__
@@ -33,6 +33,12 @@ namespace ewol {
 #include <ewol/translate.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
+
+#define DECLARE_WIDGET_FACTORY(className, name) \
+	DECLARE_FACTORY(className); \
+	static void createManagerWidget(ewol::widget::Manager& _widgetManager) { \
+		_widgetManager.addWidgetCreator(name,[]() -> std::shared_ptr<ewol::Widget> { return className::create(); }); \
+	}
 
 namespace ewol {
 	/**
@@ -117,49 +123,20 @@ namespace ewol {
 	 * 
 	 */
 	class Widget : public ewol::Object {
-		public:
-			// Config list of properties
-			static const char* const configFill;
-			static const char* const configExpand;
-			static const char* const configHide;
-			static const char* const configFocus;
-			static const char* const configMinSize;
-			static const char* const configMaxSize;
-			static const char* const configGravity;
-		public:
+		protected:
 			/**
 			 * @brief Constructor of the widget classes
 			 * @return (no execption generated (not managed in embended platform))
 			 */
 			Widget();
+			
+			void init();
+			void init(const std::string& _name);
+		public:
 			/**
 			 * @brief Destructor of the widget classes
 			 */
 			virtual ~Widget();
-		// ----------------------------------------------------------------------------------------------------------------
-		// -- Hierarchy management:
-		// ----------------------------------------------------------------------------------------------------------------
-		protected:
-			ewol::object::Shared<ewol::Widget> m_up; //!< uppper widget in the tree of widget
-		public:
-			/**
-			 * @brief set the upper widget of this widget.
-			 * @param[in] _upper Father widget (only keep the last and write error if a previous was set)  == > disable with nullptr.
-			 */
-			void setUpperWidget(ewol::object::Shared<ewol::Widget> _upper);
-			/**
-			 * @brief remove the upper widget of this widget.
-			 */
-			void removeUpperWidget() {
-				setUpperWidget(nullptr);
-			};
-			/**
-			 * @brief get the upper widget (father).
-			 * @ return the requested widget (if nullptr , 2 case : root widget or error implementation).
-			 */
-			ewol::object::Shared<ewol::Widget> getUpperWidget() {
-				return m_up;
-			};
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget size:
 		// ----------------------------------------------------------------------------------------------------------------
@@ -254,13 +231,15 @@ namespace ewol {
 			 */
 			virtual vec2 getOrigin();
 		protected:
-			ewol::Dimension m_userMinSize; //!< user define the minimum size of the widget
+			ewol::object::Param<ewol::Dimension> m_userMinSize; //!< user define the minimum size of the widget
 		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] _size set minimum size (none : 0)
 			 */
-			void setMinSize(const ewol::Dimension& _size);
+			void setMinSize(const ewol::Dimension& _size) {
+				m_userMinSize.set(_size);
+			}
 			/**
 			 * @brief User set No minimum size.
 			 */
@@ -270,7 +249,7 @@ namespace ewol {
 			 * @return the size requested
 			 */
 			const ewol::Dimension& getMinSize() {
-				return m_userMinSize;
+				return m_userMinSize.get();
 			};
 			/**
 			 * @brief Check if the current min size is compatible with the user minimum size
@@ -279,13 +258,15 @@ namespace ewol {
 			 */
 			virtual void checkMinSize();
 		protected:
-			ewol::Dimension m_userMaxSize; //!< user define the maximum size of the widget
+			ewol::object::Param<ewol::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] _size The new maximum size requested (vec2(0,0) to unset)
 			 */
-			void setMaxSize(const ewol::Dimension& _size);
+			void setMaxSize(const ewol::Dimension& _size) {
+				m_userMaxSize.set(_size);
+			}
 			/**
 			 * @brief User set No maximum size.
 			 */
@@ -295,7 +276,7 @@ namespace ewol {
 			 * @return the size requested
 			 */
 			const ewol::Dimension& getMaxSize() {
-				return m_userMaxSize;
+				return m_userMaxSize.get();
 			};
 			/**
 			 * @brief Check if the current max size is compatible with the user maximum size
@@ -304,13 +285,15 @@ namespace ewol {
 			 */
 			virtual void checkMaxSize();
 		protected:
-			bvec2 m_userExpand;
+			ewol::object::Param<bvec2> m_userExpand;
 		public:
 			/**
 			 * @brief set the expend capabilities (x&y)
 			 * @param[in] _newExpend 2D boolean repensent the capacity to expend
 			 */
-			virtual void setExpand(const bvec2& _newExpand);
+			virtual void setExpand(const bvec2& _newExpand) {
+				m_userExpand.set(_newExpand);
+			}
 			/**
 			 * @brief get the expend capabilities (x&y) (set by the user)
 			 * @return 2D boolean repensent the capacity to expend
@@ -325,13 +308,15 @@ namespace ewol {
 			 */
 			virtual bvec2 canExpand();
 		protected:
-			bvec2 m_userFill;
+			ewol::object::Param<bvec2> m_userFill;
 		public:
 			/**
 			 * @brief set the x&y filling capacity
 			 * @param[in] _newFill new x&y fill state
 			 */
-			virtual void setFill(const bvec2& _newFill);
+			virtual void setFill(const bvec2& _newFill) {
+				m_userFill.set(_newFill);
+			}
 			/**
 			 * @brief set the x&y filling capacity set by the user
 			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
@@ -346,16 +331,20 @@ namespace ewol {
 			 */
 			const bvec2& canFill();
 		protected:
-			bool m_hide; //!< hide a widget on the display
+			ewol::object::Param<bool> m_hide; //!< hide a widget on the display
 		public:
 			/**
 			 * @brief set the widget hidden
 			 */
-			virtual void hide();
+			virtual void hide() {
+				m_hide.set(true);
+			}
 			/**
 			 * @brief set the widget visible
 			 */
-			virtual void show();
+			virtual void show() {
+				m_hide.set(false);
+			}
 			/**
 			 * @brief get the visibility of the widget
 			 * @return true: if the widget is hiden, false: it is visible
@@ -365,13 +354,15 @@ namespace ewol {
 			};
 		
 		protected:
-			enum ewol::gravity m_gravity; //!< Gravity of the widget
+			ewol::object::ParamList<enum ewol::gravity> m_gravity; //!< Gravity of the widget
 		public:
 			/**
 			 * @brief set the widget gravity
 			 * @param[in] _gravity New gravity of the widget
 			 */
-			virtual void setGravity(enum ewol::gravity _gravity);
+			virtual void setGravity(enum ewol::gravity _gravity) {
+				m_gravity.set(_gravity);
+			}
 			/**
 			 * @brief get the widget gravity
 			 * @return the gravity type
@@ -384,7 +375,7 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
 			bool m_hasFocus; //!< set the focus on this widget
-			bool m_canFocus; //!< the focus can be done on this widget
+			ewol::object::Param<bool> m_canFocus; //!< the focus can be done on this widget
 		public:
 			/**
 			 * @brief get the focus state of the widget
@@ -414,7 +405,9 @@ namespace ewol {
 			 * @brief set the capability to have the focus
 			 * @param[in] _canFocusState new focus capability
 			 */
-			virtual void setCanHaveFocus(bool _canFocusState);
+			virtual void setCanHaveFocus(bool _canFocusState) {
+				m_canFocus.set(_canFocusState);
+			}
 			/**
 			 * @brief keep the focus on this widget  == > this remove the previous focus on all other widget
 			 */
@@ -532,9 +525,9 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
+			virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
 				if (false == isHide()) {
-					return this;
+					return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 				}
 				return nullptr;
 			};
@@ -543,7 +536,7 @@ namespace ewol {
 			 * @param[in] _widgetName name of the widget
 			 * @return the requested pointer on the node (or nullptr pointer)
 			 */
-			virtual ewol::object::Shared<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
+			virtual std::shared_ptr<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:
@@ -699,11 +692,9 @@ namespace ewol {
 			 */
 			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
-			virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _object);
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
-			virtual bool onSetConfig(const ewol::object::Config& _conf);
-			virtual bool onGetConfig(const char* _config, std::string& _result) const;
+			virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions
@@ -716,16 +707,11 @@ namespace ewol {
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::object::Shared<ewol::widget::Windows> getWindows();
+			std::shared_ptr<ewol::widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */
 		public:
-			// configuration :
-			static const char* const configAnnimationAddType;
-			static const char* const configAnnimationAddTime;
-			static const char* const configAnnimationRemoveType;
-			static const char* const configAnnimationRemoveTime;
 			// event generated :
 			static const char* const eventAnnimationStart; //!< event when start annimation
 			static const char* const eventAnnimationRatio; //!< event when % of annimation change (integer)
@@ -738,11 +724,11 @@ namespace ewol {
 			};
 			enum annimationMode m_annimationMode; //!< true when the annimation is started
 			float m_annimationratio; //!< Ratio of the annimation [0..1]
-		private:
-			std::vector<const char*> m_annimationList[2]; //!< List of all annimation type ADD
 		protected:
-			const char* m_annimationType[2]; //!< type of start annimation (default nullptr ==> no annimation)
-			float m_annimationTime[2]; //!< time to produce start annimation
+			ewol::object::ParamList<int32_t> m_annimationTypeStart; //!< type of start annimation
+			ewol::object::ParamRange<float> m_annimationTimeStart; //!< time to produce start annimation
+			ewol::object::ParamList<int32_t> m_annimationTypeStop; //!< type of start annimation
+			ewol::object::ParamRange<float> m_annimationTimeStop; //!< time to produce start annimation
 		protected:
 			/**
 			 * @brief Add a annimation type capabilities of this widget.
@@ -791,5 +777,6 @@ namespace ewol {
 	};
 };
 
+#include <ewol/widget/Manager.h>
 
 #endif

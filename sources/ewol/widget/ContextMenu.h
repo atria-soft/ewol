@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_CONTEXT_MENU_H__
@@ -32,44 +32,44 @@ namespace ewol {
 					markNone
 				};
 			public:
-				static void init(ewol::widget::Manager& _widgetManager);
-				// Config list of properties
-				static const char* const configArrowPosition;
-				static const char* const configArrowMode;
-				static const char* const configShaper;
+				ContextMenu();
+				void init(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
 			public:
-				ContextMenu(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
+				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			public:
 				/**
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 				 * @param[in] _shaperName The new shaper filename
 				 */
-				void setShaperName(const std::string& _shaperName);
+				void setShaperName(const std::string& _shaperName) {
+					m_shaper.set(_shaperName);
+				}
 			private:
 				// TODO : Rework the displayer ....
 				ewol::compositing::Drawing m_compositing;
 				etk::Color<> m_colorBackGroung;
 				etk::Color<> m_colorBorder;
-				
 				float m_offset;
 			private:
-				vec2 m_arrowPos;
-				enum markPosition m_arrawBorder;
+				ewol::object::Param<vec2> m_arrowPos;
+				ewol::object::ParamList<enum markPosition> m_arrawBorder;
 			public:
-				void setPositionMark(enum markPosition position, vec2 arrowPos);
+				void setPositionMark(enum markPosition _position, const vec2& _arrowPos) {
+					m_arrawBorder.set(_position);
+					m_arrowPos.set(_arrowPos);
+				}
 			protected: // Derived function
 				virtual void onDraw();
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 		};
 	};
 };

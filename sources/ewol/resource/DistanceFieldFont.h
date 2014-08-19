@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_DISTANCE_FIELD_FONT_H__
@@ -23,7 +23,7 @@ namespace ewol {
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				ewol::object::Shared<ewol::resource::FontBase> m_font;
+				std::shared_ptr<ewol::resource::FontBase> m_font;
 			public:
 				std::vector<GlyphProperty> m_listElement;
 			private:
@@ -31,8 +31,10 @@ namespace ewol {
 				ivec2 m_lastGlyphPos;
 				int32_t m_lastRawHeigh;
 			protected:
-				DistanceFieldFont(const std::string& _fontName);
+				DistanceFieldFont();
+				void init(const std::string& _fontName);
 			public:
+				DECLARE_RESOURCE_NAMED_FACTORY(DistanceFieldFont);
 				virtual ~DistanceFieldFont();
 			public:
 				float getDisplayRatio(float _size);
@@ -71,7 +73,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the texture font.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::object::Shared<ewol::resource::DistanceFieldFont> keep(const std::string& _filename);
+				static std::shared_ptr<ewol::resource::DistanceFieldFont> keep(const std::string& _filename);
 			private:
 				/**
 				 * @brief add a glyph in a texture font.

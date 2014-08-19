@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/debug.h>
@@ -17,9 +17,13 @@
 ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(nullptr) {
 	addObjectType("ewol::Colored3DObject");
+}
+
+void ewol::resource::Colored3DObject::init() {
+	ewol::Resource::init();
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::resource::Program::keep("DATA:simple3D.prog");
+	m_GLprogram = ewol::resource::Program::create("DATA:simple3D.prog");
 	if (nullptr != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getUniform("EW_color");
@@ -152,17 +156,5 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 		}
 		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
-}
-
-ewol::object::Shared<ewol::resource::Colored3DObject> ewol::resource::Colored3DObject::keep() {
-	EWOL_VERBOSE("KEEP : direct Colored3DObject");
-	// need to crate a new one ...
-	ewol::object::Shared<ewol::resource::Colored3DObject> object = ewol::object::makeShared(new ewol::resource::Colored3DObject());
-	if (object == nullptr) {
-		EWOL_ERROR("allocation error of a resource : ???Colored3DObject??? ");
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
 }
 

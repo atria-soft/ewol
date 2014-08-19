@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __OPEN_GL__SHADER_H__
@@ -30,8 +30,10 @@ namespace ewol {
 				 * @brief Contructor of an opengl Shader
 				 * @param[in] filename Standard file name format. see @ref etk::FSNode
 				 */
-				Shader(const std::string& _filename);
+				Shader();
 			public:
+				void init(const std::string& _filename);
+				DECLARE_RESOURCE_NAMED_FACTORY(Shader);
 				/**
 				 * @brief Destructor, remove the current Shader
 				 */
@@ -68,14 +70,6 @@ namespace ewol {
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
 				void reload();
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @param[in] _filename Name of the openGL Shader.
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::Shader> keep(const std::string& _filename);
 		};
 	};
 };

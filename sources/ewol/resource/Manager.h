@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __RESOURCES_MANAGER_H__
@@ -20,8 +20,8 @@ namespace ewol {
 	namespace resource {
 		class Manager{
 			private:
-				std::list<ewol::object::Owner<ewol::Resource>> m_resourceList;
-				std::vector<ewol::object::Shared<ewol::Resource>> m_resourceListToUpdate;
+				std::list<std::weak_ptr<ewol::Resource>> m_resourceList;
+				std::vector<std::shared_ptr<ewol::Resource>> m_resourceListToUpdate;
 				bool m_contextHasBeenRemoved;
 			public:
 				/**
@@ -50,7 +50,7 @@ namespace ewol {
 				 * @brief Call by the system to send all the needed data on the graphic card chen they change ...
 				 * @param[in] _object The resources that might be updated
 				 */
-				void update(const ewol::object::Shared<ewol::Resource>& _object);
+				void update(const std::shared_ptr<ewol::Resource>& _object);
 				/**
 				 * @brief Call by the system chen the openGL Context has been unexpectially removed  == > This reload all the texture, VBO and other ....
 				 */
@@ -61,9 +61,9 @@ namespace ewol {
 				void contextHasBeenDestroyed();
 			public:
 				// internal API to extent eResources in extern Soft
-				ewol::object::Shared<ewol::Resource> localKeep(const std::string& _filename);
-				void localAdd(const ewol::object::Shared<ewol::Resource>& _object);
-				virtual bool checkResourceToRemove();
+				std::shared_ptr<ewol::Resource> localKeep(const std::string& _filename);
+				void localAdd(const std::shared_ptr<ewol::Resource>& _object);
+				virtual void cleanInternalRemoved();
 		};
 	};
 };

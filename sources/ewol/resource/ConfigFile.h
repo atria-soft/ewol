@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __SIMPLE_CONFIG_FILE_H__
@@ -22,9 +22,11 @@ namespace ewol {
 				ejson::Document m_doc;
 				etk::Hash<ejson::Value*> m_list;
 			protected:
-				ConfigFile(const std::string& _filename);
+				ConfigFile();
+				void init(const std::string& _filename);
 			public:
 				virtual ~ConfigFile();
+				DECLARE_RESOURCE_NAMED_FACTORY(ConfigFile);
 			public:
 				void reload();
 				
@@ -40,7 +42,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the configuration file.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ewol::object::Shared<ewol::resource::ConfigFile> keep(const std::string& _filename);
+				static std::shared_ptr<ewol::resource::ConfigFile> keep(const std::string& _filename);
 		};
 	};
 };

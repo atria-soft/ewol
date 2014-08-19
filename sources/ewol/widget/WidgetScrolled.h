@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_SCROLLED_WIDGET_H__
@@ -63,12 +63,15 @@ namespace ewol {
 				bool m_fingerPresent[CALCULATE_SIMULTANEOUS_FINGER];
 				bool m_fingerScoolActivated;
 				vec2 m_fingerMoveStartPos[CALCULATE_SIMULTANEOUS_FINGER];
-			public:
+			protected:
 				/**
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)
 				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
-				WidgetScrolled(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
+				WidgetScrolled();
+				void init(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
+			public:
+				DECLARE_WIDGET_FACTORY(WidgetScrolled, "WidgetScrolled");
 				/**
 				 * @brief Scroll widget destructor.
 				 */
@@ -111,7 +114,7 @@ namespace ewol {
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 				 */
 				void setLimitScrolling(float _poucentageLimit) {
-					m_limitScrolling = etk_avg(0.1f, _poucentageLimit,0.9f);
+					m_limitScrolling = std::avg(0.1f, _poucentageLimit,0.9f);
 				};
 		};
 	};

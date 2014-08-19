@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/Dimension.h>
@@ -89,28 +89,28 @@ void ewol::Dimension::set(std::string _config) {
 	m_data.setValue(0,0);
 	m_type = ewol::Dimension::Pixel;
 	enum distance type = ewol::Dimension::Pixel;
-	if (end_with(_config, "%", false) == true) {
+	if (etk::end_with(_config, "%", false) == true) {
 		type = ewol::Dimension::Pourcent;
 		_config.erase(_config.size()-1, 1);
-	} else if (end_with(_config, "px",false) == true) {
+	} else if (etk::end_with(_config, "px",false) == true) {
 		type = ewol::Dimension::Pixel;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "ft",false) == true) {
+	} else if (etk::end_with(_config, "ft",false) == true) {
 		type = ewol::Dimension::foot;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "in",false) == true) {
+	} else if (etk::end_with(_config, "in",false) == true) {
 		type = ewol::Dimension::Inch;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "km",false) == true) {
+	} else if (etk::end_with(_config, "km",false) == true) {
 		type = ewol::Dimension::Kilometer;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "mm",false) == true) {
+	} else if (etk::end_with(_config, "mm",false) == true) {
 		type = ewol::Dimension::Millimeter;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "cm",false) == true) {
+	} else if (etk::end_with(_config, "cm",false) == true) {
 		type = ewol::Dimension::Centimeter;
 		_config.erase(_config.size()-2, 2);
-	} else if (end_with(_config, "m",false) == true) {
+	} else if (etk::end_with(_config, "m",false) == true) {
 		type = ewol::Dimension::Meter;
 		_config.erase(_config.size()-1, 1);
 	} else {
@@ -183,12 +183,12 @@ vec2 ewol::Dimension::get(enum ewol::Dimension::distance _type) const {
 
 void ewol::Dimension::set(const vec2& _size, enum ewol::Dimension::distance _type) {
 	// set min max on input to limit error : 
-	vec2 size(etk_avg(0.0f,_size.x(),9999999.0f),
-	          etk_avg(0.0f,_size.y(),9999999.0f));
+	vec2 size(std::avg(0.0f,_size.x(),9999999.0f),
+	          std::avg(0.0f,_size.y(),9999999.0f));
 	switch(_type) {
 		case ewol::Dimension::Pourcent: {
-			vec2 size2(etk_avg(0.0f,_size.x(),100.0f),
-			           etk_avg(0.0f,_size.y(),100.0f));
+			vec2 size2(std::avg(0.0f,_size.x(),100.0f),
+			           std::avg(0.0f,_size.y(),100.0f));
 			m_data = vec2(size2.x()*0.01f, size2.y()*0.01f);
 			//EWOL_VERBOSE("Set % : " << size2 << "  == > " << m_data);
 			break;
@@ -297,4 +297,21 @@ std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::Dimension::distanc
 std::ostream& ewol::operator <<(std::ostream& _os, const ewol::Dimension& _obj) {
 	_os << _obj.get(_obj.getType()) << _obj.getType();
 	return _os;
+}
+
+
+template<> std::string etk::to_string<ewol::Dimension>(const ewol::Dimension& _obj) {
+	return _obj;
+}
+template<> std::u32string etk::to_u32string<ewol::Dimension>(const ewol::Dimension& _obj) {
+	return etk::to_u32string(etk::to_string(_obj));
+}
+
+
+template<> bool etk::from_string<ewol::Dimension>(ewol::Dimension& _variableRet, const std::string& _value) {
+	_variableRet = ewol::Dimension(_value);
+	return true;
+}
+template<> bool etk::from_string<ewol::Dimension>(ewol::Dimension& _variableRet, const std::u32string& _value) {
+	return from_string(_variableRet, etk::to_string(_value));
 }

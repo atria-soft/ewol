@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/types.h>
@@ -14,16 +14,19 @@
 #undef __class__
 #define __class__ "resource::VirtualBufferObject"
 
-ewol::resource::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
-  m_exist(false) {
-	addObjectType("ewol::VirtualBufferObject");
-	m_nbVBO = etk_avg(1, _number, NB_VBO_MAX);
+void ewol::resource::VirtualBufferObject::init(int32_t _number) {
+	ewol::Resource::init();
+	m_nbVBO = std::avg(1, _number, NB_VBO_MAX);
 	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii]=0;
 		m_vboUsed[iii]=false;
 	}
-	m_resourceLevel = 3;
 	EWOL_DEBUG("OGL : load VBO count=\"" << _number << "\"");
+}
+
+ewol::resource::VirtualBufferObject::VirtualBufferObject() {
+	addObjectType("ewol::VirtualBufferObject");
+	m_resourceLevel = 3;
 }
 
 ewol::resource::VirtualBufferObject::~VirtualBufferObject() {
@@ -82,7 +85,7 @@ void ewol::resource::VirtualBufferObject::reload() {
 
 void ewol::resource::VirtualBufferObject::flush() {
 	// request to the manager to be call at the next update ...
-	getManager().update(this);
+	getManager().update(std::dynamic_pointer_cast<ewol::Resource>(shared_from_this()));
 }
 
 void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec3& _data) {
@@ -121,15 +124,4 @@ vec2 ewol::resource::VirtualBufferObject::getOnBufferVec2(int32_t _id, int32_t _
 
 int32_t ewol::resource::VirtualBufferObject::sizeOnBufferVec2(int32_t _id) {
 	return m_buffer[_id].size()/2;
-}
-
-ewol::object::Shared<ewol::resource::VirtualBufferObject> ewol::resource::VirtualBufferObject::keep(int32_t _number) {
-	// this element create a new one every time ....
-	ewol::object::Shared<ewol::resource::VirtualBufferObject> object = ewol::object::makeShared(new ewol::resource::VirtualBufferObject(_number));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : ??VBO??");
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
 }

@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/ProgressBar.h>
@@ -14,37 +14,19 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-static ewol::Widget* create() {
-	return new ewol::widget::ProgressBar();
-}
-
-void ewol::widget::ProgressBar::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
-const char* const ewol::widget::ProgressBar::configColorBg = "color-bg";
-const char* const ewol::widget::ProgressBar::configColorFgOn = "color-on";
-const char* const ewol::widget::ProgressBar::configColorFgOff = "color-off";
-const char* const ewol::widget::ProgressBar::configValue = "value";
-
 const int32_t dotRadius = 6;
 
-ewol::widget::ProgressBar::ProgressBar() {
+ewol::widget::ProgressBar::ProgressBar() :
+  m_value(*this, "value", 0.0f, "Value of the progress bar"),
+  m_textColorFg(*this, "color-bg", etk::color::black, "Background color"),
+  m_textColorBgOn(*this, "color-on", etk::Color<>(0x00, 0xFF, 0x00, 0xFF), "Color of the true value"),
+  m_textColorBgOff(*this, "color-off", etk::color::none, "Color of the false value") {
 	addObjectType("ewol::widget::ProgressBar");
-	m_value = 0.0;
-	
-	m_textColorFg = etk::color::black;
-	
-	m_textColorBgOn = 0x00FF00FF;
-	
-	m_textColorBgOff = etk::color::black;
-	m_textColorBgOff.setA(0x3F);
 	setCanHaveFocus(true);
-	registerConfig(configColorBg, "color", nullptr, "Background color");
-	registerConfig(configColorFgOn, "color", nullptr, "Corlor of the true value");
-	registerConfig(configColorFgOff, "color", nullptr, "Corlor of the false value");
-	registerConfig(configValue, "integer", nullptr, "Value of the progress bar");
-	
+}
+
+void ewol::widget::ProgressBar::init() {
+	ewol::Widget::init();
 }
 
 ewol::widget::ProgressBar::~ProgressBar() {
@@ -52,14 +34,14 @@ ewol::widget::ProgressBar::~ProgressBar() {
 }
 
 void ewol::widget::ProgressBar::calculateMinMaxSize() {
-	vec2 tmpMin = m_userMinSize.getPixel();
-	m_minSize.setValue( etk_max(tmpMin.x(), 40),
-	                    etk_max(tmpMin.y(), dotRadius*2) );
+	vec2 tmpMin = m_userMinSize->getPixel();
+	m_minSize.setValue( std::max(tmpMin.x(), 40.0f),
+	                    std::max(tmpMin.y(), dotRadius*2.0f) );
 	markToRedraw();
 }
 
 void ewol::widget::ProgressBar::setValue(float _val) {
-	m_value = etk_avg(0, _val, 1);
+	m_value = std::avg(0.0f, _val, 1.0f);
 	markToRedraw();
 }
 
@@ -91,56 +73,17 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	}
 }
 
-
-
-bool ewol::widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configColorBg) {
-		m_textColorFg = _conf.getData();
+void ewol::widget::ProgressBar::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_value) {
 		markToRedraw();
-		return true;
-	}
-	if (_conf.getConfig() == configColorFgOn) {
-		m_textColorBgOn = _conf.getData();
+	} else if (_paramPointer == m_textColorFg) {
 		markToRedraw();
-		return true;
-	}
-	if (_conf.getConfig() == configColorFgOff) {
-		m_textColorBgOff = _conf.getData();
+	} else if (_paramPointer == m_textColorBgOn) {
 		markToRedraw();
-		return true;
-	}
-	if (_conf.getConfig() == configValue) {
-		m_value = stof(_conf.getData());
+	} else if (_paramPointer == m_textColorBgOff) {
 		markToRedraw();
-		return true;
 	}
-	return false;
-}
-
-bool ewol::widget::ProgressBar::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configColorBg) {
-		_result = m_textColorFg.getString();
-		return true;
-	}
-	if (_config == configColorFgOn) {
-		_result = m_textColorBgOn.getString();
-		return true;
-	}
-	if (_config == configColorFgOff) {
-		_result = m_textColorBgOff.getString();
-		return true;
-	}
-	if (_config == configValue) {
-		_result = m_value;
-		return true;
-	}
-	return false;
 }
 
 

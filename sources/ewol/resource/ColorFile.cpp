@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <etk/os/FSNode.h>
@@ -17,20 +17,24 @@
 #define __class__	"resource::ColorFile"
 
 
-ewol::resource::ColorFile::ColorFile(const std::string& _filename) :
-  ewol::Resource(_filename),
+ewol::resource::ColorFile::ColorFile() :
+  ewol::Resource(),
   m_errorColor(etk::color::orange) {
 	addObjectType("ewol::ColorFile");
+}
+
+void ewol::resource::ColorFile::init(const std::string& _filename) {
+	ewol::Resource::init(_filename);
 	EWOL_DEBUG("CF : load \"" << _filename << "\"");
 	reload();
 	EWOL_DEBUG("List of all color : " << m_list.getKeys());
 }
 
-
 ewol::resource::ColorFile::~ColorFile() {
 	// remove all element
 	m_list.clear();
 }
+
 
 void ewol::resource::ColorFile::reload() {
 	// remove all previous set of value :
@@ -73,29 +77,3 @@ int32_t ewol::resource::ColorFile::request(const std::string& _paramName) {
 	}
 	return m_list.getId(_paramName);
 }
-
-
-ewol::object::Shared<ewol::resource::ColorFile> ewol::resource::ColorFile::keep(const std::string& _filename) {
-	EWOL_INFO("KEEP : ColorFile : file : \"" << _filename << "\"");
-	ewol::object::Shared<ewol::resource::ColorFile> object = nullptr;
-	ewol::object::Shared<ewol::Resource> object2 = getManager().localKeep(_filename);
-	if (nullptr != object2) {
-		object = ewol::dynamic_pointer_cast<ewol::resource::ColorFile>(object2);
-		if (nullptr == object) {
-			EWOL_CRITICAL("Request resource file : '" << _filename << "' With the wrong type (dynamic cast error)");
-			return nullptr;
-		}
-	}
-	if (nullptr != object) {
-		return object;
-	}
-	// this element create a new one every time ....
-	object = ewol::object::makeShared(new ewol::resource::ColorFile(_filename));
-	if (nullptr == object) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
-		return nullptr;
-	}
-	getManager().localAdd(object);
-	return object;
-}
-

@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_POP_UP_H__
@@ -23,21 +23,17 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class PopUp : public ewol::widget::Container {
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
-				// Config list of properties
-				static const char* const configShaper;
-				static const char* const configRemoveOnExternClick;
-				static const char* const configAnimation;
-				static const char* const configLockExpand;
 			protected:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
-			public:
+				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
-				PopUp(const std::string& _shaperName="THEME:GUI:PopUp.json");
+				PopUp();
+				void init(const std::string& _shaperName="THEME:GUI:PopUp.json");
+			public:
+				DECLARE_WIDGET_FACTORY(PopUp, "PopUp");
 				/**
 				 * @brief Destructor
 				 */
@@ -48,22 +44,24 @@ namespace ewol {
 				 */
 				void setShaperName(const std::string& _shaperName);
 			protected:
-				bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
+				ewol::object::Param<bvec2> m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			public:
 				/**
 				 * @brief Limit the expend properties to the current widget (no contamination)
 				 * @param[in] _lockExpend Lock mode of the expend properties
 				 */
-				void lockExpand(const bvec2& _lockExpand);
+				void lockExpand(const bvec2& _lockExpand) {
+					m_lockExpand.set(_lockExpand);
+				}
 			private:
-				bool m_closeOutEvent; //!< ratio progression of a sliding
+				ewol::object::Param<bool> m_closeOutEvent; //!< ratio progression of a sliding
 			public:
 				/**
 				 * @brief Request the Auto-remove when the event input is set outside the widget
 				 * @param[in] _state New status
 				 */
 				void setRemoveOnExternClick(bool _state) {
-					m_closeOutEvent = _state;
+					m_closeOutEvent.set(_state);
 				};
 				/**
 				 * @brief get the status of the request the Auto-remove when the event input is set outside the widget.
@@ -74,15 +72,14 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
 				virtual void calculateSize(const vec2& _available);
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual ewol::object::Shared<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected:
 				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
 				virtual void onStopAnnimation();

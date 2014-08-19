@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_PROGRESS_BAR_H__
@@ -22,17 +22,13 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class ProgressBar : public ewol::Widget {
-			public:
-				static void init(ewol::widget::Manager& _widgetManager);
-				// Config list of properties
-				static const char* const configColorBg;
-				static const char* const configColorFgOn;
-				static const char* const configColorFgOff;
-				static const char* const configValue;
 			private:
 				ewol::compositing::Drawing m_draw; // basic drawing element
-			public:
+			protected:
 				ProgressBar();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ProgressBar, "ProgressBar");
 				virtual ~ProgressBar();
 				void setValue(float _val);
 				float getValue() const {
@@ -42,14 +38,13 @@ namespace ewol {
 					m_textColorFg = _newColor;
 				};
 			private:
-				float m_value; //!< % used
-				etk::Color<> m_textColorFg; //!< forder bar color
-				etk::Color<> m_textColorBgOn; //!< bar color enable
-				etk::Color<> m_textColorBgOff; //!< bar color disable
+				ewol::object::Param<float> m_value; //!< % used
+				ewol::object::Param<etk::Color<>> m_textColorFg; //!< forder bar color
+				ewol::object::Param<etk::Color<>> m_textColorBgOn; //!< bar color enable
+				ewol::object::Param<etk::Color<>> m_textColorBgOff; //!< bar color disable
 			protected: // Derived function
 				virtual void onDraw();
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual void calculateMinMaxSize();

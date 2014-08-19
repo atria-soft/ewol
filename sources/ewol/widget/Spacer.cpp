@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/Spacer.h>
@@ -14,23 +14,15 @@
 #undef __class__
 #define __class__ "Spacer"
 
-const char* const ewol::widget::Spacer::configColor = "color";
-
-static ewol::Widget* create() {
-	return new ewol::widget::Spacer();
-}
-
-void ewol::widget::Spacer::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
-
-ewol::widget::Spacer::Spacer() {
+ewol::widget::Spacer::Spacer() :
+  m_color(*this, "color", etk::color::none, "background of the spacer") {
 	addObjectType("ewol::widget::Spacer");
 	m_userMinSize = ewol::Dimension(vec2(10,10));
 	setCanHaveFocus(false);
-	m_color = etk::color::black;
-	m_color.setA(0);
-	registerConfig(configColor, "color", nullptr, "background of the spacer");
+}
+
+void ewol::widget::Spacer::init() {
+	ewol::Widget::init();
 }
 
 ewol::widget::Spacer::~Spacer() {
@@ -48,7 +40,7 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	}
 	m_draw.clear();
 	
-	if (m_color.a() == 0) {
+	if (m_color->a() == 0) {
 		return;
 	}
 	m_draw.setColor(m_color);
@@ -56,27 +48,10 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
-bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::Widget::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configColor) {
-		m_color = _conf.getData();
+void ewol::widget::Spacer::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_color) {
 		markToRedraw();
-		return true;
 	}
-	return false;
 }
-
-bool ewol::widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::Widget::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configColor) {
-		_result = m_color.getString();
-		return true;
-	}
-	return false;
-}
-
 

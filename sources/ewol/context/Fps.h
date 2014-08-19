@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_FPS_H__
@@ -85,13 +85,13 @@ namespace ewol {
 						EWOL_INFO(m_displayName << " : processTime : " << (float)((float)processTimeLocal / 1000.0) << "ms ");
 					}
 					if (drwingDone) {
-						min = etk_min(min, processTimeLocal);
-						max = etk_max(max, processTimeLocal);
+						min = std::min(min, processTimeLocal);
+						max = std::max(max, processTimeLocal);
 						avg += processTimeLocal;
 						drwingDone = false;
 					} else {
-						min_idle = etk_min(min_idle, processTimeLocal);
-						max_idle = etk_max(max_idle, processTimeLocal);
+						min_idle = std::min(min_idle, processTimeLocal);
+						max_idle = std::max(max_idle, processTimeLocal);
 						avg_idle += processTimeLocal;
 					}
 				}

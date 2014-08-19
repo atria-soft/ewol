@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_FONT_FREE_TYPE_H__
@@ -29,8 +29,10 @@ namespace ewol {
 				bool m_init;
 				void display();
 			protected:
-				FontFreeType(const std::string& _fontName);
+				FontFreeType();
+				void init(const std::string& _fontName);
 			public:
+				DECLARE_RESOURCE_NAMED_FACTORY(FontFreeType);
 				virtual ~FontFreeType();
 			public:
 				
@@ -54,14 +56,6 @@ namespace ewol {
 				float getSizeWithHeight(float _fontHeight);
 				
 				void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph);
-			public:
-				/**
-				 * @brief keep the resource pointer.
-				 * @note Never free this pointer by your own...
-				 * @param[in] _filename Name of the base font.
-				 * @return pointer on the resource or nullptr if an error occured.
-				 */
-				static ewol::object::Shared<ewol::resource::FontBase> keep(const std::string& _filename);
 		};
 		void freeTypeInit();
 		void freeTypeUnInit();

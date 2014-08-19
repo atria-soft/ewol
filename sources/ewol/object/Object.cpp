@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/object/Object.h>
@@ -15,136 +15,63 @@
 #undef __class__
 #define __class__ "Object"
 
-
-const char* const ewol::Object::configName = "name";
 size_t ewol::Object::m_valUID = 0;
 
-
-void ewol::Object::objRefCountIncrement() {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	/*
-	if (std::string("ewol::widget::Windows") == getObjectType()) {
-		EWOL_ERROR("increment Windows count ++" << m_objRefCount);
-		//etk::log::displayBacktrace();
-	}
-	*/
-	m_objRefCount++;
-}
-
-void ewol::Object::objRefCountDecrement() {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	/*
-	if (std::string("ewol::widget::Windows") == getObjectType()) {
-		EWOL_ERROR("Decrement Windows count --" << m_objRefCount);
-		//etk::log::displayBacktrace();
-	}
-	*/
-	m_objRefCount--;
-}
-
-void ewol::Object::operator delete(void* _ptr, std::size_t _sz) {
-	EWOL_VERBOSE("custom delete for size " << _sz);
-	ewol::Object* obj = (ewol::Object*)_ptr;
-	obj->objRefCountDecrement();
-	if (obj->m_objRefCount <= 0) {
-		EWOL_VERBOSE("    ==> real remove");
-		::operator delete(_ptr);
-	} else {
-		EWOL_ERROR("    ==> Some user is link on it : " << obj->m_objRefCount);
-		etk::log::displayBacktrace();
-	}
-}
-
-void ewol::Object::operator delete[](void* _ptr, std::size_t _sz) {
-	EWOL_CRITICAL("custom delete for size ==> not implemented ..." << _sz);
-	::operator delete(_ptr);
-}
-#ifdef DEBUG
-void ewol::Object::incOwnerCount() {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	m_ownerCount++;
-	if (m_ownerCount>1) {
-		EWOL_CRITICAL("Multiple Owner on one Object ==> very bad ... " << m_ownerCount);
-	}
-}
-
-void ewol::Object::decOwnerCount() {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	m_ownerCount--;
-	if (m_ownerCount<0) {
-		EWOL_CRITICAL("Owner remove the owner counter under 1 ==> very bad ... " << m_ownerCount);
-	}
-}
-#endif
-
 void ewol::Object::autoDestroy() {
-	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getObjectType());
-	bool needRemove = false;
-	{
-		std::unique_lock<std::mutex> lock(m_lockRefCount);
-		if (m_isDestroyed == true) {
-			EWOL_WARNING("Request remove of a removed object");
-			return;
-		} else {
-			m_isDestroyed = true;
-			needRemove = true;
-		}
-	}
-	if (needRemove == true) {
-		getObjectManager().remove(this);
-	}
-}
-
-void ewol::Object::removeObject() {
-	autoDestroy();
-}
-
-void ewol::Object::respownObject() {
-	std::unique_lock<std::mutex> lock(m_lockRefCount);
-	if (m_isDestroyed == false) {
-		EWOL_WARNING("Respawn an alive object");
+	if (m_objectHasBeenInit == false) {
+		EWOL_WARNING("try to auto destroy inside a constructor");
 		return;
 	}
-	m_isDestroyed = false;
-	getObjectManager().respown(this);
+	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getObjectType());
+	std::shared_ptr<ewol::Object> parent = m_parent.lock();
+	// TODO : set a signal to do this ...
+	if (parent != nullptr) {
+		parent->requestDestroyFromChild(shared_from_this());
+	}
+	//if no parent ==> noting to do ...
 }
 
-ewol::Object::Object() :
-  m_objRefCount(1),
-  #ifdef DEBUG
-    m_ownerCount(0),
-  #endif
-  m_isDestroyed(false),
-  m_static(false),
-  m_isResource(false) {
-	// note this is nearly atomic ... (but it is enough)
-	m_uniqueId = m_valUID++;
-	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
-	getObjectManager().add(this);
-	registerConfig(configName, "string", nullptr, "Object name, might be a unique reference in all the program");
+void ewol::Object::requestDestroyFromChild(const std::shared_ptr<ewol::Object>& _child) {
+	EWOL_CRITICAL("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
 }
-ewol::Object::Object(const std::string& _name) :
-  m_objRefCount(1),
-  #ifdef DEBUG
-    m_ownerCount(0),
-  #endif
-  m_isDestroyed(false),
+void ewol::Object::setParent(const std::shared_ptr<ewol::Object>& _newParent) {
+	// TODO : Implement change of parent ...
+	m_parent = _newParent;
+}
+
+void ewol::Object::removeParent() {
+	m_parent.reset();
+}
+
+
+
+ewol::Object::Object() :
+  m_objectHasBeenInit(false),
   m_static(false),
-  m_name(_name),
+  m_name(*this, "name", "", "Object name, might be a unique reference in all the program"),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
-	getObjectManager().add(this);
-	registerConfig(configName, "string", nullptr, "Object name, might be a unique reference in all the program");
 }
 
 ewol::Object::~Object() {
-	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription() << " refcount=" << m_objRefCount);
-	getMultiCast().rm(this);
+	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
 	m_externEvent.clear();
 	m_availlableEventId.clear();
 	m_uniqueId = -1;
+}
+
+
+void ewol::Object::init() {
+	getObjectManager().add(shared_from_this());
+	parameterDisplay();
+	m_objectHasBeenInit = true;
+}
+
+void ewol::Object::init(const std::string& _name) {
+	init();
+	m_name = _name;
 }
 
 const char * const ewol::Object::getObjectType() {
@@ -195,6 +122,10 @@ void ewol::Object::addEventId(const char * _generateEventId) {
 }
 
 void ewol::Object::generateEventId(const char * _generateEventId, const std::string& _data) {
+	if (m_objectHasBeenInit == false) {
+		EWOL_WARNING("try to generate an event inside a constructor");
+		return;
+	}
 	int32_t nbObject = getObjectManager().getNumberObject();
 	EWOL_VERBOSE("try send message '" << _generateEventId << "'");
 	// for every element registered ...
@@ -204,19 +135,20 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 			EWOL_VERBOSE("    wrong event '" << it.localEventId << "' != '" << _generateEventId << "'");
 			continue;
 		}
-		if (it.destObject == nullptr) {
+		std::shared_ptr<ewol::Object> destObject = it.destObject.lock();
+		if (destObject == nullptr) {
 			EWOL_VERBOSE("    nullptr dest");
 			continue;
 		}
 		if (it.overloadData.size() <= 0){
-			ewol::object::Message tmpMsg(this, it.destEventId, _data);
+			ewol::object::Message tmpMsg(shared_from_this(), it.destEventId, _data);
 			EWOL_VERBOSE("send message " << tmpMsg);
-			it.destObject->onReceiveMessage(tmpMsg);
+			destObject->onReceiveMessage(tmpMsg);
 		} else {
 			// set the user requested data ...
-			ewol::object::Message tmpMsg(this, it.destEventId, it.overloadData);
+			ewol::object::Message tmpMsg(shared_from_this(), it.destEventId, it.overloadData);
 			EWOL_VERBOSE("send message " << tmpMsg);
-			it.destObject->onReceiveMessage(tmpMsg);
+			destObject->onReceiveMessage(tmpMsg);
 		}
 	}
 	if (nbObject > getObjectManager().getNumberObject()) {
@@ -225,18 +157,26 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 }
 
 void ewol::Object::sendMultiCast(const char* const _messageId, const std::string& _data) {
+	if (m_objectHasBeenInit == false) {
+		EWOL_WARNING("try to generate an multicast event inside a constructor");
+		return;
+	}
 	int32_t nbObject = getObjectManager().getNumberObject();
-	getMultiCast().send(this, _messageId, _data);
+	getMultiCast().send(shared_from_this(), _messageId, _data);
 	if (nbObject > getObjectManager().getNumberObject()) {
 		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->removObject() which is asynchronous");
 	}
 }
 
 void ewol::Object::registerMultiCast(const char* const _messageId) {
-	getMultiCast().add(this, _messageId);
+	if (m_objectHasBeenInit == false) {
+		EWOL_ERROR("Try to Register multicast inside a constructor (move it in the init function)");
+		return;
+	}
+	getMultiCast().add(shared_from_this(), _messageId);
 }
 
-void ewol::Object::registerOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+void ewol::Object::registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
                                     const std::string& _overloadData) {
@@ -300,7 +240,7 @@ void ewol::Object::registerOnEvent(const ewol::object::Shared<ewol::Object>& _de
 	m_externEvent.push_back(tmpEvent);
 }
 
-void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _destinationObject,
+void ewol::Object::unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
                                      const char * _eventId) {
 	if (_destinationObject == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
@@ -309,10 +249,11 @@ void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _
 	// check if event existed :
 	auto it(m_externEvent.begin());
 	while(it != m_externEvent.end()) {
-		if (it->destObject == nullptr) {
+		std::shared_ptr<ewol::Object> obj = it->destObject.lock();
+		if (obj == nullptr) {
 			m_externEvent.erase(it);
 			it = m_externEvent.begin();
-		} else if (    it->destObject == _destinationObject
+		} else if (    obj == _destinationObject
 		            && it->localEventId == _eventId) {
 			m_externEvent.erase(it);
 			it = m_externEvent.begin();
@@ -323,59 +264,19 @@ void ewol::Object::unRegisterOnEvent(const ewol::object::Shared<ewol::Object>& _
 	}
 }
 
-void ewol::Object::onObjectRemove(const ewol::object::Shared<ewol::Object>& _object) {
-	EWOL_VERBOSE("[" << getId() << "] onObjectRemove(" << _object->getId() << ")");
-	auto it(m_externEvent.begin());
-	while(it != m_externEvent.end()) {
-		if (it->destObject == nullptr) {
-			m_externEvent.erase(it);
-			it = m_externEvent.begin();
-		} else if (it->destObject == _object) {
-			m_externEvent.erase(it);
-			it = m_externEvent.begin();
-			EWOL_INFO("[" << getId() << "] Remove extern event : to object id=" << _object->getId());
-		} else {
-			++it;
-		}
-	}
-}
-
-
-void ewol::Object::registerConfig(const char* _config,
-                                  const char* _type,
-                                  const char* _control,
-                                  const char* _description,
-                                  const char* _default) {
-	if (nullptr == _config) {
-		EWOL_ERROR("Try to add nullptr config");
-		return;
-	}
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (nullptr != m_listConfig[iii].getConfig()) {
-			if (0 == strcmp(m_listConfig[iii].getConfig(), _config) ) {
-				EWOL_ERROR("Try to add config already added : " << _config << " at pos=" << iii);
-			}
-		}
-	}
-	m_listConfig.push_back(ewol::object::ConfigElement(_config, _type, _control, _description, _default));
-}
-
-
 bool ewol::Object::loadXML(exml::Element* _node) {
 	if (nullptr == _node) {
 		return false;
 	}
-	bool errorOccured = true;
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (m_listConfig[iii].getConfig() == nullptr) {
+	bool errorOccured = false;
+	
+	for(size_t iii=0 ; iii<_node->sizeAttribute() ; iii++) {
+		auto pair = _node->getAttrPair(iii);
+		if (pair.first == "") {
 			continue;
 		}
-		if (_node->existAttribute(m_listConfig[iii].getConfig()) == false) {
-			continue;
-		}
-		std::string value = _node->getAttribute(m_listConfig[iii].getConfig());
-		if (false == setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), value) ) ) {
-			errorOccured = false;
+		if (parameterSet(pair.first, pair.second) == false) {
+			errorOccured = true;
 		}
 	}
 	return errorOccured;
@@ -386,100 +287,47 @@ bool ewol::Object::storeXML(exml::Element* _node) const {
 		return false;
 	}
 	bool errorOccured = true;
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (m_listConfig[iii].getConfig() == nullptr) {
-			continue;
-		}
-		std::string value = getConfig(m_listConfig[iii].getConfig());
-		if (nullptr != m_listConfig[iii].getDefault() ) {
-			if (value == m_listConfig[iii].getDefault() ) {
-				// nothing to add on the XML :
-				continue;
-			}
-		}
-		// add attribute ...  == > note : add special element when '"' element detected ...
-		_node->setAttribute(m_listConfig[iii].getConfig(), value);
+	for (auto &it : parameterGetAll(true)) {
+		_node->setAttribute(it.first, it.second);
 	}
 	return errorOccured;
 }
 
-
-bool ewol::Object::onSetConfig(const ewol::object::Config& _conf) {
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config : " << _conf);
-	if (_conf.getConfig() == configName) {
-		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config name : \"" << _conf.getData() << "\"");
-		setName(_conf.getData());
-		return true;
-	}
-	return false;
-}
-
-bool ewol::Object::onGetConfig(const char* _config, std::string& _result) const {
-	if (_config == configName) {
-		_result = getName();
-		return true;
-	}
-	return false;
-}
-
-bool ewol::Object::setConfig(const std::string& _config, const std::string& _value) {
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (nullptr != m_listConfig[iii].getConfig()) {
-			if (_config == m_listConfig[iii].getConfig() ) {
-				// call config with standard parameter
-				return setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), _value));
-			}
-		}
-	}
-	EWOL_ERROR(" parameter is not in the list : \"" << _config << "\"" );
-	return false;
-}
-
-std::string ewol::Object::getConfig(const char* _config) const {
-	std::string res="";
-	if (nullptr != _config) {
-		onGetConfig(_config, res);
-	}
-	return res;
-}
-
-std::string ewol::Object::getConfig(const std::string& _config) const {
-	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
-		if (nullptr != m_listConfig[iii].getConfig()) {
-			if (_config == m_listConfig[iii].getConfig() ) {
-				// call config with standard parameter
-				return getConfig(m_listConfig[iii].getConfig());
-			}
-		}
-	}
-	EWOL_ERROR(" parameter is not in the list : \"" << _config << "\"" );
-	return "";
-}
-
-bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf) {
-	ewol::object::Shared<ewol::Object> object = getObjectManager().get(_objectName);
+bool ewol::Object::parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+	std::shared_ptr<ewol::Object> object = getObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
 	}
-	return object->setConfig(_conf);
+	return object->parameterSet(_config, _value);
 }
 
-bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
-	ewol::object::Shared<ewol::Object> object = getObjectManager().get(_objectName);
-	if (object == nullptr) {
-		return false;
-	}
-	return object->setConfig(_config, _value);
+ewol::object::Manager& ewol::Object::getObjectManager() const {
+	ewol::object::Manager& tmp = ewol::getContext().getEObjectManager();
+	return tmp;
 }
 
-ewol::object::Manager& ewol::Object::getObjectManager() {
-	return ewol::getContext().getEObjectManager();
-}
-
-ewol::object::MultiCast& ewol::Object::getMultiCast() {
+ewol::object::MultiCast& ewol::Object::getMultiCast() const {
 	return ewol::getContext().getEObjectManager().multiCast();
 }
 
-ewol::Context& ewol::Object::getContext() {
+ewol::Context& ewol::Object::getContext() const {
 	return ewol::getContext();
+}
+
+void ewol::Object::registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
+                                         const std::string& _objectName,
+                                         const char * _eventId,
+                                         const char * _eventIdgenerated,
+                                         const std::string& _overloadData) {
+	std::shared_ptr<ewol::Object> tmpObject = getObjectManager().getObjectNamed(_objectName);
+	if (nullptr != tmpObject) {
+		EWOL_DEBUG("Find widget named : '" << _objectName << "' register event='" << _eventId << "'");
+		tmpObject->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
+	} else {
+		EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Can not register event : \"" << _eventId << "\" the object named=\"" << _objectName << "\" does not exist");
+	}
+}
+
+std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) const {
+	return getObjectManager().getObjectNamed(_objectName);
 }

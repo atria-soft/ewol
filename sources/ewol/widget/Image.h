@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_IMAGE_H__
@@ -26,29 +26,19 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventPressed;
-				// Config list of properties
-				static const char * const configRatio;
-				static const char * const configSize;
-				static const char * const configBorder;
-				static const char * const configSource;
-				static const char * const configDistanceField;
-				static const char * const configPartStart;
-				static const char * const configPartStop;
-			public:
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
-				ewol::object::Shared<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorId; //!< Color of the image.
 			public:
 				/**
 				 * @brief 
 				 */
-				Image(const std::string& _file="",
-				      const ewol::Dimension& _border=ewol::Dimension(vec2(0,0),ewol::Dimension::Millimeter));
+				Image();
+				void init(const std::string& _file="",
+				          const ewol::Dimension& _border=ewol::Dimension(vec2(0,0),ewol::Dimension::Millimeter));
+			public:
+				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**
 				 * @brief 
 				 */
@@ -60,13 +50,15 @@ namespace ewol {
 				 */
 				void set(const std::string& _file, const ewol::Dimension& _border);
 			protected:
-				std::string m_fileName; //!< file name of the image.
+				ewol::object::Param<std::string> m_fileName; //!< file name of the image.
 			public:
 				/**
 				 * @brief set the new filename
 				 * @param[in] _file Filaneme of the new image
 				 */
-				void setFile(const std::string& _file);
+				void setFile(const std::string& _file) {
+					m_fileName.set(_file);
+				}
 				/**
 				 * @brief get the file displayed
 				 * @return the filename of the image
@@ -75,7 +67,7 @@ namespace ewol {
 					return m_fileName;
 				};
 			protected:
-				ewol::Dimension m_border; //!< border to add at the image.
+				ewol::object::Param<ewol::Dimension> m_border; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -90,7 +82,7 @@ namespace ewol {
 					return m_border;
 				};
 			protected:
-				ewol::Dimension m_imageSize; //!< border to add at the image.
+				ewol::object::Param<ewol::Dimension> m_imageSize; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -105,7 +97,7 @@ namespace ewol {
 					return m_imageSize;
 				};
 			protected:
-				bool m_keepRatio; //!< keep the image ratio between width and hight
+				ewol::object::Param<bool> m_keepRatio; //!< keep the image ratio between width and hight
 			public:
 				/**
 				 * @brief set the current status of keeping ratio.
@@ -120,7 +112,7 @@ namespace ewol {
 					return m_keepRatio;
 				};
 			protected:
-				vec2 m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
+				ewol::object::ParamRange<vec2> m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
 			public:
 				/**
 				 * @brief set the current 'start' position in the image to display.
@@ -135,7 +127,7 @@ namespace ewol {
 					return m_posStart;
 				};
 			protected:
-				vec2 m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
+				ewol::object::ParamRange<vec2> m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
 			public:
 				/**
 				 * @brief set the current 'stop' position in the image to display.
@@ -149,6 +141,8 @@ namespace ewol {
 				vec2 getStopPos() const {
 					return m_posStop;
 				};
+			public:
+				ewol::object::Param<bool> m_distanceFieldMode; //!< to have a parameter
 			public:
 				/**
 				 * @brief Set distance field rendering mode
@@ -166,8 +160,7 @@ namespace ewol {
 				}
 			protected: // Derived function
 				virtual void onDraw();
-				virtual bool onSetConfig(const ewol::object::Config& _conf);
-				virtual bool onGetConfig(const char* _config, std::string& _result) const;
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

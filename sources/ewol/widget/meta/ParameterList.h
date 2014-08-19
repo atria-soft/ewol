@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_WIDGET_PARAMETER_LIST_H__
@@ -43,8 +43,11 @@ namespace ewol {
 			private:
 				int32_t m_idSelected;
 				std::vector<ewol::widget::elementPL *> m_list;
-			public:
+			protected:
 				ParameterList();
+				void init();
+			public:
+				DECLARE_WIDGET_FACTORY(ParameterList, "ParameterList");
 				virtual ~ParameterList();
 				void setLabel(std::string _newLabel);
 			// drawing capabilities ....

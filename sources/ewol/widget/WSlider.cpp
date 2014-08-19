@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <ewol/widget/WSlider.h>
@@ -26,31 +26,20 @@ std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::s
 // Event list of properties
 const char* const ewol::widget::WSlider::eventStartSlide = "ewol-widget-wslider-event-start-slide";
 const char* const ewol::widget::WSlider::eventStopSlide = "ewol-widget-wslider-event-stop-slide";
-// Config list of properties
-const char* const ewol::widget::WSlider::configMode = "mode";
-const char* const ewol::widget::WSlider::configSpeed = "speed";
-
-static ewol::Widget* create() {
-	return new ewol::widget::WSlider();
-}
-
-void ewol::widget::WSlider::init(ewol::widget::Manager& _widgetManager) {
-	_widgetManager.addWidgetCreator(__class__,&create);
-}
 
 ewol::widget::WSlider::WSlider() :
   m_windowsSources(0),
   m_windowsDestination(0),
   m_windowsRequested(-1),
   m_slidingProgress(1.0f),
-  m_transitionSpeed(1.0f),
-  m_transitionSlide(sladingTransitionHori) {
+  m_selectNewWidget(*this, "select", "", "Select the requested widget to display"),
+  m_transitionSpeed(*this, "speed", 1.0f, 0.0f, 200.0f, "Transition speed of the slider"),
+  m_transitionSlide(*this, "mode", sladingTransitionHori, "Transition mode of the slider") {
 	addObjectType("ewol::widget::WSlider");
 	addEventId(eventStartSlide);
 	addEventId(eventStopSlide);
-	// add configuration
-	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
-	registerConfig(configSpeed, "float", nullptr, "Transition speed of the slider");
+	m_transitionSlide.add(sladingTransitionVert, "vert");
+	m_transitionSlide.add(sladingTransitionHori, "hori");
 }
 
 ewol::widget::WSlider::~WSlider() {
@@ -129,6 +118,12 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 		elementID ++;
 		if (it != nullptr) {
 			if (it->getId() == _id) {
+				if (it->getName() != "") {
+					// change the internal event parameter (in case...) ==> no event generation
+					m_selectNewWidget.get() = it->getName();
+				} else {
+					m_selectNewWidget.get() = "";
+				}
 				break;
 			}
 		}
@@ -137,10 +132,12 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 		subWidgetSelectSetVectorId(elementID);
 	} else {
 		subWidgetSelectSetVectorId(-1);
+		// change the internal event parameter (in case...) ==> no event generation
+		m_selectNewWidget.get() = "";
 	}
 }
 
-void ewol::widget::WSlider::subWidgetSelectSet(const ewol::object::Shared<ewol::Widget>& _widgetPointer) {
+void ewol::widget::WSlider::subWidgetSelectSet(const std::shared_ptr<ewol::Widget>& _widgetPointer) {
 	if (_widgetPointer == nullptr) {
 		EWOL_ERROR("Can not change to a widget nullptr");
 		return;
@@ -150,6 +147,12 @@ void ewol::widget::WSlider::subWidgetSelectSet(const ewol::object::Shared<ewol::
 		if (    it != nullptr
 		     && it == _widgetPointer) {
 			subWidgetSelectSetVectorId(iii);
+			if (_widgetPointer->getName() != "") {
+				// change the internal event parameter (in case...) ==> no event generation
+				m_selectNewWidget.get() = _widgetPointer->getName();
+			} else {
+				m_selectNewWidget.get() = "";
+			}
 			return;
 		}
 		iii++;
@@ -167,18 +170,13 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 		if (    it != nullptr
 		     && it->getName() == _widgetName) {
 			subWidgetSelectSetVectorId(iii);
+			// change the internal event parameter (in case...) ==> no event generation
+			m_selectNewWidget.get() = _widgetName;
 			return;
 		}
 		iii++;
 	}
 	EWOL_ERROR("Can not change to a widget not present");
-}
-
-void ewol::widget::WSlider::setTransitionMode(enum sladingMode _mode) {
-	if (m_transitionSlide != _mode) {
-		m_transitionSlide = _mode;
-		markToRedraw();
-	}
 }
 
 void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
@@ -208,7 +206,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 			}
 		}
 		m_slidingProgress += _event.getDeltaCall()/m_transitionSpeed;
-		m_slidingProgress = etk_avg(0.0f, m_slidingProgress, 1.0f);
+		m_slidingProgress = std::avg(0.0f, m_slidingProgress, 1.0f);
 	}
 	calculateSize(m_size);
 	markToRedraw();
@@ -276,52 +274,20 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 		}
 	}
 }
-
-bool ewol::widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configMode) {
-		enum sladingMode tmpTransition = sladingTransitionHori;
-		if(compare_no_case(_conf.getData(), "vert") == true) {
-			tmpTransition = sladingTransitionVert;
-		} else if(compare_no_case(_conf.getData(), "hori") == true) {
-			tmpTransition = sladingTransitionHori;
+void ewol::widget::WSlider::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::widget::ContainerN::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_selectNewWidget) {
+		if (m_selectNewWidget.get() != "") {
+			subWidgetSelectSet(m_selectNewWidget);
 		}
-		setTransitionMode(tmpTransition);
-		return true;
+	} else if (_paramPointer == m_transitionSpeed) {
+		// nothing to do ...
+	} else if (_paramPointer == m_transitionSlide) {
+		markToRedraw();
 	}
-	if (_conf.getConfig() == configSpeed) {
-		setTransitionSpeed(std::stof(_conf.getData()));
-		return true;
-	}
-	return false;
 }
 
-bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::ContainerN::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configMode) {
-		switch(m_transitionSlide){
-			default:
-			case sladingTransitionHori:
-				_result = "hori";
-				break;
-			case sladingTransitionVert:
-				_result = "vert";
-				break;
-		}
-		return true;
-	}
-	if (_config == configMode) {
-		_result = std::to_string(getTransitionSpeed());
-		return true;
-	}
-	return false;
-}
-
-ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
+std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return nullptr;
 	}
@@ -335,7 +301,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -352,7 +318,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -368,7 +334,7 @@ ewol::object::Shared<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const v
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::object::Shared<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}

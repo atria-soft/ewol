@@ -3,7 +3,7 @@
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license BSD v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #ifndef __EWOL_COMPOSITING_IMAGE_H__
@@ -29,7 +29,7 @@ namespace ewol {
 				etk::Color<> m_color; //!< The text foreground color
 				float m_angle; //!< Angle to set at the axes
 			private:
-				ewol::object::Shared<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
+				std::shared_ptr<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)
@@ -37,8 +37,8 @@ namespace ewol {
 				int32_t m_GLtexID; //!< openGL id on the element (texture ID)
 			private:
 				bool m_distanceFieldMode; //!< select distance field mode
-				ewol::object::Shared<ewol::resource::TextureFile> m_resource; //!< texture resources
-				ewol::object::Shared<ewol::resource::ImageDF> m_resourceDF; //!< texture resources
+				std::shared_ptr<ewol::resource::TextureFile> m_resource; //!< texture resources
+				std::shared_ptr<ewol::resource::ImageDF> m_resourceDF; //!< texture resources
 				std::vector<vec3 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
