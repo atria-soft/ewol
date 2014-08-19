@@ -293,18 +293,12 @@ bool ewol::Object::storeXML(exml::Element* _node) const {
 	return errorOccured;
 }
 
-void ewol::Object::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
-	if (_paramPointer == m_name) {
-		EWOL_VERBOSE("[" << getId() << "] Parameter name change : " << m_name);
-	}
-}
-
-bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+bool ewol::Object::parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
 	std::shared_ptr<ewol::Object> object = getObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
 	}
-	return object->setConfig(_config, _value);
+	return object->parameterSet(_config, _value);
 }
 
 ewol::object::Manager& ewol::Object::getObjectManager() const {

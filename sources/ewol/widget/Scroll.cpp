@@ -356,27 +356,4 @@ void ewol::widget::Scroll::onParameterChangeValue(const ewol::object::ParameterR
 		
 	}
 }
-/*
-bool ewol::widget::Scroll::onSetConfig(const ewol::object::Config& _conf) {
-	if (true == ewol::widget::Container::onSetConfig(_conf)) {
-		return true;
-	}
-	if (_conf.getConfig() == configLimit) {
-		setLimit(_conf.getData());
-		return true;
-	}
-	return false;
-}
-
-bool ewol::widget::Scroll::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
-		return true;
-	}
-	if (_config == configLimit) {
-		_result = getLimit();
-		return true;
-	}
-	return false;
-}
-*/
 

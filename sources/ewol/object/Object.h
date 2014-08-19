@@ -194,40 +194,13 @@ namespace ewol {
 			void unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 			                       const char * _eventId = nullptr);
 			/**
-			 * @brief Inform object that an other object is removed ...
-			 * @note : Sub classes must call this class
-			 */
-			virtual void onObjectRemove(const std::shared_ptr<ewol::Object>& _object, bool _deprecated) { /* Deprecated */};
-			/**
 			 * @brief Receive a message from an other Object with a specific eventId and data
 			 * @param[in] _msg Message handle
 			 */
-			virtual void onReceiveMessage(const ewol::object::Message& _msg) {
-				
-			};
+			virtual void onReceiveMessage(const ewol::object::Message& _msg) { };
 		public:
-			/**
-			 * @brief Configuration requested to the curent Object (systrem mode)
-			 * @param[in] _conf Configuration handle.
-			 * @return true if config set correctly...
-			 */
-			// TODO : Remove this function .... ==> parameterSet(_config, _value);
-			bool setConfig(const std::string& _config, const std::string& _value) {
-				return parameterSet(_config, _value);
-			}
 			// TODO : Rework the position on this function ...
-			bool setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
-			/**
-			 * @brief Configuration get from the curent Object (systrem mode)
-			 * @param[in] _config Configuration name.
-			 * @return the config properties
-			 */
-			// TODO : Remove this :
-			std::string getConfig(const std::string& _config) const {
-				return parameterGet(_config);
-			}
-			// herited function :
-			virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		protected:
 			ewol::object::Param<std::string> m_name; //!< name of the element ...
 		public:

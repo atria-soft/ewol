@@ -192,20 +192,6 @@ int32_t ewol::widget::Gird::getRowSize() {
 
 void ewol::widget::Gird::subWidgetRemoveAll() {
 	size_t errorControl = m_subWidget.size();
-	// the size automaticly decrement with the auto call of the onObjectRemove function
-	while (m_subWidget.size() > 0 ) {
-		if (nullptr != m_subWidget[0].widget) {
-			m_subWidget[0].widget.reset();
-			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
-			if (errorControl == m_subWidget.size()) {
-				EWOL_CRITICAL("[" << getId() << "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-			}
-		} else {
-			EWOL_WARNING("[" << getId() << "] Must not have null pointer on the subWidget list ...");
-			m_subWidget.erase(m_subWidget.begin());
-		}
-		errorControl = m_subWidget.size();
-	}
 	m_subWidget.clear();
 }
 

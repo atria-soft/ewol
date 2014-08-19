@@ -124,7 +124,7 @@ void ewol::widget::FileChooser::init() {
 
 void ewol::widget::FileChooser::onGetFocus() {
 	// transfert focus on a specific widget...
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "focus", "true");
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "focus", "true");
 }
 
 ewol::widget::FileChooser::~FileChooser() {
@@ -132,15 +132,15 @@ ewol::widget::FileChooser::~FileChooser() {
 }
 
 void ewol::widget::FileChooser::setTitle(const std::string& _label) {
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", _label);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setValidateLabel(const std::string& _label) {
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", _label);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setCancelLabel(const std::string& _label) {
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", _label);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
@@ -150,7 +150,7 @@ void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
 
 void ewol::widget::FileChooser::setFileName(const std::string& _filename) {
 	m_file = _filename;
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
 }
 
 void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
@@ -162,18 +162,18 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		// == > change the file name
 		m_file = _msg.getData();
 		// update the selected file in the list :
-		setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
+		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
 	} else if (eventCancel == _msg.getMessage()) {
 		// == > Auto remove ...
 		generateEventId(_msg.getMessage());
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventFileChooserHidenFileChange) {
 		if (_msg.getData() == "true") {
-			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
-			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
+			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
+			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
 		} else {
-			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
-			setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
+			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
+			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
 		}
 	} else if (_msg.getMessage() == ewolEventFileChooserListFolder) {
 		// == > this is an internal event ...
@@ -216,9 +216,9 @@ void ewol::widget::FileChooser::updateCurrentFolder() {
 			m_folder +=  "/";
 		}
 	}
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "path", m_folder);
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "path", m_folder);
-	setConfigNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "value", m_folder);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "path", m_folder);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "path", m_folder);
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "value", m_folder);
 	markToRedraw();
 }
 
