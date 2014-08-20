@@ -86,11 +86,6 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj
 #undef __class__
 #define __class__ "Widget"
 
-// event generated :
-const char* const ewol::Widget::eventAnnimationStart = "annimation-start";
-const char* const ewol::Widget::eventAnnimationRatio = "annimation-ratio";
-const char* const ewol::Widget::eventAnnimationStop = "annimation-stop";
-
 ewol::Widget::Widget() :
   m_size(10,10),
   m_minSize(0,0),
@@ -113,6 +108,9 @@ ewol::Widget::Widget() :
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
   m_cursorDisplay(ewol::context::cursorArrow),
+  signalAnnimationStart(*this, "annimation-start"),
+  signalAnnimationRatio(*this, "annimation-ratio"),
+  signalAnnimationStop(*this, "annimation-stop"),
   m_annimationMode(annimationModeDisable),
   m_annimationratio(0.0f),
   m_annimationTypeStart(*this, "annimation-start-type", 0, "Annimation type, when adding/show a widget"),
@@ -133,10 +131,6 @@ ewol::Widget::Widget() :
 	m_gravity.add(ewol::gravityLeft, "left");
 	m_annimationTypeStart.add(0, "none");
 	m_annimationTypeStop.add(0, "none");
-	
-	addEventId(eventAnnimationStart);
-	addEventId(eventAnnimationRatio);
-	addEventId(eventAnnimationStop);
 }
 
 void ewol::Widget::init() {

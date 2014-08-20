@@ -18,10 +18,22 @@
 
 namespace ewol {
 	namespace object {
+		class SignalCallerIdentifier {
+			public:
+				std::weak_ptr<ewol::Object> m_object;
+				const char* m_enevntId;
+				std::string m_data;
+				SignalCallerIdentifier(std::shared_ptr<ewol::Object> _object, const char* _enevntId, const std::string& _data) :
+				  m_object(_object),
+				  m_enevntId(_enevntId),
+				  m_data(_data) {
+					// nothing to do ...
+				}
+		};
 		template<typename T> class Signal : public SignalBase {
 			private:
 				//std::vector<std::funtion<void(const T&)>> m_callerList;
-				std::vector<std::tuple<std::weak_ptr<ewol::Object>, const char*, std::string>> m_serializedCallerList;
+				std::vector<SignalCallerIdentifier> m_serializedCallerList;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
@@ -42,21 +54,12 @@ namespace ewol {
 				 * @brief Destructor.
 				 */
 				virtual ~Signal() { };
-				
-				const std::string& getName() {
-					return m_name;
+				void connect(std::shared_ptr<ewol::Object> _obj, const char* _destId=nullptr, const std::string& _data="" ) {
+					m_serializedCallerList.push_back(SignalCallerIdentifier(_obj, _destId, _data));
 				}
-				const std::string& getDescription() {
-					return m_description;
-				}
-				
-				bool connect(std::shared_ptr<ewol::Object> _obj, const char* _destId=nullptr, const std::string& _data="" ) {
-					m_serializedCallerList.push_back(std::make_tuple(_obj, _destId, _data));
-					return true;
-				}
-				bool release(std::shared_ptr<ewol::Object> _obj) {
+				void release(std::shared_ptr<ewol::Object> _obj) {
 					for (auto it(m_serializedCallerList.begin()) ; it != m_serializedCallerList.end(); ++it) {
-						if (std::get<0>(it) == _obj) {
+						if (it->m_object.lock() == _obj) {
 							m_serializedCallerList.erase(it);
 							it = m_serializedCallerList.begin();
 						}
@@ -89,30 +92,30 @@ namespace ewol {
 					}
 				}
 				*/
-				bool emit(const std::shared_ptr<ewol::Object>& _source, const T& _data) {
+				void emit(const std::shared_ptr<ewol::Object>& _source, const T& _data) {
 					// note : this can not emit on function ....
 					std::string stringData;
 					if (m_serializedCallerList.size()>0 ) {
 						stringData = etk::to_string(_data);
 					}
 					for (auto &it : m_serializedCallerList) {
-						std::shared_ptr<ewol::Object> destObject = std::get<0>(it).lock();
+						std::shared_ptr<ewol::Object> destObject = it.m_object.lock();
 						if (destObject == nullptr) {
 							// TODO : Remove instance ...
 							EWOL_VERBOSE("    nullptr dest");
 							continue;
 						}
 						const char* eventId = m_name.c_str();
-						if (std::get<1>(it) != nullptr) {
-							eventId = std::get<1>(it);
+						if (it.m_enevntId != nullptr) {
+							eventId = it.m_enevntId;
 						}
-						if (std::get<2>(it).size() <= 0){
+						if (it.m_data.size() <= 0){
 							ewol::object::Message tmpMsg(_source, eventId, stringData);
 							EWOL_VERBOSE("send message " << tmpMsg);
 							destObject->onReceiveMessage(tmpMsg);
 						} else {
 							// set the user requested data ...
-							ewol::object::Message tmpMsg(_source, eventId, std::get<2>(it));
+							ewol::object::Message tmpMsg(_source, eventId, it.m_data);
 							EWOL_VERBOSE("send message " << tmpMsg);
 							destObject->onReceiveMessage(tmpMsg);
 						}
@@ -123,7 +126,7 @@ namespace ewol {
 		template<> class Signal<void> : public SignalBase {
 			private:
 				//std::vector<std::funtion<void(const T&)>> m_callerList;
-				std::vector<std::tuple<std::weak_ptr<ewol::Object>, const char*, std::string>> m_serializedCallerList;
+				std::vector<SignalCallerIdentifier> m_serializedCallerList;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
@@ -145,46 +148,38 @@ namespace ewol {
 				 */
 				virtual ~Signal() { };
 				
-				const std::string& getName() {
-					return m_name;
+				void connect(std::shared_ptr<ewol::Object> _obj, const char* _destId=nullptr, const std::string& _data="" ) {
+					m_serializedCallerList.push_back(SignalCallerIdentifier(_obj, _destId, _data));
 				}
-				const std::string& getDescription() {
-					return m_description;
-				}
-				
-				bool connect(std::shared_ptr<ewol::Object> _obj, const char* _destId=nullptr, const std::string& _data="" ) {
-					m_serializedCallerList.push_back(std::make_tuple(_obj, _destId, _data));
-					return true;
-				}
-				bool release(std::shared_ptr<ewol::Object> _obj) {
+				void release(std::shared_ptr<ewol::Object> _obj) {
 					for (auto it(m_serializedCallerList.begin()) ; it != m_serializedCallerList.end(); ++it) {
-						if (std::get<0>(it) == _obj) {
+						if (it->m_object.lock() == _obj) {
 							m_serializedCallerList.erase(it);
 							it = m_serializedCallerList.begin();
 						}
 					}
 				}
-				bool emit(const std::shared_ptr<ewol::Object>& _source) {
+				void emit(const std::shared_ptr<ewol::Object>& _source) {
 					// note : this can not emit on function ....
 					std::string stringData;
 					for (auto &it : m_serializedCallerList) {
-						std::shared_ptr<ewol::Object> destObject = std::get<0>(it).lock();
+						std::shared_ptr<ewol::Object> destObject = it.m_object.lock();
 						if (destObject == nullptr) {
 							// TODO : Remove instance ...
 							EWOL_VERBOSE("    nullptr dest");
 							continue;
 						}
 						const char* eventId = m_name.c_str();
-						if (std::get<1>(it) != nullptr) {
-							eventId = std::get<1>(it);
+						if (it.m_enevntId != nullptr) {
+							eventId = it.m_enevntId;
 						}
-						if (std::get<2>(it).size() <= 0){
+						if (it.m_data.size() <= 0){
 							ewol::object::Message tmpMsg(_source, eventId, stringData);
 							EWOL_VERBOSE("send message " << tmpMsg);
 							destObject->onReceiveMessage(tmpMsg);
 						} else {
 							// set the user requested data ...
-							ewol::object::Message tmpMsg(_source, eventId, std::get<2>(it));
+							ewol::object::Message tmpMsg(_source, eventId, it.m_data);
 							EWOL_VERBOSE("send message " << tmpMsg);
 							destObject->onReceiveMessage(tmpMsg);
 						}

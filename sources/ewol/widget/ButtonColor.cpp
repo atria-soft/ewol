@@ -15,9 +15,6 @@
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
 
-const char * const ewol::widget::ButtonColor::eventChange = "change";
-
-
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
@@ -31,10 +28,10 @@ const char * const ewol::widget::ButtonColor::eventChange = "change";
 static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
 
 ewol::widget::ButtonColor::ButtonColor() :
+  signalChange(*this, "change", "Button color change value"),
   m_textColorFg(etk::color::black),
   m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
-	addEventId(eventChange);
 	changeStatusIn(STATUS_UP);
 	setCanHaveFocus(true);
 	// Limit event at 1:
@@ -227,7 +224,9 @@ void ewol::widget::ButtonColor::onReceiveMessage(const ewol::object::Message& _m
 	EWOL_INFO("Receive MSG : " <<  _msg.getData());
 	if (_msg.getMessage() == eventColorHasChange) {
 		m_textColorFg = _msg.getData();
-		generateEventId(eventChange, _msg.getData());
+		// TODO : set a proper call
+		//signalChange.emit(shared_from_this(), _msg.getData());
+		EWOL_TODO("generate signal of change color : " << _msg.getData());
 		markToRedraw();
 	}
 }

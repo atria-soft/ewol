@@ -12,6 +12,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Composer.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -74,8 +75,8 @@ namespace ewol {
 		class FileChooser : public ewol::widget::Composer {
 			public:
 				// Event list of properties
-				static const char* const eventCancel;
-				static const char* const eventValidate;
+				ewol::object::Signal<void> signalCancel;
+				ewol::object::Signal<std::string> signalValidate;
 			protected:
 				FileChooser();
 				void init();

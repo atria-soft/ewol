@@ -31,6 +31,7 @@ namespace ewol {
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
 #include <ewol/translate.h>
+#include <ewol/object/Signal.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
@@ -713,9 +714,9 @@ namespace ewol {
 		 */
 		public:
 			// event generated :
-			static const char* const eventAnnimationStart; //!< event when start annimation
-			static const char* const eventAnnimationRatio; //!< event when % of annimation change (integer)
-			static const char* const eventAnnimationStop;  //!< event when stop annimation
+			ewol::object::Signal<void> signalAnnimationStart; //!< event when start annimation
+			ewol::object::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
+			ewol::object::Signal<void> signalAnnimationStop;  //!< event when stop annimation
 		protected:
 			enum annimationMode {
 				annimationModeEnableAdd,

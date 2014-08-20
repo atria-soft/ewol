@@ -15,10 +15,9 @@
 #undef __class__
 #define __class__ "Label"
 
-const char * const ewol::widget::Label::eventPressed = "pressed";
-
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :
+  signalPressed(*this, "pressed"),
   m_label(*this, "value", U"", "displayed value string"),
   m_colorProperty(nullptr),
   m_colorDefaultFgText(-1),
@@ -29,7 +28,6 @@ ewol::widget::Label::Label() :
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
-	addEventId(eventPressed);
 	setCanHaveFocus(false);
 	setMouseLimit(1);
 }
@@ -126,7 +124,7 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	if (1 == _event.getId()) {
 		if (ewol::key::statusSingle == _event.getStatus()) {
 			// nothing to do ...
-			generateEventId(eventPressed);
+			signalPressed.emit(shared_from_this());
 			return true;
 		}
 	}

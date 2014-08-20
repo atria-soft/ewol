@@ -30,9 +30,8 @@ extern "C" {
 #define __class__ "FileChooser"
 
 
-const char * const ewol::widget::FileChooser::eventCancel     = "cancel";
-const char * const ewol::widget::FileChooser::eventValidate   = "validate";
-
+static const char * const ewolEventFileChooserCancel           = "ewol-event-file-chooser-cancel";
+static const char * const ewolEventFileChooserValidate         = "ewol-event-file-chooser-validate";
 static const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
 static const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
 static const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
@@ -44,10 +43,10 @@ static const char * const ewolEventFileChooserListFileValidate = "ewol-event-fil
 static const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
-ewol::widget::FileChooser::FileChooser() {
+ewol::widget::FileChooser::FileChooser() :
+  signalCancel(*this, "cancel"),
+  signalValidate(*this, "validate") {
 	addObjectType("ewol::widget::FileChooser");
-	addEventId(eventCancel);
-	addEventId(eventValidate);
 }
 
 void ewol::widget::FileChooser::init() {
@@ -107,8 +106,8 @@ void ewol::widget::FileChooser::init() {
 	      + "</popup>";
 	loadFromString(myDescription);
 	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file", "value", ewolEventFileChooserHidenFileChange);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-validate", "pressed", eventValidate);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-cancel", "pressed", eventCancel);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-validate", "pressed", ewolEventFileChooserValidate);
+	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-cancel", "pressed", ewolEventFileChooserCancel);
 	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "folder-validate", ewolEventFileChooserListFolder);
 	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-files", "file-select", ewolEventFileChooserListFile);
 	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-files", "file-validate", ewolEventFileChooserListFileValidate);
@@ -163,9 +162,9 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		m_file = _msg.getData();
 		// update the selected file in the list :
 		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
-	} else if (eventCancel == _msg.getMessage()) {
+	} else if (ewolEventFileChooserCancel == _msg.getMessage()) {
 		// == > Auto remove ...
-		generateEventId(_msg.getMessage());
+		signalCancel.emit(shared_from_this());
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventFileChooserHidenFileChange) {
 		if (_msg.getData() == "true") {
@@ -187,16 +186,16 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		setFileName(_msg.getData());
 		std::string tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
-		generateEventId(_msg.getMessage(), tmpFileCompleatName);
+		// TODO : generateEventId(_msg.getMessage(), tmpFileCompleatName);
 	} else if(     _msg.getMessage() == ewolEventFileChooserListFileValidate 
-	           || (_msg.getMessage() == eventValidate && m_file != "" )
+	           || (_msg.getMessage() == ewolEventFileChooserValidate && m_file != "" )
 	           || (_msg.getMessage() == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the file  == > generate a validate
 		if (_msg.getData() != "") {
 			setFileName(_msg.getData());
 		}
 		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
-		generateEventId(eventValidate, getCompleateFileName());
+		signalValidate.emit(shared_from_this(), getCompleateFileName());
 		autoDestroy();
 	} else if(_msg.getMessage() == ewolEventFileChooserHome) {
 		std::string tmpUserFolder = etk::getUserHomeFolder();

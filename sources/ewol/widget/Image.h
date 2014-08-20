@@ -16,6 +16,7 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/resource/ColorFile.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -25,7 +26,7 @@ namespace ewol {
 		class Image :public ewol::Widget {
 			public:
 				// Event list of properties
-				static const char * const eventPressed;
+				ewol::object::Signal<void> signalPressed;
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
 				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property

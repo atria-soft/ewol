@@ -22,17 +22,13 @@ extern "C" {
 #undef __class__
 #define __class__	"ColorChooser"
 
-
-const char * const ewol::widget::ColorChooser::eventChange = "change";
-
-
 static const char * const eventColorBarHasChange          = "event-color-bar-has-change";
 static const char * const eventColorSpecificHasChange     = "event-color-specific-has-change";
 
 
-ewol::widget::ColorChooser::ColorChooser() {
+ewol::widget::ColorChooser::ColorChooser() :
+  signalChange(*this, "change") {
 	addObjectType("ewol::widget::ColorChooser");
-	addEventId(eventChange);
 }
 
 void ewol::widget::ColorChooser::init() {
@@ -140,7 +136,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 		if (nullptr != m_widgetAlpha) {
 			m_widgetAlpha->setValue(m_currentColor.a());
 		}
-		generateEventId(eventChange, m_currentColor.getString());
+		signalChange.emit(shared_from_this(), m_currentColor);
 	} else if (eventColorSpecificHasChange == _msg.getMessage()) {
 		// Slider has changes his color  == > get the one change ...
 		if (_msg.getCaller() == m_widgetRed) {
@@ -158,7 +154,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 		if (nullptr != m_widgetColorBar) {
 			m_widgetColorBar->setCurrentColor(m_currentColor);
 		}
-		generateEventId(eventChange, m_currentColor.getString());
+		signalChange.emit(shared_from_this(), m_currentColor);
 	}
 };
 

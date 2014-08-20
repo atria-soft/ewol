@@ -30,12 +30,12 @@ namespace ewol {
 		class Button : public ewol::widget::Container2 {
 			public:
 				// Event list of properties
-				ewol::object::Signal<int> signalPressed;
+				ewol::object::Signal<void> signalPressed;
 				ewol::object::Signal<void> signalDown;
 				ewol::object::Signal<void> signalUp;
 				ewol::object::Signal<void> signalEnter;
 				ewol::object::Signal<void> signalLeave;
-				ewol::object::Signal<void> signalValue;
+				ewol::object::Signal<bool> signalValue;
 				enum buttonLock{
 					lockNone, //!< normal status of the button
 					lockWhenPressed, //!< When the state is set in pressed, the status stay in this one

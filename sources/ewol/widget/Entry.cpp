@@ -29,11 +29,10 @@ const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-sele
 #define STATUS_HOVER     (1)
 #define STATUS_SELECTED  (2)
 
-const char * const ewol::widget::Entry::eventClick  = "click";
-const char * const ewol::widget::Entry::eventEnter  = "enter";
-const char * const ewol::widget::Entry::eventModify = "modify";
-
 ewol::widget::Entry::Entry() :
+  signalClick(*this, "click", "the user Click on the Entry box"),
+  signalEnter(*this, "enter", "The cursor enter inside the button"),
+  signalModify(*this, "modify", "Entry box value change"),
   m_shaper(*this, "shaper", "Shaper to display the background"),
   m_data(*this, "value", "", "Value display in the entry (decorated text)"),
   m_maxCharacter(*this, "max", 0x7FFFFFFF, 0, 0x7FFFFFFF, "Maximum cgar that can be set on the Entry"),
@@ -46,9 +45,6 @@ ewol::widget::Entry::Entry() :
   m_textWhenNothing(*this, "emptytext", "", "Text that is displayed when the Entry is empty (decorated text)") {
 	addObjectType("ewol::widget::Entry");
 	setCanHaveFocus(true);
-	addEventId(eventClick);
-	addEventId(eventEnter);
-	addEventId(eventModify);
 	shortCutAdd("ctrl+w", ewolEventEntryClean);
 	shortCutAdd("ctrl+x", ewolEventEntryCut);
 	shortCutAdd("ctrl+c", ewolEventEntryCopy);
@@ -244,7 +240,7 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 	if (1 == _event.getId()) {
 		if (ewol::key::statusSingle == _event.getStatus()) {
 			keepFocus();
-			generateEventId(eventClick);
+			signalClick.emit(shared_from_this());
 			//nothing to do ...
 			return true;
 		} else if (ewol::key::statusDouble == _event.getStatus()) {
@@ -335,13 +331,11 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 	if (_event.getType() == ewol::key::keyboardChar) {
 		if(_event.getStatus() == ewol::key::statusDown) {
-			//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
-			//return GenEventInputExternal(eventEnter, -1, -1);
 			// remove curent selected data ...
 			removeSelected();
 			if(    _event.getChar() == '\n'
 			    || _event.getChar() == '\r') {
-				generateEventId(eventEnter, m_data);
+				signalEnter.emit(shared_from_this(), m_data);
 				return true;
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
@@ -371,7 +365,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 					}
 				}
 			}
-			generateEventId(eventModify, m_data);
+			signalModify.emit(shared_from_this(), m_data);
 			markToRedraw();
 			return true;
 		}
@@ -443,7 +437,7 @@ void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipbo
 			markToRedraw();
 		}
 	}
-	generateEventId(eventModify, m_data);
+	signalModify.emit(shared_from_this(), m_data);
 }
 
 
@@ -458,7 +452,7 @@ void ewol::widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
 	} else if(_msg.getMessage() == ewolEventEntryCut) {
 		copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
 		removeSelected();
-		generateEventId(eventModify, m_data);
+		signalModify.emit(shared_from_this(), m_data);
 	} else if(_msg.getMessage() == ewolEventEntryCopy) {
 		copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
 	} else if(_msg.getMessage() == ewolEventEntryPaste) {

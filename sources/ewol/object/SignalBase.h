@@ -36,13 +36,16 @@ namespace ewol {
 				 */
 				virtual ~SignalBase() { };
 				
-				const std::string& getName() {
+				const std::string& getName() const {
 					return m_name;
 				}
-				const std::string& getDescription() {
+				const std::string& getDescription() const {
 					return m_description;
 				}
+				virtual void connect(std::shared_ptr<ewol::Object> _obj, const char* _destId=nullptr, const std::string& _data="" ) = 0;
+				virtual void release(std::shared_ptr<ewol::Object> _obj) = 0;
 		};
+		std::ostream& operator <<(std::ostream& _os, const SignalBase& _obj);
 	};
 };
 #endif

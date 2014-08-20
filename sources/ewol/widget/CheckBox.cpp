@@ -9,13 +9,6 @@
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/Manager.h>
 
-const char* const ewol::widget::CheckBox::eventPressed    = "pressed";
-const char* const ewol::widget::CheckBox::eventDown       = "down";
-const char* const ewol::widget::CheckBox::eventUp         = "up";
-const char* const ewol::widget::CheckBox::eventEnter      = "enter";
-const char* const ewol::widget::CheckBox::eventValue      = "value";
-
-
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
@@ -26,6 +19,11 @@ const char* const ewol::widget::CheckBox::eventValue      = "value";
 
 
 ewol::widget::CheckBox::CheckBox() :
+  signalPressed(*this, "pressed", "CheckBox is pressed"),
+  signalDown(*this, "down", "CheckBox is DOWN"),
+  signalUp(*this, "up", "CheckBox is UP"),
+  signalEnter(*this, "enter", "The cursor enter inside the CheckBox"),
+  signalValue(*this, "value", "CheckBox value change"),
   m_shaper(*this, "shaper", "The display name for config file"),
   m_mouseHover(false),
   m_buttonPressed(false),
@@ -35,12 +33,6 @@ ewol::widget::CheckBox::CheckBox() :
   m_shaperIdSizeInsize(-1),
   m_value(*this, "value", false, "Basic value of the widget") {
 	addObjectType("ewol::widget::CheckBox");
-	// add basic Event generated :
-	addEventId(eventPressed);
-	addEventId(eventDown);
-	addEventId(eventUp);
-	addEventId(eventEnter);
-	addEventId(eventValue);
 	
 	m_shaperIdSize = m_shaper->requestConfig("box-size");
 	m_shaperIdSizeInsize = m_shaper->requestConfig("box-inside");
@@ -135,24 +127,24 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(ewol::key::statusDown == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << eventDown);
-				generateEventId(eventDown);
+				EWOL_VERBOSE(getName() << " : Generate event : " << signalDown);
+				signalDown.emit(shared_from_this());
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(ewol::key::statusUp == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << eventUp);
-				generateEventId(eventUp);
+				EWOL_VERBOSE(getName() << " : Generate event : " << signalUp);
+				signalUp.emit(shared_from_this());
 				m_buttonPressed = false;
 				markToRedraw();
 			}
 			if(ewol::key::statusSingle == _event.getStatus()) {
 				// inverse value :
 				setValue((m_value)?false:true);
-				EWOL_VERBOSE(getName() << " : Generate event : " << eventPressed);
-				generateEventId(eventPressed);
-				EWOL_VERBOSE(getName() << " : Generate event : " << eventValue << " val=" << m_value );
-				generateEventId(eventValue, etk::to_string(m_value.get()));
+				EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
+				signalPressed.emit(shared_from_this());
+				EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value );
+				signalValue.emit(shared_from_this(), m_value.get());
 				markToRedraw();
 			}
 		}
@@ -170,7 +162,7 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 	if(    _event.getType() == ewol::key::keyboardChar
 	    && _event.getStatus() == ewol::key::statusDown
 	    && _event.getChar() == '\r') {
-		generateEventId(eventEnter);
+		signalEnter.emit(shared_from_this());
 		return true;
 	}
 	return false;

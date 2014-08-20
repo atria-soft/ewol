@@ -23,11 +23,9 @@ std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::s
 #undef __class__
 #define __class__ "WSlider"
 
-// Event list of properties
-const char* const ewol::widget::WSlider::eventStartSlide = "ewol-widget-wslider-event-start-slide";
-const char* const ewol::widget::WSlider::eventStopSlide = "ewol-widget-wslider-event-stop-slide";
-
 ewol::widget::WSlider::WSlider() :
+  signalStartSlide(*this, "start"),
+  signalStopSlide(*this, "stop"),
   m_windowsSources(0),
   m_windowsDestination(0),
   m_windowsRequested(-1),
@@ -36,8 +34,6 @@ ewol::widget::WSlider::WSlider() :
   m_transitionSpeed(*this, "speed", 1.0f, 0.0f, 200.0f, "Transition speed of the slider"),
   m_transitionSlide(*this, "mode", sladingTransitionHori, "Transition mode of the slider") {
 	addObjectType("ewol::widget::WSlider");
-	addEventId(eventStartSlide);
-	addEventId(eventStopSlide);
 	m_transitionSlide.add(sladingTransitionVert, "vert");
 	m_transitionSlide.add(sladingTransitionHori, "hori");
 }
@@ -105,7 +101,7 @@ void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
 	}
 	if (_id != m_windowsDestination) {
 		m_windowsRequested = _id;
-		generateEventId(eventStartSlide);
+		signalStartSlide.emit(shared_from_this());
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -189,7 +185,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 		} else {
 			// end of periodic :
 			periodicCallDisable();
-			generateEventId(eventStopSlide);
+			signalStopSlide.emit(shared_from_this());
 		}
 		m_windowsRequested = -1;
 	}

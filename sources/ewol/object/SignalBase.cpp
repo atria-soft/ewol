@@ -21,3 +21,9 @@ ewol::object::SignalBase::SignalBase(ewol::object::SignalList& _objectLink,
 	// add a reference on the current signal ...
 	m_objectLink.signalAdd(this);
 }
+
+std::ostream& ewol::object::operator <<(std::ostream& _os, const ewol::object::SignalBase& _obj) {
+	_os << _obj.getName();
+	return _os;
+}
+

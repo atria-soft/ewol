@@ -20,19 +20,17 @@
 
 #undef __class__
 #define __class__ "Parameter"
-
-const char * const ewol::widget::Parameter::eventClose = "close";
-
 static const char * const ewolEventParameterValidate = "ewol-event-parameter-validate";
 static const char * const ewolEventParameterSave     = "ewol-event-parameter-save";
 static const char * const l_eventMenuSelected = "local-event-menu-selected";
+static const char * const ewolEventMenuclosed = "local-event-menu-closed";
 
 ewol::widget::Parameter::Parameter() :
+  signalClose(*this, "close"),
   m_currentIdList(0),
   m_widgetTitle(),
   m_paramList() {
 	addObjectType("ewol::widget::Parameter");
-	addEventId(eventClose);
 }
 
 void ewol::widget::Parameter::init() {
@@ -106,7 +104,7 @@ void ewol::widget::Parameter::init() {
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->registerOnEvent(shared_from_this(), "pressed", eventClose);
+				tmpButton->registerOnEvent(shared_from_this(), "pressed", ewolEventMenuclosed);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 		}
@@ -200,9 +198,9 @@ void ewol::widget::Parameter::setTitle(std::string _label) {
 void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg) {
 	ewol::widget::PopUp::onReceiveMessage(_msg);
 	EWOL_DEBUG("event on the parameter : " << _msg);
-	if (_msg.getMessage() == eventClose) {
+	if (_msg.getMessage() == ewolEventMenuclosed) {
 		// inform that the parameter windows is closed
-		generateEventId(eventClose);
+		signalClose.emit(shared_from_this());
 		// close this widget ...
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventParameterSave) {

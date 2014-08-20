@@ -13,6 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,8 +23,8 @@ namespace ewol {
 		class WSlider :public ewol::widget::ContainerN {
 			public:
 				// Event list of properties
-				static const char* const eventStartSlide;
-				static const char* const eventStopSlide;
+				ewol::object::Signal<void> signalStartSlide;
+				ewol::object::Signal<void> signalStopSlide;
 				enum sladingMode {
 					sladingTransitionVert,
 					sladingTransitionHori,

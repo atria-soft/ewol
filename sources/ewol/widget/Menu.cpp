@@ -60,6 +60,8 @@ int32_t ewol::widget::Menu::addTitle(std::string _label,
 	return add(-1, _label, _image, _generateEvent, _message);
 }
 
+static const char* eventButtonPressed = "menu-local-pressed";
+
 int32_t ewol::widget::Menu::add(int32_t _parent,
                                 std::string _label,
                                 std::string _image,
@@ -95,7 +97,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
 		// keep the specific event ...
-		myButton->registerOnEvent(shared_from_this(), ewol::widget::Button::eventPressed, widget::Button::eventPressed);
+		myButton->registerOnEvent(shared_from_this(), "pressed", eventButtonPressed);
 		tmpObject.m_widgetPointer = myButton;
 	}
 	m_listElement.push_back(tmpObject);
@@ -114,7 +116,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 	}
 	*/
 	EWOL_ERROR(" receive message : " << _msg);
-	if (_msg.getMessage() == ewol::widget::Button::eventPressed) {
+	if (_msg.getMessage() == eventButtonPressed) {
 		for (auto &it : m_listElement) {
 			if (_msg.getCaller() == it.m_widgetPointer.lock()) {
 				// 2 posible case (have a message or have a child ...
@@ -215,7 +217,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 										}
 									}
 									// set the image if one is present ...
-									myButton->registerOnEvent(shared_from_this(), ewol::widget::Button::eventPressed, widget::Button::eventPressed);
+									myButton->registerOnEvent(shared_from_this(), "pressed", eventButtonPressed);
 									myButton->setExpand(bvec2(true,false));
 									myButton->setFill(bvec2(true,false));
 									// add it in the widget list
