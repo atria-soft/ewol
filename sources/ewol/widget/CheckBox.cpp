@@ -200,7 +200,7 @@ void ewol::widget::CheckBox::onParameterChangeValue(const ewol::object::Paramete
 	if (_paramPointer == m_shaper) {
 		markToRedraw();
 	} else if (_paramPointer == m_value) {
-		if (m_value == false) {
+		if (m_value.get() == false) {
 			m_idWidgetDisplayed = convertId(0);
 		} else {
 			m_idWidgetDisplayed = convertId(1);

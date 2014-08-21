@@ -623,20 +623,19 @@ const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
 	return m_colorProperty->get(_id);
 }
 
+namespace etk {
+	template<> std::string to_string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+		return _obj.getSource();
+	}
+	template<> std::u32string to_u32string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+		return etk::to_u32string(etk::to_string(_obj));
+	}
+	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::string& _value) {
+		_variableRet.setSource(_value);
+		return true;
+	}
+	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::u32string& _value) {
+		return from_string(_variableRet,  etk::to_string(_value));
+	}
+};
 
-
-template<> std::string etk::to_string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
-	return _obj.getSource();
-}
-
-template<> std::u32string etk::to_u32string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
-	return etk::to_u32string(etk::to_string(_obj));
-}
-
-template<> bool etk::from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::string& _value) {
-	_variableRet.setSource(_value);
-	return true;
-}
-template<> bool etk::from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::u32string& _value) {
-	return from_string(_variableRet,  etk::to_string(_value));
-}

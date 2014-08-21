@@ -133,21 +133,21 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 				markToRedraw();
 			}
 			if(ewol::key::statusSingle == _event.getStatus()) {
-				if(    (    m_value == true
+				if(    (    m_value.get() == true
 				         && ewol::widget::Button::lockWhenPressed == m_lock)
-				    || (    m_value == false
+				    || (    m_value.get() == false
 				         && ewol::widget::Button::lockWhenReleased == m_lock) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
 					// inverse value :
-					setValue((m_value)?false:true);
+					setValue((m_value.get())?false:true);
 					EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
 					signalPressed.emit(shared_from_this());
 					EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value );
 					signalValue.emit(shared_from_this(), m_value.get());
-					if(    false == m_toggleMode
-					    && true == m_value) {
+					if(    m_toggleMode.get() == false
+					    && m_value.get() == true) {
 						setValue(false);
 						EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value);
 						signalValue.emit(shared_from_this(), m_value.get());
@@ -216,7 +216,7 @@ void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterR
 		markToRedraw();
 	} else if (_paramPointer == m_value) {
 		if (m_toggleMode == true) {
-			if (m_value == false) {
+			if (m_value.get() == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
@@ -243,20 +243,20 @@ void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterR
 		CheckStatus();
 		markToRedraw();
 	} else if (_paramPointer == m_toggleMode) {
-		if (m_value == true) {
-			m_value = false;
+		if (m_value.get() == true) {
+			m_value.get() = false;
 			// TODO : change display and send event ...
 		}
-		if (m_toggleMode == false) {
+		if (m_toggleMode.get() == false) {
 			m_idWidgetDisplayed = 0;
 		} else {
-			if (m_value == false) {
+			if (m_value.get() == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
 			}
 		}
-		if (m_enableSingle == true) {
+		if (m_enableSingle.get() == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {
