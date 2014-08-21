@@ -71,7 +71,7 @@ void ewol::object::MultiCast::send(const std::shared_ptr<ewol::Object>& _object,
 			if (obj != nullptr) {
 				EWOL_VERBOSE("        id = " << obj->getId() << " type=" << obj->getObjectType());
 				// generate event ... (create message before ...
-				ewol::object::Message tmpMsg(_object, it.m_message, _data);
+				ewol::object::Message tmpMsg(it.m_message, _data);
 				obj->onReceiveMessage(tmpMsg);
 			}
 		}
