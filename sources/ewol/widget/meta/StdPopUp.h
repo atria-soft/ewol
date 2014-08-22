@@ -76,8 +76,8 @@ namespace ewol {
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
 				std::shared_ptr<ewol::widget::Button> addButton(const std::string& _text, bool _autoExit=false);
-			public: // Derived function
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+			public: // callback function
+				void onCallBackButtonExit();
 		};
 	};
 };

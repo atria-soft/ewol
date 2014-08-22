@@ -182,7 +182,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				myColorChooser->setColor(m_textColorFg);
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
-				myColorChooser->registerOnEvent(shared_from_this(), "change", eventColorHasChange);
+				myColorChooser->signalChange.bind(shared_from_this(), &ewol::widget::ButtonColor::onCallbackColorChange);
 				std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
 				if (currentWindows == nullptr) {
 					EWOL_ERROR("Can not get the curent Windows...");
@@ -209,8 +209,11 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 	return m_mouseHover;
 }
 
+void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color) {
+	setValue(_color);
+}
 
-void ewol::widget::ButtonColor::setValue(etk::Color<> _color) {
+void ewol::widget::ButtonColor::setValue(const etk::Color<>& _color) {
 	m_textColorFg = _color;
 	markToRedraw();
 }

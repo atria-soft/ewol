@@ -51,6 +51,7 @@ namespace ewol {
 				void onCallbackColorChangeGreen(const int32_t& _newColor);
 				void onCallbackColorChangeBlue(const int32_t& _newColor);
 				void onCallbackColorChangeAlpha(const int32_t& _newColor);
+				void onCallbackColorChange(const etk::Color<>& _newColor);
 		};
 	};
 };

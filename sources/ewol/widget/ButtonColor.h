@@ -63,7 +63,7 @@ namespace ewol {
 				 * @brief Specify the current color.
 				 * @param[in] _color The new display color.
 				 */
-				void setValue(etk::Color<> _color);
+				void setValue(const etk::Color<>& _color);
 			protected: // Derived function
 				virtual void onDraw();
 			public: // Derived function
@@ -79,6 +79,8 @@ namespace ewol {
 				void changeStatusIn(int32_t _newStatusId);
 				// Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
+				// Callback function:
+				void onCallbackColorChange(const etk::Color<>& _color);
 		};
 	};
 };

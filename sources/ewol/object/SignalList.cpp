@@ -45,7 +45,8 @@ void ewol::object::SignalList::registerOnObjectEvent(const std::shared_ptr<ewol:
                                                      const char * _eventId,
                                                      const char * _eventIdgenerated,
                                                      const std::string& _overloadData) {
-	ewol::object::Manager& tmp = ewol::getContext().getEObjectManager();
+	EWOL_TODO("RegisterOnEvent ... + name");
+	/*ewol::object::Manager& tmp = ewol::getContext().getEObjectManager();
 	std::shared_ptr<ewol::Object> tmpObject = tmp.getObjectNamed(_objectName);
 	if (nullptr != tmpObject) {
 		EWOL_DEBUG("Find widget named : '" << _objectName << "' register event='" << _eventId << "'");
@@ -53,12 +54,15 @@ void ewol::object::SignalList::registerOnObjectEvent(const std::shared_ptr<ewol:
 	} else {
 		EWOL_WARNING(" Can not register event : '" << _eventId << "' the object named='" << _objectName << "' does not exist");
 	}
+	*/
 }
 
 void ewol::object::SignalList::registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
                                                const char * _eventId,
                                                const char * _eventIdgenerated,
                                                const std::string& _overloadData) {
+	EWOL_TODO("RegisterOnEvent ...");
+	/*
 	if (_destinationObject == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;
@@ -93,10 +97,13 @@ void ewol::object::SignalList::registerOnEvent(const std::shared_ptr<ewol::Objec
 		EWOL_ERROR("Can not register event on this event=\"" << _eventId << "\"  == > unknow event");
 		return;
 	}
+	*/
 }
 
 void ewol::object::SignalList::unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
                                                  const char * _eventId) {
+	EWOL_TODO("unRegisterOnEvent ...");
+	/*
 	if (_destinationObject == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;
@@ -111,4 +118,5 @@ void ewol::object::SignalList::unRegisterOnEvent(const std::shared_ptr<ewol::Obj
 			it->release(_destinationObject);
 		}
 	}
+	*/
 }

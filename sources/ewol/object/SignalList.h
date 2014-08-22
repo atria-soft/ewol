@@ -67,14 +67,14 @@ namespace ewol {
 				void registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
 				                     const char * _eventId,
 				                     const char * _eventIdgenerated = nullptr,
-				                     const std::string& _overloadData = "");
+				                     const std::string& _overloadData = "") __attribute__ ((deprecated));
 				/**
 				 * @brief Un-Register an Object over an other.
 				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
 				 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
 				 */
 				void unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-				                       const char * _eventId = nullptr);
+				                       const char * _eventId = nullptr) __attribute__ ((deprecated));
 				/**
 				 * @brief Receive a message from an other Object with a specific eventId and data
 				 * @param[in] _msg Message handle

@@ -95,8 +95,18 @@ namespace ewol {
 				std::string getCompleateFileName();
 				void updateCurrentFolder();
 			public: // Derived function
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onGetFocus();
+			private:
+				// callback functions:
+				void onCallbackEntryFolderChangeValue(const std::string& _value);
+				void onCallbackEntryFileChangeValue(const std::string& _value);
+				void onCallbackButtonCancelPressed();
+				void onCallbackHidenFileChangeChangeValue(const bool& _value);
+				void onCallbackListFolderSelectChange(const std::string& _value);
+				void onCallbackListFileSelectChange(const std::string& _value);
+				void onCallbackListFileValidate(const std::string& _value);
+				void onCallbackListValidate();
+				void onCallbackHomePressed();
 		};
 	};
 };

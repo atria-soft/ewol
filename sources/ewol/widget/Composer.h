@@ -58,6 +58,23 @@ namespace ewol {
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
 			protected:
+				// TODO : Create a template ...
+				#define composerBind(_type, _name, _event, _obj, _func) do {\
+					std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getObjectNamed(_name)); \
+					if (myObject != nullptr) { \
+						myObject->_event.bind(_obj, _func); \
+					} \
+				} while (false)
+				/*
+				template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+					if (obj2 == nullptr) {
+						EWOL_ERROR("Can not bind signal ...");
+						return;
+					}
+					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+				}
+				*/
 				/**
 				 * @brief Register an Event an named widget. @see registerOnEvent
 				 * @param[in] _subWidgetName Name of the subWidget.
@@ -69,8 +86,14 @@ namespace ewol {
 				void registerOnEventNameWidget(const std::string& _subWidgetName,
 				                               const char * _eventId,
 				                               const char * _eventIdgenerated = nullptr,
-				                               const std::string& _overloadData="");
+				                               const std::string& _overloadData="") __attribute__ ((deprecated));
 			public:
+				#define composerExternBind(_composer, _type, _name, _event, _obj, _func) do {\
+					std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_composer->getObjectNamed(_name)); \
+					if (myObject != nullptr) { \
+						myObject->_event.bind(_obj, _func); \
+					} \
+				} while (false)
 				/**
 				 * @brief Register an Event an named widget. @see registerOnEvent
 				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
@@ -84,7 +107,7 @@ namespace ewol {
 				                               const std::string& _subWidgetName,
 				                               const char * _eventId,
 				                               const char * _eventIdgenerated = nullptr,
-				                               const std::string& _overloadData="");
+				                               const std::string& _overloadData="") __attribute__ ((deprecated));
 		};
 	};
 };

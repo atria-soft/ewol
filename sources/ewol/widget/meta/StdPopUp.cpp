@@ -16,8 +16,6 @@
 #undef __class__
 #define __class__ "ewol::StdPopUp"
 
-static const char * const eventButtonExit = "ewol-event-pop-up-exit-button";
-
 ewol::widget::StdPopUp::StdPopUp() :
   m_title(nullptr),
   m_comment(nullptr),
@@ -107,17 +105,13 @@ std::shared_ptr<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const st
 	}
 	myButton->setSubWidget(ewol::widget::Label::create(_text));
 	if(_autoExit == true) {
-		myButton->registerOnEvent(shared_from_this(), "pressed", eventButtonExit);
+		myButton->signalPressed.bind(shared_from_this(), &ewol::widget::StdPopUp::onCallBackButtonExit);
 	}
 	m_subBar->subWidgetAdd(myButton);
 	markToRedraw();
 	return myButton;
 }
 
-void ewol::widget::StdPopUp::onReceiveMessage(const ewol::object::Message& _msg) {
-	// call parent:
-	ewol::widget::PopUp::onReceiveMessage(_msg);
-	if (_msg.getMessage() == eventButtonExit) {
-		autoDestroy();
-	}
+void ewol::widget::StdPopUp::onCallBackButtonExit() {
+	autoDestroy();
 }

@@ -42,7 +42,6 @@ namespace ewol {
 				const std::string& getDescription() const {
 					return m_description;
 				}
-				virtual void connect(std::shared_ptr<ewol::Object> _obj, const char* _destId=nullptr, const std::string& _data="" ) = 0;
 				virtual void release(std::shared_ptr<ewol::Object> _obj) = 0;
 		};
 		std::ostream& operator <<(std::ostream& _os, const SignalBase& _obj);

@@ -20,10 +20,6 @@
 
 #undef __class__
 #define __class__ "Parameter"
-static const char * const ewolEventParameterValidate = "ewol-event-parameter-validate";
-static const char * const ewolEventParameterSave     = "ewol-event-parameter-save";
-static const char * const l_eventMenuSelected = "local-event-menu-selected";
-static const char * const ewolEventMenuclosed = "local-event-menu-closed";
 
 ewol::widget::Parameter::Parameter() :
   signalClose(*this, "close"),
@@ -80,7 +76,7 @@ void ewol::widget::Parameter::init() {
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->registerOnEvent(shared_from_this(), "pressed", ewolEventParameterSave);
+				tmpButton->signalPressed.bind(shared_from_this(), &ewol::widget::Parameter::onCallbackParameterSave);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 			
@@ -104,7 +100,7 @@ void ewol::widget::Parameter::init() {
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->registerOnEvent(shared_from_this(), "pressed", ewolEventMenuclosed);
+				tmpButton->signalPressed.bind(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuclosed);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 		}
@@ -120,7 +116,7 @@ void ewol::widget::Parameter::init() {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 			
-				m_paramList->registerOnEvent(shared_from_this(), "select", l_eventMenuSelected);
+				m_paramList->signalSelect.bind(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuSelected);
 				m_paramList->setFill(bvec2(false,true));
 				m_paramList->setExpand(bvec2(false,true));
 				mySizerHori->subWidgetAdd(m_paramList);
@@ -195,26 +191,21 @@ void ewol::widget::Parameter::setTitle(std::string _label) {
 	m_widgetTitle->setLabel(_label);
 }
 
-void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg) {
-	ewol::widget::PopUp::onReceiveMessage(_msg);
-	EWOL_DEBUG("event on the parameter : " << _msg);
-	if (_msg.getMessage() == ewolEventMenuclosed) {
-		// inform that the parameter windows is closed
-		signalClose.emit();
-		// close this widget ...
-		autoDestroy();
-	} else if (_msg.getMessage() == ewolEventParameterSave) {
-		//ewol::userConfig::Save();
-		EWOL_TODO("Save Parameter !!! ");
-	} else if (_msg.getMessage() == l_eventMenuSelected) {
-		if (nullptr != m_wSlider) {
-			int32_t value = 0;
-			sscanf(_msg.getData().c_str(), "%d", &value);
-			EWOL_DEBUG("event on the parameter : " << _msg.getMessage() << " select ID=" << value << "");
-			m_wSlider->subWidgetSelectSet(value);
-		}
+void ewol::widget::Parameter::onCallbackMenuclosed() {
+	// inform that the parameter windows is closed
+	signalClose.emit();
+	// close this widget ...
+	autoDestroy();
+}
+void ewol::widget::Parameter::onCallbackParameterSave() {
+	//ewol::userConfig::Save();
+	EWOL_TODO("Save Parameter !!! ");
+}
+void ewol::widget::Parameter::onCallbackMenuSelected(const int32_t& _value) {
+	if (m_wSlider != nullptr) {
+		EWOL_DEBUG("event on the parameter : Menu-select select ID=" << _value << "");
+		m_wSlider->subWidgetSelectSet(_value);
 	}
-	return;
 }
 
 void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, std::shared_ptr<ewol::Widget> _associateWidget) {

@@ -34,7 +34,7 @@ void ewol::widget::ColorChooser::init() {
 	ewol::widget::Sizer::init(ewol::widget::Sizer::modeVert);
 	lockExpand(bvec2(true,true));
 		m_widgetColorBar = ewol::widget::ColorBar::create();
-			m_widgetColorBar->registerOnEvent(shared_from_this(), "change", eventColorBarHasChange);
+			m_widgetColorBar->signalChange.bind(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChange);
 			m_widgetColorBar->setFill(bvec2(true,true));
 			subWidgetAdd(m_widgetColorBar);
 		
@@ -159,6 +159,13 @@ void ewol::widget::ColorChooser::onCallbackColorChangeBlue(const int32_t& _newCo
 }
 void ewol::widget::ColorChooser::onCallbackColorChangeAlpha(const int32_t& _newColor) {
 	m_currentColor.setA(_newColor);
+	if (nullptr != m_widgetColorBar) {
+		m_widgetColorBar->setCurrentColor(m_currentColor);
+	}
+	signalChange.emit(m_currentColor);
+}
+void ewol::widget::ColorChooser::onCallbackColorChange(const etk::Color<>& _newColor) {
+	m_currentColor = _newColor;
 	if (nullptr != m_widgetColorBar) {
 		m_widgetColorBar->setCurrentColor(m_currentColor);
 	}
