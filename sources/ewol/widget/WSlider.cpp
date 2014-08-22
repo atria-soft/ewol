@@ -101,7 +101,7 @@ void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
 	}
 	if (_id != m_windowsDestination) {
 		m_windowsRequested = _id;
-		signalStartSlide.emit(shared_from_this());
+		signalStartSlide.emit();
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -185,7 +185,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 		} else {
 			// end of periodic :
 			periodicCallDisable();
-			signalStopSlide.emit(shared_from_this());
+			signalStopSlide.emit();
 		}
 		m_windowsRequested = -1;
 	}

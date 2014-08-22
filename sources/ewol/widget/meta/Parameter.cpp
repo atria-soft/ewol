@@ -200,7 +200,7 @@ void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg
 	EWOL_DEBUG("event on the parameter : " << _msg);
 	if (_msg.getMessage() == ewolEventMenuclosed) {
 		// inform that the parameter windows is closed
-		signalClose.emit(shared_from_this());
+		signalClose.emit();
 		// close this widget ...
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventParameterSave) {

@@ -124,7 +124,7 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	if (1 == _event.getId()) {
 		if (ewol::key::statusSingle == _event.getStatus()) {
 			// nothing to do ...
-			signalPressed.emit(shared_from_this());
+			signalPressed.emit();
 			return true;
 		}
 	}

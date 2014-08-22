@@ -107,7 +107,7 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 			m_value = std::max(std::min(m_value, m_max), m_min);
 			if (oldValue != m_value) {
 				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
-				signalChange.emit(shared_from_this(), m_value);
+				signalChange.emit(m_value);
 				markToRedraw();
 			}
 			return true;

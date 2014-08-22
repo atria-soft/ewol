@@ -556,7 +556,7 @@ bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
 						sendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					}
 					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
-					ewol::object::Message tmpMsg(shared_from_this(), m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					ewol::object::Message tmpMsg(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					onReceiveMessage(tmpMsg);
 				} // no else
 				return true;

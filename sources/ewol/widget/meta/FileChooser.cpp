@@ -164,7 +164,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
 	} else if (ewolEventFileChooserCancel == _msg.getMessage()) {
 		// == > Auto remove ...
-		signalCancel.emit(shared_from_this());
+		signalCancel.emit();
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventFileChooserHidenFileChange) {
 		if (_msg.getData() == "true") {
@@ -195,7 +195,7 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 			setFileName(_msg.getData());
 		}
 		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
-		signalValidate.emit(shared_from_this(), getCompleateFileName());
+		signalValidate.emit(getCompleateFileName());
 		autoDestroy();
 	} else if(_msg.getMessage() == ewolEventFileChooserHome) {
 		std::string tmpUserFolder = etk::getUserHomeFolder();

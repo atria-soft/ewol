@@ -144,10 +144,10 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 			}
 			markToRedraw();
 			if(ewol::key::statusDown == typeEvent) {
-				signalEnable.emit(shared_from_this());
+				signalEnable.emit();
 			} else {
 				std::string tmp = std::string("distance=") + std::string(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
-				signalMove.emit(shared_from_this(), m_angle+M_PI/2);
+				signalMove.emit(m_angle+M_PI/2);
 			}
 			//teta += M_PI/2;
 			//EWOL_DEBUG("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
@@ -163,7 +163,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 				m_distance = 0;
 			}
 			markToRedraw();
-			signalDisable.emit(shared_from_this());
+			signalDisable.emit();
 			return true;
 		}
 		return false;

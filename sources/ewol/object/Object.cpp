@@ -63,7 +63,7 @@ ewol::Object::~Object() {
 
 void ewol::Object::init() {
 	getObjectManager().add(shared_from_this());
-	parameterDisplay();
+	//parameterDisplay();
 	m_objectHasBeenInit = true;
 }
 

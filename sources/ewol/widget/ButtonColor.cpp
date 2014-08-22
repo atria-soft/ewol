@@ -225,7 +225,7 @@ void ewol::widget::ButtonColor::onReceiveMessage(const ewol::object::Message& _m
 	if (_msg.getMessage() == eventColorHasChange) {
 		m_textColorFg = _msg.getData();
 		// TODO : set a proper call
-		//signalChange.emit(shared_from_this(), _msg.getData());
+		//signalChange.emit(_msg.getData());
 		EWOL_TODO("generate signal of change color : " << _msg.getData());
 		markToRedraw();
 	}

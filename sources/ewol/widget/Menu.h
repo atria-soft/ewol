@@ -13,6 +13,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/widget/Button.h>
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/ContextMenu.h>
 
@@ -55,6 +56,8 @@ namespace ewol {
 				void addSpacer();
 				// Derived function
 				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+			private:
+				void onButtonPressed(std::weak_ptr<ewol::widget::Button> _button);
 		};
 	};
 };

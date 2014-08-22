@@ -220,7 +220,7 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 			}
 			if(m_currentColor != estimateColor) {
 				m_currentColor = estimateColor;
-				signalChange.emit(shared_from_this(), m_currentColor);
+				signalChange.emit(m_currentColor);
 			}
 			return true;
 		}

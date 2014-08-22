@@ -128,13 +128,13 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 		if (1 == _event.getId()) {
 			if(ewol::key::statusDown == _event.getStatus()) {
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalDown);
-				signalDown.emit(shared_from_this());
+				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(ewol::key::statusUp == _event.getStatus()) {
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalUp);
-				signalUp.emit(shared_from_this());
+				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
@@ -142,9 +142,9 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 				// inverse value :
 				setValue((m_value)?false:true);
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
-				signalPressed.emit(shared_from_this());
+				signalPressed.emit();
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value );
-				signalValue.emit(shared_from_this(), m_value.get());
+				signalValue.emit(m_value.get());
 				markToRedraw();
 			}
 		}
@@ -162,7 +162,7 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 	if(    _event.getType() == ewol::key::keyboardChar
 	    && _event.getStatus() == ewol::key::statusDown
 	    && _event.getChar() == '\r') {
-		signalEnter.emit(shared_from_this());
+		signalEnter.emit();
 		return true;
 	}
 	return false;

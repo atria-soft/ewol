@@ -61,13 +61,13 @@ namespace ewol {
 				 * @param[in] _func Link on the fuction that might be called (inside a class)
 				 * @example signalXXXX.connect(shared_from_this(), &ClassName::onCallbackXXX);
 				 */
-				template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&)) {
+				template<class TYPE, typename... Args> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&), Args... args) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, args...)));
 				}
 				/**
 				 * @brief Advanced binding a callback function to the current signal.
@@ -180,13 +180,13 @@ namespace ewol {
 				 * @param[in] _func Link on the fuction that might be called (inside a class)
 				 * @example signalXXXX.connect(shared_from_this(), &ClassName::onCallbackXXX);
 				 */
-				template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+				template<class TYPE, typename... Args> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(), Args... args) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), args...)));
 				}
 				/**
 				 * @brief Advanced binding a callback function to the current signal.

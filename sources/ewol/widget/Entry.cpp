@@ -240,7 +240,7 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 	if (1 == _event.getId()) {
 		if (ewol::key::statusSingle == _event.getStatus()) {
 			keepFocus();
-			signalClick.emit(shared_from_this());
+			signalClick.emit();
 			//nothing to do ...
 			return true;
 		} else if (ewol::key::statusDouble == _event.getStatus()) {
@@ -335,7 +335,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 			removeSelected();
 			if(    _event.getChar() == '\n'
 			    || _event.getChar() == '\r') {
-				signalEnter.emit(shared_from_this(), m_data);
+				signalEnter.emit(m_data);
 				return true;
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
@@ -365,7 +365,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 					}
 				}
 			}
-			signalModify.emit(shared_from_this(), m_data);
+			signalModify.emit(m_data);
 			markToRedraw();
 			return true;
 		}
@@ -437,7 +437,7 @@ void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipbo
 			markToRedraw();
 		}
 	}
-	signalModify.emit(shared_from_this(), m_data);
+	signalModify.emit(m_data);
 }
 
 
@@ -452,7 +452,7 @@ void ewol::widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
 	} else if(_msg.getMessage() == ewolEventEntryCut) {
 		copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
 		removeSelected();
-		signalModify.emit(shared_from_this(), m_data);
+		signalModify.emit(m_data);
 	} else if(_msg.getMessage() == ewolEventEntryCopy) {
 		copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
 	} else if(_msg.getMessage() == ewolEventEntryPaste) {

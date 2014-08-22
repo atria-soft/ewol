@@ -47,6 +47,10 @@ namespace ewol {
 				std::shared_ptr<ewol::widget::Slider> m_widgetBlue;
 				std::shared_ptr<ewol::widget::Slider> m_widgetAlpha;
 				etk::Color<> m_currentColor;
+				void onCallbackColorChangeRed(const int32_t& _newColor);
+				void onCallbackColorChangeGreen(const int32_t& _newColor);
+				void onCallbackColorChangeBlue(const int32_t& _newColor);
+				void onCallbackColorChangeAlpha(const int32_t& _newColor);
 		};
 	};
 };

@@ -190,7 +190,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
 			if (m_list[rawID]!=nullptr) {
 				if (m_list[rawID]->m_refId >= 0) {
-					signalSelect.emit(shared_from_this(), m_list[rawID]->m_refId);
+					signalSelect.emit(m_list[rawID]->m_refId);
 					m_idSelected = rawID;
 					markToRedraw();
 					return true;

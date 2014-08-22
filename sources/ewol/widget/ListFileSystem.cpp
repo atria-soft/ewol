@@ -185,21 +185,21 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				if(    m_showFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
-					signalFolderSelect.emit(shared_from_this(), ".");
+					signalFolderSelect.emit(".");
 				} else if (    m_showFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
-					signalFolderSelect.emit(shared_from_this(), "..");
+					signalFolderSelect.emit("..");
 				} else if(    m_selectedLine-offset  >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && nullptr != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
-							signalFileSelect.emit(shared_from_this(), m_list[m_selectedLine-offset]->getNameFile());
+							signalFileSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						case etk::FSN_FOLDER :
-							signalFolderSelect.emit(shared_from_this(), m_list[m_selectedLine-offset]->getNameFile());
+							signalFolderSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
 							EWOL_ERROR("Can not generate event on an unknow type");
@@ -210,20 +210,20 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				if(    m_showFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
-					signalFolderValidate.emit(shared_from_this(), ".");
+					signalFolderValidate.emit(".");
 				} else if (    m_showFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
-					signalFolderValidate.emit(shared_from_this(), "..");
+					signalFolderValidate.emit("..");
 				} else if(    m_selectedLine-offset >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && nullptr != m_list[m_selectedLine-offset] ) {
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
-							signalFileValidate.emit(shared_from_this(), m_list[m_selectedLine-offset]->getNameFile());
+							signalFileValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						case etk::FSN_FOLDER :
-							signalFolderValidate.emit(shared_from_this(), m_list[m_selectedLine-offset]->getNameFile());
+							signalFolderValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
 							EWOL_ERROR("Can not generate event on an unknow type");
