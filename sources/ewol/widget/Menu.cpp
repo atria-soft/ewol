@@ -18,7 +18,8 @@
 #undef __class__
 #define __class__ "Menu"
 
-ewol::widget::Menu::Menu() {
+ewol::widget::Menu::Menu() :
+  signalSelect(*this, "select") {
 	addObjectType("ewol::widget::Menu");
 	m_staticId = 0;
 }
@@ -55,9 +56,8 @@ void ewol::widget::Menu::clear() {
 
 int32_t ewol::widget::Menu::addTitle(std::string _label,
                                      std::string _image,
-                                     const char * _generateEvent,
                                      const std::string _message) {
-	return add(-1, _label, _image, _generateEvent, _message);
+	return add(-1, _label, _image, _message);
 }
 
 static const char* eventButtonPressed = "menu-local-pressed";
@@ -65,14 +65,12 @@ static const char* eventButtonPressed = "menu-local-pressed";
 int32_t ewol::widget::Menu::add(int32_t _parent,
                                 std::string _label,
                                 std::string _image,
-                                const char *_generateEvent,
                                 const std::string _message) {
 	ewol::widget::MenuElement tmpObject;
 	tmpObject.m_localId = m_staticId++;
 	tmpObject.m_parentId = _parent;
 	tmpObject.m_label = std::string("<left>") + _label + "</left>";
 	tmpObject.m_image = _image;
-	tmpObject.m_generateEvent = _generateEvent;
 	tmpObject.m_message = _message;
 	if (-1 == tmpObject.m_parentId) {
 		std::shared_ptr<ewol::widget::Button> myButton = ewol::widget::Button::create();
@@ -116,10 +114,10 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 	for (auto &it : m_listElement) {
 		if (caller == it.m_widgetPointer.lock()) {
 			// 2 posible case (have a message or have a child ...
-			if (it.m_generateEvent != nullptr) {
+			if (it.m_message.size() > 0) {
 				EWOL_DEBUG("Menu  == > generate Event");
 				// Send a multicast event ...
-				sendMultiCast(it.m_generateEvent, it.m_message);
+				signalSelect.emit(it.m_message);
 				std::shared_ptr<ewol::widget::ContextMenu> tmpContext = m_widgetContextMenu.lock();
 				if (tmpContext != nullptr) {
 					EWOL_DEBUG("Mark the menu to remove ...");

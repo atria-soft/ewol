@@ -18,6 +18,8 @@
 
 namespace ewol {
 	namespace object {
+		#undef __class__
+		#define __class__ "object::Signal<T>"
 		template<typename T> class Signal : public SignalBase {
 			private:
 				std::vector<std::pair<std::weak_ptr<ewol::Object>,
@@ -46,7 +48,7 @@ namespace ewol {
 				 * @brief Bind a callback function to the current signal (generic methis (simplest))
 				 * @param[in] _obj Shared pointer on the caller object
 				 * @param[in] _func Link on the fuction that might be called (inside a class)
-				 * @example signalXXXX.connect(shared_from_this(), &ClassName::onCallbackXXX);
+				 * @example signalXXXX.bind(shared_from_this(), &ClassName::onCallbackXXX);
 				 */
 				template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&)) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
@@ -89,11 +91,13 @@ namespace ewol {
 							EWOL_VERBOSE("    nullptr dest");
 							continue;
 						}
+						EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "] data='" << etk::to_string(_data) << "'");
 						it.second(_data);
 					}
 				}
 		};
-		
+		#undef __class__
+		#define __class__ "object::Signal<void>"
 		template<> class Signal<void> : public SignalBase {
 			private:
 				std::vector<std::pair<std::weak_ptr<ewol::Object>, std::function<void()>>> m_callerList;
@@ -161,11 +165,13 @@ namespace ewol {
 							EWOL_VERBOSE("    nullptr dest");
 							continue;
 						}
+						EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "] BANG!!!");
 						it.second();
 					}
 				}
 		};
-		
+		#undef __class__
+		#define __class__ nullptr
 	};
 };
 #endif

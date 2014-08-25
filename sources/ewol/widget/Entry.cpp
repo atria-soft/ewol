@@ -44,27 +44,32 @@ ewol::widget::Entry::Entry() :
   m_displayCursorPosSelection(0),
   m_textWhenNothing(*this, "emptytext", "", "Text that is displayed when the Entry is empty (decorated text)") {
 	addObjectType("ewol::widget::Entry");
-	setCanHaveFocus(true);
-	shortCutAdd("ctrl+w", ewolEventEntryClean);
-	shortCutAdd("ctrl+x", ewolEventEntryCut);
-	shortCutAdd("ctrl+c", ewolEventEntryCopy);
-	shortCutAdd("ctrl+v", ewolEventEntryPaste);
-	shortCutAdd("ctrl+a", ewolEventEntrySelect, "ALL");
-	shortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
-	m_regExp.setString(".*");
-	markToRedraw();
 }
-
 
 void ewol::widget::Entry::init(const std::string& _newData) {
 	ewol::Widget::init();
 	m_data.set(_newData);
 	m_shaper.setString("THEME:GUI:Entry.json");
+	setCanHaveFocus(true);
+	m_regExp.setString(".*");
+	markToRedraw();
+	
+	shortCutAdd("ctrl+w", "clean");
+	shortCutAdd("ctrl+x", "cut");
+	shortCutAdd("ctrl+c", "copy");
+	shortCutAdd("ctrl+v", "paste");
+	shortCutAdd("ctrl+a", "select:all");
+	shortCutAdd("ctrl+shift+a", "select:none");
+	signalShortcut.bind(shared_from_this(), &ewol::widget::Entry::onCallbackShortCut);
 }
 
 
 ewol::widget::Entry::~Entry() {
 	
+}
+
+void ewol::widget::Entry::onCallbackShortCut(const std::string& _value) {
+	EWOL_WARNING("Event from ShortCut : " << _value);
 }
 
 void ewol::widget::Entry::calculateMinMaxSize() {

@@ -100,16 +100,12 @@ namespace ewol {
 	 */
 	class EventShortCut {
 		public:
-			bool broadcastEvent; //!< if it is true, then the message is sent to all the system
-			const char* generateEventId; //!< Local generated event
-			std::string eventData; //!< data link with the event
+			std::string message; //!< data link with the event
 			ewol::key::Special specialKey; //!< special board key
 			char32_t unicodeValue; //!< 0 if not used
 			enum ewol::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut() {
-				broadcastEvent = false;
-				generateEventId = nullptr;
-				eventData = "";
+				message = "";
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::key::keyboardUnknow;
 			};
@@ -585,19 +581,18 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
+		public:
+			ewol::object::Signal<std::string> signalShortcut; //!< signal handle of the message
 		private:
 			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
 			/**
 			 * @brief add a specific shortcut with his description
 			 * @param[in] _descriptiveString Description string of the shortcut
-			 * @param[in] _generateEventId Event generic of the element
-			 * @param[in] _data Associate data wit the event
+			 * @param[in] _message massage to generate (or shortcut name)
 			 */
-			virtual void shortCutAdd(const char * _descriptiveString,
-			                         const char * _generateEventId,
-			                         std::string _data="",
-			                         bool _broadcast=false);
+			virtual void shortCutAdd(const std::string& _descriptiveString,
+			                         const std::string& _message="");
 			/**
 			 * @brief remove all curent shortCut
 			 */

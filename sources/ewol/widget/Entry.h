@@ -176,6 +176,8 @@ namespace ewol {
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+			private: // callback functions
+				void onCallbackShortCut(const std::string& _value);
 		};
 	};
 };
