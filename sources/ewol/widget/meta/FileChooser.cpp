@@ -95,17 +95,17 @@ void ewol::widget::FileChooser::init() {
 	      + "	</sizer>\n"
 	      + "</popup>";
 	loadFromString(myDescription);
-	composerBind(ewol::widget::CheckBox, "[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file", signalValue, shared_from_this(), &ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue);
-	composerBind(ewol::widget::Button, "[" + etk::to_string(getId()) + "]file-shooser:button-validate", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackListValidate);
-	composerBind(ewol::widget::Button, "[" + etk::to_string(getId()) + "]file-shooser:button-cancel", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackButtonCancelPressed);
-	composerBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-folder", signalFolderValidate, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFolderSelectChange);
-	composerBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-files", signalFileSelect, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileSelectChange);
-	composerBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-files", signalFileValidate, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileValidate);
-	composerBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-file", signalModify, shared_from_this(), &ewol::widget::FileChooser::onCallbackEntryFileChangeValue);
-	composerBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-file", signalEnter, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileValidate);
-	composerBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-folder", signalModify, shared_from_this(), &ewol::widget::FileChooser::onCallbackEntryFolderChangeValue);
+	subBind(ewol::widget::CheckBox, "[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file", signalValue, shared_from_this(), &ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue);
+	subBind(ewol::widget::Button, "[" + etk::to_string(getId()) + "]file-shooser:button-validate", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackListValidate);
+	subBind(ewol::widget::Button, "[" + etk::to_string(getId()) + "]file-shooser:button-cancel", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackButtonCancelPressed);
+	subBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-folder", signalFolderValidate, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFolderSelectChange);
+	subBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-files", signalFileSelect, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileSelectChange);
+	subBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-files", signalFileValidate, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileValidate);
+	subBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-file", signalModify, shared_from_this(), &ewol::widget::FileChooser::onCallbackEntryFileChangeValue);
+	subBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-file", signalEnter, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileValidate);
+	subBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-folder", signalModify, shared_from_this(), &ewol::widget::FileChooser::onCallbackEntryFolderChangeValue);
 	//composerBind(ewol::widget::CheckBox, "[" + etk::to_string(getId()) + "]file-shooser:entry-folder", signalEnter, shared_from_this(), &ewol::widget::FileChooser::);
-	composerBind(ewol::widget::Image, "[" + etk::to_string(getId()) + "]file-shooser:img-home", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackHomePressed);
+	subBind(ewol::widget::Image, "[" + etk::to_string(getId()) + "]file-shooser:img-home", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackHomePressed);
 	// set the default Folder properties:
 	updateCurrentFolder();
 	setCanHaveFocus(true);

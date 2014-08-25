@@ -40,71 +40,8 @@ std::vector<std::string> ewol::object::SignalList::signalGetAll() const {
 	return out;
 }
 
-void ewol::object::SignalList::registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-                                                     const std::string& _objectName,
-                                                     const char * _eventId,
-                                                     const char * _eventIdgenerated,
-                                                     const std::string& _overloadData) {
-	EWOL_TODO("RegisterOnEvent ... + name");
-	/*ewol::object::Manager& tmp = ewol::getContext().getEObjectManager();
-	std::shared_ptr<ewol::Object> tmpObject = tmp.getObjectNamed(_objectName);
-	if (nullptr != tmpObject) {
-		EWOL_DEBUG("Find widget named : '" << _objectName << "' register event='" << _eventId << "'");
-		tmpObject->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
-	} else {
-		EWOL_WARNING(" Can not register event : '" << _eventId << "' the object named='" << _objectName << "' does not exist");
-	}
-	*/
-}
-
-void ewol::object::SignalList::registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-                                               const char * _eventId,
-                                               const char * _eventIdgenerated,
-                                               const std::string& _overloadData) {
-	EWOL_TODO("RegisterOnEvent ...");
-	/*
-	if (_destinationObject == nullptr) {
-		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
-		return;
-	}
-	if (_eventId == nullptr) {
-		EWOL_ERROR("Input ERROR nullptr pointer Event Id...");
-		return;
-	}
-	if (    _eventId[0] == '*'
-	     && _eventId[1] == '\0') {
-		EWOL_VERBOSE("Register on all event ...");
-		for(auto &it : m_list) {
-			if (it == nullptr) {
-				continue;
-			}
-			it->connect(_destinationObject, _eventIdgenerated, _overloadData);
-		}
-		return;
-	}
-	// check if event existed :
-	bool findIt = false;
-	for(auto &it : m_list) {
-		if (it == nullptr) {
-			continue;
-		}
-		if (it->getName() == _eventId) {
-			findIt = true;
-			it->connect(_destinationObject, _eventIdgenerated, _overloadData);
-		}
-	}
-	if (false == findIt) {
-		EWOL_ERROR("Can not register event on this event=\"" << _eventId << "\"  == > unknow event");
-		return;
-	}
-	*/
-}
-
-void ewol::object::SignalList::unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-                                                 const char * _eventId) {
-	EWOL_TODO("unRegisterOnEvent ...");
-	/*
-	if (_destinationObject == nullptr) {
+void ewol::object::SignalList::unBindAll(const std::shared_ptr<ewol::Object>& _object) {
+	if (_object == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;
 	}
@@ -112,11 +49,6 @@ void ewol::object::SignalList::unRegisterOnEvent(const std::shared_ptr<ewol::Obj
 		if (it == nullptr) {
 			continue;
 		}
-		if (    it->getName() == _eventId
-		     || (    _eventId[0] == '*'
-		          && _eventId[1] == '\0') ) {
-			it->release(_destinationObject);
-		}
+		it->release(_object);
 	}
-	*/
 }

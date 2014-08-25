@@ -41,40 +41,11 @@ namespace ewol {
 				 */
 				std::vector<std::string> signalGetAll() const;
 				/**
-				 * @brief Register an Event an named widget. @see registerOnEvent
-				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-				 * @param[in] _objectName Name of the object.
-				 * @param[in] _eventId Event generate inside the object.
-				 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
-				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
-				 * @note : To used when NOT herited from this object.
+				 * @brief Remove binding on all event class.
+				 * @param[in] _object Object to unlink.
 				 */
-				// TODO : Change name : registerOnSignal
-				void registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-				                           const std::string& _objectName,
-				                           const char * _eventId,
-				                           const char * _eventIdgenerated = nullptr,
-				                           const std::string& _overloadData="");
-				
+				void unBindAll(const std::shared_ptr<ewol::Object>& _object);
 			public:
-				/**
-				 * @brief Register an Object over an other to get event on the second...
-				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-				 * @param[in] _eventId Event generate inside the object (note : "*" event register on all event generated )
-				 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
-				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
-				 */
-				void registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-				                     const char * _eventId,
-				                     const char * _eventIdgenerated = nullptr,
-				                     const std::string& _overloadData = "") __attribute__ ((deprecated));
-				/**
-				 * @brief Un-Register an Object over an other.
-				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-				 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
-				 */
-				void unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-				                       const char * _eventId = nullptr) __attribute__ ((deprecated));
 				/**
 				 * @brief Receive a message from an other Object with a specific eventId and data
 				 * @param[in] _msg Message handle

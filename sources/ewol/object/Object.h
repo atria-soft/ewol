@@ -21,7 +21,6 @@ namespace ewol {
 	class Object;
 	namespace object {
 		class Manager;
-		class MultiCast;
 	};
 	class Context;
 };
@@ -138,21 +137,6 @@ namespace ewol {
 			int32_t getId(){
 				return m_uniqueId;
 			};
-			// TODO : Remove this section :
-		protected:
-			/**
-			 * @brief generate Multicast event on all Object requested the event
-			 * @param[in] _messageId Event Id that is generated
-			 * @param[in] _data String that is send at all the destinations
-			 */
-			// TODO : Remove this ... Not really needed : user can simply create an object and send event with it ...
-			void sendMultiCast(const char* const _messageId, const std::string& _data = "");
-			/**
-			 * @brief Register of the arrival of a Multicast message
-			 * @param[in] _messageId Event Id waiting for...
-			 */
-			// TODO : Remove this ...
-			void registerMultiCast(const char* const _messageId);
 		public:
 			// TODO : Rework the position on this function ... This is a convignet function ...
 			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
@@ -195,11 +179,6 @@ namespace ewol {
 			 */
 			ewol::object::Manager& getObjectManager() const;
 			/**
-			 * @breif get the current Object Message Multicast manager.
-			 * @return the requested object manager.
-			 */
-			ewol::object::MultiCast& getMultiCast() const;
-			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
@@ -228,10 +207,56 @@ namespace ewol {
 			 * @return the requested object or nullptr
 			 */
 			std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName) const;
+			/**
+			 * @brief Retrive an object with his name (in the global list)
+			 * @param[in] _name Name of the object
+			 * @return the requested object or nullptr
+			 */
+			virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+		protected:
+			// TODO : Create a template ...
+			/**
+			 * @brief link on an signal in the subwiget with his name
+			 */
+			#define subBind(_type, _name, _event, _obj, _func) do {\
+				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
+				if (myObject != nullptr) { \
+					myObject->_event.bind(_obj, _func); \
+				} \
+			} while (false)
+			/*
+			template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+				if (obj2 == nullptr) {
+					EWOL_ERROR("Can not bind signal ...");
+					return;
+				}
+				m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+			}
+			*/
 	};
 	
 };
 
+/**
+ * @brief link on an signal in the global object list with his name
+ */
+#define globalBind(_type, _name, _event, _obj, _func) do {\
+	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
+	if (myObject != nullptr) { \
+		myObject->_event.bind(_obj, _func); \
+	} \
+} while (false)
+
+/**
+ * @brief link on an signal in the subWidget of an object with his name
+ */
+#define externSubBind(_object, _type, _name, _event, _obj, _func) do {\
+	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
+	if (myObject != nullptr) { \
+		myObject->_event.bind(_obj, _func); \
+	} \
+} while (false)
 //#include <ewol/object/Signal.h>
 
 #endif

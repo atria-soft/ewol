@@ -11,7 +11,6 @@
 
 #include <etk/types.h>
 #include <ewol/object/Object.h>
-#include <ewol/object/MultiCast.h>
 #include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
@@ -19,7 +18,6 @@ namespace ewol {
 	namespace object {
 		class Manager {
 			private:
-				std::vector<ewol::object::RemoveEvent*> m_removeEventList;
 				std::vector<std::weak_ptr<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;
 			public:
@@ -47,15 +45,6 @@ namespace ewol {
 				void cleanInternalRemoved();
 				
 				std::shared_ptr<ewol::Object> get(const std::string& _name);
-			private:
-				ewol::object::MultiCast m_multiCast; //!< muticast manager
-			public:
-				ewol::object::MultiCast& multiCast() {
-					return m_multiCast;
-				};
-				
-				void add(ewol::object::RemoveEvent* _class);
-				void rm(ewol::object::RemoveEvent* _class);
 			
 			public:
 				/**

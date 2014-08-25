@@ -88,25 +88,3 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 	requestUpdateSize();
 	return true;
 }
-
-
-void ewol::widget::Composer::registerOnEventNameWidget(const std::string& _subWidgetName,
-                                                       const char * _eventId,
-                                                       const char * _eventIdgenerated,
-                                                       const std::string& _overloadData) {
-	registerOnEventNameWidget(shared_from_this(), _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
-}
-
-void ewol::widget::Composer::registerOnEventNameWidget(const std::shared_ptr<ewol::Object>& _destinationObject,
-                                                       const std::string& _subWidgetName,
-                                                       const char * _eventId,
-                                                       const char * _eventIdgenerated,
-                                                       const std::string& _overloadData) {
-	std::shared_ptr<ewol::Widget> tmpWidget = getWidgetNamed(_subWidgetName);
-	if (tmpWidget != nullptr) {
-		EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
-		tmpWidget->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
-	} else {
-		EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");
-	}
-}

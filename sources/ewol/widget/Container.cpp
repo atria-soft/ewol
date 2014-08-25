@@ -64,13 +64,13 @@ void ewol::widget::Container::subWidgetUnLink() {
 	m_subWidget.reset();
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::Container::getWidgetNamed(const std::string& _widgetName) {
-	std::shared_ptr<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
-	if (nullptr!=tmpUpperWidget) {
-		return tmpUpperWidget;
+std::shared_ptr<ewol::Object> ewol::widget::Container::getSubObjectNamed(const std::string& _objectName) {
+	std::shared_ptr<ewol::Object> tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
+	if (nullptr!=tmpObject) {
+		return tmpObject;
 	}
 	if (nullptr != m_subWidget) {
-		return m_subWidget->getWidgetNamed(_widgetName);
+		return m_subWidget->getSubObjectNamed(_objectName);
 	}
 	return nullptr;
 }

@@ -532,12 +532,6 @@ namespace ewol {
 				}
 				return nullptr;
 			};
-			/**
-			 * @brief get the widget if it have this name or one of the subwidget with the same name
-			 * @param[in] _widgetName name of the widget
-			 * @return the requested pointer on the node (or nullptr pointer)
-			 */
-			virtual std::shared_ptr<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:

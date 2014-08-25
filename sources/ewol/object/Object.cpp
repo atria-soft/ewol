@@ -10,7 +10,6 @@
 #include <ewol/object/Manager.h>
 #include <ewol/debug.h>
 #include <ewol/context/Context.h>
-#include <ewol/object/MultiCast.h>
 
 #undef __class__
 #define __class__ "Object"
@@ -107,76 +106,6 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 	return false;
 }
 
-/*
-
-void ewol::Object::addEventId(const char * _generateEventId) {
-	for (auto &it : m_availlableEventId) {
-		if (std::string(it) == _generateEventId) {
-			EWOL_WARNING("Event already existed : '" << it << "' == '" << _generateEventId << "'");
-			return;
-		}
-	}
-	if (_generateEventId != nullptr) {
-		m_availlableEventId.push_back(_generateEventId);
-	}
-}
-
-void ewol::Object::generateEventId(const char * _generateEventId, const std::string& _data) {
-	if (m_objectHasBeenInit == false) {
-		EWOL_WARNING("try to generate an event inside a constructor");
-		return;
-	}
-	int32_t nbObject = getObjectManager().getNumberObject();
-	EWOL_VERBOSE("try send message '" << _generateEventId << "'");
-	// for every element registered ...
-	for (auto &it : m_externEvent) {
-		// if we find the event ...
-		if (it.localEventId != _generateEventId) {
-			EWOL_VERBOSE("    wrong event '" << it.localEventId << "' != '" << _generateEventId << "'");
-			continue;
-		}
-		std::shared_ptr<ewol::Object> destObject = it.destObject.lock();
-		if (destObject == nullptr) {
-			EWOL_VERBOSE("    nullptr dest");
-			continue;
-		}
-		if (it.overloadData.size() <= 0){
-			ewol::object::Message tmpMsg(shared_from_this(), it.destEventId, _data);
-			EWOL_VERBOSE("send message " << tmpMsg);
-			destObject->onReceiveMessage(tmpMsg);
-		} else {
-			// set the user requested data ...
-			ewol::object::Message tmpMsg(shared_from_this(), it.destEventId, it.overloadData);
-			EWOL_VERBOSE("send message " << tmpMsg);
-			destObject->onReceiveMessage(tmpMsg);
-		}
-	}
-	if (nbObject > getObjectManager().getNumberObject()) {
-		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->removObject() which is asynchronous");
-	}
-}
-*/
-
-void ewol::Object::sendMultiCast(const char* const _messageId, const std::string& _data) {
-	if (m_objectHasBeenInit == false) {
-		EWOL_WARNING("try to generate an multicast event inside a constructor");
-		return;
-	}
-	int32_t nbObject = getObjectManager().getNumberObject();
-	getMultiCast().send(shared_from_this(), _messageId, _data);
-	if (nbObject > getObjectManager().getNumberObject()) {
-		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->removObject() which is asynchronous");
-	}
-}
-
-void ewol::Object::registerMultiCast(const char* const _messageId) {
-	if (m_objectHasBeenInit == false) {
-		EWOL_ERROR("Try to Register multicast inside a constructor (move it in the init function)");
-		return;
-	}
-	getMultiCast().add(shared_from_this(), _messageId);
-}
-
 bool ewol::Object::loadXML(exml::Element* _node) {
 	if (nullptr == _node) {
 		return false;
@@ -219,13 +148,17 @@ ewol::object::Manager& ewol::Object::getObjectManager() const {
 	return tmp;
 }
 
-ewol::object::MultiCast& ewol::Object::getMultiCast() const {
-	return ewol::getContext().getEObjectManager().multiCast();
-}
-
 ewol::Context& ewol::Object::getContext() const {
 	return ewol::getContext();
 }
 std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) const {
 	return getObjectManager().getObjectNamed(_objectName);
 }
+
+std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string& _objectName) {
+	if (_objectName == m_name.get()) {
+		return shared_from_this();
+	}
+	return nullptr;
+}
+

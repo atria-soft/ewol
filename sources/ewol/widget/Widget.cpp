@@ -602,14 +602,6 @@ bool ewol::Widget::loadXML(exml::Element* _node) {
 	return true;
 }
 
-std::shared_ptr<ewol::Widget> ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} compare : " << getName() << " == " << _widgetName );
-	if (getName() == _widgetName) {
-		return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
-	}
-	return nullptr;
-}
-
 bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 	std::shared_ptr<ewol::Widget> up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
 	if (up != nullptr) {
