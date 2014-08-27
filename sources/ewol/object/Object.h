@@ -222,6 +222,8 @@ namespace ewol {
 				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
 					myObject->_event.bind(_obj, _func); \
+				} else { \
+					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
 			} while (false)
 			/*
@@ -245,6 +247,8 @@ namespace ewol {
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.bind(_obj, _func); \
+	} else { \
+		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
 
@@ -255,6 +259,8 @@ namespace ewol {
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.bind(_obj, _func); \
+	} else { \
+		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
 //#include <ewol/object/Signal.h>
