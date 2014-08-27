@@ -183,24 +183,27 @@ void ewol::widget::FileChooser::onCallbackListFolderSelectChange(const std::stri
 
 void ewol::widget::FileChooser::onCallbackListFileSelectChange(const std::string& _value) {
 	setFileName(_value);
+	/*
 	std::string tmpFileCompleatName = m_folder;
 	tmpFileCompleatName += m_file;
 	// TODO : generateEventId(_msg.getMessage(), tmpFileCompleatName);
+	*/
 }
 
 void ewol::widget::FileChooser::onCallbackListFileValidate(const std::string& _value) {
 	// select the file  == > generate a validate
 	setFileName(_value);
-	EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
+	EWOL_VERBOSE(" generate a fiel opening : '" << m_folder << "' / '" << m_file << "'");
 	signalValidate.emit(getCompleateFileName());
 	autoDestroy();
 }
 
 void ewol::widget::FileChooser::onCallbackListValidate() {
-	if (m_file != "" ) {
+	if (m_file == "" ) {
+		EWOL_WARNING(" Validate : '" << m_folder << "' / '" << m_file << "' ==> error No name ...");
 		return;
 	}
-	EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
+	EWOL_DEBUG(" generate a file opening : '" << m_folder << "' / '" << m_file << "'");
 	signalValidate.emit(getCompleateFileName());
 	autoDestroy();
 }

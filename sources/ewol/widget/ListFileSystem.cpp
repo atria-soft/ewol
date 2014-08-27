@@ -173,7 +173,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 		}
 	}
 	if (_typeEvent == ewol::key::statusSingle) {
-		EWOL_DEBUG("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
+		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;
 			if (_raw > (int32_t)m_list.size()+offset ) {

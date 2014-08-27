@@ -215,6 +215,7 @@ void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color
 
 void ewol::widget::ButtonColor::setValue(const etk::Color<>& _color) {
 	m_textColorFg = _color;
+	signalChange.emit(m_textColorFg);
 	markToRedraw();
 }
 
@@ -222,27 +223,12 @@ etk::Color<> ewol::widget::ButtonColor::getValue() {
 	return m_textColorFg;
 }
 
-
-void ewol::widget::ButtonColor::onReceiveMessage(const ewol::object::Message& _msg) {
-	EWOL_INFO("Receive MSG : " <<  _msg.getData());
-	if (_msg.getMessage() == eventColorHasChange) {
-		m_textColorFg = _msg.getData();
-		// TODO : set a proper call
-		//signalChange.emit(_msg.getData());
-		EWOL_TODO("generate signal of change color : " << _msg.getData());
-		markToRedraw();
-	}
-}
-
-
 void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
 	}
 }
-
-
 
 void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {

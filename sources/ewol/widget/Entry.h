@@ -166,7 +166,6 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 				virtual void calculateMinMaxSize();
 			protected: // Derived function
@@ -178,6 +177,11 @@ namespace ewol {
 				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			private: // callback functions
 				void onCallbackShortCut(const std::string& _value);
+				void onCallbackEntryClean();
+				void onCallbackCut();
+				void onCallbackCopy();
+				void onCallbackPaste();
+				void onCallbackSelect(bool _all);
 		};
 	};
 };

@@ -91,7 +91,14 @@ namespace ewol {
 							EWOL_VERBOSE("    nullptr dest");
 							continue;
 						}
-						EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "] data='" << etk::to_string(_data) << "'");
+						#ifdef DEBUG
+							ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
+							if (srcObject != nullptr) {
+								EWOL_DEBUG("emit signal : " << srcObject->getObjectType() << " '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " data='" << etk::to_string(_data) << "'");
+							} else {
+								EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " data='" << etk::to_string(_data) << "'");
+							}
+						#endif
 						it.second(_data);
 					}
 				}
@@ -165,7 +172,14 @@ namespace ewol {
 							EWOL_VERBOSE("    nullptr dest");
 							continue;
 						}
-						EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "] BANG!!!");
+						#ifdef DEBUG
+							ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
+							if (srcObject != nullptr) {
+								EWOL_DEBUG("emit signal : " << srcObject->getObjectType() << " '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " BANG!!!");
+							} else {
+								EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " BANG!!!");
+							}
+						#endif
 						it.second();
 					}
 				}

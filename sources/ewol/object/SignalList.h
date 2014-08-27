@@ -45,12 +45,6 @@ namespace ewol {
 				 * @param[in] _object Object to unlink.
 				 */
 				void unBindAll(const std::shared_ptr<ewol::Object>& _object);
-			public:
-				/**
-				 * @brief Receive a message from an other Object with a specific eventId and data
-				 * @param[in] _msg Message handle
-				 */
-				virtual void onReceiveMessage(const ewol::object::Message& _msg) { };
 		};
 	};
 };

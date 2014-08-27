@@ -55,8 +55,6 @@ namespace ewol {
 				int32_t addTitle(std::string _label, std::string _image="", const std::string _message = "");
 				int32_t add(int32_t _parent, std::string _label, std::string _image="", const std::string _message = "");
 				void addSpacer();
-				// Derived function
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			private:
 				void onButtonPressed(std::weak_ptr<ewol::widget::Button> _button);
 		};

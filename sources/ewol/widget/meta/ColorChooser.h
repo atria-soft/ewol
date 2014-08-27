@@ -35,8 +35,6 @@ namespace ewol {
 			public:
 				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
 				virtual ~ColorChooser();
-			public: // Derived function
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			public:
 				void setColor(etk::Color<> _newColor);
 				etk::Color<> getColor();

@@ -70,7 +70,6 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status

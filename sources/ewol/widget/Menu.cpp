@@ -235,9 +235,3 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 }
 
 
-void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
-	/*
-	*/
-}
-
-

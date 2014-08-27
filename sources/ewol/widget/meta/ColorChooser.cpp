@@ -109,33 +109,6 @@ etk::Color<> ewol::widget::ColorChooser::getColor() {
 	return m_currentColor;
 }
 
-
-void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _msg) {
-	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\"  == > data=\"" << data << "\"" );
-	if (eventColorBarHasChange == _msg.getMessage()) {
-		// == > colorBar has change ...
-		uint8_t tmpAlpha = m_currentColor.a();
-		// the colorbar has no notion of the alpha  == > keep it ...
-		if (nullptr != m_widgetColorBar) {
-			m_currentColor = m_widgetColorBar->getCurrentColor();
-		}
-		m_currentColor.setA(tmpAlpha);
-		if (nullptr != m_widgetRed) {
-			m_widgetRed->setValue(m_currentColor.r());
-		}
-		if (nullptr != m_widgetGreen) {
-			m_widgetGreen->setValue(m_currentColor.g());
-		}
-		if (nullptr != m_widgetBlue) {
-			m_widgetBlue->setValue(m_currentColor.b());
-		}
-		if (nullptr != m_widgetAlpha) {
-			m_widgetAlpha->setValue(m_currentColor.a());
-		}
-		signalChange.emit(m_currentColor);
-	}
-};
-
 void ewol::widget::ColorChooser::onCallbackColorChangeRed(const int32_t& _newColor) {
 	m_currentColor.setR(_newColor);
 	if (nullptr != m_widgetColorBar) {
@@ -166,8 +139,21 @@ void ewol::widget::ColorChooser::onCallbackColorChangeAlpha(const int32_t& _newC
 }
 void ewol::widget::ColorChooser::onCallbackColorChange(const etk::Color<>& _newColor) {
 	m_currentColor = _newColor;
-	if (nullptr != m_widgetColorBar) {
-		m_widgetColorBar->setCurrentColor(m_currentColor);
+	// == > colorBar has change ...
+	uint8_t tmpAlpha = m_currentColor.a();
+	m_currentColor = _newColor;
+	m_currentColor.setA(tmpAlpha);
+	if (nullptr != m_widgetRed) {
+		m_widgetRed->setValue(m_currentColor.r());
+	}
+	if (nullptr != m_widgetGreen) {
+		m_widgetGreen->setValue(m_currentColor.g());
+	}
+	if (nullptr != m_widgetBlue) {
+		m_widgetBlue->setValue(m_currentColor.b());
+	}
+	if (nullptr != m_widgetAlpha) {
+		m_widgetAlpha->setValue(m_currentColor.a());
 	}
 	signalChange.emit(m_currentColor);
 }

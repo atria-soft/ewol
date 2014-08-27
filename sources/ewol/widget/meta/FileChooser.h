@@ -24,21 +24,19 @@ namespace ewol {
 		 *  Fist global static declaration and inclusion:
 		 *  [code style=c++]
 		 *  #include <ewol/widget/meta/FileChooser.h>
-		 *  static const char* const g_eventOpenFile = "appl-local-event-open-file";
-		 *  static const char* const g_eventClosePopUp = "appl-local-event-close-pop-up";
 		 *  [/code]
 		 *  
-		 *  The first step is to create the file chooser pop-up :
+		 *  The first step is to create the file chooser pop-up : (never in the constructor!!!)
 		 *  [code style=c++]
-		 *  std::shared_ptr<ewol::widget::FileChooser> tmpWidget = ewol::object::makeShared(new ewol::Widget::FileChooser());
+		 *  std::shared_ptr<ewol::widget::FileChooser> tmpWidget = ewol::Widget::FileChooser::create();
 		 *  if (tmpWidget == nullptr) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;
 		 *  }
 		 *  // register on the Validate event:
-		 *  tmpWidget->registerOnEvent(this, "validate", g_eventOpenFile);
+		 *  tmpWidget->signalValidate.bind(shared_from_this(), &****::onCallbackOpenFile);
 		 *  // no need of this event watching ...
-		 *  tmpWidget->registerOnEvent(this, "cancel", g_eventClosePopUp);
+		 *  tmpWidget->signalCancel.bind(shared_from_this(), &****::onCallbackClosePopUp);
 		 *  // set the title:
 		 *   tmpWidget->setTitle("Open files ...");
 		 *  // Set the validate Label:
@@ -46,7 +44,7 @@ namespace ewol {
 		 *  // simply set a folder (by default this is the home folder)
 		 *  //tmpWidget->setFolder("/home/me");
 		 *  // add the widget as windows pop-up ...
-		 *  ewol::widget::Windows* tmpWindows = getWindows();
+		 *  std::shared_ptr<ewol::widget::Windows> tmpWindows = getWindows();
 		 *  if (tmpWindows == nullptr) {
 		 *  	APPL_ERROR("Can not get the current windows !!! ");
 		 *  	return -1;
@@ -57,17 +55,11 @@ namespace ewol {
 		 *  Now we just need to wait the the open event message.
 		 *  
 		 *  [code style=c++]
-		 *  void ********::onReceiveMessage(const ewol::object::Message& _msg) {
-		 *  	APPL_DEBUG("Receive Message: " << _msg );
-		 *  	if (_msg.getMessage() == g_eventOpenFile) {
-		 *  		APPL_INFO("Request open file : '" << _msg.getData() << "'");
-		 *  		return;
-		 *  	}
-		 *  	if (_msg.getMessage() == g_eventClosePopUp) {
-		 *  		APPL_INFO("The File chooser has been closed");
-		 *  		// generaly nothing to do ...
-		 *  		return;
-		 *  	}
+		 *  void ****::onCallbackOpenFile(const std::string& _value) {
+		 *  	APPL_INFO("Request open file : '" << _value << "'");
+		 *  }
+		 *  void ****::onCallbackClosePopUp() {
+		 *  	APPL_INFO("The File chooser has been closed");
 		 *  }
 		 *  [/code]
 		 *  This is the best example of a Meta-widget.

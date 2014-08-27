@@ -13,14 +13,6 @@
 #include <ewol/context/Context.h>
 #include <ewol/Padding.h>
 
-
-const char * const ewolEventEntryCut    = "ewol-widget-entry-event-internal-cut";
-const char * const ewolEventEntryCopy   = "ewol-widget-entry-event-internal-copy";
-const char * const ewolEventEntryPaste  = "ewol-widget-entry-event-internal-paste";
-const char * const ewolEventEntryClean  = "ewol-widget-entry-event-internal-clean";
-const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-select";
-
-
 #undef __class__
 #define __class__ "Entry"
 
@@ -52,6 +44,7 @@ void ewol::widget::Entry::init(const std::string& _newData) {
 	m_shaper.setString("THEME:GUI:Entry.json");
 	setCanHaveFocus(true);
 	m_regExp.setString(".*");
+	m_regExp.get().setMaximize(true);
 	markToRedraw();
 	
 	shortCutAdd("ctrl+w", "clean");
@@ -69,7 +62,21 @@ ewol::widget::Entry::~Entry() {
 }
 
 void ewol::widget::Entry::onCallbackShortCut(const std::string& _value) {
-	EWOL_WARNING("Event from ShortCut : " << _value);
+	if (_value == "clean") {
+		onCallbackEntryClean();
+	} else if (_value == "cut") {
+		onCallbackCut();
+	} else if (_value == "copy") {
+		onCallbackCopy();
+	} else if (_value == "paste") {
+		onCallbackPaste();
+	} else if (_value == "select:all") {
+		onCallbackSelect(true);
+	} else if (_value == "select:none") {
+		onCallbackSelect(false);
+	} else {
+		EWOL_WARNING("Unknow event from ShortCut : " << _value);
+	}
 }
 
 void ewol::widget::Entry::calculateMinMaxSize() {
@@ -407,7 +414,7 @@ void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 	std::string previous = m_data;
 	// check the RegExp :
 	if (_newData.size()>0) {
-		if (false == m_regExp->processOneElement(_newData,0,_newData.size()) ) {
+		if (false == m_regExp->parse(_newData,0,_newData.size()) ) {
 			EWOL_INFO("the input data does not match with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp->getRegExp() << "\" start=" << m_regExp->start() << " stop=" << m_regExp->stop() );
 			return;
 		}
@@ -445,32 +452,36 @@ void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipbo
 	signalModify.emit(m_data);
 }
 
+void ewol::widget::Entry::onCallbackEntryClean() {
+	m_data = "";
+	m_displayStartPosition = 0;
+	m_displayCursorPos = 0;
+	m_displayCursorPosSelection = m_displayCursorPos;
+	markToRedraw();
+}
 
-void ewol::widget::Entry::onReceiveMessage(const ewol::object::Message& _msg) {
-	ewol::Widget::onReceiveMessage(_msg);
-	if(_msg.getMessage() == ewolEventEntryClean) {
-		m_data = "";
-		m_displayStartPosition = 0;
-		m_displayCursorPos = 0;
+void ewol::widget::Entry::onCallbackCut() {
+	copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
+	removeSelected();
+	signalModify.emit(m_data);
+}
+
+void ewol::widget::Entry::onCallbackCopy() {
+	copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
+}
+
+void ewol::widget::Entry::onCallbackPaste() {
+	ewol::context::clipBoard::request(ewol::context::clipBoard::clipboardStd);
+}
+
+void ewol::widget::Entry::onCallbackSelect(bool _all) {
+	if(_all == true) {
+		m_displayCursorPosSelection = 0;
+		m_displayCursorPos = m_data->size();
+	} else {
 		m_displayCursorPosSelection = m_displayCursorPos;
-		markToRedraw();
-	} else if(_msg.getMessage() == ewolEventEntryCut) {
-		copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
-		removeSelected();
-		signalModify.emit(m_data);
-	} else if(_msg.getMessage() == ewolEventEntryCopy) {
-		copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
-	} else if(_msg.getMessage() == ewolEventEntryPaste) {
-		ewol::context::clipBoard::request(ewol::context::clipBoard::clipboardStd);
-	} else if(_msg.getMessage() == ewolEventEntrySelect) {
-		if(_msg.getData() == "ALL") {
-			m_displayCursorPosSelection = 0;
-			m_displayCursorPos = m_data->size();
-		} else {
-			m_displayCursorPosSelection = m_displayCursorPos;
-		}
-		markToRedraw();
 	}
+	markToRedraw();
 }
 
 void ewol::widget::Entry::markToUpdateTextPosition() {
