@@ -50,11 +50,13 @@ namespace ewol {
 				std::vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
 				std::weak_ptr<ewol::widget::ContextMenu> m_widgetContextMenu;
+				int32_t get(const std::string& _label);
 			public:
 				void clear();
-				int32_t addTitle(std::string _label, std::string _image="", const std::string _message = "");
-				int32_t add(int32_t _parent, std::string _label, std::string _image="", const std::string _message = "");
-				void addSpacer();
+				int32_t addTitle(const std::string& _label, const std::string& _image="", const std::string& _message = "");
+				int32_t add(int32_t _parent, const std::string& _label, const std::string& _image="", const std::string& _message = "");
+				int32_t addSpacer();
+				void remove(int32_t _id);
 			private:
 				void onButtonPressed(std::weak_ptr<ewol::widget::Button> _button);
 		};

@@ -21,7 +21,7 @@
 ewol::widget::Menu::Menu() :
   signalSelect(*this, "select") {
 	addObjectType("ewol::widget::Menu");
-	m_staticId = 0;
+	m_staticId = 666;
 }
 
 void ewol::widget::Menu::init() {
@@ -54,22 +54,36 @@ void ewol::widget::Menu::clear() {
 	m_listElement.clear();
 }
 
-int32_t ewol::widget::Menu::addTitle(std::string _label,
-                                     std::string _image,
-                                     const std::string _message) {
+int32_t ewol::widget::Menu::addTitle(const std::string& _label,
+                                     const std::string& _image,
+                                     const std::string& _message) {
 	return add(-1, _label, _image, _message);
 }
 
 static const char* eventButtonPressed = "menu-local-pressed";
 
+int32_t ewol::widget::Menu::get(const std::string& _label) {
+	for (auto &it : m_listElement) {
+		if (it.m_label == _label) {
+			return it.m_localId;
+		}
+	}
+	return -1;
+}
+
 int32_t ewol::widget::Menu::add(int32_t _parent,
-                                std::string _label,
-                                std::string _image,
-                                const std::string _message) {
+                                const std::string& _label,
+                                const std::string& _image,
+                                const std::string& _message) {
+	// try to find one already created :
+	int32_t previous = get(_label);
+	if (previous != -1) {
+		return previous;
+	}
 	ewol::widget::MenuElement tmpObject;
 	tmpObject.m_localId = m_staticId++;
 	tmpObject.m_parentId = _parent;
-	tmpObject.m_label = std::string("<left>") + _label + "</left>";
+	tmpObject.m_label = _label;
 	tmpObject.m_image = _image;
 	tmpObject.m_message = _message;
 	if (-1 == tmpObject.m_parentId) {
@@ -85,13 +99,12 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			} else {
 				composeString+="    <image src=\"" + tmpObject.m_image + "\" size=\"8,8mm\"/>\n";
 			}
-			composeString+="    <label>" + tmpObject.m_label + "</label>\n";
+			composeString+="    <label><left>" + tmpObject.m_label + "</left></label>\n";
 			composeString+="</sizer>\n";
 			myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String, composeString));
 		} else {
-			myButton->setSubWidget(ewol::widget::Label::create(tmpObject.m_label) );
+			myButton->setSubWidget(ewol::widget::Label::create("<left>" + tmpObject.m_label + "</left>") );
 		}
-		
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
 		// keep the specific event ...
@@ -102,8 +115,14 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 	return tmpObject.m_localId;
 }
 
-void ewol::widget::Menu::addSpacer() {
-	EWOL_TODO("NOT now...");
+void ewol::widget::Menu::remove(int32_t _id) {
+	EWOL_TODO("NOT remove...");
+}
+
+
+int32_t ewol::widget::Menu::addSpacer() {
+	EWOL_TODO("NOT addSpacer...");
+	return -1;
 }
 
 void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _button) {
@@ -188,7 +207,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 									} else {
 										composeString+="        <image src=\"" + it2->m_image + "\" size=\"8,8mm\"/>\n";
 									}
-									composeString+="        <label exand=\"true,true\" fill=\"true,true\">" + it2->m_label + "</label>\n";
+									composeString+="        <label exand=\"true,true\" fill=\"true,true\"><left>" + it2->m_label + "</left></label>\n";
 									composeString+="    </sizer>\n";
 									composeString+="</composer>\n";
 									myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String, composeString));
@@ -198,7 +217,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 										        std::string("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
 										        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
 										        "		<spacer min-size=\"8,0mm\"/>\n"
-										        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + it2->m_label + "]]></label>\n"
+										        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
 										        "	</sizer>\n"
 										        "</composer>\n"));
 									} else {
