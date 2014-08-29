@@ -597,6 +597,11 @@ namespace ewol {
 			 * @brief remove all curent shortCut
 			 */
 			virtual void shortCutClean();
+			/**
+			 * @brief remove a specific shortCut whith his event name
+			 * @param[in] _message renerated event name
+			 */
+			virtual void shortCutRemove(const std::string& _message);
 		public:
 			/**
 			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref onEventKb).

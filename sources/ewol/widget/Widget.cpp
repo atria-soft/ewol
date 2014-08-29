@@ -516,10 +516,25 @@ void ewol::Widget::shortCutAdd(const std::string& _descriptiveString, const std:
 	m_localShortcut.push_back(tmpElement);
 }
 
+void ewol::Widget::shortCutRemove(const std::string& _message) {
+	auto it(m_localShortcut.begin());
+	while(it != m_localShortcut.end()) {
+		if (    *it != nullptr
+		     && (*it)->message != _message) {
+			++it;
+			continue;
+		}
+		delete(*it);
+		*it = nullptr;
+		m_localShortcut.erase(it);
+		it = m_localShortcut.begin();
+	}
+}
+
 void ewol::Widget::shortCutClean() {
-	for (size_t iii=0; iii<m_localShortcut.size(); iii++) {
-		delete(m_localShortcut[iii]);
-		m_localShortcut[iii]=nullptr;
+	for (auto &it : m_localShortcut) {
+		delete(it);
+		it = nullptr;
 	}
 	m_localShortcut.clear();
 }
