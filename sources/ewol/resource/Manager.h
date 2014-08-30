@@ -14,7 +14,6 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/resource/Resource.h>
-#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	namespace resource {

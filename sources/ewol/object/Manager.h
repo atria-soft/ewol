@@ -11,7 +11,6 @@
 
 #include <etk/types.h>
 #include <ewol/object/Object.h>
-#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	class Context;

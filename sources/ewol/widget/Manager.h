@@ -14,7 +14,6 @@
 #include <vector>
 #include <etk/Hash.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/object/RemoveEvent.h>
 
 namespace ewol {
 	namespace widget {

@@ -10,7 +10,6 @@
 #define __EWOL_SYSTEM_INPUT_H__
 
 #include <ewol/widget/Widget.h>
-#include <ewol/object/RemoveEvent.h>
 
 #define MAX_MANAGE_INPUT (15)
 

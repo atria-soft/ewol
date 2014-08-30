@@ -10,7 +10,6 @@
 #define __EWOL_OBJECT_H__
 
 #include <etk/types.h>
-#include <etk/types.h>
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
@@ -25,7 +24,7 @@ namespace ewol {
 	class Context;
 };
 
-#include <ewol/object/Message.h>
+#include <ewol/debug.h>
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Param.h>
 #include <ewol/object/ParamRange.h>
