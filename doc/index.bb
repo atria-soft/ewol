@@ -7,10 +7,10 @@ EWOL, or Edn Widget OpenGl Layer, is a multi-platform library for creating graph
 ===Where can I use it?===
 Everywhere! EWOL is cross-platform devolopped to support bases OS:
 : ** Linux (X11) (mouse)
-: ** Windows (mouse)
+: ** Windows (mouse) (not compile anymore ==> TODO)
 : ** MacOs (mouse)
 : ** Android (mouse + touch)
-: ** IOs (in-progress)
+: ** IOs (touch)
 
 ===What languages are supported?===
 EWOL is written in C++ and is not (for now) supported for other languages.
@@ -23,7 +23,7 @@ That allow you to use it for every program you want, including those developing 
 [note]The static support is important for some platform like IOs, and this limit the external library use at some license like :
 :** BSD*
 :** MIT
-:** APPACHE
+:** APPACHE-2
 :** PNG
 :** ZLIB
 This exclude the classical extern library with licence:
@@ -31,33 +31,37 @@ This exclude the classical extern library with licence:
 :** GPL
 [/note]
 
-==== License (BSD) ====
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
+==== License (APACHE 2) ====
+Copyright ewol Edouard DUPIN
 
-:** Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-:** Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-:** The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 
 ==== Sub library: ====
 ===== License: =====
-:** [b][lib[etk | e-tk]][/b] : BSD 3 clauses
+:** [b][lib[etk | e-tk]][/b] : APACHE-2
 ::** [b][lib[linearmath | Linear-Math]][/b] : z-lib (subset of bullet lib)
-::** [b][lib[earchive | e-Archive]][/b] : BSD 3 clauses
+::** [b][lib[earchive | e-Archive]][/b] : APACHE-2
 :::** [b][lib[z | Z lib]][/b] : z-lib
-:** [b][lib[egami | e-gami]][/b] : BSD 3 clauses
-::** [b][lib[esvg | e-svg]][/b] : BSD 3 clauses
+:** [b][lib[egami | e-gami]][/b] : APACHE-2
+::** [b][lib[esvg | e-svg]][/b] : APACHE-2
 :::** [b][lib[agg | AGG]][/b] : BSD-like
 ::** [b][lib[png | libPNG]][/b] : PNG
 :** [b][lib[portaudio | portaudio]][/b] : MIT
 :** [b][lib[ogg | ogg]][/b] : BSD-like
 :** [b][lib[freetype | Free-Type]][/b] : BSD-like
-:** [b][lib[ejson | e-json]][/b] : BSD 3 clauses
-:** [b][lib[exml | e-xml]][/b] : BSD 3 clauses
+:** [b][lib[ejson | e-json]][/b] : APACHE-2
+:** [b][lib[exml | e-xml]][/b] : APACHE-2
 
 
 ==== Description : ====

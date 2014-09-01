@@ -5,7 +5,7 @@ __________________________________________________
 === Overview:===
 EWOL is an OpenGL library for creating graphical user interfaces.
 It works on many UNIX-like platforms, Windows, and OS X and some mobile platforms Android, iOs(soon).
-EWOL is released under the BSD 3 clauses license (BSD v3), which allows for very flexible licensing of client applications.
+EWOL is released under the APACHE-2 license, which allows for very flexible licensing of client applications.
 EWOL has a C++ architecture that allows for maximum flexibility.
 
 The main idea of EWOL is to create a complete abstraction of the platforms.
@@ -21,7 +21,7 @@ To use ewol you need to know only C++ language. It could be usefull to know:
 One of the important point to know in this framwork is some of absurd things came from the multiple architecture type.
 
 I will Explain the main points:
-:** IOs does [b]NOT[/b] simply support the shared object sub lib, this force ewol to be BSD, and depend on some sub-library with small license restriction.
+:** IOs does [b]NOT[/b] simply support the shared object sub lib, this force ewol to be APACHE-2, and depend on some sub-library with small license restriction.
 :** Android have a JAVA main, then the application main will not be used with this platform
 :** Android event (keyboard, mouse, touch-screen and ...) will arrive in asynchron mode ==> need to be resynchronyse in one thread
 :** Only one graphyc framework is availlable on all platform. This is OpenGL

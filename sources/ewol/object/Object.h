@@ -63,6 +63,7 @@ namespace ewol {
 			 */
 			Object();
 			void init();
+			//! @previous
 			void init(const std::string& _name);
 		public:
 			/**
