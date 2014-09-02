@@ -1,4 +1,4 @@
-=?= Tutorial 4: Object Message =?=
+=?= Tutorial 4: Object Signals =?=
 __________________________________________________
 [left][tutorial[011_ObjectConfig | Previous: Object config]][/left] [right][tutorial[020_FileAccess | Next: File Access]][/right]
 
@@ -8,123 +8,164 @@ __________________________________________________
 
 == Message system ==
 
-The message system is a simple message sending between Object.
-This is composed with a pointer (const char* const) that represent the mesage ID (pointer, then unique)
-and a value (std::string)
+Message system is based on generic std::funtion and std::bind methode:
 
-The message are broadcast or multicast on object watcher.
+It permit to an object to generate some [b]'signals'[/b].
 
-== Receive Message from other object ==
+All signal are synchronous
 
-=== Register on message ===
 
-We will se an example on the widget : [class[ewol::widget::Button]]
+== Receive signals from other object ==
 
-By default the messageID is the event generated, But to overwrite this message Id just create a new one:
+[todo]
+Link with the signal name
+[/todo]
+
+Register on the 'up' and 'value' signal of a button:
+
+Button header :
 [code style=c++]
-// on the global on the file or in private class member:
-static const char* const g_backMessage = "local-event-button-pressed";
-static const char* const g_backMessageValue = "local-event-button-value";
-static const char* const g_backMessageDataOverWritte = "local-event-button-data";
+	...
+	public:
+		ewol::object::Signal<void> signalDown;
+		ewol::object::Signal<void> signalUp;
+		...
+		ewol::object::Signal<bool> signalValue;
+	...
 [/code]
 
-
-Register with his name:
-[code style=c++]
-registerOnEvent(this, "pressed", g_backMessage);
-[/code]
-
-Register with his direct name:
-[code style=c++]
-registerOnEvent(this, ewol::widget::Button::eventValue, g_backMessageValue);
-[/code]
-
-It is possible to overwrote the data send by the Object :
-[code style=c++]
-registerOnEvent(this, ewol::widget::Button::eventPressed, g_backMessageDataOverWritte, "Data we want to receive");
-[/code]
-
-
-=== Receive message ===
-
-To receive message from other widget, just implement this function:
+=== simple signal connection: ===
 
 [code style=c++]
-
-void appl::ObjectName::onReceiveMessage(const ewol::object::Message& _msg) {
-	APPL_INFO("Receive Event : " << _msg);
-	if (_msg.getMessage() == g_backMessage) {
-		// process here
-		return;
-	}
-	if (_msg.getMessage() == g_backMessageValue) {
-		APPL_INFO("message value: '" << _msg.getData() << "'");
-		return;
-	}
-	if (_msg.getMessage() == g_backMessageDataOverWritte) {
-		APPL_INFO("Overwrite message data: '" << _msg.getData() << "'");
-		return;
+#include <ewol/object/Object.h>
+#include <ewol/widget/Button.h>
+namespace appl {
+	class MyObj : public ewol::Object {
+		private:
+			std::shared_ptr<ewol::widget::Button> m_button;
+		protected:
+			//! @brief Constructor
+			MyObj(void) {
+				// nothing to do..
+			}
+			void init() {
+				ewol::Object::init();
+				m_button = ewol::widget::Button::Create();
+				if (m_button == nullptr) {
+					APPL_ERROR("Can not create button...");
+					return;
+				}
+				// We connect signals here :
+				m_button->signalUp.bind(shared_from_this(), &appl::MyObj::onCallbackUp);
+				m_button->signalValue.bind(shared_from_this(), &appl::MyObj::onCallbackValue);
+			}
+		public:
+			//! @brief Destructor
+			virtual ~MyObj(void) { }
+			DECLARE_FACTORY(MyObj);
+		private:
+			void onCallbackUp() {
+				APPL_INFO("button pressed: UP);
+			}
+			void onCallbackValue(const bool& _value) {
+				APPL_INFO("button value: " << _value);
+			}
 	}
 }
 [/code]
 
 
-== Declare Extern Message ==
+=== Advenced signal connection: ===
 
-=== Declare Message ===
+Here we will see how to connect an advance function on a signal
 
-In the header file:
 [code style=c++]
 #include <ewol/object/Object.h>
+#include <ewol/widget/Button.h>
+namespace appl {
+	class MyObj : public ewol::Object {
+		private:
+			std::shared_ptr<ewol::widget::Button> m_button;
+		protected:
+			//! @brief Constructor
+			MyObj(void) {
+				// nothing to do..
+			}
+			void init() {
+				ewol::Object::init();
+				m_button = ewol::widget::Button::Create();
+				if (m_button == nullptr) {
+					APPL_ERROR("Can not create button...");
+					return;
+				}
+				// We connect signals here :
+				m_button->signalUp.register(shared_from_this(), std::bind(&appl::MyObj::onCallbackUp, this, std::string("tmpVariableToSend")));
+				m_button->signalValue.register(shared_from_this(), std::bind(&appl::MyObj::onCallbackValue, this));
+			}
+		public:
+			//! @brief Destructor
+			virtual ~MyObj(void) { }
+			DECLARE_FACTORY(MyObj);
+		private:
+			void onCallbackUp(const std::string& _value) {
+				APPL_INFO("button pressed: UP inputMessage: " << _value);
+			}
+			void onCallbackValue() {
+				APPL_INFO("button value: " << _value);
+			}
+	}
+}
+[/code]
+
+=== Connect to a signal with a named widget ===
+
+TODO: documentation :
+:** subBind(_type, _name, _event, _obj, _func)
+:** globalBind(_type, _name, _event, _obj, _func)
+:** externSubBind(_object, _type, _name, _event, _obj, _func)
+
+
+== Declare Signal ==
+
+=== source ===
+
+[code style=c++]
+#include <ewol/object/Object.h>
+#include <ewol/widget/Button.h>
 namespace appl {
 	class MyObj : public ewol::Object {
 		public:
-			// Event list of properties
-			static const char* const eventValue;
-		public:
+			ewol::object::Signal<void> signalEmpty;
+			ewol::object::Signal<bool> signalBoolean;
+			ewol::object::Signal<std::string> signalString;
+		protected:
 			//! @brief Constructor
-			MyObj(void);
+			MyObj(void) :
+			  signalEmpty(*this, "empty"),
+			  signalBoolean(*this, "boolean"),
+			  signalString(*this, "string") {
+				// nothing to do..
+			}
+			void init() {
+				ewol::Object::init();
+			}
+		public:
 			//! @brief Destructor
-			virtual ~MyObj(void);
+			virtual ~MyObj(void) { }
+			DECLARE_FACTORY(MyObj);
+		private:
+			void process() {
+				signalEmpty.emit();
+				signalBoolean.emit(false);
+				signalString.emit("plop... plop");
+			}
 	}
 }
 [/code]
 
-[note]
-By convention declare events started with "eventXXXXXX"
-[/note]
-
-In the source file:
-[code style=c++]
-// Declare the configuration Name:
-const char* const appl::MyObj::eventValue = "value";
-
-appl::MyObj::MyObj(void) {
-	// declare Event generated on this object:
-	addEventId(eventValue);
-}
-appl::MyObj::~MyObj(void) {
-	// nothing to do ...
-}
-[/code]
-Now an extern Object can register event on this object, otherwise, they will be rejected!!!
-
-
-=== Generate Message ===
-
-Now we have register object message, We need to have generated it, This is really simple :
-
-[code style=c++]
-	// with no data:
-	generateEventId(eventValue);
-	// With a custom data:
-	generateEventId(eventValue, "My sring custom data ...");
-[/code]
-
-
 == Conclusion ==
 
-You will now able to generate event between objects...
+You will now able to reise signals between objects...
 
 
 

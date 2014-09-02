@@ -6,17 +6,18 @@ __________________________________________________
 :** Understand ewol basic [class[ewol::Object]]
 :** Use [class[ewol::Object]] correctly
 
-== Basis of the Object ==
+== Basis of the ewol::Object ==
 
 An object in Ewol is a simple class : [class[ewol::Object]] This object is the basis of all element in the ewol system.
-This is designed to manage basis element of complexe structure:
+This is designed to manage many common things:
 
 :** Unique ID
 :** Name
-:** Configuration (decriptive naming of parameters)
-:** Event generation and receving
+:** Parameters
+:** Signal generation
 :** Xml configuration
-:** Delayed removing
+:** Removing
+:** Perodic calling
 
 [note]
 Please do not compare with the gObject basic class...
@@ -25,130 +26,86 @@ Please do not compare with the gObject basic class...
 
 == Create an Object: ==
 
-In theory you can use a simple new on an object, but you need to remove the refcounting of this one by yoursef ... really awfull.
+Creating an object is really simple:
 
-It is really better to use the ewol::object::Shared<> declaration to auto manage it. (same as std::shared_ptr)
 [code style=c++]
-	ewol::object::Shared<widget::Label> tmpObject = ewol::object::makeShared(new widget::Label());
-	if (tmpObject == NULL) {
-		APPL_ERROR("An error occured");
-		return;
-	}
+	std::shared_ptr<ewol::Button> tmpButon = ewol::Button::create();
+	APPL_INFO("We just create a button widget with unique ID=" << tmpButon->getId() << " name='" << tmpButon->getName() << "'");
 [/code]
 
-The object register itself on the object manager, now it will have a specific Id and no name
+Note that all object created are std::shared_ptr.
 
-Force the set of the name :
+
+Set the name of the object:
 
 [code style=c++]
-	tmpObject->setName("my widget name");
-	APPL_INFO("We just create an Object with ID=" << tmpObject->getId() << " name='" << tmpObject->getName() << "'");
+	tmpButon->setName("my widget name");
+	APPL_INFO("We just create an Object with ID=" << tmpButon->getId() << " name='" << tmpButon->getName() << "'");
 [/code]
 
 
 == Remove an Object: ==
 
-This is important to note that many element can have a reference on the Object.
-
-Then we need to use the fuction:
-[b]removeObject()[/b] to remove the Object, This will notify avery object in the system that this 
-specific object has been removed.
-
-
-Then to remove an object call:
+Simply use the function:
 [code style=c++]
-	tmpObject->removeObject();
+	tmpButon->destroy();
 [/code]
 
-On every object we can have an herited function: [b]virtual void onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject);[/b]
+This function request his parrent to remove the std::shared_ptr it keep on it.
+And when all std::shared_ptr is removed the object will be really removed.
 
-
-We need to implement this fuction to be notify an object is removed:
-[code style=c++]
-	void namespeceName::ClassName::onObjectRemove(const ewol::object::Shared<ewol::Object>& _removeObject) {
-		// Never forget to call upper Object (otherwise many object will keep theire reference)
-		upperClass::onObjectRemove(_removeObject);
-		if (_removeObject == m_object) {
-			m_object.reset();
-			markToRedraw(); // set only for graphical object ...
-		}
-	}
-[/code]
+At his point we can think an object is allive all the time someone keep a reference on it, then when you are not a parrent of the object, do not keep a std::shared_ptr but a std::weak_ptr.
 
 [note]
-If you have well follow the idea, you will never declare an object in local, just use shared pointer on them.
+If some Object is not removed when you close the application, the system inform you with displaying all object already alive.
 [/note]
-
-[note]
-For some case it could be interesting to see the [class[ewol::object::Owner<T>]] class that provide an automatic auto remove of object.
-
-See [class[ewol::widget::Container]] for an example.
-[/note]
-
-
-=== Particularity ===
-
-An object can remove itself, just use the function:
-[code style=c++]
-	autoDestroy();
-[/code]
 
 
 == Retrieve an Object: ==
 
 In Ewol this is possible to get a object with his name.
-This is really simple.
 
-=== In an Object ===
-
-Call a simple function define in the Object:
+=== Find a global Object (ouside an Object) ===
 
 [code style=c++]
-	#include <ewol/object/Manager.h>
-	
-	...
-	
-	ewol::object::Shared<ewol::Object> tmpObject = getObjectManager().get("name of the object");
-	if (tmpObject == NULL) {
-		APPL_ERROR("The Object does not exist");
-	}
-[/code]
-
-=== Not in an Object ===
-
-In this case, we need to get the context manager and after the object manager:
-
-[code style=c++]
-	#include <ewol/object/Manager.h>
 	#include <ewol/context/Context.h>
 	
-	...
-	
-	ewol::object::Shared<ewol::Object> tmpObject = ewol::getContext().getObjectManager().get("name of the object");
+	std::shared_ptr<ewol::Object> tmpObject = ewol::getContext().getEObjectManager().getObjectNamed("obj Name");
 	if (tmpObject == NULL) {
 		APPL_ERROR("The Object does not exist");
 	}
 [/code]
 
-=== Casting your object ===
+=== Find a global Object (inside an Object) ===
+
+[code style=c++]
+	std::shared_ptr<ewol::Object> tmpObject = getObjectNamed("obj Name");
+	if (tmpObject == NULL) {
+		APPL_ERROR("The Object does not exist");
+	}
+[/code]
+
+=== Find a sub-object ===
+
+[code style=c++]
+	std::shared_ptr<ewol::Object> tmpObject = getSubObjectNamed("obj Name");
+	if (tmpObject == NULL) {
+		APPL_ERROR("The Object does not exist");
+	}
+[/code]
+
+=== retriving your object type ===
 
 It could be really interesting to retrive your own instance:
 
 [code style=c++]
-	ewol::object::Shared<ewol::Object> tmpObject ...;
+	std::shared_ptr<ewol::Object> tmpObject ...;
 	
-	ewol::object::Shared<appl::MyOwnObject> myObject = ewol::dynamic_pointer_cast<appl::MyOwnObject>(tmpObject);
+	std::shared_ptr<appl::MyOwnObject> myObject = std::dynamic_pointer_cast<appl::MyOwnObject>(tmpObject);
 [/code]
 
 == conclusion ==
 
-If you follow these rules, you will not have memory leek and no segmentation fault on the ewol system.
-
-[note]
-To be sure that the name is unique, just add the current creator object Id in the name.
-
-See [class[ewol::widget::FileChooser]] class for an example.
-[/note]
-
+TODO ...
 
 

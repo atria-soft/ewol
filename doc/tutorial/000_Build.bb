@@ -48,7 +48,7 @@ Compile software in debug for the curent platform :
 
 You can specify the platform with:
 [code style=shell]
-	./ewol/build/lutin.py -mdebug -tAndroid
+	./ewol/build/lutin.py -tAndroid -mdebug
 [/code]
 
 It coud be usefull to disable the package generation in local debug :
