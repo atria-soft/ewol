@@ -1,6 +1,3 @@
-=?= Tutorial 2: Object Model =?=
-__________________________________________________
-[left][tutorial[001_HelloWord | Previous: Hello Word]][/left] [right][tutorial[011_ObjectConfig | Next: Object config]][/right]
 
 === Objectif ===
 :** Understand ewol basic [class[ewol::Object]]

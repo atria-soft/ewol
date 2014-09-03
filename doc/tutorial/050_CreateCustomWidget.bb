@@ -1,4 +1,3 @@
-=?=Create a custum widget=?=
 
 To create a custum widget, this is as simple as complex.
 The first things to do is to choice a methode to display you widget:

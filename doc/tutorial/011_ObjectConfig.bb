@@ -1,7 +1,3 @@
-=?= Tutorial 3: Object Config =?=
-__________________________________________________
-[left][tutorial[010_ObjectModel | Previous: Object model]][/left] [right][tutorial[012_ObjectMessage | Next: Object signals]][/right]
-
 === Objectif ===
 :** Understand ewol::Object configuration parameter
 :** Create an configurable object

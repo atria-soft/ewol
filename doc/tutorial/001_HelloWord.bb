@@ -1,6 +1,3 @@
-=?= Tutorial 1: Hello Word =?=
-__________________________________________________
-[left][tutorial[000_Build | Previous: Download & Build]][/left] [right][tutorial[010_ObjectModel | Next: Object model]][/right]
 
 === Objectif ===
 :** Understand basis of ewol

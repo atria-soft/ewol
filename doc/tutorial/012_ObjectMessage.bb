@@ -1,6 +1,3 @@
-=?= Tutorial 4: Object Signals =?=
-__________________________________________________
-[left][tutorial[011_ObjectConfig | Previous: Object config]][/left] [right][tutorial[020_FileAccess | Next: File Access]][/right]
 
 === Objectif ===
 :** Understand ewol::Object Messaging system
