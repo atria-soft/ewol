@@ -1,0 +1,4 @@
+language: cpp
+before_script: git submodule init; git submodule update
+script: ./build/lutin.py -cclang -mdebug -p ewol
+
