@@ -1,4 +1,37 @@
+# language type:
 language: cpp
-before_script: git submodule init; git submodule update
-script: ./build/lutin.py -cclang -mdebug -p ewol
 
+# compilator system:
+compiler:
+- clang
+- gcc
+
+# build branch requested
+branches:
+  only:
+    - master
+    - dev
+
+# previous actions:
+before_script: 
+  - git submodule init
+  - git submodule update
+
+install:
+  - if [ "$CXX" == "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
+  - if [ "$CXX" == "g++" ]; then sudo apt-get update -qq; fi
+  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX" == "g++" ]; then sudo rm /usr/bin/gcc /usr/bin/g++; fi
+  - if [ "$CXX" == "g++" ]; then sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc; fi
+  - if [ "$CXX" == "g++" ]; then sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++; fi
+
+
+# build sequence with Lutin :
+script: 
+  - if [ "$CXX" == "clang++" ]; then ./build/lutin.py -cclang -mdebug -p ewol; fi
+  - if [ "$CXX" == "g++" ]; then ./build/lutin.py -cgcc -mdebug -p ewol; fi
+
+#send e-mail on compilation result:
+notifications:
+  email:
+    - yui.heero@gmail.com
