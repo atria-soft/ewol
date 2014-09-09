@@ -111,3 +111,4 @@ When user request to reload all resources (can be usefull when using file type :
 [code style=c++]
 	void reload();
 [/code]
+
