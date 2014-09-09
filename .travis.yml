@@ -5,7 +5,7 @@ language: cpp
 branches:
   only:
     - master
-    - stable
+    - dev
 
 # previous actions:
 before_script: git submodule init
@@ -13,3 +13,9 @@ before_script: git submodule update
 
 # build sequence with Lutin :
 script: ./build/lutin.py -cclang -mdebug -p ewol
+script: ./build/lutin.py -cgcc -mdebug -p ewol
+
+#send e-mail on compilation result:
+notifications:
+  email:
+    - yui.heero@gmail.com
