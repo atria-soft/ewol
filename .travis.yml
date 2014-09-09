@@ -6,10 +6,6 @@ compiler:
 - clang
 - gcc
 
-# Setup different environments to test
-env:
-- CPP11=1
-
 # build branch requested
 branches:
   only:
@@ -24,6 +20,7 @@ before_script:
 install:
   - if [ "$CXX" == "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
   - if [ "$CXX" == "g++" ]; then sudo apt-get update -qq; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get remove g++-4.6; fi
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
 
 
