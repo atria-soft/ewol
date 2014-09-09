@@ -1,3 +1,15 @@
+# language type:
 language: cpp
-before_script: git submodule init; git submodule update
+
+# build branch requested
+branches:
+  only:
+    - master
+    - stable
+
+# previous actions:
+before_script: git submodule init
+before_script: git submodule update
+
+# build sequence with Lutin :
 script: ./build/lutin.py -cclang -mdebug -p ewol
