@@ -1,6 +1,11 @@
 # language type:
 language: cpp
 
+# compilator system:
+compiler:
+- clang
+- gcc
+
 # build branch requested
 branches:
   only:
@@ -8,12 +13,14 @@ branches:
     - dev
 
 # previous actions:
-before_script: git submodule init
-before_script: git submodule update
+before_script: 
+  - git submodule init
+  - git submodule update
 
 # build sequence with Lutin :
-script: ./build/lutin.py -cclang -mdebug -p ewol
-script: ./build/lutin.py -cgcc -mdebug -p ewol
+script: 
+  - if [ "$CXX" == "clang++" ]; then ./build/lutin.py -cclang -mdebug -p ewol; fi
+  - if [ "$CXX" == "g++" ]; then script: ./build/lutin.py -cgcc -mdebug -p ewol; fi
 
 #send e-mail on compilation result:
 notifications:
