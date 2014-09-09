@@ -6,6 +6,10 @@ compiler:
 - clang
 - gcc
 
+# Setup different environments to test
+env:
+- CPP11=1
+
 # build branch requested
 branches:
   only:
@@ -20,7 +24,7 @@ before_script:
 # build sequence with Lutin :
 script: 
   - if [ "$CXX" == "clang++" ]; then ./build/lutin.py -cclang -mdebug -p ewol; fi
-  - if [ "$CXX" == "g++" ]; then script: ./build/lutin.py -cgcc -mdebug -p ewol; fi
+  - if [ "$CXX" == "g++" ]; then ./build/lutin.py -cgcc -mdebug -p ewol; fi
 
 #send e-mail on compilation result:
 notifications:
