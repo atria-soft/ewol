@@ -86,11 +86,6 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj
 #undef __class__
 #define __class__ "Widget"
 
-// event generated :
-const char* const ewol::Widget::eventAnnimationStart = "annimation-start";
-const char* const ewol::Widget::eventAnnimationRatio = "annimation-ratio";
-const char* const ewol::Widget::eventAnnimationStop = "annimation-stop";
-
 ewol::Widget::Widget() :
   m_size(10,10),
   m_minSize(0,0),
@@ -110,9 +105,13 @@ ewol::Widget::Widget() :
   m_allowRepeateKeyboardEvent(true),
   m_periodicCallDeltaTime(-1),
   m_periodicCallTime(0),
+  signalShortcut(*this, "shortcut"),
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
   m_cursorDisplay(ewol::context::cursorArrow),
+  signalAnnimationStart(*this, "annimation-start"),
+  signalAnnimationRatio(*this, "annimation-ratio"),
+  signalAnnimationStop(*this, "annimation-stop"),
   m_annimationMode(annimationModeDisable),
   m_annimationratio(0.0f),
   m_annimationTypeStart(*this, "annimation-start-type", 0, "Annimation type, when adding/show a widget"),
@@ -133,10 +132,6 @@ ewol::Widget::Widget() :
 	m_gravity.add(ewol::gravityLeft, "left");
 	m_annimationTypeStart.add(0, "none");
 	m_annimationTypeStop.add(0, "none");
-	
-	addEventId(eventAnnimationStart);
-	addEventId(eventAnnimationRatio);
-	addEventId(eventAnnimationStop);
 }
 
 void ewol::Widget::init() {
@@ -431,12 +426,8 @@ const bvec2& ewol::Widget::canFill() {
 // -- Shortcut : management of the shortcut
 // ----------------------------------------------------------------------------------------------------------------
 
-void ewol::Widget::shortCutAdd(const char * _descriptiveString,
-                               const char * _generateEventId,
-                               std::string _data,
-                               bool _broadcast) {
-	if (    _descriptiveString == nullptr
-	     || strlen(_descriptiveString) == 0) {
+void ewol::Widget::shortCutAdd(const std::string& _descriptiveString, const std::string& _message) {
+	if (_descriptiveString.size() == 0) {
 		EWOL_ERROR("try to add shortcut with no descriptive string ...");
 		return;
 	}
@@ -445,94 +436,105 @@ void ewol::Widget::shortCutAdd(const char * _descriptiveString,
 		EWOL_ERROR("allocation error ... Memory error ...");
 		return;
 	}
-	tmpElement->broadcastEvent = _broadcast;
-	tmpElement->generateEventId = _generateEventId;
-	tmpElement->eventData = _data;
+	if (_message.size() == 0) {
+		tmpElement->message = _descriptiveString;
+	} else {
+		tmpElement->message = _message;
+	}
 	// parsing of the string :
 	//"ctrl+shift+alt+meta+s"
-	const char * tmp = strstr(_descriptiveString, "ctrl");
-	if(nullptr != tmp) {
+	if(_descriptiveString.find("ctrl") != std::string::npos) {
 		tmpElement->specialKey.setCtrl(true);
 	}
-	tmp = strstr(_descriptiveString, "shift");
-	if(nullptr != tmp) {
+	if(_descriptiveString.find("shift") != std::string::npos) {
 		tmpElement->specialKey.setShift(true);
 	}
-	tmp = strstr(_descriptiveString, "alt");
-	if(nullptr != tmp) {
+	if(_descriptiveString.find("alt") != std::string::npos) {
 		tmpElement->specialKey.setAlt(true);
 	}
-	tmp = strstr(_descriptiveString, "meta");
-	if(nullptr != tmp) {
+	if(_descriptiveString.find("meta") != std::string::npos) {
 		tmpElement->specialKey.setMeta(true);
 	}
-	if(nullptr != strstr(_descriptiveString, "F12") ) {
+	if(_descriptiveString.find("F12") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF12;
-	} else if(nullptr != strstr(_descriptiveString, "F11") ) {
+	} else if(_descriptiveString.find("F11") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF11;
-	} else if(nullptr != strstr(_descriptiveString, "F10") ) {
+	} else if(_descriptiveString.find("F10") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF10;
-	} else if(nullptr != strstr(_descriptiveString, "F9") ) {
+	} else if(_descriptiveString.find("F9") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF9;
-	} else if(nullptr != strstr(_descriptiveString, "F8") ) {
+	} else if(_descriptiveString.find("F8") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF8;
-	} else if(nullptr != strstr(_descriptiveString, "F7") ) {
+	} else if(_descriptiveString.find("F7") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF7;
-	} else if(nullptr != strstr(_descriptiveString, "F6") ) {
+	} else if(_descriptiveString.find("F6") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF6;
-	} else if(nullptr != strstr(_descriptiveString, "F5") ) {
+	} else if(_descriptiveString.find("F5") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF5;
-	} else if(nullptr != strstr(_descriptiveString, "F4") ) {
+	} else if(_descriptiveString.find("F4") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF4;
-	} else if(nullptr != strstr(_descriptiveString, "F3") ) {
+	} else if(_descriptiveString.find("F3") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF3;
-	} else if(nullptr != strstr(_descriptiveString, "F2") ) {
+	} else if(_descriptiveString.find("F2") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF2;
-	} else if(nullptr != strstr(_descriptiveString, "F1") ) {
+	} else if(_descriptiveString.find("F1") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardF1;
-	} else if(nullptr != strstr(_descriptiveString, "LEFT") ) {
+	} else if(_descriptiveString.find("LEFT") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardLeft;
-	} else if(nullptr != strstr(_descriptiveString, "RIGHT") ) {
+	} else if(_descriptiveString.find("RIGHT") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardRight;
-	} else if(nullptr != strstr(_descriptiveString, "UP") ) {
+	} else if(_descriptiveString.find("UP") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardUp;
-	} else if(nullptr != strstr(_descriptiveString, "DOWN") ) {
+	} else if(_descriptiveString.find("DOWN") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardDown;
-	} else if(nullptr != strstr(_descriptiveString, "PAGE_UP") ) {
+	} else if(_descriptiveString.find("PAGE_UP") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardPageUp;
-	} else if(nullptr != strstr(_descriptiveString, "PAGE_DOWN") ) {
+	} else if(_descriptiveString.find("PAGE_DOWN") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardPageDown;
-	} else if(nullptr != strstr(_descriptiveString, "START") ) {
+	} else if(_descriptiveString.find("START") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardStart;
-	} else if(nullptr != strstr(_descriptiveString, "END") ) {
+	} else if(_descriptiveString.find("END") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardEnd;
-	} else if(nullptr != strstr(_descriptiveString, "PRINT") ) {
+	} else if(_descriptiveString.find("PRINT") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardPrint;
-	} else if(nullptr != strstr(_descriptiveString, "ARRET_DEFIL") ) {
+	} else if(_descriptiveString.find("ARRET_DEFIL") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardStopDefil;
-	} else if(nullptr != strstr(_descriptiveString, "WAIT") ) {
+	} else if(_descriptiveString.find("WAIT") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardWait;
-	} else if(nullptr != strstr(_descriptiveString, "INSERT") ) {
+	} else if(_descriptiveString.find("INSERT") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardInsert;
-	} else if(nullptr != strstr(_descriptiveString, "CAPLOCK") ) {
+	} else if(_descriptiveString.find("CAPLOCK") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardCapLock;
-	} else if(nullptr != strstr(_descriptiveString, "CONTEXT_MENU") ) {
+	} else if(_descriptiveString.find("CONTEXT_MENU") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardContextMenu;
-	} else if(nullptr != strstr(_descriptiveString, "NUM_LOCK") ) {
+	} else if(_descriptiveString.find("NUM_LOCK") != std::string::npos) {
 		tmpElement->keyboardMoveValue = ewol::key::keyboardNumLock;
 	} else {
-		tmpElement->unicodeValue = _descriptiveString[strlen(_descriptiveString) -1];
+		tmpElement->unicodeValue = _descriptiveString[_descriptiveString.size() -1];
 	}
 	// add it on the List ...
 	m_localShortcut.push_back(tmpElement);
 }
 
-void ewol::Widget::shortCutClean() {
-	for (size_t iii=0; iii<m_localShortcut.size(); iii++) {
-		if (nullptr != m_localShortcut[iii]) {
-			delete(m_localShortcut[iii]);
-			m_localShortcut[iii]=nullptr;
+void ewol::Widget::shortCutRemove(const std::string& _message) {
+	auto it(m_localShortcut.begin());
+	while(it != m_localShortcut.end()) {
+		if (    *it != nullptr
+		     && (*it)->message != _message) {
+			++it;
+			continue;
 		}
+		delete(*it);
+		*it = nullptr;
+		m_localShortcut.erase(it);
+		it = m_localShortcut.begin();
+	}
+}
+
+void ewol::Widget::shortCutClean() {
+	for (auto &it : m_localShortcut) {
+		delete(it);
+		it = nullptr;
 	}
 	m_localShortcut.clear();
 }
@@ -557,14 +559,8 @@ bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
 			              && m_localShortcut[iii]->unicodeValue == 0)
 			       ) ) {
 				if (_isDown) {
-					if (true == m_localShortcut[iii]->broadcastEvent) {
-						// send message at all the widget (exepted this one)
-						sendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
-					}
-					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
-					ewol::object::Message tmpMsg(shared_from_this(), m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
-					onReceiveMessage(tmpMsg);
-				} // no else
+					signalShortcut.emit(m_localShortcut[iii]->message);
+				}
 				return true;
 			}
 		}
@@ -602,18 +598,9 @@ enum ewol::context::cursorDisplay ewol::Widget::getCursor() {
 }
 
 bool ewol::Widget::loadXML(exml::Element* _node) {
-	// Call EObject basic parser
-	ewol::Object::loadXML(_node); // note : load standard parameters (attribute in XML)
+	ewol::Object::loadXML(_node);
 	markToRedraw();
 	return true;
-}
-
-std::shared_ptr<ewol::Widget> ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} compare : " << getName() << " == " << _widgetName );
-	if (getName() == _widgetName) {
-		return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
-	}
-	return nullptr;
 }
 
 bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {

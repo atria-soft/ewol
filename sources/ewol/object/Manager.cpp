@@ -53,7 +53,6 @@ void ewol::object::Manager::unInit() {
 	if (m_eObjectList.size() != 0) {
 		EWOL_ERROR("Have " << m_eObjectList.size() << " active Object");
 	}
-	m_multiCast.clear();
 	m_eObjectList.clear();
 }
 
@@ -100,19 +99,6 @@ std::shared_ptr<ewol::Object> ewol::object::Manager::get(const std::string& _nam
 	return nullptr;
 }
 
-
-void ewol::object::Manager::add(ewol::object::RemoveEvent* _class) {
-	m_removeEventList.push_back(_class);
-}
-
-void ewol::object::Manager::rm(ewol::object::RemoveEvent* _class) {
-	for (size_t iii=0; iii<m_removeEventList.size(); ++iii) {
-		if (m_removeEventList[iii] == _class) {
-			m_removeEventList.erase(m_removeEventList.begin() + iii);
-			return;
-		}
-	}
-}
 
 std::shared_ptr<ewol::Object> ewol::object::Manager::getObjectNamed(const std::string& _name) {
 	return ewol::object::Manager::get(_name);

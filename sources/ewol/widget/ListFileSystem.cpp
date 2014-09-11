@@ -15,13 +15,11 @@
 #undef __class__
 #define __class__ "ListFileSystem"
 
-const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";
-const char * const ewol::widget::ListFileSystem::eventFileValidate   = "file-validate";
-const char * const ewol::widget::ListFileSystem::eventFolderSelect   = "folder-select";
-const char * const ewol::widget::ListFileSystem::eventFolderValidate = "folder-validate";
-
-
 ewol::widget::ListFileSystem::ListFileSystem() :
+  signalFileSelect(*this, "file-select"),
+  signalFileValidate(*this, "file-validate"),
+  signalFolderSelect(*this, "folder-select"),
+  signalFolderValidate(*this, "folder-validate"),
   m_selectedLine(-1),
   m_folder(*this, "path", "/", "Path to display"),
   m_selectFile(*this, "select", "", "selection af a specific file"),
@@ -40,11 +38,6 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 		m_colorIdBackground2 = m_colorProperty->request("background2");
 		m_colorIdBackgroundSelected = m_colorProperty->request("selected");
 	}
-	addEventId(eventFileSelect);
-	addEventId(eventFileValidate);
-	addEventId(eventFolderSelect);
-	addEventId(eventFolderValidate);
-	
 	setMouseLimit(1);
 };
 
@@ -180,7 +173,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 		}
 	}
 	if (_typeEvent == ewol::key::statusSingle) {
-		EWOL_DEBUG("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
+		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;
 			if (_raw > (int32_t)m_list.size()+offset ) {
@@ -192,21 +185,21 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				if(    m_showFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
-					generateEventId(eventFolderSelect, ".");
+					signalFolderSelect.emit(".");
 				} else if (    m_showFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
-					generateEventId(eventFolderSelect, "..");
+					signalFolderSelect.emit("..");
 				} else if(    m_selectedLine-offset  >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && nullptr != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
-							generateEventId(eventFileSelect, m_list[m_selectedLine-offset]->getNameFile());
+							signalFileSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						case etk::FSN_FOLDER :
-							generateEventId(eventFolderSelect, m_list[m_selectedLine-offset]->getNameFile());
+							signalFolderSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
 							EWOL_ERROR("Can not generate event on an unknow type");
@@ -217,21 +210,20 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				if(    m_showFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
-					generateEventId(eventFolderValidate, ".");
+					signalFolderValidate.emit(".");
 				} else if (    m_showFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
-					generateEventId(eventFolderValidate, "..");
+					signalFolderValidate.emit("..");
 				} else if(    m_selectedLine-offset >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && nullptr != m_list[m_selectedLine-offset] ) {
-					switch(m_list[m_selectedLine-offset]->getNodeType())
-					{
+					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
-							generateEventId(eventFileValidate, m_list[m_selectedLine-offset]->getNameFile());
+							signalFileValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						case etk::FSN_FOLDER :
-							generateEventId(eventFolderValidate, m_list[m_selectedLine-offset]->getNameFile());
+							signalFolderValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
 							EWOL_ERROR("Can not generate event on an unknow type");

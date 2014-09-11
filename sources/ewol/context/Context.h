@@ -23,7 +23,6 @@
 #include <ewol/context/commandLine.h>
 #include <ewol/context/InputManager.h>
 #include <ewol/context/Fps.h>
-#include <ewol/object/RemoveEvent.h>
 #include <memory>
 
 namespace ewol {

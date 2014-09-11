@@ -1,6 +1,3 @@
-=?= Tutorial 5: File Access =?=
-__________________________________________________
-[left][tutorial[012_ObjectMessage | Previous: Object message]][/left] [right][tutorial[021_Resources | Next: Resources management]][/right]
 
 === Objectif ===
 :** Understand why we wrap interface on file system

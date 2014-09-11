@@ -135,7 +135,7 @@ namespace ewol {
 				}
 		};
 		
-		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::object::Param<MY_TYPE>& _obj) {
+		template<typename MY_TYPE, bool isEventReceiving=false> std::ostream& operator <<(std::ostream& _os, const ewol::object::Param<MY_TYPE, isEventReceiving>& _obj) {
 			_os << _obj.get();
 			return _os;
 		}

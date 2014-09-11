@@ -10,7 +10,6 @@
 #define __EWOL_OBJECT_H__
 
 #include <etk/types.h>
-#include <etk/types.h>
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
@@ -21,16 +20,16 @@ namespace ewol {
 	class Object;
 	namespace object {
 		class Manager;
-		class MultiCast;
 	};
 	class Context;
 };
 
-#include <ewol/object/Message.h>
+#include <ewol/debug.h>
 #include <ewol/object/ParameterList.h>
 #include <ewol/object/Param.h>
 #include <ewol/object/ParamRange.h>
 #include <ewol/object/ParamList.h>
+#include <ewol/object/SignalList.h>
 
 #define DECLARE_FACTORY(className) \
 	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
@@ -47,24 +46,13 @@ namespace ewol {
 	}
 
 namespace ewol {
-	namespace object {
-		/**
-		 * local class for event generation
-		 * @not-in-doc
-		 */
-		class EventExtGen {
-			public:
-				const char* localEventId; //!< local event Id generation
-				std::weak_ptr<ewol::Object> destObject; //!< destination widget that might be call
-				const char* destEventId; //!< generated event ID on the distant widget
-				std::string overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
-		};
-	}
 	/**
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every Object to communicate between them.
 	 */
-	class Object : public std::enable_shared_from_this<Object>, public ewol::object::ParameterList {
+	class Object : public std::enable_shared_from_this<Object>,
+	               public ewol::object::ParameterList,
+	               public ewol::object::SignalList {
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
@@ -75,6 +63,7 @@ namespace ewol {
 			 */
 			Object();
 			void init();
+			//! @previous
 			void init(const std::string& _name);
 		public:
 			/**
@@ -148,58 +137,8 @@ namespace ewol {
 			int32_t getId(){
 				return m_uniqueId;
 			};
-		private:
-			std::vector<object::EventExtGen> m_externEvent; //!< Generic list of event generation for output link
-			std::vector<const char*> m_availlableEventId; //!< List of all event availlable for this widget
-		protected:
-			/**
-			 * @brief add a specific event Id in the list to prevent wrong link on a Object
-			 * @param[in] _generateEventId event Id to add
-			 */
-			void addEventId(const char * _generateEventId);
-			/**
-			 * @brief generate event on all registered Object
-			 * @param[in] _generateEventId event Id that is curetly generated
-			 * @param[in] _data data associated with the event
-			 */
-			void generateEventId(const char * _generateEventId, const std::string& _data = "");
-			/**
-			 * @brief generate Multicast event on all Object requested the event
-			 * @param[in] _messageId Event Id that is generated
-			 * @param[in] _data String that is send at all the destinations
-			 */
-			void sendMultiCast(const char* const _messageId, const std::string& _data = "");
-			/**
-			 * @brief Register of the arrival of a Multicast message
-			 * @param[in] _messageId Event Id waiting for...
-			 */
-			void registerMultiCast(const char* const _messageId);
 		public:
-			/**
-			 * @brief Register an Object over an other to get event on the second...
-			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] _eventId Event generate inside the object (note : "*" event register on all event generated )
-			 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
-			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
-			 */
-			void registerOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-			                     const char * _eventId,
-			                     const char * _eventIdgenerated = nullptr,
-			                     const std::string& _overloadData = "");
-			/**
-			 * @brief Un-Register an Object over an other.
-			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] _eventId Event generate inside the object (nullptr to remove all event on this object)
-			 */
-			void unRegisterOnEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-			                       const char * _eventId = nullptr);
-			/**
-			 * @brief Receive a message from an other Object with a specific eventId and data
-			 * @param[in] _msg Message handle
-			 */
-			virtual void onReceiveMessage(const ewol::object::Message& _msg) { };
-		public:
-			// TODO : Rework the position on this function ...
+			// TODO : Rework the position on this function ... This is a convignent function ...
 			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		protected:
 			ewol::object::Param<std::string> m_name; //!< name of the element ...
@@ -240,11 +179,6 @@ namespace ewol {
 			 */
 			ewol::object::Manager& getObjectManager() const;
 			/**
-			 * @breif get the current Object Message Multicast manager.
-			 * @return the requested object manager.
-			 */
-			ewol::object::MultiCast& getMultiCast() const;
-			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
@@ -268,28 +202,68 @@ namespace ewol {
 				return m_isResource;
 			}
 			/**
-			 * @brief Register an Event an named widget. @see registerOnEvent
-			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] _objectName Name of the object.
-			 * @param[in] _eventId Event generate inside the object.
-			 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
-			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
-			 * @note : To used when NOT herited from this object.
-			 */
-			void registerOnObjectEvent(const std::shared_ptr<ewol::Object>& _destinationObject,
-			                           const std::string& _objectName,
-			                           const char * _eventId,
-			                           const char * _eventIdgenerated = nullptr,
-			                           const std::string& _overloadData="");
-			/**
 			 * @brief Retrive an object with his name (in the global list)
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
 			std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName) const;
+			/**
+			 * @brief Retrive an object with his name (in the global list)
+			 * @param[in] _name Name of the object
+			 * @return the requested object or nullptr
+			 */
+			virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+		protected:
+			// TODO : Create a template ...
+			/**
+			 * @brief link on an signal in the subwiget with his name
+			 */
+			#define subBind(_type, _name, _event, _obj, _func) do {\
+				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
+				if (myObject != nullptr) { \
+					myObject->_event.bind(_obj, _func); \
+				} else { \
+					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+				} \
+			} while (false)
+			/*
+			template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+				if (obj2 == nullptr) {
+					EWOL_ERROR("Can not bind signal ...");
+					return;
+				}
+				m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+			}
+			*/
 	};
 	
 };
+
+/**
+ * @brief link on an signal in the global object list with his name
+ */
+#define globalBind(_type, _name, _event, _obj, _func) do {\
+	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
+	if (myObject != nullptr) { \
+		myObject->_event.bind(_obj, _func); \
+	} else { \
+		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+	} \
+} while (false)
+
+/**
+ * @brief link on an signal in the subWidget of an object with his name
+ */
+#define externSubBind(_object, _type, _name, _event, _obj, _func) do {\
+	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
+	if (myObject != nullptr) { \
+		myObject->_event.bind(_obj, _func); \
+	} else { \
+		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+	} \
+} while (false)
+//#include <ewol/object/Signal.h>
 
 #endif
 

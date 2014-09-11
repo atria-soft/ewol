@@ -1,7 +1,4 @@
 
-
-
-
 == Declare object in XML ==
 
 Object can be declared in some XML, (like gui decription), then we need to declare the Object in the system recognition.

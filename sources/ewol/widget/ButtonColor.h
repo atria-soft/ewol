@@ -17,13 +17,14 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
 		class ButtonColor : public ewol::Widget {
 			public:
 				// Event list of properties
-				static const char * const eventChange;
+				ewol::object::Signal<etk::Color<>> signalChange;
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
@@ -62,14 +63,13 @@ namespace ewol {
 				 * @brief Specify the current color.
 				 * @param[in] _color The new display color.
 				 */
-				void setValue(etk::Color<> _color);
+				void setValue(const etk::Color<>& _color);
 			protected: // Derived function
 				virtual void onDraw();
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
@@ -78,6 +78,8 @@ namespace ewol {
 				void changeStatusIn(int32_t _newStatusId);
 				// Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
+				// Callback function:
+				void onCallbackColorChange(const etk::Color<>& _color);
 		};
 	};
 };

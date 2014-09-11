@@ -14,14 +14,6 @@
 #define __class__ "Button"
 
 
-const char* const ewol::widget::Button::eventPressed    = "pressed";
-const char* const ewol::widget::Button::eventDown       = "down";
-const char* const ewol::widget::Button::eventUp         = "up";
-const char* const ewol::widget::Button::eventEnter      = "enter";
-const char* const ewol::widget::Button::eventLeave      = "leave";
-const char* const ewol::widget::Button::eventValue      = "value";
-
-
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
@@ -29,6 +21,12 @@ const char* const ewol::widget::Button::eventValue      = "value";
 #define STATUS_DOWN      (3)
 
 ewol::widget::Button::Button() :
+  signalPressed(*this, "pressed", "Button is pressed"),
+  signalDown(*this, "down", "Button is DOWN"),
+  signalUp(*this, "up", "Button is UP"),
+  signalEnter(*this, "enter", "The cursor enter inside the button"),
+  signalLeave(*this, "leave", "the cursor leave the button"),
+  signalValue(*this, "value", "button value change"),
   m_shaper(*this, "shaper", "The display name for config file"),
   m_value(*this, "value", false, "Value of the Button"),
   m_lock(*this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder"),
@@ -39,13 +37,6 @@ ewol::widget::Button::Button() :
   m_selectableAreaPos(0,0),
   m_selectableAreaSize(0,0) {
 	addObjectType("ewol::widget::Button");
-	// add basic Event generated :
-	addEventId(eventPressed);
-	addEventId(eventDown);
-	addEventId(eventUp);
-	addEventId(eventEnter);
-	addEventId(eventLeave);
-	addEventId(eventValue);
 	
 	// set property list:
 	m_lock.add(lockNone, "none");
@@ -130,36 +121,36 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(ewol::key::statusDown == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << eventDown);
-				generateEventId(eventDown);
+				EWOL_VERBOSE(getName() << " : Generate event : " << signalDown);
+				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(ewol::key::statusUp == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << eventUp);
-				generateEventId(eventUp);
+				EWOL_VERBOSE(getName() << " : Generate event : " << signalUp);
+				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
 			if(ewol::key::statusSingle == _event.getStatus()) {
-				if(    (    m_value == true
+				if(    (    m_value.get() == true
 				         && ewol::widget::Button::lockWhenPressed == m_lock)
-				    || (    m_value == false
+				    || (    m_value.get() == false
 				         && ewol::widget::Button::lockWhenReleased == m_lock) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
 					// inverse value :
-					setValue((m_value)?false:true);
-					EWOL_VERBOSE(getName() << " : Generate event : " << eventPressed);
-					generateEventId(eventPressed);
-					EWOL_VERBOSE(getName() << " : Generate event : " << eventValue << " val=" << m_value );
-					generateEventId(eventValue, etk::to_string(m_value.get()));
-					if(    false == m_toggleMode
-					    && true == m_value) {
+					setValue((m_value.get())?false:true);
+					EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
+					signalPressed.emit();
+					EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value );
+					signalValue.emit(m_value.get());
+					if(    m_toggleMode.get() == false
+					    && m_value.get() == true) {
 						setValue(false);
-						EWOL_VERBOSE(getName() << " : Generate event : " << ewol::widget::Button::eventValue << " val=" << m_value);
-						generateEventId(eventValue, etk::to_string(m_value.get()));
+						EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value);
+						signalValue.emit(m_value.get());
 					}
 				}
 				markToRedraw();
@@ -176,7 +167,7 @@ bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 	if(    _event.getType() == ewol::key::keyboardChar
 	    && _event.getStatus() == ewol::key::statusDown
 	    && _event.getChar() == '\r') {
-		generateEventId(eventEnter);
+		signalEnter.emit();
 		return true;
 	}
 	return false;
@@ -225,7 +216,7 @@ void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterR
 		markToRedraw();
 	} else if (_paramPointer == m_value) {
 		if (m_toggleMode == true) {
-			if (m_value == false) {
+			if (m_value.get() == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
@@ -252,20 +243,20 @@ void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterR
 		CheckStatus();
 		markToRedraw();
 	} else if (_paramPointer == m_toggleMode) {
-		if (m_value == true) {
-			m_value = false;
+		if (m_value.get() == true) {
+			m_value.get() = false;
 			// TODO : change display and send event ...
 		}
-		if (m_toggleMode == false) {
+		if (m_toggleMode.get() == false) {
 			m_idWidgetDisplayed = 0;
 		} else {
-			if (m_value == false) {
+			if (m_value.get() == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
 			}
 		}
-		if (m_enableSingle == true) {
+		if (m_enableSingle.get() == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {

@@ -16,9 +16,8 @@
 #undef __class__
 #define __class__ "Image"
 
-const char * const ewol::widget::Image::eventPressed = "pressed";
-
 ewol::widget::Image::Image() :
+  signalPressed(*this, "pressed", "Image is pressed"),
   m_colorProperty(nullptr),
   m_colorId(-1),
   m_fileName(*this, "src", "", "Image source path"),
@@ -29,7 +28,6 @@ ewol::widget::Image::Image() :
   m_posStop(*this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
   m_distanceFieldMode(*this, "distance-field", false, "Distance field mode") {
 	addObjectType("ewol::widget::Image");
-	addEventId(eventPressed);
 	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Image.json");
 	if (m_colorProperty != nullptr) {
 		m_colorId = m_colorProperty->request("foreground");
@@ -135,7 +133,7 @@ bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
 		if(ewol::key::statusSingle == _event.getStatus()) {
-			generateEventId(eventPressed);
+			signalPressed.emit();
 			return true;
 		}
 	}

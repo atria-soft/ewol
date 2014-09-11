@@ -14,7 +14,7 @@
 std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Input& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
-	_os << " id=" << _obj.getId();
+	_os << " id=" << etk::to_string(_obj.getId());
 	_os << " pos=" << _obj.getPos();
 	_os << "}";
 	return _os;

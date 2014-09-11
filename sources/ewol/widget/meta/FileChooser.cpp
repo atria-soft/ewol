@@ -10,6 +10,10 @@
 #include <ewol/widget/meta/FileChooser.h>
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/List.h>
+#include <ewol/widget/Button.h>
+#include <ewol/widget/CheckBox.h>
+#include <ewol/widget/ListFileSystem.h>
+#include <ewol/widget/Entry.h>
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
 #include <ewol/widget/Composer.h>
@@ -29,25 +33,10 @@ extern "C" {
 #undef __class__
 #define __class__ "FileChooser"
 
-
-const char * const ewol::widget::FileChooser::eventCancel     = "cancel";
-const char * const ewol::widget::FileChooser::eventValidate   = "validate";
-
-static const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
-static const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
-static const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
-static const char * const ewolEventFileChooserEntryFile        = "ewol-event-file-chooser-modify-entry-file";
-static const char * const ewolEventFileChooserEntryFileEnter   = "ewol-event-file-chooser-modify-entry-file-enter";
-static const char * const ewolEventFileChooserListFolder       = "ewol-event-file-chooser-modify-list-folder";
-static const char * const ewolEventFileChooserListFile         = "ewol-event-file-chooser-modify-list-file";
-static const char * const ewolEventFileChooserListFileValidate = "ewol-event-file-chooser-modify-list-file-validate";
-static const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
-
-
-ewol::widget::FileChooser::FileChooser() {
+ewol::widget::FileChooser::FileChooser() :
+  signalCancel(*this, "cancel"),
+  signalValidate(*this, "validate") {
 	addObjectType("ewol::widget::FileChooser");
-	addEventId(eventCancel);
-	addEventId(eventValidate);
 }
 
 void ewol::widget::FileChooser::init() {
@@ -106,17 +95,17 @@ void ewol::widget::FileChooser::init() {
 	      + "	</sizer>\n"
 	      + "</popup>";
 	loadFromString(myDescription);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file", "value", ewolEventFileChooserHidenFileChange);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-validate", "pressed", eventValidate);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:button-cancel", "pressed", eventCancel);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "folder-validate", ewolEventFileChooserListFolder);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-files", "file-select", ewolEventFileChooserListFile);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:list-files", "file-validate", ewolEventFileChooserListFileValidate);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "modify", ewolEventFileChooserEntryFile);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "enter",  ewolEventFileChooserEntryFileEnter);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "modify", ewolEventFileChooserEntryFolder);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:entry-folder", "enter",  ewolEventFileChooserEntryFolderEnter);
-	registerOnEventNameWidget("[" + etk::to_string(getId()) + "]file-shooser:img-home", "pressed", ewolEventFileChooserHome);
+	subBind(ewol::widget::CheckBox, "[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file", signalValue, shared_from_this(), &ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue);
+	subBind(ewol::widget::Button, "[" + etk::to_string(getId()) + "]file-shooser:button-validate", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackListValidate);
+	subBind(ewol::widget::Button, "[" + etk::to_string(getId()) + "]file-shooser:button-cancel", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackButtonCancelPressed);
+	subBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-folder", signalFolderValidate, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFolderSelectChange);
+	subBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-files", signalFileSelect, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileSelectChange);
+	subBind(ewol::widget::ListFileSystem, "[" + etk::to_string(getId()) + "]file-shooser:list-files", signalFileValidate, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileValidate);
+	subBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-file", signalModify, shared_from_this(), &ewol::widget::FileChooser::onCallbackEntryFileChangeValue);
+	subBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-file", signalEnter, shared_from_this(), &ewol::widget::FileChooser::onCallbackListFileValidate);
+	subBind(ewol::widget::Entry, "[" + etk::to_string(getId()) + "]file-shooser:entry-folder", signalModify, shared_from_this(), &ewol::widget::FileChooser::onCallbackEntryFolderChangeValue);
+	//composerBind(ewol::widget::CheckBox, "[" + etk::to_string(getId()) + "]file-shooser:entry-folder", signalEnter, shared_from_this(), &ewol::widget::FileChooser::);
+	subBind(ewol::widget::Image, "[" + etk::to_string(getId()) + "]file-shooser:img-home", signalPressed, shared_from_this(), &ewol::widget::FileChooser::onCallbackHomePressed);
 	// set the default Folder properties:
 	updateCurrentFolder();
 	setCanHaveFocus(true);
@@ -153,62 +142,81 @@ void ewol::widget::FileChooser::setFileName(const std::string& _filename) {
 	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
 }
 
-void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
-	EWOL_INFO("Receive Event from the LIST ... : " << _msg);
-	if (_msg.getMessage() == ewolEventFileChooserEntryFolder) {
-		// == > change the folder name
-		// TODO : change the folder, if it exit ...
-	} else if (_msg.getMessage() == ewolEventFileChooserEntryFile) {
-		// == > change the file name
-		m_file = _msg.getData();
-		// update the selected file in the list :
-		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
-	} else if (eventCancel == _msg.getMessage()) {
-		// == > Auto remove ...
-		generateEventId(_msg.getMessage());
-		autoDestroy();
-	} else if (_msg.getMessage() == ewolEventFileChooserHidenFileChange) {
-		if (_msg.getData() == "true") {
-			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
-			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
-		} else {
-			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
-			parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
-		}
-	} else if (_msg.getMessage() == ewolEventFileChooserListFolder) {
-		// == > this is an internal event ...
-		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << _msg.getData() << "\"");
-		m_folder = m_folder + _msg.getData();
-		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
-		m_folder = etk::simplifyPath(m_folder);
-		setFileName("");
-		updateCurrentFolder();
-	} else if (_msg.getMessage() == ewolEventFileChooserListFile) {
-		setFileName(_msg.getData());
-		std::string tmpFileCompleatName = m_folder;
-		tmpFileCompleatName += m_file;
-		generateEventId(_msg.getMessage(), tmpFileCompleatName);
-	} else if(     _msg.getMessage() == ewolEventFileChooserListFileValidate 
-	           || (_msg.getMessage() == eventValidate && m_file != "" )
-	           || (_msg.getMessage() == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
-		// select the file  == > generate a validate
-		if (_msg.getData() != "") {
-			setFileName(_msg.getData());
-		}
-		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
-		generateEventId(eventValidate, getCompleateFileName());
-		autoDestroy();
-	} else if(_msg.getMessage() == ewolEventFileChooserHome) {
-		std::string tmpUserFolder = etk::getUserHomeFolder();
-		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
-		
-		m_folder = etk::simplifyPath(tmpUserFolder);
-		
-		setFileName("");
-		updateCurrentFolder();
+
+void ewol::widget::FileChooser::onCallbackEntryFolderChangeValue(const std::string& _value) {
+	// == > change the folder name
+	// TODO : change the folder, if it exit ...
+}
+
+void ewol::widget::FileChooser::onCallbackEntryFileChangeValue(const std::string& _value) {
+	// == > change the file name
+	m_file = _value;
+	// update the selected file in the list :
+	parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
+}
+
+void ewol::widget::FileChooser::onCallbackButtonCancelPressed() {
+	// == > Auto remove ...
+	signalCancel.emit();
+	autoDestroy();
+}
+
+void ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue(const bool& _value) {
+	if (_value == true) {
+		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
+		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
+	} else {
+		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
+		parameterSetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
 	}
-	return;
-};
+}
+
+void ewol::widget::FileChooser::onCallbackListFolderSelectChange(const std::string& _value) {
+	// == > this is an internal event ...
+	EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << _value << "\"");
+	m_folder = m_folder + _value;
+	EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
+	m_folder = etk::simplifyPath(m_folder);
+	setFileName("");
+	updateCurrentFolder();
+}
+
+void ewol::widget::FileChooser::onCallbackListFileSelectChange(const std::string& _value) {
+	setFileName(_value);
+	/*
+	std::string tmpFileCompleatName = m_folder;
+	tmpFileCompleatName += m_file;
+	// TODO : generateEventId(_msg.getMessage(), tmpFileCompleatName);
+	*/
+}
+
+void ewol::widget::FileChooser::onCallbackListFileValidate(const std::string& _value) {
+	// select the file  == > generate a validate
+	setFileName(_value);
+	EWOL_VERBOSE(" generate a fiel opening : '" << m_folder << "' / '" << m_file << "'");
+	signalValidate.emit(getCompleateFileName());
+	autoDestroy();
+}
+
+void ewol::widget::FileChooser::onCallbackListValidate() {
+	if (m_file == "" ) {
+		EWOL_WARNING(" Validate : '" << m_folder << "' / '" << m_file << "' ==> error No name ...");
+		return;
+	}
+	EWOL_DEBUG(" generate a file opening : '" << m_folder << "' / '" << m_file << "'");
+	signalValidate.emit(getCompleateFileName());
+	autoDestroy();
+}
+
+void ewol::widget::FileChooser::onCallbackHomePressed() {
+	std::string tmpUserFolder = etk::getUserHomeFolder();
+	EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
+	
+	m_folder = etk::simplifyPath(tmpUserFolder);
+	
+	setFileName("");
+	updateCurrentFolder();
+}
 
 void ewol::widget::FileChooser::updateCurrentFolder() {
 	if (m_folder != "" ) {

@@ -57,34 +57,6 @@ namespace ewol {
 				 * @return false  == > some error occured
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
-			protected:
-				/**
-				 * @brief Register an Event an named widget. @see registerOnEvent
-				 * @param[in] _subWidgetName Name of the subWidget.
-				 * @param[in] _eventId Event generate inside the object.
-				 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
-				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
-				 * @note : To used when herited from this object.
-				 */
-				void registerOnEventNameWidget(const std::string& _subWidgetName,
-				                               const char * _eventId,
-				                               const char * _eventIdgenerated = nullptr,
-				                               const std::string& _overloadData="");
-			public:
-				/**
-				 * @brief Register an Event an named widget. @see registerOnEvent
-				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-				 * @param[in] _subWidgetName Name of the subWidget.
-				 * @param[in] _eventId Event generate inside the object.
-				 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
-				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
-				 * @note : To used when NOT herited from this object.
-				 */
-				void registerOnEventNameWidget(const std::shared_ptr<ewol::Object>& _destinationObject,
-				                               const std::string& _subWidgetName,
-				                               const char * _eventId,
-				                               const char * _eventIdgenerated = nullptr,
-				                               const std::string& _overloadData="");
 		};
 	};
 };

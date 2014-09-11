@@ -31,6 +31,7 @@ namespace ewol {
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
 #include <ewol/translate.h>
+#include <ewol/object/Signal.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
@@ -99,16 +100,12 @@ namespace ewol {
 	 */
 	class EventShortCut {
 		public:
-			bool broadcastEvent; //!< if it is true, then the message is sent to all the system
-			const char* generateEventId; //!< Local generated event
-			std::string eventData; //!< data link with the event
+			std::string message; //!< data link with the event
 			ewol::key::Special specialKey; //!< special board key
 			char32_t unicodeValue; //!< 0 if not used
 			enum ewol::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut() {
-				broadcastEvent = false;
-				generateEventId = nullptr;
-				eventData = "";
+				message = "";
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::key::keyboardUnknow;
 			};
@@ -531,12 +528,6 @@ namespace ewol {
 				}
 				return nullptr;
 			};
-			/**
-			 * @brief get the widget if it have this name or one of the subwidget with the same name
-			 * @param[in] _widgetName name of the widget
-			 * @return the requested pointer on the node (or nullptr pointer)
-			 */
-			virtual std::shared_ptr<ewol::Widget> getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:
@@ -590,23 +581,27 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
+		public:
+			ewol::object::Signal<std::string> signalShortcut; //!< signal handle of the message
 		private:
 			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
 			/**
 			 * @brief add a specific shortcut with his description
 			 * @param[in] _descriptiveString Description string of the shortcut
-			 * @param[in] _generateEventId Event generic of the element
-			 * @param[in] _data Associate data wit the event
+			 * @param[in] _message massage to generate (or shortcut name)
 			 */
-			virtual void shortCutAdd(const char * _descriptiveString,
-			                         const char * _generateEventId,
-			                         std::string _data="",
-			                         bool _broadcast=false);
+			virtual void shortCutAdd(const std::string& _descriptiveString,
+			                         const std::string& _message="");
 			/**
 			 * @brief remove all curent shortCut
 			 */
 			virtual void shortCutClean();
+			/**
+			 * @brief remove a specific shortCut whith his event name
+			 * @param[in] _message renerated event name
+			 */
+			virtual void shortCutRemove(const std::string& _message);
 		public:
 			/**
 			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref onEventKb).
@@ -713,9 +708,9 @@ namespace ewol {
 		 */
 		public:
 			// event generated :
-			static const char* const eventAnnimationStart; //!< event when start annimation
-			static const char* const eventAnnimationRatio; //!< event when % of annimation change (integer)
-			static const char* const eventAnnimationStop;  //!< event when stop annimation
+			ewol::object::Signal<void> signalAnnimationStart; //!< event when start annimation
+			ewol::object::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
+			ewol::object::Signal<void> signalAnnimationStop;  //!< event when stop annimation
 		protected:
 			enum annimationMode {
 				annimationModeEnableAdd,

@@ -18,6 +18,7 @@
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/ColorBar.h>
 #include <ewol/widget/Slider.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -27,15 +28,13 @@ namespace ewol {
 		class ColorChooser : public ewol::widget::Sizer {
 			public:
 				// Event list of properties
-				static const char * const eventChange;
+				ewol::object::Signal<etk::Color<>> signalChange;
 			protected:
 				ColorChooser();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
 				virtual ~ColorChooser();
-			public: // Derived function
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			public:
 				void setColor(etk::Color<> _newColor);
 				etk::Color<> getColor();
@@ -46,6 +45,11 @@ namespace ewol {
 				std::shared_ptr<ewol::widget::Slider> m_widgetBlue;
 				std::shared_ptr<ewol::widget::Slider> m_widgetAlpha;
 				etk::Color<> m_currentColor;
+				void onCallbackColorChangeRed(const int32_t& _newColor);
+				void onCallbackColorChangeGreen(const int32_t& _newColor);
+				void onCallbackColorChangeBlue(const int32_t& _newColor);
+				void onCallbackColorChangeAlpha(const int32_t& _newColor);
+				void onCallbackColorChange(const etk::Color<>& _newColor);
 		};
 	};
 };

@@ -15,15 +15,13 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/Manager.h>
 
-const char * const ewol::widget::ParameterList::eventSelect = "select";
-
 #undef __class__
 #define __class__ "List"
 
 
-ewol::widget::ParameterList::ParameterList() {
+ewol::widget::ParameterList::ParameterList() :
+  signalSelect(*this, "select") {
 	addObjectType("ewol::widget::ParameterList");
-	addEventId(eventSelect);
 	
 	m_idSelected = -1;
 	m_paddingSizeX = 2;
@@ -192,7 +190,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
 			if (m_list[rawID]!=nullptr) {
 				if (m_list[rawID]->m_refId >= 0) {
-					generateEventId(eventSelect, etk::to_string(m_list[rawID]->m_refId));
+					signalSelect.emit(m_list[rawID]->m_refId);
 					m_idSelected = rawID;
 					markToRedraw();
 					return true;

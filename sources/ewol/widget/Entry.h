@@ -18,6 +18,7 @@
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -33,10 +34,9 @@ namespace ewol {
 		 */
 		class Entry : public ewol::Widget {
 			public:
-				// Event list of properties
-				static const char * const eventClick;
-				static const char * const eventEnter;
-				static const char * const eventModify; // return in the data the new string inside it ...
+				ewol::object::Signal<void> signalClick; //!< bang on click the entry box
+				ewol::object::Signal<std::string> signalEnter; //!< Enter key is pressed
+				ewol::object::Signal<std::string> signalModify; //!< data change
 			private:
 				ewol::object::Param<ewol::compositing::Shaper> m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
@@ -166,7 +166,6 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 				virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 				virtual void calculateMinMaxSize();
 			protected: // Derived function
@@ -176,6 +175,13 @@ namespace ewol {
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+			private: // callback functions
+				void onCallbackShortCut(const std::string& _value);
+				void onCallbackEntryClean();
+				void onCallbackCut();
+				void onCallbackCopy();
+				void onCallbackPaste();
+				void onCallbackSelect(bool _all);
 		};
 	};
 };

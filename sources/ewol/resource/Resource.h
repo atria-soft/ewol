@@ -90,31 +90,69 @@ namespace ewol {
 	namespace resource {
 		class Manager;
 	};
-	// class resources is pure virtual
+	/**
+	 * @brief A Resource is a generic interface to have an instance that have things that can be used by many people, ad have some hardware dependency.
+	 * For example of resources :
+	 * :** Shaders: openGL display interface.
+	 * :** Texture: openGL imega interface.
+	 * :** Font: Single file interface to store many glyphe ==> reduce the number of parallele loaded files.
+	 * :** ConfigFile: simple widget configuration files
+	 * :** ...
+	 */
 	class Resource : public ewol::Object {
 		protected:
+			/**
+			 * @brief generic protected contructor (use factory to create this class)
+			 */
 			Resource() :
 			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
 				addObjectType("ewol::Resource");
 				setStatusResource(true);
 			};
+			/**
+			 * @brief Initialisation of the class and previous classes.
+			 * @param[in] _name Name of the resource.
+			 */
 			void init();
+			//! @previous
 			void init(const std::string& _name);
 		public:
-			
+			//! geenric destructor
 			virtual ~Resource() {
 				
 			};
 		protected:
-			uint8_t m_resourceLevel; //!< Level of the resource ==> for updata priority [0..5] 0 must be update first.
+			uint8_t m_resourceLevel; //!< Level of the resource ==> for update priority [0..5] 0 must be update first.
 		public:
-			uint8_t  getResourceLevel() {
+			/**
+			 * @brief Get the current resource level;
+			 * @return value in [0..5]
+			 */
+			uint8_t getResourceLevel() {
 				return m_resourceLevel;
 			};
+			/**
+			 * @brief Call when need to send data on the harware (openGL)
+			 * @note This is done asynchronously with the create of the Resource.
+			 */
 			virtual void updateContext();
+			/**
+			 * @brief The current OpenGl context is removing ==> remove yout own system data
+			 */
 			virtual void removeContext();
+			/**
+			 * @brief The notification of the Context removing is too late, we have no more acces on the OpenGl context (thank you Android).
+			 * Juste update your internal state
+			 */
 			virtual void removeContextToLate();
+			/**
+			 * @brief User request the reload of all resources (usefull when the file depend on DATA:GUI:xxx ...
+			 */
 			virtual void reload();
+		protected:
+			/**
+			 * @brief Get the current resource Manager
+			 */
 			static ewol::resource::Manager& getManager();
 	};
 };

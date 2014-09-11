@@ -15,9 +15,6 @@
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
 
-const char * const ewol::widget::ButtonColor::eventChange = "change";
-
-
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
@@ -31,10 +28,10 @@ const char * const ewol::widget::ButtonColor::eventChange = "change";
 static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
 
 ewol::widget::ButtonColor::ButtonColor() :
+  signalChange(*this, "change", "Button color change value"),
   m_textColorFg(etk::color::black),
   m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
-	addEventId(eventChange);
 	changeStatusIn(STATUS_UP);
 	setCanHaveFocus(true);
 	// Limit event at 1:
@@ -185,7 +182,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				myColorChooser->setColor(m_textColorFg);
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
-				myColorChooser->registerOnEvent(shared_from_this(), "change", eventColorHasChange);
+				myColorChooser->signalChange.bind(shared_from_this(), &ewol::widget::ButtonColor::onCallbackColorChange);
 				std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
 				if (currentWindows == nullptr) {
 					EWOL_ERROR("Can not get the curent Windows...");
@@ -212,9 +209,13 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 	return m_mouseHover;
 }
 
+void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color) {
+	setValue(_color);
+}
 
-void ewol::widget::ButtonColor::setValue(etk::Color<> _color) {
+void ewol::widget::ButtonColor::setValue(const etk::Color<>& _color) {
 	m_textColorFg = _color;
+	signalChange.emit(m_textColorFg);
 	markToRedraw();
 }
 
@@ -222,25 +223,12 @@ etk::Color<> ewol::widget::ButtonColor::getValue() {
 	return m_textColorFg;
 }
 
-
-void ewol::widget::ButtonColor::onReceiveMessage(const ewol::object::Message& _msg) {
-	EWOL_INFO("Receive MSG : " <<  _msg.getData());
-	if (_msg.getMessage() == eventColorHasChange) {
-		m_textColorFg = _msg.getData();
-		generateEventId(eventChange, _msg.getData());
-		markToRedraw();
-	}
-}
-
-
 void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
 	}
 }
-
-
 
 void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {

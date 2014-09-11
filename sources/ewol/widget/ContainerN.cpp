@@ -138,16 +138,16 @@ void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 	subWidgetRemoveAll();
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetNamed(const std::string& _widgetName) {
-	std::shared_ptr<ewol::Widget> tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
-	if (tmpUpperWidget != nullptr) {
-		return tmpUpperWidget;
+std::shared_ptr<ewol::Object> ewol::widget::ContainerN::getSubObjectNamed(const std::string& _objectName) {
+	std::shared_ptr<ewol::Object> tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
+	if (tmpObject != nullptr) {
+		return tmpObject;
 	}
 	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
-			std::shared_ptr<ewol::Widget> tmpWidget = it->getWidgetNamed(_widgetName);
-			if (tmpWidget != nullptr) {
-				return tmpWidget;
+			tmpObject = it->getSubObjectNamed(_objectName);
+			if (tmpObject != nullptr) {
+				return tmpObject;
 			}
 		}
 	}

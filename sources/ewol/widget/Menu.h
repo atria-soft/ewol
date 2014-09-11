@@ -13,6 +13,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/widget/Button.h>
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/ContextMenu.h>
 
@@ -26,13 +27,14 @@ namespace ewol {
 				std::weak_ptr<ewol::Widget> m_widgetPointer;
 				std::string m_label;
 				std::string m_image;
-				const char* m_generateEvent;
 				std::string m_message;
 		};
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Menu :public ewol::widget::Sizer {
+			public:
+				ewol::object::Signal<std::string> signalSelect; // event on a menu button or ...
 			protected:
 				Menu();
 				void init();
@@ -48,13 +50,15 @@ namespace ewol {
 				std::vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
 				std::weak_ptr<ewol::widget::ContextMenu> m_widgetContextMenu;
+				int32_t get(const std::string& _label);
 			public:
 				void clear();
-				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
-				int32_t add(int32_t _parent, std::string _label, std::string _image="", const char * _generateEvent = nullptr, const std::string _message = "");
-				void addSpacer();
-				// Derived function
-				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+				int32_t addTitle(const std::string& _label, const std::string& _image="", const std::string& _message = "");
+				int32_t add(int32_t _parent, const std::string& _label, const std::string& _image="", const std::string& _message = "");
+				int32_t addSpacer();
+				void remove(int32_t _id);
+			private:
+				void onButtonPressed(std::weak_ptr<ewol::widget::Button> _button);
 		};
 	};
 };

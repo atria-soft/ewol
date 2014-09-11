@@ -12,6 +12,7 @@
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
 #include <ewol/resource/ColorFile.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -21,10 +22,10 @@ namespace ewol {
 		class ListFileSystem : public ewol::widget::List {
 			public:
 				// Event list of properties
-				static const char * const eventFileSelect; //!< @event "file-select" Generated when a file is selected.
-				static const char * const eventFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
-				static const char * const eventFolderSelect;
-				static const char * const eventFolderValidate;
+				ewol::object::Signal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
+				ewol::object::Signal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
+				ewol::object::Signal<std::string> signalFolderSelect;
+				ewol::object::Signal<std::string> signalFolderValidate;
 			protected:
 				ListFileSystem();
 				void init();

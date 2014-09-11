@@ -14,6 +14,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/object/Signal.h>
 
 
 namespace ewol {
@@ -21,11 +22,11 @@ namespace ewol {
 		class CheckBox : public ewol::widget::Container2 {
 			public:
 				// Event list of properties
-				static const char* const eventPressed;
-				static const char* const eventDown;
-				static const char* const eventUp;
-				static const char* const eventEnter;
-				static const char* const eventValue;
+				ewol::object::Signal<void> signalPressed;
+				ewol::object::Signal<void> signalDown;
+				ewol::object::Signal<void> signalUp;
+				ewol::object::Signal<void> signalEnter;
+				ewol::object::Signal<bool> signalValue;
 			private:
 				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).

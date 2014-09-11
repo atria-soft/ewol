@@ -14,6 +14,7 @@
 #include <etk/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/object/Signal.h>
 
 
 namespace ewol {
@@ -21,7 +22,7 @@ namespace ewol {
 		class ColorBar : public ewol::Widget {
 			public:
 				// Event list of properties
-				static const char * const eventChange;
+				ewol::object::Signal<etk::Color<>> signalChange;
 			protected:
 				ColorBar();
 				void init();

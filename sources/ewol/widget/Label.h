@@ -15,6 +15,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/resource/ColorFile.h>
+#include <ewol/object/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -24,7 +25,7 @@ namespace ewol {
 		class Label : public ewol::Widget {
 			public:
 				// Event list of properties
-				static const char * const eventPressed;
+				ewol::object::Signal<void> signalPressed;
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
 				ewol::object::Param<std::u32string> m_label; //!< decorated text to display.
