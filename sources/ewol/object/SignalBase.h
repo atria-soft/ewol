@@ -21,6 +21,7 @@ namespace ewol {
 				ewol::object::SignalList& m_objectLink;
 				std::string m_name;
 				std::string m_description;
+				static int32_t m_uidSignal;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.

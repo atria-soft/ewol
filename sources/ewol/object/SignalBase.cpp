@@ -12,6 +12,7 @@
 #include <ewol/object/SignalList.h>
 #include <ewol/object/SignalBase.h>
 
+int32_t ewol::object::SignalBase::m_uidSignal = 0;
 ewol::object::SignalBase::SignalBase(ewol::object::SignalList& _objectLink,
                                    const std::string& _name,
                                    const std::string& _description) :

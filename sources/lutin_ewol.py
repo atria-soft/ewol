@@ -90,6 +90,7 @@ def create(target):
 	myModule.add_src_file([
 		'ewol/object/Manager.cpp',
 		'ewol/object/Object.cpp',
+		'ewol/object/Worker.cpp',
 		'ewol/object/Parameter.cpp',
 		'ewol/object/ParameterList.cpp',
 		'ewol/object/ParamList.cpp',

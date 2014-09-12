@@ -52,6 +52,19 @@ namespace ewol {
 				 * @return the requested object or nullptr
 				 */
 				std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _name);
+			private:
+				std::vector<std::shared_ptr<ewol::Object>> m_workerList;
+			public:
+				/**
+				 * @brief Add a worker on the system list.
+				 * @param[in] _worker Worker to add in the list.
+				 */
+				void workerAdd(const std::shared_ptr<ewol::Object>& _worker);
+				/**
+				 * @brief Remove a worker on the system list.
+				 * @param[in] _worker Worker to add in the list.
+				 */
+				void workerRemove(const std::shared_ptr<ewol::Object>& _worker);
 		};
 	};
 };

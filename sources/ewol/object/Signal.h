@@ -72,10 +72,12 @@ namespace ewol {
 				 * @param[in] _obj shared pointer on the removing object
 				 */
 				void release(std::shared_ptr<ewol::Object> _obj) {
-					for (auto it(m_callerList.begin()) ; it != m_callerList.end(); ++it) {
+					auto it(m_callerList.begin());
+					while(it != m_callerList.end()) {
 						if (it->first.lock() == _obj) {
-							m_callerList.erase(it);
-							it = m_callerList.begin();
+							it = m_callerList.erase(it);
+						} else {
+							++it;
 						}
 					}
 				}
@@ -84,6 +86,15 @@ namespace ewol {
 				 * @param[in] _data data to emit
 				 */
 				void emit(const T& _data) {
+					#ifdef DEBUG
+						int32_t tmpID = m_uidSignal++;
+						ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
+						if (srcObject != nullptr) {
+							EWOL_DEBUG("emit signal{" << tmpID << "} : " << srcObject->getObjectType() << " signal='" << m_name << "' data='" << etk::to_string(_data) << "' to:");
+						} else {
+							EWOL_DEBUG("emit signal{" << tmpID << "} : signal='" << m_name << "' data='" << etk::to_string(_data) << "' to:");
+						}
+					#endif
 					for (auto &it : m_callerList) {
 						std::shared_ptr<ewol::Object> destObject = it.first.lock();
 						if (destObject == nullptr) {
@@ -92,11 +103,10 @@ namespace ewol {
 							continue;
 						}
 						#ifdef DEBUG
-							ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
 							if (srcObject != nullptr) {
-								EWOL_DEBUG("emit signal : " << srcObject->getObjectType() << " '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " data='" << etk::to_string(_data) << "'");
+								EWOL_DEBUG("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							} else {
-								EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " data='" << etk::to_string(_data) << "'");
+								EWOL_DEBUG("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							}
 						#endif
 						it.second(_data);
@@ -157,14 +167,25 @@ namespace ewol {
 				 * @param[in] _obj shared pointer on the removing object
 				 */
 				void release(std::shared_ptr<ewol::Object> _obj) {
-					for (auto it(m_callerList.begin()) ; it != m_callerList.end(); ++it) {
+					auto it(m_callerList.begin());
+					while(it != m_callerList.end()) {
 						if (it->first.lock() == _obj) {
-							m_callerList.erase(it);
-							it = m_callerList.begin();
+							it = m_callerList.erase(it);
+						} else {
+							++it;
 						}
 					}
 				}
 				void emit() {
+					#ifdef DEBUG
+						int32_t tmpID = m_uidSignal++;
+						ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
+						if (srcObject != nullptr) {
+							EWOL_DEBUG("emit signal{" << tmpID << "} : " << srcObject->getObjectType() << " signal='" << m_name << "' BANG!!! to:");
+						} else {
+							EWOL_DEBUG("emit signal{" << tmpID << "} : signal='" << m_name << "' to:");
+						}
+					#endif
 					for (auto &it : m_callerList) {
 						std::shared_ptr<ewol::Object> destObject = it.first.lock();
 						if (destObject == nullptr) {
@@ -173,11 +194,10 @@ namespace ewol {
 							continue;
 						}
 						#ifdef DEBUG
-							ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
 							if (srcObject != nullptr) {
-								EWOL_DEBUG("emit signal : " << srcObject->getObjectType() << " '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " BANG!!!");
+								EWOL_DEBUG("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							} else {
-								EWOL_DEBUG("emit signal : '" << m_name << "' to [" << destObject->getId() << "]" << destObject->getObjectType() << " BANG!!!");
+								EWOL_DEBUG("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							}
 						#endif
 						it.second();

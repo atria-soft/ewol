@@ -85,7 +85,7 @@ namespace ewol {
 			 */
 			void autoDestroy();
 		public:
-			void destroy() {
+			virtual void destroy() {
 				autoDestroy();
 			}
 		public:

@@ -21,6 +21,7 @@ ewol::object::Manager::Manager(ewol::Context& _context) :
 }
 
 ewol::object::Manager::~Manager() {
+	m_workerList.clear();
 	bool hasError = false;
 	if (m_eObjectList.size()!=0) {
 		EWOL_ERROR("Must not have anymore eObject !!!");
@@ -44,6 +45,10 @@ void ewol::object::Manager::displayListObject() {
 
 void ewol::object::Manager::unInit() {
 	EWOL_DEBUG(" == > Un-Init Object-Manager");
+	if (m_workerList.size() > 0) {
+		EWOL_DEBUG(" == > Remove all workers");
+		m_workerList.clear();
+	}
 	for (auto &it : m_eObjectList) {
 		std::shared_ptr<ewol::Object> element = it.lock();
 		if (element != nullptr) {
@@ -74,8 +79,7 @@ void ewol::object::Manager::cleanInternalRemoved() {
 	auto it(m_eObjectList.begin());
 	while (it != m_eObjectList.end()) {
 		if (it->expired() == true) {
-			m_eObjectList.erase(it);
-			it = m_eObjectList.begin();
+			it = m_eObjectList.erase(it);
 		} else {
 			++it;
 		}
@@ -104,3 +108,18 @@ std::shared_ptr<ewol::Object> ewol::object::Manager::getObjectNamed(const std::s
 	return ewol::object::Manager::get(_name);
 }
 
+
+void ewol::object::Manager::workerAdd(const std::shared_ptr<ewol::Object>& _worker) {
+	m_workerList.push_back(_worker);
+}
+
+void ewol::object::Manager::workerRemove(const std::shared_ptr<ewol::Object>& _worker) {
+	auto it(m_workerList.begin());
+	while (it != m_workerList.end()) {
+		if (*it == _worker) {
+			it = m_workerList.erase(it);
+		} else {
+			++it;
+		}
+	}
+}
