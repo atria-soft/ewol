@@ -31,8 +31,12 @@ namespace ewol {
 				 * @return number of Object
 				 */
 				int32_t getNumberObject();
+				/**
+				 * @brief Display all object Open.
+				 */
 				void displayListObject();
 			private:
+				//! @not-in-doc
 				friend class ewol::Object;
 				/**
 				 * @brief Internal API that used only with Object toi reference itself in the manager.
@@ -41,10 +45,16 @@ namespace ewol {
 				 */
 				void add(const std::shared_ptr<ewol::Object>& _object);
 			public:
+				/**
+				 * @brief clean the weak pointer list (remove weak_ptr that is remoed)
+				 */
 				void cleanInternalRemoved();
-				
+				/**
+				 * @brief Retrive an Object with his name
+				 * @param[in] _name Name of the Object
+				 * @return Pointer on the finded Object.
+				 */
 				std::shared_ptr<ewol::Object> get(const std::string& _name);
-			
 			public:
 				/**
 				 * @brief retrive an object with his name

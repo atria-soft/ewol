@@ -28,6 +28,7 @@ void ewol::Object::autoDestroy() {
 		parent->requestDestroyFromChild(shared_from_this());
 	}
 	//if no parent ==> noting to do ...
+	m_destroy = true;
 }
 
 void ewol::Object::requestDestroyFromChild(const std::shared_ptr<ewol::Object>& _child) {
@@ -46,6 +47,7 @@ void ewol::Object::removeParent() {
 
 ewol::Object::Object() :
   m_objectHasBeenInit(false),
+  m_destroy(false),
   m_static(false),
   m_name(*this, "name", "", "Object name, might be a unique reference in all the program"),
   m_isResource(false) {

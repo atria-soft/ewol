@@ -79,6 +79,7 @@ namespace ewol {
 			}
 		protected:
 			std::weak_ptr<Object> m_parent;
+			bool m_destroy;
 		protected:
 			/**
 			 * @brief Auto-destroy the object
@@ -87,6 +88,9 @@ namespace ewol {
 		public:
 			virtual void destroy() {
 				autoDestroy();
+			}
+			bool isDestroyed() const {
+				return m_destroy;
 			}
 		public:
 			virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);

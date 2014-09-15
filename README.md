@@ -27,7 +27,9 @@ Dependency packages
 	# For andoid compilation (jdk 7 does not work...)
 	sudo apt-get install javacc openjdk-6-jdk
 	# if you want to compile for windows :
-	sudo apt-get install mingw32
+	sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+	sudo apt-get update
+	sudo apt-get install gcc-mingw-w64
 	# on 64 bits processor for compatibility
 	sudo apt-get install ia32-libs
 
