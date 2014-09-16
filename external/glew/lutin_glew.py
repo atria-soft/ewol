@@ -12,8 +12,15 @@ def create(target):
 		myModule = module.Module(__file__, 'glew', 'PREBUILD')
 		
 		myModule.add_export_path(tools.get_current_path(__file__) + "/glew/include/")
+		if target.config["bus-size"] == "32":
+			myModule.add_export_flag_LD([
+				tools.get_current_path(__file__) + "/glew/lib/Release/Win32/glew32s.lib"
+				])
+		else:
+			myModule.add_export_flag_LD([
+				tools.get_current_path(__file__) + "/glew/lib/Release/x64/glew32s.lib",
+				])
 		myModule.add_export_flag_LD([
-			tools.get_current_path(__file__) + "/glew/lib/glew32s.lib",
 			"-lopengl32",
 			"-lgdi32",
 			"-static-libgcc",

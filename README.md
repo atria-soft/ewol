@@ -32,6 +32,7 @@ Dependency packages
 	sudo apt-get install gcc-mingw-w64
 	# on 64 bits processor for compatibility
 	sudo apt-get install ia32-libs
+	sudo apt-get install g++-multilib libc6-dev-i386
 
 License (APACHE v2.0)
 =====================
