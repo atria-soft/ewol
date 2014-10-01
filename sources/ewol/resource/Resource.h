@@ -35,7 +35,10 @@
 #define DECLARE_RESOURCE_NAMED_FACTORY(className) \
 	template<typename ... T> static std::shared_ptr<className> create(const std::string& _name, T&& ... all ) { \
 		std::shared_ptr<className> object; \
-		std::shared_ptr<ewol::Resource> object2 = getManager().localKeep(_name); \
+		std::shared_ptr<ewol::Resource> object2; \
+		if (_name != "" && _name != "---") { \
+			object2 = getManager().localKeep(_name); \
+		} \
 		if (object2 != nullptr) { \
 			object = std::dynamic_pointer_cast<className>(object2); \
 			if (object == nullptr) { \
