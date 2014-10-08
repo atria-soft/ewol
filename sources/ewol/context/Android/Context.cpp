@@ -11,7 +11,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <pthread.h>
-#include <etk/os/Mutex.h>
+#include <mutex>
 #include <ewol/debug.h>
 #include <ewol/context/Context.h>
 //#include <ewol/renderer/audio/audio.h>
@@ -32,8 +32,8 @@ int64_t ewol::getTime() {
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
 static JavaVM* g_JavaVM=nullptr; // global acces on the unique JVM !!!
-etk::Mutex g_interfaceMutex;
-etk::Mutex g_interfaceAudioMutex;
+std::mutex g_interfaceMutex;
+std::mutex g_interfaceAudioMutex;
 
 
 void java_check_exception(JNIEnv* _env) {
@@ -646,16 +646,16 @@ extern "C" {
 	// JNI onLoad
 	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved) {
 		// get the java virtual machine handle ...
-		etk::AutoLockMutex myLock(g_interfaceMutex);
-		etk::AutoLockMutex myLock2(g_interfaceAudioMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceAudioMutex);
 		g_JavaVM = _jvm;
 		EWOL_DEBUG("JNI-> load the jvm ..." );
 		return JNI_VERSION_1_6;
 	}
 	// JNI onUnLoad
 	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
-		etk::AutoLockMutex myLock2(g_interfaceAudioMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceAudioMutex);
 		g_JavaVM = nullptr;
 		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
 	}
@@ -666,7 +666,7 @@ extern "C" {
 	                                             jint _id,
 	                                             jint _mode,
 	                                             jstring _myString) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -692,7 +692,7 @@ extern "C" {
 	                                                     jclass _classBase,
 	                                                     jobject _objCallback,
 	                                                     int _typeApplication) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Creating EWOL context                 **");
 		EWOL_DEBUG("*******************************************");
@@ -722,7 +722,7 @@ extern "C" {
 	}
 	
 	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStop(JNIEnv* _env, jclass _cls, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** remove JVM Pointer                    **");
 		EWOL_DEBUG("*******************************************");
@@ -740,7 +740,7 @@ extern "C" {
 		s_listInstance[_id]=nullptr;
 	}
 	void Java_org_ewol_Ewol_EWtouchEvent(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("  == > Touch Event");
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
@@ -753,7 +753,7 @@ extern "C" {
 	}
 	
 	void Java_org_ewol_Ewol_EWonCreate(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Create                    **");
 		EWOL_DEBUG("*******************************************");
@@ -768,7 +768,7 @@ extern "C" {
 	}
 	
 	void Java_org_ewol_Ewol_EWonStart(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Start                     **");
 		EWOL_DEBUG("*******************************************");
@@ -782,7 +782,7 @@ extern "C" {
 		//SendSystemMessage(" testmessages ... ");
 	}
 	void Java_org_ewol_Ewol_EWonReStart(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Re-Start                  **");
 		EWOL_DEBUG("*******************************************");
@@ -795,7 +795,7 @@ extern "C" {
 		}
 	}
 	void Java_org_ewol_Ewol_EWonResume(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on resume                    **");
 		EWOL_DEBUG("*******************************************");
@@ -809,7 +809,7 @@ extern "C" {
 		s_listInstance[_id]->OS_Resume();
 	}
 	void Java_org_ewol_Ewol_EWonPause(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on pause                     **");
 		EWOL_DEBUG("*******************************************");
@@ -825,7 +825,7 @@ extern "C" {
 		s_listInstance[_id]->OS_Suspend();
 	}
 	void Java_org_ewol_Ewol_EWonStop(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Stop                      **");
 		EWOL_DEBUG("*******************************************");
@@ -839,7 +839,7 @@ extern "C" {
 		s_listInstance[_id]->OS_Stop();
 	}
 	void Java_org_ewol_Ewol_EWonDestroy(JNIEnv* _env, jobject _thiz, jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Destroy                   **");
 		EWOL_DEBUG("*******************************************");
@@ -864,7 +864,7 @@ extern "C" {
 	                                           jint _pointerID,
 	                                           jfloat _x,
 	                                           jfloat _y) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -882,7 +882,7 @@ extern "C" {
 	                                          jboolean _isUp,
 	                                          jfloat _x,
 	                                          jfloat _y) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -899,7 +899,7 @@ extern "C" {
 	                                           jint _pointerID,
 	                                           jfloat _x,
 	                                           jfloat _y) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -917,7 +917,7 @@ extern "C" {
 	                                          jboolean _isUp,
 	                                          jfloat _x,
 	                                          jfloat _y) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -932,7 +932,7 @@ extern "C" {
 	                                      jobject _thiz,
 	                                      jint _id,
 	                                      jint _pointerID) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -948,7 +948,7 @@ extern "C" {
 	                                            jint _id,
 	                                            jint _type,
 	                                            jboolean _isdown) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -965,7 +965,7 @@ extern "C" {
 	                                           jint _id,
 	                                           jint _uniChar,
 	                                           jboolean _isdown) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -982,7 +982,7 @@ extern "C" {
 	                                                 jint _id,
 	                                                 jfloat _ratioX,
 	                                                 jfloat _ratioY) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -1000,7 +1000,7 @@ extern "C" {
 	                                                 jint _id,
 	                                                 jint _keyVal,
 	                                                 jboolean _isdown) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -1044,7 +1044,7 @@ extern "C" {
 	void Java_org_ewol_Ewol_EWrenderInit(JNIEnv* _env,
 	                                     jobject _thiz,
 	                                     jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -1059,7 +1059,7 @@ extern "C" {
 	                                       jint _id,
 	                                       jint _w,
 	                                       jint _h) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -1074,7 +1074,7 @@ extern "C" {
 	void Java_org_ewol_Ewol_EWrenderDraw(JNIEnv* _env,
 	                                     jobject _thiz,
 	                                     jint _id) {
-		etk::AutoLockMutex myLock(g_interfaceMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {
@@ -1091,7 +1091,7 @@ extern "C" {
 	                                        jshortArray _location,
 	                                        jint _frameRate,
 	                                        jint _nbChannels) {
-		etk::AutoLockMutex myLock(g_interfaceAudioMutex);
+		std::unique_lock<std::mutex> lock(g_interfaceAudioMutex);
 		if(    _id >= (int32_t)s_listInstance.size()
 		    || _id<0
 		    || nullptr == s_listInstance[_id] ) {

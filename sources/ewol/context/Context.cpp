@@ -12,7 +12,7 @@
 
 #include <etk/tool.h>
 #include <etk/os/FSNode.h>
-#include <etk/os/Mutex.h>
+#include <mutex>
 
 #include <date/date.h>
 
@@ -39,8 +39,8 @@
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& mutexInterface() {
-	static etk::Mutex s_interfaceMutex;
+static std::mutex& mutexInterface() {
+	static  std::mutex s_interfaceMutex;
 	return s_interfaceMutex;
 }
 
@@ -78,7 +78,7 @@ void ewol::Context::lockContext() {
  */
 void ewol::Context::unLockContext() {
 	l_curentInterface = nullptr;
-	mutexInterface().unLock();
+	mutexInterface().unlock();
 }
 
 

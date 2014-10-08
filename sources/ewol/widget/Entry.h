@@ -10,7 +10,7 @@
 #define __EWOL_ENTRY_H__
 
 #include <etk/types.h>
-#include <etk/RegExp.h>
+#include <regex>
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Drawing.h>
@@ -96,21 +96,22 @@ namespace ewol {
 					return m_maxCharacter;
 				};
 			private:
-				ewol::object::Param<etk::RegExp<std::string>> m_regExp; //!< regular expression to limit the input of an entry
+				ewol::object::Param<std::string> m_regexValue; //!< regular expression value
+				std::regex m_regex; //!< regular expression to check content
 			public:
 				/**
 				 * @brief Limit the input entry at a regular expression... (by default it is "*")
 				 * @param _expression New regular expression
 				 */
-				void setRegExp(const std::string& _expression) {
-					m_regExp.setString(_expression);
+				void setRegex(const std::string& _expression) {
+					m_regexValue.set(_expression);
 				}
 				/**
 				 * @brief get the regualar expression limitation
 				 * @param The regExp string
 				 */
-				std::string getRegExp() const {
-					return m_regExp->getRegExp();
+				std::string getRegex() const {
+					return m_regexValue;
 				};
 			private:
 				bool m_needUpdateTextPos; //!< text position can have change

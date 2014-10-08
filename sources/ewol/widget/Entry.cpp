@@ -28,7 +28,7 @@ ewol::widget::Entry::Entry() :
   m_shaper(*this, "shaper", "Shaper to display the background"),
   m_data(*this, "value", "", "Value display in the entry (decorated text)"),
   m_maxCharacter(*this, "max", 0x7FFFFFFF, 0, 0x7FFFFFFF, "Maximum cgar that can be set on the Entry"),
-  m_regExp(*this, "regExp", "Control what it is write with a regular expression"),
+  m_regexValue(*this, "regex", ".*", "Control what it is write with a regular expression"),
   m_needUpdateTextPos(true),
   m_displayStartPosition(0),
   m_displayCursor(false),
@@ -43,8 +43,12 @@ void ewol::widget::Entry::init(const std::string& _newData) {
 	m_data.set(_newData);
 	m_shaper.setString("THEME:GUI:Entry.json");
 	setCanHaveFocus(true);
-	m_regExp.setString(".*");
-	m_regExp.get().setMaximize(true);
+	
+	try {
+		m_regex.assign(".*", std::regex_constants::optimize | std::regex_constants::ECMAScript);
+	} catch (std::regex_error e) {
+		EWOL_ERROR("can not parse regex : '" << e.what() << "' for : " << m_regexValue);
+	}
 	markToRedraw();
 	
 	shortCutAdd("ctrl+w", "clean");
@@ -414,14 +418,18 @@ void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 	std::string previous = m_data;
 	// check the RegExp :
 	if (_newData.size()>0) {
-		if (false == m_regExp->parse(_newData,0,_newData.size()) ) {
-			EWOL_INFO("the input data does not match with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp->getRegExp() << "\" start=" << m_regExp->start() << " stop=" << m_regExp->stop() );
+		std::smatch resultMatch;
+		std::regex_search(_newData.begin(), _newData.end(), resultMatch, m_regex, std::regex_constants::match_continuous);
+		if (resultMatch.size() <= 0) {
+			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << m_regexValue << "'" );
 			return;
 		}
-		//EWOL_INFO("find regExp : \"" << m_data << "\" start=" << m_regExp.Start() << " stop=" << m_regExp.Stop() );
-		if(    0 != m_regExp->start()
-		    || _newData.size() != (size_t)m_regExp->stop() ) {
-			EWOL_INFO("The input data match not entirely with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp->getRegExp() << "\" start=" << m_regExp->start() << " stop=" << m_regExp->stop() );
+		if (_newData.begin() != resultMatch[0].first) {
+			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << m_regexValue << "' (start position error)" );
+			return;
+		}
+		if (_newData.end() !=  resultMatch[0].second) {
+			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << m_regexValue << "' (stop position error)" );
 			return;
 		}
 	}
@@ -563,10 +571,11 @@ void ewol::widget::Entry::onParameterChangeValue(const ewol::object::ParameterRe
 		markToRedraw();
 	} else if (_paramPointer == m_maxCharacter) {
 		// nothing to do ...
-	} else if (_paramPointer == m_regExp) {
-		if (m_regExp->getStatus() == false) {
-			EWOL_ERROR("error when adding regExp ...  == > set the '\".*\"' ...");
-			m_regExp->compile(".*");
+	} else if (_paramPointer == m_regexValue) {
+		try {
+			m_regex.assign(m_regexValue.get(), std::regex_constants::optimize | std::regex_constants::ECMAScript);
+		} catch (std::regex_error e) {
+			EWOL_ERROR("can not parse regex : '" << e.what() << "' for : " << m_regexValue);
 		}
 		markToRedraw();
 	} else if (_paramPointer == m_textWhenNothing) {

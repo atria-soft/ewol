@@ -9,15 +9,15 @@
 #include <vector>
 #include <ewol/debug.h>
 #include <ewol/openGL/openGL.h>
-#include <etk/os/Mutex.h>
+#include <mutex>
 
 /**
  * @brief get the draw mutex (ewol render).
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& mutexOpenGl() {
-	static etk::Mutex s_drawMutex;
+static std::mutex& mutexOpenGl() {
+	static std::mutex s_drawMutex;
 	return s_drawMutex;
 }
 
@@ -42,7 +42,7 @@ void ewol::openGL::lock() {
 }
 
 void ewol::openGL::unLock() {
-	mutexOpenGl().unLock();
+	mutexOpenGl().unlock();
 }
 
 void ewol::openGL::setBasicMatrix(const mat4& _newOne) {
