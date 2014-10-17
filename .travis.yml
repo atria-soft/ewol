@@ -23,7 +23,7 @@ install:
   - sudo apt-get install -qq g++-4.8
   - sudo rm /usr/bin/gcc /usr/bin/g++
   - sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
-  - ln -s /usr/bin/g++-4.8 /usr/bin/g++
+  - sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
   - if [ "$CXX" == "clang++" ]; then wget http://llvm.org/releases/3.4.1/clang+llvm-3.4.1-x86_64-unknown-ubuntu12.04.tar.xz; fi
   - if [ "$CXX" == "clang++" ]; then tar vxJf clang+llvm-3.4.1-x86_64-unknown-ubuntu12.04.tar.xz; fi
   - if [ "$CXX" == "clang++" ]; then export PATH=$PWD/clang+llvm-3.4.1-x86_64-unknown-ubuntu12.04/bin:$PATH; fi
