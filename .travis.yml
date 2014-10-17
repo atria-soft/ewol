@@ -24,9 +24,6 @@ install:
   - sudo rm /usr/bin/gcc /usr/bin/g++
   - sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
   - sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
-  - if [ "$CXX" == "clang++" ]; then wget http://llvm.org/releases/3.4.1/clang+llvm-3.4.1-x86_64-unknown-ubuntu12.04.tar.xz; fi
-  - if [ "$CXX" == "clang++" ]; then tar vxJf clang+llvm-3.4.1-x86_64-unknown-ubuntu12.04.tar.xz; fi
-  - if [ "$CXX" == "clang++" ]; then export PATH=$PWD/clang+llvm-3.4.1-x86_64-unknown-ubuntu12.04/bin:$PATH; fi
 
 # build sequence with Lutin :
 script: 
@@ -34,12 +31,12 @@ script:
   - if [ "$CXX" == "g++" ]; then ./build/lutin.py -C -P -cgcc -mdebug -p ewol etktest exmltest ejsontest enettest; fi
 
 after_script:
-  - if [ "$CXX" == "clang++" ]; then ./out/Linux/debug/staging/clang/etktest//usr/bin/etktest; fi
-  - if [ "$CXX" == "clang++" ]; then ./out/Linux/debug/staging/clang/exmltest//usr/bin/exmltest; fi
-  - if [ "$CXX" == "clang++" ]; then ./out/Linux/debug/staging/clang/ejsontest//usr/bin/ejsontest; fi
-  - if [ "$CXX" == "g++" ]; then ./out/Linux/debug/staging/gcc/etktest//usr/bin/etktest; fi
-  - if [ "$CXX" == "g++" ]; then ./out/Linux/debug/staging/gcc/exmltest//usr/bin/exmltest; fi
-  - if [ "$CXX" == "g++" ]; then ./out/Linux/debug/staging/gcc/ejsontest//usr/bin/ejsontest; fi
+  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/etktest/usr/bin/etktest; fi
+  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/exmltest/usr/bin/exmltest; fi
+  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/ejsontest/usr/bin/ejsontest; fi
+  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/etktest/usr/bin/etktest; fi
+  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/exmltest/usr/bin/exmltest; fi
+  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/ejsontest/usr/bin/ejsontest; fi
 
 #send e-mail on compilation result:
 notifications:
