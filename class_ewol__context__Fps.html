@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -83,29 +84,29 @@
 This class is designed to count the number of frame per second in the main renderer system<br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+             <a class="code-function" href="#4162">Fps</a>              (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">displayName</span>,<br/>                                <span class="code-type" >bool</span> <span class="code-argument">displayFPS</span>);<br/>+             <a class="code-function" href="#4165">~Fps</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++             <a class="code-function" href="#2073">Fps</a>              (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">displayName</span>,<br/>                                <span class="code-type" >bool</span> <span class="code-argument">displayFPS</span>);<br/>+             <a class="code-function" href="#2076">~Fps</a>             ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>        <a class="code-function" href="#4167">tic</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>        <a class="code-function" href="#4169">toc</a>              (<span class="code-type" >bool</span> <span class="code-argument">displayTime</span>);<br/>+ <span class="code-type" >void</span>        <a class="code-function" href="#4171">incrementCounter</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>        <a class="code-function" href="#4173">draw</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span>        <a class="code-function" href="#2077">tic</a>              ();<br/>+ <span class="code-type" >void</span>        <a class="code-function" href="#2078">toc</a>              (<span class="code-type" >bool</span> <span class="code-argument">displayTime</span>);<br/>+ <span class="code-type" >void</span>        <a class="code-function" href="#2080">incrementCounter</a> ();<br/>+ <span class="code-type" >void</span>        <a class="code-function" href="#2081">draw</a>             ();<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="4162"/><a id="4165"/><h3>Fps</h3><pre>
+<a id="2073"/><a id="2076"/><h3>Fps</h3><pre>
 +  <span class="code-function">Fps</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">displayName</span>,<br/>        <span class="code-type" >bool</span> <span class="code-argument">displayFPS</span>);<br/></pre>
 Constructor<br/>
 <br/>
 <hr/>
-<a id="4167"/><h3>~Fps</h3><pre>
-+  <span class="code-function">~Fps</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2077"/><h3>~Fps</h3><pre>
++  <span class="code-function">~Fps</span> ();<br/></pre>
 Destructor<br/>
 <br/>
 <hr/>
-<a id="4169"/><h3>tic</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">tic</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2078"/><h3>tic</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">tic</span> ();<br/></pre>
 this might be call every time a diplay start<br/>
 <br/>
 <hr/>
-<a id="4171"/><h3>toc</h3><pre>
+<a id="2080"/><h3>toc</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">toc</span> (<span class="code-type" >bool</span> <span class="code-argument">displayTime</span>);<br/></pre>
 this might be call every time a diplay stop, it do the display every second<br/><ul>
 <table class="parameter-list">
@@ -115,13 +116,13 @@ this might be call every time a diplay stop, it do the display every second<br/>
 
 <br/>
 <hr/>
-<a id="4173"/><h3>incrementCounter</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">incrementCounter</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2081"/><h3>incrementCounter</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">incrementCounter</span> ();<br/></pre>
 this might be call when a display is really done<br/>
 <br/>
 <hr/>
 <h3>draw</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">draw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span> <span class="code-function">draw</span> ();<br/></pre>
 draw debug display ...<br/>
 <br/>
 <hr/>

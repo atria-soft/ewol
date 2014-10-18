@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -81,68 +82,63 @@
 	<div class="container" id="content">
 <h1>class: ewol::widget::Image</h1><hr/><h2>Constructor and Destructor:</h2>
 <pre>
-+                                  <a class="code-function" href="#2635">Image</a>               (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>                                                        <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                          <a class="code-function" href="#2638">~Image</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                    <a class="code-function" href="#693">Image</a>                  ();<br/>+ <span class="code-storage-keyword">virtual</span>                                            <a class="code-function" href="#700">~Image</a>                 ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>        <a class="code-member" href="#2627">eventPressed</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>        <a class="code-member" href="#2628">configRatio</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>        <a class="code-member" href="#2629">configSize</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>        <a class="code-member" href="#2630">configBorder</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>        <a class="code-member" href="#2631">configSource</a>;<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#2632">init</a>                (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/>#         <a class="code-type" href="class_ewol__compositing__Image.html">ewol::compositing::Image</a> <a class="code-member" href="#2634">m_compositing</a>;<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#2640">set</a>                 (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>                                                        <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/>#         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>              <a class="code-member" href="#2643">m_fileName</a>;<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#2644">setFile</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &      <a class="code-function" href="#2646">getFile</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a>          <a class="code-member" href="#2648">m_border</a>;<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#2649">setBorder</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> &  <a class="code-function" href="#2651">getBorder</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a>          <a class="code-member" href="#2653">m_imageSize</a>;<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#2654">setImageSize</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> &  <a class="code-function" href="#2656">getImageSize</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>#         <span class="code-type" >bool</span>                     <a class="code-member" href="#2658">m_keepRatio</a>;<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#2659">setKeepRatio</a>        (<span class="code-type" >bool</span> <span class="code-argument">_keep</span>);<br/>+         <span class="code-type" >bool</span>                     <a class="code-function" href="#2661">getKeepRatio</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#2663">onDraw</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                     <a class="code-function" href="#2665">onSetConfig</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                     <a class="code-function" href="#2667">onGetConfig</a>         (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                                                        <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#2670">calculateMinMaxSize</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#2672">onRegenerateDisplay</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                     <a class="code-function" href="#2674">onEventInput</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                     <a class="code-function" href="#2676">loadXML</a>             (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/></pre>
++         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt;                 <a class="code-member" href="#689">signalPressed</a>;<br/>#         <a class="code-type" href="class_ewol__compositing__Image.html">ewol::compositing::Image</a>                   <a class="code-member" href="#690">m_compositing</a>;<br/>#         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::resource::ColorFile&gt; <a class="code-member" href="#691">m_colorProperty</a>;<br/>#         <span class="code-type" >int32_t</span>                                    <a class="code-member" href="#692">m_colorId</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#694">init</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>                                                                             <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/>+                                                    <a class="code-function" href="#697">DECLARE_WIDGET_FACTORY</a> (Image <span class="code-argument"></span>,<br/>                                                                             "Image" <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#701">set</a>                    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>                                                                             <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;std::string&gt;           <a class="code-member" href="#704">m_fileName</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#705">setFile</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &                        <a class="code-function" href="#707">getFile</a>                () <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;ewol::Dimension&gt;       <a class="code-member" href="#708">m_border</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#709">setBorder</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> &                    <a class="code-function" href="#711">getBorder</a>              () <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;ewol::Dimension&gt;       <a class="code-member" href="#712">m_imageSize</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#713">setImageSize</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> &                    <a class="code-function" href="#715">getImageSize</a>           () <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;bool&gt;                  <a class="code-member" href="#716">m_keepRatio</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#717">setKeepRatio</a>           (<span class="code-type" >bool</span> <span class="code-argument">_keep</span>);<br/>+         <span class="code-type" >bool</span>                                       <a class="code-function" href="#719">getKeepRatio</a>           () <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__object__ParamRange.html">ewol::object::ParamRange</a>&lt;vec2&gt;             <a class="code-member" href="#720">m_posStart</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#721">setStartPos</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+         vec2                                       <a class="code-function" href="#723">getStartPos</a>            () <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="class_ewol__object__ParamRange.html">ewol::object::ParamRange</a>&lt;vec2&gt;             <a class="code-member" href="#724">m_posStop</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#725">setStopPos</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+         vec2                                       <a class="code-function" href="#727">getStopPos</a>             () <span class="code-storage-keyword">const</span>;<br/>+         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;bool&gt;                  <a class="code-member" href="#728">m_distanceFieldMode</a>;<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#729">setDistanceField</a>       (<span class="code-type" >bool</span> <span class="code-argument">_df</span>);<br/>+         <span class="code-type" >bool</span>                                       <a class="code-function" href="#731">getDistanceField</a>       () <span class="code-storage-keyword">const</span>;<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#732">onDraw</a>                 ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#733">onParameterChangeValue</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#735">calculateMinMaxSize</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#736">onRegenerateDisplay</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                       <a class="code-function" href="#737">onEventInput</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                       <a class="code-function" href="#739">loadXML</a>                (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::Image<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> ewol::widget::Image<br/></pre>
 <h2>Detail:</h2>
-<a id="2627"/><a id="2628"/><h3>eventPressed</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventPressed</span>;<br/></pre>
+<a id="689"/><a id="690"/><h3>signalPressed</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalPressed</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2629"/><h3>configRatio</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configRatio</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="2630"/><h3>configSize</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configSize</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="2631"/><h3>configBorder</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configBorder</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="2632"/><h3>configSource</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configSource</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="2634"/><h3>init</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">init</span> (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/></pre>
-Main call of recording the widget on the List of "widget named creator"<br/>
-<br/>
-<hr/>
-<a id="2635"/><h3>m_compositing</h3><pre>
+<a id="691"/><h3>m_compositing</h3><pre>
 # <a class="code-type" href="class_ewol__compositing__Image.html">ewol::compositing::Image</a> <span class="code-member">m_compositing</span>;<br/></pre>
 
 compositing element of the image.<br/>
 <br/>
 <hr/>
-<a id="2638"/><h3>Image</h3><pre>
-+  <span class="code-function">Image</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>          <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/></pre>
+<a id="692"/><h3>m_colorProperty</h3><pre>
+# <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::resource::ColorFile&gt; <span class="code-member">m_colorProperty</span>;<br/></pre>
+
+theme color property<br/>
+<br/>
+<hr/>
+<a id="693"/><h3>m_colorId</h3><pre>
+# <span class="code-type" >int32_t</span> <span class="code-member">m_colorId</span>;<br/></pre>
+
+Color of the image.<br/>
+<br/>
+<hr/>
+<a id="694"/><h3>Image</h3><pre>
++  <span class="code-function">Image</span> ();<br/></pre>
 
 <br/>
 <hr/>
-<a id="2640"/><h3>~Image</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Image</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="697"/><h3>init</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>             <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="700"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (Image <span class="code-argument"></span>,<br/>                           "Image" <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="701"/><h3>~Image</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Image</span> ();<br/></pre>
 
 <br/>
 <hr/>
-<a id="2643"/><h3>set</h3><pre>
+<a id="704"/><h3>set</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">set</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>,<br/>            <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/></pre>
 set All the configuration of the current image<br/><ul>
 <table class="parameter-list">
@@ -153,13 +149,13 @@ set All the configuration of the current image<br/><ul>
 
 <br/>
 <hr/>
-<a id="2644"/><h3>m_fileName</h3><pre>
-# <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-member">m_fileName</span>;<br/></pre>
+<a id="705"/><h3>m_fileName</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;std::string&gt; <span class="code-member">m_fileName</span>;<br/></pre>
 
 file name of the image.<br/>
 <br/>
 <hr/>
-<a id="2646"/><h3>setFile</h3><pre>
+<a id="707"/><h3>setFile</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setFile</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_file</span>);<br/></pre>
 set the new filename<br/><ul>
 <table class="parameter-list">
@@ -169,8 +165,8 @@ set the new filename<br/><ul>
 
 <br/>
 <hr/>
-<a id="2648"/><h3>getFile</h3><pre>
-+ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getFile</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="708"/><h3>getFile</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getFile</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the file displayed<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the filename of the image</td></tr></table>
@@ -178,13 +174,13 @@ get the file displayed<br/><ul>
 
 <br/>
 <hr/>
-<a id="2649"/><h3>m_border</h3><pre>
-# <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> <span class="code-member">m_border</span>;<br/></pre>
+<a id="709"/><h3>m_border</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;ewol::Dimension&gt; <span class="code-member">m_border</span>;<br/></pre>
 
 border to add at the image.<br/>
 <br/>
 <hr/>
-<a id="2651"/><h3>setBorder</h3><pre>
+<a id="711"/><h3>setBorder</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setBorder</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_border</span>);<br/></pre>
 set tge Border size around the image<br/><ul>
 <table class="parameter-list">
@@ -194,8 +190,8 @@ set tge Border size around the image<br/><ul>
 
 <br/>
 <hr/>
-<a id="2653"/><h3>getBorder</h3><pre>
-+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-function">getBorder</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="712"/><h3>getBorder</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-function">getBorder</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current border request at the image<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the border size</td></tr></table>
@@ -203,13 +199,13 @@ get the current border request at the image<br/><ul>
 
 <br/>
 <hr/>
-<a id="2654"/><h3>m_imageSize</h3><pre>
-# <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> <span class="code-member">m_imageSize</span>;<br/></pre>
+<a id="713"/><h3>m_imageSize</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;ewol::Dimension&gt; <span class="code-member">m_imageSize</span>;<br/></pre>
 
 border to add at the image.<br/>
 <br/>
 <hr/>
-<a id="2656"/><h3>setImageSize</h3><pre>
+<a id="715"/><h3>setImageSize</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setImageSize</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br/></pre>
 set tge Border size around the image<br/><ul>
 <table class="parameter-list">
@@ -219,8 +215,8 @@ set tge Border size around the image<br/><ul>
 
 <br/>
 <hr/>
-<a id="2658"/><h3>getImageSize</h3><pre>
-+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-function">getImageSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="716"/><h3>getImageSize</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-function">getImageSize</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current border request at the image<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the border size</td></tr></table>
@@ -228,13 +224,13 @@ get the current border request at the image<br/><ul>
 
 <br/>
 <hr/>
-<a id="2659"/><h3>m_keepRatio</h3><pre>
-# <span class="code-type" >bool</span> <span class="code-member">m_keepRatio</span>;<br/></pre>
+<a id="717"/><h3>m_keepRatio</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;bool&gt; <span class="code-member">m_keepRatio</span>;<br/></pre>
 
 keep the image ratio between width and hight<br/>
 <br/>
 <hr/>
-<a id="2661"/><h3>setKeepRatio</h3><pre>
+<a id="719"/><h3>setKeepRatio</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setKeepRatio</span> (<span class="code-type" >bool</span> <span class="code-argument">_keep</span>);<br/></pre>
 set the current status of keeping ratio.<br/><ul>
 <table class="parameter-list">
@@ -244,8 +240,8 @@ set the current status of keeping ratio.<br/><ul>
 
 <br/>
 <hr/>
-<a id="2663"/><h3>getKeepRatio</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getKeepRatio</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="720"/><h3>getKeepRatio</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getKeepRatio</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current status of keeping ratio.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The status of keeping the ratio of this image.</td></tr></table>
@@ -253,43 +249,103 @@ get the current status of keeping ratio.<br/><ul>
 
 <br/>
 <hr/>
-<a id="2665"/><h3>onDraw</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="721"/><h3>m_posStart</h3><pre>
+# <a class="code-type" href="class_ewol__object__ParamRange.html">ewol::object::ParamRange</a>&lt;vec2&gt; <span class="code-member">m_posStart</span>;<br/></pre>
+
+position in the image to start the sisplay (when we want not to display all the image)<br/>
+<br/>
+<hr/>
+<a id="723"/><h3>setStartPos</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setStartPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+set the current 'start' position in the image to display.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_keep</span> </td><td> The new position in the image vec2([0..1],[0..1])</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="724"/><h3>getStartPos</h3><pre>
++ vec2 <span class="code-function">getStartPos</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+get the current 'start' position in the image to display.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>The Position of the display in image</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="725"/><h3>m_posStop</h3><pre>
+# <a class="code-type" href="class_ewol__object__ParamRange.html">ewol::object::ParamRange</a>&lt;vec2&gt; <span class="code-member">m_posStop</span>;<br/></pre>
+
+position in the image to start the sisplay (when we want not to display all the image)<br/>
+<br/>
+<hr/>
+<a id="727"/><h3>setStopPos</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setStopPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+set the current 'stop' position in the image to display.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_keep</span> </td><td> The new position in the image vec2([0..1],[0..1])</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="728"/><h3>getStopPos</h3><pre>
++ vec2 <span class="code-function">getStopPos</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+get the current 'stop' position in the image to display.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>The Position of the display in image</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="729"/><h3>m_distanceFieldMode</h3><pre>
++ <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;bool&gt; <span class="code-member">m_distanceFieldMode</span>;<br/></pre>
+
+to have a parameter<br/>
+<br/>
+<hr/>
+<a id="731"/><h3>setDistanceField</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setDistanceField</span> (<span class="code-type" >bool</span> <span class="code-argument">_df</span>);<br/></pre>
+Set distance field rendering mode<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_df</span> </td><td> enable distance field</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="732"/><h3>getDistanceField</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getDistanceField</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+Get the distance field render mode.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>Status of the distance field render mode.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="733"/><h3>onDraw</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> ();<br/></pre>
 Common widget drawing function (called by the drawing thread [Android, X11, ...])<br/>
 <br/>
 <hr/>
-<a id="2667"/><h3>onSetConfig</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onSetConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/></pre>
-Configuration requested to the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_conf</span> </td><td> Configuration handle.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the parametere has been used</td></tr></table>
-</ul>
+<a id="735"/><h3>onParameterChangeValue</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onParameterChangeValue</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/></pre>
 
 <br/>
-<hr/>
-<a id="2670"/><h3>onGetConfig</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onGetConfig</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                            <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
-Receive a configuration message from an other element system or from the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_config</span> </td><td> Configuration name.</td></tr>
-<td><b>Parameter [output]:</b></td><td><span class="code-argument">_result</span> </td><td> Result of the request.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the config is set</td></tr></table>
-</ul>
-
 <br/>
 <hr/>
-<a id="2672"/><h3>calculateMinMaxSize</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="736"/><h3>calculateMinMaxSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> ();<br/></pre>
 calculate the minimum and maximum size (need to estimate expend properties of the widget)<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> 
 <br/>
 <hr/>
-<a id="2674"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="737"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="2676"/><h3>onEventInput</h3><pre>
+<a id="739"/><h3>onEventInput</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventInput</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
 Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 <table class="parameter-list">

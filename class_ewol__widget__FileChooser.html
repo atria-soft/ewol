@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -79,102 +80,141 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>class: ewol::widget::FileChooser</h1><hr/><h2>Constructor and Destructor:</h2>
+<h1>class: ewol::widget::FileChooser</h1><hr/><h2>Description:</h2>
+File Chooser is a simple selector of file for opening, saving, and what you want ...<br/>
+As all other pop-up methode ( wost case we can have) the creating is simple , but event back is not all the time simple:<br/>
+Fist global static declaration and inclusion:
 <pre>
-+                                       <a class="code-function" href="#3711">FileChooser</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span>                               <a class="code-function" href="#3713">~FileChooser</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<span class="code-preproc">#include &lt;ewol/widget/meta/FileChooser.h&gt;
+</span></pre><br/>
+The first step is to create the file chooser pop-up : (never in the constructor!!!)
+<pre>
+<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::widget::FileChooser</span>&gt; tmpWidget = <span class="code-class">ewol::Widget::FileChooser</span>::<span class="code-function-name">create(</span>);
+<span class="code-keyword">if </span>(tmpWidget <span class="code-operator">==</span> nullptr) <span class="code-operator">{</span>
+	<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"Can not open File chooser !!! "</span>);
+	<span class="code-keyword">return </span>-<span class="code-number">1</span>;
+<span class="code-operator">}</span>
+<span class="code-comment">// register on the Validate event:
+</span>tmpWidget-&gt;signalValidate.<span class="code-function-name">bind(</span>shared_fro<span class="code-member">m_t</span><span class="code-function-name">his(</span>), &::onCallbackOpenFile);
+<span class="code-comment">// no need of this event watching ...
+</span>tmpWidget-&gt;signalCancel.<span class="code-function-name">bind(</span>shared_fro<span class="code-member">m_t</span><span class="code-function-name">his(</span>), &::onCallbackClosePopUp);
+<span class="code-comment">// set the title:
+</span> tmpWidget-&gt;<span class="code-function-name">setTitle(</span><span class="code-text-quote">"Open files ..."</span>);
+<span class="code-comment">// Set the validate Label:
+</span>tmpWidget-&gt;<span class="code-function-name">setValidateLabel(</span><span class="code-text-quote">"Open"</span>);
+<span class="code-comment">// simply set a folder (by default this is the home folder)
+</span><span class="code-comment">//tmpWidget-&gt;setFolder("/home/me");
+</span><span class="code-comment">// add the widget as windows pop-up ...
+</span><span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::widget::Windows</span>&gt; tmpWindows = <span class="code-function-name">getWindows(</span>);
+<span class="code-keyword">if </span>(tmpWindows <span class="code-operator">==</span> nullptr) <span class="code-operator">{</span>
+	<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"Can not get the current windows !!! "</span>);
+	<span class="code-keyword">return </span>-<span class="code-number">1</span>;
+<span class="code-operator">}</span>
+tmpWindows-&gt;<span class="code-function-name">popUpWidgetPush(</span>tmpWidget);
+</pre><br/>
+Now we just need to wait the the open event message.<br/>
+<pre>
+<span class="code-type">void</span>::<span class="code-function-name">onCallbackOpenFile(</span><span class="code-storage-keyword">const</span> <span class="code-class">std::string</span>&<span class="code-input-function"> _value</span>) <span class="code-operator">{</span>
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"Request open file : '"</span> &lt;&lt;<span class="code-input-function"> _value</span> &lt;&lt; <span class="code-text-quote">"'"</span>);
+<span class="code-operator">}</span>
+<span class="code-type">void</span>::<span class="code-function-name">onCallbackClosePopUp(</span>) <span class="code-operator">{</span>
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"The File chooser has been closed"</span>);
+<span class="code-operator">}</span>
+</pre>
+This is the best example of a Meta-widget.<br/><br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
+#                                           <a class="code-function" href="#1639">FileChooser</a>                          ();<br/>+ <span class="code-storage-keyword">virtual</span>                                   <a class="code-function" href="#1644">~FileChooser</a>                         ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>             <a class="code-member" href="#3709">eventCancel</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>             <a class="code-member" href="#3710">eventValidate</a>;<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3725">setTitle</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3727">setValidateLabel</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3729">setCancelLabel</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3731">setFolder</a>               (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_folder</span>);<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3733">setFileName</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                   <a class="code-function" href="#3735">getCompleateFileName</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3737">updateCurrentFolder</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#3739">onReceiveMessage</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Message.html">ewol::object::Message</a> & <span class="code-argument">_msg</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#3741">onObjectRemove</a>          (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
++         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt;        <a class="code-member" href="#1637">signalCancel</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;std::string&gt; <a class="code-member" href="#1638">signalValidate</a>;<br/>#         <span class="code-type" >void</span>                              <a class="code-function" href="#1640">init</a>                                 ();<br/>+                                           <a class="code-function" href="#1641">DECLARE_WIDGET_FACTORY</a>               (FileChooser <span class="code-argument"></span>,<br/>                                                                                  "FileChooser" <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#1647">setTitle</a>                             (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#1649">setValidateLabel</a>                     (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#1651">setCancelLabel</a>                       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#1653">setFolder</a>                            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_folder</span>);<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#1655">setFileName</a>                          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                       <a class="code-function" href="#1657">getCompleateFileName</a>                 ();<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#1658">updateCurrentFolder</a>                  ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                              <a class="code-function" href="#1659">onGetFocus</a>                           ();<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> +<a href="class_ewol__widget__Container.html">ewol::widget::Container</a><br/>                +--> +<a href="class_ewol__widget__PopUp.html">ewol::widget::PopUp</a><br/>                       +--> ewol::widget::FileChooser<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> +<a href="class_ewol__widget__Container.html">ewol::widget::Container</a><br/>                       +--> +<a href="class_ewol__widget__Composer.html">ewol::widget::Composer</a><br/>                              +--> ewol::widget::FileChooser<br/></pre>
 <h2>Detail:</h2>
-<a id="3709"/><a id="3710"/><h3>eventCancel</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventCancel</span>;<br/></pre>
+<a id="1637"/><a id="1638"/><h3>signalCancel</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalCancel</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3711"/><h3>eventValidate</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventValidate</span>;<br/></pre>
+<a id="1639"/><h3>signalValidate</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;std::string&gt; <span class="code-member">signalValidate</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3713"/><h3>FileChooser</h3><pre>
-+  <span class="code-function">FileChooser</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1640"/><h3>FileChooser</h3><pre>
+#  <span class="code-function">FileChooser</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3725"/><h3>~FileChooser</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~FileChooser</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1641"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3727"/><h3>setTitle</h3><pre>
+<a id="1644"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (FileChooser <span class="code-argument"></span>,<br/>                           "FileChooser" <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1647"/><h3>~FileChooser</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~FileChooser</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1649"/><h3>setTitle</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setTitle</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3729"/><h3>setValidateLabel</h3><pre>
+<a id="1651"/><h3>setValidateLabel</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setValidateLabel</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3731"/><h3>setCancelLabel</h3><pre>
+<a id="1653"/><h3>setCancelLabel</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setCancelLabel</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3733"/><h3>setFolder</h3><pre>
+<a id="1655"/><h3>setFolder</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setFolder</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_folder</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3735"/><h3>setFileName</h3><pre>
+<a id="1657"/><h3>setFileName</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setFileName</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3737"/><h3>getCompleateFileName</h3><pre>
-+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getCompleateFileName</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1658"/><h3>getCompleateFileName</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getCompleateFileName</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3739"/><h3>updateCurrentFolder</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">updateCurrentFolder</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1659"/><h3>updateCurrentFolder</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">updateCurrentFolder</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3741"/><h3>onReceiveMessage</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onReceiveMessage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Message.html">ewol::object::Message</a> & <span class="code-argument">_msg</span>);<br/></pre>
-Receive a message from an other Object with a specific eventId and data<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_msg</span> </td><td> Message handle</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<h3>onObjectRemove</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
-Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_removObject</span> </td><td> Pointer on the Object remeved  == &gt; the user must remove all reference on this Object</td></tr>
-</table>
-</ul>
-
+<h3>onGetFocus</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onGetFocus</span> ();<br/></pre>
+Event of the focus has been grep by the current widget<br/>
 <br/>
 <hr/>
 	</div>

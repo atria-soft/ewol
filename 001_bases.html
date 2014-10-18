@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,7 +85,7 @@
 <h2> Overview:</h2>
 EWOL is an OpenGL library for creating graphical user interfaces.
 It works on many UNIX-like platforms, Windows, and OS X and some mobile platforms Android, iOs(soon).
-EWOL is released under the BSD 3 clauses license (BSD v3), which allows for very flexible licensing of client applications.
+EWOL is released under the APACHE-2 license, which allows for very flexible licensing of client applications.
 EWOL has a C++ architecture that allows for maximum flexibility.<br/>
 The main idea of EWOL is to create a complete abstraction of the platforms.
 This generate some restriction that you will see an overwiew in the under section.<br/>
@@ -94,7 +95,7 @@ To use ewol you need to know only C++ language. It could be usefull to know:
 <h2> Architecture:</h2>
 One of the important point to know in this framwork is some of absurd things came from the multiple architecture type.<br/>
 I will Explain the main points:
-<ul><li> IOs does <span style="font-weight: bold;">NOT</span> simply support the shared object sub lib, this force ewol to be BSD, and depend on some sub-library with small license restriction.</li><li> Android have a JAVA main, then the application main will not be used with this platform</li><li> Android event (keyboard, mouse, touch-screen and ...) will arrive in asynchron mode ==&gt; need to be resynchronyse in one thread</li><li> Only one graphyc framework is availlable on all platform. This is OpenGL</li><li> Main interesting point is packaging of the application data:</li><ul><li> Linux store it in /usr/share/applName/*</li><li> MacOs store it in applName.app/subFolder/*</li><li> Android store it in the .pkg that is a renamed .zip that the name is dynamic</li><li> Windows (TODO : Never done a pakage)</li> This will generate a complex result of data access...
+<ul><li> IOs does <span style="font-weight: bold;">NOT</span> simply support the shared object sub lib, this force ewol to be APACHE-2, and depend on some sub-library with small license restriction.</li><li> Android have a JAVA main, then the application main will not be used with this platform</li><li> Android event (keyboard, mouse, touch-screen and ...) will arrive in asynchron mode ==&gt; need to be resynchronyse in one thread</li><li> Only one graphyc framework is availlable on all platform. This is OpenGL</li><li> Main interesting point is packaging of the application data:</li><ul><li> Linux store it in /usr/share/applName/*</li><li> MacOs store it in applName.app/subFolder/*</li><li> Android store it in the .pkg that is a renamed .zip that the name is dynamic</li><li> Windows (TODO : Never done a pakage)</li> This will generate a complex result of data access...
 </ul><li> Sub lib Change on all the platform, the I will use the idea of Apple, that incluse in a package all needed libs. This could be a problem for small platform, but this framwork need to have a OpenGL-ES2 instance then the memory problem, is not really a problem.</li></ul>
 	</div>
 <script>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::object::template&lt;MY_TYPE, isEventReceiving&gt ParamList</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Synopsis:</h2>
+<pre>
++                                       <a class="code-function" href="#3009">ParamList</a>                (<a class="code-type" href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a> & <span class="code-argument">_objectLink</span>,<br/>                                                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>                                                                  <span class="code-storage-keyword">const</span> MY_TYPE & <span class="code-argument">_defaultValue</span>,<br/>                                                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_description</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                               <a class="code-function" href="#3014">~ParamList</a>               ();<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3015">add</a>                      (<span class="code-storage-keyword">const</span> MY_TYPE & <span class="code-argument">_value</span>,<br/>                                                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>                                                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_description</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                   <a class="code-function" href="#3019">getType</a>                  () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                   <a class="code-function" href="#3020">getString</a>                () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                   <a class="code-function" href="#3021">getDefault</a>               () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#3022">setString</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newVal</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                   <a class="code-function" href="#3024">getInfo</a>                  () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                          <a class="code-function" href="#3025">isDefault</a>                () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#3026">setDefault</a>               ();<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3027">setDefaultValue</a>          (<span class="code-storage-keyword">const</span> MY_TYPE & <span class="code-argument">_value</span>);<br/>+         MY_TYPE &                     <a class="code-function" href="#3029">get</a>                      ();<br/>+         <span class="code-storage-keyword">const</span> inlineMY_TYPE &         <a class="code-function" href="#3030">get</a>                      () <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#3031">set</a>                      (MY_TYPE <span class="code-argument">_newVal</span>);<br/>+         <span class="code-storage-keyword">const</span> ParamList &             <a class="code-function" href="#3035">operator =</a>               (MY_TYPE <span class="code-argument">_newVal</span>);<br/>+                                       <a class="code-function" href="#3037">operator const MY_TYPE &</a> () <span class="code-storage-keyword">const</span>;<br/>+         MY_TYPE &                     <a class="code-function" href="#3038">operator *</a>               () <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-storage-keyword">const</span> MY_TYPE*                <a class="code-function" href="#3039">operator -></a>              () <span class="code-storage-keyword">const</span>;<br/>+         MY_TYPE*                      <a class="code-function" href="#3040">operator -></a>              ();<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++Parameter<br/>  +--> ewol::object::ParamList<br/></pre>
+<h2>Detail:</h2>
+<a id="3009"/><a id="3014"/><h3>ParamList</h3><pre>
++  <span class="code-function">ParamList</span> (<a class="code-type" href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a> & <span class="code-argument">_objectLink</span>,<br/>              <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>              <span class="code-storage-keyword">const</span> MY_TYPE & <span class="code-argument">_defaultValue</span>,<br/>              <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_description</span>);<br/></pre>
+Create a parameter with List of element parameter.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_objectLink</span> </td><td> reference on the parameter lister.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Static name of the parameter.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_description</span> </td><td> description of the parameter.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3015"/><h3>~ParamList</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~ParamList</span> ();<br/></pre>
+Destructor.<br/>
+<br/>
+<hr/>
+<a id="3019"/><h3>add</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">add</span> (<span class="code-storage-keyword">const</span> MY_TYPE & <span class="code-argument">_value</span>,<br/>            <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>            <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_description</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3020"/><h3>getType</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getType</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3021"/><h3>getString</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getString</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3022"/><h3>getDefault</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getDefault</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3024"/><h3>setString</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setString</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newVal</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3025"/><h3>getInfo</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getInfo</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3026"/><h3>isDefault</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">isDefault</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3027"/><h3>setDefault</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setDefault</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3029"/><h3>setDefaultValue</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setDefaultValue</span> (<span class="code-storage-keyword">const</span> MY_TYPE & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3030"/><h3>get</h3><pre>
++ MY_TYPE & <span class="code-function">get</span> ();<br/></pre>
+Get the value of the current parameter.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>the Reference value</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3031"/><h3>get</h3><pre>
++ <span class="code-storage-keyword">const</span> inlineMY_TYPE & <span class="code-function">get</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3035"/><h3>set</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">set</span> (MY_TYPE <span class="code-argument">_newVal</span>);<br/></pre>
+Set the value of the current parameter.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newVal</span> </td><td> New value of the parameter. (not set if out of range)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3037"/><h3>operator =</h3><pre>
++ <span class="code-storage-keyword">const</span> ParamList & <span class="code-function">operator =</span> (MY_TYPE <span class="code-argument">_newVal</span>);<br/></pre>
+assignement operator.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">newVal</span> </td><td> The new value of the parameter.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3038"/><h3>operator const MY_TYPE &</h3><pre>
++  <span class="code-function">operator const MY_TYPE &</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3039"/><h3>operator *</h3><pre>
++ MY_TYPE & <span class="code-function">operator *</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3040"/><h3>operator -></h3><pre>
++ <span class="code-storage-keyword">const</span> MY_TYPE* <span class="code-function">operator -></span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>operator -></h3><pre>
++ MY_TYPE* <span class="code-function">operator -></span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

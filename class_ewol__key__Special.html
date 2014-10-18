@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -83,20 +84,20 @@
 This class consider generic special keyborad key (insert, control, shift ...)<br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+          <a class="code-function" href="#2106">Special</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++          <a class="code-function" href="#148">Special</a>     ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >bool</span>     <a class="code-function" href="#2108">getCapsLock</a> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2110">setCapsLock</a> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2112">getShift</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2114">setShift</a>    (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2116">getCtrl</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2118">setCtrl</a>     (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2120">getMeta</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2122">setMeta</a>     (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2124">getAlt</a>      (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2126">setAlt</a>      (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2128">getAltGr</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2130">setAltGr</a>    (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2132">getNumLock</a>  (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2134">setNumLock</a>  (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#2136">getInsert</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#2138">setInsert</a>   (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
++ <span class="code-type" >bool</span>     <a class="code-function" href="#149">getCapsLock</a> () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#150">setCapsLock</a> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#152">getShift</a>    () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#153">setShift</a>    (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#155">getCtrl</a>     () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#156">setCtrl</a>     (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#158">getMeta</a>     () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#159">setMeta</a>     (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#161">getAlt</a>      () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#162">setAlt</a>      (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#164">getAltGr</a>    () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#165">setAltGr</a>    (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#167">getNumLock</a>  () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#168">setNumLock</a>  (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >bool</span>     <a class="code-function" href="#170">getInsert</a>   () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#171">setInsert</a>   (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>     <a class="code-function" href="#173">update</a>      (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                        <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>);<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="2106"/><a id="2108"/><h3>Special</h3><pre>
-+  <span class="code-function">Special</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="148"/><a id="149"/><h3>Special</h3><pre>
++  <span class="code-function">Special</span> ();<br/></pre>
 Main constructor<br/>
 <br/>
 <hr/>
-<a id="2110"/><h3>getCapsLock</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getCapsLock</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="150"/><h3>getCapsLock</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getCapsLock</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current CapLock Status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The CapLock value</td></tr></table>
@@ -104,7 +105,7 @@ get the current CapLock Status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2112"/><h3>setCapsLock</h3><pre>
+<a id="152"/><h3>setCapsLock</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setCapsLock</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 set the current CapLock Status<br/><ul>
 <table class="parameter-list">
@@ -114,8 +115,8 @@ set the current CapLock Status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2114"/><h3>getShift</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getShift</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="153"/><h3>getShift</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getShift</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the current Shift key status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Shift value</td></tr></table>
@@ -123,7 +124,7 @@ Get the current Shift key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2116"/><h3>setShift</h3><pre>
+<a id="155"/><h3>setShift</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setShift</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the current Shift key status<br/><ul>
 <table class="parameter-list">
@@ -133,8 +134,8 @@ Set the current Shift key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2118"/><h3>getCtrl</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getCtrl</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="156"/><h3>getCtrl</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getCtrl</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the Current Control key status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Control value</td></tr></table>
@@ -142,7 +143,7 @@ Get the Current Control key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2120"/><h3>setCtrl</h3><pre>
+<a id="158"/><h3>setCtrl</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setCtrl</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the Current Control key status<br/><ul>
 <table class="parameter-list">
@@ -152,8 +153,8 @@ Set the Current Control key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2122"/><h3>getMeta</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getMeta</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="159"/><h3>getMeta</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getMeta</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the current Meta key status (also named windows or apple key)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Meta value (name Windows key, apple key, command key ...)</td></tr></table>
@@ -161,7 +162,7 @@ Get the current Meta key status (also named windows or apple key)<br/><ul>
 
 <br/>
 <hr/>
-<a id="2124"/><h3>setMeta</h3><pre>
+<a id="161"/><h3>setMeta</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setMeta</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the current Meta key status (also named windows or apple key)<br/><ul>
 <table class="parameter-list">
@@ -171,8 +172,8 @@ Set the current Meta key status (also named windows or apple key)<br/><ul>
 
 <br/>
 <hr/>
-<a id="2126"/><h3>getAlt</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getAlt</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="162"/><h3>getAlt</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getAlt</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the current Alt key status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Alt value</td></tr></table>
@@ -180,7 +181,7 @@ Get the current Alt key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2128"/><h3>setAlt</h3><pre>
+<a id="164"/><h3>setAlt</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setAlt</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the current Alt key status<br/><ul>
 <table class="parameter-list">
@@ -190,8 +191,8 @@ Set the current Alt key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2130"/><h3>getAltGr</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getAltGr</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="165"/><h3>getAltGr</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getAltGr</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the current Alt-Gr key status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Alt-gr value (does not exist on MacOs)</td></tr></table>
@@ -199,7 +200,7 @@ Get the current Alt-Gr key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2132"/><h3>setAltGr</h3><pre>
+<a id="167"/><h3>setAltGr</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setAltGr</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the current Alt-Gr key status<br/><ul>
 <table class="parameter-list">
@@ -209,8 +210,8 @@ Set the current Alt-Gr key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2134"/><h3>getNumLock</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getNumLock</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="168"/><h3>getNumLock</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getNumLock</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the current Ver-num key status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Numerical Lock value</td></tr></table>
@@ -218,7 +219,7 @@ Get the current Ver-num key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2136"/><h3>setNumLock</h3><pre>
+<a id="170"/><h3>setNumLock</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setNumLock</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the current Ver-num key status<br/><ul>
 <table class="parameter-list">
@@ -228,8 +229,8 @@ Set the current Ver-num key status<br/><ul>
 
 <br/>
 <hr/>
-<a id="2138"/><h3>getInsert</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getInsert</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="171"/><h3>getInsert</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getInsert</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the current Intert key status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Insert value</td></tr></table>
@@ -237,11 +238,22 @@ Get the current Intert key status<br/><ul>
 
 <br/>
 <hr/>
-<h3>setInsert</h3><pre>
+<a id="173"/><h3>setInsert</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setInsert</span> (<span class="code-type" >bool</span> <span class="code-argument">_value</span>);<br/></pre>
 Set the current Intert key status<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> The new Insert value</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>update</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">update</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>               <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>);<br/></pre>
+Update the internal value with the input moving key.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_move</span> </td><td> Moving key.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_isFown</span> </td><td> The Key is pressed or not.</td></tr>
 </table>
 </ul>
 

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>namespace: IOs</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Associated Class:</h2><ul>
+<a href="namespace_IOs.html">IOs</a></ul>
+<h2>Synopsis:</h2>
+<pre>
+  <span class="code-type" >void</span> <a class="code-function" href="#2138">createInterface</a>  ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2139">releaseInterface</a> ();<br/>  <span class="code-type" >bool</span> <a class="code-function" href="#2140">draw</a>             (<span class="code-type" >bool</span> <span class="code-argument">_displayEveryTime</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2142">resize</a>           (<span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2145">setMouseState</a>    (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                         <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2150">setMouseMotion</a>   (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2154">setInputState</a>    (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                         <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2159">setInputMotion</a>   (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                         <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2163">setKeyboard</a>      (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> <span class="code-argument">_keyboardMode</span>,<br/>                         <span class="code-type" >int32_t</span> <span class="code-argument">_unichar</span>,<br/>                         <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                         <span class="code-type" >bool</span> <span class="code-argument">_isAReapeateKey</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2168">setKeyboardMove</a>  (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_keyboardMode</span>,<br/>                         <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                         <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2172">start</a>            ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2173">stop</a>             ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2174">foreground</a>       ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2175">background</a>       ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2176">resume</a>           ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2177">suspend</a>          ();<br/></pre>
+<br/>
+<h2>Detail:</h2>
+<a id="2138"/><a id="2139"/><h3>createInterface</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">createInterface</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2140"/><h3>releaseInterface</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">releaseInterface</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2142"/><h3>draw</h3><pre>
+  <span class="code-type" >bool</span> <span class="code-function">draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_displayEveryTime</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2145"/><h3>resize</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">resize</span> (<span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>               <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/></pre>
+The OS inform that the current windows has change his size.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_size</span> </td><td> new size of the windows.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2150"/><h3>setMouseState</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setMouseState</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                      <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                      <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2154"/><h3>setMouseMotion</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setMouseMotion</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                       <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                       <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2159"/><h3>setInputState</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setInputState</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                      <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                      <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2163"/><h3>setInputMotion</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setInputMotion</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>,<br/>                       <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                       <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2168"/><h3>setKeyboard</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setKeyboard</span> (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> <span class="code-argument">_keyboardMode</span>,<br/>                    <span class="code-type" >int32_t</span> <span class="code-argument">_unichar</span>,<br/>                    <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                    <span class="code-type" >bool</span> <span class="code-argument">_isAReapeateKey</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2172"/><h3>setKeyboardMove</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setKeyboardMove</span> (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_keyboardMode</span>,<br/>                        <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                        <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2173"/><h3>start</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">start</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2174"/><h3>stop</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">stop</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2175"/><h3>foreground</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">foreground</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2176"/><h3>background</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">background</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2177"/><h3>resume</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">resume</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>suspend</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">suspend</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

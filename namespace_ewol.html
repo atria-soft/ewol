@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,22 +85,29 @@
 <br/><br/>
 <h2>namespace:</h2>
 <ul>
-<li><a href="namespace_ewol__key.html">key</a></li><li><a href="namespace_ewol__widget.html">widget</a></li><li><a href="namespace_ewol__openGL.html">openGL</a></li><li><a href="namespace_ewol__context.html">context</a></li><li><a href="namespace_ewol__audio.html">audio</a></li><li><a href="namespace_ewol__portAudio.html">portAudio</a></li><li><a href="namespace_ewol__compositing.html">compositing</a></li><li><a href="namespace_ewol__object.html">object</a></li><li><a href="namespace_ewol__resource.html">resource</a></li><li><a href="namespace_ewol__font.html">font</a></li><li><a href="namespace_ewol__event.html">event</a></li></ul>
+<li><a href="namespace_ewol__translate.html">translate</a></li><li><a href="namespace_ewol__key.html">key</a></li><li><a href="namespace_ewol__widget.html">widget</a></li><li><a href="namespace_ewol__openGL.html">openGL</a></li><li><a href="namespace_ewol__context.html">context</a></li><li><a href="namespace_ewol__compositing.html">compositing</a></li><li><a href="namespace_ewol__object.html">object</a></li><li><a href="namespace_ewol__resource.html">resource</a></li><li><a href="namespace_ewol__font.html">font</a></li><li><a href="namespace_ewol__event.html">event</a></li></ul>
 <h2>class:</h2>
 <ul>
-<li><a href="class_ewol__Dimension.html">Dimension</a></li><li><a href="class_ewol__Widget.html">Widget</a></li><li><a href="class_ewol__Context.html">Context</a></li><li><a href="class_ewol__Compositing.html">Compositing</a></li><li><a href="class_ewol__Object.html">Object</a></li><li><a href="class_ewol__Resource.html">Resource</a></li></ul>
+<li><a href="class_ewol__Padding.html">Padding</a></li><li><a href="class_ewol__Dimension.html">Dimension</a></li><li><a href="class_ewol__Widget.html">Widget</a></li><li><a href="class_ewol__Context.html">Context</a></li><li><a href="class_ewol__Compositing.html">Compositing</a></li><li><a href="class_ewol__Object.html">Object</a></li><li><a href="class_ewol__Resource.html">Resource</a></li></ul>
 <h2>Synopsis:</h2>
 <pre>
-  <span class="code-type" >int32_t</span>            <a class="code-function" href="#2006">run</a>                (<span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#2009">getVersion</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <span class="code-type" >int64_t</span>            <a class="code-function" href="#2011">getTime</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#2013">getCompilationMode</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#2015">getBoardType</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#2079">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#2082">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#2098">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#2862">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__widget__WSlider__sladingMode.html">ewol::widget::WSlider::sladingMode</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#2876">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#2880">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#2883">gravityToString</a>    (<span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/>  <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <a class="code-function" href="#2885">stringToGravity</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_obj</span>);<br/>  Context &          <a class="code-function" href="#4115">getContext</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#4141">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#4194">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#4980">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#5063">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ConfigElement.html">ewol::object::ConfigElement</a> & <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> &       <a class="code-function" href="#5315">operator <<</a>        (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__font__mode.html">ewol::font::mode</a> <span class="code-argument">_obj</span>);<br/></pre>
+  std::ostream &     <a class="code-function" href="#41">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a> & <span class="code-argument">_obj</span>);<br/>  <span class="code-type" >int32_t</span>            <a class="code-function" href="#46">run</a>                (<a class="code-type" href="class_ewol__context__Application.html">ewol::context::Application</a>* <span class="code-argument">_application</span>,<br/>                                         <span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#50">getVersion</a>         ();<br/>  <span class="code-type" >int64_t</span>            <a class="code-function" href="#51">getTime</a>            ();<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#52">getCompilationMode</a> ();<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#53">getBoardType</a>       ();<br/>  std::ostream &     <a class="code-function" href="#102">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_obj</span>);<br/>  std::ostream &     <a class="code-function" href="#105">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_obj</span>);<br/>  <span class="code-type" >int32_t</span>            <a class="code-function" href="#110">getLogId</a>           ();<br/>  std::ostream &     <a class="code-function" href="#140">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_obj</span>);<br/>  std::ostream &     <a class="code-function" href="#905">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__widget__WSlider__sladingMode.html">ewol::widget::WSlider::sladingMode</a> <span class="code-argument">_obj</span>);<br/>  std::ostream &     <a class="code-function" href="#919">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_obj</span>);<br/>  std::ostream &     <a class="code-function" href="#923">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/>  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>        <a class="code-function" href="#926">gravityToString</a>    (<span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/>  <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <a class="code-function" href="#928">stringToGravity</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_obj</span>);<br/>  Context &          <a class="code-function" href="#2032">getContext</a>         ();<br/>  std::ostream &     <a class="code-function" href="#2052">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_obj</span>);<br/>  std::ostream &     <a class="code-function" href="#2099">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_obj</span>);<br/>  std::ostream &     <a class="code-function" href="#3374">operator <<</a>        (std::ostream & <span class="code-argument">_os</span>,<br/>                                         <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__font__mode.html">ewol::font::mode</a> <span class="code-argument">_obj</span>);<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="2006"/><a id="2009"/><h3>run</h3><pre>
-  <span class="code-type" >int32_t</span> <span class="code-function">run</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>               <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/></pre>
+<a id="41"/><a id="46"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a> & <span class="code-argument">_obj</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="50"/><h3>run</h3><pre>
+  <span class="code-type" >int32_t</span> <span class="code-function">run</span> (<a class="code-type" href="class_ewol__context__Application.html">ewol::context::Application</a>* <span class="code-argument">_application</span>,<br/>               <span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>               <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/></pre>
 This is the only one things the User might done in his main();<br/><b>Note:</b> To answare you before you ask the question, this is really simple:
       Due to the fect that the current system is multiple-platform, you "main"
       Does not exist in the android platform, then ewol call other start 
       and stop function, to permit to have only one code<br/> <b>Note:</b> The main can not be in the ewol, due to the fact thet is an librairy<br/> <ul>
 <table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_application</span> </td><td> just created instance of the applicationo</td></tr>
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_argc</span> </td><td> Standard argc</td></tr>
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_argv</span> </td><td> Standard argv</td></tr>
 <tr><td><b>Return: </b></td><td></td><td>normal error int for the application error management</td></tr></table>
@@ -107,8 +115,8 @@ This is the only one things the User might done in his main();<br/><b>Note:</b> 
 
 <br/>
 <hr/>
-<a id="2011"/><h3>getVersion</h3><pre>
-  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getVersion</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="51"/><h3>getVersion</h3><pre>
+  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getVersion</span> ();<br/></pre>
 get EWOL version<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The string that describe ewol version</td></tr></table>
@@ -116,8 +124,8 @@ get EWOL version<br/><ul>
 
 <br/>
 <hr/>
-<a id="2013"/><h3>getTime</h3><pre>
-  <span class="code-type" >int64_t</span> <span class="code-function">getTime</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="52"/><h3>getTime</h3><pre>
+  <span class="code-type" >int64_t</span> <span class="code-function">getTime</span> ();<br/></pre>
 get current time in us...<br/><b>Note:</b> is implemented by the OS implementation cf renderer/X11/...<br/> <ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The current time</td></tr></table>
@@ -125,8 +133,8 @@ get current time in us...<br/><b>Note:</b> is implemented by the OS implementati
 
 <br/>
 <hr/>
-<a id="2015"/><h3>getCompilationMode</h3><pre>
-  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getCompilationMode</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="53"/><h3>getCompilationMode</h3><pre>
+  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getCompilationMode</span> ();<br/></pre>
 get compilation mode (release/debug)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the string of the mode of commpilation</td></tr></table>
@@ -134,8 +142,8 @@ get compilation mode (release/debug)<br/><ul>
 
 <br/>
 <hr/>
-<a id="2079"/><h3>getBoardType</h3><pre>
-  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getBoardType</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="102"/><h3>getBoardType</h3><pre>
+  <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getBoardType</span> ();<br/></pre>
 get the board type (Android/Linux/MacOs/...)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the string of the mode of commpilation</td></tr></table>
@@ -143,55 +151,61 @@ get the board type (Android/Linux/MacOs/...)<br/><ul>
 
 <br/>
 <hr/>
-<a id="2082"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_obj</span>);<br/></pre>
+<a id="105"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2098"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_obj</span>);<br/></pre>
+<a id="110"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__Dimension.html">ewol::Dimension</a> & <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2862"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_obj</span>);<br/></pre>
+<a id="140"/><h3>getLogId</h3><pre>
+  <span class="code-type" >int32_t</span> <span class="code-function">getLogId</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="905"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_obj</span>);<br/></pre>
 Debug operator To display the curent element in a Human redeable information<br/>
 <br/>
 <hr/>
-<a id="2876"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__widget__WSlider__sladingMode.html">ewol::widget::WSlider::sladingMode</a> <span class="code-argument">_obj</span>);<br/></pre>
+<a id="919"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__widget__WSlider__sladingMode.html">ewol::widget::WSlider::sladingMode</a> <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2880"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_obj</span>);<br/></pre>
+<a id="923"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2883"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/></pre>
+<a id="926"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2885"/><h3>gravityToString</h3><pre>
+<a id="928"/><h3>gravityToString</h3><pre>
   <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">gravityToString</span> (<span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4115"/><h3>stringToGravity</h3><pre>
+<a id="2032"/><h3>stringToGravity</h3><pre>
   <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__gravity.html">ewol::gravity</a> <span class="code-function">stringToGravity</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4141"/><h3>getContext</h3><pre>
-  Context & <span class="code-function">getContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2052"/><h3>getContext</h3><pre>
+  Context & <span class="code-function">getContext</span> ();<br/></pre>
 From everyware in the program, we can get the context inteface.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>current reference on the instance.</td></tr></table>
@@ -199,30 +213,18 @@ From everyware in the program, we can get the context inteface.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4194"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_obj</span>);<br/></pre>
+<a id="2099"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_obj</span>);<br/></pre>
 Debug operator To display the curent element in a Human readable information<br/>
 <br/>
 <hr/>
-<a id="4980"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_obj</span>);<br/></pre>
+<a id="3374"/><h3>operator <<</h3><pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_obj</span>);<br/></pre>
 Debug operator To display the curent element in a Human redeable information<br/>
 <br/>
 <hr/>
-<a id="5063"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_obj</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="5315"/><h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ConfigElement.html">ewol::object::ConfigElement</a> & <span class="code-argument">_obj</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
 <h3>operator <<</h3><pre>
-  <a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-function">operator <<</span> (<a class="code-type" href="class_etk__CCout.html">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                            <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__font__mode.html">ewol::font::mode</a> <span class="code-argument">_obj</span>);<br/></pre>
+  std::ostream & <span class="code-function">operator <<</span> (std::ostream & <span class="code-argument">_os</span>,<br/>                              <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__font__mode.html">ewol::font::mode</a> <span class="code-argument">_obj</span>);<br/></pre>
 
 <br/>
 <br/>

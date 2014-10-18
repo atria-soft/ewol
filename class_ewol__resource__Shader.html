@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -83,18 +84,18 @@
 Shader is a specific resources for opengl, used only in @ref Program. This are components of the renderer pipe-line<br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-#                         <a class="code-function" href="#5357">Shader</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/># <span class="code-storage-keyword">virtual</span>                         <a class="code-function" href="#5359">~Shader</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                <a class="code-function" href="#3413">Shader</a>                         ();<br/>+ <span class="code-storage-keyword">virtual</span>        <a class="code-function" href="#3418">~Shader</a>                        ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ GLuint                  <a class="code-function" href="#5361">getGL_ID</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ GLenum                  <a class="code-function" href="#5363">getShaderType</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                    <a class="code-function" href="#5365">updateContext</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                    <a class="code-function" href="#5367">removeContext</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                    <a class="code-function" href="#5369">removeContextToLate</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                    <a class="code-function" href="#5371">reload</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <a class="code-type" href="class_ewol__resource__Shader.html">ewol::resource::Shader</a>* <a class="code-function" href="#5373">keep</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/>+ <span class="code-type" >void</span>                    <a class="code-function" href="#5375">release</a>             (<a class="code-type" href="class_ewol__resource__Shader.html">ewol::resource::Shader</a>* & <span class="code-argument">_object</span>);<br/></pre>
++ <span class="code-type" >void</span>   <a class="code-function" href="#3414">init</a>                           (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/>+        <a class="code-function" href="#3416">DECLARE_RESOURCE_NAMED_FACTORY</a> (Shader <span class="code-argument"></span>);<br/>+ GLuint <a class="code-function" href="#3419">getGL_ID</a>                       ();<br/>+ GLenum <a class="code-function" href="#3420">getShaderType</a>                  ();<br/>+ <span class="code-type" >void</span>   <a class="code-function" href="#3421">updateContext</a>                  ();<br/>+ <span class="code-type" >void</span>   <a class="code-function" href="#3422">removeContext</a>                  ();<br/>+ <span class="code-type" >void</span>   <a class="code-function" href="#3423">removeContextToLate</a>            ();<br/>+ <span class="code-type" >void</span>   <a class="code-function" href="#3424">reload</a>                         ();<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Resource.html">ewol::Resource</a><br/>         +--> ewol::resource::Shader<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Resource.html">ewol::Resource</a><br/>                +--> ewol::resource::Shader<br/></pre>
 <h2>Detail:</h2>
-<a id="5357"/><a id="5359"/><h3>Shader</h3><pre>
-#  <span class="code-function">Shader</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
+<a id="3413"/><a id="3414"/><h3>Shader</h3><pre>
+#  <span class="code-function">Shader</span> ();<br/></pre>
 Contructor of an opengl Shader<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">filename</span> </td><td> Standard file name format. see @ref etk::FSNode</td></tr>
@@ -103,13 +104,25 @@ Contructor of an opengl Shader<br/><ul>
 
 <br/>
 <hr/>
-<a id="5361"/><h3>~Shader</h3><pre>
-# <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Shader</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="3416"/><h3>init</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3418"/><h3>DECLARE_RESOURCE_NAMED_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_RESOURCE_NAMED_FACTORY</span> (Shader <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3419"/><h3>~Shader</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Shader</span> ();<br/></pre>
 Destructor, remove the current Shader<br/>
 <br/>
 <hr/>
-<a id="5363"/><h3>getGL_ID</h3><pre>
-+ GLuint <span class="code-function">getGL_ID</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="3420"/><h3>getGL_ID</h3><pre>
++ GLuint <span class="code-function">getGL_ID</span> ();<br/></pre>
 get the opengl reference id of this shader.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The opengl id.</td></tr></table>
@@ -117,8 +130,8 @@ get the opengl reference id of this shader.<br/><ul>
 
 <br/>
 <hr/>
-<a id="5365"/><h3>getShaderType</h3><pre>
-+ GLenum <span class="code-function">getShaderType</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="3421"/><h3>getShaderType</h3><pre>
++ GLenum <span class="code-function">getShaderType</span> ();<br/></pre>
 get the opengl type of this shader.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The type of this loaded shader.</td></tr></table>
@@ -126,44 +139,24 @@ get the opengl type of this shader.<br/><ul>
 
 <br/>
 <hr/>
-<a id="5367"/><h3>updateContext</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">updateContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="3422"/><h3>updateContext</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">updateContext</span> ();<br/></pre>
 This load/reload the data in the opengl context, needed when removed previously.<br/>
 <br/>
 <hr/>
-<a id="5369"/><h3>removeContext</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">removeContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="3423"/><h3>removeContext</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">removeContext</span> ();<br/></pre>
 remove the data from the opengl context.<br/>
 <br/>
 <hr/>
-<a id="5371"/><h3>removeContextToLate</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">removeContextToLate</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="3424"/><h3>removeContextToLate</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">removeContextToLate</span> ();<br/></pre>
 Special android spec! It inform us that all context is removed and after notify us...<br/>
 <br/>
 <hr/>
-<a id="5373"/><h3>reload</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">reload</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<h3>reload</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">reload</span> ();<br/></pre>
 Relode the shader from the file. used when a request of resouces reload is done.<br/><b>Note:</b> this is really usefull when we tested the new themes or shader developpements.<br/> 
-<br/>
-<hr/>
-<a id="5375"/><h3>keep</h3><pre>
-+ <a class="code-type" href="class_ewol__resource__Shader.html">ewol::resource::Shader</a>* <span class="code-function">keep</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
-keep the resource pointer.<br/><b>Note:</b> Never free this pointer by your own...<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_filename</span> </td><td> Name of the openGL Shader.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>pointer on the resource or NULL if an error occured.</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<h3>release</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">release</span> (<a class="code-type" href="class_ewol__resource__Shader.html">ewol::resource::Shader</a>* & <span class="code-argument">_object</span>);<br/></pre>
-release the keeped resources<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input] [output]:</b></td><td><span class="code-argument">reference</span> </td><td> on the object pointer</td></tr>
-</table>
-</ul>
-
 <br/>
 <hr/>
 	</div>

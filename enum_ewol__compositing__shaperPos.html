@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -79,35 +80,39 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>class: ewol::object::EventExtGen</h1><hr/><h2>Synopsis:</h2>
-<pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>*   <a class="code-member" href="#4857">localEventId</a>;<br/>+ <a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <a class="code-member" href="#4858">destObject</a>;<br/>+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>*   <a class="code-member" href="#4859">destEventId</a>;<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>   <a class="code-member" href="#4860">overloadData</a>;<br/></pre>
-<br/>
+<h1>enum: ewol::compositing::shaperPos</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Value list</h2>
+<ul>
+<table class="enumeration-list"><tr>
+<tr>
+<td><a href="#shaperPosLeft">shaperPosLeft</a></td></tr>
+<tr>
+<td><a href="#shaperPosRight">shaperPosRight</a></td></tr>
+<tr>
+<td><a href="#shaperPosTop">shaperPosTop</a></td></tr>
+<tr>
+<td><a href="#shaperPosButtom">shaperPosButtom</a></td></tr>
+<tr>
+<td><a href="#shaperPosCount">shaperPosCount</a></td></tr>
+</table>
+</ul>
 <h2>Detail:</h2>
-<a id="4857"/><a id="4858"/><h3>localEventId</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-member">localEventId</span>;<br/></pre>
-
-local event Id generation<br/>
-<br/>
+<h3><a id="shaperPosLeft"/>shaperPosLeft</h3><pre>
+shaperPosLeft   = <span class="code-type">0<span></pre>
 <hr/>
-<a id="4859"/><h3>destObject</h3><pre>
-+ <a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-member">destObject</span>;<br/></pre>
-
-destination widget that might be call<br/>
-<br/>
+<h3><a id="shaperPosRight"/>shaperPosRight</h3><pre>
+shaperPosRight  = <span class="code-type">1<span></pre>
 <hr/>
-<a id="4860"/><h3>destEventId</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-member">destEventId</span>;<br/></pre>
-
-generated event ID on the distant widget<br/>
-<br/>
+<h3><a id="shaperPosTop"/>shaperPosTop</h3><pre>
+shaperPosTop    = <span class="code-type">2<span></pre>
 <hr/>
-<h3>overloadData</h3><pre>
-+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-member">overloadData</span>;<br/></pre>
-
-sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)<br/>
-<br/>
+<h3><a id="shaperPosButtom"/>shaperPosButtom</h3><pre>
+shaperPosButtom = <span class="code-type">3<span></pre>
 <hr/>
+<h3><a id="shaperPosCount"/>shaperPosCount</h3><pre>
+shaperPosCount  = <span class="code-type">4<span></pre>
 	</div>
 <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1><center>object model</center></h1>
+<hr><div align="left"><a href="tutorial_001_HelloWord.html">Previous: Hello word</a></div>  <div align="right"><a href="tutorial_011_ObjectConfig.html">Next: Object config</a></div>
+
+<h2> Objectif </h2>
+<ul><li> Understand ewol basic <a href="class_ewol__Object.html">ewol::Object</a></li><li> Use <a href="class_ewol__Object.html">ewol::Object</a> correctly</li></ul>
+<h1> Basis of the ewol::Object </h1><br/>
+An object in Ewol is a simple class : <a href="class_ewol__Object.html">ewol::Object</a> This object is the basis of all element in the ewol system.
+This is designed to manage many common things:<br/>
+<ul><li> Unique ID</li><li> Name</li><li> Parameters</li><li> Signal generation</li><li> Xml configuration</li><li> Removing</li><li> Perodic calling</li></ul>
+<br/>
+<b>Note:</b><pre>
+Please do not compare with the gObject basic class...
+</pre><br/>
+
+<h1> Create an Object: </h1><br/>
+Creating an object is really simple:<br/>
+<pre>
+	<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::Button</span>&gt; tmpButon = <span class="code-class">ewol::Button</span>::<span class="code-function-name">create(</span>);
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"We just create a button widget with unique ID="</span> &lt;&lt; tmpButon-&gt;<span class="code-function-name">getId(</span>) &lt;&lt; <span class="code-text-quote">" name='"</span> &lt;&lt; tmpButon-&gt;<span class="code-function-name">getName(</span>) &lt;&lt; <span class="code-text-quote">"'"</span>);
+</pre><br/>
+Note that all object created are std::shared_ptr.<br/>
+
+Set the name of the object:<br/>
+<pre>
+	tmpButon-&gt;<span class="code-function-name">setName(</span><span class="code-text-quote">"my widget name"</span>);
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"We just create an Object with ID="</span> &lt;&lt; tmpButon-&gt;<span class="code-function-name">getId(</span>) &lt;&lt; <span class="code-text-quote">" name='"</span> &lt;&lt; tmpButon-&gt;<span class="code-function-name">getName(</span>) &lt;&lt; <span class="code-text-quote">"'"</span>);
+</pre><br/>
+
+<h1> Remove an Object: </h1><br/>
+Simply use the function:
+<pre>
+	tmpButon-&gt;<span class="code-function-name">destroy(</span>);
+</pre><br/>
+This function request his parrent to remove the std::shared_ptr it keep on it.
+And when all std::shared_ptr is removed the object will be really removed.<br/>
+At his point we can think an object is allive all the time someone keep a reference on it, then when you are not a parrent of the object, do not keep a std::shared_ptr but a std::weak_ptr.<br/>
+<br/>
+<b>Note:</b><pre>
+If some Object is not removed when you close the application, the system inform you with displaying all object already alive.
+</pre><br/>
+
+<h1> Retrieve an Object: </h1><br/>
+In Ewol this is possible to get a object with his name.<br/>
+<h2> Find a global Object (ouside an Object) </h2><br/>
+<pre>
+	<span class="code-preproc">#include &lt;ewol/context/Context.h&gt;
+</span>	
+	<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::Object</span>&gt; tmpObject = ewol::<span class="code-function-name">getContext(</span>).<span class="code-function-name">getEObjectManager(</span>).<span class="code-function-name">getObjectNamed(</span><span class="code-text-quote">"obj Name"</span>);
+	<span class="code-keyword">if </span>(tmpObject <span class="code-operator">==</span> <span class="code-generic-define">NULL</span>) <span class="code-operator">{</span>
+		<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"The Object does not exist"</span>);
+	<span class="code-operator">}</span>
+</pre><br/>
+<h2> Find a global Object (inside an Object) </h2><br/>
+<pre>
+	<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::Object</span>&gt; tmpObject = <span class="code-function-name">getObjectNamed(</span><span class="code-text-quote">"obj Name"</span>);
+	<span class="code-keyword">if </span>(tmpObject <span class="code-operator">==</span> <span class="code-generic-define">NULL</span>) <span class="code-operator">{</span>
+		<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"The Object does not exist"</span>);
+	<span class="code-operator">}</span>
+</pre><br/>
+<h2> Find a sub-object </h2><br/>
+<pre>
+	<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::Object</span>&gt; tmpObject = <span class="code-function-name">getSubObjectNamed(</span><span class="code-text-quote">"obj Name"</span>);
+	<span class="code-keyword">if </span>(tmpObject <span class="code-operator">==</span> <span class="code-generic-define">NULL</span>) <span class="code-operator">{</span>
+		<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"The Object does not exist"</span>);
+	<span class="code-operator">}</span>
+</pre><br/>
+<h2> retriving your object type </h2><br/>
+It could be really interesting to retrive your own instance:<br/>
+<pre>
+	<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">ewol::Object</span>&gt; tmpObject ...;
+	
+	<span class="code-class">std::shared_ptr</span>&lt;<span class="code-class">appl::MyOwnObject</span>&gt; myObject = <span class="code-class">std::dynamic_po</span><span class="code-type">int</span>er_cast&lt;<span class="code-class">appl::MyOwnObject</span>&gt;(tmpObject);
+</pre><br/>
+<h1> conclusion </h1><br/>
+TODO ...<br/>
+
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

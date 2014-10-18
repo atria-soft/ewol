@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -79,113 +80,169 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>class: ewol::widget::Windows</h1><hr/><h2>enum:</h2>
+<h1>class: ewol::widget::Windows</h1><hr/><h2>Description:</h2>
+Windows basic interface<br/><br/>
+<h2>enum:</h2>
 <ul>
 <li><a href="enum_ewol__widget__Windows__popUpMessageType.html">popUpMessageType</a></li></ul>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                    <a class="code-function" href="#3132">Windows</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span>                            <a class="code-function" href="#3134">~Windows</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                                    <a class="code-function" href="#1105">Windows</a>                 ();<br/>+ <span class="code-storage-keyword">virtual</span>                                            <a class="code-function" href="#1107">~Windows</a>                ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-type" >void</span>                       <a class="code-function" href="#3136">sysDraw</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3138">sysOnShow</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3140">sysOnHide</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3142">sysOnKill</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3144">onShow</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3146">onHide</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#3148">onKill</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3150">onReduce</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3152">on</a>                     (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3155">setDecorationDisable</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3157">setDecorationEnable</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3161">setSubWidget</a>           (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3163">popUpWidgetPush</a>        (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; &  <a class="code-function" href="#3166">getBackgroundColor</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3168">setBackgroundColor</a>     (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; & <span class="code-argument">_color</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3170">systemDraw</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3172">onRegenerateDisplay</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3174">onObjectRemove</a>         (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3176">calculateSize</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>*              <a class="code-function" href="#3178">getWidgetAtPos</a>         (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3180">setTitle</a>               (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_title</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#3183">createPopUpMessage</a>     (<span class="code-storage-keyword">enum</span> popUpMessageType <span class="code-argument">_type</span>,<br/>                                                             <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3186">displayInfoMessage</a>     (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3188">displayWarningMessage</a>  (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3190">displayErrorMessage</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#3192">displayCriticalMessage</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/></pre>
+#         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::resource::ColorFile&gt; <a class="code-member" href="#1103">m_colorProperty</a>;<br/>#         <span class="code-type" >int32_t</span>                                    <a class="code-member" href="#1104">m_colorBg</a>;<br/>#         <span class="code-type" >void</span>                                       <a class="code-function" href="#1106">init</a>                    ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1108">sysDraw</a>                 ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1109">sysOnShow</a>               ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1110">sysOnHide</a>               ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1111">sysOnKill</a>               ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1112">onShow</a>                  ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1113">onHide</a>                  ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                       <a class="code-function" href="#1114">onKill</a>                  ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1115">onReduce</a>                ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1116">onStateBackground</a>       ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1117">onStateForeground</a>       ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1118">onStateSuspend</a>          ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1119">onStateResume</a>           ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1120">on</a>                      ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1122">setDecorationDisable</a>    ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1123">setDecorationEnable</a>     ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1126">setSubWidget</a>            (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1128">popUpWidgetPush</a>         (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1130">popUpWidgetPop</a>          ();<br/>+         size_t                                     <a class="code-function" href="#1131">popUpCount</a>              ();<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; &                  <a class="code-function" href="#1133">getBackgroundColor</a>      ();<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1134">setBackgroundColor</a>      (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; & <span class="code-argument">_color</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1136">systemDraw</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1138">onRegenerateDisplay</a>     ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1139">calculateSize</a>           (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt;              <a class="code-function" href="#1141">getWidgetAtPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1143">requestDestroyFromChild</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_child</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt;              <a class="code-function" href="#1145">getSubObjectNamed</a>       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1147">setTitle</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_title</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                       <a class="code-function" href="#1150">createPopUpMessage</a>      (<span class="code-storage-keyword">enum</span> popUpMessageType <span class="code-argument">_type</span>,<br/>                                                                              <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1153">displayInfoMessage</a>      (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1155">displayWarningMessage</a>   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1157">displayErrorMessage</a>     (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+         <span class="code-type" >void</span>                                       <a class="code-function" href="#1159">displayCriticalMessage</a>  (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                       <a class="code-function" href="#1161">onEventHardwareInput</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="enum_ewol__key__keyboardSystem.html">ewol::key::keyboardSystem</a> & <span class="code-argument">_event</span>,<br/>                                                                              <span class="code-type" >bool</span> <span class="code-argument">_down</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::Windows<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> ewol::widget::Windows<br/></pre>
 <h2>Detail:</h2>
-<a id="3132"/><a id="3134"/><h3>Windows</h3><pre>
-+  <span class="code-function">Windows</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1103"/><a id="1104"/><h3>m_colorProperty</h3><pre>
+# <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::resource::ColorFile&gt; <span class="code-member">m_colorProperty</span>;<br/></pre>
+
+theme color property<br/>
+<br/>
+<hr/>
+<a id="1105"/><h3>m_colorBg</h3><pre>
+# <span class="code-type" >int32_t</span> <span class="code-member">m_colorBg</span>;<br/></pre>
+
+Default background color of the windows<br/>
+<br/>
+<hr/>
+<a id="1106"/><h3>Windows</h3><pre>
+#  <span class="code-function">Windows</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3136"/><h3>~Windows</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Windows</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1107"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3138"/><h3>sysDraw</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">sysDraw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1108"/><h3>~Windows</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Windows</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3140"/><h3>sysOnShow</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">sysOnShow</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1109"/><h3>sysDraw</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">sysDraw</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3142"/><h3>sysOnHide</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">sysOnHide</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1110"/><h3>sysOnShow</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">sysOnShow</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3144"/><h3>sysOnKill</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">sysOnKill</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1111"/><h3>sysOnHide</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">sysOnHide</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3146"/><h3>onShow</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onShow</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1112"/><h3>sysOnKill</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">sysOnKill</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3148"/><h3>onHide</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onHide</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1113"/><h3>onShow</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onShow</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3150"/><h3>onKill</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onKill</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1114"/><h3>onHide</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onHide</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3152"/><h3>onReduce</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onReduce</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1115"/><h3>onKill</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onKill</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3155"/><h3>on</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">on</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1116"/><h3>onReduce</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onReduce</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3157"/><h3>setDecorationDisable</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setDecorationDisable</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1117"/><h3>onStateBackground</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onStateBackground</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3161"/><h3>setDecorationEnable</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setDecorationEnable</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1118"/><h3>onStateForeground</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onStateForeground</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3163"/><h3>setSubWidget</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setSubWidget</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/></pre>
+<a id="1119"/><h3>onStateSuspend</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onStateSuspend</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3166"/><h3>popUpWidgetPush</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">popUpWidgetPush</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/></pre>
+<a id="1120"/><h3>onStateResume</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onStateResume</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3168"/><h3>getBackgroundColor</h3><pre>
-+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; & <span class="code-function">getBackgroundColor</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1122"/><h3>on</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">on</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1123"/><h3>setDecorationDisable</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setDecorationDisable</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1126"/><h3>setDecorationEnable</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setDecorationEnable</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1128"/><h3>setSubWidget</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setSubWidget</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1130"/><h3>popUpWidgetPush</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">popUpWidgetPush</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1131"/><h3>popUpWidgetPop</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">popUpWidgetPop</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1133"/><h3>popUpCount</h3><pre>
++ size_t <span class="code-function">popUpCount</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1134"/><h3>getBackgroundColor</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; & <span class="code-function">getBackgroundColor</span> ();<br/></pre>
 get the background color.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>A reference on the color</td></tr></table>
@@ -193,12 +250,12 @@ get the background color.<br/><ul>
 
 <br/>
 <hr/>
-<a id="3170"/><h3>setBackgroundColor</h3><pre>
+<a id="1136"/><h3>setBackgroundColor</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setBackgroundColor</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; & <span class="code-argument">_color</span>);<br/></pre>
 set the background color.<br/>
 <br/>
 <hr/>
-<a id="3172"/><h3>systemDraw</h3><pre>
+<a id="1138"/><h3>systemDraw</h3><pre>
 # <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">systemDraw</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/></pre>
 {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget<br/><b>Note:</b> This function is virtual for the scrolled widget, and the more complicated openGl widget<br/> <b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
@@ -209,22 +266,12 @@ This function generate a clipping with the viewport openGL system. Like this a w
 
 <br/>
 <hr/>
-<a id="3174"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1139"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="3176"/><h3>onObjectRemove</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
-Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_removObject</span> </td><td> Pointer on the Object remeved  == &gt; the user must remove all reference on this Object</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="3178"/><h3>calculateSize</h3><pre>
+<a id="1141"/><h3>calculateSize</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/></pre>
 Parent set the possible diplay size of the current widget whith his own possibilities
        By default this save the widget available size in the widget size<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
@@ -235,23 +282,39 @@ Parent set the possible diplay size of the current widget whith his own possibil
 
 <br/>
 <hr/>
-<a id="3180"/><h3>getWidgetAtPos</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+<a id="1143"/><h3>getWidgetAtPos</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 get the widget at the specific windows absolute position<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> gAbsolute position of the requested widget knowledge</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>NULL No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
+<tr><td><b>Return: </b></td><td></td><td>nullptr No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
 </ul>
 
 <br/>
 <hr/>
-<a id="3183"/><h3>setTitle</h3><pre>
+<a id="1145"/><h3>requestDestroyFromChild</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">requestDestroyFromChild</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_child</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1147"/><h3>getSubObjectNamed</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <span class="code-function">getSubObjectNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>);<br/></pre>
+Retrive an object with his name (in the global list)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the object</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the requested object or nullptr</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="1150"/><h3>setTitle</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setTitle</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_title</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3186"/><h3>createPopUpMessage</h3><pre>
+<a id="1153"/><h3>createPopUpMessage</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">createPopUpMessage</span> (<span class="code-storage-keyword">enum</span> popUpMessageType <span class="code-argument">_type</span>,<br/>                                   <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/></pre>
 Create a simple pop-up message on the screen for application error.<br/><ul>
 <table class="parameter-list">
@@ -262,7 +325,7 @@ Create a simple pop-up message on the screen for application error.<br/><ul>
 
 <br/>
 <hr/>
-<a id="3188"/><h3>displayInfoMessage</h3><pre>
+<a id="1155"/><h3>displayInfoMessage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">displayInfoMessage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/></pre>
 Create a simple information message<br/><ul>
 <table class="parameter-list">
@@ -272,7 +335,7 @@ Create a simple information message<br/><ul>
 
 <br/>
 <hr/>
-<a id="3190"/><h3>displayWarningMessage</h3><pre>
+<a id="1157"/><h3>displayWarningMessage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">displayWarningMessage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/></pre>
 Create a simple warning message<br/><ul>
 <table class="parameter-list">
@@ -282,7 +345,7 @@ Create a simple warning message<br/><ul>
 
 <br/>
 <hr/>
-<a id="3192"/><h3>displayErrorMessage</h3><pre>
+<a id="1159"/><h3>displayErrorMessage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">displayErrorMessage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/></pre>
 Create a simple error message<br/><ul>
 <table class="parameter-list">
@@ -292,7 +355,7 @@ Create a simple error message<br/><ul>
 
 <br/>
 <hr/>
-<h3>displayCriticalMessage</h3><pre>
+<a id="1161"/><h3>displayCriticalMessage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">displayCriticalMessage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_message</span>);<br/></pre>
 Create a simple critical message<br/><ul>
 <table class="parameter-list">
@@ -300,6 +363,12 @@ Create a simple critical message<br/><ul>
 </table>
 </ul>
 
+<br/>
+<hr/>
+<h3>onEventHardwareInput</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventHardwareInput</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="enum_ewol__key__keyboardSystem.html">ewol::key::keyboardSystem</a> & <span class="code-argument">_event</span>,<br/>                                     <span class="code-type" >bool</span> <span class="code-argument">_down</span>);<br/></pre>
+
+<br/>
 <br/>
 <hr/>
 	</div>

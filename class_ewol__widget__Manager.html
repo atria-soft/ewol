@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,129 +85,123 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                            <a class="code-function" href="#3427">Manager</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                            <a class="code-function" href="#3429">~Manager</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                  <a class="code-function" href="#1385">Manager</a>                 ();<br/>+ <span class="code-storage-keyword">virtual</span>                                          <a class="code-function" href="#1386">~Manager</a>                ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ typedefewol::Widget        <a class="code-function" href="#3417">*</a>                      (*creator_tf)( <span class="code-argument">void</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3431">rm</a>                     (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3433">focusKeep</a>              (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3435">focusSetDefault</a>        (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3437">focusRelease</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>*              <a class="code-function" href="#3439">focusGet</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3441">focusRemoveIfRemove</a>    (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3443">periodicCallAdd</a>        (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_pWidget</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3445">periodicCallRm</a>         (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_pWidget</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3447">periodicCall</a>           (<span class="code-type" >int64_t</span> <span class="code-argument">_localTime</span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3449">periodicCallResume</a>     (<span class="code-type" >int64_t</span> <span class="code-argument">_localTime</span>);<br/>+ <span class="code-type" >bool</span>                       <a class="code-function" href="#3451">periodicCallHave</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3453">markDrawingIsNeeded</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >bool</span>                       <a class="code-function" href="#3455">isDrawingNeeded</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                       <a class="code-function" href="#3457">addWidgetCreator</a>       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>                                                     creator_tf <span class="code-argument">_pointer</span>);<br/>+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>*              <a class="code-function" href="#3460">create</a>                 (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-type" >bool</span>                       <a class="code-function" href="#3462">exist</a>                  (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                <a class="code-function" href="#3464">list</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ typedefstd::shared_ptr&lt;ewol::Widget      <a class="code-function" href="#1375">></a>                       (*creator_tf) <span class="code-argument">(</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1387">focusKeep</a>               (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1389">focusSetDefault</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1391">focusRelease</a>            ();<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt;            <a class="code-function" href="#1392">focusGet</a>                ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1393">focusRemoveIfRemove</a>     (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1395">periodicCallAdd</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_pWidget</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1397">periodicCallRm</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_pWidget</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1399">periodicCall</a>            (<span class="code-type" >int64_t</span> <span class="code-argument">_localTime</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1401">periodicCallResume</a>      (<span class="code-type" >int64_t</span> <span class="code-argument">_localTime</span>);<br/>+ <span class="code-type" >bool</span>                                     <a class="code-function" href="#1403">periodicCallHave</a>        ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1404">markDrawingIsNeeded</a>     ();<br/>+ <span class="code-type" >bool</span>                                     <a class="code-function" href="#1405">isDrawingNeeded</a>         ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#1406">addWidgetCreator</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>                                                                    creator_tf <span class="code-argument">_pointer</span>);<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt;            <a class="code-function" href="#1409">create</a>                  (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-type" >bool</span>                                     <a class="code-function" href="#1411">exist</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                              <a class="code-function" href="#1413">list</a>                    ();<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="3417"/><a id="3427"/><h3>*</h3><pre>
-+ typedefewol::Widget <span class="code-function">*</span> (*creator_tf)( <span class="code-argument">void</span>);<br/></pre>
+<a id="1375"/><a id="1385"/><h3>></h3><pre>
++ typedefstd::shared_ptr&lt;ewol::Widget <span class="code-function">></span> (*creator_tf) <span class="code-argument">(</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3429"/><h3>Manager</h3><pre>
-+  <span class="code-function">Manager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1386"/><h3>Manager</h3><pre>
++  <span class="code-function">Manager</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3431"/><h3>~Manager</h3><pre>
-+  <span class="code-function">~Manager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1387"/><h3>~Manager</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Manager</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3433"/><h3>rm</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">rm</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+<a id="1389"/><h3>focusKeep</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">focusKeep</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_newWidget</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3435"/><h3>focusKeep</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">focusKeep</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+<a id="1391"/><h3>focusSetDefault</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">focusSetDefault</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_newWidget</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3437"/><h3>focusSetDefault</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">focusSetDefault</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+<a id="1392"/><h3>focusRelease</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">focusRelease</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3439"/><h3>focusRelease</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">focusRelease</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1393"/><h3>focusGet</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">focusGet</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3441"/><h3>focusGet</h3><pre>
-+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">focusGet</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1395"/><h3>focusRemoveIfRemove</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">focusRemoveIfRemove</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_newWidget</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3443"/><h3>focusRemoveIfRemove</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">focusRemoveIfRemove</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+<a id="1397"/><h3>periodicCallAdd</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">periodicCallAdd</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_pWidget</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3445"/><h3>periodicCallAdd</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">periodicCallAdd</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_pWidget</span>);<br/></pre>
+<a id="1399"/><h3>periodicCallRm</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">periodicCallRm</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; & <span class="code-argument">_pWidget</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3447"/><h3>periodicCallRm</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">periodicCallRm</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_pWidget</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="3449"/><h3>periodicCall</h3><pre>
+<a id="1401"/><h3>periodicCall</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">periodicCall</span> (<span class="code-type" >int64_t</span> <span class="code-argument">_localTime</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3451"/><h3>periodicCallResume</h3><pre>
+<a id="1403"/><h3>periodicCallResume</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">periodicCallResume</span> (<span class="code-type" >int64_t</span> <span class="code-argument">_localTime</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3453"/><h3>periodicCallHave</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">periodicCallHave</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1404"/><h3>periodicCallHave</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">periodicCallHave</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3455"/><h3>markDrawingIsNeeded</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">markDrawingIsNeeded</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1405"/><h3>markDrawingIsNeeded</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">markDrawingIsNeeded</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3457"/><h3>isDrawingNeeded</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">isDrawingNeeded</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1406"/><h3>isDrawingNeeded</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">isDrawingNeeded</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3460"/><h3>addWidgetCreator</h3><pre>
+<a id="1409"/><h3>addWidgetCreator</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">addWidgetCreator</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>                         creator_tf <span class="code-argument">_pointer</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3462"/><h3>create</h3><pre>
-+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">create</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
+<a id="1411"/><h3>create</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">create</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3464"/><h3>exist</h3><pre>
+<a id="1413"/><h3>exist</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">exist</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
 <h3>list</h3><pre>
-+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">list</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">list</span> ();<br/></pre>
 
 <br/>
 <br/>

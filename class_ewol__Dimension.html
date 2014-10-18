@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -87,19 +88,19 @@ but one case need to be dynamic the %, then when requested in % the register the
 <li><a href="enum_ewol__Dimension__distance.html">distance</a></li></ul>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                   <a class="code-function" href="#2022">Dimension</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                   <a class="code-function" href="#2024">Dimension</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                          <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/>+                   <a class="code-function" href="#2027">Dimension</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>);<br/>+                   <a class="code-function" href="#2029">Dimension</a>            (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>);<br/>+                   <a class="code-function" href="#2031">~Dimension</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                   <a class="code-function" href="#59">Dimension</a>            ();<br/>+                   <a class="code-function" href="#60">Dimension</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                          <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/>+                   <a class="code-function" href="#63">Dimension</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>);<br/>+                   <a class="code-function" href="#65">Dimension</a>            (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>);<br/>+                   <a class="code-function" href="#67">~Dimension</a>           ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+                   <a class="code-function" href="#2033">operator std::string</a> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2035">get</a>                  (<span class="code-storage-keyword">enum</span> distance <span class="code-argument">_type</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#2037">set</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                          <span class="code-storage-keyword">enum</span> distance <span class="code-argument">_type</span>);<br/>+ vec2              <a class="code-function" href="#2042">getPixel</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2044">getPourcent</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2046">getMeter</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2048">getCentimeter</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2050">getMillimeter</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2052">getKilometer</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2054">getInch</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#2056">getFoot</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">const</span> Dimension & <a class="code-function" href="#2058">operator =</a>           (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>);<br/>+ <span class="code-type" >bool</span>              <a class="code-function" href="#2060">operator ==</a>          (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >bool</span>              <a class="code-function" href="#2062">operator !=</a>          (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">enum</span> distance     <a class="code-function" href="#2064">getType</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#2066">init</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#2068">unInit</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#2070">setPixelRatio</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_ratio</span>,<br/>                                          <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#2073">setPixelWindowsSize</a>  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ vec2              <a class="code-function" href="#2075">getWindowsSize</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/>+ <span class="code-type" >float</span>             <a class="code-function" href="#2077">getWindowsDiag</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/></pre>
++                   <a class="code-function" href="#68">operator std::string</a> () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#69">get</a>                  (<span class="code-storage-keyword">enum</span> distance <span class="code-argument">_type</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#71">set</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                          <span class="code-storage-keyword">enum</span> distance <span class="code-argument">_type</span>);<br/>+ vec2              <a class="code-function" href="#76">getPixel</a>             () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#77">getPourcent</a>          () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#78">getMeter</a>             () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#79">getCentimeter</a>        () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#80">getMillimeter</a>        () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#81">getKilometer</a>         () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#82">getInch</a>              () <span class="code-storage-keyword">const</span>;<br/>+ vec2              <a class="code-function" href="#83">getFoot</a>              () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">const</span> Dimension & <a class="code-function" href="#84">operator =</a>           (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>);<br/>+ <span class="code-type" >bool</span>              <a class="code-function" href="#86">operator ==</a>          (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >bool</span>              <a class="code-function" href="#88">operator !=</a>          (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">enum</span> distance     <a class="code-function" href="#90">getType</a>              () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#91">init</a>                 ();<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#92">unInit</a>               ();<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#93">setPixelRatio</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_ratio</span>,<br/>                                          <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/>+ <span class="code-type" >void</span>              <a class="code-function" href="#96">setPixelWindowsSize</a>  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ vec2              <a class="code-function" href="#98">getWindowsSize</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/>+ <span class="code-type" >float</span>             <a class="code-function" href="#100">getWindowsDiag</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="2022"/><a id="2024"/><h3>Dimension</h3><pre>
-+  <span class="code-function">Dimension</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="59"/><a id="60"/><h3>Dimension</h3><pre>
++  <span class="code-function">Dimension</span> ();<br/></pre>
 Constructor (default :0,0 mode pixel)<br/>
 <br/>
 <hr/>
-<a id="2027"/><h3>Dimension</h3><pre>
+<a id="63"/><h3>Dimension</h3><pre>
 +  <span class="code-function">Dimension</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>              <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/></pre>
 Constructor<br/><ul>
 <table class="parameter-list">
@@ -110,7 +111,7 @@ Constructor<br/><ul>
 
 <br/>
 <hr/>
-<a id="2029"/><h3>Dimension</h3><pre>
+<a id="65"/><h3>Dimension</h3><pre>
 +  <span class="code-function">Dimension</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>);<br/></pre>
 Constructor<br/><ul>
 <table class="parameter-list">
@@ -120,7 +121,7 @@ Constructor<br/><ul>
 
 <br/>
 <hr/>
-<a id="2031"/><h3>Dimension</h3><pre>
+<a id="67"/><h3>Dimension</h3><pre>
 +  <span class="code-function">Dimension</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>);<br/></pre>
 Constructor<br/><ul>
 <table class="parameter-list">
@@ -130,17 +131,17 @@ Constructor<br/><ul>
 
 <br/>
 <hr/>
-<a id="2033"/><h3>~Dimension</h3><pre>
-+  <span class="code-function">~Dimension</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="68"/><h3>~Dimension</h3><pre>
++  <span class="code-function">~Dimension</span> ();<br/></pre>
 Destructor<br/>
 <br/>
 <hr/>
-<a id="2035"/><h3>operator std::string</h3><pre>
-+  <span class="code-function">operator std::string</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="69"/><h3>operator std::string</h3><pre>
++  <span class="code-function">operator std::string</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 string cast :<br/>
 <br/>
 <hr/>
-<a id="2037"/><h3>get</h3><pre>
+<a id="71"/><h3>get</h3><pre>
 + vec2 <span class="code-function">get</span> (<span class="code-storage-keyword">enum</span> distance <span class="code-argument">_type</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in requested type<br/><ul>
 <table class="parameter-list">
@@ -150,7 +151,7 @@ get the current dimention in requested type<br/><ul>
 
 <br/>
 <hr/>
-<a id="2042"/><h3>set</h3><pre>
+<a id="76"/><h3>set</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">set</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>            <span class="code-storage-keyword">enum</span> distance <span class="code-argument">_type</span>);<br/></pre>
 set the current dimention in requested type<br/><ul>
 <table class="parameter-list">
@@ -161,8 +162,8 @@ set the current dimention in requested type<br/><ul>
 
 <br/>
 <hr/>
-<a id="2044"/><h3>getPixel</h3><pre>
-+ vec2 <span class="code-function">getPixel</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="77"/><h3>getPixel</h3><pre>
++ vec2 <span class="code-function">getPixel</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in pixel<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Pixel</td></tr></table>
@@ -170,8 +171,8 @@ get the current dimention in pixel<br/><ul>
 
 <br/>
 <hr/>
-<a id="2046"/><h3>getPourcent</h3><pre>
-+ vec2 <span class="code-function">getPourcent</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="78"/><h3>getPourcent</h3><pre>
++ vec2 <span class="code-function">getPourcent</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Pourcent<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Pourcent</td></tr></table>
@@ -179,8 +180,8 @@ get the current dimention in Pourcent<br/><ul>
 
 <br/>
 <hr/>
-<a id="2048"/><h3>getMeter</h3><pre>
-+ vec2 <span class="code-function">getMeter</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="79"/><h3>getMeter</h3><pre>
++ vec2 <span class="code-function">getMeter</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Meter<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Meter</td></tr></table>
@@ -188,8 +189,8 @@ get the current dimention in Meter<br/><ul>
 
 <br/>
 <hr/>
-<a id="2050"/><h3>getCentimeter</h3><pre>
-+ vec2 <span class="code-function">getCentimeter</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="80"/><h3>getCentimeter</h3><pre>
++ vec2 <span class="code-function">getCentimeter</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Centimeter<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Centimeter</td></tr></table>
@@ -197,8 +198,8 @@ get the current dimention in Centimeter<br/><ul>
 
 <br/>
 <hr/>
-<a id="2052"/><h3>getMillimeter</h3><pre>
-+ vec2 <span class="code-function">getMillimeter</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="81"/><h3>getMillimeter</h3><pre>
++ vec2 <span class="code-function">getMillimeter</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Millimeter<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Millimeter</td></tr></table>
@@ -206,8 +207,8 @@ get the current dimention in Millimeter<br/><ul>
 
 <br/>
 <hr/>
-<a id="2054"/><h3>getKilometer</h3><pre>
-+ vec2 <span class="code-function">getKilometer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="82"/><h3>getKilometer</h3><pre>
++ vec2 <span class="code-function">getKilometer</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Kilometer<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Kilometer</td></tr></table>
@@ -215,8 +216,8 @@ get the current dimention in Kilometer<br/><ul>
 
 <br/>
 <hr/>
-<a id="2056"/><h3>getInch</h3><pre>
-+ vec2 <span class="code-function">getInch</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="83"/><h3>getInch</h3><pre>
++ vec2 <span class="code-function">getInch</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Inch<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Inch</td></tr></table>
@@ -224,8 +225,8 @@ get the current dimention in Inch<br/><ul>
 
 <br/>
 <hr/>
-<a id="2058"/><h3>getFoot</h3><pre>
-+ vec2 <span class="code-function">getFoot</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="84"/><h3>getFoot</h3><pre>
++ vec2 <span class="code-function">getFoot</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the current dimention in Foot<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>dimention in Foot</td></tr></table>
@@ -233,26 +234,26 @@ get the current dimention in Foot<br/><ul>
 
 <br/>
 <hr/>
-<a id="2060"/><h3>operator =</h3><pre>
+<a id="86"/><h3>operator =</h3><pre>
 + <span class="code-storage-keyword">const</span> Dimension & <span class="code-function">operator =</span> (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>);<br/></pre>
 
 = assigment<br/>
 <br/>
 <hr/>
-<a id="2062"/><h3>operator ==</h3><pre>
+<a id="88"/><h3>operator ==</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">operator ==</span> (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
 
 == operator<br/>
 <br/>
 <hr/>
-<a id="2064"/><h3>operator !=</h3><pre>
+<a id="90"/><h3>operator !=</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">operator !=</span> (<span class="code-storage-keyword">const</span> Dimension & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
 
 != operator<br/>
 <br/>
 <hr/>
-<a id="2066"/><h3>getType</h3><pre>
-+ <span class="code-storage-keyword">enum</span> distance <span class="code-function">getType</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="91"/><h3>getType</h3><pre>
++ <span class="code-storage-keyword">enum</span> distance <span class="code-function">getType</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 <ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the type</td></tr></table>
@@ -260,17 +261,17 @@ get the current dimention in Foot<br/><ul>
 
 <br/>
 <hr/>
-<a id="2068"/><h3>init</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="92"/><h3>init</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/></pre>
 basic init<br/>
 <br/>
 <hr/>
-<a id="2070"/><h3>unInit</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">unInit</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="93"/><h3>unInit</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">unInit</span> ();<br/></pre>
 basic un-init<br/>
 <br/>
 <hr/>
-<a id="2073"/><h3>setPixelRatio</h3><pre>
+<a id="96"/><h3>setPixelRatio</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPixelRatio</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_ratio</span>,<br/>                      <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/></pre>
 set the Milimeter ratio for calculation<br/><ul>
 <table class="parameter-list">
@@ -281,7 +282,7 @@ set the Milimeter ratio for calculation<br/><ul>
 
 <br/>
 <hr/>
-<a id="2075"/><h3>setPixelWindowsSize</h3><pre>
+<a id="98"/><h3>setPixelWindowsSize</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPixelWindowsSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
 set the current Windows size<br/><ul>
 <table class="parameter-list">
@@ -291,7 +292,7 @@ set the current Windows size<br/><ul>
 
 <br/>
 <hr/>
-<a id="2077"/><h3>getWindowsSize</h3><pre>
+<a id="100"/><h3>getWindowsSize</h3><pre>
 + vec2 <span class="code-function">getWindowsSize</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__Dimension__distance.html">ewol::Dimension::distance</a> <span class="code-argument">_type</span>);<br/></pre>
 get the Windows size in the request unit<br/><ul>
 <table class="parameter-list">

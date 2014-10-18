@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,47 +85,47 @@
 <li><a href="enum_ewol__widget__Scroll__highSpeedMode.html">highSpeedMode</a></li></ul>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                    <a class="code-function" href="#2691">Scroll</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span>                            <a class="code-function" href="#2693">~Scroll</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                        <a class="code-function" href="#752">Scroll</a>                 ();<br/>+ <span class="code-storage-keyword">virtual</span>                                <a class="code-function" href="#758">~Scroll</a>                ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>          <a class="code-member" href="#2683">configLimit</a>;<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2684">init</a>                (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/>#         vec2                       <a class="code-member" href="#2687">m_limit</a>;<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2695">setLimit</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_limit</span>);<br/>+         <span class="code-storage-keyword">const</span> vec2 &               <a class="code-function" href="#2697">getLimit</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2699">calculateMinMaxSize</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2701">onRegenerateDisplay</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2703">onEventInput</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2705">systemDraw</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>*              <a class="code-function" href="#2707">getWidgetAtPos</a>      (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2709">onDraw</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2711">onSetConfig</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2713">onGetConfig</a>         (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                                                          <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+#         <a class="code-type" href="class_ewol__object__ParamRange.html">ewol::object::ParamRange</a>&lt;vec2&gt; <a class="code-member" href="#748">m_limit</a>;<br/>#         <span class="code-type" >void</span>                           <a class="code-function" href="#753">init</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/>+                                        <a class="code-function" href="#755">DECLARE_WIDGET_FACTORY</a> (Scroll <span class="code-argument"></span>,<br/>                                                                 "Scroll" <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                           <a class="code-function" href="#759">setLimit</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_limit</span>);<br/>+         <span class="code-storage-keyword">const</span> vec2 &                   <a class="code-function" href="#761">getLimit</a>               () <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-type" >void</span>                           <a class="code-function" href="#762">calculateMinMaxSize</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                           <a class="code-function" href="#763">onRegenerateDisplay</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                           <a class="code-function" href="#764">onEventInput</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                           <a class="code-function" href="#766">systemDraw</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt;  <a class="code-function" href="#768">getWidgetAtPos</a>         (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                           <a class="code-function" href="#770">onDraw</a>                 ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                           <a class="code-function" href="#771">onParameterChangeValue</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> +<a href="class_ewol__widget__Container.html">ewol::widget::Container</a><br/>                +--> ewol::widget::Scroll<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> +<a href="class_ewol__widget__Container.html">ewol::widget::Container</a><br/>                       +--> ewol::widget::Scroll<br/></pre>
 <h2>Detail:</h2>
-<a id="2683"/><a id="2684"/><h3>configLimit</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configLimit</span>;<br/></pre>
+<a id="748"/><a id="752"/><h3>m_limit</h3><pre>
+# <a class="code-type" href="class_ewol__object__ParamRange.html">ewol::object::ParamRange</a>&lt;vec2&gt; <span class="code-member">m_limit</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2687"/><h3>init</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">init</span> (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/></pre>
+<a id="753"/><h3>Scroll</h3><pre>
+#  <span class="code-function">Scroll</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2691"/><h3>m_limit</h3><pre>
-# vec2 <span class="code-member">m_limit</span>;<br/></pre>
+<a id="755"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2693"/><h3>Scroll</h3><pre>
-+  <span class="code-function">Scroll</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="758"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (Scroll <span class="code-argument"></span>,<br/>                           "Scroll" <span class="code-argument"></span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2695"/><h3>~Scroll</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Scroll</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="759"/><h3>~Scroll</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Scroll</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2697"/><h3>setLimit</h3><pre>
+<a id="761"/><h3>setLimit</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setLimit</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_limit</span>);<br/></pre>
 set the limit of scrolling<br/><b>Note:</b> This permit to scoll element upper the end of the display<br/> <ul>
 <table class="parameter-list">
@@ -134,8 +135,8 @@ set the limit of scrolling<br/><b>Note:</b> This permit to scoll element upper t
 
 <br/>
 <hr/>
-<a id="2699"/><h3>getLimit</h3><pre>
-+ <span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getLimit</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="762"/><h3>getLimit</h3><pre>
++ <span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getLimit</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the limit of scrolling<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>scrolling limit</td></tr></table>
@@ -143,17 +144,17 @@ get the limit of scrolling<br/><ul>
 
 <br/>
 <hr/>
-<a id="2701"/><h3>calculateMinMaxSize</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="763"/><h3>calculateMinMaxSize</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> ();<br/></pre>
 calculate the minimum and maximum size (need to estimate expend properties of the widget)<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> 
 <br/>
 <hr/>
-<a id="2703"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="764"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="2705"/><h3>onEventInput</h3><pre>
+<a id="766"/><h3>onEventInput</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventInput</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
 Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 <table class="parameter-list">
@@ -163,7 +164,7 @@ Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 
 <br/>
 <hr/>
-<a id="2707"/><h3>systemDraw</h3><pre>
+<a id="768"/><h3>systemDraw</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">systemDraw</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/></pre>
 {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget<br/><b>Note:</b> This function is virtual for the scrolled widget, and the more complicated openGl widget<br/> <b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
@@ -174,40 +175,25 @@ This function generate a clipping with the viewport openGL system. Like this a w
 
 <br/>
 <hr/>
-<a id="2709"/><h3>getWidgetAtPos</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+<a id="770"/><h3>getWidgetAtPos</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 get the widget at the specific windows absolute position<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> gAbsolute position of the requested widget knowledge</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>NULL No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
+<tr><td><b>Return: </b></td><td></td><td>nullptr No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
 </ul>
 
 <br/>
 <hr/>
-<a id="2711"/><h3>onDraw</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="771"/><h3>onDraw</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> ();<br/></pre>
 Common widget drawing function (called by the drawing thread [Android, X11, ...])<br/>
 <br/>
 <hr/>
-<a id="2713"/><h3>onSetConfig</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onSetConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/></pre>
-Configuration requested to the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_conf</span> </td><td> Configuration handle.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the parametere has been used</td></tr></table>
-</ul>
+<h3>onParameterChangeValue</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onParameterChangeValue</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/></pre>
 
 <br/>
-<hr/>
-<h3>onGetConfig</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onGetConfig</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                            <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
-Receive a configuration message from an other element system or from the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_config</span> </td><td> Configuration name.</td></tr>
-<td><b>Parameter [output]:</b></td><td><span class="code-argument">_result</span> </td><td> Result of the request.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the config is set</td></tr></table>
-</ul>
-
 <br/>
 <hr/>
 	</div>

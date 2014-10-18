@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::object::SignalBase</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
++                                    <a class="code-function" href="#2811">SignalBase</a>     (<a class="code-type" href="class_ewol__object__SignalList.html">ewol::object::SignalList</a> & <span class="code-argument">_objectLink</span>,<br/>                                                     <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>                                                     <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_description</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                            <a class="code-function" href="#2815">~SignalBase</a>    ();<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
+#         <a class="code-type" href="class_ewol__object__SignalList.html">ewol::object::SignalList</a> & <a class="code-member" href="#2807">m_objectLink</a>;<br/>#         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                <a class="code-member" href="#2808">m_name</a>;<br/>#         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                <a class="code-member" href="#2809">m_description</a>;<br/>#         <span class="code-type" >int32_t</span>                    <a class="code-member" href="#2810">m_uidSignal</a>;<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &        <a class="code-function" href="#2816">getName</a>        () <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &        <a class="code-function" href="#2817">getDescription</a> () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2818">release</a>        (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <span class="code-argument">_obj</span>) = 0;<br/></pre>
+<br/>
+<h2>Detail:</h2>
+<a id="2807"/><a id="2808"/><h3>m_objectLink</h3><pre>
+# <a class="code-type" href="class_ewol__object__SignalList.html">ewol::object::SignalList</a> & <span class="code-member">m_objectLink</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2809"/><h3>m_name</h3><pre>
+# <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-member">m_name</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2810"/><h3>m_description</h3><pre>
+# <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-member">m_description</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2811"/><h3>m_uidSignal</h3><pre>
+# <span class="code-type" >int32_t</span> <span class="code-member">m_uidSignal</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2815"/><h3>SignalBase</h3><pre>
++  <span class="code-function">SignalBase</span> (<a class="code-type" href="class_ewol__object__SignalList.html">ewol::object::SignalList</a> & <span class="code-argument">_objectLink</span>,<br/>               <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>,<br/>               <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_description</span>);<br/></pre>
+Create a parameter with a specific type.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_objectLink</span> </td><td> reference on the parameter lister.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Static name of the parameter.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_description</span> </td><td> description of the parameter.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2816"/><h3>~SignalBase</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~SignalBase</span> ();<br/></pre>
+Destructor.<br/>
+<br/>
+<hr/>
+<a id="2817"/><h3>getName</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getName</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2818"/><h3>getDescription</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getDescription</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>release</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">release</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <span class="code-argument">_obj</span>) = 0;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

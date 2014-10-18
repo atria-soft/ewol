@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1><center>file access</center></h1>
+<hr><div align="left"><a href="tutorial_012_ObjectMessage.html">Previous: Object message</a></div>  <div align="right"><a href="tutorial_021_Resources.html">Next: Resources</a></div>
+
+<h2> Objectif </h2>
+<ul><li> Understand why we wrap interface on file system</li></ul>
+<h1> Limitation </h1><br/>
+Application generation is really simple, but package management can create some problems...<br/>
+For example :
+<ul><li> Android does not permit access on the file system, but we need data that is named assets, thes data in contained in a zip file.</li><li> Linux set his own application data in a special path : /usr/shared/applName/</li><li> MacOs create a bundle (*.app) that is a folder with all application data.</li><li> ...</li></ul>
+For all tese reason we need to wrap standard application interface. (you can acces directly but it could be tricky and depend on the target)<br/>
+<h1> Generic Properties </h1><br/>
+By default we dertermine some basics for files.<br/>
+Then we need to determine file in the tree with :
+<ul><li> "DATA:XXX" Application internal data</li><li> "USERDATA:XXX" User save data (like game save)</li><li> "HOME:XXX" User home folder</li><li> "/XXX" Direct acces on a file in the fileSystem</li><li> ...</li></ul>
+When you will call a file, you need to just call it with the starting name.<br/>
+For example if I want to acces at an application data I will call the file : "DATA:myImage.png"<br/>
+<h1> Integrate a file in a package </h1><br/>
+In your lutin_xxx.py file add:
+<pre>
+	# to copy a single file:
+	myModule.copy_file("relative/path/file.svg","destination/folder/file.svg")
+	# to copy an entire patern path
+	myModule.copy_folder("relative/path/start*.png","destination/folder/")
+</pre><br/>
+And now you can acces on these file with : "DATA:destination/folder/file.svg"<br/>
+
+<h1> Read a file </h1><br/>
+<pre>
+	<span class="code-preproc">#include &lt;etk/os/FSNode.h&gt;
+</span>	
+	...
+	
+	<span class="code-class">etk::FSNode</span> <span class="code-function-name">file(</span><span class="code-text-quote">"DATA:destination/folder/file.svg"</span>);
+	<span class="code-keyword">if </span>(file.<span class="code-function-name">exist(</span>) <span class="code-operator">==</span> <span class="<code-operator">false</span>) <span class="code-operator">{</span>
+		<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"Can not read the file (Does not exist)"</span>);
+		return;
+	<span class="code-operator">}</span>
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"open :"</span> &lt;&lt; file &lt;&lt; <span class="code-text-quote">" with size="</span> &lt;&lt; file.<span class="code-function-name">fileSize(</span>));
+	<span class="code-keyword">if </span>(file.<span class="code-function-name">fileOpenRead(</span>) <span class="code-operator">==</span> <span class="<code-operator">false</span>) <span class="code-operator">{</span>
+		<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"Can not open in read mode the file: "</span> &lt;&lt; file);
+		return;
+	<span class="code-operator">}</span>
+	<span class="code-comment">// get a char
+</span>	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"read in: "</span> &lt;&lt; file &lt;&lt; <span class="code-text-quote">" the first char='"</span> &lt;&lt; file.<span class="code-function-name">fileGet(</span>) &lt;&lt; <span class="code-text-quote">"'"</span>);
+	<span class="code-comment">// Get a line
+</span>	<span class="code-class">std::string</span> output;
+	file.<span class="code-function-name">fileGets(</span>output);
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"and the end of the line ='"</span> &lt;&lt; output &lt;&lt; <span class="code-text-quote">"'"</span>);
+	<span class="code-comment">// close the file (note : if you did not do it, it will be close automaticly with an error)
+</span>	file.<span class="code-function-name">fileClose(</span>);
+</pre><br/>
+<h1> Write a file </h1><br/>
+<pre>
+	<span class="code-preproc">#include &lt;etk/os/FSNode.h&gt;
+</span>	
+	...
+	
+	<span class="code-class">etk::FSNode</span> <span class="code-function-name">file(</span><span class="code-text-quote">"USERDATA:exmple.txt"</span>);
+	<span class="code-function-name">APPL_INFO(</span><span class="code-text-quote">"open :"</span> &lt;&lt; file);
+	<span class="code-keyword">if </span>(file.<span class="code-function-name">fileOpenWrite(</span>) <span class="code-operator">==</span> <span class="<code-operator">false</span>) <span class="code-operator">{</span>
+		<span class="code-function-name">APPL_ERROR(</span><span class="code-text-quote">"Can not open in write mode the file: "</span> &lt;&lt; file);
+		return;
+	<span class="code-operator">}</span>
+	<span class="code-comment">// put a char
+</span>	file.<span class="code-function-name">filePut(</span><span class="code-text-quote">'A'</span>);
+	<span class="code-comment">// write a line
+</span>	file.<span class="code-function-name">filePuts(</span><span class="code-text-quote">" other string to put in the file ... \n"</span>);
+	<span class="code-comment">// close the file (note : if you did not do it, it will be close automaticly with an error)
+</span>	file.<span class="code-function-name">fileClose(</span>);
+</pre><br/>
+<h1> 'Theme' management </h1><br/>
+The theme management is a subset a file selected by a main key.
+For example The basic theme of an API can be manage with only 2 commands (set the theme, and request upate of GUI)<br/>
+At the start of the program, you might specify the default path theme:<br/>
+<pre>
+	<span class="code-class">etk::theme</span>::<span class="code-function-name">setNameDefault(</span><span class="code-text-quote">"GUI_COLOR"</span>, <span class="code-text-quote">"theme/black"</span>);
+	<span class="code-class">etk::theme</span>::<span class="code-function-name">setNameDefault(</span><span class="code-text-quote">"GUI_SHAPE"</span>, <span class="code-text-quote">"theme/rounded"</span>);
+</pre><br/>
+And when you want to change the theme, just call:<br/>
+<pre>
+	<span class="code-comment">// change the theme :
+</span>	<span class="code-class">etk::theme</span>::<span class="code-function-name">setName(</span><span class="code-text-quote">"GUI_COLOR"</span>, <span class="code-text-quote">"theme/white"</span>);
+	<span class="code-comment">// force reload of all the resources :
+</span>	ewol::<span class="code-function-name">getContext(</span>).<span class="code-function-name">getResourcesManager(</span>).<span class="code-function-name">reLoadResources(</span>);
+	ewol::<span class="code-function-name">getContext(</span>).<span class="code-function-name">forceRedrawAll(</span>);
+</pre><br/>
+<br/>
+<b>Note:</b><pre>
+This is not done automaticly, because reloading the resources can have a real cost of time.
+</pre><br/>
+You can acces on your theme with accessing the filename: "THEME:GUI_COLOR:your/sub/path/file.xx"<br/>
+An important think is that the theme file is searching in many path in the order:
+<ul><li> USERDATA:GUI_COLOR:your/sub/path/file.xx</li><li> DATA:GUI_COLOR:your/sub/path/file.xx</li><li> USERDATA:GUI_COLOR(default):your/sub/path/file.xx</li><li> DATA:GUI_COLOR(default):your/sub/path/file.xx</li></ul><br/>
+Like this a user can overload the application theme...<br/>
+<br/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

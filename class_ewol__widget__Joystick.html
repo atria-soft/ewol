@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,59 +85,71 @@
 <li><a href="enum_ewol__widget__Joystick__joystickMode.html">joystickMode</a></li></ul>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                           <a class="code-function" href="#2459">Joystick</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span>                   <a class="code-function" href="#2461">~Joystick</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                    <a class="code-function" href="#469">Joystick</a>               ();<br/>+ <span class="code-storage-keyword">virtual</span>                            <a class="code-function" href="#474">~Joystick</a>              ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <a class="code-member" href="#2445">eventEnable</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <a class="code-member" href="#2446">eventDisable</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <a class="code-member" href="#2447">eventMove</a>;<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#2463">setLockMode</a>         (<span class="code-type" >bool</span> <span class="code-argument">_lockWhenOut</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#2465">setDisplayMode</a>      (<span class="code-storage-keyword">enum</span> joystickMode <span class="code-argument">_newMode</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#2467">ratio</a>               (<span class="code-type" >float</span> <span class="code-argument">_newRatio</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#2469">background</a>          (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_imageNameInData</span>,<br/>                                                 <span class="code-type" >bool</span> <span class="code-argument">_display</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#2472">foreground</a>          (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_imageNameInData</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#2474">getProperty</a>         (<span class="code-type" >float</span> & <span class="code-argument">_distance</span>,<br/>                                                 <span class="code-type" >float</span> & <span class="code-argument">_angle</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>              <a class="code-function" href="#2477">calculateSize</a>       (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>              <a class="code-function" href="#2479">onRegenerateDisplay</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>              <a class="code-function" href="#2481">onEventInput</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
++         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <a class="code-member" href="#455">signalEnable</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <a class="code-member" href="#456">signalDisable</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;vec2&gt; <a class="code-member" href="#457">signalMove</a>;<br/>#         <span class="code-type" >void</span>                       <a class="code-function" href="#470">init</a>                   ();<br/>+                                    <a class="code-function" href="#471">DECLARE_WIDGET_FACTORY</a> (Joystick <span class="code-argument"></span>,<br/>                                                             "Joystick" <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#475">setLockMode</a>            (<span class="code-type" >bool</span> <span class="code-argument">_lockWhenOut</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#477">setDisplayMode</a>         (<span class="code-storage-keyword">enum</span> joystickMode <span class="code-argument">_newMode</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#479">ratio</a>                  (<span class="code-type" >float</span> <span class="code-argument">_newRatio</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#481">background</a>             (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_imageNameInData</span>,<br/>                                                             <span class="code-type" >bool</span> <span class="code-argument">_display</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#484">foreground</a>             (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_imageNameInData</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#486">getProperty</a>            (<span class="code-type" >float</span> & <span class="code-argument">_distance</span>,<br/>                                                             <span class="code-type" >float</span> & <span class="code-argument">_angle</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#489">calculateSize</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#491">onRegenerateDisplay</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#492">onEventInput</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::Joystick<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> ewol::widget::Joystick<br/></pre>
 <h2>Detail:</h2>
-<a id="2445"/><a id="2446"/><h3>eventEnable</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventEnable</span>;<br/></pre>
+<a id="455"/><a id="456"/><h3>signalEnable</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalEnable</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2447"/><h3>eventDisable</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventDisable</span>;<br/></pre>
+<a id="457"/><h3>signalDisable</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalDisable</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2459"/><h3>eventMove</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventMove</span>;<br/></pre>
+<a id="469"/><h3>signalMove</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;vec2&gt; <span class="code-member">signalMove</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2461"/><h3>Joystick</h3><pre>
-+  <span class="code-function">Joystick</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="470"/><h3>Joystick</h3><pre>
+#  <span class="code-function">Joystick</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2463"/><h3>~Joystick</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Joystick</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="471"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2465"/><h3>setLockMode</h3><pre>
+<a id="474"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (Joystick <span class="code-argument"></span>,<br/>                           "Joystick" <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="475"/><h3>~Joystick</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Joystick</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="477"/><h3>setLockMode</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setLockMode</span> (<span class="code-type" >bool</span> <span class="code-argument">_lockWhenOut</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2467"/><h3>setDisplayMode</h3><pre>
+<a id="479"/><h3>setDisplayMode</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setDisplayMode</span> (<span class="code-storage-keyword">enum</span> joystickMode <span class="code-argument">_newMode</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2469"/><h3>ratio</h3><pre>
+<a id="481"/><h3>ratio</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">ratio</span> (<span class="code-type" >float</span> <span class="code-argument">_newRatio</span>);<br/></pre>
 set the ratio of the widget joystick<br/><ul>
 <table class="parameter-list">
@@ -146,7 +159,7 @@ set the ratio of the widget joystick<br/><ul>
 
 <br/>
 <hr/>
-<a id="2472"/><h3>background</h3><pre>
+<a id="484"/><h3>background</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">background</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_imageNameInData</span>,<br/>                   <span class="code-type" >bool</span> <span class="code-argument">_display</span>);<br/></pre>
 set the Background of the widget joystick<br/><ul>
 <table class="parameter-list">
@@ -157,7 +170,7 @@ set the Background of the widget joystick<br/><ul>
 
 <br/>
 <hr/>
-<a id="2474"/><h3>foreground</h3><pre>
+<a id="486"/><h3>foreground</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">foreground</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_imageNameInData</span>);<br/></pre>
 set the Foreground of the widget joystick<br/><ul>
 <table class="parameter-list">
@@ -167,7 +180,7 @@ set the Foreground of the widget joystick<br/><ul>
 
 <br/>
 <hr/>
-<a id="2477"/><h3>getProperty</h3><pre>
+<a id="489"/><h3>getProperty</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">getProperty</span> (<span class="code-type" >float</span> & <span class="code-argument">_distance</span>,<br/>                    <span class="code-type" >float</span> & <span class="code-argument">_angle</span>);<br/></pre>
 get the property of the joystick<br/><ul>
 <table class="parameter-list">
@@ -178,7 +191,7 @@ get the property of the joystick<br/><ul>
 
 <br/>
 <hr/>
-<a id="2479"/><h3>calculateSize</h3><pre>
+<a id="491"/><h3>calculateSize</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/></pre>
 Parent set the possible diplay size of the current widget whith his own possibilities
        By default this save the widget available size in the widget size<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
@@ -189,8 +202,8 @@ Parent set the possible diplay size of the current widget whith his own possibil
 
 <br/>
 <hr/>
-<a id="2481"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="492"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>

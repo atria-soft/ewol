@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -86,54 +87,92 @@ this class mermit at every Object to communicate between them.<br/><br/>
 <a href="namespace_ewol__object.html">object</a></ul>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                                          <a class="code-function" href="#4864">Object</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                                                          <a class="code-function" href="#4866">Object</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                                  <a class="code-function" href="#4868">~Object</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                          <a class="code-function" href="#2869">Object</a>                    ();<br/>+ <span class="code-storage-keyword">virtual</span>                                  <a class="code-function" href="#2875">~Object</a>                   ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>                                <a class="code-member" href="#4863">configName</a>;<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4870">autoDestroy</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                             <a class="code-function" href="#4872">removeObject</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>                                <a class="code-function" href="#4875">getObjectType</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                                      <a class="code-function" href="#4877">getTypeDescription</a>  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4879">isTypeCompatible</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_type</span>);<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4881">addObjectType</a>       (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_type</span>);<br/>#         <span class="code-type" >bool</span>                                             <a class="code-member" href="#4883">m_static</a>;<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4884">getStatic</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >int32_t</span>                                          <a class="code-function" href="#4887">getId</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4891">addEventId</a>          (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_generateEventId</span>);<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4893">generateEventId</a>     (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_generateEventId</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4896">sendMultiCast</a>       (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-argument">_messageId</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4899">registerMultiCast</a>   (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-argument">_messageId</span>);<br/>+         <span class="code-type" >void</span>                                             <a class="code-function" href="#4901">registerOnEvent</a>     (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_destinationObject</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventIdgenerated</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_overloadData</span>);<br/>+         <span class="code-type" >void</span>                                             <a class="code-function" href="#4906">unRegisterOnEvent</a>   (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_destinationObject</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                             <a class="code-function" href="#4909">onObjectRemove</a>      (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                             <a class="code-function" href="#4911">onReceiveMessage</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Message.html">ewol::object::Message</a> & <span class="code-argument">_msg</span>);<br/>#         <span class="code-type" >void</span>                                             <a class="code-function" href="#4914">registerConfig</a>      (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_type</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_control</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_description</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_default</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                             <a class="code-function" href="#4920">onSetConfig</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                             <a class="code-function" href="#4922">onGetConfig</a>         (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                                                                                <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/vector/vector/">std::vector</a>&lt;ewol::object::ConfigElement&gt; & <a class="code-function" href="#4925">getConfigList</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4927">setConfig</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4929">setConfig</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_value</span>);<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4932">setConfigNamed</a>      (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_value</span>);<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4936">setConfigNamed</a>      (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>,<br/>                                                                                <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                                      <a class="code-function" href="#4939">getConfig</a>           (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>) <span class="code-storage-keyword">const</span>;<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                                      <a class="code-function" href="#4941">getConfig</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>) <span class="code-storage-keyword">const</span>;<br/>#         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                                      <a class="code-member" href="#4943">m_name</a>;<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &                              <a class="code-function" href="#4944">getName</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-type" >void</span>                                             <a class="code-function" href="#4946">setName</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                             <a class="code-function" href="#4948">loadXML</a>             (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                             <a class="code-function" href="#4950">storeXML</a>            (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>) <span class="code-storage-keyword">const</span>;<br/>+         <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> &                          <a class="code-function" href="#4952">getObjectManager</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="class_ewol__object__MultiCast.html">ewol::object::MultiCast</a> &                        <a class="code-function" href="#4954">getMultiCast</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="class_ewol__Context.html">ewol::Context</a> &                                  <a class="code-function" href="#4956">getContext</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                             <a class="code-function" href="#4959">setStatusResource</a>   (<span class="code-type" >bool</span> <span class="code-argument">_val</span>);<br/>+         <span class="code-type" >bool</span>                                             <a class="code-function" href="#4961">getStatusResource</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#         <span class="code-type" >void</span>                             <a class="code-function" href="#2870">init</a>                      ();<br/>#         <span class="code-type" >void</span>                             <a class="code-function" href="#2871">init</a>                      (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+                                          <a class="code-function" href="#2873">DECLARE_FACTORY</a>           (Object <span class="code-argument"></span>);<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#2876">objectHasBeenCorectlyInit</a> ();<br/>#         <a class="code-type" href="http://www.cplusplus.com/reference/memory/weak_ptr/">std::weak_ptr</a>&lt;Object&gt;            <a class="code-member" href="#2877">m_parent</a>;<br/>#         <span class="code-type" >bool</span>                             <a class="code-member" href="#2878">m_destroy</a>;<br/>#         <span class="code-type" >void</span>                             <a class="code-function" href="#2879">autoDestroy</a>               ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#2880">destroy</a>                   ();<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#2881">isDestroyed</a>               () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#2882">requestDestroyFromChild</a>   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_child</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#2884">setParent</a>                 (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_newParent</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#2886">removeParent</a>              ();<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>                <a class="code-function" href="#2888">getObjectType</a>             ();<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                      <a class="code-function" href="#2889">getTypeDescription</a>        ();<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#2890">isTypeCompatible</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_type</span>);<br/>#         <span class="code-type" >void</span>                             <a class="code-function" href="#2892">addObjectType</a>             (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_type</span>);<br/>#         <span class="code-type" >bool</span>                             <a class="code-member" href="#2894">m_static</a>;<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#2895">getStatic</a>                 ();<br/>+         <span class="code-type" >int32_t</span>                          <a class="code-function" href="#2897">getId</a>                     ();<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#2898">parameterSetOnWidgetNamed</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_value</span>);<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;std::string&gt; <a class="code-member" href="#2902">m_name</a>;<br/>+         <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &              <a class="code-function" href="#2903">getName</a>                   () <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#2904">setName</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                             <a class="code-function" href="#2906">loadXML</a>                   (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                             <a class="code-function" href="#2908">storeXML</a>                  (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>) <span class="code-storage-keyword">const</span>;<br/>+         <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> &          <a class="code-function" href="#2910">getObjectManager</a>          () <span class="code-storage-keyword">const</span>;<br/>+         <a class="code-type" href="class_ewol__Context.html">ewol::Context</a> &                  <a class="code-function" href="#2911">getContext</a>                () <span class="code-storage-keyword">const</span>;<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#2913">setStatusResource</a>         (<span class="code-type" >bool</span> <span class="code-argument">_val</span>);<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#2915">getStatusResource</a>         () <span class="code-storage-keyword">const</span>;<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt;    <a class="code-function" href="#2916">getObjectNamed</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt;    <a class="code-function" href="#2918">getSubObjectNamed</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-ewol::Object<br/>  +--> <a href="class_ewol__Widget.html">ewol::Widget</a><br/>  +--> <a href="class_ewol__Resource.html">ewol::Resource</a><br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> ewol::Object<br/>         +--> <a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> <a href="class_ewol__object__Worker.html">ewol::object::Worker</a><br/>         +--> <a href="class_ewol__Resource.html">ewol::Resource</a><br/></pre>
 <h2>Detail:</h2>
-<a id="4863"/><a id="4864"/><h3>configName</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configName</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4866"/><h3>Object</h3><pre>
-+  <span class="code-function">Object</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2869"/><a id="2870"/><h3>Object</h3><pre>
+#  <span class="code-function">Object</span> ();<br/></pre>
 Constructor.<br/>
 <br/>
 <hr/>
-<a id="4868"/><h3>Object</h3><pre>
-+  <span class="code-function">Object</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
-Constructor.<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the Object.</td></tr>
-</table>
-</ul>
+<a id="2871"/><a id="2873"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/># <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
 
 <br/>
+<br/>
 <hr/>
-<a id="4870"/><h3>~Object</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Object</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2875"/><h3>DECLARE_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_FACTORY</span> (Object <span class="code-argument"></span>);<br/></pre>
+Factory<br/>
+<br/>
+<hr/>
+<a id="2876"/><h3>~Object</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Object</span> ();<br/></pre>
 Destructor<br/>
 <br/>
 <hr/>
-<a id="4872"/><h3>autoDestroy</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">autoDestroy</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2877"/><h3>objectHasBeenCorectlyInit</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">objectHasBeenCorectlyInit</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2878"/><h3>m_parent</h3><pre>
+# <a class="code-type" href="http://www.cplusplus.com/reference/memory/weak_ptr/">std::weak_ptr</a>&lt;Object&gt; <span class="code-member">m_parent</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2879"/><h3>m_destroy</h3><pre>
+# <span class="code-type" >bool</span> <span class="code-member">m_destroy</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2880"/><h3>autoDestroy</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">autoDestroy</span> ();<br/></pre>
 Auto-destroy the object<br/>
 <br/>
 <hr/>
-<a id="4875"/><h3>removeObject</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">removeObject</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
-Asynchronous removing the object<br/>
+<a id="2881"/><h3>destroy</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">destroy</span> ();<br/></pre>
+
+<br/>
 <br/>
 <hr/>
-<a id="4877"/><h3>getObjectType</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-function">getObjectType</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2882"/><h3>isDestroyed</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">isDestroyed</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2884"/><h3>requestDestroyFromChild</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">requestDestroyFromChild</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_child</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2886"/><h3>setParent</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setParent</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_newParent</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2888"/><h3>removeParent</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">removeParent</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2889"/><h3>getObjectType</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-function">getObjectType</span> ();<br/></pre>
 get the current Object type of the Object<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the last type name of the element</td></tr></table>
@@ -141,8 +180,8 @@ get the current Object type of the Object<br/><ul>
 
 <br/>
 <hr/>
-<a id="4879"/><h3>getTypeDescription</h3><pre>
-+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getTypeDescription</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2890"/><h3>getTypeDescription</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getTypeDescription</span> ();<br/></pre>
 Get the herarchie of the Object type.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>descriptive string.</td></tr></table>
@@ -150,7 +189,7 @@ Get the herarchie of the Object type.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4881"/><h3>isTypeCompatible</h3><pre>
+<a id="2892"/><h3>isTypeCompatible</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">isTypeCompatible</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_type</span>);<br/></pre>
 check  if the element herited from a specific type<br/><ul>
 <table class="parameter-list">
@@ -160,7 +199,7 @@ check  if the element herited from a specific type<br/><ul>
 
 <br/>
 <hr/>
-<a id="4883"/><h3>addObjectType</h3><pre>
+<a id="2894"/><h3>addObjectType</h3><pre>
 # <span class="code-type" >void</span> <span class="code-function">addObjectType</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_type</span>);<br/></pre>
 Add a type of the list of Object.<br/><ul>
 <table class="parameter-list">
@@ -170,14 +209,14 @@ Add a type of the list of Object.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4884"/><h3>m_static</h3><pre>
+<a id="2895"/><h3>m_static</h3><pre>
 # <span class="code-type" >bool</span> <span class="code-member">m_static</span>;<br/></pre>
 
 set this variable at true if this element must not be auto destroy (exemple : use static object)<br/>
 <br/>
 <hr/>
-<a id="4887"/><h3>getStatic</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getStatic</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2897"/><h3>getStatic</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getStatic</span> ();<br/></pre>
 get the static status of the Object  == &gt; mark at true if the user set the object mark as static allocated element ==&gt; not auto remove element<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>true if it might not be removed  == &gt; usefull for conficuration class</td></tr></table>
@@ -185,8 +224,8 @@ get the static status of the Object  == &gt; mark at true if the user set the ob
 
 <br/>
 <hr/>
-<a id="4891"/><h3>getId</h3><pre>
-+ <span class="code-type" >int32_t</span> <span class="code-function">getId</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2898"/><h3>getId</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getId</span> ();<br/></pre>
 get the UniqueId of the Object<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the requested ID</td></tr></table>
@@ -194,188 +233,20 @@ get the UniqueId of the Object<br/><ul>
 
 <br/>
 <hr/>
-<a id="4893"/><h3>addEventId</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">addEventId</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_generateEventId</span>);<br/></pre>
-add a specific event Id in the list to prevent wrong link on a Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_generateEventId</span> </td><td> event Id to add</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4896"/><h3>generateEventId</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">generateEventId</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_generateEventId</span>,<br/>                        <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/></pre>
-generate event on all registered Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_generateEventId</span> </td><td> event Id that is curetly generated</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_data</span> </td><td> data associated with the event</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4899"/><h3>sendMultiCast</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">sendMultiCast</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-argument">_messageId</span>,<br/>                      <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/></pre>
-generate Multicast event on all Object requested the event<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_messageId</span> </td><td> Event Id that is generated</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_data</span> </td><td> String that is send at all the destinations</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4901"/><h3>registerMultiCast</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">registerMultiCast</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-argument">_messageId</span>);<br/></pre>
-Register of the arrival of a Multicast message<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_messageId</span> </td><td> Event Id waiting for...</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4906"/><h3>registerOnEvent</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">registerOnEvent</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_destinationObject</span>,<br/>                        <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>,<br/>                        <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventIdgenerated</span>,<br/>                        <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_overloadData</span>);<br/></pre>
-Register an Object over an other to get event on the second...<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_destinationObject</span> </td><td> pointer on the object that might be call when an event is generated</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventId</span> </td><td> Event generate inside the object (note : "" event register on all event generated )</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventIdgenerated</span> </td><td> event generated when call the distant Object.onReceiveMessage(...)</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_overloadData</span> </td><td> When the user prever to receive a data specificly for this event ...</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4909"/><h3>unRegisterOnEvent</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">unRegisterOnEvent</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_destinationObject</span>,<br/>                          <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>);<br/></pre>
-Un-Register an Object over an other.<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_destinationObject</span> </td><td> pointer on the object that might be call when an event is generated</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventId</span> </td><td> Event generate inside the object (NULL to remove all event on this object)</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4911"/><h3>onObjectRemove</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
-Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_removObject</span> </td><td> Pointer on the Object remeved  == &gt; the user must remove all reference on this Object</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4914"/><h3>onReceiveMessage</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onReceiveMessage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Message.html">ewol::object::Message</a> & <span class="code-argument">_msg</span>);<br/></pre>
-Receive a message from an other Object with a specific eventId and data<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_msg</span> </td><td> Message handle</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4920"/><h3>registerConfig</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">registerConfig</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                       <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_type</span>,<br/>                       <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_control</span>,<br/>                       <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_description</span>,<br/>                       <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_default</span>);<br/></pre>
-the Object add a configuration capabilities<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_config</span> </td><td> Configuration name.</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_type</span> </td><td> Type of the config.</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_control</span> </td><td> control of the current type.</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_description</span> </td><td> Descritpion on the current type.</td></tr>
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_default</span> </td><td> Default value of this parameter.</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4922"/><h3>onSetConfig</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onSetConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/></pre>
-Configuration requested to the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_conf</span> </td><td> Configuration handle.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the parametere has been used</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4925"/><h3>onGetConfig</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onGetConfig</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                            <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
-Receive a configuration message from an other element system or from the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_config</span> </td><td> Configuration name.</td></tr>
-<td><b>Parameter [output]:</b></td><td><span class="code-argument">_result</span> </td><td> Result of the request.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the config is set</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4927"/><h3>getConfigList</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/vector/vector/">std::vector</a>&lt;ewol::object::ConfigElement&gt; & <span class="code-function">getConfigList</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
-get all the configuration list<br/><ul>
-<table class="parameter-list">
-<tr><td><b>Return: </b></td><td></td><td>The list of all parameter availlable in the widget</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4929"/><h3>setConfig</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">setConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/></pre>
-Configuration requested to the curent Object (systrem mode)<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_conf</span> </td><td> Configuration handle.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if config set correctly...</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4932"/><h3>setConfig</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">setConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>,<br/>                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_value</span>);<br/></pre>
+<a id="2902"/><h3>parameterSetOnWidgetNamed</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">parameterSetOnWidgetNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_value</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4936"/><h3>setConfigNamed</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">setConfigNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>,<br/>                       <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>,<br/>                       <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_value</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4939"/><h3>setConfigNamed</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">setConfigNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>,<br/>                       <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4941"/><h3>getConfig</h3><pre>
-+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getConfig</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
-Configuration get from the curent Object (systrem mode)<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_config</span> </td><td> Configuration name.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>the config properties</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4943"/><h3>getConfig</h3><pre>
-+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_config</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4944"/><h3>m_name</h3><pre>
-# <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-member">m_name</span>;<br/></pre>
+<a id="2903"/><h3>m_name</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;std::string&gt; <span class="code-member">m_name</span>;<br/></pre>
 
 name of the element ...<br/>
 <br/>
 <hr/>
-<a id="4946"/><h3>getName</h3><pre>
-+ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getName</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="2904"/><h3>getName</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getName</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the Object name<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The requested name</td></tr></table>
@@ -383,7 +254,7 @@ get the Object name<br/><ul>
 
 <br/>
 <hr/>
-<a id="4948"/><h3>setName</h3><pre>
+<a id="2906"/><h3>setName</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setName</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
 get the Widget name<br/><ul>
 <table class="parameter-list">
@@ -393,7 +264,7 @@ get the Widget name<br/><ul>
 
 <br/>
 <hr/>
-<a id="4950"/><h3>loadXML</h3><pre>
+<a id="2908"/><h3>loadXML</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">loadXML</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/></pre>
 load properties with an XML node.<br/><ul>
 <table class="parameter-list">
@@ -403,7 +274,7 @@ load properties with an XML node.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4952"/><h3>storeXML</h3><pre>
+<a id="2910"/><h3>storeXML</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">storeXML</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
 store properties in this XML node.<br/><ul>
 <table class="parameter-list">
@@ -413,8 +284,8 @@ store properties in this XML node.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4954"/><h3>getObjectManager</h3><pre>
-+ <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> & <span class="code-function">getObjectManager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2911"/><h3>getObjectManager</h3><pre>
++ <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> & <span class="code-function">getObjectManager</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 <ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the requested object manager.</td></tr></table>
@@ -422,17 +293,8 @@ store properties in this XML node.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4956"/><h3>getMultiCast</h3><pre>
-+ <a class="code-type" href="class_ewol__object__MultiCast.html">ewol::object::MultiCast</a> & <span class="code-function">getMultiCast</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
-<ul>
-<table class="parameter-list">
-<tr><td><b>Return: </b></td><td></td><td>the requested object manager.</td></tr></table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4959"/><h3>getContext</h3><pre>
-+ <a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-function">getContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2913"/><h3>getContext</h3><pre>
++ <a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-function">getContext</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the curent the system inteface.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>current reference on the instance.</td></tr></table>
@@ -440,7 +302,7 @@ get the curent the system inteface.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4961"/><h3>setStatusResource</h3><pre>
+<a id="2915"/><h3>setStatusResource</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setStatusResource</span> (<span class="code-type" >bool</span> <span class="code-argument">_val</span>);<br/></pre>
 Declare this element as a resource (or singleton) this mean the element will 
 not be auto Remove at the end of the programm. It just notify that it is not removed.<br/><ul>
@@ -451,11 +313,31 @@ not be auto Remove at the end of the programm. It just notify that it is not rem
 
 <br/>
 <hr/>
-<h3>getStatusResource</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getStatusResource</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2916"/><h3>getStatusResource</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getStatusResource</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 Get the resource status of the element.<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the resource status.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2918"/><h3>getObjectNamed</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <span class="code-function">getObjectNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+Retrive an object with his name (in the global list)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the object</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the requested object or nullptr</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<h3>getSubObjectNamed</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <span class="code-function">getSubObjectNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>);<br/></pre>
+Retrive an object with his name (in the global list)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the object</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the requested object or nullptr</td></tr></table>
 </ul>
 
 <br/>

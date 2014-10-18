@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,65 +85,82 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                <a class="code-function" href="#5701">Input</a>     (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>                                            <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>,<br/>                                            <span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>,<br/>                                            <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
++                                <a class="code-function" href="#3762">Input</a>         (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>                                                <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>,<br/>                                                <span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>,<br/>                                                <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> <span class="code-argument">_specialKey</span>);<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>                           <a class="code-function" href="#5706">setType</a>   (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>);<br/>+ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> &   <a class="code-function" href="#5708">getType</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#5710">setStatus</a> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>);<br/>+ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> & <a class="code-function" href="#5712">getStatus</a> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#5714">setId</a>     (<span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>);<br/>+ <span class="code-storage-keyword">const</span> <span class="code-type" >uint8_t</span> &                <a class="code-function" href="#5716">getId</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#5718">setPos</a>    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">const</span> vec2 &                   <a class="code-function" href="#5720">getPos</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
++ <span class="code-type" >void</span>                           <a class="code-function" href="#3768">setType</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>);<br/>+ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> &   <a class="code-function" href="#3770">getType</a>       () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#3771">setStatus</a>     (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>);<br/>+ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> & <a class="code-function" href="#3773">getStatus</a>     () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#3774">setId</a>         (<span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>);<br/>+ <span class="code-storage-keyword">const</span> <span class="code-type" >uint8_t</span> &                <a class="code-function" href="#3776">getId</a>         () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#3777">setPos</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">const</span> vec2 &                   <a class="code-function" href="#3779">getPos</a>        () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#3780">setSpecialKey</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_specialKey</span>);<br/>+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> &     <a class="code-function" href="#3782">getSpecialKey</a> () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#3783">reset</a>         () <span class="code-storage-keyword">const</span>;<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="5701"/><a id="5706"/><h3>Input</h3><pre>
-+  <span class="code-function">Input</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>          <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>,<br/>          <span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>,<br/>          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+<a id="3762"/><a id="3768"/><h3>Input</h3><pre>
++  <span class="code-function">Input</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>          <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>,<br/>          <span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>,<br/>          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>          <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> <span class="code-argument">_specialKey</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5708"/><h3>setType</h3><pre>
+<a id="3770"/><h3>setType</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setType</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5710"/><h3>getType</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> & <span class="code-function">getType</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="3771"/><h3>getType</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> & <span class="code-function">getType</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5712"/><h3>setStatus</h3><pre>
+<a id="3773"/><h3>setStatus</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setStatus</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_status</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5714"/><h3>getStatus</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> & <span class="code-function">getStatus</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="3774"/><h3>getStatus</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> & <span class="code-function">getStatus</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5716"/><h3>setId</h3><pre>
+<a id="3776"/><h3>setId</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setId</span> (<span class="code-type" >uint8_t</span> <span class="code-argument">_id</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5718"/><h3>getId</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >uint8_t</span> & <span class="code-function">getId</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="3777"/><h3>getId</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-type" >uint8_t</span> & <span class="code-function">getId</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="5720"/><h3>setPos</h3><pre>
+<a id="3779"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<h3>getPos</h3><pre>
-+ <span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getPos</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="3780"/><h3>getPos</h3><pre>
++ <span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getPos</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 
 <br/>
+<br/>
+<hr/>
+<a id="3782"/><h3>setSpecialKey</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setSpecialKey</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_specialKey</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3783"/><h3>getSpecialKey</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-function">getSpecialKey</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>reset</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">reset</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+Reset the input property of the curent event.<br/>
 <br/>
 <hr/>
 	</div>

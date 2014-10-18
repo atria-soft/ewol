@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -81,82 +82,94 @@
 	<div class="container" id="content">
 <h1>class: ewol::widget::ParameterList</h1><hr/><h2>Constructor and Destructor:</h2>
 <pre>
-+                                               <a class="code-function" href="#3784">ParameterList</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                       <a class="code-function" href="#3786">~ParameterList</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                               <a class="code-function" href="#1714">ParameterList</a>          ();<br/>+ <span class="code-storage-keyword">virtual</span>                                       <a class="code-function" href="#1719">~ParameterList</a>         ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>                     <a class="code-member" href="#3781">eventSelect</a>;<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3788">setLabel</a>               (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_newLabel</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3791">addOObject</a>             (<a class="code-type" href="class_ewol__Compositing.html">ewol::Compositing</a>* <span class="code-argument">_newObject</span>,<br/>                                                                        <span class="code-type" >int32_t</span> <span class="code-argument">_pos</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3794">clearOObjectList</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3800">menuAdd</a>                (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>,<br/>                                                                        <span class="code-type" >int32_t</span> <span class="code-argument">_refId</span>,<br/>                                                                        <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_image</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3804">menuAddGroup</a>           (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3806">menuClear</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#3808">menuSeparator</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#3810">onRegenerateDisplay</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                  <a class="code-function" href="#3812">onEventInput</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#3814">calculateMinMaxSize</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#3816">onGetFocus</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#3818">onLostFocus</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#3820">onDraw</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;int32_t&gt;         <a class="code-member" href="#1711">signalSelect</a>;<br/>#         <span class="code-type" >void</span>                                  <a class="code-function" href="#1715">init</a>                   ();<br/>+                                               <a class="code-function" href="#1716">DECLARE_WIDGET_FACTORY</a> (ParameterList <span class="code-argument"></span>,<br/>                                                                        "ParameterList" <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1720">setLabel</a>               (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_newLabel</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1723">addOObject</a>             (<a class="code-type" href="class_ewol__Compositing.html">ewol::Compositing</a>* <span class="code-argument">_newObject</span>,<br/>                                                                        <span class="code-type" >int32_t</span> <span class="code-argument">_pos</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1726">clearOObjectList</a>       ();<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1731">menuAdd</a>                (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>,<br/>                                                                        <span class="code-type" >int32_t</span> <span class="code-argument">_refId</span>,<br/>                                                                        <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_image</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1735">menuAddGroup</a>           (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1737">menuClear</a>              ();<br/>+         <span class="code-type" >void</span>                                  <a class="code-function" href="#1738">menuSeparator</a>          ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#1739">onRegenerateDisplay</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                  <a class="code-function" href="#1740">onEventInput</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#1742">calculateMinMaxSize</a>    ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#1743">onGetFocus</a>             ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#1744">onLostFocus</a>            ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                  <a class="code-function" href="#1745">onDraw</a>                 ();<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> +<a href="class_ewol__widget__WidgetScrooled.html">ewol::widget::WidgetScrooled</a><br/>                +--> ewol::widget::ParameterList<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> +<a href="class_ewol__widget__WidgetScrolled.html">ewol::widget::WidgetScrolled</a><br/>                       +--> ewol::widget::ParameterList<br/></pre>
 <h2>Detail:</h2>
-<a id="3781"/><a id="3784"/><h3>eventSelect</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventSelect</span>;<br/></pre>
+<a id="1711"/><a id="1714"/><h3>signalSelect</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;int32_t&gt; <span class="code-member">signalSelect</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3786"/><h3>ParameterList</h3><pre>
-+  <span class="code-function">ParameterList</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1715"/><h3>ParameterList</h3><pre>
+#  <span class="code-function">ParameterList</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3788"/><h3>~ParameterList</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~ParameterList</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1716"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3791"/><h3>setLabel</h3><pre>
+<a id="1719"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (ParameterList <span class="code-argument"></span>,<br/>                           "ParameterList" <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1720"/><h3>~ParameterList</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~ParameterList</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1723"/><h3>setLabel</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setLabel</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_newLabel</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3794"/><h3>addOObject</h3><pre>
+<a id="1726"/><h3>addOObject</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">addOObject</span> (<a class="code-type" href="class_ewol__Compositing.html">ewol::Compositing</a>* <span class="code-argument">_newObject</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3800"/><h3>clearOObjectList</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">clearOObjectList</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1731"/><h3>clearOObjectList</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">clearOObjectList</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3804"/><h3>menuAdd</h3><pre>
+<a id="1735"/><h3>menuAdd</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">menuAdd</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>,<br/>                <span class="code-type" >int32_t</span> <span class="code-argument">_refId</span>,<br/>                <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_image</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3806"/><h3>menuAddGroup</h3><pre>
+<a id="1737"/><h3>menuAddGroup</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">menuAddGroup</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_label</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3808"/><h3>menuClear</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">menuClear</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1738"/><h3>menuClear</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">menuClear</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3810"/><h3>menuSeparator</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">menuSeparator</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1739"/><h3>menuSeparator</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">menuSeparator</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3812"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1740"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="3814"/><h3>onEventInput</h3><pre>
+<a id="1742"/><h3>onEventInput</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventInput</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
 Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 <table class="parameter-list">
@@ -166,23 +179,23 @@ Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 
 <br/>
 <hr/>
-<a id="3816"/><h3>calculateMinMaxSize</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1743"/><h3>calculateMinMaxSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> ();<br/></pre>
 calculate the minimum and maximum size (need to estimate expend properties of the widget)<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> 
 <br/>
 <hr/>
-<a id="3818"/><h3>onGetFocus</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onGetFocus</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1744"/><h3>onGetFocus</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onGetFocus</span> ();<br/></pre>
 Event of the focus has been grep by the current widget<br/>
 <br/>
 <hr/>
-<a id="3820"/><h3>onLostFocus</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onLostFocus</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1745"/><h3>onLostFocus</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onLostFocus</span> ();<br/></pre>
 Event of the focus has been lost by the current widget<br/>
 <br/>
 <hr/>
 <h3>onDraw</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> ();<br/></pre>
 Common widget drawing function (called by the drawing thread [Android, X11, ...])<br/>
 <br/>
 <hr/>

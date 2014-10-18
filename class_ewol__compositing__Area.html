@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,17 +85,17 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                <a class="code-function" href="#4448">Area</a>         (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/>+                                <a class="code-function" href="#4450">~Area</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                  <a class="code-function" href="#2307">Area</a>         (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                          <a class="code-function" href="#2309">~Area</a>        ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>                           <a class="code-function" href="#4452">draw</a>         (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4454">clear</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">const</span> vec3 &                   <a class="code-function" href="#4456">getPos</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4458">setPos</a>       (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4460">setPos</a>       (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4462">setRelPos</a>    (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4464">setRelPos</a>    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4466">print</a>        (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/>+ <a class="code-type" href="class_egami__Image.html">egami::Image</a> &                 <a class="code-function" href="#4468">get</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4470">flush</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span>                                     <a class="code-function" href="#2310">draw</a>         (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2312">clear</a>        ();<br/>+ <span class="code-storage-keyword">const</span> vec3 &                             <a class="code-function" href="#2313">getPos</a>       ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2314">setPos</a>       (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2316">setPos</a>       (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2318">setRelPos</a>    (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2320">setRelPos</a>    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2322">print</a>        (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/>+ <a class="code-type" href="class_egami__Image.html">egami::Image</a> &                           <a class="code-function" href="#2324">get</a>          ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2325">flush</a>        ();<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 +<a href="class_ewol__Compositing.html">ewol::Compositing</a><br/>  +--> ewol::compositing::Area<br/></pre>
 <h2>Detail:</h2>
-<a id="4448"/><a id="4450"/><h3>Area</h3><pre>
+<a id="2307"/><a id="2309"/><h3>Area</h3><pre>
 +  <span class="code-function">Area</span> (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/></pre>
 generic constructor<br/><ul>
 <table class="parameter-list">
@@ -104,23 +105,23 @@ generic constructor<br/><ul>
 
 <br/>
 <hr/>
-<a id="4452"/><h3>~Area</h3><pre>
-+  <span class="code-function">~Area</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2310"/><h3>~Area</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Area</span> ();<br/></pre>
 generic destructor<br/>
 <br/>
 <hr/>
-<a id="4454"/><h3>draw</h3><pre>
+<a id="2312"/><h3>draw</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/></pre>
 draw All the refistered text in the current element on openGL<br/>
 <br/>
 <hr/>
-<a id="4456"/><h3>clear</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">clear</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2313"/><h3>clear</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">clear</span> ();<br/></pre>
 clear alll the registered element in the current element<br/>
 <br/>
 <hr/>
-<a id="4458"/><h3>getPos</h3><pre>
-+ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2314"/><h3>getPos</h3><pre>
++ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> ();<br/></pre>
 get the current display position (sometime needed in the gui control)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the current position.</td></tr></table>
@@ -128,7 +129,7 @@ get the current display position (sometime needed in the gui control)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4460"/><h3>setPos</h3><pre>
+<a id="2316"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
 set position for the next text writen<br/><ul>
 <table class="parameter-list">
@@ -138,13 +139,13 @@ set position for the next text writen<br/><ul>
 
 <br/>
 <hr/>
-<a id="4462"/><h3>setPos</h3><pre>
+<a id="2318"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4464"/><h3>setRelPos</h3><pre>
+<a id="2320"/><h3>setRelPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
 set relative position for the next text writen<br/><ul>
 <table class="parameter-list">
@@ -154,13 +155,13 @@ set relative position for the next text writen<br/><ul>
 
 <br/>
 <hr/>
-<a id="4466"/><h3>setRelPos</h3><pre>
+<a id="2322"/><h3>setRelPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4468"/><h3>print</h3><pre>
+<a id="2324"/><h3>print</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">print</span> (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/></pre>
 add a compleate of the image to display with the requested size<br/><ul>
 <table class="parameter-list">
@@ -170,14 +171,14 @@ add a compleate of the image to display with the requested size<br/><ul>
 
 <br/>
 <hr/>
-<a id="4470"/><h3>get</h3><pre>
-+ <a class="code-type" href="class_egami__Image.html">egami::Image</a> & <span class="code-function">get</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2325"/><h3>get</h3><pre>
++ <a class="code-type" href="class_egami__Image.html">egami::Image</a> & <span class="code-function">get</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
 <h3>flush</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">flush</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span> <span class="code-function">flush</span> ();<br/></pre>
 
 <br/>
 <br/>

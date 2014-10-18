@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,38 +85,38 @@
 <br/><br/>
 <h2>namespace:</h2>
 <ul>
-<li><a href="namespace_ewol.html">ewol</a></li><li><a href="namespace_MacOs.html">MacOs</a></li></ul>
+<li><a href="namespace_ewol.html">ewol</a></li><li><a href="namespace_MacOs.html">MacOs</a></li><li><a href="namespace_IOs.html">IOs</a></li></ul>
 <h2>Synopsis:</h2>
 <pre>
-  externconstchar* <a class="code-member" href="#2086">g_ewolLibName</a>;<br/>  <span class="code-type" >bool</span>             <a class="code-function" href="#4117">APP_Init</a>      (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/>  <span class="code-type" >void</span>             <a class="code-function" href="#4119">APP_UnInit</a>    (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/>  <span class="code-type" >int</span>              <a class="code-function" href="#4225">mm_main</a>       (<span class="code-type" >int</span> <span class="code-argument">argc</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">argv</span>);<br/>  <span class="code-type" >int</span>              <a class="code-function" href="#4228">mm_run</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+  <span class="code-type" >int</span>  <a class="code-function" href="#2131">mm_main</a>    (<span class="code-type" >int</span> <span class="code-argument">argc</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">argv</span>);<br/>  <span class="code-type" >int</span>  <a class="code-function" href="#2134">mm_run</a>     ();<br/>  <span class="code-type" >int</span>  <a class="code-function" href="#2180">mm_main</a>    (<span class="code-type" >int</span> <span class="code-argument">argc</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">argv</span>);<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2183">mm_exit</a>    ();<br/>  <span class="code-type" >void</span> <a class="code-function" href="#2184">mm_openURL</a> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_url</span>);<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="2086"/><a id="4117"/><h3>g_ewolLibName</h3><pre>
-  externconstchar* <span class="code-member">g_ewolLibName</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4119"/><h3>APP_Init</h3><pre>
-  <span class="code-type" >bool</span> <span class="code-function">APP_Init</span> (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4225"/><h3>APP_UnInit</h3><pre>
-  <span class="code-type" >void</span> <span class="code-function">APP_UnInit</span> (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="4228"/><h3>mm_main</h3><pre>
+<a id="2131"/><a id="2134"/><h3>mm_main</h3><pre>
   <span class="code-type" >int</span> <span class="code-function">mm_main</span> (<span class="code-type" >int</span> <span class="code-argument">argc</span>,<br/>               <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">argv</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<h3>mm_run</h3><pre>
-  <span class="code-type" >int</span> <span class="code-function">mm_run</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2180"/><h3>mm_run</h3><pre>
+  <span class="code-type" >int</span> <span class="code-function">mm_run</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2183"/><h3>mm_main</h3><pre>
+  <span class="code-type" >int</span> <span class="code-function">mm_main</span> (<span class="code-type" >int</span> <span class="code-argument">argc</span>,<br/>               <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">argv</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2184"/><h3>mm_exit</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">mm_exit</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>mm_openURL</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">mm_openURL</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_url</span>);<br/></pre>
 
 <br/>
 <br/>

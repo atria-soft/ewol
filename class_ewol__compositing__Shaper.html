@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -83,17 +84,17 @@
 the Shaper system is a basic theme configuration for every widget, it corespond at a background display described by a pool of files<br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                              <a class="code-function" href="#4508">Shaper</a>                    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/>+                              <a class="code-function" href="#4510">~Shaper</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                      <a class="code-function" href="#2369">Shaper</a>                    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                              <a class="code-function" href="#2371">~Shaper</a>                   ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>                         <a class="code-function" href="#4512">draw</a>                      (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                         <a class="code-function" href="#4514">clear</a>                     (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >bool</span>                         <a class="code-function" href="#4516">changeStatusIn</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_newStatusId</span>);<br/>+ <span class="code-type" >int32_t</span>                      <a class="code-function" href="#4518">getCurrentDisplayedStatus</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >int32_t</span>                      <a class="code-function" href="#4520">getNextDisplayedStatus</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >float</span>                        <a class="code-function" href="#4522">getTransitionStatus</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >bool</span>                         <a class="code-function" href="#4524">periodicCall</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Time.html">ewol::event::Time</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-type" >void</span>                         <a class="code-function" href="#4526">setOrigin</a>                 (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newOri</span>);<br/>+ <span class="code-type" >void</span>                         <a class="code-function" href="#4528">setSize</a>                   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newSize</span>);<br/>+ <span class="code-type" >void</span>                         <a class="code-function" href="#4530">setInsideSize</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newInsideSize</span>);<br/>+ <span class="code-type" >void</span>                         <a class="code-function" href="#4532">setInsidePos</a>              (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newInsidePos</span>);<br/>+ vec2                         <a class="code-function" href="#4534">getPadding</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                         <a class="code-function" href="#4536">setSource</a>                 (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>);<br/>+ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &          <a class="code-function" href="#4538">getSource</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >bool</span>                         <a class="code-function" href="#4540">hasSources</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span>                                         <a class="code-function" href="#2372">draw</a>                      (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2374">clear</a>                     ();<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2375">changeStatusIn</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_newStatusId</span>);<br/>+ <span class="code-type" >int32_t</span>                                      <a class="code-function" href="#2377">getCurrentDisplayedStatus</a> ();<br/>+ <span class="code-type" >int32_t</span>                                      <a class="code-function" href="#2378">getNextDisplayedStatus</a>    ();<br/>+ <span class="code-type" >float</span>                                        <a class="code-function" href="#2379">getTransitionStatus</a>       ();<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2380">periodicCall</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Time.html">ewol::event::Time</a> & <span class="code-argument">_event</span>);<br/>+ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a>                                <a class="code-function" href="#2382">getPadding</a>                ();<br/>+ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a>                                <a class="code-function" href="#2383">getPaddingIn</a>              ();<br/>+ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a>                                <a class="code-function" href="#2384">getPaddingOut</a>             ();<br/>+ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a>                                <a class="code-function" href="#2385">getBorder</a>                 ();<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2386">setSource</a>                 (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>);<br/>+ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &                          <a class="code-function" href="#2388">getSource</a>                 () <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2389">hasSources</a>                ();<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2390">setShape</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_origin</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_insidePos</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_insideSize</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2395">setShape</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_origin</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >int32_t</span>                                      <a class="code-function" href="#2398">requestColor</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; &                    <a class="code-function" href="#2400">getColor</a>                  (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/>+ <span class="code-type" >int32_t</span>                                      <a class="code-function" href="#2402">requestConfig</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/>+ <span class="code-type" >double</span>                                       <a class="code-function" href="#2404">getConfigNumber</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2406">setActivateState</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_status</span>);<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2423">operator ==</a>               (<span class="code-storage-keyword">const</span> Shaper & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2425">operator !=</a>               (<span class="code-storage-keyword">const</span> Shaper & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 +<a href="class_ewol__Compositing.html">ewol::Compositing</a><br/>  +--> ewol::compositing::Shaper<br/></pre>
 <h2>Detail:</h2>
-<a id="4508"/><a id="4510"/><h3>Shaper</h3><pre>
+<a id="2369"/><a id="2371"/><h3>Shaper</h3><pre>
 +  <span class="code-function">Shaper</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/></pre>
 generic constructor<br/><ul>
 <table class="parameter-list">
@@ -103,22 +104,22 @@ generic constructor<br/><ul>
 
 <br/>
 <hr/>
-<a id="4512"/><h3>~Shaper</h3><pre>
-+  <span class="code-function">~Shaper</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2372"/><h3>~Shaper</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Shaper</span> ();<br/></pre>
 generic destructor<br/>
 <br/>
 <hr/>
-<a id="4514"/><h3>draw</h3><pre>
+<a id="2374"/><h3>draw</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/></pre>
 draw All the refistered text in the current element on openGL<br/>
 <br/>
 <hr/>
-<a id="4516"/><h3>clear</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">clear</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2375"/><h3>clear</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">clear</span> ();<br/></pre>
 clear alll tre registered element in the current element<br/>
 <br/>
 <hr/>
-<a id="4518"/><h3>changeStatusIn</h3><pre>
+<a id="2377"/><h3>changeStatusIn</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">changeStatusIn</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_newStatusId</span>);<br/></pre>
 change the current status in an other<br/><ul>
 <table class="parameter-list">
@@ -128,8 +129,8 @@ change the current status in an other<br/><ul>
 
 <br/>
 <hr/>
-<a id="4520"/><h3>getCurrentDisplayedStatus</h3><pre>
-+ <span class="code-type" >int32_t</span> <span class="code-function">getCurrentDisplayedStatus</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2378"/><h3>getCurrentDisplayedStatus</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getCurrentDisplayedStatus</span> ();<br/></pre>
 get the current displayed status of the shaper<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The Status Id</td></tr></table>
@@ -137,8 +138,8 @@ get the current displayed status of the shaper<br/><ul>
 
 <br/>
 <hr/>
-<a id="4522"/><h3>getNextDisplayedStatus</h3><pre>
-+ <span class="code-type" >int32_t</span> <span class="code-function">getNextDisplayedStatus</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2379"/><h3>getNextDisplayedStatus</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getNextDisplayedStatus</span> ();<br/></pre>
 get the next displayed status of the shaper<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The next status Id (-1 if no status in next)</td></tr></table>
@@ -146,8 +147,8 @@ get the next displayed status of the shaper<br/><ul>
 
 <br/>
 <hr/>
-<a id="4524"/><h3>getTransitionStatus</h3><pre>
-+ <span class="code-type" >float</span> <span class="code-function">getTransitionStatus</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2380"/><h3>getTransitionStatus</h3><pre>
++ <span class="code-type" >float</span> <span class="code-function">getTransitionStatus</span> ();<br/></pre>
 get the current trasion status<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>value of the transition status (0.0f when no activity)</td></tr></table>
@@ -155,7 +156,7 @@ get the current trasion status<br/><ul>
 
 <br/>
 <hr/>
-<a id="4526"/><h3>periodicCall</h3><pre>
+<a id="2382"/><h3>periodicCall</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">periodicCall</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Time.html">ewol::event::Time</a> & <span class="code-argument">_event</span>);<br/></pre>
 Same as the widfget periodic call (this is for change display)<br/><ul>
 <table class="parameter-list">
@@ -165,48 +166,8 @@ Same as the widfget periodic call (this is for change display)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4528"/><h3>setOrigin</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setOrigin</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newOri</span>);<br/></pre>
-set the widget origin (needed fot the display)<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newOri</span> </td><td> : the new widget origin</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4530"/><h3>setSize</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newSize</span>);<br/></pre>
-set the widget size (needed fot the display)<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newSize</span> </td><td> : the new widget size</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4532"/><h3>setInsideSize</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setInsideSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newInsideSize</span>);<br/></pre>
-set the internal widget size<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newInsidePos</span> </td><td> : the subelement size.</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4534"/><h3>setInsidePos</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setInsidePos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newInsidePos</span>);<br/></pre>
-set the internal widget position<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newInsidePos</span> </td><td> : the subelement position</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4536"/><h3>getPadding</h3><pre>
-+ vec2 <span class="code-function">getPadding</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2383"/><h3>getPadding</h3><pre>
++ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a> <span class="code-function">getPadding</span> ();<br/></pre>
 get the padding declared by the user in the config file<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the padding property</td></tr></table>
@@ -214,7 +175,28 @@ get the padding declared by the user in the config file<br/><ul>
 
 <br/>
 <hr/>
-<a id="4538"/><h3>setSource</h3><pre>
+<a id="2384"/><h3>getPaddingIn</h3><pre>
++ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a> <span class="code-function">getPaddingIn</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2385"/><h3>getPaddingOut</h3><pre>
++ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a> <span class="code-function">getPaddingOut</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2386"/><h3>getBorder</h3><pre>
++ <a class="code-type" href="class_ewol__Padding.html">ewol::Padding</a> <span class="code-function">getBorder</span> ();<br/></pre>
+get the padding declared by the user in the config file<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>the padding property</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2388"/><h3>setSource</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setSource</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>);<br/></pre>
 change the shaper Source<br/><ul>
 <table class="parameter-list">
@@ -224,8 +206,8 @@ change the shaper Source<br/><ul>
 
 <br/>
 <hr/>
-<a id="4540"/><h3>getSource</h3><pre>
-+ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getSource</span> (<span class="code-type" >void</span> <span class="code-argument"></span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+<a id="2389"/><h3>getSource</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getSource</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
 get the shaper file Source<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the shapper file name</td></tr></table>
@@ -233,13 +215,86 @@ get the shaper file Source<br/><ul>
 
 <br/>
 <hr/>
-<h3>hasSources</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">hasSources</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2390"/><h3>hasSources</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">hasSources</span> ();<br/></pre>
 Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the validity od the resources.</td></tr></table>
 </ul>
 
+<br/>
+<hr/>
+<a id="2395"/><h3>setShape</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShape</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_origin</span>,<br/>                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_insidePos</span>,<br/>                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_insideSize</span>);<br/></pre>
+
+<br/>
+<hr/>
+<a id="2398"/><h3>setShape</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShape</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_origin</span>,<br/>                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2400"/><h3>requestColor</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">requestColor</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
+Get an ID on the color instance element<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the element requested</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>The Id of the color</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2402"/><h3>getColor</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;float&gt; & <span class="code-function">getColor</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/></pre>
+Get The color associated at an ID.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_id</span> </td><td> Id of the color</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the reference on the color</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2404"/><h3>requestConfig</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">requestConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_name</span>);<br/></pre>
+Get an ID on the configuration instance element<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the element requested</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>The Id of the element</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2406"/><h3>getConfigNumber</h3><pre>
++ <span class="code-type" >double</span> <span class="code-function">getConfigNumber</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/></pre>
+Get The number associated at an ID.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_id</span> </td><td> Id of the parameter</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the requested number.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2423"/><h3>setActivateState</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setActivateState</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_status</span>);<br/></pre>
+Set activate state of the element<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_status</span> </td><td> New activate status</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2425"/><h3>operator ==</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">operator ==</span> (<span class="code-storage-keyword">const</span> Shaper & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>operator !=</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">operator !=</span> (<span class="code-storage-keyword">const</span> Shaper & <span class="code-argument">_obj</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+
+<br/>
 <br/>
 <hr/>
 	</div>

@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -86,161 +87,167 @@
 <a href="namespace_ewol__context.html">context</a></ul>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                          <a class="code-function" href="#3992">Context</a>                   (<span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                  <a class="code-function" href="#3995">~Context</a>                  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                     <a class="code-function" href="#1907">Context</a>                   (<a class="code-type" href="class_ewol__context__Application.html">ewol::context::Application</a>* <span class="code-argument">_application</span>,<br/>                                                                                 <span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                             <a class="code-function" href="#1911">~Context</a>                  ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <a class="code-type" href="class_ewol__context__CommandLine.html">ewol::context::CommandLine</a> &     <a class="code-function" href="#3978">getCmd</a>                    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="class_ewol__context__ConfigFont.html">ewol::context::ConfigFont</a> &      <a class="code-function" href="#3981">getFontDefault</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> &          <a class="code-function" href="#3984">getWidgetManager</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> &          <a class="code-function" href="#3987">getEObjectManager</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <a class="code-type" href="class_ewol__resource__Manager.html">ewol::resource::Manager</a> &        <a class="code-function" href="#3990">getResourcesManager</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>#         <span class="code-type" >void</span>                             <a class="code-function" href="#3997">lockContext</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>#         <span class="code-type" >void</span>                             <a class="code-function" href="#3999">unLockContext</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4011">setArchiveDir</a>             (<span class="code-type" >int</span> <span class="code-argument">_mode</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_str</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4014">OS_SetInputMotion</a>         (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4017">OS_SetInputState</a>          (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4021">OS_SetMouseMotion</a>         (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4024">OS_SetMouseState</a>          (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4028">OS_SetKeyboard</a>            (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                                      <span class="code-type" >char32_t</span> <span class="code-argument">_myChar</span>,<br/>                                                                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                      <span class="code-type" >bool</span> <span class="code-argument">_isARepeateKey</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4033">OS_SetKeyboardMove</a>        (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                                      <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                                                                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                      <span class="code-type" >bool</span> <span class="code-argument">_isARepeateKey</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4038">OS_Suspend</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4040">OS_Resume</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4042">requestUpdateSize</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >bool</span>                             <a class="code-function" href="#4044">OS_Draw</a>                   (<span class="code-type" >bool</span> <span class="code-argument">_displayEveryTime</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4046">onObjectRemove</a>            (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4048">resetIOEvent</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4050">OS_OpenGlContextDestroy</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4052">OS_Stop</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4054">stop</a>                      (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4057">setWindows</a>                (<a class="code-type" href="class_ewol__widget__Windows.html">ewol::widget::Windows</a>* <span class="code-argument">_windows</span>);<br/>+         <a class="code-type" href="class_ewol__widget__Windows.html">ewol::widget::Windows</a>*           <a class="code-function" href="#4059">getWindows</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-storage-keyword">const</span> vec2 &                     <a class="code-function" href="#4062">getSize</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4064">OS_Resize</a>                 (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4066">setSize</a>                   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4068">OS_Move</a>                   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4070">setPos</a>                    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4072">OS_Hide</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4074">hide</a>                      (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4076">OS_Show</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4078">show</a>                      (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4080">forceRedrawAll</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4082">inputEventTransfertWidget</a> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_source</span>,<br/>                                                                      <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_destination</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4085">inputEventGrabPointer</a>     (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4087">inputEventUnGrabPointer</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4089">keyboardShow</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4091">keyboardHide</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4093">clipBoardGet</a>              (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4095">clipBoardSet</a>              (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>+         <span class="code-type" >void</span>                             <a class="code-function" href="#4097">OS_ClipBoardArrive</a>        (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4099">setTitle</a>                  (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_title</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4101">forceOrientation</a>          (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__orientation.html">ewol::orientation</a> <span class="code-argument">_orientation</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4103">grabPointerEvents</a>         (<span class="code-type" >bool</span> <span class="code-argument">_isGrabbed</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_forcedPosition</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4106">setCursor</a>                 (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                             <a class="code-function" href="#4108">setIcon</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_inputFile</span>);<br/>+         <span class="code-type" >int64_t</span>                          <a class="code-function" href="#4110">getTime</a>                   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >int</span>                              <a class="code-function" href="#4112">main</a>                      (<span class="code-type" >int</span> <span class="code-argument">_argc</span>,<br/>                                                                      <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/></pre>
++         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::context::Application&gt; <a class="code-function" href="#1896">getApplication</a>            ();<br/>+         <a class="code-type" href="class_ewol__context__CommandLine.html">ewol::context::CommandLine</a> &                <a class="code-function" href="#1898">getCmd</a>                    ();<br/>+         <a class="code-type" href="class_ewol__context__ConfigFont.html">ewol::context::ConfigFont</a> &                 <a class="code-function" href="#1900">getFontDefault</a>            ();<br/>+         <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> &                     <a class="code-function" href="#1902">getEObjectManager</a>         ();<br/>+         <a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> &                     <a class="code-function" href="#1904">getWidgetManager</a>          ();<br/>+         <a class="code-type" href="class_ewol__resource__Manager.html">ewol::resource::Manager</a> &                   <a class="code-function" href="#1906">getResourcesManager</a>       ();<br/>#         <span class="code-type" >void</span>                                        <a class="code-function" href="#1912">lockContext</a>               ();<br/>#         <span class="code-type" >void</span>                                        <a class="code-function" href="#1913">unLockContext</a>             ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1923">setArchiveDir</a>             (<span class="code-type" >int</span> <span class="code-argument">_mode</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_str</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1926">OS_SetInputMotion</a>         (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1929">OS_SetInputState</a>          (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1933">OS_SetMouseMotion</a>         (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1936">OS_SetMouseState</a>          (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1940">OS_SetKeyboard</a>            (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                                                 <span class="code-type" >char32_t</span> <span class="code-argument">_myChar</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_isARepeateKey</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1945">OS_SetKeyboardMove</a>        (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                                                 <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_isARepeateKey</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1950">OS_Suspend</a>                ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1951">OS_Resume</a>                 ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1952">OS_Foreground</a>             ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1953">OS_Background</a>             ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1954">requestUpdateSize</a>         ();<br/>+         <span class="code-type" >bool</span>                                        <a class="code-function" href="#1955">OS_Draw</a>                   (<span class="code-type" >bool</span> <span class="code-argument">_displayEveryTime</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1957">resetIOEvent</a>              ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1958">OS_OpenGlContextDestroy</a>   ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1959">OS_Stop</a>                   ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1960">stop</a>                      ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1962">setWindows</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::widget::Windows&gt; & <span class="code-argument">_windows</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::widget::Windows&gt;      <a class="code-function" href="#1964">getWindows</a>                ();<br/>+         <span class="code-storage-keyword">const</span> vec2 &                                <a class="code-function" href="#1966">getSize</a>                   ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1967">OS_Resize</a>                 (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1969">setSize</a>                   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1971">OS_Move</a>                   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1973">setPos</a>                    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1975">OS_Hide</a>                   ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1976">hide</a>                      ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1977">OS_Show</a>                   ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1978">show</a>                      ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1979">forceRedrawAll</a>            ();<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1980">inputEventTransfertWidget</a> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_source</span>,<br/>                                                                                 <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_destination</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1983">inputEventGrabPointer</a>     (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1985">inputEventUnGrabPointer</a>   ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1986">keyboardShow</a>              ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1987">keyboardHide</a>              ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1988">clipBoardGet</a>              (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1990">clipBoardSet</a>              (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#1992">OS_ClipBoardArrive</a>        (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1994">setTitle</a>                  (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_title</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1996">openURL</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_url</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#1998">forceOrientation</a>          (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__orientation.html">ewol::orientation</a> <span class="code-argument">_orientation</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#2000">grabPointerEvents</a>         (<span class="code-type" >bool</span> <span class="code-argument">_isGrabbed</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_forcedPosition</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#2003">setCursor</a>                 (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                        <a class="code-function" href="#2005">setIcon</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_inputFile</span>);<br/>+         <span class="code-type" >int64_t</span>                                     <a class="code-function" href="#2007">getTime</a>                   ();<br/>+         typedef                                     <a class="code-function" href="#2008">void</a>                      (*AndroidAudioCallback)(void*_data,int32_t_size,void* <span class="code-argument">_userData</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >int32_t</span>                                     <a class="code-function" href="#2010">audioGetDeviceCount</a>       ();<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>                                 <a class="code-function" href="#2011">audioGetDeviceProperty</a>    (<span class="code-type" >int32_t</span> <span class="code-argument">_idDevice</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                        <a class="code-function" href="#2013">audioOpenDevice</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idDevice</span>,<br/>                                                                                 <span class="code-type" >int32_t</span> <span class="code-argument">_freq</span>,<br/>                                                                                 <span class="code-type" >int32_t</span> <span class="code-argument">_nbChannel</span>,<br/>                                                                                 <span class="code-type" >int32_t</span> <span class="code-argument">_format</span>,<br/>                                                                                 AndroidAudioCallback <span class="code-argument">_callback</span>,<br/>                                                                                 <span class="code-type" >void</span>* <span class="code-argument">_userData</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                        <a class="code-function" href="#2020">audioCloseDevice</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_idDevice</span>);<br/>+         <span class="code-type" >int</span>                                         <a class="code-function" href="#2022">main</a>                      (<span class="code-type" >int</span> <span class="code-argument">_argc</span>,<br/>                                                                                 <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/>+         <span class="code-type" >void</span>                                        <a class="code-function" href="#2027">setInitImage</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                        <a class="code-function" href="#2029">systemKeyboradEvent</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboardSystem.html">ewol::key::keyboardSystem</a> <span class="code-argument">_key</span>,<br/>                                                                                 <span class="code-type" >bool</span> <span class="code-argument">_down</span>);<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="3978"/><a id="3981"/><h3>getCmd</h3><pre>
-+ <a class="code-type" href="class_ewol__context__CommandLine.html">ewol::context::CommandLine</a> & <span class="code-function">getCmd</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1896"/><a id="1898"/><h3>getApplication</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::context::Application&gt; <span class="code-function">getApplication</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3984"/><h3>getFontDefault</h3><pre>
-+ <a class="code-type" href="class_ewol__context__ConfigFont.html">ewol::context::ConfigFont</a> & <span class="code-function">getFontDefault</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1900"/><h3>getCmd</h3><pre>
++ <a class="code-type" href="class_ewol__context__CommandLine.html">ewol::context::CommandLine</a> & <span class="code-function">getCmd</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3987"/><h3>getWidgetManager</h3><pre>
-+ <a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-function">getWidgetManager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1902"/><h3>getFontDefault</h3><pre>
++ <a class="code-type" href="class_ewol__context__ConfigFont.html">ewol::context::ConfigFont</a> & <span class="code-function">getFontDefault</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3990"/><h3>getEObjectManager</h3><pre>
-+ <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> & <span class="code-function">getEObjectManager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1904"/><h3>getEObjectManager</h3><pre>
++ <a class="code-type" href="class_ewol__object__Manager.html">ewol::object::Manager</a> & <span class="code-function">getEObjectManager</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3992"/><h3>getResourcesManager</h3><pre>
-+ <a class="code-type" href="class_ewol__resource__Manager.html">ewol::resource::Manager</a> & <span class="code-function">getResourcesManager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1906"/><h3>getWidgetManager</h3><pre>
++ <a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-function">getWidgetManager</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3995"/><h3>Context</h3><pre>
-+  <span class="code-function">Context</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>            <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/></pre>
+<a id="1907"/><h3>getResourcesManager</h3><pre>
++ <a class="code-type" href="class_ewol__resource__Manager.html">ewol::resource::Manager</a> & <span class="code-function">getResourcesManager</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3997"/><h3>~Context</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Context</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1911"/><h3>Context</h3><pre>
++  <span class="code-function">Context</span> (<a class="code-type" href="class_ewol__context__Application.html">ewol::context::Application</a>* <span class="code-argument">_application</span>,<br/>            <span class="code-type" >int32_t</span> <span class="code-argument">_argc</span>,<br/>            <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3999"/><h3>lockContext</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">lockContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1912"/><h3>~Context</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Context</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1913"/><h3>lockContext</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">lockContext</span> ();<br/></pre>
 set the curent interface.<br/><b>Note:</b> this lock the main mutex<br/> 
 <br/>
 <hr/>
-<a id="4011"/><h3>unLockContext</h3><pre>
-# <span class="code-type" >void</span> <span class="code-function">unLockContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
-set the curent interface at NULL.<br/><b>Note:</b> this un-lock the main mutex<br/> 
+<a id="1923"/><h3>unLockContext</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">unLockContext</span> ();<br/></pre>
+set the curent interface at nullptr.<br/><b>Note:</b> this un-lock the main mutex<br/> 
 <br/>
 <hr/>
-<a id="4014"/><h3>setArchiveDir</h3><pre>
+<a id="1926"/><h3>setArchiveDir</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setArchiveDir</span> (<span class="code-type" >int</span> <span class="code-argument">_mode</span>,<br/>                              <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_str</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4017"/><h3>OS_SetInputMotion</h3><pre>
+<a id="1929"/><h3>OS_SetInputMotion</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_SetInputMotion</span> (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                  <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4021"/><h3>OS_SetInputState</h3><pre>
+<a id="1933"/><h3>OS_SetInputState</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_SetInputState</span> (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                 <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4024"/><h3>OS_SetMouseMotion</h3><pre>
+<a id="1936"/><h3>OS_SetMouseMotion</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_SetMouseMotion</span> (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                  <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4028"/><h3>OS_SetMouseState</h3><pre>
+<a id="1940"/><h3>OS_SetMouseState</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_SetMouseState</span> (<span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                 <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4033"/><h3>OS_SetKeyboard</h3><pre>
+<a id="1945"/><h3>OS_SetKeyboard</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_SetKeyboard</span> (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                               <span class="code-type" >char32_t</span> <span class="code-argument">_myChar</span>,<br/>                               <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                               <span class="code-type" >bool</span> <span class="code-argument">_isARepeateKey</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4038"/><h3>OS_SetKeyboardMove</h3><pre>
+<a id="1950"/><h3>OS_SetKeyboardMove</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_SetKeyboardMove</span> (<a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                   <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboard.html">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                                   <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                   <span class="code-type" >bool</span> <span class="code-argument">_isARepeateKey</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4040"/><h3>OS_Suspend</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Suspend</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1951"/><h3>OS_Suspend</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Suspend</span> ();<br/></pre>
 The current context is suspended<br/>
 <br/>
 <hr/>
-<a id="4042"/><h3>OS_Resume</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Resume</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1952"/><h3>OS_Resume</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Resume</span> ();<br/></pre>
 The current context is resumed<br/>
 <br/>
 <hr/>
-<a id="4044"/><h3>requestUpdateSize</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">requestUpdateSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1953"/><h3>OS_Foreground</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Foreground</span> ();<br/></pre>
+The current context is set in foreground (framerate is maximum speed)<br/>
+<br/>
+<hr/>
+<a id="1954"/><h3>OS_Background</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Background</span> ();<br/></pre>
+The current context is set in background (framerate is slowing down (max fps)/5 # 4fps)<br/>
+<br/>
+<hr/>
+<a id="1955"/><h3>requestUpdateSize</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">requestUpdateSize</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4046"/><h3>OS_Draw</h3><pre>
+<a id="1957"/><h3>OS_Draw</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-function">OS_Draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_displayEveryTime</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4048"/><h3>onObjectRemove</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
-Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">removeObject</span> </td><td> Pointer on the EObject removed  == &gt; the user must remove all reference on this EObject</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="4050"/><h3>resetIOEvent</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">resetIOEvent</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1958"/><h3>resetIOEvent</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">resetIOEvent</span> ();<br/></pre>
 reset event management for the IO like Input ou Mouse or keyborad<br/>
 <br/>
 <hr/>
-<a id="4052"/><h3>OS_OpenGlContextDestroy</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">OS_OpenGlContextDestroy</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1959"/><h3>OS_OpenGlContextDestroy</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">OS_OpenGlContextDestroy</span> ();<br/></pre>
 The OS inform that the openGL constext has been destroy  == &gt; use to automaticly reload the texture and other thinks ...<br/>
 <br/>
 <hr/>
-<a id="4054"/><h3>OS_Stop</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">OS_Stop</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1960"/><h3>OS_Stop</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">OS_Stop</span> ();<br/></pre>
 The OS Inform that the Window has been killed<br/>
 <br/>
 <hr/>
-<a id="4057"/><h3>stop</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">stop</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1962"/><h3>stop</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">stop</span> ();<br/></pre>
 The application request that the Window will be killed<br/>
 <br/>
 <hr/>
-<a id="4059"/><h3>setWindows</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setWindows</span> (<a class="code-type" href="class_ewol__widget__Windows.html">ewol::widget::Windows</a>* <span class="code-argument">_windows</span>);<br/></pre>
+<a id="1964"/><h3>setWindows</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setWindows</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::widget::Windows&gt; & <span class="code-argument">_windows</span>);<br/></pre>
 set the current windows to display :<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter:</b></td><td><span class="code-argument">_windows</span> </td><td> Windows that might be displayed</td></tr>
@@ -249,8 +256,8 @@ set the current windows to display :<br/><ul>
 
 <br/>
 <hr/>
-<a id="4062"/><h3>getWindows</h3><pre>
-+ <a class="code-type" href="class_ewol__widget__Windows.html">ewol::widget::Windows</a>* <span class="code-function">getWindows</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1966"/><h3>getWindows</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::widget::Windows&gt; <span class="code-function">getWindows</span> ();<br/></pre>
 get the current windows that is displayed<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the current handle on the windows (can be null)</td></tr></table>
@@ -258,8 +265,8 @@ get the current windows that is displayed<br/><ul>
 
 <br/>
 <hr/>
-<a id="4064"/><h3>getSize</h3><pre>
-+ <span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1967"/><h3>getSize</h3><pre>
++ <span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getSize</span> ();<br/></pre>
 get the current windows size<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the current size ...</td></tr></table>
@@ -267,7 +274,7 @@ get the current windows size<br/><ul>
 
 <br/>
 <hr/>
-<a id="4066"/><h3>OS_Resize</h3><pre>
+<a id="1969"/><h3>OS_Resize</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">OS_Resize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
 The OS inform that the current windows has change his size.<br/><ul>
 <table class="parameter-list">
@@ -277,7 +284,7 @@ The OS inform that the current windows has change his size.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4068"/><h3>setSize</h3><pre>
+<a id="1971"/><h3>setSize</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
 The application request a change of his curent size.<br/><ul>
 <table class="parameter-list">
@@ -287,7 +294,7 @@ The application request a change of his curent size.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4070"/><h3>OS_Move</h3><pre>
+<a id="1973"/><h3>OS_Move</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">OS_Move</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 The OS inform that the current windows has change his position.<br/><ul>
 <table class="parameter-list">
@@ -297,7 +304,7 @@ The OS inform that the current windows has change his position.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4072"/><h3>setPos</h3><pre>
+<a id="1975"/><h3>setPos</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 The Application request that the current windows will change his position.<br/><ul>
 <table class="parameter-list">
@@ -307,33 +314,33 @@ The Application request that the current windows will change his position.<br/><
 
 <br/>
 <hr/>
-<a id="4074"/><h3>OS_Hide</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">OS_Hide</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1976"/><h3>OS_Hide</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">OS_Hide</span> ();<br/></pre>
 The OS inform that the Windows is now Hidden.<br/>
 <br/>
 <hr/>
-<a id="4076"/><h3>hide</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">hide</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1977"/><h3>hide</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">hide</span> ();<br/></pre>
 The Application request that the Windows will be Hidden.<br/>
 <br/>
 <hr/>
-<a id="4078"/><h3>OS_Show</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">OS_Show</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1978"/><h3>OS_Show</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">OS_Show</span> ();<br/></pre>
 The OS inform that the Windows is now visible.<br/>
 <br/>
 <hr/>
-<a id="4080"/><h3>show</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">show</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1979"/><h3>show</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">show</span> ();<br/></pre>
 The Application request that the Windows will be visible.<br/>
 <br/>
 <hr/>
-<a id="4082"/><h3>forceRedrawAll</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">forceRedrawAll</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1980"/><h3>forceRedrawAll</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">forceRedrawAll</span> ();<br/></pre>
 Redraw all the windows<br/>
 <br/>
 <hr/>
-<a id="4085"/><h3>inputEventTransfertWidget</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">inputEventTransfertWidget</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_source</span>,<br/>                                  <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_destination</span>);<br/></pre>
+<a id="1983"/><h3>inputEventTransfertWidget</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">inputEventTransfertWidget</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_source</span>,<br/>                                  <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_destination</span>);<br/></pre>
 This is to transfert the event from one widget to another one<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter:</b></td><td><span class="code-argument">source</span> </td><td> the widget where the event came from</td></tr>
@@ -343,8 +350,8 @@ This is to transfert the event from one widget to another one<br/><ul>
 
 <br/>
 <hr/>
-<a id="4087"/><h3>inputEventGrabPointer</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">inputEventGrabPointer</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/></pre>
+<a id="1985"/><h3>inputEventGrabPointer</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">inputEventGrabPointer</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/></pre>
 This fonction lock the pointer properties to move in relative instead of absolute<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">widget</span> </td><td> The widget that lock the pointer events</td></tr>
@@ -353,22 +360,22 @@ This fonction lock the pointer properties to move in relative instead of absolut
 
 <br/>
 <hr/>
-<a id="4089"/><h3>inputEventUnGrabPointer</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">inputEventUnGrabPointer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1986"/><h3>inputEventUnGrabPointer</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">inputEventUnGrabPointer</span> ();<br/></pre>
 This fonction un-lock the pointer properties to move in relative instead of absolute<br/>
 <br/>
 <hr/>
-<a id="4091"/><h3>keyboardShow</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">keyboardShow</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1987"/><h3>keyboardShow</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">keyboardShow</span> ();<br/></pre>
 display the virtal keyboard (for touch system only)<br/>
 <br/>
 <hr/>
-<a id="4093"/><h3>keyboardHide</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">keyboardHide</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1988"/><h3>keyboardHide</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">keyboardHide</span> ();<br/></pre>
 Hide the virtal keyboard (for touch system only)<br/>
 <br/>
 <hr/>
-<a id="4095"/><h3>clipBoardGet</h3><pre>
+<a id="1990"/><h3>clipBoardGet</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">clipBoardGet</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/></pre>
 Inform the Gui that we want to have a copy of the clipboard<br/><ul>
 <table class="parameter-list">
@@ -378,7 +385,7 @@ Inform the Gui that we want to have a copy of the clipboard<br/><ul>
 
 <br/>
 <hr/>
-<a id="4097"/><h3>clipBoardSet</h3><pre>
+<a id="1992"/><h3>clipBoardSet</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">clipBoardSet</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/></pre>
 Inform the Gui that we are the new owner of the clipboard<br/><ul>
 <table class="parameter-list">
@@ -388,7 +395,7 @@ Inform the Gui that we are the new owner of the clipboard<br/><ul>
 
 <br/>
 <hr/>
-<a id="4099"/><h3>OS_ClipBoardArrive</h3><pre>
+<a id="1994"/><h3>OS_ClipBoardArrive</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">OS_ClipBoardArrive</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/></pre>
 Call by the OS when a clipboard arrive to US (previously requested by a widget)<br/><ul>
 <table class="parameter-list">
@@ -398,7 +405,7 @@ Call by the OS when a clipboard arrive to US (previously requested by a widget)<
 
 <br/>
 <hr/>
-<a id="4101"/><h3>setTitle</h3><pre>
+<a id="1996"/><h3>setTitle</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setTitle</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_title</span>);<br/></pre>
 set the new title of the windows<br/><ul>
 <table class="parameter-list">
@@ -408,7 +415,17 @@ set the new title of the windows<br/><ul>
 
 <br/>
 <hr/>
-<a id="4103"/><h3>forceOrientation</h3><pre>
+<a id="1998"/><h3>openURL</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">openURL</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_url</span>);<br/></pre>
+Open an URL on an eternal brother.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_url</span> </td><td> URL to open.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2000"/><h3>forceOrientation</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">forceOrientation</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__orientation.html">ewol::orientation</a> <span class="code-argument">_orientation</span>);<br/></pre>
 force the screen orientation (availlable on portable elements ...<br/><ul>
 <table class="parameter-list">
@@ -418,7 +435,7 @@ force the screen orientation (availlable on portable elements ...<br/><ul>
 
 <br/>
 <hr/>
-<a id="4106"/><h3>grabPointerEvents</h3><pre>
+<a id="2003"/><h3>grabPointerEvents</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">grabPointerEvents</span> (<span class="code-type" >bool</span> <span class="code-argument">_isGrabbed</span>,<br/>                                  <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_forcedPosition</span>);<br/></pre>
 get all the event from the X system<br/><ul>
 <table class="parameter-list">
@@ -429,7 +446,7 @@ get all the event from the X system<br/><ul>
 
 <br/>
 <hr/>
-<a id="4108"/><h3>setCursor</h3><pre>
+<a id="2005"/><h3>setCursor</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setCursor</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__cursorDisplay.html">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);<br/></pre>
 set the cursor display type.<br/><ul>
 <table class="parameter-list">
@@ -439,7 +456,7 @@ set the cursor display type.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4110"/><h3>setIcon</h3><pre>
+<a id="2007"/><h3>setIcon</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setIcon</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_inputFile</span>);<br/></pre>
 set the Icon of the program<br/><ul>
 <table class="parameter-list">
@@ -449,8 +466,8 @@ set the Icon of the program<br/><ul>
 
 <br/>
 <hr/>
-<a id="4112"/><h3>getTime</h3><pre>
-+ <span class="code-type" >int64_t</span> <span class="code-function">getTime</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2008"/><h3>getTime</h3><pre>
++ <span class="code-type" >int64_t</span> <span class="code-function">getTime</span> ();<br/></pre>
 get the curent time in micro-second<br/><b>Note:</b> : must be implemented in all system OS implementation<br/> <ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>The curent time of the process</td></tr></table>
@@ -458,7 +475,37 @@ get the curent time in micro-second<br/><b>Note:</b> : must be implemented in al
 
 <br/>
 <hr/>
-<h3>main</h3><pre>
+<a id="2010"/><h3>void</h3><pre>
++ typedef <span class="code-function">void</span> (*AndroidAudioCallback)(void*_data,int32_t_size,void* <span class="code-argument">_userData</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2011"/><h3>audioGetDeviceCount</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >int32_t</span> <span class="code-function">audioGetDeviceCount</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2013"/><h3>audioGetDeviceProperty</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">audioGetDeviceProperty</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idDevice</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2020"/><h3>audioOpenDevice</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">audioOpenDevice</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idDevice</span>,<br/>                                <span class="code-type" >int32_t</span> <span class="code-argument">_freq</span>,<br/>                                <span class="code-type" >int32_t</span> <span class="code-argument">_nbChannel</span>,<br/>                                <span class="code-type" >int32_t</span> <span class="code-argument">_format</span>,<br/>                                AndroidAudioCallback <span class="code-argument">_callback</span>,<br/>                                <span class="code-type" >void</span>* <span class="code-argument">_userData</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2022"/><h3>audioCloseDevice</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">audioCloseDevice</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idDevice</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="2027"/><h3>main</h3><pre>
 + <span class="code-type" >int</span> <span class="code-function">main</span> (<span class="code-type" >int</span> <span class="code-argument">_argc</span>,<br/>            <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_argv</span>);<br/></pre>
 This is the only one things the User might done in his main();<br/><b>Note:</b> : must be implemented in all system OPS implementation<br/> <b>Note:</b> To answare you before you ask the question, this is really simple:
       Due to the fect that the current system is multiple-platform, you "main"
@@ -468,6 +515,27 @@ This is the only one things the User might done in his main();<br/><b>Note:</b> 
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_argc</span> </td><td> Standard argc</td></tr>
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_argv</span> </td><td> Standard argv</td></tr>
 <tr><td><b>Return: </b></td><td></td><td>normal error int for the application error management</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2029"/><h3>setInitImage</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setInitImage</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/></pre>
+Special for init (main) set the start image when loading data<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_fileName</span> </td><td> Name of the image to load</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>systemKeyboradEvent</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">systemKeyboradEvent</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__keyboardSystem.html">ewol::key::keyboardSystem</a> <span class="code-argument">_key</span>,<br/>                                    <span class="code-type" >bool</span> <span class="code-argument">_down</span>);<br/></pre>
+HARDWARE keyboard event from the system<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_key</span> </td><td> event type</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_status</span> </td><td> Up or down status</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>Keep the event or not</td></tr></table>
 </ul>
 
 <br/>

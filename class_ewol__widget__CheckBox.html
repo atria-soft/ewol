@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,74 +85,156 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                    <a class="code-function" href="#2786">CheckBox</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">newLabel</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                            <a class="code-function" href="#2788">~CheckBox</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                                        <a class="code-function" href="#831">CheckBox</a>               ();<br/>+ <span class="code-storage-keyword">virtual</span>                                                <a class="code-function" href="#837">~CheckBox</a>              ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>          <a class="code-member" href="#2783">eventClicked</a>;<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2784">init</a>                (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2790">setLabel</a>            (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">newLabel</span>);<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2792">setValue</a>            (<span class="code-type" >bool</span> <span class="code-argument">val</span>);<br/>+         <span class="code-type" >bool</span>                       <a class="code-function" href="#2794">getValue</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2802">onDraw</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2804">calculateMinMaxSize</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2806">onRegenerateDisplay</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2808">onEventInput</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2810">onEventEntry</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Entry.html">ewol::event::Entry</a> & <span class="code-argument">_event</span>);<br/></pre>
++         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt;                     <a class="code-member" href="#819">signalPressed</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt;                     <a class="code-member" href="#820">signalDown</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt;                     <a class="code-member" href="#821">signalUp</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt;                     <a class="code-member" href="#822">signalEnter</a>;<br/>+         <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;bool&gt;                     <a class="code-member" href="#823">signalValue</a>;<br/>#         <span class="code-type" >void</span>                                           <a class="code-function" href="#832">init</a>                   (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/>+                                                        <a class="code-function" href="#834">DECLARE_WIDGET_FACTORY</a> (CheckBox <span class="code-argument"></span>,<br/>                                                                                 "CheckBox" <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                                           <a class="code-function" href="#838">setShaperName</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;bool&gt;                      <a class="code-member" href="#840">m_value</a>;<br/>+         <span class="code-type" >void</span>                                           <a class="code-function" href="#841">setValue</a>               (<span class="code-type" >bool</span> <span class="code-argument">_val</span>);<br/>+         <span class="code-type" >bool</span>                                           <a class="code-function" href="#843">getValue</a>               () <span class="code-storage-keyword">const</span>;<br/>#         <span class="code-type" >void</span>                                           <a class="code-function" href="#844">changeStatusIn</a>         (<span class="code-type" >int32_t</span> <span class="code-argument">_newStatusId</span>);<br/>#         <span class="code-type" >void</span>                                           <a class="code-function" href="#846">CheckStatus</a>            ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                           <a class="code-function" href="#847">onDraw</a>                 ();<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                           <a class="code-function" href="#848">onParameterChangeValue</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                           <a class="code-function" href="#850">calculateMinMaxSize</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                           <a class="code-function" href="#851">calculateSize</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                           <a class="code-function" href="#853">onRegenerateDisplay</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                           <a class="code-function" href="#854">onEventInput</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                                           <a class="code-function" href="#856">onEventEntry</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Entry.html">ewol::event::Entry</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                                           <a class="code-function" href="#858">periodicCall</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Time.html">ewol::event::Time</a> & <span class="code-argument">_event</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::CheckBox<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> +<a href="class_ewol__widget__Container2.html">ewol::widget::Container2</a><br/>                       +--> ewol::widget::CheckBox<br/></pre>
 <h2>Detail:</h2>
-<a id="2783"/><a id="2784"/><h3>eventClicked</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventClicked</span>;<br/></pre>
+<a id="819"/><a id="820"/><h3>signalPressed</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalPressed</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2786"/><h3>init</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">init</span> (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/></pre>
+<a id="821"/><h3>signalDown</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalDown</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2788"/><h3>CheckBox</h3><pre>
-+  <span class="code-function">CheckBox</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">newLabel</span>);<br/></pre>
+<a id="822"/><h3>signalUp</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalUp</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2790"/><h3>~CheckBox</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~CheckBox</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="823"/><h3>signalEnter</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;void&gt; <span class="code-member">signalEnter</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2792"/><h3>setLabel</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setLabel</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">newLabel</span>);<br/></pre>
+<a id="831"/><h3>signalValue</h3><pre>
++ <a class="code-type" href="class_ewol__object__Signal.html">ewol::object::Signal</a>&lt;bool&gt; <span class="code-member">signalValue</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2794"/><h3>setValue</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setValue</span> (<span class="code-type" >bool</span> <span class="code-argument">val</span>);<br/></pre>
+<a id="832"/><h3>CheckBox</h3><pre>
+#  <span class="code-function">CheckBox</span> ();<br/></pre>
+Main checkbox constructor<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_shaperName</span> </td><td> Shaper file properties</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="834"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2802"/><h3>getValue</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">getValue</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="837"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (CheckBox <span class="code-argument"></span>,<br/>                           "CheckBox" <span class="code-argument"></span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="2804"/><h3>onDraw</h3><pre>
-# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="838"/><h3>~CheckBox</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~CheckBox</span> ();<br/></pre>
+main destructor.<br/>
+<br/>
+<hr/>
+<a id="840"/><h3>setShaperName</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShaperName</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/></pre>
+set the shaper name (use the contructer one this permit to not noad unused shaper)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_shaperName</span> </td><td> The new shaper filename</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="841"/><h3>m_value</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;bool&gt; <span class="code-member">m_value</span>;<br/></pre>
+
+Current state of the checkbox.<br/>
+<br/>
+<hr/>
+<a id="843"/><h3>setValue</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setValue</span> (<span class="code-type" >bool</span> <span class="code-argument">_val</span>);<br/></pre>
+set the current value of the checkbox (check or not)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_val</span> </td><td> New value of the button</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="844"/><h3>getValue</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getValue</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+get the current button value.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>True : The checkbox is active.&lt;br/&gt;false : The checkbox is disable.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="846"/><h3>changeStatusIn</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">changeStatusIn</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_newStatusId</span>);<br/></pre>
+internal system to change the property of the current status<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newStatusId</span> </td><td> new state</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="847"/><h3>CheckStatus</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">CheckStatus</span> ();<br/></pre>
+update the status with the internal satte of the button ...<br/>
+<br/>
+<hr/>
+<a id="848"/><h3>onDraw</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> ();<br/></pre>
 Common widget drawing function (called by the drawing thread [Android, X11, ...])<br/>
 <br/>
 <hr/>
-<a id="2806"/><h3>calculateMinMaxSize</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="850"/><h3>onParameterChangeValue</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onParameterChangeValue</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="851"/><h3>calculateMinMaxSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> ();<br/></pre>
 calculate the minimum and maximum size (need to estimate expend properties of the widget)<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> 
 <br/>
 <hr/>
-<a id="2808"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="853"/><h3>calculateSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/></pre>
+Parent set the possible diplay size of the current widget whith his own possibilities
+       By default this save the widget available size in the widget size<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_available</span> </td><td> Available x&y pixel size</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="854"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="2810"/><h3>onEventInput</h3><pre>
+<a id="856"/><h3>onEventInput</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventInput</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
 Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 <table class="parameter-list">
@@ -161,7 +244,7 @@ Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
 
 <br/>
 <hr/>
-<h3>onEventEntry</h3><pre>
+<a id="858"/><h3>onEventEntry</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventEntry</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Entry.html">ewol::event::Entry</a> & <span class="code-argument">_event</span>);<br/></pre>
 Entry event.
        represent the physical event :
@@ -171,6 +254,16 @@ Entry event.
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_event</span> </td><td> Event properties</td></tr>
 <tr><td><b>Return: </b></td><td></td><td>true if the event has been used&lt;br/&gt;false if the event has not been used</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<h3>periodicCall</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">periodicCall</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Time.html">ewol::event::Time</a> & <span class="code-argument">_event</span>);<br/></pre>
+periodic call of this widget<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter:</b></td><td><span class="code-argument">_event</span> </td><td> Current time property</td></tr>
+</table>
 </ul>
 
 <br/>

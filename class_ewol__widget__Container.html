@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -83,34 +84,40 @@
 the Cotainer widget is a widget that have an only one subWidget<br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                       <a class="code-function" href="#3199">Container</a>              (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_subElement</span>);<br/>+                       <a class="code-function" href="#3201">~Container</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                       <a class="code-function" href="#1169">Container</a>               ();<br/>+ <span class="code-storage-keyword">virtual</span>                               <a class="code-function" href="#1172">~Container</a>              ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-#         <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <a class="code-member" href="#3198">m_subWidget</a>;<br/>+         <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <a class="code-function" href="#3203">getSubWidget</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>          <a class="code-function" href="#3205">setSubWidget</a>           (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+         <span class="code-type" >void</span>          <a class="code-function" href="#3207">subWidgetRemove</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3209">subWidgetRemoveDelayed</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3211">systemDraw</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3213">onRegenerateDisplay</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3215">onObjectRemove</a>         (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3217">calculateSize</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3219">calculateMinMaxSize</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <a class="code-function" href="#3221">getWidgetAtPos</a>         (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <a class="code-function" href="#3223">getWidgetNamed</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_widgetName</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>          <a class="code-function" href="#3225">loadXML</a>                (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>          <a class="code-function" href="#3227">setOffset</a>              (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newVal</span>);<br/></pre>
+#         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <a class="code-member" href="#1168">m_subWidget</a>;<br/>#         <span class="code-type" >void</span>                          <a class="code-function" href="#1170">init</a>                    (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_subElement</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <a class="code-function" href="#1173">getSubWidget</a>            ();<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#1174">setSubWidget</a>            (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_newWidget</span>);<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#1176">subWidgetRemove</a>         ();<br/>+         <span class="code-type" >void</span>                          <a class="code-function" href="#1177">subWidgetUnLink</a>         ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#1178">systemDraw</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#1180">onRegenerateDisplay</a>     ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#1181">calculateSize</a>           (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#1183">calculateMinMaxSize</a>     ();<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <a class="code-function" href="#1184">getWidgetAtPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <a class="code-function" href="#1186">getSubObjectNamed</a>       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                          <a class="code-function" href="#1188">loadXML</a>                 (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#1190">setOffset</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newVal</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                          <a class="code-function" href="#1192">requestDestroyFromChild</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_child</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::Container<br/>                +--> <a href="class_ewol__widget__PopUp.html">ewol::widget::PopUp</a><br/>                +--> <a href="class_ewol__widget__ContextMenu.html">ewol::widget::ContextMenu</a><br/>                +--> <a href="class_ewol__widget__Scroll.html">ewol::widget::Scroll</a><br/>                +--> <a href="class_ewol__widget__Composer.html">ewol::widget::Composer</a><br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> ewol::widget::Container<br/>                       +--> <a href="class_ewol__widget__PopUp.html">ewol::widget::PopUp</a><br/>                       +--> <a href="class_ewol__widget__ContextMenu.html">ewol::widget::ContextMenu</a><br/>                       +--> <a href="class_ewol__widget__Scroll.html">ewol::widget::Scroll</a><br/>                       +--> <a href="class_ewol__widget__Composer.html">ewol::widget::Composer</a><br/></pre>
 <h2>Detail:</h2>
-<a id="3198"/><a id="3199"/><h3>m_subWidget</h3><pre>
-# <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-member">m_subWidget</span>;<br/></pre>
+<a id="1168"/><a id="1169"/><h3>m_subWidget</h3><pre>
+# <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-member">m_subWidget</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3201"/><h3>Container</h3><pre>
-+  <span class="code-function">Container</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_subElement</span>);<br/></pre>
+<a id="1170"/><h3>Container</h3><pre>
+#  <span class="code-function">Container</span> ();<br/></pre>
 Constructor<br/>
 <br/>
 <hr/>
-<a id="3203"/><h3>~Container</h3><pre>
-+  <span class="code-function">~Container</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1172"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_subElement</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="1173"/><h3>~Container</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Container</span> ();<br/></pre>
 Destructor<br/>
 <br/>
 <hr/>
-<a id="3205"/><h3>getSubWidget</h3><pre>
-+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getSubWidget</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1174"/><h3>getSubWidget</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">getSubWidget</span> ();<br/></pre>
 get the main node widget<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the requested pointer on the node</td></tr></table>
@@ -118,8 +125,8 @@ get the main node widget<br/><ul>
 
 <br/>
 <hr/>
-<a id="3207"/><h3>setSubWidget</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setSubWidget</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+<a id="1176"/><h3>setSubWidget</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setSubWidget</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_newWidget</span>);<br/></pre>
 set the subWidget node widget.<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_newWidget</span> </td><td> The widget to add.</td></tr>
@@ -128,17 +135,17 @@ set the subWidget node widget.<br/><ul>
 
 <br/>
 <hr/>
-<a id="3209"/><h3>subWidgetRemove</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">subWidgetRemove</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
-remove the subWidget node.<br/>
+<a id="1177"/><h3>subWidgetRemove</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">subWidgetRemove</span> ();<br/></pre>
+remove the subWidget node (async).<br/>
 <br/>
 <hr/>
-<a id="3211"/><h3>subWidgetRemoveDelayed</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetRemoveDelayed</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
-remove the subWidget node (delayed to prevent remove in the callbback).<br/>
+<a id="1178"/><h3>subWidgetUnLink</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">subWidgetUnLink</span> ();<br/></pre>
+Unlink the subwidget Node.<br/>
 <br/>
 <hr/>
-<a id="3213"/><h3>systemDraw</h3><pre>
+<a id="1180"/><h3>systemDraw</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">systemDraw</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/></pre>
 {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget<br/><b>Note:</b> This function is virtual for the scrolled widget, and the more complicated openGl widget<br/> <b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
@@ -149,22 +156,12 @@ This function generate a clipping with the viewport openGL system. Like this a w
 
 <br/>
 <hr/>
-<a id="3215"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1181"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="3217"/><h3>onObjectRemove</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
-Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_removObject</span> </td><td> Pointer on the Object remeved  == &gt; the user must remove all reference on this Object</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="3219"/><h3>calculateSize</h3><pre>
+<a id="1183"/><h3>calculateSize</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/></pre>
 Parent set the possible diplay size of the current widget whith his own possibilities
        By default this save the widget available size in the widget size<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
@@ -175,32 +172,32 @@ Parent set the possible diplay size of the current widget whith his own possibil
 
 <br/>
 <hr/>
-<a id="3221"/><h3>calculateMinMaxSize</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1184"/><h3>calculateMinMaxSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> ();<br/></pre>
 calculate the minimum and maximum size (need to estimate expend properties of the widget)<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> 
 <br/>
 <hr/>
-<a id="3223"/><h3>getWidgetAtPos</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+<a id="1186"/><h3>getWidgetAtPos</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 get the widget at the specific windows absolute position<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> gAbsolute position of the requested widget knowledge</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>NULL No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
+<tr><td><b>Return: </b></td><td></td><td>nullptr No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
 </ul>
 
 <br/>
 <hr/>
-<a id="3225"/><h3>getWidgetNamed</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getWidgetNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_widgetName</span>);<br/></pre>
-get the widget if it have this name or one of the subwidget with the same name<br/><ul>
+<a id="1188"/><h3>getSubObjectNamed</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Object&gt; <span class="code-function">getSubObjectNamed</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_objectName</span>);<br/></pre>
+Retrive an object with his name (in the global list)<br/><ul>
 <table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_widgetName</span> </td><td> name of the widget</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>the requested pointer on the node (or NULL pointer)</td></tr></table>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_name</span> </td><td> Name of the object</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the requested object or nullptr</td></tr></table>
 </ul>
 
 <br/>
 <hr/>
-<a id="3227"/><h3>loadXML</h3><pre>
+<a id="1190"/><h3>loadXML</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">loadXML</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_node</span>);<br/></pre>
 load properties with an XML node.<br/><ul>
 <table class="parameter-list">
@@ -210,7 +207,7 @@ load properties with an XML node.<br/><ul>
 
 <br/>
 <hr/>
-<h3>setOffset</h3><pre>
+<a id="1192"/><h3>setOffset</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">setOffset</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newVal</span>);<br/></pre>
 set the zoom property of the widget.<br/><ul>
 <table class="parameter-list">
@@ -218,6 +215,12 @@ set the zoom property of the widget.<br/><ul>
 </table>
 </ul>
 
+<br/>
+<hr/>
+<h3>requestDestroyFromChild</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">requestDestroyFromChild</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;Object&gt; & <span class="code-argument">_child</span>);<br/></pre>
+
+<br/>
 <br/>
 <hr/>
 	</div>

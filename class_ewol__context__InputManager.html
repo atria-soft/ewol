@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,60 +85,50 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                 <a class="code-function" href="#3920">InputManager</a>          (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/>+                 <a class="code-function" href="#3922">~InputManager</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                             <a class="code-function" href="#1833">InputManager</a>           (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/>+                             <a class="code-function" href="#1835">~InputManager</a>          ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>            <a class="code-function" href="#3924">setDpi</a>                (<span class="code-type" >int32_t</span> <span class="code-argument">newDPI</span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3926">motion</a>                (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>                                         <span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                         vec2 <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3930">state</a>                 (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>                                         <span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                         <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                         vec2 <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3935">onObjectRemove</a>        (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3937">newLayerSet</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3939">transfertEvent</a>        (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_source</span>,<br/>                                         <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_destination</span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3942">grabPointer</a>           (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/>+ <span class="code-type" >void</span>            <a class="code-function" href="#3944">unGrabPointer</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span>                        <a class="code-function" href="#1836">setDpi</a>                 (<span class="code-type" >int32_t</span> <span class="code-argument">_newDPI</span>);<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1838">motion</a>                 (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>                                                      <span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                      vec2 <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1842">state</a>                  (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>                                                      <span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>                                                      <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>                                                      vec2 <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1847">newLayerSet</a>            ();<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1848">transfertEvent</a>         (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_source</span>,<br/>                                                      <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_destination</span>);<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1851">grabPointer</a>            (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1853">unGrabPointer</a>          ();<br/>+ <span class="code-type" >void</span>                        <a class="code-function" href="#1855">setLastKeyboardSpecial</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_specialKey</span>);<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="3920"/><a id="3922"/><h3>InputManager</h3><pre>
+<a id="1833"/><a id="1835"/><h3>InputManager</h3><pre>
 +  <span class="code-function">InputManager</span> (<a class="code-type" href="class_ewol__Context.html">ewol::Context</a> & <span class="code-argument">_context</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3924"/><h3>~InputManager</h3><pre>
-+  <span class="code-function">~InputManager</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1836"/><h3>~InputManager</h3><pre>
++  <span class="code-function">~InputManager</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3926"/><h3>setDpi</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">setDpi</span> (<span class="code-type" >int32_t</span> <span class="code-argument">newDPI</span>);<br/></pre>
+<a id="1838"/><h3>setDpi</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setDpi</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_newDPI</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3930"/><h3>motion</h3><pre>
+<a id="1842"/><h3>motion</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">motion</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>               <span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>               vec2 <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3935"/><h3>state</h3><pre>
+<a id="1847"/><h3>state</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">state</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__type.html">ewol::key::type</a> <span class="code-argument">_type</span>,<br/>              <span class="code-type" >int</span> <span class="code-argument">_pointerID</span>,<br/>              <span class="code-type" >bool</span> <span class="code-argument">_isDown</span>,<br/>              vec2 <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3937"/><h3>onObjectRemove</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
-Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">removeObject</span> </td><td> Pointer on the Object remeved  == &gt; the user must remove all reference on this Object</td></tr>
-</table>
-</ul>
-
-<br/>
-<hr/>
-<a id="3939"/><h3>newLayerSet</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">newLayerSet</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1848"/><h3>newLayerSet</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">newLayerSet</span> ();<br/></pre>
 a new layer on the windows is set  == &gt; might remove all the property of the current element ...<br/>
 <br/>
 <hr/>
-<a id="3942"/><h3>transfertEvent</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">transfertEvent</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_source</span>,<br/>                       <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_destination</span>);<br/></pre>
+<a id="1851"/><h3>transfertEvent</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">transfertEvent</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_source</span>,<br/>                       <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_destination</span>);<br/></pre>
 This is to transfert the event from one widget to another one<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter:</b></td><td><span class="code-argument">_source</span> </td><td> the widget where the event came from</td></tr>
@@ -147,8 +138,8 @@ This is to transfert the event from one widget to another one<br/><ul>
 
 <br/>
 <hr/>
-<a id="3944"/><h3>grabPointer</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">grabPointer</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_widget</span>);<br/></pre>
+<a id="1853"/><h3>grabPointer</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">grabPointer</span> (<a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-argument">_widget</span>);<br/></pre>
 This fonction lock the pointer properties to move in relative instead of absolute<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_widget</span> </td><td> The widget that lock the pointer events</td></tr>
@@ -157,9 +148,15 @@ This fonction lock the pointer properties to move in relative instead of absolut
 
 <br/>
 <hr/>
-<h3>unGrabPointer</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">unGrabPointer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="1855"/><h3>unGrabPointer</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">unGrabPointer</span> ();<br/></pre>
 This fonction un-lock the pointer properties to move in relative instead of absolute<br/>
+<br/>
+<hr/>
+<h3>setLastKeyboardSpecial</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setLastKeyboardSpecial</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__key__Special.html">ewol::key::Special</a> & <span class="code-argument">_specialKey</span>);<br/></pre>
+
+<br/>
 <br/>
 <hr/>
 	</div>

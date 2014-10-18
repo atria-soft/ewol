@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,32 +85,33 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                <a class="code-function" href="#4589">Image</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_imageName</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                <a class="code-function" href="#4591">~Image</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                      <a class="code-function" href="#2512">Image</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_imageName</span>,<br/>                                                                             <span class="code-type" >bool</span> <span class="code-argument">_df</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                                              <a class="code-function" href="#2515">~Image</a>               ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>                           <a class="code-function" href="#4593">draw</a>               (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4595">clear</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">const</span> vec3 &                   <a class="code-function" href="#4597">getPos</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4599">setPos</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4601">setPos</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4603">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4605">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4607">setColor</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4609">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                     vec3 <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4612">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4615">setClipping</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                     vec3 <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4618">setClipping</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4621">setClippingMode</a>    (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4623">setAngle</a>           (<span class="code-type" >float</span> <span class="code-argument">_angleRad</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4625">print</a>              (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4627">print</a>              (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4629">printPart</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_sourcePosStart</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_sourcePosStop</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4633">setSource</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>,<br/>                                                     <span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4636">setSource</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >bool</span>                           <a class="code-function" href="#4639">hasSources</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ vec2                           <a class="code-function" href="#4641">getRealSize</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span>                                         <a class="code-function" href="#2516">draw</a>                 (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2518">clear</a>                ();<br/>+ <span class="code-storage-keyword">const</span> vec3 &                                 <a class="code-function" href="#2519">getPos</a>               ();<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2520">setPos</a>               (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2522">setPos</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2524">setRelPos</a>            (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2526">setRelPos</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2528">setColor</a>             (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2530">setClippingWidth</a>     (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                                     vec3 <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2533">setClippingWidth</a>     (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2536">setClipping</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                                     vec3 <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2539">setClipping</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2542">setClippingMode</a>      (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2544">setAngle</a>             (<span class="code-type" >float</span> <span class="code-argument">_angleRad</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2546">print</a>                (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2548">print</a>                (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2550">printPart</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_sourcePosStart</span>,<br/>                                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_sourcePosStop</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2554">setSource</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>,<br/>                                                                     <span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2557">setSource</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>,<br/>                                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2560">hasSources</a>           ();<br/>+ vec2                                         <a class="code-function" href="#2561">getRealSize</a>          ();<br/>+ <span class="code-type" >void</span>                                         <a class="code-function" href="#2562">setDistanceFieldMode</a> (<span class="code-type" >bool</span> <span class="code-argument">_mode</span>);<br/>+ <span class="code-type" >bool</span>                                         <a class="code-function" href="#2564">getDistanceFieldMode</a> () <span class="code-storage-keyword">const</span>;<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 +<a href="class_ewol__Compositing.html">ewol::Compositing</a><br/>  +--> ewol::compositing::Image<br/>         +--> <a href="class_ewol__compositing__Sprite.html">ewol::compositing::Sprite</a><br/></pre>
 <h2>Detail:</h2>
-<a id="4589"/><a id="4591"/><h3>Image</h3><pre>
-+  <span class="code-function">Image</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_imageName</span>);<br/></pre>
+<a id="2512"/><a id="2515"/><h3>Image</h3><pre>
++  <span class="code-function">Image</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_imageName</span>,<br/>          <span class="code-type" >bool</span> <span class="code-argument">_df</span>);<br/></pre>
 generic constructor<br/><ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_imageName</span> </td><td> Name of the file that might be loaded</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_df</span> </td><td> enable distance field mode</td></tr>
 </table>
 </ul>
 
 <br/>
 <hr/>
-<a id="4593"/><h3>~Image</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Image</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2516"/><h3>~Image</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Image</span> ();<br/></pre>
 generic destructor<br/>
 <br/>
 <hr/>
-<a id="4595"/><h3>draw</h3><pre>
+<a id="2518"/><h3>draw</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/></pre>
 draw All the refistered text in the current element on openGL<br/><ul>
 <table class="parameter-list">
@@ -119,13 +121,13 @@ draw All the refistered text in the current element on openGL<br/><ul>
 
 <br/>
 <hr/>
-<a id="4597"/><h3>clear</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">clear</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2519"/><h3>clear</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">clear</span> ();<br/></pre>
 clear alll tre registered element in the current element<br/>
 <br/>
 <hr/>
-<a id="4599"/><h3>getPos</h3><pre>
-+ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2520"/><h3>getPos</h3><pre>
++ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> ();<br/></pre>
 get the current display position (sometime needed in the gui control)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the current position.</td></tr></table>
@@ -133,7 +135,7 @@ get the current display position (sometime needed in the gui control)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4601"/><h3>setPos</h3><pre>
+<a id="2522"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
 set position for the next text writen<br/><ul>
 <table class="parameter-list">
@@ -143,13 +145,13 @@ set position for the next text writen<br/><ul>
 
 <br/>
 <hr/>
-<a id="4603"/><h3>setPos</h3><pre>
+<a id="2524"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4605"/><h3>setRelPos</h3><pre>
+<a id="2526"/><h3>setRelPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
 set relative position for the next text writen<br/><ul>
 <table class="parameter-list">
@@ -159,13 +161,13 @@ set relative position for the next text writen<br/><ul>
 
 <br/>
 <hr/>
-<a id="4607"/><h3>setRelPos</h3><pre>
+<a id="2528"/><h3>setRelPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4609"/><h3>setColor</h3><pre>
+<a id="2530"/><h3>setColor</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setColor</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/></pre>
 set the Color of the current foreground font<br/><ul>
 <table class="parameter-list">
@@ -175,7 +177,7 @@ set the Color of the current foreground font<br/><ul>
 
 <br/>
 <hr/>
-<a id="4612"/><h3>setClippingWidth</h3><pre>
+<a id="2533"/><h3>setClippingWidth</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClippingWidth</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                         vec3 <span class="code-argument">_width</span>);<br/></pre>
 Request a clipping area for the text (next draw only)<br/><ul>
 <table class="parameter-list">
@@ -186,13 +188,13 @@ Request a clipping area for the text (next draw only)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4615"/><h3>setClippingWidth</h3><pre>
+<a id="2536"/><h3>setClippingWidth</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClippingWidth</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                         <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4618"/><h3>setClipping</h3><pre>
+<a id="2539"/><h3>setClipping</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClipping</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                    vec3 <span class="code-argument">_posEnd</span>);<br/></pre>
 Request a clipping area for the text (next draw only)<br/><ul>
 <table class="parameter-list">
@@ -203,18 +205,18 @@ Request a clipping area for the text (next draw only)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4621"/><h3>setClipping</h3><pre>
+<a id="2542"/><h3>setClipping</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClipping</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                    <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4623"/><h3>setClippingMode</h3><pre>
+<a id="2544"/><h3>setClippingMode</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClippingMode</span> (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/></pre>
 enable/Disable the clipping (without lose the current clipping position)<br/>_newMode The new status of the clipping<br/>
 <br/>
 <hr/>
-<a id="4625"/><h3>setAngle</h3><pre>
+<a id="2546"/><h3>setAngle</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setAngle</span> (<span class="code-type" >float</span> <span class="code-argument">_angleRad</span>);<br/></pre>
 set a unique rotation of this element (not set in the rotate Generic system)<br/><ul>
 <table class="parameter-list">
@@ -224,7 +226,7 @@ set a unique rotation of this element (not set in the rotate Generic system)<br/
 
 <br/>
 <hr/>
-<a id="4627"/><h3>print</h3><pre>
+<a id="2548"/><h3>print</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">print</span> (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br/></pre>
 add a compleate of the image to display with the requested size<br/><ul>
 <table class="parameter-list">
@@ -234,13 +236,13 @@ add a compleate of the image to display with the requested size<br/><ul>
 
 <br/>
 <hr/>
-<a id="4629"/><h3>print</h3><pre>
+<a id="2550"/><h3>print</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">print</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4633"/><h3>printPart</h3><pre>
+<a id="2554"/><h3>printPart</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">printPart</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>,<br/>                  <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_sourcePosStart</span>,<br/>                  <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_sourcePosStop</span>);<br/></pre>
 add a part of the image to display with the requested size<br/><ul>
 <table class="parameter-list">
@@ -252,7 +254,7 @@ add a part of the image to display with the requested size<br/><ul>
 
 <br/>
 <hr/>
-<a id="4636"/><h3>setSource</h3><pre>
+<a id="2557"/><h3>setSource</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setSource</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/></pre>
 change the image Source  == &gt; can not be done to display 2 images at the same time ...<br/><ul>
 <table class="parameter-list">
@@ -263,14 +265,14 @@ change the image Source  == &gt; can not be done to display 2 images at the same
 
 <br/>
 <hr/>
-<a id="4639"/><h3>setSource</h3><pre>
+<a id="2560"/><h3>setSource</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setSource</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_newFile</span>,<br/>                  <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4641"/><h3>hasSources</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">hasSources</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2561"/><h3>hasSources</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">hasSources</span> ();<br/></pre>
 Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the validity od the resources.</td></tr></table>
@@ -278,11 +280,30 @@ Sometimes the user declare an image but not allocate the ressources all the time
 
 <br/>
 <hr/>
-<h3>getRealSize</h3><pre>
-+ vec2 <span class="code-function">getRealSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2562"/><h3>getRealSize</h3><pre>
++ vec2 <span class="code-function">getRealSize</span> ();<br/></pre>
 get the source image registered size in the file (&lt;0 when multiple size image)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>tre image registered size</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2564"/><h3>setDistanceFieldMode</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setDistanceFieldMode</span> (<span class="code-type" >bool</span> <span class="code-argument">_mode</span>);<br/></pre>
+Set render mode of the image<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_mode</span> </td><td> Activation of distance field mode</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>getDistanceFieldMode</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getDistanceFieldMode</span> () <span class="code-storage-keyword">const</span>;<br/></pre>
+Get the render methode.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>The render mode of the image.</td></tr></table>
 </ul>
 
 <br/>

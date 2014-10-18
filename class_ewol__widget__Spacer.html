@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -81,45 +82,45 @@
 	<div class="container" id="content">
 <h1>class: ewol::widget::Spacer</h1><hr/><h2>Constructor and Destructor:</h2>
 <pre>
-+                                    <a class="code-function" href="#2526">Spacer</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span>                            <a class="code-function" href="#2528">~Spacer</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+#                                           <a class="code-function" href="#540">Spacer</a>                 ();<br/>+ <span class="code-storage-keyword">virtual</span>                                   <a class="code-function" href="#545">~Spacer</a>                ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-type" >void</span>                       <a class="code-function" href="#2522">init</a>                (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>          <a class="code-member" href="#2524">configColor</a>;<br/>#         <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt;               <a class="code-member" href="#2530">m_color</a>;<br/>+         <span class="code-type" >void</span>                       <a class="code-function" href="#2531">setColor</a>            (<a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; <span class="code-argument">_newColor</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>*              <a class="code-function" href="#2533">getWidgetAtPos</a>      (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2535">onRegenerateDisplay</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                       <a class="code-function" href="#2537">onDraw</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2539">onSetConfig</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                       <a class="code-function" href="#2541">onGetConfig</a>         (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                                                          <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
+#         <span class="code-type" >void</span>                              <a class="code-function" href="#541">init</a>                   ();<br/>+                                           <a class="code-function" href="#542">DECLARE_WIDGET_FACTORY</a> (Spacer <span class="code-argument"></span>,<br/>                                                                    "Spacer" <span class="code-argument"></span>);<br/>#         <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;etk::Color&lt;&gt;&gt; <a class="code-member" href="#546">m_color</a>;<br/>+         <span class="code-type" >void</span>                              <a class="code-function" href="#547">setColor</a>               (<a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; <span class="code-argument">_newColor</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt;     <a class="code-function" href="#549">getWidgetAtPos</a>         (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                              <a class="code-function" href="#551">onRegenerateDisplay</a>    ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                              <a class="code-function" href="#552">onDraw</a>                 ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                              <a class="code-function" href="#553">onParameterChangeValue</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
-+<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::Spacer<br/></pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> ewol::widget::Spacer<br/></pre>
 <h2>Detail:</h2>
-<a id="2522"/><a id="2524"/><h3>init</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">init</span> (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="2526"/><h3>configColor</h3><pre>
-+ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">configColor</span>;<br/></pre>
-
-<br/>
-<br/>
-<hr/>
-<a id="2528"/><h3>Spacer</h3><pre>
-+  <span class="code-function">Spacer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="540"/><a id="541"/><h3>Spacer</h3><pre>
+#  <span class="code-function">Spacer</span> ();<br/></pre>
 Main constructer<br/>
 <br/>
 <hr/>
-<a id="2530"/><h3>~Spacer</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Spacer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="542"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> ();<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="545"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (Spacer <span class="code-argument"></span>,<br/>                           "Spacer" <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="546"/><h3>~Spacer</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Spacer</span> ();<br/></pre>
 Main destructer<br/>
 <br/>
 <hr/>
-<a id="2531"/><h3>m_color</h3><pre>
-# <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; <span class="code-member">m_color</span>;<br/></pre>
+<a id="547"/><h3>m_color</h3><pre>
+# <a class="code-type" href="class_ewol__object__Param.html">ewol::object::Param</a>&lt;etk::Color&lt;&gt;&gt; <span class="code-member">m_color</span>;<br/></pre>
 
 Background color<br/>
 <br/>
 <hr/>
-<a id="2533"/><h3>setColor</h3><pre>
+<a id="549"/><h3>setColor</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setColor</span> (<a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; <span class="code-argument">_newColor</span>);<br/></pre>
 Spziby the background color (basicly transparent)<br/><ul>
 <table class="parameter-list">
@@ -129,45 +130,30 @@ Spziby the background color (basicly transparent)<br/><ul>
 
 <br/>
 <hr/>
-<a id="2535"/><h3>getWidgetAtPos</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+<a id="551"/><h3>getWidgetAtPos</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="http://www.cplusplus.com/reference/memory/shared_ptr/">std::shared_ptr</a>&lt;ewol::Widget&gt; <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 get the widget at the specific windows absolute position<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
 <table class="parameter-list">
 <td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> gAbsolute position of the requested widget knowledge</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>NULL No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
+<tr><td><b>Return: </b></td><td></td><td>nullptr No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
 </ul>
 
 <br/>
 <hr/>
-<a id="2537"/><h3>onRegenerateDisplay</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="552"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
 Event generated when a redraw is needed<br/>
 <br/>
 <hr/>
-<a id="2539"/><h3>onDraw</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="553"/><h3>onDraw</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> ();<br/></pre>
 Common widget drawing function (called by the drawing thread [Android, X11, ...])<br/>
 <br/>
 <hr/>
-<a id="2541"/><h3>onSetConfig</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onSetConfig</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__Config.html">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br/></pre>
-Configuration requested to the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_conf</span> </td><td> Configuration handle.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the parametere has been used</td></tr></table>
-</ul>
+<h3>onParameterChangeValue</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onParameterChangeValue</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__object__ParameterRef.html">ewol::object::ParameterRef</a> & <span class="code-argument">_paramPointer</span>);<br/></pre>
 
 <br/>
-<hr/>
-<h3>onGetConfig</h3><pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onGetConfig</span> (<span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_config</span>,<br/>                            <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_result</span>) <span class="code-storage-keyword">const</span>;<br/></pre>
-Receive a configuration message from an other element system or from the curent Object<br/><ul>
-<table class="parameter-list">
-<td><b>Parameter [input]:</b></td><td><span class="code-argument">_config</span> </td><td> Configuration name.</td></tr>
-<td><b>Parameter [output]:</b></td><td><span class="code-argument">_result</span> </td><td> Result of the request.</td></tr>
-<tr><td><b>Return: </b></td><td></td><td>true if the config is set</td></tr></table>
-</ul>
-
 <br/>
 <hr/>
 	</div>

@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -83,64 +84,64 @@
 internal structure<br/><br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >bool</span>          <a class="code-member" href="#3879">isUsed</a>;<br/>+ <span class="code-type" >int32_t</span>       <a class="code-member" href="#3880">destinationInputId</a>;<br/>+ <span class="code-type" >int64_t</span>       <a class="code-member" href="#3881">lastTimeEvent</a>;<br/>+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <a class="code-member" href="#3882">curentWidgetEvent</a>;<br/>+ vec2          <a class="code-member" href="#3883">origin</a>;<br/>+ vec2          <a class="code-member" href="#3884">size</a>;<br/>+ vec2          <a class="code-member" href="#3885">downStart</a>;<br/>+ vec2          <a class="code-member" href="#3886">posEvent</a>;<br/>+ <span class="code-type" >bool</span>          <a class="code-member" href="#3887">isDown</a>;<br/>+ <span class="code-type" >bool</span>          <a class="code-member" href="#3888">isInside</a>;<br/>+ <span class="code-type" >int32_t</span>       <a class="code-member" href="#3889">nbClickEvent</a>;<br/></pre>
++ <span class="code-type" >bool</span>                        <a class="code-member" href="#1793">isUsed</a>;<br/>+ <span class="code-type" >int32_t</span>                     <a class="code-member" href="#1794">destinationInputId</a>;<br/>+ <span class="code-type" >int64_t</span>                     <a class="code-member" href="#1795">lastTimeEvent</a>;<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/memory/weak_ptr/">std::weak_ptr</a>&lt;ewol::Widget&gt; <a class="code-member" href="#1796">curentWidgetEvent</a>;<br/>+ vec2                        <a class="code-member" href="#1797">origin</a>;<br/>+ vec2                        <a class="code-member" href="#1798">size</a>;<br/>+ vec2                        <a class="code-member" href="#1799">downStart</a>;<br/>+ vec2                        <a class="code-member" href="#1800">posEvent</a>;<br/>+ <span class="code-type" >bool</span>                        <a class="code-member" href="#1801">isDown</a>;<br/>+ <span class="code-type" >bool</span>                        <a class="code-member" href="#1802">isInside</a>;<br/>+ <span class="code-type" >int32_t</span>                     <a class="code-member" href="#1803">nbClickEvent</a>;<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="3879"/><a id="3880"/><h3>isUsed</h3><pre>
+<a id="1793"/><a id="1794"/><h3>isUsed</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-member">isUsed</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3881"/><h3>destinationInputId</h3><pre>
+<a id="1795"/><h3>destinationInputId</h3><pre>
 + <span class="code-type" >int32_t</span> <span class="code-member">destinationInputId</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3882"/><h3>lastTimeEvent</h3><pre>
+<a id="1796"/><h3>lastTimeEvent</h3><pre>
 + <span class="code-type" >int64_t</span> <span class="code-member">lastTimeEvent</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3883"/><h3>curentWidgetEvent</h3><pre>
-+ <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-member">curentWidgetEvent</span>;<br/></pre>
+<a id="1797"/><h3>curentWidgetEvent</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/memory/weak_ptr/">std::weak_ptr</a>&lt;ewol::Widget&gt; <span class="code-member">curentWidgetEvent</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3884"/><h3>origin</h3><pre>
+<a id="1798"/><h3>origin</h3><pre>
 + vec2 <span class="code-member">origin</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3885"/><h3>size</h3><pre>
+<a id="1799"/><h3>size</h3><pre>
 + vec2 <span class="code-member">size</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3886"/><h3>downStart</h3><pre>
+<a id="1800"/><h3>downStart</h3><pre>
 + vec2 <span class="code-member">downStart</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3887"/><h3>posEvent</h3><pre>
+<a id="1801"/><h3>posEvent</h3><pre>
 + vec2 <span class="code-member">posEvent</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3888"/><h3>isDown</h3><pre>
+<a id="1802"/><h3>isDown</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-member">isDown</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="3889"/><h3>isInside</h3><pre>
+<a id="1803"/><h3>isInside</h3><pre>
 + <span class="code-type" >bool</span> <span class="code-member">isInside</span>;<br/></pre>
 
 <br/>

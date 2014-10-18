@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::widget::WidgetScrolled</h1><hr/><h2>Description:</h2>
+Widget to integrate a scrool bar in a widget. This is not a stadalone widget.<br/><br/>
+<h2>enum:</h2>
+<ul>
+<li><a href="enum_ewol__widget__WidgetScrolled__scrollingMode.html">scrollingMode</a></li></ul>
+<h2>Constructor and Destructor:</h2>
+<pre>
+#                                   <a class="code-function" href="#347">WidgetScrolled</a>              ();<br/>+ <span class="code-storage-keyword">virtual</span>                           <a class="code-function" href="#353">~WidgetScrolled</a>             ();<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
+#         vec2                      <a class="code-member" href="#334">m_originScrooled</a>;<br/>#         vec2                      <a class="code-member" href="#335">m_maxSize</a>;<br/>#         <span class="code-type" >float</span>                     <a class="code-member" href="#336">m_limitScrolling</a>;<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#341">setSingleFinger</a>             (<span class="code-type" >bool</span> <span class="code-argument">_status</span>);<br/>+         <span class="code-type" >bool</span>                      <a class="code-function" href="#343">getSingleFinger</a>             ();<br/>#         <span class="code-type" >void</span>                      <a class="code-function" href="#348">init</a>                        (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/>+                                   <a class="code-function" href="#350">DECLARE_WIDGET_FACTORY</a>      (WidgetScrolled <span class="code-argument"></span>,<br/>                                                                 "WidgetScrolled" <span class="code-argument"></span>);<br/># <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                      <a class="code-function" href="#354">onDraw</a>                      ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                      <a class="code-function" href="#355">onRegenerateDisplay</a>         ();<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                      <a class="code-function" href="#356">onEventInput</a>                (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                      <a class="code-function" href="#358">systemDraw</a>                  (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>#         <span class="code-type" >void</span>                      <a class="code-function" href="#360">setScrollingSize</a>            (<span class="code-type" >float</span> <span class="code-argument">_nbPixel</span>);<br/>#         <span class="code-type" >void</span>                      <a class="code-function" href="#362">scroolingMode</a>               (<span class="code-storage-keyword">enum</span> scrollingMode <span class="code-argument">_newMode</span>);<br/>#         <span class="code-type" >void</span>                      <a class="code-function" href="#364">setMaxSize</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_localSize</span>);<br/>#         <span class="code-type" >void</span>                      <a class="code-function" href="#366">setScrollingPositionDynamic</a> (vec2 <span class="code-argument">_borderWidth</span>,<br/>                                                                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_currentPosition</span>,<br/>                                                                 <span class="code-type" >bool</span> <span class="code-argument">_center</span>);<br/>#         <span class="code-type" >void</span>                      <a class="code-function" href="#370">setLimitScrolling</a>           (<span class="code-type" >float</span> <span class="code-argument">_poucentageLimit</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++std::enable_shared_from_this&lt;Object&gt;<br/>+<a href="class_ewol__object__ParameterList.html">ewol::object::ParameterList</a><br/>+<a href="class_ewol__object__SignalList.html">ewol::object::SignalList</a><br/>  +--> +<a href="class_ewol__Object.html">ewol::Object</a><br/>         +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>                +--> ewol::widget::WidgetScrolled<br/>                       +--> <a href="class_ewol__widget__List.html">ewol::widget::List</a><br/>                       +--> <a href="class_ewol__widget__ParameterList.html">ewol::widget::ParameterList</a><br/></pre>
+<h2>Detail:</h2>
+<a id="334"/><a id="335"/><h3>m_originScrooled</h3><pre>
+# vec2 <span class="code-member">m_originScrooled</span>;<br/></pre>
+
+pixel distance from the origin of the display (Bottum left)<br/>
+<br/>
+<hr/>
+<a id="336"/><h3>m_maxSize</h3><pre>
+# vec2 <span class="code-member">m_maxSize</span>;<br/></pre>
+
+Maximum size of the Widget ==&gt; to display scrollbar<br/>
+<br/>
+<hr/>
+<a id="341"/><h3>m_limitScrolling</h3><pre>
+# <span class="code-type" >float</span> <span class="code-member">m_limitScrolling</span>;<br/></pre>
+
+Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==&gt; 20% migt all time be visible)
+mode of management of the scrooling<br/>
+<br/>
+<hr/>
+<a id="343"/><h3>setSingleFinger</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setSingleFinger</span> (<span class="code-type" >bool</span> <span class="code-argument">_status</span>);<br/></pre>
+Set the single finger capabilities/<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_status</span> </td><td> True if single inger mode, two otherwise/</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="347"/><h3>getSingleFinger</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getSingleFinger</span> ();<br/></pre>
+Get the single finger capabilities<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>true The single finger mode is active&lt;br/&gt;false The To finger mode is active</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="348"/><h3>WidgetScrolled</h3><pre>
+#  <span class="code-function">WidgetScrolled</span> ();<br/></pre>
+Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_shaperName</span> </td><td> Shaper name if the scrolled widget.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="350"/><h3>init</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_shaperName</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="353"/><h3>DECLARE_WIDGET_FACTORY</h3><pre>
++  <span class="code-function">DECLARE_WIDGET_FACTORY</span> (WidgetScrolled <span class="code-argument"></span>,<br/>                           "WidgetScrolled" <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="354"/><h3>~WidgetScrolled</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~WidgetScrolled</span> ();<br/></pre>
+Scroll widget destructor.<br/>
+<br/>
+<hr/>
+<a id="355"/><h3>onDraw</h3><pre>
+# <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onDraw</span> ();<br/></pre>
+Common widget drawing function (called by the drawing thread [Android, X11, ...])<br/>
+<br/>
+<hr/>
+<a id="356"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> ();<br/></pre>
+Event generated when a redraw is needed<br/>
+<br/>
+<hr/>
+<a id="358"/><h3>onEventInput</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">onEventInput</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__event__Input.html">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br/></pre>
+Event on an input of this Widget (finger, mouse, stilet)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_event</span> </td><td> Event properties</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>true the event is used&lt;br/&gt;false the event is not used</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="360"/><h3>systemDraw</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">systemDraw</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/></pre>
+{SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget<br/><b>Note:</b> This function is virtual for the scrolled widget, and the more complicated openGl widget<br/> <b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_displayProp</span> </td><td> properties of the current display</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="362"/><h3>setScrollingSize</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">setScrollingSize</span> (<span class="code-type" >float</span> <span class="code-argument">_nbPixel</span>);<br/></pre>
+For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbPixel</span> </td><td> number of pixel scrolling</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="364"/><h3>scroolingMode</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">scroolingMode</span> (<span class="code-storage-keyword">enum</span> scrollingMode <span class="code-argument">_newMode</span>);<br/></pre>
+Specify the mode of scrolling for this windows<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newMode</span> </td><td> the selected mode for the scrolling...</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="366"/><h3>setMaxSize</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">setMaxSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_localSize</span>);<br/></pre>
+set the specific mawimum size of the widget<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_localSize</span> </td><td> new Maximum size</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="370"/><h3>setScrollingPositionDynamic</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">setScrollingPositionDynamic</span> (vec2 <span class="code-argument">_borderWidth</span>,<br/>                                    <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_currentPosition</span>,<br/>                                    <span class="code-type" >bool</span> <span class="code-argument">_center</span>);<br/></pre>
+Request a specific position for the scrolling of the current windows.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_borderWidth</span> </td><td> size of the border that requested the element might not to be</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_currentPosition</span> </td><td> Position that is requested to view</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_center</span> </td><td> True if the position might be at the center of the widget</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>setLimitScrolling</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">setLimitScrolling</span> (<span class="code-type" >float</span> <span class="code-argument">_poucentageLimit</span>);<br/></pre>
+set the scrolling limit when arriving at he end of the widget<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_poucentageLimit</span> </td><td> pourcent of the limit of view nothing in the widget when arriving at the end ...</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

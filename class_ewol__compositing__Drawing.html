@@ -15,6 +15,8 @@
 <ul class="niveau1">
 	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
 <ul class="niveau2">
+	<li><a href="namespace_ewol__translate.html">translate</a>
+	</li>
 	<li><a href="namespace_ewol__key.html">key</a>
 	</li>
 	<li><a href="namespace_ewol__widget.html">widget</a>
@@ -26,18 +28,6 @@
 	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
 	</li>
 </ul>
-	</li>
-	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
-<ul class="niveau3">
-	<li><a href="namespace_ewol__audio__wav.html">wav</a>
-	</li>
-	<li><a href="namespace_ewol__audio__music.html">music</a>
-	</li>
-	<li><a href="namespace_ewol__audio__effects.html">effects</a>
-	</li>
-</ul>
-	</li>
-	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
 	</li>
 	<li><a href="namespace_ewol__compositing.html">compositing</a>
 	</li>
@@ -53,14 +43,25 @@
 	</li>
 	<li><a href="namespace_MacOs.html">MacOs</a>
 	</li>
+	<li><a href="namespace_IOs.html">IOs</a>
+	</li>
 </ul>
 			</div>
 <h3>Documentation:</h3><div id="menu">
-<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+<ul class="niveau1"><li><a href="001_bases.html">Bases</a></li>
+</ul><ul class="niveau1"><li><a href="faq.html">Faq</a></li>
 </ul></div>
 <h3>Tutorials:</h3><div id="menu">
 <ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
-</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">Hello word</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_010_ObjectModel.html">Object model</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_011_ObjectConfig.html">Object config</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_012_ObjectMessage.html">Object message</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_020_FileAccess.html">File access</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_021_Resources.html">Resources</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_030_ConplexeXmlGui.html">Conplexe xml gui</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_050_CreateCustomWidget.html">Create custom widget</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_051_AddWidgetCustumInXML.html">Add widget custum in x m l</a></li>
 </ul></div>
 <br/><h3>Associate libraries:</h3><div id="menu">
 <ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
@@ -84,38 +85,38 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                <a class="code-function" href="#4336">Drawing</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                                <a class="code-function" href="#4338">~Drawing</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                                  <a class="code-function" href="#2203">Drawing</a>            ();<br/>+ <span class="code-storage-keyword">virtual</span>                                          <a class="code-function" href="#2204">~Drawing</a>           ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>                           <a class="code-function" href="#4356">draw</a>               (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4358">clear</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">const</span> vec3 &                   <a class="code-function" href="#4360">getPos</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4362">setPos</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4364">setPos</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4366">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4368">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4370">setColor</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4372">setColorBg</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4374">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4377">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4380">setClipping</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4383">setClipping</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4386">setClippingMode</a>    (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4388">setThickness</a>       (<span class="code-type" >float</span> <span class="code-argument">_thickness</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4390">addVertex</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4392">lineTo</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4394">lineTo</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4396">lineRel</a>            (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4398">lineRel</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_vect</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4400">rectangle</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4402">rectangle</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4404">rectangleWidth</a>     (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4406">rectangleWidth</a>     (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4408">cube</a>               (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4410">circle</a>             (<span class="code-type" >float</span> <span class="code-argument">_radius</span>,<br/>                                                     <span class="code-type" >float</span> <span class="code-argument">_angleStart</span>,<br/>                                                     <span class="code-type" >float</span> <span class="code-argument">_angleStop</span>);<br/></pre>
++ <span class="code-type" >void</span>                                     <a class="code-function" href="#2217">draw</a>               (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2219">clear</a>              ();<br/>+ <span class="code-storage-keyword">const</span> vec3 &                             <a class="code-function" href="#2220">getPos</a>             ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2221">setPos</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2223">setPos</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2225">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2227">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2229">setColor</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; &                     <a class="code-function" href="#2231">getColor</a>           ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2232">setColorBg</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; &                     <a class="code-function" href="#2234">getColorBg</a>         ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2235">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                               <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2238">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                               <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2241">setClipping</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                               <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2244">setClipping</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                               <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2247">setClippingMode</a>    (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2249">setThickness</a>       (<span class="code-type" >float</span> <span class="code-argument">_thickness</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2251">addVertex</a>          ();<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2252">lineTo</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2254">lineTo</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2256">lineRel</a>            (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2258">lineRel</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_vect</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2260">rectangle</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2262">rectangle</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2264">rectangleWidth</a>     (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2266">rectangleWidth</a>     (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2268">cube</a>               (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                                     <a class="code-function" href="#2270">circle</a>             (<span class="code-type" >float</span> <span class="code-argument">_radius</span>,<br/>                                                               <span class="code-type" >float</span> <span class="code-argument">_angleStart</span>,<br/>                                                               <span class="code-type" >float</span> <span class="code-argument">_angleStop</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 +<a href="class_ewol__Compositing.html">ewol::Compositing</a><br/>  +--> ewol::compositing::Drawing<br/></pre>
 <h2>Detail:</h2>
-<a id="4336"/><a id="4338"/><h3>Drawing</h3><pre>
-+  <span class="code-function">Drawing</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2203"/><a id="2204"/><h3>Drawing</h3><pre>
++  <span class="code-function">Drawing</span> ();<br/></pre>
 Basic constructor<br/>
 <br/>
 <hr/>
-<a id="4356"/><h3>~Drawing</h3><pre>
-+  <span class="code-function">~Drawing</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2217"/><h3>~Drawing</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Drawing</span> ();<br/></pre>
 Basic destructor<br/>
 <br/>
 <hr/>
-<a id="4358"/><h3>draw</h3><pre>
+<a id="2219"/><h3>draw</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/></pre>
 draw All the refistered text in the current element on openGL<br/>
 <br/>
 <hr/>
-<a id="4360"/><h3>clear</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">clear</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2220"/><h3>clear</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">clear</span> ();<br/></pre>
 clear alll tre registered element in the current element<br/>
 <br/>
 <hr/>
-<a id="4362"/><h3>getPos</h3><pre>
-+ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2221"/><h3>getPos</h3><pre>
++ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> ();<br/></pre>
 get the current display position (sometime needed in the gui control)<br/><ul>
 <table class="parameter-list">
 <tr><td><b>Return: </b></td><td></td><td>the current position.</td></tr></table>
@@ -123,7 +124,7 @@ get the current display position (sometime needed in the gui control)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4364"/><h3>setPos</h3><pre>
+<a id="2223"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
 set position for the next text writen<br/><ul>
 <table class="parameter-list">
@@ -133,13 +134,13 @@ set position for the next text writen<br/><ul>
 
 <br/>
 <hr/>
-<a id="4366"/><h3>setPos</h3><pre>
+<a id="2225"/><h3>setPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4368"/><h3>setRelPos</h3><pre>
+<a id="2227"/><h3>setRelPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
 set relative position for the next text writen<br/><ul>
 <table class="parameter-list">
@@ -149,13 +150,13 @@ set relative position for the next text writen<br/><ul>
 
 <br/>
 <hr/>
-<a id="4370"/><h3>setRelPos</h3><pre>
+<a id="2229"/><h3>setRelPos</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4372"/><h3>setColor</h3><pre>
+<a id="2231"/><h3>setColor</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setColor</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/></pre>
 set the Color of the current foreground font<br/><ul>
 <table class="parameter-list">
@@ -165,7 +166,16 @@ set the Color of the current foreground font<br/><ul>
 
 <br/>
 <hr/>
-<a id="4374"/><h3>setColorBg</h3><pre>
+<a id="2232"/><h3>getColor</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-function">getColor</span> ();<br/></pre>
+Get the foreground color of the font.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>Foreground color.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2234"/><h3>setColorBg</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setColorBg</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/></pre>
 set the background color of the font (for selected Text (not the global BG))<br/><ul>
 <table class="parameter-list">
@@ -175,7 +185,16 @@ set the background color of the font (for selected Text (not the global BG))<br/
 
 <br/>
 <hr/>
-<a id="4377"/><h3>setClippingWidth</h3><pre>
+<a id="2235"/><h3>getColorBg</h3><pre>
++ <span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-function">getColorBg</span> ();<br/></pre>
+Get the background color of the font.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>Background color.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2238"/><h3>setClippingWidth</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClippingWidth</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                         <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);<br/></pre>
 Request a clipping area for the text (next draw only)<br/><ul>
 <table class="parameter-list">
@@ -185,13 +204,13 @@ Request a clipping area for the text (next draw only)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4380"/><h3>setClippingWidth</h3><pre>
+<a id="2241"/><h3>setClippingWidth</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClippingWidth</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                         <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4383"/><h3>setClipping</h3><pre>
+<a id="2244"/><h3>setClipping</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClipping</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                    <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);<br/></pre>
 Request a clipping area for the text (next draw only)<br/><ul>
 <table class="parameter-list">
@@ -202,18 +221,18 @@ Request a clipping area for the text (next draw only)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4386"/><h3>setClipping</h3><pre>
+<a id="2247"/><h3>setClipping</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClipping</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                    <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4388"/><h3>setClippingMode</h3><pre>
+<a id="2249"/><h3>setClippingMode</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setClippingMode</span> (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/></pre>
 enable/Disable the clipping (without lose the current clipping position)<br/>_newMode The new status of the clipping<br/>
 <br/>
 <hr/>
-<a id="4390"/><h3>setThickness</h3><pre>
+<a id="2251"/><h3>setThickness</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">setThickness</span> (<span class="code-type" >float</span> <span class="code-argument">_thickness</span>);<br/></pre>
 Specify the line thickness for the next elements<br/><ul>
 <table class="parameter-list">
@@ -223,12 +242,12 @@ Specify the line thickness for the next elements<br/><ul>
 
 <br/>
 <hr/>
-<a id="4392"/><h3>addVertex</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">addVertex</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="2252"/><h3>addVertex</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">addVertex</span> ();<br/></pre>
 add a point reference at the current position (this is a vertex reference at the current position<br/>
 <br/>
 <hr/>
-<a id="4394"/><h3>lineTo</h3><pre>
+<a id="2254"/><h3>lineTo</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">lineTo</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/></pre>
 draw a line to a specific position<br/><ul>
 <table class="parameter-list">
@@ -238,13 +257,13 @@ draw a line to a specific position<br/><ul>
 
 <br/>
 <hr/>
-<a id="4396"/><h3>lineTo</h3><pre>
+<a id="2256"/><h3>lineTo</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">lineTo</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4398"/><h3>lineRel</h3><pre>
+<a id="2258"/><h3>lineRel</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">lineRel</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br/></pre>
 Relative drawing a line (spacial vector)<br/><ul>
 <table class="parameter-list">
@@ -254,13 +273,13 @@ Relative drawing a line (spacial vector)<br/><ul>
 
 <br/>
 <hr/>
-<a id="4400"/><h3>lineRel</h3><pre>
+<a id="2260"/><h3>lineRel</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">lineRel</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_vect</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4402"/><h3>rectangle</h3><pre>
+<a id="2262"/><h3>rectangle</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">rectangle</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/></pre>
 draw a 2D rectangle to the position requested.<br/><ul>
 <table class="parameter-list">
@@ -270,13 +289,13 @@ draw a 2D rectangle to the position requested.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4404"/><h3>rectangle</h3><pre>
+<a id="2264"/><h3>rectangle</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">rectangle</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4406"/><h3>rectangleWidth</h3><pre>
+<a id="2266"/><h3>rectangleWidth</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">rectangleWidth</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_size</span>);<br/></pre>
 draw a 2D rectangle to the requested size.<br/><ul>
 <table class="parameter-list">
@@ -286,13 +305,13 @@ draw a 2D rectangle to the requested size.<br/><ul>
 
 <br/>
 <hr/>
-<a id="4408"/><h3>rectangleWidth</h3><pre>
+<a id="2268"/><h3>rectangleWidth</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">rectangleWidth</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="4410"/><h3>cube</h3><pre>
+<a id="2270"/><h3>cube</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">cube</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/></pre>
 draw a 3D rectangle to the position requested.<br/><ul>
 <table class="parameter-list">
