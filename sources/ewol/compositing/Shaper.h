@@ -45,7 +45,6 @@ namespace ewol {
 				std::string m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
 				std::shared_ptr<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
-				int32_t m_confIdDisplayExternal; //!< Display external border
 				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
 				int32_t m_confIdBorder[shaperPosCount]; //!< border property : X-left X-right Y-top Y-buttom
 				int32_t m_confIdPaddingIn[shaperPosCount]; //!< Padding in property : X-left X-right Y-top Y-buttom
