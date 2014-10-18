@@ -31,25 +31,90 @@ namespace ewol {
 			public:
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				virtual ~Slider();
-				void setValue(int32_t _val);
-				int32_t getValue();
-				void setMin(int32_t _val);
-				void setMax(int32_t _val);
+			protected:
+				ewol::object::Param<float> m_value; //!< current value of the Slider
+			public:
+				/**
+				 * @brief Set the value of the slider.
+				 * @param[in] _val New value to apply.
+				 */
+				void setValue(float _val) {
+					m_value.set(_val);
+				}
+				/**
+				 * @brief Get the value of the slider.
+				 * @return The current value of the slider.
+				 */
+				float getValue() {
+					return m_value;
+				}
+			protected:
+				ewol::object::Param<float> m_min; //!< minimum value of the slider
+			public:
+				/**
+				 * @brief Set the minumum value of the slider.
+				 * @param[in] _val New minimum value to apply.
+				 */
+				void setMin(float _val) {
+					m_min.set(_val);
+				}
+				/**
+				 * @brief Get the minimum value of the slider.
+				 * @return The minimum value of the slider.
+				 */
+				float getMin() {
+					return m_min;
+				}
+			protected:
+				ewol::object::Param<float> m_max; //!< maximum value of the slider
+			public:
+				/**
+				 * @brief Set the maximum value of the slider.
+				 * @param[in] _val New maximum value to apply.
+				 */
+				void setMax(float _val) {
+					m_max.set(_val);
+				}
+				/**
+				 * @brief Get the maximum value of the slider.
+				 * @return The maximum value of the slider.
+				 */
+				float getMax() {
+					return m_max;
+				}
+			protected:
+				ewol::object::Param<float> m_step;
+			public:
+				/**
+				 * @brief Set the step value of the slider.
+				 * @param[in] _val New step value to apply.
+				 */
+				void setStep(float _val) {
+					m_step.set(_val);
+				}
+				/**
+				 * @brief Get the step value of the slider.
+				 * @return The wtep value of the slider.
+				 */
+				float getStep() {
+					return m_step;
+				}
+			public:
+				// TODO : Rewoek the color in the theme ...
 				void setColor(etk::Color<> _newColor) {
 					m_textColorFg = _newColor;
 				};
 			protected:
 				ewol::compositing::Drawing m_draw; //!< drawing tool.
-				int32_t m_value;
-				int32_t m_min;
-				int32_t m_max;
 				etk::Color<> m_textColorFg; //!< Text color
 				etk::Color<> m_textColorBg; //!< Background color
+				void updateValue(float _newValue);
 			public: // Derived function
 				virtual void onDraw();
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 		};
 	};
 };
