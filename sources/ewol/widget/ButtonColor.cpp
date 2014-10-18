@@ -29,8 +29,8 @@ static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorCha
 
 ewol::widget::ButtonColor::ButtonColor() :
   signalChange(*this, "change", "Button color change value"),
-  m_textColorFg(etk::color::black),
-  m_widgetContextMenu(nullptr) {
+  m_widgetContextMenu(nullptr),
+  m_textColorFg(*this, "color", etk::color::black, "Current color") {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);
 	setCanHaveFocus(true);
@@ -41,7 +41,7 @@ ewol::widget::ButtonColor::ButtonColor() :
 void ewol::widget::ButtonColor::init(etk::Color<> _baseColor, std::string _shaperName) {
 	ewol::Widget::init();
 	m_shaper.setSource(_shaperName);
-	m_textColorFg = _baseColor;
+	m_textColorFg.set(_baseColor);
 }
 
 ewol::widget::ButtonColor::~ButtonColor() {
@@ -107,15 +107,15 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	
 	// clean the element
 	m_text.reset();
-	if(    m_textColorFg.r() < 100
-	    || m_textColorFg.g() < 100
-	    || m_textColorFg.b() < 100) {
+	if(    m_textColorFg.get().r() < 100
+	    || m_textColorFg.get().g() < 100
+	    || m_textColorFg.get().b() < 100) {
 		m_text.setColor(etk::color::white);
 	} else {
 		m_text.setColor(etk::color::black);
 	}
 	m_text.setPos(tmpTextOrigin);
-	m_text.setColorBg(m_textColorFg);
+	m_text.setColorBg(m_textColorFg.get());
 	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignCenter);
 	m_text.print(label);
 	
@@ -169,7 +169,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_buttonPressed = false;
 				m_mouseHover = false;
 				// create a context menu : 
-				m_widgetContextMenu = std::make_shared<ewol::widget::ContextMenu>();
+				m_widgetContextMenu = ewol::widget::ContextMenu::create();
 				if (nullptr == m_widgetContextMenu) {
 					EWOL_ERROR("Allocation Error");
 					return true;
@@ -179,7 +179,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
 				
 				std::shared_ptr<ewol::widget::ColorChooser> myColorChooser = widget::ColorChooser::create();
-				myColorChooser->setColor(m_textColorFg);
+				myColorChooser->setColor(m_textColorFg.get());
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
 				myColorChooser->signalChange.bind(shared_from_this(), &ewol::widget::ButtonColor::onCallbackColorChange);
@@ -213,16 +213,6 @@ void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color
 	setValue(_color);
 }
 
-void ewol::widget::ButtonColor::setValue(const etk::Color<>& _color) {
-	m_textColorFg = _color;
-	signalChange.emit(m_textColorFg);
-	markToRedraw();
-}
-
-etk::Color<> ewol::widget::ButtonColor::getValue() {
-	return m_textColorFg;
-}
-
 void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
@@ -235,4 +225,13 @@ void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 		periodicCallDisable();
 	}
 	markToRedraw();
+}
+
+
+void ewol::widget::ButtonColor::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+	ewol::Widget::onParameterChangeValue(_paramPointer);
+	if (_paramPointer == m_textColorFg) {
+		signalChange.emit(m_textColorFg);
+		markToRedraw();
+	}
 }

@@ -28,7 +28,6 @@ namespace ewol {
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
-				etk::Color<> m_textColorFg; //!< Current color.
 				std::shared_ptr<ewol::widget::ContextMenu> m_widgetContextMenu; //!< Specific context menu.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
@@ -42,7 +41,7 @@ namespace ewol {
 				 * @param[in] _shaperName The new shaper filename.
 				 */
 				ButtonColor();
-				void init(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:widgetButton.json");
+				void init(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:Button.json");
 			public:
 				DECLARE_WIDGET_FACTORY(ButtonColor, "ButtonColor");
 				/**
@@ -54,22 +53,30 @@ namespace ewol {
 				 * @param[in] _shaperName The new shaper filename.
 				 */
 				void setShaperName(std::string _shaperName);
+			protected:
+				ewol::object::Param<etk::Color<>> m_textColorFg; //!< Current color.
+			public:
 				/**
 				 * @brief get the current color of the color selection widget
 				 * @return The current color
 				 */
-				etk::Color<> getValue();
+				const etk::Color<>& getValue() {
+					return m_textColorFg.get();
+				}
 				/**
 				 * @brief Specify the current color.
 				 * @param[in] _color The new display color.
 				 */
-				void setValue(const etk::Color<>& _color);
+				void setValue(const etk::Color<>& _color) {
+					m_textColorFg.set(_color);
+				}
 			protected: // Derived function
 				virtual void onDraw();
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
