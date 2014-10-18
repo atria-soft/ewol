@@ -266,3 +266,30 @@ void ewol::widget::Windows::requestDestroyFromChild(const std::shared_ptr<Object
 		markToRedraw();
 	}
 }
+
+std::shared_ptr<ewol::Object> ewol::widget::Windows::getSubObjectNamed(const std::string& _objectName) {
+	std::shared_ptr<ewol::Object> tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
+	if (tmpObject != nullptr) {
+		return tmpObject;
+	}
+	// check direct subwidget
+	if (m_subWidget != nullptr) {
+		tmpObject = m_subWidget->getSubObjectNamed(_objectName);
+		if (tmpObject != nullptr) {
+			return tmpObject;
+		}
+	}
+	// get all subwidget "pop-up"
+	for (auto &it : m_popUpWidgetList) {
+		if (it != nullptr) {
+			tmpObject = it->getSubObjectNamed(_objectName);
+			if (tmpObject != nullptr) {
+				return tmpObject;
+			}
+		}
+	}
+	// not find ...
+	return nullptr;
+}
+
+

@@ -92,6 +92,7 @@ namespace ewol {
 				virtual void calculateSize(const vec2& _availlable);
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
 				void setTitle(const std::string& _title);
 			public:
 				enum popUpMessageType {
