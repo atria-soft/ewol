@@ -31,7 +31,7 @@ namespace ewol {
 					markLeft,
 					markNone
 				};
-			public:
+			protected:
 				ContextMenu();
 				void init(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
 			public:
