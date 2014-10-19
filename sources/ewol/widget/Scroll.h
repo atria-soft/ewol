@@ -18,9 +18,6 @@
 
 namespace ewol {
 	namespace widget {
-		/**
-		 * @ingroup ewolWidgetGroup
-		 */
 		class Scroll : public ewol::widget::Container {
 			public:
 				enum highSpeedMode {
@@ -58,7 +55,9 @@ namespace ewol {
 				 * @brief get the limit of scrolling
 				 * @return scrolling limit
 				 */
-				const vec2& getLimit() const { return m_limit; };
+				const vec2& getLimit() const {
+					return m_limit;
+				};
 				
 			public: // Derived function
 				void calculateMinMaxSize();
