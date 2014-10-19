@@ -108,7 +108,7 @@ void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
 }
 
 void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
-	int32_t elementID = 0;
+	size_t elementID = 0;
 	// search element in the list : 
 	for (auto &it : m_subWidget) {
 		elementID ++;
