@@ -58,6 +58,14 @@ namespace ewol {
 					}
 					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
 				}
+				template<class TYPE, typename TYPE2> void bind1(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&,const TYPE2&), TYPE2 _param1) {
+					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+					if (obj2 == nullptr) {
+						EWOL_ERROR("Can not bind signal ...");
+						return;
+					}
+					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
+				}
 				/**
 				 * @brief Advanced binding a callback function to the current signal.
 				 * @param[in] _obj Shared pointer on the caller object
@@ -152,6 +160,14 @@ namespace ewol {
 						return;
 					}
 					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+				}
+				template<class TYPE, class TYPE2> void bind1(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const TYPE2&), const TYPE2& _param1) {
+					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+					if (obj2 == nullptr) {
+						EWOL_ERROR("Can not bind signal ...");
+						return;
+					}
+					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1)));
 				}
 				/**
 				 * @brief Advanced binding a callback function to the current signal.

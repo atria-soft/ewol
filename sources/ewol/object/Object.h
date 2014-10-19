@@ -230,6 +230,14 @@ namespace ewol {
 					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
 			} while (false)
+			#define subBind1(_type, _name, _event, _obj, _func, _param1) do {\
+				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
+				if (myObject != nullptr) { \
+					myObject->_event.bind1(_obj, _func, _param1); \
+				} else { \
+					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+				} \
+			} while (false)
 			/*
 			template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
 				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
