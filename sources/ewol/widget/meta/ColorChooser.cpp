@@ -109,28 +109,28 @@ etk::Color<> ewol::widget::ColorChooser::getColor() {
 	return m_currentColor;
 }
 
-void ewol::widget::ColorChooser::onCallbackColorChangeRed(const int32_t& _newColor) {
+void ewol::widget::ColorChooser::onCallbackColorChangeRed(const float& _newColor) {
 	m_currentColor.setR(_newColor);
 	if (nullptr != m_widgetColorBar) {
 		m_widgetColorBar->setCurrentColor(m_currentColor);
 	}
 	signalChange.emit(m_currentColor);
 }
-void ewol::widget::ColorChooser::onCallbackColorChangeGreen(const int32_t& _newColor) {
+void ewol::widget::ColorChooser::onCallbackColorChangeGreen(const float& _newColor) {
 	m_currentColor.setG(_newColor);
 	if (nullptr != m_widgetColorBar) {
 		m_widgetColorBar->setCurrentColor(m_currentColor);
 	}
 	signalChange.emit(m_currentColor);
 }
-void ewol::widget::ColorChooser::onCallbackColorChangeBlue(const int32_t& _newColor) {
+void ewol::widget::ColorChooser::onCallbackColorChangeBlue(const float& _newColor) {
 	m_currentColor.setB(_newColor);
 	if (nullptr != m_widgetColorBar) {
 		m_widgetColorBar->setCurrentColor(m_currentColor);
 	}
 	signalChange.emit(m_currentColor);
 }
-void ewol::widget::ColorChooser::onCallbackColorChangeAlpha(const int32_t& _newColor) {
+void ewol::widget::ColorChooser::onCallbackColorChangeAlpha(const float& _newColor) {
 	m_currentColor.setA(_newColor);
 	if (nullptr != m_widgetColorBar) {
 		m_widgetColorBar->setCurrentColor(m_currentColor);

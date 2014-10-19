@@ -24,7 +24,7 @@ namespace ewol {
 		class Slider : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::object::Signal<int32_t> signalChange;
+				ewol::object::Signal<float> signalChange;
 			protected:
 				Slider();
 				void init();
