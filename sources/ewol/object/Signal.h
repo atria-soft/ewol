@@ -23,7 +23,9 @@ namespace ewol {
 		template<typename T> class Signal : public SignalBase {
 			private:
 				std::vector<std::pair<std::weak_ptr<ewol::Object>,
-				                      std::function<void(const T&)>>> m_callerList;
+				                      std::function<void(const T&)>>> m_callerList; // current list of binded element
+				std::vector<std::pair<std::weak_ptr<ewol::Object>,
+				                      std::function<void(const T&)>>> m_callerListInCallback; // temporaty list (when add one in call process)
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
@@ -68,7 +70,11 @@ namespace ewol {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+					}
 				}
 				// TODO : Rework this when I understand the use of variadic template with std::function
 				template<class TYPE, typename TYPE2>
@@ -78,7 +84,11 @@ namespace ewol {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
+					}
 				}
 				template<class TYPE, typename TYPE2, typename TYPE3>
 				void bind2(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&, const TYPE2&, const TYPE3&), TYPE2 _param1, TYPE3 _param2) {
@@ -87,7 +97,11 @@ namespace ewol {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
+					}
 				}
 				/**
 				 * @brief Advanced binding a callback function to the current signal.
@@ -96,17 +110,44 @@ namespace ewol {
 				 * @example signalXXXX.connect(shared_from_this(), std::bind(&ClassName::onCallbackXXX, this, std::placeholders::_1));
 				 */
 				void connect(std::shared_ptr<ewol::Object> _obj, std::function<void(const T&)> _function ) {
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+					}
 				}
 				/**
 				 * @brief remove link on the signal.
 				 * @param[in] _obj shared pointer on the removing object
 				 */
 				void release(std::shared_ptr<ewol::Object> _obj) {
-					auto it(m_callerList.begin());
-					while(it != m_callerList.end()) {
+					if (m_callInProgress == 0) {
+						// Remove from the list :
+						auto it(m_callerList.begin());
+						while(it != m_callerList.end()) {
+							if (it->first.lock() == _obj) {
+								it = m_callerList.erase(it);
+							} else {
+								++it;
+							}
+						}
+					} else {
+						// just remove weak poointer
+						auto it(m_callerList.begin());
+						while(it != m_callerList.end()) {
+							if (it->first.lock() == _obj) {
+								it->first.reset();
+							} else {
+								++it;
+							}
+						}
+						m_someOneRemoveInCall = true;
+					}
+					// remove from add list in callback progress
+					auto it = m_callerListInCallback.begin();
+					while(it != m_callerListInCallback.end()) {
 						if (it->first.lock() == _obj) {
-							it = m_callerList.erase(it);
+							it = m_callerListInCallback.erase(it);
 						} else {
 							++it;
 						}
@@ -117,30 +158,54 @@ namespace ewol {
 				 * @param[in] _data data to emit
 				 */
 				void emit(const T& _data) {
+					m_signalCallLeval++;
+					m_callInProgress++;
 					#ifdef DEBUG
 						int32_t tmpID = m_uidSignal++;
 						ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
 						if (srcObject != nullptr) {
-							EWOL_VERBOSE("emit signal{" << tmpID << "} : " << srcObject->getObjectType() << " signal='" << m_name << "' data='" << etk::to_string(_data) << "' to:");
+							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "emit signal{" << tmpID << "} : " << srcObject->getObjectType() << " signal='" << m_name << "' data='" << etk::to_string(_data) << "' to: " << m_callerList.size() << " element(s)");
 						} else {
-							EWOL_VERBOSE("emit signal{" << tmpID << "} : signal='" << m_name << "' data='" << etk::to_string(_data) << "' to:");
+							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' data='" << etk::to_string(_data) << "' to: " << m_callerList.size() << " element(s)");
 						}
 					#endif
 					for (auto &it : m_callerList) {
 						std::shared_ptr<ewol::Object> destObject = it.first.lock();
 						if (destObject == nullptr) {
 							// TODO : Remove instance ...
-							EWOL_VERBOSE("    nullptr dest");
+							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "    nullptr dest");
 							continue;
 						}
 						#ifdef DEBUG
 							if (srcObject != nullptr) {
-								EWOL_VERBOSE("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
+								EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							} else {
-								EWOL_VERBOSE("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
+								EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							}
 						#endif
 						it.second(_data);
+					}
+					m_callInProgress--;
+					m_signalCallLeval--;
+					// Remove element in call phase:
+					if (m_someOneRemoveInCall == true) {
+						m_someOneRemoveInCall = false;
+						// Remove from the list :
+						auto it(m_callerList.begin());
+						while(it != m_callerList.end()) {
+							if (it->first.expired() == true) {
+								it = m_callerList.erase(it);
+							} else {
+								++it;
+							}
+						}
+					}
+					// add element in call phase:
+					if (m_callerListInCallback.size() > 0) {
+						for (auto &it : m_callerListInCallback) {
+							m_callerList.push_back(it);
+						}
+						m_callerListInCallback.clear();
 					}
 				}
 		};
@@ -149,6 +214,7 @@ namespace ewol {
 		template<> class Signal<void> : public SignalBase {
 			private:
 				std::vector<std::pair<std::weak_ptr<ewol::Object>, std::function<void()>>> m_callerList;
+				std::vector<std::pair<std::weak_ptr<ewol::Object>, std::function<void()>>> m_callerListInCallback;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
@@ -183,7 +249,11 @@ namespace ewol {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+					}
 				}
 				template<class TYPE, class TYPE2>
 				void bind1(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(TYPE2), TYPE2 _param1) {
@@ -192,7 +262,11 @@ namespace ewol {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1)));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1)));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1)));
+					}
 				}
 				template<class TYPE, class TYPE2, class TYPE3>
 				void bind2(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(TYPE2, TYPE2), TYPE2 _param1, TYPE3 _param2) {
@@ -201,7 +275,11 @@ namespace ewol {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
+					}
 				}
 				/**
 				 * @brief Advanced binding a callback function to the current signal.
@@ -210,7 +288,11 @@ namespace ewol {
 				 * @example signalXXXX.connect(shared_from_this(), std::bind(&ClassName::onCallbackXXX, this, std::placeholders::_1));
 				 */
 				void connect(std::shared_ptr<ewol::Object> _obj, std::function<void()> _function ) {
-					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+					if (m_callInProgress == 0) {
+						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+					} else {
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+					}
 				}
 				/**
 				 * @brief remove link on the signal.
@@ -218,39 +300,90 @@ namespace ewol {
 				 */
 				void release(std::shared_ptr<ewol::Object> _obj) {
 					auto it(m_callerList.begin());
-					while(it != m_callerList.end()) {
+					if (m_callInProgress == 0) {
+						// Remove from the list :
+						while(it != m_callerList.end()) {
+							if (it->first.lock() == _obj) {
+								EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "'");
+								it = m_callerList.erase(it);
+							} else {
+								++it;
+							}
+						}
+					} else {
+						// just remove weak poointer
+						while(it != m_callerList.end()) {
+							if (it->first.lock() == _obj) {
+								EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "' (delayed)");
+								it->first.reset();
+							} else {
+								++it;
+							}
+						}
+						m_someOneRemoveInCall = true;
+					}
+					// remove from add list in callback progress
+					it = m_callerListInCallback.begin();
+					while(it != m_callerListInCallback.end()) {
 						if (it->first.lock() == _obj) {
-							it = m_callerList.erase(it);
+							EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "' (notActive)");
+							it = m_callerListInCallback.erase(it);
 						} else {
 							++it;
 						}
 					}
 				}
 				void emit() {
+					m_callInProgress++;
+					m_signalCallLeval++;
 					#ifdef DEBUG
 						int32_t tmpID = m_uidSignal++;
 						ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
 						if (srcObject != nullptr) {
-							EWOL_VERBOSE("emit signal{" << tmpID << "} : " << srcObject->getObjectType() << " signal='" << m_name << "' BANG!!! to:");
+							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "emit signal{" << tmpID << "} : " << srcObject->getObjectType() << " signal='" << m_name << "' BANG!!! to: " << m_callerList.size() << " element(s)");
 						} else {
-							EWOL_VERBOSE("emit signal{" << tmpID << "} : signal='" << m_name << "' to:");
+							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' to: " << m_callerList.size() << " element(s)");
 						}
 					#endif
 					for (auto &it : m_callerList) {
 						std::shared_ptr<ewol::Object> destObject = it.first.lock();
 						if (destObject == nullptr) {
 							// TODO : Remove instance ...
-							EWOL_VERBOSE("    nullptr dest");
+							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "    nullptr dest");
 							continue;
 						}
 						#ifdef DEBUG
 							if (srcObject != nullptr) {
-								EWOL_VERBOSE("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
+								EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							} else {
-								EWOL_VERBOSE("     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
+								EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							}
 						#endif
 						it.second();
+					}
+					m_callInProgress--;
+					m_signalCallLeval--;
+					// Remove element in call phase:
+					if (m_someOneRemoveInCall == true) {
+						m_someOneRemoveInCall = false;
+						// Remove from the list :
+						auto it(m_callerList.begin());
+						while(it != m_callerList.end()) {
+							if (it->first.expired() == true) {
+								it = m_callerList.erase(it);
+							} else {
+								++it;
+							}
+						}
+					}
+					// add element in call phase:
+					if (m_callerListInCallback.size() > 0) {
+						for (auto &it : m_callerListInCallback) {
+							if (it.first.expired() == false) {
+								m_callerList.push_back(it);
+							}
+						}
+						m_callerListInCallback.clear();
 					}
 				}
 		};

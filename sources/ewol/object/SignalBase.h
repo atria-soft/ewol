@@ -18,10 +18,13 @@ namespace ewol {
 	namespace object {
 		class SignalBase {
 			protected:
+				static int32_t m_uidSignal;
+				static int32_t m_signalCallLeval;
 				ewol::object::SignalList& m_objectLink;
 				std::string m_name;
 				std::string m_description;
-				static int32_t m_uidSignal;
+				int32_t m_callInProgress;
+				bool m_someOneRemoveInCall;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
@@ -46,6 +49,7 @@ namespace ewol {
 				virtual void release(std::shared_ptr<ewol::Object> _obj) = 0;
 		};
 		std::ostream& operator <<(std::ostream& _os, const SignalBase& _obj);
+		const char* logIndent(int32_t _iii);
 	};
 };
 #endif
