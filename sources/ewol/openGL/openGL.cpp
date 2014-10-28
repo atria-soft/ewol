@@ -10,7 +10,7 @@
 #include <ewol/debug.h>
 #include <ewol/openGL/openGL.h>
 #include <mutex>
-
+//#define DIRECT_MODE
 /**
  * @brief get the draw mutex (ewol render).
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
@@ -117,7 +117,53 @@ void ewol::openGL::swap() {
 	
 }
 
-//#define DIRECT_MODE
+
+std::ostream& ewol::operator <<(std::ostream& _os, const enum openGL::openGlFlags& _obj) {
+	static std::vector<std::pair<enum openGL::openGlFlags, const char*>> list = {
+		std::make_pair(openGL::FLAG_BLEND, "FLAG_BLEND"),
+		std::make_pair(openGL::FLAG_CLIP_DISTANCE_I, "FLAG_CLIP_DISTANCE_I"),
+		std::make_pair(openGL::FLAG_COLOR_LOGIC_OP, "FLAG_COLOR_LOGIC_OP"),
+		std::make_pair(openGL::FLAG_CULL_FACE, "FLAG_CULL_FACE"),
+		std::make_pair(openGL::FLAG_DEBUG_OUTPUT, "FLAG_DEBUG_OUTPUT"),
+		std::make_pair(openGL::FLAG_DEBUG_OUTPUT_SYNCHRONOUS, "FLAG_DEBUG_OUTPUT_SYNCHRONOUS"),
+		std::make_pair(openGL::FLAG_DEPTH_CLAMP, "FLAG_DEPTH_CLAMP"),
+		std::make_pair(openGL::FLAG_DEPTH_TEST, "FLAG_DEPTH_TEST"),
+		std::make_pair(openGL::FLAG_DITHER, "FLAG_DITHER"),
+		std::make_pair(openGL::FLAG_FRAMEBUFFER_SRGB, "FLAG_FRAMEBUFFER_SRGB"),
+		std::make_pair(openGL::FLAG_LINE_SMOOTH, "FLAG_LINE_SMOOTH"),
+		std::make_pair(openGL::FLAG_MULTISAMPLE, "FLAG_MULTISAMPLE"),
+		std::make_pair(openGL::FLAG_POLYGON_OFFSET_FILL, "FLAG_POLYGON_OFFSET_FILL"),
+		std::make_pair(openGL::FLAG_POLYGON_OFFSET_LINE, "FLAG_POLYGON_OFFSET_LINE"),
+		std::make_pair(openGL::FLAG_POLYGON_OFFSET_POINT, "FLAG_POLYGON_OFFSET_POINT"),
+		std::make_pair(openGL::FLAG_POLYGON_SMOOTH, "FLAG_POLYGON_SMOOTH"),
+		std::make_pair(openGL::FLAG_PRIMITIVE_RESTART, "FLAG_PRIMITIVE_RESTART"),
+		std::make_pair(openGL::FLAG_PRIMITIVE_RESTART_FIXED_INDEX, "FLAG_PRIMITIVE_RESTART_FIXED_INDEX"),
+		std::make_pair(openGL::FLAG_SAMPLE_ALPHA_TO_COVERAGE, "FLAG_SAMPLE_ALPHA_TO_COVERAGE"),
+		std::make_pair(openGL::FLAG_SAMPLE_ALPHA_TO_ONE, "FLAG_SAMPLE_ALPHA_TO_ONE"),
+		std::make_pair(openGL::FLAG_SAMPLE_COVERAGE, "FLAG_SAMPLE_COVERAGE"),
+		std::make_pair(openGL::FLAG_SAMPLE_SHADING, "FLAG_SAMPLE_SHADING"),
+		std::make_pair(openGL::FLAG_SAMPLE_MASK, "FLAG_SAMPLE_MASK"),
+		std::make_pair(openGL::FLAG_SCISSOR_TEST, "FLAG_SCISSOR_TEST"),
+		std::make_pair(openGL::FLAG_STENCIL_TEST, "FLAG_STENCIL_TEST"),
+		std::make_pair(openGL::FLAG_PROGRAM_POINT_SIZE, "FLAG_PROGRAM_POINT_SIZE"),
+		std::make_pair(openGL::FLAG_TEXTURE_2D, "FLAG_TEXTURE_2D"),
+		std::make_pair(openGL::FLAG_ALPHA_TEST, "FLAG_ALPHA_TEST"),
+		std::make_pair(openGL::FLAG_FOG, "FLAG_FOG")
+	};
+	_os << "{";
+	bool hasOne = false;
+	for (auto &it : list) {
+		if ((_obj & it.first) != 0) {
+			if (hasOne==true) {
+				_os << ",";
+			}
+			_os << it.second;
+			hasOne = true;
+		}
+	}
+	_os << "}";
+	return _os;
+}
 
 typedef struct {
 	uint32_t curentFlag;
@@ -182,8 +228,19 @@ static correspondenceTable_ts basicFlag[] = {
 };
 static int32_t basicFlagCount = sizeof(basicFlag) / sizeof(correspondenceTable_ts);
 
+void ewol::openGL::reset() {
+	#ifdef DIRECT_MODE
+		EWOL_TODO("...");
+	#else
+		l_flagsMustBeSet = 0;
+		l_programId = -1;
+		l_textureflags = 0;
+		updateAllFlags();
+	#endif
+}
 
 void ewol::openGL::enable(enum ewol::openGL::openGlFlags _flagID) {
+	//EWOL_INFO("Enable : " << _flagID);
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {
@@ -198,6 +255,7 @@ void ewol::openGL::enable(enum ewol::openGL::openGlFlags _flagID) {
 }
 
 void ewol::openGL::disable(enum ewol::openGL::openGlFlags _flagID) {
+	//EWOL_INFO("Disable : " << _flagID);
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {
@@ -217,16 +275,19 @@ void ewol::openGL::updateAllFlags() {
 	#endif
 	// check if fhags has change :
 	if (l_flagsMustBeSet == l_flagsCurrent ) {
+		//EWOL_INFO("real flag set : " << l_flagsMustBeSet << " " << l_flagsCurrent);
 		return;
 	}
-	//EWOL_DEBUG("             == >" << l_flagsMustBeSet);
+	//EWOL_INFO("real flag set : " << l_flagsMustBeSet);
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		uint32_t CurrentFlag = basicFlag[iii].curentFlag;
 		if ( (l_flagsMustBeSet&CurrentFlag)!=(l_flagsCurrent&CurrentFlag) ) {
 			if ( (l_flagsMustBeSet&CurrentFlag) != 0) {
 				glEnable(basicFlag[iii].OGlFlag);
+				//EWOL_INFO("    enable : " << basicFlag[iii].OGlFlag);
 			} else {
 				glDisable(basicFlag[iii].OGlFlag);
+				//EWOL_INFO("    disable : " << basicFlag[iii].OGlFlag);
 			}
 		}
 	}

@@ -178,7 +178,9 @@ namespace ewol {
 		 * @param[in] id Id of the program that might be used
 		 */
 		void useProgram(int32_t _id);
+		void reset();
 	};
+	std::ostream& operator <<(std::ostream& _os, const enum openGL::openGlFlags& _obj);
 };
 
 
