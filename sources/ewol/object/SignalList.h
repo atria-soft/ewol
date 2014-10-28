@@ -44,7 +44,7 @@ namespace ewol {
 				 * @brief Remove binding on all event class.
 				 * @param[in] _object Object to unlink.
 				 */
-				void unBindAll(const std::shared_ptr<ewol::Object>& _object);
+				void unBindAll(const std::shared_ptr<void>& _object);
 		};
 	};
 };

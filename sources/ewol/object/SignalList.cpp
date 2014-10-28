@@ -40,7 +40,7 @@ std::vector<std::string> ewol::object::SignalList::signalGetAll() const {
 	return out;
 }
 
-void ewol::object::SignalList::unBindAll(const std::shared_ptr<ewol::Object>& _object) {
+void ewol::object::SignalList::unBindAll(const std::shared_ptr<void>& _object) {
 	if (_object == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;

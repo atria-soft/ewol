@@ -46,7 +46,7 @@ namespace ewol {
 				const std::string& getDescription() const {
 					return m_description;
 				}
-				virtual void release(std::shared_ptr<ewol::Object> _obj) = 0;
+				virtual void release(std::shared_ptr<void> _obj) = 0;
 		};
 		std::ostream& operator <<(std::ostream& _os, const SignalBase& _obj);
 		const char* logIndent(int32_t _iii);

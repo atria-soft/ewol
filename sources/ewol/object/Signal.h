@@ -22,9 +22,9 @@ namespace ewol {
 		#define __class__ "object::Signal<T>"
 		template<typename T> class Signal : public SignalBase {
 			private:
-				std::vector<std::pair<std::weak_ptr<ewol::Object>,
+				std::vector<std::pair<std::weak_ptr<void>,
 				                      std::function<void(const T&)>>> m_callerList; // current list of binded element
-				std::vector<std::pair<std::weak_ptr<ewol::Object>,
+				std::vector<std::pair<std::weak_ptr<void>,
 				                      std::function<void(const T&)>>> m_callerListInCallback; // temporaty list (when add one in call process)
 			public:
 				/**
@@ -63,44 +63,44 @@ namespace ewol {
 					m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, args2)));
 				}
 				*/
-				template<class TYPE>
-				void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&)) {
+				template<class TYPE_CLASS, class TYPE>
+				void bind(std::shared_ptr<TYPE_CLASS> _obj, void (TYPE::*_func)(const T&)) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1)));
 					}
 				}
 				// TODO : Rework this when I understand the use of variadic template with std::function
-				template<class TYPE, typename TYPE2>
-				void bind1(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&, const TYPE2&), TYPE2 _param1) {
+				template<class TYPE_CLASS, class TYPE, typename TYPE2>
+				void bind1(std::shared_ptr<TYPE_CLASS> _obj, void (TYPE::*_func)(const T&, const TYPE2&), TYPE2 _param1) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1)));
 					}
 				}
-				template<class TYPE, typename TYPE2, typename TYPE3>
-				void bind2(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(const T&, const TYPE2&, const TYPE3&), TYPE2 _param1, TYPE3 _param2) {
+				template<class TYPE_CLASS, class TYPE, typename TYPE2, typename TYPE3>
+				void bind2(std::shared_ptr<TYPE_CLASS> _obj, void (TYPE::*_func)(const T&, const TYPE2&, const TYPE3&), TYPE2 _param1, TYPE3 _param2) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), std::placeholders::_1, _param1, _param2)));
 					}
 				}
 				/**
@@ -109,18 +109,18 @@ namespace ewol {
 				 * @param[in] _func functor to call (do it yourself)
 				 * @example signalXXXX.connect(shared_from_this(), std::bind(&ClassName::onCallbackXXX, this, std::placeholders::_1));
 				 */
-				void connect(std::shared_ptr<ewol::Object> _obj, std::function<void(const T&)> _function ) {
+				void connect(std::shared_ptr<void> _obj, std::function<void(const T&)> _function ) {
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), _function));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), _function));
 					}
 				}
 				/**
 				 * @brief remove link on the signal.
 				 * @param[in] _obj shared pointer on the removing object
 				 */
-				void release(std::shared_ptr<ewol::Object> _obj) {
+				void release(std::shared_ptr<void> _obj) {
 					if (m_callInProgress == 0) {
 						// Remove from the list :
 						auto it(m_callerList.begin());
@@ -160,7 +160,7 @@ namespace ewol {
 				void emit(const T& _data) {
 					m_signalCallLeval++;
 					m_callInProgress++;
-					#ifdef DEBUG
+					#if 0
 						int32_t tmpID = m_uidSignal++;
 						ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
 						if (srcObject != nullptr) {
@@ -170,13 +170,13 @@ namespace ewol {
 						}
 					#endif
 					for (auto &it : m_callerList) {
-						std::shared_ptr<ewol::Object> destObject = it.first.lock();
+						std::shared_ptr<void> destObject = it.first.lock();
 						if (destObject == nullptr) {
 							// TODO : Remove instance ...
 							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "    nullptr dest");
 							continue;
 						}
-						#ifdef DEBUG
+						#if 0
 							if (srcObject != nullptr) {
 								EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							} else {
@@ -216,8 +216,8 @@ namespace ewol {
 		#define __class__ "object::Signal<void>"
 		template<> class Signal<void> : public SignalBase {
 			private:
-				std::vector<std::pair<std::weak_ptr<ewol::Object>, std::function<void()>>> m_callerList;
-				std::vector<std::pair<std::weak_ptr<ewol::Object>, std::function<void()>>> m_callerListInCallback;
+				std::vector<std::pair<std::weak_ptr<void>, std::function<void()>>> m_callerList;
+				std::vector<std::pair<std::weak_ptr<void>, std::function<void()>>> m_callerListInCallback;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
@@ -245,43 +245,43 @@ namespace ewol {
 				 * @param[in] _func Link on the fuction that might be called (inside a class)
 				 * @example signalXXXX.connect(shared_from_this(), &ClassName::onCallbackXXX);
 				 */
-				template<class TYPE>
-				void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+				template<class TYPE_CLASS, class TYPE>
+				void bind(std::shared_ptr<TYPE_CLASS> _obj, void (TYPE::*_func)()) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get())));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get())));
 					}
 				}
-				template<class TYPE, class TYPE2>
-				void bind1(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(TYPE2), TYPE2 _param1) {
+				template<class TYPE_CLASS, class TYPE, class TYPE2>
+				void bind1(std::shared_ptr<TYPE_CLASS> _obj, void (TYPE::*_func)(TYPE2), TYPE2 _param1) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1)));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), _param1)));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1)));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), _param1)));
 					}
 				}
-				template<class TYPE, class TYPE2, class TYPE3>
-				void bind2(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(TYPE2, TYPE3), TYPE2 _param1, TYPE3 _param2) {
+				template<class TYPE_CLASS, class TYPE, class TYPE2, class TYPE3>
+				void bind2(std::shared_ptr<TYPE_CLASS> _obj, void (TYPE::*_func)(TYPE2, TYPE3), TYPE2 _param1, TYPE3 _param2) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
 						return;
 					}
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), std::bind(_func, obj2.get(), _param1, _param2)));
 					}
 				}
 				/**
@@ -290,24 +290,24 @@ namespace ewol {
 				 * @param[in] _func functor to call (do it yourself)
 				 * @example signalXXXX.connect(shared_from_this(), std::bind(&ClassName::onCallbackXXX, this, std::placeholders::_1));
 				 */
-				void connect(std::shared_ptr<ewol::Object> _obj, std::function<void()> _function ) {
+				void connect(std::shared_ptr<void> _obj, std::function<void()> _function ) {
 					if (m_callInProgress == 0) {
-						m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+						m_callerList.push_back(std::make_pair(std::weak_ptr<void>(_obj), _function));
 					} else {
-						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), _function));
+						m_callerListInCallback.push_back(std::make_pair(std::weak_ptr<void>(_obj), _function));
 					}
 				}
 				/**
 				 * @brief remove link on the signal.
 				 * @param[in] _obj shared pointer on the removing object
 				 */
-				void release(std::shared_ptr<ewol::Object> _obj) {
+				void release(std::shared_ptr<void> _obj) {
 					auto it(m_callerList.begin());
 					if (m_callInProgress == 0) {
 						// Remove from the list :
 						while(it != m_callerList.end()) {
 							if (it->first.lock() == _obj) {
-								EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "'");
+								//EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "'");
 								it = m_callerList.erase(it);
 							} else {
 								++it;
@@ -317,7 +317,7 @@ namespace ewol {
 						// just remove weak poointer
 						while(it != m_callerList.end()) {
 							if (it->first.lock() == _obj) {
-								EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "' (delayed)");
+								//EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "' (delayed)");
 								it->first.reset();
 							} else {
 								++it;
@@ -329,7 +329,7 @@ namespace ewol {
 					it = m_callerListInCallback.begin();
 					while(it != m_callerListInCallback.end()) {
 						if (it->first.lock() == _obj) {
-							EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "' (notActive)");
+							//EWOL_DEBUG(" unbind : " << _obj->getObjectType() << " signal='" << m_name << "' (notActive)");
 							it = m_callerListInCallback.erase(it);
 						} else {
 							++it;
@@ -339,7 +339,7 @@ namespace ewol {
 				void emit() {
 					m_callInProgress++;
 					m_signalCallLeval++;
-					#ifdef DEBUG
+					#if 0
 						int32_t tmpID = m_uidSignal++;
 						ewol::Object* srcObject = dynamic_cast<ewol::Object*>(&m_objectLink);
 						if (srcObject != nullptr) {
@@ -349,13 +349,13 @@ namespace ewol {
 						}
 					#endif
 					for (auto &it : m_callerList) {
-						std::shared_ptr<ewol::Object> destObject = it.first.lock();
+						std::shared_ptr<void> destObject = it.first.lock();
 						if (destObject == nullptr) {
 							// TODO : Remove instance ...
 							EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "    nullptr dest");
 							continue;
 						}
-						#ifdef DEBUG
+						#if 0
 							if (srcObject != nullptr) {
 								EWOL_DEBUG(ewol::object::logIndent(m_signalCallLeval-1) << "     signal{" << tmpID << "} : [" << destObject->getId() << "]" << destObject->getObjectType());
 							} else {
