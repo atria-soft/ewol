@@ -34,13 +34,8 @@
 
 ewol::widget::Manager::Manager() :
   m_havePeriodic(false),
-  m_haveRedraw(true),
-  m_applWakeUpTime(0),
-  m_lastPeriodicCallTime(0) {
+  m_haveRedraw(true) {
 	EWOL_DEBUG(" == > init Widget-Manager");
-	// set the basic time properties :
-	m_applWakeUpTime = ewol::getTime();
-	m_lastPeriodicCallTime = ewol::getTime();
 	
 	ewol::widget::Button::createManagerWidget(*this);
 	ewol::widget::ButtonColor::createManagerWidget(*this);
@@ -68,7 +63,6 @@ ewol::widget::Manager::~Manager() {
 	focusSetDefault(nullptr);
 	focusRelease();
 	
-	m_listOfPeriodicWidget.clear();
 	m_creatorList.clear();
 }
 
@@ -163,53 +157,7 @@ void ewol::widget::Manager::focusRemoveIfRemove(const std::shared_ptr<ewol::Widg
 	}
 }
 
-void ewol::widget::Manager::periodicCallAdd(const std::shared_ptr<ewol::Widget>& _pWidget) {
-	if (_pWidget == nullptr) {
-		return;
-	}
-	m_havePeriodic = true;
-	for (auto &it : m_listOfPeriodicWidget) {
-		if (it.lock() == _pWidget) {
-			return;
-		}
-	}
-	for (auto &it : m_listOfPeriodicWidget) {
-		if (it.expired() == true) {
-			it = _pWidget;
-			return;
-		}
-	}
-	m_listOfPeriodicWidget.push_back(_pWidget);
-}
-
-void ewol::widget::Manager::periodicCallRm(const std::shared_ptr<ewol::Widget>& _pWidget) {
-	for (auto &it : m_listOfPeriodicWidget) {
-		if (it.lock() == _pWidget) {
-			it.reset();
-		}
-	}
-	periodicCallUpdateCount();
-}
-
-void ewol::widget::Manager::periodicCallUpdateCount() {
-	int32_t nbElement = 0;
-	for (auto &it : m_listOfPeriodicWidget) {
-		if (it.expired() == false) {
-			nbElement++;
-		}
-	}
-	if (0 == nbElement) {
-		m_havePeriodic = false;
-	} else {
-		m_havePeriodic = true;
-	}
-}
-
-
-void ewol::widget::Manager::periodicCallResume(int64_t _localTime) {
-	m_lastPeriodicCallTime = _localTime;
-}
-
+/*
 void ewol::widget::Manager::periodicCall(int64_t _localTime) {
 	int64_t previousTime = m_lastPeriodicCallTime;
 	m_lastPeriodicCallTime = _localTime;
@@ -246,10 +194,8 @@ void ewol::widget::Manager::periodicCall(int64_t _localTime) {
 		}
 	}
 }
+*/
 
-bool ewol::widget::Manager::periodicCallHave() {
-	return m_havePeriodic;
-}
 
 void ewol::widget::Manager::markDrawingIsNeeded() {
 	m_haveRedraw = true;

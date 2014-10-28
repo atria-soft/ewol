@@ -16,8 +16,14 @@
 #define __class__ "ewol::object::Manager"
 
 ewol::object::Manager::Manager(ewol::Context& _context) :
-  m_context(_context) {
+  m_context(_context),
+  periodicCall(*this, "periodic", "Call every time system render"),
+  m_applWakeUpTime(0),
+  m_lastPeriodicCallTime(0) {
 	EWOL_DEBUG(" == > init Object-Manager");
+	// set the basic time properties :
+	m_applWakeUpTime = ewol::getTime();
+	m_lastPeriodicCallTime = ewol::getTime();
 }
 
 ewol::object::Manager::~Manager() {
@@ -122,4 +128,23 @@ void ewol::object::Manager::workerRemove(const std::shared_ptr<ewol::Object>& _w
 			++it;
 		}
 	}
+}
+
+void ewol::object::Manager::timeCall(int64_t _localTime) {
+	int64_t previousTime = m_lastPeriodicCallTime;
+	m_lastPeriodicCallTime = _localTime;
+	if (periodicCall.getNumberConnected() <= 0) {
+		return;
+	}
+	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
+	ewol::event::Time myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
+	periodicCall.emit(myTime);
+}
+
+void ewol::object::Manager::timeCallResume(int64_t _localTime) {
+	m_lastPeriodicCallTime = _localTime;
+}
+
+bool ewol::object::Manager::timeCallHave() {
+	return periodicCall.getNumberConnected() > 0;
 }

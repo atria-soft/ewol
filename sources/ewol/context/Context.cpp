@@ -592,7 +592,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			}
 		}
 		// call all the widget that neded to do something periodicly
-		m_widgetManager.periodicCall(currentTime);
+		m_objectManager.timeCall(currentTime);
 		// check if the user selected a windows
 		if (nullptr != m_windowsCurrent) {
 			// Redraw all needed elements
@@ -731,7 +731,7 @@ void ewol::Context::OS_Resume() {
 	lockContext();
 	EWOL_INFO("OS_Resume...");
 	m_previousDisplayTime = ewol::getTime();
-	m_widgetManager.periodicCallResume(m_previousDisplayTime);
+	m_objectManager.timeCallResume(m_previousDisplayTime);
 	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateResume();
 	}

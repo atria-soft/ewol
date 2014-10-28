@@ -208,6 +208,9 @@ namespace ewol {
 						m_callerListInCallback.clear();
 					}
 				}
+				size_t getNumberConnected() {
+					return m_callerList.size();
+				}
 		};
 		#undef __class__
 		#define __class__ "object::Signal<void>"
@@ -269,7 +272,7 @@ namespace ewol {
 					}
 				}
 				template<class TYPE, class TYPE2, class TYPE3>
-				void bind2(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(TYPE2, TYPE2), TYPE2 _param1, TYPE3 _param2) {
+				void bind2(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)(TYPE2, TYPE3), TYPE2 _param1, TYPE3 _param2) {
 					std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 					if (obj2 == nullptr) {
 						EWOL_ERROR("Can not bind signal ...");
@@ -385,6 +388,9 @@ namespace ewol {
 						}
 						m_callerListInCallback.clear();
 					}
+				}
+				size_t getNumberConnected() {
+					return m_callerList.size();
 				}
 		};
 		#undef __class__

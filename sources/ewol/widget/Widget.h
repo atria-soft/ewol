@@ -472,41 +472,17 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- periodic call Area
 		// ----------------------------------------------------------------------------------------------------------------
-		private:
-			int64_t m_periodicCallDeltaTime; //!< -1 : disable / 0 : every time / else in US
-			int64_t m_periodicCallTime; //!< Last call time
 		protected:
+			// TODO : Remove this API ==> deprecated since 28/10/2014
 			/**
 			 * @brief disable the periodic call.
 			 */
 			void periodicCallDisable();
 			/**
 			 * @brief disable the periodic call.
-			 * @param[in] _callInSecond periodic call in second (float)
 			 */
-			void periodicCallEnable(float _callInSecond=0);
+			void periodicCallEnable();
 		public:
-			/**
-			 * @brief {SYSTEM} get a reference of the periodic call delta time
-			 * @return the perodic time delta call -1 : disable / 0 : every time / else in US
-			 */
-			int64_t systemGetCallDeltaTime() const {
-				return m_periodicCallDeltaTime;
-			};
-			/**
-			 * @brief {SYSTEM} get a reference of the periodic call time
-			 * @return Last call from the periodic call
-			 */
-			int64_t systemGetLastCallTime() const {
-				return m_periodicCallTime;
-			};
-			/**
-			 * @brief {SYSTEM} get a reference of the periodic call time
-			 * @return Last call from the periodic call
-			 */
-			void systemSetLastCallTime(int64_t _time) {
-				m_periodicCallTime=_time;
-			};
 			/**
 			 * @brief periodic call of this widget
 			 * @param _event Current time property

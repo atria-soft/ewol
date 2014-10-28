@@ -92,6 +92,7 @@ void ewol::widget::Button::onRegenerateDisplay() {
 	                  m_size,
 	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
 	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
+	//EWOL_ERROR("pos=" << m_origin << " size=" << m_size);
 }
 
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
