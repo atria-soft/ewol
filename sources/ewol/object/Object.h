@@ -29,7 +29,7 @@ namespace ewol {
 #include <ewol/object/Param.h>
 #include <ewol/object/ParamRange.h>
 #include <ewol/object/ParamList.h>
-#include <ewol/object/SignalList.h>
+#include <ewol/signal/List.h>
 
 #define DECLARE_FACTORY(className) \
 	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
@@ -52,7 +52,7 @@ namespace ewol {
 	 */
 	class Object : public std::enable_shared_from_this<Object>,
 	               public ewol::object::ParameterList,
-	               public ewol::object::SignalList {
+	               public ewol::signal::List {
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
@@ -222,32 +222,16 @@ namespace ewol {
 			/**
 			 * @brief link on an signal in the subwiget with his name
 			 */
-			#define subBind(_type, _name, _event, _obj, _func) do {\
+			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
 				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
-					myObject->_event.bind(_obj, _func); \
-				} else { \
-					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
-				} \
-			} while (false)
-			#define subBind1(_type, _name, _event, _obj, _func, _param1) do {\
-				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
-				if (myObject != nullptr) { \
-					myObject->_event.bind1(_obj, _func, _param1); \
-				} else { \
-					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
-				} \
-			} while (false)
-			#define subBind2(_type, _name, _event, _obj, _func, _param1, _param2) do {\
-				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
-				if (myObject != nullptr) { \
-					myObject->_event.bind2(_obj, _func, _param1, _param2); \
+					myObject->_event.bind(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
 					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
 			} while (false)
 			/*
-			template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+			template<class TYPE> void subBind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
 				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 				if (obj2 == nullptr) {
 					EWOL_ERROR("Can not bind signal ...");
@@ -263,10 +247,10 @@ namespace ewol {
 /**
  * @brief link on an signal in the global object list with his name
  */
-#define globalBind(_type, _name, _event, _obj, _func) do {\
+#define globalBind(_type, _name, _event, _obj, _func, ...) do {\
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
-		myObject->_event.bind(_obj, _func); \
+		myObject->_event.bind(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
@@ -275,15 +259,15 @@ namespace ewol {
 /**
  * @brief link on an signal in the subWidget of an object with his name
  */
-#define externSubBind(_object, _type, _name, _event, _obj, _func) do {\
+#define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
-		myObject->_event.bind(_obj, _func); \
+		myObject->_event.bind(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
-//#include <ewol/object/Signal.h>
+//#include <ewol/signal/Signal.h>
 
 #endif
 

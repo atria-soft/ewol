@@ -14,7 +14,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -24,7 +24,7 @@ namespace ewol {
 		class Slider : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::object::Signal<float> signalChange;
+				ewol::Signal<float> signalChange;
 			protected:
 				Slider();
 				void init();

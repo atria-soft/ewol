@@ -9,18 +9,18 @@
 #ifndef __EWOL_SIGNAL_BASE_H__
 #define __EWOL_SIGNAL_BASE_H__
 
-#include <ewol/object/SignalList.h>
-#include <ewol/object/SignalBase.h>
-#include <ewol/object/Object.h>
+#include <ewol/signal/List.h>
 
 
 namespace ewol {
-	namespace object {
-		class SignalBase {
+	namespace signal {
+		class Base {
 			protected:
-				static int32_t m_uidSignal;
-				static int32_t m_signalCallLeval;
-				ewol::object::SignalList& m_objectLink;
+				#ifdef DEBUG
+					static int32_t m_uidSignal;
+					static int32_t m_signalCallLevel;
+				#endif
+				ewol::signal::List& m_signalLink;
 				std::string m_name;
 				std::string m_description;
 				int32_t m_callInProgress;
@@ -28,17 +28,17 @@ namespace ewol {
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
-				 * @param[in] _objectLink reference on the parameter lister.
+				 * @param[in] _signalListLink reference on the signal list.
 				 * @param[in] _name Static name of the parameter.
 				 * @param[in] _description description of the parameter.
 				 */
-				SignalBase(ewol::object::SignalList& _objectLink,
+				Base(ewol::signal::List& _signalListLink,
 				           const std::string& _name,
 				           const std::string& _description = "");
 				/**
 				 * @brief Destructor.
 				 */
-				virtual ~SignalBase() { };
+				virtual ~Base() { };
 				
 				const std::string& getName() const {
 					return m_name;
@@ -48,7 +48,7 @@ namespace ewol {
 				}
 				virtual void release(std::shared_ptr<void> _obj) = 0;
 		};
-		std::ostream& operator <<(std::ostream& _os, const SignalBase& _obj);
+		std::ostream& operator <<(std::ostream& _os, const ewol::signal::Base& _obj);
 		const char* logIndent(int32_t _iii);
 	};
 };

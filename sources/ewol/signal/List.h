@@ -14,27 +14,27 @@
 #include <map>
 
 namespace ewol {
-	namespace object {
-		class SignalBase;
-		class SignalList {
-			friend class ewol::object::SignalBase; // to register parameter in the list.
+	namespace signal {
+		class Base;
+		class List {
+			friend class ewol::signal::Base; // to register parameter in the list.
 			private:
-				std::vector<ewol::object::SignalBase*> m_list;  //!< list of availlable Parameters
+				std::vector<ewol::signal::Base*> m_list;  //!< list of availlable Parameters
 			public:
 				/**
 				 * @brief Constructor.
 				 */
-				SignalList();
+				List();
 				/**
 				 * @brief Destructor.
 				 */
-				virtual ~SignalList();
+				~List();
 				/**
 				 * @brief Register a parameter class pointer in the List of parameters
 				 * @note This class does not destroy the parameter pointer!!!
 				 * @param[in] pointerOnParameter Pointer on the parameter that might be added.
 				 */
-				void signalAdd(SignalBase* _pointerOnParameter);
+				void signalAdd(ewol::signal::Base* _pointerOnParameter);
 				/**
 				 * @brief Get All the signal list:
 				 * @return vector on all the signals names
@@ -42,9 +42,9 @@ namespace ewol {
 				std::vector<std::string> signalGetAll() const;
 				/**
 				 * @brief Remove binding on all event class.
-				 * @param[in] _object Object to unlink.
+				 * @param[in] _sharedPtr sharedPtr to unlink (no type needed ...).
 				 */
-				void unBindAll(const std::shared_ptr<void>& _object);
+				void signalUnBindAll(const std::shared_ptr<void>& _sharedPtr);
 		};
 	};
 };

@@ -18,7 +18,7 @@
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -34,9 +34,9 @@ namespace ewol {
 		 */
 		class Entry : public ewol::Widget {
 			public:
-				ewol::object::Signal<void> signalClick; //!< bang on click the entry box
-				ewol::object::Signal<std::string> signalEnter; //!< Enter key is pressed
-				ewol::object::Signal<std::string> signalModify; //!< data change
+				ewol::Signal<void> signalClick; //!< bang on click the entry box
+				ewol::Signal<std::string> signalEnter; //!< Enter key is pressed
+				ewol::Signal<std::string> signalModify; //!< data change
 			private:
 				ewol::object::Param<ewol::compositing::Shaper> m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground

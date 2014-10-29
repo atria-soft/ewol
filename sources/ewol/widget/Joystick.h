@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <draw/Color.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 
 namespace ewol {
@@ -24,9 +24,9 @@ namespace ewol {
 		class Joystick :public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::object::Signal<void> signalEnable;
-				ewol::object::Signal<void> signalDisable;
-				ewol::object::Signal<vec2> signalMove;
+				ewol::Signal<void> signalEnable;
+				ewol::Signal<void> signalDisable;
+				ewol::Signal<vec2> signalMove;
 			public:
 				enum joystickMode {
 					modeNormal,

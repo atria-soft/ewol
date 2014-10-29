@@ -93,9 +93,12 @@ def create(target):
 		'ewol/object/Worker.cpp',
 		'ewol/object/Parameter.cpp',
 		'ewol/object/ParameterList.cpp',
-		'ewol/object/ParamList.cpp',
-		'ewol/object/SignalList.cpp',
-		'ewol/object/SignalBase.cpp'
+		'ewol/object/ParamList.cpp'
+		])
+	# object :
+	myModule.add_src_file([
+		'ewol/signal/List.cpp',
+		'ewol/signal/Base.cpp'
 		])
 	
 	# OpenGL interface :

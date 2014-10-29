@@ -17,7 +17,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 
 
@@ -30,12 +30,12 @@ namespace ewol {
 		class Button : public ewol::widget::Container2 {
 			public:
 				// Event list of properties
-				ewol::object::Signal<void> signalPressed;
-				ewol::object::Signal<void> signalDown;
-				ewol::object::Signal<void> signalUp;
-				ewol::object::Signal<void> signalEnter;
-				ewol::object::Signal<void> signalLeave;
-				ewol::object::Signal<bool> signalValue;
+				ewol::Signal<void> signalPressed;
+				ewol::Signal<void> signalDown;
+				ewol::Signal<void> signalUp;
+				ewol::Signal<void> signalEnter;
+				ewol::Signal<void> signalLeave;
+				ewol::Signal<bool> signalValue;
 				enum buttonLock{
 					lockNone, //!< normal status of the button
 					lockWhenPressed, //!< When the state is set in pressed, the status stay in this one

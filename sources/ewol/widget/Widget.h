@@ -31,7 +31,7 @@ namespace ewol {
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
 #include <ewol/translate.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
@@ -558,7 +558,7 @@ namespace ewol {
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
 		public:
-			ewol::object::Signal<std::string> signalShortcut; //!< signal handle of the message
+			ewol::Signal<std::string> signalShortcut; //!< signal handle of the message
 		private:
 			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
@@ -684,9 +684,9 @@ namespace ewol {
 		 */
 		public:
 			// event generated :
-			ewol::object::Signal<void> signalAnnimationStart; //!< event when start annimation
-			ewol::object::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
-			ewol::object::Signal<void> signalAnnimationStop;  //!< event when stop annimation
+			ewol::Signal<void> signalAnnimationStart; //!< event when start annimation
+			ewol::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
+			ewol::Signal<void> signalAnnimationStop;  //!< event when stop annimation
 		protected:
 			enum annimationMode {
 				annimationModeEnableAdd,

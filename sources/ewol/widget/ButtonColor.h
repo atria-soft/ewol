@@ -17,14 +17,14 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 namespace ewol {
 	namespace widget {
 		class ButtonColor : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::object::Signal<etk::Color<>> signalChange;
+				ewol::Signal<etk::Color<>> signalChange;
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
