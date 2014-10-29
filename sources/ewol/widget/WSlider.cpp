@@ -270,7 +270,7 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 		}
 	}
 }
-void ewol::widget::WSlider::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::WSlider::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::ContainerN::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_selectNewWidget) {
 		if (m_selectNewWidget.get() != "") {

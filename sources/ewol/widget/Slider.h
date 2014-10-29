@@ -32,7 +32,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				virtual ~Slider();
 			protected:
-				ewol::object::Param<float> m_value; //!< current value of the Slider
+				ewol::parameter::Value<float> m_value; //!< current value of the Slider
 			public:
 				/**
 				 * @brief Set the value of the slider.
@@ -49,7 +49,7 @@ namespace ewol {
 					return m_value;
 				}
 			protected:
-				ewol::object::Param<float> m_min; //!< minimum value of the slider
+				ewol::parameter::Value<float> m_min; //!< minimum value of the slider
 			public:
 				/**
 				 * @brief Set the minumum value of the slider.
@@ -66,7 +66,7 @@ namespace ewol {
 					return m_min;
 				}
 			protected:
-				ewol::object::Param<float> m_max; //!< maximum value of the slider
+				ewol::parameter::Value<float> m_max; //!< maximum value of the slider
 			public:
 				/**
 				 * @brief Set the maximum value of the slider.
@@ -83,7 +83,7 @@ namespace ewol {
 					return m_max;
 				}
 			protected:
-				ewol::object::Param<float> m_step;
+				ewol::parameter::Value<float> m_step;
 			public:
 				/**
 				 * @brief Set the step value of the slider.
@@ -114,7 +114,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};
 	};
 };

@@ -15,6 +15,13 @@
 #include <mutex>
 #include <memory>
 
+#include <ewol/debug.h>
+#include <ewol/parameter/Interface.h>
+#include <ewol/parameter/Value.h>
+#include <ewol/parameter/Range.h>
+#include <ewol/parameter/List.h>
+#include <ewol/signal/List.h>
+
 namespace ewol {
 	// some class need to define element befor other ...
 	class Object;
@@ -23,13 +30,6 @@ namespace ewol {
 	};
 	class Context;
 };
-
-#include <ewol/debug.h>
-#include <ewol/object/ParameterList.h>
-#include <ewol/object/Param.h>
-#include <ewol/object/ParamRange.h>
-#include <ewol/object/ParamList.h>
-#include <ewol/signal/List.h>
 
 #define DECLARE_FACTORY(className) \
 	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
@@ -51,7 +51,7 @@ namespace ewol {
 	 * this class mermit at every Object to communicate between them.
 	 */
 	class Object : public std::enable_shared_from_this<Object>,
-	               public ewol::object::ParameterList,
+	               public ewol::parameter::Interface,
 	               public ewol::signal::List {
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
@@ -145,7 +145,7 @@ namespace ewol {
 			// TODO : Rework the position on this function ... This is a convignent function ...
 			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		protected:
-			ewol::object::Param<std::string> m_name; //!< name of the element ...
+			ewol::parameter::Value<std::string> m_name; //!< name of the element ...
 		public:
 			/**
 			 * @brief get the Object name

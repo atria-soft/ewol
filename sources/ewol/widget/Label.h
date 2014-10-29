@@ -28,7 +28,7 @@ namespace ewol {
 				ewol::Signal<void> signalPressed;
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
-				ewol::object::Param<std::u32string> m_label; //!< decorated text to display.
+				ewol::parameter::Value<std::u32string> m_label; //!< decorated text to display.
 				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
@@ -69,7 +69,7 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

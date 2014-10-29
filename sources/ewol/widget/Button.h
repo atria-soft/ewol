@@ -43,7 +43,7 @@ namespace ewol {
 					lockAccess, //!< all event are trashed  == > acctivity of the button is disable
 				};
 			private:
-				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+				ewol::parameter::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
@@ -65,7 +65,7 @@ namespace ewol {
 					m_shaper.setString(_shaperName);
 				}
 			protected:
-				ewol::object::Param<bool> m_value; //!< Current state of the button.
+				ewol::parameter::Value<bool> m_value; //!< Current state of the button.
 			public:
 				/**
 				 * @brief set the currentValue of the Button (pressed or not)
@@ -84,7 +84,7 @@ namespace ewol {
 					return m_value;
 				};
 			protected:
-				ewol::object::ParamList<enum buttonLock> m_lock; //!< Current lock state of the button.
+				ewol::parameter::List<enum buttonLock> m_lock; //!< Current lock state of the button.
 			public:
 				/**
 				 * @brief set the button lock state.
@@ -101,7 +101,7 @@ namespace ewol {
 					return m_lock;
 				};
 			protected:
-				ewol::object::Param<bool> m_toggleMode; //!< The button is able to toggle.
+				ewol::parameter::Value<bool> m_toggleMode; //!< The button is able to toggle.
 			public:
 				/**
 				 * @brief change the toggle mode.
@@ -118,7 +118,7 @@ namespace ewol {
 					return m_toggleMode;
 				};
 			protected:
-				ewol::object::Param<bool> m_enableSingle; //!< When a single subwidget is set display all time it.
+				ewol::parameter::Value<bool> m_enableSingle; //!< When a single subwidget is set display all time it.
 			public:
 				/**
 				 * @brief Chane the display single widget mode availlable.
@@ -152,7 +152,7 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void calculateSize(const vec2& _availlable);

@@ -51,7 +51,7 @@ namespace ewol {
 				 */
 				void set(const std::string& _file, const ewol::Dimension& _border);
 			protected:
-				ewol::object::Param<std::string> m_fileName; //!< file name of the image.
+				ewol::parameter::Value<std::string> m_fileName; //!< file name of the image.
 			public:
 				/**
 				 * @brief set the new filename
@@ -68,7 +68,7 @@ namespace ewol {
 					return m_fileName;
 				};
 			protected:
-				ewol::object::Param<ewol::Dimension> m_border; //!< border to add at the image.
+				ewol::parameter::Value<ewol::Dimension> m_border; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -83,7 +83,7 @@ namespace ewol {
 					return m_border;
 				};
 			protected:
-				ewol::object::Param<ewol::Dimension> m_imageSize; //!< border to add at the image.
+				ewol::parameter::Value<ewol::Dimension> m_imageSize; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -98,7 +98,7 @@ namespace ewol {
 					return m_imageSize;
 				};
 			protected:
-				ewol::object::Param<bool> m_keepRatio; //!< keep the image ratio between width and hight
+				ewol::parameter::Value<bool> m_keepRatio; //!< keep the image ratio between width and hight
 			public:
 				/**
 				 * @brief set the current status of keeping ratio.
@@ -113,7 +113,7 @@ namespace ewol {
 					return m_keepRatio;
 				};
 			protected:
-				ewol::object::ParamRange<vec2> m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
+				ewol::parameter::Range<vec2> m_posStart; //!< position in the image to start the sisplay (when we want not to display all the image)
 			public:
 				/**
 				 * @brief set the current 'start' position in the image to display.
@@ -128,7 +128,7 @@ namespace ewol {
 					return m_posStart;
 				};
 			protected:
-				ewol::object::ParamRange<vec2> m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
+				ewol::parameter::Range<vec2> m_posStop; //!< position in the image to start the sisplay (when we want not to display all the image)
 			public:
 				/**
 				 * @brief set the current 'stop' position in the image to display.
@@ -143,7 +143,7 @@ namespace ewol {
 					return m_posStop;
 				};
 			public:
-				ewol::object::Param<bool> m_distanceFieldMode; //!< to have a parameter
+				ewol::parameter::Value<bool> m_distanceFieldMode; //!< to have a parameter
 			public:
 				/**
 				 * @brief Set distance field rendering mode
@@ -161,7 +161,7 @@ namespace ewol {
 				}
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

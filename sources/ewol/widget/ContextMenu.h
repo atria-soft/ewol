@@ -38,7 +38,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();
 			private:
-				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+				ewol::parameter::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			public:
 				/**
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
@@ -54,8 +54,8 @@ namespace ewol {
 				etk::Color<> m_colorBorder;
 				float m_offset;
 			private:
-				ewol::object::Param<vec2> m_arrowPos;
-				ewol::object::ParamList<enum markPosition> m_arrawBorder;
+				ewol::parameter::Value<vec2> m_arrowPos;
+				ewol::parameter::List<enum markPosition> m_arrawBorder;
 			public:
 				void setPositionMark(enum markPosition _position, const vec2& _arrowPos) {
 					m_arrawBorder.set(_position);
@@ -63,7 +63,7 @@ namespace ewol {
 				}
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);

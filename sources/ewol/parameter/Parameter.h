@@ -6,7 +6,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/object/ParameterList.h>
+#include <ewol/parameter/Interface.h>
 
 #ifndef __EWOL_PARAMETER_H__
 #define __EWOL_PARAMETER_H__
@@ -15,14 +15,14 @@
 #include <typeinfo>
 
 namespace ewol {
-	namespace object {
-		class ParameterRef;
+	namespace parameter {
+		class Ref;
 		class Parameter {
 			private:
-				ewol::object::ParameterList& m_objectLink;
+				ewol::parameter::Interface& m_interfaceLink;
 				std::string m_name;
 			public:
-				Parameter(ewol::object::ParameterList& _objectLink, const std::string& _name);
+				Parameter(ewol::parameter::Interface& _paramInterfaceLink, const std::string& _name);
 				virtual ~Parameter() { };
 				/**
 				 * @brief call main class that parameterChange
@@ -70,16 +70,16 @@ namespace ewol {
 				 */
 				virtual void setDefault() = 0;
 		};
-		class ParameterRef {
+		class Ref {
 			public:
 				const Parameter* m_ref;
-				ParameterRef(const Parameter* _ref) :
+				Ref(const Parameter* _ref) :
 				  m_ref(_ref) {
 					// nothing to do ...
 				}
 		};
-		bool operator==(const ParameterRef& _obj, const Parameter& _obj2) noexcept;
-		bool operator==(const Parameter& _obj2, const ParameterRef& _obj) noexcept;
+		bool operator==(const Ref& _obj, const Parameter& _obj2) noexcept;
+		bool operator==(const Parameter& _obj2, const Ref& _obj) noexcept;
 	};
 };
 

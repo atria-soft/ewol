@@ -54,7 +54,7 @@ namespace ewol {
 				 */
 				void setShaperName(std::string _shaperName);
 			protected:
-				ewol::object::Param<etk::Color<>> m_textColorFg; //!< Current color.
+				ewol::parameter::Value<etk::Color<>> m_textColorFg; //!< Current color.
 			public:
 				/**
 				 * @brief get the current color of the color selection widget
@@ -76,7 +76,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status

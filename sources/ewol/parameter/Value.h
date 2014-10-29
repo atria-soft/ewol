@@ -6,21 +6,19 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#ifndef __EWOL_PARAM_RANGE_H__
-#define __EWOL_PARAM_RANGE_H__
+#ifndef __EWOL_PARAMETER_VALUE_H__
+#define __EWOL_PARAMETER_VALUE_H__
 
-#include <ewol/object/ParameterList.h>
-#include <ewol/object/Parameter.h>
+#include <ewol/parameter/Interface.h>
+#include <ewol/parameter/Parameter.h>
 #include <etk/math/Vector2D.h>
-#include <typeinfo>
+
 
 namespace ewol {
-	namespace object {
-		template<typename MY_TYPE, bool isEventReceiving=false> class ParamRange : public Parameter {
+	namespace parameter {
+		template<typename MY_TYPE, bool isEventReceiving=false> class Value : public Parameter {
 			private:
 				MY_TYPE m_value; //!< Current value.
-				MY_TYPE m_min; //!< Minimum value.
-				MY_TYPE m_max; //!< Maximum value.
 				MY_TYPE m_default; //!< Default value.
 			public:
 				/**
@@ -32,23 +30,27 @@ namespace ewol {
 				 * @param[in] _max Maximum value.
 				 * @param[in] _description description of the parameter.
 				 */
-				ParamRange(ewol::object::ParameterList& _objectLink,
+				Value(ewol::parameter::Interface& _paramInterfaceLink,
 				      const std::string& _name,
 				      const MY_TYPE& _defaultValue,
-				      const MY_TYPE& _min,
-				      const MY_TYPE& _max,
 				      const std::string& _description = "") :
-				  Parameter(_objectLink, _name),
+				  Parameter(_paramInterfaceLink, _name),
 				  m_value(_defaultValue),
-				  m_min(_min),
-				  m_max(_max),
 				  m_default(_defaultValue) {
+					
+				};
+				Value(ewol::parameter::Interface& _paramListLink,
+				      const std::string& _name,
+				      const std::string& _description = "") :
+				  Parameter(_paramListLink, _name),
+				  m_value(),
+				  m_default() {
 					
 				};
 				/**
 				 * @brief Destructor.
 				 */
-				virtual ~ParamRange() { };
+				virtual ~Value() { };
 				// herited methode
 				virtual std::string getType() const {
 					return typeid(MY_TYPE).name();
@@ -56,17 +58,17 @@ namespace ewol {
 				// herited methode
 				virtual std::string getString() const {
 					return getValueSpecific(m_value);
-				};
+				}
 				// herited methode
 				virtual std::string getDefault() const {
 					return getValueSpecific(m_default);
-				};
+				}
 				// herited methode
 				virtual void setString(const std::string& _newVal) {
-					MY_TYPE val;
 					// when you want to set an element in parameter you will implement the function template std::from_string
-					etk::from_string(val, _newVal);
-					set(val);
+					etk::from_string(m_value, _newVal);
+					// TODO : Do it better ...
+					notifyChange();
 				}
 				// herited methode
 				virtual std::string getInfo() const {
@@ -97,17 +99,9 @@ namespace ewol {
 				 * @param[in] newVal New value to set (set the nearest value if range is set)
 				 */
 				void set(const MY_TYPE& _newVal) {
-					if (m_min == m_max) {
-						if (_newVal != m_value) {
-							m_value = _newVal;
-							notifyChange();
-						}
-					} else {
-						MY_TYPE newVal = std::avg(m_min, _newVal, m_max);
-						if (newVal != m_value) {
-							m_value = newVal;
-							notifyChange();
-						}
+					if (_newVal != m_value) {
+						m_value = _newVal;
+						notifyChange();
 					}
 				}
 			private:
@@ -123,7 +117,7 @@ namespace ewol {
 				 * @brief assignement operator.
 				 * @param[in] newVal The new value of the parameter.
 				 */
-				const Param<MY_TYPE>& operator= (const MY_TYPE& _newVal) {
+				const Value<MY_TYPE>& operator= (const MY_TYPE& _newVal) {
 					set(_newVal);
 					return *this;
 				};
@@ -141,7 +135,7 @@ namespace ewol {
 				}
 		};
 		
-		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::object::ParamRange<MY_TYPE>& _obj) {
+		template<typename MY_TYPE, bool isEventReceiving=false> std::ostream& operator <<(std::ostream& _os, const ewol::parameter::Value<MY_TYPE, isEventReceiving>& _obj) {
 			_os << _obj.get();
 			return _os;
 		}

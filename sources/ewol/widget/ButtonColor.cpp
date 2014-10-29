@@ -228,7 +228,7 @@ void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 }
 
 
-void ewol::widget::ButtonColor::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::ButtonColor::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Widget::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_textColorFg) {
 		signalChange.emit(m_textColorFg);

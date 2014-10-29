@@ -24,7 +24,7 @@ namespace ewol {
 		 */
 		class PopUp : public ewol::widget::Container {
 			protected:
-				ewol::object::Param<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+				ewol::parameter::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
@@ -44,7 +44,7 @@ namespace ewol {
 				 */
 				void setShaperName(const std::string& _shaperName);
 			protected:
-				ewol::object::Param<bvec2> m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
+				ewol::parameter::Value<bvec2> m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			public:
 				/**
 				 * @brief Limit the expend properties to the current widget (no contamination)
@@ -54,7 +54,7 @@ namespace ewol {
 					m_lockExpand.set(_lockExpand);
 				}
 			private:
-				ewol::object::Param<bool> m_closeOutEvent; //!< ratio progression of a sliding
+				ewol::parameter::Value<bool> m_closeOutEvent; //!< ratio progression of a sliding
 			public:
 				/**
 				 * @brief Request the Auto-remove when the event input is set outside the widget
@@ -72,7 +72,7 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);

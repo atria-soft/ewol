@@ -211,7 +211,7 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::Button::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::Container2::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
 		markToRedraw();

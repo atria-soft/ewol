@@ -179,7 +179,7 @@ bool ewol::widget::Image::loadXML(exml::Element* _node) {
 	return true;
 }
 
-void ewol::widget::Image::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::Image::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Widget::onParameterChangeValue(_paramPointer);
 	if (    _paramPointer == m_fileName
 	     || _paramPointer == m_imageSize) {

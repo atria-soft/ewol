@@ -559,7 +559,7 @@ void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::Entry::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::Entry::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Widget::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
 		m_colorIdTextFg = m_shaper->requestColor("text-foreground");

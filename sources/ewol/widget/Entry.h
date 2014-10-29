@@ -38,7 +38,7 @@ namespace ewol {
 				ewol::Signal<std::string> signalEnter; //!< Enter key is pressed
 				ewol::Signal<std::string> signalModify; //!< data change
 			private:
-				ewol::object::Param<ewol::compositing::Shaper> m_shaper;
+				ewol::parameter::Value<ewol::compositing::Shaper> m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
 				int32_t m_colorIdTextBg; //!< color property of the text background
 				int32_t m_colorIdCursor; //!< color property of the text cursor
@@ -58,7 +58,7 @@ namespace ewol {
 				 */
 				virtual ~Entry();
 			private:
-				ewol::object::Param<std::string> m_data; //!< sting that must be displayed
+				ewol::parameter::Value<std::string> m_data; //!< sting that must be displayed
 			protected:
 				/**
 				 * @brief internal check the value with RegExp checking
@@ -79,7 +79,7 @@ namespace ewol {
 					return m_data;
 				};
 			private:
-				ewol::object::ParamRange<int32_t> m_maxCharacter; //!< number max of xharacter in the list
+				ewol::parameter::Range<int32_t> m_maxCharacter; //!< number max of xharacter in the list
 			public:
 				/**
 				 * @brief Limit the number of Unicode character in the entry
@@ -96,7 +96,7 @@ namespace ewol {
 					return m_maxCharacter;
 				};
 			private:
-				ewol::object::Param<std::string> m_regexValue; //!< regular expression value
+				ewol::parameter::Value<std::string> m_regexValue; //!< regular expression value
 				std::regex m_regex; //!< regular expression to check content
 			public:
 				/**
@@ -147,7 +147,7 @@ namespace ewol {
 				 */
 				virtual void removeSelected();
 			private:
-				ewol::object::Param<std::string> m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
+				ewol::parameter::Value<std::string> m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			public:
 				/**
 				 * @brief set The text displayed when nothing is in the entry.
@@ -175,7 +175,7 @@ namespace ewol {
 				virtual void onLostFocus();
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			private: // callback functions
 				void onCallbackShortCut(const std::string& _value);
 				void onCallbackEntryClean();

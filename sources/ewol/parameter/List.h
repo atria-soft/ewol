@@ -6,17 +6,17 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#ifndef __EWOL_PARAM_LIST_H__
-#define __EWOL_PARAM_LIST_H__
+#ifndef __EWOL_PARAMETER_LIST_H__
+#define __EWOL_PARAMETER_LIST_H__
 
-#include <ewol/object/ParameterList.h>
-#include <ewol/object/Parameter.h>
+#include <ewol/parameter/Interface.h>
+#include <ewol/parameter/Parameter.h>
 #include <map>
 #include <typeinfo>
 
 namespace ewol {
-	namespace object {
-		template<typename MY_TYPE, bool isEventReceiving=false> class ParamList : public Parameter {
+	namespace parameter {
+		template<typename MY_TYPE, bool isEventReceiving=false> class List : public Parameter {
 			private:
 				MY_TYPE m_value; //!< Element value ==> can be directly used.
 				MY_TYPE m_default; //!< Default value.
@@ -28,11 +28,11 @@ namespace ewol {
 				 * @param[in] _name Static name of the parameter.
 				 * @param[in] _description description of the parameter.
 				 */
-				ParamList(ewol::object::ParameterList& _objectLink,
-				          const std::string& _name,
-				          const MY_TYPE& _defaultValue,
-				          const std::string& _description="") :
-				  Parameter(_objectLink, _name),
+				List(ewol::parameter::Interface& _paramInterfaceLink,
+				     const std::string& _name,
+				     const MY_TYPE& _defaultValue,
+				     const std::string& _description="") :
+				  Parameter(_paramInterfaceLink, _name),
 				  m_value(_defaultValue),
 				  m_default(_defaultValue) {
 					
@@ -40,7 +40,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor.
 				 */
-				virtual ~ParamList() {
+				virtual ~List() {
 					
 				};
 				void add(const MY_TYPE& _value, const std::string& _name, const std::string& _description = "") {
@@ -143,7 +143,7 @@ namespace ewol {
 				 * @brief assignement operator.
 				 * @param[in] newVal The new value of the parameter.
 				 */
-				const ParamList& operator= (MY_TYPE _newVal) {
+				const List& operator= (MY_TYPE _newVal) {
 					set(_newVal);
 					return *this;
 				}
@@ -160,7 +160,7 @@ namespace ewol {
 					return &m_value;
 				}
 		};
-		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::object::ParamList<MY_TYPE>& _obj) {
+		template<typename MY_TYPE> std::ostream& operator <<(std::ostream& _os, const ewol::parameter::List<MY_TYPE>& _obj) {
 			_os << _obj.get();
 			return _os;
 		}
