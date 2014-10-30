@@ -8,7 +8,7 @@
 
 #include <memory>
 #include <ewol/debug.h>
-#include <ewol/signal/List.h>
+#include <ewol/signal/Interface.h>
 #include <ewol/signal/Base.h>
 
 #ifdef DEBUG
@@ -16,16 +16,16 @@
 	int32_t ewol::signal::Base::m_signalCallLevel = 0;
 #endif
 
-ewol::signal::Base::Base(ewol::signal::List& _signalLink,
+ewol::signal::Base::Base(ewol::signal::Interface& _signalInterfaceLink,
                          const std::string& _name,
                          const std::string& _description) :
-  m_signalLink(_signalLink),
+  m_signalInterfaceLink(_signalInterfaceLink),
   m_name(_name),
   m_description(_description),
   m_callInProgress(0),
   m_someOneRemoveInCall(false) {
 	// add a reference on the current signal ...
-	m_signalLink.signalAdd(this);
+	m_signalInterfaceLink.signalAdd(this);
 }
 
 std::ostream& ewol::signal::operator <<(std::ostream& _os, const ewol::signal::Base& _obj) {

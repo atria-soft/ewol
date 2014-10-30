@@ -99,7 +99,7 @@ def create(target):
 		])
 	# Signal :
 	myModule.add_src_file([
-		'ewol/signal/List.cpp',
+		'ewol/signal/Interface.cpp',
 		'ewol/signal/Base.cpp'
 		])
 	

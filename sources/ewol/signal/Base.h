@@ -9,7 +9,7 @@
 #ifndef __EWOL_SIGNAL_BASE_H__
 #define __EWOL_SIGNAL_BASE_H__
 
-#include <ewol/signal/List.h>
+#include <ewol/signal/Interface.h>
 
 
 namespace ewol {
@@ -20,7 +20,7 @@ namespace ewol {
 					static int32_t m_uidSignal;
 					static int32_t m_signalCallLevel;
 				#endif
-				ewol::signal::List& m_signalLink;
+				ewol::signal::Interface& m_signalInterfaceLink;
 				std::string m_name;
 				std::string m_description;
 				int32_t m_callInProgress;
@@ -28,11 +28,11 @@ namespace ewol {
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
-				 * @param[in] _signalListLink reference on the signal list.
+				 * @param[in] _signalInterfaceLink reference on the signal list.
 				 * @param[in] _name Static name of the parameter.
 				 * @param[in] _description description of the parameter.
 				 */
-				Base(ewol::signal::List& _signalListLink,
+				Base(ewol::signal::Interface& _signalInterfaceLink,
 				           const std::string& _name,
 				           const std::string& _description = "");
 				/**

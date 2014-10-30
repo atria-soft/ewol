@@ -20,7 +20,7 @@
 #include <ewol/parameter/Value.h>
 #include <ewol/parameter/Range.h>
 #include <ewol/parameter/List.h>
-#include <ewol/signal/List.h>
+#include <ewol/signal/Interface.h>
 
 namespace ewol {
 	// some class need to define element befor other ...
@@ -52,7 +52,7 @@ namespace ewol {
 	 */
 	class Object : public std::enable_shared_from_this<Object>,
 	               public ewol::parameter::Interface,
-	               public ewol::signal::List {
+	               public ewol::signal::Interface {
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:

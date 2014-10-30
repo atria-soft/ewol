@@ -24,17 +24,17 @@ namespace ewol {
 		public:
 			/**
 			 * @brief Create a parameter with a specific type.
-			 * @param[in] _objectLink reference on the parameter lister.
+			 * @param[in] _signalInterfaceLink reference on the parameter lister.
 			 * @param[in] _name Static name of the parameter.
 			 * @param[in] _defaultValue Default value of the parameter.
 			 * @param[in] _min Minumum value.
 			 * @param[in] _max Maximum value.
 			 * @param[in] _description description of the parameter.
 			 */
-			Signal(ewol::signal::List& _objectLink,
+			Signal(ewol::signal::Interface& _signalInterfaceLink,
 			      const std::string& _name,
 			      const std::string& _description = "") :
-			  signal::Base(_objectLink, _name, _description) {
+			  signal::Base(_signalInterfaceLink, _name, _description) {
 				
 			};
 			/**
@@ -171,17 +171,17 @@ namespace ewol {
 		public:
 			/**
 			 * @brief Create a parameter with a specific type.
-			 * @param[in] _objectLink reference on the parameter lister.
+			 * @param[in] _signalInterfaceLink reference on the parameter lister.
 			 * @param[in] _name Static name of the parameter.
 			 * @param[in] _defaultValue Default value of the parameter.
 			 * @param[in] _min Minumum value.
 			 * @param[in] _max Maximum value.
 			 * @param[in] _description description of the parameter.
 			 */
-			Signal(ewol::signal::List& _objectLink,
+			Signal(ewol::signal::Interface& _signalInterfaceLink,
 			      const std::string& _name,
 			      const std::string& _description = "") :
-			  signal::Base(_objectLink, _name, _description) {
+			  signal::Base(_signalInterfaceLink, _name, _description) {
 				
 			};
 			/**

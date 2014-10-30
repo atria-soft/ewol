@@ -17,7 +17,7 @@
 namespace ewol {
 	class Context;
 	namespace object {
-		class Manager : public ewol::signal::List {
+		class Manager : public ewol::signal::Interface {
 			private:
 				std::vector<std::weak_ptr<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;

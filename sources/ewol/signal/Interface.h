@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __EWOL_SIGNAL_LIST_H__
-#define __EWOL_SIGNAL_LIST_H__
+#ifndef __EWOL_SIGNAL_INTERFACE_H__
+#define __EWOL_SIGNAL_INTERFACE_H__
 
 #include <vector>
 #include <map>
@@ -16,7 +16,7 @@
 namespace ewol {
 	namespace signal {
 		class Base;
-		class List {
+		class Interface {
 			friend class ewol::signal::Base; // to register parameter in the list.
 			private:
 				std::vector<ewol::signal::Base*> m_list;  //!< list of availlable Parameters
@@ -24,11 +24,11 @@ namespace ewol {
 				/**
 				 * @brief Constructor.
 				 */
-				List();
+				Interface();
 				/**
 				 * @brief Destructor.
 				 */
-				~List();
+				~Interface();
 				/**
 				 * @brief Register a parameter class pointer in the List of parameters
 				 * @note This class does not destroy the parameter pointer!!!
