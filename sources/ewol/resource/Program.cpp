@@ -330,7 +330,6 @@ void ewol::resource::Program::sendAttribute(int32_t _idElem,
 }
 
 void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
-                                                   int32_t _nbElement,
                                                    const std::shared_ptr<ewol::resource::VirtualBufferObject>& _vbo,
                                                    int32_t _index,
                                                    int32_t _jumpBetweenSample,
@@ -347,7 +346,7 @@ void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo->getGL_ID(_index));
 	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
-	                      _nbElement, // number of elements per vertex, here (r,g,b,a)
+	                      _vbo->getElementSize(_index), // number of elements per vertex, here (r,g,b,a)
 	                      GL_FLOAT, // the type of each element
 	                      GL_FALSE, // take our values as-is
 	                      _jumpBetweenSample, // no extra data between each position

@@ -87,18 +87,17 @@ namespace ewol {
 				                   const void* _pointer,
 				                   int32_t _jumpBetweenSample=0);
 				void sendAttributePointer(int32_t _idElem,
-				                          int32_t _nbElement,
 				                          const std::shared_ptr<ewol::resource::VirtualBufferObject>& _vbo,
 				                          int32_t _index,
 				                          int32_t _jumpBetweenSample=0,
 				                          int32_t _offset=0);
-				inline void sendAttribute(int32_t _idElem, const std::vector<vec2 >& _data) {
+				inline void sendAttribute(int32_t _idElem, const std::vector<vec2>& _data) {
 					sendAttribute(_idElem, 2/*u,v / x,y*/, &_data[0]);
 				}
-				inline void sendAttribute(int32_t _idElem, const std::vector<vec3 >& _data) {
+				inline void sendAttribute(int32_t _idElem, const std::vector<vec3>& _data) {
 					sendAttribute(_idElem, 3/*x,y,z,unused*/, &_data[0], 4*sizeof(btScalar));
 				}
-				inline void sendAttribute(int32_t _idElem, const std::vector<etk::Color<float> >& _data) {
+				inline void sendAttribute(int32_t _idElem, const std::vector<etk::Color<float>>& _data) {
 					sendAttribute(_idElem, 4/*r,g,b,a*/, &_data[0]);
 				}
 				inline void sendAttribute(int32_t _idElem, const std::vector<float>& _data) {
