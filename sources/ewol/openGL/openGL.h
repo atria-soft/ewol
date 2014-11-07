@@ -141,6 +141,18 @@ namespace ewol {
 			FLAG_ALPHA_TEST = 1<<27, //!< 
 			FLAG_FOG = 1<<28, //!< 
 		};
+		enum renderMode {
+			renderPoint = GL_POINTS,
+			renderLine = GL_LINES,
+			renderLineStrip = GL_LINE_STRIP, //!< Not supported in EWOL (TODO : Later)
+			renderLineLoop = GL_LINE_LOOP,
+			renderTriangle = GL_TRIANGLES,
+			renderTriangleStrip = GL_TRIANGLE_STRIP, //!< Not supported in EWOL (TODO : Later)
+			renderTriangleFan = GL_TRIANGLE_FAN, //!< Not supported in EWOL (TODO : Later)
+			renderQuad = GL_QUADS, //!< Not supported in OpenGL-ES2
+			renderQuadStrip = GL_QUAD_STRIP, //!< Not supported in OpenGL-ES2
+			renderPolygon = GL_POLYGON //!< Not supported in OpenGL-ES2
+		};
 		
 		/**
 		 * @brief enable a flag on the system
@@ -181,6 +193,7 @@ namespace ewol {
 		void reset();
 	};
 	std::ostream& operator <<(std::ostream& _os, const enum openGL::openGlFlags& _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum openGL::renderMode& _obj);
 };
 
 

@@ -9,6 +9,7 @@
 #include <vector>
 #include <ewol/debug.h>
 #include <ewol/openGL/openGL.h>
+#include <etk/stdTools.h>
 #include <mutex>
 //#define DIRECT_MODE
 /**
@@ -164,6 +165,59 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum openGL::openGlFlag
 	_os << "}";
 	return _os;
 }
+
+
+std::vector<std::pair<enum ewol::openGL::renderMode, std::string>>& getListRenderMode() {
+	static std::vector<std::pair<enum ewol::openGL::renderMode, std::string>> list = {
+		std::make_pair(ewol::openGL::renderPoint, "POINTS"),
+		std::make_pair(ewol::openGL::renderLine, "LINES"),
+		std::make_pair(ewol::openGL::renderLineStrip, "LINES_STRIP"),
+		std::make_pair(ewol::openGL::renderLineLoop, "LINE_LOOP"),
+		std::make_pair(ewol::openGL::renderTriangle, "TRIANGLE"),
+		std::make_pair(ewol::openGL::renderTriangleStrip, "TRIANGLE_STRIP"),
+		std::make_pair(ewol::openGL::renderTriangleFan, "TRIANGLE_FAN"),
+		std::make_pair(ewol::openGL::renderQuad, "QUAD"),
+		std::make_pair(ewol::openGL::renderQuadStrip, "QUAD_STRIP"),
+		std::make_pair(ewol::openGL::renderPolygon, "POLYGON"),
+	};
+	return list;
+}
+
+
+namespace etk {
+	template<> std::string to_string<ewol::openGL::renderMode>(const ewol::openGL::renderMode& _obj) {
+		for (auto &it : getListRenderMode()) {
+			if (it.first == _obj) {
+				return it.second;
+			}
+		}
+		EWOL_ERROR("Can not convert : " << static_cast<int32_t>(_obj) << " return UNKNOW");
+		return "UNKNOW";
+	}
+	template<> std::u32string to_u32string<ewol::openGL::renderMode>(const ewol::openGL::renderMode& _obj) {
+		return etk::to_u32string(etk::to_string(_obj));
+	}
+	template<> bool from_string<ewol::openGL::renderMode>(ewol::openGL::renderMode& _variableRet, const std::string& _value) {
+		for (auto &it : getListRenderMode()) {
+			if (it.second == _value) {
+				_variableRet = it.first;
+				return true;
+			}
+		}
+		EWOL_WARNING("Can not parse : '" << _value << "' set Triangle default value");
+		_variableRet = ewol::openGL::renderTriangle;
+		return false;
+	}
+	template<> bool from_string<ewol::openGL::renderMode>(ewol::openGL::renderMode& _variableRet, const std::u32string& _value) {
+		return from_string(_variableRet, etk::to_string(_value));
+	}
+};
+
+std::ostream& ewol::operator <<(std::ostream& _os, const enum openGL::renderMode& _obj) {
+	_os << etk::to_string(_obj);
+	return _os;
+}
+
 
 typedef struct {
 	uint32_t curentFlag;
