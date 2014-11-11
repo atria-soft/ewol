@@ -146,8 +146,12 @@ ewol::Widget::~Widget() {
 }
 
 void ewol::Widget::calculateSize(const vec2& _available) {
-	m_size = _available;
-	m_size.setMax(m_minSize);
+	vec2 size = _available;
+	size.setMax(m_minSize);
+	if (m_size == size) {
+		return;
+	}
+	m_size = size;
 	markToRedraw();
 }
 
