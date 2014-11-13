@@ -113,11 +113,10 @@ namespace ewol {
 				/**
 				 * @brief Send a uniform element to the spefified ID (not send if does not really exist in the openGL program)
 				 * @param[in] _idElem Id of the uniform that might be sended.
-				 * @param[in] _nbElement Specifies the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-				 * @param[in] _pointer Pointer on the data that might be sended
+				 * @param[in] _matrix Matrix that might be sended.
 				 * @param[in] _transpose Transpose the matrix (needed all the taime in the normal openGl access (only not done in the openGL-ES2 due to the fact we must done it ourself)
 				 */
-				void uniformMatrix4fv(int32_t _idElem, int32_t _nbElement, mat4 _matrix, bool _transpose=true);
+				void uniformMatrix(int32_t _idElem, const mat4& _matrix, bool _transpose=true);
 				
 				inline void uniform(int32_t _idElem, const etk::Color<float>& _value) {
 					uniform4f(_idElem, _value.r(), _value.g(), _value.b(), _value.a());

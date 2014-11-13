@@ -184,7 +184,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::getMatrix();
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
 	// property

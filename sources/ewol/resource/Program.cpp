@@ -358,7 +358,7 @@ void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::resource::Program::uniformMatrix4fv(int32_t _idElem, int32_t _nbElement, mat4 _matrix, bool _transpose) {
+void ewol::resource::Program::uniformMatrix(int32_t _idElem, const mat4& _matrix, bool _transpose) {
 	if (0 == m_program) {
 		return;
 	}
@@ -371,9 +371,12 @@ void ewol::resource::Program::uniformMatrix4fv(int32_t _idElem, int32_t _nbEleme
 	}
 	// note : Android des not supported the transposition of the matrix, then we will done it oursef:
 	if (true == _transpose) {
-		_matrix.transpose();
+		mat4 tmp = _matrix;
+		tmp.transpose();
+		glUniformMatrix4fv(m_elementList[_idElem].m_elementId, 1, GL_FALSE, tmp.m_mat);
+	} else {
+		glUniformMatrix4fv(m_elementList[_idElem].m_elementId, 1, GL_FALSE, _matrix.m_mat);
 	}
-	glUniformMatrix4fv(m_elementList[_idElem].m_elementId, _nbElement, GL_FALSE, _matrix.m_mat);
 	//checkGlError("glUniformMatrix4fv", __LINE__);
 }
 

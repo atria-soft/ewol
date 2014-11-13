@@ -61,7 +61,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
 	m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
 	// position :

@@ -59,7 +59,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	mat4 projMatrix = ewol::openGL::getMatrix();
 	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix;
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &_vertices[0], 4*sizeof(float));
 	// color :
@@ -102,7 +102,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	mat4 projMatrix = ewol::openGL::getMatrix();
 	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
@@ -142,7 +142,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	mat4 projMatrix = ewol::openGL::getMatrix();
 	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
