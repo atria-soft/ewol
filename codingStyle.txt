@@ -126,7 +126,7 @@ We need to use the same coding style in c and c++ to simplify inter-reading code
 	- Fonction/Methods:
 		Camel case with first letter in lower case.
 			void myExampleFontionName(void);
-	- Valiable:
+	- Variable:
 		Camel case with first letter in lower case.
 			int32_t myVariableExample;
 	- namespace:
