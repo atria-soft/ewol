@@ -329,19 +329,19 @@ void ewol::openGL::updateAllFlags() {
 	#endif
 	// check if fhags has change :
 	if (l_flagsMustBeSet == l_flagsCurrent ) {
-		//EWOL_INFO("real flag set : " << l_flagsMustBeSet << " " << l_flagsCurrent);
+		EWOL_INFO("OGL: current flag : " << (enum openGL::openGlFlags)l_flagsMustBeSet);
 		return;
 	}
-	//EWOL_INFO("real flag set : " << l_flagsMustBeSet);
+	EWOL_INFO("OGL: set new flag : " << (enum openGL::openGlFlags)l_flagsMustBeSet);
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		uint32_t CurrentFlag = basicFlag[iii].curentFlag;
 		if ( (l_flagsMustBeSet&CurrentFlag)!=(l_flagsCurrent&CurrentFlag) ) {
 			if ( (l_flagsMustBeSet&CurrentFlag) != 0) {
 				glEnable(basicFlag[iii].OGlFlag);
-				//EWOL_INFO("    enable : " << basicFlag[iii].OGlFlag);
+				EWOL_INFO("    enable : " << (enum openGL::openGlFlags)basicFlag[iii].curentFlag);
 			} else {
 				glDisable(basicFlag[iii].OGlFlag);
-				//EWOL_INFO("    disable : " << basicFlag[iii].OGlFlag);
+				EWOL_INFO("    disable : " << (enum openGL::openGlFlags)basicFlag[iii].curentFlag);
 			}
 		}
 	}

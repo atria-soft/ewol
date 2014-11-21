@@ -116,6 +116,14 @@ static void checkGlError(const char* _op, int32_t _localLine) {
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
+bool ewol::resource::Program::checkIdValidity(int32_t _idElem) {
+	if (    _idElem < 0
+	     || (size_t)_idElem > m_elementList.size()) {
+		return false;
+	}
+	return m_elementList[_idElem].m_isLinked;
+}
+
 int32_t ewol::resource::Program::getAttribute(std::string _elementName) {
 	// check if it exist previously :
 	for(size_t iii=0; iii<m_elementList.size(); iii++) {

@@ -69,6 +69,12 @@ namespace ewol {
 				virtual ~Program();
 			public:
 				/**
+				 * @brief Check If an Id is valid in the shader or not (sometime the shader have not some attribute, then we need to display some error)
+				 * @return _idElem Id of the Attribute that might be sended.
+				 * @return true The id is valid, false otherwise
+				 */
+				bool checkIdValidity(int32_t _idElem);
+				/**
 				 * @brief User request an attribute on this program.
 				 * @note The attribute is send to the fragment shaders
 				 * @param[in] _elementName Name of the requested attribute.
