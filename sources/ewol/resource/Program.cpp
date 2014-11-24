@@ -42,7 +42,7 @@ void ewol::resource::Program::init(const std::string& _filename) {
 		tmpFilename.erase(tmpFilename.size()-4, 4);
 		std::shared_ptr<ewol::resource::Shader> tmpShader = ewol::resource::Shader::create(tmpFilename+"vert");
 		if (nullptr == tmpShader) {
-			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
+			EWOL_ERROR("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "vert");
@@ -50,7 +50,7 @@ void ewol::resource::Program::init(const std::string& _filename) {
 		}
 		tmpShader = ewol::resource::Shader::create(tmpFilename+"frag");
 		if (nullptr == tmpShader) {
-			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
+			EWOL_ERROR("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "frag");
@@ -86,7 +86,7 @@ void ewol::resource::Program::init(const std::string& _filename) {
 			std::string tmpFilename = file.getRelativeFolder() + tmpData;
 			std::shared_ptr<ewol::resource::Shader> tmpShader = ewol::resource::Shader::create(tmpFilename);
 			if (nullptr == tmpShader) {
-				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
+				EWOL_ERROR("Error while getting a specific shader filename : " << tmpFilename);
 			} else {
 				EWOL_DEBUG("Add shader on program : "<< tmpFilename);
 				m_shaderList.push_back(tmpShader);
@@ -353,7 +353,7 @@ void ewol::resource::Program::sendAttribute(int32_t _idElem,
 	if (m_elementList[_idElem].m_isLinked == false) {
 		return;
 	}
-	EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " element");
+	//EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " element");
 	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
 	                      _nbElement, // number of elements per vertex, here (r,g,b,a)
 	                      GL_FLOAT, // the type of each element
@@ -380,14 +380,15 @@ void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
 	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	EWOL_INFO(m_elementList);
-	EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _vbo->getElementSize(_index) << " element on oglID=" << _vbo->getGL_ID(_index) << " VBOindex=" << _index);
+	//EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _vbo->getElementSize(_index) << " element on oglID=" << _vbo->getGL_ID(_index) << " VBOindex=" << _index);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo->getGL_ID(_index));
 	checkGlError("glBindBuffer", __LINE__);
+	/*
 	EWOL_ERROR("    id=" << m_elementList[_idElem].m_elementId);
 	EWOL_ERROR("    eleme size=" << _vbo->getElementSize(_index));
 	EWOL_ERROR("    jump sample=" << _jumpBetweenSample);
 	EWOL_ERROR("    offset=" << _offset);
+	*/
 	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
 	                      _vbo->getElementSize(_index), // number of elements per vertex, here (r,g,b,a)
 	                      GL_FLOAT, // the type of each element
@@ -412,12 +413,11 @@ void ewol::resource::Program::uniformMatrix(int32_t _idElem, const mat4& _matrix
 	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send 1 matrix");
+	//EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send 1 matrix");
 	// note : Android des not supported the transposition of the matrix, then we will done it oursef:
 	if (true == _transpose) {
 		mat4 tmp = _matrix;
 		tmp.transpose();
-		EWOL_ERROR("matrix:" << tmp);
 		glUniformMatrix4fv(m_elementList[_idElem].m_elementId, 1, GL_FALSE, tmp.m_mat);
 	} else {
 		glUniformMatrix4fv(m_elementList[_idElem].m_elementId, 1, GL_FALSE, _matrix.m_mat);
@@ -610,7 +610,7 @@ void ewol::resource::Program::uniform3fv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
-	EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " vec3");
+	EWOL_VERBOSE("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " vec3");
 	glUniform3fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform3fv", __LINE__);
 }
@@ -633,7 +633,7 @@ void ewol::resource::Program::uniform4fv(int32_t _idElem, int32_t _nbElement, co
 		EWOL_ERROR("nullptr Input pointer to send at open GL ...");
 		return;
 	}
-	EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " vec4");
+	EWOL_VERBOSE("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " vec4");
 	glUniform4fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform4fv", __LINE__);
 }

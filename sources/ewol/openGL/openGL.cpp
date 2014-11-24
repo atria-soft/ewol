@@ -13,19 +13,27 @@
 #include <mutex>
 //#define DIRECT_MODE
 
+#define CHECK_ERROR_OPENGL
 
 static void checkGlError(const char* _op, int32_t _localLine) {
-	bool isPresent = false;
+	#ifdef CHECK_ERROR_OPENGL
+	bool hasError = false;
 	for (GLint error = glGetError(); error; error = glGetError()) {
 		EWOL_ERROR("after " << _op << "():" << _localLine << " glError(" << error << ")");
-		isPresent = true;
+		hasError = true;
 	}
-	if (isPresent == true) {
+	if (hasError == true) {
 		EWOL_CRITICAL("plop");
 	}
+	#endif
 }
 
-
+#define OPENGL_ERROR(data) do { } while (false)
+//#define OPENGL_ERROR(data) EWOL_ERROR(data)
+#define OPENGL_WARNING(data) do { } while (false)
+//#define OPENGL_WARNING(data) EWOL_WARNING(data)
+#define OPENGL_INFO(data) do { } while (false)
+//#define OPENGL_INFO(data) EWOL_INFO(data)
 
 
 /**
@@ -129,9 +137,9 @@ void ewol::openGL::flush() {
 	l_programId = -1;
 	l_textureflags = 0;
 	glFlush();
-	EWOL_ERROR("========================" );
-	EWOL_ERROR("==   FLUSH OPEN GL    ==" );
-	EWOL_ERROR("========================");
+	OPENGL_INFO("========================" );
+	OPENGL_INFO("==   FLUSH OPEN GL    ==" );
+	OPENGL_INFO("========================");
 }
 
 void ewol::openGL::swap() {
@@ -314,7 +322,7 @@ void ewol::openGL::reset() {
 }
 
 void ewol::openGL::enable(enum ewol::openGL::openGlFlags _flagID) {
-	//EWOL_INFO("Enable : " << _flagID);
+	//EWOL_INFO("Enable : " <EWOL_ERROR< _flagID);
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {
@@ -349,19 +357,19 @@ void ewol::openGL::updateAllFlags() {
 	#endif
 	// check if fhags has change :
 	if (l_flagsMustBeSet == l_flagsCurrent ) {
-		EWOL_INFO("OGL: current flag : " << (enum openGL::openGlFlags)l_flagsMustBeSet);
+		OPENGL_INFO("OGL: current flag : " << (enum openGL::openGlFlags)l_flagsMustBeSet);
 		return;
 	}
-	EWOL_INFO("OGL: set new flag : " << (enum openGL::openGlFlags)l_flagsMustBeSet);
+	OPENGL_INFO("OGL: set new flag : " << (enum openGL::openGlFlags)l_flagsMustBeSet);
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		uint32_t CurrentFlag = basicFlag[iii].curentFlag;
 		if ( (l_flagsMustBeSet&CurrentFlag)!=(l_flagsCurrent&CurrentFlag) ) {
 			if ( (l_flagsMustBeSet&CurrentFlag) != 0) {
 				glEnable(basicFlag[iii].OGlFlag);
-				EWOL_INFO("    enable : " << (enum openGL::openGlFlags)basicFlag[iii].curentFlag);
+				OPENGL_INFO("    enable : " << (enum openGL::openGlFlags)basicFlag[iii].curentFlag);
 			} else {
 				glDisable(basicFlag[iii].OGlFlag);
-				EWOL_INFO("    disable : " << (enum openGL::openGlFlags)basicFlag[iii].curentFlag);
+				OPENGL_INFO("    disable : " << (enum openGL::openGlFlags)basicFlag[iii].curentFlag);
 			}
 		}
 	}
@@ -442,7 +450,7 @@ bool ewol::openGL::genBuffers(std::vector<GLuint>& _buffers) {
 		EWOL_WARNING("try to generate vector buffer with size 0");
 		return true;
 	}
-	EWOL_VERBOSE("Create N=" << _buffers.size() << " Buffer");
+	OPENGL_INFO("Create N=" << _buffers.size() << " Buffer");
 	glGenBuffers(_buffers.size(), &_buffers[0]);
 	checkGlError("glGenBuffers", __LINE__);
 	bool hasError = false;
