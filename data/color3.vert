@@ -14,6 +14,5 @@ varying vec4 f_color;
 
 void main(void) {
 	gl_Position = EW_MatrixTransformation * EW_MatrixPosition * vec4(EW_coord3d, 1.0);
-	//gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(EW_coord2d, 0.0, 1.0);
 	f_color = EW_color;
 }

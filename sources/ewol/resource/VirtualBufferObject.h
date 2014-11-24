@@ -16,9 +16,6 @@
 #include <ewol/openGL/openGL.h>
 #include <etk/Color.h>
 
-// TODO : Remove this ...
-#define NB_VBO_MAX   (20)
-
 namespace ewol {
 	namespace resource {
 		/**
@@ -26,12 +23,11 @@ namespace ewol {
 		 */
 		class VirtualBufferObject : public ewol::Resource {
 			private :
-				size_t m_nbVBO;
 				bool m_exist;  //!< This data is availlable in the Graphic card
-				GLuint m_vbo[NB_VBO_MAX]; //!< openGl ID of this VBO
-				bool m_vboUsed[NB_VBO_MAX]; //!< true if the VBO is allocated or used ...
-				std::vector<float> m_buffer[NB_VBO_MAX]; //!< data that is availlable in the VBO system ...
-				int8_t m_vboSizeDataOffset[NB_VBO_MAX]; //!< Internal size of the VBO (dynamicly set)
+				std::vector<GLuint> m_vbo; //!< openGl ID of this VBO
+				std::vector<bool> m_vboUsed; //!< true if the VBO is allocated or used ...
+				std::vector<std::vector<float>> m_buffer; //!< data that is availlable in the VBO system ...
+				std::vector<int8_t> m_vboSizeDataOffset; //!< Internal size of the VBO (dynamicly set)
 			protected:
 				/**
 				 * @brief Constructor of this VBO.

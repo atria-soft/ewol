@@ -641,7 +641,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			m_FpsFlush.tic();
 			m_FpsFlush.incrementCounter();
 		}
-		glFlush();
+		ewol::openGL::flush();
 		//glFinish();
 		if (m_displayFps == true) {
 			m_FpsFlush.toc();

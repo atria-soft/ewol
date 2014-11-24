@@ -191,6 +191,13 @@ namespace ewol {
 		 */
 		void useProgram(int32_t _id);
 		void reset();
+		
+		
+		bool genBuffers(std::vector<GLuint>& _buffers);
+		bool deleteBuffers(std::vector<GLuint>& _buffers);
+		bool bindBuffer(GLuint _bufferId);
+		bool bufferData(size_t _size, const void* _data, GLenum _usage);
+		bool unbindBuffer();
 	};
 	std::ostream& operator <<(std::ostream& _os, const enum openGL::openGlFlags& _obj);
 	std::ostream& operator <<(std::ostream& _os, const enum openGL::renderMode& _obj);

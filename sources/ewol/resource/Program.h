@@ -33,6 +33,10 @@ namespace ewol {
 				bool m_isAttribute; //!< true if it was an attribute element, otherwite it was an uniform
 				bool m_isLinked; //!< if this element does not exist this is false
 		};
+		//! @not-in-doc
+		std::ostream& operator <<(std::ostream& _os, const ewol::resource::progAttributeElement& _obj);
+		//! @not-in-doc
+		std::ostream& operator <<(std::ostream& _os, const std::vector<ewol::resource::progAttributeElement>& _obj);
 		/**
 		 * @brief Program is a compilation of some fragment Shader and vertex Shader. This construct automaticly this assiciation
 		 * The input file must have the form : "myFile.prog"

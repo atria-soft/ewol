@@ -55,7 +55,7 @@ ewol::resource::Shader::~Shader() {
 
 static void checkGlError(const char* _op) {
 	for (GLint error = glGetError(); error; error = glGetError()) {
-		EWOL_INFO("after " << _op << "() glError (" << error << ")");
+		EWOL_ERROR("after " << _op << "() glError (" << error << ")");
 	}
 }
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
@@ -70,13 +70,15 @@ void ewol::resource::Shader::updateContext() {
 			m_shader = 0;
 			return;
 		}
+		EWOL_INFO("Create Shader : '" << m_name << "'");
 		m_shader = glCreateShader(m_type);
 		if (!m_shader) {
 			EWOL_ERROR("glCreateShader return error ...");
 			checkGlError("glCreateShader");
+			EWOL_CRITICAL(" can not load shader");
 			return;
 		} else {
-			//EWOL_INFO("Creater shader with GLID=" << m_shader);
+			EWOL_INFO("Compile shader with GLID=" << m_shader);
 			glShaderSource(m_shader, 1, (const char**)&m_fileData, nullptr);
 			glCompileShader(m_shader);
 			GLint compiled = 0;
@@ -95,6 +97,7 @@ void ewol::resource::Shader::updateContext() {
 				for (size_t iii=0 ; iii<lines.size() ; iii++) {
 					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
 				}
+				EWOL_CRITICAL(" can not load shader");
 				return;
 			}
 		}
@@ -118,17 +121,17 @@ void ewol::resource::Shader::removeContextToLate() {
 void ewol::resource::Shader::reload() {
 	etk::FSNode file(m_name);
 	if (false == file.exist()) {
-		EWOL_ERROR("File does not Exist : '" << file << "' : '" << file.getFileSystemName() << "'");
+		EWOL_CRITICAL("File does not Exist : '" << file << "' : '" << file.getFileSystemName() << "'");
 		return;
 	}
 	
 	int64_t fileSize = file.fileSize();
 	if (0 == fileSize) {
-		EWOL_ERROR("This file is empty : " << file);
+		EWOL_CRITICAL("This file is empty : " << file);
 		return;
 	}
 	if (false == file.fileOpenRead()) {
-		EWOL_ERROR("Can not open the file : " << file);
+		EWOL_CRITICAL("Can not open the file : " << file);
 		return;
 	}
 	// remove previous data ...
@@ -139,7 +142,7 @@ void ewol::resource::Shader::reload() {
 	// allocate data
 	m_fileData = new char[fileSize+5];
 	if (nullptr == m_fileData) {
-		EWOL_ERROR("Error Memory allocation size=" << fileSize);
+		EWOL_CRITICAL("Error Memory allocation size=" << fileSize);
 		return;
 	}
 	memset(m_fileData, 0, (fileSize+5)*sizeof(char));

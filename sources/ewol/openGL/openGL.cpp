@@ -12,6 +12,22 @@
 #include <etk/stdTools.h>
 #include <mutex>
 //#define DIRECT_MODE
+
+
+static void checkGlError(const char* _op, int32_t _localLine) {
+	bool isPresent = false;
+	for (GLint error = glGetError(); error; error = glGetError()) {
+		EWOL_ERROR("after " << _op << "():" << _localLine << " glError(" << error << ")");
+		isPresent = true;
+	}
+	if (isPresent == true) {
+		EWOL_CRITICAL("plop");
+	}
+}
+
+
+
+
 /**
  * @brief get the draw mutex (ewol render).
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
@@ -112,6 +128,10 @@ void ewol::openGL::finish() {
 void ewol::openGL::flush() {
 	l_programId = -1;
 	l_textureflags = 0;
+	glFlush();
+	EWOL_ERROR("========================" );
+	EWOL_ERROR("==   FLUSH OPEN GL    ==" );
+	EWOL_ERROR("========================");
 }
 
 void ewol::openGL::swap() {
@@ -414,4 +434,55 @@ void ewol::openGL::useProgram(int32_t _id) {
 	#endif
 }
 
+
+
+
+bool ewol::openGL::genBuffers(std::vector<GLuint>& _buffers) {
+	if (_buffers.size() == 0) {
+		EWOL_WARNING("try to generate vector buffer with size 0");
+		return true;
+	}
+	EWOL_VERBOSE("Create N=" << _buffers.size() << " Buffer");
+	glGenBuffers(_buffers.size(), &_buffers[0]);
+	checkGlError("glGenBuffers", __LINE__);
+	bool hasError = false;
+	for (size_t iii=0; iii<_buffers.size(); iii++) {
+		if (_buffers[iii] == 0) {
+			EWOL_ERROR("[" << iii << "] error to create a buffer id=" << _buffers[iii]);
+			hasError = true;
+		}
+	}
+	return hasError;
+}
+
+bool ewol::openGL::deleteBuffers(std::vector<GLuint>& _buffers) {
+	if (_buffers.size() == 0) {
+		EWOL_WARNING("try to delete vector buffer with size 0");
+		return true;
+	}
+	glDeleteBuffers(_buffers.size(), &_buffers[0]);
+	checkGlError("glDeleteBuffers", __LINE__);
+	for (auto &it : _buffers) {
+		it = 0;
+	}
+	return true;
+}
+
+bool ewol::openGL::bindBuffer(GLuint _bufferId) {
+	glBindBuffer(GL_ARRAY_BUFFER, _bufferId);
+	checkGlError("glBindBuffer", __LINE__);
+	return true;
+}
+
+bool ewol::openGL::bufferData(size_t _size, const void* _data, GLenum _usage) {
+	glBufferData(GL_ARRAY_BUFFER, _size, _data, _usage);
+	checkGlError("glBufferData", __LINE__);
+	return true;
+}
+
+bool ewol::openGL::unbindBuffer() {
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	checkGlError("glBindBuffer(0)", __LINE__);
+	return true;
+}
 
