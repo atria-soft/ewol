@@ -19,7 +19,7 @@ void ewol::resource::VirtualBufferObject::init(int32_t _number) {
 	m_vbo.resize(_number, 0);
 	m_vboUsed.resize(_number, false);
 	m_buffer.resize(_number);
-	m_vboSizeDataOffset.resize(_number, 0);
+	m_vboSizeDataOffset.resize(_number, -1);
 	EWOL_DEBUG("OGL : load VBO count=\"" << _number << "\"");
 }
 
