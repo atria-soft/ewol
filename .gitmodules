@@ -68,3 +68,6 @@
 [submodule "external/enet"]
 	path = external/enet
 	url = https://github.com/HeeroYui/enet.git
+[submodule "external/gtest"]
+	path = external/gtest
+	url = https://github.com/HeeroYui/gtest

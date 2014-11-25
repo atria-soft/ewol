@@ -7,7 +7,8 @@ import lutinMultiprocess
 def get_desc():
 	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
 
-
+def get_license():
+	return "APACHE v2.0"
 
 def create(target):
 	# set the ewol folder for Android basic sources ...
