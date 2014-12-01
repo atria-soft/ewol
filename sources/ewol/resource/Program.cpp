@@ -380,15 +380,13 @@ void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
 	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	//EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send " << _vbo->getElementSize(_index) << " element on oglID=" << _vbo->getGL_ID(_index) << " VBOindex=" << _index);
+	EWOL_VERBOSE("[" << m_elementList[_idElem].m_name << "] send " << _vbo->getElementSize(_index) << " element on oglID=" << _vbo->getGL_ID(_index) << " VBOindex=" << _index);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo->getGL_ID(_index));
 	checkGlError("glBindBuffer", __LINE__);
-	/*
-	EWOL_ERROR("    id=" << m_elementList[_idElem].m_elementId);
-	EWOL_ERROR("    eleme size=" << _vbo->getElementSize(_index));
-	EWOL_ERROR("    jump sample=" << _jumpBetweenSample);
-	EWOL_ERROR("    offset=" << _offset);
-	*/
+	EWOL_VERBOSE("    id=" << m_elementList[_idElem].m_elementId);
+	EWOL_VERBOSE("    eleme size=" << _vbo->getElementSize(_index));
+	EWOL_VERBOSE("    jump sample=" << _jumpBetweenSample);
+	EWOL_VERBOSE("    offset=" << _offset);
 	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
 	                      _vbo->getElementSize(_index), // number of elements per vertex, here (r,g,b,a)
 	                      GL_FLOAT, // the type of each element
