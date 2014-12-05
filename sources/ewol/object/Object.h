@@ -241,7 +241,7 @@ namespace ewol {
 			}
 			*/
 	};
-	
+	bool parameterSetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 };
 
 /**

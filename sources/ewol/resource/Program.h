@@ -303,6 +303,8 @@ namespace ewol {
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
 				void reload();
+			private:
+				void checkGlError(const char* _op, int32_t _localLine, int32_t _idElem=-2);
 		};
 	};
 };

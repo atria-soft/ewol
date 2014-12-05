@@ -125,15 +125,29 @@ std::ostream& ewol::resource::operator <<(std::ostream& _os, const std::vector<e
 	return _os;
 }
 
-static void checkGlError(const char* _op, int32_t _localLine) {
-	bool isPresent = false;
-	for (GLint error = glGetError(); error; error = glGetError()) {
-		EWOL_ERROR("after " << _op << "():" << _localLine << " glError(" << error << ")");
-		isPresent = true;
-	}
-	if (isPresent == true) {
-		EWOL_CRITICAL("plop");
-	}
+void ewol::resource::Program::checkGlError(const char* _op, int32_t _localLine, int32_t _idElem) {
+	#ifdef DEBUG
+		bool isPresent = false;
+		for (GLint error = glGetError(); error; error = glGetError()) {
+			EWOL_ERROR("after " << _op << "() line=" << _localLine << " glError(" << error << ")");
+			isPresent = true;
+		}
+		if (isPresent == true) {
+			EWOL_ERROR("    in program name : " << m_name);
+			EWOL_ERROR("    program OpenGL ID =" << m_program);
+			EWOL_ERROR("    List IO :");
+			int32_t id = 0;
+			for (auto &it : m_elementList) {
+				if (id == _idElem) {
+					EWOL_ERROR("      * name :" << it.m_name << " OpenGL ID=" << it.m_elementId << " attribute=" << it.m_isAttribute << " is linked=" << it.m_isLinked);
+				} else {
+					EWOL_ERROR("        name :" << it.m_name << " OpenGL ID=" << it.m_elementId << " attribute=" << it.m_isAttribute << " is linked=" << it.m_isLinked);
+				}
+				id++;
+			}
+			EWOL_CRITICAL("Stop on openGL ERROR");
+		}
+	#endif
 }
 
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
@@ -160,9 +174,9 @@ int32_t ewol::resource::Program::getAttribute(std::string _elementName) {
 	tmp.m_elementId = glGetAttribLocation(m_program, tmp.m_name.c_str());
 	tmp.m_isLinked = true;
 	if (tmp.m_elementId<0) {
-		checkGlError("glGetAttribLocation", __LINE__);
 		EWOL_WARNING("    [" << m_elementList.size() << "] glGetAttribLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 		tmp.m_isLinked = false;
+		checkGlError("glGetAttribLocation", __LINE__, tmp.m_elementId);
 	} else {
 		EWOL_INFO("    [" << m_elementList.size() << "] glGetAttribLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 	}
@@ -183,9 +197,9 @@ int32_t ewol::resource::Program::getUniform(std::string _elementName) {
 	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
 	tmp.m_isLinked = true;
 	if (tmp.m_elementId<0) {
-		checkGlError("glGetUniformLocation", __LINE__);
 		EWOL_WARNING("    [" << m_elementList.size() << "] glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 		tmp.m_isLinked = false;
+		checkGlError("glGetUniformLocation", __LINE__, tmp.m_elementId);
 	} else {
 		EWOL_INFO("    [" << m_elementList.size() << "] glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 	}
@@ -360,9 +374,9 @@ void ewol::resource::Program::sendAttribute(int32_t _idElem,
 	                      GL_FALSE, // take our values as-is
 	                      _jumpBetweenSample, // no extra data between each position
 	                      _pointer); // Pointer on the buffer
-	//checkGlError("glVertexAttribPointer", __LINE__);
+	checkGlError("glVertexAttribPointer", __LINE__, _idElem);
 	glEnableVertexAttribArray(m_elementList[_idElem].m_elementId);
-	//checkGlError("glEnableVertexAttribArray", __LINE__);
+	checkGlError("glEnableVertexAttribArray", __LINE__, _idElem);
 }
 
 void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
@@ -380,9 +394,15 @@ void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
 	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
+	// check error of the VBO goog enought ...
+	if (_vbo->getElementSize(_index) <= 0) {
+		EWOL_ERROR("Can not bind a VBO Buffer with an element size of : " << _vbo->getElementSize(_index) << " named=" << _vbo->getName());
+		return;
+	}
+	
 	EWOL_VERBOSE("[" << m_elementList[_idElem].m_name << "] send " << _vbo->getElementSize(_index) << " element on oglID=" << _vbo->getGL_ID(_index) << " VBOindex=" << _index);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo->getGL_ID(_index));
-	checkGlError("glBindBuffer", __LINE__);
+	checkGlError("glBindBuffer", __LINE__, _idElem);
 	EWOL_VERBOSE("    id=" << m_elementList[_idElem].m_elementId);
 	EWOL_VERBOSE("    eleme size=" << _vbo->getElementSize(_index));
 	EWOL_VERBOSE("    jump sample=" << _jumpBetweenSample);
@@ -393,9 +413,9 @@ void ewol::resource::Program::sendAttributePointer(int32_t _idElem,
 	                      GL_FALSE, // take our values as-is
 	                      _jumpBetweenSample, // no extra data between each position
 	                      (GLvoid *)_offset); // Pointer on the buffer
-	checkGlError("glVertexAttribPointer", __LINE__);
+	checkGlError("glVertexAttribPointer", __LINE__, _idElem);
 	glEnableVertexAttribArray(m_elementList[_idElem].m_elementId);
-	checkGlError("glEnableVertexAttribArray", __LINE__);
+	checkGlError("glEnableVertexAttribArray", __LINE__, _idElem);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +440,7 @@ void ewol::resource::Program::uniformMatrix(int32_t _idElem, const mat4& _matrix
 	} else {
 		glUniformMatrix4fv(m_elementList[_idElem].m_elementId, 1, GL_FALSE, _matrix.m_mat);
 	}
-	//checkGlError("glUniformMatrix4fv", __LINE__);
+	checkGlError("glUniformMatrix4fv", __LINE__, _idElem);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -437,7 +457,7 @@ void ewol::resource::Program::uniform1f(int32_t _idElem, float _value1) {
 		return;
 	}
 	glUniform1f(m_elementList[_idElem].m_elementId, _value1);
-	//checkGlError("glUniform1f", __LINE__);
+	checkGlError("glUniform1f", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform2f(int32_t _idElem, float  _value1, float _value2) {
 	if (0 == m_program) {
@@ -451,7 +471,7 @@ void ewol::resource::Program::uniform2f(int32_t _idElem, float  _value1, float _
 		return;
 	}
 	glUniform2f(m_elementList[_idElem].m_elementId, _value1, _value2);
-	//checkGlError("glUniform2f", __LINE__);
+	checkGlError("glUniform2f", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform3f(int32_t _idElem, float _value1, float _value2, float _value3) {
 	if (0 == m_program) {
@@ -465,7 +485,7 @@ void ewol::resource::Program::uniform3f(int32_t _idElem, float _value1, float _v
 		return;
 	}
 	glUniform3f(m_elementList[_idElem].m_elementId, _value1, _value2, _value3);
-	//checkGlError("glUniform3f", __LINE__);
+	checkGlError("glUniform3f", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform4f(int32_t _idElem, float _value1, float _value2, float _value3, float _value4) {
 	if (0 == m_program) {
@@ -478,9 +498,8 @@ void ewol::resource::Program::uniform4f(int32_t _idElem, float _value1, float _v
 	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	EWOL_ERROR("[" << m_elementList[_idElem].m_name << "] send 4 values");
 	glUniform4f(m_elementList[_idElem].m_elementId, _value1, _value2, _value3, _value4);
-	//checkGlError("glUniform4f", __LINE__);
+	checkGlError("glUniform4f", __LINE__, _idElem);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -497,7 +516,7 @@ void ewol::resource::Program::uniform1i(int32_t _idElem, int32_t _value1) {
 		return;
 	}
 	glUniform1i(m_elementList[_idElem].m_elementId, _value1);
-	//checkGlError("glUniform1i", __LINE__);
+	checkGlError("glUniform1i", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform2i(int32_t _idElem, int32_t _value1, int32_t _value2) {
 	if (0 == m_program) {
@@ -511,7 +530,7 @@ void ewol::resource::Program::uniform2i(int32_t _idElem, int32_t _value1, int32_
 		return;
 	}
 	glUniform2i(m_elementList[_idElem].m_elementId, _value1, _value2);
-	//checkGlError("glUniform2i", __LINE__);
+	checkGlError("glUniform2i", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform3i(int32_t _idElem, int32_t _value1, int32_t _value2, int32_t _value3) {
 	if (0 == m_program) {
@@ -525,7 +544,7 @@ void ewol::resource::Program::uniform3i(int32_t _idElem, int32_t _value1, int32_
 		return;
 	}
 	glUniform3i(m_elementList[_idElem].m_elementId, _value1, _value2, _value3);
-	//checkGlError("glUniform3i", __LINE__);
+	checkGlError("glUniform3i", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform4i(int32_t _idElem, int32_t _value1, int32_t _value2, int32_t _value3, int32_t _value4) {
 	if (0 == m_program) {
@@ -539,7 +558,7 @@ void ewol::resource::Program::uniform4i(int32_t _idElem, int32_t _value1, int32_
 		return;
 	}
 	glUniform4i(m_elementList[_idElem].m_elementId, _value1, _value2, _value3, _value4);
-	//checkGlError("glUniform4i", __LINE__);
+	checkGlError("glUniform4i", __LINE__, _idElem);
 }
 
 
@@ -565,7 +584,7 @@ void ewol::resource::Program::uniform1fv(int32_t _idElem, int32_t _nbElement, co
 		return;
 	}
 	glUniform1fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform1fv", __LINE__);
+	checkGlError("glUniform1fv", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform2fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
@@ -587,7 +606,7 @@ void ewol::resource::Program::uniform2fv(int32_t _idElem, int32_t _nbElement, co
 		return;
 	}
 	glUniform2fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform2fv", __LINE__);
+	checkGlError("glUniform2fv", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform3fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
@@ -610,7 +629,7 @@ void ewol::resource::Program::uniform3fv(int32_t _idElem, int32_t _nbElement, co
 	}
 	EWOL_VERBOSE("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " vec3");
 	glUniform3fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform3fv", __LINE__);
+	checkGlError("glUniform3fv", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform4fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
@@ -633,7 +652,7 @@ void ewol::resource::Program::uniform4fv(int32_t _idElem, int32_t _nbElement, co
 	}
 	EWOL_VERBOSE("[" << m_elementList[_idElem].m_name << "] send " << _nbElement << " vec4");
 	glUniform4fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform4fv", __LINE__);
+	checkGlError("glUniform4fv", __LINE__, _idElem);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -658,7 +677,7 @@ void ewol::resource::Program::uniform1iv(int32_t _idElem, int32_t _nbElement, co
 		return;
 	}
 	glUniform1iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform1iv", __LINE__);
+	checkGlError("glUniform1iv", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform2iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
@@ -680,7 +699,7 @@ void ewol::resource::Program::uniform2iv(int32_t _idElem, int32_t _nbElement, co
 		return;
 	}
 	glUniform2iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform2iv", __LINE__);
+	checkGlError("glUniform2iv", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform3iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
@@ -702,7 +721,7 @@ void ewol::resource::Program::uniform3iv(int32_t _idElem, int32_t _nbElement, co
 		return;
 	}
 	glUniform3iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform3iv", __LINE__);
+	checkGlError("glUniform3iv", __LINE__, _idElem);
 }
 void ewol::resource::Program::uniform4iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
@@ -724,7 +743,7 @@ void ewol::resource::Program::uniform4iv(int32_t _idElem, int32_t _nbElement, co
 		return;
 	}
 	glUniform4iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
-	//checkGlError("glUniform4iv", __LINE__);
+	checkGlError("glUniform4iv", __LINE__, _idElem);
 }
 
 //#define PROGRAM_DISPLAY_SPEED
@@ -741,7 +760,7 @@ void ewol::resource::Program::use() {
 	#endif
 	// event if it was 0  == > set it to prevent other use of the previous shader display ...
 	ewol::openGL::useProgram(m_program);
-	//checkGlError("glUseProgram", __LINE__);
+	checkGlError("glUseProgram", __LINE__);
 }
 
 
@@ -760,13 +779,13 @@ void ewol::resource::Program::setTexture0(int32_t _idElem, GLint _textureOpenGlI
 		checkGlError("glEnable", __LINE__);
 	#endif
 	ewol::openGL::activeTexture(GL_TEXTURE0);
-	//checkGlError("glActiveTexture", __LINE__);
+	checkGlError("glActiveTexture", __LINE__, _idElem);
 	// set the textureID
 	glBindTexture(GL_TEXTURE_2D, _textureOpenGlID);
-	//checkGlError("glBindTexture", __LINE__);
+	checkGlError("glBindTexture", __LINE__, _idElem);
 	// set the texture on the uniform attribute
 	glUniform1i(m_elementList[_idElem].m_elementId, /*GL_TEXTURE*/0);
-	//checkGlError("glUniform1i", __LINE__);
+	checkGlError("glUniform1i", __LINE__, _idElem);
 	m_hasTexture = true;
 }
 
@@ -785,13 +804,13 @@ void ewol::resource::Program::setTexture1(int32_t _idElem, GLint _textureOpenGlI
 		checkGlError("glEnable", __LINE__);
 	#endif
 	ewol::openGL::activeTexture(GL_TEXTURE1);
-	//checkGlError("glActiveTexture", __LINE__);
+	checkGlError("glActiveTexture", __LINE__, _idElem);
 	// set the textureID
 	glBindTexture(GL_TEXTURE_2D, _textureOpenGlID);
-	//checkGlError("glBindTexture", __LINE__);
+	checkGlError("glBindTexture", __LINE__, _idElem);
 	// set the texture on the uniform attribute
 	glUniform1i(m_elementList[_idElem].m_elementId, /*GL_TEXTURE*/1);
-	//checkGlError("glUniform1i", __LINE__);
+	checkGlError("glUniform1i", __LINE__, _idElem);
 	m_hasTexture1 = true;
 }
 
@@ -818,6 +837,6 @@ void ewol::resource::Program::unUse() {
 			EWOL_DEBUG("      prog : " << localTime << "ms    resource=\"" << m_name << "\"");
 		}
 	#endif
-	//checkGlError("glUseProgram", __LINE__);
+	checkGlError("glUseProgram", __LINE__);
 }
 

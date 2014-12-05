@@ -164,3 +164,11 @@ std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string&
 	return nullptr;
 }
 
+
+bool ewol::parameterSetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+	std::shared_ptr<ewol::Object> object = ewol::getContext().getEObjectManager().get(_objectName);
+	if (object == nullptr) {
+		return false;
+	}
+	return object->parameterSet(_config, _value);
+}
