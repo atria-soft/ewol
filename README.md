@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/HeeroYui/ewol.svg?branch=dev)](https://travis-ci.org/HeeroYui/ewol)
+
 Ewol
 ====
 
