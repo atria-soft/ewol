@@ -71,3 +71,6 @@
 [submodule "external/gtest"]
 	path = external/gtest
 	url = https://github.com/HeeroYui/gtest
+[submodule "external/luaWrapper"]
+	path = external/luaWrapper
+	url = https://github.com/HeeroYui/luaWrapper.git
