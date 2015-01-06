@@ -74,3 +74,9 @@
 [submodule "external/luaWrapper"]
 	path = external/luaWrapper
 	url = https://github.com/HeeroYui/luaWrapper.git
+[submodule "external/speex"]
+	path = external/speex
+	url = https://github.com/HeeroYui/speex.git
+[submodule "external/speexdsp"]
+	path = external/speexdsp
+	url = https://github.com/HeeroYui/speexdsp.git
