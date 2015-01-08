@@ -112,11 +112,11 @@ namespace ewol {
 			// generic dimentions
 			vec2 dimention;
 			// keyboard events :
-			bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
-			bool                        stateIsDown;
-			char32_t                   keyboardChar;
+			bool repeateKey;  //!< special flag for the repeating key on the PC interface
+			bool stateIsDown;
+			char32_t keyboardChar;
 			enum ewol::key::keyboard keyboardMove;
-			ewol::key::Special            keyboardSpecial;
+			ewol::key::Special keyboardSpecial;
 			
 			eSystemMessage() :
 				TypeMessage(msgNone),
