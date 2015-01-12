@@ -1,5 +1,7 @@
 # language type:
-language: cpp
+language:
+- cpp
+- Objective-c
 
 # compilator system:
 compiler:
@@ -27,16 +29,16 @@ install:
 
 # build sequence with Lutin :
 script: 
-  - if [ "$CXX" == "clang++" ]; then ./build/lutin.py -C -P -cclang -mdebug -p ewol etktest exmltest ejsontest enettest; fi
-  - if [ "$CXX" == "g++" ]; then ./build/lutin.py -C -P -cgcc -mdebug -p ewol etktest exmltest ejsontest enettest; fi
+  - if [ "$CXX" == "clang++" ]; then ./build/lutin.py -C -P -cclang -mdebug -p ewol etk_test exmltest ejson_test enettest; fi
+  - if [ "$CXX" == "g++" ]; then ./build/lutin.py -C -P -cgcc -mdebug -p ewol etk_test exmltest ejson_test enettest; fi
 
 after_script:
-  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/etktest/usr/bin/etktest; fi
+  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/etktest/usr/bin/etk_test; fi
   - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/exmltest/usr/bin/exmltest; fi
-  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/ejsontest/usr/bin/ejsontest; fi
-  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/etktest/usr/bin/etktest; fi
+  - if [ "$CXX" == "clang++" ]; then ./out/Linux_x86_64/debug/staging/clang/ejsontest/usr/bin/ejson_test; fi
+  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/etktest/usr/bin/etk_test; fi
   - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/exmltest/usr/bin/exmltest; fi
-  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/ejsontest/usr/bin/ejsontest; fi
+  - if [ "$CXX" == "g++" ]; then ./out/Linux_x86_64/debug/staging/gcc/ejsontest/usr/bin/ejson_test; fi
 
 #send e-mail on compilation result:
 notifications:

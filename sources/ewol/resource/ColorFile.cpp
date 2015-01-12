@@ -47,13 +47,13 @@ void ewol::resource::ColorFile::reload() {
 		EWOL_ERROR("Can not load file : '" << m_name << "' = " << etk::FSNode(m_name).getFileSystemName());
 		return;
 	}
-	ejson::Array* baseArray = doc.getArray("color");
+	std::shared_ptr<ejson::Array> baseArray = doc.getArray("color");
 	if (baseArray == nullptr) {
 		EWOL_ERROR("Can not get basic array : 'color'");
 		return;
 	}
 	for (size_t iii = 0; iii < baseArray->size(); ++iii) {
-		ejson::Object* tmpObj = baseArray->getObject(iii);
+		std::shared_ptr<ejson::Object> tmpObj = baseArray->getObject(iii);
 		if (tmpObj == nullptr) {
 			EWOL_DEBUG(" can not get object in 'color' id=" << iii);
 			continue;
