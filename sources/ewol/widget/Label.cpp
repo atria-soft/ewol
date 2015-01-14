@@ -131,8 +131,8 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-bool ewol::widget::Label::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	ewol::Widget::loadXML(_node);

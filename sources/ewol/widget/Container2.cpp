@@ -176,8 +176,8 @@ std::shared_ptr<ewol::Widget> ewol::widget::Container2::getWidgetAtPos(const vec
 }
 */
 
-bool ewol::widget::Container2::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::widget::Container2::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	// parse generic properties :
@@ -187,7 +187,7 @@ bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 	
 	// parse all the elements :
 	for(size_t iii=0; iii< _node->size(); iii++) {
-		exml::Element* pNode = _node->getElement(iii);
+		std::shared_ptr<const exml::Element> pNode = _node->getElement(iii);
 		if (pNode == nullptr) {
 			// trash here all that is not element
 			continue;
@@ -198,9 +198,9 @@ bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 			continue;
 		}
 		bool toogleMode=false;
-		if (nullptr != getSubWidget()) {
+		if (getSubWidget() != nullptr) {
 			toogleMode=true;
-			if (nullptr != getSubWidgetToggle()) {
+			if (getSubWidgetToggle() != nullptr) {
 				EWOL_ERROR("(l "<<pNode->getPos()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
 				continue;
 			}
@@ -217,7 +217,7 @@ bool ewol::widget::Container2::loadXML(exml::Element* _node) {
 		} else {
 			setSubWidgetToggle(tmpWidget);
 		}
-		if (false == tmpWidget->loadXML(pNode)) {
+		if (tmpWidget->loadXML(pNode) == false) {
 			EWOL_ERROR ("(l "<<pNode->getPos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}

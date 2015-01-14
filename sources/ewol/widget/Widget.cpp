@@ -591,7 +591,7 @@ enum ewol::context::cursorDisplay ewol::Widget::getCursor() {
 	return m_cursorDisplay;
 }
 
-bool ewol::Widget::loadXML(exml::Element* _node) {
+bool ewol::Widget::loadXML(const std::shared_ptr<const exml::Element>& _node) {
 	ewol::Object::loadXML(_node);
 	markToRedraw();
 	return true;

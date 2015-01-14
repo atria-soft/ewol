@@ -143,18 +143,17 @@ std::shared_ptr<ewol::Widget> ewol::widget::Container::getWidgetAtPos(const vec2
 };
 
 
-bool ewol::widget::Container::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::widget::Container::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	// parse generic properties :
 	ewol::Widget::loadXML(_node);
 	// remove previous element :
 	subWidgetRemove();
-	
 	// parse all the elements :
 	for(size_t iii=0; iii< _node->size(); iii++) {
-		exml::Element* pNode = _node->getElement(iii);
+		std::shared_ptr<const exml::Element> pNode = _node->getElement(iii);
 		if (pNode == nullptr) {
 			// trash here all that is not element
 			continue;

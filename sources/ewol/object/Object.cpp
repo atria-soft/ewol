@@ -108,8 +108,8 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 	return false;
 }
 
-bool ewol::Object::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::Object::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	bool errorOccured = false;
@@ -126,7 +126,7 @@ bool ewol::Object::loadXML(exml::Element* _node) {
 	return errorOccured;
 }
 
-bool ewol::Object::storeXML(exml::Element* _node) const {
+bool ewol::Object::storeXML(const std::shared_ptr<exml::Element>& _node) const {
 	if (nullptr == _node) {
 		return false;
 	}
