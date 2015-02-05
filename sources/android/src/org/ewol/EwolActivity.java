@@ -344,7 +344,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	
 	public String audioGetDeviceProperty(int idDevice) {
 		if (idDevice == 0) {
-			return "speaker:out:8000,16000,24000,32000,48000,96000:2:s16";
+			return "speaker:out:8000,16000,24000,32000,48000,96000:2:int16";
 		} else {
 			return "::::";
 		}
