@@ -80,3 +80,12 @@
 [submodule "external/speexdsp"]
 	path = external/speexdsp
 	url = https://github.com/HeeroYui/speexdsp.git
+[submodule "external/audio"]
+	path = external/audio
+	url = https://github.com/HeeroYui/audio.git
+[submodule "external/drain"]
+	path = external/drain
+	url = https://github.com/HeeroYui/drain.git
+[submodule "external/river"]
+	path = external/river
+	url = https://github.com/HeeroYui/river.git
