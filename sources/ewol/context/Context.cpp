@@ -305,6 +305,8 @@ ewol::Context::Context(ewol::context::Application* _application, int32_t _argc, 
   m_windowsCurrent(nullptr),
   m_windowsSize(320,480),
   m_initStepId(0) {
+	// set a basic 
+	etk::log::setThreadName("ewol");
 	if (m_application == nullptr) {
 		EWOL_CRITICAL("Can not start context with no Application ==> rtfm ...");
 	}
