@@ -232,6 +232,7 @@ void IOs::foreground() {
 
 static int l_argc = 0;
 static const char **l_argv = nullptr;
+static ewol::context::Application* l_application;
 /**
  * @brief Main of the program
  * @param std IO
@@ -240,14 +241,16 @@ static const char **l_argv = nullptr;
 int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
 	l_argc = _argc;
 	l_argv = _argv;
-	return mm_main(_application, _argc, _argv);
+	l_application = _application;
+	return mm_main(_argc, _argv);
 }
 
 // Creat and relaese ewol::Context interface:
 void IOs::createInterface() {
 	etk::setArgZero(l_argv[0]);
 	EWOL_INFO("Create new interface");
-	interface = new MacOSInterface(l_argc, l_argv);
+	interface = new MacOSInterface(l_application, l_argc, l_argv);
+	l_application = nullptr;
 	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return;
@@ -255,10 +258,9 @@ void IOs::createInterface() {
 }
 
 void IOs::releaseInterface() {
-	if (interface == nullptr) {
-		return;
+	if (interface != nullptr) {
+		EWOL_INFO("Remove interface");
 	}
-	EWOL_INFO("Remove interface");
 	delete(interface);
 	interface = nullptr;
 }

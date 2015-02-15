@@ -149,9 +149,15 @@ namespace ewol {
 			renderTriangle = GL_TRIANGLES,
 			renderTriangleStrip = GL_TRIANGLE_STRIP, //!< Not supported in EWOL (TODO : Later)
 			renderTriangleFan = GL_TRIANGLE_FAN, //!< Not supported in EWOL (TODO : Later)
-			renderQuad = GL_QUADS, //!< Not supported in OpenGL-ES2
-			renderQuadStrip = GL_QUAD_STRIP, //!< Not supported in OpenGL-ES2
-			renderPolygon = GL_POLYGON //!< Not supported in OpenGL-ES2
+			#if (!defined(__TARGET_OS__IOs) && !defined(__TARGET_OS__Android))
+				renderQuad = GL_QUADS, //!< Not supported in OpenGL-ES2
+				renderQuadStrip = GL_QUAD_STRIP, //!< Not supported in OpenGL-ES2
+				renderPolygon = GL_POLYGON //!< Not supported in OpenGL-ES2
+			#else
+				renderQuad, //!< Not supported in OpenGL-ES2
+				renderQuadStrip, //!< Not supported in OpenGL-ES2
+				renderPolygon //!< Not supported in OpenGL-ES2
+			#endif
 		};
 		
 		/**

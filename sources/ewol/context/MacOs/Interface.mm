@@ -84,7 +84,7 @@ int mm_main(int argc, const char *argv[]) {
 	//[window addChildWindow:view];
 	//[window makeKeyAndVisible];
 	
-	[window setDelegate:view];
+	//[window setDelegate:view];
 #else
     @autoreleasepool
     {
