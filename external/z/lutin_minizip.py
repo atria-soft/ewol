@@ -18,6 +18,8 @@ def create(target):
 	
 	myModule.add_module_depend('z')
 	
+	myModule.compile_version_CC(1999)
+	
 	myModule.compile_flags_CC([
 		"-DNOCRYPT",
 		"-DIOAPI_NO_64"])
