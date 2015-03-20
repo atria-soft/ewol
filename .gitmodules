@@ -23,9 +23,6 @@
 [submodule "external/ogg"]
 	path = external/ogg
 	url = https://github.com/HeeroYui/libogg.git
-[submodule "external/lua"]
-	path = external/lua
-	url = https://github.com/HeeroYui/liblua.git
 [submodule "external/z/zlib"]
 	path = external/z/zlib
 	url = https://github.com/madler/zlib.git
@@ -71,9 +68,6 @@
 [submodule "external/gtest"]
 	path = external/gtest
 	url = https://github.com/HeeroYui/gtest
-[submodule "external/luaWrapper"]
-	path = external/luaWrapper
-	url = https://github.com/HeeroYui/luaWrapper.git
 [submodule "external/speex"]
 	path = external/speex
 	url = https://github.com/HeeroYui/speex.git
