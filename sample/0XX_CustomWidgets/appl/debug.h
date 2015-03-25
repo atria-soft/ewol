@@ -14,16 +14,7 @@
 namespace appl {
 	int32_t getLogId();
 };
-// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
-#define APPL_BASE(info,data) \
-	do { \
-		if (info <= etk::log::getLevel(appl::getLogId())) { \
-			std::stringbuf sb; \
-			std::ostream tmpStream(&sb); \
-			tmpStream << data; \
-			etk::log::logStream(appl::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
-		} \
-	} while(0)
+#define APPL_BASE(info,data) TK_LOG_BASE(appl::getLogId(),info,data)
 
 #define APPL_CRITICAL(data)      APPL_BASE(1, data)
 #define APPL_ERROR(data)         APPL_BASE(2, data)
