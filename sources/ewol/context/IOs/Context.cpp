@@ -29,6 +29,7 @@
 #include <sys/times.h>
 #include <mach/clock.h>
 #include <mach/mach.h>
+#include <etk/etk.h>
 
 
 int64_t ewol::getTime() {

@@ -24,6 +24,7 @@
 #include <ewol/resource/Manager.h>
 #include <ewol/context/Context.h>
 #include <ewol/Dimension.h>
+#include <etk/etk.h>
 
 
 #if defined(__TARGET_OS__Linux)
