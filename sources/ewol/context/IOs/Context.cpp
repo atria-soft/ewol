@@ -247,7 +247,7 @@ int ewol::run(ewol::context::Application* _application, int _argc, const char *_
 
 // Creat and relaese ewol::Context interface:
 void IOs::createInterface() {
-	etk::setArgZero(l_argv[0]);
+	etk::init(l_argc, l_argv);
 	EWOL_INFO("Create new interface");
 	interface = new MacOSInterface(l_application, l_argc, l_argv);
 	l_application = nullptr;
