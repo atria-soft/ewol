@@ -2,9 +2,6 @@
 [submodule "external/glew/glew"]
 	path = external/glew/glew
 	url = https://github.com/HeeroYui/glew.git
-[submodule "build"]
-	path = build
-	url = https://github.com/HeeroYui/Build.git
 [submodule "external/etk"]
 	path = external/etk
 	url = https://github.com/HeeroYui/etk.git
@@ -83,3 +80,6 @@
 [submodule "external/river"]
 	path = external/river
 	url = https://github.com/HeeroYui/river.git
+[submodule "external/audio-algo-aec"]
+	path = external/audio-algo-aec
+	url = https://github.com/HeeroYui/audio-algo-aec.git

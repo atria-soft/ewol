@@ -16,6 +16,7 @@ branches:
 
 # previous actions:
 before_script: 
+  - git clone git://github.com/HeeroYui/lutin.git
   - git submodule init
   - git submodule update
   - if [ "$CXX" == "clang++" ]; then BUILDER=clang; else BUILDER=gcc; fi
@@ -31,7 +32,7 @@ install:
 
 # build sequence with Lutin :
 script: 
-  - ./build/lutin.py -C -P -c$BUILDER -mdebug -p ewol etk_test exml_test ejson_test enettest
+  - ./lutin/lutin.py -C -P -c$BUILDER -mdebug -p ewol etk_test exml_test ejson_test enettest
   - ./out/Linux_x86_64/debug/staging/$BUILDER/etk_test/usr/bin/etk_test
   - ./out/Linux_x86_64/debug/staging/$BUILDER/ejson_test/usr/bin/ejson_test
   - ./out/Linux_x86_64/debug/staging/$BUILDER/exml_test/usr/bin/exml_test
