@@ -41,21 +41,6 @@
 [submodule "external/ege"]
 	path = external/ege
 	url = https://github.com/HeeroYui/ege.git
-[submodule "monk"]
-	path = monk
-	url = https://github.com/HeeroYui/monk.git
-[submodule "external/rtaudio/rtaudio"]
-	path = external/rtaudio/rtaudio
-	url = https://github.com/HeeroYui/rtaudio.git
-[submodule "external/eaudiofx"]
-	path = external/eaudiofx
-	url = https://github.com/HeeroYui/eaudiofx.git
-[submodule "external/airtaudio"]
-	path = external/airtaudio
-	url = https://github.com/HeeroYui/AirTAudio.git
-[submodule "external/ewolsa"]
-	path = external/ewolsa
-	url = https://github.com/HeeroYui/ewolsa.git
 [submodule "ios-deploy"]
 	path = ios-deploy
 	url = https://github.com/HeeroYui/ios-deploy.git
@@ -74,12 +59,24 @@
 [submodule "external/audio"]
 	path = external/audio
 	url = https://github.com/HeeroYui/audio.git
-[submodule "external/drain"]
-	path = external/drain
-	url = https://github.com/HeeroYui/drain.git
-[submodule "external/river"]
-	path = external/river
-	url = https://github.com/HeeroYui/river.git
 [submodule "external/audio-algo-aec"]
 	path = external/audio-algo-aec
 	url = https://github.com/HeeroYui/audio-algo-aec.git
+[submodule "external/audio-algo-drain"]
+	path = external/audio-algo-drain
+	url = https://github.com/HeeroYui/audio-algo-drain.git
+[submodule "external/audio-drain"]
+	path = external/audio-drain
+	url = https://github.com/HeeroYui/audio-drain.git
+[submodule "external/audio-river"]
+	path = external/audio-river
+	url = https://github.com/HeeroYui/audio-river.git
+[submodule "external/audio-ess"]
+	path = external/audio-ess
+	url = https://github.com/HeeroYui/audio-ess.git
+[submodule "external/audio-blockEngine"]
+	path = external/audio-blockEngine
+	url = https://github.com/HeeroYui/audio-blockEngine.git
+[submodule "external/audio-orchestra"]
+	path = external/audio-orchestra
+	url = https://github.com/HeeroYui/audio-orchestra.git
