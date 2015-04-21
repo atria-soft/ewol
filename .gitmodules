@@ -79,3 +79,6 @@
 [submodule "external/audio-orchestra"]
 	path = external/audio-orchestra
 	url = https://github.com/musicdsp/audio-orchestra.git
+[submodule "external/audio-algo-speex"]
+	path = external/audio-algo-speex
+	url = http://github.com/musicdsp/audio-algo-speex
