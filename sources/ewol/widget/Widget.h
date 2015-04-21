@@ -31,7 +31,7 @@ namespace ewol {
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
 #include <ewol/translate.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
@@ -228,7 +228,7 @@ namespace ewol {
 			 */
 			virtual vec2 getOrigin();
 		protected:
-			ewol::object::Param<ewol::Dimension> m_userMinSize; //!< user define the minimum size of the widget
+			ewol::parameter::Value<ewol::Dimension> m_userMinSize; //!< user define the minimum size of the widget
 		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
@@ -255,7 +255,7 @@ namespace ewol {
 			 */
 			virtual void checkMinSize();
 		protected:
-			ewol::object::Param<ewol::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
+			ewol::parameter::Value<ewol::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
@@ -282,7 +282,7 @@ namespace ewol {
 			 */
 			virtual void checkMaxSize();
 		protected:
-			ewol::object::Param<bvec2> m_userExpand;
+			ewol::parameter::Value<bvec2> m_userExpand;
 		public:
 			/**
 			 * @brief set the expend capabilities (x&y)
@@ -305,7 +305,7 @@ namespace ewol {
 			 */
 			virtual bvec2 canExpand();
 		protected:
-			ewol::object::Param<bvec2> m_userFill;
+			ewol::parameter::Value<bvec2> m_userFill;
 		public:
 			/**
 			 * @brief set the x&y filling capacity
@@ -328,7 +328,7 @@ namespace ewol {
 			 */
 			const bvec2& canFill();
 		protected:
-			ewol::object::Param<bool> m_hide; //!< hide a widget on the display
+			ewol::parameter::Value<bool> m_hide; //!< hide a widget on the display
 		public:
 			/**
 			 * @brief set the widget hidden
@@ -351,7 +351,7 @@ namespace ewol {
 			};
 		
 		protected:
-			ewol::object::ParamList<enum ewol::gravity> m_gravity; //!< Gravity of the widget
+			ewol::parameter::List<enum ewol::gravity> m_gravity; //!< Gravity of the widget
 		public:
 			/**
 			 * @brief set the widget gravity
@@ -372,7 +372,7 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
 			bool m_hasFocus; //!< set the focus on this widget
-			ewol::object::Param<bool> m_canFocus; //!< the focus can be done on this widget
+			ewol::parameter::Value<bool> m_canFocus; //!< the focus can be done on this widget
 		public:
 			/**
 			 * @brief get the focus state of the widget
@@ -472,41 +472,17 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- periodic call Area
 		// ----------------------------------------------------------------------------------------------------------------
-		private:
-			int64_t m_periodicCallDeltaTime; //!< -1 : disable / 0 : every time / else in US
-			int64_t m_periodicCallTime; //!< Last call time
 		protected:
+			// TODO : Remove this API ==> deprecated since 28/10/2014
 			/**
 			 * @brief disable the periodic call.
 			 */
 			void periodicCallDisable();
 			/**
 			 * @brief disable the periodic call.
-			 * @param[in] _callInSecond periodic call in second (float)
 			 */
-			void periodicCallEnable(float _callInSecond=0);
+			void periodicCallEnable();
 		public:
-			/**
-			 * @brief {SYSTEM} get a reference of the periodic call delta time
-			 * @return the perodic time delta call -1 : disable / 0 : every time / else in US
-			 */
-			int64_t systemGetCallDeltaTime() const {
-				return m_periodicCallDeltaTime;
-			};
-			/**
-			 * @brief {SYSTEM} get a reference of the periodic call time
-			 * @return Last call from the periodic call
-			 */
-			int64_t systemGetLastCallTime() const {
-				return m_periodicCallTime;
-			};
-			/**
-			 * @brief {SYSTEM} get a reference of the periodic call time
-			 * @return Last call from the periodic call
-			 */
-			void systemSetLastCallTime(int64_t _time) {
-				m_periodicCallTime=_time;
-			};
 			/**
 			 * @brief periodic call of this widget
 			 * @param _event Current time property
@@ -582,7 +558,7 @@ namespace ewol {
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
 		public:
-			ewol::object::Signal<std::string> signalShortcut; //!< signal handle of the message
+			ewol::Signal<std::string> signalShortcut; //!< signal handle of the message
 		private:
 			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
@@ -687,9 +663,9 @@ namespace ewol {
 			 */
 			virtual enum ewol::context::cursorDisplay getCursor();
 		public: // Derived function
-			virtual bool loadXML(exml::Element* _node);
+			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 		protected: // Derived function
-			virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+			virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions
@@ -708,9 +684,9 @@ namespace ewol {
 		 */
 		public:
 			// event generated :
-			ewol::object::Signal<void> signalAnnimationStart; //!< event when start annimation
-			ewol::object::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
-			ewol::object::Signal<void> signalAnnimationStop;  //!< event when stop annimation
+			ewol::Signal<void> signalAnnimationStart; //!< event when start annimation
+			ewol::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
+			ewol::Signal<void> signalAnnimationStop;  //!< event when stop annimation
 		protected:
 			enum annimationMode {
 				annimationModeEnableAdd,
@@ -720,10 +696,10 @@ namespace ewol {
 			enum annimationMode m_annimationMode; //!< true when the annimation is started
 			float m_annimationratio; //!< Ratio of the annimation [0..1]
 		protected:
-			ewol::object::ParamList<int32_t> m_annimationTypeStart; //!< type of start annimation
-			ewol::object::ParamRange<float> m_annimationTimeStart; //!< time to produce start annimation
-			ewol::object::ParamList<int32_t> m_annimationTypeStop; //!< type of start annimation
-			ewol::object::ParamRange<float> m_annimationTimeStop; //!< time to produce start annimation
+			ewol::parameter::List<int32_t> m_annimationTypeStart; //!< type of start annimation
+			ewol::parameter::Range<float> m_annimationTimeStart; //!< time to produce start annimation
+			ewol::parameter::List<int32_t> m_annimationTypeStop; //!< type of start annimation
+			ewol::parameter::Range<float> m_annimationTimeStop; //!< time to produce start annimation
 		protected:
 			/**
 			 * @brief Add a annimation type capabilities of this widget.

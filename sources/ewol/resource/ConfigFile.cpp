@@ -16,7 +16,7 @@
 #include <stdexcept>
 
 #undef __class__
-#define __class__	"resource::ConfigFile"
+#define __class__ "resource::ConfigFile"
 
 
 ewol::resource::ConfigFile::ConfigFile() :
@@ -32,13 +32,6 @@ void ewol::resource::ConfigFile::init(const std::string& _filename) {
 
 
 ewol::resource::ConfigFile::~ConfigFile() {
-	// remove all element
-	for (int32_t iii=0; iii<m_list.size(); iii++){
-		if (nullptr != m_list[iii]) {
-			delete(m_list[iii]);
-			m_list[iii] = nullptr;
-		}
-	}
 	m_list.clear();
 }
 
@@ -76,7 +69,7 @@ double ewol::resource::ConfigFile::getNumber(int32_t _id) {
 	     || m_list[_id] == nullptr) {
 		return 0.0;
 	}
-	ejson::Number* tmp = m_list[_id]->toNumber();
+	std::shared_ptr<ejson::Number> tmp = m_list[_id]->toNumber();
 	if (tmp == nullptr) {
 		return 0.0;
 	}
@@ -89,7 +82,7 @@ const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
 	     || m_list[_id] == nullptr) {
 		return errorString;
 	}
-	ejson::String* tmp = m_list[_id]->toString();
+	std::shared_ptr<ejson::String> tmp = m_list[_id]->toString();
 	if (tmp == nullptr) {
 		return errorString;
 	}
@@ -101,7 +94,7 @@ bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
 	     || m_list[_id] == nullptr) {
 		return false;
 	}
-	ejson::Boolean* tmp = m_list[_id]->toBoolean();
+	std::shared_ptr<ejson::Boolean> tmp = m_list[_id]->toBoolean();
 	if (tmp == nullptr) {
 		return false;
 	}

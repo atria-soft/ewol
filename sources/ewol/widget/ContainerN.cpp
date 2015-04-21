@@ -238,8 +238,8 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec
 };
 
 
-bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::widget::ContainerN::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	// parse generic properties :
@@ -258,7 +258,7 @@ bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
 	}
 	// parse all the elements :
 	for (size_t iii=0; iii < _node->size(); iii++) {
-		exml::Element* pNode = _node->getElement(iii);
+		std::shared_ptr<const exml::Element> pNode = _node->getElement(iii);
 		if (pNode == nullptr) {
 			// trash here all that is not element
 			continue;
@@ -275,12 +275,12 @@ bool ewol::widget::ContainerN::loadXML(exml::Element* _node) {
 			continue;
 		}
 		// add sub element : 
-		if (false == invertAdding) {
+		if (invertAdding == false) {
 			subWidgetAdd(subWidget);
 		} else {
 			subWidgetAddStart(subWidget);
 		}
-		if (false == subWidget->loadXML(pNode)) {
+		if (subWidget->loadXML(pNode) == false) {
 			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l "<<pNode->getPos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}

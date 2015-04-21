@@ -95,7 +95,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
-				virtual bool loadXML(exml::Element* _node);
+				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void setOffset(const vec2& _newVal);
 				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
 		};

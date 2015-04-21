@@ -8,21 +8,19 @@
 
 #include <memory>
 #include <ewol/debug.h>
-#include <ewol/object/Object.h>
-#include <ewol/object/SignalList.h>
-#include <ewol/object/SignalBase.h>
-#include <ewol/context/Context.h>
+#include <ewol/signal/Interface.h>
+#include <ewol/signal/Base.h>
 
-ewol::object::SignalList::SignalList() {
+ewol::signal::Interface::Interface() {
 	
 }
 
-ewol::object::SignalList::~SignalList() {
+ewol::signal::Interface::~Interface() {
 	m_list.clear();
 }
 
 // note this pointer is not allocated and not free at the end of the class
-void ewol::object::SignalList::signalAdd(SignalBase* _pointerOnSignal) {
+void ewol::signal::Interface::signalAdd(ewol::signal::Base* _pointerOnSignal) {
 	if (_pointerOnSignal == nullptr) {
 		EWOL_ERROR("Try to link a nullptr parameters");
 		return;
@@ -30,7 +28,7 @@ void ewol::object::SignalList::signalAdd(SignalBase* _pointerOnSignal) {
 	m_list.push_back(_pointerOnSignal);
 }
 
-std::vector<std::string> ewol::object::SignalList::signalGetAll() const {
+std::vector<std::string> ewol::signal::Interface::signalGetAll() const {
 	std::vector<std::string> out;
 	for (auto &it : m_list) {
 		if(it != nullptr) {
@@ -40,7 +38,7 @@ std::vector<std::string> ewol::object::SignalList::signalGetAll() const {
 	return out;
 }
 
-void ewol::object::SignalList::unBindAll(const std::shared_ptr<ewol::Object>& _object) {
+void ewol::signal::Interface::signalUnBindAll(const std::shared_ptr<void>& _object) {
 	if (_object == nullptr) {
 		EWOL_ERROR("Input ERROR nullptr pointer Object ...");
 		return;

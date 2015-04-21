@@ -29,7 +29,7 @@ namespace ewol {
 		class Parameter : public ewol::widget::PopUp {
 			public:
 				// Event list of properties
-				ewol::object::Signal<void> signalClose;
+				ewol::Signal<void> signalClose;
 			protected:
 				Parameter();
 				void init();

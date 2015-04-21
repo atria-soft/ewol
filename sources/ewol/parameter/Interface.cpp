@@ -7,19 +7,19 @@
  */
 
 #include <ewol/debug.h>
-#include <ewol/object/ParameterList.h>
-#include <ewol/object/Parameter.h>
+#include <ewol/parameter/List.h>
+#include <ewol/parameter/Parameter.h>
 
-ewol::object::ParameterList::ParameterList() {
+ewol::parameter::Interface::Interface() {
 	
 }
 
-ewol::object::ParameterList::~ParameterList() {
+ewol::parameter::Interface::~Interface() {
 	parameterClean();
 }
 
 // note this pointer is not allocated and not free at the end of the class
-void ewol::object::ParameterList::parameterAdd(Parameter* _pointerOnParameter) {
+void ewol::parameter::Interface::parameterAdd(ewol::parameter::Parameter* _pointerOnParameter) {
 	if (_pointerOnParameter == nullptr) {
 		EWOL_ERROR("Try to link a nullptr parameters");
 		return;
@@ -27,14 +27,14 @@ void ewol::object::ParameterList::parameterAdd(Parameter* _pointerOnParameter) {
 	m_list.push_back(_pointerOnParameter);
 }
 
-void ewol::object::ParameterList::parameterClean() {
+void ewol::parameter::Interface::parameterClean() {
 	// remove all pointer on these parameters
 	m_list.clear();
 }
 
 // Note no lock is needed at this level, because the lock is done is the upper elements ...
 // the parameter set might be done with a pool of parameter, allone, the overhed is bigger ...
-bool ewol::object::ParameterList::parameterSet(const std::string& _parameter, const std::string& _value) {
+bool ewol::parameter::Interface::parameterSet(const std::string& _parameter, const std::string& _value) {
 	for (auto &it : m_list) {
 		if(    it != nullptr
 		    && it->getName() == _parameter) {
@@ -46,7 +46,7 @@ bool ewol::object::ParameterList::parameterSet(const std::string& _parameter, co
 	return false;
 }
 
-std::string ewol::object::ParameterList::parameterGet(const std::string& _parameter) const {
+std::string ewol::parameter::Interface::parameterGet(const std::string& _parameter) const {
 	for (auto &it : m_list) {
 		if(    it != nullptr
 		    && it->getName() == _parameter) {
@@ -56,7 +56,7 @@ std::string ewol::object::ParameterList::parameterGet(const std::string& _parame
 	return "???";
 }
 
-void ewol::object::ParameterList::parameterDisplay(bool _changeOnly) const {
+void ewol::parameter::Interface::parameterDisplay(bool _changeOnly) const {
 	EWOL_INFO("    Object parameters:");
 	for (auto &it : m_list) {
 		if(it != nullptr) {
@@ -73,7 +73,7 @@ void ewol::object::ParameterList::parameterDisplay(bool _changeOnly) const {
 	}
 }
 
-std::map<std::string, std::string> ewol::object::ParameterList::parameterGetAll(bool _notIfDefault) const {
+std::map<std::string, std::string> ewol::parameter::Interface::parameterGetAll(bool _notIfDefault) const {
 	std::map<std::string, std::string> out;
 	for (auto &it : m_list) {
 		if(it != nullptr) {

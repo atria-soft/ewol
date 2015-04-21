@@ -108,7 +108,7 @@ void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
 }
 
 void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
-	int32_t elementID = 0;
+	size_t elementID = 0;
 	// search element in the list : 
 	for (auto &it : m_subWidget) {
 		elementID ++;
@@ -270,7 +270,7 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 		}
 	}
 }
-void ewol::widget::WSlider::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::WSlider::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::ContainerN::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_selectNewWidget) {
 		if (m_selectNewWidget.get() != "") {

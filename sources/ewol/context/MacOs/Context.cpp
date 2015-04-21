@@ -29,6 +29,7 @@
 #include <sys/times.h>
 #include <mach/clock.h>
 #include <mach/mach.h>
+#include <etk/etk.h>
 
 
 int64_t ewol::getTime() {
@@ -173,7 +174,7 @@ void MacOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::k
  * @return std IO
  */
 int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
-	etk::setArgZero(_argv[0]);
+	etk::init(_argc, _argv);
 	interface = new MacOSInterface(_application, _argc, _argv);
 	if (nullptr == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");

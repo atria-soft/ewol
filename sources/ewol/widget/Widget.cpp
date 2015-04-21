@@ -103,8 +103,6 @@ ewol::Widget::Widget() :
   m_canFocus(*this, "focus", false, "enable the widget to have the focus capacity"), // TODO : je pense que c'est une erreur, c'st surement un event to get the cocus ...
   m_limitMouseEvent(3),
   m_allowRepeateKeyboardEvent(true),
-  m_periodicCallDeltaTime(-1),
-  m_periodicCallTime(0),
   signalShortcut(*this, "shortcut"),
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
@@ -148,8 +146,12 @@ ewol::Widget::~Widget() {
 }
 
 void ewol::Widget::calculateSize(const vec2& _available) {
-	m_size = _available;
-	m_size.setMax(m_minSize);
+	vec2 size = _available;
+	size.setMax(m_minSize);
+	if (m_size == size) {
+		return;
+	}
+	m_size = size;
 	markToRedraw();
 }
 
@@ -310,19 +312,11 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 }
 
 void ewol::Widget::periodicCallDisable() {
-	m_periodicCallDeltaTime=0;
-	m_periodicCallTime=-1;
-	getWidgetManager().periodicCallRm(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
+	getObjectManager().periodicCall.release(shared_from_this());
 }
 
-void ewol::Widget::periodicCallEnable(float _callInSecond) {
-	if (_callInSecond < 0) {
-		periodicCallDisable();
-	} else {
-		getWidgetManager().periodicCallAdd(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
-		m_periodicCallDeltaTime = _callInSecond*1000000.0;
-		m_periodicCallTime = ewol::getTime();
-	}
+void ewol::Widget::periodicCallEnable() {
+	getObjectManager().periodicCall.bind(shared_from_this(), &ewol::Widget::periodicCall);
 }
 
 void ewol::Widget::markToRedraw() {
@@ -597,7 +591,7 @@ enum ewol::context::cursorDisplay ewol::Widget::getCursor() {
 	return m_cursorDisplay;
 }
 
-bool ewol::Widget::loadXML(exml::Element* _node) {
+bool ewol::Widget::loadXML(const std::shared_ptr<const exml::Element>& _node) {
 	ewol::Object::loadXML(_node);
 	markToRedraw();
 	return true;
@@ -623,7 +617,7 @@ bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
 	return onEventInput(_event.m_event);
 }
 
-void ewol::Widget::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Object::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_canFocus) {
 		if (m_hasFocus == true) {

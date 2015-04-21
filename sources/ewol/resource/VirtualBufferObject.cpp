@@ -16,15 +16,15 @@
 
 void ewol::resource::VirtualBufferObject::init(int32_t _number) {
 	ewol::Resource::init();
-	m_nbVBO = std::avg(1, _number, NB_VBO_MAX);
-	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
-		m_vbo[iii]=0;
-		m_vboUsed[iii]=false;
-	}
+	m_vbo.resize(_number, 0);
+	m_vboUsed.resize(_number, false);
+	m_buffer.resize(_number);
+	m_vboSizeDataOffset.resize(_number, -1);
 	EWOL_DEBUG("OGL : load VBO count=\"" << _number << "\"");
 }
 
-ewol::resource::VirtualBufferObject::VirtualBufferObject() {
+ewol::resource::VirtualBufferObject::VirtualBufferObject() :
+  m_exist(false) {
 	addObjectType("ewol::VirtualBufferObject");
 	m_resourceLevel = 3;
 }
@@ -40,40 +40,33 @@ void ewol::resource::VirtualBufferObject::retreiveData() {
 void ewol::resource::VirtualBufferObject::updateContext() {
 	if (false == m_exist) {
 		// Allocate and assign a Vertex Array Object to our handle
-		glGenBuffers(m_nbVBO, m_vbo);
+		ewol::openGL::genBuffers(m_vbo);
 	}
 	m_exist = true;
-	for (size_t iii=0; iii<m_nbVBO; iii++) {
+	for (size_t iii=0; iii<m_vbo.size(); iii++) {
 		EWOL_INFO("VBO    : add [" << getId() << "]=" << m_buffer[iii].size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
 		if (true == m_vboUsed[iii]) {
 			// select the buffer to set data inside it ...
 			if (m_buffer[iii].size()>0) {
-				glBindBuffer(GL_ARRAY_BUFFER, m_vbo[iii]);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer[iii].size(), &((m_buffer[iii])[0]), GL_STATIC_DRAW);
+				ewol::openGL::bindBuffer(m_vbo[iii]);
+				ewol::openGL::bufferData(sizeof(float)*m_buffer[iii].size(), &((m_buffer[iii])[0]), GL_STATIC_DRAW);
 			}
 		}
 	}
 	// un-bind it to permet to have no erreor in the next display ...
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	ewol::openGL::unbindBuffer();
 }
 
 void ewol::resource::VirtualBufferObject::removeContext() {
 	if (true == m_exist) {
-		EWOL_INFO("VBO: remove [" << getId() << "] OGl_Id=" << m_vbo[0]
-		                                             << "/" << m_vbo[1]
-		                                             << "/" << m_vbo[2]
-		                                             << "/" << m_vbo[3]);
-		glDeleteBuffers(m_nbVBO, m_vbo);
+		ewol::openGL::deleteBuffers(m_vbo);
 		m_exist = false;
-		for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
-			m_vbo[iii] = 0;
-		}
 	}
 }
 
 void ewol::resource::VirtualBufferObject::removeContextToLate() {
 	m_exist = false;
-	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
+	for (size_t iii=0; iii<m_vbo.size(); iii++) {
 		m_vbo[iii] = 0;
 	}
 }
@@ -89,6 +82,12 @@ void ewol::resource::VirtualBufferObject::flush() {
 }
 
 void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec3& _data) {
+	if (m_vboSizeDataOffset[_id] == -1) {
+		m_vboSizeDataOffset[_id] = 3;
+	} else if (m_vboSizeDataOffset[_id] != 3) {
+		EWOL_WARNING("set multiType in VBO (Not supported ==> TODO : Maybe update it");
+		return;
+	}
 	m_vboUsed[_id] = true;
 	m_buffer[_id].push_back(_data.x());
 	m_buffer[_id].push_back(_data.y());
@@ -104,11 +103,20 @@ vec3 ewol::resource::VirtualBufferObject::getOnBufferVec3(int32_t _id, int32_t _
 	            m_buffer[_id][3*_elementID+2]);
 }
 
-int32_t ewol::resource::VirtualBufferObject::sizeOnBufferVec3(int32_t _id) {
-	return m_buffer[_id].size()/3;
+int32_t ewol::resource::VirtualBufferObject::bufferSize(int32_t _id) {
+	return m_buffer[_id].size()/m_vboSizeDataOffset[_id];
+}
+int32_t ewol::resource::VirtualBufferObject::getElementSize(int32_t _id) {
+	return m_vboSizeDataOffset[_id];
 }
 
 void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec2& _data) {
+	if (m_vboSizeDataOffset[_id] == -1) {
+		m_vboSizeDataOffset[_id] = 2;
+	} else if (m_vboSizeDataOffset[_id] != 2) {
+		EWOL_WARNING("set multiType in VBO (Not supported ==> TODO : Maybe update it");
+		return;
+	}
 	m_vboUsed[_id] = true;
 	m_buffer[_id].push_back(_data.x());
 	m_buffer[_id].push_back(_data.y());
@@ -122,6 +130,54 @@ vec2 ewol::resource::VirtualBufferObject::getOnBufferVec2(int32_t _id, int32_t _
 	            m_buffer[_id][2*_elementID+1]);
 }
 
-int32_t ewol::resource::VirtualBufferObject::sizeOnBufferVec2(int32_t _id) {
-	return m_buffer[_id].size()/2;
+
+void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const etk::Color<float,4>& _data) {
+	if (m_vboSizeDataOffset[_id] == -1) {
+		m_vboSizeDataOffset[_id] = 4;
+	} else if (m_vboSizeDataOffset[_id] != 4) {
+		EWOL_WARNING("set multiType in VBO (Not supported ==> TODO : Maybe update it");
+		return;
+	}
+	m_vboUsed[_id] = true;
+	m_buffer[_id].push_back(_data.r());
+	m_buffer[_id].push_back(_data.g());
+	m_buffer[_id].push_back(_data.b());
+	m_buffer[_id].push_back(_data.a());
 }
+
+void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const etk::Color<float,3>& _data) {
+	if (m_vboSizeDataOffset[_id] == -1) {
+		m_vboSizeDataOffset[_id] = 3;
+	} else if (m_vboSizeDataOffset[_id] != 3) {
+		EWOL_WARNING("set multiType in VBO (Not supported ==> TODO : Maybe update it");
+		return;
+	}
+	m_vboUsed[_id] = true;
+	m_buffer[_id].push_back(_data.r());
+	m_buffer[_id].push_back(_data.g());
+	m_buffer[_id].push_back(_data.b());
+}
+
+void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const etk::Color<float,2>& _data) {
+	if (m_vboSizeDataOffset[_id] == -1) {
+		m_vboSizeDataOffset[_id] = 2;
+	} else if (m_vboSizeDataOffset[_id] != 2) {
+		EWOL_WARNING("set multiType in VBO (Not supported ==> TODO : Maybe update it");
+		return;
+	}
+	m_vboUsed[_id] = true;
+	m_buffer[_id].push_back(_data.r());
+	m_buffer[_id].push_back(_data.g());
+}
+
+void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const etk::Color<float,1>& _data) {
+	if (m_vboSizeDataOffset[_id] == -1) {
+		m_vboSizeDataOffset[_id] = 1;
+	} else if (m_vboSizeDataOffset[_id] != 1) {
+		EWOL_WARNING("set multiType in VBO (Not supported ==> TODO : Maybe update it");
+		return;
+	}
+	m_vboUsed[_id] = true;
+	m_buffer[_id].push_back(_data.r());
+}
+

@@ -227,6 +227,7 @@ ewol::compositing::Drawing::Drawing() :
   m_GLprogram(nullptr),
   m_GLPosition(-1),
   m_GLMatrix(-1),
+  m_GLMatrixPosition(-1),
   m_GLColor(-1),
   m_thickness(0.0),
   m_triElement(0) {
@@ -288,8 +289,9 @@ void ewol::compositing::Drawing::loadProgram() {
 	// get the shader resource :
 	if (nullptr != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->getAttribute("EW_color");
-		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
+		m_GLColor = m_GLprogram->getAttribute("EW_color");
+		m_GLMatrix = m_GLprogram->getUniform("EW_MatrixTransformation");
+		m_GLMatrixPosition = m_GLprogram->getUniform("EW_MatrixPosition");
 	}
 }
 
@@ -306,7 +308,9 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use();
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	mat4 tmpMatrix2;
+	m_GLprogram->uniformMatrix(m_GLMatrixPosition, tmpMatrix2);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// color :

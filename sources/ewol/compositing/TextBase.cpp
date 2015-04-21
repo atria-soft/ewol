@@ -245,7 +245,7 @@ void ewol::compositing::TextBase::print(const std::string& _text) {
 }
 
 
-void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
+void ewol::compositing::TextBase::parseHtmlNode(const std::shared_ptr<const exml::Element>& _element) {
 	// get the static real pointer
 	if (_element == nullptr) {
 		EWOL_ERROR( "Error Input node does not existed ...");
@@ -254,15 +254,15 @@ void ewol::compositing::TextBase::parseHtmlNode(exml::Element* _element) {
 		if (_element->getType(iii) == exml::typeComment) {
 			// nothing to do ...
 		} else if (_element->getType(iii) == exml::typeText) {
-			exml::Node* child = _element->getNode(iii);
+			std::shared_ptr<const exml::Node> child = _element->getNode(iii);
 			htmlAddData(etk::to_u32string(child->getValue()));
 			EWOL_VERBOSE("XML add : " << child->getValue());
 			continue;
-		} else if (_element->getType(iii)!=exml::typeElement) {
+		} else if (_element->getType(iii) != exml::typeElement) {
 			EWOL_ERROR("(l "<< _element->getNode(iii)->getPos() << ") node not suported type : " << _element->getType(iii) << " val=\""<< _element->getNode(iii)->getValue() << "\"" );
 			continue;
 		}
-		exml::Element* elem = _element->getElement(iii);
+		std::shared_ptr<const exml::Element> elem = _element->getElement(iii);
 		if (elem == nullptr) {
 			EWOL_ERROR("Cast error ...");
 			continue;
@@ -373,13 +373,13 @@ void ewol::compositing::TextBase::printHTML(const std::string& _text) {
 		return;
 	}
 	
-	exml::Element* root = (exml::Element*)doc.getNamed( "html" );
+	std::shared_ptr<const exml::Element> root = doc.getNamed( "html" );
 	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		doc.display();
 		return;
 	}
-	exml::Element* bodyNode = (exml::Element*)root->getNamed( "body" );
+	std::shared_ptr<const exml::Element> bodyNode = root->getNamed( "body" );
 	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;
@@ -401,13 +401,13 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 		return;
 	}
 	
-	exml::Element* root = (exml::Element*)doc.getNamed( "html" );
+	std::shared_ptr<exml::Element> root = doc.getNamed( "html" );
 	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		doc.display();
 		return;
 	}
-	exml::Element* bodyNode = (exml::Element*)root->getNamed( "body" );
+	std::shared_ptr<exml::Element> bodyNode = root->getNamed( "body" );
 	if (root == nullptr) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;

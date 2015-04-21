@@ -62,7 +62,7 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
 	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
@@ -100,7 +100,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
-	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
 	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());

@@ -33,6 +33,10 @@ namespace ewol {
 				bool m_isAttribute; //!< true if it was an attribute element, otherwite it was an uniform
 				bool m_isLinked; //!< if this element does not exist this is false
 		};
+		//! @not-in-doc
+		std::ostream& operator <<(std::ostream& _os, const ewol::resource::progAttributeElement& _obj);
+		//! @not-in-doc
+		std::ostream& operator <<(std::ostream& _os, const std::vector<ewol::resource::progAttributeElement>& _obj);
 		/**
 		 * @brief Program is a compilation of some fragment Shader and vertex Shader. This construct automaticly this assiciation
 		 * The input file must have the form : "myFile.prog"
@@ -69,6 +73,12 @@ namespace ewol {
 				virtual ~Program();
 			public:
 				/**
+				 * @brief Check If an Id is valid in the shader or not (sometime the shader have not some attribute, then we need to display some error)
+				 * @return _idElem Id of the Attribute that might be sended.
+				 * @return true The id is valid, false otherwise
+				 */
+				bool checkIdValidity(int32_t _idElem);
+				/**
 				 * @brief User request an attribute on this program.
 				 * @note The attribute is send to the fragment shaders
 				 * @param[in] _elementName Name of the requested attribute.
@@ -87,18 +97,17 @@ namespace ewol {
 				                   const void* _pointer,
 				                   int32_t _jumpBetweenSample=0);
 				void sendAttributePointer(int32_t _idElem,
-				                          int32_t _nbElement,
 				                          const std::shared_ptr<ewol::resource::VirtualBufferObject>& _vbo,
 				                          int32_t _index,
 				                          int32_t _jumpBetweenSample=0,
 				                          int32_t _offset=0);
-				inline void sendAttribute(int32_t _idElem, const std::vector<vec2 >& _data) {
+				inline void sendAttribute(int32_t _idElem, const std::vector<vec2>& _data) {
 					sendAttribute(_idElem, 2/*u,v / x,y*/, &_data[0]);
 				}
-				inline void sendAttribute(int32_t _idElem, const std::vector<vec3 >& _data) {
+				inline void sendAttribute(int32_t _idElem, const std::vector<vec3>& _data) {
 					sendAttribute(_idElem, 3/*x,y,z,unused*/, &_data[0], 4*sizeof(btScalar));
 				}
-				inline void sendAttribute(int32_t _idElem, const std::vector<etk::Color<float> >& _data) {
+				inline void sendAttribute(int32_t _idElem, const std::vector<etk::Color<float>>& _data) {
 					sendAttribute(_idElem, 4/*r,g,b,a*/, &_data[0]);
 				}
 				inline void sendAttribute(int32_t _idElem, const std::vector<float>& _data) {
@@ -114,11 +123,10 @@ namespace ewol {
 				/**
 				 * @brief Send a uniform element to the spefified ID (not send if does not really exist in the openGL program)
 				 * @param[in] _idElem Id of the uniform that might be sended.
-				 * @param[in] _nbElement Specifies the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-				 * @param[in] _pointer Pointer on the data that might be sended
+				 * @param[in] _matrix Matrix that might be sended.
 				 * @param[in] _transpose Transpose the matrix (needed all the taime in the normal openGl access (only not done in the openGL-ES2 due to the fact we must done it ourself)
 				 */
-				void uniformMatrix4fv(int32_t _idElem, int32_t _nbElement, mat4 _pointer, bool _transpose=true);
+				void uniformMatrix(int32_t _idElem, const mat4& _matrix, bool _transpose=true);
 				
 				inline void uniform(int32_t _idElem, const etk::Color<float>& _value) {
 					uniform4f(_idElem, _value.r(), _value.g(), _value.b(), _value.a());
@@ -295,6 +303,8 @@ namespace ewol {
 				 * @note this is really usefull when we tested the new themes or shader developpements.
 				 */
 				void reload();
+			private:
+				void checkGlError(const char* _op, int32_t _localLine, int32_t _idElem=-2);
 		};
 	};
 };

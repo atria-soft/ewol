@@ -195,7 +195,7 @@ void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::CheckBox::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::CheckBox::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::Container2::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
 		markToRedraw();

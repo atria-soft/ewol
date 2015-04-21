@@ -14,16 +14,7 @@
 namespace ewol {
 	int32_t getLogId();
 };
-// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
-#define EWOL_BASE(info,data) \
-	do { \
-		if (info <= etk::log::getLevel(ewol::getLogId())) { \
-			std::stringbuf sb; \
-			std::ostream tmpStream(&sb); \
-			tmpStream << data; \
-			etk::log::logStream(ewol::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
-		} \
-	} while(0)
+#define EWOL_BASE(info,data) TK_LOG_BASE(ewol::getLogId(),info,data)
 
 #define EWOL_CRITICAL(data)      EWOL_BASE(1, data)
 #define EWOL_ERROR(data)         EWOL_BASE(2, data)

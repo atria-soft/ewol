@@ -226,7 +226,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const ve
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
-void ewol::widget::ContextMenu::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::ContextMenu::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::Container::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
 		markToRedraw();

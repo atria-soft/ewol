@@ -75,16 +75,16 @@ void ewol::widget::Slider::onRegenerateDisplay() {
 
 bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
-	EWOL_ERROR("Event on Slider ..." << _event);
+	//EWOL_DEBUG("Event on Slider ..." << _event);
 	if (1 == _event.getId()) {
 		if(    ewol::key::statusSingle == _event.getStatus()
 		    || ewol::key::statusMove   == _event.getStatus()) {
 			// get the new position :
-			EWOL_INFO("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
+			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
 			float oldValue = m_value.get();
 			updateValue(m_min + (float)(relativePos.x() - dotRadius) / (m_size.x()-2*dotRadius) * (m_max-m_min));
 			if (oldValue != m_value) {
-				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
+				EWOL_VERBOSE(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
 				signalChange.emit(m_value);
 			}
 			return true;
@@ -105,7 +105,7 @@ void ewol::widget::Slider::updateValue(float _newValue) {
 }
 
 // TODO : Review this really bad things ...
-void ewol::widget::Slider::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::Slider::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Widget::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_value) {
 		updateValue(m_value.get());

@@ -108,8 +108,8 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 	return false;
 }
 
-bool ewol::Object::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::Object::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	bool errorOccured = false;
@@ -126,7 +126,7 @@ bool ewol::Object::loadXML(exml::Element* _node) {
 	return errorOccured;
 }
 
-bool ewol::Object::storeXML(exml::Element* _node) const {
+bool ewol::Object::storeXML(const std::shared_ptr<exml::Element>& _node) const {
 	if (nullptr == _node) {
 		return false;
 	}
@@ -164,3 +164,11 @@ std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string&
 	return nullptr;
 }
 
+
+bool ewol::parameterSetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+	std::shared_ptr<ewol::Object> object = ewol::getContext().getEObjectManager().get(_objectName);
+	if (object == nullptr) {
+		return false;
+	}
+	return object->parameterSet(_config, _value);
+}

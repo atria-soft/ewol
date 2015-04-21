@@ -15,6 +15,8 @@ def create(target):
 		'edtaa3/edtaa3func.c'
 		])
 	
+	myModule.compile_version_CC(1999)
+	
 	myModule.add_export_path(tools.get_current_path(__file__))
 	
 	# add the currrent module at the 

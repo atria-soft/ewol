@@ -15,6 +15,13 @@
 #include <mutex>
 #include <memory>
 
+#include <ewol/debug.h>
+#include <ewol/parameter/Interface.h>
+#include <ewol/parameter/Value.h>
+#include <ewol/parameter/Range.h>
+#include <ewol/parameter/List.h>
+#include <ewol/signal/Interface.h>
+
 namespace ewol {
 	// some class need to define element befor other ...
 	class Object;
@@ -23,13 +30,6 @@ namespace ewol {
 	};
 	class Context;
 };
-
-#include <ewol/debug.h>
-#include <ewol/object/ParameterList.h>
-#include <ewol/object/Param.h>
-#include <ewol/object/ParamRange.h>
-#include <ewol/object/ParamList.h>
-#include <ewol/object/SignalList.h>
 
 #define DECLARE_FACTORY(className) \
 	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
@@ -51,8 +51,8 @@ namespace ewol {
 	 * this class mermit at every Object to communicate between them.
 	 */
 	class Object : public std::enable_shared_from_this<Object>,
-	               public ewol::object::ParameterList,
-	               public ewol::object::SignalList {
+	               public ewol::parameter::Interface,
+	               public ewol::signal::Interface {
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
@@ -145,7 +145,7 @@ namespace ewol {
 			// TODO : Rework the position on this function ... This is a convignent function ...
 			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		protected:
-			ewol::object::Param<std::string> m_name; //!< name of the element ...
+			ewol::parameter::Value<std::string> m_name; //!< name of the element ...
 		public:
 			/**
 			 * @brief get the Object name
@@ -168,14 +168,14 @@ namespace ewol {
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
-			virtual bool loadXML(exml::Element* _node);
+			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 			/**
 			 * @brief store properties in this XML node.
 			 * @param[in,out] _node Pointer on the tinyXML node.
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
-			virtual bool storeXML(exml::Element* _node) const;
+			virtual bool storeXML(const std::shared_ptr<exml::Element>& _node) const;
 		public:
 			/**
 			 * @breif get the current Object manager.
@@ -222,16 +222,16 @@ namespace ewol {
 			/**
 			 * @brief link on an signal in the subwiget with his name
 			 */
-			#define subBind(_type, _name, _event, _obj, _func) do {\
+			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
 				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
-					myObject->_event.bind(_obj, _func); \
+					myObject->_event.bind(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
 					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
 			} while (false)
 			/*
-			template<class TYPE> void bind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
+			template<class TYPE> void subBind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
 				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 				if (obj2 == nullptr) {
 					EWOL_ERROR("Can not bind signal ...");
@@ -241,16 +241,16 @@ namespace ewol {
 			}
 			*/
 	};
-	
+	bool parameterSetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 };
 
 /**
  * @brief link on an signal in the global object list with his name
  */
-#define globalBind(_type, _name, _event, _obj, _func) do {\
+#define globalBind(_type, _name, _event, _obj, _func, ...) do {\
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
-		myObject->_event.bind(_obj, _func); \
+		myObject->_event.bind(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
@@ -259,15 +259,15 @@ namespace ewol {
 /**
  * @brief link on an signal in the subWidget of an object with his name
  */
-#define externSubBind(_object, _type, _name, _event, _obj, _func) do {\
+#define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
-		myObject->_event.bind(_obj, _func); \
+		myObject->_event.bind(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
-//#include <ewol/object/Signal.h>
+//#include <ewol/signal/Signal.h>
 
 #endif
 

@@ -11,11 +11,13 @@
 
 #include <etk/types.h>
 #include <ewol/object/Object.h>
+#include <ewol/signal/Signal.h>
+#include <ewol/event/Time.h>
 
 namespace ewol {
 	class Context;
 	namespace object {
-		class Manager {
+		class Manager : public ewol::signal::Interface {
 			private:
 				std::vector<std::weak_ptr<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;
@@ -75,6 +77,28 @@ namespace ewol {
 				 * @param[in] _worker Worker to add in the list.
 				 */
 				void workerRemove(const std::shared_ptr<ewol::Object>& _worker);
+			public:
+				ewol::Signal<ewol::event::Time> periodicCall;
+			private:
+				int64_t m_applWakeUpTime; //!< Time of the application initialize
+				int64_t m_lastPeriodicCallTime; //!< last call time ...
+			public: // ewol system internal :
+				/**
+				 * @brief Call every time we can with the current time
+				 * @param[in] _localTime Current system Time.
+				 */
+				void timeCall(int64_t _localTime);
+				/**
+				 * @brief If the application is suspended The Ewol Object manager does not know it, just call this to update delta call
+				 * @param[in] _localTime Current system Time.
+				 */
+				void timeCallResume(int64_t _localTime);
+				/**
+				 * @breif check if the Interface have some user that request a periodic call
+				 * @return true, have some periodic event...
+				 */
+				bool timeCallHave();
+				
 		};
 	};
 };

@@ -10,6 +10,7 @@ Instructions
 
 download the software :
 
+	git clone git://github.com/HeeroYui/lutin.git
 	git clone git://github.com/HeeroYui/ewol.git
 	cd ewol
 	git submodule init

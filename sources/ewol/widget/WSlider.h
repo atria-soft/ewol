@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -23,8 +23,8 @@ namespace ewol {
 		class WSlider :public ewol::widget::ContainerN {
 			public:
 				// Event list of properties
-				ewol::object::Signal<void> signalStartSlide;
-				ewol::object::Signal<void> signalStopSlide;
+				ewol::Signal<void> signalStartSlide;
+				ewol::Signal<void> signalStopSlide;
 				enum sladingMode {
 					sladingTransitionVert,
 					sladingTransitionHori,
@@ -43,7 +43,7 @@ namespace ewol {
 				int32_t m_windowsDestination; //!< widget destinated viewed
 				int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
 				float m_slidingProgress; //!< ratio progression of a sliding
-				ewol::object::Param<std::string, true> m_selectNewWidget; // input config requesting
+				ewol::parameter::Value<std::string, true> m_selectNewWidget; // input config requesting
 			protected:
 				/**
 				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
@@ -67,7 +67,7 @@ namespace ewol {
 				 */
 				void subWidgetSelectSet(const std::string& _widgetName);
 			private:
-				ewol::object::ParamRange<float> m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
+				ewol::parameter::Range<float> m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
 			public:
 				/** 
 				 * @brief set transition speed element.
@@ -84,7 +84,7 @@ namespace ewol {
 					return m_transitionSpeed;
 				};
 			private:
-				ewol::object::ParamList<enum sladingMode> m_transitionSlide; //!< mode to slide the widgets
+				ewol::parameter::List<enum sladingMode> m_transitionSlide; //!< mode to slide the widgets
 			public:
 				/** 
 				 * @brief set a new mode of sliding element
@@ -106,7 +106,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};
 	};
 	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);

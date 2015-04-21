@@ -12,6 +12,7 @@
 
 #include <etk/tool.h>
 #include <etk/os/FSNode.h>
+#include <etk/thread/tools.h>
 #include <mutex>
 
 #include <date/date.h>
@@ -112,11 +113,11 @@ namespace ewol {
 			// generic dimentions
 			vec2 dimention;
 			// keyboard events :
-			bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
-			bool                        stateIsDown;
-			char32_t                   keyboardChar;
+			bool repeateKey;  //!< special flag for the repeating key on the PC interface
+			bool stateIsDown;
+			char32_t keyboardChar;
 			enum ewol::key::keyboard keyboardMove;
-			ewol::key::Special            keyboardSpecial;
+			ewol::key::Special keyboardSpecial;
 			
 			eSystemMessage() :
 				TypeMessage(msgNone),
@@ -305,6 +306,8 @@ ewol::Context::Context(ewol::context::Application* _application, int32_t _argc, 
   m_windowsCurrent(nullptr),
   m_windowsSize(320,480),
   m_initStepId(0) {
+	// set a basic 
+	etk::thread::setName("ewol");
 	if (m_application == nullptr) {
 		EWOL_CRITICAL("Can not start context with no Application ==> rtfm ...");
 	}
@@ -592,7 +595,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			}
 		}
 		// call all the widget that neded to do something periodicly
-		m_widgetManager.periodicCall(currentTime);
+		m_objectManager.timeCall(currentTime);
 		// check if the user selected a windows
 		if (nullptr != m_windowsCurrent) {
 			// Redraw all needed elements
@@ -641,7 +644,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			m_FpsFlush.tic();
 			m_FpsFlush.incrementCounter();
 		}
-		glFlush();
+		ewol::openGL::flush();
 		//glFinish();
 		if (m_displayFps == true) {
 			m_FpsFlush.toc();
@@ -731,7 +734,7 @@ void ewol::Context::OS_Resume() {
 	lockContext();
 	EWOL_INFO("OS_Resume...");
 	m_previousDisplayTime = ewol::getTime();
-	m_widgetManager.periodicCallResume(m_previousDisplayTime);
+	m_objectManager.timeCallResume(m_previousDisplayTime);
 	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateResume();
 	}

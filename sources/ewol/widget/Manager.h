@@ -24,12 +24,9 @@ namespace ewol {
 				// For the focus Management
 				std::weak_ptr<ewol::Widget> m_focusWidgetDefault;
 				std::weak_ptr<ewol::Widget> m_focusWidgetCurrent;
-				std::vector<std::weak_ptr<ewol::Widget>> m_listOfPeriodicWidget;
 				bool m_havePeriodic;
 				bool m_haveRedraw;
 				etk::Hash<creator_tf> m_creatorList;
-				int64_t m_applWakeUpTime; //!< Time of the application initialize
-				int64_t m_lastPeriodicCallTime; //!< last call time ...
 			public:
 				Manager();
 				virtual ~Manager();
@@ -39,12 +36,6 @@ namespace ewol {
 				void focusRelease(); // release focus from the current widget to the default
 				std::shared_ptr<ewol::Widget> focusGet();
 				void focusRemoveIfRemove(const std::shared_ptr<ewol::Widget>& _newWidget);
-				
-				void periodicCallAdd(const std::shared_ptr<ewol::Widget>& _pWidget);
-				void periodicCallRm(const std::shared_ptr<ewol::Widget>& _pWidget);
-				void periodicCall(int64_t _localTime);
-				void periodicCallResume(int64_t _localTime);
-				bool periodicCallHave();
 				
 				void markDrawingIsNeeded();
 				bool isDrawingNeeded();

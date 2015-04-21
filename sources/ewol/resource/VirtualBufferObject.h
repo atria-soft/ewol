@@ -14,8 +14,7 @@
 #include <ewol/debug.h>
 #include <ewol/resource/Resource.h>
 #include <ewol/openGL/openGL.h>
-
-#define NB_VBO_MAX   (20)
+#include <etk/Color.h>
 
 namespace ewol {
 	namespace resource {
@@ -24,11 +23,11 @@ namespace ewol {
 		 */
 		class VirtualBufferObject : public ewol::Resource {
 			private :
-				size_t m_nbVBO;
 				bool m_exist;  //!< This data is availlable in the Graphic card
-				GLuint m_vbo[NB_VBO_MAX]; //!< openGl ID of this VBO
-				bool m_vboUsed[NB_VBO_MAX]; //!< true if the VBO is allocated or used ...
-				std::vector<float> m_buffer[NB_VBO_MAX]; //!< data that is availlable in the VBO system ...
+				std::vector<GLuint> m_vbo; //!< openGl ID of this VBO
+				std::vector<bool> m_vboUsed; //!< true if the VBO is allocated or used ...
+				std::vector<std::vector<float>> m_buffer; //!< data that is availlable in the VBO system ...
+				std::vector<int8_t> m_vboSizeDataOffset; //!< Internal size of the VBO (dynamicly set)
 			protected:
 				/**
 				 * @brief Constructor of this VBO.
@@ -47,29 +46,56 @@ namespace ewol {
 				 * @brief get the real openGL ID.
 				 * @return the Ogl id reference of this VBO.
 				 */
-				GLuint getGL_ID(int32_t id) { return m_vbo[id]; };
+				GLuint getGL_ID(int32_t _id) {
+					return m_vbo[_id];
+				};
 				/**
 				 * @brief get a reference on hte buffer data for this VBO.
 				 * @param[in] id Id of the buffer requested
 				 * @return A reference on the data.
 				 */
-				std::vector<float>& getRefBuffer(int32_t id) { m_vboUsed[id] = true; return m_buffer[id]; };
+				std::vector<float>& getRefBuffer(int32_t _id) {
+					m_vboUsed[_id] = true;
+					return m_buffer[_id];
+				};
+				/**
+				 * @brief Get the buffer Number of element.
+				 * @param[in] _id VBO Element
+				 * @return Number of Float in the buffer.
+				 */
+				int32_t bufferSize(int32_t _id);
+				/**
+				 * @brief Get the offset between element.
+				 * @param[in] _id VBO Element
+				 * @return Number of Float to jump between target.
+				 */
+				int32_t getElementSize(int32_t _id);
 				/**
 				 * @brief push data on a buffer with a custum type :
-				 * @param[in] id Id of the buffer requested.
-				 * @param[in] data Direct data that might be set.
+				 * @param[in] _id Id of the buffer requested.
+				 * @param[in] _data Direct data that might be set.
 				 */
-				void pushOnBuffer(int32_t id, const vec3& data);
-				vec3 getOnBufferVec3(int32_t id, int32_t elementID);
-				int32_t sizeOnBufferVec3(int32_t id);
+				void pushOnBuffer(int32_t _id, const vec3& _data);
+				vec3 getOnBufferVec3(int32_t _id, int32_t _elementID);
 				/**
 				 * @brief push data on a buffer with a custum type :
-				 * @param[in] id Id of the buffer requested.
-				 * @param[in] data Direct data that might be set.
+				 * @param[in] _id Id of the buffer requested.
+				 * @param[in] _data Direct data that might be set.
 				 */
-				void pushOnBuffer(int32_t id, const vec2& data);
-				vec2 getOnBufferVec2(int32_t id, int32_t elementID);
-				int32_t sizeOnBufferVec2(int32_t id);
+				void pushOnBuffer(int32_t _id, const vec2& _data);
+				vec2 getOnBufferVec2(int32_t _id, int32_t _elementID);
+				/**
+				 * @brief push data on a buffer with a custum type :
+				 * @param[in] _id Id of the buffer requested.
+				 * @param[in] _data Direct data that might be set (Color).
+				 */
+				void pushOnBuffer(int32_t _id, const etk::Color<float,4>& _data);
+				//! @previous
+				void pushOnBuffer(int32_t _id, const etk::Color<float,3>& _data);
+				//! @previous
+				void pushOnBuffer(int32_t _id, const etk::Color<float,2>& _data);
+				//! @previous
+				void pushOnBuffer(int32_t _id, const etk::Color<float,1>& _data);
 				/**
 				 * @brief get the data from the graphic card.
 				 */

@@ -15,7 +15,8 @@
 int mm_main(int argc, const char *argv[]) {
 	@autoreleasepool {
 	    return UIApplicationMain(argc, (char**)argv, nil, NSStringFromClass([AppDelegate class]));
-	}	// return no error
+	}
+	// return no error
 	return 0;
 }
 
@@ -24,6 +25,7 @@ void mm_exit(void) {
 }
 
 void mm_openURL(const char *_url) {
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:_url]];
+	NSString* url = [[NSString alloc] initWithUTF8String:_url];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 

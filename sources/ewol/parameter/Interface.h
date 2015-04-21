@@ -7,29 +7,29 @@
  */
 
 
-#ifndef __EWOL_PARAMETER_LIST_H__
-#define __EWOL_PARAMETER_LIST_H__
+#ifndef __EWOL_PARAMETER_INTERFACE_H__
+#define __EWOL_PARAMETER_INTERFACE_H__
 
 #include <vector>
 #include <map>
 
 namespace ewol {
-	namespace object {
+	namespace parameter {
 		class Parameter;
-		class ParameterRef;
-		class ParameterList {
-			friend class ewol::object::Parameter; // to register parameter in the list.
+		class Ref;
+		class Interface {
+			friend class ewol::parameter::Parameter; // to register parameter in the list.
 			private:
-				std::vector<ewol::object::Parameter*> m_list;  //!< list of availlable Parameters
+				std::vector<ewol::parameter::Parameter*> m_list;  //!< list of availlable Parameters (no need to free)
 			public:
 				/**
 				 * @brief Constructor.
 				 */
-				ParameterList();
+				Interface();
 				/**
 				 * @brief Destructor.
 				 */
-				virtual ~ParameterList();
+				virtual ~Interface();
 				/**
 				 * @brief Register a parameter class pointer in the List of parameters
 				 * @note This class does not destroy the parameter pointer!!!
@@ -64,7 +64,7 @@ namespace ewol {
 				 * @brief Called when a parameter change value.
 				 * @param[in] _paramPointer Pointer on the parameter (to know which parameter have change);
 				 */
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) { };
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) { };
 				/**
 				 * @brief Get All the parameter configuration:
 				 * @return map on the parameters

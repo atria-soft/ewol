@@ -73,7 +73,7 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	}
 }
 
-void ewol::widget::ProgressBar::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::ProgressBar::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Widget::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_value) {
 		markToRedraw();

@@ -60,7 +60,7 @@
 	//[window addChildWindow:view];
 	//[window makeKeyAndVisible];
 	
-	[windowsID setDelegate:view];
+	//[windowsID setDelegate:view];
 	EWOL_DEBUG("ALLOCATE ...");
 	return windowsID;
 }

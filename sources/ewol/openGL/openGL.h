@@ -141,6 +141,24 @@ namespace ewol {
 			FLAG_ALPHA_TEST = 1<<27, //!< 
 			FLAG_FOG = 1<<28, //!< 
 		};
+		enum renderMode {
+			renderPoint = GL_POINTS,
+			renderLine = GL_LINES,
+			renderLineStrip = GL_LINE_STRIP, //!< Not supported in EWOL (TODO : Later)
+			renderLineLoop = GL_LINE_LOOP,
+			renderTriangle = GL_TRIANGLES,
+			renderTriangleStrip = GL_TRIANGLE_STRIP, //!< Not supported in EWOL (TODO : Later)
+			renderTriangleFan = GL_TRIANGLE_FAN, //!< Not supported in EWOL (TODO : Later)
+			#if (!defined(__TARGET_OS__IOs) && !defined(__TARGET_OS__Android))
+				renderQuad = GL_QUADS, //!< Not supported in OpenGL-ES2
+				renderQuadStrip = GL_QUAD_STRIP, //!< Not supported in OpenGL-ES2
+				renderPolygon = GL_POLYGON //!< Not supported in OpenGL-ES2
+			#else
+				renderQuad, //!< Not supported in OpenGL-ES2
+				renderQuadStrip, //!< Not supported in OpenGL-ES2
+				renderPolygon //!< Not supported in OpenGL-ES2
+			#endif
+		};
 		
 		/**
 		 * @brief enable a flag on the system
@@ -178,7 +196,17 @@ namespace ewol {
 		 * @param[in] id Id of the program that might be used
 		 */
 		void useProgram(int32_t _id);
+		void reset();
+		
+		
+		bool genBuffers(std::vector<GLuint>& _buffers);
+		bool deleteBuffers(std::vector<GLuint>& _buffers);
+		bool bindBuffer(GLuint _bufferId);
+		bool bufferData(size_t _size, const void* _data, GLenum _usage);
+		bool unbindBuffer();
 	};
+	std::ostream& operator <<(std::ostream& _os, const enum openGL::openGlFlags& _obj);
+	std::ostream& operator <<(std::ostream& _os, const enum openGL::renderMode& _obj);
 };
 
 

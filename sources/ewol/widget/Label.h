@@ -15,7 +15,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/resource/ColorFile.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -25,10 +25,10 @@ namespace ewol {
 		class Label : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::object::Signal<void> signalPressed;
+				ewol::Signal<void> signalPressed;
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
-				ewol::object::Param<std::u32string> m_label; //!< decorated text to display.
+				ewol::parameter::Value<std::u32string> m_label; //!< decorated text to display.
 				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
@@ -69,12 +69,12 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual bool loadXML(exml::Element* _node);
+				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 		};
 	};
 };

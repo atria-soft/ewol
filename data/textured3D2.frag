@@ -50,9 +50,6 @@ void main(void) {
 		specularLight = pow(ecNormalDotLightHalfplane, EW_material.shininess) * EW_directionalLight.specularColor * EW_material.specularFactor;
 		specularLight = EW_directionalLight.specularColor * EW_material.specularFactor;
 	}
-	
-	
 	vec4 light = ambientLight + diffuseLight + specularLight;
-	
 	gl_FragColor = tmpElementColor * light;
 }

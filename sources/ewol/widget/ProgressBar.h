@@ -38,13 +38,13 @@ namespace ewol {
 					m_textColorFg = _newColor;
 				};
 			private:
-				ewol::object::Param<float> m_value; //!< % used
-				ewol::object::Param<etk::Color<>> m_textColorFg; //!< forder bar color
-				ewol::object::Param<etk::Color<>> m_textColorBgOn; //!< bar color enable
-				ewol::object::Param<etk::Color<>> m_textColorBgOff; //!< bar color disable
+				ewol::parameter::Value<float> m_value; //!< % used
+				ewol::parameter::Value<etk::Color<>> m_textColorFg; //!< forder bar color
+				ewol::parameter::Value<etk::Color<>> m_textColorBgOn; //!< bar color enable
+				ewol::parameter::Value<etk::Color<>> m_textColorBgOff; //!< bar color disable
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual void calculateMinMaxSize();

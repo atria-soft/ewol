@@ -92,6 +92,7 @@ void ewol::widget::Button::onRegenerateDisplay() {
 	                  m_size,
 	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
 	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
+	//EWOL_ERROR("pos=" << m_origin << " size=" << m_size);
 }
 
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
@@ -210,7 +211,7 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::Button::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::Button::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::Container2::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
 		markToRedraw();

@@ -12,7 +12,7 @@
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
 #include <ewol/resource/ColorFile.h>
-#include <ewol/object/Signal.h>
+#include <ewol/signal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,10 +22,10 @@ namespace ewol {
 		class ListFileSystem : public ewol::widget::List {
 			public:
 				// Event list of properties
-				ewol::object::Signal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
-				ewol::object::Signal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
-				ewol::object::Signal<std::string> signalFolderSelect;
-				ewol::object::Signal<std::string> signalFolderValidate;
+				ewol::Signal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
+				ewol::Signal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
+				ewol::Signal<std::string> signalFolderSelect;
+				ewol::Signal<std::string> signalFolderValidate;
 			protected:
 				ListFileSystem();
 				void init();
@@ -69,8 +69,8 @@ namespace ewol {
 				 */
 				std::string getSelect() const ;
 			protected:
-				ewol::object::Param<std::string> m_folder; //!< Current folder that display point on.
-				ewol::object::Param<std::string, true> m_selectFile; //!< current selected file
+				ewol::parameter::Value<std::string> m_folder; //!< Current folder that display point on.
+				ewol::parameter::Value<std::string, true> m_selectFile; //!< current selected file
 			public:
 				/**
 				 * @brief Set a folder to display (might be a valid folder !!!)
@@ -87,7 +87,7 @@ namespace ewol {
 					return m_folder;
 				};
 			protected:
-				ewol::object::Param<bool> m_showFile; //!< Show files elements
+				ewol::parameter::Value<bool> m_showFile; //!< Show files elements
 			public:
 				/**
 				 * @brief Set the status of the displaying files or Not.
@@ -104,7 +104,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				ewol::object::Param<bool> m_showFolder; //!< Display the folders elements
+				ewol::parameter::Value<bool> m_showFolder; //!< Display the folders elements
 			public:
 				/**
 				 * @brief Set the status of the displaying fodlers or Not.
@@ -121,7 +121,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				ewol::object::Param<bool> m_showHidden; //!< Display hidden elements
+				ewol::parameter::Value<bool> m_showHidden; //!< Display hidden elements
 			public:
 				/**
 				 * @brief Set the status of the displaying hidden files or folder or Not.
@@ -138,7 +138,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			protected:
-				ewol::object::Param<bool> m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
+				ewol::parameter::Value<bool> m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
 			public:
 				/**
 				 * @brief Set the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
@@ -155,7 +155,7 @@ namespace ewol {
 					return m_showFile;
 				};
 			public: // glocal derived functions
-				virtual void onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer);
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};
 	};
 };

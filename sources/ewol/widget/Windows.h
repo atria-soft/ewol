@@ -49,17 +49,6 @@ namespace ewol {
 				virtual void onStateForeground() {};
 				virtual void onStateSuspend() {};
 				virtual void onStateResume() {};
-				virtual void on() { };
-			private:
-				bool m_hasDecoration;
-			public:
-				void setDecorationDisable() {
-					m_hasDecoration = false;
-				}
-				
-				void setDecorationEnable() {
-					m_hasDecoration = true;
-				}
 			private:
 				std::shared_ptr<ewol::Widget> m_subWidget;
 				std::list<std::shared_ptr<ewol::Widget>> m_popUpWidgetList;

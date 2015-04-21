@@ -131,8 +131,8 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-bool ewol::widget::Label::loadXML(exml::Element* _node) {
-	if (nullptr == _node) {
+bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _node) {
+	if (_node == nullptr) {
 		return false;
 	}
 	ewol::Widget::loadXML(_node);
@@ -142,7 +142,7 @@ bool ewol::widget::Label::loadXML(exml::Element* _node) {
 	return true;
 }
 
-void ewol::widget::Label::onParameterChangeValue(const ewol::object::ParameterRef& _paramPointer) {
+void ewol::widget::Label::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::Widget::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_label) {
 		markToRedraw();

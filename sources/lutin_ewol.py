@@ -1,13 +1,15 @@
 #!/usr/bin/python
 import lutinModule as module
 import lutinTools as tools
+import lutinDebug as debug
 import os
 import lutinMultiprocess
 
 def get_desc():
 	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
 
-
+def get_license():
+	return "APACHE v2.0"
 
 def create(target):
 	# set the ewol folder for Android basic sources ...
@@ -90,12 +92,17 @@ def create(target):
 	myModule.add_src_file([
 		'ewol/object/Manager.cpp',
 		'ewol/object/Object.cpp',
-		'ewol/object/Worker.cpp',
-		'ewol/object/Parameter.cpp',
-		'ewol/object/ParameterList.cpp',
-		'ewol/object/ParamList.cpp',
-		'ewol/object/SignalList.cpp',
-		'ewol/object/SignalBase.cpp'
+		'ewol/object/Worker.cpp'
+		])
+	# parameter :
+	myModule.add_src_file([
+		'ewol/parameter/Parameter.cpp',
+		'ewol/parameter/Interface.cpp',
+		])
+	# Signal :
+	myModule.add_src_file([
+		'ewol/signal/Interface.cpp',
+		'ewol/signal/Base.cpp'
 		])
 	
 	# OpenGL interface :
@@ -211,12 +218,15 @@ def create(target):
 		myModule.add_export_flag_LD("-ldl")
 		myModule.add_export_flag_LD("-llog")
 		myModule.add_export_flag_LD("-landroid")
-		java_tmp_dir = tools.get_current_path(__file__) + "/../../ewol/sources/android/src/"
+		java_tmp_dir = tools.get_current_path(__file__) + "/../sources/android/src/"
 		cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
-		lutinMultiprocess.run_command("javac " + java_tmp_src + ".java")
-		lutinMultiprocess.run_command("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
-		tools.copy_file(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", force=True)
+		# TODO : set the build directory in out/.build with option -d ...
+		debugCommand = ""
+		if debug.get_level() >= 4:
+			debugCommand = " -verbose "
+		lutinMultiprocess.run_command("javac " + debugCommand + java_tmp_src + ".java")
+		lutinMultiprocess.run_command("javah " + debugCommand + "-classpath " + java_tmp_dir + " -d " + cpp_tmp_dir + " org.ewol.EwolConstants")
 		tools.remove_file(java_tmp_src + ".class")
 	elif target.name=="Windows":
 		myModule.add_module_depend("glew")
@@ -234,7 +244,6 @@ def create(target):
 			"-framework GLKit",
 			"-framework Foundation",
 			"-framework QuartzCore"])
-
-	# add the currrent module at the 
+	
 	return myModule
 

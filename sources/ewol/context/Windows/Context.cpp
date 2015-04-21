@@ -24,6 +24,7 @@
 #include <sys/time.h>
 #include <windows.h>
 #include <windowsx.h>
+#include <etk/etk.h>
 
 
 
@@ -478,7 +479,7 @@ class WindowsContext : public ewol::Context {
  * @return std IO
  */
 int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
-	etk::setArgZero(_argv[0]);
+	etk::init(_argc, _argv);
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
 		// Problem: glewInit failed, something is seriously wrong.

@@ -647,7 +647,7 @@ extern "C" {
 	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved) {
 		// get the java virtual machine handle ...
 		std::unique_lock<std::mutex> lock(g_interfaceMutex);
-		std::unique_lock<std::mutex> lock(g_interfaceAudioMutex);
+		std::unique_lock<std::mutex> lockAudio(g_interfaceAudioMutex);
 		g_JavaVM = _jvm;
 		EWOL_DEBUG("JNI-> load the jvm ..." );
 		return JNI_VERSION_1_6;
@@ -655,7 +655,7 @@ extern "C" {
 	// JNI onUnLoad
 	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved) {
 		std::unique_lock<std::mutex> lock(g_interfaceMutex);
-		std::unique_lock<std::mutex> lock(g_interfaceAudioMutex);
+		std::unique_lock<std::mutex> lockAudio(g_interfaceAudioMutex);
 		g_JavaVM = nullptr;
 		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
 	}

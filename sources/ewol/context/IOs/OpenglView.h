@@ -34,8 +34,8 @@
 	int deltaDisplay;
 	int displayCounter;
 }
-- ()stopDisplayLink;
-- ()startDisplayLink;
-- ()speedSlow;
-- ()speedNormal;
+- (void)stopDisplayLink;
+- (void)startDisplayLink;
+- (void)speedSlow;
+- (void)speedNormal;
 @end

@@ -24,6 +24,7 @@
 #include <ewol/resource/Manager.h>
 #include <ewol/context/Context.h>
 #include <ewol/Dimension.h>
+#include <etk/etk.h>
 
 
 #if defined(__TARGET_OS__Linux)
@@ -1323,7 +1324,7 @@ class X11Interface : public ewol::Context {
  * @return std IO
  */
 int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
-	etk::setArgZero(_argv[0]);
+	etk::init(_argc, _argv);
 	X11Interface* interface = new X11Interface(_application, _argc, _argv);
 	if (interface == nullptr) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");

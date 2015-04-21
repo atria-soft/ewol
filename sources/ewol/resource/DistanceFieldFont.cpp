@@ -342,13 +342,13 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 void ewol::resource::DistanceFieldFont::exportOnFile() {
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
-	ejson::Array* tmpList = new ejson::Array();
+	std::shared_ptr<ejson::Array> tmpList = ejson::Array::create();
 	if (tmpList == nullptr) {
 		EWOL_ERROR("nullptr pointer");
 		return;
 	}
 	for (size_t iii=0; iii<m_listElement.size(); ++iii) {
-		ejson::Object* tmpObj = new ejson::Object();
+		std::shared_ptr<ejson::Object> tmpObj = ejson::Object::create();
 		if (tmpObj == nullptr) {
 			continue;
 		}
@@ -391,14 +391,14 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 	m_lastRawHeigh = doc.getNumberValue("m_lastRawHeigh", 0);
 	m_borderSize = doc.getNumberValue("m_borderSize", 2);
 	m_textureBorderSize = doc.addString("m_textureBorderSize", "0,0");
-	ejson::Array* tmpList = doc.getArray("m_listElement");
+	std::shared_ptr<ejson::Array> tmpList = doc.getArray("m_listElement");
 	if (tmpList == nullptr) {
 		EWOL_ERROR("nullptr pointer array");
 		return false;
 	}
 	m_listElement.clear();
 	for (size_t iii=0; iii<tmpList->size(); ++iii) {
-		ejson::Object* tmpObj = tmpList->getObject(iii);
+		std::shared_ptr<ejson::Object> tmpObj = tmpList->getObject(iii);
 		if (tmpObj == nullptr) {
 			continue;
 		}

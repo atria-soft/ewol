@@ -40,15 +40,15 @@ ewol::widget::Composer::~Composer() {
 }
 
 bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
-	exml::Document doc;
-	if (doc.load(_fileName) == false) {
+	std::shared_ptr<exml::Document> doc = exml::Document::create();
+	if (doc->load(_fileName) == false) {
 		EWOL_ERROR(" can not load file XML : " << _fileName);
 		return false;
 	}
-	exml::Element* root = (exml::Element*)doc.getNamed("composer");
+	std::shared_ptr<const exml::Element> root = doc->getNamed("composer");
 	if (root == nullptr) {
 		// Maybe a multiple node XML for internal config:
-		root = doc.toElement();
+		root = doc->toElement();
 		if (root == nullptr) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
@@ -65,15 +65,15 @@ bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 }
 
 bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlString) {
-	exml::Document doc;
-	if (doc.parse(_composerXmlString) == false) {
+	std::shared_ptr<exml::Document> doc = exml::Document::create();
+	if (doc->parse(_composerXmlString) == false) {
 		EWOL_ERROR(" can not load file XML string...");
 		return false;
 	}
-	exml::Element* root = (exml::Element*)doc.getNamed("composer");
+	std::shared_ptr<const exml::Element> root = doc->getNamed("composer");
 	if (root == nullptr) {
 		// Maybe a multiple node XML for internal config:
-		root = doc.toElement();
+		root = doc->toElement();
 		if (root == nullptr) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
