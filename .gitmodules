@@ -8,18 +8,12 @@
 [submodule "external/agg"]
 	path = external/agg
 	url = https://github.com/HeeroYui/libagg.git
-[submodule "external/portaudio"]
-	path = external/portaudio
-	url = https://github.com/HeeroYui/libportaudio.git
 [submodule "external/freetype"]
 	path = external/freetype
 	url = https://github.com/HeeroYui/libfreetype.git
 [submodule "external/png"]
 	path = external/png
 	url = https://github.com/HeeroYui/libpng.git
-[submodule "external/ogg"]
-	path = external/ogg
-	url = https://github.com/HeeroYui/libogg.git
 [submodule "external/z/zlib"]
 	path = external/z/zlib
 	url = https://github.com/madler/zlib.git
@@ -50,33 +44,38 @@
 [submodule "external/gtest"]
 	path = external/gtest
 	url = https://github.com/HeeroYui/gtest
-[submodule "external/speex"]
-	path = external/speex
-	url = https://github.com/HeeroYui/speex.git
-[submodule "external/speexdsp"]
-	path = external/speexdsp
-	url = https://github.com/HeeroYui/speexdsp.git
-[submodule "external/audio"]
-	path = external/audio
-	url = https://github.com/HeeroYui/audio.git
-[submodule "external/audio-algo-aec"]
-	path = external/audio-algo-aec
-	url = https://github.com/HeeroYui/audio-algo-aec.git
-[submodule "external/audio-algo-drain"]
-	path = external/audio-algo-drain
-	url = https://github.com/HeeroYui/audio-algo-drain.git
-[submodule "external/audio-drain"]
-	path = external/audio-drain
-	url = https://github.com/HeeroYui/audio-drain.git
-[submodule "external/audio-river"]
-	path = external/audio-river
-	url = https://github.com/HeeroYui/audio-river.git
+
 [submodule "external/audio-ess"]
 	path = external/audio-ess
 	url = https://github.com/HeeroYui/audio-ess.git
 [submodule "external/audio-blockEngine"]
 	path = external/audio-blockEngine
 	url = https://github.com/HeeroYui/audio-blockEngine.git
+
+[submodule "external/ogg"]
+	path = external/ogg
+	url = https://github.com/musicdsp/ogg.git
+[submodule "external/speex"]
+	path = external/speex
+	url = https://github.com/musicdsp/speex.git
+[submodule "external/speexdsp"]
+	path = external/speexdsp
+	url = https://github.com/musicdsp/speexdsp.git
+[submodule "external/audio"]
+	path = external/audio
+	url = https://github.com/musicdsp/audio.git
+[submodule "external/audio-algo-aec"]
+	path = external/audio-algo-aec
+	url = https://github.com/musicdsp/audio-algo-aec.git
+[submodule "external/audio-algo-drain"]
+	path = external/audio-algo-drain
+	url = https://github.com/musicdsp/audio-algo-drain.git
+[submodule "external/audio-drain"]
+	path = external/audio-drain
+	url = https://github.com/musicdsp/audio-drain.git
+[submodule "external/audio-river"]
+	path = external/audio-river
+	url = https://github.com/musicdsp/audio-river.git
 [submodule "external/audio-orchestra"]
 	path = external/audio-orchestra
-	url = https://github.com/HeeroYui/audio-orchestra.git
+	url = https://github.com/musicdsp/audio-orchestra.git
