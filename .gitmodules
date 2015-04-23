@@ -64,9 +64,9 @@
 [submodule "external/audio"]
 	path = external/audio
 	url = https://github.com/musicdsp/audio.git
-[submodule "external/audio-algo-aec"]
-	path = external/audio-algo-aec
-	url = https://github.com/musicdsp/audio-algo-aec.git
+[submodule "external/audio-algo-river"]
+	path = external/audio-algo-river
+	url = https://github.com/musicdsp/audio-algo-river.git
 [submodule "external/audio-algo-drain"]
 	path = external/audio-algo-drain
 	url = https://github.com/musicdsp/audio-algo-drain.git
