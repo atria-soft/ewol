@@ -79,3 +79,6 @@
 [submodule "external/audio-algo-speex"]
 	path = external/audio-algo-speex
 	url = http://github.com/musicdsp/audio-algo-speex.git
+[submodule "external/z"]
+	path = external/z
+	url = https://github.com/HeeroYui/z.git
