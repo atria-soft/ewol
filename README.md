@@ -15,6 +15,9 @@ download the software :
 	cd ewol
 	git submodule init
 	git submodule update
+	cd external/z
+	git submodule init
+	git submodule update
 
 Compile software and install :
 
