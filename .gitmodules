@@ -14,9 +14,6 @@
 [submodule "external/png"]
 	path = external/png
 	url = https://github.com/HeeroYui/libpng.git
-[submodule "external/z/zlib"]
-	path = external/z/zlib
-	url = https://github.com/HeeroYui/zlib.git
 [submodule "external/bullet/bullet"]
 	path = external/bullet/bullet
 	url = https://github.com/HeeroYui/bullet.git
