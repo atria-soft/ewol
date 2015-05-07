@@ -166,21 +166,21 @@ def create(target):
 		'ewol/widget/WSlider.cpp',
 		])
 	
-	myModule.copy_folder('../data/theme/shape/square/*','theme/shape/square')
-	myModule.copy_folder('../data/theme/shape/round/*','theme/shape/round')
-	myModule.copy_folder('../data/theme/color/black/*','theme/color/black')
-	myModule.copy_folder('../data/theme/color/white/*','theme/color/white')
-	myModule.copy_folder('../data/textured.*','')
-	myModule.copy_folder('../data/texturedNoMaterial.*','')
-	myModule.copy_folder('../data/text.*','')
-	myModule.copy_folder('../data/simple3D.*','')
-	myModule.copy_folder('../data/color.*','')
-	myModule.copy_folder('../data/color3.*','')
-	myModule.copy_folder('../data/textured3D2.*','')
-	myModule.copy_folder('../data/textured3D.*','')
-	myModule.copy_folder('../data/texturedDF.*','')
-	myModule.copy_folder('../data/fontDistanceField/*','fontDistanceField')
-	myModule.copy_folder('../data/translate/*','translate/ewol/')
+	myModule.copy_folder('data/theme/shape/square/*','theme/shape/square')
+	myModule.copy_folder('data/theme/shape/round/*','theme/shape/round')
+	myModule.copy_folder('data/theme/color/black/*','theme/color/black')
+	myModule.copy_folder('data/theme/color/white/*','theme/color/white')
+	myModule.copy_folder('data/textured.*','')
+	myModule.copy_folder('data/texturedNoMaterial.*','')
+	myModule.copy_folder('data/text.*','')
+	myModule.copy_folder('data/simple3D.*','')
+	myModule.copy_folder('data/color.*','')
+	myModule.copy_folder('data/color3.*','')
+	myModule.copy_folder('data/textured3D2.*','')
+	myModule.copy_folder('data/textured3D.*','')
+	myModule.copy_folder('data/texturedDF.*','')
+	myModule.copy_folder('data/fontDistanceField/*','fontDistanceField')
+	myModule.copy_folder('data/translate/*','translate/ewol/')
 	
 	# name of the dependency
 	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3', 'date'])
@@ -218,7 +218,7 @@ def create(target):
 		myModule.add_export_flag_LD("-ldl")
 		myModule.add_export_flag_LD("-llog")
 		myModule.add_export_flag_LD("-landroid")
-		java_tmp_dir = tools.get_current_path(__file__) + "/../sources/android/src/"
+		java_tmp_dir = tools.get_current_path(__file__) + "/android/src/"
 		cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
 		# TODO : set the build directory in out/.build with option -d ...
