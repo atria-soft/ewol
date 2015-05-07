@@ -16,13 +16,23 @@ branches:
 
 # previous actions:
 before_script: 
+  - cd ..
   - git clone git://github.com/HeeroYui/lutin.git
-  - git submodule init
-  - git submodule update
-  - cd external/z
-  - git submodule init
-  - git submodule update
-  - cd ../..
+  - mkdir bin
+  - curl https://storage.googleapis.com/git-repo-downloads/repo > bin/repo
+  - chmod a+x bin/repo
+  - git config --global user.email "travis@travis.com"
+  - git config --global user.name "Travis"
+  - git config --global color.ui "auto"
+  - git config --global core.editor "vi"
+  - mkdir WORKING_DIRECTORY
+  - cd WORKING_DIRECTORY
+  - ../bin/repo init -u https://github.com/HeeroYui/manifest.git
+  - ../bin/repo sync -j8
+  - rm -rf ewol
+  - cd ..
+  - pwd
+  - ls -l
   - if [ "$CXX" == "clang++" ]; then BUILDER=clang; else BUILDER=gcc; fi
 
 install:
