@@ -8,15 +8,29 @@ Ewol
 Instructions
 ============
 
-download the software :
+need google repo:
+-----------------
 
+see: http://source.android.com/source/downloading.html#installing-repo
+
+	mkdir ~/.bin
+	PATH=~/.bin:$PATH
+	curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
+	chmod a+x ~/.bin/repo
+
+
+download the software:
+----------------------
+
+	mkdir WORKING_DIRECTORY
+	cd WORKING_DIRECTORY
 	git clone git://github.com/HeeroYui/lutin.git
-	git clone git://github.com/HeeroYui/ewol.git
-	cd ewol
-	git submodule init
-	git submodule update
+	repo init -u git://github.com/HeeroYui/manifest.git
+	repo sync -j8
 
-Compile software and install :
+
+Compile software and install:
+-----------------------------
 
 	For this you might use a project that create binaries or something else ...
 	Show http://github.com/HeeroYui/edn project
