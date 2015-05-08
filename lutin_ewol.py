@@ -1,9 +1,9 @@
 #!/usr/bin/python
-import lutinModule as module
-import lutinTools as tools
-import lutinDebug as debug
+import lutin.module as module
+import lutin.tools as tools
+import lutin.debug as debug
 import os
-import lutinMultiprocess
+import lutin.multiprocess as lutinMultiprocess
 
 def get_desc():
 	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
@@ -189,20 +189,20 @@ def create(target):
 
 	tagFile = tools.get_current_path(__file__) + "/tag"
 	ewolVersionID = tools.file_read_data(tagFile)
-	myModule.compile_flags_CC([
+	myModule.compile_flags('c++', [
 		"-DEWOL_VERSION=\"\\\""+ewolVersionID+"\\\"\""
 		])
 	
 	if target.name=="Linux":
-		myModule.add_export_flag_LD('-lGL')
+		myModule.add_export_flag('link', '-lGL')
 		
 		#`pkg-config --cflags directfb` `pkg-config --libs directfb`
 		
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-		myModule.add_export_flag_LD('-lX11')
+		myModule.add_export_flag('link', '-lX11')
 		#endif
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-		#myModule.add_export_flag_LD(['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
+		#myModule.add_export_flag('link', ['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
 		#endif
 		
 		#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
@@ -213,11 +213,11 @@ def create(target):
 		#endif
 	
 	elif target.name=="Android":
-		myModule.add_export_flag_LD("-lGLESv2")
+		myModule.add_export_flag('link', "-lGLESv2")
 		
-		myModule.add_export_flag_LD("-ldl")
-		myModule.add_export_flag_LD("-llog")
-		myModule.add_export_flag_LD("-landroid")
+		myModule.add_export_flag('link', "-ldl")
+		myModule.add_export_flag('link', "-llog")
+		myModule.add_export_flag('link', "-landroid")
 		java_tmp_dir = tools.get_current_path(__file__) + "/android/src/"
 		cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
@@ -231,13 +231,13 @@ def create(target):
 	elif target.name=="Windows":
 		myModule.add_module_depend("glew")
 	elif target.name=="MacOs":
-		myModule.add_export_flag_LD([
+		myModule.add_export_flag('link', [
 			"-framework Cocoa",
 			"-framework OpenGL",
 			"-framework QuartzCore",
 			"-framework AppKit"])
 	elif target.name=="IOs":
-		myModule.add_export_flag_LD([
+		myModule.add_export_flag('link', [
 			"-framework OpenGLES",
 			"-framework CoreGraphics",
 			"-framework UIKit",

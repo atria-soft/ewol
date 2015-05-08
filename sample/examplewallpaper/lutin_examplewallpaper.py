@@ -1,6 +1,6 @@
 #!/usr/bin/python
-import lutinModule as module
-import lutinTools as tools
+import lutin.module as module
+import lutin.tools as tools
 import datetime
 
 def get_desc():
@@ -20,7 +20,7 @@ def create(target):
 	
 	myModule.add_module_depend(['ewol'])
 	
-	myModule.compile_flags_CC([
+	myModule.compile_flags('c++', [
 		"-DPROJECT_NAME=\"\\\""+myModule.name+"\\\"\""])
 	
 	myModule.copy_folder('data/SnowFlake.svg','')
