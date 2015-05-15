@@ -50,7 +50,6 @@ int mm_main(int argc, const char *argv[]) {
 	// -- basic windows creation :
 	// -----------------------		----------------------------------------
 	// create a windows of size 800/600
-#if 1
 	id window = [ [ [EwolMainWindows alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
 				styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
 				 autorelease];
@@ -85,19 +84,6 @@ int mm_main(int argc, const char *argv[]) {
 	//[window makeKeyAndVisible];
 	
 	//[window setDelegate:view];
-#else
-    @autoreleasepool
-    {
-        const ProcessSerialNumber psn = { 0, kCurrentProcess };
-        TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-        SetFrontProcess(&psn);
-		
-        [MyApplication sharedApplication];
-        [NSApp setDelegate: NSApp];
-		
-        [NSApp run];
-    }
-#endif
 	// return no error
 	return 0;
 }

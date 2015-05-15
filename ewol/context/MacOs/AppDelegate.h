@@ -11,6 +11,6 @@
 @interface MacOsAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
-- ()sendEvent:(NSEvent *)event;
-- ()applicationWillResignActive:(MacOsAppDelegate *)application;
+- (void)sendEvent:(NSEvent *)event;
+- (void)applicationWillResignActive:(MacOsAppDelegate *)application;
 @end
