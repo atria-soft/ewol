@@ -17,7 +17,6 @@ branches:
 # previous actions:
 before_script: 
   - cd ..
-  - git clone git://github.com/HeeroYui/lutin.git
   - mkdir bin
   - curl https://storage.googleapis.com/git-repo-downloads/repo > bin/repo
   - chmod a+x bin/repo
@@ -43,10 +42,11 @@ install:
   - sudo rm /usr/bin/gcc /usr/bin/g++
   - sudo ln -s /usr/bin/gcc-4.9 /usr/bin/gcc
   - sudo ln -s /usr/bin/g++-4.9 /usr/bin/g++
+  - sudo pip install lutin
 
 # build sequence with Lutin :
 script: 
-  - ./lutin/lutin.py -C -P -c$BUILDER -mdebug -p ewol etk_test exml_test ejson_test enettest
+  - lutin -C -P -c$BUILDER -mdebug -p ewol etk_test exml_test ejson_test enettest
   - ./out/Linux_x86_64/debug/staging/$BUILDER/etk_test/usr/bin/etk_test
   - ./out/Linux_x86_64/debug/staging/$BUILDER/ejson_test/usr/bin/ejson_test
   - ./out/Linux_x86_64/debug/staging/$BUILDER/exml_test/usr/bin/exml_test
