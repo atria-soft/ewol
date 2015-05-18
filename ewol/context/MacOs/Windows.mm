@@ -24,6 +24,9 @@
 
 - (id)init {
 	id windowsID = [super init];
+	
+	//[NSApp setDelegate: self];
+	
 	EWOL_DEBUG("INIT ...");
 	// set the windows at a specific position :
 	[windowsID cascadeTopLeftFromPoint:NSMakePoint(50,50)];
@@ -68,13 +71,13 @@
 
 
 + (void)dealloc {
-	EWOL_DEBUG("FREE ...");
+	EWOL_ERROR("FREE ...");
 	//[_window release];
 	[super dealloc];
 }
 
 + (void)performClose:(id)sender {
-	EWOL_DEBUG("perform close ...");
+	EWOL_ERROR("perform close ...");
 }
 					  
 
@@ -420,7 +423,12 @@ static ewol::key::Special guiKeyBoardMode;
 	}
 }
 
-
+- (void)close {
+	EWOL_ERROR("close:");
+	// TODO: add check of close request ...
+	[super close];
+	[NSApp terminate:self];
+}
 
 @end
 

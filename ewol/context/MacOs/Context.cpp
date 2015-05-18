@@ -183,6 +183,7 @@ int ewol::run(ewol::context::Application* _application, int _argc, const char *_
 	}
 	
 	int32_t retValue = interface->Run();
+	EWOL_INFO("Stop running");
 	delete(interface);
 	interface = nullptr;
 	return retValue;

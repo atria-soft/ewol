@@ -12,8 +12,7 @@
 #import <ewol/context/MacOs/OpenglView.h>
 #import <ewol/context/MacOs/Windows.h>
 #import <ewol/context/MacOs/AppDelegate.h>
-
-
+#import <ewol/debug.h>
 
 int mm_main(int argc, const char *argv[]) {
 	[NSAutoreleasePool new];
@@ -90,6 +89,7 @@ int mm_main(int argc, const char *argv[]) {
 
 int mm_run(void) {
 	[NSApp run];
+	EWOL_INFO("END of application");
 	// return no error
 	return 0;
 }
