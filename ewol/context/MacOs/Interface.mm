@@ -14,6 +14,8 @@
 #import <ewol/context/MacOs/AppDelegate.h>
 #import <ewol/debug.h>
 
+id window = nil;
+
 int mm_main(int argc, const char *argv[]) {
 	[NSAutoreleasePool new];
 	
@@ -38,8 +40,13 @@ int mm_main(int argc, const char *argv[]) {
 	// create the label to qui the application :
 	id quitTitle = [@"Quit " stringByAppendingString:appName];
 	// create the item to quit the appllication with META+q at shortCut
+	/*
 	id quitMenuItem = [ [ [NSMenuItem alloc] initWithTitle:quitTitle
 	                      action:@selector(terminate:) keyEquivalent:@"q"] autorelease];
+	 */
+	id quitMenuItem = [ [ [NSMenuItem alloc] initWithTitle:quitTitle
+	                      action:@selector(stop:) keyEquivalent:@"q"] autorelease];
+	
 	// add the item to the menu:
 	[appMenu addItem:quitMenuItem];
 	// set the application menu to the main app menu ...
@@ -49,9 +56,9 @@ int mm_main(int argc, const char *argv[]) {
 	// -- basic windows creation :
 	// -----------------------		----------------------------------------
 	// create a windows of size 800/600
-	id window = [ [ [EwolMainWindows alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
-				styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
-				 autorelease];
+	window = [ [ [EwolMainWindows alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
+	           styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
+	           autorelease];
 	[window setAcceptsMouseMovedEvents:YES];
 	//id window = [ [MacOsAppDelegate alloc] autorelease];
 	
@@ -93,3 +100,12 @@ int mm_run(void) {
 	// return no error
 	return 0;
 }
+
+void mm_stopApplication() {
+	EWOL_INFO("NSApp terminate start.");
+	[window closeRequestEwol];
+	[NSApp stop:nil];
+	//[NSApp terminate:nil];
+	EWOL_INFO("NSApp terminate done");
+}
+

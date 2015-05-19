@@ -423,13 +423,21 @@ static ewol::key::Special guiKeyBoardMode;
 	}
 }
 
+- (void)closeRequestEwol {
+	EWOL_ERROR("closeRequestEwol: BEGIN");
+	[super close];
+	EWOL_ERROR("closeRequestEwol: END");
+}
+
 - (void)close {
 	EWOL_ERROR("close:");
+	MacOs::stopRequested();
 	// TODO: add check of close request ...
-	[super close];
-	[NSApp terminate:self];
+	//[super close];
+	//[NSApp terminate:self];
 }
 
 @end
+
 
 

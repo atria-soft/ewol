@@ -564,6 +564,15 @@ void ewol::Context::OS_ClipBoardArrive(enum ewol::context::clipBoard::clipboardL
 	m_msgSystem.post(data);
 }
 
+void ewol::Context::clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+	// just transmit an event , we have the data in the system
+	OS_ClipBoardArrive(_clipboardID);
+}
+
+void ewol::Context::clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+	// nothing to do, data is already copyed in the EWOL clipborad center
+}
+
 bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	int64_t currentTime = ewol::getTime();
 	// this is to prevent the multiple display at the a high frequency ...

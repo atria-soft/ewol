@@ -17,13 +17,13 @@
 
 
 /*
-note: la copy dans le :
+note: copy id data :
         0 : copy standard
-   [1..9] : copy interne
-       10 : bouton du milieux
+   [1..9] : copy internal
+       10 : middle button
 */
 //!< Local copy of the clipboards
-static std::string mesCopy[ewol::context::clipBoard::clipboardCount];
+static std::string myCopy[ewol::context::clipBoard::clipboardCount];
 
 static const char* clipboardDescriptionString[ewol::context::clipBoard::clipboardCount+1] = {
 	"clipboard0",
@@ -54,7 +54,7 @@ std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::context::cli
 void ewol::context::clipBoard::init() {
 	EWOL_INFO("Initialyse ClipBoards");
 	for(int32_t i=0; i<ewol::context::clipBoard::clipboardCount; i++) {
-		mesCopy[i].clear();
+		myCopy[i].clear();
 	}
 }
 
@@ -62,7 +62,7 @@ void ewol::context::clipBoard::init() {
 void ewol::context::clipBoard::unInit() {
 	EWOL_INFO("Initialyse ClipBoards");
 	for(int32_t i=0; i<ewol::context::clipBoard::clipboardCount; i++) {
-		mesCopy[i].clear();
+		myCopy[i].clear();
 	}
 }
 
@@ -110,7 +110,7 @@ void ewol::context::clipBoard::setSystem(enum ewol::context::clipBoard::clipboar
 		return;
 	}
 	// Copy datas ...
-	mesCopy[_clipboardID] = _data;
+	myCopy[_clipboardID] = _data;
 }
 
 
@@ -121,7 +121,7 @@ const std::string& ewol::context::clipBoard::get(enum ewol::context::clipBoard::
 		return emptyString;
 	}
 	// Copy datas ...
-	return mesCopy[_clipboardID];
+	return myCopy[_clipboardID];
 }
 
 

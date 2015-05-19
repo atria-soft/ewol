@@ -291,4 +291,10 @@ std::shared_ptr<ewol::Object> ewol::widget::Windows::getSubObjectNamed(const std
 	return nullptr;
 }
 
+void ewol::widget::Windows::sysOnKill() {
+	if (onKill() == true) {
+		getContext().stop();
+	}
+			
+}
 

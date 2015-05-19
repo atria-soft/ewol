@@ -31,6 +31,7 @@
 // keyboard eevnts:
 - (void)keyDown:(NSEvent *)theEvent;
 - (void)flagsChanged:(NSEvent *)theEvent;
-
+- (void)closeRequestEwol;
 @end
+
 

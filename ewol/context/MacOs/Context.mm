@@ -11,6 +11,7 @@
 #include <ewol/ewol.h>
 #include <ewol/key/key.h>
 #include <ewol/context/commandLine.h>
+#include <ewol/context/clipBoard.h>
 #include <etk/types.h>
 #include <etk/os/FSNode.h>
 #include <ewol/widget/Manager.h>
@@ -31,6 +32,7 @@
 #include <mach/mach.h>
 #include <etk/etk.h>
 
+#import <Cocoa/Cocoa.h>
 
 int64_t ewol::getTime() {
 	struct timespec now;
@@ -52,7 +54,7 @@ int64_t ewol::getTime() {
 
 class MacOSInterface : public ewol::Context {
 	private:
-	ewol::key::Special m_guiKeyBoardMode;
+		ewol::key::Special m_guiKeyBoardMode;
 	public:
 		MacOSInterface(ewol::context::Application* _application, int32_t _argc, const char* _argv[]) :
 		  ewol::Context(_application, _argc, _argv) {
@@ -78,12 +80,12 @@ class MacOSInterface : public ewol::Context {
 			OS_SetMouseMotion(_id, vec2(_x, _y));
 		}
 		void MAC_SetKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
-			if (_unichar == u32char::Delete) {
+			if (char32_t(_unichar) == u32char::Delete) {
 				_unichar = u32char::Suppress;
-			} else if (_unichar == u32char::Suppress) {
+			} else if (char32_t(_unichar) == u32char::Suppress) {
 				_unichar = u32char::Delete;
 			}
-			if (_unichar == u32char::CarrierReturn) {
+			if (char32_t(_unichar) == u32char::CarrierReturn) {
 				_unichar = u32char::Return;
 			}
 			//EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
@@ -118,6 +120,40 @@ class MacOSInterface : public ewol::Context {
 			std::string req = "open " + _url;
 			system(req.c_str());
 		}
+		void MAC_Stop() {
+			OS_Stop();
+		}
+		void stop() {
+			mm_stopApplication();
+		}
+		void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+			if (_clipboardID == ewol::context::clipBoard::clipboardStd) {
+				NSPasteboard* myPasteboard = [NSPasteboard generalPasteboard];
+				NSString* myString = [myPasteboard stringForType:NSPasteboardTypeString];
+				std::string val([myString UTF8String]);
+				ewol::context::clipBoard::setSystem(_clipboardID, val);
+				if (val.size() != 0) {
+					OS_ClipBoardArrive(_clipboardID);
+				}
+			} else {
+				ewol::Context::clipBoardGet(_clipboardID);
+			}
+		}
+		void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+			if (_clipboardID == ewol::context::clipBoard::clipboardStd) {
+				NSPasteboard* myPasteboard = [NSPasteboard generalPasteboard];
+				[myPasteboard clearContents];
+				//EWOL_ERROR(" copy: " << ewol::context::clipBoard::get(_clipboardID));
+				NSString *text = [[NSString alloc] initWithUTF8String:ewol::context::clipBoard::get(_clipboardID).c_str()];
+				BOOL err = [myPasteboard setString:text forType:NSPasteboardTypeString];
+				if (err == FALSE) {
+					EWOL_ERROR("copy to clipboard can not be done ..."); 
+				}
+			} else {
+				ewol::Context::clipBoardSet(_clipboardID);
+			}
+		}
+	
 };
 
 
@@ -168,6 +204,12 @@ void MacOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::k
 	interface->MAC_SetKeyboardMove(_keyboardMode, _move, _isDown, _isAReapeateKey);
 }
 
+void MacOs::stopRequested() {
+	if (interface == nullptr) {
+		return;
+	}
+	interface->MAC_Stop();
+}
 
 /**
  * @brief Main of the program

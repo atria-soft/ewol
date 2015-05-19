@@ -37,7 +37,7 @@ namespace ewol {
 				void sysDraw();
 				void sysOnShow() {};
 				void sysOnHide() {};
-				void sysOnKill() {};
+				void sysOnKill();
 			public:
 				virtual void onShow() { };
 				virtual void onHide() { };

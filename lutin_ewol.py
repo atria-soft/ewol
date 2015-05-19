@@ -59,7 +59,7 @@ def create(target):
 		myModule.add_src_file('ewol/context/Android/Context.cpp')
 	elif target.name=="MacOs":
 		myModule.add_src_file([
-			'ewol/context/MacOs/Context.cpp',
+			'ewol/context/MacOs/Context.mm',
 			'ewol/context/MacOs/Interface.mm',
 			'ewol/context/MacOs/Windows.mm',
 			'ewol/context/MacOs/OpenglView.mm',

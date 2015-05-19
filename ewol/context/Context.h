@@ -254,12 +254,12 @@ namespace ewol {
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) { };
+			virtual void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 			/**
 			 * @brief Inform the Gui that we are the new owner of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) { };
+			virtual void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 			/**
 			 * @brief Call by the OS when a clipboard arrive to US (previously requested by a widget)
 			 * @param[in] Id of the clipboard
