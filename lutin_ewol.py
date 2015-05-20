@@ -13,7 +13,7 @@ def get_license():
 
 def create(target):
 	# set the ewol folder for Android basic sources ...
-	target.set_ewol_folder(tools.get_current_path(__file__) + "/../")
+	target.set_ewol_folder(tools.get_current_path(__file__))
 	
 	# module name is 'edn' and type binary.
 	myModule = module.Module(__file__, 'ewol', 'LIBRARY')
