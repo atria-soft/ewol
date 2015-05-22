@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-int mm_main(int argc, const char *argv[]);
+int mm_main(int _argc, const char *_argv[]);
 void mm_exit();
 void mm_openURL(const char *_url);
 

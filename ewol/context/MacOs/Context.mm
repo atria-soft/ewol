@@ -56,7 +56,7 @@ class MacOSInterface : public ewol::Context {
 	private:
 		ewol::key::Special m_guiKeyBoardMode;
 	public:
-		MacOSInterface(ewol::context::Application* _application, int32_t _argc, const char* _argv[]) :
+		MacOSInterface(ewol::context::Application* _application, int _argc, const char* _argv[]) :
 		  ewol::Context(_application, _argc, _argv) {
 			mm_main(_argc, _argv);
 		}
@@ -216,7 +216,7 @@ void MacOs::stopRequested() {
  * @param std IO
  * @return std IO
  */
-int ewol::run(ewol::context::Application* _application, int _argc, const char *_argv[]) {
+int ewol::run(ewol::context::Application* _application, int _argc, const char* _argv[]) {
 	etk::init(_argc, _argv);
 	interface = new MacOSInterface(_application, _argc, _argv);
 	if (nullptr == interface) {

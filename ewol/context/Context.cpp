@@ -325,28 +325,11 @@ ewol::Context::Context(ewol::context::Application* _application, int32_t _argc, 
 	etk::theme::setNameDefault("COLOR", "color/black/");
 	// parse the debug level:
 	for(int32_t iii = 0; iii < m_commandLine.size() ; ++iii) {
-		if (m_commandLine.get(iii) == "-l0") {
-			etk::log::setLevel(etk::log::logLevelNone);
-		} else if (m_commandLine.get(iii) == "-l1") {
-			etk::log::setLevel(etk::log::logLevelCritical);
-		} else if (m_commandLine.get(iii) == "-l2") {
-			etk::log::setLevel(etk::log::logLevelError);
-		} else if (m_commandLine.get(iii) == "-l3") {
-			etk::log::setLevel(etk::log::logLevelWarning);
-		} else if (m_commandLine.get(iii) == "-l4") {
-			etk::log::setLevel(etk::log::logLevelInfo);
-		} else if (m_commandLine.get(iii) == "-l5") {
-			etk::log::setLevel(etk::log::logLevelDebug);
-		} else if(    m_commandLine.get(iii) == "-l6"
-		           || m_commandLine.get(iii) == "-l7"
-		           || m_commandLine.get(iii) == "-l8"
-		           || m_commandLine.get(iii) == "-l9") {
-			etk::log::setLevel(etk::log::logLevelVerbose);
-		} else if (m_commandLine.get(iii) == "-fps") {
+		if (m_commandLine.get(iii) == "--ewol-fps") {
 			m_displayFps=true;
-		} else if (m_commandLine.get(iii) == "--dbg-file") {
-			// TODO : Set it back ...
-			//etk::cout.setOutputFile(true);
+		} else if (    m_commandLine.get(iii) == "-h"
+		            || m_commandLine.get(iii) == "--help") {
+			// TODO ...
 		} else {
 			continue;
 		}
@@ -651,10 +634,13 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		if (m_displayFps == true) {
 			m_FpsSystem.toc();
 			m_FpsFlush.tic();
-			m_FpsFlush.incrementCounter();
 		}
-		ewol::openGL::flush();
-		//glFinish();
+		if (hasDisplayDone == true) {
+			if (m_displayFps == true) {
+				m_FpsFlush.incrementCounter();
+			}
+			ewol::openGL::flush();
+		}
 		if (m_displayFps == true) {
 			m_FpsFlush.toc();
 		}

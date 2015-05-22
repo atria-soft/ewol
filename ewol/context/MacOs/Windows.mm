@@ -205,13 +205,15 @@ static ewol::key::Special guiKeyBoardMode;
 	}
 	
 	if (([theEvent modifierFlags] & NSControlKeyMask) != 0) {
-		EWOL_VERBOSE("NSControlKeyMask");
+		//EWOL_VERBOSE("NSControlKeyMask");
 		if (guiKeyBoardMode.getCtrl() == false) {
+			EWOL_VERBOSE("NSControlKeyMask DOWN");
 			guiKeyBoardMode.setCtrl(true);
 			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::key::keyboardCtrlLeft, true, false);
 		}
 	} else {
 		if (guiKeyBoardMode.getCtrl() == true) {
+			EWOL_VERBOSE("NSControlKeyMask UP");
 			guiKeyBoardMode.setCtrl(false);
 			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::key::keyboardCtrlLeft, false, false);
 		}
@@ -424,17 +426,14 @@ static ewol::key::Special guiKeyBoardMode;
 }
 
 - (void)closeRequestEwol {
-	EWOL_ERROR("closeRequestEwol: BEGIN");
+	EWOL_VERBOSE("closeRequestEwol: BEGIN");
 	[super close];
-	EWOL_ERROR("closeRequestEwol: END");
+	EWOL_VERBOSE("closeRequestEwol: END");
 }
 
 - (void)close {
-	EWOL_ERROR("close:");
+	EWOL_VERBOSE("close:");
 	MacOs::stopRequested();
-	// TODO: add check of close request ...
-	//[super close];
-	//[NSApp terminate:self];
 }
 
 @end

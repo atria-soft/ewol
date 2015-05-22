@@ -1294,8 +1294,7 @@ class X11Interface : public ewol::Context {
 		}
 		/****************************************************************************************/
 		void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
-			switch (_clipboardID)
-			{
+			switch (_clipboardID) {
 				case ewol::context::clipBoard::clipboardSelection:
 					// Request the selection :
 					if (false == m_clipBoardOwnerPrimary) {

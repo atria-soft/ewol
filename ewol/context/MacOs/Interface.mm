@@ -16,7 +16,7 @@
 
 id window = nil;
 
-int mm_main(int argc, const char *argv[]) {
+int mm_main(int _argc, const char* _argv[]) {
 	[NSAutoreleasePool new];
 	
 	[NSApplication sharedApplication];
@@ -40,10 +40,6 @@ int mm_main(int argc, const char *argv[]) {
 	// create the label to qui the application :
 	id quitTitle = [@"Quit " stringByAppendingString:appName];
 	// create the item to quit the appllication with META+q at shortCut
-	/*
-	id quitMenuItem = [ [ [NSMenuItem alloc] initWithTitle:quitTitle
-	                      action:@selector(terminate:) keyEquivalent:@"q"] autorelease];
-	 */
 	id quitMenuItem = [ [ [NSMenuItem alloc] initWithTitle:quitTitle
 	                      action:@selector(stop:) keyEquivalent:@"q"] autorelease];
 	
@@ -54,7 +50,7 @@ int mm_main(int argc, const char *argv[]) {
 	
 	// ---------------------------------------------------------------
 	// -- basic windows creation :
-	// -----------------------		----------------------------------------
+	// ---------------------------------------------------------------
 	// create a windows of size 800/600
 	window = [ [ [EwolMainWindows alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
 	           styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
@@ -96,16 +92,15 @@ int mm_main(int argc, const char *argv[]) {
 
 int mm_run(void) {
 	[NSApp run];
-	EWOL_INFO("END of application");
+	EWOL_DEBUG("END of application");
 	// return no error
 	return 0;
 }
 
 void mm_stopApplication() {
-	EWOL_INFO("NSApp terminate start.");
+	EWOL_DEBUG("NSApp terminate start.");
 	[window closeRequestEwol];
 	[NSApp stop:nil];
-	//[NSApp terminate:nil];
-	EWOL_INFO("NSApp terminate done");
+	EWOL_DEBUG("NSApp terminate done");
 }
 
