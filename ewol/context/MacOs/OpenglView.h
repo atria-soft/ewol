@@ -13,7 +13,9 @@
 
 @interface OpenGLView : NSOpenGLView<NSWindowDelegate> {
     NSTimer* _refreshTimer;
+    bool _redraw;
 }
 - (void)prepareOpenGL;
 - (void)drawRect:(NSRect) bounds;
+- (void)UpdateScreenRequested;
 @end

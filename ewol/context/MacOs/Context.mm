@@ -211,6 +211,13 @@ void MacOs::stopRequested() {
 	interface->MAC_Stop();
 }
 
+void MacOs::setRedrawCallback(const std::function<void()>& _func) {
+	if (interface == nullptr) {
+		return;
+	}
+	interface->getWidgetManager().setCallbackonRedrawNeeded(_func);
+}
+
 /**
  * @brief Main of the program
  * @param std IO

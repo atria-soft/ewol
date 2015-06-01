@@ -8,7 +8,6 @@
 
 
 #import <ewol/context/MacOs/Windows.h>
-#import <ewol/context/MacOs/OpenglView.h>
 #include <ewol/context/MacOS/Context.h>
 #include <ewol/key/key.h>
 
@@ -52,11 +51,11 @@
 	NSRect window_frame = [windowsID frame];
 	EWOL_DEBUG("ALLOCATE ...");
 	
-	OpenGLView* view=[[OpenGLView alloc]initWithFrame:window_frame]; //NSMakeRect(0, 0, 800, 600)];
+	_view=[[OpenGLView alloc]initWithFrame:window_frame]; //NSMakeRect(0, 0, 800, 600)];
 	EWOL_DEBUG("ALLOCATE ...");
-	[windowsID setContentView:view];
+	[windowsID setContentView:_view];
 	EWOL_DEBUG("ALLOCATE ...");
-	[view setAutoresizesSubviews:YES];
+	[_view setAutoresizesSubviews:YES];
 	EWOL_DEBUG("ALLOCATE ...");
 	
 	// Override point for customization after application launch.
@@ -79,7 +78,6 @@
 + (void)performClose:(id)sender {
 	EWOL_ERROR("perform close ...");
 }
-					  
 
 static ewol::key::Special guiKeyBoardMode;
 
@@ -436,6 +434,9 @@ static ewol::key::Special guiKeyBoardMode;
 	MacOs::stopRequested();
 }
 
+- (void)UpdateScreenRequested {
+	[_view UpdateScreenRequested];
+}
 @end
 
 

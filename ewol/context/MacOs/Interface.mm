@@ -5,7 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
+#include "Context.h"
 #import <Cocoa/Cocoa.h>
 #include "ewol/context/MacOs/Interface.h"
 
@@ -15,6 +15,11 @@
 #import <ewol/debug.h>
 
 id window = nil;
+
+void callbackSomeThingToDo() {
+	//EWOL_CRITICAL("ksdjlkqjsdlfkjsqdlkfjslqkdjflqksjdf");
+	[window UpdateScreenRequested];
+}
 
 int mm_main(int _argc, const char* _argv[]) {
 	[NSAutoreleasePool new];
@@ -74,23 +79,16 @@ int mm_main(int _argc, const char* _argv[]) {
 	NSRect window_frame = [window frame];
 	
 	OpenGLView* view=[[OpenGLView alloc]initWithFrame:window_frame]; //NSMakeRect(0, 0, 800, 600)];
-    NSTrackingArea *track = [[NSTrackingArea alloc] initWithRect:window_frame options: NSTrackingMouseMoved | NSTrackingActiveWhenFirstResponder | NSTrackingActiveInKeyWindow
+	NSTrackingArea *track = [[NSTrackingArea alloc] initWithRect:window_frame options: NSTrackingMouseMoved | NSTrackingActiveWhenFirstResponder | NSTrackingActiveInKeyWindow
 														   owner:window userInfo:nil];
-    [view addTrackingArea:track];
+	[view addTrackingArea:track];
 	[window setContentView:view];
 	[view setAutoresizesSubviews:YES];
-	
-	// Override point for customization after application launch.
-	//[window addSubview:view];
-	//[window addChildWindow:view];
-	//[window makeKeyAndVisible];
-	
-	//[window setDelegate:view];
-	// return no error
 	return 0;
 }
 
 int mm_run(void) {
+	//MacOs::setRedrawCallback(std::bind(callbackSomeThingToDo));
 	[NSApp run];
 	EWOL_DEBUG("END of application");
 	// return no error

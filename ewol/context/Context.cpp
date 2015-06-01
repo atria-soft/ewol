@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include <etk/types.h>
+#include <etk/etk.h>
 
 #include <etk/tool.h>
 #include <etk/os/FSNode.h>
@@ -329,7 +330,14 @@ ewol::Context::Context(ewol::context::Application* _application, int32_t _argc, 
 			m_displayFps=true;
 		} else if (    m_commandLine.get(iii) == "-h"
 		            || m_commandLine.get(iii) == "--help") {
-			// TODO ...
+			EWOL_PRINT("ewol - help : ");
+			EWOL_PRINT("    " << etk::getApplicationName() << " [options]");
+			EWOL_PRINT("        --ewol-fps:   Display the current fps of the display");
+			EWOL_PRINT("        -h/--help:    Display this help");
+			EWOL_PRINT("    example:");
+			EWOL_PRINT("        " << etk::getApplicationName() << " --ewol-fps");
+			// this is a global help system does not remove it
+			continue;
 		} else {
 			continue;
 		}

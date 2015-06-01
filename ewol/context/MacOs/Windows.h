@@ -7,9 +7,10 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <ewol/context/MacOs/OpenglView.h>
 
 @interface EwolMainWindows : NSWindow {
-	
+	OpenGLView* _view;
 }
 + (id)alloc;
 - (id)init;
@@ -32,6 +33,7 @@
 - (void)keyDown:(NSEvent *)theEvent;
 - (void)flagsChanged:(NSEvent *)theEvent;
 - (void)closeRequestEwol;
+- (void)UpdateScreenRequested;
 @end
 
 

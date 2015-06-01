@@ -157,48 +157,18 @@ void ewol::widget::Manager::focusRemoveIfRemove(const std::shared_ptr<ewol::Widg
 	}
 }
 
-/*
-void ewol::widget::Manager::periodicCall(int64_t _localTime) {
-	int64_t previousTime = m_lastPeriodicCallTime;
-	m_lastPeriodicCallTime = _localTime;
-	if (m_listOfPeriodicWidget.size() <= 0) {
-		return;
-	}
-	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
-	
-	ewol::event::Time myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
-	
-	EWOL_VERBOSE("periodic : " << _localTime);
-	for (int32_t iii=m_listOfPeriodicWidget.size()-1; iii >= 0 ; iii--) {
-		auto tmpWidget = m_listOfPeriodicWidget[iii].lock();
-		if (nullptr != tmpWidget) {
-			int64_t deltaTimeCallUser = tmpWidget->systemGetCallDeltaTime();
-			if (deltaTimeCallUser <= 0) {
-				myTime.setDeltaCall(deltaTime);
-				EWOL_VERBOSE("[" << iii << "] periodic : " << myTime);
-				tmpWidget->systemSetLastCallTime(_localTime);
-				tmpWidget->periodicCall(myTime);
-			} else {
-				int64_t lastCallTime = tmpWidget->systemGetLastCallTime();
-				if (lastCallTime == 0) {
-					lastCallTime = _localTime;
-				}
-				float deltaLocalTime = (float)(_localTime-lastCallTime)/1000000.0;;
-				if (deltaLocalTime >=  lastCallTime) {
-					myTime.setDeltaCall(deltaLocalTime);
-					EWOL_VERBOSE("[" << iii << "] periodic : " << myTime);
-					tmpWidget->systemSetLastCallTime(_localTime);
-					tmpWidget->periodicCall(myTime);
-				}
-			}
-		}
-	}
+void ewol::widget::Manager::setCallbackonRedrawNeeded(const std::function<void()>& _func) {
+	m_funcRedrawNeeded = _func;
 }
-*/
-
 
 void ewol::widget::Manager::markDrawingIsNeeded() {
+	if (m_haveRedraw == true) {
+		return;
+	}
 	m_haveRedraw = true;
+	if (m_funcRedrawNeeded != nullptr) {
+		m_funcRedrawNeeded();
+	}
 }
 
 bool ewol::widget::Manager::isDrawingNeeded() {
