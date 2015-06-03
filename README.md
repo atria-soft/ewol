@@ -24,7 +24,7 @@ download the software:
 
 	mkdir WORKING_DIRECTORY
 	cd WORKING_DIRECTORY
-	git clone git://github.com/HeeroYui/lutin.git
+	sudo pip install lutin
 	repo init -u git://github.com/HeeroYui/manifest.git
 	repo sync -j8
 
