@@ -26,9 +26,9 @@ before_script:
   - git config --global core.editor "vi"
   - mkdir WORKING_DIRECTORY
   - cd WORKING_DIRECTORY
-  - ../bin/repo init -u https://github.com/HeeroYui/manifest.git
+  - ../bin/repo init -u https://github.com/atria-soft/manifest.git
   - ../bin/repo sync -j8
-  - rm -rf ewol
+  - rm -rf atria-soft/ewol
   - cd ..
   - pwd
   - ls -l
@@ -46,10 +46,10 @@ install:
 
 # build sequence with Lutin :
 script: 
-  - lutin -C -P -c$BUILDER -mdebug -p ewol etk_test exml_test ejson_test enettest
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/etk_test/usr/bin/etk_test
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/ejson_test/usr/bin/ejson_test
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/exml_test/usr/bin/exml_test
+  - lutin -C -P -c$BUILDER -mdebug -p ewol etk-test exml-test ejson-test enet-test 0XX_customwidget 001_HelloWord
+  - ./out/Linux_x86_64/debug/staging/$BUILDER/etk-test/usr/bin/etk-test
+  - ./out/Linux_x86_64/debug/staging/$BUILDER/ejson-test/usr/bin/ejson-test
+  - ./out/Linux_x86_64/debug/staging/$BUILDER/exml-test/usr/bin/exml-test
 
 #send e-mail on compilation result:
 notifications:

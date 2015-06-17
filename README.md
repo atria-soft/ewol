@@ -1,9 +1,9 @@
-[![Build Status](https://secure.travis-ci.org/HeeroYui/ewol.svg?branch=master)](https://travis-ci.org/HeeroYui/ewol)
-
 Ewol
 ====
 
 `Ewol` (Edn Widget OpenGl Layer) is a FREE software.
+
+[![Build Status](https://travis-ci.org/atria-soft/ewol.svg?branch=master)](https://travis-ci.org/atria-soft/ewol)
 
 Instructions
 ============
