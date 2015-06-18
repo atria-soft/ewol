@@ -11,6 +11,24 @@ def get_desc():
 def get_license():
 	return "APACHE v2.0"
 
+"""
+def create_header(module, target):
+	debug.print_element("javah", module.name, "<==", file);
+	
+	# TODO : Create constant headers ...
+	
+	java_tmp_dir = tools.get_current_path(__file__) + "/android/src/"
+	cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
+	java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
+	# TODO : set the build directory in out/.build with option -d ...
+	debugCommand = ""
+	if debug.get_level() >= 4:
+		debugCommand = " -verbose "
+	lutinMultiprocess.run_command("javac " + debugCommand + java_tmp_src + ".java")
+	lutinMultiprocess.run_command("javah " + debugCommand + "-classpath " + java_tmp_dir + " -d " + cpp_tmp_dir + " org.ewol.EwolConstants")
+	tools.remove_file(java_tmp_src + ".class")
+"""
+
 def create(target):
 	# set the ewol folder for Android basic sources ...
 	# TODO: Remove this really bad interface :
@@ -66,11 +84,10 @@ def create(target):
 			'android/src/org/ewol/EwolRendererGL.java',
 			'android/src/org/ewol/EwolSurfaceViewGL.java',
 			'android/src/org/ewol/EwolActivity.java',
-			'android/src/org/ewol/EwolWallpaper.java'
+			'android/src/org/ewol/EwolWallpaper.java',
+			'org.ewol.EwolConstants.javah'
 			])
-		myModule.add_export_path(tools.get_current_path(__file__) + '/android/src/', type='java')
-		# TODO : Create constant headers ...
-		
+		myModule.add_path(tools.get_current_path(__file__) + '/android/src/', type='java')
 	elif target.name=="MacOs":
 		myModule.add_src_file([
 			'ewol/context/MacOs/Context.mm',
@@ -232,16 +249,6 @@ def create(target):
 		myModule.add_export_flag('link', "-ldl")
 		myModule.add_export_flag('link', "-llog")
 		myModule.add_export_flag('link', "-landroid")
-		java_tmp_dir = tools.get_current_path(__file__) + "/android/src/"
-		cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
-		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
-		# TODO : set the build directory in out/.build with option -d ...
-		debugCommand = ""
-		if debug.get_level() >= 4:
-			debugCommand = " -verbose "
-		lutinMultiprocess.run_command("javac " + debugCommand + java_tmp_src + ".java")
-		lutinMultiprocess.run_command("javah " + debugCommand + "-classpath " + java_tmp_dir + " -d " + cpp_tmp_dir + " org.ewol.EwolConstants")
-		tools.remove_file(java_tmp_src + ".class")
 	elif target.name=="Windows":
 		myModule.add_module_depend("glew")
 	elif target.name=="MacOs":
