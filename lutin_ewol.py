@@ -13,6 +13,7 @@ def get_license():
 
 def create(target):
 	# set the ewol folder for Android basic sources ...
+	# TODO: Remove this really bad interface :
 	target.set_ewol_folder(tools.get_current_path(__file__))
 	
 	# module name is 'edn' and type binary.
@@ -57,6 +58,19 @@ def create(target):
 		myModule.add_src_file('ewol/context/Windows/Context.cpp')
 	elif target.name=="Android":
 		myModule.add_src_file('ewol/context/Android/Context.cpp')
+		myModule.add_src_file([
+			'android/src/org/ewol/EwolAudioTask.java',
+			'android/src/org/ewol/EwolCallback.java',
+			'android/src/org/ewol/EwolConstants.java',
+			'android/src/org/ewol/Ewol.java',
+			'android/src/org/ewol/EwolRendererGL.java',
+			'android/src/org/ewol/EwolSurfaceViewGL.java',
+			'android/src/org/ewol/EwolActivity.java',
+			'android/src/org/ewol/EwolWallpaper.java'
+			])
+		myModule.add_export_path(tools.get_current_path(__file__) + '/android/src/', type='java')
+		# TODO : Create constant headers ...
+		
 	elif target.name=="MacOs":
 		myModule.add_src_file([
 			'ewol/context/MacOs/Context.mm',
