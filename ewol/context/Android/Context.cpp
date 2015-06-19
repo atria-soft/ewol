@@ -17,7 +17,7 @@
 //#include <ewol/renderer/audio/audio.h>
 #include <ewol/Dimension.h>
 /* include auto generated file */
-#include <ewol/renderer/Android/org_ewol_EwolConstants.h>
+#include <org_ewol_EwolConstants.h>
 
 
 
