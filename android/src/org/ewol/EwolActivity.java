@@ -58,21 +58,13 @@ import org.ewol.Ewol;
 public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants {
 	private static Context mContext;
 	protected EwolSurfaceViewGL mGLView = null;
-	private Ewol              EWOL;
+	private Ewol EWOL;
 	// clipboard section
 	private String tmpClipBoard; // TODO : Remove this ==> clipboard acces does not work
 	// Audio section :
 	private EwolAudioTask mStreams;
 	private Thread mAudioThread;
 	private boolean mAudioStarted;
-	
-	static {
-		try {
-			System.loadLibrary("ewol");
-		} catch (UnsatisfiedLinkError e) {
-			Log.e("EwolActivity", "error getting lib(): " + e);
-		}
-	}
 	
 	public static Context getAppContext() {
 		return EwolActivity.mContext;

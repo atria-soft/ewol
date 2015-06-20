@@ -208,24 +208,15 @@ def create(target):
 	
 	if target.name=="Linux":
 		myModule.add_export_flag('link', '-lGL')
-		
 		#`pkg-config --cflags directfb` `pkg-config --libs directfb`
-		
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
 		myModule.add_export_flag('link', '-lX11')
 		#endif
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
 		#myModule.add_export_flag('link', ['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
 		#endif
-		
-		#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
-		# needed package on linux : libgl1-mesa-dev libglew1.5-dev
-		
-		#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
-		#myModule.add_src_file('ewol/renderer/audio/interfacePortAudio.cpp')
-		#endif
-	
 	elif target.name=="Android":
+		myModule.add_module_depend("SDK")
 		myModule.add_export_flag('link', "-lGLESv2")
 		
 		myModule.add_export_flag('link', "-ldl")
@@ -297,6 +288,7 @@ def tool_generate_main_java_class(target, module, package_name):
 		tmpFile.write( " * @note This file is autogenerate ==> see documantation to generate your own\n")
 		tmpFile.write( " */\n")
 		tmpFile.write( "package "+ android_package_name + ";\n")
+		tmpFile.write( "import android.util.Log;\n")
 		tmpFile.write( "import org.ewol.EwolActivity;\n")
 		if "ADMOD_ID" in module.package_prop:
 			tmpFile.write( "import com.google.android.gms.ads.AdRequest;\n")
@@ -309,6 +301,15 @@ def tool_generate_main_java_class(target, module, package_name):
 			tmpFile.write( "	/** The view to show the ad. */\n")
 			tmpFile.write( "	private AdView adView;\n")
 			tmpFile.write( "	private LinearLayout mLayout = null;\n")
+		tmpFile.write( "	\n")
+		tmpFile.write( "	static {\n")
+		tmpFile.write( "		try {\n")
+		tmpFile.write( "			System.loadLibrary(\"" + package_name + "\");\n")
+		tmpFile.write( "		} catch (UnsatisfiedLinkError e) {\n")
+		tmpFile.write( "			Log.e(\"" + application_name + "\", \"error getting lib(): \" + e);\n")
+		tmpFile.write( "		}\n")
+		tmpFile.write( "	}\n")
+		tmpFile.write( "	\n")
 		tmpFile.write( "	public void onCreate(android.os.Bundle savedInstanceState) {\n")
 		tmpFile.write( "		super.onCreate(savedInstanceState);\n")
 		tmpFile.write( "		initApkPath(\"" + module.package_prop["COMPAGNY_TYPE"]+"\", \""+module.package_prop["COMPAGNY_NAME2"]+"\", \"" + application_name + "\");\n")
@@ -386,9 +387,19 @@ def tool_generate_main_java_class(target, module, package_name):
 		tmpFile.write( " * @note This file is autogenerate ==> see documantation to generate your own\n")
 		tmpFile.write( " */\n")
 		tmpFile.write( "package "+ android_package_name + ";\n")
+		tmpFile.write( "import android.util.Log;\n")
 		tmpFile.write( "import org.ewol.EwolWallpaper;\n")
 		tmpFile.write( "public class " + application_name + " extends EwolWallpaper {\n")
 		tmpFile.write( "	public static final String SHARED_PREFS_NAME = \"" + application_name + "settings\";\n")
+		tmpFile.write( "	\n")
+		tmpFile.write( "	static {\n")
+		tmpFile.write( "		try {\n")
+		tmpFile.write( "			System.loadLibrary(\"" + package_name + "\");\n")
+		tmpFile.write( "		} catch (UnsatisfiedLinkError e) {\n")
+		tmpFile.write( "			Log.e(\"" + application_name + "\", \"error getting lib(): \" + e);\n")
+		tmpFile.write( "		}\n")
+		tmpFile.write( "	}\n")
+		tmpFile.write( "	\n")
 		tmpFile.write( "	public Engine onCreateEngine() {\n")
 		tmpFile.write( "		Engine tmpEngine = super.onCreateEngine();\n")
 		tmpFile.write( "		initApkPath(\"" + module.package_prop["COMPAGNY_TYPE"]+"\", \""+module.package_prop["COMPAGNY_NAME2"]+"\", \"" + application_name + "\");\n")

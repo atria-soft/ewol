@@ -33,9 +33,6 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 {
 	private GLEngine mGLView;
 	private Ewol EWOL;
-	static {
-		System.loadLibrary("ewol");
-	}
 	
 	protected void initApkPath(String org, String vendor, String project) {
 		StringBuilder sb = new StringBuilder();
