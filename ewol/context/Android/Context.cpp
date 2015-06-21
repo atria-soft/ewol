@@ -18,7 +18,7 @@
 #include <ewol/Dimension.h>
 /* include auto generated file */
 #include <org_ewol_EwolConstants.h>
-
+#include <jvm-basics/jvm-basics.h>
 
 
 int64_t ewol::getTime() {
@@ -31,18 +31,9 @@ int64_t ewol::getTime() {
 
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
-static JavaVM* g_JavaVM=nullptr; // global acces on the unique JVM !!!
 std::mutex g_interfaceMutex;
 std::mutex g_interfaceAudioMutex;
 
-
-void java_check_exception(JNIEnv* _env) {
-	if (_env->ExceptionOccurred()) {
-		EWOL_ERROR("C->java : EXEPTION ...");
-		_env->ExceptionDescribe();
-		_env->ExceptionClear();
-	}
-}
 
 class AndroidContext : public ewol::Context {
 	public:
@@ -144,7 +135,7 @@ class AndroidContext : public ewol::Context {
 				                       "titleSet",
 				                       "(Ljava/lang/String;)V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : titleSet");
 					functionCallbackIsMissing = true;
 				}
@@ -153,7 +144,7 @@ class AndroidContext : public ewol::Context {
 				                       "openURI",
 				                       "(Ljava/lang/String;)V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : openURI");
 					functionCallbackIsMissing = true;
 				}
@@ -163,7 +154,7 @@ class AndroidContext : public ewol::Context {
 				                       "stop",
 				                       "()V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : stop");
 					functionCallbackIsMissing = true;
 				}
@@ -173,7 +164,7 @@ class AndroidContext : public ewol::Context {
 				                       "eventNotifier",
 				                       "([Ljava/lang/String;)V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : eventNotifier");
 					functionCallbackIsMissing = true;
 				}
@@ -183,7 +174,7 @@ class AndroidContext : public ewol::Context {
 				                       "keyboardUpdate",
 				                       "(Z)V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : keyboardUpdate");
 					functionCallbackIsMissing = true;
 				}
@@ -193,7 +184,7 @@ class AndroidContext : public ewol::Context {
 				                       "orientationUpdate",
 				                       "(I)V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : orientationUpdate");
 					functionCallbackIsMissing = true;
 				}
@@ -203,7 +194,7 @@ class AndroidContext : public ewol::Context {
 				                       "setClipBoardString",
 				                       "(Ljava/lang/String;)V");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : setClipBoardString");
 					functionCallbackIsMissing = true;
 				}
@@ -213,7 +204,7 @@ class AndroidContext : public ewol::Context {
 				                       "getClipBoardString",
 				                       "()Ljava/lang/String;");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : getClipBoardString");
 					functionCallbackIsMissing = true;
 				}
@@ -223,7 +214,7 @@ class AndroidContext : public ewol::Context {
 				                       "audioGetDeviceCount",
 				                       "()I");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : audioGetDeviceCount");
 					functionCallbackIsMissing = true;
 				}
@@ -233,7 +224,7 @@ class AndroidContext : public ewol::Context {
 				                       "audioGetDeviceProperty",
 				                       "(I)Ljava/lang/String;");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : audioGetDeviceProperty");
 					functionCallbackIsMissing = true;
 				}
@@ -243,7 +234,7 @@ class AndroidContext : public ewol::Context {
 				                       "audioOpenDevice",
 				                       "(IIII)Z");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : audioOpenDevice");
 					functionCallbackIsMissing = true;
 				}
@@ -252,7 +243,7 @@ class AndroidContext : public ewol::Context {
 				                       "audioCloseDevice",
 				                       "(I)Z");
 				if (ret == false) {
-					java_check_exception(_env);
+					jvm_basics::checkExceptionJavaVM(_env);
 					EWOL_ERROR("system can not start without function : audioCloseDevice");
 					functionCallbackIsMissing = true;
 				}
@@ -299,7 +290,7 @@ class AndroidContext : public ewol::Context {
 			//Call java ...
 			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackStop);
 			// manage execption : 
-			java_check_exception(m_JavaVirtualMachinePointer);
+			jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
 		
@@ -347,7 +338,7 @@ class AndroidContext : public ewol::Context {
 						m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityGetClipBoardString, data);
 						m_JavaVirtualMachinePointer->DeleteLocalRef(data);
 						// manage execption : 
-						java_check_exception(m_JavaVirtualMachinePointer);
+						jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 						java_detach_current_thread(status);
 					} else {
 						EWOL_ERROR("C->java : can not set clipboard");
@@ -370,7 +361,7 @@ class AndroidContext : public ewol::Context {
 				//Call java ...
 				jint ret = m_JavaVirtualMachinePointer->CallIntMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioGetDeviceCount);
 				// manage execption : 
-				java_check_exception(m_JavaVirtualMachinePointer);
+				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 				java_detach_current_thread(status);
 				return (int32_t)ret;
 			} else {
@@ -393,7 +384,7 @@ class AndroidContext : public ewol::Context {
 				m_JavaVirtualMachinePointer->ReleaseStringUTFChars(returnString, js);
 				//m_JavaVirtualMachinePointer->DeleteLocalRef(returnString);
 				// manage execption : 
-				java_check_exception(m_JavaVirtualMachinePointer);
+				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 				java_detach_current_thread(status);
 				return retString;
 			} else {
@@ -425,7 +416,7 @@ class AndroidContext : public ewol::Context {
 				//Call java ...
 				jboolean ret = m_JavaVirtualMachinePointer->CallBooleanMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioOpenDevice, _idDevice, _freq, _nbChannel, _format);
 				// manage execption : 
-				java_check_exception(m_JavaVirtualMachinePointer);
+				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 				java_detach_current_thread(status);
 				if (ret == true) {
 					m_audioCallBack = _callback;
@@ -452,7 +443,7 @@ class AndroidContext : public ewol::Context {
 				//Call java ...
 				jboolean ret = m_JavaVirtualMachinePointer->CallBooleanMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioCloseDevice, _idDevice);
 				// manage execption : 
-				java_check_exception(m_JavaVirtualMachinePointer);
+				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 				java_detach_current_thread(status);
 				m_audioCallBack = nullptr;
 				m_audioCallBackUserData = nullptr;
@@ -465,19 +456,19 @@ class AndroidContext : public ewol::Context {
 	private:
 		bool java_attach_current_thread(int *_rstatus) {
 			EWOL_DEBUG("C->java : call java");
-			if (g_JavaVM == nullptr) {
+			if (jvm_basics::getJavaVM() == nullptr) {
 				EWOL_ERROR("C->java : JVM not initialised");
 				m_JavaVirtualMachinePointer = nullptr;
 				return false;
 			}
-			*_rstatus = g_JavaVM->GetEnv((void **) &m_JavaVirtualMachinePointer, JNI_VERSION_1_6);
+			*_rstatus = jvm_basics::getJavaVM()->GetEnv((void **) &m_JavaVirtualMachinePointer, JNI_VERSION_1_6);
 			if (*_rstatus == JNI_EDETACHED) {
 				JavaVMAttachArgs lJavaVMAttachArgs;
 				lJavaVMAttachArgs.version = JNI_VERSION_1_6;
 				lJavaVMAttachArgs.name = "EwolNativeThread";
 				lJavaVMAttachArgs.group = nullptr; 
-				int status = g_JavaVM->AttachCurrentThread(&m_JavaVirtualMachinePointer, &lJavaVMAttachArgs);
-				java_check_exception(m_JavaVirtualMachinePointer);
+				int status = jvm_basics::getJavaVM()->AttachCurrentThread(&m_JavaVirtualMachinePointer, &lJavaVMAttachArgs);
+				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 				if (status != JNI_OK) {
 					EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
 					m_JavaVirtualMachinePointer = nullptr;
@@ -489,7 +480,7 @@ class AndroidContext : public ewol::Context {
 		
 		void java_detach_current_thread(int _status) {
 			if(_status == JNI_EDETACHED) {
-				g_JavaVM->DetachCurrentThread();
+				jvm_basics::getJavaVM()->DetachCurrentThread();
 				m_JavaVirtualMachinePointer = nullptr;
 			}
 		}
@@ -502,7 +493,7 @@ class AndroidContext : public ewol::Context {
 			//Call java ...
 			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackKeyboardUpdate, _showIt);
 			// manage execption : 
-			java_check_exception(m_JavaVirtualMachinePointer);
+			jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
 		void keyboardShow() {
@@ -524,7 +515,7 @@ class AndroidContext : public ewol::Context {
 			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackOrientationUpdate, param);
 			
 			// manage execption : 
-			java_check_exception(m_JavaVirtualMachinePointer);
+			jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
 		
@@ -540,7 +531,7 @@ class AndroidContext : public ewol::Context {
 				m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivitySetTitle, title);
 				m_JavaVirtualMachinePointer->DeleteLocalRef(title);
 				// manage execption : 
-				java_check_exception(m_JavaVirtualMachinePointer);
+				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 				java_detach_current_thread(status);
 			} else {
 				EWOL_ERROR("C->java : can not set title on appliation that is not real application");
@@ -558,7 +549,7 @@ class AndroidContext : public ewol::Context {
 			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityOpenURI, url);
 			m_JavaVirtualMachinePointer->DeleteLocalRef(url);
 			// manage execption :
-			java_check_exception(m_JavaVirtualMachinePointer);
+			jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
 		
@@ -592,7 +583,7 @@ class AndroidContext : public ewol::Context {
 			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackEventNotifier, args);
 			
 			EWOL_DEBUG("C->java : 666");
-			java_check_exception(m_JavaVirtualMachinePointer);
+			jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
 	public:
@@ -643,23 +634,6 @@ static std::vector<AndroidContext*> s_listInstance;
 ewol::context::Application* s_applicationInit = NULL;
 
 extern "C" {
-	// JNI onLoad
-	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved) {
-		// get the java virtual machine handle ...
-		std::unique_lock<std::mutex> lock(g_interfaceMutex);
-		std::unique_lock<std::mutex> lockAudio(g_interfaceAudioMutex);
-		g_JavaVM = _jvm;
-		EWOL_DEBUG("JNI-> load the jvm ..." );
-		return JNI_VERSION_1_6;
-	}
-	// JNI onUnLoad
-	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved) {
-		std::unique_lock<std::mutex> lock(g_interfaceMutex);
-		std::unique_lock<std::mutex> lockAudio(g_interfaceAudioMutex);
-		g_JavaVM = nullptr;
-		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
-	}
-	
 	/* Call to initialize the graphics state */
 	void Java_org_ewol_Ewol_EWparamSetArchiveDir(JNIEnv* _env,
 	                                             jclass _cls,
@@ -749,7 +723,7 @@ extern "C" {
 			// TODO : generate error in java to stop the current instance
 			return;
 		}
-		java_check_exception(_env);
+		jvm_basics::checkExceptionJavaVM(_env);
 	}
 	
 	void Java_org_ewol_Ewol_EWonCreate(JNIEnv* _env, jobject _thiz, jint _id) {

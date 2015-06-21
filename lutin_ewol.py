@@ -216,12 +216,14 @@ def create(target):
 		#myModule.add_export_flag('link', ['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
 		#endif
 	elif target.name=="Android":
-		myModule.add_module_depend("SDK")
+		myModule.add_module_depend(["SDK", "jvm-basics"])
 		myModule.add_export_flag('link', "-lGLESv2")
 		
 		myModule.add_export_flag('link', "-ldl")
 		myModule.add_export_flag('link', "-llog")
 		myModule.add_export_flag('link', "-landroid")
+		# TODO : Remove this: for simple test only : 
+		myModule.add_module_depend(["audio-river"])
 		# add tre creator of the basic java class ...
 		target.add_action("PACKAGE", tool_generate_main_java_class)
 	elif target.name=="Windows":
