@@ -50,7 +50,6 @@ import java.io.IOException;
 //import activityRootView
 
 import org.ewol.Ewol;
-import org.musicdsp.orchestra.Manager;
 
 
 /**
@@ -61,7 +60,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	private static Context mContext;
 	protected EwolSurfaceViewGL mGLView = null;
 	private Ewol EWOL;
-	private Manager MANAGER;
 	// clipboard section
 	private String tmpClipBoard; // TODO : Remove this ==> clipboard acces does not work
 	// Audio section :
@@ -74,7 +72,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	
 	public EwolActivity() {
-		MANAGER = new Manager();
 		// set the java evironement in the C sources :
 		EWOL = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
 		tmpClipBoard = "";

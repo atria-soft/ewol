@@ -218,14 +218,9 @@ def create(target):
 	elif target.name=="Android":
 		myModule.add_module_depend(["SDK", "jvm-basics"])
 		myModule.add_export_flag('link', "-lGLESv2")
-		
-		myModule.add_export_flag('link', "-ldl")
-		myModule.add_export_flag('link', "-llog")
-		myModule.add_export_flag('link', "-landroid")
-		# TODO : Remove this: for simple test only : 
-		myModule.add_module_depend(["audio-river"])
 		# add tre creator of the basic java class ...
-		target.add_action("PACKAGE", tool_generate_main_java_class)
+		target.add_action("PACKAGE", 50, "ewol-auto-wrapper", tool_generate_main_java_class)
+		# TODO : Add the same for BINARY to create a console interface ?
 	elif target.name=="Windows":
 		myModule.add_module_depend("glew")
 	elif target.name=="MacOs":
@@ -256,7 +251,7 @@ def tool_generate_main_java_class(target, module, package_name):
 	file_list = []
 	
 	debug.debug("------------------------------------------------------------------------")
-	debug.info("Generate android wrapping for '" + package_name + "'")
+	debug.debug("Generate android wrapping for '" + package_name + "'")
 	debug.debug("------------------------------------------------------------------------")
 	application_name = package_name
 	if target.config["mode"] == "debug":
@@ -271,143 +266,99 @@ def tool_generate_main_java_class(target, module, package_name):
 	
 	android_package_name = module.package_prop["COMPAGNY_TYPE"]+"."+module.package_prop["COMPAGNY_NAME2"]+"." + application_name
 	
-	if "ADMOD_ID" in module.package_prop:
-		module.package_prop["RIGHT"].append("INTERNET")
-		module.package_prop["RIGHT"].append("ACCESS_NETWORK_STATE")
-	
-	
 	debug.print_element("pkg", "absractionFile", "<==", "dynamic file")
 	# Create folder :
 	tools.create_directory_of_file(java_file_wrapper)
-	debug.info("create file : '" + java_file_wrapper + "'")
+	debug.debug("create file : '" + java_file_wrapper + "'")
 	# Create file :
 	tmpFile = open(java_file_wrapper + "_tmp", 'w')
+	
+	tmpFile.write( "/**\n")
+	tmpFile.write( " * @author Edouard DUPIN, Kevin BILLONNEAU\n")
+	tmpFile.write( " * @copyright 2011, Edouard DUPIN, all right reserved\n")
+	tmpFile.write( " * @license APACHE v2.0 (see license file)\n")
+	tmpFile.write( " * @note This file is autogenerate ==> see documantation to generate your own\n")
+	tmpFile.write( " */\n")
+	tmpFile.write( "package "+ android_package_name + ";\n")
+	tmpFile.write( "import android.util.Log;\n")
 	if module.package_prop["ANDROID_APPL_TYPE"]=="APPL":
-		tmpFile.write( "/**\n")
-		tmpFile.write( " * @author Edouard DUPIN, Kevin BILLONNEAU\n")
-		tmpFile.write( " * @copyright 2011, Edouard DUPIN, all right reserved\n")
-		tmpFile.write( " * @license APACHE v2.0 (see license file)\n")
-		tmpFile.write( " * @note This file is autogenerate ==> see documantation to generate your own\n")
-		tmpFile.write( " */\n")
-		tmpFile.write( "package "+ android_package_name + ";\n")
-		tmpFile.write( "import android.util.Log;\n")
 		tmpFile.write( "import org.ewol.EwolActivity;\n")
-		if "ADMOD_ID" in module.package_prop:
-			tmpFile.write( "import com.google.android.gms.ads.AdRequest;\n")
-			tmpFile.write( "import com.google.android.gms.ads.AdSize;\n")
-			tmpFile.write( "import com.google.android.gms.ads.AdView;\n")
-			tmpFile.write( "import android.widget.LinearLayout;\n")
-			tmpFile.write( "import android.widget.Button;\n")
-		tmpFile.write( "public class " + application_name + " extends EwolActivity {\n")
-		if "ADMOD_ID" in module.package_prop:
-			tmpFile.write( "	/** The view to show the ad. */\n")
-			tmpFile.write( "	private AdView adView;\n")
-			tmpFile.write( "	private LinearLayout mLayout = null;\n")
-		tmpFile.write( "	\n")
-		tmpFile.write( "	static {\n")
-		tmpFile.write( "		try {\n")
-		tmpFile.write( "			System.loadLibrary(\"" + package_name + "\");\n")
-		tmpFile.write( "		} catch (UnsatisfiedLinkError e) {\n")
-		tmpFile.write( "			Log.e(\"" + application_name + "\", \"error getting lib(): \" + e);\n")
-		tmpFile.write( "		}\n")
-		tmpFile.write( "	}\n")
-		tmpFile.write( "	\n")
-		tmpFile.write( "	public void onCreate(android.os.Bundle savedInstanceState) {\n")
-		tmpFile.write( "		super.onCreate(savedInstanceState);\n")
-		tmpFile.write( "		initApkPath(\"" + module.package_prop["COMPAGNY_TYPE"]+"\", \""+module.package_prop["COMPAGNY_NAME2"]+"\", \"" + application_name + "\");\n")
-		if "ADMOD_ID" in module.package_prop:
-			tmpFile.write( "		mLayout = new LinearLayout(this);\n")
-			tmpFile.write( "		mLayout.setOrientation(android.widget.LinearLayout.VERTICAL);\n")
-			tmpFile.write( "		LinearLayout.LayoutParams paramsWindows = new LinearLayout.LayoutParams(\n")
-			tmpFile.write( "			LinearLayout.LayoutParams.FILL_PARENT,\n")
-			tmpFile.write( "			LinearLayout.LayoutParams.FILL_PARENT);\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		setContentView(mLayout, paramsWindows);\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		LinearLayout.LayoutParams paramsAdds = new LinearLayout.LayoutParams(\n")
-			tmpFile.write( "			LinearLayout.LayoutParams.FILL_PARENT,\n")
-			tmpFile.write( "			LinearLayout.LayoutParams.WRAP_CONTENT);\n")
-			tmpFile.write( "		paramsAdds.weight = 0;\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		LinearLayout.LayoutParams paramsGLView = new LinearLayout.LayoutParams(\n")
-			tmpFile.write( "			LinearLayout.LayoutParams.FILL_PARENT,\n")
-			tmpFile.write( "			LinearLayout.LayoutParams.FILL_PARENT);\n")
-			tmpFile.write( "		paramsGLView.weight = 1;\n")
-			tmpFile.write( "		paramsGLView.height = 0;\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		mLayout.setGravity(android.view.Gravity.TOP);\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		// Create an adds.\n")
-			tmpFile.write( "		adView = new AdView(this);\n")
-			tmpFile.write( "		adView.setAdSize(AdSize.SMART_BANNER);\n")
-			tmpFile.write( "		adView.setAdUnitId(\"" + module.package_prop["ADMOD_ID"] + "\");\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		// Create an ad request. Check logcat output for the hashed device ID to get test ads on a physical device.\n")
-			tmpFile.write( "		AdRequest adRequest = new AdRequest.Builder()\n")
-			tmpFile.write( "			.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)\n")
-			tmpFile.write( "			.build();\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		// Add the AdView to the view hierarchy. The view will have no size until the ad is loaded.\n")
-			if     "ADMOD_POSITION" in module.package_prop.keys() \
-			   and module.package_prop["ADMOD_POSITION"] == "top":
-				tmpFile.write( "		mLayout.addView(adView, paramsAdds);\n")
-				tmpFile.write( "		mLayout.addView(mGLView, paramsGLView);\n")
-			else:
-				tmpFile.write( "		mLayout.addView(mGLView, paramsGLView);\n")
-				tmpFile.write( "		mLayout.addView(adView, paramsAdds);\n")
-			tmpFile.write( "		\n")
-			tmpFile.write( "		// Start loading the ad in the background.\n")
-			tmpFile.write( "		adView.loadAd(adRequest);\n")
-		tmpFile.write( "	}\n")
-		if "ADMOD_ID" in module.package_prop:
-			tmpFile.write( "	@Override protected void onResume() {\n")
-			tmpFile.write( "		super.onResume();\n")
-			tmpFile.write( "		if (adView != null) {\n")
-			tmpFile.write( "			adView.resume();\n")
-			tmpFile.write( "		}\n")
-			tmpFile.write( "	}\n")
-			tmpFile.write( "	@Override protected void onPause() {\n")
-			tmpFile.write( "		if (adView != null) {\n")
-			tmpFile.write( "			adView.pause();\n")
-			tmpFile.write( "		}\n")
-			tmpFile.write( "		super.onPause();\n")
-			tmpFile.write( "	}\n")
-			tmpFile.write( "	@Override protected void onDestroy() {\n")
-			tmpFile.write( "		// Destroy the AdView.\n")
-			tmpFile.write( "		if (adView != null) {\n")
-			tmpFile.write( "			adView.destroy();\n")
-			tmpFile.write( "		}\n")
-			tmpFile.write( "		super.onDestroy();\n")
-			tmpFile.write( "	}\n")
-		tmpFile.write( "}\n")
-	else :
-		# wallpaper mode ...
-		tmpFile.write( "/**\n")
-		tmpFile.write( " * @author Edouard DUPIN, Kevin BILLONNEAU\n")
-		tmpFile.write( " * @copyright 2011, Edouard DUPIN, all right reserved\n")
-		tmpFile.write( " * @license APACHE v2.0 (see license file)\n")
-		tmpFile.write( " * @note This file is autogenerate ==> see documantation to generate your own\n")
-		tmpFile.write( " */\n")
-		tmpFile.write( "package "+ android_package_name + ";\n")
-		tmpFile.write( "import android.util.Log;\n")
+	else:
 		tmpFile.write( "import org.ewol.EwolWallpaper;\n")
+	tmpFile.write( "\n")
+	
+	if "GENERATE_SECTION__IMPORT" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__IMPORT"]:
+			for line in elem:
+				tmpFile.write( line + "\n")
+	if module.package_prop["ANDROID_APPL_TYPE"]=="APPL":
+		tmpFile.write( "public class " + application_name + " extends EwolActivity {\n")
+	else:
 		tmpFile.write( "public class " + application_name + " extends EwolWallpaper {\n")
 		tmpFile.write( "	public static final String SHARED_PREFS_NAME = \"" + application_name + "settings\";\n")
-		tmpFile.write( "	\n")
-		tmpFile.write( "	static {\n")
-		tmpFile.write( "		try {\n")
-		tmpFile.write( "			System.loadLibrary(\"" + package_name + "\");\n")
-		tmpFile.write( "		} catch (UnsatisfiedLinkError e) {\n")
-		tmpFile.write( "			Log.e(\"" + application_name + "\", \"error getting lib(): \" + e);\n")
-		tmpFile.write( "		}\n")
-		tmpFile.write( "	}\n")
-		tmpFile.write( "	\n")
+	
+	if "GENERATE_SECTION__DECLARE" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__DECLARE"]:
+			for line in elem:
+				tmpFile.write( "	" + line + "\n")
+	
+	tmpFile.write( "	\n")
+	tmpFile.write( "	static {\n")
+	tmpFile.write( "		try {\n")
+	tmpFile.write( "			System.loadLibrary(\"" + package_name + "\");\n")
+	tmpFile.write( "		} catch (UnsatisfiedLinkError e) {\n")
+	tmpFile.write( "			Log.e(\"" + application_name + "\", \"error getting lib(): \" + e);\n")
+	tmpFile.write( "		}\n")
+	tmpFile.write( "	}\n")
+	tmpFile.write( "	\n")
+	if module.package_prop["ANDROID_APPL_TYPE"]!="APPL":
 		tmpFile.write( "	public Engine onCreateEngine() {\n")
 		tmpFile.write( "		Engine tmpEngine = super.onCreateEngine();\n")
 		tmpFile.write( "		initApkPath(\"" + module.package_prop["COMPAGNY_TYPE"]+"\", \""+module.package_prop["COMPAGNY_NAME2"]+"\", \"" + application_name + "\");\n")
 		tmpFile.write( "		return tmpEngine;\n")
 		tmpFile.write( "	}\n")
-		tmpFile.write( "}\n")
+	
+	tmpFile.write( "	public " + application_name + "() {\n")
+	if "GENERATE_SECTION__CONSTRUCTOR" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__CONSTRUCTOR"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+	tmpFile.write( "	}\n")
+	
+	tmpFile.write( "	public void onCreate(android.os.Bundle savedInstanceState) {\n")
+	tmpFile.write( "		super.onCreate(savedInstanceState);\n")
+	tmpFile.write( "		initApkPath(\"" + module.package_prop["COMPAGNY_TYPE"]+"\", \""+module.package_prop["COMPAGNY_NAME2"]+"\", \"" + application_name + "\");\n")
+	
+	if "GENERATE_SECTION__ON_CREATE" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__ON_CREATE"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+	tmpFile.write( "	}\n")
+	
+	tmpFile.write( "	@Override protected void onResume() {\n")
+	tmpFile.write( "		super.onResume();\n")
+	if "GENERATE_SECTION__ON_RESUME" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__ON_RESUME"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+	tmpFile.write( "	}\n")
+	
+	tmpFile.write( "	@Override protected void onPause() {\n")
+	if "GENERATE_SECTION__ON_PAUSE" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__ON_PAUSE"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+	tmpFile.write( "		super.onPause();\n")
+	tmpFile.write( "	}\n")
+	
+	tmpFile.write( "	@Override protected void onDestroy() {\n")
+	if "GENERATE_SECTION__ON_DESTROY" in module.package_prop:
+		for elem in module.package_prop["GENERATE_SECTION__ON_DESTROY"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+	tmpFile.write( "		super.onDestroy();\n")
+	tmpFile.write( "	}\n")
+	tmpFile.write( "}\n")
 	tmpFile.flush()
 	tmpFile.close()
 	
@@ -432,7 +383,7 @@ def tool_generate_main_java_class(target, module, package_name):
 	if module.package_prop["ANDROID_MANIFEST"] == "":
 		# force manifest file:
 		module.package_prop["ANDROID_MANIFEST"] = target.get_build_folder(package_name) + "/AndroidManifest.xml";
-		debug.info(" create file: '" + module.package_prop["ANDROID_MANIFEST"] + "'")
+		debug.debug(" create file: '" + module.package_prop["ANDROID_MANIFEST"] + "'")
 		if "VERSION_CODE" not in module.package_prop:
 			module.package_prop["VERSION_CODE"] = "1"
 		debug.print_element("pkg", "AndroidManifest.xml", "<==", "package configurations")
