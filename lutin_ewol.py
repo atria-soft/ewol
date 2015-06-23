@@ -59,7 +59,6 @@ def create(target):
 	elif target.name=="Android":
 		myModule.add_src_file('ewol/context/Android/Context.cpp')
 		myModule.add_src_file([
-			'android/src/org/ewol/EwolAudioTask.java',
 			'android/src/org/ewol/EwolCallback.java',
 			'android/src/org/ewol/EwolConstants.java',
 			'android/src/org/ewol/Ewol.java',

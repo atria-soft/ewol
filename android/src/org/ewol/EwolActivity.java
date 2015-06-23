@@ -62,10 +62,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	private Ewol EWOL;
 	// clipboard section
 	private String tmpClipBoard; // TODO : Remove this ==> clipboard acces does not work
-	// Audio section :
-	private EwolAudioTask mStreams;
-	private Thread mAudioThread;
-	private boolean mAudioStarted;
 	
 	public static Context getAppContext() {
 		return EwolActivity.mContext;
@@ -98,8 +94,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setListnerToRootView();
-		mAudioStarted = false;
-		mAudioThread = null;
 		EwolActivity.mContext = getApplicationContext();
 		
 		// Load the application directory
@@ -128,9 +122,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		// create bsurface system
 		mGLView = new EwolSurfaceViewGL(this, EWOL);
 		
-		// create element audio ...
-		mStreams = new EwolAudioTask(EWOL);
-		
 		setContentView(mGLView);
 	}
 	
@@ -147,35 +138,12 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	@Override protected void onResume() {
 		super.onResume();
 		mGLView.onResume();
-		if (mAudioStarted == true) {
-			Log.e("EwolActivity", "Start audio interface");
-			if (mAudioThread == null) {
-				Log.e("EwolActivity", "create thread with stream");
-				mAudioThread = new Thread(mStreams);
-				if (mAudioThread != null) {
-					Log.e("EwolActivity", "start audio");
-					mAudioThread.start();
-				}
-			}
-		}
 		EWOL.onResume();
 	}
 	
 	@Override protected void onPause() {
 		super.onPause();
 		mGLView.onPause();
-		if (mAudioStarted == true) {
-			Log.e("EwolActivity", "Pause audio interface");
-			if (mAudioThread != null) {
-				// request audio stop
-				mStreams.AutoStop();
-				// wait the thread ended ...
-				try {
-					mAudioThread.join();
-				} catch(InterruptedException e) { }
-				mAudioThread = null;
-			}
-		}
 		EWOL.onPause();
 	}
 	
@@ -328,53 +296,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		// Set the clipboard's primary clip.
 		clipboard.setPrimaryClip(clip);
 		*/
-	}
-	
-	public int audioGetDeviceCount() {
-		//Log.e("EwolActivity", "Get device List");
-		return 1;
-	}
-	
-	public String audioGetDeviceProperty(int idDevice) {
-		if (idDevice == 0) {
-			return "speaker:out:8000,16000,24000,32000,48000,96000:2:int16";
-		} else {
-			return "::::";
-		}
-	}
-	
-	public boolean audioOpenDevice(int idDevice, int freq, int nbChannel, int format) {
-		if (idDevice == 0) {
-			mAudioStarted = true;
-			mAudioThread = new Thread(mStreams);
-			if (mAudioThread != null) {
-				mAudioThread.start();
-				return true;
-			}
-			return false;
-		} else {
-			Log.e("EwolActivity", "can not open : error unknow device ...");
-			return false;
-		}
-	}
-	
-	public boolean audioCloseDevice(int idDevice) {
-		if (idDevice == 0) {
-			if (mAudioThread != null) {
-				// request audio stop
-				mStreams.AutoStop();
-				// wait the thread ended ...
-				try {
-					mAudioThread.join();
-				} catch(InterruptedException e) { }
-				mAudioThread = null;
-			}
-			mAudioStarted = false;
-			return true;
-		} else {
-			Log.e("EwolActivity", "can not close : error unknow device ...");
-			return false;
-		}
 	}
 }
 

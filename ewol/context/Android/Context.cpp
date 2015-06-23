@@ -14,7 +14,6 @@
 #include <mutex>
 #include <ewol/debug.h>
 #include <ewol/context/Context.h>
-//#include <ewol/renderer/audio/audio.h>
 #include <ewol/Dimension.h>
 /* include auto generated file */
 #include <org_ewol_EwolConstants.h>
@@ -32,7 +31,6 @@ int64_t ewol::getTime() {
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
 std::mutex g_interfaceMutex;
-std::mutex g_interfaceAudioMutex;
 
 
 class AndroidContext : public ewol::Context {
@@ -57,11 +55,6 @@ class AndroidContext : public ewol::Context {
 		jmethodID m_javaMethodEwolActivityOpenURI;
 		jmethodID m_javaMethodEwolActivitySetClipBoardString;
 		jmethodID m_javaMethodEwolActivityGetClipBoardString;
-		// List of all Audio interface :
-		jmethodID m_javaMethodEwolActivityAudioGetDeviceCount;
-		jmethodID m_javaMethodEwolActivityAudioGetDeviceProperty;
-		jmethodID m_javaMethodEwolActivityAudioOpenDevice;
-		jmethodID m_javaMethodEwolActivityAudioCloseDevice;
 		jclass m_javaDefaultClassString; //!< default string class
 		int32_t m_currentHeight;
 		ewol::key::Special m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
@@ -93,15 +86,9 @@ class AndroidContext : public ewol::Context {
 		  m_javaMethodEwolActivityOpenURI(0),
 		  m_javaMethodEwolActivitySetClipBoardString(0),
 		  m_javaMethodEwolActivityGetClipBoardString(0),
-		  m_javaMethodEwolActivityAudioGetDeviceCount(0),
-		  m_javaMethodEwolActivityAudioGetDeviceProperty(0),
-		  m_javaMethodEwolActivityAudioOpenDevice(0),
-		  m_javaMethodEwolActivityAudioCloseDevice(0),
 		  m_javaDefaultClassString(0),
 		  m_currentHeight(0),
-		  m_clipBoardOwnerStd(false),
-		  m_audioCallBack(nullptr),
-		  m_audioCallBackUserData(nullptr) {
+		  m_clipBoardOwnerStd(false) {
 			EWOL_DEBUG("*******************************************");
 			if (m_javaApplicationType == appl_application) {
 				EWOL_DEBUG("** set JVM Pointer (application)         **");
@@ -209,45 +196,6 @@ class AndroidContext : public ewol::Context {
 					functionCallbackIsMissing = true;
 				}
 				
-				ret = safeInitMethodID(m_javaMethodEwolActivityAudioGetDeviceCount,
-				                       m_javaClassEwolCallback,
-				                       "audioGetDeviceCount",
-				                       "()I");
-				if (ret == false) {
-					jvm_basics::checkExceptionJavaVM(_env);
-					EWOL_ERROR("system can not start without function : audioGetDeviceCount");
-					functionCallbackIsMissing = true;
-				}
-				
-				ret = safeInitMethodID(m_javaMethodEwolActivityAudioGetDeviceProperty,
-				                       m_javaClassEwolCallback,
-				                       "audioGetDeviceProperty",
-				                       "(I)Ljava/lang/String;");
-				if (ret == false) {
-					jvm_basics::checkExceptionJavaVM(_env);
-					EWOL_ERROR("system can not start without function : audioGetDeviceProperty");
-					functionCallbackIsMissing = true;
-				}
-				
-				ret = safeInitMethodID(m_javaMethodEwolActivityAudioOpenDevice,
-				                       m_javaClassEwolCallback,
-				                       "audioOpenDevice",
-				                       "(IIII)Z");
-				if (ret == false) {
-					jvm_basics::checkExceptionJavaVM(_env);
-					EWOL_ERROR("system can not start without function : audioOpenDevice");
-					functionCallbackIsMissing = true;
-				}
-				ret = safeInitMethodID(m_javaMethodEwolActivityAudioCloseDevice,
-				                       m_javaClassEwolCallback,
-				                       "audioCloseDevice",
-				                       "(I)Z");
-				if (ret == false) {
-					jvm_basics::checkExceptionJavaVM(_env);
-					EWOL_ERROR("system can not start without function : audioCloseDevice");
-					functionCallbackIsMissing = true;
-				}
-				
 				m_javaObjectEwolCallback = _env->NewGlobalRef(_objCallback);
 				//javaObjectEwolCallbackAndActivity = objCallback;
 				if (m_javaObjectEwolCallback == nullptr) {
@@ -348,110 +296,6 @@ class AndroidContext : public ewol::Context {
 					EWOL_ERROR("Request an unknow ClipBoard ...");
 					break;
 			}
-		}
-		int32_t audioGetDeviceCount() {
-			// Request the clipBoard :
-			EWOL_DEBUG("C->java : audio get device count");
-			if (m_javaApplicationType == appl_application) {
-				int status;
-				if(!java_attach_current_thread(&status)) {
-					return 0;
-				}
-				EWOL_DEBUG("Call CallIntMethod ...");
-				//Call java ...
-				jint ret = m_JavaVirtualMachinePointer->CallIntMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioGetDeviceCount);
-				// manage execption : 
-				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
-				java_detach_current_thread(status);
-				return (int32_t)ret;
-			} else {
-				EWOL_ERROR("C->java : can not get audio device count");
-			}
-			return 0;
-		}
-		std::string audioGetDeviceProperty(int32_t _idDevice) {
-			// Request the clipBoard :
-			EWOL_DEBUG("C->java : audio get device count");
-			if (m_javaApplicationType == appl_application) {
-				int status;
-				if(!java_attach_current_thread(&status)) {
-					return "";
-				}
-				//Call java ...
-				jstring returnString = (jstring) m_JavaVirtualMachinePointer->CallObjectMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioGetDeviceProperty, _idDevice);
-				const char *js = m_JavaVirtualMachinePointer->GetStringUTFChars(returnString, nullptr);
-				std::string retString(js);
-				m_JavaVirtualMachinePointer->ReleaseStringUTFChars(returnString, js);
-				//m_JavaVirtualMachinePointer->DeleteLocalRef(returnString);
-				// manage execption : 
-				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
-				java_detach_current_thread(status);
-				return retString;
-			} else {
-				EWOL_ERROR("C->java : can not get audio device count");
-			}
-			return "";
-		}
-	private:
-		AndroidAudioCallback m_audioCallBack;
-		void* m_audioCallBackUserData;
-	public:
-		bool audioOpenDevice(int32_t _idDevice,
-		                     int32_t _freq,
-		                     int32_t _nbChannel,
-		                     int32_t _format,
-		                     AndroidAudioCallback _callback,
-		                     void* _userData) {
-			if (m_audioCallBack != nullptr) {
-				EWOL_ERROR("AudioCallback already started ...");
-				return false;
-			}
-			// Request the clipBoard :
-			EWOL_DEBUG("C->java : audio get device count");
-			if (m_javaApplicationType == appl_application) {
-				int status;
-				if(!java_attach_current_thread(&status)) {
-					return false;
-				}
-				//Call java ...
-				jboolean ret = m_JavaVirtualMachinePointer->CallBooleanMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioOpenDevice, _idDevice, _freq, _nbChannel, _format);
-				// manage execption : 
-				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
-				java_detach_current_thread(status);
-				if (ret == true) {
-					m_audioCallBack = _callback;
-					m_audioCallBackUserData = _userData;
-				}
-				return (bool)ret;
-			} else {
-				EWOL_ERROR("C->java : can not get audio device count");
-			}
-			return false;
-		}
-		bool audioCloseDevice(int32_t _idDevice) {
-			if (m_audioCallBack == nullptr) {
-				EWOL_ERROR("AudioCallback Not started ...");
-				return false;
-			}
-			// Request the clipBoard :
-			EWOL_DEBUG("C->java : audio get device count");
-			if (m_javaApplicationType == appl_application) {
-				int status;
-				if(!java_attach_current_thread(&status)) {
-					return false;
-				}
-				//Call java ...
-				jboolean ret = m_JavaVirtualMachinePointer->CallBooleanMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityAudioCloseDevice, _idDevice);
-				// manage execption : 
-				jvm_basics::checkExceptionJavaVM(m_JavaVirtualMachinePointer);
-				java_detach_current_thread(status);
-				m_audioCallBack = nullptr;
-				m_audioCallBackUserData = nullptr;
-				return (bool)ret;
-			} else {
-				EWOL_ERROR("C->java : can not get audio device count");
-			}
-			return false;
 		}
 	private:
 		bool java_attach_current_thread(int *_rstatus) {
@@ -620,13 +464,6 @@ class AndroidContext : public ewol::Context {
 		void OS_Resize(const vec2& _size) {
 			m_currentHeight = _size.y();
 			ewol::Context::OS_Resize(_size);
-		}
-		
-		void audioPlayback(void* _dataOutput, int32_t _frameRate) {
-			if (m_audioCallBack != nullptr) {
-				//EWOL_DEBUG("IO Audio event request: Frames=" << _frameRate);
-				m_audioCallBack(_dataOutput, _frameRate, m_audioCallBackUserData);
-			}
 		}
 };
 
@@ -1057,35 +894,6 @@ extern "C" {
 			return;
 		}
 		s_listInstance[_id]->OS_Draw(true);
-	}
-	
-	void Java_org_ewol_Ewol_EWaudioPlayback(JNIEnv* _env,
-	                                        void* _reserved,
-	                                        jint _id,
-	                                        jshortArray _location,
-	                                        jint _frameRate,
-	                                        jint _nbChannels) {
-		std::unique_lock<std::mutex> lock(g_interfaceAudioMutex);
-		if(    _id >= (int32_t)s_listInstance.size()
-		    || _id<0
-		    || nullptr == s_listInstance[_id] ) {
-			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : generate error in java to stop the current instance
-			return;
-		}
-		// get the short* pointer from the Java array
-		jboolean isCopy;
-		jshort* dst = _env->GetShortArrayElements(_location, &isCopy);
-		if (nullptr != dst) {
-			memset(dst, sizeof(jshort), _frameRate*_nbChannels);
-			//EWOL_DEBUG("IO Audio event request: Frames=" << _frameRate << " channels=" << _nbChannels);
-			s_listInstance[_id]->audioPlayback(dst, _frameRate);
-		}
-		// TODO : Understand why it did not work corectly ...
-		//if (isCopy == JNI_TRUE) {
-		// release the short* pointer
-		_env->ReleaseShortArrayElements(_location, dst, 0);
-		//}
 	}
 };
 
