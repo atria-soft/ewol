@@ -295,6 +295,5 @@ void ewol::widget::Windows::sysOnKill() {
 	if (onKill() == true) {
 		getContext().stop();
 	}
-			
 }
 

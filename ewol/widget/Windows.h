@@ -42,7 +42,8 @@ namespace ewol {
 				virtual void onShow() { };
 				virtual void onHide() { };
 				virtual bool onKill() {
-					return true;
+					// TODO : Check this in speck for android ...
+					return false;
 				};
 				virtual void onReduce() { };
 				virtual void onStateBackground() {};

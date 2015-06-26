@@ -302,30 +302,6 @@ namespace ewol {
 			 * @return The curent time of the process
 			 */
 			static int64_t getTime();
-		#if defined(__TARGET_OS__Android)
-		public:
-			typedef void (*AndroidAudioCallback)(void* _data,
-			                                     int32_t _size,
-			                                     void* _userData);
-			// Android specific audio interface :
-			virtual int32_t audioGetDeviceCount() {
-				return 0;
-			}
-			virtual std::string audioGetDeviceProperty(int32_t _idDevice) {
-				return "";
-			}
-			virtual bool audioOpenDevice(int32_t _idDevice,
-			                             int32_t _freq,
-			                             int32_t _nbChannel,
-			                             int32_t _format,
-			                             AndroidAudioCallback _callback,
-			                             void* _userData) {
-				return false;
-			}
-			virtual bool audioCloseDevice(int32_t _idDevice) {
-				return false;
-			}
-		#endif
 		private:
 			// TODO : set user argument here ....
 			

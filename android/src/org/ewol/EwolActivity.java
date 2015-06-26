@@ -112,11 +112,11 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		
 		// Remove the title of the current display : 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// set full screen Mode : 
+		// set full screen Mode:
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		// display keyboard:
 		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-		// hide keyboard : 
+		// hide keyboard:
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		// create bsurface system
@@ -126,38 +126,50 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	
 	@Override protected void onStart() {
+		Log.w("EwolActivity", "onStart (START)");
 		super.onStart();
 		EWOL.onStart();
+		Log.w("EwolActivity", "onStart (STOP)");
 	}
 	
 	@Override protected void onRestart() {
+		Log.w("EwolActivity", "onRestart (START)");
 		super.onRestart();
 		EWOL.onReStart();
+		Log.w("EwolActivity", "onRestart (STOP)");
 	}
 	
 	@Override protected void onResume() {
+		Log.w("EwolActivity", "onResume (START)");
 		super.onResume();
 		mGLView.onResume();
 		EWOL.onResume();
+		Log.w("EwolActivity", "onResume (STOP)");
 	}
 	
 	@Override protected void onPause() {
+		Log.w("EwolActivity", "onPause (START)");
 		super.onPause();
 		mGLView.onPause();
 		EWOL.onPause();
+		Log.w("EwolActivity", "onPause (STOP)");
 	}
 	
 	@Override protected void onStop() {
+		Log.w("EwolActivity", "onStop (START)");
 		super.onStop();
 		// call C
 		EWOL.onStop();
+		Log.w("EwolActivity", "onStop (STOP)");
 	}
 	@Override protected void onDestroy() {
+		Log.w("EwolActivity", "onDestroy (START)");
 		super.onDestroy();
 		// call C
 		EWOL.onDestroy();
 		// Remove the java Virtual machine pointer form the C code
 		EWOL.setJavaVirtualMachineStop();
+		Log.w("EwolActivity", "onDestroy (STOP)");
 	}
 	
 	@Override protected void finalize() throws Throwable {
@@ -252,8 +264,10 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	
 	public void stop() {
+		Log.w("EwolActivity", "Application stop requested (START)");
 		// end application is requested ...
 		finish();
+		Log.w("EwolActivity", "Application stop requested (STOP)");
 	}
 	
 	//http://developer.android.com/guide/topics/text/copy-paste.html

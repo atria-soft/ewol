@@ -271,26 +271,24 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 			case KeyEvent.KEYCODE_META_RIGHT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_META_RIGHT, isDown);   return true;
 			case KeyEvent.KEYCODE_ALT_LEFT:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_ALT, isDown);          return true;
 			case KeyEvent.KEYCODE_ALT_RIGHT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_ALT_GR, isDown);       return true;
-			//case KeyEvent.KEYCODE_MENU:        EWOL.keyboardEventMove(EWOL_MOVE_KEY_CONTEXT_MENU, isDown); return true;
 			case KeyEvent.KEYCODE_NUM_LOCK:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_NUM_LOCK, isDown);     return true;
 			default:
 				break;
 			}
 		// key wrapping :
-		if(	(actionDone == KeyEvent.ACTION_DOWN)
-			   || (actionDone == KeyEvent.ACTION_MULTIPLE)
-			   || (actionDone == KeyEvent.ACTION_UP))
-			{
-				// convert the key in UniChar to prevent errors ...
-				int uchar = event.getUnicodeChar();
-				// pb on the return methode ... in java it is like windows ...
-				if (uchar == '\r') {
-					uchar = '\n';
-				}
-				// send it to ewol ...
-				EWOL.keyboardEventKey(uchar, isDown);
-				return true;
+		if (    (actionDone == KeyEvent.ACTION_DOWN)
+		     || (actionDone == KeyEvent.ACTION_MULTIPLE)
+		     || (actionDone == KeyEvent.ACTION_UP)) {
+			// convert the key in UniChar to prevent errors ...
+			int uchar = event.getUnicodeChar();
+			// pb on the return methode ... in java it is like windows ...
+			if (uchar == '\r') {
+				uchar = '\n';
 			}
+			// send it to ewol ...
+			EWOL.keyboardEventKey(uchar, isDown);
+			return true;
+		}
 		return false;
 	}
 	

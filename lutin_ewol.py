@@ -317,12 +317,12 @@ def tool_generate_main_java_class(target, module, package_name):
 		tmpFile.write( "		return tmpEngine;\n")
 		tmpFile.write( "	}\n")
 	
-	tmpFile.write( "	public " + application_name + "() {\n")
 	if "GENERATE_SECTION__CONSTRUCTOR" in module.package_prop:
+		tmpFile.write( "	public " + application_name + "() {\n")
 		for elem in module.package_prop["GENERATE_SECTION__CONSTRUCTOR"]:
 			for line in elem:
 				tmpFile.write( "		" + line + "\n")
-	tmpFile.write( "	}\n")
+		tmpFile.write( "	}\n")
 	
 	tmpFile.write( "	public void onCreate(android.os.Bundle savedInstanceState) {\n")
 	tmpFile.write( "		super.onCreate(savedInstanceState);\n")
@@ -334,29 +334,54 @@ def tool_generate_main_java_class(target, module, package_name):
 				tmpFile.write( "		" + line + "\n")
 	tmpFile.write( "	}\n")
 	
-	tmpFile.write( "	@Override protected void onResume() {\n")
-	tmpFile.write( "		super.onResume();\n")
+	
+	if "GENERATE_SECTION__ON_START" in module.package_prop:
+		tmpFile.write( "	@Override protected void onStart() {\n")
+		for elem in module.package_prop["GENERATE_SECTION__ON_START"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+		tmpFile.write( "		super.onStart();\n")
+		tmpFile.write( "	}\n")
+	
+	if "GENERATE_SECTION__ON_RESTART" in module.package_prop:
+		tmpFile.write( "	@Override protected void onRestart() {\n")
+		for elem in module.package_prop["GENERATE_SECTION__ON_RESTART"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+		tmpFile.write( "		super.onRestart();\n")
+		tmpFile.write( "	}\n")
+	
 	if "GENERATE_SECTION__ON_RESUME" in module.package_prop:
+		tmpFile.write( "	@Override protected void onResume() {\n")
+		tmpFile.write( "		super.onResume();\n")
 		for elem in module.package_prop["GENERATE_SECTION__ON_RESUME"]:
 			for line in elem:
 				tmpFile.write( "		" + line + "\n")
-	tmpFile.write( "	}\n")
+		tmpFile.write( "	}\n")
 	
-	tmpFile.write( "	@Override protected void onPause() {\n")
 	if "GENERATE_SECTION__ON_PAUSE" in module.package_prop:
+		tmpFile.write( "	@Override protected void onPause() {\n")
 		for elem in module.package_prop["GENERATE_SECTION__ON_PAUSE"]:
 			for line in elem:
 				tmpFile.write( "		" + line + "\n")
-	tmpFile.write( "		super.onPause();\n")
-	tmpFile.write( "	}\n")
+		tmpFile.write( "		super.onPause();\n")
+		tmpFile.write( "	}\n")
 	
-	tmpFile.write( "	@Override protected void onDestroy() {\n")
+	if "GENERATE_SECTION__ON_STOP" in module.package_prop:
+		tmpFile.write( "	@Override protected void onStop() {\n")
+		for elem in module.package_prop["GENERATE_SECTION__ON_STOP"]:
+			for line in elem:
+				tmpFile.write( "		" + line + "\n")
+		tmpFile.write( "		super.onStop();\n")
+		tmpFile.write( "	}\n")
+	
 	if "GENERATE_SECTION__ON_DESTROY" in module.package_prop:
+		tmpFile.write( "	@Override protected void onDestroy() {\n")
 		for elem in module.package_prop["GENERATE_SECTION__ON_DESTROY"]:
 			for line in elem:
 				tmpFile.write( "		" + line + "\n")
-	tmpFile.write( "		super.onDestroy();\n")
-	tmpFile.write( "	}\n")
+		tmpFile.write( "		super.onDestroy();\n")
+		tmpFile.write( "	}\n")
 	tmpFile.write( "}\n")
 	tmpFile.flush()
 	tmpFile.close()
