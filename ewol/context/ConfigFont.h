@@ -55,12 +55,22 @@ namespace ewol {
 					return m_name;
 				};
 				/**
+				 * @brief Set the current default font name
+				 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
+				 */
+				void setName(const std::string& _fontName);
+				/**
 				 * @brief get the default font size.
 				 * @return the font size.
 				 */
 				int32_t getSize() {
 					return m_size;
 				};
+				/**
+				 * @brief Set the default font size.
+				 * @param[in] _size new font size.
+				 */
+				void setSize(int32_t _size);
 			private:
 				bool m_useExternal;
 			public:

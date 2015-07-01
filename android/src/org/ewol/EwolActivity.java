@@ -57,27 +57,27 @@ import org.ewol.Ewol;
  *
  */
 public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants {
-	private static Context mContext;
-	protected EwolSurfaceViewGL mGLView = null;
-	private Ewol EWOL;
+	private static Context m_context;
+	protected EwolSurfaceViewGL m_glView = null;
+	private Ewol m_ewolNative;
 	// clipboard section
 	private String tmpClipBoard; // TODO : Remove this ==> clipboard acces does not work
 	
 	public static Context getAppContext() {
-		return EwolActivity.mContext;
+		return EwolActivity.m_context;
 	}
 	
 	public EwolActivity() {
 		// set the java evironement in the C sources :
-		EWOL = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
+		m_ewolNative = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
 		tmpClipBoard = "";
 	}
 	
-	protected void initApkPath(String org, String vendor, String project) {
+	protected void initApkPath(String _org, String _vendor, String _project) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(org).append(".");
-		sb.append(vendor).append(".");
-		sb.append(project);
+		sb.append(_org).append(".");
+		sb.append(_vendor).append(".");
+		sb.append(_project);
 		String apkFilePath = null;
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = getPackageManager();
@@ -88,27 +88,27 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			throw new RuntimeException("Unable to locate assets, aborting...");
 		}
 		apkFilePath = appInfo.sourceDir;
-		EWOL.paramSetArchiveDir(0, apkFilePath);
+		m_ewolNative.paramSetArchiveDir(0, apkFilePath);
 	}
 	
-	@Override protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	@Override protected void onCreate(Bundle _savedInstanceState) {
+		super.onCreate(_savedInstanceState);
 		//setListnerToRootView();
-		EwolActivity.mContext = getApplicationContext();
+		EwolActivity.m_context = getApplicationContext();
 		
 		// Load the application directory
-		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
-		EWOL.paramSetArchiveDir(2, getCacheDir().toString());
+		m_ewolNative.paramSetArchiveDir(1, getFilesDir().toString());
+		m_ewolNative.paramSetArchiveDir(2, getCacheDir().toString());
 		// to enable extarnal storage: add in the manifest the restriction needed ...
 		//packageManager.checkPermission("android.permission.READ_SMS", myPackage) == PERMISSION_GRANTED; 
 		//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
 		
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		EWOL.displayPropertyMetrics(metrics.xdpi, metrics.ydpi);
+		m_ewolNative.displayPropertyMetrics(metrics.xdpi, metrics.ydpi);
 		
 		// call C init ...
-		EWOL.onCreate();
+		m_ewolNative.onCreate();
 		
 		// Remove the title of the current display : 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -120,38 +120,38 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		// create bsurface system
-		mGLView = new EwolSurfaceViewGL(this, EWOL);
+		m_glView = new EwolSurfaceViewGL(this, m_ewolNative);
 		
-		setContentView(mGLView);
+		setContentView(m_glView);
 	}
 	
 	@Override protected void onStart() {
 		Log.w("EwolActivity", "onStart (START)");
 		super.onStart();
-		EWOL.onStart();
+		m_ewolNative.onStart();
 		Log.w("EwolActivity", "onStart (STOP)");
 	}
 	
 	@Override protected void onRestart() {
 		Log.w("EwolActivity", "onRestart (START)");
 		super.onRestart();
-		EWOL.onReStart();
+		m_ewolNative.onReStart();
 		Log.w("EwolActivity", "onRestart (STOP)");
 	}
 	
 	@Override protected void onResume() {
 		Log.w("EwolActivity", "onResume (START)");
 		super.onResume();
-		mGLView.onResume();
-		EWOL.onResume();
+		m_glView.onResume();
+		m_ewolNative.onResume();
 		Log.w("EwolActivity", "onResume (STOP)");
 	}
 	
 	@Override protected void onPause() {
 		Log.w("EwolActivity", "onPause (START)");
 		super.onPause();
-		mGLView.onPause();
-		EWOL.onPause();
+		m_glView.onPause();
+		m_ewolNative.onPause();
 		Log.w("EwolActivity", "onPause (STOP)");
 	}
 	
@@ -159,16 +159,16 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		Log.w("EwolActivity", "onStop (START)");
 		super.onStop();
 		// call C
-		EWOL.onStop();
+		m_ewolNative.onStop();
 		Log.w("EwolActivity", "onStop (STOP)");
 	}
 	@Override protected void onDestroy() {
 		Log.w("EwolActivity", "onDestroy (START)");
 		super.onDestroy();
 		// call C
-		EWOL.onDestroy();
+		m_ewolNative.onDestroy();
 		// Remove the java Virtual machine pointer form the C code
-		EWOL.setJavaVirtualMachineStop();
+		m_ewolNative.setJavaVirtualMachineStop();
 		Log.w("EwolActivity", "onDestroy (STOP)");
 	}
 	
@@ -178,21 +178,21 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(Configuration _newConfig) {
 		Log.e("EwolActivity", "Receive event ... ");
-		super.onConfigurationChanged(newConfig);
+		super.onConfigurationChanged(_newConfig);
 		// Checks whether a hardware keyboard is available
-		if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-			EWOL.setHardKeyboardHidden(false);
-			Log.e("EwolActivity", "HARD Keyboard active = " + !EWOL.getHardKeyboardHidden() + " (visible)");
-		} else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-			EWOL.setHardKeyboardHidden(true);
-			Log.e("EwolActivity", "HARD Keyboard active = " + !EWOL.getHardKeyboardHidden() + " (hidden)");
+		if (_newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
+			m_ewolNative.setHardKeyboardHidden(false);
+			Log.e("EwolActivity", "HARD Keyboard active = " + !m_ewolNative.getHardKeyboardHidden() + " (visible)");
+		} else if (_newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
+			m_ewolNative.setHardKeyboardHidden(true);
+			Log.e("EwolActivity", "HARD Keyboard active = " + !m_ewolNative.getHardKeyboardHidden() + " (hidden)");
 		}
 	}
 	
-	public void keyboardUpdate(boolean show) {
-		Log.i("EwolActivity", "set keyboard status visibility :" + show);
+	public void keyboardUpdate(boolean _show) {
+		Log.i("EwolActivity", "set keyboard status visibility :" + _show);
 		final InputMethodManager imm;
 		try {
 			imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -201,9 +201,9 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			return;
 		}
 		Log.i("EwolActivity", "Get input manager done");
-		if(show == true) {
+		if(_show == true) {
 			try {
-				imm.showSoftInput(mGLView, InputMethodManager.SHOW_IMPLICIT);
+				imm.showSoftInput(m_glView, InputMethodManager.SHOW_IMPLICIT);
 			} catch(Exception e) {
 				Log.e("EwolActivity", "Can not set keyboard state ... (exeption !!!!)");
 			}
@@ -211,7 +211,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		} else {
 			// this is a little sutid this ==> display keyboard to be sure that it toggle in the hide state ...
 			try {
-				imm.showSoftInput(mGLView, InputMethodManager.SHOW_IMPLICIT);
+				imm.showSoftInput(m_glView, InputMethodManager.SHOW_IMPLICIT);
 			} catch(Exception e) {
 				Log.e("EwolActivity", "Can not set keyboard state ... (exeption !!!!)");
 			}
@@ -225,19 +225,19 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		}
 	}
 	
-	public void eventNotifier(String[] args) {
+	public void eventNotifier(String[] _args) {
 		// TODO : ...
 	}
 	
-	public void orientationUpdate(int screenMode) {
+	public void orientationUpdate(int _screenMode) {
 		Context localContext = getAppContext();
 		int result = localContext.checkCallingOrSelfPermission(Manifest.permission.SET_ORIENTATION);
 		if (result != PackageManager.PERMISSION_GRANTED) {
-			if (screenMode == EWOL_ORIENTATION_LANDSCAPE) {
+			if (_screenMode == EWOL_ORIENTATION_LANDSCAPE) {
 				//Force landscape
 				//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-			} else if (screenMode == EWOL_ORIENTATION_PORTRAIT) {
+			} else if (_screenMode == EWOL_ORIENTATION_PORTRAIT) {
 				//Force portrait
 				//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
@@ -250,13 +250,13 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		}
 	}
 	
-	public void titleSet(String value) {
-		setTitle(value);
+	public void titleSet(String _value) {
+		setTitle(_value);
 	}
 	
-	public void openURI(String uri) {
+	public void openURI(String _uri) {
 		try {
-			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(_uri));
 			startActivity(myIntent);
 		} catch (ActivityNotFoundException e) {
 			Log.e("EwolActivity", "Can not request an URL");
@@ -298,8 +298,8 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		*/
 	}
 	
-	public void setClipBoardString(String data) {
-		tmpClipBoard = data;
+	public void setClipBoardString(String _data) {
+		tmpClipBoard = _data;
 		return;
 		// TODO : Rework this it does not work
 		/*

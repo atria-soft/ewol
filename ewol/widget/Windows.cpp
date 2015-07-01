@@ -41,7 +41,7 @@ ewol::widget::Windows::~Windows() {
 }
 
 void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
-	//EWOL_DEBUG(" _availlable : " << _availlable);
+	EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
 	if (m_subWidget != nullptr) {
 		m_subWidget->calculateMinMaxSize();

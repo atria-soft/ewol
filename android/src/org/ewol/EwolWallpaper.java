@@ -32,13 +32,13 @@ import org.ewol.Ewol;
 public abstract class EwolWallpaper extends WallpaperService implements EwolCallback, EwolConstants
 {
 	private GLEngine mGLView;
-	private Ewol EWOL;
+	private Ewol m_ewolNative;
 	
-	protected void initApkPath(String org, String vendor, String project) {
+	protected void initApkPath(String _org, String _vendor, String _project) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(org).append(".");
-		sb.append(vendor).append(".");
-		sb.append(project);
+		sb.append(_org).append(".");
+		sb.append(_vendor).append(".");
+		sb.append(_project);
 		String apkFilePath = null;
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = getPackageManager();
@@ -49,16 +49,16 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			throw new RuntimeException("Unable to locate assets, aborting...");
 		}
 		apkFilePath = appInfo.sourceDir;
-		EWOL.paramSetArchiveDir(0, apkFilePath);
+		m_ewolNative.paramSetArchiveDir(0, apkFilePath);
 	}
 	
 	@Override public Engine onCreateEngine() {
 		// set the java evironement in the C sources :
-		EWOL = new Ewol(this, EWOL_APPL_TYPE_WALLPAPER);
+		m_ewolNative = new Ewol(this, EWOL_APPL_TYPE_WALLPAPER);
 		
 		// Load the application directory
-		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
-		EWOL.paramSetArchiveDir(2, getCacheDir().toString());
+		m_ewolNative.paramSetArchiveDir(1, getFilesDir().toString());
+		m_ewolNative.paramSetArchiveDir(2, getCacheDir().toString());
 		// to enable extarnal storage: add in the manifest the restriction needed ...
 		//packageManager.checkPermission("android.permission.READ_SMS", myPackage) == PERMISSION_GRANTED; 
 		//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
@@ -66,29 +66,28 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		
 		//! DisplayMetrics metrics = new DisplayMetrics();
 		//! getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		//! EWOL.displayPropertyMetrics(metrics.xdpi, metrics.ydpi);
+		//! m_ewolNative.displayPropertyMetrics(metrics.xdpi, metrics.ydpi);
 		
 		// call C init ...
-		EWOL.onCreate();
+		m_ewolNative.onCreate();
 		
 		// create bsurface system
-		mGLView = new GLEngine(EWOL);
+		mGLView = new GLEngine(m_ewolNative);
 		
 		return mGLView;
 	}
 	
 	public class GLEngine extends Engine {
-		private Ewol EWOL;
-		public GLEngine(Ewol ewolInstance) {
-			EWOL = ewolInstance;
+		private Ewol m_ewolNative;
+		public GLEngine(Ewol _ewolInstance) {
+			m_ewolNative = _ewolInstance;
 		}
 		
-		class WallpaperGLSurfaceView extends EwolSurfaceViewGL
-		{
+		class WallpaperGLSurfaceView extends EwolSurfaceViewGL {
 			private static final String TAG = "WallpaperGLSurfaceView";
-			WallpaperGLSurfaceView(Context context, Ewol ewolInstance) {
-				super(context, ewolInstance);
-				Log.d(TAG, "WallpaperGLSurfaceView(" + context + ")");
+			WallpaperGLSurfaceView(Context _context, Ewol _ewolInstance) {
+				super(_context, _ewolInstance);
+				Log.d(TAG, "WallpaperGLSurfaceView(" + _context + ")");
 			}
 			@Override public SurfaceHolder getHolder() {
 				Log.d(TAG, "getHolder(): returning " + getSurfaceHolder());
@@ -103,18 +102,18 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		private static final String TAG = "GLEngine";
 		private WallpaperGLSurfaceView glSurfaceView;
 		
-		@Override public void onCreate(SurfaceHolder surfaceHolder) {
-			Log.d(TAG, "onCreate(" + surfaceHolder + ")");
-			super.onCreate(surfaceHolder);
+		@Override public void onCreate(SurfaceHolder _surfaceHolder) {
+			Log.d(TAG, "onCreate(" + _surfaceHolder + ")");
+			super.onCreate(_surfaceHolder);
 			
-			glSurfaceView = new WallpaperGLSurfaceView(EwolWallpaper.this, EWOL);
+			glSurfaceView = new WallpaperGLSurfaceView(EwolWallpaper.this, m_ewolNative);
 			
 			// Check if the system supports OpenGL ES 2.0.
 			final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 			final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 			final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 			
-			if (false==supportsEs2) {
+			if (supportsEs2 == false) {
 				Log.d("LiveWallpaper", "does not support board with only open GL ES 1");
 				return;
 			}
@@ -127,21 +126,21 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			
 		}
 		
-		@Override public void onTouchEvent(MotionEvent event) {
-			glSurfaceView.onTouchEvent(event);
+		@Override public void onTouchEvent(MotionEvent _event) {
+			glSurfaceView.onTouchEvent(_event);
 		}
 		
-		@Override public void onVisibilityChanged(boolean visible) {
-			Log.d(TAG, "onVisibilityChanged(" + visible + ")");
-			super.onVisibilityChanged(visible);
-			if (true==visible) {
+		@Override public void onVisibilityChanged(boolean _visible) {
+			Log.d(TAG, "onVisibilityChanged(" + _visible + ")");
+			super.onVisibilityChanged(_visible);
+			if (_visible == true) {
 				glSurfaceView.onResume();
 				// call C
-				EWOL.onResume();
+				m_ewolNative.onResume();
 			} else {
 				glSurfaceView.onPause();
 				// call C
-				EWOL.onPause();
+				m_ewolNative.onPause();
 			}
 		}
 		
@@ -149,47 +148,47 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			Log.d(TAG, "onDestroy()");
 			super.onDestroy();
 			// call C
-			EWOL.onStop();
-			EWOL.onDestroy();
+			m_ewolNative.onStop();
+			m_ewolNative.onDestroy();
 			glSurfaceView.onDestroy();
 		}
 		
-		protected void setPreserveEGLContextOnPause(boolean preserve) {
+		protected void setPreserveEGLContextOnPause(boolean _preserve) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-				Log.d(TAG, "setPreserveEGLContextOnPause(" + preserve + ")");
-				glSurfaceView.setPreserveEGLContextOnPause(preserve);
+				Log.d(TAG, "setPreserveEGLContextOnPause(" + _preserve + ")");
+				glSurfaceView.setPreserveEGLContextOnPause(_preserve);
 			}
 		}
 		
-		protected void setEGLContextClientVersion(int version) {
-			Log.d(TAG, "setEGLContextClientVersion(" + version + ")");
-			glSurfaceView.setEGLContextClientVersion(version);
+		protected void setEGLContextClientVersion(int _version) {
+			Log.d(TAG, "setEGLContextClientVersion(" + _version + ")");
+			glSurfaceView.setEGLContextClientVersion(_version);
 		}
 	}
 	
-	public void keyboardUpdate(boolean show) {
+	public void keyboardUpdate(boolean _show) {
 		// never display keyboard on wallpaer...
 		Log.d("EwolCallback", "KEABOARD UPDATE is not implemented ...");
 	}
 	
-	public void eventNotifier(String[] args) {
+	public void eventNotifier(String[] _args) {
 		// just for the test ...
 		Log.d("EwolCallback", "EVENT NOTIFIER is not implemented ...");
 		
 	}
 	
-	public void orientationUpdate(int screenMode) {
+	public void orientationUpdate(int _screenMode) {
 		Log.d("EwolCallback", "SET ORIENTATION is not implemented ...");
 	}
 	
-	public void titleSet(String value) {
+	public void titleSet(String _value) {
 		// no title in the wallpaper ...
 		Log.d("EwolCallback", "SET TITLE is not implemented ...");
 	}
 	
-	public void openURI(String uri) {
+	public void openURI(String _uri) {
 		try {
-			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(_uri));
 			startActivity(myIntent);
 		} catch (ActivityNotFoundException e) {
 			Log.e("EwolActivity", "Can not request an URL");
@@ -198,26 +197,6 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 	
 	public void stop() {
 		Log.d("EwolCallback", "STOP is not implemented ...");
-	}
-	
-	public int audioGetDeviceCount() {
-		Log.e("EwolActivity", "Get device List");
-		return 0;
-	}
-	
-	public String audioGetDeviceProperty(int idDevice) {
-		Log.e("EwolActivity", "Get device property");
-		return "";
-	}
-	
-	public boolean audioOpenDevice(int idDevice, int freq, int nbChannel, int format) {
-		Log.e("EwolActivity", "Open device");
-		return false;
-	}
-	
-	public boolean audioCloseDevice(int idDevice) {
-		Log.e("EwolActivity", "Close device");
-		return false;
 	}
 }
 

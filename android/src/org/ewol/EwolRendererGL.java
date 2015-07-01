@@ -25,20 +25,20 @@ import org.ewol.Ewol;
  */
 public class EwolRendererGL implements GLSurfaceView.Renderer
 {
-	private Ewol EWOL;
+	private Ewol m_ewolNative;
 	
-	public EwolRendererGL(Ewol ewolInstance) {
-		EWOL = ewolInstance;
+	public EwolRendererGL(Ewol _ewolInstance) {
+		m_ewolNative = _ewolInstance;
 	}
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		EWOL.renderInit();
-	}
-	
-	public void onSurfaceChanged(GL10 gl, int w, int h) {
-		EWOL.renderResize(w, h);
+	public void onSurfaceCreated(GL10 _gl, EGLConfig _config) {
+		m_ewolNative.renderInit();
 	}
 	
-	public void onDrawFrame(GL10 gl) {
-		EWOL.renderDraw();
+	public void onSurfaceChanged(GL10 _gl, int _w, int _h) {
+		m_ewolNative.renderResize(_w, _h);
+	}
+	
+	public void onDrawFrame(GL10 _gl) {
+		m_ewolNative.renderDraw();
 	}
 }

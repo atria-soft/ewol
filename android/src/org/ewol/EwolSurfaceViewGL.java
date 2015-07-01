@@ -27,12 +27,12 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 	private boolean inputDown1 = false;
 	private boolean inputDown2 = false;
 	private boolean inputDown3 = false;
-	private Ewol EWOL;
+	private Ewol m_ewolNative;
 		
-	public EwolSurfaceViewGL(Context context, Ewol ewolInstance) {
+	public EwolSurfaceViewGL(Context _context, Ewol _ewolInstance) {
 		// super must be first statement in constructor
-		super(context);
-		EWOL = ewolInstance;
+		super(_context);
+		m_ewolNative = _ewolInstance;
 		/*
 		  List of the Android API :
 		  Android 4.1, 4.1.1          16  JELLY_BEAN               Platform Highlights
@@ -59,7 +59,7 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		setEGLContextClientVersion(2);
 		
 		// je n'ai pas compris ...
-		m_ewolDrawer = new EwolRendererGL(EWOL);
+		m_ewolDrawer = new EwolRendererGL(m_ewolNative);
 		setRenderer(m_ewolDrawer);
 		
 		// Can get the focus ==> get keyboard from JAVA : 
@@ -67,143 +67,143 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		setFocusableInTouchMode(true);
 	}
 	
-	public boolean onTouchEvent(final MotionEvent event) {
+	public boolean onTouchEvent(final MotionEvent _event) {
 		// Wrapper on input events : 
 		
-		int tmpActionType = event.getAction();
+		int tmpActionType = _event.getAction();
 		
 		if (tmpActionType == MotionEvent.ACTION_MOVE) {
-			final int pointerCount = event.getPointerCount();
+			final int pointerCount = _event.getPointerCount();
 			for (int p = 0; p < pointerCount; p++) {
 				if (SDK_VERSION>=14) {
-					final int typeOfPointer = event.getToolType(p);
+					final int typeOfPointer = _event.getToolType(p);
 					if(    typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					    || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-						EWOL.inputEventMotion(event.getPointerId(p), (float)event.getX(p), (float)event.getY(p));
+						m_ewolNative.inputEventMotion(_event.getPointerId(p), (float)_event.getX(p), (float)_event.getY(p));
 					} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-						EWOL.mouseEventMotion(event.getPointerId(p), (float)event.getX(p), (float)event.getY(p));
+						m_ewolNative.mouseEventMotion(_event.getPointerId(p), (float)_event.getX(p), (float)_event.getY(p));
 					}
 				} else {
-					EWOL.inputEventMotion(event.getPointerId(p), (float)event.getX(p), (float)event.getY(p));
+					m_ewolNative.inputEventMotion(_event.getPointerId(p), (float)_event.getX(p), (float)_event.getY(p));
 				}
 			}
 		} else if(	tmpActionType == MotionEvent.ACTION_POINTER_1_DOWN 
 					  || tmpActionType == MotionEvent.ACTION_DOWN) {
 			if (SDK_VERSION>=14) {
-				final int typeOfPointer = event.getToolType(0);
+				final int typeOfPointer = _event.getToolType(0);
 				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-					EWOL.inputEventState(event.getPointerId(0), true, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.inputEventState(_event.getPointerId(0), true, (float)_event.getX(0), (float)_event.getY(0));
 				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-					EWOL.mouseEventState(event.getPointerId(0), true, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.mouseEventState(_event.getPointerId(0), true, (float)_event.getX(0), (float)_event.getY(0));
 				}
 			} else {
-				EWOL.inputEventState(event.getPointerId(0), true, (float)event.getX(0), (float)event.getY(0));
+				m_ewolNative.inputEventState(_event.getPointerId(0), true, (float)_event.getX(0), (float)_event.getY(0));
 			}
 			inputDown1 = true;
 		} else if(tmpActionType == MotionEvent.ACTION_POINTER_1_UP) {
 			if (SDK_VERSION>=14) {
-				final int typeOfPointer = event.getToolType(0);
+				final int typeOfPointer = _event.getToolType(0);
 				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-					EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-					EWOL.mouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.mouseEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 				}
 			} else {
-				EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+				m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 			}
 			inputDown1 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_DOWN) {
 			if (SDK_VERSION>=14) {
-				final int typeOfPointer = event.getToolType(1);
+				final int typeOfPointer = _event.getToolType(1);
 				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-					EWOL.inputEventState(event.getPointerId(1), true, (float)event.getX(1), (float)event.getY(1));
+					m_ewolNative.inputEventState(_event.getPointerId(1), true, (float)_event.getX(1), (float)_event.getY(1));
 				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-					EWOL.mouseEventState(event.getPointerId(1), true, (float)event.getX(1), (float)event.getY(1));
+					m_ewolNative.mouseEventState(_event.getPointerId(1), true, (float)_event.getX(1), (float)_event.getY(1));
 				}
 			} else {
-				EWOL.inputEventState(event.getPointerId(1), true, (float)event.getX(1), (float)event.getY(1));
+				m_ewolNative.inputEventState(_event.getPointerId(1), true, (float)_event.getX(1), (float)_event.getY(1));
 			}
 			inputDown2 = true;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_UP) {
 			if (SDK_VERSION>=14) {
-				final int typeOfPointer = event.getToolType(1);
+				final int typeOfPointer = _event.getToolType(1);
 				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-					EWOL.inputEventState(event.getPointerId(1), false, (float)event.getX(1), (float)event.getY(1));
+					m_ewolNative.inputEventState(_event.getPointerId(1), false, (float)_event.getX(1), (float)_event.getY(1));
 				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-					EWOL.mouseEventState(event.getPointerId(1), false, (float)event.getX(1), (float)event.getY(1));
+					m_ewolNative.mouseEventState(_event.getPointerId(1), false, (float)_event.getX(1), (float)_event.getY(1));
 				}
 			} else {
-				EWOL.inputEventState(event.getPointerId(1), false, (float)event.getX(1), (float)event.getY(1));
+				m_ewolNative.inputEventState(_event.getPointerId(1), false, (float)_event.getX(1), (float)_event.getY(1));
 			}
 			inputDown2 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_DOWN) {
 			if (SDK_VERSION>=14) {
-				final int typeOfPointer = event.getToolType(2);
+				final int typeOfPointer = _event.getToolType(2);
 				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-					EWOL.inputEventState(event.getPointerId(2), true, (float)event.getX(2), (float)event.getY(2));
+					m_ewolNative.inputEventState(_event.getPointerId(2), true, (float)_event.getX(2), (float)_event.getY(2));
 				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-					EWOL.mouseEventState(event.getPointerId(2), true, (float)event.getX(2), (float)event.getY(2));
+					m_ewolNative.mouseEventState(_event.getPointerId(2), true, (float)_event.getX(2), (float)_event.getY(2));
 				}
 			} else {
-				EWOL.inputEventState(event.getPointerId(2), true, (float)event.getX(2), (float)event.getY(2));
+				m_ewolNative.inputEventState(_event.getPointerId(2), true, (float)_event.getX(2), (float)_event.getY(2));
 			}
 			inputDown3 = true;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_UP) {
 			if (SDK_VERSION>=14) {
-				final int typeOfPointer = event.getToolType(2);
+				final int typeOfPointer = _event.getToolType(2);
 				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 					  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-					EWOL.inputEventState(event.getPointerId(2), false, (float)event.getX(2), (float)event.getY(2));
+					m_ewolNative.inputEventState(_event.getPointerId(2), false, (float)_event.getX(2), (float)_event.getY(2));
 				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-					EWOL.mouseEventState(event.getPointerId(2), false, (float)event.getX(2), (float)event.getY(2));
+					m_ewolNative.mouseEventState(_event.getPointerId(2), false, (float)_event.getX(2), (float)_event.getY(2));
 				}
 			} else {
-				EWOL.inputEventState(event.getPointerId(2), false, (float)event.getX(2), (float)event.getY(2));
+				m_ewolNative.inputEventState(_event.getPointerId(2), false, (float)_event.getX(2), (float)_event.getY(2));
 			}
 			inputDown3 = false;
 		} else if(tmpActionType == MotionEvent.ACTION_UP){
 			if (inputDown1) {
 				if (SDK_VERSION>=14) {
-					final int typeOfPointer = event.getToolType(0);
+					final int typeOfPointer = _event.getToolType(0);
 					if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 						  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-						EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+						m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 					} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-						EWOL.mouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+						m_ewolNative.mouseEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 					}
 				} else {
-					EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 				}
 				inputDown1 = false;
 			} else if (inputDown2) {
 				if (SDK_VERSION>=14) {
-					final int typeOfPointer = event.getToolType(0);
+					final int typeOfPointer = _event.getToolType(0);
 					if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 						  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-						EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+						m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 					} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-						EWOL.mouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+						m_ewolNative.mouseEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 					}
 				} else {
-					EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 				}
 				inputDown2 = false;
 			} else {
 				if (SDK_VERSION>=14) {
-					final int typeOfPointer = event.getToolType(0);
+					final int typeOfPointer = _event.getToolType(0);
 					if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
 						  || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
-						EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+						m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 					} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
-						EWOL.mouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+						m_ewolNative.mouseEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 					}
 				} else {
-					EWOL.inputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
+					m_ewolNative.inputEventState(_event.getPointerId(0), false, (float)_event.getX(0), (float)_event.getY(0));
 				}
 				inputDown3 = false;
 			}
@@ -211,67 +211,67 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		return true;
 	}
 	
-	private boolean keyboardEvent(int keyCode, KeyEvent event, boolean isDown) {
-		int actionDone = event.getAction();
-		Log.i("Surface GL", "get event : " + keyCode + " is down : " + isDown);
+	private boolean keyboardEvent(int keyCode, KeyEvent _event, boolean _isDown) {
+		int actionDone = _event.getAction();
+		Log.i("Surface GL", "get event : " + keyCode + " is down : " + _isDown);
 		switch(keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_DOWN, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_DOWN, _isDown);
 			case KeyEvent.KEYCODE_VOLUME_UP:
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_UP, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_UP, _isDown);
 			case KeyEvent.KEYCODE_MENU:
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_MENU, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_MENU, _isDown);
 			case KeyEvent.KEYCODE_CAMERA:
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_CAMERA, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_CAMERA, _isDown);
 			case KeyEvent.KEYCODE_HOME:
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_HOME, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_HOME, _isDown);
 			case KeyEvent.KEYCODE_POWER:
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_POWER, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_POWER, _isDown);
 			case KeyEvent.KEYCODE_BACK:
 				// the back key is wrapped in the <esc> key to simplify PC validation ...
-				return EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_BACK, isDown);
+				return m_ewolNative.keyboardEventKeySystem(EWOL_SYSTEM_KEY_BACK, _isDown);
 				/*
-				EWOL.keyboardEventKey(EWOL_SYSTEM_KEY_BACK, isDown);
+				m_ewolNative.keyboardEventKey(EWOL_SYSTEM_KEY_BACK, _isDown);
 				return false;
 				*/
 			case KeyEvent.KEYCODE_DEL:
-				EWOL.keyboardEventKey(EWOL_SYSTEM_KEY_DEL, isDown);
+				m_ewolNative.keyboardEventKey(EWOL_SYSTEM_KEY_DEL, _isDown);
 				return true;
 				// Joystick event :
-			case KeyEvent.KEYCODE_DPAD_UP:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_UP, isDown);        return true;
-			case KeyEvent.KEYCODE_DPAD_DOWN:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_DOWN, isDown);      return true;
-			case KeyEvent.KEYCODE_DPAD_LEFT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_LEFT, isDown);      return true;
-			case KeyEvent.KEYCODE_DPAD_RIGHT: EWOL.keyboardEventMove(EWOL_MOVE_KEY_RIGHT, isDown);     return true;
-			case KeyEvent.KEYCODE_PAGE_UP:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_PAGE_UP, isDown);   return true;
-			case KeyEvent.KEYCODE_PAGE_DOWN:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_PAGE_DOWN, isDown); return true;
-			case KeyEvent.KEYCODE_MOVE_HOME:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_START, isDown);     return true;
-			case KeyEvent.KEYCODE_MOVE_END:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_END, isDown);       return true;
-			case KeyEvent.KEYCODE_SYSRQ:      EWOL.keyboardEventMove(EWOL_MOVE_KEY_PRINT, isDown);     return true;
-			//case KeyEvent.:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_STOP_DEFIL, isDown); return true;
-			case KeyEvent.KEYCODE_BREAK:      EWOL.keyboardEventMove(EWOL_MOVE_KEY_WAIT, isDown);      return true;
-			case KeyEvent.KEYCODE_INSERT:     EWOL.keyboardEventMove(EWOL_MOVE_KEY_INSERT, isDown);    return true;
-			case KeyEvent.KEYCODE_F1:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F1, isDown);  return true;
-			case KeyEvent.KEYCODE_F2:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F2, isDown);  return true;
-			case KeyEvent.KEYCODE_F3:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F3, isDown);  return true;
-			case KeyEvent.KEYCODE_F4:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F4, isDown);  return true;
-			case KeyEvent.KEYCODE_F5:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F5, isDown);  return true;
-			case KeyEvent.KEYCODE_F6:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F6, isDown);  return true;
-			case KeyEvent.KEYCODE_F7:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F7, isDown);  return true;
-			case KeyEvent.KEYCODE_F8:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F8, isDown);  return true;
-			case KeyEvent.KEYCODE_F9:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F9, isDown);  return true;
-			case KeyEvent.KEYCODE_F10: EWOL.keyboardEventMove(EWOL_MOVE_KEY_F10, isDown); return true;
-			case KeyEvent.KEYCODE_F11: EWOL.keyboardEventMove(EWOL_MOVE_KEY_F11, isDown); return true;
-			case KeyEvent.KEYCODE_F12: EWOL.keyboardEventMove(EWOL_MOVE_KEY_F12, isDown); return true;
-			case KeyEvent.KEYCODE_CAPS_LOCK:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_CAP_LOCK, isDown);     return true;
-			case KeyEvent.KEYCODE_SHIFT_LEFT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_SHIFT_LEFT, isDown);   return true;
-			case KeyEvent.KEYCODE_SHIFT_RIGHT: EWOL.keyboardEventMove(EWOL_MOVE_KEY_SHIFT_RIGHT, isDown);  return true;
-			case KeyEvent.KEYCODE_CTRL_LEFT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_CTRL_LEFT, isDown);    return true;
-			case KeyEvent.KEYCODE_CTRL_RIGHT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_CTRL_RIGHT, isDown);   return true;
-			case KeyEvent.KEYCODE_META_LEFT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_META_LEFT, isDown);    return true;
-			case KeyEvent.KEYCODE_META_RIGHT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_META_RIGHT, isDown);   return true;
-			case KeyEvent.KEYCODE_ALT_LEFT:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_ALT, isDown);          return true;
-			case KeyEvent.KEYCODE_ALT_RIGHT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_ALT_GR, isDown);       return true;
-			case KeyEvent.KEYCODE_NUM_LOCK:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_NUM_LOCK, isDown);     return true;
+			case KeyEvent.KEYCODE_DPAD_UP:    m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_UP, _isDown);        return true;
+			case KeyEvent.KEYCODE_DPAD_DOWN:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_DOWN, _isDown);      return true;
+			case KeyEvent.KEYCODE_DPAD_LEFT:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_LEFT, _isDown);      return true;
+			case KeyEvent.KEYCODE_DPAD_RIGHT: m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_RIGHT, _isDown);     return true;
+			case KeyEvent.KEYCODE_PAGE_UP:    m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_PAGE_UP, _isDown);   return true;
+			case KeyEvent.KEYCODE_PAGE_DOWN:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_PAGE_DOWN, _isDown); return true;
+			case KeyEvent.KEYCODE_MOVE_HOME:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_START, _isDown);     return true;
+			case KeyEvent.KEYCODE_MOVE_END:   m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_END, _isDown);       return true;
+			case KeyEvent.KEYCODE_SYSRQ:      m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_PRINT, _isDown);     return true;
+			//case KeyEvent.:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_STOP_DEFIL, _isDown); return true;
+			case KeyEvent.KEYCODE_BREAK:      m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_WAIT, _isDown);      return true;
+			case KeyEvent.KEYCODE_INSERT:     m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_INSERT, _isDown);    return true;
+			case KeyEvent.KEYCODE_F1:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F1, _isDown);  return true;
+			case KeyEvent.KEYCODE_F2:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F2, _isDown);  return true;
+			case KeyEvent.KEYCODE_F3:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F3, _isDown);  return true;
+			case KeyEvent.KEYCODE_F4:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F4, _isDown);  return true;
+			case KeyEvent.KEYCODE_F5:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F5, _isDown);  return true;
+			case KeyEvent.KEYCODE_F6:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F6, _isDown);  return true;
+			case KeyEvent.KEYCODE_F7:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F7, _isDown);  return true;
+			case KeyEvent.KEYCODE_F8:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F8, _isDown);  return true;
+			case KeyEvent.KEYCODE_F9:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F9, _isDown);  return true;
+			case KeyEvent.KEYCODE_F10: m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F10, _isDown); return true;
+			case KeyEvent.KEYCODE_F11: m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F11, _isDown); return true;
+			case KeyEvent.KEYCODE_F12: m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_F12, _isDown); return true;
+			case KeyEvent.KEYCODE_CAPS_LOCK:   m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_CAP_LOCK, _isDown);     return true;
+			case KeyEvent.KEYCODE_SHIFT_LEFT:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_SHIFT_LEFT, _isDown);   return true;
+			case KeyEvent.KEYCODE_SHIFT_RIGHT: m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_SHIFT_RIGHT, _isDown);  return true;
+			case KeyEvent.KEYCODE_CTRL_LEFT:   m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_CTRL_LEFT, _isDown);    return true;
+			case KeyEvent.KEYCODE_CTRL_RIGHT:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_CTRL_RIGHT, _isDown);   return true;
+			case KeyEvent.KEYCODE_META_LEFT:   m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_META_LEFT, _isDown);    return true;
+			case KeyEvent.KEYCODE_META_RIGHT:  m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_META_RIGHT, _isDown);   return true;
+			case KeyEvent.KEYCODE_ALT_LEFT:    m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_ALT, _isDown);          return true;
+			case KeyEvent.KEYCODE_ALT_RIGHT:   m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_ALT_GR, _isDown);       return true;
+			case KeyEvent.KEYCODE_NUM_LOCK:    m_ewolNative.keyboardEventMove(EWOL_MOVE_KEY_NUM_LOCK, _isDown);     return true;
 			default:
 				break;
 			}
@@ -280,23 +280,23 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		     || (actionDone == KeyEvent.ACTION_MULTIPLE)
 		     || (actionDone == KeyEvent.ACTION_UP)) {
 			// convert the key in UniChar to prevent errors ...
-			int uchar = event.getUnicodeChar();
+			int uchar = _event.getUnicodeChar();
 			// pb on the return methode ... in java it is like windows ...
 			if (uchar == '\r') {
 				uchar = '\n';
 			}
 			// send it to ewol ...
-			EWOL.keyboardEventKey(uchar, isDown);
+			m_ewolNative.keyboardEventKey(uchar, _isDown);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return keyboardEvent(keyCode, event, true);
+	public boolean onKeyDown(int _keyCode, KeyEvent _event) {
+		return keyboardEvent(_keyCode, _event, true);
 	}
 	
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		return keyboardEvent(keyCode, event, false);
+	public boolean onKeyUp(int _keyCode, KeyEvent _event) {
+		return keyboardEvent(_keyCode, _event, false);
 	}
 }

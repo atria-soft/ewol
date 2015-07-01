@@ -10,10 +10,10 @@ package org.ewol;
 import android.util.Log;
 
 public interface EwolCallback {
-	public void openURI(String uri);
-	public void keyboardUpdate(boolean show);
-	public void eventNotifier(String[] args);
-	public void orientationUpdate(int screenMode);
-	public void titleSet(String value);
+	public void openURI(String _uri);
+	public void keyboardUpdate(boolean _show);
+	public void eventNotifier(String[] _args);
+	public void orientationUpdate(int _screenMode);
+	public void titleSet(String _value);
 	public void stop();
 }
