@@ -255,9 +255,9 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	                                   (int32_t)( 1));
 	mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 	
-	ewol::openGL::push();
+	gale::openGL::push();
 	// set internal matrix system :
-	ewol::openGL::setMatrix(tmpMat);
+	gale::openGL::setMatrix(tmpMat);
 	//int64_t ___startTime = ewol::getTime();
 	onDraw();
 	
@@ -284,7 +284,7 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::setMatrix(tmpMat);
+		gale::openGL::setMatrix(tmpMat);
 		//int64_t ___startTime = ewol::getTime();
 		onDraw();
 		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
@@ -300,14 +300,14 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		mat4 tmpProjection = etk::matOrtho(-m_size.x()/2, m_size.x()/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::setMatrix(tmpMat);
+		gale::openGL::setMatrix(tmpMat);
 		//int64_t ___startTime = ewol::getTime();
 		onDraw();
 		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
 	}
 	#endif
-	ewol::openGL::pop();
+	gale::openGL::pop();
 	return;
 }
 

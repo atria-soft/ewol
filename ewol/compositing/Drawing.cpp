@@ -306,7 +306,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	mat4 tmpMatrix2;
@@ -316,7 +316,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

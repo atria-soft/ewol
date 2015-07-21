@@ -71,12 +71,12 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (_disableDepthTest == true) {
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
 	} else {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
@@ -98,7 +98,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

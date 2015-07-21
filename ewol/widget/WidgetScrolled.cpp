@@ -408,7 +408,7 @@ void ewol::widget::WidgetScrolled::onDraw() {
 }
 
 void ewol::widget::WidgetScrolled::systemDraw(const ewol::DrawProperty& _displayProp) {
-	ewol::openGL::push();
+	gale::openGL::push();
 	if (m_scroollingMode == scroolModeCenter) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 		glViewport( m_origin.x(),
@@ -420,7 +420,7 @@ void ewol::widget::WidgetScrolled::systemDraw(const ewol::DrawProperty& _display
 		mat4 tmpTranslate = etk::matTranslate(vec3(-m_maxSize.x()/2, -m_maxSize.y()/2, -1.0) );
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::setMatrix(tmpMat);
+		gale::openGL::setMatrix(tmpMat);
 		// Call the widget drawing methode
 		onDraw();
 	} if (m_scroollingMode == scroolModeGame) {
@@ -434,13 +434,13 @@ void ewol::widget::WidgetScrolled::systemDraw(const ewol::DrawProperty& _display
 		mat4 tmpTranslate = etk::matTranslate(vec3( -m_maxSize.x()/2, -m_maxSize.y()/2, -1.0) );
 		mat4 tmpMat = tmpProjection * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::setMatrix(tmpMat);
+		gale::openGL::setMatrix(tmpMat);
 		// Call the widget drawing methode
 		onDraw();
 	} else {
 		ewol::Widget::systemDraw(_displayProp);
 	}
-	ewol::openGL::pop();
+	gale::openGL::pop();
 }
 
 void ewol::widget::WidgetScrolled::setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center) {

@@ -183,7 +183,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	//glScalef(m_scaling.x, m_scaling.y, 1.0);
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix();
+	mat4 tmpMatrix = gale::openGL::getMatrix();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
@@ -202,8 +202,8 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getId());
 	}
 	// Request the draw of the elements : 
-	//ewol::openGL::drawArrays(GL_TRIANGLES, 0, SHAPER_NB_MAX_VERTEX);
-	ewol::openGL::drawArrays(GL_TRIANGLE_STRIP, 0, m_nbVertexToDisplay);
+	//gale::openGL::drawArrays(GL_TRIANGLES, 0, SHAPER_NB_MAX_VERTEX);
+	gale::openGL::drawArrays(GL_TRIANGLE_STRIP, 0, m_nbVertexToDisplay);
 	m_GLprogram->unUse();
 }
 

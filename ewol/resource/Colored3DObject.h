@@ -12,14 +12,13 @@
 #include <etk/types.h>
 #include <ewol/resource/Resource.h>
 #include <ewol/resource/Image.h>
-#include <ewol/resource/Shader.h>
-#include <ewol/resource/Program.h>
+#include <gale/resource/Program.h>
 
 namespace ewol {
 	namespace resource {
 		class Colored3DObject : public ewol::Resource {
 			protected:
-				std::shared_ptr<ewol::resource::Program> m_GLprogram;
+				std::shared_ptr<gale::resource::Program> m_GLprogram;
 				int32_t m_GLPosition;
 				int32_t m_GLMatrix;
 				int32_t m_GLColor;

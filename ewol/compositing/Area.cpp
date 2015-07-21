@@ -22,7 +22,7 @@ ewol::compositing::Area::Area(const ivec2& _size) :
   m_GLtexture(-1),
   m_GLtexID(-1),
   m_resource(nullptr) {
-	m_resource = ewol::resource::Texture::create();
+	m_resource = gale::resource::Texture::create();
 	m_resource->setImageSize(_size);
 	m_resource->flush();
 	loadProgram();
@@ -35,7 +35,7 @@ ewol::compositing::Area::~Area() {
 void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::resource::Program::create(std::string("DATA:textured3D.prog"));
+	m_GLprogram = gale::resource::Program::create(std::string("DATA:textured3D.prog"));
 	if (nullptr != m_GLprogram) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
@@ -59,7 +59,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
@@ -71,7 +71,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

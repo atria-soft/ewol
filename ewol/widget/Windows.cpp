@@ -76,30 +76,30 @@ void ewol::widget::Windows::sysDraw() {
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x(),m_size.y());
 	
-	ewol::openGL::disable(ewol::openGL::FLAG_DITHER);
-	//ewol::openGL::disable(ewol::openGL::FLAG_BLEND);
-	ewol::openGL::disable(ewol::openGL::FLAG_STENCIL_TEST);
-	ewol::openGL::disable(ewol::openGL::FLAG_ALPHA_TEST);
-	ewol::openGL::disable(ewol::openGL::FLAG_FOG);
+	gale::openGL::disable(gale::openGL::FLAG_DITHER);
+	//gale::openGL::disable(gale::openGL::FLAG_BLEND);
+	gale::openGL::disable(gale::openGL::FLAG_STENCIL_TEST);
+	gale::openGL::disable(gale::openGL::FLAG_ALPHA_TEST);
+	gale::openGL::disable(gale::openGL::FLAG_FOG);
 	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__IOs))
 		glPixelZoom(1.0,1.0);
 	#endif
-	ewol::openGL::disable(ewol::openGL::FLAG_TEXTURE_2D);
-	ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+	gale::openGL::disable(gale::openGL::FLAG_TEXTURE_2D);
+	gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
 	
-	ewol::openGL::enable(ewol::openGL::FLAG_BLEND);
+	gale::openGL::enable(gale::openGL::FLAG_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
 	mat4 newOne;
-	ewol::openGL::setBasicMatrix(newOne);
+	gale::openGL::setBasicMatrix(newOne);
 	
 	ewol::DrawProperty displayProp;
 	displayProp.m_windowsSize = m_size;
 	displayProp.m_origin.setValue(0,0);
 	displayProp.m_size = m_size;
 	systemDraw(displayProp);
-	ewol::openGL::disable(ewol::openGL::FLAG_BLEND);
+	gale::openGL::disable(gale::openGL::FLAG_BLEND);
 	return;
 }
 

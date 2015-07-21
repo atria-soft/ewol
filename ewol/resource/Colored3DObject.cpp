@@ -23,8 +23,8 @@ void ewol::resource::Colored3DObject::init() {
 	ewol::Resource::init();
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::resource::Program::create("DATA:simple3D.prog");
-	if (nullptr != m_GLprogram ) {
+	m_GLprogram = gale::resource::Program::create("DATA:simple3D.prog");
+	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -48,7 +48,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 		return;
 	}
 	if (true == _depthtest) {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
@@ -56,8 +56,8 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::getMatrix();
-	mat4 camMatrix = ewol::openGL::getCameraMatrix();
+	mat4 projMatrix = gale::openGL::getMatrix();
+	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
@@ -65,7 +65,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
 	m_GLprogram->unUse();
 	// Request the draw od the elements : 
 	//glDrawArrays(GL_LINES, 0, vertices.size());
@@ -74,7 +74,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
@@ -91,7 +91,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 		return;
 	}
 	if (true == _depthtest) {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
@@ -99,8 +99,8 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::getMatrix();
-	mat4 camMatrix = ewol::openGL::getCameraMatrix();
+	mat4 projMatrix = gale::openGL::getMatrix();
+	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
@@ -108,13 +108,13 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
@@ -131,7 +131,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 		return;
 	}
 	if (true == _depthtest) {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
@@ -139,8 +139,8 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::getMatrix();
-	mat4 camMatrix = ewol::openGL::getCameraMatrix();
+	mat4 projMatrix = gale::openGL::getMatrix();
+	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
@@ -148,13 +148,13 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_LINES, 0, _vertices.size());
+	gale::openGL::drawArrays(GL_LINES, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
 	}
 }
 

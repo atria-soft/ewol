@@ -614,7 +614,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	//! drawing section :
 	{
 		// Lock openGl context:
-		ewol::openGL::lock();
+		gale::openGL::lock();
 		if (m_displayFps == true) {
 			m_FpsSystemContext.tic();
 		}
@@ -647,13 +647,13 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 			if (m_displayFps == true) {
 				m_FpsFlush.incrementCounter();
 			}
-			ewol::openGL::flush();
+			gale::openGL::flush();
 		}
 		if (m_displayFps == true) {
 			m_FpsFlush.toc();
 		}
 		// release open GL Context
-		ewol::openGL::unLock();
+		gale::openGL::unLock();
 	}
 	if (m_displayFps == true) {
 		m_FpsSystemEvent.draw();
@@ -665,11 +665,11 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		// set the curent interface :
 		lockContext();
 		// release open GL Context
-		ewol::openGL::lock();
+		gale::openGL::lock();
 		// while The Gui is drawing in OpenGl, we do some not realTime things
 		m_resourceManager.updateContext();
 		// release open GL Context
-		ewol::openGL::unLock();
+		gale::openGL::unLock();
 		m_objectManager.cleanInternalRemoved();
 		m_resourceManager.cleanInternalRemoved();
 		// release the curent interface :

@@ -44,11 +44,11 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 		return;
 	}
 	if (_enableDepthTest == true) {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::getMatrix();
-	mat4 camMatrix = ewol::openGL::getCameraMatrix();
+	mat4 projMatrix = gale::openGL::getMatrix();
+	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
@@ -63,10 +63,10 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 	if (_enableDepthTest == true) {
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
@@ -88,7 +88,7 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
@@ -102,7 +102,7 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 
