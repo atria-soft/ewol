@@ -11,12 +11,12 @@
 #include <etk/os/FSNode.h>
 
 
-#include <ewol/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL.h>
 
 #include <ewol/resource/Texture.h>
 #include <ewol/resource/FontFreeType.h>
 #include <ewol/resource/font/FontBase.h>
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 
 #undef __class__
 #define __class__ "resource::FontFreeType"
@@ -53,7 +53,7 @@ void ewol::resource::freeTypeUnInit() {
 }
 
 ewol::resource::FontFreeType::FontFreeType() {
-	addObjectType("ewol::FontFreeType");
+	addResourceType("ewol::FontFreeType");
 	m_init = false;
 	m_FileBuffer = nullptr;
 	m_FileSize = 0;

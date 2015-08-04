@@ -17,7 +17,7 @@
 ewol::widget::Spacer::Spacer() :
   m_color(*this, "color", etk::color::none, "background of the spacer") {
 	addObjectType("ewol::widget::Spacer");
-	m_userMinSize = ewol::Dimension(vec2(10,10));
+	m_userMinSize = gale::Dimension(vec2(10,10));
 	setCanHaveFocus(false);
 }
 

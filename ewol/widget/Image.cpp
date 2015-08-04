@@ -34,7 +34,7 @@ ewol::widget::Image::Image() :
 	}
 }
 
-void ewol::widget::Image::init(const std::string& _file, const ewol::Dimension& _border) {
+void ewol::widget::Image::init(const std::string& _file, const gale::Dimension& _border) {
 	ewol::Widget::init();
 	set(_file, _border);
 }
@@ -44,7 +44,7 @@ ewol::widget::Image::~Image() {
 	
 }
 
-void ewol::widget::Image::set(const std::string& _file, const ewol::Dimension& _border) {
+void ewol::widget::Image::set(const std::string& _file, const gale::Dimension& _border) {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
 	m_border.set(_border);
 	m_fileName.set(_file);
@@ -132,7 +132,7 @@ void ewol::widget::Image::calculateMinMaxSize() {
 bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (_event.getId() == 1) {
-		if(ewol::key::statusSingle == _event.getStatus()) {
+		if(gale::key::status_single == _event.getStatus()) {
 			signalPressed.emit();
 			return true;
 		}

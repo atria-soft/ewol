@@ -11,7 +11,6 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Image.h>
-#include <ewol/resource/Manager.h>
 
 namespace ewol {
 	namespace compositing {

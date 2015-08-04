@@ -18,6 +18,7 @@ appl::Windows::Windows() {
 	addObjectType("appl::Windows");
 }
 void appl::Windows::init() {
+	ewol::widget::Windows::init();
 	setTitle("example 001_HelloWord");
 	std::shared_ptr<ewol::widget::Label> tmpWidget = ewol::widget::Label::create();
 	if (tmpWidget == nullptr) {

@@ -9,7 +9,7 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/resource/ConfigFile.h>
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 #include <ejson/ejson.h>
 #include <ejson/Number.h>
 #include <ejson/String.h>
@@ -20,12 +20,12 @@
 
 
 ewol::resource::ConfigFile::ConfigFile() :
-  ewol::Resource() {
-	addObjectType("ewol::ConfigFile");
+  gale::Resource() {
+	addResourceType("ewol::ConfigFile");
 }
 
 void ewol::resource::ConfigFile::init(const std::string& _filename) {
-	ewol::Resource::init(_filename);
+	gale::Resource::init(_filename);
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
 }

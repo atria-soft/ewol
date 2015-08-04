@@ -15,7 +15,8 @@
 
 #include <ewol/debug.h>
 #include <ewol/object/Object.h>
-#include <ewol/Dimension.h>
+#include <gale/Dimension.h>
+#include <gale/context/cursor.h>
 
 namespace ewol {
 	class Widget;
@@ -24,9 +25,9 @@ namespace ewol {
 		class Windows;
 	};
 };
-#include <ewol/context/clipBoard.h>
-#include <ewol/key/key.h>
-#include <ewol/context/cursor.h>
+#include <gale/context/clipBoard.h>
+#include <gale/key/key.h>
+#include <gale/context/cursor.h>
 #include <ewol/event/Input.h>
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
@@ -101,13 +102,13 @@ namespace ewol {
 	class EventShortCut {
 		public:
 			std::string message; //!< data link with the event
-			ewol::key::Special specialKey; //!< special board key
+			gale::key::Special specialKey; //!< special board key
 			char32_t unicodeValue; //!< 0 if not used
-			enum ewol::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
+			enum gale::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut() {
 				message = "";
 				unicodeValue = 0;
-				keyboardMoveValue = ewol::key::keyboardUnknow;
+				keyboardMoveValue = gale::key::keyboard_unknow;
 			};
 			virtual ~EventShortCut() { };
 	};
@@ -228,13 +229,13 @@ namespace ewol {
 			 */
 			virtual vec2 getOrigin();
 		protected:
-			ewol::parameter::Value<ewol::Dimension> m_userMinSize; //!< user define the minimum size of the widget
+			ewol::parameter::Value<gale::Dimension> m_userMinSize; //!< user define the minimum size of the widget
 		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] _size set minimum size (none : 0)
 			 */
-			void setMinSize(const ewol::Dimension& _size) {
+			void setMinSize(const gale::Dimension& _size) {
 				m_userMinSize.set(_size);
 			}
 			/**
@@ -245,7 +246,7 @@ namespace ewol {
 			 * @brief get the current calculated min size
 			 * @return the size requested
 			 */
-			const ewol::Dimension& getMinSize() {
+			const gale::Dimension& getMinSize() {
 				return m_userMinSize.get();
 			};
 			/**
@@ -255,13 +256,13 @@ namespace ewol {
 			 */
 			virtual void checkMinSize();
 		protected:
-			ewol::parameter::Value<ewol::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
+			ewol::parameter::Value<gale::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] _size The new maximum size requested (vec2(0,0) to unset)
 			 */
-			void setMaxSize(const ewol::Dimension& _size) {
+			void setMaxSize(const gale::Dimension& _size) {
 				m_userMaxSize.set(_size);
 			}
 			/**
@@ -272,7 +273,7 @@ namespace ewol {
 			 * @brief get the current maximum size
 			 * @return the size requested
 			 */
-			const ewol::Dimension& getMaxSize() {
+			const gale::Dimension& getMaxSize() {
 				return m_userMaxSize.get();
 			};
 			/**
@@ -552,7 +553,7 @@ namespace ewol {
 			 * @note : need to have focus ...
 			 * @param[in] mode Mode of data requested
 			 */
-			virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID) { };
+			virtual void onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID) { };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Shortcut : management of the shortcut
@@ -588,9 +589,9 @@ namespace ewol {
 			 * @return false if the event has not been used.
 			 * @note To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
 			 */
-			virtual bool onEventShortCut(ewol::key::Special& _special,
+			virtual bool onEventShortCut(gale::key::Special& _special,
 			                             char32_t _unicodeValue,
-			                             enum ewol::key::keyboard _kbMove,
+			                             enum gale::key::keyboard _kbMove,
 			                             bool _isDown);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
@@ -650,18 +651,18 @@ namespace ewol {
 			 */
 			virtual bool getGrabStatus();
 		private:
-			enum ewol::context::cursorDisplay m_cursorDisplay;
+			enum gale::context::cursor m_cursorDisplay;
 		public:
 			/**
 			 * @brief set the cursor display type.
 			 * @param[in] _newCursor selected new cursor.
 			 */
-			virtual void setCursor(enum ewol::context::cursorDisplay _newCursor);
+			virtual void setCursor(enum gale::context::cursor _newCursor);
 			/**
 			 * @brief get the currrent cursor.
 			 * @return the type of the cursor.
 			 */
-			virtual enum ewol::context::cursorDisplay getCursor();
+			virtual enum gale::context::cursor getCursor();
 		public: // Derived function
 			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 		protected: // Derived function

@@ -13,14 +13,14 @@
 #include <etk/Color.h>
 #include <etk/Hash.h>
 #include <ewol/debug.h>
-#include <ewol/resource/Resource.h>
+#include <gale/resource/Resource.h>
 
 namespace ewol {
 	namespace resource {
 		/**
 		 * @brief ColorFile is a Resource designed to be specific with the theme (for example black, or white or orange ...)
 		 */
-		class ColorFile : public ewol::Resource {
+		class ColorFile : public gale::Resource {
 			private:
 				etk::Hash<etk::Color<float> > m_list; //!< List of all color in the file
 				etk::Color<float> m_errorColor; //!< Error returned color

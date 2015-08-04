@@ -9,7 +9,7 @@
 
 #include <etk/types.h>
 #include <egami/egami.h>
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 #include <ewol/resource/ImageDF.h>
 #include <ewol/resource/Texture.h>
 #include <edtaa3/edtaa3func.h>
@@ -19,7 +19,7 @@
 #define __class__ "resource::TextureFile"
 
 ewol::resource::ImageDF::ImageDF() {
-	addObjectType("ewol::resource::ImageDF");
+	addResourceType("ewol::resource::ImageDF");
 }
 
 
@@ -193,7 +193,7 @@ std::shared_ptr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const s
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
 	std::shared_ptr<ewol::resource::ImageDF> object = nullptr;
-	std::shared_ptr<ewol::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
+	std::shared_ptr<gale::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
 	if (nullptr != object2) {
 		object = std::dynamic_pointer_cast<ewol::resource::ImageDF>(object2);
 		if (nullptr == object) {

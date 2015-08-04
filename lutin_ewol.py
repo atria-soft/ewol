@@ -26,7 +26,6 @@ def create(target):
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
 		'ewol/Padding.cpp',
-		'ewol/Dimension.cpp',
 		'ewol/translate.cpp'
 		])
 	
@@ -45,11 +44,8 @@ def create(target):
 	
 	# context :
 	myModule.add_src_file([
-		'ewol/context/clipBoard.cpp',
-		'ewol/context/commandLine.cpp',
 		'ewol/context/ConfigFont.cpp',
 		'ewol/context/Context.cpp',
-		'ewol/context/cursor.cpp',
 		'ewol/context/InputManager.cpp'
 		])
 	
@@ -58,14 +54,6 @@ def create(target):
 		'ewol/event/Entry.cpp',
 		'ewol/event/Time.cpp',
 		'ewol/event/Input.cpp'
-		])
-	
-	# Key properties :
-	myModule.add_src_file([
-		'ewol/key/keyboard.cpp',
-		'ewol/key/Special.cpp',
-		'ewol/key/status.cpp',
-		'ewol/key/type.cpp'
 		])
 	
 	# object :
@@ -85,11 +73,6 @@ def create(target):
 		'ewol/signal/Base.cpp'
 		])
 	
-	# OpenGL interface :
-	myModule.add_src_file([
-		'ewol/openGL/openGL.cpp'
-		])
-	
 	# resources :
 	myModule.add_src_file([
 		'ewol/resource/Colored3DObject.cpp',
@@ -98,8 +81,7 @@ def create(target):
 		'ewol/resource/FontFreeType.cpp',
 		'ewol/resource/Image.cpp',
 		'ewol/resource/ImageDF.cpp',
-		'ewol/resource/Manager.cpp',
-		'ewol/resource/Resource.cpp',
+		'ewol/resource/Texture.cpp',
 		'ewol/resource/TexturedFont.cpp',
 		'ewol/resource/DistanceFieldFont.cpp'
 		])

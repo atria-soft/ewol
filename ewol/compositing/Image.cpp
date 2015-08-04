@@ -43,9 +43,9 @@ void ewol::compositing::Image::loadProgram() {
 	m_GLPosition = 0;
 	m_GLprogram.reset();
 	if (m_distanceFieldMode == true) {
-		m_GLprogram = ewol::resource::Program::create("DATA:texturedDF.prog");
+		m_GLprogram = gale::resource::Program::create("DATA:texturedDF.prog");
 	} else {
-		m_GLprogram = ewol::resource::Program::create("DATA:textured3D.prog");
+		m_GLprogram = gale::resource::Program::create("DATA:textured3D.prog");
 	}
 	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
@@ -71,9 +71,9 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (_disableDepthTest == true) {
-		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	} else {
-		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 	}
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
@@ -98,7 +98,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

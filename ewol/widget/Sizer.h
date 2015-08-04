@@ -60,20 +60,20 @@ namespace ewol {
 					return m_mode;
 				}
 			private:
-				ewol::parameter::Value<ewol::Dimension> m_borderSize; //!< Border size needed for all the display
+				ewol::parameter::Value<gale::Dimension> m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
 				 * @brief set the current border size of the current element:
 				 * @param[in] _newBorderSize The border size to set (0 if not used)
 				 */
-				void setBorderSize(const ewol::Dimension& _newBorderSize) {
+				void setBorderSize(const gale::Dimension& _newBorderSize) {
 					m_borderSize.set(_newBorderSize);
 				}
 				/**
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const ewol::Dimension& getBorderSize() const {
+				const gale::Dimension& getBorderSize() const {
 					return m_borderSize;
 				};
 			public:

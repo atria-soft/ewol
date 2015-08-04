@@ -11,7 +11,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/resource/Program.h>
+#include <gale/resource/Program.h>
 #include <ewol/resource/Image.h>
 #include <ewol/resource/ImageDF.h>
 
@@ -29,7 +29,7 @@ namespace ewol {
 				etk::Color<> m_color; //!< The text foreground color
 				float m_angle; //!< Angle to set at the axes
 			private:
-				std::shared_ptr<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
+				std::shared_ptr<gale::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)

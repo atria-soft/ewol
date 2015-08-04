@@ -8,7 +8,8 @@
 
 #include <ewol/debug.h>
 #include <ewol/resource/Colored3DObject.h>
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
+#include <gale/renderer/openGL/openGL-include.h>
 
 #undef __class__
 #define __class__	"resource::Colored3DObject"
@@ -16,11 +17,11 @@
 
 ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(nullptr) {
-	addObjectType("ewol::Colored3DObject");
+	addResourceType("ewol::Colored3DObject");
 }
 
 void ewol::resource::Colored3DObject::init() {
-	ewol::Resource::init();
+	gale::Resource::init();
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = gale::resource::Program::create("DATA:simple3D.prog");
@@ -48,7 +49,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 		return;
 	}
 	if (true == _depthtest) {
-		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
@@ -65,7 +66,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, _vertices.size());
 	m_GLprogram->unUse();
 	// Request the draw od the elements : 
 	//glDrawArrays(GL_LINES, 0, vertices.size());
@@ -74,7 +75,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 
@@ -91,7 +92,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 		return;
 	}
 	if (true == _depthtest) {
-		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
@@ -108,13 +109,13 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 
@@ -131,7 +132,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 		return;
 	}
 	if (true == _depthtest) {
-		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
@@ -148,13 +149,13 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_LINES, 0, _vertices.size());
+	gale::openGL::drawArrays(gale::openGL::render_line, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 

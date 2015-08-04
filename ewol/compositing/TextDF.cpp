@@ -55,7 +55,7 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 		return;
 	}
 	if (_enableDepthTest == true) {
-		gale::openGL::enable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 	}
 	// set Matrix : translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
@@ -72,10 +72,10 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 	if (_enableDepthTest == true) {
-		gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 
@@ -110,7 +110,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

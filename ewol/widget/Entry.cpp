@@ -234,7 +234,7 @@ void ewol::widget::Entry::removeSelected() {
 }
 
 
-void ewol::widget::Entry::copySelectionToClipBoard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+void ewol::widget::Entry::copySelectionToClipBoard(enum gale::context::clipBoard::clipboardListe _clipboardID) {
 	if (m_displayCursorPosSelection == m_displayCursorPos) {
 		// nothing to cut ...
 		return;
@@ -247,19 +247,19 @@ void ewol::widget::Entry::copySelectionToClipBoard(enum ewol::context::clipBoard
 	}
 	// Copy
 	std::string tmpData = std::string(m_data, pos1, pos2);
-	ewol::context::clipBoard::set(_clipboardID, tmpData);
+	gale::context::clipBoard::set(_clipboardID, tmpData);
 }
 
 
 bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == _event.getId()) {
-		if (ewol::key::statusSingle == _event.getStatus()) {
+		if (gale::key::status_single == _event.getStatus()) {
 			keepFocus();
 			signalClick.emit();
 			//nothing to do ...
 			return true;
-		} else if (ewol::key::statusDouble == _event.getStatus()) {
+		} else if (gale::key::status_double == _event.getStatus()) {
 			keepFocus();
 			// select word
 			m_displayCursorPosSelection = m_displayCursorPos-1;
@@ -302,42 +302,42 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 				}
 			}
 			// Copy to clipboard Middle ...
-			copySelectionToClipBoard(ewol::context::clipBoard::clipboardSelection);
+			copySelectionToClipBoard(gale::context::clipBoard::clipboardSelection);
 			markToRedraw();
-		} else if (ewol::key::statusTriple == _event.getStatus()) {
+		} else if (gale::key::status_triple == _event.getStatus()) {
 			keepFocus();
 			m_displayCursorPosSelection = 0;
 			m_displayCursorPos = m_data->size();
-		} else if (ewol::key::statusDown == _event.getStatus()) {
+		} else if (gale::key::status_down == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos());
 			markToRedraw();
-		} else if (ewol::key::statusMove == _event.getStatus()) {
+		} else if (gale::key::status_move == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos(), true);
 			markToRedraw();
-		} else if (ewol::key::statusUp == _event.getStatus()) {
+		} else if (gale::key::status_up == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos(), true);
 			// Copy to clipboard Middle ...
-			copySelectionToClipBoard(ewol::context::clipBoard::clipboardSelection);
+			copySelectionToClipBoard(gale::context::clipBoard::clipboardSelection);
 			markToRedraw();
 		}
 	}
-	else if(    ewol::key::typeMouse == _event.getType()
+	else if(    gale::key::type_mouse == _event.getType()
 	         && _event.getId() == 2) {
-		if(    _event.getStatus() == ewol::key::statusDown
-		    || _event.getStatus() == ewol::key::statusMove
-		    || _event.getStatus() == ewol::key::statusUp) {
+		if(    _event.getStatus() == gale::key::status_down
+		    || _event.getStatus() == gale::key::status_move
+		    || _event.getStatus() == gale::key::status_up) {
 			keepFocus();
 			// updatethe cursor position : 
 			updateCursorPosition(_event.getPos());
 		}
 		// Paste current selection only when up button
-		if (_event.getStatus() == ewol::key::statusUp) {
+		if (_event.getStatus() == gale::key::status_up) {
 			keepFocus();
 			// middle button => past data...
-			ewol::context::clipBoard::request(ewol::context::clipBoard::clipboardSelection);
+			gale::context::clipBoard::request(gale::context::clipBoard::clipboardSelection);
 		}
 	}
 	return false;
@@ -345,8 +345,8 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 
 
 bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
-	if (_event.getType() == ewol::key::keyboardChar) {
-		if(_event.getStatus() == ewol::key::statusDown) {
+	if (_event.getType() == gale::key::keyboard_char) {
+		if(_event.getStatus() == gale::key::status_down) {
 			// remove curent selected data ...
 			removeSelected();
 			if(    _event.getChar() == '\n'
@@ -387,19 +387,19 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 		}
 		return false;
 	} else {
-		if(_event.getStatus() == ewol::key::statusDown) {
+		if(_event.getStatus() == gale::key::status_down) {
 			switch (_event.getType())
 			{
-				case ewol::key::keyboardLeft:
+				case gale::key::keyboard_left:
 					m_displayCursorPos--;
 					break;
-				case ewol::key::keyboardRight:
+				case gale::key::keyboard_right:
 					m_displayCursorPos++;
 					break;
-				case ewol::key::keyboardStart:
+				case gale::key::keyboard_start:
 					m_displayCursorPos = 0;
 					break;
-				case ewol::key::keyboardEnd:
+				case gale::key::keyboard_end:
 					m_displayCursorPos = m_data->size();
 					break;
 				default:
@@ -437,7 +437,7 @@ void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 	markToRedraw();
 }
 
-void ewol::widget::Entry::onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
+void ewol::widget::Entry::onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID) {
 	// remove curent selected data ...
 	removeSelected();
 	// get current selection / Copy :
@@ -469,17 +469,17 @@ void ewol::widget::Entry::onCallbackEntryClean() {
 }
 
 void ewol::widget::Entry::onCallbackCut() {
-	copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
+	copySelectionToClipBoard(gale::context::clipBoard::clipboardStd);
 	removeSelected();
 	signalModify.emit(m_data);
 }
 
 void ewol::widget::Entry::onCallbackCopy() {
-	copySelectionToClipBoard(ewol::context::clipBoard::clipboardStd);
+	copySelectionToClipBoard(gale::context::clipBoard::clipboardStd);
 }
 
 void ewol::widget::Entry::onCallbackPaste() {
-	ewol::context::clipBoard::request(ewol::context::clipBoard::clipboardStd);
+	gale::context::clipBoard::request(gale::context::clipBoard::clipboardStd);
 }
 
 void ewol::widget::Entry::onCallbackSelect(bool _all) {

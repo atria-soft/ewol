@@ -122,7 +122,7 @@ void ewol::widget::Label::onRegenerateDisplay() {
 bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == _event.getId()) {
-		if (ewol::key::statusSingle == _event.getStatus()) {
+		if (gale::key::status_single == _event.getStatus()) {
 			// nothing to do ...
 			signalPressed.emit();
 			return true;

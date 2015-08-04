@@ -11,7 +11,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/resource/Program.h>
+#include <gale/resource/Program.h>
 #include <ewol/resource/ConfigFile.h>
 #include <ewol/resource/ColorFile.h>
 #include <ewol/resource/Image.h>
@@ -55,7 +55,7 @@ namespace ewol {
 				int32_t m_confColorFile;       //!< ConfigFile opengGl color file Name
 				int32_t m_confImageFile;       //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
-				std::shared_ptr<ewol::resource::Program> m_GLprogram; //!< pointer on the opengl display program
+				std::shared_ptr<gale::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
 				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on vec2(X,Y))

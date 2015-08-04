@@ -9,7 +9,6 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/resource/ColorFile.h>
-#include <ewol/resource/Manager.h>
 #include <ejson/ejson.h>
 #include <stdexcept>
 
@@ -18,13 +17,13 @@
 
 
 ewol::resource::ColorFile::ColorFile() :
-  ewol::Resource(),
+  gale::Resource(),
   m_errorColor(etk::color::orange) {
-	addObjectType("ewol::ColorFile");
+	addResourceType("ewol::ColorFile");
 }
 
 void ewol::resource::ColorFile::init(const std::string& _filename) {
-	ewol::Resource::init(_filename);
+	gale::Resource::init(_filename);
 	EWOL_DEBUG("CF : load \"" << _filename << "\"");
 	reload();
 	EWOL_DEBUG("List of all color : " << m_list.getKeys());

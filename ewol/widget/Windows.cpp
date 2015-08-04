@@ -9,7 +9,8 @@
 #include <etk/types.h>
 #include <etk/types.h>
 #include <ewol/ewol.h>
-#include <ewol/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL-include.h>
 #include <ewol/context/Context.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
@@ -72,22 +73,21 @@ std::shared_ptr<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& 
 }
 
 void ewol::widget::Windows::sysDraw() {
-	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
+	//EWOL_DEBUG("Drow on " << m_size);
 	// set the size of the open GL system
-	glViewport(0,0,m_size.x(),m_size.y());
-	
-	gale::openGL::disable(gale::openGL::FLAG_DITHER);
-	//gale::openGL::disable(gale::openGL::FLAG_BLEND);
-	gale::openGL::disable(gale::openGL::FLAG_STENCIL_TEST);
-	gale::openGL::disable(gale::openGL::FLAG_ALPHA_TEST);
-	gale::openGL::disable(gale::openGL::FLAG_FOG);
+	gale::openGL::setViewPort(vec2(0,0), m_size);
+	gale::openGL::disable(gale::openGL::flag_dither);
+	//gale::openGL::disable(gale::openGL::flag_blend);
+	gale::openGL::disable(gale::openGL::flag_stencilTest);
+	gale::openGL::disable(gale::openGL::flag_alphaTest);
+	gale::openGL::disable(gale::openGL::flag_fog);
 	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__IOs))
 		glPixelZoom(1.0,1.0);
 	#endif
-	gale::openGL::disable(gale::openGL::FLAG_TEXTURE_2D);
-	gale::openGL::disable(gale::openGL::FLAG_DEPTH_TEST);
+	gale::openGL::disable(gale::openGL::flag_texture2D);
+	gale::openGL::disable(gale::openGL::flag_depthTest);
 	
-	gale::openGL::enable(gale::openGL::FLAG_BLEND);
+	gale::openGL::enable(gale::openGL::flag_blend);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
@@ -99,7 +99,7 @@ void ewol::widget::Windows::sysDraw() {
 	displayProp.m_origin.setValue(0,0);
 	displayProp.m_size = m_size;
 	systemDraw(displayProp);
-	gale::openGL::disable(gale::openGL::FLAG_BLEND);
+	gale::openGL::disable(gale::openGL::flag_blend);
 	return;
 }
 

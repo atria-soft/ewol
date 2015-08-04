@@ -126,10 +126,11 @@ namespace ewol {
 					createPopUpMessage(messageTypeCritical, _message);
 				}
 				
-				
-				virtual bool onEventHardwareInput(const ewol::key::keyboardSystem& _event, bool _down) {
+				/* TODO : 
+				virtual bool onEventHardwareInput(const gale::key::keyboardSystem& _event, bool _down) {
 					return false;
 				};
+				*/
 		};
 	};
 };

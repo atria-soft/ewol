@@ -10,7 +10,7 @@
 #include <etk/os/FSNode.h>
 #include <egami/egami.h>
 
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 
 #include <ewol/resource/font/FontBase.h>
 #include <ewol/resource/TexturedFont.h>
@@ -43,7 +43,7 @@ std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::font::mode _obj) {
 #define __class__ "resource::TexturedFont"
 
 ewol::resource::TexturedFont::TexturedFont() {
-	addObjectType("ewol::resource::TexturedFont");
+	addResourceType("ewol::resource::TexturedFont");
 }
 
 void ewol::resource::TexturedFont::init(const std::string& _fontName) {

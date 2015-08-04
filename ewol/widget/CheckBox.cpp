@@ -105,8 +105,8 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("Event on BT : " << _event);
 	
 	bool previousHoverState = m_mouseHover;
-	if(    ewol::key::statusLeave == _event.getStatus()
-	    || ewol::key::statusAbort == _event.getStatus()) {
+	if(    gale::key::status_leave == _event.getStatus()
+	    || gale::key::status_abort == _event.getStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
@@ -126,19 +126,19 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
-			if(ewol::key::statusDown == _event.getStatus()) {
+			if(gale::key::status_down == _event.getStatus()) {
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
-			if(ewol::key::statusUp == _event.getStatus()) {
+			if(gale::key::status_up == _event.getStatus()) {
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
-			if(ewol::key::statusSingle == _event.getStatus()) {
+			if(gale::key::status_single == _event.getStatus()) {
 				// inverse value :
 				setValue((m_value)?false:true);
 				EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
@@ -159,8 +159,8 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 
 bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    _event.getType() == ewol::key::keyboardChar
-	    && _event.getStatus() == ewol::key::statusDown
+	if(    _event.getType() == gale::key::keyboard_char
+	    && _event.getStatus() == gale::key::status_down
 	    && _event.getChar() == '\r') {
 		signalEnter.emit();
 		return true;

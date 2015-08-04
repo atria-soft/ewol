@@ -159,7 +159,7 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std
 
 
 bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
-                                               enum ewol::key::status _typeEvent,
+                                               enum gale::key::status _typeEvent,
                                                int32_t _colomn,
                                                int32_t _raw,
                                                float _x,
@@ -172,7 +172,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 			offset = 2;
 		}
 	}
-	if (_typeEvent == ewol::key::statusSingle) {
+	if (_typeEvent == gale::key::status_single) {
 		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;

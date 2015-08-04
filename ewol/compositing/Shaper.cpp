@@ -118,7 +118,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		}
 		// get the shader resource :
 		m_GLPosition = 0;
-		m_GLprogram = ewol::resource::Program::create(tmpFilename);
+		m_GLprogram = gale::resource::Program::create(tmpFilename);
 		if (m_GLprogram != nullptr) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -202,8 +202,8 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getId());
 	}
 	// Request the draw of the elements : 
-	//gale::openGL::drawArrays(GL_TRIANGLES, 0, SHAPER_NB_MAX_VERTEX);
-	gale::openGL::drawArrays(GL_TRIANGLE_STRIP, 0, m_nbVertexToDisplay);
+	//gale::openGL::drawArrays(gale::openGL::render_triangle, 0, SHAPER_NB_MAX_VERTEX);
+	gale::openGL::drawArrays(gale::openGL::render_triangleStrip, 0, m_nbVertexToDisplay);
 	m_GLprogram->unUse();
 }
 

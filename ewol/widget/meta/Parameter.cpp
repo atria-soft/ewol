@@ -36,9 +36,9 @@ void ewol::widget::Parameter::init() {
 	std::shared_ptr<ewol::widget::Sizer> mySizerHori = nullptr;
 	std::shared_ptr<ewol::widget::Spacer> mySpacer = nullptr;
 	#ifdef __TARGET_OS__Android
-		setMinSize(ewol::Dimension(vec2(90, 90), ewol::Dimension::Pourcent));
+		setMinSize(gale::Dimension(vec2(90, 90), gale::Dimension::Pourcent));
 	#else
-		setMinSize(ewol::Dimension(vec2(80, 80), ewol::Dimension::Pourcent));
+		setMinSize(gale::Dimension(vec2(80, 80), gale::Dimension::Pourcent));
 	#endif
 	
 	mySizerVert = ewol::widget::Sizer::create(widget::Sizer::modeVert);
@@ -85,7 +85,7 @@ void ewol::widget::Parameter::init() {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				mySpacer->setExpand(bvec2(false,false));
-				mySpacer->setMinSize(ewol::Dimension(vec2(10,0)));
+				mySpacer->setMinSize(gale::Dimension(vec2(10,0)));
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			

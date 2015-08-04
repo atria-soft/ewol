@@ -9,7 +9,7 @@
 
 #include <etk/types.h>
 #include <egami/egami.h>
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 #include <ewol/resource/Image.h>
 #include <ewol/resource/Texture.h>
 
@@ -18,7 +18,7 @@
 #define __class__ "resource::TextureFile"
 
 ewol::resource::TextureFile::TextureFile() {
-	addObjectType("ewol::resource::Image");
+	addResourceType("ewol::resource::Image");
 	
 }
 
@@ -104,21 +104,21 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
 	std::shared_ptr<ewol::resource::TextureFile> object = nullptr;
-	std::shared_ptr<ewol::Resource> object2 = getManager().localKeep(TmpFilename);
-	if (nullptr != object2) {
+	std::shared_ptr<gale::Resource> object2 = getManager().localKeep(TmpFilename);
+	if (object2 != nullptr) {
 		object = std::dynamic_pointer_cast<ewol::resource::TextureFile>(object2);
-		if (nullptr == object) {
+		if (object == nullptr) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
 		}
 	}
-	if (nullptr != object) {
+	if (object != nullptr) {
 		return object;
 	}
 	EWOL_INFO("CREATE: TextureFile: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = std::shared_ptr<ewol::resource::TextureFile>(new ewol::resource::TextureFile());
-	if (nullptr == object) {
+	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}

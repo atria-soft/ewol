@@ -13,7 +13,6 @@
 #include <etk/types.h>
 #include <egami/Image.h>
 #include <ewol/resource/Texture.h>
-#include <ewol/resource/Resource.h>
 
 namespace ewol {
 	namespace resource {

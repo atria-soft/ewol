@@ -13,11 +13,11 @@
 #include <etk/Hash.h>
 #include <ewol/debug.h>
 #include <ejson/ejson.h>
-#include <ewol/resource/Resource.h>
+#include <gale/resource/Resource.h>
 
 namespace ewol {
 	namespace resource {
-		class ConfigFile : public ewol::Resource {
+		class ConfigFile : public gale::Resource {
 			private:
 				ejson::Document m_doc;
 				etk::Hash<std::shared_ptr<ejson::Value>> m_list;

@@ -55,7 +55,7 @@ namespace ewol {
 				void calculateLimit();
 				InputPoperty m_eventInputSaved[MAX_MANAGE_INPUT];
 				InputPoperty m_eventMouseSaved[MAX_MANAGE_INPUT];
-				void abortElement(InputPoperty* _eventTable, int32_t _idInput, enum ewol::key::type _type);
+				void abortElement(InputPoperty* _eventTable, int32_t _idInput, enum gale::key::type _type);
 				void cleanElement(InputPoperty* _eventTable, int32_t _idInput);
 				/**
 				 * @brief generate the event on the destinated widget.
@@ -66,10 +66,10 @@ namespace ewol {
 				 * @param[in] _pos position of the event
 				 * @return true if event has been greped
 				 */
-				bool localEventInput(enum ewol::key::type _type,
+				bool localEventInput(enum gale::key::type _type,
 				                     std::shared_ptr<ewol::Widget> _destWidget,
 				                     int32_t _IdInput,
-				                     enum ewol::key::status _typeEvent,
+				                     enum gale::key::status _typeEvent,
 				                     vec2 _pos);
 				/**
 				 * @brief convert the system event id in the correct EWOL id depending of the system management mode
@@ -80,7 +80,7 @@ namespace ewol {
 				 * @param[in] _realInputId system Id
 				 * @return the ewol input id
 				 */
-				int32_t localGetDestinationId(enum ewol::key::type _type,
+				int32_t localGetDestinationId(enum gale::key::type _type,
 				                              std::shared_ptr<ewol::Widget> _destWidget,
 				                              int32_t _realInputId);
 			private:
@@ -91,8 +91,8 @@ namespace ewol {
 				void setDpi(int32_t _newDPI);
 				
 				// note if id<0  == > the it was finger event ...
-				void motion(enum ewol::key::type _type, int _pointerID, vec2 _pos );
-				void state(enum ewol::key::type _type, int _pointerID, bool _isDown, vec2 _pos);
+				void motion(enum gale::key::type _type, int _pointerID, vec2 _pos );
+				void state(enum gale::key::type _type, int _pointerID, bool _isDown, vec2 _pos);
 			public:
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
@@ -114,9 +114,9 @@ namespace ewol {
 				 */
 				void unGrabPointer();
 			private:
-				ewol::key::Special m_specialKey;
+				gale::key::Special m_specialKey;
 			public:
-				void setLastKeyboardSpecial(const ewol::key::Special& _specialKey) {
+				void setLastKeyboardSpecial(const gale::key::Special& _specialKey) {
 					m_specialKey = _specialKey;
 				}
 		};

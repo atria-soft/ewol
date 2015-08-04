@@ -10,13 +10,13 @@
 #define __COLORED_3D_OBJECT_H__
 
 #include <etk/types.h>
-#include <ewol/resource/Resource.h>
+#include <gale/resource/Resource.h>
 #include <ewol/resource/Image.h>
 #include <gale/resource/Program.h>
 
 namespace ewol {
 	namespace resource {
-		class Colored3DObject : public ewol::Resource {
+		class Colored3DObject : public gale::Resource {
 			protected:
 				std::shared_ptr<gale::resource::Program> m_GLprogram;
 				int32_t m_GLPosition;

@@ -53,8 +53,8 @@ ewol::compositing::TextBase::~TextBase() {
 void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	std::shared_ptr<ewol::resource::Program> old = m_GLprogram;
-	m_GLprogram = ewol::resource::Program::create(_shaderName);
+	std::shared_ptr<gale::resource::Program> old = m_GLprogram;
+	m_GLprogram = gale::resource::Program::create(_shaderName);
 	if (m_GLprogram != nullptr) {
 		m_GLPosition   = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor      = m_GLprogram->getAttribute("EW_color");

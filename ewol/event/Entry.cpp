@@ -14,7 +14,7 @@
 std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Entry& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
-	if (_obj.getType() == ewol::key::keyboardChar) {
+	if (_obj.getType() == gale::key::keyboard_char) {
 		_os << " char=" << _obj.getChar();
 	}
 	_os << "}";

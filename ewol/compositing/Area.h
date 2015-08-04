@@ -13,7 +13,8 @@
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
 #include <gale/resource/Program.h>
-#include <gale/resource/Texture.h>
+#include <ewol/resource/Texture.h>
+#include <egami/Image.h>
 
 namespace ewol {
 	namespace compositing {
@@ -29,7 +30,7 @@ namespace ewol {
 				int32_t m_GLtexture;  //!< openGL id on the element (Texture position)
 				int32_t m_GLtexID;    //!< openGL id on the element (texture ID)
 			private:
-				std::shared_ptr<gale::resource::Texture> m_resource; //!< texture resources
+				std::shared_ptr<ewol::resource::Texture> m_resource; //!< texture resources
 				std::vector<vec3 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
@@ -90,9 +91,11 @@ namespace ewol {
 				 */
 				void print(const ivec2& _size);
 				
+				/*
 				egami::Image& get() {
 					return m_resource->get();
 				};
+				*/
 				void flush() {
 					m_resource->flush();
 				};

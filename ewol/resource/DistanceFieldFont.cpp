@@ -10,7 +10,7 @@
 #include <etk/os/FSNode.h>
 #include <egami/egami.h>
 
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 
 #include <ewol/resource/font/FontBase.h>
 #include <ewol/resource/TexturedFont.h>
@@ -28,7 +28,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
   ewol::resource::Texture(),
   m_borderSize(10),
   m_textureBorderSize(0,0) {
-	addObjectType("ewol::resource::DistanceFieldFont");
+	addResourceType("ewol::resource::DistanceFieldFont");
 	m_font = nullptr;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;

@@ -9,48 +9,34 @@
 #ifndef __EWOL_CONTEXT_H__
 #define __EWOL_CONTEXT_H__
 
-#include <etk/os/Fifo.h>
+#include <gale/key/key.h>
+#include <gale/Application.h>
+#include <gale/context/Context.h>
+#include <gale/context/clipBoard.h>
+#include <gale/context/commandLine.h>
+
 #include <ewol/debug.h>
 #include <ewol/ewol.h>
-#include <ewol/key/key.h>
 #include <ewol/object/Manager.h>
-#include <ewol/resource/Manager.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/context/Application.h>
-#include <ewol/context/clipBoard.h>
 #include <ewol/context/ConfigFont.h>
-#include <ewol/context/commandLine.h>
 #include <ewol/context/InputManager.h>
-#include <ewol/context/Fps.h>
 #include <memory>
 
 namespace ewol {
-	/**
-	 * @not-in-doc
-	 */
-	class eSystemMessage;
-	/**
-	 * @not-in-doc
-	 */
-	enum orientation{
-		screenAuto = 0,
-		screenLandscape,
-		screenPortrait
-	};
-	
-	class Context/* : private ewol::object::RemoveEvent */{
+	// Here we hereted from the gale application to be agnostic of the OW where we work ...
+	class Context : public gale::Application {
 		private:
 			std::shared_ptr<ewol::context::Application> m_application; //!< Application handle
 		public:
 			std::shared_ptr<ewol::context::Application> getApplication() {
 				return m_application;
 			}
-		private:
-			ewol::context::CommandLine m_commandLine; //!< Start command line information
 		public:
-			ewol::context::CommandLine& getCmd() {
-				return m_commandLine;
+			gale::context::CommandLine& getCmd() {
+				return gale::getContext().getCmd();
 			};
 		private:
 			ewol::context::ConfigFont m_configFont; //!< global font configuration
@@ -70,15 +56,15 @@ namespace ewol {
 			ewol::widget::Manager& getWidgetManager() {
 				return m_widgetManager;
 			};
-		private:
-			ewol::resource::Manager m_resourceManager; //!< global resources Manager
 		public:
-			ewol::resource::Manager& getResourcesManager() {
-				return m_resourceManager;
+			gale::resource::Manager& getResourcesManager() {
+				return gale::getContext().getResourcesManager();
 			};
 		public:
-			Context(ewol::context::Application* _application, int32_t _argc=0, const char* _argv[]=nullptr);
+			Context(ewol::context::Application* _application);
 			virtual ~Context();
+		private:
+			ewol::context::InputManager m_input;
 		protected:
 			/**
 			 * @brief set the curent interface.
@@ -90,72 +76,31 @@ namespace ewol {
 			 * @note this un-lock the main mutex
 			 */
 			void unLockContext();
-		private:
-			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
-			ewol::context::InputManager m_input;
-			etk::Fifo<ewol::eSystemMessage*> m_msgSystem;
-			bool m_displayFps;
-			ewol::context::Fps m_FpsSystemEvent;
-			ewol::context::Fps m_FpsSystemContext;
-			ewol::context::Fps m_FpsSystem;
-			ewol::context::Fps m_FpsFlush;
-			/**
-			 * @brief Processing all the event arrived ... (commoly called in draw function)
-			 */
-			void processEvents();
-		public:
 			
-			virtual void setArchiveDir(int _mode, const char* _str);
+		public: // herited function:
+			virtual void onCreate(gale::Context& _context);
+			virtual void onStart(gale::Context& _context);
+			virtual void onResume(gale::Context& _context);
+			virtual void onRegenerateDisplay(gale::Context& _context);
+			virtual void onDraw(gale::Context& _context);
+			virtual void onPause(gale::Context& _context);
+			virtual void onStop(gale::Context& _context);
+			virtual void onDestroy(gale::Context& _context);
+			virtual void onPointer(enum gale::key::type _type,
+			                       int32_t _pointerID,
+			                       const vec2& _pos,
+			                       gale::key::status _state);
+			virtual void onKeyboard(gale::key::Special& _special,
+			                        enum gale::key::keyboard _type,
+			                        char32_t _value,
+			                        gale::key::status _state);
+			virtual void onClipboardEvent(enum gale::context::clipBoard::clipboardListe _clipboardId);
 			
-			virtual void OS_SetInputMotion(int _pointerID, const vec2& _pos);
-			virtual void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos);
-			
-			virtual void OS_SetMouseMotion(int _pointerID, const vec2& _pos);
-			virtual void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos);
-			
-			virtual void OS_SetKeyboard(ewol::key::Special& _special,
-			                            char32_t _myChar,
-			                            bool _isDown,
-			                            bool _isARepeateKey=false);
-			virtual void OS_SetKeyboardMove(ewol::key::Special& _special,
-			                                enum ewol::key::keyboard _move,
-			                                bool _isDown,
-			                                bool _isARepeateKey=false);
-			/**
-			 * @brief The current context is suspended
-			 */
-			virtual void OS_Suspend();
-			/**
-			 * @brief The current context is resumed
-			 */
-			virtual void OS_Resume();
-			
-			/**
-			 * @brief The current context is set in foreground (framerate is maximum speed)
-			 */
-			virtual void OS_Foreground();
-			/**
-			 * @brief The current context is set in background (framerate is slowing down (max fps)/5 # 4fps)
-			 */
-			virtual void OS_Background();
-			
-			void requestUpdateSize();
-			
-			// return true if a flush is needed
-			bool OS_Draw(bool _displayEveryTime);
 		public:
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
 			void resetIOEvent();
-			/**
-			 * @brief The OS inform that the openGL constext has been destroy  == > use to automaticly reload the texture and other thinks ...
-			 */
-			void OS_OpenGlContextDestroy();
-			/**
-			 * @brief The OS Inform that the Window has been killed
-			 */
-			void OS_Stop();
 			/**
 			 * @brief The application request that the Window will be killed
 			 */
@@ -173,52 +118,7 @@ namespace ewol {
 			 * @return the current handle on the windows (can be null)
 			 */
 			std::shared_ptr<ewol::widget::Windows> getWindows();
-		private:
-			vec2 m_windowsSize; //!< current size of the system
-		public:
-			/**
-			 * @brief get the current windows size
-			 * @return the current size ...
-			 */
-			const vec2& getSize() {
-				return m_windowsSize;
-			};
-			/**
-			 * @brief The OS inform that the current windows has change his size.
-			 * @param[in] _size new size of the windows.
-			 */
-			virtual void OS_Resize(const vec2& _size);
-			/**
-			 * @brief The application request a change of his curent size.
-			 * @param[in] _size new Requested size of the windows.
-			 */
-			virtual void setSize(const vec2& _size);
-			/**
-			 * @brief The OS inform that the current windows has change his position.
-			 * @param[in] _pos New position of the Windows.
-			 */
-			void OS_Move(const vec2& _pos);
-			/**
-			 * @brief The Application request that the current windows will change his position.
-			 * @param[in] _pos New position of the Windows requested.
-			 */
-			virtual void setPos(const vec2& _pos);
-			/**
-			 * @brief The OS inform that the Windows is now Hidden.
-			 */
-			void OS_Hide();
-			/**
-			 * @brief The Application request that the Windows will be Hidden.
-			 */
-			virtual void hide();
-			/**
-			 * @brief The OS inform that the Windows is now visible.
-			 */
-			void OS_Show();
-			/**
-			 * @brief The Application request that the Windows will be visible.
-			 */
-			virtual void show();
+			
 			/**
 			 * @brief Redraw all the windows
 			 */
@@ -240,16 +140,7 @@ namespace ewol {
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */
 			void inputEventUnGrabPointer();
-			
-			/**
-			 * @brief display the virtal keyboard (for touch system only)
-			 */
-			virtual void keyboardShow();
-			/**
-			 * @brief Hide the virtal keyboard (for touch system only)
-			 */
-			virtual void keyboardHide();
-			
+			#if 0
 			/**
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
@@ -265,16 +156,9 @@ namespace ewol {
 			 * @param[in] Id of the clipboard
 			 */
 			void OS_ClipBoardArrive(enum ewol::context::clipBoard::clipboardListe _clipboardID);
-			/**
-			 * @brief set the new title of the windows
-			 * @param[in] title New desired title
-			 */
-			virtual void setTitle(const std::string& _title);
-			/**
-			 * @brief Open an URL on an eternal brother.
-			 * @param[in] _url URL to open.
-			 */
-			virtual void openURL(const std::string& _url) { };
+			#endif
+			
+			#if 0
 			/**
 			 * @brief force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.
@@ -286,25 +170,14 @@ namespace ewol {
 			 * @param[in] _forcedPosition the position where the mouse might be reset at  every events ...
 			 */
 			virtual void grabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) { };
-			/**
-			 * @brief set the cursor display type.
-			 * @param[in] _newCursor selected new cursor.
-			 */
-			virtual void setCursor(enum ewol::context::cursorDisplay _newCursor) { };
-			/**
-			 * @brief set the Icon of the program
-			 * @param[in] _inputFile new filename icon of the curent program.
-			 */
-			virtual void setIcon(const std::string& _inputFile) { };
+			
 			/**
 			 * @brief get the curent time in micro-second
 			 * @note : must be implemented in all system OS implementation
 			 * @return The curent time of the process
 			 */
 			static int64_t getTime();
-		private:
-			// TODO : set user argument here ....
-			
+			#endif
 		public:
 			/**
 			 * @brief This is the only one things the User might done in his main();
@@ -329,13 +202,15 @@ namespace ewol {
 			 */
 			void setInitImage(const std::string& _fileName);
 		protected:
+			# if 0
 			/**
 			 * @brief HARDWARE keyboard event from the system
 			 * @param[in] _key event type
 			 * @param[in] _status Up or down status
 			 * @return Keep the event or not
 			 */
-			virtual bool systemKeyboradEvent(enum ewol::key::keyboardSystem _key, bool _down);
+			virtual bool systemKeyboradEvent(enum gale:key::keyboardSystem _key, bool _down);
+			#endif
 	};
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.

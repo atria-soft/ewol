@@ -22,7 +22,7 @@ ewol::compositing::Area::Area(const ivec2& _size) :
   m_GLtexture(-1),
   m_GLtexID(-1),
   m_resource(nullptr) {
-	m_resource = gale::resource::Texture::create();
+	m_resource = ewol::resource::Texture::create();
 	m_resource->setImageSize(_size);
 	m_resource->flush();
 	loadProgram();
@@ -71,7 +71,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 
