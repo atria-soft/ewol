@@ -16,8 +16,9 @@
 
 namespace ewol {
 	namespace resource {
-		class Texture : public gale::resource::Texture {
+		class Texture : public gale::Resource {
 			protected:
+				uint32_t m_texId; //!< openGl textureID.
 				// openGl Context propoerties :
 				egami::Image m_data;
 				// some image are not square  == > we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
@@ -44,6 +45,12 @@ namespace ewol {
 				void updateContext();
 				void removeContext();
 				void removeContextToLate();
+				const ivec2& getOpenGlSize() const {
+					return m_data.getSize();
+				};
+				uint32_t getRendererId() const {
+					return m_texId;
+				};
 		};
 	};
 };

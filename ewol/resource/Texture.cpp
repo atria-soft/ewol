@@ -41,22 +41,24 @@ void ewol::resource::Texture::init() {
 	gale::Resource::init();
 }
 
-ewol::resource::Texture::Texture() {
+ewol::resource::Texture::Texture() :
+  m_texId(0),
+  m_endPointSize(1,1),
+  m_loaded(false) {
 	addResourceType("ewol::compositing::Texture");
-	m_loaded = false;
-	m_texId = 0;
-	m_endPointSize.setValue(1.0,1.0);
 }
 
 ewol::resource::Texture::~Texture() {
 	removeContext();
 }
+#include <egami/wrapperBMP.h>
 
 void ewol::resource::Texture::updateContext() {
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
 	}
+	EWOL_ERROR("plop : load the image:" << m_name);
 	// in all case we set the texture properties :
 	// TODO : check error ???
 	glBindTexture(GL_TEXTURE_2D, m_texId);
@@ -70,6 +72,7 @@ void ewol::resource::Texture::updateContext() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	EWOL_INFO("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" <<m_texId);
+	//egami::storeBMP("~/bbb_image.bmp", m_data);
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
 	             GL_RGBA, // Format internal

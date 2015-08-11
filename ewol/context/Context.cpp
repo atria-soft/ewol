@@ -33,49 +33,16 @@
 
 #include <ewol/context/Context.h>
 
-
-
-
-/**
- * @brief get the main ewol mutex (event or periodic call mutex).
- * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
- * @return the main inteface Mutex
- */
-static std::mutex& mutexInterface() {
-	static  std::mutex s_interfaceMutex;
-	return s_interfaceMutex;
-}
-
-
 static ewol::Context* l_curentInterface=nullptr;
 ewol::Context& ewol::getContext() {
-	#if DEBUG_LEVEL > 2
-		if(nullptr == l_curentInterface){
-			EWOL_CRITICAL("[CRITICAL] try acces at an empty interface");
-		}
-	#endif
-	return *l_curentInterface;
+	gale::Context& context = gale::getContext();
+	std::shared_ptr<gale::Application> appl = context.getApplication();
+	if (appl == nullptr) {
+		EWOL_CRITICAL("[CRITICAL] try acces at an empty GALE application (can not get Context)");
+		// ???
+	}
+	return *(std::static_pointer_cast<ewol::Context>(appl));
 }
-
-
-/**
- * @brief set the curent interface.
- * @note this lock the main mutex
- */
-void ewol::Context::lockContext() {
-	mutexInterface().lock();
-	l_curentInterface = this;
-}
-
-/**
- * @brief set the curent interface at nullptr.
- * @note this un-lock the main mutex
- */
-void ewol::Context::unLockContext() {
-	l_curentInterface = nullptr;
-	mutexInterface().unlock();
-}
-
 
 
 void ewol::Context::setInitImage(const std::string& _fileName) {
@@ -100,7 +67,6 @@ void ewol::Context::inputEventUnGrabPointer() {
 
 
 void ewol::Context::onCreate(gale::Context& _context) {
-	lockContext();
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
 	// Add basic ewol translation:
 	ewol::translate::addPath("ewol", "DATA:translate/ewol/");
@@ -140,34 +106,27 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	#endif
 	*/
 	EWOL_INFO(" == > Ewol system init (END)");
-	unLockContext();
 }
 
 void ewol::Context::onStart(gale::Context& _context) {
-	lockContext();
 	if (m_application == nullptr) {
 		// TODO : Request exit of the application .... with error ...
-		unLockContext();
 		return;
 	}
 	for (int32_t iii=0; iii<m_application->getNbStepInit(); ++iii) {
 		m_application->init(*this, iii);
 	}
-	unLockContext();
 }
 
 void ewol::Context::onResume(gale::Context& _context) {
-	lockContext();
-	unLockContext();
+	
 }
 
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
-	lockContext();
 	EWOL_INFO("REGENERATE_DISPLAY");
 	// check if the user selected a windows
 	if (m_windowsCurrent == nullptr) {
 		EWOL_INFO("No windows ...");
-		unLockContext();
 		return;
 	}
 	// Redraw all needed elements
@@ -176,11 +135,9 @@ void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 		markDrawingIsNeeded();
 	}
 	//markDrawingIsNeeded();
-	unLockContext();
 }
 
 void ewol::Context::onDraw(gale::Context& _context) {
-	lockContext();
 	EWOL_INFO("DRAW");
 	// clean internal data...
 	m_objectManager.cleanInternalRemoved();
@@ -189,22 +146,16 @@ void ewol::Context::onDraw(gale::Context& _context) {
 		return;
 	}
 	m_windowsCurrent->sysDraw();
-	unLockContext();
 }
 
 void ewol::Context::onPause(gale::Context& _context) {
-	lockContext();
-	unLockContext();
 }
 
 void ewol::Context::onStop(gale::Context& _context) {
-	lockContext();
 	m_application->unInit(*this);
-	unLockContext();
 }
 
 void ewol::Context::onDestroy(gale::Context& _context) {
-	lockContext();
 	EWOL_INFO(" == > Ewol system Un-Init (BEGIN)");
 	// Remove current windows
 	m_windowsCurrent.reset();
@@ -221,14 +172,12 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	// now All must be removed !!!
 	m_objectManager.unInit();
 	EWOL_INFO(" == > Ewol system Un-Init (END)");
-	unLockContext();
 }
 
 void ewol::Context::onPointer(enum gale::key::type _type,
                               int32_t _pointerID,
                               const vec2& _pos,
                               gale::key::status _state) {
-	lockContext();
 	switch (_state) {
 		case gale::key::status_move:
 			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
@@ -247,18 +196,15 @@ void ewol::Context::onPointer(enum gale::key::type _type,
 			EWOL_DEBUG("Unknow state : " << _state);
 			break;
 	}
-	unLockContext();
 }
 void ewol::Context::onKeyboard(gale::key::Special& _special,
                                enum gale::key::keyboard _type,
                                char32_t _value,
                                gale::key::status _state) {
-	lockContext();
 	// store the keyboard special key status for mouse event...
 	m_input.setLastKeyboardSpecial(_special);
 	if (m_windowsCurrent == nullptr) {
 		// No windows ...
-		unLockContext();
 		return;
 	}
 	bool repeate = (_state == gale::key::status_downRepeate);
@@ -269,14 +215,12 @@ void ewol::Context::onKeyboard(gale::key::Special& _special,
 	                                      _type,
 	                                      isDown) == true) {
 		// Keep a shortcut ...
-		unLockContext();
 		return;
 	}
 	// get the current focused Widget :
 	std::shared_ptr<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
 	if (tmpWidget == nullptr) {
 		// no Widget ...
-		unLockContext();
 		return;
 	}
 	// check if the widget allow repeating key events.
@@ -314,7 +258,6 @@ void ewol::Context::onKeyboard(gale::key::Special& _special,
 			EWOL_DEBUG("remove Repeate key ...");
 		}
 	}
-	unLockContext();
 }
 
 /*
@@ -328,12 +271,10 @@ void ewol::Context::processEvents() {
 */
 
 void ewol::Context::onClipboardEvent(enum gale::context::clipBoard::clipboardListe _clipboardId) {
-	lockContext();
 	std::shared_ptr<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
 	if (tmpWidget != nullptr) {
 		tmpWidget->onEventClipboard(_clipboardId);
 	}
-	unLockContext();
 }
 
 
@@ -367,7 +308,6 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	//! Event management section ...
 	{
 		// set the curent interface :
-		lockContext();
 		processEvents();
 		if (m_initStepId < m_application->getNbStepInit()) {
 			ewol::eSystemMessage *data = new ewol::eSystemMessage();
@@ -388,7 +328,6 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		//! bool needRedraw = ewol::widgetManager::isDrawingNeeded();
 		needRedraw = m_widgetManager.isDrawingNeeded();
 		// release the curent interface :
-		unLockContext();
 	}
 	bool hasDisplayDone = false;
 	//! drawing section :
@@ -437,7 +376,6 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 	}
 	{
 		// set the curent interface :
-		lockContext();
 		// release open GL Context
 		gale::openGL::lock();
 		// while The Gui is drawing in OpenGl, we do some not realTime things
@@ -447,7 +385,6 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_objectManager.cleanInternalRemoved();
 		m_resourceManager.cleanInternalRemoved();
 		// release the curent interface :
-		unLockContext();
 	}
 	return hasDisplayDone;
 }
@@ -473,40 +410,40 @@ void ewol::Context::setWindows(const std::shared_ptr<ewol::widget::Windows>& _wi
 std::shared_ptr<ewol::widget::Windows> ewol::Context::getWindows() {
 	return m_windowsCurrent;
 };
+void ewol::Context::onResize(const ivec2& _size) {
+	EWOL_ERROR("Resize: " << _size);
+	forceRedrawAll();
+}
 
 void ewol::Context::forceRedrawAll() {
 	if (m_windowsCurrent == nullptr) {
 		return;
 	}
-	// TODO: m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
+	ivec2 size = getSize();
+	m_windowsCurrent->calculateSize(vec2(size.x(), size.y()));
 }
 /*
 void ewol::Context::OS_Stop() {
 	// set the curent interface :
-	lockContext();
 	EWOL_INFO("OS_Stop...");
 	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->sysOnKill();
 	}
 	// release the curent interface :
-	unLockContext();
 }
 
 void ewol::Context::OS_Suspend() {
 	// set the curent interface :
-	lockContext();
 	EWOL_INFO("OS_Suspend...");
 	m_previousDisplayTime = -1;
 	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateSuspend();
 	}
 	// release the curent interface :
-	unLockContext();
 }
 
 void ewol::Context::OS_Resume() {
 	// set the curent interface :
-	lockContext();
 	EWOL_INFO("OS_Resume...");
 	m_previousDisplayTime = ewol::getTime();
 	m_objectManager.timeCallResume(m_previousDisplayTime);
@@ -514,28 +451,23 @@ void ewol::Context::OS_Resume() {
 		m_windowsCurrent->onStateResume();
 	}
 	// release the curent interface :
-	unLockContext();
 }
 void ewol::Context::OS_Foreground() {
 	// set the curent interface :
-	lockContext();
 	EWOL_INFO("OS_Foreground...");
 	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateForeground();
 	}
 	// release the curent interface :
-	unLockContext();
 }
 
 void ewol::Context::OS_Background() {
 	// set the curent interface :
-	lockContext();
 	EWOL_INFO("OS_Background...");
 	if (m_windowsCurrent != nullptr) {
 		m_windowsCurrent->onStateBackground();
 	}
 	// release the curent interface :
-	unLockContext();
 }
 */
 

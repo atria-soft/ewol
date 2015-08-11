@@ -53,7 +53,7 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
-	m_GLprogram->setTexture0(m_GLtexID, m_font->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_font->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
 	// position :
@@ -92,7 +92,7 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
-	m_GLprogram->setTexture0(m_GLtexID, m_font->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_font->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
 	// position :

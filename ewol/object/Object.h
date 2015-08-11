@@ -45,6 +45,32 @@ namespace ewol {
 		return object; \
 	}
 
+#define DECLARE_SINGLE_FACTORY(className,uniqueName) \
+	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
+		std::shared_ptr<className> object; \
+		std::shared_ptr<ewol::Object> object2 = getObjectNamed(uniqueName); \
+		if (object2 != nullptr) { \
+			object = std::dynamic_pointer_cast<className>(object2); \
+			if (object == nullptr) { \
+				GALE_CRITICAL("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
+				return nullptr; \
+			} \
+		} \
+		if (object != nullptr) { \
+			return object; \
+		} \
+		object = std::shared_ptr<className>(new className()); \
+		if (object == nullptr) { \
+			EWOL_ERROR("Factory error"); \
+			return nullptr; \
+		} \
+		object->init(uniqueName, std::forward<T>(all)... ); \
+		if (object->objectHasBeenCorectlyInit() == false) { \
+			EWOL_CRITICAL("Object is not correctly init : " << #className ); \
+		} \
+		return object; \
+	}
+
 namespace ewol {
 	/**
 	 * @brief Basic message classes for ewol system
@@ -181,12 +207,12 @@ namespace ewol {
 			 * @breif get the current Object manager.
 			 * @return the requested object manager.
 			 */
-			ewol::object::Manager& getObjectManager() const;
+			static ewol::object::Manager& getObjectManager();
 			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
-			ewol::Context& getContext() const;
+			static ewol::Context& getContext();
 		private:
 			bool m_isResource; //!< enable this when you want to declare this element is auto-remove
 		public:
@@ -210,7 +236,7 @@ namespace ewol {
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
-			std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName) const;
+			static std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName);
 			/**
 			 * @brief Retrive an object with his name (in the global list)
 			 * @param[in] _name Name of the object

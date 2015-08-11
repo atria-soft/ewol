@@ -73,7 +73,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& 
 }
 
 void ewol::widget::Windows::sysDraw() {
-	//EWOL_DEBUG("Drow on " << m_size);
+	EWOL_DEBUG("Drow on " << m_size);
 	// set the size of the open GL system
 	gale::openGL::setViewPort(vec2(0,0), m_size);
 	gale::openGL::disable(gale::openGL::flag_dither);
@@ -121,18 +121,17 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::getTime();
 	#endif
-	
 	// clear the screen with transparency ...
 	etk::Color<float> colorBg(0.5, 0.5, 0.5, 0.5);
 	if (m_colorProperty != nullptr) {
 		colorBg = m_colorProperty->get(m_colorBg);
 	}
-	glClearColor(colorBg.r(), colorBg.g(), colorBg.b(), colorBg.a());
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	gale::openGL::clearColor(colorBg);
+	gale::openGL::clear(   gale::openGL::clearFlag_colorBuffer
+	                     | gale::openGL::clearFlag_depthBuffer);
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime0 = (float)(ewol::getTime() - ___startTime0) / 1000.0f;
 	EWOL_ERROR("      Windows000  : " << ___localTime0 << "ms ");
-	
 	int64_t ___startTime1 = ewol::getTime();
 	#endif
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
@@ -144,7 +143,6 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime1 = (float)(ewol::getTime() - ___startTime1) / 1000.0f;
 	EWOL_ERROR("      Windows111  : " << ___localTime1 << "ms ");
-	
 	int64_t ___startTime2 = ewol::getTime();
 	#endif
 	// second display the pop-up

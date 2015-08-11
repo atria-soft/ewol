@@ -65,18 +65,6 @@ namespace ewol {
 			virtual ~Context();
 		private:
 			ewol::context::InputManager m_input;
-		protected:
-			/**
-			 * @brief set the curent interface.
-			 * @note this lock the main mutex
-			 */
-			void lockContext();
-			/**
-			 * @brief set the curent interface at nullptr.
-			 * @note this un-lock the main mutex
-			 */
-			void unLockContext();
-			
 		public: // herited function:
 			virtual void onCreate(gale::Context& _context);
 			virtual void onStart(gale::Context& _context);
@@ -140,6 +128,8 @@ namespace ewol {
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */
 			void inputEventUnGrabPointer();
+			// herited function:
+			virtual void onResize(const ivec2& _size);
 			#if 0
 			/**
 			 * @brief Inform the Gui that we want to have a copy of the clipboard

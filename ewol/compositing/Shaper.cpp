@@ -199,7 +199,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	}
 	if (nullptr!=m_resourceTexture) {
 		// TextureID
-		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getId());
+		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getRendererId());
 	}
 	// Request the draw of the elements : 
 	//gale::openGL::drawArrays(gale::openGL::render_triangle, 0, SHAPER_NB_MAX_VERTEX);

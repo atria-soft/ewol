@@ -63,7 +63,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
-	m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_resource->getRendererId());
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// Texture :

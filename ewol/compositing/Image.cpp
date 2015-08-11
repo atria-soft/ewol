@@ -84,12 +84,12 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		if (m_distanceFieldMode == true) {
 			EWOL_ERROR("FONT type error Request distance field and display normal ...");
 		}
-		m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
+		m_GLprogram->setTexture0(m_GLtexID, m_resource->getRendererId());
 	} else {
 		if (m_distanceFieldMode == false) {
 			EWOL_ERROR("FONT type error Request normal and display distance field ...");
 		}
-		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getId());
+		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getRendererId());
 	}
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
