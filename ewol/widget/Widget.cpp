@@ -666,7 +666,7 @@ void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPoin
 			EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
 			m_userMinSize = gale::Dimension(vec2(0,0),gale::Dimension::Pixel);
 		}
-		// TODO : requestUpdateSize();
+		requestUpdateSize();
 	} else if (_paramPointer == m_annimationTypeStart) {
 		
 	} else if (_paramPointer == m_annimationTimeStart) {
@@ -679,7 +679,7 @@ void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPoin
 }
 
 void ewol::Widget::requestUpdateSize() {
-	// TODO : getContext().requestUpdateSize();
+	getContext().requestUpdateSize();
 }
 
 ewol::widget::Manager& ewol::Widget::getWidgetManager() {

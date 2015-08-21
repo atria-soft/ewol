@@ -123,7 +123,7 @@ void ewol::Context::onResume(gale::Context& _context) {
 }
 
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
-	EWOL_INFO("REGENERATE_DISPLAY");
+	//EWOL_INFO("REGENERATE_DISPLAY");
 	// check if the user selected a windows
 	if (m_windowsCurrent == nullptr) {
 		EWOL_INFO("No windows ...");
@@ -138,7 +138,7 @@ void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 }
 
 void ewol::Context::onDraw(gale::Context& _context) {
-	EWOL_INFO("DRAW");
+	//EWOL_INFO("DRAW");
 	// clean internal data...
 	m_objectManager.cleanInternalRemoved();
 	// real draw...
@@ -201,6 +201,7 @@ void ewol::Context::onKeyboard(gale::key::Special& _special,
                                enum gale::key::keyboard _type,
                                char32_t _value,
                                gale::key::status _state) {
+	EWOL_VERBOSE("event {" << _special << "} " << _type << " " << _value << " " << _state);
 	// store the keyboard special key status for mouse event...
 	m_input.setLastKeyboardSpecial(_special);
 	if (m_windowsCurrent == nullptr) {
@@ -224,7 +225,7 @@ void ewol::Context::onKeyboard(gale::key::Special& _special,
 		return;
 	}
 	// check if the widget allow repeating key events.
-	//EWOL_DEBUG("repeating test :" << data->repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data->stateIsDown);
+	//EWOL_INFO("repeating test :" << repeate << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << isDown);
 	if(    repeate == false
 	    || (    repeate == true
 	         && tmpWidget->getKeyboardRepeate() == true) ) {
@@ -244,7 +245,6 @@ void ewol::Context::onKeyboard(gale::key::Special& _special,
 				}
 				tmpWidget->systemEventEntry(tmpEntryEvent);
 			} else { // THREAD_KEYBORAD_MOVE
-				EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << _type << " " << _state);
 				ewol::event::EntrySystem tmpEntryEvent(_type,
 				                                       gale::key::status_up,
 				                                       _special,
@@ -292,6 +292,16 @@ ewol::Context::Context(ewol::context::Application* _application) :
 
 ewol::Context::~Context() {
 	// nothing to do ...
+}
+
+void ewol::Context::requestUpdateSize() {
+	gale::Context& context = gale::getContext();
+	context.requestUpdateSize();
+}
+
+void ewol::Context::onPeriod(int64_t _time) {
+	EWOL_ERROR("_time=" << _time);
+	m_objectManager.timeCall(_time);
 }
 
 #if 0
@@ -411,7 +421,7 @@ std::shared_ptr<ewol::widget::Windows> ewol::Context::getWindows() {
 	return m_windowsCurrent;
 };
 void ewol::Context::onResize(const ivec2& _size) {
-	EWOL_ERROR("Resize: " << _size);
+	EWOL_VERBOSE("Resize: " << _size);
 	forceRedrawAll();
 }
 

@@ -72,10 +72,9 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 
 void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// draw BG in any case:
-	m_vectorialDraw.draw();
+	m_vectorialDraw.draw(_disableDepthTest);
 	
 	if (m_coord.size() <= 0 || m_font == nullptr) {
-		// TODO : a remèe ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}

@@ -33,7 +33,7 @@ namespace ewol {
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLMatrixPosition; //!< position matrix
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)
-			private: // Background Color (display only when needed)
+			public: // Background Color (display only when needed)
 				std::vector<vec3 > m_coord; //!< internal position for the text display
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the background
 			public:

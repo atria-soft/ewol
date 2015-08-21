@@ -201,6 +201,12 @@ namespace ewol {
 			 */
 			virtual bool systemKeyboradEvent(enum gale:key::keyboardSystem _key, bool _down);
 			#endif
+		public:
+			/**
+			 * @brief Request a display after call a resize
+			 */
+			void requestUpdateSize();
+			virtual void onPeriod(int64_t _time);
 	};
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.

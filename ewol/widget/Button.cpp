@@ -205,6 +205,7 @@ void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 
 
 void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
+	EWOL_INFO("periodic : " << _event);
 	if (false == m_shaper->periodicCall(_event) ) {
 		periodicCallDisable();
 	}
