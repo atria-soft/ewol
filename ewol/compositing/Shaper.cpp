@@ -100,7 +100,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		m_confIdPaddingIn[shaperPosRight]  = m_config->request("padding-in-right");
 		m_confIdPaddingIn[shaperPosTop]    = m_config->request("padding-in-top");
 		m_confIdPaddingIn[shaperPosButtom] = m_config->request("padding-in-buttom");
-		m_confIdChangeTime = m_config->request("ChangeTime");
+		m_confIdChangeTime = m_config->request("change-time");
 		m_confProgramFile  = m_config->request("program");
 		m_confImageFile    = m_config->request("image");
 		m_confColorFile    = m_config->request("color");
@@ -229,7 +229,7 @@ bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {
 }
 
 bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
-	//EWOL_DEBUG("call=" << _event);
+	EWOL_VERBOSE("call=" << _event << "state transition=" << m_stateTransition << " speedTime=" << m_config->getNumber(m_confIdChangeTime));
 	// start :
 	if (m_stateTransition >= 1.0) {
 		m_stateOld = m_stateNew;
@@ -238,7 +238,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 			m_stateNew = m_nextStatusRequested;
 			m_nextStatusRequested = -1;
 			m_stateTransition = 0.0;
-			//EWOL_DEBUG("     ##### START #####  ");
+			EWOL_VERBOSE("     ##### START #####  ");
 		} else {
 			m_nextStatusRequested = -1;
 			// disable periodic call ...
@@ -261,7 +261,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
 		m_stateTransition = std::avg(0.0f, m_stateTransition, 1.0f);
-		//EWOL_DEBUG("relative=" << timeRelativity << " Transition : " << m_stateTransition);
+		EWOL_VERBOSE("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
 }

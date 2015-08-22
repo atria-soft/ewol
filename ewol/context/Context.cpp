@@ -300,7 +300,6 @@ void ewol::Context::requestUpdateSize() {
 }
 
 void ewol::Context::onPeriod(int64_t _time) {
-	EWOL_ERROR("_time=" << _time);
 	m_objectManager.timeCall(_time);
 }
 

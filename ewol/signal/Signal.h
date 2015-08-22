@@ -74,6 +74,30 @@ namespace ewol {
 				}
 			}
 			/**
+			 * @brief Check if an object is registered in the Signal
+			 * @param[in] _obj shared pointer on the object
+			 * @return true The object is connected at this signal.
+			 * @return false The object is NOT connected on this signal.
+			 */
+			bool isRegistered(std::shared_ptr<void> _obj) {
+				if (_obj == nullptr) {
+					return false;
+				}
+				for (auto &it : m_callerList) {
+					std::shared_ptr<void> obj = it.first.lock();
+					if (obj == _obj) {
+						return true;
+					}
+				}
+				for (auto &it : m_callerListInCallback) {
+					std::shared_ptr<void> obj = it.first.lock();
+					if (obj == _obj) {
+						return true;
+					}
+				}
+				return false;
+			}
+			/**
 			 * @brief remove link on the signal.
 			 * @param[in] _obj shared pointer on the removing object
 			 */
