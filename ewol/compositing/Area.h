@@ -91,11 +91,9 @@ namespace ewol {
 				 */
 				void print(const ivec2& _size);
 				
-				/*
 				egami::Image& get() {
 					return m_resource->get();
 				};
-				*/
 				void flush() {
 					m_resource->flush();
 				};
