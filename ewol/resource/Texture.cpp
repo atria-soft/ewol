@@ -54,6 +54,7 @@ ewol::resource::Texture::~Texture() {
 #include <egami/wrapperBMP.h>
 
 void ewol::resource::Texture::updateContext() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
@@ -87,6 +88,7 @@ void ewol::resource::Texture::updateContext() {
 }
 
 void ewol::resource::Texture::removeContext() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (true == m_loaded) {
 		// Request remove texture ...
 		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
@@ -96,16 +98,19 @@ void ewol::resource::Texture::removeContext() {
 }
 
 void ewol::resource::Texture::removeContextToLate() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	m_loaded = false;
 	m_texId=0;
 }
 
 void ewol::resource::Texture::flush() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	// request to the manager to be call at the next update ...
 	getManager().update(std::dynamic_pointer_cast<gale::Resource>(shared_from_this()));
 }
 
 void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }

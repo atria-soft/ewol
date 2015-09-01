@@ -25,6 +25,7 @@ ewol::resource::ConfigFile::ConfigFile() :
 }
 
 void ewol::resource::ConfigFile::init(const std::string& _filename) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	gale::Resource::init(_filename);
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
@@ -36,6 +37,7 @@ ewol::resource::ConfigFile::~ConfigFile() {
 }
 
 void ewol::resource::ConfigFile::reload() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	// reset all parameters
 	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (nullptr != m_list[iii]) {
@@ -53,6 +55,7 @@ void ewol::resource::ConfigFile::reload() {
 
 
 int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {
 		m_list.add(_paramName, nullptr);
@@ -65,6 +68,7 @@ int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
 
 
 double ewol::resource::ConfigFile::getNumber(int32_t _id) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (    _id < 0
 	     || m_list[_id] == nullptr) {
 		return 0.0;
@@ -77,6 +81,7 @@ double ewol::resource::ConfigFile::getNumber(int32_t _id) {
 }
 
 const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	static const std::string& errorString("");
 	if (    _id < 0
 	     || m_list[_id] == nullptr) {
@@ -90,6 +95,7 @@ const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
 }
 
 bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (    _id < 0
 	     || m_list[_id] == nullptr) {
 		return false;

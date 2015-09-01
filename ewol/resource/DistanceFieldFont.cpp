@@ -36,6 +36,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
 }
 
 void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
 	std::string localName = _fontName;
 	std::vector<std::string> folderList;
@@ -130,11 +131,13 @@ ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
 
 
 float ewol::resource::DistanceFieldFont::getDisplayRatio(float _size) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	return _size / (float)SIZE_GENERATION;
 }
 
 
 void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
 	std::vector<short> xdist(size);
 	std::vector<short> ydist(size);
@@ -214,6 +217,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 }
 
 bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	bool hasChange = false;
 	if (m_font == nullptr) {
 		return false;
@@ -295,6 +299,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 }
 
 int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (_charcode < 0x20) {
 		return 0;
 	} else if (_charcode < 0x80) {
@@ -321,6 +326,7 @@ int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
 }
 
 ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const char32_t& _charcode) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode);
 	if(    index < 0
@@ -340,6 +346,7 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 }
 
 void ewol::resource::DistanceFieldFont::exportOnFile() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
 	std::shared_ptr<ejson::Array> tmpList = ejson::Array::create();
@@ -374,6 +381,7 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 }
 
 bool ewol::resource::DistanceFieldFont::importFromFile() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	// test file existance:
 	etk::FSNode fileJSON(m_fileName + ".json");
