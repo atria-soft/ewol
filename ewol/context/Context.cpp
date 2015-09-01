@@ -106,6 +106,10 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	#endif
 	*/
 	EWOL_INFO(" == > Ewol system init (END)");
+	if (m_application == nullptr) {
+		return;
+	}
+	m_application->onCreate(*this);
 }
 
 void ewol::Context::onStart(gale::Context& _context) {
@@ -113,13 +117,11 @@ void ewol::Context::onStart(gale::Context& _context) {
 		// TODO : Request exit of the application .... with error ...
 		return;
 	}
-	for (int32_t iii=0; iii<m_application->getNbStepInit(); ++iii) {
-		m_application->init(*this, iii);
-	}
+	m_application->onStart(*this);
 }
 
 void ewol::Context::onResume(gale::Context& _context) {
-	
+	m_application->onResume(*this);
 }
 
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
@@ -149,10 +151,11 @@ void ewol::Context::onDraw(gale::Context& _context) {
 }
 
 void ewol::Context::onPause(gale::Context& _context) {
+	m_application->onPause(*this);
 }
 
 void ewol::Context::onStop(gale::Context& _context) {
-	m_application->unInit(*this);
+	m_application->onStop(*this);
 }
 
 void ewol::Context::onDestroy(gale::Context& _context) {
@@ -162,11 +165,10 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	// clean all widget and sub widget with their resources:
 	m_objectManager.cleanInternalRemoved();
 	// call application to uninit
-	m_application->unInit(*this);
+	m_application->onDestroy(*this);
 	m_application.reset();
 	// internal clean elements
 	m_objectManager.cleanInternalRemoved();
-	
 	EWOL_INFO("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
 	m_objectManager.displayListObject();
 	// now All must be removed !!!

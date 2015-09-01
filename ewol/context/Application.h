@@ -13,19 +13,40 @@ namespace ewol {
 	class Context;
 	namespace context {
 		class Application {
-			protected:
-				size_t m_nbStepInit;
 			public:
-				size_t getNbStepInit() {
-					return m_nbStepInit;
-				}
-			public:
-				Application() :
-				  m_nbStepInit(1) {};
+				Application() {};
 				virtual ~Application() {};
 			public:
-				virtual bool init(ewol::Context& _context, size_t _initId) = 0;
-				virtual void unInit(ewol::Context& _context) = 0;
+				/**
+				 * @brief The application is created.
+				 * @param[in] _context Current ewol context.
+				 */
+				virtual void onCreate(ewol::Context& _context) {};
+				/**
+				 * @brief The application is started.
+				 * @param[in] _context Current ewol context.
+				 */
+				virtual void onStart(ewol::Context& _context) {};
+				/**
+				 * @brief The application is resumed (now visible).
+				 * @param[in] _context Current ewol context.
+				 */
+				virtual void onResume(ewol::Context& _context) {};
+				/**
+				 * @brief The application is Hide / not visible.
+				 * @param[in] _context Current ewol context.
+				 */
+				virtual void onPause(ewol::Context& _context) {};
+				/**
+				 * @brief The application is stopped.
+				 * @param[in] _context Current ewol context.
+				 */
+				virtual void onStop(ewol::Context& _context) {};
+				/**
+				 * @brief The application is remoed (call destructor just adter it.).
+				 * @param[in] _context Current ewol context.
+				 */
+				virtual void onDestroy(ewol::Context& _context) {};
 		};
 	};
 };
