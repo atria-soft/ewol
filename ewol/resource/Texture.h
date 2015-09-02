@@ -42,7 +42,7 @@ namespace ewol {
 				};
 				// flush the data to send it at the openGl system
 				void flush();
-				void updateContext();
+				bool updateContext();
 				void removeContext();
 				void removeContextToLate();
 				const ivec2& getOpenGlSize() const {

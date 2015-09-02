@@ -84,6 +84,7 @@ namespace ewol {
 				};
 			protected:
 				ewol::parameter::Value<gale::Dimension> m_imageSize; //!< border to add at the image.
+				vec2 m_realllll;
 			public:
 				/**
 				 * @brief set tge Border size around the image
@@ -142,7 +143,7 @@ namespace ewol {
 				vec2 getStopPos() const {
 					return m_posStop;
 				};
-			public:
+			protected:
 				ewol::parameter::Value<bool> m_distanceFieldMode; //!< to have a parameter
 			public:
 				/**
@@ -158,6 +159,23 @@ namespace ewol {
 				 */
 				bool getDistanceField() const {
 					return m_compositing.getDistanceFieldMode();
+				}
+			protected:
+				ewol::parameter::Value<bool> m_smooth; //!< display is done in the pixed approximation if false
+			public:
+				/**
+				 * @brief Set smooth rendering mode
+				 * @param[in] _value enable smooting of the display
+				 */
+				void setSmooth(bool _value) {
+					m_smooth.set(_value);
+				}
+				/**
+				 * @brief Get smooth rendering mode
+				 * @return Status of the smooting render mode.
+				 */
+				bool getSmooth() const {
+					return m_smooth;
 				}
 			protected: // Derived function
 				virtual void onDraw();

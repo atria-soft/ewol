@@ -26,7 +26,8 @@ ewol::widget::Image::Image() :
   m_keepRatio(*this, "ratio", true, "Keep ratio of the image"),
   m_posStart(*this, "part-start", vec2(0.0f, 0.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
   m_posStop(*this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
-  m_distanceFieldMode(*this, "distance-field", false, "Distance field mode") {
+  m_distanceFieldMode(*this, "distance-field", false, "Distance field mode"),
+  m_smooth(*this, "smooth", true, "Smooth display of the image") {
 	addObjectType("ewol::widget::Image");
 	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Image.json");
 	if (m_colorProperty != nullptr) {
@@ -65,7 +66,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		vec2 imageBoder = m_border->getPixel();
 		vec2 origin = imageBoder;
 		imageBoder *= 2.0f;
-		vec2 imageRealSize = m_minSize - imageBoder;
+		vec2 imageRealSize = m_realllll - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
 		vec2 ratioSizeDisplayRequested = m_posStop.get() - m_posStart.get();
@@ -101,7 +102,11 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		}
 		
 		// set the somposition properties :
-		m_compositing.setPos(origin);
+		if (m_smooth.get() == true) {
+			m_compositing.setPos(origin);
+		} else {
+			m_compositing.setPos(ivec2(origin));
+		}
 		m_compositing.printPart(imageRealSize, m_posStart, m_posStop);
 		//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
 		EWOL_VERBOSE("Paint Image :" << m_fileName << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
@@ -111,6 +116,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 void ewol::widget::Image::calculateMinMaxSize() {
 	vec2 imageBoder = m_border->getPixel()*2.0f;
 	vec2 imageSize = m_imageSize->getPixel();
+	vec2 size = m_userMinSize->getPixel();
 	if (imageSize!=vec2(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;
@@ -124,6 +130,9 @@ void ewol::widget::Image::calculateMinMaxSize() {
 		m_maxSize = imageBoder+m_userMaxSize->getPixel();
 		m_minSize.setMin(m_maxSize);
 	}
+	m_realllll = m_minSize;
+	m_minSize.setMax(size);
+	m_maxSize.setMax(m_minSize);
 	//EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << imageSizeReal);
 	markToRedraw();
 }
@@ -167,6 +176,10 @@ bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _n
 	if (tmpAttributeValue.size() != 0) {
 		m_border = tmpAttributeValue;
 	}
+	tmpAttributeValue = _node->getAttribute("smooth");
+	if (tmpAttributeValue.size() != 0) {
+		m_smooth = etk::string_to_bool(tmpAttributeValue);
+	}
 	//EWOL_DEBUG("Load label:" << node->ToElement()->getText());
 	if (_node->size() != 0) {
 		setFile(_node->getText());
@@ -194,6 +207,8 @@ void ewol::widget::Image::onParameterChangeValue(const ewol::parameter::Ref& _pa
 		markToRedraw();
 		requestUpdateSize();
 	} else if (_paramPointer == m_distanceFieldMode) {
+		markToRedraw();
+	} else if (_paramPointer == m_smooth) {
 		markToRedraw();
 	}
 }

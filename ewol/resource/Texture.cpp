@@ -53,8 +53,12 @@ ewol::resource::Texture::~Texture() {
 }
 #include <egami/wrapperBMP.h>
 
-void ewol::resource::Texture::updateContext() {
-	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
+bool ewol::resource::Texture::updateContext() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex, std11::defer_lock);
+	if (lock.try_lock() == false) {
+		//Lock error ==> try later ...
+		return false;
+	}
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
@@ -85,6 +89,7 @@ void ewol::resource::Texture::updateContext() {
 	             m_data.getTextureDataPointer() );
 	// now the data is loaded
 	m_loaded = true;
+	return true;
 }
 
 void ewol::resource::Texture::removeContext() {

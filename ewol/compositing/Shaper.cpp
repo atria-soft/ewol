@@ -257,7 +257,10 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 				m_nextStatusRequested = -1;
 			}
 		}
-		float timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
+		float timeRelativity = 0.0f;
+		if (m_config != nullptr) {
+			timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
+		}
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
 		m_stateTransition = std::avg(0.0f, m_stateTransition, 1.0f);
@@ -471,10 +474,11 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 	EWOL_ERROR(" inside = " << inside);
 	*/
 	int32_t mode = 0;
+	bool displayOutside = false;
 	if (m_config != nullptr) {
 		mode = m_config->getNumber(m_confIdMode);
+		displayOutside = m_config->getBoolean(m_confIdDisplayOutside);
 	}
-	bool displayOutside = m_config->getBoolean(m_confIdDisplayOutside);
 	m_nbVertexToDisplay = 0;
 	if (displayOutside == true) {
 		addVertexLine(enveloppe.yTop(), border.yTop(),

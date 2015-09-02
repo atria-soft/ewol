@@ -106,33 +106,40 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	#endif
 	*/
 	EWOL_INFO(" == > Ewol system init (END)");
-	if (m_application == nullptr) {
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl == nullptr) {
 		return;
 	}
-	m_application->onCreate(*this);
+	appl->onCreate(*this);
 }
 
 void ewol::Context::onStart(gale::Context& _context) {
-	if (m_application == nullptr) {
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl == nullptr) {
 		// TODO : Request exit of the application .... with error ...
 		return;
 	}
-	m_application->onStart(*this);
+	appl->onStart(*this);
 }
 
 void ewol::Context::onResume(gale::Context& _context) {
-	m_application->onResume(*this);
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl == nullptr) {
+		return;
+	}
+	appl->onResume(*this);
 }
 
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 	//EWOL_INFO("REGENERATE_DISPLAY");
 	// check if the user selected a windows
-	if (m_windowsCurrent == nullptr) {
+	std::shared_ptr<ewol::widget::Windows> window = m_windowsCurrent;
+	if (window == nullptr) {
 		EWOL_INFO("No windows ...");
 		return;
 	}
 	// Redraw all needed elements
-	m_windowsCurrent->onRegenerateDisplay();
+	window->onRegenerateDisplay();
 	if (m_widgetManager.isDrawingNeeded() == true) {
 		markDrawingIsNeeded();
 	}
@@ -144,18 +151,27 @@ void ewol::Context::onDraw(gale::Context& _context) {
 	// clean internal data...
 	m_objectManager.cleanInternalRemoved();
 	// real draw...
-	if (m_windowsCurrent == nullptr) {
+	std::shared_ptr<ewol::widget::Windows> window = m_windowsCurrent;
+	if (window == nullptr) {
 		return;
 	}
-	m_windowsCurrent->sysDraw();
+	window->sysDraw();
 }
 
 void ewol::Context::onPause(gale::Context& _context) {
-	m_application->onPause(*this);
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl == nullptr) {
+		return;
+	}
+	appl->onPause(*this);
 }
 
 void ewol::Context::onStop(gale::Context& _context) {
-	m_application->onStop(*this);
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl == nullptr) {
+		return;
+	}
+	appl->onStop(*this);
 }
 
 void ewol::Context::onDestroy(gale::Context& _context) {
@@ -164,9 +180,12 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	m_windowsCurrent.reset();
 	// clean all widget and sub widget with their resources:
 	m_objectManager.cleanInternalRemoved();
-	// call application to uninit
-	m_application->onDestroy(*this);
-	m_application.reset();
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl != nullptr) {
+		// call application to uninit
+		appl->onDestroy(*this);
+		m_application.reset();
+	}
 	// internal clean elements
 	m_objectManager.cleanInternalRemoved();
 	EWOL_INFO("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
