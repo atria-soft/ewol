@@ -84,7 +84,7 @@ namespace ewol {
 				};
 			protected:
 				ewol::parameter::Value<gale::Dimension> m_imageSize; //!< border to add at the image.
-				vec2 m_realllll;
+				vec2 m_imageRenderSize; //!< size of the image when we render it
 			public:
 				/**
 				 * @brief set tge Border size around the image

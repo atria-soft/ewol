@@ -29,6 +29,7 @@ ewol::widget::Image::Image() :
   m_distanceFieldMode(*this, "distance-field", false, "Distance field mode"),
   m_smooth(*this, "smooth", true, "Smooth display of the image") {
 	addObjectType("ewol::widget::Image");
+	m_imageRenderSize = vec2(0,0);
 	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Image.json");
 	if (m_colorProperty != nullptr) {
 		m_colorId = m_colorProperty->request("foreground");
@@ -66,7 +67,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		vec2 imageBoder = m_border->getPixel();
 		vec2 origin = imageBoder;
 		imageBoder *= 2.0f;
-		vec2 imageRealSize = m_realllll - imageBoder;
+		vec2 imageRealSize = m_imageRenderSize - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
 		vec2 ratioSizeDisplayRequested = m_posStop.get() - m_posStart.get();
@@ -75,13 +76,47 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		if (m_userFill->x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {
-			origin.setX(origin.x() + (m_size.x()-m_minSize.x())*0.5f);
+			switch(m_gravity) {
+				case gravityCenter:
+				case gravityTop:
+				case gravityButtom:
+					origin.setX(origin.x() + (m_size.x()-m_imageRenderSize.x())*0.5f);
+					break;
+				case gravityTopLeft:
+				case gravityButtomLeft:
+				case gravityLeft:
+					// nothing to do ...
+					break;
+				case gravityTopRight:
+				case gravityRight:
+				case gravityButtomRight:
+					origin.setX(origin.x() + (m_size.x()-m_imageRenderSize.x())*0.5f);
+					break;
+			}
 		}
 		if (m_userFill->y() == true) {
 			imageRealSize.setY(imageRealSizeMax.y());
 		} else {
-			origin.setY(origin.y() + (m_size.y()-m_minSize.y())*0.5f);
+			//
+			switch(m_gravity) {
+				case gravityCenter:
+				case gravityRight:
+				case gravityLeft:
+					origin.setY(origin.y() + (m_size.y()-m_imageRenderSize.y())*0.5f);
+					break;
+				case gravityTopLeft:
+				case gravityTop:
+				case gravityTopRight:
+					origin.setY(origin.y() + (m_size.y()-m_imageRenderSize.y()));
+					break;
+				case gravityButtomRight:
+				case gravityButtom:
+				case gravityButtomLeft:
+					// nothing to do ...
+					break;
+			}
 		}
+		
 		if (m_keepRatio == true) {
 			vec2 tmpSize = m_compositing.getRealSize();
 			//float ratio = tmpSize.x() / tmpSize.y();
@@ -117,7 +152,7 @@ void ewol::widget::Image::calculateMinMaxSize() {
 	vec2 imageBoder = m_border->getPixel()*2.0f;
 	vec2 imageSize = m_imageSize->getPixel();
 	vec2 size = m_userMinSize->getPixel();
-	if (imageSize!=vec2(0,0)) {
+	if (imageSize != vec2(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;
 	} else {
@@ -130,10 +165,10 @@ void ewol::widget::Image::calculateMinMaxSize() {
 		m_maxSize = imageBoder+m_userMaxSize->getPixel();
 		m_minSize.setMin(m_maxSize);
 	}
-	m_realllll = m_minSize;
+	m_imageRenderSize = m_minSize;
 	m_minSize.setMax(size);
 	m_maxSize.setMax(m_minSize);
-	//EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << imageSizeReal);
+	//EWOL_ERROR("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << m_imageRenderSize << " img size=" << imageSize << "  " << m_imageSize);
 	markToRedraw();
 }
 
