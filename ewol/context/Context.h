@@ -78,7 +78,7 @@ namespace ewol {
 			                       int32_t _pointerID,
 			                       const vec2& _pos,
 			                       gale::key::status _state);
-			virtual void onKeyboard(gale::key::Special& _special,
+			virtual void onKeyboard(const gale::key::Special& _special,
 			                        enum gale::key::keyboard _type,
 			                        char32_t _value,
 			                        gale::key::status _state);

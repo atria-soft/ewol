@@ -589,7 +589,7 @@ namespace ewol {
 			 * @return false if the event has not been used.
 			 * @note To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
 			 */
-			virtual bool onEventShortCut(gale::key::Special& _special,
+			virtual bool onEventShortCut(const gale::key::Special& _special,
 			                             char32_t _unicodeValue,
 			                             enum gale::key::keyboard _kbMove,
 			                             bool _isDown);

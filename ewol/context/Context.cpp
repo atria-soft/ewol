@@ -33,6 +33,9 @@
 
 #include <ewol/context/Context.h>
 
+#undef __class__
+#define __class__ "Context"
+
 static ewol::Context* l_curentInterface=nullptr;
 ewol::Context& ewol::getContext() {
 	gale::Context& context = gale::getContext();
@@ -67,7 +70,7 @@ void ewol::Context::inputEventUnGrabPointer() {
 
 
 void ewol::Context::onCreate(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system init (BEGIN)");
+	EWOL_INFO(" == > Ewol system create (BEGIN)");
 	// Add basic ewol translation:
 	ewol::translate::addPath("ewol", "DATA:translate/ewol/");
 	ewol::translate::autoDetectLanguage();
@@ -105,29 +108,34 @@ void ewol::Context::onCreate(gale::Context& _context) {
 		forceOrientation(ewol::screenAuto);
 	#endif
 	*/
-	EWOL_INFO(" == > Ewol system init (END)");
 	std::shared_ptr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
+		EWOL_ERROR(" == > Create without application");
 		return;
 	}
 	appl->onCreate(*this);
+	EWOL_INFO(" == > Ewol system create (END)");
 }
 
 void ewol::Context::onStart(gale::Context& _context) {
+	EWOL_INFO(" == > Ewol system start (BEGIN)");
 	std::shared_ptr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		// TODO : Request exit of the application .... with error ...
 		return;
 	}
 	appl->onStart(*this);
+	EWOL_INFO(" == > Ewol system start (END)");
 }
 
 void ewol::Context::onResume(gale::Context& _context) {
+	EWOL_INFO(" == > Ewol system resume (BEGIN)");
 	std::shared_ptr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		return;
 	}
 	appl->onResume(*this);
+	EWOL_INFO(" == > Ewol system resume (END)");
 }
 
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
@@ -135,7 +143,7 @@ void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 	// check if the user selected a windows
 	std::shared_ptr<ewol::widget::Windows> window = m_windowsCurrent;
 	if (window == nullptr) {
-		EWOL_INFO("No windows ...");
+		EWOL_DEBUG("No windows ...");
 		return;
 	}
 	// Redraw all needed elements
@@ -159,23 +167,27 @@ void ewol::Context::onDraw(gale::Context& _context) {
 }
 
 void ewol::Context::onPause(gale::Context& _context) {
+	EWOL_INFO(" == > Ewol system pause (BEGIN)");
 	std::shared_ptr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		return;
 	}
 	appl->onPause(*this);
+	EWOL_INFO(" == > Ewol system pause (END)");
 }
 
 void ewol::Context::onStop(gale::Context& _context) {
+	EWOL_INFO(" == > Ewol system stop (BEGIN)");
 	std::shared_ptr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		return;
 	}
 	appl->onStop(*this);
+	EWOL_INFO(" == > Ewol system stop (END)");
 }
 
 void ewol::Context::onDestroy(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system Un-Init (BEGIN)");
+	EWOL_INFO(" == > Ewol system destroy (BEGIN)");
 	// Remove current windows
 	m_windowsCurrent.reset();
 	// clean all widget and sub widget with their resources:
@@ -192,7 +204,7 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	m_objectManager.displayListObject();
 	// now All must be removed !!!
 	m_objectManager.unInit();
-	EWOL_INFO(" == > Ewol system Un-Init (END)");
+	EWOL_INFO(" == > Ewol system destroy		 (END)");
 }
 
 void ewol::Context::onPointer(enum gale::key::type _type,
@@ -218,7 +230,7 @@ void ewol::Context::onPointer(enum gale::key::type _type,
 			break;
 	}
 }
-void ewol::Context::onKeyboard(gale::key::Special& _special,
+void ewol::Context::onKeyboard(const gale::key::Special& _special,
                                enum gale::key::keyboard _type,
                                char32_t _value,
                                gale::key::status _state) {
@@ -426,6 +438,7 @@ void ewol::Context::resetIOEvent() {
 
 
 void ewol::Context::setWindows(const std::shared_ptr<ewol::widget::Windows>& _windows) {
+	EWOL_INFO("set New windows");
 	// remove current focus :
 	m_widgetManager.focusSetDefault(nullptr);
 	m_widgetManager.focusRelease();

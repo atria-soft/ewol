@@ -541,7 +541,7 @@ void ewol::Widget::shortCutClean() {
 	m_localShortcut.clear();
 }
 
-bool ewol::Widget::onEventShortCut(gale::key::Special& _special,
+bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
                                    char32_t _unicodeValue,
                                    enum gale::key::keyboard _kbMove,
                                    bool _isDown) {
