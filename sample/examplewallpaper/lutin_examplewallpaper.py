@@ -23,7 +23,7 @@ def create(target):
 	myModule.compile_flags('c++', [
 		"-DPROJECT_NAME=\"\\\""+myModule.name+"\\\"\""])
 	
-	myModule.copy_folder('data/SnowFlake.svg','')
+	myModule.copy_path('data/SnowFlake.svg','')
 	
 	myModule.add_path(tools.get_current_path(__file__))
 	

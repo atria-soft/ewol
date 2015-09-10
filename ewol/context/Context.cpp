@@ -16,8 +16,6 @@
 #include <etk/thread/tools.h>
 #include <mutex>
 
-#include <date/date.h>
-
 #include <ewol/ewol.h>
 #include <ewol/debug.h>
 
@@ -96,7 +94,6 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	}
 	
 	EWOL_INFO("EWOL v:" << ewol::getVersion());
-	EWOL_INFO("Build Date: " << date::getYear() << "/" << date::getMonth() << "/" << date::getDay() << " " << date::getHour() << "h" << date::getMinute());
 	// force a recalculation
 	/*
 	requestUpdateSize();
