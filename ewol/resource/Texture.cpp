@@ -51,7 +51,8 @@ ewol::resource::Texture::Texture() :
 ewol::resource::Texture::~Texture() {
 	removeContext();
 }
-#include <egami/wrapperBMP.h>
+
+//#include <egami/wrapperBMP.h>
 
 bool ewol::resource::Texture::updateContext() {
 	std11::unique_lock<std11::recursive_mutex> lock(m_mutex, std11::defer_lock);

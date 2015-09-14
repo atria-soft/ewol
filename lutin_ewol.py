@@ -25,6 +25,7 @@ def create(target):
 		'ewol/translate.cpp'
 		])
 	myModule.add_header_file([
+		'ewol/debug.h', # TODO : Remove this ...
 		'ewol/ewol.h',
 		'ewol/Padding.h',
 		'ewol/translate.h'
@@ -231,12 +232,12 @@ def create(target):
 	myModule.copy_path('data/textured3D.*','')
 	myModule.copy_path('data/texturedDF.*','')
 	myModule.copy_path('data/fontDistanceField/*','fontDistanceField')
-	myModule.copy_path('data/translate/*','translate/ewol/')
+	myModule.copy_path('data/translate/*','translate/ewol')
 	
 	# name of the dependency
 	myModule.add_module_depend(['etk', 'gale', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3'])
 	
-	myModule.add_export_path(tools.get_current_path(__file__))
+	myModule.add_path(tools.get_current_path(__file__))
 
 	tagFile = tools.get_current_path(__file__) + "/tag"
 	ewolVersionID = tools.file_read_data(tagFile)
