@@ -31,7 +31,7 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	#if defined(__TARGET_OS__Windows)
 		m_folder = "c:/";
 	#endif
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:ListFileSystem.json");
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:ListFileSystem.json");
 	if (m_colorProperty != nullptr) {
 		m_colorIdText = m_colorProperty->request("text");
 		m_colorIdBackground1 = m_colorProperty->request("background1");

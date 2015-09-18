@@ -70,7 +70,7 @@ void ewol::Context::inputEventUnGrabPointer() {
 void ewol::Context::onCreate(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system create (BEGIN)");
 	// Add basic ewol translation:
-	ewol::translate::addPath("ewol", "DATA:translate/ewol/");
+	ewol::translate::addPath("ewol", "{ewol}DATA:translate/ewol/");
 	ewol::translate::autoDetectLanguage();
 	// By default we set 2 themes (1 color and 1 shape ...) :
 	etk::theme::setNameDefault("GUI", "shape/square/");

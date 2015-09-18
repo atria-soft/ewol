@@ -43,9 +43,9 @@ void ewol::compositing::Image::loadProgram() {
 	m_GLPosition = 0;
 	m_GLprogram.reset();
 	if (m_distanceFieldMode == true) {
-		m_GLprogram = gale::resource::Program::create("DATA:texturedDF.prog");
+		m_GLprogram = gale::resource::Program::create("{ewol}DATA:texturedDF.prog");
 	} else {
-		m_GLprogram = gale::resource::Program::create("DATA:textured3D.prog");
+		m_GLprogram = gale::resource::Program::create("{ewol}DATA:textured3D.prog");
 	}
 	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");

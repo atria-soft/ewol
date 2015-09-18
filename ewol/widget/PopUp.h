@@ -31,7 +31,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				PopUp();
-				void init(const std::string& _shaperName="THEME:GUI:PopUp.json");
+				void init(const std::string& _shaperName="{ewol}THEME:GUI:PopUp.json");
 			public:
 				DECLARE_WIDGET_FACTORY(PopUp, "PopUp");
 				/**

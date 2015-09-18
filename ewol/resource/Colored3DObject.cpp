@@ -24,7 +24,7 @@ void ewol::resource::Colored3DObject::init() {
 	gale::Resource::init();
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = gale::resource::Program::create("DATA:simple3D.prog");
+	m_GLprogram = gale::resource::Program::create("{ewol}DATA:simple3D.prog");
 	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getUniform("EW_color");

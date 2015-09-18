@@ -101,7 +101,7 @@ namespace ewol {
 				/**
 				 * @brief generic constructor
 				 */
-				TextBase(const std::string& _shaderName = "DATA:text.prog", bool _loadProgram = true);
+				TextBase(const std::string& _shaderName = "{ewol}DATA:text.prog", bool _loadProgram = true);
 				/**
 				 * @brief generic destructor
 				 */

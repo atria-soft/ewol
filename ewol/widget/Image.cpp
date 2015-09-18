@@ -30,7 +30,7 @@ ewol::widget::Image::Image() :
   m_smooth(*this, "smooth", true, "Smooth display of the image") {
 	addObjectType("ewol::widget::Image");
 	m_imageRenderSize = vec2(0,0);
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Image.json");
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Image.json");
 	if (m_colorProperty != nullptr) {
 		m_colorId = m_colorProperty->request("foreground");
 	}

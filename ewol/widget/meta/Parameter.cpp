@@ -72,7 +72,7 @@ void ewol::widget::Parameter::init() {
 				tmpButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<image src=\"{ewol}THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
@@ -96,7 +96,7 @@ void ewol::widget::Parameter::init() {
 				tmpButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<image src=\"{ewol}THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));

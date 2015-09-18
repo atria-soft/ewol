@@ -21,7 +21,7 @@ ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSiz
   m_GLglyphLevel(-1),
   m_size(12.0) {
 	setFont(_fontName, _fontSize);
-	loadProgram("DATA:fontDistanceField/font1.prog");
+	loadProgram("{ewol}DATA:fontDistanceField/font1.prog");
 }
 
 

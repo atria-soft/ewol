@@ -18,6 +18,6 @@
 	padding-in-buttom:1,
 	
 	change-time:356,
-	program:"THEME:GUI:PopUp.prog",
-	color:"THEME:COLOR:PopUp.json"
+	program:"{ewol}THEME:GUI:PopUp.prog",
+	color:"{ewol}THEME:COLOR:PopUp.json"
 }

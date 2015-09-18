@@ -41,7 +41,7 @@ ewol::widget::Entry::Entry() :
 void ewol::widget::Entry::init(const std::string& _newData) {
 	ewol::Widget::init();
 	m_data.set(_newData);
-	m_shaper.setString("THEME:GUI:Entry.json");
+	m_shaper.setString("{ewol}THEME:GUI:Entry.json");
 	setCanHaveFocus(true);
 	
 	try {

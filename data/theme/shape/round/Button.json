@@ -18,6 +18,6 @@
 	padding-in-buttom:1,
 	
 	change-time:356,
-	program:"THEME:GUI:Button.prog",
-	color:"THEME:COLOR:Button.json"
+	program:"{ewol}THEME:GUI:Button.prog",
+	color:"{ewol}THEME:COLOR:Button.json"
 }

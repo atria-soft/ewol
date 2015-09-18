@@ -29,7 +29,7 @@ ewol::widget::Windows::Windows() :
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Windows.json");
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Windows.json");
 	if (m_colorProperty != nullptr) {
 		m_colorBg = m_colorProperty->request("background");
 	}

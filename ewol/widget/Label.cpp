@@ -23,7 +23,7 @@ ewol::widget::Label::Label() :
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Label.json");
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Label.json");
 	if (m_colorProperty != nullptr) {
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
