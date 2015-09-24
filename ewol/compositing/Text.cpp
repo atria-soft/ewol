@@ -347,10 +347,19 @@ vec3 ewol::compositing::Text::calculateSizeChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
 	int32_t fontHeigh = getHeight();
-	
+	if (myGlyph == nullptr) {
+		if (m_font == nullptr) {
+			EWOL_WARNING("no Glyph... in no font");
+		} else {
+			EWOL_WARNING("no Glyph... in font : " << m_font->getName());
+		}
+		return vec3((float)(0.2),
+		            (float)(fontHeigh),
+		            (float)(0.0));
+	}
 	// get the kerning ofset :
 	float kerningOffset = 0.0;
-	if (true == m_kerning) {
+	if (m_kerning == true) {
 		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
 	}
 	

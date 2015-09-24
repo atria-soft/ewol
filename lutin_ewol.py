@@ -13,18 +13,18 @@ def get_license():
 
 def create(target):
 	# module name is 'edn' and type binary.
-	myModule = module.Module(__file__, 'ewol', 'LIBRARY')
+	my_module = module.Module(__file__, 'ewol', 'LIBRARY')
 	
 	# add extra compilation flags:
-	myModule.add_extra_compile_flags()
+	my_module.add_extra_compile_flags()
 	# add the file to compile:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
 		'ewol/Padding.cpp',
 		'ewol/translate.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/debug.h', # TODO : Remove this ...
 		'ewol/ewol.h',
 		'ewol/Padding.h',
@@ -32,7 +32,7 @@ def create(target):
 		])
 	
 	# compositing:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/compositing/Compositing.cpp',
 		'ewol/compositing/TextBase.cpp',
 		'ewol/compositing/Text.cpp',
@@ -43,7 +43,7 @@ def create(target):
 		'ewol/compositing/Shaper.cpp',
 		'ewol/compositing/Area.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/compositing/Text.h',
 		'ewol/compositing/Drawing.h',
 		'ewol/compositing/Sprite.h',
@@ -56,12 +56,12 @@ def create(target):
 		])
 	
 	# context:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/context/ConfigFont.cpp',
 		'ewol/context/Context.cpp',
 		'ewol/context/InputManager.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/context/ConfigFont.h',
 		'ewol/context/Context.h',
 		'ewol/context/Application.h',
@@ -69,35 +69,35 @@ def create(target):
 		])
 	
 	# event properties:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/event/Entry.cpp',
 		'ewol/event/Time.cpp',
 		'ewol/event/Input.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/event/Time.h',
 		'ewol/event/Input.h',
 		'ewol/event/Entry.h'
 		])
 	
 	# object:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/object/Manager.cpp',
 		'ewol/object/Object.cpp',
 		'ewol/object/Worker.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/object/Worker.h',
 		'ewol/object/Manager.h',
 		'ewol/object/Object.h'
 		])
 	
 	# parameter:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/parameter/Parameter.cpp',
 		'ewol/parameter/Interface.cpp',
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/parameter/Value.h',
 		'ewol/parameter/Interface.h',
 		'ewol/parameter/Parameter.h',
@@ -106,18 +106,18 @@ def create(target):
 		])
 	
 	# Signal:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/signal/Interface.cpp',
 		'ewol/signal/Base.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/signal/Interface.h',
 		'ewol/signal/Base.h',
 		'ewol/signal/Signal.h'
 		])
 	
 	# resources:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/resource/Colored3DObject.cpp',
 		'ewol/resource/ColorFile.cpp',
 		'ewol/resource/ConfigFile.cpp',
@@ -128,7 +128,7 @@ def create(target):
 		'ewol/resource/TexturedFont.cpp',
 		'ewol/resource/DistanceFieldFont.cpp'
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/resource/FontFreeType.h',
 		'ewol/resource/TexturedFont.h',
 		'ewol/resource/ColorFile.h',
@@ -144,7 +144,7 @@ def create(target):
 		])
 	
 	# widget:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/widget/ButtonColor.cpp',
 		'ewol/widget/Button.cpp',
 		'ewol/widget/CheckBox.cpp',
@@ -180,7 +180,7 @@ def create(target):
 		'ewol/widget/Windows.cpp',
 		'ewol/widget/WSlider.cpp',
 		])
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'ewol/widget/Menu.h',
 		'ewol/widget/Slider.h',
 		'ewol/widget/WidgetScrolled.h',
@@ -218,32 +218,32 @@ def create(target):
 		'ewol/widget/List.h'
 		])
 	
-	myModule.copy_path('data/theme/shape/square/*','theme/shape/square')
-	myModule.copy_path('data/theme/shape/round/*','theme/shape/round')
-	myModule.copy_path('data/theme/color/black/*','theme/color/black')
-	myModule.copy_path('data/theme/color/white/*','theme/color/white')
-	myModule.copy_path('data/textured.*','')
-	myModule.copy_path('data/texturedNoMaterial.*','')
-	myModule.copy_path('data/text.*','')
-	myModule.copy_path('data/simple3D.*','')
-	myModule.copy_path('data/color.*','')
-	myModule.copy_path('data/color3.*','')
-	myModule.copy_path('data/textured3D2.*','')
-	myModule.copy_path('data/textured3D.*','')
-	myModule.copy_path('data/texturedDF.*','')
-	myModule.copy_path('data/fontDistanceField/*','fontDistanceField')
-	myModule.copy_path('data/translate/*','translate/ewol')
+	my_module.copy_path('data/theme/shape/square/*','theme/shape/square')
+	my_module.copy_path('data/theme/shape/round/*','theme/shape/round')
+	my_module.copy_path('data/theme/color/black/*','theme/color/black')
+	my_module.copy_path('data/theme/color/white/*','theme/color/white')
+	my_module.copy_path('data/textured.*','')
+	my_module.copy_path('data/texturedNoMaterial.*','')
+	my_module.copy_path('data/text.*','')
+	my_module.copy_path('data/simple3D.*','')
+	my_module.copy_path('data/color.*','')
+	my_module.copy_path('data/color3.*','')
+	my_module.copy_path('data/textured3D2.*','')
+	my_module.copy_path('data/textured3D.*','')
+	my_module.copy_path('data/texturedDF.*','')
+	my_module.copy_path('data/fontDistanceField/*','fontDistanceField')
+	my_module.copy_path('data/translate/*','translate/ewol')
 	
 	# name of the dependency
-	myModule.add_module_depend(['etk', 'gale', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3'])
+	my_module.add_module_depend(['etk', 'gale', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3'])
 	
-	myModule.add_path(tools.get_current_path(__file__))
+	my_module.add_path(tools.get_current_path(__file__))
 
 	tagFile = tools.get_current_path(__file__) + "/tag"
 	ewolVersionID = tools.file_read_data(tagFile)
-	myModule.compile_flags('c++', [
+	my_module.compile_flags('c++', [
 		"-DEWOL_VERSION=\"\\\""+ewolVersionID+"\\\"\""
 		])
 	
-	return myModule
+	return my_module
 
