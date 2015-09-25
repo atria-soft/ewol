@@ -42,12 +42,16 @@ void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
 	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
 		#if defined(__TARGET_OS__Android)
-			folderList.push_back("/system/fonts");
+			folderList.push_back("ROOT:system/fonts");
 		#elif defined(__TARGET_OS__Linux)
-			folderList.push_back("/usr/share/fonts/truetype");
+			folderList.push_back("ROOT:usr/share/fonts/truetype");
 		#endif
 	}
-	folderList.push_back(ewol::getContext().getFontDefault().getFolder());
+	std::string applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
+	std::vector<std::string> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
+	for (auto &it : applicationBaseFontList) {
+		folderList.push_back(it);
+	}
 	for (size_t folderID = 0; folderID < folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
