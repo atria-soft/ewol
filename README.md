@@ -25,6 +25,7 @@ download the software:
 	mkdir WORKING_DIRECTORY
 	cd WORKING_DIRECTORY
 	sudo pip install lutin
+	sudo pip install pillow
 	repo init -u git://github.com/HeeroYui/manifest.git
 	repo sync -j8
 
@@ -38,18 +39,34 @@ Compile software and install:
 Dependency packages
 ===================
 
+Ubuntu Or Debian:
+
 	sudo apt-get install g++ libgl1-mesa-dev zlib1g-dev libasound2-dev
-	# if you want to compile with clang :
+	# Compile with Clang:
 	sudo apt-get install clang
-	# For andoid compilation (jdk 7 does not work...)
+	# For andoid compilation (jdk 7 does not work...):
 	sudo apt-get install javacc openjdk-6-jdk
-	# if you want to compile for windows :
+	# Cross compile for windows:
 	sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 	sudo apt-get update
 	sudo apt-get install gcc-mingw-w64
-	# on 64 bits processor for compatibility
+	# On 64 bits processor for compatibility:
 	sudo apt-get install ia32-libs
 	sudo apt-get install g++-multilib libc6-dev-i386
+
+Arch-linux:
+
+	# Cross compile for windows:
+	pacman -S mingw-w64-gcc
+	
+	# Cross compile for Android:
+	in /etc/pacman.conf file uncomment:
+		[multilib]
+		Include = /etc/pacman.d/mirrorlist
+	# update the system:
+	Pacman -Syu
+	# install lib C:
+	pacman -S lib32-glibc
 
 License (APACHE v2.0)
 =====================
