@@ -73,7 +73,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& 
 }
 
 void ewol::widget::Windows::sysDraw() {
-	EWOL_DEBUG("Drow on " << m_size);
+	EWOL_VERBOSE("Draw on " << m_size);
 	// set the size of the open GL system
 	gale::openGL::setViewPort(vec2(0,0), m_size);
 	gale::openGL::disable(gale::openGL::flag_dither);

@@ -23,18 +23,17 @@ namespace ewol {
 			                      std::function<void(const T&)>>> m_callerListInCallback; // temporaty list (when add one in call process)
 		public:
 			/**
-			 * @brief Create a parameter with a specific type.
-			 * @param[in] _signalInterfaceLink reference on the parameter lister.
-			 * @param[in] _name Static name of the parameter.
-			 * @param[in] _defaultValue Default value of the parameter.
-			 * @param[in] _min Minumum value.
-			 * @param[in] _max Maximum value.
-			 * @param[in] _description description of the parameter.
+			 * @brief Create a signal with a specific type.
+			 * @param[in] _signalInterfaceLink reference on the signal lister.
+			 * @param[in] _name Static name of the signal.
+			 * @param[in] _description Description of the signal.
+			 * @param[in] _periodic Customisation of the log display tag at true to down debug lebel at verbose.
 			 */
 			Signal(ewol::signal::Interface& _signalInterfaceLink,
 			      const std::string& _name,
-			      const std::string& _description = "") :
-			  signal::Base(_signalInterfaceLink, _name, _description) {
+			      const std::string& _description = "",
+			      bool _periodic = false) :
+			  signal::Base(_signalInterfaceLink, _name, _description, _periodic) {
 				
 			};
 			/**
@@ -144,7 +143,11 @@ namespace ewol {
 					int32_t tmpID = m_uidSignal++;
 				#endif
 				m_callInProgress++;
-				EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' data='" << etk::to_string(_data) << "' to: " << m_callerList.size() << " element(s)");
+				if (m_periodic == true) {
+					EWOL_VERBOSE(ewol::signal::logIndent(m_signalCallLevel-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' data='" << etk::to_string(_data) << "' to: " << m_callerList.size() << " element(s)");
+				} else {
+					EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' data='" << etk::to_string(_data) << "' to: " << m_callerList.size() << " element(s)");
+				}
 				auto it(m_callerList.begin());
 				while (it != m_callerList.end()) {
 					std::shared_ptr<void> destObject = it->first.lock();
@@ -153,7 +156,11 @@ namespace ewol {
 						EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "    nullptr dest");
 						continue;
 					}
-					EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "     signal{" << tmpID << "} :");// [" << destObject->getId() << "]" << destObject->getObjectType());
+					if (m_periodic == true) {
+						EWOL_VERBOSE(ewol::signal::logIndent(m_signalCallLevel-1) << "     signal{" << tmpID << "} :");// [" << destObject->getId() << "]" << destObject->getObjectType());
+					} else {
+						EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "     signal{" << tmpID << "} :");// [" << destObject->getId() << "]" << destObject->getObjectType());
+					}
 					it->second(_data);
 					++it;
 				}
@@ -194,18 +201,17 @@ namespace ewol {
 			std::vector<std::pair<std::weak_ptr<void>, std::function<void()>>> m_callerListInCallback;
 		public:
 			/**
-			 * @brief Create a parameter with a specific type.
-			 * @param[in] _signalInterfaceLink reference on the parameter lister.
-			 * @param[in] _name Static name of the parameter.
-			 * @param[in] _defaultValue Default value of the parameter.
-			 * @param[in] _min Minumum value.
-			 * @param[in] _max Maximum value.
-			 * @param[in] _description description of the parameter.
+			 * @brief Create a signal with a specific 'void' type.
+			 * @param[in] _signalInterfaceLink reference on the signal lister.
+			 * @param[in] _name Static name of the signal.
+			 * @param[in] _description Description of the signal.
+			 * @param[in] _periodic Customisation of the log display tag at true to down debug lebel at verbose.
 			 */
 			Signal(ewol::signal::Interface& _signalInterfaceLink,
 			      const std::string& _name,
-			      const std::string& _description = "") :
-			  signal::Base(_signalInterfaceLink, _name, _description) {
+			      const std::string& _description = "",
+			      bool _periodic = false) :
+			  signal::Base(_signalInterfaceLink, _name, _description, _periodic) {
 				
 			};
 			/**
@@ -277,7 +283,11 @@ namespace ewol {
 					int32_t tmpID = m_uidSignal++;
 				#endif
 				m_callInProgress++;
-				EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' to: " << m_callerList.size() << " element(s)");
+				if (m_periodic == true) {
+					EWOL_VERBOSE(ewol::signal::logIndent(m_signalCallLevel-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' to: " << m_callerList.size() << " element(s)");
+				} else {
+					EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "emit signal{" << tmpID << "} : signal='" << m_name << "' to: " << m_callerList.size() << " element(s)");
+				}
 				auto it(m_callerList.begin());
 				while (it != m_callerList.end()) {
 					std::shared_ptr<void> destObject = it->first.lock();
@@ -286,7 +296,11 @@ namespace ewol {
 						EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "    nullptr dest");
 						continue;
 					}
-					EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "     signal{" << tmpID << "} :");// [" << destObject->getId() << "]" << destObject->getObjectType());
+					if (m_periodic == true) {
+						EWOL_VERBOSE(ewol::signal::logIndent(m_signalCallLevel-1) << "     signal{" << tmpID << "} :");// [" << destObject->getId() << "]" << destObject->getObjectType());
+					} else {
+						EWOL_DEBUG(ewol::signal::logIndent(m_signalCallLevel-1) << "     signal{" << tmpID << "} :");// [" << destObject->getId() << "]" << destObject->getObjectType());
+					}
 					it->second();
 					++it;
 				}

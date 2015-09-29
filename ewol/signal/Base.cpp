@@ -18,12 +18,14 @@
 
 ewol::signal::Base::Base(ewol::signal::Interface& _signalInterfaceLink,
                          const std::string& _name,
-                         const std::string& _description) :
+                         const std::string& _description,
+                         bool _periodic) :
   m_signalInterfaceLink(_signalInterfaceLink),
   m_name(_name),
   m_description(_description),
   m_callInProgress(0),
-  m_someOneRemoveInCall(false) {
+  m_someOneRemoveInCall(false),
+  m_periodic(_periodic) {
 	// add a reference on the current signal ...
 	m_signalInterfaceLink.signalAdd(this);
 }
