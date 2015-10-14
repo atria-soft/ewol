@@ -5,15 +5,31 @@ import lutin.debug as debug
 import os
 import lutin.multiprocess as lutinMultiprocess
 
+
+def get_type():
+	return "LIBRARY"
+
 def get_desc():
 	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
 
-def get_license():
-	return "APACHE v2.0"
+def get_licence():
+	return "APACHE-2"
 
-def create(target):
+def get_compagny_type():
+	return "com"
+
+def get_compagny_name():
+	return "atria-soft"
+
+def get_maintainer():
+	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
+
+def get_version():
+	return [0,0,0]
+
+def create(target, module_name):
 	# module name is 'edn' and type binary.
-	my_module = module.Module(__file__, 'ewol', 'LIBRARY')
+	my_module = module.Module(__file__, module_name, get_type())
 	
 	# add extra compilation flags:
 	my_module.add_extra_compile_flags()
@@ -238,7 +254,7 @@ def create(target):
 	my_module.add_module_depend(['etk', 'gale', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3'])
 	
 	my_module.add_path(tools.get_current_path(__file__))
-
+	
 	tagFile = tools.get_current_path(__file__) + "/tag"
 	ewolVersionID = tools.file_read_data(tagFile)
 	my_module.compile_flags('c++', [
