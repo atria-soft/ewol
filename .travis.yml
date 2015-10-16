@@ -19,15 +19,24 @@ addons:
     packages:
       - g++-4.9
 
+env:
+  - CONF=debug BUILDER=clang
+  - CONF=debug BUILDER=gcc
+
+matrix:
+  include:
+    - os: linux
+      env: CONF=debug BUILDER=gcc GCOV=--gcov
+    - os: linux
+      env: CONF=release BUILDER=clang
+    - os: linux
+      env: CONF=release BUILDER=gcc
+  exclude:
+    - os: mingw
+      env: CONF=debug BUILDER=clang
+
 install:
   - pip install --user lutin
-
-env:
-  - CONF=debug   BOARD=Linux BUILDER=clang GCOV=
-  - CONF=release BOARD=Linux BUILDER=clang GCOV=
-  - CONF=debug   BOARD=Linux BUILDER=gcc   GCOV=
-  - CONF=release BOARD=Linux BUILDER=gcc   GCOV=
-  - CONF=debug   BOARD=Linux BUILDER=gcc   GCOV=--gcov
 
 before_script:
   - cd ..
@@ -49,11 +58,17 @@ before_script:
   - cd ..
   - pwd
   - ls -l
-  - if [ "$BUILDER" == "gcc" ]; then COMPILATOR_OPTION="--compilator-version=4.9"; else COMPILATOR_OPTION=""; fi
+  - if [ "$BUILDER" == "gcc" ]; then
+        COMPILATOR_OPTION="--compilator-version=4.9";
+    else
+        COMPILATOR_OPTION="";
+    fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        export PATH=$PATH:/Users/travis/Library/Python/2.7/bin/;
+    fi
 
 script: 
   - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV -p ewol-test 0XX_customwidget 001_HelloWord
-
 
 
 notifications:
