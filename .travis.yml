@@ -68,8 +68,19 @@ before_script:
     fi
 
 script:
-  - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV -p ewol-test 0XX_customwidget 001_HelloWord
+  - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV ewol-test 0XX_customwidget 001_HelloWord
 
+
+after_script:
+  - if [ "$GCOV" != "" ]; then
+        python ./warning_send.py --find-path ./out/Linux_x86_64/$CONF/build/$BUILDER/ewol/;
+    fi
+  - ./out/Linux_x86_64/$CONF/staging/$BUILDER/ewol-test/ewol-test.app/bin/ewol-test -l6 | tee out_test.txt
+  - if [ "$GCOV" != "" ]; then
+        python ./test_send.py --file=out_test.txt;
+        lutin -C -P -c $TARGET $BUILDER $COMPILATOR_OPTION -m $CONF -p ewol?gcov;
+        python ./coverage_send.py --json=out/Linux_x86_64/$CONF/build/$BUILDER/ewol/ewol_coverage.json;
+    fi
 
 notifications:
   email:
