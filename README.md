@@ -3,7 +3,21 @@ Ewol
 
 `Ewol` (Edn Widget OpenGl Layer) is a FREE software.
 
+Release (master)
+----------------
+
 [![Build Status](https://travis-ci.org/atria-soft/ewol.svg?branch=master)](https://travis-ci.org/atria-soft/ewol)
+[![Coverage Status](http://atria-soft.com/ci/coverage/atria-soft/ewol.svg?branch=master)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Test Status](http://atria-soft.com/ci/test/atria-soft/ewol.svg?branch=master)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Warning Status](http://atria-soft.com/ci/warning/atria-soft/ewol.svg?branch=master)](http://atria-soft.com/ci/atria-soft/ewol)
+
+Developement (dev)
+------------------
+
+[![Build Status](https://travis-ci.org/atria-soft/ewol.svg?branch=dev)](https://travis-ci.org/atria-soft/ewol)
+[![Coverage Status](http://atria-soft.com/ci/coverage/atria-soft/ewol.svg?branch=dev)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Test Status](http://atria-soft.com/ci/test/atria-soft/ewol.svg?branch=dev)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Warning Status](http://atria-soft.com/ci/warning/atria-soft/ewol.svg?branch=dev)](http://atria-soft.com/ci/atria-soft/ewol)
 
 Instructions
 ============

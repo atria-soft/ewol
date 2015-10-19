@@ -67,7 +67,7 @@ before_script:
         export PATH=$PATH:/Users/travis/Library/Python/2.7/bin/;
     fi
 
-script: 
+script:
   - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV -p ewol-test 0XX_customwidget 001_HelloWord
 
 
