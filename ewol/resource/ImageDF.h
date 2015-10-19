@@ -14,7 +14,6 @@
 #include <egami/Image.h>
 #include <egami/ImageMono.h>
 #include <ewol/resource/Texture.h>
-#include <ewol/resource/Resource.h>
 
 namespace ewol {
 	namespace resource {

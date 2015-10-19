@@ -285,7 +285,7 @@ void ewol::compositing::Drawing::loadProgram() {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
-	m_GLprogram = ewol::resource::Program::create("DATA:color3.prog");
+	m_GLprogram = gale::resource::Program::create("{ewol}DATA:color3.prog");
 	// get the shader resource :
 	if (nullptr != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
@@ -306,7 +306,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	mat4 tmpMatrix2;
@@ -316,7 +316,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

@@ -36,16 +36,19 @@ namespace ewol {
 	 * @return The current time
 	 * @note is implemented by the OS implementation cf renderer/X11/...
 	 */
+	// TODO : Remove ...
 	int64_t getTime();
 	/**
 	 * @brief get compilation mode (release/debug)
 	 * @return the string of the mode of commpilation
 	 */
+	// TODO : Remove ...
 	std::string getCompilationMode();
 	/**
 	 * @brief get the board type (Android/Linux/MacOs/...)
 	 * @return the string of the mode of commpilation
 	 */
+	// TODO : Remove ...
 	std::string getBoardType();
 };
 

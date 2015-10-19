@@ -26,15 +26,17 @@ ewol::widget::Image::Image() :
   m_keepRatio(*this, "ratio", true, "Keep ratio of the image"),
   m_posStart(*this, "part-start", vec2(0.0f, 0.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
   m_posStop(*this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
-  m_distanceFieldMode(*this, "distance-field", false, "Distance field mode") {
+  m_distanceFieldMode(*this, "distance-field", false, "Distance field mode"),
+  m_smooth(*this, "smooth", true, "Smooth display of the image") {
 	addObjectType("ewol::widget::Image");
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Image.json");
+	m_imageRenderSize = vec2(0,0);
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Image.json");
 	if (m_colorProperty != nullptr) {
 		m_colorId = m_colorProperty->request("foreground");
 	}
 }
 
-void ewol::widget::Image::init(const std::string& _file, const ewol::Dimension& _border) {
+void ewol::widget::Image::init(const std::string& _file, const gale::Dimension& _border) {
 	ewol::Widget::init();
 	set(_file, _border);
 }
@@ -44,7 +46,7 @@ ewol::widget::Image::~Image() {
 	
 }
 
-void ewol::widget::Image::set(const std::string& _file, const ewol::Dimension& _border) {
+void ewol::widget::Image::set(const std::string& _file, const gale::Dimension& _border) {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
 	m_border.set(_border);
 	m_fileName.set(_file);
@@ -65,7 +67,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		vec2 imageBoder = m_border->getPixel();
 		vec2 origin = imageBoder;
 		imageBoder *= 2.0f;
-		vec2 imageRealSize = m_minSize - imageBoder;
+		vec2 imageRealSize = m_imageRenderSize - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
 		vec2 ratioSizeDisplayRequested = m_posStop.get() - m_posStart.get();
@@ -74,13 +76,47 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		if (m_userFill->x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {
-			origin.setX(origin.x() + (m_size.x()-m_minSize.x())*0.5f);
+			switch(m_gravity) {
+				case gravityCenter:
+				case gravityTop:
+				case gravityButtom:
+					origin.setX(origin.x() + (m_size.x()-m_imageRenderSize.x())*0.5f);
+					break;
+				case gravityTopLeft:
+				case gravityButtomLeft:
+				case gravityLeft:
+					// nothing to do ...
+					break;
+				case gravityTopRight:
+				case gravityRight:
+				case gravityButtomRight:
+					origin.setX(origin.x() + (m_size.x()-m_imageRenderSize.x())*0.5f);
+					break;
+			}
 		}
 		if (m_userFill->y() == true) {
 			imageRealSize.setY(imageRealSizeMax.y());
 		} else {
-			origin.setY(origin.y() + (m_size.y()-m_minSize.y())*0.5f);
+			//
+			switch(m_gravity) {
+				case gravityCenter:
+				case gravityRight:
+				case gravityLeft:
+					origin.setY(origin.y() + (m_size.y()-m_imageRenderSize.y())*0.5f);
+					break;
+				case gravityTopLeft:
+				case gravityTop:
+				case gravityTopRight:
+					origin.setY(origin.y() + (m_size.y()-m_imageRenderSize.y()));
+					break;
+				case gravityButtomRight:
+				case gravityButtom:
+				case gravityButtomLeft:
+					// nothing to do ...
+					break;
+			}
 		}
+		
 		if (m_keepRatio == true) {
 			vec2 tmpSize = m_compositing.getRealSize();
 			//float ratio = tmpSize.x() / tmpSize.y();
@@ -101,7 +137,11 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		}
 		
 		// set the somposition properties :
-		m_compositing.setPos(origin);
+		if (m_smooth.get() == true) {
+			m_compositing.setPos(origin);
+		} else {
+			m_compositing.setPos(ivec2(origin));
+		}
 		m_compositing.printPart(imageRealSize, m_posStart, m_posStop);
 		//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
 		EWOL_VERBOSE("Paint Image :" << m_fileName << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
@@ -111,7 +151,8 @@ void ewol::widget::Image::onRegenerateDisplay() {
 void ewol::widget::Image::calculateMinMaxSize() {
 	vec2 imageBoder = m_border->getPixel()*2.0f;
 	vec2 imageSize = m_imageSize->getPixel();
-	if (imageSize!=vec2(0,0)) {
+	vec2 size = m_userMinSize->getPixel();
+	if (imageSize != vec2(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;
 	} else {
@@ -124,7 +165,10 @@ void ewol::widget::Image::calculateMinMaxSize() {
 		m_maxSize = imageBoder+m_userMaxSize->getPixel();
 		m_minSize.setMin(m_maxSize);
 	}
-	//EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << imageSizeReal);
+	m_imageRenderSize = m_minSize;
+	m_minSize.setMax(size);
+	m_maxSize.setMax(m_minSize);
+	//EWOL_ERROR("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << m_imageRenderSize << " img size=" << imageSize << "  " << m_imageSize);
 	markToRedraw();
 }
 
@@ -132,7 +176,7 @@ void ewol::widget::Image::calculateMinMaxSize() {
 bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (_event.getId() == 1) {
-		if(ewol::key::statusSingle == _event.getStatus()) {
+		if(gale::key::status_single == _event.getStatus()) {
 			signalPressed.emit();
 			return true;
 		}
@@ -167,6 +211,10 @@ bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _n
 	if (tmpAttributeValue.size() != 0) {
 		m_border = tmpAttributeValue;
 	}
+	tmpAttributeValue = _node->getAttribute("smooth");
+	if (tmpAttributeValue.size() != 0) {
+		m_smooth = etk::string_to_bool(tmpAttributeValue);
+	}
 	//EWOL_DEBUG("Load label:" << node->ToElement()->getText());
 	if (_node->size() != 0) {
 		setFile(_node->getText());
@@ -194,6 +242,8 @@ void ewol::widget::Image::onParameterChangeValue(const ewol::parameter::Ref& _pa
 		markToRedraw();
 		requestUpdateSize();
 	} else if (_paramPointer == m_distanceFieldMode) {
+		markToRedraw();
+	} else if (_paramPointer == m_smooth) {
 		markToRedraw();
 	}
 }

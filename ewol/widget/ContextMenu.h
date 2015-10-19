@@ -33,7 +33,7 @@ namespace ewol {
 				};
 			protected:
 				ContextMenu();
-				void init(const std::string& _shaperName="THEME:GUI:ContextMenu.json");
+				void init(const std::string& _shaperName="{ewol}THEME:GUI:ContextMenu.json");
 			public:
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();

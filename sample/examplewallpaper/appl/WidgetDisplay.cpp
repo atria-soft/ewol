@@ -104,7 +104,7 @@ void appl::WidgetDisplay::periodicCall(const ewol::event::Time& _event) {
 bool appl::WidgetDisplay::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Input event : " << _event);
 	vec2 relPos = relativePosition(_event.getPos());
-	if (_event.getType() == ewol::key::typeFinger) {
+	if (_event.getType() == gale::key::type_finger) {
 		keepFocus();
 		if (1 == _event.getId()) {
 			APPL_DEBUG("Touch event ... ");

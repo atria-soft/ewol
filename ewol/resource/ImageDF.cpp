@@ -9,7 +9,7 @@
 
 #include <etk/types.h>
 #include <egami/egami.h>
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 #include <ewol/resource/ImageDF.h>
 #include <ewol/resource/Texture.h>
 #include <edtaa3/edtaa3func.h>
@@ -19,15 +19,17 @@
 #define __class__ "resource::TextureFile"
 
 ewol::resource::ImageDF::ImageDF() {
-	addObjectType("ewol::resource::ImageDF");
+	addResourceType("ewol::resource::ImageDF");
 }
 
 
 void ewol::resource::ImageDF::init() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init();
 }
 
 void ewol::resource::ImageDF::init(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
@@ -52,6 +54,7 @@ void ewol::resource::ImageDF::init(std::string _genName, const std::string& _tmp
 
 
 void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
 	std::vector<short> xdist(size);
 	std::vector<short> ydist(size);
@@ -193,7 +196,7 @@ std::shared_ptr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const s
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
 	std::shared_ptr<ewol::resource::ImageDF> object = nullptr;
-	std::shared_ptr<ewol::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
+	std::shared_ptr<gale::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
 	if (nullptr != object2) {
 		object = std::dynamic_pointer_cast<ewol::resource::ImageDF>(object2);
 		if (nullptr == object) {

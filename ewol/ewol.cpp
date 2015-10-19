@@ -9,11 +9,11 @@
 #include <ewol/ewol.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/context/Context.h>
+#include <gale/gale.h>
 
-#include <ewol/context/commandLine.h>
+#include <gale/context/commandLine.h>
 #include <etk/os/FSNode.h>
-#include <ewol/Dimension.h>
-#include <date/date.h>
+#include <gale/Dimension.h>
 
 #undef __class__
 #define __class__ "ewol"
@@ -48,4 +48,14 @@ std::string ewol::getBoardType() {
 std::string ewol::getVersion() {
 	return EWOL_VERSION;
 }
+int64_t ewol::getTime() {
+	return gale::getTime();
+}
+
+int32_t ewol::run(ewol::context::Application* _application,
+                  int32_t _argc,
+                  const char* _argv[]) {
+	return gale::run(new ewol::Context(_application), _argc, _argv);
+}
+
 

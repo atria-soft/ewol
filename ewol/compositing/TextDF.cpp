@@ -21,7 +21,7 @@ ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSiz
   m_GLglyphLevel(-1),
   m_size(12.0) {
 	setFont(_fontName, _fontSize);
-	loadProgram("DATA:fontDistanceField/font1.prog");
+	loadProgram("{ewol}DATA:fontDistanceField/font1.prog");
 }
 
 
@@ -55,16 +55,16 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 		return;
 	}
 	if (_enableDepthTest == true) {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::getMatrix();
-	mat4 camMatrix = ewol::openGL::getCameraMatrix();
+	mat4 projMatrix = gale::openGL::getMatrix();
+	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
-	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
@@ -72,10 +72,10 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 	if (_enableDepthTest == true) {
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 
@@ -98,11 +98,11 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
-	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
@@ -110,7 +110,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

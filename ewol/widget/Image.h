@@ -37,7 +37,7 @@ namespace ewol {
 				 */
 				Image();
 				void init(const std::string& _file="",
-				          const ewol::Dimension& _border=ewol::Dimension(vec2(0,0),ewol::Dimension::Millimeter));
+				          const gale::Dimension& _border=gale::Dimension(vec2(0,0),gale::Dimension::Millimeter));
 			public:
 				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**
@@ -49,7 +49,7 @@ namespace ewol {
 				 * @param[in] _file Filaneme of the new image
 				 * @param[in] _border New border size to set
 				 */
-				void set(const std::string& _file, const ewol::Dimension& _border);
+				void set(const std::string& _file, const gale::Dimension& _border);
 			protected:
 				ewol::parameter::Value<std::string> m_fileName; //!< file name of the image.
 			public:
@@ -68,33 +68,34 @@ namespace ewol {
 					return m_fileName;
 				};
 			protected:
-				ewol::parameter::Value<ewol::Dimension> m_border; //!< border to add at the image.
+				ewol::parameter::Value<gale::Dimension> m_border; //!< border to add at the image.
 			public:
 				/**
 				 * @brief set tge Border size around the image
 				 * @param[in] _border New border size to set
 				 */
-				void setBorder(const ewol::Dimension& _border);
+				void setBorder(const gale::Dimension& _border);
 				/**
 				 * @brief get the current border request at the image
 				 * @return the border size
 				 */
-				const ewol::Dimension& getBorder() const {
+				const gale::Dimension& getBorder() const {
 					return m_border;
 				};
 			protected:
-				ewol::parameter::Value<ewol::Dimension> m_imageSize; //!< border to add at the image.
+				ewol::parameter::Value<gale::Dimension> m_imageSize; //!< border to add at the image.
+				vec2 m_imageRenderSize; //!< size of the image when we render it
 			public:
 				/**
 				 * @brief set tge Border size around the image
 				 * @param[in] _size New border size to set
 				 */
-				void setImageSize(const ewol::Dimension& _size);
+				void setImageSize(const gale::Dimension& _size);
 				/**
 				 * @brief get the current border request at the image
 				 * @return the border size
 				 */
-				const ewol::Dimension& getImageSize() const {
+				const gale::Dimension& getImageSize() const {
 					return m_imageSize;
 				};
 			protected:
@@ -142,7 +143,7 @@ namespace ewol {
 				vec2 getStopPos() const {
 					return m_posStop;
 				};
-			public:
+			protected:
 				ewol::parameter::Value<bool> m_distanceFieldMode; //!< to have a parameter
 			public:
 				/**
@@ -158,6 +159,23 @@ namespace ewol {
 				 */
 				bool getDistanceField() const {
 					return m_compositing.getDistanceFieldMode();
+				}
+			protected:
+				ewol::parameter::Value<bool> m_smooth; //!< display is done in the pixed approximation if false
+			public:
+				/**
+				 * @brief Set smooth rendering mode
+				 * @param[in] _value enable smooting of the display
+				 */
+				void setSmooth(bool _value) {
+					m_smooth.set(_value);
+				}
+				/**
+				 * @brief Get smooth rendering mode
+				 * @return Status of the smooting render mode.
+				 */
+				bool getSmooth() const {
+					return m_smooth;
 				}
 			protected: // Derived function
 				virtual void onDraw();

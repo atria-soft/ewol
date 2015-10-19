@@ -42,7 +42,7 @@ namespace ewol {
 				vec2 m_highSpeedStartPos;
 				enum Scroll::highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
-				enum ewol::key::type m_highSpeedType;
+				enum gale::key::type m_highSpeedType;
 			private: // finger section:
 				bool m_singleFingerMode; //!< in many case the moving in a subwidget is done with one finger, it is enought ==> the user select...
 			public:
@@ -69,7 +69,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
 				WidgetScrolled();
-				void init(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
+				void init(const std::string& _shaperName="{ewol}THEME:GUI:WidgetScrolled.json");
 			public:
 				DECLARE_WIDGET_FACTORY(WidgetScrolled, "WidgetScrolled");
 				/**

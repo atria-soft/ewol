@@ -8,8 +8,9 @@
 
 #include <etk/types.h>
 #include <ewol/ewol.h>
-#include <ewol/openGL/openGL.h>
-#include <ewol/resource/Manager.h>
+#include <gale/renderer/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL-include.h>
+#include <gale/resource/Manager.h>
 #include <ewol/resource/Texture.h>
 
 #undef __class__
@@ -34,28 +35,36 @@ static int32_t nextP2(int32_t _value) {
 
 
 void ewol::resource::Texture::init(const std::string& _filename) {
-	ewol::Resource::init(_filename);
+	gale::Resource::init(_filename);
 }
 void ewol::resource::Texture::init() {
-	ewol::Resource::init();
+	gale::Resource::init();
 }
 
-ewol::resource::Texture::Texture() {
-	addObjectType("ewol::compositing::Texture");
-	m_loaded = false;
-	m_texId = 0;
-	m_endPointSize.setValue(1.0,1.0);
+ewol::resource::Texture::Texture() :
+  m_texId(0),
+  m_endPointSize(1,1),
+  m_loaded(false) {
+	addResourceType("ewol::compositing::Texture");
 }
 
 ewol::resource::Texture::~Texture() {
 	removeContext();
 }
 
-void ewol::resource::Texture::updateContext() {
+//#include <egami/wrapperBMP.h>
+
+bool ewol::resource::Texture::updateContext() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex, std11::defer_lock);
+	if (lock.try_lock() == false) {
+		//Lock error ==> try later ...
+		return false;
+	}
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
 	}
+	EWOL_ERROR("plop : load the image:" << m_name);
 	// in all case we set the texture properties :
 	// TODO : check error ???
 	glBindTexture(GL_TEXTURE_2D, m_texId);
@@ -69,6 +78,7 @@ void ewol::resource::Texture::updateContext() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	EWOL_INFO("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" <<m_texId);
+	//egami::storeBMP("~/bbb_image.bmp", m_data);
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
 	             GL_RGBA, // Format internal
@@ -80,9 +90,11 @@ void ewol::resource::Texture::updateContext() {
 	             m_data.getTextureDataPointer() );
 	// now the data is loaded
 	m_loaded = true;
+	return true;
 }
 
 void ewol::resource::Texture::removeContext() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (true == m_loaded) {
 		// Request remove texture ...
 		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
@@ -92,16 +104,19 @@ void ewol::resource::Texture::removeContext() {
 }
 
 void ewol::resource::Texture::removeContextToLate() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	m_loaded = false;
 	m_texId=0;
 }
 
 void ewol::resource::Texture::flush() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	// request to the manager to be call at the next update ...
-	getManager().update(std::dynamic_pointer_cast<ewol::Resource>(shared_from_this()));
+	getManager().update(std::dynamic_pointer_cast<gale::Resource>(shared_from_this()));
 }
 
 void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }

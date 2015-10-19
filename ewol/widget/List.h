@@ -68,7 +68,7 @@ namespace ewol {
 					}
 					return false;
 				};
-				virtual bool onItemEvent(int32_t _IdInput, enum ewol::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
+				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
 					return false;
 				}
 				/**

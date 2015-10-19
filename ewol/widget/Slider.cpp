@@ -77,8 +77,8 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on Slider ..." << _event);
 	if (1 == _event.getId()) {
-		if(    ewol::key::statusSingle == _event.getStatus()
-		    || ewol::key::statusMove   == _event.getStatus()) {
+		if(    gale::key::status_single == _event.getStatus()
+		    || gale::key::status_move   == _event.getStatus()) {
 			// get the new position :
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
 			float oldValue = m_value.get();

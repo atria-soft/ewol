@@ -14,19 +14,19 @@
 #include <egami/Image.h>
 #include <egami/ImageMono.h>
 #include <ewol/resource/Texture.h>
-#include <ewol/resource/Resource.h>
+#include <gale/resource/Resource.h>
 #include <ewol/resource/font/GlyphProperty.h>
 
 
 namespace ewol {
 	namespace resource {
-		class FontBase : public ewol::Resource {
+		class FontBase : public gale::Resource {
 			public:
 				FontBase() {
-					addObjectType("ewol::FontFreeType");
+					addResourceType("ewol::FontFreeType");
 				}
 				void init(const std::string& _fontName) {
-					ewol::Resource::init(_fontName);
+					gale::Resource::init(_fontName);
 				};
 				
 				virtual ~FontBase() { };

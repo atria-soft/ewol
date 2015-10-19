@@ -36,9 +36,12 @@ namespace ewol {
 				void focusRelease(); // release focus from the current widget to the default
 				std::shared_ptr<ewol::Widget> focusGet();
 				void focusRemoveIfRemove(const std::shared_ptr<ewol::Widget>& _newWidget);
-				
+			private:
+				std::function<void()> m_funcRedrawNeeded;
+			public:
 				void markDrawingIsNeeded();
 				bool isDrawingNeeded();
+				void setCallbackonRedrawNeeded(const std::function<void()>& _func);
 				
 				// element that generate the list of elements
 				void addWidgetCreator(const std::string& _name, creator_tf _pointer);

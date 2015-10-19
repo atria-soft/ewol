@@ -38,10 +38,10 @@ namespace ewol {
 				vec2 m_highSpeedStartPos;
 				enum highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
-				enum ewol::key::type m_highSpeedType;
+				enum gale::key::type m_highSpeedType;
 			protected:
 				Scroll();
-				void init(const std::string& _shaperName="THEME:GUI:WidgetScrolled.json");
+				void init(const std::string& _shaperName="{ewol}THEME:GUI:WidgetScrolled.json");
 			public:
 				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
 				virtual ~Scroll();

@@ -36,9 +36,9 @@ void ewol::widget::Parameter::init() {
 	std::shared_ptr<ewol::widget::Sizer> mySizerHori = nullptr;
 	std::shared_ptr<ewol::widget::Spacer> mySpacer = nullptr;
 	#ifdef __TARGET_OS__Android
-		setMinSize(ewol::Dimension(vec2(90, 90), ewol::Dimension::Pourcent));
+		setMinSize(gale::Dimension(vec2(90, 90), gale::Dimension::Pourcent));
 	#else
-		setMinSize(ewol::Dimension(vec2(80, 80), ewol::Dimension::Pourcent));
+		setMinSize(gale::Dimension(vec2(80, 80), gale::Dimension::Pourcent));
 	#endif
 	
 	mySizerVert = ewol::widget::Sizer::create(widget::Sizer::modeVert);
@@ -72,7 +72,7 @@ void ewol::widget::Parameter::init() {
 				tmpButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<image src=\"{ewol}THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
@@ -85,7 +85,7 @@ void ewol::widget::Parameter::init() {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				mySpacer->setExpand(bvec2(false,false));
-				mySpacer->setMinSize(ewol::Dimension(vec2(10,0)));
+				mySpacer->setMinSize(gale::Dimension(vec2(10,0)));
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
@@ -96,7 +96,7 @@ void ewol::widget::Parameter::init() {
 				tmpButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<image src=\"{ewol}THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));

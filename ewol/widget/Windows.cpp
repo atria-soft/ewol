@@ -9,7 +9,8 @@
 #include <etk/types.h>
 #include <etk/types.h>
 #include <ewol/ewol.h>
-#include <ewol/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL-include.h>
 #include <ewol/context/Context.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
@@ -28,7 +29,7 @@ ewol::widget::Windows::Windows() :
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Windows.json");
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Windows.json");
 	if (m_colorProperty != nullptr) {
 		m_colorBg = m_colorProperty->request("background");
 	}
@@ -41,7 +42,7 @@ ewol::widget::Windows::~Windows() {
 }
 
 void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
-	//EWOL_DEBUG(" _availlable : " << _availlable);
+	EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
 	if (m_subWidget != nullptr) {
 		m_subWidget->calculateMinMaxSize();
@@ -72,34 +73,33 @@ std::shared_ptr<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& 
 }
 
 void ewol::widget::Windows::sysDraw() {
-	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
+	EWOL_VERBOSE("Draw on " << m_size);
 	// set the size of the open GL system
-	glViewport(0,0,m_size.x(),m_size.y());
-	
-	ewol::openGL::disable(ewol::openGL::FLAG_DITHER);
-	//ewol::openGL::disable(ewol::openGL::FLAG_BLEND);
-	ewol::openGL::disable(ewol::openGL::FLAG_STENCIL_TEST);
-	ewol::openGL::disable(ewol::openGL::FLAG_ALPHA_TEST);
-	ewol::openGL::disable(ewol::openGL::FLAG_FOG);
+	gale::openGL::setViewPort(vec2(0,0), m_size);
+	gale::openGL::disable(gale::openGL::flag_dither);
+	//gale::openGL::disable(gale::openGL::flag_blend);
+	gale::openGL::disable(gale::openGL::flag_stencilTest);
+	gale::openGL::disable(gale::openGL::flag_alphaTest);
+	gale::openGL::disable(gale::openGL::flag_fog);
 	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__IOs))
 		glPixelZoom(1.0,1.0);
 	#endif
-	ewol::openGL::disable(ewol::openGL::FLAG_TEXTURE_2D);
-	ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+	gale::openGL::disable(gale::openGL::flag_texture2D);
+	gale::openGL::disable(gale::openGL::flag_depthTest);
 	
-	ewol::openGL::enable(ewol::openGL::FLAG_BLEND);
+	gale::openGL::enable(gale::openGL::flag_blend);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
 	mat4 newOne;
-	ewol::openGL::setBasicMatrix(newOne);
+	gale::openGL::setBasicMatrix(newOne);
 	
 	ewol::DrawProperty displayProp;
 	displayProp.m_windowsSize = m_size;
 	displayProp.m_origin.setValue(0,0);
 	displayProp.m_size = m_size;
 	systemDraw(displayProp);
-	ewol::openGL::disable(ewol::openGL::FLAG_BLEND);
+	gale::openGL::disable(gale::openGL::flag_blend);
 	return;
 }
 
@@ -121,18 +121,17 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::getTime();
 	#endif
-	
 	// clear the screen with transparency ...
 	etk::Color<float> colorBg(0.5, 0.5, 0.5, 0.5);
 	if (m_colorProperty != nullptr) {
 		colorBg = m_colorProperty->get(m_colorBg);
 	}
-	glClearColor(colorBg.r(), colorBg.g(), colorBg.b(), colorBg.a());
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	gale::openGL::clearColor(colorBg);
+	gale::openGL::clear(   gale::openGL::clearFlag_colorBuffer
+	                     | gale::openGL::clearFlag_depthBuffer);
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime0 = (float)(ewol::getTime() - ___startTime0) / 1000.0f;
 	EWOL_ERROR("      Windows000  : " << ___localTime0 << "ms ");
-	
 	int64_t ___startTime1 = ewol::getTime();
 	#endif
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
@@ -144,7 +143,6 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime1 = (float)(ewol::getTime() - ___startTime1) / 1000.0f;
 	EWOL_ERROR("      Windows111  : " << ___localTime1 << "ms ");
-	
 	int64_t ___startTime2 = ewol::getTime();
 	#endif
 	// second display the pop-up
@@ -291,4 +289,9 @@ std::shared_ptr<ewol::Object> ewol::widget::Windows::getSubObjectNamed(const std
 	return nullptr;
 }
 
+void ewol::widget::Windows::sysOnKill() {
+	if (onKill() == true) {
+		getContext().stop();
+	}
+}
 

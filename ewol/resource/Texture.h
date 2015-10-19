@@ -12,37 +12,19 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <egami/Image.h>
-#include <ewol/openGL/openGL.h>
-#include <ewol/resource/Resource.h>
+#include <gale/resource/Texture.h>
 
 namespace ewol {
 	namespace resource {
-		class Texture : public ewol::Resource {
+		class Texture : public gale::Resource {
 			protected:
+				uint32_t m_texId; //!< openGl textureID.
 				// openGl Context propoerties :
 				egami::Image m_data;
-				// openGl textureID :
-				GLuint m_texId;
 				// some image are not square  == > we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
 				vec2 m_endPointSize;
 				// internal state of the openGl system :
 				bool m_loaded;
-			// Ewol internal API:
-			public:
-				void updateContext();
-				void removeContext();
-				void removeContextToLate();
-			// middleware interface:
-			public:
-				GLuint getId() const {
-					return m_texId;
-				};
-				const vec2& getUsableSize() const {
-					return m_endPointSize;
-				};
-				const ivec2& getOpenGlSize() const {
-					return m_data.getSize();
-				};
 			// Public API:
 			protected:
 				void init(const std::string& _filename);
@@ -60,6 +42,15 @@ namespace ewol {
 				};
 				// flush the data to send it at the openGl system
 				void flush();
+				bool updateContext();
+				void removeContext();
+				void removeContextToLate();
+				const ivec2& getOpenGlSize() const {
+					return m_data.getSize();
+				};
+				uint32_t getRendererId() const {
+					return m_texId;
+				};
 		};
 	};
 };

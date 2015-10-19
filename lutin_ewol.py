@@ -1,36 +1,54 @@
 #!/usr/bin/python
-import lutinModule as module
-import lutinTools as tools
-import lutinDebug as debug
+import lutin.module as module
+import lutin.tools as tools
+import lutin.debug as debug
 import os
-import lutinMultiprocess
+import lutin.multiprocess as lutinMultiprocess
+
+
+def get_type():
+	return "LIBRARY"
 
 def get_desc():
 	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
 
-def get_license():
-	return "APACHE v2.0"
+def get_licence():
+	return "APACHE-2"
 
-def create(target):
-	# set the ewol folder for Android basic sources ...
-	target.set_ewol_folder(tools.get_current_path(__file__) + "/../")
-	
+def get_compagny_type():
+	return "com"
+
+def get_compagny_name():
+	return "atria-soft"
+
+def get_maintainer():
+	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
+
+def get_version():
+	return [0,0,0]
+
+def create(target, module_name):
 	# module name is 'edn' and type binary.
-	myModule = module.Module(__file__, 'ewol', 'LIBRARY')
+	my_module = module.Module(__file__, module_name, get_type())
 	
-	# add extra compilation flags :
-	myModule.add_extra_compile_flags()
+	# add extra compilation flags:
+	my_module.add_extra_compile_flags()
 	# add the file to compile:
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
 		'ewol/Padding.cpp',
-		'ewol/Dimension.cpp',
 		'ewol/translate.cpp'
 		])
+	my_module.add_header_file([
+		'ewol/debug.h', # TODO : Remove this ...
+		'ewol/ewol.h',
+		'ewol/Padding.h',
+		'ewol/translate.h'
+		])
 	
-	# compositing :
-	myModule.add_src_file([
+	# compositing:
+	my_module.add_src_file([
 		'ewol/compositing/Compositing.cpp',
 		'ewol/compositing/TextBase.cpp',
 		'ewol/compositing/Text.cpp',
@@ -41,95 +59,108 @@ def create(target):
 		'ewol/compositing/Shaper.cpp',
 		'ewol/compositing/Area.cpp'
 		])
+	my_module.add_header_file([
+		'ewol/compositing/Text.h',
+		'ewol/compositing/Drawing.h',
+		'ewol/compositing/Sprite.h',
+		'ewol/compositing/Area.h',
+		'ewol/compositing/Shaper.h',
+		'ewol/compositing/TextDF.h',
+		'ewol/compositing/TextBase.h',
+		'ewol/compositing/Compositing.h',
+		'ewol/compositing/Image.h'
+		])
 	
-	# context :
-	myModule.add_src_file([
-		'ewol/context/clipBoard.cpp',
-		'ewol/context/commandLine.cpp',
+	# context:
+	my_module.add_src_file([
 		'ewol/context/ConfigFont.cpp',
 		'ewol/context/Context.cpp',
-		'ewol/context/cursor.cpp',
 		'ewol/context/InputManager.cpp'
 		])
-	if target.name=="Linux":
-		myModule.add_src_file('ewol/context/X11/Context.cpp')
-	elif target.name=="Windows":
-		myModule.add_src_file('ewol/context/Windows/Context.cpp')
-	elif target.name=="Android":
-		myModule.add_src_file('ewol/context/Android/Context.cpp')
-	elif target.name=="MacOs":
-		myModule.add_src_file([
-			'ewol/context/MacOs/Context.cpp',
-			'ewol/context/MacOs/Interface.mm',
-			'ewol/context/MacOs/Windows.mm',
-			'ewol/context/MacOs/OpenglView.mm',
-			'ewol/context/MacOs/AppDelegate.mm'])
-	elif target.name=="IOs":
-		myModule.add_src_file([
-			'ewol/context/IOs/Context.cpp',
-			'ewol/context/IOs/Interface.m',
-			'ewol/context/IOs/OpenglView.mm',
-			'ewol/context/IOs/AppDelegate.mm'])
-	else:
-		debug.error("unknow mode...")
+	my_module.add_header_file([
+		'ewol/context/ConfigFont.h',
+		'ewol/context/Context.h',
+		'ewol/context/Application.h',
+		'ewol/context/InputManager.h'
+		])
 	
-	# event properties :
-	myModule.add_src_file([
+	# event properties:
+	my_module.add_src_file([
 		'ewol/event/Entry.cpp',
 		'ewol/event/Time.cpp',
 		'ewol/event/Input.cpp'
 		])
-	
-	# Key properties :
-	myModule.add_src_file([
-		'ewol/key/keyboard.cpp',
-		'ewol/key/Special.cpp',
-		'ewol/key/status.cpp',
-		'ewol/key/type.cpp'
+	my_module.add_header_file([
+		'ewol/event/Time.h',
+		'ewol/event/Input.h',
+		'ewol/event/Entry.h'
 		])
 	
-	# object :
-	myModule.add_src_file([
+	# object:
+	my_module.add_src_file([
 		'ewol/object/Manager.cpp',
 		'ewol/object/Object.cpp',
 		'ewol/object/Worker.cpp'
 		])
-	# parameter :
-	myModule.add_src_file([
+	my_module.add_header_file([
+		'ewol/object/Worker.h',
+		'ewol/object/Manager.h',
+		'ewol/object/Object.h'
+		])
+	
+	# parameter:
+	my_module.add_src_file([
 		'ewol/parameter/Parameter.cpp',
 		'ewol/parameter/Interface.cpp',
 		])
-	# Signal :
-	myModule.add_src_file([
+	my_module.add_header_file([
+		'ewol/parameter/Value.h',
+		'ewol/parameter/Interface.h',
+		'ewol/parameter/Parameter.h',
+		'ewol/parameter/Range.h',
+		'ewol/parameter/List.h'
+		])
+	
+	# Signal:
+	my_module.add_src_file([
 		'ewol/signal/Interface.cpp',
 		'ewol/signal/Base.cpp'
 		])
-	
-	# OpenGL interface :
-	myModule.add_src_file([
-		'ewol/openGL/openGL.cpp'
+	my_module.add_header_file([
+		'ewol/signal/Interface.h',
+		'ewol/signal/Base.h',
+		'ewol/signal/Signal.h'
 		])
 	
-	# resources :
-	myModule.add_src_file([
+	# resources:
+	my_module.add_src_file([
 		'ewol/resource/Colored3DObject.cpp',
 		'ewol/resource/ColorFile.cpp',
 		'ewol/resource/ConfigFile.cpp',
 		'ewol/resource/FontFreeType.cpp',
 		'ewol/resource/Image.cpp',
 		'ewol/resource/ImageDF.cpp',
-		'ewol/resource/Manager.cpp',
-		'ewol/resource/Program.cpp',
-		'ewol/resource/Resource.cpp',
-		'ewol/resource/Shader.cpp',
 		'ewol/resource/Texture.cpp',
 		'ewol/resource/TexturedFont.cpp',
-		'ewol/resource/DistanceFieldFont.cpp',
-		'ewol/resource/VirtualBufferObject.cpp'
+		'ewol/resource/DistanceFieldFont.cpp'
+		])
+	my_module.add_header_file([
+		'ewol/resource/FontFreeType.h',
+		'ewol/resource/TexturedFont.h',
+		'ewol/resource/ColorFile.h',
+		'ewol/resource/font/FontBase.h',
+		'ewol/resource/font/Kerning.h',
+		'ewol/resource/font/GlyphProperty.h',
+		'ewol/resource/DistanceFieldFont.h',
+		'ewol/resource/ImageDF.h',
+		'ewol/resource/Colored3DObject.h',
+		'ewol/resource/ConfigFile.h',
+		'ewol/resource/Texture.h',
+		'ewol/resource/Image.h'
 		])
 	
-	# widget :
-	myModule.add_src_file([
+	# widget:
+	my_module.add_src_file([
 		'ewol/widget/ButtonColor.cpp',
 		'ewol/widget/Button.cpp',
 		'ewol/widget/CheckBox.cpp',
@@ -165,85 +196,70 @@ def create(target):
 		'ewol/widget/Windows.cpp',
 		'ewol/widget/WSlider.cpp',
 		])
+	my_module.add_header_file([
+		'ewol/widget/Menu.h',
+		'ewol/widget/Slider.h',
+		'ewol/widget/WidgetScrolled.h',
+		'ewol/widget/ListFileSystem.h',
+		'ewol/widget/Panned.h',
+		'ewol/widget/WSlider.h',
+		'ewol/widget/Container2.h',
+		'ewol/widget/Windows.h',
+		'ewol/widget/CheckBox.h',
+		'ewol/widget/Container.h',
+		'ewol/widget/PopUp.h',
+		'ewol/widget/Label.h',
+		'ewol/widget/Composer.h',
+		'ewol/widget/Sizer.h',
+		'ewol/widget/Scroll.h',
+		'ewol/widget/ContainerN.h',
+		'ewol/widget/Spacer.h',
+		'ewol/widget/Button.h',
+		'ewol/widget/Manager.h',
+		'ewol/widget/Entry.h',
+		'ewol/widget/ContextMenu.h',
+		'ewol/widget/Gird.h',
+		'ewol/widget/ProgressBar.h',
+		'ewol/widget/ColorBar.h',
+		'ewol/widget/ButtonColor.h',
+		'ewol/widget/Layer.h',
+		'ewol/widget/Joystick.h',
+		'ewol/widget/Widget.h',
+		'ewol/widget/meta/StdPopUp.h',
+		'ewol/widget/meta/ParameterList.h',
+		'ewol/widget/meta/ColorChooser.h',
+		'ewol/widget/meta/Parameter.h',
+		'ewol/widget/meta/FileChooser.h',
+		'ewol/widget/Image.h',
+		'ewol/widget/List.h'
+		])
 	
-	myModule.copy_folder('data/theme/shape/square/*','theme/shape/square')
-	myModule.copy_folder('data/theme/shape/round/*','theme/shape/round')
-	myModule.copy_folder('data/theme/color/black/*','theme/color/black')
-	myModule.copy_folder('data/theme/color/white/*','theme/color/white')
-	myModule.copy_folder('data/textured.*','')
-	myModule.copy_folder('data/texturedNoMaterial.*','')
-	myModule.copy_folder('data/text.*','')
-	myModule.copy_folder('data/simple3D.*','')
-	myModule.copy_folder('data/color.*','')
-	myModule.copy_folder('data/color3.*','')
-	myModule.copy_folder('data/textured3D2.*','')
-	myModule.copy_folder('data/textured3D.*','')
-	myModule.copy_folder('data/texturedDF.*','')
-	myModule.copy_folder('data/fontDistanceField/*','fontDistanceField')
-	myModule.copy_folder('data/translate/*','translate/ewol/')
+	my_module.copy_path('data/theme/shape/square/*','theme/shape/square')
+	my_module.copy_path('data/theme/shape/round/*','theme/shape/round')
+	my_module.copy_path('data/theme/color/black/*','theme/color/black')
+	my_module.copy_path('data/theme/color/white/*','theme/color/white')
+	my_module.copy_path('data/textured.*','')
+	my_module.copy_path('data/texturedNoMaterial.*','')
+	my_module.copy_path('data/text.*','')
+	my_module.copy_path('data/simple3D.*','')
+	my_module.copy_path('data/color.*','')
+	my_module.copy_path('data/color3.*','')
+	my_module.copy_path('data/textured3D2.*','')
+	my_module.copy_path('data/textured3D.*','')
+	my_module.copy_path('data/texturedDF.*','')
+	my_module.copy_path('data/fontDistanceField/*','fontDistanceField')
+	my_module.copy_path('data/translate/*','translate/ewol')
 	
 	# name of the dependency
-	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3', 'date'])
+	my_module.add_module_depend(['etk', 'gale', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3'])
 	
-	myModule.add_export_path(tools.get_current_path(__file__))
-
+	my_module.add_path(tools.get_current_path(__file__))
+	
 	tagFile = tools.get_current_path(__file__) + "/tag"
 	ewolVersionID = tools.file_read_data(tagFile)
-	myModule.compile_flags_CC([
+	my_module.compile_flags('c++', [
 		"-DEWOL_VERSION=\"\\\""+ewolVersionID+"\\\"\""
 		])
 	
-	if target.name=="Linux":
-		myModule.add_export_flag_LD('-lGL')
-		
-		#`pkg-config --cflags directfb` `pkg-config --libs directfb`
-		
-		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-		myModule.add_export_flag_LD('-lX11')
-		#endif
-		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-		#myModule.add_export_flag_LD(['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
-		#endif
-		
-		#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
-		# needed package on linux : libgl1-mesa-dev libglew1.5-dev
-		
-		#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
-		#myModule.add_src_file('ewol/renderer/audio/interfacePortAudio.cpp')
-		#endif
-	
-	elif target.name=="Android":
-		myModule.add_export_flag_LD("-lGLESv2")
-		
-		myModule.add_export_flag_LD("-ldl")
-		myModule.add_export_flag_LD("-llog")
-		myModule.add_export_flag_LD("-landroid")
-		java_tmp_dir = tools.get_current_path(__file__) + "/android/src/"
-		cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
-		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
-		# TODO : set the build directory in out/.build with option -d ...
-		debugCommand = ""
-		if debug.get_level() >= 4:
-			debugCommand = " -verbose "
-		lutinMultiprocess.run_command("javac " + debugCommand + java_tmp_src + ".java")
-		lutinMultiprocess.run_command("javah " + debugCommand + "-classpath " + java_tmp_dir + " -d " + cpp_tmp_dir + " org.ewol.EwolConstants")
-		tools.remove_file(java_tmp_src + ".class")
-	elif target.name=="Windows":
-		myModule.add_module_depend("glew")
-	elif target.name=="MacOs":
-		myModule.add_export_flag_LD([
-			"-framework Cocoa",
-			"-framework OpenGL",
-			"-framework QuartzCore",
-			"-framework AppKit"])
-	elif target.name=="IOs":
-		myModule.add_export_flag_LD([
-			"-framework OpenGLES",
-			"-framework CoreGraphics",
-			"-framework UIKit",
-			"-framework GLKit",
-			"-framework Foundation",
-			"-framework QuartzCore"])
-	
-	return myModule
+	return my_module
 

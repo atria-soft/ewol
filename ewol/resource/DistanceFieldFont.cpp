@@ -10,7 +10,7 @@
 #include <etk/os/FSNode.h>
 #include <egami/egami.h>
 
-#include <ewol/resource/Manager.h>
+#include <gale/resource/Manager.h>
 
 #include <ewol/resource/font/FontBase.h>
 #include <ewol/resource/TexturedFont.h>
@@ -28,7 +28,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
   ewol::resource::Texture(),
   m_borderSize(10),
   m_textureBorderSize(0,0) {
-	addObjectType("ewol::resource::DistanceFieldFont");
+	addResourceType("ewol::resource::DistanceFieldFont");
 	m_font = nullptr;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
@@ -36,17 +36,22 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
 }
 
 void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
 	std::string localName = _fontName;
 	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
 		#if defined(__TARGET_OS__Android)
-			folderList.push_back("/system/fonts");
+			folderList.push_back("ROOT:system/fonts");
 		#elif defined(__TARGET_OS__Linux)
-			folderList.push_back("/usr/share/fonts/truetype");
+			folderList.push_back("ROOT:usr/share/fonts/truetype");
 		#endif
 	}
-	folderList.push_back(ewol::getContext().getFontDefault().getFolder());
+	std::string applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
+	std::vector<std::string> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
+	for (auto &it : applicationBaseFontList) {
+		folderList.push_back(it);
+	}
 	for (size_t folderID = 0; folderID < folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
@@ -130,11 +135,13 @@ ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
 
 
 float ewol::resource::DistanceFieldFont::getDisplayRatio(float _size) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	return _size / (float)SIZE_GENERATION;
 }
 
 
 void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
 	std::vector<short> xdist(size);
 	std::vector<short> ydist(size);
@@ -214,6 +221,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 }
 
 bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	bool hasChange = false;
 	if (m_font == nullptr) {
 		return false;
@@ -295,6 +303,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 }
 
 int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	if (_charcode < 0x20) {
 		return 0;
 	} else if (_charcode < 0x80) {
@@ -321,6 +330,7 @@ int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
 }
 
 ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const char32_t& _charcode) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode);
 	if(    index < 0
@@ -340,6 +350,7 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 }
 
 void ewol::resource::DistanceFieldFont::exportOnFile() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
 	std::shared_ptr<ejson::Array> tmpList = ejson::Array::create();
@@ -374,6 +385,7 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 }
 
 bool ewol::resource::DistanceFieldFont::importFromFile() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	// test file existance:
 	etk::FSNode fileJSON(m_fileName + ".json");

@@ -10,7 +10,8 @@
 #include <ewol/object/Manager.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
-#include <ewol/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL-include.h>
 #include <ewol/context/Context.h>
 
 #undef __class__
@@ -93,8 +94,8 @@ ewol::Widget::Widget() :
   m_offset(0,0),
   m_zoom(1.0f),
   m_origin(0,0),
-  m_userMinSize(*this, "min-size", ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel), "User minimum size"),
-  m_userMaxSize(*this, "max-size", ewol::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel), "User maximum size"),
+  m_userMinSize(*this, "min-size", gale::Dimension(vec2(0,0),gale::Dimension::Pixel), "User minimum size"),
+  m_userMaxSize(*this, "max-size", gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel), "User maximum size"),
   m_userExpand(*this, "expand", bvec2(false,false), "Request the widget Expand size wile space is available"),
   m_userFill(*this, "fill", bvec2(false,false), "Fill the widget available size"),
   m_hide(*this, "hide", false, "The widget start hided"),
@@ -106,7 +107,7 @@ ewol::Widget::Widget() :
   signalShortcut(*this, "shortcut"),
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
-  m_cursorDisplay(ewol::context::cursorArrow),
+  m_cursorDisplay(gale::context::cursor_arrow),
   signalAnnimationStart(*this, "annimation-start"),
   signalAnnimationRatio(*this, "annimation-ratio"),
   signalAnnimationStop(*this, "annimation-stop"),
@@ -255,9 +256,9 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	                                   (int32_t)( 1));
 	mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 	
-	ewol::openGL::push();
+	gale::openGL::push();
 	// set internal matrix system :
-	ewol::openGL::setMatrix(tmpMat);
+	gale::openGL::setMatrix(tmpMat);
 	//int64_t ___startTime = ewol::getTime();
 	onDraw();
 	
@@ -284,7 +285,7 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::setMatrix(tmpMat);
+		gale::openGL::setMatrix(tmpMat);
 		//int64_t ___startTime = ewol::getTime();
 		onDraw();
 		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
@@ -300,22 +301,29 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		mat4 tmpProjection = etk::matOrtho(-m_size.x()/2, m_size.x()/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::setMatrix(tmpMat);
+		gale::openGL::setMatrix(tmpMat);
 		//int64_t ___startTime = ewol::getTime();
 		onDraw();
 		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
 	}
 	#endif
-	ewol::openGL::pop();
+	gale::openGL::pop();
 	return;
 }
 
 void ewol::Widget::periodicCallDisable() {
+	EWOL_VERBOSE("Perodic call disable " << getName());
 	getObjectManager().periodicCall.release(shared_from_this());
 }
 
 void ewol::Widget::periodicCallEnable() {
+	if (getObjectManager().periodicCall.isRegistered(shared_from_this()) == true) {
+		EWOL_VERBOSE("Perodic call enable " << getName() << " ==> rejected");
+		return;
+	} else {
+		EWOL_VERBOSE("Perodic call enable " << getName());
+	}
 	getObjectManager().periodicCall.bind(shared_from_this(), &ewol::Widget::periodicCall);
 }
 
@@ -379,7 +387,7 @@ vec2 ewol::Widget::getCalculateMaxSize() {
 }
 
 void ewol::Widget::setNoMinSize() {
-	m_userMinSize.set(ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel));
+	m_userMinSize.set(gale::Dimension(vec2(0,0),gale::Dimension::Pixel));
 }
 
 void ewol::Widget::checkMinSize() {
@@ -389,7 +397,7 @@ void ewol::Widget::checkMinSize() {
 }
 
 void ewol::Widget::setNoMaxSize() {
-	m_userMaxSize.set(ewol::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel));
+	m_userMaxSize.set(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel));
 }
 
 void ewol::Widget::checkMaxSize() {
@@ -450,59 +458,59 @@ void ewol::Widget::shortCutAdd(const std::string& _descriptiveString, const std:
 		tmpElement->specialKey.setMeta(true);
 	}
 	if(_descriptiveString.find("F12") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF12;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f12;
 	} else if(_descriptiveString.find("F11") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF11;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f11;
 	} else if(_descriptiveString.find("F10") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF10;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f10;
 	} else if(_descriptiveString.find("F9") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF9;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f9;
 	} else if(_descriptiveString.find("F8") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF8;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f8;
 	} else if(_descriptiveString.find("F7") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF7;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f7;
 	} else if(_descriptiveString.find("F6") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF6;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f6;
 	} else if(_descriptiveString.find("F5") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF5;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f5;
 	} else if(_descriptiveString.find("F4") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF4;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f4;
 	} else if(_descriptiveString.find("F3") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF3;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f3;
 	} else if(_descriptiveString.find("F2") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF2;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f2;
 	} else if(_descriptiveString.find("F1") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardF1;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_f1;
 	} else if(_descriptiveString.find("LEFT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardLeft;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_left;
 	} else if(_descriptiveString.find("RIGHT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardRight;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_right;
 	} else if(_descriptiveString.find("UP") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardUp;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_up;
 	} else if(_descriptiveString.find("DOWN") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardDown;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_down;
 	} else if(_descriptiveString.find("PAGE_UP") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardPageUp;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_pageUp;
 	} else if(_descriptiveString.find("PAGE_DOWN") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardPageDown;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_pageDown;
 	} else if(_descriptiveString.find("START") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardStart;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_start;
 	} else if(_descriptiveString.find("END") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardEnd;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_end;
 	} else if(_descriptiveString.find("PRINT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardPrint;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_print;
 	} else if(_descriptiveString.find("ARRET_DEFIL") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardStopDefil;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_stopDefil;
 	} else if(_descriptiveString.find("WAIT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardWait;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_wait;
 	} else if(_descriptiveString.find("INSERT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardInsert;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_insert;
 	} else if(_descriptiveString.find("CAPLOCK") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardCapLock;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_capLock;
 	} else if(_descriptiveString.find("CONTEXT_MENU") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardContextMenu;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_contextMenu;
 	} else if(_descriptiveString.find("NUM_LOCK") != std::string::npos) {
-		tmpElement->keyboardMoveValue = ewol::key::keyboardNumLock;
+		tmpElement->keyboardMoveValue = gale::key::keyboard_numLock;
 	} else {
 		tmpElement->unicodeValue = _descriptiveString[_descriptiveString.size() -1];
 	}
@@ -533,9 +541,9 @@ void ewol::Widget::shortCutClean() {
 	m_localShortcut.clear();
 }
 
-bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
+bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
                                    char32_t _unicodeValue,
-                                   enum ewol::key::keyboard _kbMove,
+                                   enum gale::key::keyboard _kbMove,
                                    bool _isDown) {
 	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {
 		_unicodeValue += 'a' - 'A';
@@ -547,7 +555,7 @@ bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
 			    && m_localShortcut[iii]->specialKey.getCtrl()  == _special.getCtrl()
 			    && m_localShortcut[iii]->specialKey.getAlt()   == _special.getAlt()
 			    && m_localShortcut[iii]->specialKey.getMeta()  == _special.getMeta()
-			    && (    (    m_localShortcut[iii]->keyboardMoveValue == ewol::key::keyboardUnknow
+			    && (    (    m_localShortcut[iii]->keyboardMoveValue == gale::key::keyboard_unknow
 			              && m_localShortcut[iii]->unicodeValue == _unicodeValue)
 			         || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
 			              && m_localShortcut[iii]->unicodeValue == 0)
@@ -581,13 +589,13 @@ bool ewol::Widget::getGrabStatus() {
 	return m_grabCursor;
 }
 
-void ewol::Widget::setCursor(enum ewol::context::cursorDisplay _newCursor) {
+void ewol::Widget::setCursor(enum gale::context::cursor _newCursor) {
 	EWOL_DEBUG("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
 	getContext().setCursor(m_cursorDisplay);
 }
 
-enum ewol::context::cursorDisplay ewol::Widget::getCursor() {
+enum gale::context::cursor ewol::Widget::getCursor() {
 	return m_cursorDisplay;
 }
 
@@ -647,7 +655,7 @@ void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPoin
 		}
 		if (error == true) {
 			EWOL_ERROR("Can not set a 'min size' > 'max size' reset to maximum ...");
-			m_userMaxSize = ewol::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
+			m_userMaxSize = gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel);
 		}
 		requestUpdateSize();
 	} else if (_paramPointer == m_userMinSize) {
@@ -663,7 +671,7 @@ void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPoin
 		}
 		if (error == true) {
 			EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-			m_userMinSize = ewol::Dimension(vec2(0,0),ewol::Dimension::Pixel);
+			m_userMinSize = gale::Dimension(vec2(0,0),gale::Dimension::Pixel);
 		}
 		requestUpdateSize();
 	} else if (_paramPointer == m_annimationTypeStart) {

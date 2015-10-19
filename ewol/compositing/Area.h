@@ -12,8 +12,9 @@
 #include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/resource/Program.h>
+#include <gale/resource/Program.h>
 #include <ewol/resource/Texture.h>
+#include <egami/Image.h>
 
 namespace ewol {
 	namespace compositing {
@@ -22,7 +23,7 @@ namespace ewol {
 				vec3 m_position; //!< The current position to draw
 				etk::Color<> m_color; //!< The text foreground color
 			private:
-				std::shared_ptr<ewol::resource::Program> m_GLprogram;  //!< pointer on the opengl display program
+				std::shared_ptr<gale::resource::Program> m_GLprogram;  //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix;   //!< openGL id on the element (transformation matrix)
 				int32_t m_GLColor;    //!< openGL id on the element (color buffer)

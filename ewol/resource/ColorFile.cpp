@@ -9,7 +9,6 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/resource/ColorFile.h>
-#include <ewol/resource/Manager.h>
 #include <ejson/ejson.h>
 #include <stdexcept>
 
@@ -18,13 +17,14 @@
 
 
 ewol::resource::ColorFile::ColorFile() :
-  ewol::Resource(),
+  gale::Resource(),
   m_errorColor(etk::color::orange) {
-	addObjectType("ewol::ColorFile");
+	addResourceType("ewol::ColorFile");
 }
 
 void ewol::resource::ColorFile::init(const std::string& _filename) {
-	ewol::Resource::init(_filename);
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
+	gale::Resource::init(_filename);
 	EWOL_DEBUG("CF : load \"" << _filename << "\"");
 	reload();
 	EWOL_DEBUG("List of all color : " << m_list.getKeys());
@@ -37,6 +37,7 @@ ewol::resource::ColorFile::~ColorFile() {
 
 
 void ewol::resource::ColorFile::reload() {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	// remove all previous set of value :
 	for (int32_t iii = 0; iii < m_list.size() ; ++iii) {
 		m_list[iii] = m_errorColor;
@@ -71,6 +72,7 @@ void ewol::resource::ColorFile::reload() {
 
 
 int32_t ewol::resource::ColorFile::request(const std::string& _paramName) {
+	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {
 		m_list.add(_paramName, m_errorColor);

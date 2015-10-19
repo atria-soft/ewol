@@ -1,31 +1,43 @@
 #!/usr/bin/python
-import lutinModule as module
-import lutinTools as tools
+import lutin.module as module
+import lutin.tools as tools
 
+def get_type():
+	return "BINARY"
 
-# optionnal : Describe in the "lutin.py --help"
+def get_sub_type():
+	return "SAMPLE"
+
 def get_desc():
 	return "Tutorial 001 : Hello Word"
 
-# Module creation instance (not optionnal)
-def create(target):
-	# module name is '001_HelloWord' and type binary.
-	myModule = module.Module(__file__, '001_HelloWord', 'BINARY')
-	# add the file to compile:
-	myModule.add_src_file([
+def get_licence():
+	return "APACHE-2"
+
+def get_compagny_type():
+	return "com"
+
+def get_compagny_name():
+	return "atria-soft"
+
+def get_maintainer():
+	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
+
+def get_version():
+	return [0,1]
+
+def create(target, module_name):
+	my_module = module.Module(__file__, module_name, get_type())
+	my_module.add_src_file([
 		'appl/Main.cpp',
 		'appl/debug.cpp',
 		'appl/Windows.cpp',
 		])
-	# add Library dependency name
-	myModule.add_module_depend(['ewol'])
-	# add application C flags
-	myModule.compile_flags_CC([
-		"-DPROJECT_NAME=\"\\\""+myModule.name+"\\\"\""])
-	# Add current include Path
-	myModule.add_path(tools.get_current_path(__file__))
-	# return the created module
-	return myModule
+	my_module.add_module_depend(['ewol'])
+	my_module.compile_flags('c++', [
+		"-DPROJECT_NAME=\"\\\""+my_module.name+"\\\"\""])
+	my_module.add_path(tools.get_current_path(__file__))
+	return my_module
 
 
 

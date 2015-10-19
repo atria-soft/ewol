@@ -100,7 +100,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		m_confIdPaddingIn[shaperPosRight]  = m_config->request("padding-in-right");
 		m_confIdPaddingIn[shaperPosTop]    = m_config->request("padding-in-top");
 		m_confIdPaddingIn[shaperPosButtom] = m_config->request("padding-in-buttom");
-		m_confIdChangeTime = m_config->request("ChangeTime");
+		m_confIdChangeTime = m_config->request("change-time");
 		m_confProgramFile  = m_config->request("program");
 		m_confImageFile    = m_config->request("image");
 		m_confColorFile    = m_config->request("color");
@@ -118,7 +118,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		}
 		// get the shader resource :
 		m_GLPosition = 0;
-		m_GLprogram = ewol::resource::Program::create(tmpFilename);
+		m_GLprogram = gale::resource::Program::create(tmpFilename);
 		if (m_GLprogram != nullptr) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -183,7 +183,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	//glScalef(m_scaling.x, m_scaling.y, 1.0);
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix();
+	mat4 tmpMatrix = gale::openGL::getMatrix();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
@@ -199,11 +199,11 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	}
 	if (nullptr!=m_resourceTexture) {
 		// TextureID
-		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getId());
+		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getRendererId());
 	}
 	// Request the draw of the elements : 
-	//ewol::openGL::drawArrays(GL_TRIANGLES, 0, SHAPER_NB_MAX_VERTEX);
-	ewol::openGL::drawArrays(GL_TRIANGLE_STRIP, 0, m_nbVertexToDisplay);
+	//gale::openGL::drawArrays(gale::openGL::render_triangle, 0, SHAPER_NB_MAX_VERTEX);
+	gale::openGL::drawArrays(gale::openGL::render_triangleStrip, 0, m_nbVertexToDisplay);
 	m_GLprogram->unUse();
 }
 
@@ -229,7 +229,7 @@ bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {
 }
 
 bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
-	//EWOL_DEBUG("call=" << _event);
+	EWOL_VERBOSE("call=" << _event << "state transition=" << m_stateTransition << " speedTime=" << m_config->getNumber(m_confIdChangeTime));
 	// start :
 	if (m_stateTransition >= 1.0) {
 		m_stateOld = m_stateNew;
@@ -238,7 +238,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 			m_stateNew = m_nextStatusRequested;
 			m_nextStatusRequested = -1;
 			m_stateTransition = 0.0;
-			//EWOL_DEBUG("     ##### START #####  ");
+			EWOL_VERBOSE("     ##### START #####  ");
 		} else {
 			m_nextStatusRequested = -1;
 			// disable periodic call ...
@@ -257,11 +257,14 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 				m_nextStatusRequested = -1;
 			}
 		}
-		float timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
+		float timeRelativity = 0.0f;
+		if (m_config != nullptr) {
+			timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
+		}
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
 		m_stateTransition = std::avg(0.0f, m_stateTransition, 1.0f);
-		//EWOL_DEBUG("relative=" << timeRelativity << " Transition : " << m_stateTransition);
+		EWOL_VERBOSE("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
 }
@@ -471,10 +474,11 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 	EWOL_ERROR(" inside = " << inside);
 	*/
 	int32_t mode = 0;
+	bool displayOutside = false;
 	if (m_config != nullptr) {
 		mode = m_config->getNumber(m_confIdMode);
+		displayOutside = m_config->getBoolean(m_confIdDisplayOutside);
 	}
-	bool displayOutside = m_config->getBoolean(m_confIdDisplayOutside);
 	m_nbVertexToDisplay = 0;
 	if (displayOutside == true) {
 		addVertexLine(enveloppe.yTop(), border.yTop(),

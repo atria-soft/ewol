@@ -145,15 +145,16 @@ bool ewol::Object::parameterSetOnWidgetNamed(const std::string& _objectName, con
 	return object->parameterSet(_config, _value);
 }
 
-ewol::object::Manager& ewol::Object::getObjectManager() const {
+ewol::object::Manager& ewol::Object::getObjectManager() {
 	ewol::object::Manager& tmp = ewol::getContext().getEObjectManager();
 	return tmp;
 }
 
-ewol::Context& ewol::Object::getContext() const {
+ewol::Context& ewol::Object::getContext() {
 	return ewol::getContext();
 }
-std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) const {
+
+std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) {
 	return getObjectManager().getObjectNamed(_objectName);
 }
 
@@ -172,3 +173,4 @@ bool ewol::parameterSetOnObjectNamed(const std::string& _objectName, const std::
 	}
 	return object->parameterSet(_config, _value);
 }
+

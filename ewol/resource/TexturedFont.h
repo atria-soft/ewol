@@ -11,7 +11,6 @@
 
 #include <ewol/resource/font/FontBase.h>
 #include <ewol/resource/Texture.h>
-#include <ewol/resource/Resource.h>
 
 namespace ewol {
 	namespace font {

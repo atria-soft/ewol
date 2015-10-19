@@ -43,7 +43,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				CheckBox();
-				void init(const std::string& _shaperName="THEME:GUI:CheckBox.json");
+				void init(const std::string& _shaperName="{ewol}THEME:GUI:CheckBox.json");
 			public:
 				DECLARE_WIDGET_FACTORY(CheckBox, "CheckBox");
 				/**

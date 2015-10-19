@@ -10,20 +10,20 @@
 #define __EWOL_EVENT_ENTRY_H__
 
 #include <etk/types.h>
-#include <ewol/key/key.h>
+#include <gale/key/key.h>
 
 namespace ewol {
 	namespace event {
 		class Entry {
 			private:
-				enum ewol::key::keyboard m_type; //!< type of hardware event
-				enum ewol::key::status m_status; //!< status of hardware event
-				ewol::key::Special m_specialKey; //!< input key status (prevent change in time..)
+				enum gale::key::keyboard m_type; //!< type of hardware event
+				enum gale::key::status m_status; //!< status of hardware event
+				gale::key::Special m_specialKey; //!< input key status (prevent change in time..)
 				char32_t m_unicodeData; //!< Unicode data (in some case)
 			public:
-				Entry(enum ewol::key::keyboard _type,
-				      enum ewol::key::status _status,
-				      ewol::key::Special _specialKey,
+				Entry(enum gale::key::keyboard _type,
+				      enum gale::key::status _status,
+				      gale::key::Special _specialKey,
 				      char32_t _char) :
 				  m_type(_type),
 				  m_status(_status),
@@ -31,22 +31,22 @@ namespace ewol {
 				  m_unicodeData(_char) {
 					
 				};
-				void setType(enum ewol::key::keyboard _type) {
+				void setType(enum gale::key::keyboard _type) {
 					m_type = _type;
 				};
-				inline const enum ewol::key::keyboard& getType() const {
+				inline const enum gale::key::keyboard& getType() const {
 					return m_type;
 				};
-				void setStatus(enum ewol::key::status _status) {
+				void setStatus(enum gale::key::status _status) {
 					m_status = _status;
 				};
-				inline const enum ewol::key::status& getStatus() const {
+				inline const enum gale::key::status& getStatus() const {
 					return m_status;
 				};
-				void setSpecialKey(const ewol::key::Special& _specialKey) {
+				void setSpecialKey(const gale::key::Special& _specialKey) {
 					m_specialKey = _specialKey;
 				};
-				inline const ewol::key::Special& getSpecialKey() const {
+				inline const gale::key::Special& getSpecialKey() const {
 					return m_specialKey;
 				};
 				void setChar(char32_t _char) {
@@ -60,9 +60,9 @@ namespace ewol {
 		
 		class EntrySystem {
 			public:
-				EntrySystem(enum ewol::key::keyboard _type,
-				            enum ewol::key::status _status,
-				            ewol::key::Special _specialKey,
+				EntrySystem(enum gale::key::keyboard _type,
+				            enum gale::key::status _status,
+				            gale::key::Special _specialKey,
 				            char32_t _char) :
 				  m_event(_type, _status, _specialKey, _char) {
 					

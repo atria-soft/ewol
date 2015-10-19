@@ -44,16 +44,16 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 		return;
 	}
 	if (_enableDepthTest == true) {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::getMatrix();
-	mat4 camMatrix = ewol::openGL::getCameraMatrix();
+	mat4 projMatrix = gale::openGL::getMatrix();
+	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
-	m_GLprogram->setTexture0(m_GLtexID, m_font->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_font->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
 	// position :
@@ -63,19 +63,18 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 	if (_enableDepthTest == true) {
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 
 void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// draw BG in any case:
-	m_vectorialDraw.draw();
+	m_vectorialDraw.draw(_disableDepthTest);
 	
 	if (m_coord.size() <= 0 || m_font == nullptr) {
-		// TODO : a remèe ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -88,11 +87,11 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// Texture :
-	m_GLprogram->setTexture0(m_GLtexID, m_font->getId());
+	m_GLprogram->setTexture0(m_GLtexID, m_font->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
 	// position :
@@ -102,7 +101,7 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 
@@ -348,10 +347,19 @@ vec3 ewol::compositing::Text::calculateSizeChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
 	int32_t fontHeigh = getHeight();
-	
+	if (myGlyph == nullptr) {
+		if (m_font == nullptr) {
+			EWOL_WARNING("no Glyph... in no font");
+		} else {
+			EWOL_WARNING("no Glyph... in font : " << m_font->getName());
+		}
+		return vec3((float)(0.2),
+		            (float)(fontHeigh),
+		            (float)(0.0));
+	}
 	// get the kerning ofset :
 	float kerningOffset = 0.0;
-	if (true == m_kerning) {
+	if (m_kerning == true) {
 		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
 	}
 	

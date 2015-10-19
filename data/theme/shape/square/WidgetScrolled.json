@@ -18,6 +18,6 @@
 	padding-in-buttom:3,
 	
 	change-time:200,
-	program:"THEME:GUI:WidgetScrolled.prog",
-	color:"THEME:COLOR:WidgetScrolled.json"
+	program:"{ewol}THEME:GUI:WidgetScrolled.prog",
+	color:"{ewol}THEME:COLOR:WidgetScrolled.json"
 }

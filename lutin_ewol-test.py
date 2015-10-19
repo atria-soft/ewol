@@ -1,15 +1,17 @@
 #!/usr/bin/python
 import lutin.module as module
 import lutin.tools as tools
+import datetime
+
 
 def get_type():
 	return "BINARY"
 
 def get_sub_type():
-	return "SAMPLE"
+	return "TEST"
 
 def get_desc():
-	return "Tutorial 0XX : Create costum Widget"
+	return "ewol test software"
 
 def get_licence():
 	return "APACHE-2"
@@ -23,23 +25,13 @@ def get_compagny_name():
 def get_maintainer():
 	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
 
-def get_version():
-	return [0,1]
-
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
 	my_module.add_src_file([
-		'appl/Main.cpp',
-		'appl/debug.cpp',
-		'appl/Windows.cpp',
-		'appl/widget/VectorDisplay.cpp',
+		'test/main.cpp',
+		'test/testApplication.cpp',
+		'test/testWindows.cpp'
 		])
-	my_module.add_module_depend(['ewol'])
-	my_module.compile_flags('c++', [
-		"-DPROJECT_NAME=\"\\\""+my_module.name+"\\\"\""])
-	my_module.add_path(tools.get_current_path(__file__))
+	my_module.add_module_depend(['ewol', 'gtest', 'test-debug'])
 	return my_module
-
-
-
 

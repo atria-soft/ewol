@@ -1,47 +1,76 @@
-# language type:
 language:
-- cpp
-- Objective-c
+  - cpp
 
-# compilator system:
-compiler:
-- clang
-- gcc
+sudo: false
 
-# build branch requested
+os:
+  - linux
+  - osx
+
 branches:
   only:
     - master
     - dev
 
-# previous actions:
-before_script: 
-  - git clone git://github.com/HeeroYui/lutin.git
-  - git submodule init
-  - git submodule update
-  - cd external/z
-  - git submodule init
-  - git submodule update
-  - cd ../..
-  - if [ "$CXX" == "clang++" ]; then BUILDER=clang; else BUILDER=gcc; fi
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.9
+
+env:
+  - CONF=debug BUILDER=clang
+  - CONF=debug BUILDER=gcc
+
+matrix:
+  include:
+    - os: linux
+      env: CONF=debug BUILDER=gcc GCOV=--gcov
+    - os: linux
+      env: CONF=release BUILDER=clang
+    - os: linux
+      env: CONF=release BUILDER=gcc
+  exclude:
+    - os: mingw
+      env: CONF=debug BUILDER=clang
 
 install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libstdc++-4.9-dev
-  - sudo apt-get install -qq g++-4.9
-  - sudo rm /usr/bin/gcc /usr/bin/g++
-  - sudo ln -s /usr/bin/gcc-4.9 /usr/bin/gcc
-  - sudo ln -s /usr/bin/g++-4.9 /usr/bin/g++
+  - pip install --user lutin
 
-# build sequence with Lutin :
-script: 
-  - ./lutin/lutin.py -C -P -c$BUILDER -mdebug -p ewol etk_test exml_test ejson_test enettest
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/etk_test/usr/bin/etk_test
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/ejson_test/usr/bin/ejson_test
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/exml_test/usr/bin/exml_test
+before_script:
+  - cd ..
+  - wget http://atria-soft.com/ci/coverage_send.py
+  - wget http://atria-soft.com/ci/test_send.py
+  - wget http://atria-soft.com/ci/warning_send.py
+  - mkdir bin
+  - curl https://storage.googleapis.com/git-repo-downloads/repo > bin/repo
+  - chmod a+x bin/repo
+  - git config --global user.email "travis@travis.com"
+  - git config --global user.name "Travis"
+  - git config --global color.ui "auto"
+  - git config --global core.editor "vi"
+  - mkdir WORKING_DIRECTORY
+  - cd WORKING_DIRECTORY
+  - ../bin/repo init -u https://github.com/atria-soft/manifest.git
+  - ../bin/repo sync -j8
+  - rm -rf atria-soft/ewol
+  - cd ..
+  - pwd
+  - ls -l
+  - if [ "$BUILDER" == "gcc" ]; then
+        COMPILATOR_OPTION="--compilator-version=4.9";
+    else
+        COMPILATOR_OPTION="";
+    fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        export PATH=$PATH:/Users/travis/Library/Python/2.7/bin/;
+    fi
 
-#send e-mail on compilation result:
+script:
+  - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV -p ewol-test 0XX_customwidget 001_HelloWord
+
+
 notifications:
   email:
     - yui.heero@gmail.com

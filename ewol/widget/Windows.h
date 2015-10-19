@@ -37,12 +37,13 @@ namespace ewol {
 				void sysDraw();
 				void sysOnShow() {};
 				void sysOnHide() {};
-				void sysOnKill() {};
+				void sysOnKill();
 			public:
 				virtual void onShow() { };
 				virtual void onHide() { };
 				virtual bool onKill() {
-					return true;
+					// TODO : Check this in speck for android ...
+					return false;
 				};
 				virtual void onReduce() { };
 				virtual void onStateBackground() {};
@@ -125,10 +126,11 @@ namespace ewol {
 					createPopUpMessage(messageTypeCritical, _message);
 				}
 				
-				
-				virtual bool onEventHardwareInput(const ewol::key::keyboardSystem& _event, bool _down) {
+				/* TODO : 
+				virtual bool onEventHardwareInput(const gale::key::keyboardSystem& _event, bool _down) {
 					return false;
 				};
+				*/
 		};
 	};
 };

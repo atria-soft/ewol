@@ -17,7 +17,7 @@
 
 ewol::object::Manager::Manager(ewol::Context& _context) :
   m_context(_context),
-  periodicCall(*this, "periodic", "Call every time system render"),
+  periodicCall(*this, "periodic", "Call every time system render", true),
   m_applWakeUpTime(0),
   m_lastPeriodicCallTime(0) {
 	EWOL_DEBUG(" == > init Object-Manager");

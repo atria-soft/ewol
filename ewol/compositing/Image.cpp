@@ -43,9 +43,9 @@ void ewol::compositing::Image::loadProgram() {
 	m_GLPosition = 0;
 	m_GLprogram.reset();
 	if (m_distanceFieldMode == true) {
-		m_GLprogram = ewol::resource::Program::create("DATA:texturedDF.prog");
+		m_GLprogram = gale::resource::Program::create("{ewol}DATA:texturedDF.prog");
 	} else {
-		m_GLprogram = ewol::resource::Program::create("DATA:textured3D.prog");
+		m_GLprogram = gale::resource::Program::create("{ewol}DATA:textured3D.prog");
 	}
 	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
@@ -71,12 +71,12 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (_disableDepthTest == true) {
-		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::disable(gale::openGL::flag_depthTest);
 	} else {
-		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		gale::openGL::enable(gale::openGL::flag_depthTest);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
@@ -84,12 +84,12 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		if (m_distanceFieldMode == true) {
 			EWOL_ERROR("FONT type error Request distance field and display normal ...");
 		}
-		m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
+		m_GLprogram->setTexture0(m_GLtexID, m_resource->getRendererId());
 	} else {
 		if (m_distanceFieldMode == false) {
 			EWOL_ERROR("FONT type error Request normal and display distance field ...");
 		}
-		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getId());
+		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getRendererId());
 	}
 	// position :
 	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
@@ -98,7 +98,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

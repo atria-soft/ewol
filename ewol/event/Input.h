@@ -15,17 +15,17 @@ namespace ewol {
 	namespace event {
 		class Input {
 			private:
-				enum ewol::key::type m_type;
-				enum ewol::key::status m_status;
+				enum gale::key::type m_type;
+				enum gale::key::status m_status;
 				uint8_t m_inputId;
 				vec2 m_pos;
-				ewol::key::Special m_specialKey; //!< input key status (prevent change in time..)
+				gale::key::Special m_specialKey; //!< input key status (prevent change in time..)
 			public:
-				Input(enum ewol::key::type _type,
-				      enum ewol::key::status _status,
+				Input(enum gale::key::type _type,
+				      enum gale::key::status _status,
 				      uint8_t _id,
 				      const vec2& _pos,
-				      ewol::key::Special _specialKey):
+				      gale::key::Special _specialKey):
 				  m_type(_type),
 				  m_status(_status),
 				  m_inputId(_id),
@@ -33,16 +33,16 @@ namespace ewol {
 				  m_specialKey(_specialKey) {
 					
 				};
-				void setType(enum ewol::key::type _type) {
+				void setType(enum gale::key::type _type) {
 					m_type = _type;
 				};
-				inline const enum ewol::key::type& getType() const {
+				inline const enum gale::key::type& getType() const {
 					return m_type;
 				};
-				void setStatus(enum ewol::key::status _status) {
+				void setStatus(enum gale::key::status _status) {
 					m_status = _status;
 				};
-				inline const enum ewol::key::status& getStatus() const {
+				inline const enum gale::key::status& getStatus() const {
 					return m_status;
 				};
 				void setId(uint8_t _id) {
@@ -57,10 +57,10 @@ namespace ewol {
 				inline const vec2& getPos() const {
 					return m_pos;
 				};
-				void setSpecialKey(const ewol::key::Special& _specialKey) {
+				void setSpecialKey(const gale::key::Special& _specialKey) {
 					m_specialKey = _specialKey;
 				};
-				inline const ewol::key::Special& getSpecialKey() const {
+				inline const gale::key::Special& getSpecialKey() const {
 					return m_specialKey;
 				};
 				/**
@@ -74,13 +74,13 @@ namespace ewol {
 		
 		class InputSystem {
 			public:
-				InputSystem(enum ewol::key::type _type,
-				            enum ewol::key::status _status,
+				InputSystem(enum gale::key::type _type,
+				            enum gale::key::status _status,
 				            uint8_t _id,
 				            const vec2& _pos,
 				            std::shared_ptr<ewol::Widget> _dest,
 				            int32_t _realIdEvent,
-				            ewol::key::Special _specialKey) :
+				            gale::key::Special _specialKey) :
 				  m_event(_type, _status, _id, _pos, _specialKey),
 				  m_dest(_dest),
 				  m_realIdEvent(_realIdEvent) { };

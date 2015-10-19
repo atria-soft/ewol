@@ -9,7 +9,7 @@
 
 #include <etk/types.h>
 #include <ewol/ewol.h>
-#include <ewol/context/commandLine.h>
+#include <gale/context/commandLine.h>
 
 #include <appl/debug.h>
 #include <appl/Windows.h>

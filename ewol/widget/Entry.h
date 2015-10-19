@@ -140,7 +140,7 @@ namespace ewol {
 				 * @brief Copy the selected data on the specify clipboard
 				 * @param[in] _clipboardID Selected clipboard
 				 */
-				virtual void copySelectionToClipBoard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
+				virtual void copySelectionToClipBoard(enum gale::context::clipBoard::clipboardListe _clipboardID);
 				/**
 				 * @brief remove the selected area
 				 * @note This request a regeneration of the display
@@ -167,7 +167,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
+				virtual void onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID);
 				virtual void calculateMinMaxSize();
 			protected: // Derived function
 				virtual void onDraw();

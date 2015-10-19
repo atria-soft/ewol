@@ -29,7 +29,7 @@ ewol::widget::PopUp::PopUp() :
 void ewol::widget::PopUp::init(const std::string& _shaperName) {
 	ewol::widget::Container::init();
 	m_shaper.setString(_shaperName);
-	setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
+	setMinSize(gale::Dimension(vec2(80,80),gale::Dimension::Pourcent));
 	m_userExpand.set(bvec2(false, false));
 }
 ewol::widget::PopUp::~PopUp() {

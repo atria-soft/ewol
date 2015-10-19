@@ -25,16 +25,19 @@ namespace ewol {
 				std::string m_description;
 				int32_t m_callInProgress;
 				bool m_someOneRemoveInCall;
+				bool m_periodic;
 			public:
 				/**
 				 * @brief Create a parameter with a specific type.
 				 * @param[in] _signalInterfaceLink reference on the signal list.
 				 * @param[in] _name Static name of the parameter.
 				 * @param[in] _description description of the parameter.
+			 * @param[in] _periodic Customisation of the log display tag at true to down debug lebel at verbose.
 				 */
 				Base(ewol::signal::Interface& _signalInterfaceLink,
-				           const std::string& _name,
-				           const std::string& _description = "");
+				     const std::string& _name,
+				     const std::string& _description = "",
+				     bool _periodic = false);
 				/**
 				 * @brief Destructor.
 				 */

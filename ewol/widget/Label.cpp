@@ -23,7 +23,7 @@ ewol::widget::Label::Label() :
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
-	m_colorProperty = ewol::resource::ColorFile::create("THEME:COLOR:Label.json");
+	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Label.json");
 	if (m_colorProperty != nullptr) {
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
@@ -122,7 +122,7 @@ void ewol::widget::Label::onRegenerateDisplay() {
 bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == _event.getId()) {
-		if (ewol::key::statusSingle == _event.getStatus()) {
+		if (gale::key::status_single == _event.getStatus()) {
 			// nothing to do ...
 			signalPressed.emit();
 			return true;

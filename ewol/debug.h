@@ -16,6 +16,7 @@ namespace ewol {
 };
 #define EWOL_BASE(info,data) TK_LOG_BASE(ewol::getLogId(),info,data)
 
+#define EWOL_PRINT(data)         EWOL_BASE(-1, data)
 #define EWOL_CRITICAL(data)      EWOL_BASE(1, data)
 #define EWOL_ERROR(data)         EWOL_BASE(2, data)
 #define EWOL_WARNING(data)       EWOL_BASE(3, data)
