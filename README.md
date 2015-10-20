@@ -11,6 +11,13 @@ Release (master)
 [![Test Status](http://atria-soft.com/ci/test/atria-soft/ewol.svg?branch=master)](http://atria-soft.com/ci/atria-soft/ewol)
 [![Warning Status](http://atria-soft.com/ci/warning/atria-soft/ewol.svg?branch=master)](http://atria-soft.com/ci/atria-soft/ewol)
 
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=master&tag=Linux)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=master&tag=MacOs)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=master&tag=Mingw)](http://atria-soft.com/ci/atria-soft/ewol)
+
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=master&tag=Android)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=master&tag=IOs)](http://atria-soft.com/ci/atria-soft/ewol)
+
 Developement (dev)
 ------------------
 
@@ -18,6 +25,13 @@ Developement (dev)
 [![Coverage Status](http://atria-soft.com/ci/coverage/atria-soft/ewol.svg?branch=dev)](http://atria-soft.com/ci/atria-soft/ewol)
 [![Test Status](http://atria-soft.com/ci/test/atria-soft/ewol.svg?branch=dev)](http://atria-soft.com/ci/atria-soft/ewol)
 [![Warning Status](http://atria-soft.com/ci/warning/atria-soft/ewol.svg?branch=dev)](http://atria-soft.com/ci/atria-soft/ewol)
+
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=dev&tag=Linux)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=dev&tag=MacOs)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=dev&tag=Mingw)](http://atria-soft.com/ci/atria-soft/ewol)
+
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=dev&tag=Android)](http://atria-soft.com/ci/atria-soft/ewol)
+[![Build Status](http://atria-soft.com/ci/build/atria-soft/ewol.svg?branch=dev&tag=IOs)](http://atria-soft.com/ci/atria-soft/ewol)
 
 Instructions
 ============
@@ -44,11 +58,10 @@ download the software:
 	repo sync -j8
 
 
-Compile software and install:
------------------------------
+Compile software and test:
+--------------------------
 
-	For this you might use a project that create binaries or something else ...
-	Show http://github.com/HeeroYui/edn project
+	lutin ewol-test 0XX_customwidget 001_HelloWord
 
 Dependency packages
 ===================

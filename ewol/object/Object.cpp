@@ -32,8 +32,10 @@ void ewol::Object::autoDestroy() {
 }
 
 void ewol::Object::requestDestroyFromChild(const std::shared_ptr<ewol::Object>& _child) {
+	EWOL_INFO("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
 	EWOL_CRITICAL("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
 }
+
 void ewol::Object::setParent(const std::shared_ptr<ewol::Object>& _newParent) {
 	// TODO : Implement change of parent ...
 	m_parent = _newParent;
@@ -42,8 +44,6 @@ void ewol::Object::setParent(const std::shared_ptr<ewol::Object>& _newParent) {
 void ewol::Object::removeParent() {
 	m_parent.reset();
 }
-
-
 
 ewol::Object::Object() :
   m_objectHasBeenInit(false),

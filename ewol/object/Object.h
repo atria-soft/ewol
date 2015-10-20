@@ -104,23 +104,42 @@ namespace ewol {
 				return m_objectHasBeenInit;
 			}
 		protected:
-			std::weak_ptr<Object> m_parent;
-			bool m_destroy;
+			std::weak_ptr<Object> m_parent; //!< Reference on the current parrent.
+			bool m_destroy; //!< Flag to jknow if the object is requesting has destroy.
 		protected:
 			/**
 			 * @brief Auto-destroy the object
 			 */
 			void autoDestroy();
 		public:
+			/**
+			 * @brief Destroy the current object
+			 */
 			virtual void destroy() {
 				autoDestroy();
 			}
+			/**
+			 * @brief Check if the current objetc his destroy (in removing)
+			 * @return true The object is removed
+			 * @return false The object is not removed
+			 */
 			bool isDestroyed() const {
 				return m_destroy;
 			}
 		public:
+			/**
+			 * @brief Called by a whild that want to remove pointer of itself from the current list of his parrent
+			 * @param[in] _child Object of the child that want to remove itself
+			 */
 			virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+			/**
+			 * @brief Set the Object has new parrent.
+			 * @param[in] _newParent Object that requesting the parenting
+			 */
 			virtual void setParent(const std::shared_ptr<Object>& _newParent);
+			/**
+			 * @brief Remove the current parenting.
+			 */
 			virtual void removeParent();
 		private:
 			std::vector<const char*> m_listType;
