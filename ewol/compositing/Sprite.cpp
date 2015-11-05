@@ -12,8 +12,8 @@
 #undef __class__
 #define __class__ "ewol::compositing::Sprite"
 
-ewol::compositing::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite) :
-  ewol::compositing::Image(_imageName),
+ewol::compositing::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite, int32_t _size) :
+  ewol::compositing::Image(_imageName, false, _size),
   m_nbSprite(_nbSprite),
   m_unitarySpriteSize(0,0) {
 	/*

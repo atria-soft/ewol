@@ -12,7 +12,9 @@
 #undef __class__
 #define __class__	"ewol::compositing::Image"
 
-ewol::compositing::Image::Image(const std::string& _imageName, bool _df) :
+ewol::compositing::Image::Image(const std::string& _imageName,
+                                bool _df,
+                                int32_t _size) :
   m_filename(_imageName),
   m_requestSize(2,2),
   m_position(0.0, 0.0, 0.0),
@@ -30,7 +32,7 @@ ewol::compositing::Image::Image(const std::string& _imageName, bool _df) :
   m_distanceFieldMode(_df),
   m_resource(nullptr),
   m_resourceDF(nullptr) {
-	setSource(_imageName);
+	setSource(_imageName, _size);
 	loadProgram();
 }
 

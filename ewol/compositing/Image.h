@@ -52,8 +52,11 @@ namespace ewol {
 				 * @brief generic constructor
 				 * @param[in] _imageName Name of the file that might be loaded
 				 * @param[in] _df enable distance field mode
+				 * @param[in] _size for the image when Verctorial image loading is requested
 				 */
-				Image(const std::string& _imageName="", bool _df = false);
+				Image(const std::string& _imageName="",
+				      bool _df=false,
+				      int32_t _size=32);
 				/**
 				 * @brief generic destructor
 				 */
