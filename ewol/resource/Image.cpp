@@ -17,6 +17,9 @@
 #undef __class__
 #define __class__ "resource::TextureFile"
 
+const ivec2 ewol::resource::TextureFile::sizeAuto(-1,-1);
+const ivec2 ewol::resource::TextureFile::sizeDefault(0,0);
+
 ewol::resource::TextureFile::TextureFile() {
 	addResourceType("ewol::resource::Image");
 	
@@ -65,8 +68,8 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size) {
-	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
+std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size, ivec2 _sizeRegister) {
+	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
 	if (_filename == "") {
 		std::shared_ptr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
 		if (nullptr == object) {
@@ -86,8 +89,8 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
 	std::string TmpFilename = _filename;
-	if (false == etk::end_with(_filename, ".svg") ) {
-		_size = ivec2(-1,-1);
+	if (etk::end_with(_filename, ".svg") == false) {
+		_size = ewol::resource::TextureFile::sizeAuto;
 	}
 	#ifdef __TARGET_OS__MacOs
 		EWOL_ERROR("TODO : remove this strange hack");
@@ -98,10 +101,14 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 		#ifdef __TARGET_OS__Android
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
-		TmpFilename += ":";
-		TmpFilename += etk::to_string(_size.x());
-		TmpFilename += "x";
-		TmpFilename += etk::to_string(_size.y());
+		if (_sizeRegister != ewol::resource::TextureFile::sizeAuto) {
+			if (_sizeRegister != ewol::resource::TextureFile::sizeDefault) {
+				TmpFilename += ":";
+				TmpFilename += etk::to_string(_size.x());
+				TmpFilename += "x";
+				TmpFilename += etk::to_string(_size.y());
+			}
+		}
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);

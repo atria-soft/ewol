@@ -64,7 +64,7 @@ bool ewol::resource::Texture::updateContext() {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
 	}
-	EWOL_ERROR("plop : load the image:" << m_name);
+	EWOL_VERBOSE("load the image:" << m_name);
 	// in all case we set the texture properties :
 	// TODO : check error ???
 	glBindTexture(GL_TEXTURE_2D, m_texId);

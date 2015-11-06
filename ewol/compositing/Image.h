@@ -18,6 +18,8 @@
 namespace ewol {
 	namespace compositing {
 		class Image : public ewol::Compositing {
+			public:
+				static const int32_t sizeAuto;
 			private:
 				std::string m_filename;
 				ivec2 m_requestSize;
@@ -56,7 +58,7 @@ namespace ewol {
 				 */
 				Image(const std::string& _imageName="",
 				      bool _df=false,
-				      int32_t _size=32);
+				      int32_t _size=ewol::compositing::Image::sizeAuto);
 				/**
 				 * @brief generic destructor
 				 */

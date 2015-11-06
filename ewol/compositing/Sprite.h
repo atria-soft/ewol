@@ -21,9 +21,11 @@ namespace ewol {
 			public:
 				Sprite(const std::string& _imageName,
 				       const ivec2& _nbSprite,
-				       int32_t _size=32);
+				       int32_t _size=ewol::compositing::Image::sizeAuto);
 				virtual ~Sprite() {};
-				void printSprite(const ivec2& _spriteID, const vec2& _size) { printSprite(_spriteID, vec3(_size.x(), _size.y(),0)); };
+				void printSprite(const ivec2& _spriteID, const vec2& _size) {
+					printSprite(_spriteID, vec3(_size.x(), _size.y(),0));
+				};
 				void printSprite(const ivec2& _spriteID, const vec3& _size);
 		};
 	};

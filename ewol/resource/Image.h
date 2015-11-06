@@ -5,6 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
+// TODO : Change tis file name ...
 
 #ifndef __EWOL_TEXTURE_FILE_H__
 #define __EWOL_TEXTURE_FILE_H__
@@ -14,9 +15,14 @@
 #include <egami/Image.h>
 #include <ewol/resource/Texture.h>
 
+
+
 namespace ewol {
 	namespace resource {
 		class TextureFile : public ewol::resource::Texture {
+			public:
+				static const ivec2 sizeAuto;
+				static const ivec2 sizeDefault;
 			private:
 				vec2 m_realImageSize;
 			protected:
@@ -35,9 +41,12 @@ namespace ewol {
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the image file.
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
+				 * @param[in] _sizeRegister size register in named (When you preaload the images the size write here will be )
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static std::shared_ptr<ewol::resource::TextureFile> create(const std::string& _filename, ivec2 _size=ivec2(-1,-1));
+				static std::shared_ptr<ewol::resource::TextureFile> create(const std::string& _filename,
+				                                                           ivec2 _size=ewol::resource::TextureFile::sizeAuto,
+				                                                           ivec2 _sizeRegister=ewol::resource::TextureFile::sizeAuto);
 		};
 	};
 };
