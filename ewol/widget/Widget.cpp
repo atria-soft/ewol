@@ -545,21 +545,23 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
                                    char32_t _unicodeValue,
                                    enum gale::key::keyboard _kbMove,
                                    bool _isDown) {
-	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {
+	if (    _unicodeValue >= 'A'
+	     && _unicodeValue <= 'Z') {
 		_unicodeValue += 'a' - 'A';
 	}
 	//EWOL_INFO("Try to find generic shortcut ...");
-	for(int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
-		if(nullptr != m_localShortcut[iii]) {
-			if(    m_localShortcut[iii]->specialKey.getShift() == _special.getShift()
-			    && m_localShortcut[iii]->specialKey.getCtrl()  == _special.getCtrl()
-			    && m_localShortcut[iii]->specialKey.getAlt()   == _special.getAlt()
-			    && m_localShortcut[iii]->specialKey.getMeta()  == _special.getMeta()
-			    && (    (    m_localShortcut[iii]->keyboardMoveValue == gale::key::keyboard_unknow
-			              && m_localShortcut[iii]->unicodeValue == _unicodeValue)
-			         || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
-			              && m_localShortcut[iii]->unicodeValue == 0)
-			       ) ) {
+	for (int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
+		if (m_localShortcut[iii] != nullptr) {
+			if (    m_localShortcut[iii]->specialKey.getShift() == _special.getShift()
+			     && m_localShortcut[iii]->specialKey.getCtrl()  == _special.getCtrl()
+			     && m_localShortcut[iii]->specialKey.getAlt()   == _special.getAlt()
+			     && m_localShortcut[iii]->specialKey.getMeta()  == _special.getMeta()
+			     && (    (    m_localShortcut[iii]->keyboardMoveValue == gale::key::keyboard_unknow
+			               && m_localShortcut[iii]->unicodeValue == _unicodeValue)
+			          || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
+			               && m_localShortcut[iii]->unicodeValue == 0)
+			        )
+			   ) {
 				if (_isDown) {
 					signalShortcut.emit(m_localShortcut[iii]->message);
 				}
@@ -572,14 +574,14 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 
 
 void ewol::Widget::grabCursor() {
-	if (false == m_grabCursor) {
+	if (m_grabCursor == false) {
 		getContext().inputEventGrabPointer(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
 		m_grabCursor = true;
 	}
 }
 
 void ewol::Widget::unGrabCursor() {
-	if (true == m_grabCursor) {
+	if (m_grabCursor == true) {
 		getContext().inputEventUnGrabPointer();
 		m_grabCursor = false;
 	}
@@ -721,7 +723,7 @@ void ewol::Widget::addAnnimationType(enum ewol::Widget::annimationMode _mode, co
 }
 
 void ewol::Widget::setAnnimationType(enum ewol::Widget::annimationMode _mode, const std::string& _type) {
-	if (_mode==0) {
+	if (_mode == 0) {
 		m_annimationTypeStart.setString(_type);
 	} else {
 		m_annimationTypeStop.setString(_type);
@@ -729,7 +731,7 @@ void ewol::Widget::setAnnimationType(enum ewol::Widget::annimationMode _mode, co
 }
 
 void ewol::Widget::setAnnimationTime(enum ewol::Widget::annimationMode _mode, float _time) {
-	if (_mode==0) {
+	if (_mode == 0) {
 		m_annimationTimeStart.set(_time);
 	} else {
 		m_annimationTimeStop.set(_time);
