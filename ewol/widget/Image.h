@@ -11,7 +11,6 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <draw/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/resource/ColorFile.h>

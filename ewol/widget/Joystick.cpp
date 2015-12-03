@@ -29,10 +29,10 @@ ewol::widget::Joystick::Joystick() :
 	m_lock = false;
 	m_displayMode = modeNormal;
 	
-	m_colorFg = draw::color::blue;
+	m_colorFg = etk::color::blue;
 	
-	m_colorBg = draw::color::black;
-	m_colorBg.a = 0x3F;
+	m_colorBg = etk::color::black;
+	m_colorBg.setA(0x3F);
 	
 	m_displayPos.setValue(0,0);
 	m_distance = 0.0;

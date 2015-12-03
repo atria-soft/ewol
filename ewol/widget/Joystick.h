@@ -10,9 +10,9 @@
 #define __EWOL_JOYSTICK_H__
 
 #include <etk/types.h>
+#include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
-#include <draw/Color.h>
 #include <ewol/signal/Signal.h>
 
 
@@ -33,8 +33,8 @@ namespace ewol {
 					modeArrow,
 				};
 			private:
-				draw::Color m_colorFg; //!< Forground  color
-				draw::Color m_colorBg; //!< Background color
+				etk::Color<> m_colorFg; //!< Forground  color
+				etk::Color<> m_colorBg; //!< Background color
 				vec2 m_displayPos; //!< direction of the cursor ...
 				float m_distance; //!< dintance from the center
 				float m_angle; //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...

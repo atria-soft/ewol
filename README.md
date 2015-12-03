@@ -36,6 +36,12 @@ Developement (dev)
 Instructions
 ============
 
+download Build system:
+----------------------
+
+	sudo pip install lutin
+	sudo pip install pillow
+
 need google repo:
 -----------------
 
@@ -52,9 +58,7 @@ download the software:
 
 	mkdir WORKING_DIRECTORY
 	cd WORKING_DIRECTORY
-	sudo pip install lutin
-	sudo pip install pillow
-	repo init -u git://github.com/HeeroYui/manifest.git
+	repo init -u git://github.com/atria-soft/manifest.git
 	repo sync -j8
 
 
