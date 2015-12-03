@@ -25,7 +25,7 @@ def get_maintainer():
 	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
 
 def get_version():
-	return [0,0,0]
+	return [0,9,"dev"]
 
 def create(target, module_name):
 	# module name is 'edn' and type binary.
@@ -255,10 +255,8 @@ def create(target, module_name):
 	
 	my_module.add_path(tools.get_current_path(__file__))
 	
-	tagFile = tools.get_current_path(__file__) + "/tag"
-	ewolVersionID = tools.file_read_data(tagFile)
 	my_module.compile_flags('c++', [
-		"-DEWOL_VERSION=\"\\\""+ewolVersionID+"\\\"\""
+		"-DEWOL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
 		])
 	
 	return my_module
