@@ -1,8 +1,6 @@
 #!/usr/bin/python
 import lutin.module as module
 import lutin.tools as tools
-import datetime
-
 
 def get_type():
 	return "BINARY"

@@ -43,41 +43,38 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	m_size -= tmpBorderSize*2;
 	// calculate unExpandable size :
 	float unexpandableSize=0.0;
-	int32_t nbWidgetFixedSize=0;
-	int32_t nbWidgetNotFixedSize=0;
+	ivec2 nbWidgetNotFixedSize = ivec2(0,0);
 	for (auto &it : m_subWidget) {
-		if (it != nullptr) {
-			vec2 tmpSize = it->getCalculateMinSize();
-			if (m_mode == ewol::widget::Sizer::modeVert) {
-				unexpandableSize += tmpSize.y();
-				if (false == it->canExpand().y()) {
-					nbWidgetFixedSize++;
-				} else {
-					nbWidgetNotFixedSize++;
-				}
-			} else {
-				unexpandableSize += tmpSize.x();
-				if (false == it->canExpand().x()) {
-					nbWidgetFixedSize++;
-				} else {
-					nbWidgetNotFixedSize++;
-				}
+		if (it == nullptr) {
+			continue;
+		}
+		vec2 tmpSize = it->getCalculateMinSize();
+		if (m_mode == ewol::widget::Sizer::modeVert) {
+			unexpandableSize += tmpSize.y();
+			if (it->canExpand().y() == true) {
+				nbWidgetNotFixedSize+=ivec2(0,1);
+			}
+		} else {
+			unexpandableSize += tmpSize.x();
+			if (it->canExpand().x() == true) {
+				nbWidgetNotFixedSize+=ivec2(1,0);
 			}
 		}
 	}
 	// 2 cases : 1 or more can Expand, or all is done ...
 	float sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expand, or all is done ...
-	if (0 != nbWidgetNotFixedSize) {
+	if (nbWidgetNotFixedSize != ivec2(0,0)) {
 		if (m_mode == ewol::widget::Sizer::modeVert) {
-			sizeToAddAtEveryOne = (m_size.y() - unexpandableSize) / nbWidgetNotFixedSize;
+			sizeToAddAtEveryOne = (m_size.y() - unexpandableSize) / float(nbWidgetNotFixedSize.y());
 		} else {
-			sizeToAddAtEveryOne = (m_size.x() - unexpandableSize) / nbWidgetNotFixedSize;
+			sizeToAddAtEveryOne = (m_size.x() - unexpandableSize) / float(nbWidgetNotFixedSize.x());
 		}
 		if (sizeToAddAtEveryOne<0.0) {
 			sizeToAddAtEveryOne=0;
 		}
 	}
+	// TODO : Need manage gravity ...
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
 	for (auto &it : m_subWidget) {
 		if (it != nullptr) {
@@ -100,6 +97,12 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x()+sizeToAddAtEveryOne);
 				} else {
 					it->calculateSize(vec2ClipInt32(vec2(tmpSize.x(), m_size.y())));
+					
+					int32_t subSize = it->getSize().y();
+					if (subSize <= m_size.y()) {
+						// move localy of half needed
+						it->setOrigin(it->getOrigin() + ivec2(0, (m_size.y()-subSize)/2));
+					}
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x());
 				}
 			}

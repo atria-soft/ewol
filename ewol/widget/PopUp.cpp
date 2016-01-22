@@ -28,6 +28,7 @@ ewol::widget::PopUp::PopUp() :
 
 void ewol::widget::PopUp::init(const std::string& _shaperName) {
 	ewol::widget::Container::init();
+	m_userFill.set(bvec2(false,false));
 	m_shaper.setString(_shaperName);
 	setMinSize(gale::Dimension(vec2(80,80),gale::Dimension::Pourcent));
 	m_userExpand.set(bvec2(false, false));
@@ -43,7 +44,14 @@ void ewol::widget::PopUp::setShaperName(const std::string& _shaperName) {
 }
 
 void ewol::widget::PopUp::calculateSize(const vec2& _available) {
-	ewol::Widget::calculateSize(_available);
+	#if 0
+		//not call basic class ==> change methode to generate basic size ...
+		ewol::Widget::calculateSize(_available);
+	#else
+		vec2 size = _available;
+		size.setMax(m_minSize);
+		m_size = size;
+	#endif
 	if (nullptr != m_subWidget) {
 		ewol::Padding padding = m_shaper->getPadding();
 		vec2 subWidgetSize = m_subWidget->getCalculateMinSize();

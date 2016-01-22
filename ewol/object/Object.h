@@ -105,7 +105,7 @@ namespace ewol {
 			}
 		protected:
 			std::weak_ptr<Object> m_parent; //!< Reference on the current parrent.
-			bool m_destroy; //!< Flag to jknow if the object is requesting has destroy.
+			bool m_destroy; //!< Flag to know if the object is requesting has destroy.
 		protected:
 			/**
 			 * @brief Auto-destroy the object

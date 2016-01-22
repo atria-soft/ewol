@@ -34,7 +34,7 @@ void ewol::resource::TextureFile::init(std::string _genName, const std::string& 
 	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
-	if (false == egami::load(m_data, _tmpfileName, _size)) {
+	if (egami::load(m_data, _tmpfileName, _size) == false) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}
 	ivec2 tmp = m_data.getSize();

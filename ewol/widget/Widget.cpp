@@ -97,7 +97,7 @@ ewol::Widget::Widget() :
   m_userMinSize(*this, "min-size", gale::Dimension(vec2(0,0),gale::Dimension::Pixel), "User minimum size"),
   m_userMaxSize(*this, "max-size", gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel), "User maximum size"),
   m_userExpand(*this, "expand", bvec2(false,false), "Request the widget Expand size wile space is available"),
-  m_userFill(*this, "fill", bvec2(false,false), "Fill the widget available size"),
+  m_userFill(*this, "fill", bvec2(true,true), "Fill the widget available size"),
   m_hide(*this, "hide", false, "The widget start hided"),
   m_gravity(*this, "gravity", ewol::gravityButtomLeft, "Gravity orientation"),
   m_hasFocus(false),
@@ -148,7 +148,16 @@ ewol::Widget::~Widget() {
 
 void ewol::Widget::calculateSize(const vec2& _available) {
 	vec2 size = _available;
-	size.setMax(m_minSize);
+	if (m_userFill->x() == true) {
+		size.setX(std::max(size.x(), m_minSize.x()));
+	} else {
+		size.setX(std::min(size.x(), m_minSize.x()));
+	}
+	if (m_userFill->y() == true) {
+		size.setY(std::max(size.y(), m_minSize.y()));
+	} else {
+		size.setY(std::min(size.y(), m_minSize.y()));
+	}
 	if (m_size == size) {
 		return;
 	}
