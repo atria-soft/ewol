@@ -36,6 +36,11 @@ namespace ewol {
 					return m_name;
 				};
 				/**
+				 * @brief Get the parameter type of the class in string mode.
+				 * @return The string type of the parameter.
+				 */
+				virtual std::string getParameterType() const = 0;
+				/**
 				 * @brief Get the type of the parameter in string mode.
 				 * @return The string type of the parameter.
 				 */

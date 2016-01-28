@@ -52,6 +52,10 @@ namespace ewol {
 				 */
 				virtual ~Value() { };
 				// herited methode
+				virtual std::string getParameterType() const {
+					return "ewol::parameter::Value";
+				}
+				// herited methode
 				virtual std::string getType() const {
 					return typeid(MY_TYPE).name();
 				}

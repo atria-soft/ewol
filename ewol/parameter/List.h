@@ -52,6 +52,10 @@ namespace ewol {
 					m_list.insert(std::make_pair(_name, _value));
 				}
 				// herited methode
+				virtual std::string getParameterType() const {
+					return "ewol::parameter::List";
+				}
+				// herited methode
 				virtual std::string getType() const {
 					return typeid(MY_TYPE).name();
 				}

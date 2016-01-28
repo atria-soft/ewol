@@ -87,3 +87,17 @@ std::map<std::string, std::string> ewol::parameter::Interface::parameterGetAll(b
 	}
 	return out;
 }
+
+
+size_t ewol::parameter::Interface::getParameterCount() const {
+	return m_list.size();
+}
+
+ewol::parameter::Parameter* ewol::parameter::Interface::getParameterRaw(const size_t& _id) const {
+	if (_id >= m_list.size()) {
+		EWOL_ERROR("Wrong ID for parameter list. " << _id << " >= " << m_list.size());
+		return nullptr;
+	}
+	return m_list[_id];
+}
+

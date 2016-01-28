@@ -70,6 +70,21 @@ namespace ewol {
 				 * @return map on the parameters
 				 */
 				std::map<std::string, std::string> parameterGetAll(bool _notIfDefault=true) const;
+			public:
+				/**
+				 * @brief Get count of parameters.
+				 * @return The number of the parameter.
+				 */
+				size_t getParameterCount() const;
+				/**
+				 * @brief Get name of a parameters.
+				 * @return _id Id of the parameter.
+				 * @return pointer on the parameter.
+				 */
+				ewol::parameter::Parameter* getParameterRaw(const size_t& _id) const;
+				
+				
+				
 		};
 	};
 };

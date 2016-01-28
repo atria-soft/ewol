@@ -50,6 +50,10 @@ namespace ewol {
 				 */
 				virtual ~Range() { };
 				// herited methode
+				virtual std::string getParameterType() const {
+					return "ewol::parameter::Range";
+				}
+				// herited methode
 				virtual std::string getType() const {
 					return typeid(MY_TYPE).name();
 				}
