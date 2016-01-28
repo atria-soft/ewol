@@ -20,6 +20,7 @@ namespace appl {
 	class MainWindows : public ewol::widget::Windows {
 		private:
 			std::shared_ptr<ewol::widget::Sizer> m_sizerVert;
+			std::shared_ptr<ewol::widget::Sizer> m_sizerDynamic;
 			std::shared_ptr<ewol::Widget> m_subWidget;
 			std::shared_ptr<ewol::widget::Label> m_testName;
 			int32_t m_idWidget;
@@ -33,6 +34,7 @@ namespace appl {
 		protected:
 			void onCallbackThemeChange(const bool& _value);
 			void onCallbackWidgetChange(int32_t _increment);
+			void updateProperty();
 	};
 };
 #endif
