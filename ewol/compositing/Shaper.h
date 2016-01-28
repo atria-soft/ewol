@@ -231,12 +231,7 @@ namespace ewol {
 				 * @param[in] _name Name of the element requested
 				 * @return The Id of the color
 				 */
-				int32_t requestColor(const std::string& _name) {
-					if (m_colorProperty == nullptr) {
-						return -1;
-					}
-					return m_colorProperty->request(_name);
-				}
+				int32_t requestColor(const std::string& _name);
 				/**
 				 * @brief Get The color associated at an ID.
 				 * @param[in] _id Id of the color
@@ -249,24 +244,13 @@ namespace ewol {
 				 * @param[in] _name Name of the element requested
 				 * @return The Id of the element
 				 */
-				int32_t requestConfig(const std::string& _name) {
-					if (m_config == nullptr) {
-						return -1;
-					}
-					return m_config->request(_name);
-				}
+				int32_t requestConfig(const std::string& _name);
 				/**
 				 * @brief Get The number associated at an ID.
 				 * @param[in] _id Id of the parameter
 				 * @return the requested number.
 				 */
-				double getConfigNumber(int32_t _id) {
-					if (    _id == -1
-					     || m_config == nullptr) {
-						return 0.0;
-					}
-					return m_config->getNumber(_id);
-				}
+				double getConfigNumber(int32_t _id);
 			public:
 				/**
 				 * @brief Set activate state of the element

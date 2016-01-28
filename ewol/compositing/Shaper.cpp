@@ -622,10 +622,37 @@ bool ewol::compositing::Shaper::hasSources() {
 const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
 	static const etk::Color<float> errorValue(0,0,0,0);
 	if (m_colorProperty == nullptr) {
+		EWOL_WARNING("nullptr of m_colorProperty ==> return #0000 for id " << _id);
 		return errorValue;
 	}
 	return m_colorProperty->get(_id);
 }
+
+int32_t ewol::compositing::Shaper::requestColor(const std::string& _name) {
+	if (m_colorProperty == nullptr) {
+		EWOL_WARNING("nullptr of m_colorProperty ==> return -1 for name " << _name);
+		return -1;
+	}
+	return m_colorProperty->request(_name);
+}
+
+int32_t ewol::compositing::Shaper::requestConfig(const std::string& _name) {
+	if (m_config == nullptr) {
+		EWOL_WARNING("nullptr of m_config ==> return -1 for name " << _name);
+		return -1;
+	}
+	return m_config->request(_name);
+}
+
+double ewol::compositing::Shaper::getConfigNumber(int32_t _id) {
+	if (    _id == -1
+	     || m_config == nullptr) {
+		EWOL_WARNING("nullptr of m_config ==> return 0.0 for id " << _id);
+		return 0.0;
+	}
+	return m_config->getNumber(_id);
+}
+
 
 namespace etk {
 	template<> std::string to_string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
@@ -642,4 +669,3 @@ namespace etk {
 		return from_string(_variableRet,  etk::to_string(_value));
 	}
 };
-
