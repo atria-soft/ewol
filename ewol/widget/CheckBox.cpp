@@ -34,9 +34,6 @@ ewol::widget::CheckBox::CheckBox() :
   m_value(*this, "value", false, "Basic value of the widget") {
 	addObjectType("ewol::widget::CheckBox");
 	
-	m_shaperIdSize = m_shaper->requestConfig("box-size");
-	m_shaperIdSizeInsize = m_shaper->requestConfig("box-inside");
-	
 	// shaper satatus update:
 	CheckStatus();
 	// This widget can have the focus ...
@@ -49,6 +46,8 @@ ewol::widget::CheckBox::CheckBox() :
 void ewol::widget::CheckBox::init(const std::string& _shaperName) {
 	ewol::widget::Container2::init();
 	m_shaper->setSource(_shaperName);
+	m_shaperIdSize = m_shaper->requestConfig("box-size");
+	m_shaperIdSizeInsize = m_shaper->requestConfig("box-inside");
 }
 
 ewol::widget::CheckBox::~CheckBox() {
@@ -60,7 +59,7 @@ void ewol::widget::CheckBox::calculateSize(const vec2& _availlable) {
 	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	ewol::Padding ret = calculateSizePadded(_availlable, padding);
-	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
+	EWOL_DEBUG(" configuring : padding=" << padding << " boxSize=" << boxSize << "");
 	m_selectableAreaPos = vec2(ret.xLeft()/*-boxSize*/, ret.yButtom());
 	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
 }
@@ -89,7 +88,7 @@ void ewol::widget::CheckBox::onRegenerateDisplay() {
 	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
 	float boxInside = m_shaper->getConfigNumber(m_shaperIdSizeInsize);
 	m_shaper->clear();
-	
+	EWOL_DEBUG(" configuring : boxSize=" << boxSize << " boxInside=" << boxInside << "");
 	vec2 origin(m_selectableAreaPos + vec2(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
 	vec2 size = vec2(boxSize+padding.x(), boxSize+padding.y());
 	
