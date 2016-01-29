@@ -36,7 +36,7 @@ namespace ewol {
 				 * @param[in] _mode mode of parsing the string
 				 * @param[in] _data file/directString data to generate compositing of the widget..
 				 */
-				void init(enum composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
+				void init(enum ewol::widget::Composer::composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
 			public:
 				DECLARE_WIDGET_FACTORY(Composer, "Composer");
 				/**
@@ -58,6 +58,7 @@ namespace ewol {
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
 		};
+		std::shared_ptr<ewol::Widget> composerGenerate(enum ewol::widget::Composer::composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
 	};
 };
 
