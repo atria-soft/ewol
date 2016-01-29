@@ -13,6 +13,8 @@
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
 #include <ewol/widget/Manager.h>
+#include <etk/Color.h>
+#include <ewol/compositing/Drawing.h>
 
 namespace ewol {
 	namespace widget {
@@ -76,6 +78,23 @@ namespace ewol {
 				const gale::Dimension& getBorderSize() const {
 					return m_borderSize;
 				};
+			private:
+				ewol::parameter::Value<etk::Color<>> m_borderColor; //!< Border color.
+			public:
+				/**
+				 * @brief Set the current border color:
+				 * @param[in] _value The border color to set @ref etk::color::none : no color
+				 */
+				void setBorderColor(const etk::Color<>& _value) {
+					m_borderColor.set(_value);
+				}
+				/**
+				 * @brief get the current border size of the current element:
+				 * @return the border size (0 if not used)
+				 */
+				const etk::Color<>& getBorderColor() const {
+					return m_borderColor;
+				};
 			public:
 				enum animation {
 					animationNone, //!< No annimation
@@ -119,6 +138,8 @@ namespace ewol {
 				float getAnimationTime() {
 					return m_animationTime;
 				};
+			private:
+				ewol::compositing::Drawing m_draw; //!< Compositing drawing element for display the border.
 			public: // Derived function
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize();
@@ -128,6 +149,8 @@ namespace ewol {
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onRegenerateDisplay();
+				virtual void onDraw();
 		};
 	};
 };

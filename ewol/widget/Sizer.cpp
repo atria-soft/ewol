@@ -16,6 +16,7 @@
 ewol::widget::Sizer::Sizer() :
   m_mode(*this, "mode", modeHori, "The display mode"),
   m_borderSize(*this, "border", vec2(0,0), "The sizer border size"),
+  m_borderColor(*this, "border-color", etk::color::none, "Color of the border"),
   m_animation(animationNone),
   m_animationTime(0) {
 	addObjectType("ewol::widget::Sizer");
@@ -145,6 +146,31 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 		}
 	}
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
+}
+
+void ewol::widget::Sizer::onRegenerateDisplay() {
+	ewol::widget::ContainerN::onRegenerateDisplay();
+	m_draw.clear();
+	vec2 tmpBorderSize = m_borderSize->getPixel();
+	if (tmpBorderSize == vec2(0.0f, 0.0f)) {
+		return;
+	}
+	if (m_borderColor->a() == 0) {
+		return;
+	}
+	m_draw.setColor(m_borderColor);
+	m_draw.setPos(vec3(0, 0, 0) );
+	m_draw.rectangleWidth(vec3(tmpBorderSize.x(), m_size.y(),0) );
+	m_draw.setPos(vec3(m_size.x() - tmpBorderSize.x(), 0, 0) );
+	m_draw.rectangleWidth(vec3(tmpBorderSize.x(), m_size.y(),0) );
+	m_draw.setPos(vec3(tmpBorderSize.x(), 0, 0) );
+	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
+	m_draw.setPos(vec3(tmpBorderSize.x(), m_size.y()-tmpBorderSize.y(), 0) );
+	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
+}
+void ewol::widget::Sizer::onDraw() {
+	m_draw.draw();
+	ewol::widget::ContainerN::onDraw();
 }
 
 int32_t ewol::widget::Sizer::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
