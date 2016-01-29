@@ -121,27 +121,28 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
 	for (auto &it : m_subWidget) {
-		if (it != nullptr) {
-			it->calculateMinMaxSize();
-			if (it->canExpand().x() == true) {
-				m_subExpend.setX(true);
+		if (it == nullptr) {
+			continue;
+		}
+		it->calculateMinMaxSize();
+		if (it->canExpand().x() == true) {
+			m_subExpend.setX(true);
+		}
+		if (it->canExpand().y() == true) {
+			m_subExpend.setY(true);
+		}
+		vec2 tmpSize = it->getCalculateMinSize();
+		EWOL_VERBOSE("[" << getId() << "] NewMinSize=" << tmpSize);
+		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "}     Get minSize="<< tmpSize);
+		if (m_mode == ewol::widget::Sizer::modeVert) {
+			m_minSize.setY(m_minSize.y() + tmpSize.y());
+			if (tmpSize.x()>m_minSize.x()) {
+				m_minSize.setX(tmpSize.x());
 			}
-			if (it->canExpand().y() == true) {
-				m_subExpend.setY(true);
-			}
-			vec2 tmpSize = it->getCalculateMinSize();
-			EWOL_VERBOSE("[" << getId() << "] NewMinSize=" << tmpSize);
-			EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "}     Get minSize="<< tmpSize);
-			if (m_mode == ewol::widget::Sizer::modeVert) {
-				m_minSize.setY(m_minSize.y() + tmpSize.y());
-				if (tmpSize.x()>m_minSize.x()) {
-					m_minSize.setX(tmpSize.x());
-				}
-			} else {
-				m_minSize.setX(m_minSize.x() + tmpSize.x());
-				if (tmpSize.y()>m_minSize.y()) {
-					m_minSize.setY(tmpSize.y());
-				}
+		} else {
+			m_minSize.setX(m_minSize.x() + tmpSize.x());
+			if (tmpSize.y()>m_minSize.y()) {
+				m_minSize.setY(tmpSize.y());
 			}
 		}
 	}
@@ -167,6 +168,33 @@ void ewol::widget::Sizer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
 	m_draw.setPos(vec3(tmpBorderSize.x(), m_size.y()-tmpBorderSize.y(), 0) );
 	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
+	for (auto &it : m_subWidget) {
+		if (it == nullptr) {
+			continue;
+		}
+		vec2 deltaOrigin = it->getOrigin() - (m_origin );
+		vec2 size = it->getSize();
+		// now we display around the widget every element needed
+		if (m_mode == ewol::widget::Sizer::modeHori) {
+			// under
+			
+			// upper
+			if (size.y() < m_size.y()-tmpBorderSize.y()*2.0f) {
+				m_draw.setColor(etk::color::orange);
+				m_draw.setPos(deltaOrigin + vec2(0, it->getSize().y()) );
+				m_draw.rectangleWidth(vec2(it->getSize().x(), m_size.y()-tmpBorderSize.y()*2.0f-it->getSize().y()) );
+			}
+		} else {
+			// left
+			
+			// right
+			if (size.x() < m_size.x()-tmpBorderSize.x()*2.0f) {
+				m_draw.setColor(etk::color::orange);
+				m_draw.setPos(deltaOrigin + vec2(it->getSize().x(), 0) );
+				m_draw.rectangleWidth(vec2(m_size.x()-tmpBorderSize.x()*2.0f-it->getSize().x(), it->getSize().y()) );
+			}
+		}
+	}
 }
 void ewol::widget::Sizer::onDraw() {
 	m_draw.draw();

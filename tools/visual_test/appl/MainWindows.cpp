@@ -61,105 +61,6 @@ void appl::MainWindows::init() {
 	m_sizerDynamic = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-dynamic-config"));
 	m_subWidget = std::dynamic_pointer_cast<ewol::Widget>(m_composer->getSubObjectNamed("[TEST]TO-TEST"));
 	m_testName = std::dynamic_pointer_cast<ewol::widget::Label>(m_composer->getSubObjectNamed("appl-label-test"));
-	
-	/*
-	std::shared_ptr<ewol::widget::Sizer> mySizerHori;
-	std::shared_ptr<ewol::widget::Sizer> mySizerVert;
-	std::shared_ptr<ewol::widget::Button> myButton;
-	
-	mySizerVert = ewol::widget::Sizer::create(ewol::widget::Sizer::modeVert);
-	if (mySizerVert == nullptr) {
-		APPL_ERROR("Allocation error mySizerVert");
-		return;
-	}
-	setSubWidget(mySizerVert);
-		
-		mySizerHori = ewol::widget::Sizer::create(ewol::widget::Sizer::modeHori);
-		if (mySizerHori == nullptr) {
-			APPL_ERROR("Allocation error mySizerHori");
-			return;
-		}
-		mySizerVert->subWidgetAdd(mySizerHori);
-			myButton = ewol::widget::Button::create();
-			if (myButton != nullptr) {
-				myButton->setSubWidget(ewol::widget::Label::create("default theme (cube)"));
-				myButton->setSubWidgetToggle(ewol::widget::Label::create("rounded theme"));
-				myButton->setToggleMode(true);
-				myButton->signalValue.bind(shared_from_this(), &appl::MainWindows::onCallbackThemeChange);
-				mySizerHori->subWidgetAdd(myButton);
-			}
-			myButton = ewol::widget::Button::create();
-			if (myButton != nullptr) {
-				myButton->setSubWidget(ewol::widget::Label::create("Previous Widget test"));
-				myButton->signalPressed.bind(shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, -1);
-				mySizerHori->subWidgetAdd(myButton);
-			}
-			myButton = ewol::widget::Button::create();
-			if (myButton != nullptr) {
-				myButton->setSubWidget(ewol::widget::Label::create("Next Widget test"));
-				myButton->signalPressed.bind(shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, 1);
-				mySizerHori->subWidgetAdd(myButton);
-			}
-			m_testName = ewol::widget::Label::create("none");
-			if (m_testName != nullptr) {
-				mySizerHori->subWidgetAdd(m_testName);
-			}
-		std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
-		if (mySpacer != nullptr) {
-			mySpacer->setExpand(bvec2(false,false));
-			mySpacer->setFill(bvec2(true,false));
-			mySpacer->setMinSize(vec2(3,3));
-			mySpacer->setColor(0x000000FF);
-			mySizerVert->subWidgetAdd(mySpacer);
-		}
-		mySizerHori = ewol::widget::Sizer::create(ewol::widget::Sizer::modeHori);
-		if (mySizerHori == nullptr) {
-			APPL_ERROR("Allocation error mySizerVert");
-			return;
-		}
-		mySizerHori->setExpand(bvec2(true,true));
-		mySizerHori->setFill(bvec2(true,true));
-		mySizerHori->lockExpand(bvec2(true,true));
-		mySizerVert->subWidgetAdd(mySizerHori);
-			
-	      + "	<sizer mode='hori'>\n"
-	      + "		<spacer expand='false,false' fill='true,false' min-size='10,10px' color='#F008'/>\n"
-	      + "		<sizer mode='vert'>\n"
-	      + "			<spacer expand='false,false' fill='false,true' min-size='10,10px' color='#FF08'/>\n"
-	      + "			<ButtonColor name='[TEST]TO-TEST' expand='false,false' fill='false,false' />\n"
-	      + "			<spacer expand='false,false' fill='false,true' min-size='10,10px' color='#0FF8'/>\n"
-	      + "		</sizer>\n"
-	      + "		<spacer expand='false,false' fill='true,false' min-size='10,10px' color='#0F08'/>\n"
-	      + "	</sizer>\n"
-			
-			m_sizerDynamic = ewol::widget::Sizer::create(ewol::widget::Sizer::modeVert);
-			if (m_sizerDynamic == nullptr) {
-				APPL_ERROR("Allocation error mySizerHori");
-				return;
-			}
-			m_sizerDynamic->setExpand(bvec2(false,true));
-			m_sizerDynamic->setFill(bvec2(true,true));
-			m_sizerDynamic->setMinSize(gale::Dimension::Dimension(vec2(12,0), gale::Dimension::Pourcent));
-			m_sizerDynamic->lockExpand(bvec2(true,true));
-			mySizerHori->subWidgetAdd(m_sizerDynamic);
-			mySpacer = ewol::widget::Spacer::create();
-			if (mySpacer == nullptr) {
-				APPL_ERROR("Allocation error mySizerHori");
-				return;
-			}
-			mySpacer->setExpand(bvec2(false,true));
-			mySpacer->setFill(bvec2(false,true));
-			mySpacer->setMinSize(vec2(3,3));
-			mySpacer->setColor(0x000000FF);
-			mySizerHori->subWidgetAdd(mySpacer);
-			
-			m_sizerVert = ewol::widget::Sizer::create(ewol::widget::Sizer::modeVert);
-			if (m_sizerVert == nullptr) {
-				APPL_ERROR("Allocation error mySizerVert");
-				return;
-			}
-			mySizerHori->subWidgetAdd(m_sizerVert);
-	*/
 }
 
 void appl::MainWindows::onCallbackThemeChange(const bool& _value) {
@@ -315,19 +216,16 @@ void appl::MainWindows::updateProperty() {
 				//type = "bvec2";
 				std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
+				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
+				ewol::parameter::Value<bvec2>* paramValue = dynamic_cast<ewol::parameter::Value<bvec2>*>(param);
+				if (paramValue == nullptr) {
+					APPL_ERROR("nullptr... 2 ");
+					return;
+				}
+				bvec2 value = paramValue->get();
+				widgetTmp->setValue(value.x());
 				widgetTmp->signalValue.connect([=](const bool& _value) {
-						if (m_subWidget == nullptr) {
-							APPL_ERROR("nullptr...");
-							return;
-						}
 						APPL_INFO("set parameter : X name=" << param->getName() << " value=" << _value);
-						ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
-						ewol::parameter::Value<bvec2>* paramValue = dynamic_cast<ewol::parameter::Value<bvec2>*>(param);
-						if (paramValue == nullptr) {
-							APPL_ERROR("nullptr... 2 ");
-							return;
-						}
-						std::string lastValue = m_subWidget->parameterGet(param->getName());
 						bvec2 lastValueInterpreted = paramValue->get();
 						lastValueInterpreted.setX(_value);
 						paramValue->set(lastValueInterpreted);
@@ -338,19 +236,9 @@ void appl::MainWindows::updateProperty() {
 				
 				widgetTmp = ewol::widget::CheckBox::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
+				widgetTmp->setValue(value.y());
 				widgetTmp->signalValue.connect([=](const bool& _value) {
-						if (m_subWidget == nullptr) {
-							APPL_ERROR("nullptr...");
-							return;
-						}
 						APPL_INFO("set parameter : Y name=" << param->getName() << " value=" << _value);
-						ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
-						ewol::parameter::Value<bvec2>* paramValue = dynamic_cast<ewol::parameter::Value<bvec2>*>(param);
-						if (paramValue == nullptr) {
-							APPL_ERROR("nullptr... 2 ");
-							return;
-						}
-						std::string lastValue = m_subWidget->parameterGet(param->getName());
 						bvec2 lastValueInterpreted = paramValue->get();
 						lastValueInterpreted.setY(_value);
 						paramValue->set(lastValueInterpreted);

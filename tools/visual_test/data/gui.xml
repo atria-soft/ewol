@@ -42,17 +42,9 @@
 			       expand="true,true"
 			       fill="true,true"
 			       border="10px"
-			       border-color="#F008">
-				<sizer mode="hori">
-					<spacer expand="false,false" fill="true" min-size="10,10px" color="#F008"/>
-					<sizer mode="vert"
-					       name="appl-upper-test-widget">
-						<spacer expand="false,false" fill="true" min-size="10,10px" color="#FF08"/>
-						<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
-						<spacer expand='false,false' fill='true' min-size='10,10px' color="#0FF8"/>
-					</sizer>
-					<spacer expand="false,false" fill="true" min-size="10,10px" color="#0F08"/>
-				</sizer>
+			       border-color="#F008"
+			       name="appl-upper-test-widget">
+				<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
 			</sizer>
 		</sizer>
 	</sizer>
