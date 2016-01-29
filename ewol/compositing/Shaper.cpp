@@ -216,6 +216,14 @@ void ewol::compositing::Shaper::clear() {
 	memset(m_coord, 0, sizeof(m_coord));
 }
 
+bool ewol::compositing::Shaper::setState(int32_t _newState) {
+	if (m_stateActivate == _newState) {
+		return false;
+	}
+	m_stateActivate = _newState;
+	return true;
+}
+
 bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {
 	if (_newStatusId != m_stateNew) {
 		m_nextStatusRequested = _newStatusId;

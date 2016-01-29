@@ -111,6 +111,13 @@ namespace ewol {
 				 */
 				void clear();
 				/**
+				 * @brief Change the current state
+				 * @param[in] _newState Current state of the configuration
+				 * @return true Need redraw.
+				 * @return false No need redraw.
+				 */
+				bool setState(int32_t _newState);
+				/**
 				 * @brief change the current status in an other
 				 * @param[in] _newStatusId the next new status requested
 				 * @return true The widget must call this fuction periodicly (and redraw itself)
