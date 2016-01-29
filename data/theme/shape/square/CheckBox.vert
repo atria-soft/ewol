@@ -42,12 +42,16 @@ void main(void) {
 		colorOld = EW_foregroundPressed;
 	} else if(EW_status.stateOld == 2) {
 		colorOld = EW_foregroundHover;
+	} else if(EW_status.stateOld == 3) {
+		colorOld = EW_foregroundSelected;
 	}
 	vec4 colorNew = EW_foreground;
 	if(EW_status.stateNew == 1) {
 		colorNew = EW_foregroundPressed;
 	} else if(EW_status.stateNew == 2) {
 		colorNew = EW_foregroundHover;
+	} else if(EW_status.stateNew == 3) {
+		colorNew = EW_foregroundSelected;
 	}
 	
 	v_colorInside = EW_foreground;
@@ -58,6 +62,10 @@ void main(void) {
 	// note : int() is needed for the OpenGL ES platform
 	v_colorTansition =   colorOld * (1.0 - EW_status.transition)
 	                   + colorNew * EW_status.transition;
+	// for test ... TODO : Remove
+	if (EW_status.activate == 1) {
+		v_colorTansition = EW_foregroundSelected;
+	}
 	v_colorBorder = EW_border;
 	v_colorBackground = EW_background;
 }

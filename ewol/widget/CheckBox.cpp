@@ -13,6 +13,7 @@
 #define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
 #define STATUS_PRESSED   (1)
+#define STATUS_SELECTED  (2)
 
 #undef __class__
 #define __class__	"CheckBox"
@@ -168,19 +169,25 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 }
 
 void ewol::widget::CheckBox::CheckStatus() {
-	if (true == m_buttonPressed) {
-		changeStatusIn(STATUS_PRESSED);
-	} else {
-		if (true == m_mouseHover) {
-			changeStatusIn(STATUS_HOVER);
-		} else {
-			changeStatusIn(STATUS_UP);
-		}
+	if (m_shaper->setState(m_value==true?1:0) == true) {
+		markToRedraw();
 	}
+	if (m_buttonPressed == true) {
+		EWOL_WARNING("SET state : PRESSED");
+		changeStatusIn(STATUS_PRESSED);
+		return;
+	}
+	if (true == m_mouseHover) {
+		EWOL_WARNING("SET state : HOVER");
+		changeStatusIn(STATUS_HOVER);
+		return;
+	}
+	EWOL_WARNING("SET state : UP");
+	changeStatusIn(STATUS_UP);
 }
 
 void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
-	if (true == m_shaper->changeStatusIn(_newStatusId) ) {
+	if (m_shaper->changeStatusIn(_newStatusId) == true) {
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -188,7 +195,7 @@ void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
 
 
 void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
-	if (false == m_shaper->periodicCall(_event) ) {
+	if (m_shaper->periodicCall(_event) == false) {
 		periodicCallDisable();
 	}
 	markToRedraw();
