@@ -45,6 +45,13 @@ namespace ewol {
 				 */
 				void setSubWidget(std::shared_ptr<ewol::Widget> _newWidget);
 				/**
+				 * @brief Replace a old subwidget with a new one.
+				 * @param[in] _oldWidget The widget to replace.
+				 * @param[in] _newWidget The widget to set.
+				 */
+				virtual void subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
+				                              const std::shared_ptr<ewol::Widget>& _newWidget);
+				/**
 				 * @brief remove the subWidget node (async).
 				 */
 				void subWidgetRemove();

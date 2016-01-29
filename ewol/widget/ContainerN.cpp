@@ -56,14 +56,38 @@ void ewol::widget::ContainerN::lockExpand(const bvec2& _lockExpand) {
 }
 
 
+void ewol::widget::ContainerN::subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
+                                                const std::shared_ptr<ewol::Widget>& _newWidget) {
+	bool haveChange = false;
+	for (auto &it : m_subWidget) {
+		if (it != _oldWidget) {
+			continue;
+		}
+		EWOL_WARNING("Remove old");
+		it->removeParent();
+		it.reset();
+		EWOL_WARNING("Set New");
+		if (_newWidget != nullptr) {
+			EWOL_WARNING("set parrent");
+			_newWidget->setParent(shared_from_this());
+		}
+		it = _newWidget;
+		haveChange = true;
+	}
+	if (haveChange == false) {
+		EWOL_WARNING("Request replace with a wrong old widget");
+		return;
+	}
+	markToRedraw();
+	requestUpdateSize();
+}
+
 int32_t ewol::widget::ContainerN::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add An empty Widget ... ");
 		return -1;
 	}
-	if (_newWidget != nullptr) {
-		_newWidget->setParent(shared_from_this());
-	}
+	_newWidget->setParent(shared_from_this());
 	m_subWidget.push_back(_newWidget);
 	markToRedraw();
 	requestUpdateSize();

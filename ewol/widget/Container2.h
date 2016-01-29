@@ -151,6 +151,13 @@ namespace ewol {
 					}
 					return _id;
 				}
+				/**
+				 * @brief Replace a old subwidget with a new one.
+				 * @param[in] _oldWidget The widget to replace.
+				 * @param[in] _newWidget The widget to set.
+				 */
+				virtual void subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
+				                              const std::shared_ptr<ewol::Widget>& _newWidget);
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();

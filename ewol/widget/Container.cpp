@@ -48,6 +48,22 @@ void ewol::widget::Container::setSubWidget(std::shared_ptr<ewol::Widget> _newWid
 	requestUpdateSize();
 }
 
+void ewol::widget::Container::subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
+                                               const std::shared_ptr<ewol::Widget>& _newWidget) {
+	if (m_subWidget != _oldWidget) {
+		EWOL_WARNING("Request replace with a wrong old widget");
+		return;
+	}
+	m_subWidget->removeParent();
+	m_subWidget.reset();
+	m_subWidget = _newWidget;
+	if (m_subWidget != nullptr) {
+		m_subWidget->setParent(shared_from_this());
+	}
+	markToRedraw();
+	requestUpdateSize();
+}
+
 void ewol::widget::Container::subWidgetRemove() {
 	if (m_subWidget != nullptr) {
 		m_subWidget->removeParent();
@@ -163,7 +179,7 @@ bool ewol::widget::Container::loadXML(const std::shared_ptr<const exml::Element>
 			EWOL_ERROR("(l "<<pNode->getPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << getWidgetManager().list() << "]" );
 			continue;
 		}
-		if (nullptr != getSubWidget()) {
+		if (getSubWidget() != nullptr) {
 			EWOL_ERROR("(l "<<pNode->getPos()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
 			continue;
 		}

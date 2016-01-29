@@ -55,6 +55,13 @@ namespace ewol {
 				 */
 				virtual void subWidgetRemoveAllDelayed();
 				/**
+				 * @brief Replace a old subwidget with a new one.
+				 * @param[in] _oldWidget The widget to replace.
+				 * @param[in] _newWidget The widget to set.
+				 */
+				virtual void subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
+				                              const std::shared_ptr<ewol::Widget>& _newWidget);
+				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element

@@ -44,6 +44,29 @@ void ewol::widget::Container2::setSubWidget(std::shared_ptr<ewol::Widget> _newWi
 	requestUpdateSize();
 }
 
+void ewol::widget::Container2::subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
+                                                const std::shared_ptr<ewol::Widget>& _newWidget) {
+	bool haveChange = false;
+	for (size_t iii=0; iii<2; ++iii) {
+		if (m_subWidget[iii] != _oldWidget) {
+			continue;
+		}
+		m_subWidget[iii]->removeParent();
+		m_subWidget[iii].reset();
+		m_subWidget[iii] = _newWidget;
+		if (m_subWidget[iii] != nullptr) {
+			m_subWidget[iii]->setParent(shared_from_this());
+		}
+		haveChange = true;
+	}
+	if (haveChange == false) {
+		EWOL_WARNING("Request replace with a wrong old widget");
+		return;
+	}
+	markToRedraw();
+	requestUpdateSize();
+}
+
 
 void ewol::widget::Container2::subWidgetRemove(int32_t _idWidget) {
 	if (m_subWidget[_idWidget] != nullptr) {
