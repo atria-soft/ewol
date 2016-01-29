@@ -1,0 +1,59 @@
+<composer>
+	<sizer mode="vert"
+	       expand="true,true"
+	       fill="true,true">
+		<sizer mode="hori"
+		       expand="true,false"
+		       lock="false,true"
+		       fill="true,true">
+			<button name="appl-theme-toggle"
+			        toggle="true">
+				<label expand="false,false" fill="true,true">default theme (cube)</label>
+				<label expand="false,false" fill="true,true">rounded theme</label>
+			</button>
+			<button name="appl-previous-widget">
+				<label expand="false,false" fill="true,true">Previous Widget</label>
+			</button>
+			<button name="appl-next-widget">
+				<label expand="false,false" fill="true,true">Next Widget</label>
+			</button>
+			<label name="appl-label-test" expand="true,false" fill="true,true">Test :</label>
+			<spacer expand="true,true"/>
+		</sizer>
+		<spacer min-size="(3,3)px" expand="true,false" fill="true" corlor="red"/>
+		<sizer mode="hori"
+		       expand="true,true"
+		       lock="true,true"
+		       fill="true,true">
+			<scroll fill="true"
+			        expand="false,true"
+			        gravity="top"
+			        lock="true,true"
+			        limit="0,0.75"
+			        min-size="25%">
+				<sizer mode="vert"
+				       expand="false,false"
+				       fill="true"
+				       name="appl-dynamic-config">
+					<label expand="true" fill="true">No config</label>
+				</sizer>
+			</scroll>
+			<sizer mode="vert"
+			       expand="true,true"
+			       fill="true,true"
+			       border="10px"
+			       border-color="#F008">
+				<sizer mode="hori">
+					<spacer expand="false,false" fill="true" min-size="10,10px" color="#F008"/>
+					<sizer mode="vert"
+					       name="appl-upper-test-widget">
+						<spacer expand="false,false" fill="true" min-size="10,10px" color="#FF08"/>
+						<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
+						<spacer expand='false,false' fill='true' min-size='10,10px' color="#0FF8"/>
+					</sizer>
+					<spacer expand="false,false" fill="true" min-size="10,10px" color="#0F08"/>
+				</sizer>
+			</sizer>
+		</sizer>
+	</sizer>
+</composer>

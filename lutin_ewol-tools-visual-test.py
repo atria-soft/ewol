@@ -49,6 +49,7 @@ def create(target, module_name):
 	my_module.copy_path('tools/visual_test/data/stone*','')
 	my_module.copy_path('tools/visual_test/data/sphere.png','')
 	my_module.copy_path('tools/visual_test/data/sphere.obj','')
+	my_module.copy_path('tools/visual_test/data/gui.xml','')
 	
 	my_module.add_path(os.path.join(tools.get_current_path(__file__), "tools/visual_test/"))
 	

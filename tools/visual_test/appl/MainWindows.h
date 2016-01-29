@@ -16,9 +16,11 @@
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Spacer.h>
+#include <ewol/widget/Composer.h>
 namespace appl {
 	class MainWindows : public ewol::widget::Windows {
 		private:
+			std::shared_ptr<ewol::widget::Composer> m_composer;
 			std::shared_ptr<ewol::widget::Sizer> m_sizerVert;
 			std::shared_ptr<ewol::widget::Sizer> m_sizerDynamic;
 			std::shared_ptr<ewol::Widget> m_subWidget;
