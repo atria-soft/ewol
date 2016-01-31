@@ -86,7 +86,22 @@ void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 			// Now update his size  his size in X and the curent sizer size in Y:
 			if (m_mode == ewol::widget::Sizer::modeVert) {
 				if (it->canExpand().y() == true) {
-					it->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
+					vec2 expectedSize = vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne));
+					it->calculateSize(expectedSize);
+					vec2 underSize = it->getSize();
+					if (it->canExpand().x() == true) {
+						if (underSize.x() < expectedSize.x()) {
+							EWOL_WARNING("Subwidget request exapnd and does not expand ... ==> rules impose it ...");
+							//it->setSize(vec2(expectedSize.x(), underSize.y());
+							//underSize = it->getSize();
+						}
+					}
+					if (it->canExpand().y() == true) {
+						if (underSize.y() < expectedSize.y()) {
+							EWOL_WARNING("Subwidget request exapnd and does not expand ... ==> rules impose it ...");
+							//it->setSize(vec2(underSize.y(), expectedSize.x());
+						}
+					}
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
 				} else {
 					it->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y())));
