@@ -114,16 +114,9 @@ void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp
 	}
 }
 
-ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availlable, const ewol::Padding& _padding) {
-	vec2 localAvaillable = _availlable - vec2(_padding.x(), _padding.y());
-	ewol::Widget::calculateSize(_availlable);
-	// set minimal size
-	if (m_userExpand->x() == true) {
-		m_size.setX(_availlable.x());
-	}
-	if (m_userExpand->y() == true) {
-		m_size.setY(_availlable.y());
-	}
+ewol::Padding ewol::widget::Container2::onSizeChangePadded(const ewol::Padding& _padding) {
+	ewol::Widget::onSizeChange();
+	vec2 localAvaillable = m_size - vec2(_padding.x(), _padding.y());
 	// Checkin the filling properties  == > for the subElements:
 	vec2 subElementSize = m_minSize;
 	if (m_userFill->x() == true) {
@@ -156,7 +149,8 @@ ewol::Padding ewol::widget::Container2::calculateSizePadded(const vec2& _availla
 				}
 			}
 			m_subWidget[iii]->setOrigin(m_origin + origin);
-			m_subWidget[iii]->calculateSize(subElementSize);
+			m_subWidget[iii]->setSize(subElementSize);
+			m_subWidget[iii]->onSizeChange();
 		}
 	}
 	vec2 selectableAreaPos = origin-vec2(_padding.xLeft(), _padding.yButtom());
@@ -252,7 +246,7 @@ void ewol::widget::Container2::setOffset(const vec2& _newVal) {
 	if (m_offset != _newVal) {
 		ewol::Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...
-		calculateSize(m_size);
+		calculateSize();
 	}
 }
 

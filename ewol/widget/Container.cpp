@@ -104,31 +104,33 @@ void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp)
 	}
 }
 
-void ewol::widget::Container::calculateSize(const vec2& _availlable) {
-	if (nullptr!=m_subWidget) {
-		vec2 origin = m_origin+m_offset;
-		vec2 minSize = m_subWidget->getCalculateMinSize();
-		bvec2 expand = m_subWidget->getExpand();
-		if (    expand.x() == false
-		    || minSize.x()>_availlable.x()) {
-			if (m_gravity == ewol::gravityCenter) {
-				origin -= vec2((minSize.x() - _availlable.x())/2.0f, 0);
-			} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
-				origin -= vec2((minSize.x() - _availlable.x()), 0);
-			}
-		}
-		if(    expand.y() == false
-		    || minSize.y()>_availlable.y()) {
-			if (m_gravity == ewol::gravityCenter) {
-				origin -= vec2(0, (minSize.y() - _availlable.y())/2.0f);
-			} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
-				origin -= vec2(0, (minSize.y() - _availlable.y()));
-			}
-		}
-		m_subWidget->setOrigin(origin);
-		m_subWidget->calculateSize(_availlable);
+void ewol::widget::Container::onSizeChange() {
+	ewol::Widget::onSizeChange();
+	if (m_subWidget == nullptr) {
+		return;
 	}
-	ewol::Widget::calculateSize(_availlable);
+	vec2 origin = m_origin+m_offset;
+	vec2 minSize = m_subWidget->getCalculateMinSize();
+	bvec2 expand = m_subWidget->getExpand();
+	if (    expand.x() == false
+	    || minSize.x()>m_size.x()) {
+		if (m_gravity == ewol::gravityCenter) {
+			origin -= vec2((minSize.x() - m_size.x())*0.5f, 0.0f);
+		} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
+			origin -= vec2((minSize.x() - m_size.x()), 0.0f);
+		}
+	}
+	if(    expand.y() == false
+	    || minSize.y()>m_size.y()) {
+		if (m_gravity == ewol::gravityCenter) {
+			origin -= vec2(0.0f, (minSize.y() - m_size.y())*0.5f);
+		} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
+			origin -= vec2(0.0f, (minSize.y() - m_size.y()));
+		}
+	}
+	m_subWidget->setOrigin(origin);
+	m_subWidget->setSize(m_size);
+	m_subWidget->onSizeChange();
 }
 
 void ewol::widget::Container::calculateMinMaxSize() {
@@ -203,7 +205,7 @@ void ewol::widget::Container::setOffset(const vec2& _newVal) {
 	if (m_offset != _newVal) {
 		ewol::Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...
-		calculateSize(m_size);
+		onSizeChange();
 	}
 }
 

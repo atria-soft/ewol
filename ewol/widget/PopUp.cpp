@@ -43,45 +43,39 @@ void ewol::widget::PopUp::setShaperName(const std::string& _shaperName) {
 	markToRedraw();
 }
 
-void ewol::widget::PopUp::calculateSize(const vec2& _available) {
-	#if 0
-		//not call basic class ==> change methode to generate basic size ...
-		ewol::Widget::calculateSize(_available);
-	#else
-		vec2 size = _available;
-		size.setMax(m_minSize);
-		m_size = size;
-	#endif
-	if (nullptr != m_subWidget) {
-		ewol::Padding padding = m_shaper->getPadding();
-		vec2 subWidgetSize = m_subWidget->getCalculateMinSize();
-		if (true == m_subWidget->canExpand().x()) {
-			if (m_lockExpand->x() == true) {
-				subWidgetSize.setX(m_minSize.x());
-			} else {
-				subWidgetSize.setX(m_size.x()-padding.xLeft());
-			}
-		}
-		if (true == m_subWidget->canExpand().y()) {
-			if (m_lockExpand->y() == true) {
-				subWidgetSize.setY(m_minSize.y());
-			} else {
-				subWidgetSize.setY(m_size.y()-padding.yButtom());
-			}
-		}
-		// limit the size of the element :
-		//subWidgetSize.setMin(m_minSize);
-		// posiition at a int32_t pos :
-		subWidgetSize = vec2ClipInt32(subWidgetSize);
-		
-		// set config to the Sub-widget
-		vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
-		subWidgetOrigin = vec2ClipInt32(subWidgetOrigin);
-		
-		m_subWidget->setOrigin(subWidgetOrigin);
-		m_subWidget->calculateSize(subWidgetSize);
-	}
+void ewol::widget::PopUp::onSizeChange() {
 	markToRedraw();
+	if (nullptr == m_subWidget) {
+		return;
+	}
+	ewol::Padding padding = m_shaper->getPadding();
+	vec2 subWidgetSize = m_subWidget->getCalculateMinSize();
+	if (true == m_subWidget->canExpand().x()) {
+		if (m_lockExpand->x() == true) {
+			subWidgetSize.setX(m_minSize.x());
+		} else {
+			subWidgetSize.setX(m_size.x()-padding.xLeft());
+		}
+	}
+	if (true == m_subWidget->canExpand().y()) {
+		if (m_lockExpand->y() == true) {
+			subWidgetSize.setY(m_minSize.y());
+		} else {
+			subWidgetSize.setY(m_size.y()-padding.yButtom());
+		}
+	}
+	// limit the size of the element :
+	//subWidgetSize.setMin(m_minSize);
+	// posiition at a int32_t pos :
+	subWidgetSize = vec2ClipInt32(subWidgetSize);
+	
+	// set config to the Sub-widget
+	vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
+	subWidgetOrigin = vec2ClipInt32(subWidgetOrigin);
+	
+	m_subWidget->setOrigin(subWidgetOrigin);
+	m_subWidget->setSize(subWidgetSize);
+	m_subWidget->onSizeChange();
 }
 
 void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {

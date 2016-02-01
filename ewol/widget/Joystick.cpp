@@ -55,13 +55,6 @@ ewol::widget::Joystick::~Joystick() {
 	
 }
 
-
-void ewol::widget::Joystick::calculateSize(const vec2& availlable) {
-	float minimumSize = std::min(availlable.x(), availlable.y());
-	m_size.setValue(minimumSize, minimumSize);
-	markToRedraw();
-}
-
 void ewol::widget::Joystick::onRegenerateDisplay() {
 	if (true == needRedraw()) {
 		// clean the object list ...

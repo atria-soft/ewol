@@ -150,19 +150,23 @@ namespace ewol {
 			 */
 			virtual vec2 relativePosition(const vec2& _pos);
 			/**
-			 * @brief Parent set the possible diplay size of the current widget whith his own possibilities
-			 *        By default this save the widget available size in the widget size
-			 * @param[in] _available Available x&y pixel size
+			 * @brief Parent have set the size and the origin. the container need to update the subwidget property
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void calculateSize(const vec2& _available);
+			virtual void onSizeChange();
+			virtual void calculateSize() {};
 			/**
 			 * @brief get the widget size
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual vec2 getSize();
-			virtual void parrentSetSize(const vec2& _value) {
+			/**
+			 * @brief set the widget size
+			 * @return Requested size
+			 * @note : INTERNAL EWOL SYSTEM Do not modify the size yourself: calculation is complex and need knowledge of around widget
+			 */
+			virtual void setSize(const vec2& _value) {
 				m_size = _value;
 			}
 			/**
@@ -672,7 +676,7 @@ namespace ewol {
 			virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		public:
 			/**
-			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions
+			 * @brief need to be call When the size of the current widget have change  ==> this force the system to recalculate all the widget positions
 			 */
 			void requestUpdateSize();
 			/**

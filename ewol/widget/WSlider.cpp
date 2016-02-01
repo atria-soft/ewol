@@ -43,17 +43,16 @@ ewol::widget::WSlider::~WSlider() {
 }
 
 
-void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
-	//EWOL_DEBUG("Update size");
-	ewol::widget::ContainerN::calculateSize(_availlable);
-	
+void ewol::widget::WSlider::onSizeChange() {
+	ewol::widget::ContainerN::onSizeChange();
 	if (m_windowsDestination == m_windowsSources) {
 		auto it = m_subWidget.begin();
 		std::advance(it, m_windowsDestination);
 		if (    it != m_subWidget.end()
 		     && *it != nullptr) {
 			(*it)->setOrigin(m_origin+m_offset);
-			(*it)->calculateSize(m_size);
+			(*it)->setSize(m_size);
+			(*it)->onSizeChange();
 		}
 	} else {
 		float factor = -1.0f;
@@ -73,7 +72,8 @@ void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 				                         m_origin.y() + factor*(m_size.y()*m_slidingProgress))
 				                  + m_offset);
 			}
-			(*it)->calculateSize(m_size);
+			(*it)->setSize(m_size);
+			(*it)->onSizeChange();
 		}
 		it = m_subWidget.begin();
 		std::advance(it, m_windowsDestination);
@@ -88,7 +88,8 @@ void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 				                         m_origin.y() + factor*(m_size.y()*m_slidingProgress - m_size.y()))
 				                  + m_offset);
 			}
-			(*it)->calculateSize(m_size);
+			(*it)->setSize(m_size);
+			(*it)->onSizeChange();
 		}
 	}
 	markToRedraw();
@@ -204,8 +205,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 		m_slidingProgress += _event.getDeltaCall()/m_transitionSpeed;
 		m_slidingProgress = std::avg(0.0f, m_slidingProgress, 1.0f);
 	}
-	calculateSize(m_size);
-	markToRedraw();
+	onSizeChange();
 }
 
 void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {

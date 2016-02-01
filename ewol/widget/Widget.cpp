@@ -146,22 +146,7 @@ ewol::Widget::~Widget() {
 	shortCutClean();
 }
 
-void ewol::Widget::calculateSize(const vec2& _available) {
-	vec2 size = _available;
-	if (m_userFill->x() == true) {
-		size.setX(std::max(size.x(), m_minSize.x()));
-	} else {
-		size.setX(std::min(size.x(), m_minSize.x()));
-	}
-	if (m_userFill->y() == true) {
-		size.setY(std::max(size.y(), m_minSize.y()));
-	} else {
-		size.setY(std::min(size.y(), m_minSize.y()));
-	}
-	if (m_size == size) {
-		return;
-	}
-	m_size = size;
+void ewol::Widget::onSizeChange() {
 	markToRedraw();
 }
 

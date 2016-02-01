@@ -83,7 +83,6 @@ namespace ewol {
 				void getProperty(float& _distance, float& _angle);
 				
 			public: // Derived function
-				virtual void calculateSize(const vec2& _availlable);
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 		};

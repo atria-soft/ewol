@@ -155,7 +155,7 @@ namespace ewol {
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
-				virtual void calculateSize(const vec2& _availlable);
+				virtual void onSizeChange();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);

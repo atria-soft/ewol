@@ -141,7 +141,7 @@ namespace ewol {
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element for display the border.
 			public: // Derived function
-				virtual void calculateSize(const vec2& _availlable);
+				virtual void onSizeChange();
 				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
 				virtual int32_t subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget);

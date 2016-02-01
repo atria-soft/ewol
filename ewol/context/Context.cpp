@@ -460,7 +460,8 @@ void ewol::Context::forceRedrawAll() {
 		return;
 	}
 	ivec2 size = getSize();
-	m_windowsCurrent->calculateSize(vec2(size.x(), size.y()));
+	m_windowsCurrent->setSize(vec2(size.x(), size.y()));
+	m_windowsCurrent->onSizeChange();
 }
 /*
 void ewol::Context::OS_Stop() {

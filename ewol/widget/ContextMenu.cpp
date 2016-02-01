@@ -49,10 +49,8 @@ ewol::widget::ContextMenu::~ContextMenu() {
 	
 }
 
-void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
-	//EWOL_DEBUG("CalculateSize=" << availlable);
+void ewol::widget::ContextMenu::onSizeChange() {
 	// pop-up fill all the display :
-	m_size = _availlable;
 	ewol::Padding padding = m_shaper->getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
 	if (nullptr != m_subWidget) {
@@ -110,7 +108,8 @@ void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 		}
 		EWOL_VERBOSE("       == > sub origin=" << subWidgetOrigin << " size=" << subWidgetSize);
 		m_subWidget->setOrigin(subWidgetOrigin);
-		m_subWidget->calculateSize(subWidgetSize);
+		m_subWidget->setSize(subWidgetSize);
+		m_subWidget->onSizeChange();
 	}
 	markToRedraw();
 }

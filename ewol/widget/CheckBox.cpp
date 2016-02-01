@@ -55,11 +55,11 @@ ewol::widget::CheckBox::~CheckBox() {
 	
 }
 
-void ewol::widget::CheckBox::calculateSize(const vec2& _availlable) {
+void ewol::widget::CheckBox::onSizeChange() {
 	ewol::Padding padding = m_shaper->getPadding();
 	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
-	ewol::Padding ret = calculateSizePadded(_availlable, padding);
+	ewol::Padding ret = onSizeChangePadded(padding);
 	EWOL_DEBUG(" configuring : padding=" << padding << " boxSize=" << boxSize << "");
 	m_selectableAreaPos = vec2(ret.xLeft()/*-boxSize*/, ret.yButtom());
 	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));

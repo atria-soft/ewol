@@ -79,7 +79,7 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
-				virtual void calculateSize(const vec2& _availlable);
+				virtual void onSizeChange();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
 				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
