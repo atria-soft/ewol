@@ -139,9 +139,9 @@ namespace ewol {
 		// -- Widget size:
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			vec2 m_size; //!< internal : current size of the widget
-			vec2 m_minSize; //!< internal : minimum size of the widget
-			vec2 m_maxSize; //!< internal : maximum size of the widget
+			vec2 m_size; //!< internal: current size of the widget
+			vec2 m_minSize; //!< internal: minimum size of the widget
+			vec2 m_maxSize; //!< internal: maximum size of the widget
 		public:
 			/**
 			 * @brief convert the absolute position in the local Position (Relative)
@@ -162,6 +162,9 @@ namespace ewol {
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual vec2 getSize();
+			virtual void parrentSetSize(const vec2& _value) {
+				m_size = _value;
+			}
 			/**
 			 * @brief calculate the minimum and maximum size (need to estimate expend properties of the widget)
 			 * @note : INTERNAL EWOL SYSTEM
