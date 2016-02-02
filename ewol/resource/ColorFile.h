@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __SIMPLE_COLOR_FILE_H__
-#define __SIMPLE_COLOR_FILE_H__
+#pragma once
 
 #include <etk/types.h>
 #include <etk/Color.h>
@@ -74,6 +72,4 @@ namespace ewol {
 		};
 	};
 };
-
-#endif
 

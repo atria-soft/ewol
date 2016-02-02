@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_EVENT_ENTRY_H__
-#define __EWOL_EVENT_ENTRY_H__
+#pragma once
 
 #include <etk/types.h>
 #include <gale/key/key.h>
@@ -72,6 +70,3 @@ namespace ewol {
 		std::ostream& operator <<(std::ostream& _os, const ewol::event::EntrySystem& _obj);
 	};
 };
-
-#endif
-

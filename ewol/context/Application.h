@@ -6,8 +6,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#ifndef __EWOL_CONTEXT_APPLICATION_H__
-#define __EWOL_CONTEXT_APPLICATION_H__
+#pragma once
 
 namespace ewol {
 	class Context;
@@ -50,5 +49,3 @@ namespace ewol {
 		};
 	};
 };
-
-#endif

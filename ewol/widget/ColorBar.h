@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COLORBAR_H__
-#define __EWOL_COLORBAR_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -44,5 +42,3 @@ namespace ewol {
 		};
 	};
 };
-
-#endif

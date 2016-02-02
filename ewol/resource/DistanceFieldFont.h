@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_DISTANCE_FIELD_FONT_H__
-#define __EWOL_DISTANCE_FIELD_FONT_H__
+#pragma once
 
 #include <ewol/resource/font/FontBase.h>
 #include <ewol/resource/Texture.h>
@@ -98,6 +96,3 @@ namespace ewol {
 		};
 	};
 };
-
-#endif
-

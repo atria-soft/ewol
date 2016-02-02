@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_W_SLIDER_H__
-#define __EWOL_W_SLIDER_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -108,8 +106,7 @@ namespace ewol {
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};
-	};
+	}
 	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
-};
+}
 
-#endif

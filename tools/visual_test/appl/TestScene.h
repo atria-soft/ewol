@@ -5,9 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
-
-#ifndef __TEST_SCENE_H__
-#define __TEST_SCENE_H__
+#pragma once
 
 #include <appl/debug.h>
 #include <ewol/widget/Widget.h>
@@ -25,4 +23,3 @@ class TestScene : public ewol::widget::Sizer {
 		virtual void onReceiveMessage(const ewol::object::Message& _msg);
 };
 
-#endif

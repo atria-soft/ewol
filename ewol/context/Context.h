@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_CONTEXT_H__
-#define __EWOL_CONTEXT_H__
+#pragma once
 
 #include <gale/key/key.h>
 #include <gale/Application.h>
@@ -214,6 +212,4 @@ namespace ewol {
 	 */
 	Context& getContext();
 };
-
-#endif
 

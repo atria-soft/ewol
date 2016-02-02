@@ -5,9 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
-
-#ifndef __TEST_BUTTON_COLOR_H__
-#define __TEST_BUTTON_COLOR_H__
+#pragma once
 
 #include <appl/debug.h>
 #include <ewol/widget/Widget.h>
@@ -34,6 +32,5 @@ namespace appl {
 			void onCallbackFillY(const bool& _value);
 			void onCallbackChangeColor(const etk::Color<>& _value);
 	};
-};
+}
 
-#endif

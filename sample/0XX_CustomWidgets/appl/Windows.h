@@ -5,9 +5,7 @@
  * 
  * @license BSD 3 clauses (see license file)
  */
-
-#ifndef __APPL_WINDOWS_H__
-#define __APPL_WINDOWS_H__
+#pragma once
 
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/Composer.h>
@@ -25,7 +23,4 @@ namespace appl {
 			void onCallbackChangeValues();
 			void onCallbackAutoMode();
 	};
-};
-
-
-#endif
+}

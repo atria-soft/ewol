@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_ENTRY_H__
-#define __EWOL_ENTRY_H__
+#pragma once
 
 #include <etk/types.h>
 #include <regex>
@@ -186,5 +184,3 @@ namespace ewol {
 		};
 	};
 };
-
-#endif

@@ -5,9 +5,7 @@
  * 
  * @license GPL v3 (see license file)
  */
-
-#ifndef __APPL_WIDGET_DISPLAY_H__
-#define __APPL_WIDGET_DISPLAY_H__
+#pragma once
 
 #include <draw/Color.h>
 #include <ewol/widget/Widget.h>
@@ -43,7 +41,6 @@ namespace appl {
 			virtual bool onEventInput(const ewol::event::Input& _event);
 			virtual void onDraw();
 	};
-};
+}
 
-#endif
 

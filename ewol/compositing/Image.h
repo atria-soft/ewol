@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COMPOSITING_IMAGE_H__
-#define __EWOL_COMPOSITING_IMAGE_H__
+#pragma once
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
@@ -192,4 +190,3 @@ namespace ewol {
 	};
 };
 
-#endif

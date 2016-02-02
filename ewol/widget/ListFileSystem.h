@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_LIST_FILE_H__
-#define __EWOL_LIST_FILE_H__
+#pragma once
 
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
@@ -160,5 +158,4 @@ namespace ewol {
 	};
 };
 
-#endif
 

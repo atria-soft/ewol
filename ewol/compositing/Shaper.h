@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COMPOSITING_SHAPER_H__
-#define __EWOL_COMPOSITING_SHAPER_H__
+#pragma once
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
@@ -292,8 +290,7 @@ namespace ewol {
 					return _obj.m_name != m_name;
 				}
 		};
-	};
-};
+	}
+}
 
-#endif
 

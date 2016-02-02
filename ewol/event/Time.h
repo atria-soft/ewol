@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_EVENT_CALL_TIME_H__
-#define __EWOL_EVENT_CALL_TIME_H__
+#pragma once
 
 #include <etk/types.h>
 
@@ -60,8 +58,6 @@ namespace ewol {
 				};
 		};
 		std::ostream& operator <<(std::ostream& _os, const ewol::event::Time& _obj);
-	};
-};
-
-#endif
+	}
+}
 

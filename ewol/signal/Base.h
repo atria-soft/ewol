@@ -5,12 +5,9 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_SIGNAL_BASE_H__
-#define __EWOL_SIGNAL_BASE_H__
+#pragma once
 
 #include <ewol/signal/Interface.h>
-
 
 namespace ewol {
 	namespace signal {
@@ -55,4 +52,3 @@ namespace ewol {
 		const char* logIndent(int32_t _iii);
 	};
 };
-#endif

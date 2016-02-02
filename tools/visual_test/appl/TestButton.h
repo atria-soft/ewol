@@ -5,9 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
-
-#ifndef __TEST_BUTTON_H__
-#define __TEST_BUTTON_H__
+#pragma once
 
 #include <appl/debug.h>
 #include <ewol/widget/Button.h>
@@ -31,6 +29,4 @@ namespace appl {
 			void onCallbackTextToggle(const bool& _value);
 			void onCallbackChangeText();
 	};
-};
-
-#endif
+}

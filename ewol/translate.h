@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_TRANSLATE_H__
-#define __EWOL_TRANSLATE_H__
+#pragma once
 
 #include <etk/types.h>
 
@@ -75,6 +73,3 @@ namespace ewol {
 };
 // Here we define a simple macro to Translate all string simply:
 #define TRANSLATE(a) ewol::translate::get(a)
-
-#endif
-

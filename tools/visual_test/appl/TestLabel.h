@@ -5,9 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
-
-#ifndef __TEST_LABEL_H__
-#define __TEST_LABEL_H__
+#pragma once
 
 #include <appl/debug.h>
 #include <ewol/widget/Widget.h>
@@ -41,7 +39,6 @@ namespace appl {
 			void onCallbackMaxSize(const bool& _value);
 			void onCallbackChangeLabel();
 	};
-};
+}
 
-#endif
 

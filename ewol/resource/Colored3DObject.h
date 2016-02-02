@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __COLORED_3D_OBJECT_H__
-#define __COLORED_3D_OBJECT_H__
+#pragma once
 
 #include <etk/types.h>
 #include <gale/resource/Resource.h>
@@ -56,5 +54,3 @@ namespace ewol {
 	};
 };
 
-
-#endif

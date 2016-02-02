@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_OBJECT_H__
-#define __EWOL_OBJECT_H__
+#pragma once
 
 #include <etk/types.h>
 #include <vector>
@@ -314,7 +312,6 @@ namespace ewol {
 } while (false)
 //#include <ewol/signal/Signal.h>
 
-#endif
 
 
 

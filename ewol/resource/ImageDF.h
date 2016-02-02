@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_RESOURCE_IMAGE_DISTANCE_FIELD_H__
-#define __EWOL_RESOURCE_IMAGE_DISTANCE_FIELD_H__
+#pragma once
 
 #include <etk/types.h>
 #include <etk/types.h>
@@ -50,5 +48,3 @@ namespace ewol {
 	};
 };
 
-
-#endif

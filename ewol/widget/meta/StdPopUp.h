@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_STD_POP_UP_H__
-#define __EWOL_STD_POP_UP_H__
+#pragma once
 
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/Label.h>
@@ -79,7 +77,6 @@ namespace ewol {
 			public: // callback function
 				void onCallBackButtonExit();
 		};
-	};
-};
+	}
+}
 
-#endif

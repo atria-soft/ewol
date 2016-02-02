@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_WIDGET_H__
-#define __EWOL_WIDGET_H__
+#pragma once
 
 #include <vector>
 #include <etk/types.h>
@@ -758,4 +756,3 @@ namespace ewol {
 
 #include <ewol/widget/Manager.h>
 
-#endif

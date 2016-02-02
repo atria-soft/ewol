@@ -5,9 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
-
-#ifndef __TEST_IMAGE_H__
-#define __TEST_IMAGE_H__
+#pragma once
 
 #include <appl/debug.h>
 #include <ewol/widget/Widget.h>
@@ -34,6 +32,5 @@ namespace appl {
 			void onCallbackFillY(const bool& _value);
 			void onCallbackChangeImage();
 	};
-};
+}
 
-#endif

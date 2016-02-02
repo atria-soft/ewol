@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COMPOSITING_TEXT_DF_H__
-#define __EWOL_COMPOSITING_TEXT_DF_H__
+#pragma once
 
 #include <etk/Color.h>
 
@@ -70,8 +68,7 @@ namespace ewol {
 				virtual void printChar(const char32_t& _charcode);
 				virtual vec3 calculateSizeChar(const char32_t& _charcode);
 		};
-	};
-};
+	}
+}
 
-#endif
 

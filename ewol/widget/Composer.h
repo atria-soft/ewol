@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_WIDGET_COMPOSER_H__
-#define __EWOL_WIDGET_COMPOSER_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -61,5 +59,3 @@ namespace ewol {
 		std::shared_ptr<ewol::Widget> composerGenerate(enum ewol::widget::Composer::composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
 	};
 };
-
-#endif

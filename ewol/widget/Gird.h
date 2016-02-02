@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_WIDGET_GIRD_H__
-#define __EWOL_WIDGET_GIRD_H__
+#pragma once
 
 #include <etk/types.h>
 #include <vector>
@@ -145,5 +143,3 @@ namespace ewol {
 		};
 	};
 };
-
-#endif

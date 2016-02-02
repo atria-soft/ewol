@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_FONT_FREE_TYPE_H__
-#define __EWOL_FONT_FREE_TYPE_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/resource/font/FontBase.h>
@@ -61,6 +59,4 @@ namespace ewol {
 		void freeTypeUnInit();
 	};
 };
-
-#endif
 

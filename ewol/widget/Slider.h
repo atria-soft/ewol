@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_SLIDER_H__
-#define __EWOL_SLIDER_H__
+#pragma once
 
 #include <etk/types.h>
 #include <etk/Color.h>
@@ -116,7 +114,6 @@ namespace ewol {
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};
-	};
-};
+	}
+}
 
-#endif

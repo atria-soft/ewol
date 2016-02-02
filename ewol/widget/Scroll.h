@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_WIDGET_SCROLL_H__
-#define __EWOL_WIDGET_SCROLL_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -69,7 +67,6 @@ namespace ewol {
 				virtual void onDraw();
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};
-	};
-};
+	}
+}
 
-#endif

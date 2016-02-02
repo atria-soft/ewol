@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COMPOSITING_H__
-#define __EWOL_COMPOSITING_H__
+#pragma once
 
 #include <ewol/debug.h>
 #include <etk/types.h>
@@ -60,5 +58,3 @@ namespace ewol {
 			virtual void setMatrix(const mat4& _mat);
 	};
 };
-
-#endif

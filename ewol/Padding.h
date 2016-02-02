@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_PADDING_H__
-#define __EWOL_PADDING_H__
+#pragma once
 
 #include <ewol/debug.h>
 
@@ -83,4 +81,3 @@ namespace ewol {
 	std::ostream& operator <<(std::ostream& _os, const ewol::Padding& _obj);
 };
 
-#endif

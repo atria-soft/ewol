@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_SIZER_H__
-#define __EWOL_SIZER_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -152,7 +150,6 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual void onDraw();
 		};
-	};
-};
+	}
+}
 
-#endif

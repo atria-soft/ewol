@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __SIMPLE_CONFIG_FILE_H__
-#define __SIMPLE_CONFIG_FILE_H__
+#pragma once
 
 #include <etk/types.h>
 #include <etk/Hash.h>
@@ -46,6 +44,3 @@ namespace ewol {
 		};
 	};
 };
-
-#endif
-

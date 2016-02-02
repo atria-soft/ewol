@@ -5,10 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-
-#ifndef __EWOL_PARAMETER_INTERFACE_H__
-#define __EWOL_PARAMETER_INTERFACE_H__
+#pragma once
 
 #include <vector>
 #include <map>
@@ -89,4 +86,3 @@ namespace ewol {
 	};
 };
 
-#endif

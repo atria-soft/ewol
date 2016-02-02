@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_FONT_KERNING_H__
-#define __EWOL_FONT_KERNING_H__
+#pragma once
 
 namespace ewol {
 	/**
@@ -70,6 +68,4 @@ namespace ewol {
 			~Kerning() { };
 	};
 };
-
-#endif
 

@@ -5,9 +5,7 @@
  * 
  * @license GPL v3 (see license file)
  */
-
-#ifndef __APPL_WINDOWS_H__
-#define __APPL_WINDOWS_H__
+#pragma once
 
 #include <appl/WidgetDisplay.h>
 #include <ewol/widget/Windows.h>
@@ -21,7 +19,4 @@ namespace appl {
 			DECLARE_FACTORY(Windows);
 			virtual ~Windows();
 	};
-};
-
-
-#endif
+}

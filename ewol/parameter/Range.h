@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_PARAMETER_RANGE_H__
-#define __EWOL_PARAMETER_RANGE_H__
+#pragma once
 
 #include <ewol/parameter/Interface.h>
 #include <ewol/parameter/Parameter.h>
@@ -151,4 +149,4 @@ namespace ewol {
 		}
 	};
 };
-#endif
+

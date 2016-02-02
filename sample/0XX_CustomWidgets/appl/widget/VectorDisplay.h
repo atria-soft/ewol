@@ -3,9 +3,7 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __APPL_WIDGET_VECTOR_DISPLAY_H__
-#define __APPL_WIDGET_VECTOR_DISPLAY_H__
+#pragma once
 
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
@@ -40,7 +38,6 @@ namespace appl {
 				virtual void onRegenerateDisplay();
 				virtual void periodicCall(const ewol::event::Time& _event);
 		};
-	};
-};
+	}
+}
 
-#endif

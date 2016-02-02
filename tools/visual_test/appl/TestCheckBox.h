@@ -5,9 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
-
-#ifndef __TEST_CHECK_BOX_H__
-#define __TEST_CHECK_BOX_H__
+#pragma once
 
 #include <appl/debug.h>
 #include <ewol/widget/CheckBox.h>
@@ -31,7 +29,6 @@ namespace appl {
 			void onCallbackTextToggle(const bool& _value);
 			void onCallbackChangeText();
 	};
-};
+}
 
-#endif
 

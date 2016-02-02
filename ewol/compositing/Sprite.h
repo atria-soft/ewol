@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COMPOSITING_SPRITE_H__
-#define __EWOL_COMPOSITING_SPRITE_H__
+#pragma once
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Image.h>
@@ -28,8 +26,6 @@ namespace ewol {
 				};
 				void printSprite(const ivec2& _spriteID, const vec3& _size);
 		};
-	};
-};
-
-#endif
+	}
+}
 

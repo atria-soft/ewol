@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_DEBUG_H__
-#define __EWOL_DEBUG_H__
+#pragma once
 
 #include <etk/log.h>
 
@@ -39,6 +37,4 @@ namespace ewol {
 			assert(!#cond); \
 		} \
 	} while (0)
-
-#endif
 

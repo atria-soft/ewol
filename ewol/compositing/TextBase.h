@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_COMPOSITING_TEXT_BASE_H__
-#define __EWOL_COMPOSITING_TEXT_BASE_H__
+#pragma once
 
 #include <etk/Color.h>
 
@@ -474,8 +472,7 @@ namespace ewol {
 				 */
 				void setCursorColor(const etk::Color<>& _color);
 		};
-	};
-};
+	}
+}
 
-#endif
 

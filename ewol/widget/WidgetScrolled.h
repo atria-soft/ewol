@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_SCROLLED_WIDGET_H__
-#define __EWOL_SCROLLED_WIDGET_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -117,7 +115,6 @@ namespace ewol {
 					m_limitScrolling = std::avg(0.1f, _poucentageLimit,0.9f);
 				};
 		};
-	};
-};
+	}
+}
 
-#endif

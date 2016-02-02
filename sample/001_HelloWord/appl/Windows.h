@@ -5,9 +5,7 @@
  * 
  * @license GPL v3 (see license file)
  */
-
-#ifndef __APPL_WINDOWS_H__
-#define __APPL_WINDOWS_H__
+#pragma once
 
 #include <ewol/widget/Windows.h>
 
@@ -19,7 +17,5 @@ namespace appl {
 		public:
 			DECLARE_FACTORY(Windows);
 	};
-};
+}
 
-
-#endif

@@ -8,8 +8,7 @@
 
 #include <ewol/parameter/Interface.h>
 
-#ifndef __EWOL_PARAMETER_H__
-#define __EWOL_PARAMETER_H__
+#pragma once
 
 #include <string>
 #include <typeinfo>
@@ -88,4 +87,3 @@ namespace ewol {
 	};
 };
 
-#endif

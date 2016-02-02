@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_SIGNAL_H__
-#define __EWOL_SIGNAL_H__
+#pragma once
 
 #include <functional>
 #include <ewol/signal/Base.h>
@@ -410,5 +408,5 @@ namespace ewol {
 	};
 	#undef __class__
 	#define __class__ nullptr
-};
-#endif
+}
+

@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __EWOL_LABEL_H__
-#define __EWOL_LABEL_H__
+#pragma once
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -79,4 +77,3 @@ namespace ewol {
 	};
 };
 
-#endif

@@ -2,6 +2,10 @@
 	<sizer mode="vert"
 	       expand="true,true"
 	       fill="true,true">
+		<spacer expand="true,true" fill="true,true" color="red"/>
+		<spacer expand="true,true" fill="true,true" color="green"/>
+		<spacer expand="true,true" fill="true,true" color="blue"/>
+		<!--
 		<sizer mode="hori"
 		       expand="true,false"
 		       lock="false,true"
@@ -47,5 +51,6 @@
 				<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
 			</sizer>
 		</sizer>
+		-->
 	</sizer>
 </composer>
