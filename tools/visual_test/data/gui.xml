@@ -1,10 +1,14 @@
 <composer>
 	<sizer mode="vert"
 	       expand="true,true"
-	       fill="true,true">
+	       fill="true,true"
+	       border="10px"
+	       border-color="#F008">
 		<spacer expand="true,true" fill="true,true" color="red"/>
-		<spacer expand="true,true" fill="true,true" color="green"/>
+		
+		<spacer expand="false,true" fill="true,true" color="green"/>
 		<spacer expand="true,true" fill="true,true" color="blue"/>
+		
 		<!--
 		<sizer mode="hori"
 		       expand="true,false"

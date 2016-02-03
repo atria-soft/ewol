@@ -43,7 +43,7 @@ void ewol::widget::PopUp::setShaperName(const std::string& _shaperName) {
 	markToRedraw();
 }
 
-void ewol::widget::PopUp::onSizeChange() {
+void ewol::widget::PopUp::onChangeSize() {
 	markToRedraw();
 	if (nullptr == m_subWidget) {
 		return;
@@ -75,7 +75,7 @@ void ewol::widget::PopUp::onSizeChange() {
 	
 	m_subWidget->setOrigin(subWidgetOrigin);
 	m_subWidget->setSize(subWidgetSize);
-	m_subWidget->onSizeChange();
+	m_subWidget->onChangeSize();
 }
 
 void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {

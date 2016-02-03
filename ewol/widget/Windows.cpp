@@ -41,21 +41,21 @@ ewol::widget::Windows::~Windows() {
 	m_popUpWidgetList.clear();
 }
 
-void ewol::widget::Windows::onSizeChange() {
-	ewol::Widget::onSizeChange();
+void ewol::widget::Windows::onChangeSize() {
+	ewol::Widget::onChangeSize();
 	if (m_subWidget != nullptr) {
 		m_subWidget->calculateMinMaxSize();
 		// TODO : do it better ... and manage gravity ...
 		m_subWidget->setSize(m_size);
 		m_subWidget->setOrigin(vec2(0.0f, 0.0f));
-		m_subWidget->onSizeChange();
+		m_subWidget->onChangeSize();
 	}
 	for (auto &it : m_popUpWidgetList) {
 		if(it != nullptr) {
 			it->calculateMinMaxSize();
 			it->setSize(m_size);
 			it->setOrigin(vec2(0.0f, 0.0f));
-			it->onSizeChange();
+			it->onChangeSize();
 		}
 	}
 }
@@ -172,7 +172,7 @@ void ewol::widget::Windows::setSubWidget(std::shared_ptr<ewol::Widget> _widget) 
 	}
 	
 	// Regenerate the size calculation :
-	onSizeChange();
+	onChangeSize();
 }
 
 void ewol::widget::Windows::popUpWidgetPush(std::shared_ptr<ewol::Widget> _widget) {
@@ -186,7 +186,7 @@ void ewol::widget::Windows::popUpWidgetPush(std::shared_ptr<ewol::Widget> _widge
 	// force the focus on the basic widget ==> this remove many time the virual keyboard area
 	_widget->keepFocus();
 	// Regenerate the size calculation :
-	onSizeChange();
+	onChangeSize();
 	// TODO : it is dangerous to access directly to the system ...
 	getContext().resetIOEvent();
 }

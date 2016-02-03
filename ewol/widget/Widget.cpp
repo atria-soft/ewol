@@ -146,7 +146,8 @@ ewol::Widget::~Widget() {
 	shortCutClean();
 }
 
-void ewol::Widget::onSizeChange() {
+void ewol::Widget::onChangeSize() {
+	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} update size : " << m_size);
 	markToRedraw();
 }
 

@@ -75,7 +75,7 @@ namespace ewol {
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual void onSizeChange();
+				virtual void onChangeSize();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected:

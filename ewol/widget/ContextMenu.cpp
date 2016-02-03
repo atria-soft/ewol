@@ -49,7 +49,7 @@ ewol::widget::ContextMenu::~ContextMenu() {
 	
 }
 
-void ewol::widget::ContextMenu::onSizeChange() {
+void ewol::widget::ContextMenu::onChangeSize() {
 	// pop-up fill all the display :
 	ewol::Padding padding = m_shaper->getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
@@ -109,7 +109,7 @@ void ewol::widget::ContextMenu::onSizeChange() {
 		EWOL_VERBOSE("       == > sub origin=" << subWidgetOrigin << " size=" << subWidgetSize);
 		m_subWidget->setOrigin(subWidgetOrigin);
 		m_subWidget->setSize(subWidgetSize);
-		m_subWidget->onSizeChange();
+		m_subWidget->onChangeSize();
 	}
 	markToRedraw();
 }

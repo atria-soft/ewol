@@ -126,7 +126,7 @@ namespace ewol {
 				 * @param[in] _padding Padding of the widget.
 				 * @note : INTERNAL EWOL SYSTEM
 				 */
-				virtual ewol::Padding onSizeChangePadded(const ewol::Padding& _padding = ewol::Padding(0,0,0,0));
+				virtual ewol::Padding onChangeSizePadded(const ewol::Padding& _padding = ewol::Padding(0,0,0,0));
 				/**
 				 * @brief calculate the minimum and maximum size (need to estimate expend properties of the widget)
 				 * @param[in] _padding Padding of the widget.
@@ -158,8 +158,8 @@ namespace ewol {
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual void onSizeChange() {
-					onSizeChangePadded();
+				virtual void onChangeSize() {
+					onChangeSizePadded();
 				}
 				virtual void calculateMinMaxSize() {
 					calculateMinMaxSizePadded();

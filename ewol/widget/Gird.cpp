@@ -47,7 +47,7 @@ void ewol::widget::Gird::setBorderSize(const ivec2& _newBorderSize) {
 	requestUpdateSize();
 }
 
-void ewol::widget::Gird::onSizeChange() {
+void ewol::widget::Gird::onChangeSize() {
 	//EWOL_DEBUG("Update size");
 	m_size -= m_borderSize*2;
 	
@@ -77,7 +77,7 @@ void ewol::widget::Gird::onSizeChange() {
 			m_subWidget[iii].widget->setOrigin(vec2ClipInt32(tmpOrigin));
 			// all time set oll the space .
 			m_subWidget[iii].widget->setSize(vec2ClipInt32(vec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow)));
-			m_subWidget[iii].widget->onSizeChange();
+			m_subWidget[iii].widget->onChangeSize();
 		}
 	}
 	m_size += m_borderSize*2;

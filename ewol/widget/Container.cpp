@@ -104,8 +104,8 @@ void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp)
 	}
 }
 
-void ewol::widget::Container::onSizeChange() {
-	ewol::Widget::onSizeChange();
+void ewol::widget::Container::onChangeSize() {
+	ewol::Widget::onChangeSize();
 	if (m_subWidget == nullptr) {
 		return;
 	}
@@ -130,7 +130,7 @@ void ewol::widget::Container::onSizeChange() {
 	}
 	m_subWidget->setOrigin(origin);
 	m_subWidget->setSize(m_size);
-	m_subWidget->onSizeChange();
+	m_subWidget->onChangeSize();
 }
 
 void ewol::widget::Container::calculateMinMaxSize() {
@@ -205,7 +205,7 @@ void ewol::widget::Container::setOffset(const vec2& _newVal) {
 	if (m_offset != _newVal) {
 		ewol::Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...
-		onSizeChange();
+		onChangeSize();
 	}
 }
 

@@ -37,8 +37,8 @@ ewol::widget::Sizer::~Sizer() {
 }
 
 
-void ewol::widget::Sizer::onSizeChange() {
-	ewol::Widget::onSizeChange();
+void ewol::widget::Sizer::onChangeSize() {
+	ewol::Widget::onChangeSize();
 	vec2 tmpBorderSize = m_borderSize->getPixel();
 	EWOL_VERBOSE("[" << getId() << "] update size : " << m_size << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
 	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
@@ -107,7 +107,7 @@ void ewol::widget::Sizer::onSizeChange() {
 					tmpSizeMin.setY(sizeExpand);
 				}
 				if (it->canExpand().x() == true) {
-					float sizeExpand = std::avg(tmpSizeMin.x(), minSize.x(), tmpSizeMax.x());
+					float sizeExpand = std::avg(tmpSizeMin.x(), localWidgetSize.x(), tmpSizeMax.x());
 					tmpSizeMin.setX(sizeExpand);
 				}
 				it->setSize(tmpSizeMin);
@@ -122,7 +122,7 @@ void ewol::widget::Sizer::onSizeChange() {
 					tmpSizeMin.setX(sizeExpand);
 				}
 				if (it->canExpand().y() == true) {
-					float sizeExpand = std::avg(tmpSizeMin.y(), minSize.y(), tmpSizeMax.y());
+					float sizeExpand = std::avg(tmpSizeMin.y(), localWidgetSize.y(), tmpSizeMax.y());
 					tmpSizeMin.setY(sizeExpand);
 				}
 				it->setSize(tmpSizeMin);
@@ -165,7 +165,7 @@ void ewol::widget::Sizer::onSizeChange() {
 		if (it == nullptr) {
 			continue;
 		}
-		it->onSizeChange();
+		it->onChangeSize();
 	}
 	markToRedraw();
 }

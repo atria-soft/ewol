@@ -151,7 +151,7 @@ namespace ewol {
 			 * @brief Parent have set the size and the origin. the container need to update the subwidget property
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void onSizeChange();
+			virtual void onChangeSize();
 			virtual void calculateSize() {};
 			/**
 			 * @brief get the widget size

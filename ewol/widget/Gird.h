@@ -138,7 +138,7 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& pos);
-				virtual void onSizeChange();
+				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
 		};
 	};

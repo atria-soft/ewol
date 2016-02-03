@@ -62,9 +62,9 @@ ewol::widget::Button::~Button() {
 	
 }
 
-void ewol::widget::Button::onSizeChange() {
+void ewol::widget::Button::onChangeSize() {
 	ewol::Padding padding = m_shaper->getPadding();
-	ewol::Padding ret = onSizeChangePadded(padding);
+	ewol::Padding ret = onChangeSizePadded(padding);
 	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
 	m_selectableAreaPos = vec2(ret.xLeft(), ret.yButtom());
 	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
