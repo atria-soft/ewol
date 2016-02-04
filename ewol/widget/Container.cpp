@@ -112,22 +112,7 @@ void ewol::widget::Container::onChangeSize() {
 	vec2 origin = m_origin+m_offset;
 	vec2 minSize = m_subWidget->getCalculateMinSize();
 	bvec2 expand = m_subWidget->getExpand();
-	if (    expand.x() == false
-	    || minSize.x()>m_size.x()) {
-		if (m_gravity == ewol::gravityCenter) {
-			origin -= vec2((minSize.x() - m_size.x())*0.5f, 0.0f);
-		} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
-			origin -= vec2((minSize.x() - m_size.x()), 0.0f);
-		}
-	}
-	if(    expand.y() == false
-	    || minSize.y()>m_size.y()) {
-		if (m_gravity == ewol::gravityCenter) {
-			origin -= vec2(0.0f, (minSize.y() - m_size.y())*0.5f);
-		} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
-			origin -= vec2(0.0f, (minSize.y() - m_size.y()));
-		}
-	}
+	origin += ewol::gravityGenerateDelta(m_gravity, minSize - m_size);
 	m_subWidget->setOrigin(origin);
 	m_subWidget->setSize(m_size);
 	m_subWidget->onChangeSize();

@@ -73,49 +73,16 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		vec2 ratioSizeDisplayRequested = m_posStop.get() - m_posStart.get();
 		//imageRealSizeMax *= ratioSizeDisplayRequested;
 		
+		vec2 delta = ewol::gravityGenerateDelta(m_gravity, m_size-m_imageRenderSize);
 		if (m_userFill->x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
-		} else {
-			switch(m_gravity) {
-				case gravityCenter:
-				case gravityTop:
-				case gravityButtom:
-					origin.setX(origin.x() + (m_size.x()-m_imageRenderSize.x())*0.5f);
-					break;
-				case gravityTopLeft:
-				case gravityButtomLeft:
-				case gravityLeft:
-					// nothing to do ...
-					break;
-				case gravityTopRight:
-				case gravityRight:
-				case gravityButtomRight:
-					origin.setX(origin.x() + (m_size.x()-m_imageRenderSize.x())*0.5f);
-					break;
-			}
+			delta.setX(0.0);
 		}
 		if (m_userFill->y() == true) {
 			imageRealSize.setY(imageRealSizeMax.y());
-		} else {
-			//
-			switch(m_gravity) {
-				case gravityCenter:
-				case gravityRight:
-				case gravityLeft:
-					origin.setY(origin.y() + (m_size.y()-m_imageRenderSize.y())*0.5f);
-					break;
-				case gravityTopLeft:
-				case gravityTop:
-				case gravityTopRight:
-					origin.setY(origin.y() + (m_size.y()-m_imageRenderSize.y()));
-					break;
-				case gravityButtomRight:
-				case gravityButtom:
-				case gravityButtomLeft:
-					// nothing to do ...
-					break;
-			}
+			delta.setY(0.0);
 		}
+		origin += delta;
 		
 		if (m_keepRatio == true) {
 			vec2 tmpSize = m_compositing.getRealSize();

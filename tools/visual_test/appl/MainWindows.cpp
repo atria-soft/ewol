@@ -43,6 +43,7 @@ static const char * l_eventChangeWidgetPrevious  = "event-change-widget-test-pre
 #define __class__ "MainWindows"
 
 appl::MainWindows::MainWindows() :
+  m_gravity(ewol::gravity_buttomLeft),
   m_idWidget(0) {
 	APPL_DEBUG("CREATE WINDOWS ... ");
 	addObjectType("appl::MainWindows");
@@ -56,11 +57,11 @@ void appl::MainWindows::init() {
 	externSubBind(m_composer, ewol::widget::Button, "appl-theme-toggle", signalValue, shared_from_this(), &appl::MainWindows::onCallbackThemeChange);
 	externSubBind(m_composer, ewol::widget::Button, "appl-previous-widget", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, -1);
 	externSubBind(m_composer, ewol::widget::Button, "appl-next-widget", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, 1);
+	externSubBind(m_composer, ewol::widget::Button, "appl-next-gravity", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackGravityChange);
 	
 	m_sizerVert = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-upper-test-widget"));
 	m_sizerDynamic = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-dynamic-config"));
 	m_subWidget = std::dynamic_pointer_cast<ewol::Widget>(m_composer->getSubObjectNamed("[TEST]TO-TEST"));
-	m_testName = std::dynamic_pointer_cast<ewol::widget::Label>(m_composer->getSubObjectNamed("appl-label-test"));
 }
 
 void appl::MainWindows::onCallbackThemeChange(const bool& _value) {
@@ -72,6 +73,40 @@ void appl::MainWindows::onCallbackThemeChange(const bool& _value) {
 	// Reload shaders and graphic system ...
 	ewol::getContext().getResourcesManager().reLoadResources();
 	ewol::getContext().forceRedrawAll();
+}
+
+void appl::MainWindows::onCallbackGravityChange() {
+	switch(m_gravity) {
+		case ewol::gravity_center:
+			m_gravity = ewol::gravity_topLeft;
+			break;
+		case ewol::gravity_topLeft:
+			m_gravity = ewol::gravity_top;
+			break;
+		case ewol::gravity_top:
+			m_gravity = ewol::gravity_topRight;
+			break;
+		case ewol::gravity_topRight:
+			m_gravity = ewol::gravity_right;
+			break;
+		case ewol::gravity_right:
+			m_gravity = ewol::gravity_buttomRight;
+			break;
+		case ewol::gravity_buttomRight:
+			m_gravity = ewol::gravity_buttom;
+			break;
+		case ewol::gravity_buttom:
+			m_gravity = ewol::gravity_buttomLeft;
+			break;
+		case ewol::gravity_buttomLeft:
+			m_gravity = ewol::gravity_left;
+			break;
+		case ewol::gravity_left:
+			m_gravity = ewol::gravity_center;
+			break;
+	}
+	parameterSetOnWidgetNamed("appl-upper-test-widget", "gravity", ewol::gravityToString(m_gravity));
+	parameterSetOnWidgetNamed("appl-next-gravity-label", "value", "Next gravity<br/>(" + ewol::gravityToString(m_gravity) + ")");
 }
 
 void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
@@ -124,9 +159,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	if (m_subWidget != nullptr) {
 		m_sizerVert->subWidgetReplace(oldWidget, m_subWidget);
 	}
-	if (m_testName!=nullptr) {
-		m_testName->setLabel("TestButton");
-	};
+	parameterSetOnWidgetNamed("appl-label-test", "value", tmpDescription);
 	updateProperty();
 }
 

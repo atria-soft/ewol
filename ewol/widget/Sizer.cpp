@@ -167,8 +167,26 @@ void ewol::widget::Sizer::onChangeSize() {
 		}
 		it->setSize(vec2ClipInt32(it->getSize()));
 	}
-	// -7- Set the origin for every element with the gravity update:
-	vec2 tmpOrigin = m_origin + tmpBorderSize;
+	// -7- get under Size
+	vec2 underSize(0,0);
+	for (auto &it : m_subWidget) {
+		if (it == nullptr) {
+			continue;
+		}
+		vec2 size = it->getSize();
+		if (m_mode == ewol::widget::Sizer::modeVert) {
+			underSize += vec2(0.0f, size.y());
+			underSize.setX(std::max(underSize.x(), size.x()));
+		} else {
+			underSize += vec2(size.x(), 0.0f);
+			underSize.setY(std::max(underSize.y(), size.y()));
+		}
+	}
+	vec2 deltas = localWidgetSize - underSize;
+	
+	// -8- Calculate the local origin, depending of the gravity:
+	vec2 tmpOrigin = m_origin + tmpBorderSize + ewol::gravityGenerateDelta(m_gravity, deltas);
+	// -9- Set sub widget origin:
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
 			continue;
@@ -182,7 +200,7 @@ void ewol::widget::Sizer::onChangeSize() {
 		}
 		// TODO : Set origin with the correct gravity
 	}
-	// -8- Update all subSize at every element:
+	// -10- Update all subSize at every element:
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
 			continue;

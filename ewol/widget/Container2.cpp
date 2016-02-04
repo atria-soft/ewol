@@ -132,22 +132,7 @@ ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& 
 			vec2 origin2 = origin+m_offset;
 			vec2 minSize = m_subWidget[iii]->getCalculateMinSize();
 			bvec2 expand = m_subWidget[iii]->getExpand();
-			if (    expand.x() == false
-			    || minSize.x() > localAvaillable.x()) {
-				if (m_gravity == ewol::gravityCenter) {
-					origin2 -= vec2((minSize.x() - localAvaillable.x())/2.0f, 0);
-				} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
-					origin2 -= vec2((minSize.x() - localAvaillable.x()), 0);
-				}
-			}
-			if(    expand.y() == false
-			    || minSize.y() > localAvaillable.y()) {
-				if (m_gravity == ewol::gravityCenter) {
-					origin2 -= vec2(0, (minSize.y() - localAvaillable.y())/2.0f);
-				} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
-					origin2 -= vec2(0, (minSize.y() - localAvaillable.y()));
-				}
-			}
+			origin2 += ewol::gravityGenerateDelta(m_gravity, minSize - localAvaillable);
 			m_subWidget[iii]->setOrigin(m_origin + origin);
 			m_subWidget[iii]->setSize(subElementSize);
 			m_subWidget[iii]->onChangeSize();

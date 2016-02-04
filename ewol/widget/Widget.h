@@ -81,19 +81,20 @@ namespace ewol {
 	 * @not-in-doc
 	 */
 	enum gravity {
-		gravityCenter=0x00, //!< gravity is in certer
-		gravityTopLeft=0x05,
-		gravityTop=0x01,
-		gravityTopRight=0x03,
-		gravityRight=0x02,
-		gravityButtomRight=0x06,
-		gravityButtom=0x04,
-		gravityButtomLeft=0x0C,
-		gravityLeft=0x08,
+		gravity_center      = 0x00, //!< gravity is in center
+		gravity_top         = 0x01, //!< gravity is in top
+		gravity_buttom      = 0x02, //!< gravity is in buttom
+		gravity_right       = 0x04, //!< gravity is in right
+		gravity_left        = 0x08, //!< gravity is in left
+		gravity_topRight    = gravity_top|gravity_right, //!< gravity is in top-right
+		gravity_topLeft     = gravity_top|gravity_left, //!< gravity is in top-left
+		gravity_buttomRight = gravity_buttom|gravity_right, //!< gravity is in buttom-right
+		gravity_buttomLeft  = gravity_buttom|gravity_left, //!< gravity is in buttom-left
 	};
 	std::ostream& operator <<(std::ostream& _os, const enum ewol::gravity _obj);
 	std::string gravityToString(const enum ewol::gravity _obj);
 	enum ewol::gravity stringToGravity(const std::string& _obj);
+	vec2 gravityGenerateDelta(const enum ewol::gravity _gravity, const vec2& _deltas);
 	/**
 	 * @not-in-doc
 	 */

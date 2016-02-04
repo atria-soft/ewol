@@ -25,6 +25,9 @@
 			<button name="appl-next-widget">
 				<label expand="false,false" fill="true,true">Next Widget</label>
 			</button>
+			<button name="appl-next-gravity">
+				<label name="appl-next-gravity-label" expand="false,false" fill="true,true">Next gravity<br/>(Buttom-Left)</label>
+			</button>
 			<label name="appl-label-test" expand="true,false" fill="true,true">Test :</label>
 			<spacer expand="true,true"/>
 		</sizer>

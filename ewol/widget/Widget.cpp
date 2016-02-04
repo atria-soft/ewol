@@ -34,23 +34,23 @@ void ewol::DrawProperty::limit(const vec2& _origin, const vec2& _size) {
 
 std::string ewol::gravityToString(const enum ewol::gravity _obj) {
 	switch(_obj) {
-		case ewol::gravityCenter:
+		case ewol::gravity_center:
 			return "center";
-		case ewol::gravityTopLeft:
+		case ewol::gravity_topLeft:
 			return "top-left";
-		case ewol::gravityTop:
+		case ewol::gravity_top:
 			return "top";
-		case ewol::gravityTopRight:
+		case ewol::gravity_topRight:
 			return "top-right";
-		case ewol::gravityRight:
+		case ewol::gravity_right:
 			return "right";
-		case ewol::gravityButtomRight:
+		case ewol::gravity_buttomRight:
 			return "buttom-right";
-		case ewol::gravityButtom:
+		case ewol::gravity_buttom:
 			return "buttom";
-		case ewol::gravityButtomLeft:
+		case ewol::gravity_buttomLeft:
 			return "buttom-left";
-		case ewol::gravityLeft:
+		case ewol::gravity_left:
 			return "left";
 	}
 	return "unknow";
@@ -58,25 +58,47 @@ std::string ewol::gravityToString(const enum ewol::gravity _obj) {
 
 enum ewol::gravity ewol::stringToGravity(const std::string& _obj) {
 	if (_obj == "center") {
-		return ewol::gravityCenter;
+		return ewol::gravity_center;
 	} else if (_obj == "top-left") {
-		return ewol::gravityTopLeft;
+		return ewol::gravity_topLeft;
 	} else if (_obj == "top") {
-		return ewol::gravityTop;
+		return ewol::gravity_top;
 	} else if (_obj == "top-right") {
-		return ewol::gravityTopRight;
+		return ewol::gravity_topRight;
 	} else if (_obj == "right") {
-		return ewol::gravityRight;
+		return ewol::gravity_right;
 	} else if (_obj == "buttom-right") {
-		return ewol::gravityButtomRight;
+		return ewol::gravity_buttomRight;
 	} else if (_obj == "buttom") {
-		return ewol::gravityButtom;
+		return ewol::gravity_buttom;
 	} else if (_obj == "buttom-left") {
-		return ewol::gravityButtomLeft;
+		return ewol::gravity_buttomLeft;
 	} else if (_obj == "left") {
-		return ewol::gravityLeft;
+		return ewol::gravity_left;
 	}
-	return ewol::gravityCenter;
+	return ewol::gravity_center;
+}
+vec2 ewol::gravityGenerateDelta(const enum ewol::gravity _gravity, const vec2& _deltas) {
+	vec2 out(0.0f,0.0f);
+	if (_deltas.x() > 0.0001f) {
+		if ((uint32_t(_gravity) & uint32_t(ewol::gravity_left)) != 0) {
+			// nothing to do
+		} else if ((uint32_t(_gravity) & uint32_t(ewol::gravity_right)) != 0) {
+			out = vec2(int32_t(_deltas.x()), 0.0f);
+		} else {
+			out = vec2(int32_t(_deltas.x()*0.5f), 0.0f);
+		}
+	}
+	if (_deltas.y() > 0.0001f) {
+		if ((uint32_t(_gravity) & uint32_t(ewol::gravity_buttom)) != 0) {
+			// nothing to do
+		} else if ((uint32_t(_gravity) & uint32_t(ewol::gravity_top)) != 0) {
+			out += vec2(0.0f, int32_t(_deltas.y()));
+		} else {
+			out += vec2(0.0f, int32_t(_deltas.y()*0.5f));
+		}
+	}
+	return out;
 }
 
 std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj) {
@@ -99,7 +121,7 @@ ewol::Widget::Widget() :
   m_userExpand(*this, "expand", bvec2(false,false), "Request the widget Expand size wile space is available"),
   m_userFill(*this, "fill", bvec2(true,true), "Fill the widget available size"),
   m_hide(*this, "hide", false, "The widget start hided"),
-  m_gravity(*this, "gravity", ewol::gravityButtomLeft, "Gravity orientation"),
+  m_gravity(*this, "gravity", ewol::gravity_buttomLeft, "Gravity orientation"),
   m_hasFocus(false),
   m_canFocus(*this, "focus", false, "enable the widget to have the focus capacity"), // TODO : je pense que c'est une erreur, c'st surement un event to get the cocus ...
   m_limitMouseEvent(3),
@@ -120,15 +142,15 @@ ewol::Widget::Widget() :
 	addObjectType("ewol::Widget");
 	
 	// TODO : Set a static interface for list ==> this methode create a multiple allocation
-	m_gravity.add(ewol::gravityCenter, "center");
-	m_gravity.add(ewol::gravityTopLeft, "top-left");
-	m_gravity.add(ewol::gravityTop, "top");
-	m_gravity.add(ewol::gravityTopRight, "top-right");
-	m_gravity.add(ewol::gravityRight, "right");
-	m_gravity.add(ewol::gravityButtomRight, "buttom-right");
-	m_gravity.add(ewol::gravityButtom, "buttom");
-	m_gravity.add(ewol::gravityButtomLeft, "buttom-left");
-	m_gravity.add(ewol::gravityLeft, "left");
+	m_gravity.add(ewol::gravity_center, "center");
+	m_gravity.add(ewol::gravity_topLeft, "top-left");
+	m_gravity.add(ewol::gravity_top, "top");
+	m_gravity.add(ewol::gravity_topRight, "top-right");
+	m_gravity.add(ewol::gravity_right, "right");
+	m_gravity.add(ewol::gravity_buttomRight, "buttom-right");
+	m_gravity.add(ewol::gravity_buttom, "buttom");
+	m_gravity.add(ewol::gravity_buttomLeft, "buttom-left");
+	m_gravity.add(ewol::gravity_left, "left");
 	m_annimationTypeStart.add(0, "none");
 	m_annimationTypeStop.add(0, "none");
 }
@@ -630,6 +652,7 @@ void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPoin
 		}
 	} else if (_paramPointer == m_gravity) {
 		markToRedraw();
+		requestUpdateSize();
 	} else if (_paramPointer == m_hide) {
 		markToRedraw();
 		requestUpdateSize();

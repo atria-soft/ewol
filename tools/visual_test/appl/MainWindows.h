@@ -22,7 +22,7 @@ namespace appl {
 			std::shared_ptr<ewol::widget::Sizer> m_sizerVert;
 			std::shared_ptr<ewol::widget::Sizer> m_sizerDynamic;
 			std::shared_ptr<ewol::Widget> m_subWidget;
-			std::shared_ptr<ewol::widget::Label> m_testName;
+			ewol::gravity m_gravity;
 			int32_t m_idWidget;
 		public:
 			// Constructeur
@@ -32,6 +32,7 @@ namespace appl {
 			DECLARE_FACTORY(MainWindows);
 			~MainWindows() {};
 		protected:
+			void onCallbackGravityChange();
 			void onCallbackThemeChange(const bool& _value);
 			void onCallbackWidgetChange(int32_t _increment);
 			void updateProperty();
