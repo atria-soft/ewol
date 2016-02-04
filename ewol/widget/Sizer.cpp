@@ -52,9 +52,9 @@ void ewol::widget::Sizer::onChangeSize() {
 		vec2 tmpSize = it->getCalculateMinSize();
 		if (m_mode == ewol::widget::Sizer::modeVert) {
 			minSize = vec2(std::max(minSize.x(), tmpSize.x()),
-			               minSize.x() + tmpSize.y());
+			               minSize.y() + tmpSize.y());
 		} else {
-			minSize = vec2(minSize.y() + tmpSize.y(),
+			minSize = vec2(minSize.x() + tmpSize.x(),
 			               std::max(minSize.y(), tmpSize.y()));
 		}
 		bvec2 expand = it->canExpand();
@@ -106,10 +106,6 @@ void ewol::widget::Sizer::onChangeSize() {
 					}
 					tmpSizeMin.setY(sizeExpand);
 				}
-				if (it->canExpand().x() == true) {
-					float sizeExpand = std::avg(tmpSizeMin.x(), localWidgetSize.x(), tmpSizeMax.x());
-					tmpSizeMin.setX(sizeExpand);
-				}
 				it->setSize(tmpSizeMin);
 			} else {
 				if (it->canExpand().x() == true) {
@@ -120,10 +116,6 @@ void ewol::widget::Sizer::onChangeSize() {
 						countCalculation--;
 					}
 					tmpSizeMin.setX(sizeExpand);
-				}
-				if (it->canExpand().y() == true) {
-					float sizeExpand = std::avg(tmpSizeMin.y(), localWidgetSize.y(), tmpSizeMax.y());
-					tmpSizeMin.setY(sizeExpand);
 				}
 				it->setSize(tmpSizeMin);
 			}
@@ -141,12 +133,41 @@ void ewol::widget::Sizer::onChangeSize() {
 		} else {
 			deltaExpandSize = residualNext / float(countCalculation);
 		}
-		if (deltaExpandSize<0.0f) {
-			deltaExpandSize=0.0f;
+		if (deltaExpandSize < 0.0f) {
+			deltaExpandSize = 0.0f;
 			break;
 		}
 	}
-	// -5- Set the origin for every element with the gravity update:
+	// -5- Update the expand in the second size if vert ==> X and if hori ==> Y
+	for (auto &it : m_subWidget) {
+		if (it == nullptr) {
+			continue;
+		}
+		// Now update his size  his size in X and the curent sizer size in Y:
+		if (m_mode == ewol::widget::Sizer::modeVert) {
+			if (it->canExpand().x() == false) {
+				continue;
+			}
+			vec2 tmpSizeMin = it->getSize();
+			tmpSizeMin.setX(std::avg(tmpSizeMin.x(), localWidgetSize.x(), it->getCalculateMaxSize().x()));
+			it->setSize(tmpSizeMin);
+		} else {
+			if (it->canExpand().y() == false) {
+				continue;
+			}
+			vec2 tmpSizeMin = it->getSize();
+			tmpSizeMin.setY(std::avg(tmpSizeMin.y(), localWidgetSize.y(), it->getCalculateMaxSize().y()));
+			it->setSize(tmpSizeMin);
+		}
+	}
+	// -6- Force size at the entire number:
+	for (auto &it : m_subWidget) {
+		if (it == nullptr) {
+			continue;
+		}
+		it->setSize(vec2ClipInt32(it->getSize()));
+	}
+	// -7- Set the origin for every element with the gravity update:
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
@@ -161,6 +182,7 @@ void ewol::widget::Sizer::onChangeSize() {
 		}
 		// TODO : Set origin with the correct gravity
 	}
+	// -8- Update all subSize at every element:
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
 			continue;
