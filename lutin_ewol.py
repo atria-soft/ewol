@@ -38,13 +38,17 @@ def create(target, module_name):
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
 		'ewol/Padding.cpp',
-		'ewol/translate.cpp'
+		'ewol/translate.cpp',
+		'ewol/DrawProperty.cpp',
+		'ewol/gravity.cpp'
 		])
 	my_module.add_header_file([
 		'ewol/debug.h', # TODO : Remove this ...
 		'ewol/ewol.h',
 		'ewol/Padding.h',
-		'ewol/translate.h'
+		'ewol/translate.h',
+		'ewol/DrawProperty.h',
+		'ewol/gravity.h'
 		])
 	
 	# compositing:
