@@ -198,7 +198,6 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	m_minSize = m_userMinSize->getPixel();
 	vec2 tmpBorderSize = m_borderSize->getPixel();
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
-	m_minSize += tmpBorderSize*2;
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
 			continue;
@@ -225,6 +224,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 			}
 		}
 	}
+	m_minSize += tmpBorderSize*2;
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
