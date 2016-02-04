@@ -50,68 +50,69 @@ ewol::widget::ContextMenu::~ContextMenu() {
 }
 
 void ewol::widget::ContextMenu::onChangeSize() {
+	markToRedraw();
 	// pop-up fill all the display :
 	ewol::Padding padding = m_shaper->getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
-	if (nullptr != m_subWidget) {
-		vec2 subWidgetSize;
-		vec2 subWidgetOrigin;
-		subWidgetSize = m_subWidget->getCalculateMinSize();
-		if (true == m_subWidget->canExpand().x()) {
-			subWidgetSize.setX(m_size.x());
-		}
-		if (true == m_subWidget->canExpand().y()) {
-			subWidgetSize.setY(m_size.y());
-		}
-		int32_t minWidth = 100;
-		int32_t maxWidth = 300;
-		subWidgetSize.setX((int32_t)std::max(minWidth, (int32_t)subWidgetSize.x()));
-		subWidgetSize.setX((int32_t)std::min(maxWidth, (int32_t)subWidgetSize.x()));
-		subWidgetSize.setY((int32_t)subWidgetSize.y());
-		
-		// set config to the Sub-widget
-		switch (m_arrawBorder) {
-			case markTop:
-				subWidgetOrigin.setX((int32_t)(m_arrowPos->x() - subWidgetSize.x()/2));
-				subWidgetOrigin.setY((int32_t)(m_arrowPos->y() - m_offset - subWidgetSize.y()));
-				break;
-			case markButtom:
-				subWidgetOrigin.setX((int32_t)(m_arrowPos->x() - subWidgetSize.x()/2));
-				subWidgetOrigin.setY((int32_t)(m_arrowPos->y() + m_offset));
-				break;
-			case markRight:
-			case markLeft:
-			default:
-				subWidgetOrigin.setX((int32_t)(m_size.x() - m_origin.x() - subWidgetSize.x())/2 + m_origin.x());
-				subWidgetOrigin.setY((int32_t)(m_size.y() - m_origin.y() - subWidgetSize.y())/2 + m_origin.y());
-				break;
-		}
-		// set the widget position at the border of the screen
-		subWidgetOrigin.setX( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.x()-padding.x()))
-		                                 + padding.x()) );
-		subWidgetOrigin.setY( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.y()-padding.y()))
-		                                 + padding.y()) );
-		switch (m_arrawBorder) {
-			default:
-			case markTop:
-			case markButtom:
-				if (m_arrowPos->x() <= m_offset ) {
-					subWidgetOrigin.setX(m_arrowPos->x()+padding.xLeft());
-				}
-				break;
-			case markRight:
-			case markLeft:
-				if (m_arrowPos->y() <= m_offset ) {
-					subWidgetOrigin.setY(m_arrowPos->y()+padding.yButtom());
-				}
-				break;
-		}
-		EWOL_VERBOSE("       == > sub origin=" << subWidgetOrigin << " size=" << subWidgetSize);
-		m_subWidget->setOrigin(subWidgetOrigin);
-		m_subWidget->setSize(subWidgetSize);
-		m_subWidget->onChangeSize();
+	if (m_subWidget == nullptr) {
+		return;
 	}
-	markToRedraw();
+	vec2 subWidgetSize;
+	vec2 subWidgetOrigin;
+	subWidgetSize = m_subWidget->getCalculateMinSize();
+	if (m_subWidget->canExpand().x() == true) {
+		subWidgetSize.setX(m_size.x());
+	}
+	if (m_subWidget->canExpand().y() == true) {
+		subWidgetSize.setY(m_size.y());
+	}
+	int32_t minWidth = 100;
+	int32_t maxWidth = 300;
+	subWidgetSize.setX((int32_t)std::max(minWidth, (int32_t)subWidgetSize.x()));
+	subWidgetSize.setX((int32_t)std::min(maxWidth, (int32_t)subWidgetSize.x()));
+	subWidgetSize.setY((int32_t)subWidgetSize.y());
+	
+	// set config to the Sub-widget
+	switch (m_arrawBorder) {
+		case markTop:
+			subWidgetOrigin.setX((int32_t)(m_arrowPos->x() - subWidgetSize.x()/2));
+			subWidgetOrigin.setY((int32_t)(m_arrowPos->y() - m_offset - subWidgetSize.y()));
+			break;
+		case markButtom:
+			subWidgetOrigin.setX((int32_t)(m_arrowPos->x() - subWidgetSize.x()/2));
+			subWidgetOrigin.setY((int32_t)(m_arrowPos->y() + m_offset));
+			break;
+		case markRight:
+		case markLeft:
+		default:
+			subWidgetOrigin.setX((int32_t)(m_size.x() - m_origin.x() - subWidgetSize.x())/2 + m_origin.x());
+			subWidgetOrigin.setY((int32_t)(m_size.y() - m_origin.y() - subWidgetSize.y())/2 + m_origin.y());
+			break;
+	}
+	// set the widget position at the border of the screen
+	subWidgetOrigin.setX( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.x()-padding.x()))
+	                                 + padding.x()) );
+	subWidgetOrigin.setY( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.y()-padding.y()))
+	                                 + padding.y()) );
+	switch (m_arrawBorder) {
+		default:
+		case markTop:
+		case markButtom:
+			if (m_arrowPos->x() <= m_offset ) {
+				subWidgetOrigin.setX(m_arrowPos->x()+padding.xLeft());
+			}
+			break;
+		case markRight:
+		case markLeft:
+			if (m_arrowPos->y() <= m_offset ) {
+				subWidgetOrigin.setY(m_arrowPos->y()+padding.yButtom());
+			}
+			break;
+	}
+	EWOL_VERBOSE("       == > sub origin=" << subWidgetOrigin << " size=" << subWidgetSize);
+	m_subWidget->setOrigin(subWidgetOrigin);
+	m_subWidget->setSize(subWidgetSize);
+	m_subWidget->onChangeSize();
 }
 
 
