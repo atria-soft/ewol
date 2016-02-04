@@ -93,11 +93,11 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			return tmpObject.m_localId;
 		}
 		if (tmpObject.m_image.size()!=0) {
-			std::string composeString ="<sizer mode=\"hori\">\n";
+			std::string composeString ="<sizer mode='hori' expand='true,false' fill='true,true'>\n";
 			if (etk::end_with(tmpObject.m_image, ".edf") == true) {
-				composeString+="    <image src=\"" + tmpObject.m_image + "\" size=\"8,8mm\" distance-field='true'/>\n";
+				composeString+="    <image src='" + tmpObject.m_image + "' size='8,8mm' distance-field='true'/>\n";
 			} else {
-				composeString+="    <image src=\"" + tmpObject.m_image + "\" size=\"8,8mm\"/>\n";
+				composeString+="    <image src='" + tmpObject.m_image + "' size='8,8mm'/>\n";
 			}
 			composeString+="    <label><left>" + tmpObject.m_label + "</left></label>\n";
 			composeString+="</sizer>\n";
@@ -131,125 +131,123 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 		return;
 	}
 	for (auto &it : m_listElement) {
-		if (caller == it.m_widgetPointer.lock()) {
-			// 2 posible case (have a message or have a child ...
-			if (it.m_message.size() > 0) {
-				EWOL_DEBUG("Menu  == > generate Event");
-				// Send a multicast event ...
-				signalSelect.emit(it.m_message);
-				std::shared_ptr<ewol::widget::ContextMenu> tmpContext = m_widgetContextMenu.lock();
-				if (tmpContext != nullptr) {
-					EWOL_DEBUG("Mark the menu to remove ...");
-					tmpContext->destroy();
-				}
-				return;
-			} else{
-				EWOL_DEBUG("Menu  == > load Sub Menu");
-				bool findChild = false;
-				for (auto &it2 : m_listElement) {
-					if (it.m_localId == it2.m_parentId) {
-						findChild = true;
-						break;
-					}
-				}
-				if (false == findChild) {
-					EWOL_WARNING("Event on menu element with no child an no event... label=" << it.m_label);
-					return;
-				}
-				// create a context menu : 
-				std::shared_ptr<ewol::widget::ContextMenu> tmpContext = ewol::widget::ContextMenu::create();
-				m_widgetContextMenu = tmpContext;
-				if (tmpContext == nullptr) {
-					EWOL_ERROR("Allocation Error");
-					return;
-				}
-				// get the button widget : 
-				vec2 newPosition;
-				std::shared_ptr<ewol::Widget> eventFromWidget = std::dynamic_pointer_cast<ewol::Widget>(caller);
-				if (eventFromWidget != nullptr) {
-					vec2 tmpOri  = eventFromWidget->getOrigin();
-					vec2 tmpSize = eventFromWidget->getSize();
-					// calculate the correct position
-					newPosition.setValue(tmpOri.x() + tmpSize.x()/2,
-					                     tmpOri.y() );
-				}
-				tmpContext->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition );
-				
-				std::shared_ptr<ewol::widget::Sizer> mySizer;
-				std::shared_ptr<ewol::widget::Button> myButton;
-				
-				mySizer = ewol::widget::Sizer::create(widget::Sizer::modeVert);
-				if (nullptr != mySizer) {
-					mySizer->lockExpand(vec2(true,true));
-					// set it in the pop-up-system : 
-					tmpContext->setSubWidget(mySizer);
-					
-					bool menuHaveImage = false;
-					for (auto &it2 : m_listElement) {
-						if (it.m_localId == it2.m_parentId) {
-							if (it2.m_image.size()!=0) {
-								menuHaveImage = true;
-								break;
-							}
-						}
-					}
-					for (auto it2=m_listElement.rbegin(); it2!=m_listElement.rend() ; ++it2) {
-						if (it.m_localId == it2->m_parentId) {
-							myButton = ewol::widget::Button::create();
-							if (myButton == nullptr) {
-								EWOL_ERROR("Allocation Error");
-							} else {
-								if (it2->m_image.size()!=0) {
-									std::string composeString = "<composer expand=\"true,false\" fill=\"true,true\">\n";
-									composeString+= "    <sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n";
-									if (etk::end_with(it2->m_image, ".edf") == true) {
-										composeString+="        <image src=\"" + it2->m_image + "\" size=\"8,8mm\"  distance-field='true'/>\n";
-									} else {
-										composeString+="        <image src=\"" + it2->m_image + "\" size=\"8,8mm\"/>\n";
-									}
-									composeString+="        <label exand=\"true,true\" fill=\"true,true\"><left>" + it2->m_label + "</left></label>\n";
-									composeString+="    </sizer>\n";
-									composeString+="</composer>\n";
-									myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String, composeString));
-								} else {
-									if (true == menuHaveImage) {
-										myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
-										        std::string("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
-										        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
-										        "		<spacer min-size=\"8,0mm\"/>\n"
-										        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
-										        "	</sizer>\n"
-										        "</composer>\n"));
-									} else {
-										std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create(std::string("<left>") + it2->m_label + "</left>\n");
-										if (tmpLabel != nullptr) {
-											tmpLabel->setExpand(bvec2(true,false));
-											tmpLabel->setFill(bvec2(true,true));
-											myButton->setSubWidget(tmpLabel);
-										}
-									}
-								}
-								// set the image if one is present ...
-								//myButton->registerOnEvent(shared_from_this(), "pressed", eventButtonPressed);
-								myButton->signalPressed.bind(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
-								myButton->setExpand(bvec2(true,false));
-								myButton->setFill(bvec2(true,false));
-								// add it in the widget list
-								mySizer->subWidgetAdd(myButton);
-								it2->m_widgetPointer = myButton;
-							}
-						}
-					}
-				}
-				std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
-				if (currentWindows == nullptr) {
-					EWOL_ERROR("Can not get the curent Windows...");
-				} else {
-					currentWindows->popUpWidgetPush(tmpContext);
-				}
+		if (caller != it.m_widgetPointer.lock()) {
+			continue;
+		}
+		// 2 posible case (have a message or have a child ...
+		if (it.m_message.size() > 0) {
+			EWOL_DEBUG("Menu  == > generate Event");
+			// Send a multicast event ...
+			signalSelect.emit(it.m_message);
+			std::shared_ptr<ewol::widget::ContextMenu> tmpContext = m_widgetContextMenu.lock();
+			if (tmpContext != nullptr) {
+				EWOL_DEBUG("Mark the menu to remove ...");
+				tmpContext->destroy();
 			}
 			return;
 		}
+		EWOL_DEBUG("Menu  == > load Sub Menu");
+		bool findChild = false;
+		for (auto &it2 : m_listElement) {
+			if (it.m_localId == it2.m_parentId) {
+				findChild = true;
+				break;
+			}
+		}
+		if (false == findChild) {
+			EWOL_WARNING("Event on menu element with no child an no event... label=" << it.m_label);
+			return;
+		}
+		// create a context menu:
+		std::shared_ptr<ewol::widget::ContextMenu> tmpContext = ewol::widget::ContextMenu::create();
+		m_widgetContextMenu = tmpContext;
+		if (tmpContext == nullptr) {
+			EWOL_ERROR("Allocation Error");
+			return;
+		}
+		// get the button widget:
+		vec2 newPosition;
+		std::shared_ptr<ewol::Widget> eventFromWidget = std::dynamic_pointer_cast<ewol::Widget>(caller);
+		if (eventFromWidget != nullptr) {
+			vec2 tmpOri  = eventFromWidget->getOrigin();
+			vec2 tmpSize = eventFromWidget->getSize();
+			// calculate the correct position
+			newPosition.setValue(tmpOri.x() + tmpSize.x()/2,
+			                     tmpOri.y() );
+		}
+		tmpContext->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition);
+		std::shared_ptr<ewol::widget::Sizer> mySizer;
+		std::shared_ptr<ewol::widget::Button> myButton;
+		mySizer = ewol::widget::Sizer::create(widget::Sizer::modeVert);
+		if (mySizer != nullptr) {
+			mySizer->lockExpand(vec2(true,true));
+			mySizer->setFill(vec2(true,true));
+			// set it in the pop-up-system:
+			tmpContext->setSubWidget(mySizer);
+			bool menuHaveImage = false;
+			for (auto &it2 : m_listElement) {
+				if (it.m_localId != it2.m_parentId) {
+					continue;
+				}
+				if (it2.m_image.size()!=0) {
+					menuHaveImage = true;
+					break;
+				}
+			}
+			for (auto it2=m_listElement.rbegin(); it2!=m_listElement.rend() ; ++it2) {
+				if (it.m_localId != it2->m_parentId) {
+					continue;
+				}
+				myButton = ewol::widget::Button::create();
+				if (myButton == nullptr) {
+					EWOL_ERROR("Allocation Error");
+					continue;
+				}
+				myButton->setExpand(bvec2(true,true));
+				myButton->setFill(bvec2(true,true));
+				// set callback
+				myButton->signalPressed.bind(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
+				// add it in the widget list
+				mySizer->subWidgetAdd(myButton);
+				if (it2->m_image.size() != 0) {
+					std::string composeString;
+					composeString+= "    <sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n";
+					if (etk::end_with(it2->m_image, ".edf") == true) {
+						composeString+="        <image src='" + it2->m_image + "' size='8,8mm' distance-field='true'/>\n";
+					} else {
+						composeString+="        <image src='" + it2->m_image + "' size='8,8mm'/>\n";
+					}
+					composeString+="        <label exand='true,true' fill='true,true'><left>" + it2->m_label + "</left></label>\n";
+					composeString+="    </sizer>\n";
+					myButton->setSubWidget(ewol::widget::composerGenerate(widget::Composer::String, composeString));
+				} else {
+					if (menuHaveImage == true) {
+						myButton->setSubWidget(ewol::widget::composerGenerate(widget::Composer::String,
+						        std::string() +
+						        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
+						        "		<spacer min-size='8,0mm'/>\n"
+						        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
+						        "	</sizer>\n")
+						    );
+					} else {
+						std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create(std::string("<left>") + it2->m_label + "</left>\n");
+						if (tmpLabel != nullptr) {
+							tmpLabel->setExpand(bvec2(true,false));
+							tmpLabel->setFill(bvec2(true,true));
+							myButton->setSubWidget(tmpLabel);
+						}
+					}
+				}
+				it2->m_widgetPointer = myButton;
+			}
+		}
+		std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
+		if (currentWindows == nullptr) {
+			EWOL_ERROR("Can not get the curent Windows...");
+		} else {
+			currentWindows->popUpWidgetPush(tmpContext);
+		}
+		return;
 	}
 }
 
