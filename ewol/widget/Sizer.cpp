@@ -271,7 +271,7 @@ void ewol::widget::Sizer::onRegenerateDisplay() {
 	m_draw.setPos(vec3(tmpBorderSize.x(), m_size.y()-tmpBorderSize.y(), 0) );
 	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
 	vec2 underSize(0,0);
-	vec2 underOrigin(0,0);
+	vec2 underOrigin(999999999999.0,999999999999.0);
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
 			continue;
@@ -297,7 +297,7 @@ void ewol::widget::Sizer::onRegenerateDisplay() {
 		vec2 size = it->getSize();
 		// now we display around the widget every element needed
 		if (m_mode == ewol::widget::Sizer::modeHori) {
-			if (size.x() < localWidgetSize.x()) {
+			if (size.y() < localWidgetSize.y()) {
 				// under
 				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_buttom)) == 0) {
 					m_draw.setColor(etk::Color<>(0xFF, 0xFF, 0x00, 0xA0));
@@ -309,10 +309,9 @@ void ewol::widget::Sizer::onRegenerateDisplay() {
 					m_draw.setColor(etk::color::orange);
 					float startDraw = origin.y()+it->getSize().y() - m_origin.y();
 					m_draw.setPos(vec2(origin.x()-m_origin.x(), startDraw));
-					m_draw.rectangleWidth(vec2(it->getSize().y(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
+					m_draw.rectangleWidth(vec2(it->getSize().x(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
 				}
 			}
-			// TODO : Do left and right
 		} else {
 			if (size.x() < localWidgetSize.x()) {
 				// left
@@ -329,7 +328,40 @@ void ewol::widget::Sizer::onRegenerateDisplay() {
 					m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), it->getSize().y()) );
 				}
 			}
-			// TODO : Do up and down
+		}
+	}
+	// now we do the rest of the sizer:
+	if (m_mode == ewol::widget::Sizer::modeHori) {
+		if (underSize.x() < localWidgetSize.x()) {
+			// left
+			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_left)) == 0) {
+				m_draw.setColor(etk::color::purple);
+				m_draw.setPos(localWidgetOrigin - m_origin);
+				m_draw.rectangleWidth(vec2(underOrigin.x()-localWidgetOrigin.x(), localWidgetSize.y()) );
+			}
+			// right
+			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_right)) == 0) {
+				m_draw.setColor(etk::color::cyan);
+				float startDraw = underOrigin.x() + underSize.x() - m_origin.x();
+				m_draw.setPos(vec2(startDraw, localWidgetOrigin.y()-m_origin.y()));
+				m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), localWidgetSize.y()) );
+			}
+		}
+	} else {
+		if (underSize.y() < localWidgetSize.y()) {
+			// under
+			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_buttom)) == 0) {
+				m_draw.setColor(etk::color::purple);
+				m_draw.setPos(localWidgetOrigin - m_origin);
+				m_draw.rectangleWidth(vec2(localWidgetSize.x(), underOrigin.y()-localWidgetOrigin.y()) );
+			}
+			// upper
+			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_top)) == 0) {
+				m_draw.setColor(etk::color::cyan);
+				float startDraw = underOrigin.y() + underSize.y() - m_origin.y();
+				m_draw.setPos(vec2(localWidgetOrigin.x()-m_origin.x(), startDraw));
+				m_draw.rectangleWidth(vec2(localWidgetSize.x(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
+			}
 		}
 	}
 }

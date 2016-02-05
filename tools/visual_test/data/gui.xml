@@ -44,18 +44,19 @@
 					<label expand="true" fill="true">No config</label>
 				</sizer>
 			</scroll>
-			<sizer mode="vert"
+			<sizer mode="hori"
 			       expand="true,true"
 			       fill="true,true"
 			       border="10px"
 			       border-color="#F008"
 			       name="appl-upper-test-widget">
-				<!--
-				<spacer expand="false,false" fill="true,true" min-size="12%" color="red"/>
+				
+				<spacer expand="false,true" fill="true,true" min-size="12%" color="red"/>
 				<spacer expand="false,false" fill="true,true" min-size="12%" color="green"/>
 				<spacer expand="false,false" fill="true,true" min-size="12%" color="blue"/>
-				-->
+				<!-->
 				<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
+				-->
 			</sizer>
 		</sizer>
 	</sizer>
