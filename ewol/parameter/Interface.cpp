@@ -73,6 +73,10 @@ void ewol::parameter::Interface::parameterDisplay(bool _changeOnly) const {
 	}
 }
 
+void ewol::parameter::Interface::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
+	// nothing to do ...
+}
+
 std::map<std::string, std::string> ewol::parameter::Interface::parameterGetAll(bool _notIfDefault) const {
 	std::map<std::string, std::string> out;
 	for (auto &it : m_list) {

@@ -61,7 +61,7 @@ namespace ewol {
 				 * @brief Called when a parameter change value.
 				 * @param[in] _paramPointer Pointer on the parameter (to know which parameter have change);
 				 */
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) { };
+				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 				/**
 				 * @brief Get All the parameter configuration:
 				 * @return map on the parameters

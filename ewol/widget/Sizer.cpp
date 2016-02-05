@@ -191,14 +191,19 @@ void ewol::widget::Sizer::onChangeSize() {
 		if (it == nullptr) {
 			continue;
 		}
-		it->setOrigin(vec2ClipInt32(tmpOrigin+m_offset));
+		vec2 origin;
 		vec2 size = it->getSize();
+		if (m_mode == ewol::widget::Sizer::modeVert) {
+			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(underSize.x()-size.x(),0.0f)));
+		} else {
+			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(0.0f, underSize.y()-size.x())));
+		}
+		it->setOrigin(origin);
 		if (m_mode == ewol::widget::Sizer::modeVert) {
 			tmpOrigin.setY(tmpOrigin.y() + size.y());
 		} else {
 			tmpOrigin.setX(tmpOrigin.x() + size.x());
 		}
-		// TODO : Set origin with the correct gravity
 	}
 	// -10- Update all subSize at every element:
 	for (auto &it : m_subWidget) {
@@ -265,31 +270,66 @@ void ewol::widget::Sizer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
 	m_draw.setPos(vec3(tmpBorderSize.x(), m_size.y()-tmpBorderSize.y(), 0) );
 	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
+	vec2 underSize(0,0);
+	vec2 underOrigin(0,0);
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
 			continue;
 		}
-		vec2 deltaOrigin = it->getOrigin() - (m_origin );
+		vec2 size = it->getSize();
+		if (m_mode == ewol::widget::Sizer::modeVert) {
+			underSize += vec2(0.0f, size.y());
+			underSize.setX(std::max(underSize.x(), size.x()));
+		} else {
+			underSize += vec2(size.x(), 0.0f);
+			underSize.setY(std::max(underSize.y(), size.y()));
+		}
+		underOrigin.setX(std::min(it->getOrigin().x(), underOrigin.x()));
+		underOrigin.setY(std::min(it->getOrigin().y(), underOrigin.y()));
+	}
+	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
+	vec2 localWidgetOrigin = m_origin + tmpBorderSize;
+	for (auto &it : m_subWidget) {
+		if (it == nullptr) {
+			continue;
+		}
+		vec2 origin = it->getOrigin();
 		vec2 size = it->getSize();
 		// now we display around the widget every element needed
 		if (m_mode == ewol::widget::Sizer::modeHori) {
-			// under
-			
-			// upper
-			if (size.y() < m_size.y()-tmpBorderSize.y()*2.0f) {
-				m_draw.setColor(etk::color::orange);
-				m_draw.setPos(deltaOrigin + vec2(0, it->getSize().y()) );
-				m_draw.rectangleWidth(vec2(it->getSize().x(), m_size.y()-tmpBorderSize.y()*2.0f-it->getSize().y()) );
+			if (size.x() < localWidgetSize.x()) {
+				// under
+				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_buttom)) == 0) {
+					m_draw.setColor(etk::Color<>(0xFF, 0xFF, 0x00, 0xA0));
+					m_draw.setPos(vec2(origin.x(), localWidgetOrigin.y()) - m_origin);
+					m_draw.rectangleWidth(vec2(it->getSize().x(), origin.y()-localWidgetOrigin.y()) );
+				}
+				// upper
+				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_top)) == 0) {
+					m_draw.setColor(etk::color::orange);
+					float startDraw = origin.y()+it->getSize().y() - m_origin.y();
+					m_draw.setPos(vec2(origin.x()-m_origin.x(), startDraw));
+					m_draw.rectangleWidth(vec2(it->getSize().y(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
+				}
 			}
+			// TODO : Do left and right
 		} else {
-			// left
-			
-			// right
-			if (size.x() < m_size.x()-tmpBorderSize.x()*2.0f) {
-				m_draw.setColor(etk::color::orange);
-				m_draw.setPos(deltaOrigin + vec2(it->getSize().x(), 0) );
-				m_draw.rectangleWidth(vec2(m_size.x()-tmpBorderSize.x()*2.0f-it->getSize().x(), it->getSize().y()) );
+			if (size.x() < localWidgetSize.x()) {
+				// left
+				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_left)) == 0) {
+					m_draw.setColor(etk::Color<>(0xFF, 0xFF, 0x00, 0xA0));
+					m_draw.setPos(vec2(localWidgetOrigin.x(), origin.y()) - m_origin);
+					m_draw.rectangleWidth(vec2(origin.x()-localWidgetOrigin.x(), it->getSize().y()) );
+				}
+				// right
+				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_right)) == 0) {
+					m_draw.setColor(etk::color::orange);
+					float startDraw = origin.x()+it->getSize().x() - m_origin.x();
+					m_draw.setPos(vec2(startDraw, origin.y()-m_origin.y()));
+					m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), it->getSize().y()) );
+				}
 			}
+			// TODO : Do up and down
 		}
 	}
 }
