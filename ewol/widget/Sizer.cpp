@@ -196,7 +196,7 @@ void ewol::widget::Sizer::onChangeSize() {
 		if (m_mode == ewol::widget::Sizer::modeVert) {
 			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(underSize.x()-size.x(),0.0f)));
 		} else {
-			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(0.0f, underSize.y()-size.x())));
+			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(0.0f, underSize.y()-size.y())));
 		}
 		it->setOrigin(origin);
 		if (m_mode == ewol::widget::Sizer::modeVert) {
