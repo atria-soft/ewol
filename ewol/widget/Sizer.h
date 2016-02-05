@@ -30,7 +30,7 @@ namespace ewol {
 					modeVert, //!< Vertical mode
 					modeHori, //!< Horizontal mode
 				};
-			private:
+			protected:
 				ewol::parameter::List<enum displayMode> m_mode; //!< Methode to display the widget list (vert/hory ...)
 			protected:
 				/**
@@ -59,7 +59,7 @@ namespace ewol {
 				enum displayMode getMode() const {
 					return m_mode;
 				}
-			private:
+			protected:
 				ewol::parameter::Value<gale::Dimension> m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
@@ -76,23 +76,6 @@ namespace ewol {
 				const gale::Dimension& getBorderSize() const {
 					return m_borderSize;
 				};
-			private:
-				ewol::parameter::Value<etk::Color<>> m_borderColor; //!< Border color.
-			public:
-				/**
-				 * @brief Set the current border color:
-				 * @param[in] _value The border color to set @ref etk::color::none : no color
-				 */
-				void setBorderColor(const etk::Color<>& _value) {
-					m_borderColor.set(_value);
-				}
-				/**
-				 * @brief get the current border size of the current element:
-				 * @return the border size (0 if not used)
-				 */
-				const etk::Color<>& getBorderColor() const {
-					return m_borderColor;
-				};
 			public:
 				enum animation {
 					animationNone, //!< No annimation
@@ -102,7 +85,7 @@ namespace ewol {
 					animationRight //!< element came from the right
 					//animationZoom //!< element came from zooming
 				};
-			private:
+			protected:
 				enum animation m_animation; //!< Methode add and remove element (animation)
 			public:
 				/**
@@ -119,7 +102,7 @@ namespace ewol {
 				enum animation getAnimationMode() {
 					return m_animation;
 				};
-			private:
+			protected:
 				float m_animationTime; //!< Time in second to generate animation
 			public:
 				/**
@@ -136,8 +119,6 @@ namespace ewol {
 				float getAnimationTime() {
 					return m_animationTime;
 				};
-			private:
-				ewol::compositing::Drawing m_draw; //!< Compositing drawing element for display the border.
 			public: // Derived function
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
@@ -147,8 +128,6 @@ namespace ewol {
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
-				virtual void onRegenerateDisplay();
-				virtual void onDraw();
 		};
 	}
 }

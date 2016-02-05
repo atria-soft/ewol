@@ -16,7 +16,6 @@
 ewol::widget::Sizer::Sizer() :
   m_mode(*this, "mode", modeHori, "The display mode"),
   m_borderSize(*this, "border", vec2(0,0), "The sizer border size"),
-  m_borderColor(*this, "border-color", etk::color::none, "Color of the border"),
   m_animation(animationNone),
   m_animationTime(0) {
 	addObjectType("ewol::widget::Sizer");
@@ -249,125 +248,6 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	}
 	m_minSize += tmpBorderSize*2;
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
-}
-
-void ewol::widget::Sizer::onRegenerateDisplay() {
-	ewol::widget::ContainerN::onRegenerateDisplay();
-	m_draw.clear();
-	vec2 tmpBorderSize = m_borderSize->getPixel();
-	if (tmpBorderSize == vec2(0.0f, 0.0f)) {
-		return;
-	}
-	if (m_borderColor->a() == 0) {
-		return;
-	}
-	m_draw.setColor(m_borderColor);
-	m_draw.setPos(vec3(0, 0, 0) );
-	m_draw.rectangleWidth(vec3(tmpBorderSize.x(), m_size.y(),0) );
-	m_draw.setPos(vec3(m_size.x() - tmpBorderSize.x(), 0, 0) );
-	m_draw.rectangleWidth(vec3(tmpBorderSize.x(), m_size.y(),0) );
-	m_draw.setPos(vec3(tmpBorderSize.x(), 0, 0) );
-	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
-	m_draw.setPos(vec3(tmpBorderSize.x(), m_size.y()-tmpBorderSize.y(), 0) );
-	m_draw.rectangleWidth(vec3(m_size.x()-tmpBorderSize.x()*2.0f, tmpBorderSize.y(),0) );
-	vec2 underSize(0,0);
-	vec2 underOrigin(999999999999.0,999999999999.0);
-	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
-			continue;
-		}
-		vec2 size = it->getSize();
-		if (m_mode == ewol::widget::Sizer::modeVert) {
-			underSize += vec2(0.0f, size.y());
-			underSize.setX(std::max(underSize.x(), size.x()));
-		} else {
-			underSize += vec2(size.x(), 0.0f);
-			underSize.setY(std::max(underSize.y(), size.y()));
-		}
-		underOrigin.setX(std::min(it->getOrigin().x(), underOrigin.x()));
-		underOrigin.setY(std::min(it->getOrigin().y(), underOrigin.y()));
-	}
-	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
-	vec2 localWidgetOrigin = m_origin + tmpBorderSize;
-	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
-			continue;
-		}
-		vec2 origin = it->getOrigin();
-		vec2 size = it->getSize();
-		// now we display around the widget every element needed
-		if (m_mode == ewol::widget::Sizer::modeHori) {
-			if (size.y() < localWidgetSize.y()) {
-				// under
-				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_buttom)) == 0) {
-					m_draw.setColor(etk::Color<>(0xFF, 0xFF, 0x00, 0xA0));
-					m_draw.setPos(vec2(origin.x(), localWidgetOrigin.y()) - m_origin);
-					m_draw.rectangleWidth(vec2(it->getSize().x(), origin.y()-localWidgetOrigin.y()) );
-				}
-				// upper
-				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_top)) == 0) {
-					m_draw.setColor(etk::color::orange);
-					float startDraw = origin.y()+it->getSize().y() - m_origin.y();
-					m_draw.setPos(vec2(origin.x()-m_origin.x(), startDraw));
-					m_draw.rectangleWidth(vec2(it->getSize().x(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
-				}
-			}
-		} else {
-			if (size.x() < localWidgetSize.x()) {
-				// left
-				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_left)) == 0) {
-					m_draw.setColor(etk::Color<>(0xFF, 0xFF, 0x00, 0xA0));
-					m_draw.setPos(vec2(localWidgetOrigin.x(), origin.y()) - m_origin);
-					m_draw.rectangleWidth(vec2(origin.x()-localWidgetOrigin.x(), it->getSize().y()) );
-				}
-				// right
-				if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_right)) == 0) {
-					m_draw.setColor(etk::color::orange);
-					float startDraw = origin.x()+it->getSize().x() - m_origin.x();
-					m_draw.setPos(vec2(startDraw, origin.y()-m_origin.y()));
-					m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), it->getSize().y()) );
-				}
-			}
-		}
-	}
-	// now we do the rest of the sizer:
-	if (m_mode == ewol::widget::Sizer::modeHori) {
-		if (underSize.x() < localWidgetSize.x()) {
-			// left
-			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_left)) == 0) {
-				m_draw.setColor(etk::color::purple);
-				m_draw.setPos(localWidgetOrigin - m_origin);
-				m_draw.rectangleWidth(vec2(underOrigin.x()-localWidgetOrigin.x(), localWidgetSize.y()) );
-			}
-			// right
-			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_right)) == 0) {
-				m_draw.setColor(etk::color::cyan);
-				float startDraw = underOrigin.x() + underSize.x() - m_origin.x();
-				m_draw.setPos(vec2(startDraw, localWidgetOrigin.y()-m_origin.y()));
-				m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), localWidgetSize.y()) );
-			}
-		}
-	} else {
-		if (underSize.y() < localWidgetSize.y()) {
-			// under
-			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_buttom)) == 0) {
-				m_draw.setColor(etk::color::purple);
-				m_draw.setPos(localWidgetOrigin - m_origin);
-				m_draw.rectangleWidth(vec2(localWidgetSize.x(), underOrigin.y()-localWidgetOrigin.y()) );
-			}
-			// upper
-			if ((uint32_t(m_gravity) & uint32_t(ewol::gravity_top)) == 0) {
-				m_draw.setColor(etk::color::cyan);
-				float startDraw = underOrigin.y() + underSize.y() - m_origin.y();
-				m_draw.setPos(vec2(localWidgetOrigin.x()-m_origin.x(), startDraw));
-				m_draw.rectangleWidth(vec2(localWidgetSize.x(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
-			}
-		}
-	}
-}
-void ewol::widget::Sizer::onDraw() {
-	m_draw.draw();
-	ewol::widget::ContainerN::onDraw();
 }
 
 int32_t ewol::widget::Sizer::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
