@@ -49,18 +49,17 @@
 			            fill="true,true"
 			            border="10px"
 			            border-color="#F008"
-			            back-color-right="light-green"
-			            back-color-left="magenta"
-			            back-color-buttom="purple"
-			            back-color-top="cyan"
+			            color-right="blueViolet"
+			            color-left="magenta"
+			            color-buttom="purple"
+			            color-top="cyan"
 			            name="appl-upper-test-widget">
-				
+				<!--
 				<spacer expand="false,true" fill="true,true" min-size="12%" color="red"/>
 				<spacer expand="false,false" fill="true,true" min-size="12%" color="green"/>
 				<spacer expand="false,false" fill="true,true" min-size="12%" color="blue"/>
-				<!-->
-				<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
 				-->
+				<label name="[TEST]TO-TEST" expand="true" fill="true">No widget</label>
 			</sizerColor>
 		</sizer>
 	</sizer>

@@ -70,8 +70,8 @@ void ewol::widget::CheckBox::calculateMinMaxSize() {
 	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	calculateMinMaxSizePadded(padding);
-	if (m_size.y() < padding.y()+boxSize) {
-		m_size.setY(padding.y()+boxSize);
+	if (m_minSize.y() < padding.y()+boxSize) {
+		m_minSize.setY(padding.y()+boxSize);
 	}
 }
 

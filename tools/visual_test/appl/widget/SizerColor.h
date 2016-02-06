@@ -35,21 +35,10 @@ namespace appl {
 				virtual ~SizerColor();
 			private:
 				ewol::parameter::Value<etk::Color<>> m_borderColor; //!< Border color.
-			public:
-				/**
-				 * @brief Set the current border color:
-				 * @param[in] _value The border color to set @ref etk::color::none : no color
-				 */
-				void setBorderColor(const etk::Color<>& _value) {
-					m_borderColor.set(_value);
-				}
-				/**
-				 * @brief get the current border size of the current element:
-				 * @return the border size (0 if not used)
-				 */
-				const etk::Color<>& getBorderColor() const {
-					return m_borderColor;
-				};
+				ewol::parameter::Value<etk::Color<>> m_leftColor; //!< Left color.
+				ewol::parameter::Value<etk::Color<>> m_rightColor; //!< Right color.
+				ewol::parameter::Value<etk::Color<>> m_topColor; //!< Top color.
+				ewol::parameter::Value<etk::Color<>> m_buttomColor; //!< Buttom color.
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element for display the border.
 			public:
