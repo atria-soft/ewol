@@ -125,7 +125,8 @@ ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& 
 	if (m_userFill->y() == true) {
 		subElementSize.setY(m_size.y());
 	}
-	vec2 origin = (m_size - subElementSize)*0.5f + vec2(_padding.xLeft(), _padding.yButtom());
+	vec2 delta = ewol::gravityGenerateDelta(m_gravity, m_size - subElementSize);
+	vec2 origin = delta + vec2(_padding.xLeft(), _padding.yButtom());
 	subElementSize -= vec2(_padding.x(), _padding.y());
 	for (size_t iii = 0; iii < 2; ++iii) {
 		if (m_subWidget[iii] != nullptr) {
@@ -141,7 +142,10 @@ ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& 
 	vec2 selectableAreaPos = origin-vec2(_padding.xLeft(), _padding.yButtom());
 	vec2 selectableAreaEndPos = m_size - (selectableAreaPos + subElementSize + vec2(_padding.x(), _padding.y()));
 	markToRedraw();
-	return ewol::Padding(selectableAreaPos.x(), selectableAreaEndPos.y(), selectableAreaEndPos.x(), selectableAreaPos.y());
+	return ewol::Padding(selectableAreaPos.x(),
+	                     selectableAreaEndPos.y(),
+	                     selectableAreaEndPos.x(),
+	                     selectableAreaPos.y());
 }
 
 void ewol::widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _padding) {

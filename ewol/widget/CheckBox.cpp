@@ -34,7 +34,6 @@ ewol::widget::CheckBox::CheckBox() :
   m_shaperIdSizeInsize(-1),
   m_value(*this, "value", false, "Basic value of the widget") {
 	addObjectType("ewol::widget::CheckBox");
-	
 	// shaper satatus update:
 	CheckStatus();
 	// This widget can have the focus ...
