@@ -163,6 +163,19 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	updateProperty();
 }
 
+static void addSpacer(const std::shared_ptr<ewol::widget::Sizer>& _sizer, etk::Color<> _color=etk::color::none) {
+	std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
+	if (mySpacer != nullptr) {
+		mySpacer->setExpand(bvec2(true,false));
+		mySpacer->setFill(bvec2(true,false));
+		if (_color == etk::color::none) {
+			mySpacer->setMinSize(vec2(3,3));
+			mySpacer->setColor(_color);
+		}
+		_sizer->subWidgetAdd(mySpacer);
+	}
+}
+
 void appl::MainWindows::updateProperty() {
 	// remove all elements:
 	m_sizerDynamic->subWidgetRemoveAll();
@@ -171,59 +184,13 @@ void appl::MainWindows::updateProperty() {
 	}
 	std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create(m_subWidget->getObjectType());
 	m_sizerDynamic->subWidgetAdd(widget);
-	std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
-	if (mySpacer != nullptr) {
-		mySpacer->setExpand(bvec2(true,false));
-		mySpacer->setFill(bvec2(true,false));
-		mySpacer->setMinSize(vec2(3,3));
-		mySpacer->setColor(0x000000AA);
-		m_sizerDynamic->subWidgetAddStart(mySpacer);
-	}
+	addSpacer(m_sizerDynamic, etk::color::red);
 	for (size_t iii=0; iii<m_subWidget->getParameterCount(); ++iii) {
 		ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
 		if (param == nullptr) {
 			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
 			continue;
 		}
-		std::string type = param->getType();
-		if (type == typeid(std::string).name()) {
-			type = "std::string";
-		} else if (type == typeid(gale::Dimension).name()) {
-			type = "gale::Dimension";
-		} else if (type == typeid(bvec2).name()) {
-			type = "bvec2";
-		} else if (type == typeid(ivec2).name()) {
-			type = "ivec2";
-		} else if (type == typeid(uivec2).name()) {
-			type = "uivec2";
-		} else if (type == typeid(vec2).name()) {
-			type = "vec2";
-		} else if (type == typeid(bool).name()) {
-			type = "bool";
-		} else if (type == typeid(int64_t).name()) {
-			type = "int64_t";
-		} else if (type == typeid(int32_t).name()) {
-			type = "int32_t";
-		} else if (type == typeid(int16_t).name()) {
-			type = "int16_t";
-		} else if (type == typeid(int8_t).name()) {
-			type = "int8_t";
-		} else if (type == typeid(uint64_t).name()) {
-			type = "uint64_t";
-		} else if (type == typeid(uint32_t).name()) {
-			type = "uint32_t";
-		} else if (type == typeid(uint16_t).name()) {
-			type = "uint16_t";
-		} else if (type == typeid(uint8_t).name()) {
-			type = "uint8_t";
-		} else if (type == typeid(float).name()) {
-			type = "float";
-		} else if (type == typeid(double).name()) {
-			type = "double";
-		} else if (type == typeid(enum ewol::gravity).name()) {
-			type = "enum ewol::gravity";
-		}
-		// / " + param->getParameterType() + "&lt;" + type + "&gt; / " + param->getString()
 		std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create(ewol::widget::Sizer::modeHori);
 		if (widgetSizer != nullptr) {
 			widgetSizer->setExpand(bvec2(true,false));
@@ -232,21 +199,31 @@ void appl::MainWindows::updateProperty() {
 			
 			std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create(param->getName() + ":");
 			widgetSizer->subWidgetAdd(widget);
-			mySpacer = ewol::widget::Spacer::create();
-			if (mySpacer != nullptr) {
-				mySpacer->setExpand(bvec2(true,false));
-				mySpacer->setFill(bvec2(true,false));
-				mySpacer->setMinSize(vec2(3,3));
-				widgetSizer->subWidgetAdd(mySpacer);
-			}
-			// Main part to do ...
+			//addSpacer(widgetSizer, etk::color::purple);
+			// Main part TODO: ...
 			std::string type = param->getType();
 			if (type == typeid(std::string).name()) {
-				type = "std::string";
+				std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
+				widgetSizer->subWidgetAdd(widgetTmp);
+				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
+				ewol::parameter::Value<std::string>* paramValue = dynamic_cast<ewol::parameter::Value<std::string>*>(param);
+				if (paramValue == nullptr) {
+					APPL_ERROR("nullptr...");
+					return;
+				}
+				std::string value = paramValue->get();
+				widgetTmp->setValue(value);
+				widgetTmp->setExpand(bvec2(true,false));
+				widgetTmp->setFill(bvec2(true,false));
+				widgetTmp->signalModify.connect([=](const std::string& _value) {
+						APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
+						paramValue->set(_value);
+						return;
+					});
 			} else if (type == typeid(gale::Dimension).name()) {
 				type = "gale::Dimension";
 			} else if (type == typeid(bvec2).name()) {
-				//type = "bvec2";
+				addSpacer(widgetSizer);
 				std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
 				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
@@ -286,7 +263,7 @@ void appl::MainWindows::updateProperty() {
 			} else if (type == typeid(vec2).name()) {
 				type = "vec2";
 			} else if (type == typeid(bool).name()) {
-				type = "bool";
+				addSpacer(widgetSizer);
 				std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
 				widgetTmp->signalValue.connect([=](const bool& _value) {
@@ -298,22 +275,43 @@ void appl::MainWindows::updateProperty() {
 						m_subWidget->parameterSet(param->getName(), etk::to_string(_value));
 						return;
 					});
-			} else if (type == typeid(int64_t).name()) {
-				type = "int64_t";
-			} else if (type == typeid(int32_t).name()) {
-				type = "int32_t";
-			} else if (type == typeid(int16_t).name()) {
-				type = "int16_t";
-			} else if (type == typeid(int8_t).name()) {
-				type = "int8_t";
-			} else if (type == typeid(uint64_t).name()) {
-				type = "uint64_t";
-			} else if (type == typeid(uint32_t).name()) {
-				type = "uint32_t";
-			} else if (type == typeid(uint16_t).name()) {
-				type = "uint16_t";
-			} else if (type == typeid(uint8_t).name()) {
-				type = "uint8_t";
+			} else if (    type == typeid(int64_t).name()
+			            || type == typeid(int32_t).name()
+			            || type == typeid(int16_t).name()
+			            || type == typeid(int8_t).name()
+			            || type == typeid(uint64_t).name()
+			            || type == typeid(uint32_t).name()
+			            || type == typeid(uint16_t).name()
+			            || type == typeid(uint8_t).name()) {
+				std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
+				widgetSizer->subWidgetAdd(widgetTmp);
+				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
+				std::string value = param->getString();
+				widgetTmp->setValue(value);
+				widgetTmp->setExpand(bvec2(true,false));
+				widgetTmp->setFill(bvec2(true,false));
+				widgetTmp->signalModify.connect([=](const std::string& _value) {
+						APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
+						param->setString(_value);
+						return;
+					});
+				if (type == typeid(int64_t).name()) {
+					type = "int64_t";
+				} else if (type == typeid(int32_t).name()) {
+					type = "int32_t";
+				} else if (type == typeid(int16_t).name()) {
+					type = "int16_t";
+				} else if (type == typeid(int8_t).name()) {
+					type = "int8_t";
+				} else if (type == typeid(uint64_t).name()) {
+					type = "uint64_t";
+				} else if (type == typeid(uint32_t).name()) {
+					type = "uint32_t";
+				} else if (type == typeid(uint16_t).name()) {
+					type = "uint16_t";
+				} else if (type == typeid(uint8_t).name()) {
+					type = "uint8_t";
+				}
 			} else if (type == typeid(float).name()) {
 				type = "float";
 			} else if (type == typeid(double).name()) {
@@ -322,7 +320,7 @@ void appl::MainWindows::updateProperty() {
 				type = "enum ewol::gravity";
 			}
 		}
-		mySpacer = ewol::widget::Spacer::create();
+		std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
 		if (mySpacer != nullptr) {
 			mySpacer->setExpand(bvec2(true,false));
 			mySpacer->setFill(bvec2(true,false));
