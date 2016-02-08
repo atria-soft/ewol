@@ -189,9 +189,11 @@ def create(target, module_name):
 		'ewol/widget/meta/Parameter.cpp',
 		'ewol/widget/meta/ParameterList.cpp',
 		'ewol/widget/meta/StdPopUp.cpp',
+		'ewol/widget/meta/SpinBase.cpp',
 		'ewol/widget/PopUp.cpp',
 		'ewol/widget/ProgressBar.cpp',
 		'ewol/widget/Scroll.cpp',
+		'ewol/widget/Select.cpp',
 		'ewol/widget/Sizer.cpp',
 		'ewol/widget/Slider.cpp',
 		'ewol/widget/Spacer.cpp',
@@ -230,12 +232,14 @@ def create(target, module_name):
 		'ewol/widget/Joystick.h',
 		'ewol/widget/Widget.h',
 		'ewol/widget/meta/StdPopUp.h',
+		'ewol/widget/meta/SpinBase.h',
 		'ewol/widget/meta/ParameterList.h',
 		'ewol/widget/meta/ColorChooser.h',
 		'ewol/widget/meta/Parameter.h',
 		'ewol/widget/meta/FileChooser.h',
 		'ewol/widget/Image.h',
-		'ewol/widget/List.h'
+		'ewol/widget/List.h',
+		'ewol/widget/Select.h'
 		])
 	
 	my_module.copy_path('data/theme/shape/square/*','theme/shape/square')

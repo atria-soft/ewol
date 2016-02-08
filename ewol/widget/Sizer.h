@@ -42,7 +42,7 @@ namespace ewol {
 			public:
 				DECLARE_WIDGET_FACTORY(Sizer, "Sizer");
 				/**
-				 * @brief Desstructor
+				 * @brief Destructor
 				 */
 				virtual ~Sizer();
 				/**

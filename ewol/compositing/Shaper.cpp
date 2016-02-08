@@ -85,7 +85,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		return;
 	}
 	m_config = ewol::resource::ConfigFile::create(m_name);
-	if (nullptr != m_config) {
+	if (m_config != nullptr) {
 		m_confIdMode = m_config->request("mode");
 		m_confIdDisplayOutside = m_config->request("display-outside");
 		m_confIdPaddingOut[shaperPosLeft]   = m_config->request("padding-out-left");

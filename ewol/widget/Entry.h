@@ -48,7 +48,8 @@ namespace ewol {
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
 				Entry();
-				void init(const std::string& _newData = "");
+				void init(const std::string& _newData = "",
+				          const std::string& _shaperName="{ewol}THEME:GUI:Entry.json");
 			public:
 				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**

@@ -38,10 +38,10 @@ ewol::widget::Entry::Entry() :
 	addObjectType("ewol::widget::Entry");
 }
 
-void ewol::widget::Entry::init(const std::string& _newData) {
+void ewol::widget::Entry::init(const std::string& _newData, const std::string& _shaperName) {
 	ewol::Widget::init();
 	m_data.set(_newData);
-	m_shaper.setString("{ewol}THEME:GUI:Entry.json");
+	m_shaper.setString(_shaperName);
 	setCanHaveFocus(true);
 	
 	try {

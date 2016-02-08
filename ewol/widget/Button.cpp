@@ -180,23 +180,22 @@ void ewol::widget::Button::onLostFocus() {
 }
 
 void ewol::widget::Button::CheckStatus() {
-	if (true == m_buttonPressed) {
+	if (m_buttonPressed == true) {
 		changeStatusIn(STATUS_PRESSED);
-	} else {
-		if (true == m_mouseHover) {
-			changeStatusIn(STATUS_HOVER);
-		} else {
-			if (true == m_value) {
-				changeStatusIn(STATUS_DOWN);
-			} else {
-				changeStatusIn(STATUS_UP);
-			}
-		}
+		return;
 	}
+	if (m_mouseHover == true) {
+		changeStatusIn(STATUS_HOVER);
+		return;
+	}
+	if (m_value == true) {
+		changeStatusIn(STATUS_DOWN);
+	}
+	changeStatusIn(STATUS_UP);
 }
 
 void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
-	if (true == m_shaper->changeStatusIn(_newStatusId) ) {
+	if (m_shaper->changeStatusIn(_newStatusId) == true) {
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -204,7 +203,7 @@ void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 
 
 void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
-	if (false == m_shaper->periodicCall(_event) ) {
+	if (m_shaper->periodicCall(_event) == false) {
 		periodicCallDisable();
 	}
 	markToRedraw();

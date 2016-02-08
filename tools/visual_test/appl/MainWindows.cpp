@@ -44,7 +44,7 @@ static const char * l_eventChangeWidgetPrevious  = "event-change-widget-test-pre
 
 appl::MainWindows::MainWindows() :
   m_gravity(ewol::gravity_buttomLeft),
-  m_idWidget(0) {
+  m_idWidget(-1) {
 	APPL_DEBUG("CREATE WINDOWS ... ");
 	addObjectType("appl::MainWindows");
 }
@@ -117,25 +117,36 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	switch(m_idWidget) {
 		case 0:
 			tmpConstruct = std::string()
+			    + "<select>\n"
+			    + "    <option id='1'>plop 1</option>\n"
+			    + "    <option id='2'>plop 2</option>\n"
+			    + "    <option id='3' select='true'>plop 3</option>\n"
+			    + "    <option id='4'>plop 4</option>\n"
+			    + "    <option id='5'>plop 5</option>\n"
+			    + "</select>\n";
+			tmpDescription = "TestButton";
+			break;
+		case 1:
+			tmpConstruct = std::string()
 			    + "<button name='[TEST]Button:TO-TEST' expand='false,false' fill='false,false' >\n"
 			    + "    <label>My <font color='#FF0000'>Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...</label>\n"
 			    + "</button>\n";
 			tmpDescription = "TestButton";
 			break;
-		case 1:
+		case 2:
 			tmpConstruct = "<ButtonColor/>";
 			tmpDescription = "TestButtonColor";
 			break;
-		case 2:
+		case 3:
 			tmpConstruct = "<label>Simple string</label>\n";
 			tmpDescription = "TestLabel";
 			break;
-		case 3:
+		case 4:
 			tmpConstruct = "<image src='DATA:sphere.png'/>\n";
 			tmpDescription = "TestImage";
 			break;
-		case 4:
-			tmpConstruct = "<checkbox/>\n";
+		case 5:
+			tmpConstruct = "<checkbox><label>Simple string</label></checkbox>\n";
 			tmpDescription = "TestCheckbox";
 			break;
 		default:
