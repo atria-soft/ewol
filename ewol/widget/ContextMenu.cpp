@@ -11,6 +11,7 @@
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/widget/Windows.h>
 #include <ewol/Padding.h>
 
 #undef __class__
@@ -226,6 +227,10 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const ve
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
+void ewol::widget::ContextMenu::setShaperName(const std::string& _shaperName) {
+	m_shaper.set(_shaperName);
+}
+
 void ewol::widget::ContextMenu::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
 	ewol::widget::Container::onParameterChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
@@ -236,3 +241,24 @@ void ewol::widget::ContextMenu::onParameterChangeValue(const ewol::parameter::Re
 		markToRedraw();
 	}
 }
+
+
+void ewol::widget::ContextMenu::setPositionMarkAuto(const vec2& _origin, const vec2& _size) {
+	std::shared_ptr<ewol::widget::Windows> windows = getWindows();
+	vec2 globalSize = windows->getSize();
+	// TODO : Support left and right
+	float upperSize = globalSize.y() - (_origin.y() + _size.y());
+	float underSize = globalSize.y() - _origin.y();
+	if (underSize >= upperSize) {
+		vec2 pos = _origin + _size - vec2(_size.x()*0.5f, 0.0f);
+		setPositionMark(ewol::widget::ContextMenu::markButtom, pos);
+	} else {
+		vec2 pos = _origin + vec2(_size.x()*0.5f, 0.0f);
+		setPositionMark(ewol::widget::ContextMenu::markTop, pos);
+	}
+}
+void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, const vec2& _arrowPos) {
+	m_arrawBorder.set(_position);
+	m_arrowPos.set(_arrowPos);
+}
+

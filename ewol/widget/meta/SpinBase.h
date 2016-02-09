@@ -106,7 +106,7 @@ namespace ewol {
 				std::shared_ptr<ewol::widget::Entry> m_widgetEntry;
 				std::shared_ptr<ewol::widget::Button> m_widgetButtonDown;
 				std::shared_ptr<ewol::widget::Button> m_widgetButtonUp;
-				void updateGui();
+				virtual void updateGui();
 			public: // Derived function
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 		};

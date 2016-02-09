@@ -44,6 +44,7 @@ void ewol::widget::SpinBase::init(enum ewol::widget::spinPosition _mode,
 		m_confIdDownData = m_config->request("down-data");
 	}
 	m_spinMode = _mode;
+	setGravity(gravity_center);
 	updateGui();
 }
 
@@ -65,17 +66,21 @@ void ewol::widget::SpinBase::updateGui() {
 	markToRedraw();
 	requestUpdateSize();
 	if (m_widgetEntry == nullptr) {
-		// TODO : Check shaper pointer
-		std::string shaper = m_config->getString(m_confIdEntryShaper);
+		std::string shaper;
+		if (m_config != nullptr) {
+			shaper = m_config->getString(m_confIdEntryShaper);
+		}
 		m_widgetEntry = ewol::widget::Entry::create("", shaper);
 		if (m_widgetEntry != nullptr) {
 			m_widgetEntry->setExpand(bvec2(true,false));
 			m_widgetEntry->setFill(bvec2(true,true));
-			// TODO : Connect
 		}
 	}
 	if (m_widgetButtonDown == nullptr) {
-		std::string shaper = m_config->getString(m_confIdDownShaper);
+		std::string shaper;
+		if (m_config != nullptr) {
+			shaper = m_config->getString(m_confIdDownShaper);
+		}
 		m_widgetButtonDown = ewol::widget::Button::create(shaper);
 		if (m_widgetButtonDown != nullptr) {
 			m_widgetButtonDown->setExpand(bvec2(false,false));
@@ -83,11 +88,13 @@ void ewol::widget::SpinBase::updateGui() {
 			std::string data = m_config->getString(m_confIdDownData);
 			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerate(ewol::widget::Composer::String, data);
 			m_widgetButtonDown->setSubWidget(widget);
-			// TODO : Connect
 		}
 	}
 	if (m_widgetButtonUp == nullptr) {
-		std::string shaper = m_config->getString(m_confIdUpShaper);
+		std::string shaper;
+		if (m_config != nullptr) {
+			shaper = m_config->getString(m_confIdUpShaper);
+		}
 		m_widgetButtonUp = ewol::widget::Button::create(shaper);
 		if (m_widgetButtonUp != nullptr) {
 			m_widgetButtonUp->setExpand(bvec2(false,false));
@@ -95,7 +102,6 @@ void ewol::widget::SpinBase::updateGui() {
 			std::string data = m_config->getString(m_confIdUpData);
 			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerate(ewol::widget::Composer::String, data);
 			m_widgetButtonUp->setSubWidget(widget);
-			// TODO : Connect
 		}
 	}
 	switch (m_spinMode) {

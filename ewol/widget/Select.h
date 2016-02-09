@@ -7,6 +7,7 @@
  */
 #pragma once
 
+#include <vector>
 #include <etk/types.h>
 #include <ewol/widget/meta/SpinBase.h>
 
@@ -19,7 +20,6 @@ namespace ewol {
 		class Select : public ewol::widget::SpinBase {
 			public:
 				// Event list of properties
-				ewol::Signal<std::string> signalValueString;
 				ewol::Signal<int32_t> signalValue;
 			protected:
 				/**
@@ -42,6 +42,21 @@ namespace ewol {
 					//m_shaper.setString(_shaperName);
 				}
 			protected:
+				class Element {
+					public:
+						int32_t m_value;
+						std::string m_name;
+						bool m_selected;
+					public:
+						Element(int32_t _value, std::string _name, bool _selected=false);
+				};
+				std::vector<ewol::widget::Select::Element> m_listElement;
+			public:
+				void optionSelectDefault();
+				void optionRemove(int32_t _value);
+				void optionClear();
+				void optionAdd(int32_t _value, std::string _name);
+			protected:
 				ewol::parameter::Value<int32_t> m_value; //!< Current state of the Select.
 			public:
 				/**
@@ -49,19 +64,20 @@ namespace ewol {
 				 * @note Work only in toggle mode
 				 * @param[in] _val New value of the Select
 				 */
-				void setValue(int32_t _val) {
-					m_value.set(_val);
-				}
+				void setValue(int32_t _val);
 				/**
 				 * @brief get the current Select value.
 				 * @return True : The Select is pressed.
 				 * @return false : The Select is released.
 				 */
-				bool getValue() const {
-					return m_value;
-				};
+				bool getValue() const;
+			protected:
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+				virtual void updateGui();
+			protected:
+				void onCallbackOpenMenu();
+				void onCallbackLabelPressed(int32_t _value);
 		};
 	};
 };

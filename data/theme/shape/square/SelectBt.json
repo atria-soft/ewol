@@ -3,12 +3,12 @@
 	display-outside:false,
 	
 	padding-out-left:0,
-	padding-out-right:0,
+	padding-out-right:1,
 	padding-out-top:1,
 	padding-out-buttom:1,
 	
 	border-left:1,
-	border-right:0,
+	border-right:1,
 	border-top:1,
 	border-buttom:1,
 	

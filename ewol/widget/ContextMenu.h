@@ -42,9 +42,7 @@ namespace ewol {
 				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 				 * @param[in] _shaperName The new shaper filename
 				 */
-				void setShaperName(const std::string& _shaperName) {
-					m_shaper.set(_shaperName);
-				}
+				void setShaperName(const std::string& _shaperName);
 			private:
 				// TODO : Rework the displayer ....
 				ewol::compositing::Drawing m_compositing;
@@ -55,10 +53,8 @@ namespace ewol {
 				ewol::parameter::Value<vec2> m_arrowPos;
 				ewol::parameter::List<enum markPosition> m_arrawBorder;
 			public:
-				void setPositionMark(enum markPosition _position, const vec2& _arrowPos) {
-					m_arrawBorder.set(_position);
-					m_arrowPos.set(_arrowPos);
-				}
+				void setPositionMarkAuto(const vec2& _origin, const vec2& _size);
+				void setPositionMark(enum markPosition _position, const vec2& _arrowPos);
 			protected: // Derived function
 				virtual void onDraw();
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);

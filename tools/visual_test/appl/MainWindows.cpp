@@ -22,6 +22,7 @@
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/meta/FileChooser.h>
 #include <ewol/widget/meta/Parameter.h>
+#include <ewol/widget/Select.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/context/Context.h>
 #include <appl/TestButton.h>
@@ -124,30 +125,38 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			    + "    <option id='4'>plop 4</option>\n"
 			    + "    <option id='5'>plop 5</option>\n"
 			    + "</select>\n";
-			tmpDescription = "TestButton";
+			tmpDescription = "Test ewol::widget::Select";
 			break;
 		case 1:
 			tmpConstruct = std::string()
 			    + "<button name='[TEST]Button:TO-TEST' expand='false,false' fill='false,false' >\n"
 			    + "    <label>My <font color='#FF0000'>Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...</label>\n"
 			    + "</button>\n";
-			tmpDescription = "TestButton";
+			tmpDescription = "Test ewol::widget::Button";
 			break;
 		case 2:
 			tmpConstruct = "<ButtonColor/>";
-			tmpDescription = "TestButtonColor";
+			tmpDescription = "Test ewol::widget::ButtonColor";
 			break;
 		case 3:
 			tmpConstruct = "<label>Simple string</label>\n";
-			tmpDescription = "TestLabel";
+			tmpDescription = "Test ewol::widget::Label";
 			break;
 		case 4:
 			tmpConstruct = "<image src='DATA:sphere.png'/>\n";
-			tmpDescription = "TestImage";
+			tmpDescription = "Test ewol::widget::Image";
 			break;
 		case 5:
 			tmpConstruct = "<checkbox><label>Simple string</label></checkbox>\n";
-			tmpDescription = "TestCheckbox";
+			tmpDescription = "Test ewol::widget::Checkbox";
+			break;
+		case 6:
+			tmpConstruct = "<entry/>\n";
+			tmpDescription = "Test ewol::widget::Entry";
+			break;
+		case 7:
+			tmpConstruct = "<slider/>\n";
+			tmpDescription = "Test ewol::widget::Entry";
 			break;
 		default:
 			tmpConstruct = "<label expand=false fill=false>Simple string</label>\n";
@@ -329,6 +338,33 @@ void appl::MainWindows::updateProperty() {
 				type = "double";
 			} else if (type == typeid(enum ewol::gravity).name()) {
 				type = "enum ewol::gravity";
+				std::shared_ptr<ewol::widget::Select> widgetTmp = ewol::widget::Select::create();
+				widgetSizer->subWidgetAdd(widgetTmp);
+				widgetTmp->setExpand(bvec2(true,false));
+				widgetTmp->setFill(bvec2(true,false));
+				widgetTmp->optionAdd(int32_t(ewol::gravity_center), "Center");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_top), "Top");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_buttom), "Buttom");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_right), "Right");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_left), "Left");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_topRight), "Top-right");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_topLeft), "Top-left");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_buttomRight), "Buttom-right");
+				widgetTmp->optionAdd(int32_t(ewol::gravity_buttomLeft), "Buttom-left");
+				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
+				ewol::parameter::List<ewol::gravity>* paramValue = dynamic_cast<ewol::parameter::List<ewol::gravity>*>(param);
+				if (paramValue == nullptr) {
+					APPL_ERROR("nullptr... 2 ");
+					return;
+				}
+				ewol::gravity value = paramValue->get();
+				widgetTmp->setValue(value);
+				widgetTmp->signalValue.connect([=](const int32_t& _value) {
+					enum ewol::gravity val = ewol::gravity(_value);
+					APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << val);
+					paramValue->set(val);
+					return;
+				});
 			}
 		}
 		std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();

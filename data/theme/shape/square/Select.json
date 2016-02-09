@@ -1,7 +1,5 @@
 {
 	entry-shaper:"{ewol}THEME:GUI:SelectEntry.json",
-	up-shaper:"{ewol}THEME:GUI:SelectUp.json",
-	up-data:"<label>Up</label>",
-	down-shaper:"{ewol}THEME:GUI:SelectDown.json",
-	down-data:"<label>Down</label>",
+	up-shaper:"{ewol}THEME:GUI:SelectBt.json",
+	up-data:"<label>*</label>",
 }
