@@ -81,8 +81,8 @@ namespace ewol {
 				 * @param[in] _mode The mode to display the elements
 				 */
 				SpinBase();
-				void init(enum ewol::widget::spinPosition _mode=ewol::widget::spinPosition_RightRight,
-				          const std::string& _shaperName="{ewol}THEME:GUI:Spin.json");
+				void init(enum ewol::widget::spinPosition _mode,
+				          const std::string& _shaperName);
 			public:
 				/**
 				 * @brief Destructor
@@ -109,6 +109,7 @@ namespace ewol {
 				virtual void updateGui();
 			public: // Derived function
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 		};
 	}
 }

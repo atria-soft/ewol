@@ -28,6 +28,7 @@
 #include <ewol/widget/ListFileSystem.h>
 #include <ewol/widget/Composer.h>
 #include <ewol/widget/Select.h>
+#include <ewol/widget/Spin.h>
 #include <vector>
 
 #undef __class__
@@ -57,6 +58,7 @@ ewol::widget::Manager::Manager() :
 	ewol::widget::ListFileSystem::createManagerWidget(*this);
 	ewol::widget::Composer::createManagerWidget(*this);
 	ewol::widget::Select::createManagerWidget(*this);
+	ewol::widget::Spin::createManagerWidget(*this);
 }
 
 ewol::widget::Manager::~Manager() {

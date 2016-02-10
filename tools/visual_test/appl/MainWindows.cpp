@@ -117,6 +117,10 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	std::string tmpConstruct;
 	switch(m_idWidget) {
 		case 0:
+			tmpConstruct = "<spin/>\n";
+			tmpDescription = "Test ewol::widget::Spin";
+			break;
+		case 1:
 			tmpConstruct = std::string()
 			    + "<select>\n"
 			    + "    <option id='1'>plop 1</option>\n"
@@ -126,13 +130,6 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			    + "    <option id='5'>plop 5</option>\n"
 			    + "</select>\n";
 			tmpDescription = "Test ewol::widget::Select";
-			break;
-		case 1:
-			tmpConstruct = std::string()
-			    + "<button name='[TEST]Button:TO-TEST' expand='false,false' fill='false,false' >\n"
-			    + "    <label>My <font color='#FF0000'>Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...</label>\n"
-			    + "</button>\n";
-			tmpDescription = "Test ewol::widget::Button";
 			break;
 		case 2:
 			tmpConstruct = "<ButtonColor/>";
@@ -157,6 +154,13 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 		case 7:
 			tmpConstruct = "<slider/>\n";
 			tmpDescription = "Test ewol::widget::Entry";
+			break;
+		case 8:
+			tmpConstruct = std::string()
+			    + "<button name='[TEST]Button:TO-TEST' expand='false,false' fill='false,false' >\n"
+			    + "    <label>My <font color='#FF0000'>Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...</label>\n"
+			    + "</button>\n";
+			tmpDescription = "Test ewol::widget::Button";
 			break;
 		default:
 			tmpConstruct = "<label expand=false fill=false>Simple string</label>\n";

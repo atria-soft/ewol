@@ -248,7 +248,7 @@ void ewol::widget::ContextMenu::setPositionMarkAuto(const vec2& _origin, const v
 	vec2 globalSize = windows->getSize();
 	// TODO : Support left and right
 	float upperSize = globalSize.y() - (_origin.y() + _size.y());
-	float underSize = globalSize.y() - _origin.y();
+	float underSize = _origin.y();
 	if (underSize >= upperSize) {
 		vec2 pos = _origin + _size - vec2(_size.x()*0.5f, 0.0f);
 		setPositionMark(ewol::widget::ContextMenu::markButtom, pos);

@@ -70,7 +70,7 @@ namespace ewol {
 				 * @return True : The Select is pressed.
 				 * @return false : The Select is released.
 				 */
-				bool getValue() const;
+				int32_t getValue() const;
 			protected:
 				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);

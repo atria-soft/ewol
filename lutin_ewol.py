@@ -201,6 +201,7 @@ def create(target, module_name):
 		'ewol/widget/WidgetScrolled.cpp',
 		'ewol/widget/Windows.cpp',
 		'ewol/widget/WSlider.cpp',
+		'ewol/widget/Spin.cpp',
 		])
 	my_module.add_header_file([
 		'ewol/widget/Menu.h',
@@ -239,7 +240,8 @@ def create(target, module_name):
 		'ewol/widget/meta/FileChooser.h',
 		'ewol/widget/Image.h',
 		'ewol/widget/List.h',
-		'ewol/widget/Select.h'
+		'ewol/widget/Select.h',
+		'ewol/widget/Spin.h'
 		])
 	
 	my_module.copy_path('data/theme/shape/square/*','theme/shape/square')

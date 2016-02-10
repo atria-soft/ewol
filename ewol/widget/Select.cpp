@@ -29,7 +29,7 @@ ewol::widget::Select::Element::Element(int32_t _value, std::string _name, bool _
 
 ewol::widget::Select::Select() :
   signalValue(*this, "value", "Select value change"),
-  m_value(*this, "value", false, "Value of the Select") {
+  m_value(*this, "value", -1, "Value of the Select") {
 	addObjectType("ewol::widget::Select");
 }
 
@@ -113,7 +113,7 @@ bool ewol::widget::Select::loadXML(const std::shared_ptr<const exml::Element>& _
 		return false;
 	}
 	// parse generic properties:
-	ewol::Widget::loadXML(_node);
+	ewol::widget::SpinBase::loadXML(_node);
 	// remove previous element:
 	//subWidgetRemove();
 	// parse all the elements:
@@ -211,6 +211,6 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 void ewol::widget::Select::setValue(int32_t _val) {
 	m_value.set(_val);
 }
-bool ewol::widget::Select::getValue() const {
-	return m_value;
+int32_t ewol::widget::Select::getValue() const {
+	return m_value.get();
 };
