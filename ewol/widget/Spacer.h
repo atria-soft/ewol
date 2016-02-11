@@ -35,7 +35,7 @@ namespace ewol {
 				 */
 				virtual ~Spacer();
 			protected:
-				ewol::parameter::Value<etk::Color<>> m_color; //!< Background color
+				eproperty::Value<etk::Color<>> m_color; //!< Background color
 			public:
 				/**
 				 * @brief Spziby the background color (basicly transparent)
@@ -49,7 +49,7 @@ namespace ewol {
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return nullptr; };
 				virtual void onRegenerateDisplay();
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	}
 }

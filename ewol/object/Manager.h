@@ -9,13 +9,13 @@
 
 #include <etk/types.h>
 #include <ewol/object/Object.h>
-#include <ewol/signal/Signal.h>
+#include <esignal/Signal.h>
 #include <ewol/event/Time.h>
 
 namespace ewol {
 	class Context;
 	namespace object {
-		class Manager : public ewol::signal::Interface {
+		class Manager : public esignal::Interface {
 			private:
 				std::vector<std::weak_ptr<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;
@@ -76,7 +76,7 @@ namespace ewol {
 				 */
 				void workerRemove(const std::shared_ptr<ewol::Object>& _worker);
 			public:
-				ewol::Signal<ewol::event::Time> periodicCall;
+				esignal::Signal<ewol::event::Time> periodicCall;
 			private:
 				int64_t m_applWakeUpTime; //!< Time of the application initialize
 				int64_t m_lastPeriodicCallTime; //!< last call time ...

@@ -231,8 +231,8 @@ void ewol::widget::ContextMenu::setShaperName(const std::string& _shaperName) {
 	m_shaper.set(_shaperName);
 }
 
-void ewol::widget::ContextMenu::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::widget::Container::onParameterChangeValue(_paramPointer);
+void ewol::widget::ContextMenu::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_shaper) {
 		markToRedraw();
 	} else if (_paramPointer == m_arrowPos) {

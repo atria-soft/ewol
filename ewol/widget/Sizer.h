@@ -31,7 +31,7 @@ namespace ewol {
 					modeHori, //!< Horizontal mode
 				};
 			protected:
-				ewol::parameter::List<enum displayMode> m_mode; //!< Methode to display the widget list (vert/hory ...)
+				eproperty::List<enum displayMode> m_mode; //!< Methode to display the widget list (vert/hory ...)
 			protected:
 				/**
 				 * @brief Constructor
@@ -60,7 +60,7 @@ namespace ewol {
 					return m_mode;
 				}
 			protected:
-				ewol::parameter::Value<gale::Dimension> m_borderSize; //!< Border size needed for all the display
+				eproperty::Value<gale::Dimension> m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
 				 * @brief set the current border size of the current element:
@@ -127,7 +127,7 @@ namespace ewol {
 				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	}
 }

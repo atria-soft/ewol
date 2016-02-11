@@ -30,7 +30,7 @@ namespace ewol {
 				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
 			protected:
-				ewol::parameter::Range<vec2> m_limit;
+				eproperty::Range<vec2> m_limit;
 			private:
 				float m_pixelScrolling;
 				vec2 m_highSpeedStartPos;
@@ -65,7 +65,7 @@ namespace ewol {
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	}
 }

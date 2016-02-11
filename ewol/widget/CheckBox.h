@@ -12,7 +12,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/signal/Signal.h>
+#include <esignal/Signal.h>
 
 
 namespace ewol {
@@ -20,13 +20,13 @@ namespace ewol {
 		class CheckBox : public ewol::widget::Container2 {
 			public:
 				// Event list of properties
-				ewol::Signal<void> signalPressed;
-				ewol::Signal<void> signalDown;
-				ewol::Signal<void> signalUp;
-				ewol::Signal<void> signalEnter;
-				ewol::Signal<bool> signalValue;
+				esignal::Signal<void> signalPressed;
+				esignal::Signal<void> signalDown;
+				esignal::Signal<void> signalUp;
+				esignal::Signal<void> signalEnter;
+				esignal::Signal<bool> signalValue;
 			private:
-				ewol::parameter::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+				eproperty::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
@@ -56,7 +56,7 @@ namespace ewol {
 					m_shaper.set(_shaperName);
 				}
 			protected:
-				ewol::parameter::Value<bool> m_value; //!< Current state of the checkbox.
+				eproperty::Value<bool> m_value; //!< Current state of the checkbox.
 			public:
 				/**
 				 * @brief set the current value of the checkbox (check or not)
@@ -85,7 +85,7 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onChangeSize();

@@ -39,8 +39,8 @@ ewol::widget::Spin::~Spin() {
 	
 }
 
-void ewol::widget::Spin::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::widget::SpinBase::onParameterChangeValue(_paramPointer);
+void ewol::widget::Spin::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::widget::SpinBase::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_value) {
 		markToRedraw();
 		if (m_widgetEntry == nullptr) {

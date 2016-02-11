@@ -12,7 +12,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/signal/Signal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,7 +22,7 @@ namespace ewol {
 		class Slider : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::Signal<float> signalChange;
+				esignal::Signal<float> signalChange;
 			protected:
 				Slider();
 				void init();
@@ -30,7 +30,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				virtual ~Slider();
 			protected:
-				ewol::parameter::Value<float> m_value; //!< current value of the Slider
+				eproperty::Value<float> m_value; //!< current value of the Slider
 			public:
 				/**
 				 * @brief Set the value of the slider.
@@ -47,7 +47,7 @@ namespace ewol {
 					return m_value;
 				}
 			protected:
-				ewol::parameter::Value<float> m_min; //!< minimum value of the slider
+				eproperty::Value<float> m_min; //!< minimum value of the slider
 			public:
 				/**
 				 * @brief Set the minumum value of the slider.
@@ -64,7 +64,7 @@ namespace ewol {
 					return m_min;
 				}
 			protected:
-				ewol::parameter::Value<float> m_max; //!< maximum value of the slider
+				eproperty::Value<float> m_max; //!< maximum value of the slider
 			public:
 				/**
 				 * @brief Set the maximum value of the slider.
@@ -81,7 +81,7 @@ namespace ewol {
 					return m_max;
 				}
 			protected:
-				ewol::parameter::Value<float> m_step;
+				eproperty::Value<float> m_step;
 			public:
 				/**
 				 * @brief Set the step value of the slider.
@@ -112,7 +112,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	}
 }

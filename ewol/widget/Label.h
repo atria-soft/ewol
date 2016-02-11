@@ -13,7 +13,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/resource/ColorFile.h>
-#include <ewol/signal/Signal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -23,10 +23,10 @@ namespace ewol {
 		class Label : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::Signal<void> signalPressed;
+				esignal::Signal<void> signalPressed;
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
-				ewol::parameter::Value<std::u32string> m_label; //!< decorated text to display.
+				eproperty::Value<std::u32string> m_label; //!< decorated text to display.
 				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
@@ -67,7 +67,7 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

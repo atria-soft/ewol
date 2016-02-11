@@ -105,8 +105,8 @@ void ewol::widget::Slider::updateValue(float _newValue) {
 }
 
 // TODO : Review this really bad things ...
-void ewol::widget::Slider::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::Widget::onParameterChangeValue(_paramPointer);
+void ewol::widget::Slider::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_value) {
 		updateValue(m_value.get());
 		return;

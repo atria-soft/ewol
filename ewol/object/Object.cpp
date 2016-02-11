@@ -119,7 +119,7 @@ bool ewol::Object::loadXML(const std::shared_ptr<const exml::Element>& _node) {
 		if (pair.first == "") {
 			continue;
 		}
-		if (parameterSet(pair.first, pair.second) == false) {
+		if (propertySet(pair.first, pair.second) == false) {
 			errorOccured = true;
 		}
 	}
@@ -131,18 +131,18 @@ bool ewol::Object::storeXML(const std::shared_ptr<exml::Element>& _node) const {
 		return false;
 	}
 	bool errorOccured = true;
-	for (auto &it : parameterGetAll(true)) {
+	for (auto &it : propertyGetAll(true)) {
 		_node->setAttribute(it.first, it.second);
 	}
 	return errorOccured;
 }
 
-bool ewol::Object::parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+bool ewol::Object::propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
 	std::shared_ptr<ewol::Object> object = getObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
 	}
-	return object->parameterSet(_config, _value);
+	return object->propertySet(_config, _value);
 }
 
 ewol::object::Manager& ewol::Object::getObjectManager() {
@@ -166,11 +166,11 @@ std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string&
 }
 
 
-bool ewol::parameterSetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+bool epropertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
 	std::shared_ptr<ewol::Object> object = ewol::getContext().getEObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
 	}
-	return object->parameterSet(_config, _value);
+	return object->propertySet(_config, _value);
 }
 

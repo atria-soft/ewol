@@ -142,8 +142,8 @@ bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _n
 	return true;
 }
 
-void ewol::widget::Label::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::Widget::onParameterChangeValue(_paramPointer);
+void ewol::widget::Label::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_label) {
 		markToRedraw();
 		requestUpdateSize();

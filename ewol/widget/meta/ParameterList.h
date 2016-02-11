@@ -38,7 +38,7 @@ namespace ewol {
 		class ParameterList :public ewol::widget::WidgetScrolled {
 			public:
 				// Event list of properties
-				ewol::Signal<int32_t> signalSelect;
+				esignal::Signal<int32_t> signalSelect;
 			private:
 				int32_t m_idSelected;
 				std::vector<ewol::widget::elementPL *> m_list;

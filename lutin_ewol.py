@@ -10,7 +10,7 @@ def get_type():
 	return "LIBRARY"
 
 def get_desc():
-	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
+	return "ewol is a widget management library"
 
 def get_licence():
 	return "APACHE-2"
@@ -110,30 +110,6 @@ def create(target, module_name):
 		'ewol/object/Worker.h',
 		'ewol/object/Manager.h',
 		'ewol/object/Object.h'
-		])
-	
-	# parameter:
-	my_module.add_src_file([
-		'ewol/parameter/Parameter.cpp',
-		'ewol/parameter/Interface.cpp',
-		])
-	my_module.add_header_file([
-		'ewol/parameter/Value.h',
-		'ewol/parameter/Interface.h',
-		'ewol/parameter/Parameter.h',
-		'ewol/parameter/Range.h',
-		'ewol/parameter/List.h'
-		])
-	
-	# Signal:
-	my_module.add_src_file([
-		'ewol/signal/Interface.cpp',
-		'ewol/signal/Base.cpp'
-		])
-	my_module.add_header_file([
-		'ewol/signal/Interface.h',
-		'ewol/signal/Base.h',
-		'ewol/signal/Signal.h'
 		])
 	
 	# resources:
@@ -261,7 +237,16 @@ def create(target, module_name):
 	my_module.copy_path('data/translate/*','translate/ewol')
 	
 	# name of the dependency
-	my_module.add_module_depend(['etk', 'gale', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3'])
+	my_module.add_module_depend([
+	    'etk',
+	    'esignal',
+	    'eproperty',
+	    'gale',
+	    'freetype',
+	    'exml',
+	    'ejson',
+	    'egami',
+	    'edtaa3'])
 	
 	my_module.add_path(tools.get_current_path(__file__))
 	

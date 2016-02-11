@@ -239,8 +239,8 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 	return false;
 }
 
-void ewol::widget::ListFileSystem::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::widget::List::onParameterChangeValue(_paramPointer);
+void ewol::widget::ListFileSystem::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::widget::List::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_folder) {
 		regenerateView();
 	} else if (_paramPointer == m_selectFile) {

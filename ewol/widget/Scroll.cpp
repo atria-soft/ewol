@@ -350,8 +350,8 @@ std::shared_ptr<ewol::Widget> ewol::widget::Scroll::getWidgetAtPos(const vec2& _
 	}
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());;
 }
-void ewol::widget::Scroll::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::widget::Container::onParameterChangeValue(_paramPointer);
+void ewol::widget::Scroll::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_limit) {
 		
 	}

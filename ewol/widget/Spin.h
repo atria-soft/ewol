@@ -20,8 +20,8 @@ namespace ewol {
 		class Spin : public ewol::widget::SpinBase {
 			public:
 				// Event list of properties
-				ewol::Signal<int64_t> signalValue;
-				ewol::Signal<double> signalValueDouble;
+				esignal::Signal<int64_t> signalValue;
+				esignal::Signal<double> signalValueDouble;
 			protected:
 				/**
 				 * @brief Constructor
@@ -45,7 +45,7 @@ namespace ewol {
 					//m_shaper.setString(_shaperName);
 				}
 			protected:
-				ewol::parameter::Value<int64_t> m_value; //!< Current value of the Spin.
+				eproperty::Value<int64_t> m_value; //!< Current value of the Spin.
 			public:
 				/**
 				 * @brief set the current value of the Spin
@@ -58,7 +58,7 @@ namespace ewol {
 				 */
 				int64_t getValue() const;
 			protected:
-				ewol::parameter::Value<int64_t> m_min; //!< Minimum value
+				eproperty::Value<int64_t> m_min; //!< Minimum value
 			public:
 				/**
 				 * @brief set the minimum of the Spin
@@ -71,7 +71,7 @@ namespace ewol {
 				 */
 				int64_t getMinimum() const;
 			protected:
-				ewol::parameter::Value<int64_t> m_max; //!< Maximum value
+				eproperty::Value<int64_t> m_max; //!< Maximum value
 			public:
 				/**
 				 * @brief set the maxnimum of the Spin
@@ -84,7 +84,7 @@ namespace ewol {
 				 */
 				int64_t getMaximum() const;
 			protected:
-				ewol::parameter::Value<int64_t> m_increment; //!< Increment value
+				eproperty::Value<int64_t> m_increment; //!< Increment value
 			public:
 				/**
 				 * @brief set the increment value of the Spin
@@ -97,7 +97,7 @@ namespace ewol {
 				 */
 				int64_t getIncrement() const;
 			protected:
-				ewol::parameter::Value<int8_t> m_mantis; //!< number of value under '.' value
+				eproperty::Value<int8_t> m_mantis; //!< number of value under '.' value
 			public:
 				/**
 				 * @brief set the mantis value of the Spin
@@ -111,7 +111,7 @@ namespace ewol {
 				int8_t getMantis() const;
 			protected:
 				virtual void checkValue(int64_t _value);
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual void updateGui();
 			protected:
 				void onCallbackUp();

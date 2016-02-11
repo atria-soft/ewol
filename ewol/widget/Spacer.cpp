@@ -48,8 +48,8 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
-void ewol::widget::Spacer::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::Widget::onParameterChangeValue(_paramPointer);
+void ewol::widget::Spacer::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_color) {
 		markToRedraw();
 	}

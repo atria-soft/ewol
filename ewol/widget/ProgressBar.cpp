@@ -73,8 +73,8 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	}
 }
 
-void ewol::widget::ProgressBar::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::Widget::onParameterChangeValue(_paramPointer);
+void ewol::widget::ProgressBar::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_value) {
 		markToRedraw();
 	} else if (_paramPointer == m_textColorFg) {

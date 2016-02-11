@@ -552,8 +552,8 @@ bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
 	return onEventInput(_event.m_event);
 }
 
-void ewol::Widget::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::Object::onParameterChangeValue(_paramPointer);
+void ewol::Widget::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Object::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_canFocus) {
 		if (m_hasFocus == true) {
 			rmFocus();

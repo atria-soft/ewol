@@ -194,8 +194,8 @@ bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _n
 	return true;
 }
 
-void ewol::widget::Image::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::Widget::onParameterChangeValue(_paramPointer);
+void ewol::widget::Image::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (    _paramPointer == m_fileName
 	     || _paramPointer == m_imageSize) {
 		markToRedraw();

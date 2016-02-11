@@ -55,8 +55,8 @@ ewol::widget::SpinBase::~SpinBase() {
 	
 }
 
-void ewol::widget::SpinBase::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::widget::Sizer::onParameterChangeValue(_paramPointer);
+void ewol::widget::SpinBase::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::widget::Sizer::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_spinMode) {
 		updateGui();
 	}

@@ -74,7 +74,7 @@ namespace ewol {
 				int32_t m_confIdDownShaper;
 				int32_t m_confIdUpData;
 				int32_t m_confIdDownData;
-				ewol::parameter::List<enum ewol::widget::spinPosition> m_spinMode; //!< How to display the spin base
+				eproperty::List<enum ewol::widget::spinPosition> m_spinMode; //!< How to display the spin base
 			protected:
 				/**
 				 * @brief Constructor
@@ -108,7 +108,7 @@ namespace ewol {
 				std::shared_ptr<ewol::widget::Button> m_widgetButtonUp;
 				virtual void updateGui();
 			public: // Derived function
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 		};
 	}

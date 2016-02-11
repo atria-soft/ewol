@@ -14,7 +14,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/signal/Signal.h>
+#include <esignal/Signal.h>
 
 
 
@@ -27,12 +27,12 @@ namespace ewol {
 		class Button : public ewol::widget::Container2 {
 			public:
 				// Event list of properties
-				ewol::Signal<void> signalPressed;
-				ewol::Signal<void> signalDown;
-				ewol::Signal<void> signalUp;
-				ewol::Signal<void> signalEnter;
-				ewol::Signal<void> signalLeave;
-				ewol::Signal<bool> signalValue;
+				esignal::Signal<void> signalPressed;
+				esignal::Signal<void> signalDown;
+				esignal::Signal<void> signalUp;
+				esignal::Signal<void> signalEnter;
+				esignal::Signal<void> signalLeave;
+				esignal::Signal<bool> signalValue;
 				enum buttonLock{
 					lockNone, //!< normal status of the button
 					lockWhenPressed, //!< When the state is set in pressed, the status stay in this one
@@ -40,7 +40,7 @@ namespace ewol {
 					lockAccess, //!< all event are trashed  == > acctivity of the button is disable
 				};
 			private:
-				ewol::parameter::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+				eproperty::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
@@ -62,7 +62,7 @@ namespace ewol {
 					m_shaper.setString(_shaperName);
 				}
 			protected:
-				ewol::parameter::Value<bool> m_value; //!< Current state of the button.
+				eproperty::Value<bool> m_value; //!< Current state of the button.
 			public:
 				/**
 				 * @brief set the currentValue of the Button (pressed or not)
@@ -81,7 +81,7 @@ namespace ewol {
 					return m_value;
 				};
 			protected:
-				ewol::parameter::List<enum buttonLock> m_lock; //!< Current lock state of the button.
+				eproperty::List<enum buttonLock> m_lock; //!< Current lock state of the button.
 			public:
 				/**
 				 * @brief set the button lock state.
@@ -98,7 +98,7 @@ namespace ewol {
 					return m_lock;
 				};
 			protected:
-				ewol::parameter::Value<bool> m_toggleMode; //!< The button is able to toggle.
+				eproperty::Value<bool> m_toggleMode; //!< The button is able to toggle.
 			public:
 				/**
 				 * @brief change the toggle mode.
@@ -115,7 +115,7 @@ namespace ewol {
 					return m_toggleMode;
 				};
 			protected:
-				ewol::parameter::Value<bool> m_enableSingle; //!< When a single subwidget is set display all time it.
+				eproperty::Value<bool> m_enableSingle; //!< When a single subwidget is set display all time it.
 			public:
 				/**
 				 * @brief Chane the display single widget mode availlable.
@@ -149,7 +149,7 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onChangeSize();

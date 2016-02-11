@@ -284,8 +284,8 @@ void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidg
 	ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 }
 
-void ewol::widget::Sizer::onParameterChangeValue(const ewol::parameter::Ref& _paramPointer) {
-	ewol::widget::ContainerN::onParameterChangeValue(_paramPointer);
+void ewol::widget::Sizer::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::widget::ContainerN::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == m_mode) {
 		markToRedraw();
 		requestUpdateSize();

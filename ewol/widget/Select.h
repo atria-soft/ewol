@@ -20,7 +20,7 @@ namespace ewol {
 		class Select : public ewol::widget::SpinBase {
 			public:
 				// Event list of properties
-				ewol::Signal<int32_t> signalValue;
+				esignal::Signal<int32_t> signalValue;
 			protected:
 				/**
 				 * @brief Constructor
@@ -57,7 +57,7 @@ namespace ewol {
 				void optionClear();
 				void optionAdd(int32_t _value, std::string _name);
 			protected:
-				ewol::parameter::Value<int32_t> m_value; //!< Current state of the Select.
+				eproperty::Value<int32_t> m_value; //!< Current state of the Select.
 			public:
 				/**
 				 * @brief set the currentValue of the Select (pressed or not)
@@ -72,7 +72,7 @@ namespace ewol {
 				 */
 				int32_t getValue() const;
 			protected:
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void updateGui();
 			protected:

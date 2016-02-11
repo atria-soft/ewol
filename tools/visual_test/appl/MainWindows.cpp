@@ -32,7 +32,7 @@
 #include <appl/TestImage.h>
 #include <appl/TestDistanceField.h>
 #include <etk/os/FSNode.h>
-#include <ewol/parameter/Value.h>
+#include <eproperty/Value.h>
 
 
 static const char * l_eventChangeTheme           = "event-change-theme";
@@ -106,8 +106,8 @@ void appl::MainWindows::onCallbackGravityChange() {
 			m_gravity = ewol::gravity_center;
 			break;
 	}
-	parameterSetOnWidgetNamed("appl-upper-test-widget", "gravity", ewol::gravityToString(m_gravity));
-	parameterSetOnWidgetNamed("appl-next-gravity-label", "value", "Next gravity<br/>(" + ewol::gravityToString(m_gravity) + ")");
+	propertySetOnWidgetNamed("appl-upper-test-widget", "gravity", ewol::gravityToString(m_gravity));
+	propertySetOnWidgetNamed("appl-next-gravity-label", "value", "Next gravity<br/>(" + ewol::gravityToString(m_gravity) + ")");
 }
 
 void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
@@ -183,7 +183,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	if (m_subWidget != nullptr) {
 		m_sizerVert->subWidgetReplace(oldWidget, m_subWidget);
 	}
-	parameterSetOnWidgetNamed("appl-label-test", "value", tmpDescription);
+	propertySetOnWidgetNamed("appl-label-test", "value", tmpDescription);
 	updateProperty();
 }
 
@@ -209,8 +209,8 @@ void appl::MainWindows::updateProperty() {
 	std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create(m_subWidget->getObjectType());
 	m_sizerDynamic->subWidgetAdd(widget);
 	addSpacer(m_sizerDynamic, etk::color::red);
-	for (size_t iii=0; iii<m_subWidget->getParameterCount(); ++iii) {
-		ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
+	for (size_t iii=0; iii<m_subWidget->getPropertyCount(); ++iii) {
+		eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
 		if (param == nullptr) {
 			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
 			continue;
@@ -229,8 +229,8 @@ void appl::MainWindows::updateProperty() {
 			if (type == typeid(std::string).name()) {
 				std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
-				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
-				ewol::parameter::Value<std::string>* paramValue = dynamic_cast<ewol::parameter::Value<std::string>*>(param);
+				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+				eproperty::Value<std::string>* paramValue = dynamic_cast<eproperty::Value<std::string>*>(param);
 				if (paramValue == nullptr) {
 					APPL_ERROR("nullptr...");
 					return;
@@ -250,8 +250,8 @@ void appl::MainWindows::updateProperty() {
 				addSpacer(widgetSizer);
 				std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
-				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
-				ewol::parameter::Value<bvec2>* paramValue = dynamic_cast<ewol::parameter::Value<bvec2>*>(param);
+				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+				eproperty::Value<bvec2>* paramValue = dynamic_cast<eproperty::Value<bvec2>*>(param);
 				if (paramValue == nullptr) {
 					APPL_ERROR("nullptr... 2 ");
 					return;
@@ -296,7 +296,7 @@ void appl::MainWindows::updateProperty() {
 							return;
 						}
 						APPL_INFO("set parameter : name=" << param->getName() << " value=" << _value);
-						m_subWidget->parameterSet(param->getName(), etk::to_string(_value));
+						m_subWidget->propertySet(param->getName(), etk::to_string(_value));
 						return;
 					});
 			} else if (    type == typeid(int64_t).name()
@@ -309,7 +309,7 @@ void appl::MainWindows::updateProperty() {
 			            || type == typeid(uint8_t).name()) {
 				std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
-				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
+				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
 				std::string value = param->getString();
 				widgetTmp->setValue(value);
 				widgetTmp->setExpand(bvec2(true,false));
@@ -355,8 +355,8 @@ void appl::MainWindows::updateProperty() {
 				widgetTmp->optionAdd(int32_t(ewol::gravity_topLeft), "Top-left");
 				widgetTmp->optionAdd(int32_t(ewol::gravity_buttomRight), "Buttom-right");
 				widgetTmp->optionAdd(int32_t(ewol::gravity_buttomLeft), "Buttom-left");
-				ewol::parameter::Parameter* param = m_subWidget->getParameterRaw(iii);
-				ewol::parameter::List<ewol::gravity>* paramValue = dynamic_cast<ewol::parameter::List<ewol::gravity>*>(param);
+				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+				eproperty::List<ewol::gravity>* paramValue = dynamic_cast<eproperty::List<ewol::gravity>*>(param);
 				if (paramValue == nullptr) {
 					APPL_ERROR("nullptr... 2 ");
 					return;

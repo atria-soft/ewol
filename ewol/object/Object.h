@@ -14,11 +14,11 @@
 #include <memory>
 
 #include <ewol/debug.h>
-#include <ewol/parameter/Interface.h>
-#include <ewol/parameter/Value.h>
-#include <ewol/parameter/Range.h>
-#include <ewol/parameter/List.h>
-#include <ewol/signal/Interface.h>
+#include <eproperty/Interface.h>
+#include <eproperty/Value.h>
+#include <eproperty/Range.h>
+#include <eproperty/List.h>
+#include <esignal/Interface.h>
 
 namespace ewol {
 	// some class need to define element befor other ...
@@ -75,8 +75,8 @@ namespace ewol {
 	 * this class mermit at every Object to communicate between them.
 	 */
 	class Object : public std::enable_shared_from_this<Object>,
-	               public ewol::parameter::Interface,
-	               public ewol::signal::Interface {
+	               public eproperty::Interface,
+	               public esignal::Interface {
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
@@ -186,9 +186,9 @@ namespace ewol {
 			};
 		public:
 			// TODO : Rework the position on this function ... This is a convignent function ...
-			bool parameterSetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
+			bool propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		protected:
-			ewol::parameter::Value<std::string> m_name; //!< name of the element ...
+			eproperty::Value<std::string> m_name; //!< name of the element ...
 		public:
 			/**
 			 * @brief get the Object name
@@ -284,7 +284,7 @@ namespace ewol {
 			}
 			*/
 	};
-	bool parameterSetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
+	bool propertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 };
 
 /**
@@ -310,7 +310,7 @@ namespace ewol {
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
-//#include <ewol/signal/Signal.h>
+//#include <esignal/Signal.h>
 
 
 

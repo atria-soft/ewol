@@ -15,14 +15,14 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
-#include <ewol/signal/Signal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
 		class ButtonColor : public ewol::Widget {
 			public:
 				// Event list of properties
-				ewol::Signal<etk::Color<>> signalChange;
+				esignal::Signal<etk::Color<>> signalChange;
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
@@ -52,7 +52,7 @@ namespace ewol {
 				 */
 				void setShaperName(std::string _shaperName);
 			protected:
-				ewol::parameter::Value<etk::Color<>> m_textColorFg; //!< Current color.
+				eproperty::Value<etk::Color<>> m_textColorFg; //!< Current color.
 			public:
 				/**
 				 * @brief get the current color of the color selection widget
@@ -74,7 +74,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onParameterChangeValue(const ewol::parameter::Ref& _paramPointer);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
