@@ -20,9 +20,10 @@
 namespace ewol {
 	namespace widget {
 		class ButtonColor : public ewol::Widget {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
+			public: // properties
+				eproperty::Value<etk::Color<>> m_textColorFg; //!< Current color.
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
@@ -51,23 +52,6 @@ namespace ewol {
 				 * @param[in] _shaperName The new shaper filename.
 				 */
 				void setShaperName(std::string _shaperName);
-			protected:
-				eproperty::Value<etk::Color<>> m_textColorFg; //!< Current color.
-			public:
-				/**
-				 * @brief get the current color of the color selection widget
-				 * @return The current color
-				 */
-				const etk::Color<>& getValue() {
-					return m_textColorFg.get();
-				}
-				/**
-				 * @brief Specify the current color.
-				 * @param[in] _color The new display color.
-				 */
-				void setValue(const etk::Color<>& _color) {
-					m_textColorFg.set(_color);
-				}
 			protected: // Derived function
 				virtual void onDraw();
 			public: // Derived function

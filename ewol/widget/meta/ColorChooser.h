@@ -24,8 +24,7 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class ColorChooser : public ewol::widget::Sizer {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
 			protected:
 				ColorChooser();

@@ -77,6 +77,10 @@ namespace ewol {
 	class Object : public std::enable_shared_from_this<Object>,
 	               public eproperty::Interface,
 	               public esignal::Interface {
+		public: // Event list
+			
+		public: // propertie list
+			eproperty::Value<std::string> propertyName; //!< name of the element ...
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
@@ -187,23 +191,6 @@ namespace ewol {
 		public:
 			// TODO : Rework the position on this function ... This is a convignent function ...
 			bool propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
-		protected:
-			eproperty::Value<std::string> m_name; //!< name of the element ...
-		public:
-			/**
-			 * @brief get the Object name
-			 * @return The requested name
-			 */
-			const std::string& getName() const {
-				return m_name.get();
-			};
-			/**
-			 * @brief get the Widget name
-			 * @param[in] _name The new name
-			 */
-			void setName(const std::string& _name) {
-				m_name = _name;
-			};
 		public:
 			/**
 			 * @brief load properties with an XML node.
@@ -310,8 +297,4 @@ namespace ewol {
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
-//#include <esignal/Signal.h>
-
-
-
 

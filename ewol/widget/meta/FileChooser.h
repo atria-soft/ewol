@@ -63,8 +63,7 @@ namespace ewol {
 		 *  This is the best example of a Meta-widget.
 		 */
 		class FileChooser : public ewol::widget::Composer {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<void> signalCancel;
 				esignal::Signal<std::string> signalValidate;
 			protected:

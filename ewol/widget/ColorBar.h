@@ -18,8 +18,7 @@
 namespace ewol {
 	namespace widget {
 		class ColorBar : public ewol::Widget {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
 			protected:
 				ColorBar();

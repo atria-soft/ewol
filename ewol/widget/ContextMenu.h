@@ -29,6 +29,10 @@ namespace ewol {
 					markLeft,
 					markNone
 				};
+			public: // properties
+				eproperty::Value<vec2> propertyArrowPos;
+				eproperty::List<enum markPosition> propertyArrawBorder;
+				eproperty::Value<std::string> propertyShaper; //!< Compositing theme.
 			protected:
 				ContextMenu();
 				void init(const std::string& _shaperName="{ewol}THEME:GUI:ContextMenu.json");
@@ -36,22 +40,11 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();
 			private:
-				eproperty::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
-			public:
-				/**
-				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
-				 * @param[in] _shaperName The new shaper filename
-				 */
-				void setShaperName(const std::string& _shaperName);
-			private:
-				// TODO : Rework the displayer ....
+				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Drawing m_compositing;
 				etk::Color<> m_colorBackGroung;
 				etk::Color<> m_colorBorder;
 				float m_offset;
-			private:
-				eproperty::Value<vec2> m_arrowPos;
-				eproperty::List<enum markPosition> m_arrawBorder;
 			public:
 				void setPositionMarkAuto(const vec2& _origin, const vec2& _size);
 				void setPositionMark(enum markPosition _position, const vec2& _arrowPos);

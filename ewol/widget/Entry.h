@@ -31,12 +31,18 @@ namespace ewol {
 		 * ~~~~~~~~~~~~~~~~~~~~~~
 		 */
 		class Entry : public ewol::Widget {
-			public:
+			public: // Event list
 				esignal::Signal<void> signalClick; //!< bang on click the entry box
 				esignal::Signal<std::string> signalEnter; //!< Enter key is pressed
 				esignal::Signal<std::string> signalModify; //!< data change
+			public: // propertie list
+				eproperty::Value<std::string> propertyShaper;
+				eproperty::Value<std::string> propertyValue; //!< string that must be displayed
+				eproperty::Range<int32_t> propertyMaxCharacter; //!< number max of xharacter in the list
+				eproperty::Value<std::string> propertyRegex; //!< regular expression value
+				eproperty::Value<std::string> propertyTextWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			private:
-				eproperty::Value<ewol::compositing::Shaper> m_shaper;
+				ewol::compositing::Shaper m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
 				int32_t m_colorIdTextBg; //!< color property of the text background
 				int32_t m_colorIdCursor; //!< color property of the text cursor
@@ -56,62 +62,14 @@ namespace ewol {
 				 * @brief Destuctor
 				 */
 				virtual ~Entry();
-			private:
-				eproperty::Value<std::string> m_data; //!< sting that must be displayed
 			protected:
 				/**
 				 * @brief internal check the value with RegExp checking
 				 * @param[in] _newData The new string to display
 				 */
 				void setInternalValue(const std::string& _newData);
-			public:
-				/**
-				 * @brief set a new value on the entry.
-				 * @param[in] _newData the new string to display.
-				 */
-				void setValue(const std::string& _newData);
-				/**
-				 * @brief get the current value in the entry
-				 * @return The current display value
-				 */
-				std::string getValue() const {
-					return m_data;
-				};
 			private:
-				eproperty::Range<int32_t> m_maxCharacter; //!< number max of xharacter in the list
-			public:
-				/**
-				 * @brief Limit the number of Unicode character in the entry
-				 * @param[in] _nbMax Number of max character set in the List (0x7FFFFFFF for no limit)
-				 */
-				void setMaxChar(int32_t _nbMax) {
-					m_maxCharacter.set(_nbMax);
-				}
-				/**
-				 * @brief Limit the number of Unicode character in the entry
-				 * @return Number of max character set in the List.
-				 */
-				int32_t getMaxChar() const {
-					return m_maxCharacter;
-				};
-			private:
-				eproperty::Value<std::string> m_regexValue; //!< regular expression value
 				std::regex m_regex; //!< regular expression to check content
-			public:
-				/**
-				 * @brief Limit the input entry at a regular expression... (by default it is "*")
-				 * @param _expression New regular expression
-				 */
-				void setRegex(const std::string& _expression) {
-					m_regexValue.set(_expression);
-				}
-				/**
-				 * @brief get the regualar expression limitation
-				 * @param The regExp string
-				 */
-				std::string getRegex() const {
-					return m_regexValue;
-				};
 			private:
 				bool m_needUpdateTextPos; //!< text position can have change
 				int32_t m_displayStartPosition; //!< ofset in pixel of the display of the UString

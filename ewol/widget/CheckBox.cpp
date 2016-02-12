@@ -25,6 +25,7 @@ ewol::widget::CheckBox::CheckBox() :
   signalUp(*this, "up", "CheckBox is UP"),
   signalEnter(*this, "enter", "The cursor enter inside the CheckBox"),
   signalValue(*this, "value", "CheckBox value change"),
+  propertyshaper(*this, "shaper", "The display name for config file"),
   m_shaper(*this, "shaper", "The display name for config file"),
   m_mouseHover(false),
   m_buttonPressed(false),

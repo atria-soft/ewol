@@ -25,8 +25,7 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Parameter : public ewol::widget::PopUp {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<void> signalClose;
 			protected:
 				Parameter();

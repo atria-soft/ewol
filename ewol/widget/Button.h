@@ -26,21 +26,27 @@ namespace ewol {
 		 */
 		class Button : public ewol::widget::Container2 {
 			public:
-				// Event list of properties
-				esignal::Signal<void> signalPressed;
-				esignal::Signal<void> signalDown;
-				esignal::Signal<void> signalUp;
-				esignal::Signal<void> signalEnter;
-				esignal::Signal<void> signalLeave;
-				esignal::Signal<bool> signalValue;
 				enum buttonLock{
 					lockNone, //!< normal status of the button
 					lockWhenPressed, //!< When the state is set in pressed, the status stay in this one
 					lockWhenReleased, //!< When the state is set in not pressed, the status stay in this one
 					lockAccess, //!< all event are trashed  == > acctivity of the button is disable
 				};
+			public: // Event list
+				esignal::Signal<void> signalPressed;
+				esignal::Signal<void> signalDown;
+				esignal::Signal<void> signalUp;
+				esignal::Signal<void> signalEnter;
+				esignal::Signal<void> signalLeave;
+				esignal::Signal<bool> signalValue;
+			public: // propertie list
+				eproperty::Value<std::string> propertyShaper; //!< shaper name property
+				eproperty::Value<bool> propertyValue; //!< Current state of the button.
+				eproperty::List<enum buttonLock> propertyLock; //!< Current lock state of the button.
+				eproperty::Value<bool> propertyToggleMode; //!< The button is able to toggle.
+				eproperty::Value<bool> propertyEnableSingle; //!< When a single subwidget is set display all time it.
 			private:
-				eproperty::Value<ewol::compositing::Shaper> m_shaper; //!< Compositing theme.
+				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
@@ -61,76 +67,6 @@ namespace ewol {
 				void setShaperName(const std::string& _shaperName) {
 					m_shaper.setString(_shaperName);
 				}
-			protected:
-				eproperty::Value<bool> m_value; //!< Current state of the button.
-			public:
-				/**
-				 * @brief set the currentValue of the Button (pressed or not)
-				 * @note Work only in toggle mode
-				 * @param[in] _val New value of the button
-				 */
-				void setValue(bool _val) {
-					m_value.set(_val);
-				}
-				/**
-				 * @brief get the current button value.
-				 * @return True : The button is pressed.
-				 * @return false : The button is released.
-				 */
-				bool getValue() const {
-					return m_value;
-				};
-			protected:
-				eproperty::List<enum buttonLock> m_lock; //!< Current lock state of the button.
-			public:
-				/**
-				 * @brief set the button lock state.
-				 * @param[in] _lock New lock mode of the button
-				 */
-				void setLock(enum buttonLock _lock) {
-					m_lock.set(_lock);
-				}
-				/**
-				 * @brief get the current button lock value.
-				 * @return The requested lock mode
-				 */
-				enum buttonLock getLock() const {
-					return m_lock;
-				};
-			protected:
-				eproperty::Value<bool> m_toggleMode; //!< The button is able to toggle.
-			public:
-				/**
-				 * @brief change the toggle mode.
-				 * @param[in] _togg New toggle mode
-				 */
-				void setToggleMode(bool _togg) {
-					m_toggleMode.set(_togg);
-				}
-				/**
-				 * @brief get the current toggle mode.
-				 * @return the current toggle mode.
-				 */
-				bool getToggleMode() const {
-					return m_toggleMode;
-				};
-			protected:
-				eproperty::Value<bool> m_enableSingle; //!< When a single subwidget is set display all time it.
-			public:
-				/**
-				 * @brief Chane the display single widget mode availlable.
-				 * @param[in] _single single mode widget set
-				 */
-				void setEnableSingle(bool _single) {
-					m_enableSingle.set(_single);
-				}
-				/**
-				 * @brief get the current single mode enableling.
-				 * @return the current value.
-				 */
-				bool getEnableSingle() const {
-					return m_enableSingle;
-				};
 			private:
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
