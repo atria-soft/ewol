@@ -20,14 +20,18 @@ namespace ewol {
 		 */
 		class WSlider :public ewol::widget::ContainerN {
 			public:
-				// Event list of properties
-				esignal::Signal<void> signalStartSlide;
-				esignal::Signal<void> signalStopSlide;
 				enum sladingMode {
 					sladingTransitionVert,
 					sladingTransitionHori,
 					sladingTransition_count,
 				};
+			public: // signals:
+				esignal::Signal<void> signalStartSlide;
+				esignal::Signal<void> signalStopSlide;
+			public: // properties:
+				eproperty::Range<float> propertyTransitionSpeed; //!< speed of the transition (default 1  == > 1s)
+				eproperty::List<enum sladingMode> propertyTransitionMode; //!< mode to slide the widgets
+				eproperty::Value<std::string> propertySelectWidget; //!< current select configuration
 			protected:
 				WSlider();
 				void init() {
@@ -41,7 +45,6 @@ namespace ewol {
 				int32_t m_windowsDestination; //!< widget destinated viewed
 				int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
 				float m_slidingProgress; //!< ratio progression of a sliding
-				eproperty::Value<std::string, true> m_selectNewWidget; // input config requesting
 			protected:
 				/**
 				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
@@ -64,40 +67,6 @@ namespace ewol {
 				 * @param[in] _widgetName Name of the subwidget name
 				 */
 				void subWidgetSelectSet(const std::string& _widgetName);
-			private:
-				eproperty::Range<float> m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
-			public:
-				/** 
-				 * @brief set transition speed element.
-				 * @param[in] _timeSecond number of second needed to do the transition.
-				 */
-				void setTransitionSpeed(float _timeSecond) {
-					m_transitionSpeed.set(_timeSecond);
-				};
-				/** 
-				 * @brief get transition speed element.
-				 * @return number of second needed to do the transition.
-				 */
-				float getTransitionSpeed() const {
-					return m_transitionSpeed;
-				};
-			private:
-				eproperty::List<enum sladingMode> m_transitionSlide; //!< mode to slide the widgets
-			public:
-				/** 
-				 * @brief set a new mode of sliding element
-				 * @param[in] _mode new display mode
-				 */
-				void setTransitionMode(enum sladingMode _mode) {
-					m_transitionSlide.set(_mode);
-				}
-				/** 
-				 * @brief get a new mode of sliding element
-				 * @return The current sliding mode
-				 */
-				enum sladingMode getTransitionMode() {
-					return m_transitionSlide;
-				};
 			public: // Derived function
 				virtual void onChangeSize();
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);

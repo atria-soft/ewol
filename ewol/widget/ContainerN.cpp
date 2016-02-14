@@ -16,7 +16,7 @@
 
 
 ewol::widget::ContainerN::ContainerN() :
-  m_lockExpand(false,false),
+  propertyLockExpand(*this, "lock", vec2(false,false), "Lock the subwidget expand"),
   m_subExpend(false,false) {
 	addObjectType("ewol::widget::ContainerN");
 	// nothing to do ...
@@ -32,29 +32,28 @@ ewol::widget::ContainerN::~ContainerN() {
 
 
 bvec2 ewol::widget::ContainerN::canExpand() {
-	bvec2 res = m_userExpand;
-	if (false == m_lockExpand.x()) {
-		if (true == m_subExpend.x()) {
+	bvec2 res = propertyExpand.get();
+	if (propertyLockExpand->x() == false) {
+		if (m_subExpend.x() == true) {
 			res.setX(true);
 		}
 	}
-	if (false == m_lockExpand.y()) {
-		if (true == m_subExpend.y()) {
+	if (propertyLockExpand->y() == false) {
+		if (m_subExpend.y() == true) {
 			res.setY(true);
 		}
 	}
-	//EWOL_DEBUG("Expend check : user=" << m_userExpand << " lock=" << m_lockExpand << " sub=" << m_subExpend << " res=" << res);
+	//EWOL_DEBUG("Expend check : user=" << m_userExpand << " lock=" << propertyLockExpand << " sub=" << m_subExpend << " res=" << res);
 	return res;
 }
 
-void ewol::widget::ContainerN::lockExpand(const bvec2& _lockExpand) {
-	if (_lockExpand != m_lockExpand) {
-		m_lockExpand = _lockExpand;
+void ewol::widget::ContainerN::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
+	if (_paramPointer == propertyLockExpand) {
 		markToRedraw();
 		requestUpdateSize();
 	}
 }
-
 
 void ewol::widget::ContainerN::subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
                                                 const std::shared_ptr<ewol::Widget>& _newWidget) {
@@ -179,7 +178,7 @@ std::shared_ptr<ewol::Object> ewol::widget::ContainerN::getSubObjectNamed(const 
 }
 
 void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (true == m_hide){
+	if (propertyHide.get() == true){
 		// widget is hidden ...
 		return;
 	}
@@ -238,7 +237,7 @@ void ewol::widget::ContainerN::onRegenerateDisplay() {
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec2& _pos) {
-	if (true == isHide()) {
+	if (propertyHide.get() == true) {
 		return nullptr;
 	}
 	// for all element in the sizer ...
@@ -250,7 +249,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				std::shared_ptr<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
-				if (nullptr != tmpWidget) {
+				if (tmpWidget != nullptr) {
 					return tmpWidget;
 				}
 				// stop searching
@@ -273,7 +272,7 @@ bool ewol::widget::ContainerN::loadXML(const std::shared_ptr<const exml::Element
 	
 	std::string tmpAttributeValue = _node->getAttribute("lock");
 	if (tmpAttributeValue.size()!=0) {
-		m_lockExpand = tmpAttributeValue;
+		propertyLockExpand = tmpAttributeValue;
 	}
 	bool invertAdding=false;
 	tmpAttributeValue = _node->getAttribute("addmode");

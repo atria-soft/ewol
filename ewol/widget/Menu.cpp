@@ -180,8 +180,8 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 		std::shared_ptr<ewol::widget::Button> myButton;
 		mySizer = ewol::widget::Sizer::create(widget::Sizer::modeVert);
 		if (mySizer != nullptr) {
-			mySizer->lockExpand(vec2(true,true));
-			mySizer->setFill(vec2(true,true));
+			mySizer->propertyLockExpand.set(vec2(true,true));
+			mySizer->propertyFill.set(vec2(true,true));
 			// set it in the pop-up-system:
 			tmpContext->setSubWidget(mySizer);
 			bool menuHaveImage = false;
@@ -203,8 +203,8 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 					EWOL_ERROR("Allocation Error");
 					continue;
 				}
-				myButton->setExpand(bvec2(true,true));
-				myButton->setFill(bvec2(true,true));
+				myButton->propertyExpand.set(bvec2(true,true));
+				myButton->propertyFill.set(bvec2(true,true));
 				// set callback
 				myButton->signalPressed.bind(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
 				// add it in the widget list
@@ -232,8 +232,8 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 					} else {
 						std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create(std::string("<left>") + it2->m_label + "</left>\n");
 						if (tmpLabel != nullptr) {
-							tmpLabel->setExpand(bvec2(true,false));
-							tmpLabel->setFill(bvec2(true,true));
+							tmpLabel->propertyExpand.set(bvec2(true,false));
+							tmpLabel->propertyFill.set(bvec2(true,true));
 							myButton->setSubWidget(tmpLabel);
 						}
 					}

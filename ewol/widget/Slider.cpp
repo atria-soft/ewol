@@ -17,23 +17,23 @@ const int32_t dotRadius = 6;
 
 ewol::widget::Slider::Slider() :
   signalChange(*this, "change"),
-  m_value(*this, "value", 0.0f, "Value of the Slider"),
-  m_min(*this, "min", 0.0f, "Minium value"),
-  m_max(*this, "max", 10.0f, "Maximum value"),
-  m_step(*this, "step", 1.0f, "Step size") {
+  propertyValue(*this, "value", 0.0f, "Value of the Slider"),
+  propertyMinimum(*this, "min", 0.0f, "Minium value"),
+  propertyMaximum(*this, "max", 10.0f, "Maximum value"),
+  propertyStep(*this, "step", 1.0f, "Step size") {
 	addObjectType("ewol::widget::Slider");
 	
 	m_textColorFg = etk::color::black;
 	
 	m_textColorBg = etk::color::black;
 	m_textColorBg.setA(0x3F);
-	setCanHaveFocus(true);
 	// Limit event at 1:
 	setMouseLimit(1);
 }
 
 void ewol::widget::Slider::init() {
 	ewol::Widget::init();
+	propertyCanFocus.set(true);
 }
 
 ewol::widget::Slider::~Slider() {
@@ -41,7 +41,7 @@ ewol::widget::Slider::~Slider() {
 }
 
 void ewol::widget::Slider::calculateMinMaxSize() {
-	vec2 minTmp = m_userMinSize->getPixel();
+	vec2 minTmp = propertyMinSize->getPixel();
 	m_minSize.setValue(std::max(minTmp.x(), 40.0f),
 	                   std::max(minTmp.y(), dotRadius*2.0f) );
 	markToRedraw();
@@ -66,7 +66,7 @@ void ewol::widget::Slider::onRegenerateDisplay() {
 	
 	etk::Color<> borderDot = m_textColorFg;
 	borderDot.setA(borderDot.a()/2);
-	m_draw.setPos(vec3(4+((m_value-m_min)/(m_max-m_min))*(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
+	m_draw.setPos(vec3(4+((propertyValue-propertyMinimum)/(propertyMaximum-propertyMinimum))*(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
 	m_draw.setColorBg(borderDot);
 	m_draw.circle(dotRadius);
 	m_draw.setColorBg(m_textColorFg);
@@ -81,11 +81,11 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 		    || gale::key::status_move   == _event.getStatus()) {
 			// get the new position :
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
-			float oldValue = m_value.get();
-			updateValue(m_min + (float)(relativePos.x() - dotRadius) / (m_size.x()-2*dotRadius) * (m_max-m_min));
-			if (oldValue != m_value) {
-				EWOL_VERBOSE(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
-				signalChange.emit(m_value);
+			float oldValue = propertyValue.get();
+			updateValue(propertyMinimum + (float)(relativePos.x() - dotRadius) / (m_size.x()-2*dotRadius) * (propertyMaximum-propertyMinimum));
+			if (oldValue != propertyValue) {
+				EWOL_VERBOSE(" new value : " << propertyValue << " in [" << propertyMinimum << ".." << propertyMaximum << "]");
+				signalChange.emit(propertyValue);
 			}
 			return true;
 		}
@@ -94,12 +94,12 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 }
 
 void ewol::widget::Slider::updateValue(float _newValue) {
-	_newValue = std::max(std::min(_newValue, m_max.get()), m_min.get());
-	if (m_step.get() == 0.0f) {
-		m_value = _newValue;
+	_newValue = std::max(std::min(_newValue, propertyMaximum.get()), propertyMinimum.get());
+	if (propertyStep.get() == 0.0f) {
+		propertyValue = _newValue;
 	} else {
-		float basicVal = (int64_t)(_newValue / m_step.get());
-		m_value = basicVal * m_step.get();
+		float basicVal = (int64_t)(_newValue / propertyStep.get());
+		propertyValue = basicVal * propertyStep.get();
 	}
 	markToRedraw();
 }
@@ -107,20 +107,20 @@ void ewol::widget::Slider::updateValue(float _newValue) {
 // TODO : Review this really bad things ...
 void ewol::widget::Slider::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_value) {
-		updateValue(m_value.get());
+	if (_paramPointer == propertyValue) {
+		updateValue(propertyValue.get());
 		return;
 	}
-	if (_paramPointer == m_min) {
-		updateValue(m_value.get());
+	if (_paramPointer == propertyMinimum) {
+		updateValue(propertyValue.get());
 		return;
 	}
-	if (_paramPointer == m_max) {
-		updateValue(m_value.get());
+	if (_paramPointer == propertyMaximum) {
+		updateValue(propertyValue.get());
 		return;
 	}
-	if (_paramPointer == m_step) {
-		updateValue(m_value.get());
+	if (_paramPointer == propertyStep) {
+		updateValue(propertyValue.get());
 		return;
 	}
 }

@@ -46,10 +46,10 @@ void ewol::Object::removeParent() {
 }
 
 ewol::Object::Object() :
+  propertyName(*this, "name", "", "Object name, might be a unique reference in all the program"),
   m_objectHasBeenInit(false),
   m_destroy(false),
   m_static(false),
-  m_name(*this, "name", "", "Object name, might be a unique reference in all the program"),
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = m_valUID++;
@@ -70,7 +70,7 @@ void ewol::Object::init() {
 
 void ewol::Object::init(const std::string& _name) {
 	init();
-	m_name = _name;
+	propertyName.set(_name);
 }
 
 const char * const ewol::Object::getObjectType() {
@@ -159,7 +159,7 @@ std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _o
 }
 
 std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string& _objectName) {
-	if (_objectName == m_name.get()) {
+	if (_objectName == propertyName.get()) {
 		return shared_from_this();
 	}
 	return nullptr;

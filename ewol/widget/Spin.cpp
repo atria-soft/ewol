@@ -15,15 +15,14 @@
 #undef __class__
 #define __class__ "widget::Spin"
 
-
 ewol::widget::Spin::Spin() :
   signalValue(*this, "value", "Spin value change"),
   signalValueDouble(*this, "valueDouble", "Spin value change value in 'double'"),
-  m_value(*this, "value", 0, "Value of the Spin"),
-  m_min(*this, "min", -9999999999, "Minimum value of the spin"),
-  m_max(*this, "max", 9999999999, "Maximum value of the spin"),
-  m_increment(*this, "increment", 1, "Increment value at each button event or keybord event"),
-  m_mantis(*this, "mantis", 0, "fix-point mantis") {
+  propertyValue(*this, "value", 0, "Value of the Spin"),
+  propertyMin(*this, "min", -9999999999, "Minimum value of the spin"),
+  propertyMax(*this, "max", 9999999999, "Maximum value of the spin"),
+  propertyIncrement(*this, "increment", 1, "Increment value at each button event or keybord event"),
+  propertyMantis(*this, "mantis", 0, "fix-point mantis") {
 	addObjectType("ewol::widget::Spin");
 }
 
@@ -41,20 +40,20 @@ ewol::widget::Spin::~Spin() {
 
 void ewol::widget::Spin::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::SpinBase::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_value) {
+	if (_paramPointer == propertyValue) {
 		markToRedraw();
 		if (m_widgetEntry == nullptr) {
 			EWOL_ERROR("Can not acces at entry ...");
 			return;
 		}
-		checkValue(m_value.get());
-	} else if (_paramPointer == m_min) {
-		checkValue(m_value.get());
-	} else if (_paramPointer == m_max) {
-		checkValue(m_value.get());
-	} else if (_paramPointer == m_increment) {
+		checkValue(propertyValue.get());
+	} else if (_paramPointer == propertyMin) {
+		checkValue(propertyValue.get());
+	} else if (_paramPointer == propertyMax) {
+		checkValue(propertyValue.get());
+	} else if (_paramPointer == propertyIncrement) {
 		
-	} else if (_paramPointer == m_mantis) {
+	} else if (_paramPointer == propertyMantis) {
 		
 	}
 }
@@ -79,17 +78,17 @@ void ewol::widget::Spin::updateGui() {
 }
 
 void ewol::widget::Spin::checkValue(int64_t _value) {
-	_value = std::avg(m_min.get(), _value, m_max.get());
-	m_value.get() = _value;
-	m_widgetEntry->setValue(etk::to_string(_value));
+	_value = std::avg(propertyMin.get(), _value, propertyMax.get());
+	propertyValue.get() = _value;
+	m_widgetEntry->propertyValue.set(etk::to_string(_value));
 }
 
 void ewol::widget::Spin::onCallbackUp() {
-	int64_t value = m_value.get() + m_increment.get();
+	int64_t value = propertyValue.get() + propertyIncrement.get();
 	checkValue(value);
 }
 
 void ewol::widget::Spin::onCallbackDown() {
-	int64_t value = m_value.get() - m_increment.get();
+	int64_t value = propertyValue.get() - propertyIncrement.get();
 	checkValue(value);
 }

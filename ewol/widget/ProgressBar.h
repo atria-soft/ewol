@@ -20,26 +20,19 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class ProgressBar : public ewol::Widget {
-			private:
-				ewol::compositing::Drawing m_draw; // basic drawing element
+			public: // properties
+				eproperty::Range<float> propertyValue; //!< % used
+				eproperty::Value<etk::Color<>> propertyTextColorFg; //!< forder bar color
+				eproperty::Value<etk::Color<>> propertyTextColorBgOn; //!< bar color enable
+				eproperty::Value<etk::Color<>> PropertyTextColorBgOff; //!< bar color disable
 			protected:
 				ProgressBar();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ProgressBar, "ProgressBar");
 				virtual ~ProgressBar();
-				void setValue(float _val);
-				float getValue() const {
-					return m_value;
-				};
-				void setColor(etk::Color<> _newColor) {
-					m_textColorFg = _newColor;
-				};
 			private:
-				eproperty::Value<float> m_value; //!< % used
-				eproperty::Value<etk::Color<>> m_textColorFg; //!< forder bar color
-				eproperty::Value<etk::Color<>> m_textColorBgOn; //!< bar color enable
-				eproperty::Value<etk::Color<>> m_textColorBgOff; //!< bar color disable
+				ewol::compositing::Drawing m_draw; // basic drawing element
 			protected: // Derived function
 				virtual void onDraw();
 				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);

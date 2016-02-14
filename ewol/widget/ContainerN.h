@@ -19,6 +19,8 @@ namespace ewol {
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
 		class ContainerN : public ewol::Widget {
+			public: // properties:
+				eproperty::Value<bvec2> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			protected:
 				std::list<std::shared_ptr<ewol::Widget>> m_subWidget;
 			protected:
@@ -33,14 +35,7 @@ namespace ewol {
 				 */
 				virtual ~ContainerN();
 			protected:
-				bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 				bvec2 m_subExpend; //!< reference of the sub element expention requested.
-			public:
-				/**
-				 * @brief Limit the expend properties to the current widget (no contamination)
-				 * @param[in] _lockExpend Lock mode of the expend properties
-				 */
-				void lockExpand(const bvec2& _lockExpand);
 				// herited function
 				virtual bvec2 canExpand();
 			public:
@@ -103,6 +98,7 @@ namespace ewol {
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void setOffset(const vec2& _newVal);
 				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+				void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	};
 };

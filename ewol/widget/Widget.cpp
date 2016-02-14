@@ -18,20 +18,20 @@
 #define __class__ "Widget"
 
 ewol::Widget::Widget() :
+  propertyMinSize(*this, "min-size", gale::Dimension(vec2(0,0),gale::Dimension::Pixel), "User minimum size"),
+  propertyMaxSize(*this, "max-size", gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel), "User maximum size"),
+  propertyExpand(*this, "expand", bvec2(false,false), "Request the widget Expand size wile space is available"),
+  propertyFill(*this, "fill", bvec2(true,true), "Fill the widget available size"),
+  propertyHide(*this, "hide", false, "The widget start hided"),
+  propertyGravity(*this, "gravity", ewol::gravity_buttomLeft, "Gravity orientation"),
+  propertyCanFocus(*this, "focus", false, "enable the widget to have the focus capacity"), // TODO : je pense que c'est une erreur, c'st surement un event to get the cocus ...
   m_size(10,10),
   m_minSize(0,0),
   m_maxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)),
   m_offset(0,0),
   m_zoom(1.0f),
   m_origin(0,0),
-  m_userMinSize(*this, "min-size", gale::Dimension(vec2(0,0),gale::Dimension::Pixel), "User minimum size"),
-  m_userMaxSize(*this, "max-size", gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel), "User maximum size"),
-  m_userExpand(*this, "expand", bvec2(false,false), "Request the widget Expand size wile space is available"),
-  m_userFill(*this, "fill", bvec2(true,true), "Fill the widget available size"),
-  m_hide(*this, "hide", false, "The widget start hided"),
-  m_gravity(*this, "gravity", ewol::gravity_buttomLeft, "Gravity orientation"),
   m_hasFocus(false),
-  m_canFocus(*this, "focus", false, "enable the widget to have the focus capacity"), // TODO : je pense que c'est une erreur, c'st surement un event to get the cocus ...
   m_limitMouseEvent(3),
   m_allowRepeateKeyboardEvent(true),
   signalShortcut(*this, "shortcut"),
@@ -43,24 +43,24 @@ ewol::Widget::Widget() :
   signalAnnimationStop(*this, "annimation-stop"),
   m_annimationMode(annimationModeDisable),
   m_annimationratio(0.0f),
-  m_annimationTypeStart(*this, "annimation-start-type", 0, "Annimation type, when adding/show a widget"),
-  m_annimationTimeStart(*this, "annimation-start-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when adding/show a widget"),
-  m_annimationTypeStop(*this, "annimation-stop-type", 0, "Annimation type, when removing/hide a widget"),
-  m_annimationTimeStop(*this, "annimation-stop-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when removing/hide a widget"){
+  propertyAnnimationTypeStart(*this, "annimation-start-type", 0, "Annimation type, when adding/show a widget"),
+  propertyAnnimationTimeStart(*this, "annimation-start-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when adding/show a widget"),
+  propertyAnnimationTypeStop(*this, "annimation-stop-type", 0, "Annimation type, when removing/hide a widget"),
+  propertyAnnimationTimeStop(*this, "annimation-stop-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when removing/hide a widget"){
 	addObjectType("ewol::Widget");
 	
 	// TODO : Set a static interface for list ==> this methode create a multiple allocation
-	m_gravity.add(ewol::gravity_center, "center");
-	m_gravity.add(ewol::gravity_topLeft, "top-left");
-	m_gravity.add(ewol::gravity_top, "top");
-	m_gravity.add(ewol::gravity_topRight, "top-right");
-	m_gravity.add(ewol::gravity_right, "right");
-	m_gravity.add(ewol::gravity_buttomRight, "buttom-right");
-	m_gravity.add(ewol::gravity_buttom, "buttom");
-	m_gravity.add(ewol::gravity_buttomLeft, "buttom-left");
-	m_gravity.add(ewol::gravity_left, "left");
-	m_annimationTypeStart.add(0, "none");
-	m_annimationTypeStop.add(0, "none");
+	propertyGravity.add(ewol::gravity_center, "center");
+	propertyGravity.add(ewol::gravity_topLeft, "top-left");
+	propertyGravity.add(ewol::gravity_top, "top");
+	propertyGravity.add(ewol::gravity_topRight, "top-right");
+	propertyGravity.add(ewol::gravity_right, "right");
+	propertyGravity.add(ewol::gravity_buttomRight, "buttom-right");
+	propertyGravity.add(ewol::gravity_buttom, "buttom");
+	propertyGravity.add(ewol::gravity_buttomLeft, "buttom-left");
+	propertyGravity.add(ewol::gravity_left, "left");
+	propertyAnnimationTypeStart.add(0, "none");
+	propertyAnnimationTypeStop.add(0, "none");
 }
 
 void ewol::Widget::init() {
@@ -82,7 +82,7 @@ void ewol::Widget::onChangeSize() {
 }
 
 bool ewol::Widget::setFocus() {
-	if (m_canFocus == true) {
+	if (propertyCanFocus == true) {
 		if (m_hasFocus == false) {
 			m_hasFocus = true;
 			onGetFocus();
@@ -93,7 +93,7 @@ bool ewol::Widget::setFocus() {
 }
 
 bool ewol::Widget::rmFocus() {
-	if (m_canFocus == true) {
+	if (propertyCanFocus == true) {
 		if (m_hasFocus == true) {
 			m_hasFocus = false;
 			onLostFocus();
@@ -142,7 +142,7 @@ void ewol::Widget::setOffset(const vec2& _newVal) {
    (0,0)
 */
 void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (true == m_hide){
+	if (propertyHide == true){
 		// widget is hidden ...
 		return;
 	}
@@ -238,16 +238,16 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 }
 
 void ewol::Widget::periodicCallDisable() {
-	EWOL_VERBOSE("Perodic call disable " << getName());
+	EWOL_VERBOSE("Perodic call disable " << propertyName);
 	getObjectManager().periodicCall.release(shared_from_this());
 }
 
 void ewol::Widget::periodicCallEnable() {
 	if (getObjectManager().periodicCall.isRegistered(shared_from_this()) == true) {
-		EWOL_VERBOSE("Perodic call enable " << getName() << " ==> rejected");
+		EWOL_VERBOSE("Perodic call enable " << propertyName << " ==> rejected");
 		return;
 	} else {
-		EWOL_VERBOSE("Perodic call enable " << getName());
+		EWOL_VERBOSE("Perodic call enable " << propertyName);
 	}
 	getObjectManager().periodicCall.bind(shared_from_this(), &ewol::Widget::periodicCall);
 }
@@ -291,62 +291,62 @@ vec2 ewol::Widget::relativePosition(const vec2& _pos) {
 }
 
 void ewol::Widget::calculateMinMaxSize() {
-	m_minSize = m_userMinSize->getPixel();
-	//EWOL_ERROR("[" << getId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
-	m_maxSize = m_userMaxSize->getPixel();
+	m_minSize = propertyMinSize->getPixel();
+	//EWOL_ERROR("[" << getId() << "] convert in min size : " << propertyMinSize << " out=" << m_minSize);
+	m_maxSize = propertyMaxSize->getPixel();
 	markToRedraw();
 }
 
 vec2 ewol::Widget::getCalculateMinSize() {
-	if (false == isHide()) {
+	if (propertyHide == false) {
 		return m_minSize;
 	}
 	return vec2(0,0);
 }
 
 vec2 ewol::Widget::getCalculateMaxSize() {
-	if (false == isHide()) {
+	if (propertyHide == false) {
 		return m_maxSize;
 	}
 	return vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 }
 
 void ewol::Widget::setNoMinSize() {
-	m_userMinSize.set(gale::Dimension(vec2(0,0),gale::Dimension::Pixel));
+	propertyMinSize.set(gale::Dimension(vec2(0,0),gale::Dimension::Pixel));
 }
 
 void ewol::Widget::checkMinSize() {
-	vec2 pixelSize = m_userMinSize->getPixel();
+	vec2 pixelSize = propertyMinSize->getPixel();
 	m_minSize.setX(std::max(m_minSize.x(), pixelSize.x()));
 	m_minSize.setY(std::max(m_minSize.y(), pixelSize.y()));
 }
 
 void ewol::Widget::setNoMaxSize() {
-	m_userMaxSize.set(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel));
+	propertyMaxSize.set(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel));
 }
 
 void ewol::Widget::checkMaxSize() {
-	vec2 pixelSize = m_userMaxSize->getPixel();
+	vec2 pixelSize = propertyMaxSize->getPixel();
 	m_maxSize.setX(std::min(m_maxSize.x(), pixelSize.x()));
 	m_maxSize.setY(std::min(m_maxSize.y(), pixelSize.y()));
 }
 
 vec2 ewol::Widget::getSize() {
-	if (false == isHide()) {
+	if (propertyHide == false) {
 		return m_size;
 	}
 	return vec2(0,0);
 }
 
 bvec2 ewol::Widget::canExpand() {
-	if (false == isHide()) {
-		return m_userExpand;
+	if (propertyHide == false) {
+		return propertyExpand;
 	}
 	return bvec2(false,false);
 }
 
 const bvec2& ewol::Widget::canFill() {
-	return m_userFill;
+	return propertyFill;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -554,25 +554,25 @@ bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
 
 void ewol::Widget::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Object::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_canFocus) {
+	if (_paramPointer == propertyCanFocus) {
 		if (m_hasFocus == true) {
 			rmFocus();
 		}
-	} else if (_paramPointer == m_gravity) {
+	} else if (_paramPointer == propertyGravity) {
 		markToRedraw();
 		requestUpdateSize();
-	} else if (_paramPointer == m_hide) {
+	} else if (_paramPointer == propertyHide) {
 		markToRedraw();
 		requestUpdateSize();
-	} else if (_paramPointer == m_userFill) {
+	} else if (_paramPointer == propertyFill) {
 		markToRedraw();
 		requestUpdateSize();
-	} else if (_paramPointer == m_userExpand) {
+	} else if (_paramPointer == propertyExpand) {
 		requestUpdateSize();
 		markToRedraw();
-	} else if (_paramPointer == m_userMaxSize) {
-		vec2 pixelMin = m_userMinSize->getPixel();
-		vec2 pixelMax = m_userMaxSize->getPixel();
+	} else if (_paramPointer == propertyMaxSize) {
+		vec2 pixelMin = propertyMinSize->getPixel();
+		vec2 pixelMax = propertyMaxSize->getPixel();
 		// check minimum & maximum compatibility :
 		bool error=false;
 		if (pixelMin.x()>pixelMax.x()) {
@@ -583,12 +583,12 @@ void ewol::Widget::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 		}
 		if (error == true) {
 			EWOL_ERROR("Can not set a 'min size' > 'max size' reset to maximum ...");
-			m_userMaxSize = gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel);
+			propertyMaxSize.get() = gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel);
 		}
 		requestUpdateSize();
-	} else if (_paramPointer == m_userMinSize) {
-		vec2 pixelMin = m_userMinSize->getPixel();
-		vec2 pixelMax = m_userMaxSize->getPixel();
+	} else if (_paramPointer == propertyMinSize) {
+		vec2 pixelMin = propertyMinSize->getPixel();
+		vec2 pixelMax = propertyMaxSize->getPixel();
 		// check minimum & maximum compatibility :
 		bool error=false;
 		if (pixelMin.x()>pixelMax.x()) {
@@ -599,16 +599,16 @@ void ewol::Widget::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 		}
 		if (error == true) {
 			EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-			m_userMinSize = gale::Dimension(vec2(0,0),gale::Dimension::Pixel);
+			propertyMinSize = gale::Dimension(vec2(0,0),gale::Dimension::Pixel);
 		}
 		requestUpdateSize();
-	} else if (_paramPointer == m_annimationTypeStart) {
+	} else if (_paramPointer == propertyAnnimationTypeStart) {
 		
-	} else if (_paramPointer == m_annimationTimeStart) {
+	} else if (_paramPointer == propertyAnnimationTimeStart) {
 		
-	} else if (_paramPointer == m_annimationTypeStop) {
+	} else if (_paramPointer == propertyAnnimationTypeStop) {
 		
-	} else if (_paramPointer == m_annimationTimeStop) {
+	} else if (_paramPointer == propertyAnnimationTimeStop) {
 		
 	}
 }
@@ -650,17 +650,17 @@ void ewol::Widget::addAnnimationType(enum ewol::Widget::annimationMode _mode, co
 
 void ewol::Widget::setAnnimationType(enum ewol::Widget::annimationMode _mode, const std::string& _type) {
 	if (_mode == 0) {
-		m_annimationTypeStart.setString(_type);
+		propertyAnnimationTypeStart.setString(_type);
 	} else {
-		m_annimationTypeStop.setString(_type);
+		propertyAnnimationTypeStop.setString(_type);
 	}
 }
 
 void ewol::Widget::setAnnimationTime(enum ewol::Widget::annimationMode _mode, float _time) {
 	if (_mode == 0) {
-		m_annimationTimeStart.set(_time);
+		propertyAnnimationTimeStart.set(_time);
 	} else {
-		m_annimationTimeStop.set(_time);
+		propertyAnnimationTimeStop.set(_time);
 	}
 }
 

@@ -25,20 +25,17 @@ ewol::widget::CheckBox::CheckBox() :
   signalUp(*this, "up", "CheckBox is UP"),
   signalEnter(*this, "enter", "The cursor enter inside the CheckBox"),
   signalValue(*this, "value", "CheckBox value change"),
-  propertyshaper(*this, "shaper", "The display name for config file"),
-  m_shaper(*this, "shaper", "The display name for config file"),
+  propertyValue(*this, "value", false, "Basic value of the widget"),
+  propertyShape(*this, "shape", "", "The display name for config file"),
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
   m_selectableAreaSize(0,0),
   m_shaperIdSize(-1),
-  m_shaperIdSizeInsize(-1),
-  m_value(*this, "value", false, "Basic value of the widget") {
+  m_shaperIdSizeInsize(-1) {
 	addObjectType("ewol::widget::CheckBox");
 	// shaper satatus update:
 	CheckStatus();
-	// This widget can have the focus ...
-	setCanHaveFocus(true);
 	// Limit event at 1:
 	setMouseLimit(1);
 }
@@ -46,9 +43,10 @@ ewol::widget::CheckBox::CheckBox() :
 
 void ewol::widget::CheckBox::init(const std::string& _shaperName) {
 	ewol::widget::Container2::init();
-	m_shaper->setSource(_shaperName);
-	m_shaperIdSize = m_shaper->requestConfig("box-size");
-	m_shaperIdSizeInsize = m_shaper->requestConfig("box-inside");
+	propertyCanFocus.set(true);
+	propertyShape.set(_shaperName);
+	m_shaperIdSize = m_shaper.requestConfig("box-size");
+	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");
 }
 
 ewol::widget::CheckBox::~CheckBox() {
@@ -56,8 +54,8 @@ ewol::widget::CheckBox::~CheckBox() {
 }
 
 void ewol::widget::CheckBox::onChangeSize() {
-	ewol::Padding padding = m_shaper->getPadding();
-	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
+	ewol::Padding padding = m_shaper.getPadding();
+	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	ewol::Padding ret = onChangeSizePadded(padding);
 	EWOL_DEBUG(" configuring : padding=" << padding << " boxSize=" << boxSize << "");
@@ -66,8 +64,8 @@ void ewol::widget::CheckBox::onChangeSize() {
 }
 
 void ewol::widget::CheckBox::calculateMinMaxSize() {
-	ewol::Padding padding = m_shaper->getPadding();
-	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
+	ewol::Padding padding = m_shaper.getPadding();
+	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	calculateMinMaxSizePadded(padding);
 	if (m_minSize.y() < padding.y()+boxSize) {
@@ -77,7 +75,7 @@ void ewol::widget::CheckBox::calculateMinMaxSize() {
 
 void ewol::widget::CheckBox::onDraw() {
 	// draw the shaaper (if needed indeed)
-	m_shaper->draw();
+	m_shaper.draw();
 }
 
 void ewol::widget::CheckBox::onRegenerateDisplay() {
@@ -85,17 +83,17 @@ void ewol::widget::CheckBox::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	ewol::Padding padding = m_shaper->getPadding();
-	float boxSize = m_shaper->getConfigNumber(m_shaperIdSize);
-	float boxInside = m_shaper->getConfigNumber(m_shaperIdSizeInsize);
-	m_shaper->clear();
+	ewol::Padding padding = m_shaper.getPadding();
+	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
+	float boxInside = m_shaper.getConfigNumber(m_shaperIdSizeInsize);
+	m_shaper.clear();
 	EWOL_DEBUG(" configuring : boxSize=" << boxSize << " boxInside=" << boxInside << "");
 	vec2 origin(m_selectableAreaPos + vec2(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
 	vec2 size = vec2(boxSize+padding.x(), boxSize+padding.y());
 	
 	vec2 origin2 = m_selectableAreaPos + vec2((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
 	vec2 size2 = vec2(boxInside+padding.x(), boxInside+padding.y());
-	m_shaper->setShape(vec2ClipInt32(origin),
+	m_shaper.setShape(vec2ClipInt32(origin),
 	                   vec2ClipInt32(size),
 	                   vec2ClipInt32(origin2+vec2(padding.xLeft(),padding.yButtom()) ),
 	                   vec2ClipInt32(size2-vec2(padding.x(),padding.y()) ));
@@ -127,24 +125,24 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(gale::key::status_down == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << signalDown);
+				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(gale::key::status_up == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << signalUp);
+				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
 			if(gale::key::status_single == _event.getStatus()) {
 				// inverse value :
-				setValue((m_value)?false:true);
-				EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
+				propertyValue.set((propertyValue.get())?false:true);
+				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalPressed);
 				signalPressed.emit();
-				EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value );
-				signalValue.emit(m_value.get());
+				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalValue << " val=" << propertyValue );
+				signalValue.emit(propertyValue.get());
 				markToRedraw();
 			}
 		}
@@ -169,7 +167,7 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 }
 
 void ewol::widget::CheckBox::CheckStatus() {
-	if (m_shaper->setState(m_value==true?1:0) == true) {
+	if (m_shaper.setState(propertyValue==true?1:0) == true) {
 		markToRedraw();
 	}
 	if (m_buttonPressed == true) {
@@ -187,7 +185,7 @@ void ewol::widget::CheckBox::CheckStatus() {
 }
 
 void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
-	if (m_shaper->changeStatusIn(_newStatusId) == true) {
+	if (m_shaper.changeStatusIn(_newStatusId) == true) {
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -195,7 +193,7 @@ void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
 
 
 void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper->periodicCall(_event) == false) {
+	if (m_shaper.periodicCall(_event) == false) {
 		periodicCallDisable();
 	}
 	markToRedraw();
@@ -203,16 +201,17 @@ void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 
 void ewol::widget::CheckBox::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container2::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_shaper) {
+	if (_paramPointer == propertyShape) {
+		m_shaper.setSource(propertyShape.get());
 		markToRedraw();
-	} else if (_paramPointer == m_value) {
-		if (m_value.get() == false) {
+	} else if (_paramPointer == propertyValue) {
+		if (propertyValue.get() == false) {
 			m_idWidgetDisplayed = convertId(0);
 		} else {
 			m_idWidgetDisplayed = convertId(1);
 		}
 		CheckStatus();
 		markToRedraw();
-		m_shaper->setActivateState(m_value==true?1:0);
+		m_shaper.setActivateState(propertyValue==true?1:0);
 	}
 }

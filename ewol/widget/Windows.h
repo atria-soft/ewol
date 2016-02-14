@@ -25,9 +25,7 @@ namespace ewol {
 				int32_t m_colorBg; //!< Default background color of the windows
 			protected:
 				Windows();
-				void init() {
-					ewol::Widget::init();
-				};
+				void init();
 			public:
 				virtual ~Windows();
 			// internal event at ewol system :

@@ -15,14 +15,14 @@
 #define __class__ "Spacer"
 
 ewol::widget::Spacer::Spacer() :
-  m_color(*this, "color", etk::color::none, "background of the spacer") {
+  propertyColor(*this, "color", etk::color::none, "background of the spacer") {
 	addObjectType("ewol::widget::Spacer");
-	m_userMinSize = gale::Dimension(vec2(10,10));
-	setCanHaveFocus(false);
 }
 
 void ewol::widget::Spacer::init() {
 	ewol::Widget::init();
+	propertyMinSize.set(gale::Dimension(vec2(10,10)));
+	propertyCanFocus.set(true);
 }
 
 ewol::widget::Spacer::~Spacer() {
@@ -40,17 +40,17 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	}
 	m_draw.clear();
 	
-	if (m_color->a() == 0) {
+	if (propertyColor->a() == 0) {
 		return;
 	}
-	m_draw.setColor(m_color);
+	m_draw.setColor(propertyColor);
 	m_draw.setPos(vec3(0, 0, 0) );
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
 void ewol::widget::Spacer::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_color) {
+	if (_paramPointer == propertyColor) {
 		markToRedraw();
 	}
 }

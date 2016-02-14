@@ -20,83 +20,20 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Slider : public ewol::Widget {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<float> signalChange;
+			public:
+				//eproperty::Value<std::string> propertyShape; //!< name of the shape used
+				eproperty::Value<float> propertyValue; //!< current value of the Slider
+				eproperty::Value<float> propertyMinimum; //!< minimum value of the slider
+				eproperty::Value<float> propertyMaximum; //!< maximum value of the slider
+				eproperty::Value<float> propertyStep; //!< step of every iteration of the slider (increment/precision)
 			protected:
 				Slider();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				virtual ~Slider();
-			protected:
-				eproperty::Value<float> m_value; //!< current value of the Slider
-			public:
-				/**
-				 * @brief Set the value of the slider.
-				 * @param[in] _val New value to apply.
-				 */
-				void setValue(float _val) {
-					m_value.set(_val);
-				}
-				/**
-				 * @brief Get the value of the slider.
-				 * @return The current value of the slider.
-				 */
-				float getValue() {
-					return m_value;
-				}
-			protected:
-				eproperty::Value<float> m_min; //!< minimum value of the slider
-			public:
-				/**
-				 * @brief Set the minumum value of the slider.
-				 * @param[in] _val New minimum value to apply.
-				 */
-				void setMin(float _val) {
-					m_min.set(_val);
-				}
-				/**
-				 * @brief Get the minimum value of the slider.
-				 * @return The minimum value of the slider.
-				 */
-				float getMin() {
-					return m_min;
-				}
-			protected:
-				eproperty::Value<float> m_max; //!< maximum value of the slider
-			public:
-				/**
-				 * @brief Set the maximum value of the slider.
-				 * @param[in] _val New maximum value to apply.
-				 */
-				void setMax(float _val) {
-					m_max.set(_val);
-				}
-				/**
-				 * @brief Get the maximum value of the slider.
-				 * @return The maximum value of the slider.
-				 */
-				float getMax() {
-					return m_max;
-				}
-			protected:
-				eproperty::Value<float> m_step;
-			public:
-				/**
-				 * @brief Set the step value of the slider.
-				 * @param[in] _val New step value to apply.
-				 */
-				void setStep(float _val) {
-					m_step.set(_val);
-				}
-				/**
-				 * @brief Get the step value of the slider.
-				 * @return The wtep value of the slider.
-				 */
-				float getStep() {
-					return m_step;
-				}
 			public:
 				// TODO : Rewoek the color in the theme ...
 				void setColor(etk::Color<> _newColor) {

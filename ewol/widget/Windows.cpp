@@ -28,12 +28,16 @@ ewol::widget::Windows::Windows() :
   m_colorProperty(nullptr),
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
-	setCanHaveFocus(true);
 	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Windows.json");
 	if (m_colorProperty != nullptr) {
 		m_colorBg = m_colorProperty->request("background");
 	}
 	//KeyboardShow(KEYBOARD_MODE_CODE);
+}
+
+void ewol::widget::Windows::init() {
+	ewol::Widget::init();
+	propertyCanFocus.set(true);
 }
 
 ewol::widget::Windows::~Windows() {
@@ -234,7 +238,7 @@ void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, cons
 	}
 	tmpPopUp->setComment(_message);
 	tmpPopUp->addButton("close", true);
-	tmpPopUp->setRemoveOnExternClick(true);
+	tmpPopUp->propertyCloseOutEvent.set(true);
 	popUpWidgetPush(tmpPopUp);
 }
 

@@ -44,7 +44,7 @@ void ewol::object::Manager::displayListObject() {
 	for (auto &it : m_eObjectList) {
 		std::shared_ptr<ewol::Object> element = it.lock();
 		if (element != nullptr) {
-			EWOL_INFO("  [" << element->getId() << "] ref=" << element.use_count()-1 << " name='" << element->getName() << "' type=" << element->getObjectType());
+			EWOL_INFO("  [" << element->getId() << "] ref=" << element.use_count()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
 		}
 	}
 }
@@ -102,7 +102,7 @@ std::shared_ptr<ewol::Object> ewol::object::Manager::get(const std::string& _nam
 	for (auto &it : m_eObjectList) {
 		std::shared_ptr<ewol::Object> element = it.lock();
 		if (    element != nullptr
-		     && element->getName() == _name) {
+		     && element->propertyName.get() == _name) {
 			return element;
 		}
 	}

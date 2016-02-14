@@ -17,6 +17,10 @@
 namespace ewol {
 	namespace widget {
 		class Scroll : public ewol::widget::Container {
+			public: // properties
+				eproperty::Range<vec2> propertyLimit; //!< Set the limitation of the ratio in the sreen
+				eproperty::Value<std::string> propertyShapeVert; //!< Vertical shaper name
+				eproperty::Value<std::string> propertyShapeHori; //!< Horizontal shaper name
 			public:
 				enum highSpeedMode {
 					speedModeDisable,
@@ -29,8 +33,6 @@ namespace ewol {
 			private:
 				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
-			protected:
-				eproperty::Range<vec2> m_limit;
 			private:
 				float m_pixelScrolling;
 				vec2 m_highSpeedStartPos;
@@ -43,20 +45,6 @@ namespace ewol {
 			public:
 				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
 				virtual ~Scroll();
-				/**
-				 * @brief set the limit of scrolling
-				 * @note This permit to scoll element upper the end of the display
-				 * @param[in] _limit scrolling limit [0..1] (represent a pourcent)
-				 */
-				void setLimit(const vec2& _limit);
-				/**
-				 * @brief get the limit of scrolling
-				 * @return scrolling limit
-				 */
-				const vec2& getLimit() const {
-					return m_limit;
-				};
-				
 			public: // Derived function
 				void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();

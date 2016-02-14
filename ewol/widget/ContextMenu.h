@@ -30,9 +30,9 @@ namespace ewol {
 					markNone
 				};
 			public: // properties
+				eproperty::Value<std::string> propertyShape; //!< shape of the widget.
 				eproperty::Value<vec2> propertyArrowPos;
 				eproperty::List<enum markPosition> propertyArrawBorder;
-				eproperty::Value<std::string> propertyShaper; //!< Compositing theme.
 			protected:
 				ContextMenu();
 				void init(const std::string& _shaperName="{ewol}THEME:GUI:ContextMenu.json");
@@ -41,9 +41,12 @@ namespace ewol {
 				virtual ~ContextMenu();
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				
+				// TODO : Use shaper for the arraw ...
 				ewol::compositing::Drawing m_compositing;
-				etk::Color<> m_colorBackGroung;
-				etk::Color<> m_colorBorder;
+				etk::Color<> m_colorBorder; // use shaper ID
+				
+				
 				float m_offset;
 			public:
 				void setPositionMarkAuto(const vec2& _origin, const vec2& _size);

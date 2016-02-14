@@ -91,7 +91,7 @@ void ewol::widget::Manager::focusKeep(const std::shared_ptr<ewol::Widget>& _newW
 		focusWidgetCurrent->rmFocus();
 		focusWidgetCurrent.reset();
 	}
-	if (_newWidget->canHaveFocus() == false) {
+	if (_newWidget->propertyCanFocus.get() == false) {
 		EWOL_DEBUG("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
@@ -104,7 +104,7 @@ void ewol::widget::Manager::focusKeep(const std::shared_ptr<ewol::Widget>& _newW
 
 void ewol::widget::Manager::focusSetDefault(const std::shared_ptr<ewol::Widget>& _newWidget) {
 	if(    _newWidget != nullptr
-	    && _newWidget->canHaveFocus() == false) {
+	    && _newWidget->propertyCanFocus.get() == false) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}

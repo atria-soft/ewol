@@ -25,8 +25,8 @@ namespace ewol {
 				esignal::Signal<void> signalEnter;
 				esignal::Signal<bool> signalValue;
 			public: // propertie list
-				eproperty::Value<std::string> propertyShaper;
 				eproperty::Value<bool> propertyValue; //!< Current state of the checkbox.
+				eproperty::Value<std::string> propertyShape; //!< shape of the widget
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).

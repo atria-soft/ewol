@@ -103,23 +103,6 @@ namespace ewol {
 				 * @note This request a regeneration of the display
 				 */
 				virtual void removeSelected();
-			private:
-				eproperty::Value<std::string> m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
-			public:
-				/**
-				 * @brief set The text displayed when nothing is in the entry.
-				 * @param _text Text to display when the entry box is empty (this text can be decorated).
-				 */
-				void setEmptyText(const std::string& _text) {
-					m_textWhenNothing.set(_text);
-				}
-				/**
-				 * @brief get The text displayed when nothing is in the entry.
-				 * @return Text display when nothing
-				 */
-				const std::string& getEmptyText() const {
-					return m_textWhenNothing;
-				};
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);

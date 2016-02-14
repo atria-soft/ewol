@@ -38,6 +38,8 @@ namespace ewol {
 		 * [/pre]
 		 */
 		class StdPopUp : public ewol::widget::PopUp {
+			public: // properties:
+				// TODO: ...
 			protected:
 				/**
 				 * @brief std-pop-up constructor.

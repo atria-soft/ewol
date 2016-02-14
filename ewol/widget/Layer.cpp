@@ -26,7 +26,7 @@ ewol::widget::Layer::~Layer() {
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
-	if (true == isHide()) {
+	if (propertyHide == true) {
 		return nullptr;
 	}
 	// for all element in the sizer ...
@@ -37,10 +37,9 @@ std::shared_ptr<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _p
 		vec2 tmpSize = it->getSize();
 		vec2 tmpOrigin = it->getOrigin();
 		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
-		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
-		{
+		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
 			std::shared_ptr<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
-			if (nullptr != tmpWidget) {
+			if (tmpWidget != nullptr) {
 				return tmpWidget;
 			}
 			// parse the next layer ...

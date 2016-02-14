@@ -92,12 +92,12 @@ std::shared_ptr<ewol::Object> ewol::widget::Container::getSubObjectNamed(const s
 }
 
 void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (true == m_hide){
+	if (propertyHide.get() == true){
 		// widget is hidden ...
 		return;
 	}
 	ewol::Widget::systemDraw(_displayProp);
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		ewol::DrawProperty prop = _displayProp;
 		prop.limit(m_origin, m_size);
 		m_subWidget->systemDraw(prop);
@@ -111,8 +111,8 @@ void ewol::widget::Container::onChangeSize() {
 	}
 	vec2 origin = m_origin+m_offset;
 	vec2 minSize = m_subWidget->getCalculateMinSize();
-	bvec2 expand = m_subWidget->getExpand();
-	origin += ewol::gravityGenerateDelta(m_gravity, minSize - m_size);
+	bvec2 expand = m_subWidget->propertyExpand.get();
+	origin += ewol::gravityGenerateDelta(propertyGravity.get(), minSize - m_size);
 	m_subWidget->setOrigin(origin);
 	m_subWidget->setSize(m_size);
 	m_subWidget->onChangeSize();
@@ -122,7 +122,7 @@ void ewol::widget::Container::calculateMinMaxSize() {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		m_subWidget->calculateMinMaxSize();
 		vec2 min = m_subWidget->getCalculateMinSize();
 		m_minSize.setMax(min);
@@ -131,14 +131,14 @@ void ewol::widget::Container::calculateMinMaxSize() {
 }
 
 void ewol::widget::Container::onRegenerateDisplay() {
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		m_subWidget->onRegenerateDisplay();
 	}
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::Container::getWidgetAtPos(const vec2& _pos) {
-	if (false == isHide()) {
-		if (nullptr!=m_subWidget) {
+	if (propertyHide.get() == false) {
+		if (m_subWidget != nullptr) {
 			return m_subWidget->getWidgetAtPos(_pos);
 		}
 	}

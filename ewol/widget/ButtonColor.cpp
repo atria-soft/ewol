@@ -29,34 +29,29 @@ static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorCha
 
 ewol::widget::ButtonColor::ButtonColor() :
   signalChange(*this, "change", "Button color change value"),
-  m_widgetContextMenu(nullptr),
-  m_textColorFg(*this, "color", etk::color::black, "Current color") {
+  propertyValue(*this, "color", etk::color::black, "Current color"),
+  propertyShape(*this, "shape", "", "shape of the widget"),
+  m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);
-	setCanHaveFocus(true);
 	// Limit event at 1:
 	setMouseLimit(1);
 }
 
 void ewol::widget::ButtonColor::init(etk::Color<> _baseColor, std::string _shaperName) {
 	ewol::Widget::init();
-	m_shaper.setSource(_shaperName);
-	m_textColorFg.set(_baseColor);
+	propertyCanFocus.set(true);
+	propertyShape.set(_shaperName);
+	propertyValue.set(_baseColor);
 }
 
 ewol::widget::ButtonColor::~ButtonColor() {
 	
 }
 
-
-void ewol::widget::ButtonColor::setShaperName(std::string _shaperName) {
-	m_shaper.setSource(_shaperName);
-}
-
-
 void ewol::widget::ButtonColor::calculateMinMaxSize() {
 	ewol::Padding padding = m_shaper.getPadding();
-	std::string label = m_textColorFg.getString();
+	std::string label = propertyValue.getString();
 	vec3 minSize = m_text.calculateSize(label);
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
 	m_minSize.setY(padding.y()*2 + minSize.y() );
@@ -81,7 +76,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	
 	ewol::Padding padding = m_shaper.getPadding();
 	
-	std::string label = m_textColorFg.getString();
+	std::string label = propertyValue.getString();
 	
 	ivec2 localSize = m_minSize;
 	
@@ -93,12 +88,12 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
-	if (true == m_userFill->x()) {
+	if (propertyFill->x() == true) {
 		localSize.setX(m_size.x());
 		tmpOrigin.setX(0);
 		tmpTextOrigin.setX(0);
 	}
-	if (true == m_userFill->y()) {
+	if (propertyFill->y() == true) {
 		localSize.setY(m_size.y());
 	}
 	tmpOrigin += vec3(padding.xLeft(), padding.yButtom(), 0);
@@ -107,20 +102,20 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	
 	// clean the element
 	m_text.reset();
-	if(    m_textColorFg.get().r() < 100
-	    || m_textColorFg.get().g() < 100
-	    || m_textColorFg.get().b() < 100) {
+	if(    propertyValue.get().r() < 100
+	    || propertyValue.get().g() < 100
+	    || propertyValue.get().b() < 100) {
 		m_text.setColor(etk::color::white);
 	} else {
 		m_text.setColor(etk::color::black);
 	}
 	m_text.setPos(tmpTextOrigin);
-	m_text.setColorBg(m_textColorFg.get());
+	m_text.setColorBg(propertyValue.get());
 	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignCenter);
 	m_text.print(label);
 	
 	
-	if (true == m_userFill->y()) {
+	if (propertyFill->y() == true) {
 		tmpOrigin.setY(padding.yButtom());
 	}
 	
@@ -179,7 +174,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
 				
 				std::shared_ptr<ewol::widget::ColorChooser> myColorChooser = widget::ColorChooser::create();
-				myColorChooser->setColor(m_textColorFg.get());
+				myColorChooser->propertyValue.set(propertyValue.get());
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
 				myColorChooser->signalChange.bind(shared_from_this(), &ewol::widget::ButtonColor::onCallbackColorChange);
@@ -210,18 +205,18 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 }
 
 void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color) {
-	setValue(_color);
+	propertyValue.set(_color);
 }
 
 void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
-	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
+	if (m_shaper.changeStatusIn(_newStatusId) == true) {
 		periodicCallEnable();
 		markToRedraw();
 	}
 }
 
 void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
-	if (false == m_shaper.periodicCall(_event) ) {
+	if (m_shaper.periodicCall(_event) == false) {
 		periodicCallDisable();
 	}
 	markToRedraw();
@@ -230,8 +225,10 @@ void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 
 void ewol::widget::ButtonColor::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_textColorFg) {
-		signalChange.emit(m_textColorFg);
+	if (_paramPointer == propertyValue) {
+		signalChange.emit(propertyValue);
+	} else if (_paramPointer == propertyShape) {
+		m_shaper.setSource(propertyShape.get());
 		markToRedraw();
 	}
 }

@@ -26,27 +26,26 @@ namespace ewol {
 		class ColorChooser : public ewol::widget::Sizer {
 			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
+			public:
+				eproperty::Value<etk::Color<>> propertyValue;
 			protected:
 				ColorChooser();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
 				virtual ~ColorChooser();
-			public:
-				void setColor(etk::Color<> _newColor);
-				etk::Color<> getColor();
 			private:
 				std::shared_ptr<ewol::widget::ColorBar> m_widgetColorBar;
 				std::shared_ptr<ewol::widget::Slider> m_widgetRed;
 				std::shared_ptr<ewol::widget::Slider> m_widgetGreen;
 				std::shared_ptr<ewol::widget::Slider> m_widgetBlue;
 				std::shared_ptr<ewol::widget::Slider> m_widgetAlpha;
-				etk::Color<> m_currentColor;
 				void onCallbackColorChangeRed(const float& _newColor);
 				void onCallbackColorChangeGreen(const float& _newColor);
 				void onCallbackColorChangeBlue(const float& _newColor);
 				void onCallbackColorChangeAlpha(const float& _newColor);
 				void onCallbackColorChange(const etk::Color<>& _newColor);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	};
 };

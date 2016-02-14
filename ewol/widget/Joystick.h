@@ -13,6 +13,7 @@
 #include <ewol/widget/Widget.h>
 #include <esignal/Signal.h>
 
+// TODO : Rework ==> use property and shaper ...
 
 namespace ewol {
 	namespace widget {

@@ -14,11 +14,11 @@
 #define __class__ "Button"
 
 
-// DEFINE for the shader display system :
-#define STATUS_UP        (0)
-#define STATUS_HOVER     (2)
-#define STATUS_PRESSED   (1)
-#define STATUS_DOWN      (3)
+// DEFINE for the shader display system:
+const static int32_t STATUS_UP(0);
+const static int32_t STATUS_HOVER(2);
+const static int32_t STATUS_PRESSED(1);
+const static int32_t STATUS_DOWN(3);
 
 ewol::widget::Button::Button() :
   signalPressed(*this, "pressed", "Button is pressed"),
@@ -27,11 +27,11 @@ ewol::widget::Button::Button() :
   signalEnter(*this, "enter", "The cursor enter inside the button"),
   signalLeave(*this, "leave", "the cursor leave the button"),
   signalValue(*this, "value", "button value change"),
-  m_shaper(*this, "shaper", "The display name for config file"),
-  m_value(*this, "value", false, "Value of the Button"),
-  m_lock(*this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder"),
-  m_toggleMode(*this, "toggle", false, "The Button can toogle"),
-  m_enableSingle(*this, "enable-single", false, "If one element set in the Button ==> display only set"),
+  propertyShape(*this, "shaper", "", "The display name for config file"),
+  propertyValue(*this, "value", false, "Value of the Button"),
+  propertyLock(*this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder"),
+  propertyToggleMode(*this, "toggle", false, "The Button can toogle"),
+  propertyEnableSingle(*this, "enable-single", false, "If one element set in the Button ==> display only set"),
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
@@ -39,31 +39,29 @@ ewol::widget::Button::Button() :
 	addObjectType("ewol::widget::Button");
 	
 	// set property list:
-	m_lock.add(lockNone, "none");
-	m_lock.add(lockWhenPressed, "pressed");
-	m_lock.add(lockWhenReleased, "released");
-	m_lock.add(lockAccess, "access");
+	propertyLock.add(lockNone, "none");
+	propertyLock.add(lockWhenPressed, "pressed");
+	propertyLock.add(lockWhenReleased, "released");
+	propertyLock.add(lockAccess, "access");
 	
 	// shaper satatus update:
 	CheckStatus();
-	// This widget can have the focus ...
-	setCanHaveFocus(true);
 	// Limit event at 1:
 	setMouseLimit(1);
 }
 
 void ewol::widget::Button::init(const std::string& _shaperName) {
 	ewol::widget::Container2::init();
-	m_shaper->setSource(_shaperName);
+	propertyCanFocus.set(true);
+	propertyShape.set(_shaperName);
 }
-
 
 ewol::widget::Button::~Button() {
 	
 }
 
 void ewol::widget::Button::onChangeSize() {
-	ewol::Padding padding = m_shaper->getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	ewol::Padding ret = onChangeSizePadded(padding);
 	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
 	m_selectableAreaPos = vec2(ret.xLeft(), ret.yButtom());
@@ -72,13 +70,13 @@ void ewol::widget::Button::onChangeSize() {
 
 
 void ewol::widget::Button::calculateMinMaxSize() {
-	ewol::Padding padding = m_shaper->getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	calculateMinMaxSizePadded(padding);
 }
 
 void ewol::widget::Button::onDraw() {
 	// draw the shaaper (if needed indeed)
-	m_shaper->draw();
+	m_shaper.draw();
 }
 
 void ewol::widget::Button::onRegenerateDisplay() {
@@ -86,8 +84,8 @@ void ewol::widget::Button::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	ewol::Padding padding = m_shaper->getPadding();
-	m_shaper->setShape(vec2(0,0),
+	ewol::Padding padding = m_shaper.getPadding();
+	m_shaper.setShape(vec2(0,0),
 	                  m_size,
 	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
 	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
@@ -97,7 +95,7 @@ void ewol::widget::Button::onRegenerateDisplay() {
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("Event on BT : " << _event);
 	// disable event in the lock access mode :
-	if(ewol::widget::Button::lockAccess == m_lock) {
+	if(ewol::widget::Button::lockAccess == propertyLock) {
 		return false;
 	}
 	if(    gale::key::status_leave == _event.getStatus()
@@ -121,36 +119,36 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(gale::key::status_down == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << signalDown);
+				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(gale::key::status_up == _event.getStatus()) {
-				EWOL_VERBOSE(getName() << " : Generate event : " << signalUp);
+				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
 			if(gale::key::status_single == _event.getStatus()) {
-				if(    (    m_value.get() == true
-				         && ewol::widget::Button::lockWhenPressed == m_lock)
-				    || (    m_value.get() == false
-				         && ewol::widget::Button::lockWhenReleased == m_lock) ) {
+				if(    (    propertyValue.get() == true
+				         && ewol::widget::Button::lockWhenPressed == propertyLock)
+				    || (    propertyValue.get() == false
+				         && ewol::widget::Button::lockWhenReleased == propertyLock) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
 					// inverse value :
-					setValue((m_value.get())?false:true);
-					EWOL_VERBOSE(getName() << " : Generate event : " << signalPressed);
+					propertyValue.set((propertyValue.get())?false:true);
+					EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalPressed);
 					signalPressed.emit();
-					EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value );
-					signalValue.emit(m_value.get());
-					if(    m_toggleMode.get() == false
-					    && m_value.get() == true) {
-						setValue(false);
-						EWOL_VERBOSE(getName() << " : Generate event : " << signalValue << " val=" << m_value);
-						signalValue.emit(m_value.get());
+					EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalValue << " val=" << propertyValue );
+					signalValue.emit(propertyValue.get());
+					if(    propertyToggleMode.get() == false
+					    && propertyValue.get() == true) {
+						propertyValue.set(false);
+						EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalValue << " val=" << propertyValue);
+						signalValue.emit(propertyValue.get());
 					}
 				}
 				markToRedraw();
@@ -175,7 +173,7 @@ bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 
 void ewol::widget::Button::onLostFocus() {
 	m_buttonPressed = false;
-	EWOL_VERBOSE(getName() << " : Remove Focus ...");
+	EWOL_VERBOSE(propertyName.get() << " : Remove Focus ...");
 	CheckStatus();
 }
 
@@ -188,14 +186,14 @@ void ewol::widget::Button::CheckStatus() {
 		changeStatusIn(STATUS_HOVER);
 		return;
 	}
-	if (m_value == true) {
+	if (propertyValue == true) {
 		changeStatusIn(STATUS_DOWN);
 	}
 	changeStatusIn(STATUS_UP);
 }
 
 void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
-	if (m_shaper->changeStatusIn(_newStatusId) == true) {
+	if (m_shaper.changeStatusIn(_newStatusId) == true) {
 		periodicCallEnable();
 		markToRedraw();
 	}
@@ -203,7 +201,7 @@ void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 
 
 void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper->periodicCall(_event) == false) {
+	if (m_shaper.periodicCall(_event) == false) {
 		periodicCallDisable();
 	}
 	markToRedraw();
@@ -211,17 +209,18 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 
 void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container2::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_shaper) {
+	if (_paramPointer == propertyShape) {
+		m_shaper.setSource(propertyShape.get());
 		markToRedraw();
-	} else if (_paramPointer == m_value) {
-		if (m_toggleMode == true) {
-			if (m_value.get() == false) {
+	} else if (_paramPointer == propertyValue) {
+		if (propertyToggleMode == true) {
+			if (propertyValue.get() == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
 			}
 		}
-		if (m_enableSingle == true) {
+		if (propertyEnableSingle == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {
@@ -234,28 +233,28 @@ void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPoi
 		}
 		CheckStatus();
 		markToRedraw();
-	} else if (_paramPointer == m_lock) {
-		if(ewol::widget::Button::lockAccess == m_lock.get()) {
+	} else if (_paramPointer == propertyLock) {
+		if(ewol::widget::Button::lockAccess == propertyLock.get()) {
 			m_buttonPressed = false;
 			m_mouseHover = false;
 		}
 		CheckStatus();
 		markToRedraw();
-	} else if (_paramPointer == m_toggleMode) {
-		if (m_value.get() == true) {
-			m_value.get() = false;
+	} else if (_paramPointer == propertyToggleMode) {
+		if (propertyValue.get() == true) {
+			propertyValue.get() = false;
 			// TODO : change display and send event ...
 		}
-		if (m_toggleMode.get() == false) {
+		if (propertyToggleMode.get() == false) {
 			m_idWidgetDisplayed = 0;
 		} else {
-			if (m_value.get() == false) {
+			if (propertyValue.get() == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
 			}
 		}
-		if (m_enableSingle.get() == true) {
+		if (propertyEnableSingle.get() == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {
@@ -268,8 +267,8 @@ void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPoi
 		}
 		CheckStatus();
 		markToRedraw();
-	} else if (_paramPointer == m_enableSingle) {
-		if (m_enableSingle == true) {
+	} else if (_paramPointer == propertyEnableSingle) {
+		if (propertyEnableSingle == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {

@@ -27,6 +27,8 @@ namespace ewol {
 		class Parameter : public ewol::widget::PopUp {
 			public: // signals
 				esignal::Signal<void> signalClose;
+			public: // properties
+				eproperty::Value<std::string> propertyLabelTitle;
 			protected:
 				Parameter();
 				void init();
@@ -34,7 +36,6 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Parameter, "Parameter");
 				virtual ~Parameter();
 			public:
-				void setTitle(std::string _label);
 				void menuAdd(std::string _label, std::string _image, std::shared_ptr<ewol::Widget> _associateWidget);
 				void menuAddGroup(std::string _label);
 				void menuClear();
@@ -48,6 +49,7 @@ namespace ewol {
 				void onCallbackMenuclosed();
 				void onCallbackParameterSave();
 				void onCallbackMenuSelected(const int32_t& _value);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	};
 };

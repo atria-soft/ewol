@@ -30,11 +30,11 @@ ewol::widget::ParameterList::ParameterList() :
 	#else
 		m_paddingSizeY = 2;
 	#endif
-	setCanHaveFocus(true);
 }
 
 void ewol::widget::ParameterList::init() {
 	ewol::widget::WidgetScrolled::init();
+	propertyCanFocus.set(true);
 }
 ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object

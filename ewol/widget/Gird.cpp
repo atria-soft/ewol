@@ -52,7 +52,7 @@ void ewol::widget::Gird::onChangeSize() {
 	m_size -= m_borderSize*2;
 	
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii].widget) {
+		if (m_subWidget[iii].widget != nullptr) {
 			//calculate the origin :
 			vec2 tmpOrigin = m_origin + m_borderSize;
 			if (false == m_gavityButtom) {
@@ -92,8 +92,8 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 		}
 	}
 	//EWOL_DEBUG("Update minimum size");
-	m_minSize = m_userMinSize->getPixel();
-	m_maxSize = m_userMaxSize->getPixel();
+	m_minSize = propertyMinSize->getPixel();
+	m_maxSize = propertyMaxSize->getPixel();
 	m_uniformSizeRow = 0;
 	m_minSize += m_borderSize*2;
 	int32_t lastLineID = 0;
@@ -102,7 +102,7 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 			// change of line : 
 			lastLineID = m_subWidget[iii].row;
 		}
-		if (nullptr != m_subWidget[iii].widget) {
+		if (m_subWidget[iii].widget != nullptr) {
 			m_subWidget[iii].widget->calculateMinMaxSize();
 			vec2 tmpSize = m_subWidget[iii].widget->getCalculateMinSize();
 			EWOL_DEBUG("     [" << iii << "] subWidgetMinSize=" << tmpSize);
@@ -136,7 +136,7 @@ void ewol::widget::Gird::setColNumber(int32_t _colNumber) {
 		size_t errorControl = m_subWidget.size();
 		// remove subWidget :
 		for (int64_t iii=m_subWidget.size(); iii >= 0; iii--) {
-			if (m_subWidget[iii].col>(_colNumber-1)) {
+			if (m_subWidget[iii].col > (_colNumber-1)) {
 				// out of bounds : must remove it ...
 				if (m_subWidget[iii].widget != nullptr) {
 					m_subWidget[iii].widget.reset();
@@ -197,7 +197,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 
 
 void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, std::shared_ptr<ewol::Widget> _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		return;
 	}
 	GirdProperties prop;
@@ -249,7 +249,8 @@ void ewol::widget::Gird::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidge
 }
 
 void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
-	if (_colId<0 || _rowId<0) {
+	if (    _colId < 0
+	     || _rowId < 0) {
 		EWOL_WARNING("[" << getId() << "] try to remove widget with id < 0 col=" << _colId << " row=" << _rowId);
 		return;
 	}
@@ -266,7 +267,7 @@ void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 }
 
 void ewol::widget::Gird::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		return;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
@@ -278,7 +279,8 @@ void ewol::widget::Gird::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidge
 }
 
 void ewol::widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
-	if (_colId<0 || _rowId<0) {
+	if (    _colId < 0
+	     || _rowId < 0) {
 		EWOL_WARNING("[" << getId() << "] try to Unlink widget with id < 0 col=" << _colId << " row=" << _rowId);
 		return;
 	}
@@ -295,41 +297,42 @@ void ewol::widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 
 void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii].widget) {
-			m_subWidget[iii].widget->systemDraw(_displayProp);
+	for (auto &it : m_subWidget) {
+		if (it.widget != nullptr) {
+			it.widget->systemDraw(_displayProp);
 		}
 	}
 }
 
 void ewol::widget::Gird::onRegenerateDisplay() {
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii].widget) {
-			m_subWidget[iii].widget->onRegenerateDisplay();
+	for (auto &it : m_subWidget) {
+		if (it.widget != nullptr) {
+			it.widget->onRegenerateDisplay();
 		}
 	}
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
-	if (true == isHide()) {
+	if (propertyHide == true) {
 		return nullptr;
 	}
 	// for all element in the sizer ...
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (nullptr != m_subWidget[iii].widget) {
-			vec2 tmpSize = m_subWidget[iii].widget->getSize();
-			vec2 tmpOrigin = m_subWidget[iii].widget->getOrigin();
-			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
-			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
-			{
-				std::shared_ptr<ewol::Widget> tmpWidget = m_subWidget[iii].widget->getWidgetAtPos(_pos);
-				if (nullptr != tmpWidget) {
-					return tmpWidget;
-				}
-				// stop searching
-				break;
+	for (auto &it : m_subWidget) {
+		if (it.widget == nullptr) {
+			continue;
+		}
+		vec2 tmpSize = it.widget->getSize();
+		vec2 tmpOrigin = it.widget->getOrigin();
+		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
+		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
+			std::shared_ptr<ewol::Widget> tmpWidget = it.widget->getWidgetAtPos(_pos);
+			if (tmpWidget != nullptr) {
+				return tmpWidget;
 			}
+			// stop searching
+			break;
 		}
 	}
 	return nullptr;
 }
+

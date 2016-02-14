@@ -14,32 +14,34 @@
 #define __class__ "Sizer"
 
 ewol::widget::Sizer::Sizer() :
-  m_mode(*this, "mode", modeHori, "The display mode"),
-  m_borderSize(*this, "border", vec2(0,0), "The sizer border size"),
-  m_animation(animationNone),
-  m_animationTime(0) {
+  propertyMode(*this, "mode", modeHori, "The display mode"),
+  propertyBorderSize(*this, "border", vec2(0,0), "The sizer border size"),
+  propertyAnimation(*this, "annimation", animationNone, "sizer annimation"),
+  propertyAnimationTime(*this, "annimation-time", 0, "time of the anniation") {
 	addObjectType("ewol::widget::Sizer");
-	m_mode.add(modeHori, "hori");
-	m_mode.add(modeVert, "vert");
+	propertyMode.add(modeHori, "hori");
+	propertyMode.add(modeVert, "vert");
+	propertyAnimation.add(animationNone, "none");
+	propertyAnimation.add(animationTop, "top");
+	propertyAnimation.add(animationbuttom, "buttom");
+	propertyAnimation.add(animationLeft, "left");
+	propertyAnimation.add(animationRight, "right");
 }
 
 void ewol::widget::Sizer::init(enum displayMode _mode) {
 	ewol::widget::ContainerN::init();
-	m_mode.set(_mode);
+	propertyMode.set(_mode);
 }
 
 ewol::widget::Sizer::~Sizer() {
-	// disable annimation to remore "remove" error
-	m_animation = animationNone;
-	m_animationTime = 0;
-	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (m_mode == ewol::widget::Sizer::modeVert?"Vert":"Hori") << ")");
+	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (propertyMode == ewol::widget::Sizer::modeVert?"Vert":"Hori") << ")");
 }
 
 
 void ewol::widget::Sizer::onChangeSize() {
 	ewol::Widget::onChangeSize();
-	vec2 tmpBorderSize = m_borderSize->getPixel();
-	EWOL_VERBOSE("[" << getId() << "] update size : " << m_size << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
+	vec2 tmpBorderSize = propertyBorderSize->getPixel();
+	EWOL_VERBOSE("[" << getId() << "] update size : " << m_size << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << propertyBorderSize);
 	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
 	// -1- calculate min-size and expand requested:
 	vec2 minSize(0.0f, 0.0f);
@@ -49,7 +51,7 @@ void ewol::widget::Sizer::onChangeSize() {
 			continue;
 		}
 		vec2 tmpSize = it->getCalculateMinSize();
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			minSize = vec2(std::max(minSize.x(), tmpSize.x()),
 			               minSize.y() + tmpSize.y());
 		} else {
@@ -63,7 +65,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	// -2- Calculate the size to add at every elements...
 	float deltaExpandSize = 0.0f;
 	if (nbWidgetExpand != ivec2(0,0)) {
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			deltaExpandSize = (localWidgetSize.y() - minSize.y()) / float(nbWidgetExpand.y());
 		} else {
 			deltaExpandSize = (localWidgetSize.x() - minSize.x()) / float(nbWidgetExpand.x());
@@ -84,7 +86,7 @@ void ewol::widget::Sizer::onChangeSize() {
 		float residualNext = 0.0f;
 		// get the number of element that need to devide...
 		int32_t countCalculation = nbWidgetExpand.x();
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			countCalculation = nbWidgetExpand.y();
 		}
 		// -4.1- Update every subWidget size
@@ -95,7 +97,7 @@ void ewol::widget::Sizer::onChangeSize() {
 			vec2 tmpSizeMin = it->getSize();
 			vec2 tmpSizeMax = it->getCalculateMaxSize();
 			// Now update his size  his size in X and the curent sizer size in Y:
-			if (m_mode == ewol::widget::Sizer::modeVert) {
+			if (propertyMode == ewol::widget::Sizer::modeVert) {
 				if (it->canExpand().y() == true) {
 					float sizeExpand = tmpSizeMin.y() + deltaExpandSize;
 					if (sizeExpand > tmpSizeMax.y()) {
@@ -127,7 +129,7 @@ void ewol::widget::Sizer::onChangeSize() {
 		if (countCalculation <= 0) {
 			break;
 		}
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			deltaExpandSize = residualNext / float(countCalculation);
 		} else {
 			deltaExpandSize = residualNext / float(countCalculation);
@@ -143,7 +145,7 @@ void ewol::widget::Sizer::onChangeSize() {
 			continue;
 		}
 		// Now update his size  his size in X and the curent sizer size in Y:
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			if (it->canExpand().x() == false) {
 				continue;
 			}
@@ -173,7 +175,7 @@ void ewol::widget::Sizer::onChangeSize() {
 			continue;
 		}
 		vec2 size = it->getSize();
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			underSize += vec2(0.0f, size.y());
 			underSize.setX(std::max(underSize.x(), size.x()));
 		} else {
@@ -184,7 +186,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	vec2 deltas = localWidgetSize - underSize;
 	
 	// -8- Calculate the local origin, depending of the gravity:
-	vec2 tmpOrigin = m_origin + tmpBorderSize + ewol::gravityGenerateDelta(m_gravity, deltas);
+	vec2 tmpOrigin = m_origin + tmpBorderSize + ewol::gravityGenerateDelta(propertyGravity, deltas);
 	// -9- Set sub widget origin:
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
@@ -192,13 +194,13 @@ void ewol::widget::Sizer::onChangeSize() {
 		}
 		vec2 origin;
 		vec2 size = it->getSize();
-		if (m_mode == ewol::widget::Sizer::modeVert) {
-			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(underSize.x()-size.x(),0.0f)));
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
+			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(propertyGravity, vec2(underSize.x()-size.x(),0.0f)));
 		} else {
-			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(m_gravity, vec2(0.0f, underSize.y()-size.y())));
+			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(propertyGravity, vec2(0.0f, underSize.y()-size.y())));
 		}
 		it->setOrigin(origin);
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			tmpOrigin.setY(tmpOrigin.y() + size.y());
 		} else {
 			tmpOrigin.setX(tmpOrigin.x() + size.x());
@@ -217,8 +219,8 @@ void ewol::widget::Sizer::onChangeSize() {
 void ewol::widget::Sizer::calculateMinMaxSize() {
 	EWOL_VERBOSE("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
-	m_minSize = m_userMinSize->getPixel();
-	vec2 tmpBorderSize = m_borderSize->getPixel();
+	m_minSize = propertyMinSize->getPixel();
+	vec2 tmpBorderSize = propertyBorderSize->getPixel();
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	for (auto &it : m_subWidget) {
 		if (it == nullptr) {
@@ -234,7 +236,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 		vec2 tmpSize = it->getCalculateMinSize();
 		EWOL_VERBOSE("[" << getId() << "] NewMinSize=" << tmpSize);
 		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "}     Get minSize="<< tmpSize);
-		if (m_mode == ewol::widget::Sizer::modeVert) {
+		if (propertyMode == ewol::widget::Sizer::modeVert) {
 			m_minSize.setY(m_minSize.y() + tmpSize.y());
 			if (tmpSize.x()>m_minSize.x()) {
 				m_minSize.setX(tmpSize.x());
@@ -251,7 +253,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 }
 
 int32_t ewol::widget::Sizer::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
-	if (m_animation == animationNone) {
+	if (propertyAnimation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 	}
 	// TODO : ...
@@ -259,7 +261,7 @@ int32_t ewol::widget::Sizer::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidg
 }
 
 int32_t ewol::widget::Sizer::subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget) {
-	if (m_animation == animationNone) {
+	if (propertyAnimation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
 	// TODO : ...
@@ -267,7 +269,7 @@ int32_t ewol::widget::Sizer::subWidgetAddStart(std::shared_ptr<ewol::Widget> _ne
 }
 
 void ewol::widget::Sizer::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
-	if (m_animation == animationNone) {
+	if (propertyAnimation == animationNone) {
 		ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
 	}
@@ -276,7 +278,7 @@ void ewol::widget::Sizer::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidg
 }
 
 void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
-	if (m_animation == animationNone) {
+	if (propertyAnimation == animationNone) {
 		ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;
 	}
@@ -286,10 +288,10 @@ void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidg
 
 void ewol::widget::Sizer::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::ContainerN::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_mode) {
+	if (_paramPointer == propertyMode) {
 		markToRedraw();
 		requestUpdateSize();
-	} else if (_paramPointer == m_borderSize) {
+	} else if (_paramPointer == propertyBorderSize) {
 		markToRedraw();
 		requestUpdateSize();
 	}

@@ -66,6 +66,12 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<void> signalCancel;
 				esignal::Signal<std::string> signalValidate;
+			public: // properties
+				eproperty::Value<std::string> propertyPath;
+				eproperty::Value<std::string> propertyFile;
+				eproperty::Value<std::string> propertyLabelTitle;
+				eproperty::Value<std::string> propertyLabelValidate;
+				eproperty::Value<std::string> propertyLabelCancel;
 			protected:
 				FileChooser();
 				void init();
@@ -73,14 +79,6 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(FileChooser, "FileChooser");
 				virtual ~FileChooser();
 			private:
-				std::string m_folder;
-				std::string m_file;
-			public:
-				void setTitle(const std::string& _label);
-				void setValidateLabel(const std::string& _label);
-				void setCancelLabel(const std::string& _label);
-				void setFolder(const std::string& _folder);
-				void setFileName(const std::string& _filename);
 				std::string getCompleateFileName();
 				void updateCurrentFolder();
 			public: // Derived function
@@ -96,6 +94,7 @@ namespace ewol {
 				void onCallbackListFileValidate(const std::string& _value);
 				void onCallbackListValidate();
 				void onCallbackHomePressed();
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	};
 };

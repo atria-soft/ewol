@@ -24,12 +24,12 @@ ewol::widget::List::List() {
 	#else
 		m_paddingSizeY = 2;
 	#endif
-	m_nbVisibleRaw=0;
-	setCanHaveFocus(true);
+	m_nbVisibleRaw = 0;
 }
 
 void ewol::widget::List::init() {
 	ewol::widget::WidgetScrolled::init();
+	propertyCanFocus.set(true);
 }
 
 ewol::widget::List::~List() {

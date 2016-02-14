@@ -20,17 +20,16 @@ namespace ewol {
 		class ColorBar : public ewol::Widget {
 			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
+			public:
+				eproperty::Value<etk::Color<>> propertyValue;
 			protected:
 				ColorBar();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ColorBar, "ColorBar");
 				virtual ~ColorBar();
-				etk::Color<> getCurrentColor();
-				void setCurrentColor(etk::Color<> _newOne);
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
-				etk::Color<> m_currentColor;
 				vec2 m_currentUserPos;
 			protected: // Derived function
 				virtual void onDraw();
@@ -38,6 +37,7 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	};
 };

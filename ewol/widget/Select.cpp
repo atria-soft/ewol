@@ -29,7 +29,7 @@ ewol::widget::Select::Element::Element(int32_t _value, std::string _name, bool _
 
 ewol::widget::Select::Select() :
   signalValue(*this, "value", "Select value change"),
-  m_value(*this, "value", -1, "Value of the Select") {
+  propertyValue(*this, "value", -1, "Value of the Select") {
 	addObjectType("ewol::widget::Select");
 }
 
@@ -46,18 +46,18 @@ ewol::widget::Select::~Select() {
 
 void ewol::widget::Select::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::SpinBase::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_value) {
+	if (_paramPointer == propertyValue) {
 		markToRedraw();
 		if (m_widgetEntry == nullptr) {
 			EWOL_ERROR("Can not acces at entry ...");
 			return;
 		}
 		for (auto &it : m_listElement) {
-			if (it.m_value == m_value.get()) {
+			if (it.m_value == propertyValue.get()) {
 				if (it.m_selected == false) {
 					it.m_selected = true;
-					m_widgetEntry->setValue(it.m_name);
-					signalValue.emit(m_value.get());
+					m_widgetEntry->propertyValue.set(it.m_name);
+					signalValue.emit(propertyValue.get());
 				}
 			} else {
 				it.m_selected = false;
@@ -77,9 +77,9 @@ void ewol::widget::Select::optionSelectDefault() {
 		}
 	}
 	if (m_listElement.size() == 0) {
-		m_widgetEntry->setValue("");
+		m_widgetEntry->propertyValue.set("");
 	}
-	m_widgetEntry->setValue(m_listElement[0].m_name);
+	m_widgetEntry->propertyValue.set(m_listElement[0].m_name);
 }
 
 void ewol::widget::Select::optionRemove(int32_t _value) {
@@ -134,7 +134,7 @@ bool ewol::widget::Select::loadXML(const std::shared_ptr<const exml::Element>& _
 		int32_t select = etk::string_to_bool(valIsSelected);
 		optionAdd(id, valText);
 		if (select == true) {
-			setValue(id);
+			propertyValue.set(id);
 		}
 		
 		EWOL_WARNING("Add option : id='" << valId << "' select='" << valIsSelected << "' text='" << valText << "'");
@@ -158,7 +158,7 @@ void ewol::widget::Select::updateGui() {
 
 void ewol::widget::Select::onCallbackLabelPressed(int32_t _value) {
 	EWOL_VERBOSE("User select:" << _value);
-	setValue(_value);
+	propertyValue.set(_value);
 }
 
 void ewol::widget::Select::onCallbackOpenMenu() {
@@ -176,8 +176,8 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 		EWOL_ERROR("Allocation Error or sizer");
 		return;
 	}
-	mySizer->lockExpand(vec2(true,true));
-	mySizer->setFill(vec2(true,true));
+	mySizer->propertyLockExpand.set(vec2(true,true));
+	mySizer->propertyFill.set(vec2(true,true));
 	// set it in the pop-up-system:
 	tmpContext->setSubWidget(mySizer);
 	for (auto &it : m_listElement) {
@@ -191,8 +191,8 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 			EWOL_ERROR("Allocation Error");
 			continue;
 		}
-		myLabel->setExpand(bvec2(true,true));
-		myLabel->setFill(bvec2(true,true));
+		myLabel->propertyExpand.set(bvec2(true,true));
+		myLabel->propertyFill.set(bvec2(true,true));
 		// set callback
 		myLabel->signalPressed.bind(shared_from_this(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
 		myLabel->signalPressed.bind(tmpContext, &ewol::widget::ContextMenu::destroy);
@@ -207,10 +207,3 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	}
 }
 
-
-void ewol::widget::Select::setValue(int32_t _val) {
-	m_value.set(_val);
-}
-int32_t ewol::widget::Select::getValue() const {
-	return m_value.get();
-};

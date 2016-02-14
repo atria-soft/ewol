@@ -21,6 +21,10 @@ namespace ewol {
 		 * @brief Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
 		 */
 		class WidgetScrolled : public ewol::Widget {
+			public: // properties:
+				eproperty::Value<std::string> propertyShapeVert; //!< Vertical shaper name
+				eproperty::Value<std::string> propertyShapeHori; //!< Horizontal shaper name
+				// TODO : All property
 			public:
 				enum scrollingMode {
 					scroolModeNormal, //!< No Zoom , can UP and down, left and right
@@ -114,6 +118,7 @@ namespace ewol {
 				void setLimitScrolling(float _poucentageLimit) {
 					m_limitScrolling = std::avg(0.1f, _poucentageLimit,0.9f);
 				};
+				void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};
 	}
 }

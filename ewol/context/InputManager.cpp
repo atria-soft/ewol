@@ -359,8 +359,8 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			// we have an event previously ... check delay between click and offset position
 			if (currentTime - eventTable[_pointerID].lastTimeEvent > localLimit.sepatateTime) {
 				cleanElement(eventTable, _pointerID);
-			} else if(    abs(eventTable[_pointerID].downStart.x() - _pos.x()) >= localLimit.DpiOffset
-			           || abs(eventTable[_pointerID].downStart.y() - _pos.y()) >= localLimit.DpiOffset ){
+			} else if(    std::abs(eventTable[_pointerID].downStart.x() - _pos.x()) >= localLimit.DpiOffset
+			           || std::abs(eventTable[_pointerID].downStart.y() - _pos.y()) >= localLimit.DpiOffset ){
 				cleanElement(eventTable, _pointerID);
 			}
 		}
@@ -442,8 +442,8 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			                gale::key::status_up,
 			                _pos);
 			// generate event (single)
-			if(    abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
-			    && abs(eventTable[_pointerID].downStart.y() - _pos.y()) < localLimit.DpiOffset ){
+			if(    std::abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
+			    && std::abs(eventTable[_pointerID].downStart.y() - _pos.y()) < localLimit.DpiOffset ){
 				// Save current position :
 				eventTable[_pointerID].downStart = _pos;
 				// save start time

@@ -18,9 +18,10 @@ namespace ewol {
 		 * ==> this permit to generate standard element simple
 		 */
 		class Select : public ewol::widget::SpinBase {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<int32_t> signalValue;
+			public: // properties
+				eproperty::Value<int32_t> propertyValue; //!< Current state of the Select.
 			protected:
 				/**
 				 * @brief Constructor
@@ -34,13 +35,6 @@ namespace ewol {
 				 * @brief Destructor
 				 */
 				virtual ~Select();
-				/**
-				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
-				 * @param[in] _shaperName The new shaper filename
-				 */
-				void setShaperName(const std::string& _shaperName) {
-					//m_shaper.setString(_shaperName);
-				}
 			protected:
 				class Element {
 					public:
@@ -56,21 +50,6 @@ namespace ewol {
 				void optionRemove(int32_t _value);
 				void optionClear();
 				void optionAdd(int32_t _value, std::string _name);
-			protected:
-				eproperty::Value<int32_t> m_value; //!< Current state of the Select.
-			public:
-				/**
-				 * @brief set the currentValue of the Select (pressed or not)
-				 * @note Work only in toggle mode
-				 * @param[in] _val New value of the Select
-				 */
-				void setValue(int32_t _val);
-				/**
-				 * @brief get the current Select value.
-				 * @return True : The Select is pressed.
-				 * @return false : The Select is released.
-				 */
-				int32_t getValue() const;
 			protected:
 				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);

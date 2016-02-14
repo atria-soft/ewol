@@ -69,6 +69,16 @@ namespace ewol {
 	 * 
 	 */
 	class Widget : public ewol::Object {
+		public: // signals:
+			
+		public: // properties:
+			eproperty::Value<gale::Dimension> propertyMinSize; //!< user define the minimum size of the widget
+			eproperty::Value<gale::Dimension> propertyMaxSize; //!< user define the maximum size of the widget
+			eproperty::Value<bvec2> propertyExpand; //!< the widget will expand if possible
+			eproperty::Value<bvec2> propertyFill; //!< the widget will fill all the space provided by the parrent.
+			eproperty::Value<bool> propertyHide; //!< hide a widget on the display
+			eproperty::List<enum ewol::gravity> propertyGravity; //!< Gravity of the widget
+			eproperty::Value<bool> propertyCanFocus; //!< the focus can be done on this widget
 		protected:
 			/**
 			 * @brief Constructor of the widget classes
@@ -183,27 +193,11 @@ namespace ewol {
 			 * @return coordonate of the origin requested
 			 */
 			virtual vec2 getOrigin();
-		protected:
-			eproperty::Value<gale::Dimension> m_userMinSize; //!< user define the minimum size of the widget
 		public:
-			/**
-			 * @brief User set the minimum size he want to set the display
-			 * @param[in] _size set minimum size (none : 0)
-			 */
-			void setMinSize(const gale::Dimension& _size) {
-				m_userMinSize.set(_size);
-			}
 			/**
 			 * @brief User set No minimum size.
 			 */
-			void setNoMinSize();
-			/**
-			 * @brief get the current calculated min size
-			 * @return the size requested
-			 */
-			const gale::Dimension& getMinSize() {
-				return m_userMinSize.get();
-			};
+			void setNoMinSize(); // TODO : Remove ==> default ... of the property
 			/**
 			 * @brief Check if the current min size is compatible with the user minimum size
 			 *        If it is not the user minimum size will overWrite the minimum size set.
@@ -211,124 +205,38 @@ namespace ewol {
 			 */
 			virtual void checkMinSize();
 		protected:
-			eproperty::Value<gale::Dimension> m_userMaxSize; //!< user define the maximum size of the widget
+			
 		public:
-			/**
-			 * @brief User set the maximum size he want to set the display
-			 * @param[in] _size The new maximum size requested (vec2(0,0) to unset)
-			 */
-			void setMaxSize(const gale::Dimension& _size) {
-				m_userMaxSize.set(_size);
-			}
 			/**
 			 * @brief User set No maximum size.
 			 */
-			void setNoMaxSize();
-			/**
-			 * @brief get the current maximum size
-			 * @return the size requested
-			 */
-			const gale::Dimension& getMaxSize() {
-				return m_userMaxSize.get();
-			};
+			void setNoMaxSize(); // TODO : Remove ==> default ... of the property
 			/**
 			 * @brief Check if the current max size is compatible with the user maximum size
 			 *        If it is not the user maximum size will overWrite the maximum size set.
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual void checkMaxSize();
-		protected:
-			eproperty::Value<bvec2> m_userExpand;
 		public:
-			/**
-			 * @brief set the expend capabilities (x&y)
-			 * @param[in] _newExpend 2D boolean repensent the capacity to expend
-			 */
-			virtual void setExpand(const bvec2& _newExpand) {
-				m_userExpand.set(_newExpand);
-			}
-			/**
-			 * @brief get the expend capabilities (x&y) (set by the user)
-			 * @return 2D boolean repensent the capacity to expend
-			 */
-			virtual bvec2 getExpand() {
-				return m_userExpand;
-			};
 			/**
 			 * @brief get the expend capabilities (x&y)
 			 * @return 2D boolean repensent the capacity to expend
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual bvec2 canExpand();
-		protected:
-			eproperty::Value<bvec2> m_userFill;
 		public:
-			/**
-			 * @brief set the x&y filling capacity
-			 * @param[in] _newFill new x&y fill state
-			 */
-			virtual void setFill(const bvec2& _newFill) {
-				m_userFill.set(_newFill);
-			}
-			/**
-			 * @brief set the x&y filling capacity set by the user
-			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
-			 */
-			virtual const bvec2& getFill() {
-				return m_userFill;
-			};
 			/**
 			 * @brief get the filling capabilities x&y
 			 * @return bvec2 repensent the capacity to x&y filling
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			const bvec2& canFill();
-		protected:
-			eproperty::Value<bool> m_hide; //!< hide a widget on the display
-		public:
-			/**
-			 * @brief set the widget hidden
-			 */
-			virtual void hide() {
-				m_hide.set(true);
-			}
-			/**
-			 * @brief set the widget visible
-			 */
-			virtual void show() {
-				m_hide.set(false);
-			}
-			/**
-			 * @brief get the visibility of the widget
-			 * @return true: if the widget is hiden, false: it is visible
-			 */
-			virtual bool isHide() {
-				return m_hide;
-			};
-		
-		protected:
-			eproperty::List<enum ewol::gravity> m_gravity; //!< Gravity of the widget
-		public:
-			/**
-			 * @brief set the widget gravity
-			 * @param[in] _gravity New gravity of the widget
-			 */
-			virtual void setGravity(enum ewol::gravity _gravity) {
-				m_gravity.set(_gravity);
-			}
-			/**
-			 * @brief get the widget gravity
-			 * @return the gravity type
-			 */
-			virtual enum ewol::gravity getGravity() {
-				return m_gravity;
-			};
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- focus Area
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
 			bool m_hasFocus; //!< set the focus on this widget
-			eproperty::Value<bool> m_canFocus; //!< the focus can be done on this widget
+			
 		public:
 			/**
 			 * @brief get the focus state of the widget
@@ -336,13 +244,6 @@ namespace ewol {
 			 */
 			virtual bool getFocus() {
 				return m_hasFocus;
-			};
-			/**
-			 * @brief get the capability to have focus
-			 * @return State capability to have focus
-			 */
-			virtual bool canHaveFocus() {
-				return m_canFocus;
 			};
 			/**
 			 * @brief set focus on this widget
@@ -354,13 +255,6 @@ namespace ewol {
 			 * @return return true if the widget have release his focus (if he has it)
 			 */
 			virtual bool rmFocus();
-			/**
-			 * @brief set the capability to have the focus
-			 * @param[in] _canFocusState new focus capability
-			 */
-			virtual void setCanHaveFocus(bool _canFocusState) {
-				m_canFocus.set(_canFocusState);
-			}
 			/**
 			 * @brief keep the focus on this widget  == > this remove the previous focus on all other widget
 			 */
@@ -455,7 +349,7 @@ namespace ewol {
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
-				if (false == isHide()) {
+				if (propertyHide.get() == false) {
 					return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 				}
 				return nullptr;
@@ -652,10 +546,10 @@ namespace ewol {
 			enum annimationMode m_annimationMode; //!< true when the annimation is started
 			float m_annimationratio; //!< Ratio of the annimation [0..1]
 		protected:
-			eproperty::List<int32_t> m_annimationTypeStart; //!< type of start annimation
-			eproperty::Range<float> m_annimationTimeStart; //!< time to produce start annimation
-			eproperty::List<int32_t> m_annimationTypeStop; //!< type of start annimation
-			eproperty::Range<float> m_annimationTimeStop; //!< time to produce start annimation
+			eproperty::List<int32_t> propertyAnnimationTypeStart; //!< type of start annimation
+			eproperty::Range<float> propertyAnnimationTimeStart; //!< time to produce start annimation
+			eproperty::List<int32_t> propertyAnnimationTypeStop; //!< type of start annimation
+			eproperty::Range<float> propertyAnnimationTimeStop; //!< time to produce start annimation
 		protected:
 			/**
 			 * @brief Add a annimation type capabilities of this widget.

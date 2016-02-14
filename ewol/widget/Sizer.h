@@ -21,17 +21,28 @@ namespace ewol {
 		 */
 		class Sizer : public ewol::widget::ContainerN {
 			public:
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
-			public:
 				enum displayMode {
 					modeVert, //!< Vertical mode
 					modeHori, //!< Horizontal mode
 				};
-			protected:
-				eproperty::List<enum displayMode> m_mode; //!< Methode to display the widget list (vert/hory ...)
+				enum animation {
+					animationNone, //!< No annimation
+					animationTop, //!< element came from the top
+					animationbuttom, //!< element came from the buttom
+					animationLeft, //!< element came from the Left
+					animationRight //!< element came from the right
+					//animationZoom //!< element came from zooming
+				};
+			public: // properties:
+				eproperty::List<enum displayMode> propertyMode; //!< Methode to display the widget list (vert/hory ...)
+				eproperty::Value<gale::Dimension> propertyBorderSize; //!< Border size needed for all the display
+				eproperty::List<enum animation> propertyAnimation; //!< Methode add and remove element (animation)
+				eproperty::Value<float> propertyAnimationTime; //!< Time in second to generate animation
+			public:
+				/**
+				 * @brief Main call of recording the widget on the List of "widget named creator"
+				 */
+				static void init(ewol::widget::Manager& _widgetManager);
 			protected:
 				/**
 				 * @brief Constructor
@@ -45,80 +56,6 @@ namespace ewol {
 				 * @brief Destructor
 				 */
 				virtual ~Sizer();
-				/**
-				 * @brief set the mode to display elements.
-				 * @param[in] _mode The mode to display the elements.
-				 */
-				void setMode(enum displayMode _mode) {
-					m_mode.set(_mode);
-				}
-				/**
-				 * @brief get the mode to display elements.
-				 * @return The current mode to display the elements.
-				 */
-				enum displayMode getMode() const {
-					return m_mode;
-				}
-			protected:
-				eproperty::Value<gale::Dimension> m_borderSize; //!< Border size needed for all the display
-			public:
-				/**
-				 * @brief set the current border size of the current element:
-				 * @param[in] _newBorderSize The border size to set (0 if not used)
-				 */
-				void setBorderSize(const gale::Dimension& _newBorderSize) {
-					m_borderSize.set(_newBorderSize);
-				}
-				/**
-				 * @brief get the current border size of the current element:
-				 * @return the border size (0 if not used)
-				 */
-				const gale::Dimension& getBorderSize() const {
-					return m_borderSize;
-				};
-			public:
-				enum animation {
-					animationNone, //!< No annimation
-					animationTop, //!< element came from the top
-					animationbuttom, //!< element came from the buttom
-					animationLeft, //!< element came from the Left
-					animationRight //!< element came from the right
-					//animationZoom //!< element came from zooming
-				};
-			protected:
-				enum animation m_animation; //!< Methode add and remove element (animation)
-			public:
-				/**
-				 * @brief set an animation mode for the new element set in the Widget container.
-				 * @param[in] _animation The new animation mode.
-				 */
-				void setAnimationMode(enum animation _animation) {
-					m_animation = _animation;
-				};
-				/**
-				 * @brief get the current animation mode.
-				 * @return The animation mode.
-				 */
-				enum animation getAnimationMode() {
-					return m_animation;
-				};
-			protected:
-				float m_animationTime; //!< Time in second to generate animation
-			public:
-				/**
-				 * @brief set the time to produce animation.
-				 * @param[in] _time The new animation time.
-				 */
-				void setAnimationTime(float _time) {
-					m_animationTime = _time;
-				};
-				/**
-				 * @brief get the current animation time.
-				 * @return The time to produce the animation.
-				 */
-				float getAnimationTime() {
-					return m_animationTime;
-				};
 			public: // Derived function
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();

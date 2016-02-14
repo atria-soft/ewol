@@ -18,7 +18,8 @@
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :
   signalPressed(*this, "pressed"),
-  m_label(*this, "value", U"", "displayed value string"),
+  propertyValue(*this, "value", "", "displayed value string"),
+  m_value(U""),
   m_colorProperty(nullptr),
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
@@ -28,13 +29,13 @@ ewol::widget::Label::Label() :
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
-	setCanHaveFocus(false);
 	setMouseLimit(1);
 }
 
 void ewol::widget::Label::init(std::string _newLabel) {
 	ewol::Widget::init();
-	m_label.setString(_newLabel);
+	propertyCanFocus.set(false);
+	propertyValue.set(_newLabel);
 }
 
 ewol::widget::Label::~Label() {
@@ -42,14 +43,14 @@ ewol::widget::Label::~Label() {
 }
 
 void ewol::widget::Label::calculateMinMaxSize() {
-	vec2 tmpMax = m_userMaxSize->getPixel();
-	vec2 tmpMin = m_userMinSize->getPixel();
+	vec2 tmpMax = propertyMaxSize->getPixel();
+	vec2 tmpMin = propertyMinSize->getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::alignLeft);
 		//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
 	}
-	vec3 minSize = m_text.calculateSizeDecorated(m_label.get());
+	vec3 minSize = m_text.calculateSizeDecorated(m_value);
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
 	
 	m_minSize.setX(std::avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
@@ -68,7 +69,7 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	m_text.clear();
 	int32_t paddingSize = 2;
 	
-	vec2 tmpMax = m_userMaxSize->getPixel();
+	vec2 tmpMax = propertyMaxSize->getPixel();
 	// to know the size of one line : 
 	vec3 minSize = m_text.calculateSize(char32_t('A'));
 	
@@ -77,7 +78,7 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}
-	vec3 curentTextSize = m_text.calculateSizeDecorated(m_label.get());
+	vec3 curentTextSize = m_text.calculateSizeDecorated(m_value);
 	
 	ivec2 localSize = m_minSize;
 	
@@ -86,11 +87,11 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
-	if (m_userFill->x() == true) {
+	if (propertyFill->x() == true) {
 		localSize.setX(m_size.x());
 		tmpTextOrigin.setX(0);
 	}
-	if (m_userFill->y() == true) {
+	if (propertyFill->y() == true) {
 		localSize.setY(m_size.y());
 		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 	}
@@ -113,15 +114,15 @@ void ewol::widget::Label::onRegenerateDisplay() {
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
 	}
 	m_text.setPos(tmpTextOrigin);
-	EWOL_VERBOSE("[" << getId() << "] {" << m_label.get() << "} display at pos : " << tmpTextOrigin);
+	EWOL_VERBOSE("[" << getId() << "] {" << m_value << "} display at pos : " << tmpTextOrigin);
 	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);
 	m_text.setClipping(drawClippingPos, drawClippingSize);
-	m_text.printDecorated(m_label.get());
+	m_text.printDecorated(m_value);
 }
 
 bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Label ...");
-	if (1 == _event.getId()) {
+	if (_event.getId() == 1) {
 		if (gale::key::status_single == _event.getStatus()) {
 			// nothing to do ...
 			signalPressed.emit();
@@ -138,13 +139,14 @@ bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _n
 	ewol::Widget::loadXML(_node);
 	// get internal data : 
 	EWOL_DEBUG("Load label:" << _node->getText());
-	setLabel(_node->getText());
+	propertyValue.set(_node->getText());
 	return true;
 }
 
 void ewol::widget::Label::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_label) {
+	if (_paramPointer == propertyValue) {
+		m_value = etk::to_u32string(propertyValue.get());
 		markToRedraw();
 		requestUpdateSize();
 	}

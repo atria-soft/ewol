@@ -15,7 +15,9 @@
 #define __class__ "Scroll"
 
 ewol::widget::Scroll::Scroll() :
-  m_limit(*this, "limit", vec2(0.15,0.5), vec2(0.0,0.0), vec2(1.0,1.0), "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end"),
+  propertyLimit(*this, "limit", vec2(0.15,0.5), vec2(0.0,0.0), vec2(1.0,1.0), "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end"),
+  propertyShapeVert(*this, "shape-vert", "", "shape for the vertical display"),
+  propertyShapeHori(*this, "shape-hori", "", "shape for the horizonal display"),
   m_pixelScrolling(20),
   m_highSpeedStartPos(0,0),
   m_highSpeedMode(speedModeDisable),
@@ -26,18 +28,13 @@ ewol::widget::Scroll::Scroll() :
 
 void ewol::widget::Scroll::init(const std::string& _shaperName) {
 	ewol::widget::Container::init();
-	m_shaperH.setSource(_shaperName);
-	m_shaperV.setSource(_shaperName);
+	propertyShapeVert.set(_shaperName);
+	propertyShapeHori.set(_shaperName);
 }
 
 
 ewol::widget::Scroll::~Scroll() {
 	
-}
-
-void ewol::widget::Scroll::setLimit(const vec2& _limit) {
-	m_limit.set(_limit);
-	markToRedraw();
 }
 
 #define SCROLL_BAR_SPACE      (15)
@@ -46,16 +43,16 @@ void ewol::widget::Scroll::calculateMinMaxSize() {
 	// call main class !! and not containter class ...
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		m_subWidget->calculateMinMaxSize();
 	}
 }
 
 void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (m_hide == true) {
+	if (propertyHide == true) {
 		return;
 	}
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		ewol::DrawProperty prop = _displayProp;
 		prop.limit(m_origin, m_size);
 		m_subWidget->systemDraw(prop);
@@ -89,7 +86,7 @@ void ewol::widget::Scroll::onRegenerateDisplay() {
 	    || scrollOffset.y()!=0) {
 		float lenScrollBar = m_size.y()*m_size.y() / scrollSize.y();
 		lenScrollBar = std::avg(10.0f, lenScrollBar, m_size.y());
-		float originScrollBar = scrollOffset.y() / (scrollSize.y()-m_size.y()*m_limit->y());
+		float originScrollBar = scrollOffset.y() / (scrollSize.y()-m_size.y()*propertyLimit->y());
 		originScrollBar = std::avg(0.0f, originScrollBar, 1.0f);
 		originScrollBar *= (m_size.y()-lenScrollBar);
 		m_shaperV.setShape(vec2(m_size.x() - paddingVert.x(), 0),
@@ -101,7 +98,7 @@ void ewol::widget::Scroll::onRegenerateDisplay() {
 	    || scrollOffset.x()!=0) {
 		float lenScrollBar = (m_size.x()-paddingHori.xLeft())*(m_size.x()-paddingVert.x()) / scrollSize.x();
 		lenScrollBar = std::avg(10.0f, lenScrollBar, (m_size.x()-paddingVert.x()));
-		float originScrollBar = scrollOffset.x() / (scrollSize.x()-m_size.x()*m_limit->x());
+		float originScrollBar = scrollOffset.x() / (scrollSize.x()-m_size.x()*propertyLimit->x());
 		originScrollBar = std::avg(0.0f, originScrollBar, 1.0f);
 		originScrollBar *= (m_size.x()-paddingHori.xRight()-lenScrollBar);
 		m_shaperH.setShape(vec2(0, 0),
@@ -139,7 +136,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					m_highSpeedButton = 1;
 					// force direct scrolling in this case
 					scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
-					scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit->y())));
+					scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 					markToRedraw();
 					if (nullptr!=m_subWidget) {
 						m_subWidget->setOffset(scrollOffset);
@@ -156,7 +153,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					m_highSpeedButton = 1;
 					// force direct scrolling in this case
 					scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
-					scrollOffset.setY(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*m_limit->x())));
+					scrollOffset.setY(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x())));
 					markToRedraw();
 					if (nullptr!=m_subWidget) {
 						m_subWidget->setOffset(scrollOffset);
@@ -169,7 +166,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 		           && _event.getStatus() == gale::key::status_up) {
 			if(m_size.y() < scrollSize.y()) {
 				scrollOffset.setY(scrollOffset.y()-m_pixelScrolling);
-				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit->y())));
+				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				markToRedraw();
 				if (nullptr!=m_subWidget) {
 					m_subWidget->setOffset(scrollOffset);
@@ -180,7 +177,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 		           && _event.getStatus() == gale::key::status_up) {
 			if(m_size.y() < scrollSize.y()) {
 				scrollOffset.setY(scrollOffset.y()+m_pixelScrolling);
-				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit->y())));
+				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				markToRedraw();
 				if (nullptr!=m_subWidget) {
 					m_subWidget->setOffset(scrollOffset);
@@ -227,8 +224,8 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			} else if(    m_highSpeedMode == speedModeInit
 			           && _event.getStatus() == gale::key::status_move) {
 				// wait that the cursor move more than 10 px to enable it :
-				if(    abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
-				    || abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
+				if(    std::abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
+				    || std::abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
 					// the scrooling can start : 
 					// select the direction :
 					if (relativePos.x() == m_highSpeedStartPos.x()) {
@@ -237,7 +234,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 						m_highSpeedMode = speedModeEnableHorizontal;
 					} else {
 						float coef = (relativePos.y() - m_highSpeedStartPos.y()) / (relativePos.x() - m_highSpeedStartPos.x());
-						if (abs(coef) <= 1 ) {
+						if (std::abs(coef) <= 1 ) {
 							m_highSpeedMode = speedModeEnableHorizontal;
 						} else {
 							m_highSpeedMode = speedModeEnableVertical;
@@ -250,8 +247,8 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					}
 					markToRedraw();
 				}
-				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit->y())));
-				if (nullptr!=m_subWidget) {
+				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
+				if (m_subWidget != nullptr) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -259,9 +256,9 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			if(    m_highSpeedMode == speedModeEnableHorizontal
 			    && _event.getStatus() == gale::key::status_move) {
 				scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
-				scrollOffset.setX(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*m_limit->x() )));
+				scrollOffset.setX(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x() )));
 				markToRedraw();
-				if (nullptr!=m_subWidget) {
+				if (m_subWidget != nullptr) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -269,9 +266,9 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			if(    m_highSpeedMode == speedModeEnableVertical
 			    && _event.getStatus() == gale::key::status_move) {
 				scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
-				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit->x())));
+				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->x())));
 				markToRedraw();
-				if (nullptr!=m_subWidget) {
+				if (m_subWidget != nullptr) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -297,8 +294,8 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			} else if (    m_highSpeedMode == speedModeInit
 			            && gale::key::status_move == _event.getStatus()) {
 				// wait that the cursor move more than 10 px to enable it :
-				if(    abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
-				    || abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
+				if(    std::abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
+				    || std::abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
 					// the scrooling can start : 
 					// select the direction :
 					m_highSpeedMode = speedModeEnableFinger;
@@ -311,19 +308,19 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			     && gale::key::status_move == _event.getStatus()) {
 				EWOL_VERBOSE("SCROOL  == > INIT scrollOffset=" << scrollOffset.y() << " relativePos=" << relativePos.y() << " m_highSpeedStartPos=" << m_highSpeedStartPos.y());
 				//scrollOffset.x = (int32_t)(scrollSize.x * x / m_size.x);
-				if (m_limit->x() != 0.0f) {
+				if (propertyLimit->x() != 0.0f) {
 					scrollOffset.setX(scrollOffset.x() + (relativePos.x() - m_highSpeedStartPos.x()));
-					scrollOffset.setX(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*m_limit->x())));
+					scrollOffset.setX(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x())));
 				}
-				if (m_limit->y() != 0.0f) {
+				if (propertyLimit->y() != 0.0f) {
 					scrollOffset.setY(scrollOffset.y() - (relativePos.y() - m_highSpeedStartPos.y()));
-					scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*m_limit->y())));
+					scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				}
 				// update current position:
 				m_highSpeedStartPos = relativePos;
 				EWOL_VERBOSE("SCROOL  == > MOVE " << scrollOffset);
 				markToRedraw();
-				if (nullptr!=m_subWidget) {
+				if (m_subWidget != nullptr) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -345,15 +342,21 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 
 std::shared_ptr<ewol::Widget> ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
 	std::shared_ptr<ewol::Widget> tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
-	if (nullptr != tmpWidget) {
+	if (tmpWidget != nullptr) {
 		return tmpWidget;
 	}
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());;
 }
 void ewol::widget::Scroll::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_limit) {
-		
+	if (_paramPointer == propertyLimit) {
+		markToRedraw();
+	} else if (_paramPointer == propertyShapeVert) {
+		m_shaperV.setSource(propertyShapeVert);
+		markToRedraw();
+	} else if (_paramPointer == propertyShapeHori) {
+		m_shaperH.setSource(propertyShapeHori);
+		markToRedraw();
 	}
 }
 

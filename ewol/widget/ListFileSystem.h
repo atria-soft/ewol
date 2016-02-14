@@ -18,12 +18,18 @@ namespace ewol {
 		 * @brief Generic display folder class. This widget display the content of a single folder :
 		 */
 		class ListFileSystem : public ewol::widget::List {
-			public:
-				// Event list of properties
+			public: // signals
 				esignal::Signal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
 				esignal::Signal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
 				esignal::Signal<std::string> signalFolderSelect;
 				esignal::Signal<std::string> signalFolderValidate;
+			public: // properties
+				eproperty::Value<std::string> propertyPath; //!< Current folder that display point on.
+				eproperty::Value<std::string> propertyFile; //!< current selected file
+				eproperty::Value<bool> propertyShowFile; //!< Show files elements
+				eproperty::Value<bool> propertyShowFolder; //!< Display the folders elements
+				eproperty::Value<bool> propertyShowHidden; //!< Display hidden elements
+				eproperty::Value<std::string> propertyFilter; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
 			protected:
 				ListFileSystem();
 				void init();
@@ -44,6 +50,7 @@ namespace ewol {
 				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
 				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
 			protected:
+				// TODO: use shred_ptr
 				std::vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)
 				/**
 				 * @brief Clean the list of element.
@@ -66,92 +73,6 @@ namespace ewol {
 				 * @return the String of the element selected.
 				 */
 				std::string getSelect() const ;
-			protected:
-				eproperty::Value<std::string> m_folder; //!< Current folder that display point on.
-				eproperty::Value<std::string, true> m_selectFile; //!< current selected file
-			public:
-				/**
-				 * @brief Set a folder to display (might be a valid folder !!!)
-				 * @param[in] _newFolder Path on the folder to display content.
-				 */
-				void setFolder(const std::string& _newFolder) {
-					m_folder.set(_newFolder);
-				};
-				/**
-				 * @brief Get the element current displaying folder path.
-				 * @return Path on the folder.
-				 */
-				const std::string& getFolder() const {
-					return m_folder;
-				};
-			protected:
-				eproperty::Value<bool> m_showFile; //!< Show files elements
-			public:
-				/**
-				 * @brief Set the status of the displaying files or Not.
-				 * @param[in] _state New state to apply on display the 'file'.
-				 */
-				void setShowFiles(bool _state) {
-					m_showFile.set(_state);
-				};
-				/**
-				 * @brief Get the status of the displaying files or Not.
-				 * @return The status on displaying the 'file'.
-				 */
-				bool getShowFiles() const {
-					return m_showFile;
-				};
-			protected:
-				eproperty::Value<bool> m_showFolder; //!< Display the folders elements
-			public:
-				/**
-				 * @brief Set the status of the displaying fodlers or Not.
-				 * @param[in] _state New state to apply on display the 'folder'.
-				 */
-				void setShowFolder(bool _state) {
-					m_showFolder.set(_state);
-				};
-				/**
-				 * @brief Get the status of the displaying fodlers or Not.
-				 * @return The status on displaying the 'folder'.
-				 */
-				bool getShowFolder() const {
-					return m_showFile;
-				};
-			protected:
-				eproperty::Value<bool> m_showHidden; //!< Display hidden elements
-			public:
-				/**
-				 * @brief Set the status of the displaying hidden files or folder or Not.
-				 * @param[in] _state New state to apply on display the hidden element.
-				 */
-				void setShowHidden(bool _state) {
-					m_showHidden.set(_state);
-				};
-				/**
-				 * @brief Get the status of the displaying hidden files or folder or Not.
-				 * @return The status on displaying the hidden element.
-				 */
-				bool getShowHidden() const {
-					return m_showFile;
-				};
-			protected:
-				eproperty::Value<bool> m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
-			public:
-				/**
-				 * @brief Set the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
-				 * @param[in] _state New state to apply on display temporary files.
-				 */
-				void setShowTemporaryFiles(bool _state) {
-					m_showTemporaryFile.set(_state);
-				};
-				/**
-				 * @brief Get the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
-				 * @return The status on displaying temporary files.
-				 */
-				bool getShowTemporaryFiles() const {
-					return m_showFile;
-				};
 			public: // glocal derived functions
 				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		};

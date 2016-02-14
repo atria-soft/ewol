@@ -105,7 +105,10 @@ class LocalInstanceTranslation {
 		
 		const std::string& get(const std::string& _instance) {
 			loadTranslation();
-			auto it = m_translate.find(_instance);
+			if (etk::start_with(_instance, "TRANSLATE:") == false) {
+				return _instance;
+			}
+			auto it = m_translate.find(std::string(_instance.begin() + 9, _instance.end()));
 			if (it == m_translate.end()) {
 				EWOL_DEBUG("Can not find tranlation : '" << _instance << "'");
 				return _instance;

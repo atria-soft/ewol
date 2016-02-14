@@ -17,16 +17,16 @@
 const int32_t dotRadius = 6;
 
 ewol::widget::ProgressBar::ProgressBar() :
-  m_value(*this, "value", 0.0f, "Value of the progress bar"),
-  m_textColorFg(*this, "color-bg", etk::color::black, "Background color"),
-  m_textColorBgOn(*this, "color-on", etk::Color<>(0x00, 0xFF, 0x00, 0xFF), "Color of the true value"),
-  m_textColorBgOff(*this, "color-off", etk::color::none, "Color of the false value") {
+  propertyValue(*this, "value", 0.0f, 0.0f, 1.0f, "Value of the progress bar"),
+  propertyTextColorFg(*this, "color-bg", etk::color::black, "Background color"),
+  propertyTextColorBgOn(*this, "color-on", etk::Color<>(0x00, 0xFF, 0x00, 0xFF), "Color of the true value"),
+  PropertyTextColorBgOff(*this, "color-off", etk::color::none, "Color of the false value") {
 	addObjectType("ewol::widget::ProgressBar");
-	setCanHaveFocus(true);
 }
 
 void ewol::widget::ProgressBar::init() {
 	ewol::Widget::init();
+	propertyCanFocus.set(true);
 }
 
 ewol::widget::ProgressBar::~ProgressBar() {
@@ -34,14 +34,9 @@ ewol::widget::ProgressBar::~ProgressBar() {
 }
 
 void ewol::widget::ProgressBar::calculateMinMaxSize() {
-	vec2 tmpMin = m_userMinSize->getPixel();
+	vec2 tmpMin = propertyMinSize->getPixel();
 	m_minSize.setValue( std::max(tmpMin.x(), 40.0f),
 	                    std::max(tmpMin.y(), dotRadius*2.0f) );
-	markToRedraw();
-}
-
-void ewol::widget::ProgressBar::setValue(float _val) {
-	m_value = std::avg(0.0f, _val, 1.0f);
 	markToRedraw();
 }
 
@@ -50,38 +45,39 @@ void ewol::widget::ProgressBar::onDraw() {
 }
 
 void ewol::widget::ProgressBar::onRegenerateDisplay() {
-	if (true == needRedraw()) {
-		// clean the object list ...
-		m_draw.clear();
-		
-		m_draw.setColor(m_textColorFg);
-		
-		int32_t tmpSizeX = m_size.x() - 10;
-		int32_t tmpSizeY = m_size.y() - 10;
-		int32_t tmpOriginX = 5;
-		int32_t tmpOriginY = 5;
-		m_draw.setColor(m_textColorBgOn);
-		m_draw.setPos(vec3(tmpOriginX, tmpOriginY, 0) );
-		m_draw.rectangleWidth(vec3(tmpSizeX*m_value, tmpSizeY, 0) );
-		m_draw.setColor(m_textColorBgOff);
-		m_draw.setPos(vec3(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
-		m_draw.rectangleWidth(vec3(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
-		
-		// TODO : Create a better progress Bar ...
-		//m_draw.setColor(m_textColorFg);
-		//m_draw.rectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
+	if (needRedraw() == false) {
+		return;
 	}
+	// clean the object list ...
+	m_draw.clear();
+	
+	m_draw.setColor(propertyTextColorFg);
+	
+	int32_t tmpSizeX = m_size.x() - 10;
+	int32_t tmpSizeY = m_size.y() - 10;
+	int32_t tmpOriginX = 5;
+	int32_t tmpOriginY = 5;
+	m_draw.setColor(propertyTextColorBgOn);
+	m_draw.setPos(vec3(tmpOriginX, tmpOriginY, 0) );
+	m_draw.rectangleWidth(vec3(tmpSizeX*propertyValue, tmpSizeY, 0) );
+	m_draw.setColor(PropertyTextColorBgOff);
+	m_draw.setPos(vec3(tmpOriginX+tmpSizeX*propertyValue, tmpOriginY, 0) );
+	m_draw.rectangleWidth(vec3(tmpSizeX*(1.0-propertyValue), tmpSizeY, 0) );
+	
+	// TODO : Create a better progress Bar ...
+	//m_draw.setColor(propertyTextColorFg);
+	//m_draw.rectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
 }
 
 void ewol::widget::ProgressBar::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_value) {
+	if (_paramPointer == propertyValue) {
 		markToRedraw();
-	} else if (_paramPointer == m_textColorFg) {
+	} else if (_paramPointer == propertyTextColorFg) {
 		markToRedraw();
-	} else if (_paramPointer == m_textColorBgOn) {
+	} else if (_paramPointer == propertyTextColorBgOn) {
 		markToRedraw();
-	} else if (_paramPointer == m_textColorBgOff) {
+	} else if (_paramPointer == PropertyTextColorBgOff) {
 		markToRedraw();
 	}
 }

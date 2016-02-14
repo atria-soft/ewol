@@ -104,7 +104,7 @@ std::shared_ptr<ewol::Object> ewol::widget::Container2::getSubObjectNamed(const 
 }
 
 void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (true == m_hide){
+	if (propertyHide.get() == true){
 		// widget is hidden ...
 		return;
 	}
@@ -119,21 +119,21 @@ ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& 
 	vec2 localAvaillable = m_size - vec2(_padding.x(), _padding.y());
 	// Checkin the filling properties  == > for the subElements:
 	vec2 subElementSize = m_minSize;
-	if (m_userFill->x() == true) {
+	if (propertyFill->x() == true) {
 		subElementSize.setX(m_size.x());
 	}
-	if (m_userFill->y() == true) {
+	if (propertyFill->y() == true) {
 		subElementSize.setY(m_size.y());
 	}
-	vec2 delta = ewol::gravityGenerateDelta(m_gravity, m_size - subElementSize);
+	vec2 delta = ewol::gravityGenerateDelta(propertyGravity, m_size - subElementSize);
 	vec2 origin = delta + vec2(_padding.xLeft(), _padding.yButtom());
 	subElementSize -= vec2(_padding.x(), _padding.y());
 	for (size_t iii = 0; iii < 2; ++iii) {
 		if (m_subWidget[iii] != nullptr) {
 			vec2 origin2 = origin+m_offset;
 			vec2 minSize = m_subWidget[iii]->getCalculateMinSize();
-			bvec2 expand = m_subWidget[iii]->getExpand();
-			origin2 += ewol::gravityGenerateDelta(m_gravity, minSize - localAvaillable);
+			bvec2 expand = m_subWidget[iii]->propertyExpand.get();
+			origin2 += ewol::gravityGenerateDelta(propertyGravity, minSize - localAvaillable);
 			m_subWidget[iii]->setOrigin(m_origin + origin);
 			m_subWidget[iii]->setSize(subElementSize);
 			m_subWidget[iii]->onChangeSize();

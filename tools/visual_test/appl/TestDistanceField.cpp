@@ -35,8 +35,8 @@ appl::TestDistanceField::TestDistanceField(){
 void appl::TestDistanceField::init() {
 	ewol::Widget::init();
 	APPL_INFO("Create " __class__ " (start)");
-	setExpand(bvec2(true, true));
-	setFill(bvec2(true, true));
+	propertyExpand.set(bvec2(true, true));
+	propertyFill.set(bvec2(true, true));
 	APPL_INFO("Create " __class__ " (end)");
 }
 

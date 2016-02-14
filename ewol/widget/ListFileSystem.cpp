@@ -20,16 +20,16 @@ ewol::widget::ListFileSystem::ListFileSystem() :
   signalFileValidate(*this, "file-validate"),
   signalFolderSelect(*this, "folder-select"),
   signalFolderValidate(*this, "folder-validate"),
-  m_selectedLine(-1),
-  m_folder(*this, "path", "/", "Path to display"),
-  m_selectFile(*this, "select", "", "selection af a specific file"),
-  m_showFile(*this, "show-file", true, "display files"),
-  m_showFolder(*this, "show-folder", true, "display folders"),
-  m_showHidden(*this, "show-hidden", true, "Show the hidden element (file, folder, ...)"),
-  m_showTemporaryFile(*this, "show-temporary", true, "display temporary files") {
+  propertyPath(*this, "path", "/", "Path to display"),
+  propertyFile(*this, "select", "", "selection af a specific file"),
+  propertyShowFile(*this, "show-file", true, "display files"),
+  propertyShowFolder(*this, "show-folder", true, "display folders"),
+  propertyShowHidden(*this, "show-hidden", true, "Show the hidden element (file, folder, ...)"),
+  propertyFilter(*this, "filter", "", "regex to filter files ..."),
+  m_selectedLine(-1) {
 	addObjectType("ewol::widget::ListFileSystem");
 	#if defined(__TARGET_OS__Windows)
-		m_folder = "c:/";
+		propertyPath = "c:/";
 	#endif
 	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:ListFileSystem.json");
 	if (m_colorProperty != nullptr) {
@@ -39,25 +39,25 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 		m_colorIdBackgroundSelected = m_colorProperty->request("selected");
 	}
 	setMouseLimit(1);
-};
+}
 
 void ewol::widget::ListFileSystem::init() {
 	ewol::widget::List::init();
-};
+}
 
 
 ewol::widget::ListFileSystem::~ListFileSystem() {
 	clearList();
-};
+}
 
 void ewol::widget::ListFileSystem::clearList() {
-	for (size_t iii=0; iii<m_list.size(); iii++) {
-		if (nullptr != m_list[iii]) {
-			delete(m_list[iii]);
-			m_list[iii] = nullptr;
+	for (auto &it : m_list) {
+		if (it != nullptr) {
+			delete(it);
+			it = nullptr;
 		}
 	}
-};
+}
 
 etk::Color<> ewol::widget::ListFileSystem::getBasicBG() {
 	return m_colorProperty->get(m_colorIdBackground1);
@@ -69,9 +69,9 @@ void ewol::widget::ListFileSystem::regenerateView() {
 	m_selectedLine = -1;
 	m_list.clear();
 	m_originScrooled.setValue(0,0);
-	etk::FSNode tmpFolder(m_folder.get());
+	etk::FSNode tmpFolder(propertyPath.get());
 	// get the new list : 
-	m_list = tmpFolder.folderGetSubList(m_showHidden, m_showFolder, m_showFile, m_showTemporaryFile);
+	m_list = tmpFolder.folderGetSubList(propertyShowHidden, propertyShowFolder, propertyShowFile, propertyFilter);
 	// request a redraw ...
 	markToRedraw();
 }
@@ -91,8 +91,8 @@ void ewol::widget::ListFileSystem::setSelect(const std::string& _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
-	for (size_t iii=0; iii<m_list.size(); iii++) {
-		if (nullptr!=m_list[iii]) {
+	for (size_t iii=0; iii<m_list.size(); ++iii) {
+		if (m_list[iii] != nullptr) {
 			if (m_list[iii]->getNameFile() == _data) {
 				// we find the line :
 				m_selectedLine = iii;
@@ -114,8 +114,8 @@ bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTit
 
 uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 	int32_t offset = 0;
-	if (m_showFolder == true) {
-		if (m_folder.get() == "/") {
+	if (propertyShowFolder == true) {
+		if (propertyPath.get() == "/") {
 			offset = 1;
 		} else {
 			offset = 2;
@@ -126,8 +126,8 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 
 bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
-	if (m_showFolder == true) {
-		if (m_folder.get() == "/") {
+	if (propertyShowFolder == true) {
+		if (propertyPath.get() == "/") {
 			offset = 1;
 		} else {
 			offset = 2;
@@ -135,13 +135,13 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std
 		if (_raw == 0) {
 			_myTextToWrite = ".";
 		} else if (    _raw == 1
-		            && m_folder.get() != "/") {
+		            && propertyPath.get() != "/") {
 			_myTextToWrite = "..";
 		}
 	}
 	if(    _raw-offset >= 0
 	    && _raw-offset < (int32_t)m_list.size()
-	    && nullptr != m_list[_raw-offset]) {
+	    && m_list[_raw-offset] != nullptr) {
 		_myTextToWrite = m_list[_raw-offset]->getNameFile();
 		EWOL_VERBOSE("get filename for : '" << *m_list[_raw-offset] << ":'" << _myTextToWrite << "'");
 	}
@@ -165,8 +165,8 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
                                                float _x,
                                                float _y) {
 	int32_t offset = 0;
-	if (m_showFolder == true) {
-		if (m_folder.get() == "/") {
+	if (propertyShowFolder == true) {
+		if (propertyPath.get() == "/") {
 			offset = 1;
 		} else {
 			offset = 2;
@@ -182,11 +182,11 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				m_selectedLine = _raw;
 			}
 			if (previousRaw != m_selectedLine) {
-				if(    m_showFolder == true
+				if(    propertyShowFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
 					signalFolderSelect.emit(".");
-				} else if (    m_showFolder == true
+				} else if (    propertyShowFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
 					signalFolderSelect.emit("..");
@@ -207,11 +207,11 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					}
 				}
 			} else {
-				if(    m_showFolder == true
+				if(    propertyShowFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
 					signalFolderValidate.emit(".");
-				} else if (    m_showFolder == true
+				} else if (    propertyShowFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
 					signalFolderValidate.emit("..");
@@ -241,17 +241,17 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 
 void ewol::widget::ListFileSystem::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::List::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_folder) {
+	if (_paramPointer == propertyPath) {
 		regenerateView();
-	} else if (_paramPointer == m_selectFile) {
-		setSelect(m_selectFile);
-	} else if (_paramPointer == m_showFile) {
+	} else if (_paramPointer == propertyFile) {
+		setSelect(propertyFile);
+	} else if (_paramPointer == propertyShowFile) {
 		regenerateView();
-	} else if (_paramPointer == m_showFolder) {
+	} else if (_paramPointer == propertyShowFolder) {
 		regenerateView();
-	} else if (_paramPointer == m_showHidden) {
+	} else if (_paramPointer == propertyShowHidden) {
 		regenerateView();
-	} else if (_paramPointer == m_showTemporaryFile) {
+	} else if (_paramPointer == propertyFilter) {
 		regenerateView();
 	}
 }

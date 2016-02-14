@@ -23,7 +23,8 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
 			public: // properties
-				eproperty::Value<etk::Color<>> m_textColorFg; //!< Current color.
+				eproperty::Value<etk::Color<>> propertyValue; //!< Current color.
+				eproperty::Value<std::string> propertyShape; //!< Current color.
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
@@ -47,11 +48,6 @@ namespace ewol {
 				 * @brief Main destructor.
 				 */
 				virtual ~ButtonColor();
-				/**
-				 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper).
-				 * @param[in] _shaperName The new shaper filename.
-				 */
-				void setShaperName(std::string _shaperName);
 			protected: // Derived function
 				virtual void onDraw();
 			public: // Derived function

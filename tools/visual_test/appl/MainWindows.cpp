@@ -25,11 +25,6 @@
 #include <ewol/widget/Select.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/context/Context.h>
-#include <appl/TestButton.h>
-#include <appl/TestCheckBox.h>
-#include <appl/TestButtonColor.h>
-#include <appl/TestLabel.h>
-#include <appl/TestImage.h>
 #include <appl/TestDistanceField.h>
 #include <etk/os/FSNode.h>
 #include <eproperty/Value.h>
@@ -190,11 +185,11 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 static void addSpacer(const std::shared_ptr<ewol::widget::Sizer>& _sizer, etk::Color<> _color=etk::color::none) {
 	std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
 	if (mySpacer != nullptr) {
-		mySpacer->setExpand(bvec2(true,false));
-		mySpacer->setFill(bvec2(true,false));
+		mySpacer->propertyExpand.set(bvec2(true,false));
+		mySpacer->propertyFill.set(bvec2(true,false));
 		if (_color == etk::color::none) {
-			mySpacer->setMinSize(vec2(3,3));
-			mySpacer->setColor(_color);
+			mySpacer->propertyMinSize.set(vec2(3,3));
+			mySpacer->propertyColor.set(_color);
 		}
 		_sizer->subWidgetAdd(mySpacer);
 	}
@@ -217,8 +212,8 @@ void appl::MainWindows::updateProperty() {
 		}
 		std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create(ewol::widget::Sizer::modeHori);
 		if (widgetSizer != nullptr) {
-			widgetSizer->setExpand(bvec2(true,false));
-			widgetSizer->setFill(bvec2(true,true));
+			widgetSizer->propertyExpand.set(bvec2(true,false));
+			widgetSizer->propertyFill.set(bvec2(true,true));
 			m_sizerDynamic->subWidgetAddStart(widgetSizer);
 			
 			std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create(param->getName() + ":");
@@ -236,9 +231,9 @@ void appl::MainWindows::updateProperty() {
 					return;
 				}
 				std::string value = paramValue->get();
-				widgetTmp->setValue(value);
-				widgetTmp->setExpand(bvec2(true,false));
-				widgetTmp->setFill(bvec2(true,false));
+				widgetTmp->propertyValue.set(value);
+				widgetTmp->propertyExpand.set(bvec2(true,false));
+				widgetTmp->propertyFill.set(bvec2(true,false));
 				widgetTmp->signalModify.connect([=](const std::string& _value) {
 						APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
 						paramValue->set(_value);
@@ -257,7 +252,7 @@ void appl::MainWindows::updateProperty() {
 					return;
 				}
 				bvec2 value = paramValue->get();
-				widgetTmp->setValue(value.x());
+				widgetTmp->propertyValue.set(value.x());
 				widgetTmp->signalValue.connect([=](const bool& _value) {
 						APPL_INFO("set parameter : X name=" << param->getName() << " value=" << _value);
 						bvec2 lastValueInterpreted = paramValue->get();
@@ -270,7 +265,7 @@ void appl::MainWindows::updateProperty() {
 				
 				widgetTmp = ewol::widget::CheckBox::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
-				widgetTmp->setValue(value.y());
+				widgetTmp->propertyValue.set(value.y());
 				widgetTmp->signalValue.connect([=](const bool& _value) {
 						APPL_INFO("set parameter : Y name=" << param->getName() << " value=" << _value);
 						bvec2 lastValueInterpreted = paramValue->get();
@@ -311,9 +306,9 @@ void appl::MainWindows::updateProperty() {
 				widgetSizer->subWidgetAdd(widgetTmp);
 				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
 				std::string value = param->getString();
-				widgetTmp->setValue(value);
-				widgetTmp->setExpand(bvec2(true,false));
-				widgetTmp->setFill(bvec2(true,false));
+				widgetTmp->propertyValue.set(value);
+				widgetTmp->propertyExpand.set(bvec2(true,false));
+				widgetTmp->propertyFill.set(bvec2(true,false));
 				widgetTmp->signalModify.connect([=](const std::string& _value) {
 						APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
 						param->setString(_value);
@@ -344,8 +339,8 @@ void appl::MainWindows::updateProperty() {
 				type = "enum ewol::gravity";
 				std::shared_ptr<ewol::widget::Select> widgetTmp = ewol::widget::Select::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
-				widgetTmp->setExpand(bvec2(true,false));
-				widgetTmp->setFill(bvec2(true,false));
+				widgetTmp->propertyExpand.set(bvec2(true,false));
+				widgetTmp->propertyFill.set(bvec2(true,false));
 				widgetTmp->optionAdd(int32_t(ewol::gravity_center), "Center");
 				widgetTmp->optionAdd(int32_t(ewol::gravity_top), "Top");
 				widgetTmp->optionAdd(int32_t(ewol::gravity_buttom), "Buttom");
@@ -362,7 +357,7 @@ void appl::MainWindows::updateProperty() {
 					return;
 				}
 				ewol::gravity value = paramValue->get();
-				widgetTmp->setValue(value);
+				widgetTmp->propertyValue.set(value);
 				widgetTmp->signalValue.connect([=](const int32_t& _value) {
 					enum ewol::gravity val = ewol::gravity(_value);
 					APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << val);
@@ -373,10 +368,10 @@ void appl::MainWindows::updateProperty() {
 		}
 		std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
 		if (mySpacer != nullptr) {
-			mySpacer->setExpand(bvec2(true,false));
-			mySpacer->setFill(bvec2(true,false));
-			mySpacer->setMinSize(vec2(3,3));
-			mySpacer->setColor(etk::color::blue);
+			mySpacer->propertyExpand.set(bvec2(true,false));
+			mySpacer->propertyFill.set(bvec2(true,false));
+			mySpacer->propertyMinSize.set(vec2(3,3));
+			mySpacer->propertyColor.set(etk::color::blue);
 			m_sizerDynamic->subWidgetAddStart(mySpacer);
 		}
 	}

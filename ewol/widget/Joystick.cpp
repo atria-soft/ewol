@@ -43,11 +43,11 @@ ewol::widget::Joystick::Joystick() :
 	m_background = l_background;
 	m_foreground = l_foreground;
 	m_ratio = l_ratio;
-	setCanHaveFocus(true);
 }
 
 void ewol::widget::Joystick::init() {
 	ewol::Widget::init();
+	propertyCanFocus.set(true);
 }
 
 

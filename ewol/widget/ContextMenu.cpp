@@ -19,21 +19,19 @@
 
 
 ewol::widget::ContextMenu::ContextMenu():
-  m_shaper(*this, "shaper", "the display name for config file"),
-  m_arrowPos(*this, "arrow-position", vec2(0,0), "Position of the arrow in the pop-up"),
-  m_arrawBorder(*this, "arrow-mode", markTop, "position of the arrow") {
+  propertyShape(*this, "shape", "", "the display name for config file"),
+  propertyArrowPos(*this, "arrow-position", vec2(0,0), "Position of the arrow in the pop-up"),
+  propertyArrawBorder(*this, "arrow-mode", markTop, "position of the arrow") {
 	addObjectType("ewol::widget::ContextMenu");
-	m_arrawBorder.add(markTop, "top");
-	m_arrawBorder.add(markRight, "right");
-	m_arrawBorder.add(markButtom, "buttom");
-	m_arrawBorder.add(markLeft, "left");
-	m_arrawBorder.add(markNone, "none");
+	propertyArrawBorder.add(markTop, "top");
+	propertyArrawBorder.add(markRight, "right");
+	propertyArrawBorder.add(markButtom, "buttom");
+	propertyArrawBorder.add(markLeft, "left");
+	propertyArrawBorder.add(markNone, "none");
 	
-	m_userExpand.set(bvec2(false,false));
 	
 	m_offset = 20;
 	
-	m_colorBackGroung = etk::color::white;
 	
 	m_colorBorder = etk::color::black;
 	m_colorBorder.setA(0x7F);
@@ -43,7 +41,8 @@ ewol::widget::ContextMenu::ContextMenu():
 
 void ewol::widget::ContextMenu::init(const std::string& _shaperName) {
 	ewol::widget::Container::init();
-	m_shaper.set(_shaperName);
+	propertyShape.set(_shaperName);
+	propertyExpand.set(bvec2(false,false));
 }
 
 ewol::widget::ContextMenu::~ContextMenu() {
@@ -53,7 +52,7 @@ ewol::widget::ContextMenu::~ContextMenu() {
 void ewol::widget::ContextMenu::onChangeSize() {
 	markToRedraw();
 	// pop-up fill all the display :
-	ewol::Padding padding = m_shaper->getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
 	if (m_subWidget == nullptr) {
 		return;
@@ -74,14 +73,14 @@ void ewol::widget::ContextMenu::onChangeSize() {
 	subWidgetSize.setY((int32_t)subWidgetSize.y());
 	
 	// set config to the Sub-widget
-	switch (m_arrawBorder) {
+	switch (propertyArrawBorder.get()) {
 		case markTop:
-			subWidgetOrigin.setX((int32_t)(m_arrowPos->x() - subWidgetSize.x()/2));
-			subWidgetOrigin.setY((int32_t)(m_arrowPos->y() - m_offset - subWidgetSize.y()));
+			subWidgetOrigin.setX((int32_t)(propertyArrowPos->x() - subWidgetSize.x()/2));
+			subWidgetOrigin.setY((int32_t)(propertyArrowPos->y() - m_offset - subWidgetSize.y()));
 			break;
 		case markButtom:
-			subWidgetOrigin.setX((int32_t)(m_arrowPos->x() - subWidgetSize.x()/2));
-			subWidgetOrigin.setY((int32_t)(m_arrowPos->y() + m_offset));
+			subWidgetOrigin.setX((int32_t)(propertyArrowPos->x() - subWidgetSize.x()/2));
+			subWidgetOrigin.setY((int32_t)(propertyArrowPos->y() + m_offset));
 			break;
 		case markRight:
 		case markLeft:
@@ -95,18 +94,18 @@ void ewol::widget::ContextMenu::onChangeSize() {
 	                                 + padding.x()) );
 	subWidgetOrigin.setY( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.y()-padding.y()))
 	                                 + padding.y()) );
-	switch (m_arrawBorder) {
+	switch (propertyArrawBorder.get()) {
 		default:
 		case markTop:
 		case markButtom:
-			if (m_arrowPos->x() <= m_offset ) {
-				subWidgetOrigin.setX(m_arrowPos->x()+padding.xLeft());
+			if (propertyArrowPos->x() <= m_offset ) {
+				subWidgetOrigin.setX(propertyArrowPos->x()+padding.xLeft());
 			}
 			break;
 		case markRight:
 		case markLeft:
-			if (m_arrowPos->y() <= m_offset ) {
-				subWidgetOrigin.setY(m_arrowPos->y()+padding.yButtom());
+			if (propertyArrowPos->y() <= m_offset ) {
+				subWidgetOrigin.setY(propertyArrowPos->y()+padding.yButtom());
 			}
 			break;
 	}
@@ -121,7 +120,7 @@ void ewol::widget::ContextMenu::calculateMinMaxSize() {
 	// call main class to calculate the min size...
 	ewol::widget::Container::calculateMinMaxSize();
 	// add padding of the display
-	ewol::Padding padding = m_shaper->getPadding();
+	ewol::Padding padding = m_shaper.getPadding();
 	m_minSize += vec2(padding.x(), padding.y());
 	//EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
 	markToRedraw();
@@ -130,7 +129,7 @@ void ewol::widget::ContextMenu::calculateMinMaxSize() {
 
 void ewol::widget::ContextMenu::onDraw() {
 	m_compositing.draw();
-	m_shaper->draw();
+	m_shaper.draw();
 }
 
 
@@ -141,8 +140,8 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 		return;
 	}
 	m_compositing.clear();
-	m_shaper->clear();
-	ewol::Padding padding = m_shaper->getPadding();
+	m_shaper.clear();
+	ewol::Padding padding = m_shaper.getPadding();
 	
 	if (m_subWidget == nullptr) {
 		return;
@@ -152,38 +151,38 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 	
 	// display border ...
 	m_compositing.setColor(m_colorBorder);
-	switch (m_arrawBorder) {
+	switch (propertyArrawBorder) {
 		case markTop:
-			m_compositing.setPos(vec3(m_arrowPos->x(), m_arrowPos->y(), 0.0f) );
+			m_compositing.setPos(vec3(propertyArrowPos->x(), propertyArrowPos->y(), 0.0f) );
 			m_compositing.addVertex();
-			if (m_arrowPos->x() <= tmpOrigin.x() ) {
+			if (propertyArrowPos->x() <= tmpOrigin.x() ) {
 				float laking = m_offset - padding.yTop();
-				m_compositing.setPos(vec3(m_arrowPos->x()+laking, m_arrowPos->y()-laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x()+laking, propertyArrowPos->y()-laking, 0.0f) );
 				m_compositing.addVertex();
-				m_compositing.setPos(vec3(m_arrowPos->x(),        m_arrowPos->y()-laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x(),        propertyArrowPos->y()-laking, 0.0f) );
 				m_compositing.addVertex();
 			} else {
 				float laking = m_offset - padding.yTop();
-				m_compositing.setPos(vec3(m_arrowPos->x()+laking, m_arrowPos->y()-laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x()+laking, propertyArrowPos->y()-laking, 0.0f) );
 				m_compositing.addVertex();
-				m_compositing.setPos(vec3(m_arrowPos->x()-laking, m_arrowPos->y()-laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x()-laking, propertyArrowPos->y()-laking, 0.0f) );
 				m_compositing.addVertex();
 			}
 			break;
 		case markButtom:
-			m_compositing.setPos(vec3(m_arrowPos->x(), m_arrowPos->y(), 0) );
+			m_compositing.setPos(vec3(propertyArrowPos->x(), propertyArrowPos->y(), 0) );
 			m_compositing.addVertex();
-			if (m_arrowPos->x() <= tmpOrigin.x() ) {
+			if (propertyArrowPos->x() <= tmpOrigin.x() ) {
 				int32_t laking = m_offset - padding.yTop();
-				m_compositing.setPos(vec3(m_arrowPos->x()+laking, m_arrowPos->y()+laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x()+laking, propertyArrowPos->y()+laking, 0.0f) );
 				m_compositing.addVertex();
-				m_compositing.setPos(vec3(m_arrowPos->x(),        m_arrowPos->y()+laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x(),        propertyArrowPos->y()+laking, 0.0f) );
 				m_compositing.addVertex();
 			} else {
 				int32_t laking = m_offset - padding.yTop();
-				m_compositing.setPos(vec3(m_arrowPos->x()+laking, m_arrowPos->y()+laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x()+laking, propertyArrowPos->y()+laking, 0.0f) );
 				m_compositing.addVertex();
-				m_compositing.setPos(vec3(m_arrowPos->x()-laking, m_arrowPos->y()+laking, 0.0f) );
+				m_compositing.setPos(vec3(propertyArrowPos->x()-laking, propertyArrowPos->y()+laking, 0.0f) );
 				m_compositing.addVertex();
 			}
 			break;
@@ -196,13 +195,13 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 	
 	vec2 shaperOrigin = tmpOrigin-vec2(padding.xLeft(), padding.yButtom());
 	vec2 shaperSize = tmpSize+vec2(padding.x(), padding.y());
-	m_shaper->setShape(vec2ClipInt32(shaperOrigin),
-	                   vec2ClipInt32(shaperSize));
+	m_shaper.setShape(vec2ClipInt32(shaperOrigin),
+	                  vec2ClipInt32(shaperSize));
 }
 
 bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 	if (_event.getId() > 0) {
-		if (nullptr != ewol::widget::Container::getWidgetAtPos(_event.getPos())) {
+		if (ewol::widget::Container::getWidgetAtPos(_event.getPos()) != nullptr) {
 			return false;
 		}
 		if(    _event.getStatus() == gale::key::status_down
@@ -221,23 +220,21 @@ bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 
 std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 	std::shared_ptr<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
-	if (nullptr != val) {
+	if (val != nullptr) {
 		return val;
 	}
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
-void ewol::widget::ContextMenu::setShaperName(const std::string& _shaperName) {
-	m_shaper.set(_shaperName);
-}
 
 void ewol::widget::ContextMenu::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == m_shaper) {
+	if (_paramPointer == propertyArrowPos) {
 		markToRedraw();
-	} else if (_paramPointer == m_arrowPos) {
+	} else if (_paramPointer == propertyArrawBorder) {
 		markToRedraw();
-	} else if (_paramPointer == m_arrawBorder) {
+	} else if (_paramPointer == propertyShape) {
+		m_shaper.setSource(propertyShape.get());
 		markToRedraw();
 	}
 }
@@ -258,7 +255,7 @@ void ewol::widget::ContextMenu::setPositionMarkAuto(const vec2& _origin, const v
 	}
 }
 void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, const vec2& _arrowPos) {
-	m_arrawBorder.set(_position);
-	m_arrowPos.set(_arrowPos);
+	propertyArrawBorder.set(_position);
+	propertyArrowPos.set(_arrowPos);
 }
 

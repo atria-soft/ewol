@@ -62,7 +62,8 @@ namespace ewol {
 		 */
 		class SpinBase : public ewol::widget::Sizer {
 			public: // properties list:
-				eproperty::List<enum ewol::widget::spinPosition> m_spinMode; //!< How to display the spin base
+				eproperty::Value<std::string> propertyShape; //!< Shape of the widget
+				eproperty::List<enum ewol::widget::spinPosition> propertySpinMode; //!< How to display the spin base
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"

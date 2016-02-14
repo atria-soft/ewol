@@ -16,6 +16,8 @@
 
 
 ewol::widget::WidgetScrolled::WidgetScrolled() :
+  propertyShapeVert(*this, "shape-vert", "", "shape for the vertical display"),
+  propertyShapeHori(*this, "shape-hori", "", "shape for the horizonal display"),
   m_shaperH(),
   m_shaperV(),
   m_singleFingerMode(true) {
@@ -36,8 +38,8 @@ ewol::widget::WidgetScrolled::WidgetScrolled() :
 
 void ewol::widget::WidgetScrolled::init(const std::string& _shaperName) {
 	ewol::Widget::init();
-	m_shaperH.setSource(_shaperName);
-	m_shaperV.setSource(_shaperName);
+	propertyShapeVert.set(_shaperName);
+	propertyShapeHori.set(_shaperName);
 }
 
 ewol::widget::WidgetScrolled::~WidgetScrolled() {
@@ -225,8 +227,8 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 				} else if (    m_highSpeedMode == ewol::widget::Scroll::speedModeInit
 				            && _event.getStatus() == gale::key::status_move) {
 					// wait that the cursor move more than 10 px to enable it :
-					if(    abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
-					    || abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
+					if(    std::abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
+					    || std::abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
 						// the scrooling can start : 
 						// select the direction :
 						if (relativePos.x() == m_highSpeedStartPos.x()) {
@@ -235,7 +237,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 							m_highSpeedMode = ewol::widget::Scroll::speedModeEnableHorizontal;
 						} else {
 							float coef = (relativePos.y() - m_highSpeedStartPos.y()) / (relativePos.x() - m_highSpeedStartPos.x());
-							if (abs(coef) <= 1 ) {
+							if (std::abs(coef) <= 1 ) {
 								m_highSpeedMode = ewol::widget::Scroll::speedModeEnableHorizontal;
 							} else {
 								m_highSpeedMode = ewol::widget::Scroll::speedModeEnableVertical;
@@ -334,8 +336,8 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 					} else if (    m_highSpeedMode == ewol::widget::Scroll::speedModeInit
 					            && _event.getStatus() == gale::key::status_move) {
 						// wait that the cursor move more than 10 px to enable it :
-						if(    abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
-						    || abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
+						if(    std::abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
+						    || std::abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
 							// the scrooling can start : 
 							// select the direction :
 							m_highSpeedMode = ewol::widget::Scroll::speedModeEnableFinger;
@@ -474,4 +476,15 @@ void ewol::widget::WidgetScrolled::setSingleFinger(bool _status) {
 		return;
 	}
 	m_singleFingerMode = _status;
+}
+
+void ewol::widget::WidgetScrolled::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
+	ewol::Widget::onPropertyChangeValue(_paramPointer);
+	if (_paramPointer == propertyShapeVert) {
+		m_shaperV.setSource(propertyShapeVert);
+		markToRedraw();
+	} else if (_paramPointer == propertyShapeHori) {
+		m_shaperH.setSource(propertyShapeHori);
+		markToRedraw();
+	}
 }

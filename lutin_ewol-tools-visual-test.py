@@ -31,12 +31,6 @@ def create(target, module_name):
 	    'tools/visual_test/appl/debug.cpp',
 	    'tools/visual_test/appl/init.cpp',
 	    'tools/visual_test/appl/MainWindows.cpp',
-	    'tools/visual_test/appl/widget/SizerColor.cpp',
-	    'tools/visual_test/appl/TestButton.cpp',
-	    'tools/visual_test/appl/TestCheckBox.cpp',
-	    'tools/visual_test/appl/TestImage.cpp',
-	    'tools/visual_test/appl/TestButtonColor.cpp',
-	    'tools/visual_test/appl/TestLabel.cpp',
 	    'tools/visual_test/appl/TestDistanceField.cpp'
 	    ])
 	
