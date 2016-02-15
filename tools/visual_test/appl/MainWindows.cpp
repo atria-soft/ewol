@@ -56,8 +56,17 @@ void appl::MainWindows::init() {
 	externSubBind(m_composer, ewol::widget::Button, "appl-next-gravity", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackGravityChange);
 	
 	m_sizerVert = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-upper-test-widget"));
+	if (m_sizerVert == nullptr) {
+		APPL_CRITICAL("Can not get vertical pointer");
+	}
 	m_sizerDynamic = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-dynamic-config"));
+	if (m_sizerDynamic == nullptr) {
+		APPL_CRITICAL("Can not get dynamic pointer");
+	}
 	m_subWidget = std::dynamic_pointer_cast<ewol::Widget>(m_composer->getSubObjectNamed("[TEST]TO-TEST"));
+	if (m_subWidget == nullptr) {
+		APPL_CRITICAL("Can not get subWidget pointer");
+	}
 }
 
 void appl::MainWindows::onCallbackThemeChange(const bool& _value) {

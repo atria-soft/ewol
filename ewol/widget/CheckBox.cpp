@@ -171,16 +171,13 @@ void ewol::widget::CheckBox::CheckStatus() {
 		markToRedraw();
 	}
 	if (m_buttonPressed == true) {
-		EWOL_WARNING("SET state : PRESSED");
 		changeStatusIn(STATUS_PRESSED);
 		return;
 	}
 	if (true == m_mouseHover) {
-		EWOL_WARNING("SET state : HOVER");
 		changeStatusIn(STATUS_HOVER);
 		return;
 	}
-	EWOL_WARNING("SET state : UP");
 	changeStatusIn(STATUS_UP);
 }
 

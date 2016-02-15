@@ -82,10 +82,10 @@ void ewol::widget::Container::subWidgetUnLink() {
 
 std::shared_ptr<ewol::Object> ewol::widget::Container::getSubObjectNamed(const std::string& _objectName) {
 	std::shared_ptr<ewol::Object> tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
-	if (nullptr!=tmpObject) {
+	if (tmpObject != nullptr) {
 		return tmpObject;
 	}
-	if (nullptr != m_subWidget) {
+	if (m_subWidget != nullptr) {
 		return m_subWidget->getSubObjectNamed(_objectName);
 	}
 	return nullptr;

@@ -16,6 +16,7 @@
 
 #include <appl/debug.h>
 #include <appl/MainWindows.h>
+#include <appl/widget/SizerColor.h>
 
 class MainApplication : public ewol::context::Application {
 	public:
@@ -47,6 +48,8 @@ class MainApplication : public ewol::context::Application {
 			
 			// set the application icon ...
 			_context.setIcon("DATA:icon.png");
+			
+			appl::widget::SizerColor::createManagerWidget(_context.getWidgetManager());
 			
 			APPL_INFO("==> CREATE ... (END)");
 		}

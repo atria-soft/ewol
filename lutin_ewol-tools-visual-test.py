@@ -31,7 +31,8 @@ def create(target, module_name):
 	    'tools/visual_test/appl/debug.cpp',
 	    'tools/visual_test/appl/init.cpp',
 	    'tools/visual_test/appl/MainWindows.cpp',
-	    'tools/visual_test/appl/TestDistanceField.cpp'
+	    'tools/visual_test/appl/TestDistanceField.cpp',
+	    'tools/visual_test/appl/widget/SizerColor.cpp'
 	    ])
 	
 	my_module.add_module_depend(['ewol'])

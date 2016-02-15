@@ -69,7 +69,6 @@ void ewol::widget::SpinBase::onPropertyChangeValue(const eproperty::Ref& _paramP
 
 
 void ewol::widget::SpinBase::updateGui() {
-	EWOL_WARNING("updateGui [START]");
 	subWidgetRemoveAll();
 	markToRedraw();
 	requestUpdateSize();
@@ -77,7 +76,7 @@ void ewol::widget::SpinBase::updateGui() {
 		std::string shaper;
 		if (m_config != nullptr) {
 			shaper = m_config->getString(m_confIdEntryShaper);
-			EWOL_INFO("shaper entry : " << shaper);
+			EWOL_VERBOSE("shaper entry : " << shaper);
 		}
 		m_widgetEntry = ewol::widget::Entry::create("", shaper);
 		if (m_widgetEntry != nullptr) {
@@ -89,7 +88,7 @@ void ewol::widget::SpinBase::updateGui() {
 		std::string shaper;
 		if (m_config != nullptr) {
 			shaper = m_config->getString(m_confIdDownShaper);
-			EWOL_INFO("shaper button DOWN : " << shaper);
+			EWOL_VERBOSE("shaper button DOWN : " << shaper);
 		}
 		m_widgetButtonDown = ewol::widget::Button::create(shaper);
 		if (m_widgetButtonDown != nullptr) {
@@ -104,7 +103,7 @@ void ewol::widget::SpinBase::updateGui() {
 		std::string shaper;
 		if (m_config != nullptr) {
 			shaper = m_config->getString(m_confIdUpShaper);
-			EWOL_INFO("shaper button UP : " << shaper);
+			EWOL_VERBOSE("shaper button UP : " << shaper);
 		}
 		m_widgetButtonUp = ewol::widget::Button::create(shaper);
 		if (m_widgetButtonUp != nullptr) {
@@ -115,50 +114,34 @@ void ewol::widget::SpinBase::updateGui() {
 			m_widgetButtonUp->setSubWidget(widget);
 		}
 	}
-	EWOL_INFO("add ....");
 	switch (propertySpinMode) {
 		case ewol::widget::spinPosition_noneNone:
-			EWOL_INFO("add Entry");
 			subWidgetAdd(m_widgetEntry);
 			break;
 		case ewol::widget::spinPosition_noneRight:
-			EWOL_INFO("add Entry");
 			subWidgetAdd(m_widgetEntry);
-			EWOL_INFO("add Up");
 			subWidgetAdd(m_widgetButtonUp);
 			break;
 		case ewol::widget::spinPosition_leftNone:
-			EWOL_INFO("add Down");
 			subWidgetAdd(m_widgetButtonDown);
-			EWOL_INFO("add Entry");
 			subWidgetAdd(m_widgetEntry);
 			break;
 		case ewol::widget::spinPosition_leftRight:
-			EWOL_INFO("add Down");
 			subWidgetAdd(m_widgetButtonDown);
-			EWOL_INFO("add Entry");
 			subWidgetAdd(m_widgetEntry);
-			EWOL_INFO("add Up");
 			subWidgetAdd(m_widgetButtonUp);
 			break;
 		case ewol::widget::spinPosition_leftLeft:
-			EWOL_INFO("add Down");
 			subWidgetAdd(m_widgetButtonDown);
-			EWOL_INFO("add Up");
 			subWidgetAdd(m_widgetButtonUp);
-			EWOL_INFO("add Entry");
 			subWidgetAdd(m_widgetEntry);
 			break;
 		case ewol::widget::spinPosition_RightRight:
-			EWOL_INFO("add Entry");
 			subWidgetAdd(m_widgetEntry);
-			EWOL_INFO("add Down");
 			subWidgetAdd(m_widgetButtonDown);
-			EWOL_INFO("add Up");
 			subWidgetAdd(m_widgetButtonUp);
 			break;
 	}
-	EWOL_WARNING("updateGui [STOP]");
 }
 
 bool ewol::widget::SpinBase::loadXML(const std::shared_ptr<const exml::Element>& _node) {

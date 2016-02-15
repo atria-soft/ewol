@@ -159,6 +159,7 @@ std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _o
 }
 
 std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string& _objectName) {
+	EWOL_VERBOSE("check if name : " << _objectName << " ?= " << propertyName.get());
 	if (_objectName == propertyName.get()) {
 		return shared_from_this();
 	}
@@ -166,7 +167,7 @@ std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string&
 }
 
 
-bool epropertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+bool ewol::propertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
 	std::shared_ptr<ewol::Object> object = ewol::getContext().getEObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;

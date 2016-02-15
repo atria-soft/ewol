@@ -62,12 +62,9 @@ void ewol::widget::ContainerN::subWidgetReplace(const std::shared_ptr<ewol::Widg
 		if (it != _oldWidget) {
 			continue;
 		}
-		EWOL_WARNING("Remove old");
 		it->removeParent();
 		it.reset();
-		EWOL_WARNING("Set New");
 		if (_newWidget != nullptr) {
-			EWOL_WARNING("set parrent");
 			_newWidget->setParent(shared_from_this());
 		}
 		it = _newWidget;
