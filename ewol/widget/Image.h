@@ -13,7 +13,7 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/resource/ColorFile.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Image :public ewol::Widget {
 			public: // signals
-				esignal::Signal<void> signalPressed;
+				esignal::ISignal<> signalPressed;
 			public: // properties
 				eproperty::Value<std::string> propertySource; //!< file name of the image.
 				eproperty::Value<gale::Dimension> propertyBorder; //!< border to add at the image.

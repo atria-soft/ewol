@@ -57,7 +57,7 @@ void ewol::widget::Entry::init(const std::string& _newData, const std::string& _
 	shortCutAdd("ctrl+v", "paste");
 	shortCutAdd("ctrl+a", "select:all");
 	shortCutAdd("ctrl+shift+a", "select:none");
-	signalShortcut.bind(shared_from_this(), &ewol::widget::Entry::onCallbackShortCut);
+	signalShortcut.connect(shared_from_this(), &ewol::widget::Entry::onCallbackShortCut);
 }
 
 

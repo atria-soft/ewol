@@ -67,11 +67,11 @@ void ewol::widget::Spin::updateGui() {
 	}
 	if (m_widgetButtonUp != nullptr) {
 		m_widgetButtonUp->signalUnBindAll(shared_from_this());
-		m_widgetButtonUp->signalPressed.bind(shared_from_this(), &ewol::widget::Spin::onCallbackUp);
+		m_widgetButtonUp->signalPressed.connect(shared_from_this(), &ewol::widget::Spin::onCallbackUp);
 	}
 	if (m_widgetButtonDown != nullptr) {
 		m_widgetButtonDown->signalUnBindAll(shared_from_this());
-		m_widgetButtonDown->signalPressed.bind(shared_from_this(), &ewol::widget::Spin::onCallbackDown);
+		m_widgetButtonDown->signalPressed.connect(shared_from_this(), &ewol::widget::Spin::onCallbackDown);
 	}
 	EWOL_WARNING("updateGui [STOP]");
 	

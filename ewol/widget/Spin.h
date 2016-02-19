@@ -20,8 +20,8 @@ namespace ewol {
 		class Spin : public ewol::widget::SpinBase {
 			public:
 				// Event list of properties
-				esignal::Signal<int64_t> signalValue;
-				esignal::Signal<double> signalValueDouble;
+				esignal::ISignal<int64_t> signalValue;
+				esignal::ISignal<double> signalValueDouble;
 			public:
 				eproperty::Value<int64_t> propertyValue; //!< Current value of the Spin.
 				eproperty::Value<int64_t> propertyMin; //!< Minimum value

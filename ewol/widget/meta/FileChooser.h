@@ -10,7 +10,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Composer.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 namespace ewol {
 	namespace widget {
@@ -32,9 +32,9 @@ namespace ewol {
 		 *  	return -1;
 		 *  }
 		 *  // register on the Validate event:
-		 *  tmpWidget->signalValidate.bind(shared_from_this(), &****::onCallbackOpenFile);
+		 *  tmpWidget->signalValidate.connect(shared_from_this(), &****::onCallbackOpenFile);
 		 *  // no need of this event watching ...
-		 *  tmpWidget->signalCancel.bind(shared_from_this(), &****::onCallbackClosePopUp);
+		 *  tmpWidget->signalCancel.connect(shared_from_this(), &****::onCallbackClosePopUp);
 		 *  // set the title:
 		 *   tmpWidget->setTitle("Open files ...");
 		 *  // Set the validate Label:
@@ -64,8 +64,8 @@ namespace ewol {
 		 */
 		class FileChooser : public ewol::widget::Composer {
 			public: // signals
-				esignal::Signal<void> signalCancel;
-				esignal::Signal<std::string> signalValidate;
+				esignal::ISignal<> signalCancel;
+				esignal::ISignal<std::string> signalValidate;
 			public: // properties
 				eproperty::Value<std::string> propertyPath;
 				eproperty::Value<std::string> propertyFile;

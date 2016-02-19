@@ -10,7 +10,7 @@
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
 #include <ewol/resource/ColorFile.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 namespace ewol {
 	namespace widget {
@@ -19,10 +19,10 @@ namespace ewol {
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public: // signals
-				esignal::Signal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
-				esignal::Signal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
-				esignal::Signal<std::string> signalFolderSelect;
-				esignal::Signal<std::string> signalFolderValidate;
+				esignal::ISignal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
+				esignal::ISignal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
+				esignal::ISignal<std::string> signalFolderSelect;
+				esignal::ISignal<std::string> signalFolderValidate;
 			public: // properties
 				eproperty::Value<std::string> propertyPath; //!< Current folder that display point on.
 				eproperty::Value<std::string> propertyFile; //!< current selected file

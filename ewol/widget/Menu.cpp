@@ -108,7 +108,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
 		// keep the specific event ...
-		myButton->signalPressed.bind(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
+		myButton->signalPressed.connect(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
 		tmpObject.m_widgetPointer = myButton;
 	}
 	m_listElement.push_back(tmpObject);
@@ -206,7 +206,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 				myButton->propertyExpand.set(bvec2(true,true));
 				myButton->propertyFill.set(bvec2(true,true));
 				// set callback
-				myButton->signalPressed.bind(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
+				myButton->signalPressed.connect(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
 				// add it in the widget list
 				mySizer->subWidgetAdd(myButton);
 				if (it2->m_image.size() != 0) {

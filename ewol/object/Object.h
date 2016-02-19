@@ -255,7 +255,7 @@ namespace ewol {
 			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
 				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
-					myObject->_event.bind(_shared_ptr, _func, ##__VA_ARGS__); \
+					myObject->_event.connect(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
 					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
@@ -264,10 +264,10 @@ namespace ewol {
 			template<class TYPE> void subBind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
 				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 				if (obj2 == nullptr) {
-					EWOL_ERROR("Can not bind signal ...");
+					EWOL_ERROR("Can not connect signal ...");
 					return;
 				}
-				m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::bind(_func, obj2.get())));
+				m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::connect(_func, obj2.get())));
 			}
 			*/
 	};
@@ -280,7 +280,7 @@ namespace ewol {
 #define globalBind(_type, _name, _event, _obj, _func, ...) do {\
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
-		myObject->_event.bind(_obj, _func, ##__VA_ARGS__); \
+		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
@@ -292,7 +292,7 @@ namespace ewol {
 #define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
 	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
-		myObject->_event.bind(_obj, _func, ##__VA_ARGS__); \
+		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \

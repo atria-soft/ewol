@@ -13,7 +13,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/resource/ColorFile.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Label : public ewol::Widget {
 			public: // signals
-				esignal::Signal<void> signalPressed;
+				esignal::ISignal<> signalPressed;
 			public: // properties
 				eproperty::Value<std::string> propertyValue; //!< decorated text to display.
 			private:

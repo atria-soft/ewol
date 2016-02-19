@@ -34,5 +34,5 @@ namespace etk {
 }
 
 // declare for signal event
-template class esignal::Signal<ewol::event::Time>;
+template class esignal::ISignal<ewol::event::Time>;
 

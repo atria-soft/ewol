@@ -17,7 +17,7 @@
 
 ewol::object::Manager::Manager(ewol::Context& _context) :
   m_context(_context),
-  periodicCall(*this, "periodic", "Call every time system render", true),
+  periodicCall(*this, "periodic", "Call every time system render"),
   m_applWakeUpTime(0),
   m_lastPeriodicCallTime(0) {
 	EWOL_DEBUG(" == > init Object-Manager");
@@ -133,7 +133,7 @@ void ewol::object::Manager::workerRemove(const std::shared_ptr<ewol::Object>& _w
 void ewol::object::Manager::timeCall(int64_t _localTime) {
 	int64_t previousTime = m_lastPeriodicCallTime;
 	m_lastPeriodicCallTime = _localTime;
-	if (periodicCall.getNumberConnected() <= 0) {
+	if (periodicCall.size() <= 0) {
 		return;
 	}
 	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
@@ -146,5 +146,5 @@ void ewol::object::Manager::timeCallResume(int64_t _localTime) {
 }
 
 bool ewol::object::Manager::timeCallHave() {
-	return periodicCall.getNumberConnected() > 0;
+	return periodicCall.size() > 0;
 }

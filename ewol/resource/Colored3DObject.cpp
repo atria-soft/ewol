@@ -11,6 +11,7 @@
 #include <gale/resource/Manager.h>
 #include <gale/renderer/openGL/openGL-include.h>
 #include <esignal/details/Signal.hxx>
+#include <esignal/ISignal.h>
 
 #undef __class__
 #define __class__	"resource::Colored3DObject"
@@ -235,6 +236,6 @@ template<> std::string etk::to_string(ewol::resource::Colored3DObject const&) {
 }
 
 // declare for signal event
-template class esignal::Signal<ewol::resource::Colored3DObject>;
-template class esignal::Signal<std::shared_ptr<ewol::resource::Colored3DObject>>;
+template class esignal::ISignal<ewol::resource::Colored3DObject>;
+template class esignal::ISignal<std::shared_ptr<ewol::resource::Colored3DObject>>;
 

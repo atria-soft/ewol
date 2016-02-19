@@ -239,17 +239,17 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 
 void ewol::Widget::periodicCallDisable() {
 	EWOL_VERBOSE("Perodic call disable " << propertyName);
-	getObjectManager().periodicCall.release(shared_from_this());
+	m_periodicCallHandle.disconnect();
 }
 
 void ewol::Widget::periodicCallEnable() {
-	if (getObjectManager().periodicCall.isRegistered(shared_from_this()) == true) {
+	if (m_periodicCallHandle.isConnected() == true) {
 		EWOL_VERBOSE("Perodic call enable " << propertyName << " ==> rejected");
 		return;
 	} else {
 		EWOL_VERBOSE("Perodic call enable " << propertyName);
 	}
-	getObjectManager().periodicCall.bind(shared_from_this(), &ewol::Widget::periodicCall);
+	m_periodicCallHandle = getObjectManager().periodicCall.connect(this, &ewol::Widget::periodicCall);
 }
 
 void ewol::Widget::markToRedraw() {

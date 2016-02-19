@@ -77,7 +77,7 @@ void ewol::widget::Parameter::init() {
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->signalPressed.bind(shared_from_this(), &ewol::widget::Parameter::onCallbackParameterSave);
+				tmpButton->signalPressed.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackParameterSave);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 			
@@ -101,7 +101,7 @@ void ewol::widget::Parameter::init() {
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->signalPressed.bind(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuclosed);
+				tmpButton->signalPressed.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuclosed);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 		}
@@ -117,7 +117,7 @@ void ewol::widget::Parameter::init() {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 			
-				m_paramList->signalSelect.bind(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuSelected);
+				m_paramList->signalSelect.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuSelected);
 				m_paramList->propertyFill.set(bvec2(false,true));
 				m_paramList->propertyExpand.set(bvec2(false,true));
 				mySizerHori->subWidgetAdd(m_paramList);

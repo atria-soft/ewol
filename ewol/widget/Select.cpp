@@ -151,7 +151,7 @@ void ewol::widget::Select::updateGui() {
 	}
 	if (m_widgetButtonUp != nullptr) {
 		m_widgetButtonUp->signalUnBindAll(shared_from_this());
-		m_widgetButtonUp->signalPressed.bind(shared_from_this(), &ewol::widget::Select::onCallbackOpenMenu);
+		m_widgetButtonUp->signalPressed.connect(shared_from_this(), &ewol::widget::Select::onCallbackOpenMenu);
 	}
 	
 }
@@ -194,8 +194,8 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 		myLabel->propertyExpand.set(bvec2(true,true));
 		myLabel->propertyFill.set(bvec2(true,true));
 		// set callback
-		myLabel->signalPressed.bind(shared_from_this(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
-		myLabel->signalPressed.bind(tmpContext, &ewol::widget::ContextMenu::destroy);
+		myLabel->signalPressed.connect(shared_from_this(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
+		myLabel->signalPressed.connect(tmpContext, &ewol::widget::ContextMenu::destroy);
 		// add it in the widget list
 		mySizer->subWidgetAddStart(myLabel);
 	}

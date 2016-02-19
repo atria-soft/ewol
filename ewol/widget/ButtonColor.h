@@ -15,13 +15,13 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 namespace ewol {
 	namespace widget {
 		class ButtonColor : public ewol::Widget {
 			public: // signals
-				esignal::Signal<etk::Color<>> signalChange;
+				esignal::ISignal<etk::Color<>> signalChange;
 			public: // properties
 				eproperty::Value<etk::Color<>> propertyValue; //!< Current color.
 				eproperty::Value<std::string> propertyShape; //!< Current color.

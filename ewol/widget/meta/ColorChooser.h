@@ -16,7 +16,7 @@
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/ColorBar.h>
 #include <ewol/widget/Slider.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 namespace ewol {
 	namespace widget {
@@ -25,7 +25,7 @@ namespace ewol {
 		 */
 		class ColorChooser : public ewol::widget::Sizer {
 			public: // signals
-				esignal::Signal<etk::Color<>> signalChange;
+				esignal::ISignal<etk::Color<>> signalChange;
 			public:
 				eproperty::Value<etk::Color<>> propertyValue;
 			protected:

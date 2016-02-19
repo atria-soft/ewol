@@ -30,7 +30,7 @@ namespace ewol {
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
 #include <ewol/translate.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 #include <ewol/DrawProperty.h>
 #include <ewol/gravity.h>
 
@@ -324,6 +324,7 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
 			// TODO : Remove this API ==> deprecated since 28/10/2014
+			esignal::Connection m_periodicCallHandle;
 			/**
 			 * @brief disable the periodic call.
 			 */
@@ -408,7 +409,7 @@ namespace ewol {
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
 		public:
-			esignal::Signal<std::string> signalShortcut; //!< signal handle of the message
+			esignal::ISignal<std::string> signalShortcut; //!< signal handle of the message
 		private:
 			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
@@ -534,9 +535,9 @@ namespace ewol {
 		 */
 		public:
 			// event generated :
-			esignal::Signal<void> signalAnnimationStart; //!< event when start annimation
-			esignal::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
-			esignal::Signal<void> signalAnnimationStop;  //!< event when stop annimation
+			esignal::ISignal<> signalAnnimationStart; //!< event when start annimation
+			esignal::ISignal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
+			esignal::ISignal<> signalAnnimationStop;  //!< event when stop annimation
 		protected:
 			enum annimationMode {
 				annimationModeEnableAdd,

@@ -12,18 +12,18 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 
 namespace ewol {
 	namespace widget {
 		class CheckBox : public ewol::widget::Container2 {
 			public: // Event list
-				esignal::Signal<void> signalPressed;
-				esignal::Signal<void> signalDown;
-				esignal::Signal<void> signalUp;
-				esignal::Signal<void> signalEnter;
-				esignal::Signal<bool> signalValue;
+				esignal::ISignal<> signalPressed;
+				esignal::ISignal<> signalDown;
+				esignal::ISignal<> signalUp;
+				esignal::ISignal<> signalEnter;
+				esignal::ISignal<bool> signalValue;
 			public: // propertie list
 				eproperty::Value<bool> propertyValue; //!< Current state of the checkbox.
 				eproperty::Value<std::string> propertyShape; //!< shape of the widget

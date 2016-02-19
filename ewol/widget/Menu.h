@@ -32,7 +32,7 @@ namespace ewol {
 		 */
 		class Menu :public ewol::widget::Sizer {
 			public:
-				esignal::Signal<std::string> signalSelect; // event on a menu button or ...
+				esignal::ISignal<std::string> signalSelect; // event on a menu button or ...
 			protected:
 				Menu();
 				void init();

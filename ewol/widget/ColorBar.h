@@ -12,14 +12,14 @@
 #include <etk/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <esignal/Signal.h>
+#include <esignal/ISignal.h>
 
 
 namespace ewol {
 	namespace widget {
 		class ColorBar : public ewol::Widget {
 			public: // signals
-				esignal::Signal<etk::Color<>> signalChange;
+				esignal::ISignal<etk::Color<>> signalChange;
 			public:
 				eproperty::Value<etk::Color<>> propertyValue;
 			protected:

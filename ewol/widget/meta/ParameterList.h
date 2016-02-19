@@ -37,7 +37,7 @@ namespace ewol {
 		 */
 		class ParameterList :public ewol::widget::WidgetScrolled {
 			public: //signals
-				esignal::Signal<int32_t> signalSelect;
+				esignal::ISignal<int32_t> signalSelect;
 			public: // properties
 				
 			private:
