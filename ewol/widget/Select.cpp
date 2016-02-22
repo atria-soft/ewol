@@ -145,13 +145,13 @@ bool ewol::widget::Select::loadXML(const std::shared_ptr<const exml::Element>& _
 void ewol::widget::Select::updateGui() {
 	ewol::widget::SpinBase::updateGui();
 	
-	if (m_widgetEntry != nullptr) {
-		m_widgetEntry->signalUnBindAll(shared_from_this());
+	if (    m_widgetEntry != nullptr
+	     && m_connectionEntry.isConnected() == false) {
 		
 	}
-	if (m_widgetButtonUp != nullptr) {
-		m_widgetButtonUp->signalUnBindAll(shared_from_this());
-		m_widgetButtonUp->signalPressed.connect(shared_from_this(), &ewol::widget::Select::onCallbackOpenMenu);
+	if (    m_widgetButtonUp != nullptr
+	     && m_connectionButton.isConnected() == false) {
+		m_connectionButton = m_widgetButtonUp->signalPressed.connect(this, &ewol::widget::Select::onCallbackOpenMenu);
 	}
 	
 }

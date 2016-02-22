@@ -57,6 +57,9 @@ namespace ewol {
 			protected:
 				void onCallbackOpenMenu();
 				void onCallbackLabelPressed(int32_t _value);
+			protected:
+				esignal::Connection m_connectionEntry;
+				esignal::Connection m_connectionButton;
 		};
 	};
 };

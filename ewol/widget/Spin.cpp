@@ -61,20 +61,20 @@ void ewol::widget::Spin::onPropertyChangeValue(const eproperty::Ref& _paramPoint
 void ewol::widget::Spin::updateGui() {
 	EWOL_WARNING("updateGui [START]");
 	ewol::widget::SpinBase::updateGui();
-	if (m_widgetEntry != nullptr) {
-		m_widgetEntry->signalUnBindAll(shared_from_this());
+	
+	if (    m_widgetEntry != nullptr
+	     && m_connectionEntry.isConnected() == false) {
 		
 	}
-	if (m_widgetButtonUp != nullptr) {
-		m_widgetButtonUp->signalUnBindAll(shared_from_this());
-		m_widgetButtonUp->signalPressed.connect(shared_from_this(), &ewol::widget::Spin::onCallbackUp);
+	if (    m_widgetButtonUp != nullptr
+	     && m_connectionButtonUp.isConnected() == false) {
+		m_connectionButtonUp = m_widgetButtonUp->signalPressed.connect(this, &ewol::widget::Spin::onCallbackUp);
 	}
-	if (m_widgetButtonDown != nullptr) {
-		m_widgetButtonDown->signalUnBindAll(shared_from_this());
-		m_widgetButtonDown->signalPressed.connect(shared_from_this(), &ewol::widget::Spin::onCallbackDown);
+	if (    m_widgetButtonDown != nullptr
+	     && m_connectionButtonDown.isConnected() == false) {
+		m_connectionButtonDown = m_widgetButtonDown->signalPressed.connect(this, &ewol::widget::Spin::onCallbackDown);
 	}
 	EWOL_WARNING("updateGui [STOP]");
-	
 }
 
 void ewol::widget::Spin::checkValue(int64_t _value) {

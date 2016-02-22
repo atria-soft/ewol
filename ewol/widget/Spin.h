@@ -50,6 +50,10 @@ namespace ewol {
 			protected:
 				void onCallbackUp();
 				void onCallbackDown();
+			protected:
+				esignal::Connection m_connectionEntry;
+				esignal::Connection m_connectionButtonUp;
+				esignal::Connection m_connectionButtonDown;
 		};
 	};
 };
