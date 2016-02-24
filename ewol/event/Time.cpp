@@ -7,7 +7,6 @@
  */
 
 #include <ewol/widget/Widget.h>
-#include <esignal/details/Signal.hxx>
 
 #undef __class__
 #define __class__ "event::Time"
@@ -34,5 +33,7 @@ namespace etk {
 }
 
 // declare for signal event
+#include <esignal/details/ISignal.hxx>
+template class esignal::Signal<ewol::event::Time>;
 template class esignal::ISignal<ewol::event::Time>;
 

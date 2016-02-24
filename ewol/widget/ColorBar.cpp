@@ -55,7 +55,7 @@ static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
 void ewol::widget::ColorBar::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertyValue) {
-		propertyValue.get().setA(0xFF);
+		propertyValue.getDirect().setA(0xFF);
 		// estimate the cursor position:
 		EWOL_TODO("Later when really needed ...");
 	}
@@ -218,9 +218,9 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 				estimateColor.setG(estimateColor.g() - estimateColor.g()*poroportionnalBlack);
 				estimateColor.setB(estimateColor.b() - estimateColor.b()*poroportionnalBlack);
 			}
-			if(propertyValue.get() != estimateColor) {
+			if(*propertyValue != estimateColor) {
 				propertyValue.set(estimateColor);
-				signalChange.emit(propertyValue.get());
+				signalChange.emit(*propertyValue);
 			}
 			return true;
 		}

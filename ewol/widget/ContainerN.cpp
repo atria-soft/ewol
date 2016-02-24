@@ -175,7 +175,7 @@ std::shared_ptr<ewol::Object> ewol::widget::ContainerN::getSubObjectNamed(const 
 }
 
 void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (propertyHide.get() == true){
+	if (*propertyHide == true){
 		// widget is hidden ...
 		return;
 	}
@@ -234,7 +234,7 @@ void ewol::widget::ContainerN::onRegenerateDisplay() {
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec2& _pos) {
-	if (propertyHide.get() == true) {
+	if (*propertyHide == true) {
 		return nullptr;
 	}
 	// for all element in the sizer ...
@@ -269,7 +269,7 @@ bool ewol::widget::ContainerN::loadXML(const std::shared_ptr<const exml::Element
 	
 	std::string tmpAttributeValue = _node->getAttribute("lock");
 	if (tmpAttributeValue.size()!=0) {
-		propertyLockExpand = tmpAttributeValue;
+		propertyLockExpand.set(tmpAttributeValue);
 	}
 	bool invertAdding=false;
 	tmpAttributeValue = _node->getAttribute("addmode");

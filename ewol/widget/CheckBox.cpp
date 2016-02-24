@@ -122,27 +122,27 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 	}
 	bool previousPressed = m_buttonPressed;
 	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
-	if (true == m_mouseHover) {
-		if (1 == _event.getId()) {
+	if (m_mouseHover == true) {
+		if (_event.getId() == 1) {
 			if(gale::key::status_down == _event.getStatus()) {
-				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalDown);
+				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(gale::key::status_up == _event.getStatus()) {
-				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalUp);
+				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
 			if(gale::key::status_single == _event.getStatus()) {
 				// inverse value :
-				propertyValue.set((propertyValue.get())?false:true);
-				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalPressed);
+				propertyValue.set((*propertyValue)?false:true);
+				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalPressed);
 				signalPressed.emit();
-				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalValue << " val=" << propertyValue );
-				signalValue.emit(propertyValue.get());
+				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalValue << " val=" << propertyValue );
+				signalValue.emit(*propertyValue);
 				markToRedraw();
 			}
 		}
@@ -167,14 +167,14 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 }
 
 void ewol::widget::CheckBox::CheckStatus() {
-	if (m_shaper.setState(propertyValue==true?1:0) == true) {
+	if (m_shaper.setState(*propertyValue==true?1:0) == true) {
 		markToRedraw();
 	}
 	if (m_buttonPressed == true) {
 		changeStatusIn(STATUS_PRESSED);
 		return;
 	}
-	if (true == m_mouseHover) {
+	if (m_mouseHover == true) {
 		changeStatusIn(STATUS_HOVER);
 		return;
 	}
@@ -199,16 +199,16 @@ void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 void ewol::widget::CheckBox::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container2::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertyShape) {
-		m_shaper.setSource(propertyShape.get());
+		m_shaper.setSource(*propertyShape);
 		markToRedraw();
 	} else if (_paramPointer == propertyValue) {
-		if (propertyValue.get() == false) {
+		if (*propertyValue == false) {
 			m_idWidgetDisplayed = convertId(0);
 		} else {
 			m_idWidgetDisplayed = convertId(1);
 		}
 		CheckStatus();
 		markToRedraw();
-		m_shaper.setActivateState(propertyValue==true?1:0);
+		m_shaper.setActivateState(*propertyValue==true?1:0);
 	}
 }

@@ -69,9 +69,9 @@ void ewol::widget::ListFileSystem::regenerateView() {
 	m_selectedLine = -1;
 	m_list.clear();
 	m_originScrooled.setValue(0,0);
-	etk::FSNode tmpFolder(propertyPath.get());
+	etk::FSNode tmpFolder(*propertyPath);
 	// get the new list : 
-	m_list = tmpFolder.folderGetSubList(propertyShowHidden, propertyShowFolder, propertyShowFile, propertyFilter);
+	m_list = tmpFolder.folderGetSubList(*propertyShowHidden, *propertyShowFolder, *propertyShowFile, *propertyFilter);
 	// request a redraw ...
 	markToRedraw();
 }
@@ -114,7 +114,7 @@ bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTit
 
 uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 	int32_t offset = 0;
-	if (propertyShowFolder == true) {
+	if (*propertyShowFolder == true) {
 		if (propertyPath.get() == "/") {
 			offset = 1;
 		} else {
@@ -126,8 +126,8 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 
 bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
-	if (propertyShowFolder == true) {
-		if (propertyPath.get() == "/") {
+	if (*propertyShowFolder == true) {
+		if (*propertyPath == "/") {
 			offset = 1;
 		} else {
 			offset = 2;
@@ -165,8 +165,8 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
                                                float _x,
                                                float _y) {
 	int32_t offset = 0;
-	if (propertyShowFolder == true) {
-		if (propertyPath.get() == "/") {
+	if (*propertyShowFolder == true) {
+		if (*propertyPath == "/") {
 			offset = 1;
 		} else {
 			offset = 2;
@@ -182,11 +182,11 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				m_selectedLine = _raw;
 			}
 			if (previousRaw != m_selectedLine) {
-				if(    propertyShowFolder == true
+				if(    *propertyShowFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
 					signalFolderSelect.emit(".");
-				} else if (    propertyShowFolder == true
+				} else if (    *propertyShowFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
 					signalFolderSelect.emit("..");
@@ -207,11 +207,11 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					}
 				}
 			} else {
-				if(    propertyShowFolder == true
+				if(    *propertyShowFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
 					signalFolderValidate.emit(".");
-				} else if (    propertyShowFolder == true
+				} else if (    *propertyShowFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
 					signalFolderValidate.emit("..");

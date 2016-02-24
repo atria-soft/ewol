@@ -95,7 +95,7 @@ void ewol::widget::Button::onRegenerateDisplay() {
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("Event on BT : " << _event);
 	// disable event in the lock access mode :
-	if(ewol::widget::Button::lockAccess == propertyLock) {
+	if(ewol::widget::Button::lockAccess == *propertyLock) {
 		return false;
 	}
 	if(    gale::key::status_leave == _event.getStatus()
@@ -119,36 +119,36 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(gale::key::status_down == _event.getStatus()) {
-				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalDown);
+				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(gale::key::status_up == _event.getStatus()) {
-				EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalUp);
+				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
 			if(gale::key::status_single == _event.getStatus()) {
-				if(    (    propertyValue.get() == true
+				if(    (    *propertyValue == true
 				         && ewol::widget::Button::lockWhenPressed == propertyLock)
-				    || (    propertyValue.get() == false
+				    || (    *propertyValue == false
 				         && ewol::widget::Button::lockWhenReleased == propertyLock) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
 					// inverse value :
-					propertyValue.set((propertyValue.get())?false:true);
-					EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalPressed);
+					propertyValue.set((*propertyValue)?false:true);
+					EWOL_VERBOSE(*propertyName << " : Generate event : " << signalPressed);
 					signalPressed.emit();
-					EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalValue << " val=" << propertyValue );
-					signalValue.emit(propertyValue.get());
-					if(    propertyToggleMode.get() == false
-					    && propertyValue.get() == true) {
+					EWOL_VERBOSE(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue );
+					signalValue.emit(*propertyValue);
+					if(    *propertyToggleMode == false
+					    && *propertyValue == true) {
 						propertyValue.set(false);
-						EWOL_VERBOSE(propertyName.get() << " : Generate event : " << signalValue << " val=" << propertyValue);
-						signalValue.emit(propertyValue.get());
+						EWOL_VERBOSE(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue);
+						signalValue.emit(*propertyValue);
 					}
 				}
 				markToRedraw();
@@ -186,7 +186,7 @@ void ewol::widget::Button::CheckStatus() {
 		changeStatusIn(STATUS_HOVER);
 		return;
 	}
-	if (propertyValue == true) {
+	if (*propertyValue == true) {
 		changeStatusIn(STATUS_DOWN);
 	}
 	changeStatusIn(STATUS_UP);
@@ -210,17 +210,17 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container2::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertyShape) {
-		m_shaper.setSource(propertyShape.get());
+		m_shaper.setSource(*propertyShape);
 		markToRedraw();
 	} else if (_paramPointer == propertyValue) {
-		if (propertyToggleMode == true) {
-			if (propertyValue.get() == false) {
+		if (*propertyToggleMode == true) {
+			if (*propertyValue == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
 			}
 		}
-		if (propertyEnableSingle == true) {
+		if (*propertyEnableSingle == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {
@@ -234,27 +234,27 @@ void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPoi
 		CheckStatus();
 		markToRedraw();
 	} else if (_paramPointer == propertyLock) {
-		if(ewol::widget::Button::lockAccess == propertyLock.get()) {
+		if(ewol::widget::Button::lockAccess == *propertyLock) {
 			m_buttonPressed = false;
 			m_mouseHover = false;
 		}
 		CheckStatus();
 		markToRedraw();
 	} else if (_paramPointer == propertyToggleMode) {
-		if (propertyValue.get() == true) {
-			propertyValue.get() = false;
+		if (*propertyValue == true) {
+			propertyValue.setDirect(false);
 			// TODO : change display and send event ...
 		}
-		if (propertyToggleMode.get() == false) {
+		if (*propertyToggleMode == false) {
 			m_idWidgetDisplayed = 0;
 		} else {
-			if (propertyValue.get() == false) {
+			if (*propertyValue == false) {
 				m_idWidgetDisplayed = 0;
 			} else {
 				m_idWidgetDisplayed = 1;
 			}
 		}
-		if (propertyEnableSingle.get() == true) {
+		if (*propertyEnableSingle == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {
@@ -268,7 +268,7 @@ void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPoi
 		CheckStatus();
 		markToRedraw();
 	} else if (_paramPointer == propertyEnableSingle) {
-		if (propertyEnableSingle == true) {
+		if (*propertyEnableSingle == true) {
 			if (    m_idWidgetDisplayed == 0
 			     && m_subWidget[0] == nullptr
 			     && m_subWidget[1] != nullptr) {

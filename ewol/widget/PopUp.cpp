@@ -44,14 +44,14 @@ void ewol::widget::PopUp::onChangeSize() {
 	}
 	ewol::Padding padding = m_shaper.getPadding();
 	vec2 subWidgetSize = m_subWidget->getCalculateMinSize();
-	if (true == m_subWidget->canExpand().x()) {
+	if (m_subWidget->canExpand().x() == true) {
 		if (propertyLockExpand->x() == true) {
 			subWidgetSize.setX(m_minSize.x());
 		} else {
 			subWidgetSize.setX(m_size.x()-padding.xLeft());
 		}
 	}
-	if (true == m_subWidget->canExpand().y()) {
+	if (m_subWidget->canExpand().y() == true) {
 		if (propertyLockExpand->y() == true) {
 			subWidgetSize.setY(m_minSize.y());
 		} else {
@@ -73,7 +73,7 @@ void ewol::widget::PopUp::onChangeSize() {
 }
 
 void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (propertyHide == true){
+	if (*propertyHide == true){
 		// widget is hidden ...
 		return;
 	}
@@ -133,7 +133,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::PopUp::getWidgetAtPos(const vec2& _p
 void ewol::widget::PopUp::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertyShape) {
-		m_shaper.setSource(propertyShape);
+		m_shaper.setSource(*propertyShape);
 		markToRedraw();
 		requestUpdateSize();
 	} else if (_paramPointer == propertyLockExpand) {
@@ -148,7 +148,7 @@ bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 	if (_event.getId() == 0) {
 		return false;
 	}
-	if (propertyCloseOutEvent == true) {
+	if (*propertyCloseOutEvent == true) {
 		return false;
 	}
 	ewol::Padding padding = m_shaper.getPadding();

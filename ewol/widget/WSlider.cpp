@@ -63,7 +63,7 @@ void ewol::widget::WSlider::onChangeSize() {
 		std::advance(it, m_windowsSources);
 		if (    it != m_subWidget.end()
 		     && *it != nullptr) {
-		     if (propertyTransitionMode == sladingTransitionHori) {
+		     if (*propertyTransitionMode == sladingTransitionHori) {
 				(*it)->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress),
 				                         m_origin.y())
 				                  + m_offset);
@@ -79,7 +79,7 @@ void ewol::widget::WSlider::onChangeSize() {
 		std::advance(it, m_windowsDestination);
 		if (    it != m_subWidget.end()
 		     && *it != nullptr) {
-			if (propertyTransitionMode == sladingTransitionHori) {
+			if (*propertyTransitionMode == sladingTransitionHori) {
 				(*it)->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress - m_size.x()),
 				                         m_origin.y())
 				                  + m_offset);
@@ -117,9 +117,9 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 			if (it->getId() == _id) {
 				if (it->propertyName.get() != "") {
 					// change the internal event parameter (in case...) ==> no event generation
-					propertySelectWidget.get() = it->propertyName.get();
+					propertySelectWidget.setDirect(it->propertyName.get());
 				} else {
-					propertySelectWidget.get() = "";
+					propertySelectWidget.setDirect("");
 				}
 				break;
 			}
@@ -130,7 +130,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	} else {
 		subWidgetSelectSetVectorId(-1);
 		// change the internal event parameter (in case...) ==> no event generation
-		propertySelectWidget.get() = "";
+		propertySelectWidget.setDirect("");
 	}
 }
 
@@ -146,9 +146,9 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::shared_ptr<ewol::Widge
 			subWidgetSelectSetVectorId(iii);
 			if (_widgetPointer->propertyName.get() != "") {
 				// change the internal event parameter (in case...) ==> no event generation
-				propertySelectWidget.get() = _widgetPointer->propertyName.get();
+				propertySelectWidget.setDirect(_widgetPointer->propertyName.get());
 			} else {
-				propertySelectWidget.get() = "";
+				propertySelectWidget.setDirect("");
 			}
 			return;
 		}
@@ -168,7 +168,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 		     && it->propertyName.get() == _widgetName) {
 			subWidgetSelectSetVectorId(iii);
 			// change the internal event parameter (in case...) ==> no event generation
-			propertySelectWidget.get() = _widgetName;
+			propertySelectWidget.setDirect(_widgetName);
 			return;
 		}
 		iii++;
@@ -210,7 +210,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 }
 
 void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (propertyHide == true){
+	if (*propertyHide == true){
 		// widget is hidden ...
 		return;
 	}
@@ -276,7 +276,7 @@ void ewol::widget::WSlider::onPropertyChangeValue(const eproperty::Ref& _paramPo
 	ewol::widget::ContainerN::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertySelectWidget) {
 		if (propertySelectWidget.get() != "") {
-			subWidgetSelectSet(propertySelectWidget);
+			subWidgetSelectSet(*propertySelectWidget);
 		}
 	} else if (_paramPointer == propertyTransitionSpeed) {
 		// nothing to do ...
@@ -286,7 +286,7 @@ void ewol::widget::WSlider::onPropertyChangeValue(const eproperty::Ref& _paramPo
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
-	if (propertyHide == true) {
+	if (*propertyHide == true) {
 		return nullptr;
 	}
 	if (m_windowsDestination == m_windowsSources) {

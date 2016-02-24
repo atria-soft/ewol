@@ -72,10 +72,10 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	vec2 imageRealSize = m_imageRenderSize - imageBoder;
 	vec2 imageRealSizeMax = m_size - imageBoder;
 	
-	vec2 ratioSizeDisplayRequested = propertyPosStop.get() - propertyPosStart.get();
+	vec2 ratioSizeDisplayRequested = *propertyPosStop - *propertyPosStart;
 	//imageRealSizeMax *= ratioSizeDisplayRequested;
 	
-	vec2 delta = ewol::gravityGenerateDelta(propertyGravity, m_size-m_imageRenderSize);
+	vec2 delta = ewol::gravityGenerateDelta(*propertyGravity, m_size-m_imageRenderSize);
 	if (propertyFill->x() == true) {
 		imageRealSize.setX(imageRealSizeMax.x());
 		delta.setX(0.0);
@@ -86,7 +86,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	}
 	origin += delta;
 	
-	if (propertyKeepRatio == true) {
+	if (*propertyKeepRatio == true) {
 		vec2 tmpSize = m_compositing.getRealSize();
 		//float ratio = tmpSize.x() / tmpSize.y();
 		float ratio = (tmpSize.x()*ratioSizeDisplayRequested.x()) / (tmpSize.y() * ratioSizeDisplayRequested.y());
@@ -106,14 +106,14 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	}
 	
 	// set the somposition properties :
-	if (propertySmooth.get() == true) {
+	if (*propertySmooth == true) {
 		m_compositing.setPos(origin);
 	} else {
 		m_compositing.setPos(ivec2(origin));
 	}
-	m_compositing.printPart(imageRealSize, propertyPosStart, propertyPosStop);
+	m_compositing.printPart(imageRealSize, *propertyPosStart, *propertyPosStop);
 	//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
-	EWOL_VERBOSE("Paint Image :" << propertySource << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
+	EWOL_VERBOSE("Paint Image :" << *propertySource << " realsize=" << *m_compositing.getRealSize() << " size=" << imageRealSize);
 }
 
 void ewol::widget::Image::calculateMinMaxSize() {
@@ -162,26 +162,26 @@ bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _n
 	std::string tmpAttributeValue = _node->getAttribute("ratio");
 	if (tmpAttributeValue.size() != 0) {
 		if (etk::compare_no_case(tmpAttributeValue, "true") == true) {
-			propertyKeepRatio = true;
+			propertyKeepRatio.setDirect(true);
 		} else if (tmpAttributeValue == "1") {
-			propertyKeepRatio = true;
+			propertyKeepRatio.setDirect(true);
 		} else {
-			propertyKeepRatio = false;
+			propertyKeepRatio.setDirect(false);
 		}
 	}
 	tmpAttributeValue = _node->getAttribute("size");
 	if (tmpAttributeValue.size() != 0) {
 		//EWOL_CRITICAL(" Parse SIZE : " << tmpAttributeValue);
-		propertyImageSize = tmpAttributeValue;
+		propertyImageSize.setDirect(tmpAttributeValue);
 		//EWOL_CRITICAL("               == > " << propertyImageSize);
 	}
 	tmpAttributeValue = _node->getAttribute("border");
 	if (tmpAttributeValue.size() != 0) {
-		propertyBorder = tmpAttributeValue;
+		propertyBorder.setDirect(tmpAttributeValue);
 	}
 	tmpAttributeValue = _node->getAttribute("smooth");
 	if (tmpAttributeValue.size() != 0) {
-		propertySmooth = etk::string_to_bool(tmpAttributeValue);
+		propertySmooth.setDirect(etk::string_to_bool(tmpAttributeValue));
 	}
 	//EWOL_DEBUG("Load label:" << node->ToElement()->getText());
 	if (_node->size() != 0) {
@@ -201,8 +201,8 @@ void ewol::widget::Image::onPropertyChangeValue(const eproperty::Ref& _paramPoin
 	     || _paramPointer == propertyImageSize) {
 		markToRedraw();
 		requestUpdateSize();
-		EWOL_VERBOSE("Set sources : " << propertySource << " size=" << propertyImageSize);
-		m_compositing.setSource(propertySource, propertyImageSize->getPixel());
+		EWOL_VERBOSE("Set sources : " << *propertySource << " size=" << *propertyImageSize);
+		m_compositing.setSource(*propertySource, propertyImageSize->getPixel());
 	} else if (    _paramPointer == propertyBorder
 	            || _paramPointer == propertyKeepRatio
 	            || _paramPointer == propertyPosStart
@@ -214,7 +214,7 @@ void ewol::widget::Image::onPropertyChangeValue(const eproperty::Ref& _paramPoin
 	} else if (_paramPointer == propertySmooth) {
 		markToRedraw();
 	} else if (_paramPointer == propertyDistanceFieldMode) {
-		m_compositing.setDistanceFieldMode(propertyDistanceFieldMode.get());
+		m_compositing.setDistanceFieldMode(*propertyDistanceFieldMode);
 		markToRedraw();
 	}
 }

@@ -212,7 +212,7 @@ void ewol::widget::Entry::removeSelected() {
 	// remove data ...
 	m_displayCursorPos = pos1;
 	m_displayCursorPosSelection = pos1;
-	propertyValue->erase(pos1, pos2-pos1);
+	propertyValue.getDirect().erase(pos1, pos2-pos1);
 	markToRedraw();
 }
 
@@ -339,14 +339,14 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
 				if (propertyValue->size() > 0 && m_displayCursorPos < (int64_t)propertyValue->size()) {
-					propertyValue->erase(m_displayCursorPos, 1);
+					propertyValue.getDirect().erase(m_displayCursorPos, 1);
 					m_displayCursorPos = std::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if (_event.getChar() == 0x08) {
 				// DEL :
 				if (propertyValue->size() > 0 && m_displayCursorPos != 0) {
-					propertyValue->erase(m_displayCursorPos-1, 1);
+					propertyValue.getDirect().erase(m_displayCursorPos-1, 1);
 					m_displayCursorPos--;
 					m_displayCursorPos = std::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
@@ -415,7 +415,7 @@ void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
 			return;
 		}
 	}
-	propertyValue.get() = _newData;
+	propertyValue.setDirect(_newData);
 	markToRedraw();
 }
 
@@ -443,7 +443,7 @@ void ewol::widget::Entry::onEventClipboard(enum gale::context::clipBoard::clipbo
 }
 
 void ewol::widget::Entry::onCallbackEntryClean() {
-	propertyValue = "";
+	propertyValue.setDirect("");
 	m_displayStartPosition = 0;
 	m_displayCursorPos = 0;
 	m_displayCursorPosSelection = m_displayCursorPos;

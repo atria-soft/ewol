@@ -127,7 +127,7 @@ ewol::widget::FileChooser::~FileChooser() {
 void ewol::widget::FileChooser::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::widget::Composer::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertyPath) {
-		propertyPath.get() += "/";
+		propertyPath.getDirect() = *propertyPath + "/";
 		updateCurrentFolder();
 	} else if (_paramPointer == propertyFile) {
 		propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", propertyFile);
@@ -148,7 +148,7 @@ void ewol::widget::FileChooser::onCallbackEntryFolderChangeValue(const std::stri
 
 void ewol::widget::FileChooser::onCallbackEntryFileChangeValue(const std::string& _value) {
 	// == > change the file name
-	propertyFile.get() = _value;
+	propertyFile.setDirect(_value);
 	// update the selected file in the list :
 	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "select", propertyFile);
 }
@@ -171,11 +171,11 @@ void ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue(const bool&
 
 void ewol::widget::FileChooser::onCallbackListFolderSelectChange(const std::string& _value) {
 	// == > this is an internal event ...
-	EWOL_DEBUG(" old PATH: '" << propertyPath << "' + '" << _value << "'");
-	propertyPath.get() += _value;
-	EWOL_DEBUG("new PATH: '" << propertyPath << "'");
-	propertyPath.get() = etk::simplifyPath(propertyPath);
-	propertyFile.set("");
+	EWOL_DEBUG(" old PATH: '" << *propertyPath << "' + '" << _value << "'");
+	propertyPath.setDirect(propertyPath.get() + _value);
+	EWOL_DEBUG("new PATH: '" << *propertyPath << "'");
+	propertyPath.setDirect(etk::simplifyPath(*propertyPath));
+	propertyFile.setDirect("");
 	updateCurrentFolder();
 }
 
@@ -210,16 +210,16 @@ void ewol::widget::FileChooser::onCallbackHomePressed() {
 	std::string tmpUserFolder = etk::getUserHomeFolder();
 	EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 	
-	propertyPath.get() = etk::simplifyPath(tmpUserFolder);
+	propertyPath.setDirect(etk::simplifyPath(tmpUserFolder));
 	
-	propertyFile.set("");
+	propertyFile.setDirect("");
 	updateCurrentFolder();
 }
 
 void ewol::widget::FileChooser::updateCurrentFolder() {
-	if (propertyPath.get() != "") {
+	if (*propertyPath != "") {
 		if (propertyPath.get()[propertyPath->size()-1] != '/') {
-			propertyPath.get() +=  "/";
+			propertyPath.getDirect() +=  "/";
 		}
 	}
 	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:list-files", "path", propertyPath);

@@ -313,7 +313,7 @@ void ewol::widget::Gird::onRegenerateDisplay() {
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
-	if (propertyHide == true) {
+	if (*propertyHide == true) {
 		return nullptr;
 	}
 	// for all element in the sizer ...

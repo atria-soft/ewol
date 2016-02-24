@@ -49,7 +49,7 @@ void ewol::widget::Scroll::calculateMinMaxSize() {
 }
 
 void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (propertyHide == true) {
+	if (*propertyHide == true) {
 		return;
 	}
 	if (m_subWidget != nullptr) {
@@ -78,7 +78,7 @@ void ewol::widget::Scroll::onRegenerateDisplay() {
 	ewol::Padding paddingHori = m_shaperH.getPadding();
 	vec2 scrollOffset(0,0);
 	vec2 scrollSize(0,0);
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
@@ -114,7 +114,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	vec2 scrollOffset(0,0);
 	vec2 scrollSize(0,0);
-	if (nullptr!=m_subWidget) {
+	if (m_subWidget != nullptr) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
@@ -138,7 +138,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
 					scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 					markToRedraw();
-					if (nullptr!=m_subWidget) {
+					if (m_subWidget != nullptr) {
 						m_subWidget->setOffset(scrollOffset);
 					}
 					return true;
@@ -155,7 +155,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
 					scrollOffset.setY(std::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x())));
 					markToRedraw();
-					if (nullptr!=m_subWidget) {
+					if (m_subWidget != nullptr) {
 						m_subWidget->setOffset(scrollOffset);
 					}
 					return true;
@@ -168,7 +168,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				scrollOffset.setY(scrollOffset.y()-m_pixelScrolling);
 				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				markToRedraw();
-				if (nullptr!=m_subWidget) {
+				if (m_subWidget != nullptr) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -179,7 +179,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				scrollOffset.setY(scrollOffset.y()+m_pixelScrolling);
 				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				markToRedraw();
-				if (nullptr!=m_subWidget) {
+				if (m_subWidget != nullptr) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;

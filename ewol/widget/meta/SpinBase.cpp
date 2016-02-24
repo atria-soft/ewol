@@ -40,7 +40,7 @@ void ewol::widget::SpinBase::init(enum ewol::widget::spinPosition _mode,
 	ewol::widget::Sizer::init(ewol::widget::Sizer::modeHori);
 	propertyLockExpand.set(bvec2(true,true));
 	propertyShape.set(_shaperName);
-	propertySpinMode = _mode;
+	propertySpinMode.set(_mode);
 	propertyGravity.set(gravity_center);
 	updateGui();
 }

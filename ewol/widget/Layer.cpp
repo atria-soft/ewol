@@ -26,7 +26,7 @@ ewol::widget::Layer::~Layer() {
 }
 
 std::shared_ptr<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
-	if (propertyHide == true) {
+	if (*propertyHide == true) {
 		return nullptr;
 	}
 	// for all element in the sizer ...

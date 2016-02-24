@@ -81,11 +81,11 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 		    || gale::key::status_move   == _event.getStatus()) {
 			// get the new position :
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
-			float oldValue = propertyValue.get();
-			updateValue(propertyMinimum + (float)(relativePos.x() - dotRadius) / (m_size.x()-2*dotRadius) * (propertyMaximum-propertyMinimum));
-			if (oldValue != propertyValue) {
-				EWOL_VERBOSE(" new value : " << propertyValue << " in [" << propertyMinimum << ".." << propertyMaximum << "]");
-				signalChange.emit(propertyValue);
+			float oldValue = *propertyValue;
+			updateValue(*propertyMinimum + (float)(relativePos.x() - dotRadius) / (m_size.x()-2*dotRadius) * (*propertyMaximum-*propertyMinimum));
+			if (oldValue != *propertyValue) {
+				EWOL_VERBOSE(" new value : " << *propertyValue << " in [" << *propertyMinimum << ".." << *propertyMaximum << "]");
+				signalChange.emit(*propertyValue);
 			}
 			return true;
 		}
@@ -94,12 +94,12 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 }
 
 void ewol::widget::Slider::updateValue(float _newValue) {
-	_newValue = std::max(std::min(_newValue, propertyMaximum.get()), propertyMinimum.get());
-	if (propertyStep.get() == 0.0f) {
-		propertyValue = _newValue;
+	_newValue = std::max(std::min(_newValue, *propertyMaximum), *propertyMinimum);
+	if (*propertyStep == 0.0f) {
+		propertyValue.setDirect(_newValue);
 	} else {
-		float basicVal = (int64_t)(_newValue / propertyStep.get());
-		propertyValue = basicVal * propertyStep.get();
+		float basicVal = (int64_t)(_newValue / *propertyStep);
+		propertyValue.setDirect(basicVal * *propertyStep);
 	}
 	markToRedraw();
 }
@@ -108,19 +108,19 @@ void ewol::widget::Slider::updateValue(float _newValue) {
 void ewol::widget::Slider::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 	ewol::Widget::onPropertyChangeValue(_paramPointer);
 	if (_paramPointer == propertyValue) {
-		updateValue(propertyValue.get());
+		updateValue(*propertyValue);
 		return;
 	}
 	if (_paramPointer == propertyMinimum) {
-		updateValue(propertyValue.get());
+		updateValue(*propertyValue);
 		return;
 	}
 	if (_paramPointer == propertyMaximum) {
-		updateValue(propertyValue.get());
+		updateValue(*propertyValue);
 		return;
 	}
 	if (_paramPointer == propertyStep) {
-		updateValue(propertyValue.get());
+		updateValue(*propertyValue);
 		return;
 	}
 }

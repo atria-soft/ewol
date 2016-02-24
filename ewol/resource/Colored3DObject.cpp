@@ -10,7 +10,6 @@
 #include <ewol/resource/Colored3DObject.h>
 #include <gale/resource/Manager.h>
 #include <gale/renderer/openGL/openGL-include.h>
-#include <esignal/details/Signal.hxx>
 #include <esignal/ISignal.h>
 
 #undef __class__
@@ -231,9 +230,12 @@ void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
 	}
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
-template<> std::string etk::to_string(ewol::resource::Colored3DObject const&) {
-	return "!!ewol::resource::Colored3DObject!ERROR!CAN_NOT_BE_CONVERT!!";
+namespace etk {
+	template<> std::string to_string(ewol::resource::Colored3DObject const&) {
+		return "!!ewol::resource::Colored3DObject!ERROR!CAN_NOT_BE_CONVERT!!";
+	}
 }
+#include <esignal/details/ISignal.hxx>
 
 // declare for signal event
 template class esignal::ISignal<ewol::resource::Colored3DObject>;

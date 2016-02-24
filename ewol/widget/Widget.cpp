@@ -82,7 +82,7 @@ void ewol::Widget::onChangeSize() {
 }
 
 bool ewol::Widget::setFocus() {
-	if (propertyCanFocus == true) {
+	if (*propertyCanFocus == true) {
 		if (m_hasFocus == false) {
 			m_hasFocus = true;
 			onGetFocus();
@@ -93,7 +93,7 @@ bool ewol::Widget::setFocus() {
 }
 
 bool ewol::Widget::rmFocus() {
-	if (propertyCanFocus == true) {
+	if (*propertyCanFocus == true) {
 		if (m_hasFocus == true) {
 			m_hasFocus = false;
 			onLostFocus();
@@ -142,7 +142,7 @@ void ewol::Widget::setOffset(const vec2& _newVal) {
    (0,0)
 */
 void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
-	if (propertyHide == true){
+	if (*propertyHide == true){
 		// widget is hidden ...
 		return;
 	}
@@ -298,14 +298,14 @@ void ewol::Widget::calculateMinMaxSize() {
 }
 
 vec2 ewol::Widget::getCalculateMinSize() {
-	if (propertyHide == false) {
+	if (*propertyHide == false) {
 		return m_minSize;
 	}
 	return vec2(0,0);
 }
 
 vec2 ewol::Widget::getCalculateMaxSize() {
-	if (propertyHide == false) {
+	if (*propertyHide == false) {
 		return m_maxSize;
 	}
 	return vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
@@ -332,21 +332,21 @@ void ewol::Widget::checkMaxSize() {
 }
 
 vec2 ewol::Widget::getSize() {
-	if (propertyHide == false) {
+	if (*propertyHide == false) {
 		return m_size;
 	}
 	return vec2(0,0);
 }
 
 bvec2 ewol::Widget::canExpand() {
-	if (propertyHide == false) {
-		return propertyExpand;
+	if (*propertyHide == false) {
+		return *propertyExpand;
 	}
 	return bvec2(false,false);
 }
 
 const bvec2& ewol::Widget::canFill() {
-	return propertyFill;
+	return *propertyFill;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -583,7 +583,7 @@ void ewol::Widget::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 		}
 		if (error == true) {
 			EWOL_ERROR("Can not set a 'min size' > 'max size' reset to maximum ...");
-			propertyMaxSize.get() = gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel);
+			propertyMaxSize.setDirect(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel));
 		}
 		requestUpdateSize();
 	} else if (_paramPointer == propertyMinSize) {
@@ -599,7 +599,7 @@ void ewol::Widget::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
 		}
 		if (error == true) {
 			EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-			propertyMinSize = gale::Dimension(vec2(0,0),gale::Dimension::Pixel);
+			propertyMinSize.setDirect(gale::Dimension(vec2(0,0),gale::Dimension::Pixel));
 		}
 		requestUpdateSize();
 	} else if (_paramPointer == propertyAnnimationTypeStart) {

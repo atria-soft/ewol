@@ -46,11 +46,11 @@ void ewol::widget::Spin::onPropertyChangeValue(const eproperty::Ref& _paramPoint
 			EWOL_ERROR("Can not acces at entry ...");
 			return;
 		}
-		checkValue(propertyValue.get());
+		checkValue(*propertyValue);
 	} else if (_paramPointer == propertyMin) {
-		checkValue(propertyValue.get());
+		checkValue(*propertyValue);
 	} else if (_paramPointer == propertyMax) {
-		checkValue(propertyValue.get());
+		checkValue(*propertyValue);
 	} else if (_paramPointer == propertyIncrement) {
 		
 	} else if (_paramPointer == propertyMantis) {
@@ -79,7 +79,7 @@ void ewol::widget::Spin::updateGui() {
 
 void ewol::widget::Spin::checkValue(int64_t _value) {
 	_value = std::avg(propertyMin.get(), _value, propertyMax.get());
-	propertyValue.get() = _value;
+	propertyValue.setDirect(_value);
 	m_widgetEntry->propertyValue.set(etk::to_string(_value));
 }
 
