@@ -94,7 +94,12 @@ namespace ewol {
 				void onCallbackListFileValidate(const std::string& _value);
 				void onCallbackListValidate();
 				void onCallbackHomePressed();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyPath();
+				virtual void onChangePropertyFile();
+				virtual void onChangePropertyLabelTitle();
+				virtual void onChangePropertyLabelValidate();
+				virtual void onChangePropertyLabelCancel();
 		};
 	};
 };

@@ -53,7 +53,10 @@ namespace ewol {
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyLimit();
+				virtual void onChangePropertyShapeVert();
+				virtual void onChangePropertyShapeHori();
 		};
 	}
 }

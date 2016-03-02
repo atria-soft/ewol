@@ -49,7 +49,11 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyValue();
+				virtual void onChangePropertyMinimum();
+				virtual void onChangePropertyMaximum();
+				virtual void onChangePropertyStep();
 		};
 	}
 }

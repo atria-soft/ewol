@@ -515,8 +515,6 @@ namespace ewol {
 			virtual enum gale::context::cursor getCursor();
 		public: // Derived function
 			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
-		protected: // Derived function
-			virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  ==> this force the system to recalculate all the widget positions
@@ -595,7 +593,14 @@ namespace ewol {
 			 * @brief Event when Stop the annimation.
 			 */
 			virtual void onStopAnnimation() { };
-			
+		protected:
+			virtual void onChangePropertyCanFocus();
+			virtual void onChangePropertyGravity();
+			virtual void onChangePropertyHide();
+			virtual void onChangePropertyFill();
+			virtual void onChangePropertyExpand();
+			virtual void onChangePropertyMaxSize();
+			virtual void onChangePropertyMinSize();
 	};
 };
 

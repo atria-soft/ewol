@@ -33,15 +33,29 @@ extern "C" {
 #undef __class__
 #define __class__ "FileChooser"
 
-
 ewol::widget::FileChooser::FileChooser() :
-  signalCancel(*this, "cancel"),
-  signalValidate(*this, "validate"),
-  propertyPath(*this, "path", etk::getUserHomeFolder(), ""),
-  propertyFile(*this, "file", "", ""),
-  propertyLabelTitle(*this, "title", "TRANSLATE:FileChooser", ""),
-  propertyLabelValidate(*this, "label-validate", "TRANSLATE:Validate", ""),
-  propertyLabelCancel(*this, "label-cancel", "TRANSLATE:Cancel", "") {
+  signalCancel(this, "cancel", ""),
+  signalValidate(this, "validate", ""),
+  propertyPath(this, "path",
+                     etk::getUserHomeFolder(),
+                     "",
+                     &ewol::widget::FileChooser::onChangePropertyPath),
+  propertyFile(this, "file",
+                     "",
+                     "",
+                     &ewol::widget::FileChooser::onChangePropertyFile),
+  propertyLabelTitle(this, "title",
+                           "TRANSLATE:FileChooser",
+                           "",
+                           &ewol::widget::FileChooser::onChangePropertyLabelTitle),
+  propertyLabelValidate(this, "label-validate",
+                              "TRANSLATE:Validate",
+                              "",
+                              &ewol::widget::FileChooser::onChangePropertyLabelValidate),
+  propertyLabelCancel(this, "label-cancel",
+                            "TRANSLATE:Cancel",
+                            "",
+                            &ewol::widget::FileChooser::onChangePropertyLabelCancel) {
 	addObjectType("ewol::widget::FileChooser");
 }
 
@@ -124,21 +138,26 @@ ewol::widget::FileChooser::~FileChooser() {
 	
 }
 
-void ewol::widget::FileChooser::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Composer::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyPath) {
-		propertyPath.getDirect() = *propertyPath + "/";
-		updateCurrentFolder();
-	} else if (_paramPointer == propertyFile) {
-		propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", propertyFile);
-		updateCurrentFolder();
-	} else if (_paramPointer == propertyLabelTitle) {
-		propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", TRANSLATE(propertyLabelTitle));
-	} else if (_paramPointer == propertyLabelValidate) {
-		propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", TRANSLATE(propertyLabelValidate));
-	} else if (_paramPointer == propertyLabelCancel) {
-		propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", TRANSLATE(propertyLabelCancel));
-	}
+void ewol::widget::FileChooser::onChangePropertyPath() {
+	propertyPath.getDirect() = *propertyPath + "/";
+	updateCurrentFolder();
+}
+
+void ewol::widget::FileChooser::onChangePropertyFile() {
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", propertyFile);
+	updateCurrentFolder();
+}
+
+void ewol::widget::FileChooser::onChangePropertyLabelTitle() {
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", TRANSLATE(propertyLabelTitle));
+}
+
+void ewol::widget::FileChooser::onChangePropertyLabelValidate() {
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", TRANSLATE(propertyLabelValidate));
+}
+
+void ewol::widget::FileChooser::onChangePropertyLabelCancel() {
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", TRANSLATE(propertyLabelCancel));
 }
 
 void ewol::widget::FileChooser::onCallbackEntryFolderChangeValue(const std::string& _value) {

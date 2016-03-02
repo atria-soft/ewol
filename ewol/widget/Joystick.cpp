@@ -21,9 +21,9 @@ static float l_ratio(1.0/7.0);
 #define __class__ "Joystick"
 
 ewol::widget::Joystick::Joystick() :
-  signalEnable(*this, "enable"),
-  signalDisable(*this, "disable"),
-  signalMove(*this, "move") {
+  signalEnable(this, "enable", ""),
+  signalDisable(this, "disable", ""),
+  signalMove(this, "move", "") {
 	addObjectType("ewol::widget::Joystick");
 	// by default the joy does not lock when free out
 	m_lock = false;

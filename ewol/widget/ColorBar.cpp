@@ -17,8 +17,11 @@
 #define __class__ "ColorBar"
 
 ewol::widget::ColorBar::ColorBar() :
-  signalChange(*this, "change", "Color value change"),
-  propertyValue(*this, "color", etk::color::black, "Current color") {
+  signalChange(this, "change", "Color value change"),
+  propertyValue(this, "color",
+                      etk::color::black,
+                      "Current color",
+                      &ewol::widget::ColorBar::onChangePropertyValue) {
 	addObjectType("ewol::widget::ColorBar");
 	m_currentUserPos.setValue(0,0);
 	setMouseLimit(1);
@@ -52,13 +55,10 @@ static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
 	etk::Color<>(0xFF, 0x00, 0x00, 0xFF)};
 
 
-void ewol::widget::ColorBar::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		propertyValue.getDirect().setA(0xFF);
-		// estimate the cursor position:
-		EWOL_TODO("Later when really needed ...");
-	}
+void ewol::widget::ColorBar::onChangePropertyValue() {
+	propertyValue.getDirect().setA(0xFF);
+	// estimate the cursor position:
+	EWOL_TODO("Later when really needed ...");
 }
 
 void ewol::widget::ColorBar::onDraw() {

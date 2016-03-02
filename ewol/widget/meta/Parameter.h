@@ -49,7 +49,8 @@ namespace ewol {
 				void onCallbackMenuclosed();
 				void onCallbackParameterSave();
 				void onCallbackMenuSelected(const int32_t& _value);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyLabelTitle();
 		};
 	};
 };

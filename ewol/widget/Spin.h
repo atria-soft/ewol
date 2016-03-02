@@ -45,7 +45,6 @@ namespace ewol {
 				virtual ~Spin();
 			protected:
 				virtual void checkValue(int64_t _value);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual void updateGui();
 			protected:
 				void onCallbackUp();
@@ -54,6 +53,12 @@ namespace ewol {
 				esignal::Connection m_connectionEntry;
 				esignal::Connection m_connectionButtonUp;
 				esignal::Connection m_connectionButtonDown;
+			protected:
+				virtual void onChangePropertyValue();
+				virtual void onChangePropertyMin();
+				virtual void onChangePropertyMax();
+				virtual void onChangePropertyIncrement();
+				virtual void onChangePropertyMantis();
 		};
 	};
 };

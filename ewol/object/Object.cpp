@@ -46,7 +46,7 @@ void ewol::Object::removeParent() {
 }
 
 ewol::Object::Object() :
-  propertyName(*this, "name", "", "Object name, might be a unique reference in all the program"),
+  propertyName(this, "name", "", "Object name, might be a unique reference in all the program"),
   m_objectHasBeenInit(false),
   m_destroy(false),
   m_static(false),

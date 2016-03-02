@@ -16,7 +16,10 @@
 
 
 ewol::widget::ContainerN::ContainerN() :
-  propertyLockExpand(*this, "lock", vec2(false,false), "Lock the subwidget expand"),
+  propertyLockExpand(this, "lock",
+                           vec2(false,false),
+                           "Lock the subwidget expand",
+                           &ewol::widget::ContainerN::onChangePropertyLockExpand),
   m_subExpend(false,false) {
 	addObjectType("ewol::widget::ContainerN");
 	// nothing to do ...
@@ -47,12 +50,9 @@ bvec2 ewol::widget::ContainerN::canExpand() {
 	return res;
 }
 
-void ewol::widget::ContainerN::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyLockExpand) {
-		markToRedraw();
-		requestUpdateSize();
-	}
+void ewol::widget::ContainerN::onChangePropertyLockExpand() {
+	markToRedraw();
+	requestUpdateSize();
 }
 
 void ewol::widget::ContainerN::subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,

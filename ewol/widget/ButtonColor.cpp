@@ -25,12 +25,10 @@
 #undef __class__
 #define __class__	"ButtonColor"
 
-static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
-
 ewol::widget::ButtonColor::ButtonColor() :
-  signalChange(*this, "change", "Button color change value"),
-  propertyValue(*this, "color", etk::color::black, "Current color"),
-  propertyShape(*this, "shape", "", "shape of the widget"),
+  signalChange(this, "change", "Button color change value"),
+  propertyValue(this, "color", etk::color::black, "Current color", &ewol::widget::ButtonColor::onChangePropertyValue),
+  propertyShape(this, "shape", "", "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
   m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);
@@ -222,13 +220,12 @@ void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-
-void ewol::widget::ButtonColor::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		signalChange.emit(propertyValue);
-	} else if (_paramPointer == propertyShape) {
-		m_shaper.setSource(propertyShape.get());
-		markToRedraw();
-	}
+void ewol::widget::ButtonColor::onChangePropertyValue() {
+	signalChange.emit(propertyValue);
 }
+
+void ewol::widget::ButtonColor::onChangePropertyShape() {
+	m_shaper.setSource(propertyShape.get());
+	markToRedraw();
+}
+

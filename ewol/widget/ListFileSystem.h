@@ -73,8 +73,13 @@ namespace ewol {
 				 * @return the String of the element selected.
 				 */
 				std::string getSelect() const ;
-			public: // glocal derived functions
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyPath();
+				virtual void onChangePropertyFile();
+				virtual void onChangePropertyShowFile();
+				virtual void onChangePropertyShowFolder();
+				virtual void onChangePropertyShowHidden();
+				virtual void onChangePropertyFilter();
 		};
 	};
 };

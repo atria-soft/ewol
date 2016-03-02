@@ -45,7 +45,8 @@ namespace ewol {
 				void onCallbackColorChangeBlue(const float& _newColor);
 				void onCallbackColorChangeAlpha(const float& _newColor);
 				void onCallbackColorChange(const etk::Color<>& _newColor);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyValue();
 		};
 	};
 };

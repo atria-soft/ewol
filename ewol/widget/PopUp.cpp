@@ -18,9 +18,17 @@
 static const char* annimationIncrease = "increase";
 
 ewol::widget::PopUp::PopUp() :
-  propertyShape(*this, "shaper", "", "The shaper properties"),
-  propertyLockExpand(*this, "lock", bvec2(true,true), "Lock expand contamination"),
-  propertyCloseOutEvent(*this, "out-click-remove", false, "Remove the widget if the use click outside") {
+  propertyShape(this, "shaper",
+                      "",
+                      "The shaper properties",
+                      &ewol::widget::PopUp::onChangePropertyShape),
+  propertyLockExpand(this, "lock",
+                           bvec2(true,true),
+                           "Lock expand contamination",
+                           &ewol::widget::PopUp::onChangePropertyLockExpand),
+  propertyCloseOutEvent(this, "out-click-remove",
+                              false,
+                              "Remove the widget if the use click outside") {
 	addObjectType("ewol::widget::PopUp");
 	// Add annimations :
 	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
@@ -130,18 +138,15 @@ std::shared_ptr<ewol::Widget> ewol::widget::PopUp::getWidgetAtPos(const vec2& _p
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
-void ewol::widget::PopUp::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyShape) {
-		m_shaper.setSource(*propertyShape);
-		markToRedraw();
-		requestUpdateSize();
-	} else if (_paramPointer == propertyLockExpand) {
-		markToRedraw();
-		requestUpdateSize();
-	} else if (_paramPointer == propertyCloseOutEvent) {
-		// nothing to do ...
-	}
+void ewol::widget::PopUp::onChangePropertyShape() {
+	m_shaper.setSource(*propertyShape);
+	markToRedraw();
+	requestUpdateSize();
+}
+
+void ewol::widget::PopUp::onChangePropertyLockExpand() {
+	markToRedraw();
+	requestUpdateSize();
 }
 
 bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {

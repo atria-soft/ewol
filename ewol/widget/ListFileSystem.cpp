@@ -8,24 +8,40 @@
 
 #include <ewol/widget/ListFileSystem.h>
 #include <etk/tool.h>
-
 #include <etk/os/FSNode.h>
-
 
 #undef __class__
 #define __class__ "ListFileSystem"
 
 ewol::widget::ListFileSystem::ListFileSystem() :
-  signalFileSelect(*this, "file-select"),
-  signalFileValidate(*this, "file-validate"),
-  signalFolderSelect(*this, "folder-select"),
-  signalFolderValidate(*this, "folder-validate"),
-  propertyPath(*this, "path", "/", "Path to display"),
-  propertyFile(*this, "select", "", "selection af a specific file"),
-  propertyShowFile(*this, "show-file", true, "display files"),
-  propertyShowFolder(*this, "show-folder", true, "display folders"),
-  propertyShowHidden(*this, "show-hidden", true, "Show the hidden element (file, folder, ...)"),
-  propertyFilter(*this, "filter", "", "regex to filter files ..."),
+  signalFileSelect(this, "file-select", ""),
+  signalFileValidate(this, "file-validate", ""),
+  signalFolderSelect(this, "folder-select", ""),
+  signalFolderValidate(this, "folder-validate", ""),
+  propertyPath(this, "path",
+                     "/",
+                     "Path to display",
+                     &ewol::widget::ListFileSystem::onChangePropertyPath),
+  propertyFile(this, "select",
+                     "",
+                     "selection af a specific file",
+                     &ewol::widget::ListFileSystem::onChangePropertyFile),
+  propertyShowFile(this, "show-file",
+                         true,
+                         "display files",
+                         &ewol::widget::ListFileSystem::onChangePropertyShowFile),
+  propertyShowFolder(this, "show-folder",
+                           true,
+                           "display folders",
+                           &ewol::widget::ListFileSystem::onChangePropertyShowFolder),
+  propertyShowHidden(this, "show-hidden",
+                           true,
+                           "Show the hidden element (file, folder, ...)",
+                           &ewol::widget::ListFileSystem::onChangePropertyShowHidden),
+  propertyFilter(this, "filter",
+                       "",
+                       "regex to filter files ...",
+                       &ewol::widget::ListFileSystem::onChangePropertyFilter),
   m_selectedLine(-1) {
 	addObjectType("ewol::widget::ListFileSystem");
 	#if defined(__TARGET_OS__Windows)
@@ -239,20 +255,27 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 	return false;
 }
 
-void ewol::widget::ListFileSystem::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::List::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyPath) {
-		regenerateView();
-	} else if (_paramPointer == propertyFile) {
-		setSelect(propertyFile);
-	} else if (_paramPointer == propertyShowFile) {
-		regenerateView();
-	} else if (_paramPointer == propertyShowFolder) {
-		regenerateView();
-	} else if (_paramPointer == propertyShowHidden) {
-		regenerateView();
-	} else if (_paramPointer == propertyFilter) {
-		regenerateView();
-	}
+void ewol::widget::ListFileSystem::onChangePropertyPath() {
+	regenerateView();
+}
+
+void ewol::widget::ListFileSystem::onChangePropertyFile() {
+	setSelect(propertyFile);
+}
+
+void ewol::widget::ListFileSystem::onChangePropertyShowFile() {
+	regenerateView();
+}
+
+void ewol::widget::ListFileSystem::onChangePropertyShowFolder() {
+	regenerateView();
+}
+
+void ewol::widget::ListFileSystem::onChangePropertyShowHidden() {
+	regenerateView();
+}
+
+void ewol::widget::ListFileSystem::onChangePropertyFilter() {
+	regenerateView();
 }
 

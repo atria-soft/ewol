@@ -21,17 +21,17 @@ const static int32_t STATUS_PRESSED(1);
 const static int32_t STATUS_DOWN(3);
 
 ewol::widget::Button::Button() :
-  signalPressed(*this, "pressed", "Button is pressed"),
-  signalDown(*this, "down", "Button is DOWN"),
-  signalUp(*this, "up", "Button is UP"),
-  signalEnter(*this, "enter", "The cursor enter inside the button"),
-  signalLeave(*this, "leave", "the cursor leave the button"),
-  signalValue(*this, "value", "button value change"),
-  propertyShape(*this, "shaper", "", "The display name for config file"),
-  propertyValue(*this, "value", false, "Value of the Button"),
-  propertyLock(*this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder"),
-  propertyToggleMode(*this, "toggle", false, "The Button can toogle"),
-  propertyEnableSingle(*this, "enable-single", false, "If one element set in the Button ==> display only set"),
+  signalPressed(this, "pressed", "Button is pressed"),
+  signalDown(this, "down", "Button is DOWN"),
+  signalUp(this, "up", "Button is UP"),
+  signalEnter(this, "enter", "The cursor enter inside the button"),
+  signalLeave(this, "leave", "the cursor leave the button"),
+  signalValue(this, "value", "button value change"),
+  propertyShape(this, "shaper", "", "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
+  propertyValue(this, "value", false, "Value of the Button", &ewol::widget::Button::onChangePropertyValue),
+  propertyLock(this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder", &ewol::widget::Button::onChangePropertyLock),
+  propertyToggleMode(this, "toggle", false, "The Button can toogle", &ewol::widget::Button::onChangePropertyToggleMode),
+  propertyEnableSingle(this, "enable-single", false, "If one element set in the Button ==> display only set", &ewol::widget::Button::onChangePropertyEnableSingle),
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
@@ -207,80 +207,84 @@ void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::Button::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Container2::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyShape) {
-		m_shaper.setSource(*propertyShape);
-		markToRedraw();
-	} else if (_paramPointer == propertyValue) {
-		if (*propertyToggleMode == true) {
-			if (*propertyValue == false) {
-				m_idWidgetDisplayed = 0;
-			} else {
-				m_idWidgetDisplayed = 1;
-			}
-		}
-		if (*propertyEnableSingle == true) {
-			if (    m_idWidgetDisplayed == 0
-			     && m_subWidget[0] == nullptr
-			     && m_subWidget[1] != nullptr) {
-				m_idWidgetDisplayed = 1;
-			} else if (    m_idWidgetDisplayed == 1
-			            && m_subWidget[1] == nullptr
-			            && m_subWidget[0] != nullptr) {
-				m_idWidgetDisplayed = 0;
-			}
-		}
-		CheckStatus();
-		markToRedraw();
-	} else if (_paramPointer == propertyLock) {
-		if(ewol::widget::Button::lockAccess == *propertyLock) {
-			m_buttonPressed = false;
-			m_mouseHover = false;
-		}
-		CheckStatus();
-		markToRedraw();
-	} else if (_paramPointer == propertyToggleMode) {
-		if (*propertyValue == true) {
-			propertyValue.setDirect(false);
-			// TODO : change display and send event ...
-		}
-		if (*propertyToggleMode == false) {
+void ewol::widget::Button::onChangePropertyShape() {
+	m_shaper.setSource(*propertyShape);
+	markToRedraw();
+}
+void ewol::widget::Button::onChangePropertyValue() {
+	if (*propertyToggleMode == true) {
+		if (*propertyValue == false) {
 			m_idWidgetDisplayed = 0;
 		} else {
-			if (*propertyValue == false) {
-				m_idWidgetDisplayed = 0;
-			} else {
-				m_idWidgetDisplayed = 1;
-			}
+			m_idWidgetDisplayed = 1;
 		}
-		if (*propertyEnableSingle == true) {
-			if (    m_idWidgetDisplayed == 0
-			     && m_subWidget[0] == nullptr
-			     && m_subWidget[1] != nullptr) {
-				m_idWidgetDisplayed = 1;
-			} else if (    m_idWidgetDisplayed == 1
-			            && m_subWidget[1] == nullptr
-			            && m_subWidget[0] != nullptr) {
-				m_idWidgetDisplayed = 0;
-			}
+	}
+	if (*propertyEnableSingle == true) {
+		if (    m_idWidgetDisplayed == 0
+		     && m_subWidget[0] == nullptr
+		     && m_subWidget[1] != nullptr) {
+			m_idWidgetDisplayed = 1;
+		} else if (    m_idWidgetDisplayed == 1
+		            && m_subWidget[1] == nullptr
+		            && m_subWidget[0] != nullptr) {
+			m_idWidgetDisplayed = 0;
 		}
-		CheckStatus();
-		markToRedraw();
-	} else if (_paramPointer == propertyEnableSingle) {
-		if (*propertyEnableSingle == true) {
-			if (    m_idWidgetDisplayed == 0
-			     && m_subWidget[0] == nullptr
-			     && m_subWidget[1] != nullptr) {
-				m_idWidgetDisplayed = 1;
-			} else if (    m_idWidgetDisplayed == 1
-			            && m_subWidget[1] == nullptr
-			            && m_subWidget[0] != nullptr) {
-				m_idWidgetDisplayed = 0;
-			} else if (    m_subWidget[0] == nullptr
-			            && m_subWidget[1] == nullptr) {
-				m_idWidgetDisplayed = 0;
-			}
+	}
+	CheckStatus();
+	markToRedraw();
+}
+
+void ewol::widget::Button::onChangePropertyLock() {
+	if(ewol::widget::Button::lockAccess == *propertyLock) {
+		m_buttonPressed = false;
+		m_mouseHover = false;
+	}
+	CheckStatus();
+	markToRedraw();
+}
+
+void ewol::widget::Button::onChangePropertyToggleMode() {
+	if (*propertyValue == true) {
+		propertyValue.setDirect(false);
+		// TODO : change display and send event ...
+	}
+	if (*propertyToggleMode == false) {
+		m_idWidgetDisplayed = 0;
+	} else {
+		if (*propertyValue == false) {
+			m_idWidgetDisplayed = 0;
+		} else {
+			m_idWidgetDisplayed = 1;
+		}
+	}
+	if (*propertyEnableSingle == true) {
+		if (    m_idWidgetDisplayed == 0
+		     && m_subWidget[0] == nullptr
+		     && m_subWidget[1] != nullptr) {
+			m_idWidgetDisplayed = 1;
+		} else if (    m_idWidgetDisplayed == 1
+		            && m_subWidget[1] == nullptr
+		            && m_subWidget[0] != nullptr) {
+			m_idWidgetDisplayed = 0;
+		}
+	}
+	CheckStatus();
+	markToRedraw();
+}
+
+void ewol::widget::Button::onChangePropertyEnableSingle() {
+	if (*propertyEnableSingle == true) {
+		if (    m_idWidgetDisplayed == 0
+		     && m_subWidget[0] == nullptr
+		     && m_subWidget[1] != nullptr) {
+			m_idWidgetDisplayed = 1;
+		} else if (    m_idWidgetDisplayed == 1
+		            && m_subWidget[1] == nullptr
+		            && m_subWidget[0] != nullptr) {
+			m_idWidgetDisplayed = 0;
+		} else if (    m_subWidget[0] == nullptr
+		            && m_subWidget[1] == nullptr) {
+			m_idWidgetDisplayed = 0;
 		}
 	}
 }

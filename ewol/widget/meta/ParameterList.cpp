@@ -20,7 +20,7 @@
 
 
 ewol::widget::ParameterList::ParameterList() :
-  signalSelect(*this, "select") {
+  signalSelect(this, "select", "") {
 	addObjectType("ewol::widget::ParameterList");
 	
 	m_idSelected = -1;

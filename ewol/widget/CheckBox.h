@@ -62,7 +62,6 @@ namespace ewol {
 				void CheckStatus();
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onChangeSize();
@@ -70,6 +69,9 @@ namespace ewol {
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool onEventEntry(const ewol::event::Entry& _event);
 				virtual void periodicCall(const ewol::event::Time& _event);
+			protected:
+				virtual void onChangePropertyShape();
+				virtual void onChangePropertyValue();
 		};
 	};
 };

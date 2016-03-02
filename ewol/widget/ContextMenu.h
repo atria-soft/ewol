@@ -53,13 +53,16 @@ namespace ewol {
 				void setPositionMark(enum markPosition _position, const vec2& _arrowPos);
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
 				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+			protected:
+				virtual void onChangePropertyArrowPos();
+				virtual void onChangePropertyArrawBorder();
+				virtual void onChangePropertyShape();
 		};
 	};
 };

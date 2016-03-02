@@ -13,11 +13,15 @@
 #include <gale/renderer/openGL/openGL.h>
 #include <ewol/ewol.h>
 
-
-
 ewol::widget::WidgetScrolled::WidgetScrolled() :
-  propertyShapeVert(*this, "shape-vert", "", "shape for the vertical display"),
-  propertyShapeHori(*this, "shape-hori", "", "shape for the horizonal display"),
+  propertyShapeVert(this, "shape-vert",
+                          "",
+                          "shape for the vertical display",
+                          &ewol::widget::WidgetScrolled::onChangePropertyShapeVert),
+  propertyShapeHori(this, "shape-hori",
+                          "",
+                          "shape for the horizonal display",
+                          &ewol::widget::WidgetScrolled::onChangePropertyShapeHori),
   m_shaperH(),
   m_shaperV(),
   m_singleFingerMode(true) {
@@ -478,13 +482,12 @@ void ewol::widget::WidgetScrolled::setSingleFinger(bool _status) {
 	m_singleFingerMode = _status;
 }
 
-void ewol::widget::WidgetScrolled::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyShapeVert) {
-		m_shaperV.setSource(propertyShapeVert);
-		markToRedraw();
-	} else if (_paramPointer == propertyShapeHori) {
-		m_shaperH.setSource(propertyShapeHori);
-		markToRedraw();
-	}
+void ewol::widget::WidgetScrolled::onChangePropertyShapeVert() {
+	m_shaperV.setSource(propertyShapeVert);
+	markToRedraw();
 }
+void ewol::widget::WidgetScrolled::onChangePropertyShapeHori() {
+	m_shaperH.setSource(propertyShapeHori);
+	markToRedraw();
+}
+

@@ -19,7 +19,7 @@
 #define __class__ "Menu"
 
 ewol::widget::Menu::Menu() :
-  signalSelect(*this, "select") {
+  signalSelect(this, "select", "") {
 	addObjectType("ewol::widget::Menu");
 	m_staticId = 666;
 }

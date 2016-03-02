@@ -15,9 +15,18 @@
 #define __class__ "Scroll"
 
 ewol::widget::Scroll::Scroll() :
-  propertyLimit(*this, "limit", vec2(0.15,0.5), vec2(0.0,0.0), vec2(1.0,1.0), "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end"),
-  propertyShapeVert(*this, "shape-vert", "", "shape for the vertical display"),
-  propertyShapeHori(*this, "shape-hori", "", "shape for the horizonal display"),
+  propertyLimit(this, "limit",
+                      vec2(0.15,0.5), vec2(0.0,0.0), vec2(1.0,1.0),
+                      "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end",
+                      &ewol::widget::Scroll::onChangePropertyLimit),
+  propertyShapeVert(this, "shape-vert",
+                          "",
+                          "shape for the vertical display",
+                          &ewol::widget::Scroll::onChangePropertyShapeVert),
+  propertyShapeHori(this, "shape-hori",
+                          "",
+                          "shape for the horizonal display",
+                          &ewol::widget::Scroll::onChangePropertyShapeHori),
   m_pixelScrolling(20),
   m_highSpeedStartPos(0,0),
   m_highSpeedMode(speedModeDisable),
@@ -347,16 +356,18 @@ std::shared_ptr<ewol::Widget> ewol::widget::Scroll::getWidgetAtPos(const vec2& _
 	}
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());;
 }
-void ewol::widget::Scroll::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyLimit) {
-		markToRedraw();
-	} else if (_paramPointer == propertyShapeVert) {
-		m_shaperV.setSource(propertyShapeVert);
-		markToRedraw();
-	} else if (_paramPointer == propertyShapeHori) {
-		m_shaperH.setSource(propertyShapeHori);
-		markToRedraw();
-	}
+
+void ewol::widget::Scroll::onChangePropertyLimit() {
+	markToRedraw();
+}
+
+void ewol::widget::Scroll::onChangePropertyShapeVert() {
+	m_shaperV.setSource(propertyShapeVert);
+	markToRedraw();
+}
+
+void ewol::widget::Scroll::onChangePropertyShapeHori() {
+	m_shaperH.setSource(propertyShapeHori);
+	markToRedraw();
 }
 

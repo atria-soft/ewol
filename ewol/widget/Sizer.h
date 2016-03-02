@@ -64,7 +64,9 @@ namespace ewol {
 				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
 				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyMode();
+				virtual void onChangePropertyBorderSize();
 		};
 	}
 }

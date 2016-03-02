@@ -15,7 +15,10 @@
 #define __class__ "Spacer"
 
 ewol::widget::Spacer::Spacer() :
-  propertyColor(*this, "color", etk::color::none, "background of the spacer") {
+  propertyColor(this, "color",
+                      etk::color::none,
+                      "background of the spacer",
+                      &ewol::widget::Spacer::onChangePropertyColor) {
 	addObjectType("ewol::widget::Spacer");
 }
 
@@ -48,10 +51,7 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
-void ewol::widget::Spacer::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyColor) {
-		markToRedraw();
-	}
+void ewol::widget::Spacer::onChangePropertyColor() {
+	markToRedraw();
 }
 

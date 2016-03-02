@@ -59,12 +59,17 @@ namespace ewol {
 				vec2 m_imageRenderSize; //!< size of the image when we render it
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+			protected:
+				virtual void onChangePropertySource();
+				virtual void onChangePropertyImageSize();
+				virtual void onChangePropertyGlobalSize();
+				virtual void onChangePropertySmooth();
+				virtual void onChangePropertyDistanceFieldMode();
 		};
 	};
 };

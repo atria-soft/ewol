@@ -51,7 +51,6 @@ namespace ewol {
 				void optionClear();
 				void optionAdd(int32_t _value, std::string _name);
 			protected:
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void updateGui();
 			protected:
@@ -60,6 +59,8 @@ namespace ewol {
 			protected:
 				esignal::Connection m_connectionEntry;
 				esignal::Connection m_connectionButton;
+			protected:
+				virtual void onChangePropertyValue();
 		};
 	};
 };

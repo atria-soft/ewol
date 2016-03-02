@@ -22,8 +22,11 @@
 #define __class__ "Parameter"
 
 ewol::widget::Parameter::Parameter() :
-  signalClose(*this, "close"),
-  propertyLabelTitle(*this, "title", "TRANSLATE:Parameter", ""),
+  signalClose(this, "close", ""),
+  propertyLabelTitle(this, "title",
+                           "TRANSLATE:Parameter",
+                           "Title of the parameter interface",
+                           &ewol::widget::Parameter::onChangePropertyLabelTitle),
   m_currentIdList(0),
   m_widgetTitle(),
   m_paramList() {
@@ -184,12 +187,10 @@ void ewol::widget::Parameter::init() {
 ewol::widget::Parameter::~Parameter() {
 	
 }
-void ewol::widget::Parameter::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::PopUp::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyLabelTitle) {
-		if (m_widgetTitle != nullptr) {
-			m_widgetTitle->propertyValue.set(TRANSLATE(propertyLabelTitle));
-		}
+
+void ewol::widget::Parameter::onChangePropertyLabelTitle() {
+	if (m_widgetTitle != nullptr) {
+		m_widgetTitle->propertyValue.set(TRANSLATE(propertyLabelTitle));
 	}
 }
 

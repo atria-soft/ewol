@@ -16,13 +16,30 @@
 #define __class__ "widget::Spin"
 
 ewol::widget::Spin::Spin() :
-  signalValue(*this, "value", "Spin value change"),
-  signalValueDouble(*this, "valueDouble", "Spin value change value in 'double'"),
-  propertyValue(*this, "value", 0, "Value of the Spin"),
-  propertyMin(*this, "min", -9999999999, "Minimum value of the spin"),
-  propertyMax(*this, "max", 9999999999, "Maximum value of the spin"),
-  propertyIncrement(*this, "increment", 1, "Increment value at each button event or keybord event"),
-  propertyMantis(*this, "mantis", 0, "fix-point mantis") {
+  signalValue(this, "value",
+                    "Spin value change"),
+  signalValueDouble(this, "valueDouble",
+                          "Spin value change value in 'double'"),
+  propertyValue(this, "value",
+                      0,
+                      "Value of the Spin",
+                      &ewol::widget::Spin::onChangePropertyValue),
+  propertyMin(this, "min",
+                    -9999999999,
+                    "Minimum value of the spin",
+                    &ewol::widget::Spin::onChangePropertyMin),
+  propertyMax(this, "max",
+                    9999999999,
+                    "Maximum value of the spin",
+                    &ewol::widget::Spin::onChangePropertyMax),
+  propertyIncrement(this, "increment",
+                          1,
+                          "Increment value at each button event or keybord event",
+                          &ewol::widget::Spin::onChangePropertyIncrement),
+  propertyMantis(this, "mantis",
+                       0,
+                       "fix-point mantis",
+                       &ewol::widget::Spin::onChangePropertyMantis) {
 	addObjectType("ewol::widget::Spin");
 }
 
@@ -38,24 +55,29 @@ ewol::widget::Spin::~Spin() {
 	
 }
 
-void ewol::widget::Spin::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::SpinBase::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		markToRedraw();
-		if (m_widgetEntry == nullptr) {
-			EWOL_ERROR("Can not acces at entry ...");
-			return;
-		}
-		checkValue(*propertyValue);
-	} else if (_paramPointer == propertyMin) {
-		checkValue(*propertyValue);
-	} else if (_paramPointer == propertyMax) {
-		checkValue(*propertyValue);
-	} else if (_paramPointer == propertyIncrement) {
-		
-	} else if (_paramPointer == propertyMantis) {
-		
+void ewol::widget::Spin::onChangePropertyValue() {
+	markToRedraw();
+	if (m_widgetEntry == nullptr) {
+		EWOL_ERROR("Can not acces at entry ...");
+		return;
 	}
+	checkValue(*propertyValue);
+}
+
+void ewol::widget::Spin::onChangePropertyMin() {
+	checkValue(*propertyValue);
+}
+
+void ewol::widget::Spin::onChangePropertyMax() {
+	checkValue(*propertyValue);
+}
+
+void ewol::widget::Spin::onChangePropertyIncrement() {
+	
+}
+
+void ewol::widget::Spin::onChangePropertyMantis() {
+	
 }
 
 void ewol::widget::Spin::updateGui() {

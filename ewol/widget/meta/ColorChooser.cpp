@@ -22,12 +22,12 @@ extern "C" {
 #undef __class__
 #define __class__	"ColorChooser"
 
-static const char * const eventColorBarHasChange          = "event-color-bar-has-change";
-
-
 ewol::widget::ColorChooser::ColorChooser() :
-  signalChange(*this, "change"),
-  propertyValue(*this, "value", etk::color::white, "color to select") {
+  signalChange(this, "change", ""),
+  propertyValue(this, "value",
+                      etk::color::white,
+                      "color to select",
+                      &ewol::widget::ColorChooser::onChangePropertyValue) {
 	addObjectType("ewol::widget::ColorChooser");
 }
 
@@ -84,24 +84,21 @@ ewol::widget::ColorChooser::~ColorChooser() {
 }
 
 
-void ewol::widget::ColorChooser::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Sizer::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		if (m_widgetRed != nullptr) {
-			m_widgetRed->propertyValue.set(propertyValue->r());
-		}
-		if (m_widgetGreen != nullptr) {
-			m_widgetGreen->propertyValue.set(propertyValue->g());
-		}
-		if (m_widgetBlue != nullptr) {
-			m_widgetBlue->propertyValue.set(propertyValue->b());
-		}
-		if (m_widgetAlpha != nullptr) {
-			m_widgetAlpha->propertyValue.set(propertyValue->a());
-		}
-		if (m_widgetColorBar != nullptr) {
-			m_widgetColorBar->propertyValue.set(propertyValue);
-		}
+void ewol::widget::ColorChooser::onChangePropertyValue() {
+	if (m_widgetRed != nullptr) {
+		m_widgetRed->propertyValue.set(propertyValue->r());
+	}
+	if (m_widgetGreen != nullptr) {
+		m_widgetGreen->propertyValue.set(propertyValue->g());
+	}
+	if (m_widgetBlue != nullptr) {
+		m_widgetBlue->propertyValue.set(propertyValue->b());
+	}
+	if (m_widgetAlpha != nullptr) {
+		m_widgetAlpha->propertyValue.set(propertyValue->a());
+	}
+	if (m_widgetColorBar != nullptr) {
+		m_widgetColorBar->propertyValue.set(propertyValue);
 	}
 }
 

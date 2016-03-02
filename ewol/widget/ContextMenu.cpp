@@ -17,11 +17,19 @@
 #undef __class__
 #define __class__	"ContextMenu"
 
-
 ewol::widget::ContextMenu::ContextMenu():
-  propertyShape(*this, "shape", "", "the display name for config file"),
-  propertyArrowPos(*this, "arrow-position", vec2(0,0), "Position of the arrow in the pop-up"),
-  propertyArrawBorder(*this, "arrow-mode", markTop, "position of the arrow") {
+  propertyShape(this, "shape",
+                      "",
+                      "the display name for config file",
+                      &ewol::widget::ContextMenu::onChangePropertyShape),
+  propertyArrowPos(this, "arrow-position",
+                         vec2(0,0),
+                         "Position of the arrow in the pop-up",
+                         &ewol::widget::ContextMenu::onChangePropertyArrowPos),
+  propertyArrawBorder(this, "arrow-mode",
+                            markTop,
+                            "position of the arrow",
+                            &ewol::widget::ContextMenu::onChangePropertyArrawBorder) {
 	addObjectType("ewol::widget::ContextMenu");
 	propertyArrawBorder.add(markTop, "top");
 	propertyArrawBorder.add(markRight, "right");
@@ -226,17 +234,17 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const ve
 	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 }
 
+void ewol::widget::ContextMenu::onChangePropertyArrowPos() {
+	markToRedraw();
+}
 
-void ewol::widget::ContextMenu::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Container::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyArrowPos) {
-		markToRedraw();
-	} else if (_paramPointer == propertyArrawBorder) {
-		markToRedraw();
-	} else if (_paramPointer == propertyShape) {
-		m_shaper.setSource(propertyShape.get());
-		markToRedraw();
-	}
+void ewol::widget::ContextMenu::onChangePropertyArrawBorder() {
+	markToRedraw();
+}
+
+void ewol::widget::ContextMenu::onChangePropertyShape() {
+	m_shaper.setSource(propertyShape.get());
+	markToRedraw();
 }
 
 

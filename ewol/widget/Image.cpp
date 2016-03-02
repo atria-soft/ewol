@@ -12,20 +12,19 @@
 #include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
 
-
 #undef __class__
 #define __class__ "Image"
 
 ewol::widget::Image::Image() :
-  signalPressed(*this, "pressed", "Image is pressed"),
-  propertySource(*this, "src", "", "Image source path"),
-  propertyBorder(*this, "border", vec2(0,0), "Border of the image"),
-  propertyImageSize(*this, "size", vec2(0,0), "Basic display size of the image"),
-  propertyKeepRatio(*this, "ratio", true, "Keep ratio of the image"),
-  propertyPosStart(*this, "part-start", vec2(0.0f, 0.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
-  propertyPosStop(*this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image"),
-  propertyDistanceFieldMode(*this, "distance-field", false, "Distance field mode"),
-  propertySmooth(*this, "smooth", true, "Smooth display of the image"),
+  signalPressed(this, "pressed", "Image is pressed"),
+  propertySource(this, "src", "", "Image source path", &ewol::widget::Image::onChangePropertySource),
+  propertyBorder(this, "border", vec2(0,0), "Border of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyImageSize(this, "size", vec2(0,0), "Basic display size of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyKeepRatio(this, "ratio", true, "Keep ratio of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyPosStart(this, "part-start", vec2(0.0f, 0.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyPosStop(this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyDistanceFieldMode(this, "distance-field", false, "Distance field mode", &ewol::widget::Image::onChangePropertyDistanceFieldMode),
+  propertySmooth(this, "smooth", true, "Smooth display of the image", &ewol::widget::Image::onChangePropertySmooth),
   m_colorProperty(nullptr),
   m_colorId(-1) {
 	addObjectType("ewol::widget::Image");
@@ -195,26 +194,31 @@ bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _n
 	return true;
 }
 
-void ewol::widget::Image::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (    _paramPointer == propertySource
-	     || _paramPointer == propertyImageSize) {
-		markToRedraw();
-		requestUpdateSize();
-		EWOL_VERBOSE("Set sources : " << *propertySource << " size=" << *propertyImageSize);
-		m_compositing.setSource(*propertySource, propertyImageSize->getPixel());
-	} else if (    _paramPointer == propertyBorder
-	            || _paramPointer == propertyKeepRatio
-	            || _paramPointer == propertyPosStart
-	            || _paramPointer == propertyPosStop) {
-		markToRedraw();
-		requestUpdateSize();
-	} else if (_paramPointer == propertyDistanceFieldMode) {
-		markToRedraw();
-	} else if (_paramPointer == propertySmooth) {
-		markToRedraw();
-	} else if (_paramPointer == propertyDistanceFieldMode) {
-		m_compositing.setDistanceFieldMode(*propertyDistanceFieldMode);
-		markToRedraw();
-	}
+void ewol::widget::Image::onChangePropertySource() {
+	markToRedraw();
+	requestUpdateSize();
+	EWOL_VERBOSE("Set sources : " << *propertySource << " size=" << *propertyImageSize);
+	m_compositing.setSource(*propertySource, propertyImageSize->getPixel());
 }
+
+void ewol::widget::Image::onChangePropertyImageSize() {
+	markToRedraw();
+	requestUpdateSize();
+	EWOL_VERBOSE("Set sources : " << *propertySource << " size=" << *propertyImageSize);
+	m_compositing.setSource(*propertySource, propertyImageSize->getPixel());
+}
+
+void ewol::widget::Image::onChangePropertyGlobalSize() {
+	markToRedraw();
+	requestUpdateSize();
+}
+
+void ewol::widget::Image::onChangePropertySmooth() {
+	markToRedraw();
+}
+
+void ewol::widget::Image::onChangePropertyDistanceFieldMode() {
+	m_compositing.setDistanceFieldMode(*propertyDistanceFieldMode);
+	markToRedraw();
+}
+

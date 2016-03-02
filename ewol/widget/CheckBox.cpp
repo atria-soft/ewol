@@ -18,15 +18,20 @@
 #undef __class__
 #define __class__	"CheckBox"
 
-
 ewol::widget::CheckBox::CheckBox() :
-  signalPressed(*this, "pressed", "CheckBox is pressed"),
-  signalDown(*this, "down", "CheckBox is DOWN"),
-  signalUp(*this, "up", "CheckBox is UP"),
-  signalEnter(*this, "enter", "The cursor enter inside the CheckBox"),
-  signalValue(*this, "value", "CheckBox value change"),
-  propertyValue(*this, "value", false, "Basic value of the widget"),
-  propertyShape(*this, "shape", "", "The display name for config file"),
+  signalPressed(this, "pressed", "CheckBox is pressed"),
+  signalDown(this, "down", "CheckBox is DOWN"),
+  signalUp(this, "up", "CheckBox is UP"),
+  signalEnter(this, "enter", "The cursor enter inside the CheckBox"),
+  signalValue(this, "value", "CheckBox value change"),
+  propertyValue(this, "value",
+                      false,
+                      "Basic value of the widget",
+                      &ewol::widget::CheckBox::onChangePropertyValue),
+  propertyShape(this, "shape",
+                      "",
+                      "The display name for config file",
+                      &ewol::widget::CheckBox::onChangePropertyShape),
   m_mouseHover(false),
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
@@ -196,19 +201,18 @@ void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::CheckBox::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Container2::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyShape) {
-		m_shaper.setSource(*propertyShape);
-		markToRedraw();
-	} else if (_paramPointer == propertyValue) {
-		if (*propertyValue == false) {
-			m_idWidgetDisplayed = convertId(0);
-		} else {
-			m_idWidgetDisplayed = convertId(1);
-		}
-		CheckStatus();
-		markToRedraw();
-		m_shaper.setActivateState(*propertyValue==true?1:0);
+void ewol::widget::CheckBox::onChangePropertyShape() {
+	m_shaper.setSource(*propertyShape);
+	markToRedraw();
+}
+
+void ewol::widget::CheckBox::onChangePropertyValue() {
+	if (*propertyValue == false) {
+		m_idWidgetDisplayed = convertId(0);
+	} else {
+		m_idWidgetDisplayed = convertId(1);
 	}
+	CheckStatus();
+	markToRedraw();
+	m_shaper.setActivateState(*propertyValue==true?1:0);
 }

@@ -24,11 +24,17 @@ std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::s
 #define __class__ "WSlider"
 
 ewol::widget::WSlider::WSlider() :
-  signalStartSlide(*this, "start"),
-  signalStopSlide(*this, "stop"),
-  propertyTransitionSpeed(*this, "speed", 1.0f, 0.0f, 200.0f, "Transition speed of the slider"),
-  propertyTransitionMode(*this, "mode", sladingTransitionHori, "Transition mode of the slider"),
-  propertySelectWidget(*this, "select", "", "Select the requested widget to display"),
+  signalStartSlide(this, "start", ""),
+  signalStopSlide(this, "stop", ""),
+  propertyTransitionSpeed(this, "speed",
+                                1.0f, 0.0f, 200.0f,
+                                "Transition speed of the slider",
+                                &ewol::widget::WSlider::onChangePropertySelectWidget),
+  propertyTransitionMode(this, "mode",
+                               sladingTransitionHori,
+                               "Transition mode of the slider",
+                               &ewol::widget::WSlider::onChangePropertyTransitionMode),
+  propertySelectWidget(this, "select", "", "Select the requested widget to display"),
   m_windowsSources(0),
   m_windowsDestination(0),
   m_windowsRequested(-1),
@@ -272,18 +278,16 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 	}
 }
 
-void ewol::widget::WSlider::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::ContainerN::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertySelectWidget) {
-		if (propertySelectWidget.get() != "") {
-			subWidgetSelectSet(*propertySelectWidget);
-		}
-	} else if (_paramPointer == propertyTransitionSpeed) {
-		// nothing to do ...
-	} else if (_paramPointer == propertyTransitionMode) {
-		markToRedraw();
+void ewol::widget::WSlider::onChangePropertySelectWidget() {
+	if (propertySelectWidget.get() != "") {
+		subWidgetSelectSet(*propertySelectWidget);
 	}
 }
+
+void ewol::widget::WSlider::onChangePropertyTransitionMode() {
+	markToRedraw();
+}
+
 
 std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {

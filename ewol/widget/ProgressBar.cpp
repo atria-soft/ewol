@@ -17,10 +17,22 @@
 const int32_t dotRadius = 6;
 
 ewol::widget::ProgressBar::ProgressBar() :
-  propertyValue(*this, "value", 0.0f, 0.0f, 1.0f, "Value of the progress bar"),
-  propertyTextColorFg(*this, "color-bg", etk::color::black, "Background color"),
-  propertyTextColorBgOn(*this, "color-on", etk::Color<>(0x00, 0xFF, 0x00, 0xFF), "Color of the true value"),
-  PropertyTextColorBgOff(*this, "color-off", etk::color::none, "Color of the false value") {
+  propertyValue(this, "value",
+                      0.0f, 0.0f, 1.0f,
+                      "Value of the progress bar",
+                      &ewol::widget::ProgressBar::onChangePropertyValue),
+  propertyTextColorFg(this, "color-bg",
+                            etk::color::black,
+                            "Background color",
+                            &ewol::widget::ProgressBar::onChangePropertyTextColorFg),
+  propertyTextColorBgOn(this, "color-on",
+                              etk::Color<>(0x00, 0xFF, 0x00, 0xFF),
+                              "Color of the true value",
+                              &ewol::widget::ProgressBar::onChangePropertyTextColorBgOn),
+  propertyTextColorBgOff(this, "color-off",
+                               etk::color::none,
+                               "Color of the false value",
+                               &ewol::widget::ProgressBar::onChangePropertyTextColorBgOff) {
 	addObjectType("ewol::widget::ProgressBar");
 }
 
@@ -60,7 +72,7 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	m_draw.setColor(propertyTextColorBgOn);
 	m_draw.setPos(vec3(tmpOriginX, tmpOriginY, 0) );
 	m_draw.rectangleWidth(vec3(tmpSizeX*propertyValue, tmpSizeY, 0) );
-	m_draw.setColor(PropertyTextColorBgOff);
+	m_draw.setColor(propertyTextColorBgOff);
 	m_draw.setPos(vec3(tmpOriginX+tmpSizeX*propertyValue, tmpOriginY, 0) );
 	m_draw.rectangleWidth(vec3(tmpSizeX*(1.0-propertyValue), tmpSizeY, 0) );
 	
@@ -69,17 +81,20 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	//m_draw.rectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
 }
 
-void ewol::widget::ProgressBar::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		markToRedraw();
-	} else if (_paramPointer == propertyTextColorFg) {
-		markToRedraw();
-	} else if (_paramPointer == propertyTextColorBgOn) {
-		markToRedraw();
-	} else if (_paramPointer == PropertyTextColorBgOff) {
-		markToRedraw();
-	}
+void ewol::widget::ProgressBar::onChangePropertyValue() {
+	markToRedraw();
+}
+
+void ewol::widget::ProgressBar::onChangePropertyTextColorFg() {
+	markToRedraw();
+}
+
+void ewol::widget::ProgressBar::onChangePropertyTextColorBgOn() {
+	markToRedraw();
+}
+
+void ewol::widget::ProgressBar::onChangePropertyTextColorBgOff() {
+	markToRedraw();
 }
 
 

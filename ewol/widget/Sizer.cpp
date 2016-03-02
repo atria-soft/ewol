@@ -14,10 +14,20 @@
 #define __class__ "Sizer"
 
 ewol::widget::Sizer::Sizer() :
-  propertyMode(*this, "mode", modeHori, "The display mode"),
-  propertyBorderSize(*this, "border", vec2(0,0), "The sizer border size"),
-  propertyAnimation(*this, "annimation", animationNone, "sizer annimation"),
-  propertyAnimationTime(*this, "annimation-time", 0, "time of the anniation") {
+  propertyMode(this, "mode",
+                     modeHori,
+                     "The display mode",
+                     &ewol::widget::Sizer::onChangePropertyMode),
+  propertyBorderSize(this, "border",
+                           vec2(0,0),
+                           "The sizer border size",
+                           &ewol::widget::Sizer::onChangePropertyBorderSize),
+  propertyAnimation(this, "annimation",
+                          animationNone,
+                          "sizer annimation"),
+  propertyAnimationTime(this, "annimation-time",
+                              0,
+                              "time of the anniation") {
 	addObjectType("ewol::widget::Sizer");
 	propertyMode.add(modeHori, "hori");
 	propertyMode.add(modeVert, "vert");
@@ -286,13 +296,12 @@ void ewol::widget::Sizer::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidg
 	ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 }
 
-void ewol::widget::Sizer::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::ContainerN::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyMode) {
-		markToRedraw();
-		requestUpdateSize();
-	} else if (_paramPointer == propertyBorderSize) {
-		markToRedraw();
-		requestUpdateSize();
-	}
+void ewol::widget::Sizer::onChangePropertyMode() {
+	markToRedraw();
+	requestUpdateSize();
+}
+
+void ewol::widget::Sizer::onChangePropertyBorderSize() {
+	markToRedraw();
+	requestUpdateSize();
 }

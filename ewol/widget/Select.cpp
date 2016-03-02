@@ -28,8 +28,11 @@ ewol::widget::Select::Element::Element(int32_t _value, std::string _name, bool _
 
 
 ewol::widget::Select::Select() :
-  signalValue(*this, "value", "Select value change"),
-  propertyValue(*this, "value", -1, "Value of the Select") {
+  signalValue(this, "value", "Select value change"),
+  propertyValue(this, "value",
+                      -1,
+                      "Value of the Select",
+                      &ewol::widget::Select::onChangePropertyValue) {
 	addObjectType("ewol::widget::Select");
 }
 
@@ -44,24 +47,21 @@ ewol::widget::Select::~Select() {
 	
 }
 
-void ewol::widget::Select::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::SpinBase::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		markToRedraw();
-		if (m_widgetEntry == nullptr) {
-			EWOL_ERROR("Can not acces at entry ...");
-			return;
-		}
-		for (auto &it : m_listElement) {
-			if (it.m_value == propertyValue.get()) {
-				if (it.m_selected == false) {
-					it.m_selected = true;
-					m_widgetEntry->propertyValue.set(it.m_name);
-					signalValue.emit(propertyValue.get());
-				}
-			} else {
-				it.m_selected = false;
+void ewol::widget::Select::onChangePropertyValue() {
+	markToRedraw();
+	if (m_widgetEntry == nullptr) {
+		EWOL_ERROR("Can not acces at entry ...");
+		return;
+	}
+	for (auto &it : m_listElement) {
+		if (it.m_value == propertyValue.get()) {
+			if (it.m_selected == false) {
+				it.m_selected = true;
+				m_widgetEntry->propertyValue.set(it.m_name);
+				signalValue.emit(propertyValue.get());
 			}
+		} else {
+			it.m_selected = false;
 		}
 	}
 }

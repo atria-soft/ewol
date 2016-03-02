@@ -16,11 +16,23 @@
 const int32_t dotRadius = 6;
 
 ewol::widget::Slider::Slider() :
-  signalChange(*this, "change"),
-  propertyValue(*this, "value", 0.0f, "Value of the Slider"),
-  propertyMinimum(*this, "min", 0.0f, "Minium value"),
-  propertyMaximum(*this, "max", 10.0f, "Maximum value"),
-  propertyStep(*this, "step", 1.0f, "Step size") {
+  signalChange(this, "change", ""),
+  propertyValue(this, "value",
+                      0.0f,
+                      "Value of the Slider",
+                      &ewol::widget::Slider::onChangePropertyValue),
+  propertyMinimum(this, "min",
+                        0.0f,
+                        "Minium value",
+                        &ewol::widget::Slider::onChangePropertyMinimum),
+  propertyMaximum(this, "max",
+                        10.0f,
+                        "Maximum value",
+                        &ewol::widget::Slider::onChangePropertyMaximum),
+  propertyStep(this, "step",
+                     1.0f,
+                     "Step size",
+                     &ewol::widget::Slider::onChangePropertyStep) {
 	addObjectType("ewol::widget::Slider");
 	
 	m_textColorFg = etk::color::black;
@@ -104,25 +116,25 @@ void ewol::widget::Slider::updateValue(float _newValue) {
 	markToRedraw();
 }
 
-// TODO : Review this really bad things ...
-void ewol::widget::Slider::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		updateValue(*propertyValue);
-		return;
-	}
-	if (_paramPointer == propertyMinimum) {
-		updateValue(*propertyValue);
-		return;
-	}
-	if (_paramPointer == propertyMaximum) {
-		updateValue(*propertyValue);
-		return;
-	}
-	if (_paramPointer == propertyStep) {
-		updateValue(*propertyValue);
-		return;
-	}
+
+void ewol::widget::Slider::onChangePropertyValue() {
+	updateValue(*propertyValue);
+	return;
+}
+
+void ewol::widget::Slider::onChangePropertyMinimum() {
+	updateValue(*propertyValue);
+	return;
+}
+
+void ewol::widget::Slider::onChangePropertyMaximum() {
+	updateValue(*propertyValue);
+	return;
+}
+
+void ewol::widget::Slider::onChangePropertyStep() {
+	updateValue(*propertyValue);
+	return;
 }
 
 

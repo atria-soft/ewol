@@ -19,8 +19,14 @@ void ewol::widget::SpinBase::init(ewol::widget::Manager& _widgetManager) {
 }
 
 ewol::widget::SpinBase::SpinBase() :
-  propertyShape(*this, "shape", "", "shape for the display"),
-  propertySpinMode(*this, "mode", ewol::widget::spinPosition_RightRight, "The display spin mode"),
+  propertyShape(this, "shape",
+                      "",
+                      "shape for the display",
+                      &ewol::widget::SpinBase::onChangePropertyShape),
+  propertySpinMode(this, "mode",
+                         ewol::widget::spinPosition_RightRight,
+                         "The display spin mode",
+                         &ewol::widget::SpinBase::onChangePropertySpinMode),
   m_confIdEntryShaper(-1),
   m_confIdUpShaper(-1),
   m_confIdDownShaper(-1),
@@ -49,21 +55,20 @@ ewol::widget::SpinBase::~SpinBase() {
 	
 }
 
-void ewol::widget::SpinBase::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::widget::Sizer::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertySpinMode) {
-		updateGui();
-	} else if (_paramPointer == propertyShape) {
-		m_config = ewol::resource::ConfigFile::create(propertyShape);
-		if (m_config != nullptr) {
-			m_confIdEntryShaper = m_config->request("entry-shaper");
-			m_confIdUpShaper = m_config->request("up-shaper");
-			m_confIdDownShaper = m_config->request("down-shaper");
-			m_confIdUpData = m_config->request("up-data");
-			m_confIdDownData = m_config->request("down-data");
-		}
-		markToRedraw();
+void ewol::widget::SpinBase::onChangePropertySpinMode() {
+	updateGui();
+}
+
+void ewol::widget::SpinBase::onChangePropertyShape() {
+	m_config = ewol::resource::ConfigFile::create(propertyShape);
+	if (m_config != nullptr) {
+		m_confIdEntryShaper = m_config->request("entry-shaper");
+		m_confIdUpShaper = m_config->request("up-shaper");
+		m_confIdDownShaper = m_config->request("down-shaper");
+		m_confIdUpData = m_config->request("up-data");
+		m_confIdDownData = m_config->request("down-data");
 	}
+	markToRedraw();
 }
 
 

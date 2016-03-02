@@ -24,7 +24,7 @@ namespace ewol {
 				eproperty::Range<float> propertyValue; //!< % used
 				eproperty::Value<etk::Color<>> propertyTextColorFg; //!< forder bar color
 				eproperty::Value<etk::Color<>> propertyTextColorBgOn; //!< bar color enable
-				eproperty::Value<etk::Color<>> PropertyTextColorBgOff; //!< bar color disable
+				eproperty::Value<etk::Color<>> propertyTextColorBgOff; //!< bar color disable
 			protected:
 				ProgressBar();
 				void init();
@@ -35,10 +35,14 @@ namespace ewol {
 				ewol::compositing::Drawing m_draw; // basic drawing element
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual void calculateMinMaxSize();
+			protected:
+				virtual void onChangePropertyValue();
+				virtual void onChangePropertyTextColorFg();
+				virtual void onChangePropertyTextColorBgOn();
+				virtual void onChangePropertyTextColorBgOff();
 		};
 	};
 };

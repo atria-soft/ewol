@@ -22,14 +22,29 @@
 #define STATUS_SELECTED  (2)
 
 ewol::widget::Entry::Entry() :
-  signalClick(*this, "click", "the user Click on the Entry box"),
-  signalEnter(*this, "enter", "The cursor enter inside the button"),
-  signalModify(*this, "modify", "Entry box value change"),
-  propertyShaper(*this, "shaper", "", "Shaper to display the background"),
-  propertyValue(*this, "value", "", "Value display in the entry (decorated text)"),
-  propertyMaxCharacter(*this, "max", 0x7FFFFFFF, 0, 0x7FFFFFFF, "Maximum cgar that can be set on the Entry"),
-  propertyRegex(*this, "regex", ".*", "Control what it is write with a regular expression"),
-  propertyTextWhenNothing(*this, "empty-text", "", "Text when nothing is written"),
+  signalClick(this, "click", "the user Click on the Entry box"),
+  signalEnter(this, "enter", "The cursor enter inside the button"),
+  signalModify(this, "modify", "Entry box value change"),
+  propertyShaper(this, "shaper",
+                       "",
+                       "Shaper to display the background",
+                       &ewol::widget::Entry::onChangePropertyShaper),
+  propertyValue(this, "value",
+                      "",
+                      "Value display in the entry (decorated text)",
+                      &ewol::widget::Entry::onChangePropertyValue),
+  propertyMaxCharacter(this, "max",
+                             0x7FFFFFFF, 0, 0x7FFFFFFF,
+                             "Maximum char that can be set on the Entry",
+                             &ewol::widget::Entry::onChangePropertyMaxCharacter),
+  propertyRegex(this, "regex",
+                      ".*",
+                      "Control what it is write with a regular expression",
+                      &ewol::widget::Entry::onChangePropertyRegex),
+  propertyTextWhenNothing(this, "empty-text",
+                                "",
+                                "Text when nothing is written",
+                                &ewol::widget::Entry::onChangePropertyTextWhenNothing),
   m_needUpdateTextPos(true),
   m_displayStartPosition(0),
   m_displayCursor(false),
@@ -541,40 +556,44 @@ void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 	markToRedraw();
 }
 
-void ewol::widget::Entry::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyShaper) {
-		m_shaper.setSource(propertyShaper.get());
-		m_colorIdTextFg = m_shaper.requestColor("text-foreground");
-		m_colorIdTextBg = m_shaper.requestColor("text-background");
-		m_colorIdCursor = m_shaper.requestColor("text-cursor");
-		m_colorIdSelection = m_shaper.requestColor("text-selection");
-	} else if (_paramPointer == propertyValue) {
-		std::string newData = propertyValue.get();
-		if ((int64_t)newData.size() > propertyMaxCharacter) {
-			newData = std::string(newData, 0, propertyMaxCharacter);
-			EWOL_DEBUG("Limit entry set of data... " << std::string(newData, propertyMaxCharacter));
-		}
-		// set the value with the check of the RegExp ...
-		setInternalValue(newData);
-		if (newData == propertyValue.get()) {
-			m_displayCursorPos = propertyValue->size();
-			m_displayCursorPosSelection = m_displayCursorPos;
-			EWOL_VERBOSE("Set : '" << newData << "'");
-		}
-		markToRedraw();
-	} else if (_paramPointer == propertyMaxCharacter) {
-		// TODO : check nomber of char in the data
-	} else if (_paramPointer == propertyRegex) {
-		try {
-			m_regex.assign(propertyRegex.get(), std::regex_constants::optimize | std::regex_constants::ECMAScript);
-		} catch (std::regex_error e) {
-			EWOL_ERROR("can not parse regex : '" << e.what() << "' for : " << propertyRegex);
-		}
-		markToRedraw();
-	} else if (_paramPointer == propertyTextWhenNothing) {
-		markToRedraw();
-	}
+void ewol::widget::Entry::onChangePropertyShaper() {
+	m_shaper.setSource(propertyShaper.get());
+	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
+	m_colorIdTextBg = m_shaper.requestColor("text-background");
+	m_colorIdCursor = m_shaper.requestColor("text-cursor");
+	m_colorIdSelection = m_shaper.requestColor("text-selection");
 }
 
+void ewol::widget::Entry::onChangePropertyValue() {
+	std::string newData = propertyValue.get();
+	if ((int64_t)newData.size() > propertyMaxCharacter) {
+		newData = std::string(newData, 0, propertyMaxCharacter);
+		EWOL_DEBUG("Limit entry set of data... " << std::string(newData, propertyMaxCharacter));
+	}
+	// set the value with the check of the RegExp ...
+	setInternalValue(newData);
+	if (newData == propertyValue.get()) {
+		m_displayCursorPos = propertyValue->size();
+		m_displayCursorPosSelection = m_displayCursorPos;
+		EWOL_VERBOSE("Set : '" << newData << "'");
+	}
+	markToRedraw();
+}
+
+void ewol::widget::Entry::onChangePropertyMaxCharacter() {
+	// TODO : check nomber of char in the data
+}
+
+void ewol::widget::Entry::onChangePropertyRegex() {
+	try {
+		m_regex.assign(propertyRegex.get(), std::regex_constants::optimize | std::regex_constants::ECMAScript);
+	} catch (std::regex_error e) {
+		EWOL_ERROR("can not parse regex : '" << e.what() << "' for : " << propertyRegex);
+	}
+	markToRedraw();
+}
+
+void ewol::widget::Entry::onChangePropertyTextWhenNothing() {
+	markToRedraw();
+}
 

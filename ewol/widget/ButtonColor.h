@@ -54,7 +54,6 @@ namespace ewol {
 				virtual void calculateMinMaxSize();
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
@@ -65,6 +64,9 @@ namespace ewol {
 				virtual void periodicCall(const ewol::event::Time& _event);
 				// Callback function:
 				void onCallbackColorChange(const etk::Color<>& _color);
+			protected:
+				virtual void onChangePropertyValue();
+				virtual void onChangePropertyShape();
 		};
 	};
 };

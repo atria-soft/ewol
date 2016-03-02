@@ -115,7 +115,6 @@ namespace ewol {
 				virtual void onLostFocus();
 				virtual void changeStatusIn(int32_t _newStatusId);
 				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			private: // callback functions
 				void onCallbackShortCut(const std::string& _value);
 				void onCallbackEntryClean();
@@ -123,6 +122,12 @@ namespace ewol {
 				void onCallbackCopy();
 				void onCallbackPaste();
 				void onCallbackSelect(bool _all);
+			protected:
+				virtual void onChangePropertyShaper();
+				virtual void onChangePropertyValue();
+				virtual void onChangePropertyMaxCharacter();
+				virtual void onChangePropertyRegex();
+				virtual void onChangePropertyTextWhenNothing();
 		};
 	};
 };

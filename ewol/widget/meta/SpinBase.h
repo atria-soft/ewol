@@ -96,8 +96,10 @@ namespace ewol {
 				std::shared_ptr<ewol::widget::Button> m_widgetButtonUp;
 				virtual void updateGui();
 			public: // Derived function
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+			protected:
+				virtual void onChangePropertySpinMode();
+				virtual void onChangePropertyShape();
 		};
 	}
 }

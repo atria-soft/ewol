@@ -42,7 +42,6 @@ namespace ewol {
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			protected: // Derived function
 				virtual void onDraw();
-				virtual void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
 			public: // Derived function
 				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
@@ -53,6 +52,9 @@ namespace ewol {
 			protected:
 				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
 				virtual void onStopAnnimation();
+			protected:
+				virtual void onChangePropertyShape();
+				virtual void onChangePropertyLockExpand();
 		};
 	};
 };

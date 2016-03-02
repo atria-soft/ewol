@@ -17,8 +17,11 @@
 
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :
-  signalPressed(*this, "pressed"),
-  propertyValue(*this, "value", "", "displayed value string"),
+  signalPressed(this, "pressed", ""),
+  propertyValue(this, "value",
+                      "",
+                      "displayed value string",
+                      &ewol::widget::Label::onChangePropertyValue),
   m_value(U""),
   m_colorProperty(nullptr),
   m_colorDefaultFgText(-1),
@@ -143,12 +146,9 @@ bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _n
 	return true;
 }
 
-void ewol::widget::Label::onPropertyChangeValue(const eproperty::Ref& _paramPointer) {
-	ewol::Widget::onPropertyChangeValue(_paramPointer);
-	if (_paramPointer == propertyValue) {
-		m_value = etk::to_u32string(propertyValue.get());
-		markToRedraw();
-		requestUpdateSize();
-	}
+void ewol::widget::Label::onChangePropertyValue() {
+	m_value = etk::to_u32string(propertyValue.get());
+	markToRedraw();
+	requestUpdateSize();
 }
 

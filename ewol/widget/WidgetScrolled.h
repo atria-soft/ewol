@@ -118,7 +118,9 @@ namespace ewol {
 				void setLimitScrolling(float _poucentageLimit) {
 					m_limitScrolling = std::avg(0.1f, _poucentageLimit,0.9f);
 				};
-				void onPropertyChangeValue(const eproperty::Ref& _paramPointer);
+			protected:
+				virtual void onChangePropertyShapeVert();
+				virtual void onChangePropertyShapeHori();
 		};
 	}
 }
