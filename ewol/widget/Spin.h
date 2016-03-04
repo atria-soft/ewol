@@ -37,6 +37,7 @@ namespace ewol {
 				Spin();
 				void init(enum ewol::widget::spinPosition _mode=ewol::widget::spinPosition_RightRight,
 				          const std::string& _shaperName="{ewol}THEME:GUI:Spin.json");
+				void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 			public:
 				DECLARE_WIDGET_FACTORY(Spin, "Spin");
 				/**

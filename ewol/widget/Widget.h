@@ -88,6 +88,7 @@ namespace ewol {
 			
 			void init();
 			void init(const std::string& _name);
+			void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 		public:
 			/**
 			 * @brief Destructor of the widget classes

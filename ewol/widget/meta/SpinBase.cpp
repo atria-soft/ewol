@@ -41,6 +41,11 @@ ewol::widget::SpinBase::SpinBase() :
 	propertySpinMode.add(ewol::widget::spinPosition_RightRight, "right-right");
 }
 
+void ewol::widget::SpinBase::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
+	ewol::widget::Sizer::init(_listProperty);
+	
+}
+
 void ewol::widget::SpinBase::init(enum ewol::widget::spinPosition _mode,
                                   const std::string& _shaperName) {
 	ewol::widget::Sizer::init(ewol::widget::Sizer::modeHori);

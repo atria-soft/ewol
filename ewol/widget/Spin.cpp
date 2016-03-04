@@ -43,6 +43,10 @@ ewol::widget::Spin::Spin() :
 	addObjectType("ewol::widget::Spin");
 }
 
+void ewol::widget::Spin::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
+	ewol::widget::SpinBase::init(_listProperty);
+}
+
 void ewol::widget::Spin::init(enum ewol::widget::spinPosition _mode,
                               const std::string& _shaperName) {
 	EWOL_WARNING("init [START]");

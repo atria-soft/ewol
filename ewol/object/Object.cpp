@@ -68,6 +68,11 @@ void ewol::Object::init() {
 	m_objectHasBeenInit = true;
 }
 
+void ewol::Object::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
+	init();
+	// TODO ...
+}
+
 void ewol::Object::init(const std::string& _name) {
 	init();
 	propertyName.set(_name);

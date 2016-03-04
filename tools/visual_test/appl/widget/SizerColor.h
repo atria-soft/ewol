@@ -34,11 +34,11 @@ namespace appl {
 				 */
 				virtual ~SizerColor();
 			private:
-				eproperty::Value<etk::Color<>> m_borderColor; //!< Border color.
-				eproperty::Value<etk::Color<>> m_leftColor; //!< Left color.
-				eproperty::Value<etk::Color<>> m_rightColor; //!< Right color.
-				eproperty::Value<etk::Color<>> m_topColor; //!< Top color.
-				eproperty::Value<etk::Color<>> m_buttomColor; //!< Buttom color.
+				eproperty::Value<etk::Color<>> propertyBorderColor; //!< Border color.
+				eproperty::Value<etk::Color<>> propertyLeftColor; //!< Left color.
+				eproperty::Value<etk::Color<>> propertyRightColor; //!< Right color.
+				eproperty::Value<etk::Color<>> propertyTopColor; //!< Top color.
+				eproperty::Value<etk::Color<>> propertyButtomColor; //!< Buttom color.
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element for display the border.
 			public:

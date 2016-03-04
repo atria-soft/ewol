@@ -12,12 +12,14 @@
 #include <exml/exml.h>
 #include <mutex>
 #include <memory>
+#include <unordered_map>
 
 #include <ewol/debug.h>
 #include <eproperty/Interface.h>
 #include <eproperty/Value.h>
 #include <eproperty/Range.h>
 #include <eproperty/List.h>
+#include <eproperty/Variant.h>
 #include <esignal/Interface.h>
 
 namespace ewol {
@@ -93,6 +95,7 @@ namespace ewol {
 			void init();
 			//! @previous
 			void init(const std::string& _name);
+			void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 		public:
 			/**
 			 * @brief Factory

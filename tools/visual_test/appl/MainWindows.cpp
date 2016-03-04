@@ -182,6 +182,11 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			*/
 			break;
 	}
+	
+	m_subWidget = ewol::widget::SpinBase::create(std::unordered_map<std::string,eproperty::Variant>({{std::string("name"), eproperty::Variant(std::string("plop"))}}));
+	return;
+	
+	
 	// create the widget with a xml generator (readable for test ...):
 	m_subWidget = ewol::widget::composerGenerate(ewol::widget::Composer::String, tmpConstruct);
 	if (m_subWidget != nullptr) {

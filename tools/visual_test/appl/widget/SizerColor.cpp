@@ -13,11 +13,11 @@
 #define __class__ "SizerColor"
 
 appl::widget::SizerColor::SizerColor() :
-  m_borderColor(*this, "border-color", etk::color::none, "Color of the border"),
-  m_leftColor(*this, "color-left", etk::color::purple),
-  m_rightColor(*this, "color-right", etk::color::orange),
-  m_topColor(*this, "color-top", etk::color::cyan),
-  m_buttomColor(*this, "color-buttom", etk::color::brown) {
+  propertyBorderColor(this, "border-color", etk::color::none, "Color of the border"),
+  propertyLeftColor(this, "color-left", etk::color::purple),
+  propertyRightColor(this, "color-right", etk::color::orange),
+  propertyTopColor(this, "color-top", etk::color::cyan),
+  propertyButtomColor(this, "color-buttom", etk::color::brown) {
 	addObjectType("appl::widget::SizerColor");
 }
 
@@ -36,10 +36,10 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 	if (tmpBorderSize == vec2(0.0f, 0.0f)) {
 		return;
 	}
-	if (m_borderColor->a() == 0) {
+	if (propertyBorderColor->a() == 0) {
 		return;
 	}
-	m_draw.setColor(m_borderColor);
+	m_draw.setColor(*propertyBorderColor);
 	m_draw.setPos(vec3(0, 0, 0) );
 	m_draw.rectangleWidth(vec3(tmpBorderSize.x(), m_size.y(),0) );
 	m_draw.setPos(vec3(m_size.x() - tmpBorderSize.x(), 0, 0) );
@@ -55,7 +55,7 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 			continue;
 		}
 		vec2 size = it->getSize();
-		if (propertyMode == ewol::widget::Sizer::modeVert) {
+		if (*propertyMode == ewol::widget::Sizer::modeVert) {
 			underSize += vec2(0.0f, size.y());
 			underSize.setX(std::max(underSize.x(), size.x()));
 		} else {
@@ -74,17 +74,17 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 		vec2 origin = it->getOrigin();
 		vec2 size = it->getSize();
 		// now we display around the widget every element needed
-		if (propertyMode == ewol::widget::Sizer::modeHori) {
+		if (*propertyMode == ewol::widget::Sizer::modeHori) {
 			if (size.y() < localWidgetSize.y()) {
 				// under
-				if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_buttom)) == 0) {
-					m_draw.setColor(m_buttomColor);
+				if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_buttom)) == 0) {
+					m_draw.setColor(*propertyButtomColor);
 					m_draw.setPos(vec2(origin.x(), localWidgetOrigin.y()) - m_origin);
 					m_draw.rectangleWidth(vec2(it->getSize().x(), origin.y()-localWidgetOrigin.y()) );
 				}
 				// upper
-				if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_top)) == 0) {
-					m_draw.setColor(m_topColor);
+				if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_top)) == 0) {
+					m_draw.setColor(*propertyTopColor);
 					float startDraw = origin.y()+it->getSize().y() - m_origin.y();
 					m_draw.setPos(vec2(origin.x()-m_origin.x(), startDraw));
 					m_draw.rectangleWidth(vec2(it->getSize().x(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );
@@ -93,14 +93,14 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 		} else {
 			if (size.x() < localWidgetSize.x()) {
 				// left
-				if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_left)) == 0) {
-					m_draw.setColor(m_leftColor);
+				if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_left)) == 0) {
+					m_draw.setColor(*propertyLeftColor);
 					m_draw.setPos(vec2(localWidgetOrigin.x(), origin.y()) - m_origin);
 					m_draw.rectangleWidth(vec2(origin.x()-localWidgetOrigin.x(), it->getSize().y()) );
 				}
 				// right
-				if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_right)) == 0) {
-					m_draw.setColor(m_rightColor);
+				if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_right)) == 0) {
+					m_draw.setColor(*propertyRightColor);
 					float startDraw = origin.x()+it->getSize().x() - m_origin.x();
 					m_draw.setPos(vec2(startDraw, origin.y()-m_origin.y()));
 					m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), it->getSize().y()) );
@@ -109,17 +109,17 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 		}
 	}
 	// now we do the rest of the sizer:
-	if (propertyMode == ewol::widget::Sizer::modeHori) {
+	if (*propertyMode == ewol::widget::Sizer::modeHori) {
 		if (underSize.x() < localWidgetSize.x()) {
 			// left
-			if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_left)) == 0) {
-				m_draw.setColor(m_leftColor);
+			if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_left)) == 0) {
+				m_draw.setColor(*propertyLeftColor);
 				m_draw.setPos(localWidgetOrigin - m_origin);
 				m_draw.rectangleWidth(vec2(underOrigin.x()-localWidgetOrigin.x(), localWidgetSize.y()) );
 			}
 			// right
-			if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_right)) == 0) {
-				m_draw.setColor(m_rightColor);
+			if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_right)) == 0) {
+				m_draw.setColor(*propertyRightColor);
 				float startDraw = underOrigin.x() + underSize.x() - m_origin.x();
 				m_draw.setPos(vec2(startDraw, localWidgetOrigin.y()-m_origin.y()));
 				m_draw.rectangleWidth(vec2(localWidgetSize.x()-startDraw+tmpBorderSize.x(), localWidgetSize.y()) );
@@ -128,14 +128,14 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 	} else {
 		if (underSize.y() < localWidgetSize.y()) {
 			// under
-			if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_buttom)) == 0) {
-				m_draw.setColor(m_buttomColor);
+			if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_buttom)) == 0) {
+				m_draw.setColor(*propertyButtomColor);
 				m_draw.setPos(localWidgetOrigin - m_origin);
 				m_draw.rectangleWidth(vec2(localWidgetSize.x(), underOrigin.y()-localWidgetOrigin.y()) );
 			}
 			// upper
-			if ((uint32_t(propertyGravity) & uint32_t(ewol::gravity_top)) == 0) {
-				m_draw.setColor(m_topColor);
+			if ((uint32_t(*propertyGravity) & uint32_t(ewol::gravity_top)) == 0) {
+				m_draw.setColor(*propertyTopColor);
 				float startDraw = underOrigin.y() + underSize.y() - m_origin.y();
 				m_draw.setPos(vec2(localWidgetOrigin.x()-m_origin.x(), startDraw));
 				m_draw.rectangleWidth(vec2(localWidgetSize.x(), localWidgetSize.y()-startDraw+tmpBorderSize.y()) );

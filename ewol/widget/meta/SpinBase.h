@@ -85,6 +85,7 @@ namespace ewol {
 				SpinBase();
 				void init(enum ewol::widget::spinPosition _mode,
 				          const std::string& _shaperName);
+				void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 			public:
 				/**
 				 * @brief Destructor
