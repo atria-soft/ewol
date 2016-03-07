@@ -30,7 +30,6 @@ namespace ewol {
 				eproperty::Value<float> propertyStep; //!< step of every iteration of the slider (increment/precision)
 			protected:
 				Slider();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				virtual ~Slider();

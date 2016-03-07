@@ -65,11 +65,7 @@ namespace ewol {
 				eproperty::Value<std::string> propertyShape; //!< Shape of the widget
 				eproperty::List<enum ewol::widget::spinPosition> propertySpinMode; //!< How to display the spin base
 			public:
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
-			public:
+				UN_DECLARE_FACTORY(SpinBase);
 			protected:
 				std::shared_ptr<ewol::resource::ConfigFile> m_config;
 				int32_t m_confIdEntryShaper;
@@ -83,9 +79,7 @@ namespace ewol {
 				 * @param[in] _mode The mode to display the elements
 				 */
 				SpinBase();
-				void init(enum ewol::widget::spinPosition _mode,
-				          const std::string& _shaperName);
-				void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
+				void init();
 			public:
 				/**
 				 * @brief Destructor

@@ -25,10 +25,10 @@ ewol::widget::Entry::Entry() :
   signalClick(this, "click", "the user Click on the Entry box"),
   signalEnter(this, "enter", "The cursor enter inside the button"),
   signalModify(this, "modify", "Entry box value change"),
-  propertyShaper(this, "shaper",
-                       "",
-                       "Shaper to display the background",
-                       &ewol::widget::Entry::onChangePropertyShaper),
+  propertyShape(this, "shape",
+                      "{ewol}THEME:GUI:Entry.json",
+                      "Shaper to display the background",
+                      &ewol::widget::Entry::onChangePropertyShaper),
   propertyValue(this, "value",
                       "",
                       "Value display in the entry (decorated text)",
@@ -51,13 +51,12 @@ ewol::widget::Entry::Entry() :
   m_displayCursorPos(0),
   m_displayCursorPosSelection(0) {
 	addObjectType("ewol::widget::Entry");
+	propertyCanFocus.setDirectCheck(true);
 }
 
-void ewol::widget::Entry::init(const std::string& _newData, const std::string& _shaperName) {
+void ewol::widget::Entry::init() {
 	ewol::Widget::init();
-	propertyValue.set(_newData);
-	propertyShaper.set(_shaperName);
-	propertyCanFocus.set(true);
+	propertyShape.notifyChange();
 	
 	try {
 		m_regex.assign(".*", std::regex_constants::optimize | std::regex_constants::ECMAScript);
@@ -557,7 +556,7 @@ void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 }
 
 void ewol::widget::Entry::onChangePropertyShaper() {
-	m_shaper.setSource(propertyShaper.get());
+	m_shaper.setSource(propertyShape.get());
 	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
 	m_colorIdTextBg = m_shaper.requestColor("text-background");
 	m_colorIdCursor = m_shaper.requestColor("text-cursor");

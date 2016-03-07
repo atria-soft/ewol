@@ -19,7 +19,7 @@ static const char* annimationIncrease = "increase";
 
 ewol::widget::PopUp::PopUp() :
   propertyShape(this, "shaper",
-                      "",
+                      "{ewol}THEME:GUI:PopUp.json",
                       "The shaper properties",
                       &ewol::widget::PopUp::onChangePropertyShape),
   propertyLockExpand(this, "lock",
@@ -34,10 +34,10 @@ ewol::widget::PopUp::PopUp() :
 	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
 }
 
-void ewol::widget::PopUp::init(const std::string& _shaperName) {
+void ewol::widget::PopUp::init() {
 	ewol::widget::Container::init();
 	propertyFill.set(bvec2(false,false));
-	propertyShape.set(_shaperName);
+	propertyShape.notifyChange();
 	propertyMinSize.set(gale::Dimension(vec2(80,80),gale::Dimension::Pourcent));
 	propertyExpand.set(bvec2(false, false));
 }

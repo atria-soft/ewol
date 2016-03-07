@@ -22,11 +22,6 @@ ewol::widget::Gird::Gird() :
 	addObjectType("ewol::widget::Gird");
 	requestUpdateSize();
 }
-void ewol::widget::Gird::init(int32_t _colNumber) {
-	ewol::Widget::init();
-	setColNumber(_colNumber);
-}
-
 
 ewol::widget::Gird::~Gird() {
 	EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "} Gird : destroy");

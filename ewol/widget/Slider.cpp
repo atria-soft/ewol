@@ -39,13 +39,10 @@ ewol::widget::Slider::Slider() :
 	
 	m_textColorBg = etk::color::black;
 	m_textColorBg.setA(0x3F);
+	
+	propertyCanFocus.setDirectCheck(true);
 	// Limit event at 1:
 	setMouseLimit(1);
-}
-
-void ewol::widget::Slider::init() {
-	ewol::Widget::init();
-	propertyCanFocus.set(true);
 }
 
 ewol::widget::Slider::~Slider() {

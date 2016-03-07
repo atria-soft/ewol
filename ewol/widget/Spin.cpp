@@ -41,18 +41,7 @@ ewol::widget::Spin::Spin() :
                        "fix-point mantis",
                        &ewol::widget::Spin::onChangePropertyMantis) {
 	addObjectType("ewol::widget::Spin");
-}
-
-void ewol::widget::Spin::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
-	ewol::widget::SpinBase::init(_listProperty);
-}
-
-void ewol::widget::Spin::init(enum ewol::widget::spinPosition _mode,
-                              const std::string& _shaperName) {
-	EWOL_WARNING("init [START]");
-	ewol::widget::SpinBase::init(_mode, _shaperName);
-	markToRedraw();
-	EWOL_WARNING("init [STOP]");
+	propertyShape.setDirectCheck("{ewol}THEME:GUI:Spin.json");
 }
 
 ewol::widget::Spin::~Spin() {

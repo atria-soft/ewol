@@ -39,7 +39,9 @@ namespace ewol {
 #define DECLARE_WIDGET_FACTORY(className, name) \
 	DECLARE_FACTORY(className); \
 	static void createManagerWidget(ewol::widget::Manager& _widgetManager) { \
-		_widgetManager.addWidgetCreator(name,[]() -> std::shared_ptr<ewol::Widget> { return className::create(); }); \
+		_widgetManager.addWidgetCreator(name,   []() -> std::shared_ptr<ewol::Widget> { \
+		                                        	return className::create(); \
+		                                        }); \
 	}
 
 namespace ewol {
@@ -85,10 +87,6 @@ namespace ewol {
 			 * @return (no execption generated (not managed in embended platform))
 			 */
 			Widget();
-			
-			void init();
-			void init(const std::string& _name);
-			void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 		public:
 			/**
 			 * @brief Destructor of the widget classes

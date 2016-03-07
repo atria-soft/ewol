@@ -14,16 +14,13 @@
 #undef __class__
 #define __class__ "widget::SpinBase"
 
-void ewol::widget::SpinBase::init(ewol::widget::Manager& _widgetManager) {
-	
-}
 
 ewol::widget::SpinBase::SpinBase() :
   propertyShape(this, "shape",
                       "",
                       "shape for the display",
                       &ewol::widget::SpinBase::onChangePropertyShape),
-  propertySpinMode(this, "mode",
+  propertySpinMode(this, "spin-mode",
                          ewol::widget::spinPosition_RightRight,
                          "The display spin mode",
                          &ewol::widget::SpinBase::onChangePropertySpinMode),
@@ -32,6 +29,7 @@ ewol::widget::SpinBase::SpinBase() :
   m_confIdDownShaper(-1),
   m_confIdUpData(-1),
   m_confIdDownData(-1) {
+	
 	addObjectType("ewol::widget::SpinBase");
 	propertySpinMode.add(ewol::widget::spinPosition_noneNone, "none-none");
 	propertySpinMode.add(ewol::widget::spinPosition_noneRight, "none-right");
@@ -39,20 +37,13 @@ ewol::widget::SpinBase::SpinBase() :
 	propertySpinMode.add(ewol::widget::spinPosition_leftRight, "left-right");
 	propertySpinMode.add(ewol::widget::spinPosition_leftLeft, "left-left");
 	propertySpinMode.add(ewol::widget::spinPosition_RightRight, "right-right");
+	propertyLockExpand.setDirectCheck(bvec2(true,true));
+	propertyGravity.setDirectCheck(gravity_center);
 }
 
-void ewol::widget::SpinBase::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
-	ewol::widget::Sizer::init(_listProperty);
-	
-}
-
-void ewol::widget::SpinBase::init(enum ewol::widget::spinPosition _mode,
-                                  const std::string& _shaperName) {
-	ewol::widget::Sizer::init(ewol::widget::Sizer::modeHori);
-	propertyLockExpand.set(bvec2(true,true));
-	propertyShape.set(_shaperName);
-	propertySpinMode.set(_mode);
-	propertyGravity.set(gravity_center);
+void ewol::widget::SpinBase::init() {
+	ewol::widget::Sizer::init();
+	propertyShape.notifyChange();
 	updateGui();
 }
 
@@ -88,7 +79,7 @@ void ewol::widget::SpinBase::updateGui() {
 			shaper = m_config->getString(m_confIdEntryShaper);
 			EWOL_VERBOSE("shaper entry : " << shaper);
 		}
-		m_widgetEntry = ewol::widget::Entry::create("", shaper);
+		m_widgetEntry = ewol::widget::Entry::create("shape", shaper);
 		if (m_widgetEntry != nullptr) {
 			m_widgetEntry->propertyExpand.set(bvec2(true,false));
 			m_widgetEntry->propertyFill.set(bvec2(true,true));
@@ -100,12 +91,12 @@ void ewol::widget::SpinBase::updateGui() {
 			shaper = m_config->getString(m_confIdDownShaper);
 			EWOL_VERBOSE("shaper button DOWN : " << shaper);
 		}
-		m_widgetButtonDown = ewol::widget::Button::create(shaper);
+		m_widgetButtonDown = ewol::widget::Button::create("shape", shaper);
 		if (m_widgetButtonDown != nullptr) {
 			m_widgetButtonDown->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonDown->propertyFill.set(bvec2(true,true));
 			std::string data = m_config->getString(m_confIdDownData);
-			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerate(ewol::widget::Composer::String, data);
+			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonDown->setSubWidget(widget);
 		}
 	}
@@ -115,12 +106,12 @@ void ewol::widget::SpinBase::updateGui() {
 			shaper = m_config->getString(m_confIdUpShaper);
 			EWOL_VERBOSE("shaper button UP : " << shaper);
 		}
-		m_widgetButtonUp = ewol::widget::Button::create(shaper);
+		m_widgetButtonUp = ewol::widget::Button::create("shape", shaper);
 		if (m_widgetButtonUp != nullptr) {
 			m_widgetButtonUp->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonUp->propertyFill.set(bvec2(true,true));
 			std::string data = m_config->getString(m_confIdUpData);
-			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerate(ewol::widget::Composer::String, data);
+			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonUp->setSubWidget(widget);
 		}
 	}

@@ -34,13 +34,14 @@ ewol::widget::Select::Select() :
                       "Value of the Select",
                       &ewol::widget::Select::onChangePropertyValue) {
 	addObjectType("ewol::widget::Select");
-}
-
-void ewol::widget::Select::init(const std::string& _shaperName) {
-	ewol::widget::SpinBase::init(ewol::widget::spinPosition_noneRight, _shaperName);
-	//m_shaper->setSource(_shaperName);
-	//m_shaperIdSize = m_shaper->requestConfig("box-size");
-	//m_shaperIdSizeInsize = m_shaper->requestConfig("box-inside");
+	// override the basic parameter:
+	propertyShape.setDirectCheck("{ewol}THEME:GUI:Select.json");
+	propertySpinMode.rename("none-none", "none");
+	propertySpinMode.rename("none-right", "right");
+	propertySpinMode.rename("left-none", "left");
+	propertySpinMode.remove("left-right");
+	propertySpinMode.remove("left-left");
+	propertySpinMode.remove("right-right");
 }
 
 ewol::widget::Select::~Select() {
@@ -171,25 +172,26 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	// auto-select mark position:
 	tmpContext->setPositionMarkAuto(m_origin, m_size);
 	std::shared_ptr<ewol::widget::Sizer> mySizer;
-	mySizer = ewol::widget::Sizer::create(widget::Sizer::modeVert);
+	mySizer = ewol::widget::Sizer::create();
 	if (mySizer == nullptr) {
 		EWOL_ERROR("Allocation Error or sizer");
 		return;
 	}
+	mySizer->propertyMode.set(widget::Sizer::modeVert);
 	mySizer->propertyLockExpand.set(vec2(true,true));
 	mySizer->propertyFill.set(vec2(true,true));
 	// set it in the pop-up-system:
 	tmpContext->setSubWidget(mySizer);
 	for (auto &it : m_listElement) {
-		std::shared_ptr<ewol::widget::Label> myLabel;
-		if (it.m_selected == true) {
-			myLabel = ewol::widget::Label::create(std::string("<b>") + it.m_name + "</b>");
-		} else {
-			myLabel = ewol::widget::Label::create(it.m_name);
-		}
+		std::shared_ptr<ewol::widget::Label> myLabel = ewol::widget::Label::create();
 		if (myLabel == nullptr) {
 			EWOL_ERROR("Allocation Error");
 			continue;
+		}
+		if (it.m_selected == true) {
+			myLabel->propertyValue.set(std::string("<b>") + it.m_name + "</b>");
+		} else {
+			myLabel->propertyValue.set(it.m_name);
 		}
 		myLabel->propertyExpand.set(bvec2(true,true));
 		myLabel->propertyFill.set(bvec2(true,true));

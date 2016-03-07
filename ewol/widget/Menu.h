@@ -35,7 +35,6 @@ namespace ewol {
 				esignal::ISignal<std::string> signalSelect; // event on a menu button or ...
 			protected:
 				Menu();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Menu, "Menu");
 				virtual ~Menu();

@@ -32,12 +32,8 @@ ewol::widget::Windows::Windows() :
 	if (m_colorProperty != nullptr) {
 		m_colorBg = m_colorProperty->request("background");
 	}
+	propertyCanFocus.setDirectCheck(true);
 	//KeyboardShow(KEYBOARD_MODE_CODE);
-}
-
-void ewol::widget::Windows::init() {
-	ewol::Widget::init();
-	propertyCanFocus.set(true);
 }
 
 ewol::widget::Windows::~Windows() {

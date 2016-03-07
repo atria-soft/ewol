@@ -15,11 +15,11 @@
 
 ewol::widget::WidgetScrolled::WidgetScrolled() :
   propertyShapeVert(this, "shape-vert",
-                          "",
+                          "{ewol}THEME:GUI:WidgetScrolled.json",
                           "shape for the vertical display",
                           &ewol::widget::WidgetScrolled::onChangePropertyShapeVert),
   propertyShapeHori(this, "shape-hori",
-                          "",
+                          "{ewol}THEME:GUI:WidgetScrolled.json",
                           "shape for the horizonal display",
                           &ewol::widget::WidgetScrolled::onChangePropertyShapeHori),
   m_shaperH(),
@@ -40,10 +40,10 @@ ewol::widget::WidgetScrolled::WidgetScrolled() :
 	}
 }
 
-void ewol::widget::WidgetScrolled::init(const std::string& _shaperName) {
+void ewol::widget::WidgetScrolled::init() {
 	ewol::Widget::init();
-	propertyShapeVert.set(_shaperName);
-	propertyShapeHori.set(_shaperName);
+	propertyShapeVert.notifyChange();
+	propertyShapeHori.notifyChange();
 }
 
 ewol::widget::WidgetScrolled::~WidgetScrolled() {

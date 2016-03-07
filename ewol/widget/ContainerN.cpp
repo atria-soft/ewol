@@ -25,14 +25,6 @@ ewol::widget::ContainerN::ContainerN() :
 	// nothing to do ...
 }
 
-void ewol::widget::ContainerN::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
-	ewol::Widget::init(_listProperty);
-}
-
-void ewol::widget::ContainerN::init() {
-	ewol::Widget::init();
-}
-
 ewol::widget::ContainerN::~ContainerN() {
 	subWidgetRemoveAll();
 }

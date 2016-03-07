@@ -19,7 +19,6 @@
 #include <eproperty/Value.h>
 #include <eproperty/Range.h>
 #include <eproperty/List.h>
-#include <eproperty/Variant.h>
 #include <esignal/Interface.h>
 
 namespace ewol {
@@ -31,22 +30,56 @@ namespace ewol {
 	class Context;
 };
 
+template<class TYPE_OBJECT> static void baseInit(const std::shared_ptr<TYPE_OBJECT>& _object) {
+	// end of recurtion
+	return;
+}
+
+template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const std::shared_ptr<TYPE_OBJECT>& _object, const std::string& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
+	eproperty::Property* prop(nullptr);
+	eproperty::PropertyType<TYPE_VAL>* propType(nullptr);
+	if (_object == nullptr) {
+		EWOL_ERROR("EMPTY pointer");
+		return;
+	}
+	prop = _object->getPropertyRaw(_name);
+	if (prop == nullptr) {
+		EWOL_ERROR("property does not exit ... '" << _name << "'");
+		goto exit_on_error;
+	}
+	propType = dynamic_cast<eproperty::PropertyType<TYPE_VAL>*>(prop);
+	if (propType == nullptr) {
+		EWOL_ERROR("property does not cast in requested type ... '" << _name << "' require type : " << typeid(_val).name() << "' instead of '" << prop->getType() << "'");
+		goto exit_on_error;
+	}
+	propType->setDirectCheck(_val);
+exit_on_error:
+	baseInit(_object, std::forward<TYPE>(_all)... );
+	return;
+}
+
+#define UN_DECLARE_FACTORY(className) \
+	template<typename ... TYPE> static std::shared_ptr<className> create(const TYPE& ... _all) = delete;
+
 #define DECLARE_FACTORY(className) \
-	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
+	template<typename ... TYPE> static std::shared_ptr<className> create(const TYPE& ... _all) { \
 		std::shared_ptr<className> object(new className()); \
 		if (object == nullptr) { \
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \
 		} \
-		object->init(std::forward<T>(all)... ); \
+		/*object->initNoValue();*/ \
+		/*baseInit(object, std::forward<TYPE>(_all)... ); */ \
+		baseInit(object, _all... ); \
+		object->init(); \
 		if (object->objectHasBeenCorectlyInit() == false) { \
 			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
 		} \
 		return object; \
 	}
 
-#define DECLARE_SINGLE_FACTORY(className,uniqueName) \
-	template<typename ... T> static std::shared_ptr<className> create( T&& ... all ) { \
+#define DECLARE_SINGLE_FACTORY(className, uniqueName) \
+	template<typename ... TYPE> static std::shared_ptr<className> create(const TYPE& ... _all) { \
 		std::shared_ptr<className> object; \
 		std::shared_ptr<ewol::Object> object2 = getObjectNamed(uniqueName); \
 		if (object2 != nullptr) { \
@@ -59,16 +92,7 @@ namespace ewol {
 		if (object != nullptr) { \
 			return object; \
 		} \
-		object = std::shared_ptr<className>(new className()); \
-		if (object == nullptr) { \
-			EWOL_ERROR("Factory error"); \
-			return nullptr; \
-		} \
-		object->init(uniqueName, std::forward<T>(all)... ); \
-		if (object->objectHasBeenCorectlyInit() == false) { \
-			EWOL_CRITICAL("Object is not correctly init : " << #className ); \
-		} \
-		return object; \
+		return create("name", std::string(uniqueName), _all...); \
 	}
 
 namespace ewol {
@@ -92,10 +116,7 @@ namespace ewol {
 			 * @brief Constructor.
 			 */
 			Object();
-			void init();
-			//! @previous
-			void init(const std::string& _name);
-			void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
+			virtual void init();
 		public:
 			/**
 			 * @brief Factory

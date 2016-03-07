@@ -27,7 +27,7 @@ ewol::widget::Button::Button() :
   signalEnter(this, "enter", "The cursor enter inside the button"),
   signalLeave(this, "leave", "the cursor leave the button"),
   signalValue(this, "value", "button value change"),
-  propertyShape(this, "shaper", "", "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
+  propertyShape(this, "shaper", "{ewol}THEME:GUI:Button.json", "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
   propertyValue(this, "value", false, "Value of the Button", &ewol::widget::Button::onChangePropertyValue),
   propertyLock(this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder", &ewol::widget::Button::onChangePropertyLock),
   propertyToggleMode(this, "toggle", false, "The Button can toogle", &ewol::widget::Button::onChangePropertyToggleMode),
@@ -44,16 +44,17 @@ ewol::widget::Button::Button() :
 	propertyLock.add(lockWhenReleased, "released");
 	propertyLock.add(lockAccess, "access");
 	
+	propertyCanFocus.setDirectCheck(true);
+	
 	// shaper satatus update:
 	CheckStatus();
 	// Limit event at 1:
 	setMouseLimit(1);
 }
 
-void ewol::widget::Button::init(const std::string& _shaperName) {
+void ewol::widget::Button::init() {
 	ewol::widget::Container2::init();
-	propertyCanFocus.set(true);
-	propertyShape.set(_shaperName);
+	propertyShape.notifyChange();
 }
 
 ewol::widget::Button::~Button() {

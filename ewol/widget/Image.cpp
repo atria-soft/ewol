@@ -35,12 +35,6 @@ ewol::widget::Image::Image() :
 	}
 }
 
-void ewol::widget::Image::init(const std::string& _file, const gale::Dimension& _border) {
-	ewol::Widget::init();
-	set(_file, _border);
-}
-
-
 ewol::widget::Image::~Image() {
 	
 }

@@ -28,8 +28,6 @@ namespace ewol {
 				 * @brief Constructor
 				 */
 				ContainerN();
-				void init();
-				void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 			public:
 				/**
 				 * @brief Destructor

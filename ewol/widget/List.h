@@ -21,7 +21,6 @@ namespace ewol {
 		class List : public ewol::widget::WidgetScrolled {
 			protected:
 				List();
-				void init();
 			public:
 				virtual ~List();
 				virtual void calculateMinMaxSize();

@@ -35,7 +35,7 @@ namespace ewol {
 				eproperty::List<enum markPosition> propertyArrawBorder;
 			protected:
 				ContextMenu();
-				void init(const std::string& _shaperName="{ewol}THEME:GUI:ContextMenu.json");
+				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();

@@ -57,11 +57,6 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	setMouseLimit(1);
 }
 
-void ewol::widget::ListFileSystem::init() {
-	ewol::widget::List::init();
-}
-
-
 ewol::widget::ListFileSystem::~ListFileSystem() {
 	clearList();
 }

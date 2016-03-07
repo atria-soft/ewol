@@ -25,11 +25,7 @@ ewol::widget::List::List() {
 		m_paddingSizeY = 2;
 	#endif
 	m_nbVisibleRaw = 0;
-}
-
-void ewol::widget::List::init() {
-	ewol::widget::WidgetScrolled::init();
-	propertyCanFocus.set(true);
+	propertyCanFocus.setDirectCheck(true);
 }
 
 ewol::widget::List::~List() {

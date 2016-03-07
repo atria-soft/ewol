@@ -19,7 +19,7 @@
 
 ewol::widget::ContextMenu::ContextMenu():
   propertyShape(this, "shape",
-                      "",
+                      "{ewol}THEME:GUI:ContextMenu.json",
                       "the display name for config file",
                       &ewol::widget::ContextMenu::onChangePropertyShape),
   propertyArrowPos(this, "arrow-position",
@@ -47,10 +47,9 @@ ewol::widget::ContextMenu::ContextMenu():
 	setMouseLimit(1);
 }
 
-void ewol::widget::ContextMenu::init(const std::string& _shaperName) {
+void ewol::widget::ContextMenu::init() {
 	ewol::widget::Container::init();
-	propertyShape.set(_shaperName);
-	propertyExpand.set(bvec2(false,false));
+	propertyShape.notifyChange();
 }
 
 ewol::widget::ContextMenu::~ContextMenu() {

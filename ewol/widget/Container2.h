@@ -29,7 +29,6 @@ namespace ewol {
 				 * @param[in] _subElementToggle Widget to set on the toggle position
 				 */
 				Container2();
-				void init(std::shared_ptr<ewol::Widget> _subElement = nullptr, std::shared_ptr<ewol::Widget> _subElementToggle = nullptr);
 			public:
 				/**
 				 * @brief Destructor

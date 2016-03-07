@@ -21,28 +21,22 @@ ewol::widget::Composer::Composer() {
 	// nothing to do ...
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::composerGenerate(enum ewol::widget::Composer::composerMode _mode, const std::string& _data) {
+static std::shared_ptr<ewol::Widget> composerGenerate(bool _modeFile, const std::string& _data) {
 	ewol::widget::Manager& widgetManager = ewol::getContext().getWidgetManager();
 	if (_data == "") {
 		return nullptr;
 	}
 	std::shared_ptr<exml::Document> doc = exml::Document::create();
-	switch(_mode) {
-		case ewol::widget::Composer::None:
-			EWOL_ERROR("Not specify the type for compositing dynamic creation");
+	if (_modeFile == true) {
+		if (doc->load(_data) == false) {
+			EWOL_ERROR(" can not load file XML : " << _data);
 			return nullptr;
-		case ewol::widget::Composer::String:
-			if (doc->parse(_data) == false) {
-				EWOL_ERROR(" can not load file XML string...");
-				return nullptr;
-			}
-			break;
-		case ewol::widget::Composer::file:
-			if (doc->load(_data) == false) {
-				EWOL_ERROR(" can not load file XML : " << _data);
-				return nullptr;
-			}
-			break;
+		}
+	} else {
+		if (doc->parse(_data) == false) {
+			EWOL_ERROR(" can not load file XML string...");
+			return nullptr;
+		}
 	}
 	std::shared_ptr<const exml::Element> root = doc->toElement();
 	if (root->size() == 0) {
@@ -74,20 +68,12 @@ std::shared_ptr<ewol::Widget> ewol::widget::composerGenerate(enum ewol::widget::
 	return tmpWidget;
 }
 
+std::shared_ptr<ewol::Widget> ewol::widget::composerGenerateFile(const std::string& _data) {
+	return composerGenerate(true, _data);
+}
 
-void ewol::widget::Composer::init(enum composerMode _mode, const std::string& _fileName) {
-	ewol::widget::Container::init();
-	switch(_mode) {
-		case ewol::widget::Composer::None:
-			// nothing to do ...
-			break;
-		case ewol::widget::Composer::String:
-			loadFromString(_fileName);
-			break;
-		case ewol::widget::Composer::file:
-			loadFromFile(_fileName);
-			break;
-	}
+std::shared_ptr<ewol::Widget> ewol::widget::composerGenerateString(const std::string& _data) {
+	return composerGenerate(false, _data);
 }
 
 ewol::widget::Composer::~Composer() {

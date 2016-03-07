@@ -24,12 +24,8 @@ ewol::widget::ColorBar::ColorBar() :
                       &ewol::widget::ColorBar::onChangePropertyValue) {
 	addObjectType("ewol::widget::ColorBar");
 	m_currentUserPos.setValue(0,0);
+	propertyCanFocus.setDirectCheck(true);
 	setMouseLimit(1);
-}
-
-void ewol::widget::ColorBar::init() {
-	ewol::Widget::init();
-	propertyCanFocus.set(true);
 }
 
 ewol::widget::ColorBar::~ColorBar() {

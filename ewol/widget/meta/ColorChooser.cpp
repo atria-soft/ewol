@@ -32,7 +32,8 @@ ewol::widget::ColorChooser::ColorChooser() :
 }
 
 void ewol::widget::ColorChooser::init() {
-	ewol::widget::Sizer::init(ewol::widget::Sizer::modeVert);
+	ewol::widget::Sizer::init();
+	propertyMode.set(ewol::widget::Sizer::modeVert);
 	propertyLockExpand.set(bvec2(true,true));
 		m_widgetColorBar = ewol::widget::ColorBar::create();
 			m_widgetColorBar->signalChange.connect(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChange);

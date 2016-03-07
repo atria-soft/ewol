@@ -41,7 +41,7 @@ namespace ewol {
 				 * @param[in] _shaperName The new shaper filename.
 				 */
 				ButtonColor();
-				void init(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="{ewol}THEME:GUI:Button.json");
+				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ButtonColor, "ButtonColor");
 				/**

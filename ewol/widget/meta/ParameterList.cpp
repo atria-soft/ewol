@@ -36,6 +36,7 @@ void ewol::widget::ParameterList::init() {
 	ewol::widget::WidgetScrolled::init();
 	propertyCanFocus.set(true);
 }
+
 ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {

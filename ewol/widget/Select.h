@@ -28,7 +28,6 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				Select();
-				void init(const std::string& _shaperName="{ewol}THEME:GUI:Select.json");
 			public:
 				DECLARE_WIDGET_FACTORY(Select, "Select");
 				/**

@@ -24,7 +24,6 @@ namespace ewol {
 				eproperty::Value<etk::Color<>> propertyValue;
 			protected:
 				ColorBar();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ColorBar, "ColorBar");
 				virtual ~ColorBar();

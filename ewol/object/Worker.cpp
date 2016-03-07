@@ -18,11 +18,6 @@ void ewol::object::Worker::init() {
 	ewol::Object::init();
 	getObjectManager().workerAdd(shared_from_this());
 }
-//! @previous
-void ewol::object::Worker::init(const std::string& _name) {
-	ewol::Object::init(_name);
-	getObjectManager().workerAdd(shared_from_this());
-}
 
 ewol::object::Worker::~Worker() {
 	// nothing to do ...

@@ -45,20 +45,22 @@ void ewol::widget::Parameter::init() {
 		propertyMinSize.set(gale::Dimension(vec2(80, 80), gale::Dimension::Pourcent));
 	#endif
 	
-	mySizerVert = ewol::widget::Sizer::create(widget::Sizer::modeVert);
+	mySizerVert = ewol::widget::Sizer::create();
 	if (mySizerVert == nullptr) {
 		EWOL_ERROR("Can not allocate widget  == > display might be in error");
 	} else {
 		EWOL_INFO("add widget");
+		mySizerVert->propertyMode.set(widget::Sizer::modeVert);
 		mySizerVert->propertyLockExpand.set(bvec2(true,true));
 		mySizerVert->propertyExpand.set(bvec2(true,true));
 		// set it in the pop-up-system :
 		setSubWidget(mySizerVert);
 		
-		mySizerHori = ewol::widget::Sizer::create(widget::Sizer::modeHori);
+		mySizerHori = ewol::widget::Sizer::create();
 		if (mySizerHori == nullptr) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
+			mySizerHori->propertyMode.set(widget::Sizer::modeHori);
 			mySizerVert->subWidgetAdd(mySizerHori);
 			
 			mySpacer = ewol::widget::Spacer::create();
@@ -73,13 +75,11 @@ void ewol::widget::Parameter::init() {
 			if (tmpButton == nullptr) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				tmpButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
-				        "<composer>\n"
-				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"{ewol}THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
-				        "		<label>Save</label>\n"
-				        "	</sizer>\n"
-				        "</composer>\n"));
+				tmpButton->setSubWidget(ewol::widget::composerGenerateString(
+				        "<sizer mode=\"hori\">\n"
+				        "	<image src=\"{ewol}THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "	<label>Save</label>\n"
+				        "</sizer>\n"));
 				tmpButton->signalPressed.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackParameterSave);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
@@ -97,22 +97,21 @@ void ewol::widget::Parameter::init() {
 			if (tmpButton == nullptr) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				tmpButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String,
-				        "<composer>\n"
-				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"{ewol}THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
-				        "		<label>Close</label>\n"
-				        "	</sizer>\n"
-				        "</composer>\n"));
+				tmpButton->setSubWidget(ewol::widget::composerGenerateString(
+				        "<sizer mode=\"hori\">\n"
+				        "	<image src=\"{ewol}THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "	<label>Close</label>\n"
+				        "</sizer>\n"));
 				tmpButton->signalPressed.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuclosed);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 		}
 		
-		mySizerHori = ewol::widget::Sizer::create(widget::Sizer::modeHori);
+		mySizerHori = ewol::widget::Sizer::create();
 		if (mySizerHori == nullptr) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
+			mySizerHori->propertyMode.set(widget::Sizer::modeHori);
 			mySizerVert->subWidgetAdd(mySizerHori);
 			
 			m_paramList = ewol::widget::ParameterList::create();
@@ -135,10 +134,11 @@ void ewol::widget::Parameter::init() {
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
-			std::shared_ptr<ewol::widget::Sizer> mySizerVert2 = widget::Sizer::create(widget::Sizer::modeVert);
+			std::shared_ptr<ewol::widget::Sizer> mySizerVert2 = widget::Sizer::create();
 			if (mySizerVert2 == nullptr) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
+				mySizerVert2->propertyMode.set(widget::Sizer::modeVert);
 				mySizerHori->subWidgetAdd(mySizerVert2);
 				
 				mySpacer = ewol::widget::Spacer::create();
@@ -173,10 +173,11 @@ void ewol::widget::Parameter::init() {
 			mySizerVert->subWidgetAdd(mySpacer);
 		}
 		
-		m_widgetTitle = ewol::widget::Label::create(TRANSLATE(propertyLabelTitle));
+		m_widgetTitle = ewol::widget::Label::create();
 		if (m_widgetTitle == nullptr) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
+			m_widgetTitle->propertyValue.set(TRANSLATE(propertyLabelTitle));
 			m_widgetTitle->propertyExpand.set(bvec2(true,false));
 			mySizerVert->subWidgetAdd(m_widgetTitle);
 		}
@@ -219,10 +220,11 @@ void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, st
 				m_wSlider->subWidgetAdd(_associateWidget);
 			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
-				std::shared_ptr<ewol::widget::Label> myLabel = widget::Label::create(std::string("No widget for : ") + _label);
+				std::shared_ptr<ewol::widget::Label> myLabel = widget::Label::create();
 				if (nullptr == myLabel) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
+					myLabel->propertyValue.set(std::string("No widget for : ") + _label);
 					myLabel->propertyExpand.set(bvec2(true,true));
 					m_wSlider->subWidgetAdd(myLabel);
 				}

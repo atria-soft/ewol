@@ -28,19 +28,19 @@
 ewol::widget::ButtonColor::ButtonColor() :
   signalChange(this, "change", "Button color change value"),
   propertyValue(this, "color", etk::color::black, "Current color", &ewol::widget::ButtonColor::onChangePropertyValue),
-  propertyShape(this, "shape", "", "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
+  propertyShape(this, "shape", "{ewol}THEME:GUI:Button.json", "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
   m_widgetContextMenu(nullptr) {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);
 	// Limit event at 1:
 	setMouseLimit(1);
+	propertyCanFocus.setDirectCheck(true);
 }
 
-void ewol::widget::ButtonColor::init(etk::Color<> _baseColor, std::string _shaperName) {
+void ewol::widget::ButtonColor::init() {
 	ewol::Widget::init();
-	propertyCanFocus.set(true);
-	propertyShape.set(_shaperName);
-	propertyValue.set(_baseColor);
+	propertyShape.notifyChange();
+	propertyValue.notifyChange();
 }
 
 ewol::widget::ButtonColor::~ButtonColor() {

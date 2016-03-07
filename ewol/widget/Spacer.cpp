@@ -20,12 +20,8 @@ ewol::widget::Spacer::Spacer() :
                       "background of the spacer",
                       &ewol::widget::Spacer::onChangePropertyColor) {
 	addObjectType("ewol::widget::Spacer");
-}
-
-void ewol::widget::Spacer::init() {
-	ewol::Widget::init();
-	propertyMinSize.set(gale::Dimension(vec2(10,10)));
-	propertyCanFocus.set(true);
+	propertyMinSize.setDirectCheck(gale::Dimension(vec2(10,10)));
+	propertyCanFocus.setDirectCheck(true);
 }
 
 ewol::widget::Spacer::~Spacer() {

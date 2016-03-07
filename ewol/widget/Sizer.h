@@ -38,19 +38,12 @@ namespace ewol {
 				eproperty::Value<gale::Dimension> propertyBorderSize; //!< Border size needed for all the display
 				eproperty::List<enum animation> propertyAnimation; //!< Methode add and remove element (animation)
 				eproperty::Value<float> propertyAnimationTime; //!< Time in second to generate animation
-			public:
-				/**
-				 * @brief Main call of recording the widget on the List of "widget named creator"
-				 */
-				static void init(ewol::widget::Manager& _widgetManager);
-				void init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty);
 			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
 				Sizer();
-				void init(enum displayMode _mode=ewol::widget::Sizer::modeHori);
 			public:
 				DECLARE_WIDGET_FACTORY(Sizer, "Sizer");
 				/**

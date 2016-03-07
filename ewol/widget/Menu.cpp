@@ -24,10 +24,6 @@ ewol::widget::Menu::Menu() :
 	m_staticId = 666;
 }
 
-void ewol::widget::Menu::init() {
-	ewol::widget::Sizer::init();
-}
-
 ewol::widget::Menu::~Menu() {
 	clear();
 }
@@ -101,9 +97,9 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			}
 			composeString+="    <label><left>" + tmpObject.m_label + "</left></label>\n";
 			composeString+="</sizer>\n";
-			myButton->setSubWidget(ewol::widget::Composer::create(widget::Composer::String, composeString));
+			myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
 		} else {
-			myButton->setSubWidget(ewol::widget::Label::create("<left>" + tmpObject.m_label + "</left>") );
+			myButton->setSubWidget(ewol::widget::Label::create("value", "<left>" + tmpObject.m_label + "</left>") );
 		}
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
@@ -178,7 +174,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 		tmpContext->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition);
 		std::shared_ptr<ewol::widget::Sizer> mySizer;
 		std::shared_ptr<ewol::widget::Button> myButton;
-		mySizer = ewol::widget::Sizer::create(widget::Sizer::modeVert);
+		mySizer = ewol::widget::Sizer::create("mode", widget::Sizer::modeVert);
 		if (mySizer != nullptr) {
 			mySizer->propertyLockExpand.set(vec2(true,true));
 			mySizer->propertyFill.set(vec2(true,true));
@@ -219,10 +215,10 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 					}
 					composeString+="        <label exand='true,true' fill='true,true'><left>" + it2->m_label + "</left></label>\n";
 					composeString+="    </sizer>\n";
-					myButton->setSubWidget(ewol::widget::composerGenerate(widget::Composer::String, composeString));
+					myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
 				} else {
 					if (menuHaveImage == true) {
-						myButton->setSubWidget(ewol::widget::composerGenerate(widget::Composer::String,
+						myButton->setSubWidget(ewol::widget::composerGenerateString(
 						        std::string() +
 						        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
 						        "		<spacer min-size='8,0mm'/>\n"
@@ -230,8 +226,9 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 						        "	</sizer>\n")
 						    );
 					} else {
-						std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create(std::string("<left>") + it2->m_label + "</left>\n");
+						std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create();
 						if (tmpLabel != nullptr) {
+							tmpLabel->propertyValue.set(std::string("<left>") + it2->m_label + "</left>\n");
 							tmpLabel->propertyExpand.set(bvec2(true,false));
 							tmpLabel->propertyFill.set(bvec2(true,true));
 							myButton->setSubWidget(tmpLabel);

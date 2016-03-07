@@ -37,7 +37,6 @@ namespace ewol {
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
 				Label();
-				void init(std::string _newLabel="---");
 			public:
 				DECLARE_WIDGET_FACTORY(Label, "Label");
 				/**

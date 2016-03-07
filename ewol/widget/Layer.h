@@ -23,7 +23,6 @@ namespace ewol {
 				 * @brief Constructor
 				 */
 				Layer();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Layer, "Layer");
 				/**

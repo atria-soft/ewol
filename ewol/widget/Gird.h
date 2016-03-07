@@ -37,7 +37,6 @@ namespace ewol {
 				 * @brief Constructor
 				 */
 				Gird();
-				void init(int32_t _colNumber=1);
 			public:
 				DECLARE_WIDGET_FACTORY(Gird, "Gird");
 				/**

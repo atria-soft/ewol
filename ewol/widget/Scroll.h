@@ -41,7 +41,7 @@ namespace ewol {
 				enum gale::key::type m_highSpeedType;
 			protected:
 				Scroll();
-				void init(const std::string& _shaperName="{ewol}THEME:GUI:WidgetScrolled.json");
+				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
 				virtual ~Scroll();

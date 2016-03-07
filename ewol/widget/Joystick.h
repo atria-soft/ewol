@@ -47,7 +47,6 @@ namespace ewol {
 				float m_ratio;
 			protected:
 				Joystick();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Joystick, "Joystick");
 				virtual ~Joystick();

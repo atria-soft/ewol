@@ -85,17 +85,6 @@ ewol::Widget::Widget() :
 	propertyAnnimationTypeStop.add(0, "none");
 }
 
-void ewol::Widget::init() {
-	ewol::Object::init();
-}
-
-void ewol::Widget::init(const std::string& _name) {
-	ewol::Object::init(_name);
-}
-void ewol::Widget::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
-	ewol::Object::init(_listProperty);
-}
-
 ewol::Widget::~Widget() {
 	// clean all the short-cut ...
 	shortCutClean();

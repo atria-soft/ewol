@@ -27,7 +27,6 @@ namespace ewol {
 				 * @brief Main constructer
 				 */
 				Spacer();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Spacer, "Spacer");
 				/**

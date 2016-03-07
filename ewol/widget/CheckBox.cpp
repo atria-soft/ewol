@@ -29,7 +29,7 @@ ewol::widget::CheckBox::CheckBox() :
                       "Basic value of the widget",
                       &ewol::widget::CheckBox::onChangePropertyValue),
   propertyShape(this, "shape",
-                      "",
+                      "{ewol}THEME:GUI:CheckBox.json",
                       "The display name for config file",
                       &ewol::widget::CheckBox::onChangePropertyShape),
   m_mouseHover(false),
@@ -41,17 +41,15 @@ ewol::widget::CheckBox::CheckBox() :
 	addObjectType("ewol::widget::CheckBox");
 	// shaper satatus update:
 	CheckStatus();
+	propertyCanFocus.setDirectCheck(true);
 	// Limit event at 1:
 	setMouseLimit(1);
 }
 
 
-void ewol::widget::CheckBox::init(const std::string& _shaperName) {
+void ewol::widget::CheckBox::init() {
 	ewol::widget::Container2::init();
-	propertyCanFocus.set(true);
-	propertyShape.set(_shaperName);
-	m_shaperIdSize = m_shaper.requestConfig("box-size");
-	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");
+	propertyShape.notifyChange();
 }
 
 ewol::widget::CheckBox::~CheckBox() {
@@ -203,6 +201,8 @@ void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 
 void ewol::widget::CheckBox::onChangePropertyShape() {
 	m_shaper.setSource(*propertyShape);
+	m_shaperIdSize = m_shaper.requestConfig("box-size");
+	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");
 	markToRedraw();
 }
 

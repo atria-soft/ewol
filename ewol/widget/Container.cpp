@@ -21,12 +21,6 @@ ewol::widget::Container::Container() {
 	// nothing to do ...
 }
 
-void ewol::widget::Container::init(std::shared_ptr<ewol::Widget> _subElement) {
-	ewol::Widget::init();
-	m_subWidget = _subElement;
-}
-
-
 ewol::widget::Container::~Container() {
 	subWidgetRemove();
 }

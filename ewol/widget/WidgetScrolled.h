@@ -71,7 +71,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
 				WidgetScrolled();
-				void init(const std::string& _shaperName="{ewol}THEME:GUI:WidgetScrolled.json");
+				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(WidgetScrolled, "WidgetScrolled");
 				/**

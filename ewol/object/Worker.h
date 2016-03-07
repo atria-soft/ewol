@@ -22,8 +22,6 @@ namespace ewol {
 				 */
 				Worker();
 				void init();
-				//! @previous
-				void init(const std::string& _name);
 			public:
 				/**
 				 * @brief Factory

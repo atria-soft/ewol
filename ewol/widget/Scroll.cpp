@@ -20,11 +20,11 @@ ewol::widget::Scroll::Scroll() :
                       "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end",
                       &ewol::widget::Scroll::onChangePropertyLimit),
   propertyShapeVert(this, "shape-vert",
-                          "",
+                          "{ewol}THEME:GUI:WidgetScrolled.json",
                           "shape for the vertical display",
                           &ewol::widget::Scroll::onChangePropertyShapeVert),
   propertyShapeHori(this, "shape-hori",
-                          "",
+                          "{ewol}THEME:GUI:WidgetScrolled.json",
                           "shape for the horizonal display",
                           &ewol::widget::Scroll::onChangePropertyShapeHori),
   m_pixelScrolling(20),
@@ -35,10 +35,10 @@ ewol::widget::Scroll::Scroll() :
 	addObjectType("ewol::widget::Scroll");
 }
 
-void ewol::widget::Scroll::init(const std::string& _shaperName) {
+void ewol::widget::Scroll::init() {
 	ewol::widget::Container::init();
-	propertyShapeVert.set(_shaperName);
-	propertyShapeHori.set(_shaperName);
+	propertyShapeVert.notifyChange();
+	propertyShapeHori.notifyChange();
 }
 
 

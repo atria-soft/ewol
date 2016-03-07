@@ -29,11 +29,12 @@ void ewol::widget::StdPopUp::init() {
 	std::shared_ptr<ewol::widget::Sizer> mySizerVert;
 	std::shared_ptr<ewol::widget::Spacer> mySpacer;
 	
-	mySizerVert = ewol::widget::Sizer::create(widget::Sizer::modeVert);
+	mySizerVert = ewol::widget::Sizer::create();
 		// set it in the pop-up-system : 
 		setSubWidget(mySizerVert);
-		
-		m_subBar = ewol::widget::Sizer::create(widget::Sizer::modeHori);
+		mySizerVert->propertyMode.set(widget::Sizer::modeVert);
+		m_subBar = ewol::widget::Sizer::create();
+			m_subBar->propertyMode.set(widget::Sizer::modeHori);
 			m_subBar->propertyLockExpand.set(bvec2(true,true));
 			m_subBar->propertyExpand.set(bvec2(true,false));
 			mySizerVert->subWidgetAdd(m_subBar);
@@ -52,7 +53,8 @@ void ewol::widget::StdPopUp::init() {
 			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
-		m_comment = ewol::widget::Label::create("No Label");
+		m_comment = ewol::widget::Label::create();
+			m_comment->propertyValue.set("No Label");
 			m_comment->propertyExpand.set(bvec2(true,true));
 			mySizerVert->subWidgetAdd(m_comment);
 		
@@ -67,7 +69,8 @@ void ewol::widget::StdPopUp::init() {
 			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::Dimension::Pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
-		m_title = ewol::widget::Label::create("<bold>Message</bold>");
+		m_title = ewol::widget::Label::create();
+			m_title->propertyValue.set("<bold>Message</bold>");
 			m_title->propertyExpand.set(bvec2(true,false));
 			m_title->propertyFill.set(bvec2(true,true));
 			mySizerVert->subWidgetAdd(m_title);
@@ -103,7 +106,7 @@ std::shared_ptr<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const st
 		EWOL_ERROR("Can not allocate new button ...");
 		return nullptr;
 	}
-	myButton->setSubWidget(ewol::widget::Label::create(_text));
+	myButton->setSubWidget(ewol::widget::Label::create("value", _text));
 	if(_autoExit == true) {
 		myButton->signalPressed.connect(shared_from_this(), &ewol::widget::StdPopUp::onCallBackButtonExit);
 	}

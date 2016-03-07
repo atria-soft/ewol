@@ -33,12 +33,7 @@ ewol::widget::Label::Label() :
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
 	setMouseLimit(1);
-}
-
-void ewol::widget::Label::init(std::string _newLabel) {
-	ewol::Widget::init();
-	propertyCanFocus.set(false);
-	propertyValue.set(_newLabel);
+	propertyCanFocus.setDirectCheck(false);
 }
 
 ewol::widget::Label::~Label() {

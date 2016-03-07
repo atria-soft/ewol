@@ -34,9 +34,6 @@ namespace ewol {
 				eproperty::Value<std::string> propertySelectWidget; //!< current select configuration
 			protected:
 				WSlider();
-				void init() {
-					ewol::widget::ContainerN::init();
-				};
 			public:
 				DECLARE_WIDGET_FACTORY(WSlider, "WSlider");
 				virtual ~WSlider();

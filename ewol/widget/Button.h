@@ -53,7 +53,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				Button();
-				void init(const std::string& _shaperName="{ewol}THEME:GUI:Button.json");
+				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Button, "Button");
 				/**

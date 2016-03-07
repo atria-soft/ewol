@@ -38,15 +38,6 @@ ewol::widget::Sizer::Sizer() :
 	propertyAnimation.add(animationRight, "right");
 }
 
-void ewol::widget::Sizer::init(const std::unordered_map<std::string,eproperty::Variant>& _listProperty) {
-	ewol::widget::ContainerN::init(_listProperty);
-}
-
-void ewol::widget::Sizer::init(enum displayMode _mode) {
-	ewol::widget::ContainerN::init();
-	propertyMode.set(_mode);
-}
-
 ewol::widget::Sizer::~Sizer() {
 	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (propertyMode == ewol::widget::Sizer::modeVert?"Vert":"Hori") << ")");
 }

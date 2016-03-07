@@ -19,13 +19,6 @@
 ewol::widget::Container2::Container2() :
   m_idWidgetDisplayed(0) {
 	addObjectType("ewol::widget::Container2");
-	// nothing to do ...
-}
-
-void ewol::widget::Container2::init(std::shared_ptr<ewol::Widget> _subElement, std::shared_ptr<ewol::Widget> _subElementToggle) {
-	ewol::Widget::init();
-	m_subWidget[0] = _subElement;
-	m_subWidget[1] = _subElementToggle;
 }
 
 ewol::widget::Container2::~Container2() {

@@ -41,8 +41,6 @@ namespace ewol {
 				 * @brief 
 				 */
 				Image();
-				void init(const std::string& _file="",
-				          const gale::Dimension& _border=gale::Dimension(vec2(0,0),gale::Dimension::Millimeter));
 			public:
 				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**

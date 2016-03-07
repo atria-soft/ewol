@@ -17,10 +17,6 @@ ewol::widget::Layer::Layer() {
 	addObjectType("ewol::widget::Layer");
 }
 
-void ewol::widget::Layer::init() {
-	ewol::widget::ContainerN::init();
-}
-
 ewol::widget::Layer::~Layer() {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }

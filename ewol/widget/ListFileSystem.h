@@ -32,7 +32,6 @@ namespace ewol {
 				eproperty::Value<std::string> propertyFilter; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
 			protected:
 				ListFileSystem();
-				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(ListFileSystem, "ListFileSystem");
 				virtual ~ListFileSystem();

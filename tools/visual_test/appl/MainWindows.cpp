@@ -24,6 +24,7 @@
 #include <ewol/widget/meta/Parameter.h>
 #include <ewol/widget/Select.h>
 #include <ewol/widget/Manager.h>
+#include <ewol/widget/Spin.h>
 #include <ewol/context/Context.h>
 #include <appl/TestDistanceField.h>
 #include <etk/os/FSNode.h>
@@ -48,7 +49,8 @@ appl::MainWindows::MainWindows() :
 void appl::MainWindows::init() {
 	ewol::widget::Windows::init();
 	
-	m_composer = ewol::widget::Composer::create(ewol::widget::Composer::file, "DATA:gui.xml");
+	m_composer = ewol::widget::Composer::create();
+	m_composer->loadFromFile("DATA:gui.xml");
 	setSubWidget(m_composer);
 	externSubBind(m_composer, ewol::widget::Button, "appl-theme-toggle", signalValue, shared_from_this(), &appl::MainWindows::onCallbackThemeChange);
 	externSubBind(m_composer, ewol::widget::Button, "appl-previous-widget", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, -1);
@@ -183,12 +185,16 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			break;
 	}
 	
-	m_subWidget = ewol::widget::SpinBase::create(std::unordered_map<std::string,eproperty::Variant>({{std::string("name"), eproperty::Variant(std::string("plop"))}}));
+	m_subWidget = ewol::widget::Spin::create("name", std::string("plop"));
+	// wrong: m_subWidget = ewol::widget::SpinBase::create("name", std::string("plop"), 1521);
+	m_subWidget = ewol::widget::Spin::create("name", std::string("plop"),
+	                                          "spin-mode", ewol::widget::spinPosition_RightRight);
+	
 	return;
 	
 	
 	// create the widget with a xml generator (readable for test ...):
-	m_subWidget = ewol::widget::composerGenerate(ewol::widget::Composer::String, tmpConstruct);
+	m_subWidget = ewol::widget::composerGenerateString(tmpConstruct);
 	if (m_subWidget != nullptr) {
 		m_sizerVert->subWidgetReplace(oldWidget, m_subWidget);
 	}
@@ -215,7 +221,8 @@ void appl::MainWindows::updateProperty() {
 	if (m_subWidget == nullptr) {
 		return;
 	}
-	std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create(m_subWidget->getObjectType());
+	std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
+	widget->propertyValue.set(m_subWidget->getObjectType());
 	m_sizerDynamic->subWidgetAdd(widget);
 	addSpacer(m_sizerDynamic, etk::color::red);
 	for (size_t iii=0; iii<m_subWidget->getPropertyCount(); ++iii) {
@@ -224,13 +231,15 @@ void appl::MainWindows::updateProperty() {
 			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
 			continue;
 		}
-		std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create(ewol::widget::Sizer::modeHori);
+		std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create();
 		if (widgetSizer != nullptr) {
+			widgetSizer->propertyMode.set(ewol::widget::Sizer::modeHori);
 			widgetSizer->propertyExpand.set(bvec2(true,false));
 			widgetSizer->propertyFill.set(bvec2(true,true));
 			m_sizerDynamic->subWidgetAddStart(widgetSizer);
 			
-			std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create(param->getName() + ":");
+			std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
+			widget->propertyValue.set(param->getName() + ":");
 			widgetSizer->subWidgetAdd(widget);
 			//addSpacer(widgetSizer, etk::color::purple);
 			// Main part TODO: ...
@@ -274,7 +283,8 @@ void appl::MainWindows::updateProperty() {
 						paramValue->set(lastValueInterpreted);
 						return;
 					});
-				std::shared_ptr<ewol::widget::Label> widgetLabel = ewol::widget::Label::create("x");
+				std::shared_ptr<ewol::widget::Label> widgetLabel = ewol::widget::Label::create();
+				widgetLabel->propertyValue.set("x");
 				widgetTmp->setSubWidget(widgetLabel);
 				
 				widgetTmp = ewol::widget::CheckBox::create();
@@ -287,7 +297,8 @@ void appl::MainWindows::updateProperty() {
 						paramValue->set(lastValueInterpreted);
 						return;
 					});
-				widgetLabel = ewol::widget::Label::create("y");
+				widgetLabel = ewol::widget::Label::create();
+				widgetLabel->propertyValue.set("y");
 				widgetTmp->setSubWidget(widgetLabel);
 			} else if (type == typeid(ivec2).name()) {
 				type = "ivec2";

@@ -36,7 +36,7 @@ namespace ewol {
 				esignal::ISignal<std::string> signalEnter; //!< Enter key is pressed
 				esignal::ISignal<std::string> signalModify; //!< data change
 			public: // propertie list
-				eproperty::Value<std::string> propertyShaper;
+				eproperty::Value<std::string> propertyShape;
 				eproperty::Value<std::string> propertyValue; //!< string that must be displayed
 				eproperty::Range<int32_t> propertyMaxCharacter; //!< number max of xharacter in the list
 				eproperty::Value<std::string> propertyRegex; //!< regular expression value
@@ -54,8 +54,7 @@ namespace ewol {
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
 				Entry();
-				void init(const std::string& _newData = "",
-				          const std::string& _shaperName="{ewol}THEME:GUI:Entry.json");
+				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**

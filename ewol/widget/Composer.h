@@ -18,23 +18,11 @@ namespace ewol {
 		 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 		 */
 		class Composer : public ewol::widget::Container {
-			public:
-				enum composerMode {
-					None,
-					String,
-					file
-				};
 			protected:
 				/**
 				 * @brief Constructor
 				 */
 				Composer();
-				/**
-				 * @brief Constructor
-				 * @param[in] _mode mode of parsing the string
-				 * @param[in] _data file/directString data to generate compositing of the widget..
-				 */
-				void init(enum ewol::widget::Composer::composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
 			public:
 				DECLARE_WIDGET_FACTORY(Composer, "Composer");
 				/**
@@ -56,6 +44,7 @@ namespace ewol {
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
 		};
-		std::shared_ptr<ewol::Widget> composerGenerate(enum ewol::widget::Composer::composerMode _mode = ewol::widget::Composer::None, const std::string& _data = "");
+		std::shared_ptr<ewol::Widget> composerGenerateString(const std::string& _data = "");
+		std::shared_ptr<ewol::Widget> composerGenerateFile(const std::string& _data = "");
 	};
 };
