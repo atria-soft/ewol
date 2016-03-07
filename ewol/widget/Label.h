@@ -17,6 +17,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Label;
+		using LabelShared = ewol::SharedPtr<ewol::widget::Label>;
+		using LabelWeak = ewol::WeakPtr<ewol::widget::Label>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

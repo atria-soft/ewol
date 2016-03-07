@@ -12,6 +12,9 @@
 
 namespace ewol {
 	namespace object {
+		class Worker;
+		using WorkerShared = ewol::SharedPtr<ewol::object::Worker>;
+		using WorkerWeak = ewol::WeakPtr<ewol::object::Worker>;
 		/**
 		 * @brief A worker might not been possesed by someone, then the system might keep a pointer on it.
 		 */

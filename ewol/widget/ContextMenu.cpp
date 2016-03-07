@@ -225,8 +225,8 @@ bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
-	std::shared_ptr<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
+ewol::WidgetShared ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
+	ewol::WidgetShared val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (val != nullptr) {
 		return val;
 	}
@@ -248,7 +248,7 @@ void ewol::widget::ContextMenu::onChangePropertyShape() {
 
 
 void ewol::widget::ContextMenu::setPositionMarkAuto(const vec2& _origin, const vec2& _size) {
-	std::shared_ptr<ewol::widget::Windows> windows = getWindows();
+	ewol::widget::WindowsShared windows = getWindows();
 	vec2 globalSize = windows->getSize();
 	// TODO : Support left and right
 	float upperSize = globalSize.y() - (_origin.y() + _size.y());

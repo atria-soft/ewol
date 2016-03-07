@@ -349,8 +349,8 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
-	std::shared_ptr<ewol::Widget> tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
+ewol::WidgetShared ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
+	ewol::WidgetShared tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (tmpWidget != nullptr) {
 		return tmpWidget;
 	}

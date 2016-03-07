@@ -21,7 +21,7 @@ namespace ewol {
 				bool isUsed;
 				int32_t destinationInputId;
 				int64_t lastTimeEvent;
-				std::weak_ptr<ewol::Widget> curentWidgetEvent;
+				ewol::WidgetWeak curentWidgetEvent;
 				vec2 origin;
 				vec2 size;
 				vec2 downStart;
@@ -44,7 +44,7 @@ namespace ewol {
 		class InputManager{
 			// special grab pointer mode : 
 			private:
-				std::weak_ptr<ewol::Widget> m_grabWidget; //!< widget that grab the curent pointer.
+				ewol::WidgetWeak m_grabWidget; //!< widget that grab the curent pointer.
 			private:
 				int32_t m_dpi;
 				InputLimit m_eventInputLimit;
@@ -64,7 +64,7 @@ namespace ewol {
 				 * @return true if event has been greped
 				 */
 				bool localEventInput(enum gale::key::type _type,
-				                     std::shared_ptr<ewol::Widget> _destWidget,
+				                     ewol::WidgetShared _destWidget,
 				                     int32_t _IdInput,
 				                     enum gale::key::status _typeEvent,
 				                     vec2 _pos);
@@ -78,7 +78,7 @@ namespace ewol {
 				 * @return the ewol input id
 				 */
 				int32_t localGetDestinationId(enum gale::key::type _type,
-				                              std::shared_ptr<ewol::Widget> _destWidget,
+				                              ewol::WidgetShared _destWidget,
 				                              int32_t _realInputId);
 			private:
 				ewol::Context& m_context;
@@ -100,12 +100,12 @@ namespace ewol {
 				 * @param _source the widget where the event came from
 				 * @param _destination the widget where the event mitgh be generated now
 				 */
-				void transfertEvent(std::shared_ptr<ewol::Widget> _source, std::shared_ptr<ewol::Widget> _destination);
+				void transfertEvent(ewol::WidgetShared _source, ewol::WidgetShared _destination);
 				/**
 				 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 				 * @param[in] _widget The widget that lock the pointer events
 				 */
-				void grabPointer(std::shared_ptr<ewol::Widget> _widget);
+				void grabPointer(ewol::WidgetShared _widget);
 				/**
 				 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 				 */

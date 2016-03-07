@@ -76,7 +76,7 @@ namespace ewol {
 				            enum gale::key::status _status,
 				            uint8_t _id,
 				            const vec2& _pos,
-				            std::shared_ptr<ewol::Widget> _dest,
+				            ewol::WidgetShared _dest,
 				            int32_t _realIdEvent,
 				            gale::key::Special _specialKey) :
 				  m_event(_type, _status, _id, _pos, _specialKey),
@@ -84,13 +84,13 @@ namespace ewol {
 				  m_realIdEvent(_realIdEvent) { };
 				ewol::event::Input m_event;
 			private:
-				std::shared_ptr<ewol::Widget> m_dest;
+				ewol::WidgetShared m_dest;
 				int32_t m_realIdEvent;
 			public:
-				void setDestWidget(std::shared_ptr<ewol::Widget> _dest) {
+				void setDestWidget(ewol::WidgetShared _dest) {
 					m_dest = _dest;
 				};
-				inline std::shared_ptr<ewol::Widget> getDestWidget() const {
+				inline ewol::WidgetShared getDestWidget() const {
 					return m_dest;
 				};
 				void setRealId(int32_t _realIdEvent) {

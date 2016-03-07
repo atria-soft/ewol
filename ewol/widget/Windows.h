@@ -16,6 +16,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Windows;
+		using WindowsShared = ewol::SharedPtr<ewol::widget::Windows>;
+		using WindowsWeak = ewol::WeakPtr<ewol::widget::Windows>;
 		/**
 		 * @brief Windows basic interface
 		 */
@@ -46,11 +49,11 @@ namespace ewol {
 				virtual void onStateSuspend() {};
 				virtual void onStateResume() {};
 			private:
-				std::shared_ptr<ewol::Widget> m_subWidget;
-				std::list<std::shared_ptr<ewol::Widget>> m_popUpWidgetList;
+				ewol::WidgetShared m_subWidget;
+				std::list<ewol::WidgetShared> m_popUpWidgetList;
 			public:
-				void setSubWidget(std::shared_ptr<ewol::Widget> _widget);
-				void popUpWidgetPush(std::shared_ptr<ewol::Widget> _widget);
+				void setSubWidget(ewol::WidgetShared _widget);
+				void popUpWidgetPush(ewol::WidgetShared _widget);
 				void popUpWidgetPop();
 				size_t popUpCount() {
 					return m_popUpWidgetList.size();
@@ -75,9 +78,9 @@ namespace ewol {
 			public: // Derived function
 				virtual void onRegenerateDisplay();
 				virtual void onChangeSize();
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
-				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
-				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
+				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
+				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
 				void setTitle(const std::string& _title);
 			public:
 				enum popUpMessageType {

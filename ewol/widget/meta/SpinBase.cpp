@@ -96,7 +96,7 @@ void ewol::widget::SpinBase::updateGui() {
 			m_widgetButtonDown->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonDown->propertyFill.set(bvec2(true,true));
 			std::string data = m_config->getString(m_confIdDownData);
-			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerateString(data);
+			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonDown->setSubWidget(widget);
 		}
 	}
@@ -111,7 +111,7 @@ void ewol::widget::SpinBase::updateGui() {
 			m_widgetButtonUp->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonUp->propertyFill.set(bvec2(true,true));
 			std::string data = m_config->getString(m_confIdUpData);
-			std::shared_ptr<ewol::Widget> widget = ewol::widget::composerGenerateString(data);
+			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonUp->setSubWidget(widget);
 		}
 	}

@@ -171,12 +171,12 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				tmpPos.setX( tmpPos.x() - m_minSize.x()/2.0);
 				m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
 				
-				std::shared_ptr<ewol::widget::ColorChooser> myColorChooser = widget::ColorChooser::create();
+				ewol::widget::ColorChooserShared myColorChooser = widget::ColorChooser::create();
 				myColorChooser->propertyValue.set(propertyValue.get());
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
 				myColorChooser->signalChange.connect(shared_from_this(), &ewol::widget::ButtonColor::onCallbackColorChange);
-				std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
+				ewol::widget::WindowsShared currentWindows = getWindows();
 				if (currentWindows == nullptr) {
 					EWOL_ERROR("Can not get the curent Windows...");
 					m_widgetContextMenu.reset();

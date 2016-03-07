@@ -48,7 +48,8 @@ def create(target, module_name):
 		'ewol/Padding.h',
 		'ewol/translate.h',
 		'ewol/DrawProperty.h',
-		'ewol/gravity.h'
+		'ewol/gravity.h',
+		'ewol/memory.h'
 		])
 	
 	# compositing:

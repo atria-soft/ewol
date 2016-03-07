@@ -21,6 +21,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Parameter;
+		using ParameterShared = ewol::SharedPtr<ewol::widget::Parameter>;
+		using ParameterWeak = ewol::WeakPtr<ewol::widget::Parameter>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -36,15 +39,15 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Parameter, "Parameter");
 				virtual ~Parameter();
 			public:
-				void menuAdd(std::string _label, std::string _image, std::shared_ptr<ewol::Widget> _associateWidget);
+				void menuAdd(std::string _label, std::string _image, ewol::WidgetShared _associateWidget);
 				void menuAddGroup(std::string _label);
 				void menuClear();
 				void menuSeparator();
 			private:
 				int32_t m_currentIdList;
-				std::shared_ptr<ewol::widget::Label> m_widgetTitle;
-				std::shared_ptr<ewol::widget::ParameterList> m_paramList;
-				std::shared_ptr<ewol::widget::WSlider> m_wSlider;
+				ewol::widget::LabelShared m_widgetTitle;
+				ewol::widget::ParameterListShared m_paramList;
+				ewol::widget::WSliderShared m_wSlider;
 			private: //callback functions:
 				void onCallbackMenuclosed();
 				void onCallbackParameterSave();

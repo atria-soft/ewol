@@ -92,18 +92,18 @@ namespace ewol {
 			 */
 			virtual void stop();
 		private:
-			std::shared_ptr<ewol::widget::Windows> m_windowsCurrent; //!< curent displayed windows
+			ewol::widget::WindowsShared m_windowsCurrent; //!< curent displayed windows
 		public:
 			/**
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void setWindows(const std::shared_ptr<ewol::widget::Windows>& _windows);
+			void setWindows(const ewol::widget::WindowsShared& _windows);
 			/**
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			std::shared_ptr<ewol::widget::Windows> getWindows();
+			ewol::widget::WindowsShared getWindows();
 			
 			/**
 			 * @brief Redraw all the windows
@@ -116,12 +116,12 @@ namespace ewol {
 			 * @param source the widget where the event came from
 			 * @param destination the widget where the event mitgh be generated now
 			 */
-			void inputEventTransfertWidget(std::shared_ptr<ewol::Widget> _source, std::shared_ptr<ewol::Widget> _destination);
+			void inputEventTransfertWidget(ewol::WidgetShared _source, ewol::WidgetShared _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 			 * @param[in] widget The widget that lock the pointer events
 			 */
-			void inputEventGrabPointer(std::shared_ptr<ewol::Widget> _widget);
+			void inputEventGrabPointer(ewol::WidgetShared _widget);
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */

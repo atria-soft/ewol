@@ -13,6 +13,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Spin;
+		using SpinShared = ewol::SharedPtr<ewol::widget::Spin>;
+		using SpinWeak = ewol::WeakPtr<ewol::widget::Spin>;
 		/**
 		 * @brief a composed Spin is a Spin with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple

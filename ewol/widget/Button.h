@@ -20,6 +20,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Button;
+		using ButtonShared = ewol::SharedPtr<ewol::widget::Button>;
+		using ButtonWeak = ewol::WeakPtr<ewol::widget::Button>;
 		/**
 		 * @brief a composed button is a button with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple

@@ -33,16 +33,16 @@ void ewol::widget::Menu::subWidgetRemoveAll() {
 	ewol::widget::Sizer::subWidgetRemoveAll();
 }
 
-int32_t ewol::widget::Menu::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
+int32_t ewol::widget::Menu::subWidgetAdd(ewol::WidgetShared _newWidget) {
 	EWOL_ERROR("Not availlable");
 	return -1;
 }
 
-void ewol::widget::Menu::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::Menu::subWidgetRemove(ewol::WidgetShared _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void ewol::widget::Menu::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::Menu::subWidgetUnLink(ewol::WidgetShared _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
@@ -83,7 +83,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 	tmpObject.m_image = _image;
 	tmpObject.m_message = _message;
 	if (-1 == tmpObject.m_parentId) {
-		std::shared_ptr<ewol::widget::Button> myButton = ewol::widget::Button::create();
+		ewol::widget::ButtonShared myButton = ewol::widget::Button::create();
 		if (myButton == nullptr) {
 			EWOL_ERROR("Allocation button error");
 			return tmpObject.m_localId;
@@ -104,7 +104,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
 		// keep the specific event ...
-		myButton->signalPressed.connect(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
+		myButton->signalPressed.connect(shared_from_this(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
 		tmpObject.m_widgetPointer = myButton;
 	}
 	m_listElement.push_back(tmpObject);
@@ -121,8 +121,8 @@ int32_t ewol::widget::Menu::addSpacer() {
 	return -1;
 }
 
-void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _button) {
-	std::shared_ptr<ewol::widget::Button> caller = _button.lock();
+void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
+	ewol::widget::ButtonShared caller = _button.lock();
 	if (caller == nullptr) {
 		return;
 	}
@@ -135,7 +135,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 			EWOL_DEBUG("Menu  == > generate Event");
 			// Send a multicast event ...
 			signalSelect.emit(it.m_message);
-			std::shared_ptr<ewol::widget::ContextMenu> tmpContext = m_widgetContextMenu.lock();
+			ewol::widget::ContextMenuShared tmpContext = m_widgetContextMenu.lock();
 			if (tmpContext != nullptr) {
 				EWOL_DEBUG("Mark the menu to remove ...");
 				tmpContext->destroy();
@@ -155,7 +155,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 			return;
 		}
 		// create a context menu:
-		std::shared_ptr<ewol::widget::ContextMenu> tmpContext = ewol::widget::ContextMenu::create();
+		ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
 		m_widgetContextMenu = tmpContext;
 		if (tmpContext == nullptr) {
 			EWOL_ERROR("Allocation Error");
@@ -163,7 +163,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 		}
 		// get the button widget:
 		vec2 newPosition;
-		std::shared_ptr<ewol::Widget> eventFromWidget = std::dynamic_pointer_cast<ewol::Widget>(caller);
+		ewol::WidgetShared eventFromWidget = std::dynamic_pointer_cast<ewol::Widget>(caller);
 		if (eventFromWidget != nullptr) {
 			vec2 tmpOri  = eventFromWidget->getOrigin();
 			vec2 tmpSize = eventFromWidget->getSize();
@@ -172,8 +172,8 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 			                     tmpOri.y() );
 		}
 		tmpContext->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition);
-		std::shared_ptr<ewol::widget::Sizer> mySizer;
-		std::shared_ptr<ewol::widget::Button> myButton;
+		ewol::widget::SizerShared mySizer;
+		ewol::widget::ButtonShared myButton;
 		mySizer = ewol::widget::Sizer::create("mode", widget::Sizer::modeVert);
 		if (mySizer != nullptr) {
 			mySizer->propertyLockExpand.set(vec2(true,true));
@@ -202,7 +202,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 				myButton->propertyExpand.set(bvec2(true,true));
 				myButton->propertyFill.set(bvec2(true,true));
 				// set callback
-				myButton->signalPressed.connect(shared_from_this(), &ewol::widget::Menu::onButtonPressed, std::weak_ptr<ewol::widget::Button>(myButton));
+				myButton->signalPressed.connect(shared_from_this(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
 				// add it in the widget list
 				mySizer->subWidgetAdd(myButton);
 				if (it2->m_image.size() != 0) {
@@ -226,7 +226,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 						        "	</sizer>\n")
 						    );
 					} else {
-						std::shared_ptr<ewol::widget::Label> tmpLabel = widget::Label::create();
+						ewol::widget::LabelShared tmpLabel = widget::Label::create();
 						if (tmpLabel != nullptr) {
 							tmpLabel->propertyValue.set(std::string("<left>") + it2->m_label + "</left>\n");
 							tmpLabel->propertyExpand.set(bvec2(true,false));
@@ -238,7 +238,7 @@ void ewol::widget::Menu::onButtonPressed(std::weak_ptr<ewol::widget::Button> _bu
 				it2->m_widgetPointer = myButton;
 			}
 		}
-		std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
+		ewol::widget::WindowsShared currentWindows = getWindows();
 		if (currentWindows == nullptr) {
 			EWOL_ERROR("Can not get the curent Windows...");
 		} else {

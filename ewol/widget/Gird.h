@@ -15,6 +15,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Gird;
+		using GirdShared = ewol::SharedPtr<ewol::widget::Gird>;
+		using GirdWeak = ewol::WeakPtr<ewol::widget::Gird>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -22,7 +25,7 @@ namespace ewol {
 			private:
 				class GirdProperties {
 					public:
-						std::shared_ptr<ewol::Widget> widget;
+						ewol::WidgetShared widget;
 						int32_t row;
 						int32_t col;
 				};
@@ -30,7 +33,7 @@ namespace ewol {
 				int32_t m_uniformSizeRow;
 				std::vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
 				std::vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
-				std::shared_ptr<ewol::Widget> m_tmpWidget; //!< use when replace a widget ...
+				ewol::WidgetShared m_tmpWidget; //!< use when replace a widget ...
 				bool m_gavityButtom;
 			protected:
 				/**
@@ -95,12 +98,12 @@ namespace ewol {
 				 * @param[in] _rowId Id of the row [0..y].
 				 * @param[in] _newWidget the element pointer
 				 */
-				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::WidgetShared _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -111,7 +114,7 @@ namespace ewol {
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _colId Id of the colomn [0..x].
@@ -136,7 +139,7 @@ namespace ewol {
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& pos);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& pos);
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
 		};

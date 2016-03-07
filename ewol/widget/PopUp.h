@@ -17,6 +17,9 @@
 
 namespace ewol {
 	namespace widget {
+		class PopUp;
+		using PopUpShared = ewol::SharedPtr<ewol::widget::PopUp>;
+		using PopUpWeak = ewol::WeakPtr<ewol::widget::PopUp>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -48,7 +51,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual void onChangeSize();
 				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
 			protected:
 				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
 				virtual void onStopAnnimation();

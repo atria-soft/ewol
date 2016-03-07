@@ -15,6 +15,9 @@
 
 namespace ewol {
 	namespace widget {
+		class List;
+		using ListShared = ewol::SharedPtr<ewol::widget::List>;
+		using ListWeak = ewol::WeakPtr<ewol::widget::List>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

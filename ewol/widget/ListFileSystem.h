@@ -14,6 +14,9 @@
 
 namespace ewol {
 	namespace widget {
+		class ListFileSystem;
+		using ListFileSystemShared = ewol::SharedPtr<ewol::widget::ListFileSystem>;
+		using ListFileSystemWeak = ewol::WeakPtr<ewol::widget::ListFileSystem>;
 		/**
 		 * @brief Generic display folder class. This widget display the content of a single folder :
 		 */

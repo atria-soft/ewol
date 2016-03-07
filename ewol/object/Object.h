@@ -15,27 +15,29 @@
 #include <unordered_map>
 
 #include <ewol/debug.h>
+#include <ewol/memory.h>
 #include <eproperty/Interface.h>
 #include <eproperty/Value.h>
 #include <eproperty/Range.h>
 #include <eproperty/List.h>
 #include <esignal/Interface.h>
 
+
 namespace ewol {
 	// some class need to define element befor other ...
 	class Object;
 	namespace object {
 		class Manager;
-	};
+	}
 	class Context;
-};
+}
 
-template<class TYPE_OBJECT> static void baseInit(const std::shared_ptr<TYPE_OBJECT>& _object) {
+template<class TYPE_OBJECT> static void baseInit(const ewol::SharedPtr<TYPE_OBJECT>& _object) {
 	// end of recurtion
 	return;
 }
 
-template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const std::shared_ptr<TYPE_OBJECT>& _object, const std::string& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
+template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const ewol::SharedPtr<TYPE_OBJECT>& _object, const std::string& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
 	eproperty::Property* prop(nullptr);
 	eproperty::PropertyType<TYPE_VAL>* propType(nullptr);
 	if (_object == nullptr) {
@@ -59,11 +61,11 @@ exit_on_error:
 }
 
 #define UN_DECLARE_FACTORY(className) \
-	template<typename ... TYPE> static std::shared_ptr<className> create(const TYPE& ... _all) = delete;
+	template<class ... TYPE> static ewol::SharedPtr<className> create(const TYPE& ... _all) = delete;
 
 #define DECLARE_FACTORY(className) \
-	template<typename ... TYPE> static std::shared_ptr<className> create(const TYPE& ... _all) { \
-		std::shared_ptr<className> object(new className()); \
+	template<class ... TYPE> static ewol::SharedPtr<className> create(const TYPE& ... _all) { \
+		ewol::SharedPtr<className> object(new className()); \
 		if (object == nullptr) { \
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \
@@ -79,9 +81,9 @@ exit_on_error:
 	}
 
 #define DECLARE_SINGLE_FACTORY(className, uniqueName) \
-	template<typename ... TYPE> static std::shared_ptr<className> create(const TYPE& ... _all) { \
-		std::shared_ptr<className> object; \
-		std::shared_ptr<ewol::Object> object2 = getObjectNamed(uniqueName); \
+	template<class ... TYPE> static ewol::SharedPtr<className> create(const TYPE& ... _all) { \
+		ewol::SharedPtr<className> object; \
+		ewol::SharedPtr<ewol::Object> object2 = getObjectNamed(uniqueName); \
 		if (object2 != nullptr) { \
 			object = std::dynamic_pointer_cast<className>(object2); \
 			if (object == nullptr) { \
@@ -96,11 +98,13 @@ exit_on_error:
 	}
 
 namespace ewol {
+	using ObjectShared = ewol::SharedPtr<ewol::Object>;
+	using ObjectWeak = ewol::WeakPtr<ewol::Object>;
 	/**
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every Object to communicate between them.
 	 */
-	class Object : public std::enable_shared_from_this<Object>,
+	class Object : public ewol::EnableSharedFromThis<Object>,
 	               public eproperty::Interface,
 	               public esignal::Interface {
 		public: // Event list
@@ -130,7 +134,7 @@ namespace ewol {
 				return m_objectHasBeenInit;
 			}
 		protected:
-			std::weak_ptr<Object> m_parent; //!< Reference on the current parrent.
+			ewol::ObjectWeak m_parent; //!< Reference on the current parrent.
 			bool m_destroy; //!< Flag to know if the object is requesting has destroy.
 		protected:
 			/**
@@ -157,12 +161,12 @@ namespace ewol {
 			 * @brief Called by a whild that want to remove pointer of itself from the current list of his parrent
 			 * @param[in] _child Object of the child that want to remove itself
 			 */
-			virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+			virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
 			/**
 			 * @brief Set the Object has new parrent.
 			 * @param[in] _newParent Object that requesting the parenting
 			 */
-			virtual void setParent(const std::shared_ptr<Object>& _newParent);
+			virtual void setParent(const ewol::ObjectShared& _newParent);
 			/**
 			 * @brief Remove the current parenting.
 			 */
@@ -264,20 +268,20 @@ namespace ewol {
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
-			static std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _objectName);
+			static ewol::ObjectShared getObjectNamed(const std::string& _objectName);
 			/**
 			 * @brief Retrive an object with his name (in the global list)
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
-			virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+			virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
 		protected:
 			// TODO : Create a template ...
 			/**
 			 * @brief link on an signal in the subwiget with his name
 			 */
 			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
-				std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
+				ewol::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
 					myObject->_event.connect(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
@@ -285,13 +289,13 @@ namespace ewol {
 				} \
 			} while (false)
 			/*
-			template<class TYPE> void subBind(std::shared_ptr<ewol::Object> _obj, void (TYPE::*_func)()) {
-				std::shared_ptr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+			template<class TYPE> void subBind(ewol::SharedPtr<ewol::Object> _obj, void (TYPE::*_func)()) {
+				ewol::SharedPtr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 				if (obj2 == nullptr) {
 					EWOL_ERROR("Can not connect signal ...");
 					return;
 				}
-				m_callerList.push_back(std::make_pair(std::weak_ptr<ewol::Object>(_obj), std::connect(_func, obj2.get())));
+				m_callerList.push_back(std::make_pair(ewol::ObjectWeak(_obj), std::connect(_func, obj2.get())));
 			}
 			*/
 	};
@@ -302,7 +306,7 @@ namespace ewol {
  * @brief link on an signal in the global object list with his name
  */
 #define globalBind(_type, _name, _event, _obj, _func, ...) do {\
-	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
+	ewol::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
@@ -314,7 +318,7 @@ namespace ewol {
  * @brief link on an signal in the subWidget of an object with his name
  */
 #define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
-	std::shared_ptr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
+	ewol::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \

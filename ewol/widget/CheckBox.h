@@ -17,6 +17,9 @@
 
 namespace ewol {
 	namespace widget {
+		class CheckBox;
+		using CheckBoxShared = ewol::SharedPtr<ewol::widget::CheckBox>;
+		using CheckBoxWeak = ewol::WeakPtr<ewol::widget::CheckBox>;
 		class CheckBox : public ewol::widget::Container2 {
 			public: // Event list
 				esignal::ISignal<> signalPressed;

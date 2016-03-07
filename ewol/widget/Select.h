@@ -13,6 +13,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Select;
+		using SelectShared = ewol::SharedPtr<ewol::widget::Select>;
+		using SelectWeak = ewol::WeakPtr<ewol::widget::Select>;
 		/**
 		 * @brief a composed Select is a Select with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple

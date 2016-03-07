@@ -17,6 +17,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Joystick;
+		using JoystickShared = ewol::SharedPtr<ewol::widget::Joystick>;
+		using JoystickWeak = ewol::WeakPtr<ewol::widget::Joystick>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

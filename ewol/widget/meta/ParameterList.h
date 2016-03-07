@@ -12,8 +12,6 @@
 #include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 
-
-
 namespace ewol {
 	namespace widget {
 		class elementPL {
@@ -31,7 +29,9 @@ namespace ewol {
 				};
 				virtual ~elementPL() {};
 		};
-		
+		class ParameterList;
+		using ParameterListShared = ewol::SharedPtr<ewol::widget::ParameterList>;
+		using ParameterListWeak = ewol::WeakPtr<ewol::widget::ParameterList>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

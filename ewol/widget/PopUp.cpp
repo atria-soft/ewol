@@ -130,8 +130,8 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 	}
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
-	std::shared_ptr<ewol::Widget> val = ewol::widget::Container::getWidgetAtPos(_pos);
+ewol::WidgetShared ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
+	ewol::WidgetShared val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (val != nullptr) {
 		return val;
 	}

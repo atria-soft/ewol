@@ -22,11 +22,14 @@ namespace ewol {
 				MenuElement() { };
 				int32_t m_localId;
 				int32_t m_parentId;
-				std::weak_ptr<ewol::Widget> m_widgetPointer;
+				ewol::WidgetWeak m_widgetPointer;
 				std::string m_label;
 				std::string m_image;
 				std::string m_message;
 		};
+		class Menu;
+		using MenuShared = ewol::SharedPtr<ewol::widget::Menu>;
+		using MenuWeak = ewol::WeakPtr<ewol::widget::Menu>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -40,13 +43,13 @@ namespace ewol {
 				virtual ~Menu();
 			private:
 				virtual void subWidgetRemoveAll();
-				virtual int32_t subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAdd(ewol::WidgetShared _newWidget);
+				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
+				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
 			private:
 				std::vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
-				std::weak_ptr<ewol::widget::ContextMenu> m_widgetContextMenu;
+				ewol::widget::ContextMenuWeak m_widgetContextMenu;
 				int32_t get(const std::string& _label);
 			public:
 				void clear();
@@ -55,7 +58,7 @@ namespace ewol {
 				int32_t addSpacer();
 				void remove(int32_t _id);
 			private:
-				void onButtonPressed(std::weak_ptr<ewol::widget::Button> _button);
+				void onButtonPressed(ewol::widget::ButtonWeak _button);
 		};
 	};
 };

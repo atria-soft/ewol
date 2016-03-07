@@ -42,7 +42,7 @@ void ewol::context::InputManager::setDpi(int32_t newDPI) {
 }
 
 bool ewol::context::InputManager::localEventInput(enum gale::key::type _type,
-                                                  std::shared_ptr<ewol::Widget> _destWidget,
+                                                  ewol::WidgetShared _destWidget,
                                                   int32_t _IdInput,
                                                   enum gale::key::status _status,
                                                   vec2 _pos) {
@@ -93,14 +93,14 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 	_eventTable[_idInput].posEvent.setValue(0,0);
 }
 
-void ewol::context::InputManager::transfertEvent(std::shared_ptr<ewol::Widget> _source, std::shared_ptr<ewol::Widget> _destination) {
+void ewol::context::InputManager::transfertEvent(ewol::WidgetShared _source, ewol::WidgetShared _destination) {
 	if(    _source == nullptr
 	    || _destination == nullptr) {
 		// prevent errors ...
 		return;
 	}
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		std::shared_ptr<ewol::Widget> tmpWidget = m_eventInputSaved[iii].curentWidgetEvent.lock();
+		ewol::WidgetShared tmpWidget = m_eventInputSaved[iii].curentWidgetEvent.lock();
 		if (tmpWidget == _source) {
 			// inform the widget that it does not receive the event now
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventInputSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_ABORT] " << m_eventInputSaved[iii].posEvent);
@@ -125,7 +125,7 @@ void ewol::context::InputManager::transfertEvent(std::shared_ptr<ewol::Widget> _
 	}
 }
 
-void ewol::context::InputManager::grabPointer(std::shared_ptr<ewol::Widget> _widget) {
+void ewol::context::InputManager::grabPointer(ewol::WidgetShared _widget) {
 	if(_widget == nullptr) {
 		return;
 	}
@@ -171,13 +171,13 @@ ewol::context::InputManager::~InputManager() {
 }
 
 int32_t ewol::context::InputManager::localGetDestinationId(enum gale::key::type _type,
-                                                           std::shared_ptr<ewol::Widget> _destWidget,
+                                                           ewol::WidgetShared _destWidget,
                                                            int32_t _realInputId) {
 	if (_type == gale::key::type_finger) {
 		int32_t lastMinimum = 0;
 		for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 			if (true == m_eventInputSaved[iii].isUsed) {
-				std::shared_ptr<ewol::Widget> tmpWidget = m_eventInputSaved[iii].curentWidgetEvent.lock();
+				ewol::WidgetShared tmpWidget = m_eventInputSaved[iii].curentWidgetEvent.lock();
 				if (tmpWidget == _destWidget) {
 					if (iii != _realInputId) {
 						lastMinimum = std::max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
@@ -213,12 +213,12 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 		// not manage input
 		return;
 	}
-	std::shared_ptr<ewol::widget::Windows> tmpWindows = m_context.getWindows();
+	ewol::widget::WindowsShared tmpWindows = m_context.getWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
 	if (_type == gale::key::type_mouse && _pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
-		std::shared_ptr<ewol::Widget> tmpWidget;
+		ewol::WidgetShared tmpWidget;
 		if (m_grabWidget.lock() != nullptr) {
 			// grab all events ...
 			tmpWidget = m_grabWidget.lock();
@@ -349,7 +349,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 	}
 	// get the curent time ...
 	int64_t currentTime = ewol::getTime();
-	std::shared_ptr<ewol::widget::Windows> tmpWindows = m_context.getWindows();
+	ewol::widget::WindowsShared tmpWindows = m_context.getWindows();
 	
 	if (true == _isDown) {
 		EVENT_DEBUG("GUI : Input ID=" << _pointerID
@@ -386,7 +386,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			eventTable[_pointerID].lastTimeEvent = currentTime;
 			// set the element inside ...
 			eventTable[_pointerID].isInside = true;
-			std::shared_ptr<ewol::Widget> tmpWidget = m_grabWidget.lock();
+			ewol::WidgetShared tmpWidget = m_grabWidget.lock();
 			// get destination widget :
 			if(nullptr != tmpWindows) {
 				if (    tmpWidget != nullptr
@@ -429,7 +429,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			// revove the widget ...
 			eventTable[_pointerID].curentWidgetEvent.reset();
 		} else {
-			std::shared_ptr<ewol::Widget> tmpWidget = eventTable[_pointerID].curentWidgetEvent.lock();
+			ewol::WidgetShared tmpWidget = eventTable[_pointerID].curentWidgetEvent.lock();
 			// generate UP Event
 			EVENT_DEBUG("GUI : Input ID=" << _pointerID
 			            << " == >" << eventTable[_pointerID].destinationInputId

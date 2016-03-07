@@ -51,8 +51,8 @@ void ewol::widget::ContainerN::onChangePropertyLockExpand() {
 	requestUpdateSize();
 }
 
-void ewol::widget::ContainerN::subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
-                                                const std::shared_ptr<ewol::Widget>& _newWidget) {
+void ewol::widget::ContainerN::subWidgetReplace(const ewol::WidgetShared& _oldWidget,
+                                                const ewol::WidgetShared& _newWidget) {
 	bool haveChange = false;
 	for (auto &it : m_subWidget) {
 		if (it != _oldWidget) {
@@ -74,7 +74,7 @@ void ewol::widget::ContainerN::subWidgetReplace(const std::shared_ptr<ewol::Widg
 	requestUpdateSize();
 }
 
-int32_t ewol::widget::ContainerN::subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget) {
+int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::WidgetShared _newWidget) {
 	if (_newWidget == nullptr) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add An empty Widget ... ");
 		return -1;
@@ -87,7 +87,7 @@ int32_t ewol::widget::ContainerN::subWidgetAdd(std::shared_ptr<ewol::Widget> _ne
 	return _newWidget->getId();
 }
 
-int32_t ewol::widget::ContainerN::subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget) {
+int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::WidgetShared _newWidget) {
 	if (nullptr == _newWidget) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add start An empty Widget ... ");
 		return -1;
@@ -101,7 +101,7 @@ int32_t ewol::widget::ContainerN::subWidgetAddStart(std::shared_ptr<ewol::Widget
 	return _newWidget->getId();
 }
 
-void ewol::widget::ContainerN::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::ContainerN::subWidgetRemove(ewol::WidgetShared _newWidget) {
 	if (nullptr == _newWidget) {
 		return;
 	}
@@ -121,7 +121,7 @@ void ewol::widget::ContainerN::subWidgetRemove(std::shared_ptr<ewol::Widget> _ne
 	}
 }
 
-void ewol::widget::ContainerN::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::ContainerN::subWidgetUnLink(ewol::WidgetShared _newWidget) {
 	if (nullptr == _newWidget) {
 		return;
 	}
@@ -154,8 +154,8 @@ void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 	subWidgetRemoveAll();
 }
 
-std::shared_ptr<ewol::Object> ewol::widget::ContainerN::getSubObjectNamed(const std::string& _objectName) {
-	std::shared_ptr<ewol::Object> tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
+ewol::ObjectShared ewol::widget::ContainerN::getSubObjectNamed(const std::string& _objectName) {
+	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
 	if (tmpObject != nullptr) {
 		return tmpObject;
 	}
@@ -229,7 +229,7 @@ void ewol::widget::ContainerN::onRegenerateDisplay() {
 	}
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::ContainerN::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {
 		return nullptr;
 	}
@@ -241,7 +241,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::ContainerN::getWidgetAtPos(const vec
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				std::shared_ptr<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
+				ewol::WidgetShared tmpWidget = it->getWidgetAtPos(_pos);
 				if (tmpWidget != nullptr) {
 					return tmpWidget;
 				}
@@ -285,7 +285,7 @@ bool ewol::widget::ContainerN::loadXML(const std::shared_ptr<const exml::Element
 			continue;
 		}
 		EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} load new element : \"" << widgetName << "\"");
-		std::shared_ptr<ewol::Widget> subWidget = getWidgetManager().create(widgetName);
+		ewol::WidgetShared subWidget = getWidgetManager().create(widgetName);
 		if (subWidget == nullptr) {
 			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
@@ -313,7 +313,7 @@ void ewol::widget::ContainerN::setOffset(const vec2& _newVal) {
 	}
 }
 
-void ewol::widget::ContainerN::requestDestroyFromChild(const std::shared_ptr<Object>& _child) {
+void ewol::widget::ContainerN::requestDestroyFromChild(const ewol::ObjectShared& _child) {
 	auto it = m_subWidget.begin();
 	while (it != m_subWidget.end()) {
 		if (*it == _child) {

@@ -16,6 +16,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Sizer;
+		using SizerShared = ewol::SharedPtr<ewol::widget::Sizer>;
+		using SizerWeak = ewol::WeakPtr<ewol::widget::Sizer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -54,10 +57,10 @@ namespace ewol {
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
 				// overwrite the set fuction to start annimations ...
-				virtual int32_t subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
-				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAdd(ewol::WidgetShared _newWidget);
+				virtual int32_t subWidgetAddStart(ewol::WidgetShared _newWidget);
+				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
+				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
 			protected:
 				virtual void onChangePropertyMode();
 				virtual void onChangePropertyBorderSize();

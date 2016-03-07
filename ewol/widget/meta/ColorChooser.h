@@ -20,6 +20,9 @@
 
 namespace ewol {
 	namespace widget {
+		class ColorChooser;
+		using ColorChooserShared = ewol::SharedPtr<ewol::widget::ColorChooser>;
+		using ColorChooserWeak = ewol::WeakPtr<ewol::widget::ColorChooser>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -35,11 +38,11 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
 				virtual ~ColorChooser();
 			private:
-				std::shared_ptr<ewol::widget::ColorBar> m_widgetColorBar;
-				std::shared_ptr<ewol::widget::Slider> m_widgetRed;
-				std::shared_ptr<ewol::widget::Slider> m_widgetGreen;
-				std::shared_ptr<ewol::widget::Slider> m_widgetBlue;
-				std::shared_ptr<ewol::widget::Slider> m_widgetAlpha;
+				ewol::widget::ColorBarShared m_widgetColorBar;
+				ewol::widget::SliderShared m_widgetRed;
+				ewol::widget::SliderShared m_widgetGreen;
+				ewol::widget::SliderShared m_widgetBlue;
+				ewol::widget::SliderShared m_widgetAlpha;
 				void onCallbackColorChangeRed(const float& _newColor);
 				void onCallbackColorChangeGreen(const float& _newColor);
 				void onCallbackColorChangeBlue(const float& _newColor);

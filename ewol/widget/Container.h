@@ -13,13 +13,16 @@
 
 namespace ewol {
 	namespace widget {
+		class Container;
+		using ContainerShared = ewol::SharedPtr<ewol::widget::Container>;
+		using ContainerWeak = ewol::WeakPtr<ewol::widget::Container>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
 		class Container : public ewol::Widget {
 			protected:
-				std::shared_ptr<ewol::Widget> m_subWidget;
+				ewol::WidgetShared m_subWidget;
 			protected:
 				/**
 				 * @brief Constructor
@@ -35,19 +38,19 @@ namespace ewol {
 				 * @brief get the main node widget
 				 * @return the requested pointer on the node
 				 */
-				std::shared_ptr<ewol::Widget> getSubWidget();
+				ewol::WidgetShared getSubWidget();
 				/**
 				 * @brief set the subWidget node widget.
 				 * @param[in] _newWidget The widget to add.
 				 */
-				void setSubWidget(std::shared_ptr<ewol::Widget> _newWidget);
+				void setSubWidget(ewol::WidgetShared _newWidget);
 				/**
 				 * @brief Replace a old subwidget with a new one.
 				 * @param[in] _oldWidget The widget to replace.
 				 * @param[in] _newWidget The widget to set.
 				 */
-				virtual void subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
-				                              const std::shared_ptr<ewol::Widget>& _newWidget);
+				virtual void subWidgetReplace(const ewol::WidgetShared& _oldWidget,
+				                              const ewol::WidgetShared& _newWidget);
 				/**
 				 * @brief remove the subWidget node (async).
 				 */
@@ -61,11 +64,11 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
-				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
+				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void setOffset(const vec2& _newVal);
-				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
 		};
 	};
 };

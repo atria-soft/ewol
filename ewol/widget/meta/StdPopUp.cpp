@@ -26,8 +26,8 @@ ewol::widget::StdPopUp::StdPopUp() :
 void ewol::widget::StdPopUp::init() {
 	ewol::widget::PopUp::init();
 	propertyMinSize.set(gale::Dimension(vec2(20,10),gale::Dimension::Pourcent));
-	std::shared_ptr<ewol::widget::Sizer> mySizerVert;
-	std::shared_ptr<ewol::widget::Spacer> mySpacer;
+	ewol::widget::SizerShared mySizerVert;
+	ewol::widget::SpacerShared mySpacer;
 	
 	mySizerVert = ewol::widget::Sizer::create();
 		// set it in the pop-up-system : 
@@ -96,12 +96,12 @@ void ewol::widget::StdPopUp::setComment(const std::string& _text) {
 	markToRedraw();
 }
 
-std::shared_ptr<ewol::widget::Button> ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
+ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
 	if (m_subBar == nullptr) {
 		EWOL_ERROR("button-bar does not existed ...");
 		return nullptr;
 	}
-	std::shared_ptr<ewol::widget::Button> myButton = widget::Button::create();
+	ewol::widget::ButtonShared myButton = widget::Button::create();
 	if (myButton == nullptr) {
 		EWOL_ERROR("Can not allocate new button ...");
 		return nullptr;

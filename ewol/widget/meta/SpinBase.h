@@ -57,6 +57,9 @@ namespace ewol {
 			 */
 			spinPosition_RightRight
 		};
+		class SpinBase;
+		using SpinBaseShared = ewol::SharedPtr<ewol::widget::SpinBase>;
+		using SpinBaseWeak = ewol::WeakPtr<ewol::widget::SpinBase>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -86,9 +89,9 @@ namespace ewol {
 				 */
 				virtual ~SpinBase();
 			protected:
-				std::shared_ptr<ewol::widget::Entry> m_widgetEntry;
-				std::shared_ptr<ewol::widget::Button> m_widgetButtonDown;
-				std::shared_ptr<ewol::widget::Button> m_widgetButtonUp;
+				ewol::widget::EntryShared m_widgetEntry;
+				ewol::widget::ButtonShared m_widgetButtonDown;
+				ewol::widget::ButtonShared m_widgetButtonUp;
 				virtual void updateGui();
 			public: // Derived function
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);

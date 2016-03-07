@@ -13,6 +13,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Composer;
+		using ComposerShared = ewol::SharedPtr<ewol::widget::Composer>;
+		using ComposerWeak = ewol::WeakPtr<ewol::widget::Composer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
@@ -44,7 +47,7 @@ namespace ewol {
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
 		};
-		std::shared_ptr<ewol::Widget> composerGenerateString(const std::string& _data = "");
-		std::shared_ptr<ewol::Widget> composerGenerateFile(const std::string& _data = "");
+		ewol::WidgetShared composerGenerateString(const std::string& _data = "");
+		ewol::WidgetShared composerGenerateFile(const std::string& _data = "");
 	};
 };

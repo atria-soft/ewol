@@ -13,6 +13,9 @@
 #include <ewol/widget/Sizer.h>
 namespace ewol {
 	namespace widget {
+		class StdPopUp;
+		using StdPopUpShared = ewol::SharedPtr<ewol::widget::StdPopUp>;
+		using StdPopUpWeak = ewol::WeakPtr<ewol::widget::StdPopUp>;
 		/**
 		 * @brief The std pop up widget is a siple message widget to notify user of some simple things, like:
 		 *
@@ -53,7 +56,7 @@ namespace ewol {
 				 */
 				virtual ~StdPopUp();
 			protected:
-				std::shared_ptr<ewol::widget::Label> m_title; //!< Title Label widget
+				ewol::widget::LabelShared m_title; //!< Title Label widget
 			public:
 				/**
 				 * @brief Set the title string.
@@ -61,7 +64,7 @@ namespace ewol {
 				 */
 				void setTitle(const std::string& _text);
 			protected:
-				std::shared_ptr<ewol::widget::Label> m_comment; //!< Comment label widget
+				ewol::widget::LabelShared m_comment; //!< Comment label widget
 			public:
 				/**
 				 * @brief Set the commentary string.
@@ -69,13 +72,13 @@ namespace ewol {
 				 */
 				void setComment(const std::string& _text);
 			protected:
-				std::shared_ptr<ewol::widget::Sizer> m_subBar; //!< subwidget bar containing all the button.
+				ewol::widget::SizerShared m_subBar; //!< subwidget bar containing all the button.
 			public:
 				/**
 				 * @brief Add a buttom button.
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
-				std::shared_ptr<ewol::widget::Button> addButton(const std::string& _text, bool _autoExit=false);
+				ewol::widget::ButtonShared addButton(const std::string& _text, bool _autoExit=false);
 			public: // callback function
 				void onCallBackButtonExit();
 		};

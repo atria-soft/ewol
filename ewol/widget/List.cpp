@@ -235,7 +235,7 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), 0, rawID, _event.getPos().x(), _event.getPos().y());
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
-		//std::shared_ptr<ewol::Widget>Manager::focusKeep(this);
+		//ewol::WidgetSharedManager::focusKeep(this);
 	}
 	return isUsed;
 }

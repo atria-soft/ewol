@@ -14,13 +14,16 @@
 
 namespace ewol {
 	namespace widget {
+		class Container2;
+		using Container2Shared = ewol::SharedPtr<ewol::widget::Container2>;
+		using Container2Weak = ewol::WeakPtr<ewol::widget::Container2>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
 		class Container2 : public ewol::Widget {
 			protected:
-				std::shared_ptr<ewol::Widget> m_subWidget[2]; //!< 2 subwidget possible
+				ewol::WidgetShared m_subWidget[2]; //!< 2 subwidget possible
 				int32_t m_idWidgetDisplayed; //!< current widget displayed
 			protected:
 				/**
@@ -40,20 +43,20 @@ namespace ewol {
 				 * @param[in] _subWidget Widget to add normal
 				 * @param[in] _idWidget Id of the widget to set
 				 */
-				void setSubWidget(std::shared_ptr<ewol::Widget> _subWidget, int32_t _idWidget);
+				void setSubWidget(ewol::WidgetShared _subWidget, int32_t _idWidget);
 			public:
 				/**
 				 * @brief Specify the current widget
 				 * @param[in] _subWidget Widget to add normal
 				 */
-				void setSubWidget(std::shared_ptr<ewol::Widget> _subWidget) {
+				void setSubWidget(ewol::WidgetShared _subWidget) {
 					setSubWidget(_subWidget, 0);
 				}
 				/**
 				 * @brief Specify the current toggle widget
 				 * @param[in] _subWidget Widget to add Toggle
 				 */
-				void setSubWidgetToggle(std::shared_ptr<ewol::Widget> _subWidget) {
+				void setSubWidgetToggle(ewol::WidgetShared _subWidget) {
 					setSubWidget(_subWidget, 1);
 				}
 			private:
@@ -62,7 +65,7 @@ namespace ewol {
 				 * @param[in] _idWidget Id of the widget to set
 				 * @return The base widget
 				 */
-				std::shared_ptr<ewol::Widget> getSubWidget(int32_t _idWidget) const {
+				ewol::WidgetShared getSubWidget(int32_t _idWidget) const {
 					return m_subWidget[_idWidget];
 				};
 			public:
@@ -70,14 +73,14 @@ namespace ewol {
 				 * @brief get the current displayed composition
 				 * @return The base widget
 				 */
-				std::shared_ptr<ewol::Widget> getSubWidget() const {
+				ewol::WidgetShared getSubWidget() const {
 					return getSubWidget(0);
 				};
 				/**
 				 * @brief get the current displayed composition
 				 * @return The toggle widget
 				 */
-				std::shared_ptr<ewol::Widget> getSubWidgetToggle() const {
+				ewol::WidgetShared getSubWidgetToggle() const {
 					return getSubWidget(1);
 				};
 			private:
@@ -152,8 +155,8 @@ namespace ewol {
 				 * @param[in] _oldWidget The widget to replace.
 				 * @param[in] _newWidget The widget to set.
 				 */
-				virtual void subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
-				                              const std::shared_ptr<ewol::Widget>& _newWidget);
+				virtual void subWidgetReplace(const ewol::WidgetShared& _oldWidget,
+				                              const ewol::WidgetShared& _newWidget);
 			public: // Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
@@ -163,11 +166,11 @@ namespace ewol {
 				virtual void calculateMinMaxSize() {
 					calculateMinMaxSizePadded();
 				}
-				//virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
-				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+				//virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
+				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void setOffset(const vec2& _newVal);
-				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
 		};
 	};
 };

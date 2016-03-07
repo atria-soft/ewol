@@ -15,6 +15,9 @@
 
 namespace ewol {
 	namespace widget {
+		class WSlider;
+		using WSliderShared = ewol::SharedPtr<ewol::widget::WSlider>;
+		using WSliderWeak = ewol::WeakPtr<ewol::widget::WSlider>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -58,7 +61,7 @@ namespace ewol {
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
 				 */
-				void subWidgetSelectSet(const std::shared_ptr<ewol::Widget>& _widgetPointer);
+				void subWidgetSelectSet(const ewol::WidgetShared& _widgetPointer);
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetName Name of the subwidget name
@@ -68,7 +71,7 @@ namespace ewol {
 				virtual void onChangeSize();
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
 				virtual void periodicCall(const ewol::event::Time& _event);
 			protected:
 				virtual void onChangePropertySelectWidget();

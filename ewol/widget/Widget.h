@@ -22,6 +22,8 @@ namespace ewol {
 		class Manager;
 		class Windows;
 	};
+	using WidgetShared = ewol::SharedPtr<ewol::Widget>;
+	using WidgetWeak = ewol::WeakPtr<ewol::Widget>;
 };
 #include <gale/context/clipBoard.h>
 #include <gale/key/key.h>
@@ -39,7 +41,7 @@ namespace ewol {
 #define DECLARE_WIDGET_FACTORY(className, name) \
 	DECLARE_FACTORY(className); \
 	static void createManagerWidget(ewol::widget::Manager& _widgetManager) { \
-		_widgetManager.addWidgetCreator(name,   []() -> std::shared_ptr<ewol::Widget> { \
+		_widgetManager.addWidgetCreator(name,   []() -> ewol::WidgetShared { \
 		                                        	return className::create(); \
 		                                        }); \
 	}
@@ -348,7 +350,7 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) {
+			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) {
 				if (propertyHide.get() == false) {
 					return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
 				}
@@ -526,7 +528,7 @@ namespace ewol {
 			/**
 			 * @brief get the curent Windows
 			 */
-			std::shared_ptr<ewol::widget::Windows> getWindows();
+			ewol::SharedPtr<ewol::widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */

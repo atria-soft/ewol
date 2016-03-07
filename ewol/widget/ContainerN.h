@@ -14,6 +14,9 @@
 
 namespace ewol {
 	namespace widget {
+		class ContainerN;
+		using ContainerNShared = ewol::SharedPtr<ewol::widget::ContainerN>;
+		using ContainerNWeak = ewol::WeakPtr<ewol::widget::ContainerN>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
@@ -22,7 +25,7 @@ namespace ewol {
 			public: // properties:
 				eproperty::Value<bvec2> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			protected:
-				std::list<std::shared_ptr<ewol::Widget>> m_subWidget;
+				std::list<ewol::WidgetShared> m_subWidget;
 			protected:
 				/**
 				 * @brief Constructor
@@ -51,20 +54,20 @@ namespace ewol {
 				 * @param[in] _oldWidget The widget to replace.
 				 * @param[in] _newWidget The widget to set.
 				 */
-				virtual void subWidgetReplace(const std::shared_ptr<ewol::Widget>& _oldWidget,
-				                              const std::shared_ptr<ewol::Widget>& _newWidget);
+				virtual void subWidgetReplace(const ewol::WidgetShared& _oldWidget,
+				                              const ewol::WidgetShared& _newWidget);
 				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element
 				 */
-				virtual int32_t subWidgetAdd(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAdd(ewol::WidgetShared _newWidget);
 				//! @previous
-				inline  int32_t subWidgetAddBack(std::shared_ptr<ewol::Widget> _newWidget) {
+				inline  int32_t subWidgetAddBack(ewol::WidgetShared _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
 				//! @previous
-				inline  int32_t subWidgetAddEnd(std::shared_ptr<ewol::Widget> _newWidget) {
+				inline  int32_t subWidgetAddEnd(ewol::WidgetShared _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
 				/**
@@ -72,31 +75,31 @@ namespace ewol {
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element
 				 */
-				virtual int32_t subWidgetAddStart(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual int32_t subWidgetAddStart(ewol::WidgetShared _newWidget);
 				//! @previous
-				inline  int32_t subWidgetAddFront(std::shared_ptr<ewol::Widget> _newWidget) {
+				inline  int32_t subWidgetAddFront(ewol::WidgetShared _newWidget) {
 					return subWidgetAddStart(_newWidget);
 				};
 				/**
 				 * @brief remove definitly a widget from the system and this layer.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget);
+				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
 			public:// Derived function
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay();
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
-				virtual std::shared_ptr<ewol::Object> getSubObjectNamed(const std::string& _objectName);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
+				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 				virtual void setOffset(const vec2& _newVal);
-				virtual void requestDestroyFromChild(const std::shared_ptr<Object>& _child);
+				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
 			protected:
 				virtual void onChangePropertyLockExpand();
 		};

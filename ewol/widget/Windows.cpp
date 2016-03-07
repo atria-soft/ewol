@@ -60,7 +60,7 @@ void ewol::widget::Windows::onChangeSize() {
 	}
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	// calculate relative position
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
@@ -160,7 +160,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 }
 
-void ewol::widget::Windows::setSubWidget(std::shared_ptr<ewol::Widget> _widget) {
+void ewol::widget::Windows::setSubWidget(ewol::WidgetShared _widget) {
 	if (m_subWidget != nullptr) {
 		EWOL_INFO("Remove current main windows Widget...");
 		m_subWidget->removeParent();
@@ -175,7 +175,7 @@ void ewol::widget::Windows::setSubWidget(std::shared_ptr<ewol::Widget> _widget) 
 	onChangeSize();
 }
 
-void ewol::widget::Windows::popUpWidgetPush(std::shared_ptr<ewol::Widget> _widget) {
+void ewol::widget::Windows::popUpWidgetPush(ewol::WidgetShared _widget) {
 	if (_widget == nullptr) {
 		// nothing to do an error appear :
 		EWOL_ERROR("can not set widget pop-up (null pointer)");
@@ -213,7 +213,7 @@ void ewol::widget::Windows::setTitle(const std::string& _title) {
 
 
 void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message) {
-	std::shared_ptr<ewol::widget::StdPopUp> tmpPopUp = widget::StdPopUp::create();
+	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();
 	if (tmpPopUp == nullptr) {
 		EWOL_ERROR("Can not create a simple pop-up");
 		return;
@@ -238,7 +238,7 @@ void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, cons
 	popUpWidgetPush(tmpPopUp);
 }
 
-void ewol::widget::Windows::requestDestroyFromChild(const std::shared_ptr<Object>& _child) {
+void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _child) {
 	auto it = m_popUpWidgetList.begin();
 	while (it != m_popUpWidgetList.end()) {
 		if (*it == _child) {
@@ -266,8 +266,8 @@ void ewol::widget::Windows::requestDestroyFromChild(const std::shared_ptr<Object
 	}
 }
 
-std::shared_ptr<ewol::Object> ewol::widget::Windows::getSubObjectNamed(const std::string& _objectName) {
-	std::shared_ptr<ewol::Object> tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
+ewol::ObjectShared ewol::widget::Windows::getSubObjectNamed(const std::string& _objectName) {
+	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
 	if (tmpObject != nullptr) {
 		return tmpObject;
 	}

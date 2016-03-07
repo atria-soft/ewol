@@ -36,9 +36,9 @@ ewol::widget::Parameter::Parameter() :
 void ewol::widget::Parameter::init() {
 	ewol::widget::PopUp::init();
 	
-	std::shared_ptr<ewol::widget::Sizer> mySizerVert = nullptr;
-	std::shared_ptr<ewol::widget::Sizer> mySizerHori = nullptr;
-	std::shared_ptr<ewol::widget::Spacer> mySpacer = nullptr;
+	ewol::widget::SizerShared mySizerVert = nullptr;
+	ewol::widget::SizerShared mySizerHori = nullptr;
+	ewol::widget::SpacerShared mySpacer = nullptr;
 	#ifdef __TARGET_OS__Android
 		propertyMinSize.set(gale::Dimension(vec2(90, 90), gale::Dimension::Pourcent));
 	#else
@@ -71,7 +71,7 @@ void ewol::widget::Parameter::init() {
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
-			std::shared_ptr<ewol::widget::Button> tmpButton = widget::Button::create();
+			ewol::widget::ButtonShared tmpButton = widget::Button::create();
 			if (tmpButton == nullptr) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
@@ -134,7 +134,7 @@ void ewol::widget::Parameter::init() {
 				mySizerHori->subWidgetAdd(mySpacer);
 			}
 			
-			std::shared_ptr<ewol::widget::Sizer> mySizerVert2 = widget::Sizer::create();
+			ewol::widget::SizerShared mySizerVert2 = widget::Sizer::create();
 			if (mySizerVert2 == nullptr) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
@@ -212,7 +212,7 @@ void ewol::widget::Parameter::onCallbackMenuSelected(const int32_t& _value) {
 	}
 }
 
-void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, std::shared_ptr<ewol::Widget> _associateWidget) {
+void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::WidgetShared _associateWidget) {
 	if (nullptr != m_paramList) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
 		if (nullptr != m_wSlider) {
@@ -220,7 +220,7 @@ void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, st
 				m_wSlider->subWidgetAdd(_associateWidget);
 			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
-				std::shared_ptr<ewol::widget::Label> myLabel = widget::Label::create();
+				ewol::widget::LabelShared myLabel = widget::Label::create();
 				if (nullptr == myLabel) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {

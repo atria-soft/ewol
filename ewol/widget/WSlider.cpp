@@ -140,7 +140,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	}
 }
 
-void ewol::widget::WSlider::subWidgetSelectSet(const std::shared_ptr<ewol::Widget>& _widgetPointer) {
+void ewol::widget::WSlider::subWidgetSelectSet(const ewol::WidgetShared& _widgetPointer) {
 	if (_widgetPointer == nullptr) {
 		EWOL_ERROR("Can not change to a widget nullptr");
 		return;
@@ -289,7 +289,7 @@ void ewol::widget::WSlider::onChangePropertyTransitionMode() {
 }
 
 
-std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {
 		return nullptr;
 	}
@@ -303,7 +303,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& 
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -320,7 +320,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& 
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}
@@ -336,7 +336,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::WSlider::getWidgetAtPos(const vec2& 
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				std::shared_ptr<ewol::Widget> tmpWidget = (*it)->getWidgetAtPos(_pos);
+				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
 				if (nullptr != tmpWidget) {
 					return tmpWidget;
 				}

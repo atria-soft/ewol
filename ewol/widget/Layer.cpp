@@ -21,7 +21,7 @@ ewol::widget::Layer::~Layer() {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {
 		return nullptr;
 	}
@@ -34,7 +34,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::Layer::getWidgetAtPos(const vec2& _p
 		vec2 tmpOrigin = it->getOrigin();
 		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
-			std::shared_ptr<ewol::Widget> tmpWidget = it->getWidgetAtPos(_pos);
+			ewol::WidgetShared tmpWidget = it->getWidgetAtPos(_pos);
 			if (tmpWidget != nullptr) {
 				return tmpWidget;
 			}

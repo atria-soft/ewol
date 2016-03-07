@@ -191,7 +191,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 }
 
 
-void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::WidgetShared _newWidget) {
 	if (_newWidget == nullptr) {
 		return;
 	}
@@ -233,7 +233,7 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, std::share
 	m_subWidget.push_back(prop);
 }
 
-void ewol::widget::Gird::subWidgetRemove(std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::Gird::subWidgetRemove(ewol::WidgetShared _newWidget) {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii].widget) {
 			m_subWidget.erase(m_subWidget.begin()+iii);
@@ -261,7 +261,7 @@ void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 	EWOL_WARNING("[" << getId() << "] Can not remove unExistant widget");
 }
 
-void ewol::widget::Gird::subWidgetUnLink(std::shared_ptr<ewol::Widget> _newWidget) {
+void ewol::widget::Gird::subWidgetUnLink(ewol::WidgetShared _newWidget) {
 	if (_newWidget == nullptr) {
 		return;
 	}
@@ -307,7 +307,7 @@ void ewol::widget::Gird::onRegenerateDisplay() {
 	}
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {
 		return nullptr;
 	}
@@ -320,7 +320,7 @@ std::shared_ptr<ewol::Widget> ewol::widget::Gird::getWidgetAtPos(const vec2& _po
 		vec2 tmpOrigin = it.widget->getOrigin();
 		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
-			std::shared_ptr<ewol::Widget> tmpWidget = it.widget->getWidgetAtPos(_pos);
+			ewol::WidgetShared tmpWidget = it.widget->getWidgetAtPos(_pos);
 			if (tmpWidget != nullptr) {
 				return tmpWidget;
 			}

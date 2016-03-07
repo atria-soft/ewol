@@ -52,13 +52,13 @@ void ewol::Context::setInitImage(const std::string& _fileName) {
 
 
 
-void ewol::Context::inputEventTransfertWidget(std::shared_ptr<ewol::Widget> _source,
-                                              std::shared_ptr<ewol::Widget> _destination) {
+void ewol::Context::inputEventTransfertWidget(ewol::WidgetShared _source,
+                                              ewol::WidgetShared _destination) {
 	m_input.transfertEvent(_source, _destination);
 }
 
 
-void ewol::Context::inputEventGrabPointer(std::shared_ptr<ewol::Widget> _widget) {
+void ewol::Context::inputEventGrabPointer(ewol::WidgetShared _widget) {
 	m_input.grabPointer(_widget);
 }
 
@@ -138,7 +138,7 @@ void ewol::Context::onResume(gale::Context& _context) {
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 	//EWOL_INFO("REGENERATE_DISPLAY");
 	// check if the user selected a windows
-	std::shared_ptr<ewol::widget::Windows> window = m_windowsCurrent;
+	ewol::widget::WindowsShared window = m_windowsCurrent;
 	if (window == nullptr) {
 		EWOL_DEBUG("No windows ...");
 		return;
@@ -156,7 +156,7 @@ void ewol::Context::onDraw(gale::Context& _context) {
 	// clean internal data...
 	m_objectManager.cleanInternalRemoved();
 	// real draw...
-	std::shared_ptr<ewol::widget::Windows> window = m_windowsCurrent;
+	ewol::widget::WindowsShared window = m_windowsCurrent;
 	if (window == nullptr) {
 		return;
 	}
@@ -249,7 +249,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 		return;
 	}
 	// get the current focused Widget :
-	std::shared_ptr<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
+	ewol::WidgetShared tmpWidget = m_widgetManager.focusGet();
 	if (tmpWidget == nullptr) {
 		// no Widget ...
 		return;
@@ -301,7 +301,7 @@ void ewol::Context::processEvents() {
 */
 
 void ewol::Context::onClipboardEvent(enum gale::context::clipBoard::clipboardListe _clipboardId) {
-	std::shared_ptr<ewol::Widget> tmpWidget = m_widgetManager.focusGet();
+	ewol::WidgetShared tmpWidget = m_widgetManager.focusGet();
 	if (tmpWidget != nullptr) {
 		tmpWidget->onEventClipboard(_clipboardId);
 	}
@@ -434,7 +434,7 @@ void ewol::Context::resetIOEvent() {
 }
 
 
-void ewol::Context::setWindows(const std::shared_ptr<ewol::widget::Windows>& _windows) {
+void ewol::Context::setWindows(const ewol::widget::WindowsShared& _windows) {
 	EWOL_INFO("set New windows");
 	// remove current focus :
 	m_widgetManager.focusSetDefault(nullptr);
@@ -447,7 +447,7 @@ void ewol::Context::setWindows(const std::shared_ptr<ewol::widget::Windows>& _wi
 	forceRedrawAll();
 }
 
-std::shared_ptr<ewol::widget::Windows> ewol::Context::getWindows() {
+ewol::widget::WindowsShared ewol::Context::getWindows() {
 	return m_windowsCurrent;
 };
 void ewol::Context::onResize(const ivec2& _size) {

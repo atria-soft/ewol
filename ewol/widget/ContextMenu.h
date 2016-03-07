@@ -17,6 +17,9 @@
 
 namespace ewol {
 	namespace widget {
+		class ContextMenu;
+		using ContextMenuShared = ewol::SharedPtr<ewol::widget::ContextMenu>;
+		using ContextMenuWeak = ewol::WeakPtr<ewol::widget::ContextMenu>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -58,7 +61,7 @@ namespace ewol {
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void onChangeSize();
 				virtual void calculateMinMaxSize();
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
 			protected:
 				virtual void onChangePropertyArrowPos();
 				virtual void onChangePropertyArrawBorder();

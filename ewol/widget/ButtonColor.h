@@ -19,6 +19,9 @@
 
 namespace ewol {
 	namespace widget {
+		class ButtonColor;
+		using ButtonColorShared = ewol::SharedPtr<ewol::widget::ButtonColor>;
+		using ButtonColorWeak = ewol::WeakPtr<ewol::widget::ButtonColor>;
 		class ButtonColor : public ewol::Widget {
 			public: // signals
 				esignal::ISignal<etk::Color<>> signalChange;
@@ -28,7 +31,7 @@ namespace ewol {
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.
-				std::shared_ptr<ewol::widget::ContextMenu> m_widgetContextMenu; //!< Specific context menu.
+				ewol::widget::ContextMenuShared m_widgetContextMenu; //!< Specific context menu.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :

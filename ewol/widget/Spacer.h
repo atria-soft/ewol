@@ -16,6 +16,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Spacer;
+		using SpacerShared = ewol::SharedPtr<ewol::widget::Spacer>;
+		using SpacerWeak = ewol::WeakPtr<ewol::widget::Spacer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -36,7 +39,7 @@ namespace ewol {
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
 			public: // Derived function
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos) { return nullptr; };
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) { return nullptr; };
 				virtual void onRegenerateDisplay();
 				virtual void onDraw();
 			protected:

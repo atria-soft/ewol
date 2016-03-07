@@ -74,7 +74,7 @@ ewol::widget::Manager::~Manager() {
  * focus Area : 
  * *************************************************************************/
 
-void ewol::widget::Manager::focusKeep(const std::shared_ptr<ewol::Widget>& _newWidget) {
+void ewol::widget::Manager::focusKeep(const ewol::WidgetShared& _newWidget) {
 	if (_newWidget == nullptr) {
 		// nothing to do ...
 		return;
@@ -102,14 +102,14 @@ void ewol::widget::Manager::focusKeep(const std::shared_ptr<ewol::Widget>& _newW
 	}
 }
 
-void ewol::widget::Manager::focusSetDefault(const std::shared_ptr<ewol::Widget>& _newWidget) {
+void ewol::widget::Manager::focusSetDefault(const ewol::WidgetShared& _newWidget) {
 	if(    _newWidget != nullptr
 	    && _newWidget->propertyCanFocus.get() == false) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
-	std::shared_ptr<ewol::Widget> focusWidgetDefault = m_focusWidgetDefault.lock();
-	std::shared_ptr<ewol::Widget> focusWidgetCurrent = m_focusWidgetCurrent.lock();
+	ewol::WidgetShared focusWidgetDefault = m_focusWidgetDefault.lock();
+	ewol::WidgetShared focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (focusWidgetDefault == focusWidgetCurrent) {
 		if (focusWidgetCurrent != nullptr) {
 			EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
@@ -125,8 +125,8 @@ void ewol::widget::Manager::focusSetDefault(const std::shared_ptr<ewol::Widget>&
 }
 
 void ewol::widget::Manager::focusRelease() {
-	std::shared_ptr<ewol::Widget> focusWidgetDefault = m_focusWidgetDefault.lock();
-	std::shared_ptr<ewol::Widget> focusWidgetCurrent = m_focusWidgetCurrent.lock();
+	ewol::WidgetShared focusWidgetDefault = m_focusWidgetDefault.lock();
+	ewol::WidgetShared focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (focusWidgetDefault == focusWidgetCurrent) {
 		// nothink to do ...
 		return;
@@ -144,13 +144,13 @@ void ewol::widget::Manager::focusRelease() {
 }
 
 
-std::shared_ptr<ewol::Widget> ewol::widget::Manager::focusGet() {
+ewol::WidgetShared ewol::widget::Manager::focusGet() {
 	return m_focusWidgetCurrent.lock();
 }
 
-void ewol::widget::Manager::focusRemoveIfRemove(const std::shared_ptr<ewol::Widget>& _newWidget) {
-	std::shared_ptr<ewol::Widget> focusWidgetDefault = m_focusWidgetDefault.lock();
-	std::shared_ptr<ewol::Widget> focusWidgetCurrent = m_focusWidgetCurrent.lock();
+void ewol::widget::Manager::focusRemoveIfRemove(const ewol::WidgetShared& _newWidget) {
+	ewol::WidgetShared focusWidgetDefault = m_focusWidgetDefault.lock();
+	ewol::WidgetShared focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (focusWidgetCurrent == _newWidget) {
 		EWOL_WARNING("Release focus when remove widget");
 		focusRelease();
@@ -198,7 +198,7 @@ void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
 	m_creatorList.add(nameLower, _pointer);
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::Manager::create(const std::string& _name) {
+ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
 	std::string nameLower = etk::tolower(_name);
 	if (m_creatorList.exist(nameLower) == true) {
 		ewol::widget::Manager::creator_tf pointerFunction = m_creatorList[nameLower];

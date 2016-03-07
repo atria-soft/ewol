@@ -42,7 +42,7 @@ ewol::object::Manager::~Manager() {
 void ewol::object::Manager::displayListObject() {
 	EWOL_INFO("List loaded object : ");
 	for (auto &it : m_eObjectList) {
-		std::shared_ptr<ewol::Object> element = it.lock();
+		ewol::ObjectShared element = it.lock();
 		if (element != nullptr) {
 			EWOL_INFO("  [" << element->getId() << "] ref=" << element.use_count()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
 		}
@@ -56,7 +56,7 @@ void ewol::object::Manager::unInit() {
 		m_workerList.clear();
 	}
 	for (auto &it : m_eObjectList) {
-		std::shared_ptr<ewol::Object> element = it.lock();
+		ewol::ObjectShared element = it.lock();
 		if (element != nullptr) {
 			//it->removeObject();
 		}
@@ -67,7 +67,7 @@ void ewol::object::Manager::unInit() {
 	m_eObjectList.clear();
 }
 
-void ewol::object::Manager::add(const std::shared_ptr<ewol::Object>& _object) {
+void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
 	if (_object == nullptr) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
@@ -95,12 +95,12 @@ void ewol::object::Manager::cleanInternalRemoved() {
 	}
 }
 
-std::shared_ptr<ewol::Object> ewol::object::Manager::get(const std::string& _name) {
+ewol::ObjectShared ewol::object::Manager::get(const std::string& _name) {
 	if (_name == "") {
 		return nullptr;
 	}
 	for (auto &it : m_eObjectList) {
-		std::shared_ptr<ewol::Object> element = it.lock();
+		ewol::ObjectShared element = it.lock();
 		if (    element != nullptr
 		     && element->propertyName.get() == _name) {
 			return element;
@@ -110,16 +110,16 @@ std::shared_ptr<ewol::Object> ewol::object::Manager::get(const std::string& _nam
 }
 
 
-std::shared_ptr<ewol::Object> ewol::object::Manager::getObjectNamed(const std::string& _name) {
+ewol::ObjectShared ewol::object::Manager::getObjectNamed(const std::string& _name) {
 	return ewol::object::Manager::get(_name);
 }
 
 
-void ewol::object::Manager::workerAdd(const std::shared_ptr<ewol::Object>& _worker) {
+void ewol::object::Manager::workerAdd(const ewol::ObjectShared& _worker) {
 	m_workerList.push_back(_worker);
 }
 
-void ewol::object::Manager::workerRemove(const std::shared_ptr<ewol::Object>& _worker) {
+void ewol::object::Manager::workerRemove(const ewol::ObjectShared& _worker) {
 	auto it(m_workerList.begin());
 	while (it != m_workerList.end()) {
 		if (*it == _worker) {

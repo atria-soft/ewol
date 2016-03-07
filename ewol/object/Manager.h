@@ -17,7 +17,7 @@ namespace ewol {
 	namespace object {
 		class Manager : public esignal::Interface {
 			private:
-				std::vector<std::weak_ptr<ewol::Object>> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
+				std::vector<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;
 			public:
 				Manager(Context& _context);
@@ -43,7 +43,7 @@ namespace ewol {
 				 * @note The manager remove the object when the refecence Low down 1 (last keeper)
 				 * @param[in] _object Reference shared pointer on the object
 				 */
-				void add(const std::shared_ptr<ewol::Object>& _object);
+				void add(const ewol::ObjectShared& _object);
 			public:
 				/**
 				 * @brief clean the weak pointer list (remove weak_ptr that is remoed)
@@ -54,27 +54,27 @@ namespace ewol {
 				 * @param[in] _name Name of the Object
 				 * @return Pointer on the finded Object.
 				 */
-				std::shared_ptr<ewol::Object> get(const std::string& _name);
+				ewol::ObjectShared get(const std::string& _name);
 			public:
 				/**
 				 * @brief retrive an object with his name
 				 * @param[in] _name Name of the object
 				 * @return the requested object or nullptr
 				 */
-				std::shared_ptr<ewol::Object> getObjectNamed(const std::string& _name);
+				ewol::ObjectShared getObjectNamed(const std::string& _name);
 			private:
-				std::vector<std::shared_ptr<ewol::Object>> m_workerList;
+				std::vector<ewol::ObjectShared> m_workerList;
 			public:
 				/**
 				 * @brief Add a worker on the system list.
 				 * @param[in] _worker Worker to add in the list.
 				 */
-				void workerAdd(const std::shared_ptr<ewol::Object>& _worker);
+				void workerAdd(const ewol::ObjectShared& _worker);
 				/**
 				 * @brief Remove a worker on the system list.
 				 * @param[in] _worker Worker to add in the list.
 				 */
-				void workerRemove(const std::shared_ptr<ewol::Object>& _worker);
+				void workerRemove(const ewol::ObjectShared& _worker);
 			public:
 				esignal::ISignal<ewol::event::Time> periodicCall;
 			private:

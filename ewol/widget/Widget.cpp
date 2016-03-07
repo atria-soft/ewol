@@ -547,7 +547,7 @@ bool ewol::Widget::loadXML(const std::shared_ptr<const exml::Element>& _node) {
 }
 
 bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
-	std::shared_ptr<ewol::Widget> up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
+	ewol::WidgetShared up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
 	if (up != nullptr) {
 		if (up->systemEventEntry(_event) == true) {
 			return true;
@@ -557,7 +557,7 @@ bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 }
 
 bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
-	std::shared_ptr<ewol::Widget> up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
+	ewol::WidgetShared up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
 	if (up != nullptr) {
 		if (up->systemEventInput(_event) == true) {
 			return true;
@@ -636,7 +636,7 @@ ewol::widget::Manager& ewol::Widget::getWidgetManager() {
 	return getContext().getWidgetManager();
 }
 
-std::shared_ptr<ewol::widget::Windows> ewol::Widget::getWindows() {
+ewol::widget::WindowsShared ewol::Widget::getWindows() {
 	return getContext().getWindows();
 }
 

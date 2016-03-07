@@ -17,6 +17,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Image;
+		using ImageShared = ewol::SharedPtr<ewol::widget::Image>;
+		using ImageWeak = ewol::WeakPtr<ewol::widget::Image>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

@@ -164,14 +164,14 @@ void ewol::widget::Select::onCallbackLabelPressed(int32_t _value) {
 
 void ewol::widget::Select::onCallbackOpenMenu() {
 	// create a context menu:
-	std::shared_ptr<ewol::widget::ContextMenu> tmpContext = ewol::widget::ContextMenu::create();
+	ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
 	if (tmpContext == nullptr) {
 		EWOL_ERROR("Allocation Error");
 		return;
 	}
 	// auto-select mark position:
 	tmpContext->setPositionMarkAuto(m_origin, m_size);
-	std::shared_ptr<ewol::widget::Sizer> mySizer;
+	ewol::widget::SizerShared mySizer;
 	mySizer = ewol::widget::Sizer::create();
 	if (mySizer == nullptr) {
 		EWOL_ERROR("Allocation Error or sizer");
@@ -183,7 +183,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	// set it in the pop-up-system:
 	tmpContext->setSubWidget(mySizer);
 	for (auto &it : m_listElement) {
-		std::shared_ptr<ewol::widget::Label> myLabel = ewol::widget::Label::create();
+		ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
 		if (myLabel == nullptr) {
 			EWOL_ERROR("Allocation Error");
 			continue;
@@ -201,7 +201,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 		// add it in the widget list
 		mySizer->subWidgetAddStart(myLabel);
 	}
-	std::shared_ptr<ewol::widget::Windows> currentWindows = getWindows();
+	ewol::widget::WindowsShared currentWindows = getWindows();
 	if (currentWindows == nullptr) {
 		EWOL_ERROR("Can not get the curent Windows...");
 	} else {

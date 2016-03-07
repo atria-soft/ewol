@@ -21,7 +21,7 @@ ewol::widget::Composer::Composer() {
 	// nothing to do ...
 }
 
-static std::shared_ptr<ewol::Widget> composerGenerate(bool _modeFile, const std::string& _data) {
+static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _data) {
 	ewol::widget::Manager& widgetManager = ewol::getContext().getWidgetManager();
 	if (_data == "") {
 		return nullptr;
@@ -57,7 +57,7 @@ static std::shared_ptr<ewol::Widget> composerGenerate(bool _modeFile, const std:
 		return nullptr;
 	}
 	EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-	std::shared_ptr<ewol::Widget> tmpWidget = widgetManager.create(widgetName);
+	ewol::WidgetShared tmpWidget = widgetManager.create(widgetName);
 	if (tmpWidget == nullptr) {
 		EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
 		return nullptr;
@@ -68,11 +68,11 @@ static std::shared_ptr<ewol::Widget> composerGenerate(bool _modeFile, const std:
 	return tmpWidget;
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::composerGenerateFile(const std::string& _data) {
+ewol::WidgetShared ewol::widget::composerGenerateFile(const std::string& _data) {
 	return composerGenerate(true, _data);
 }
 
-std::shared_ptr<ewol::Widget> ewol::widget::composerGenerateString(const std::string& _data) {
+ewol::WidgetShared ewol::widget::composerGenerateString(const std::string& _data) {
 	return composerGenerate(false, _data);
 }
 

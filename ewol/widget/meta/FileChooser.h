@@ -14,6 +14,9 @@
 
 namespace ewol {
 	namespace widget {
+		class FileChooser;
+		using FileChooserShared = ewol::SharedPtr<ewol::widget::FileChooser>;
+		using FileChooserWeak = ewol::WeakPtr<ewol::widget::FileChooser>;
 		/**
 		 *  @brief File Chooser is a simple selector of file for opening, saving, and what you want ...
 		 *  
@@ -26,7 +29,7 @@ namespace ewol {
 		 *  
 		 *  The first step is to create the file chooser pop-up : (never in the constructor!!!)
 		 *  [code style=c++]
-		 *  std::shared_ptr<ewol::widget::FileChooser> tmpWidget = ewol::Widget::FileChooser::create();
+		 *  ewol::widget::FileChooserShared tmpWidget = ewol::Widget::FileChooser::create();
 		 *  if (tmpWidget == nullptr) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;
@@ -42,7 +45,7 @@ namespace ewol {
 		 *  // simply set a folder (by default this is the home folder)
 		 *  //tmpWidget->setFolder("/home/me");
 		 *  // add the widget as windows pop-up ...
-		 *  std::shared_ptr<ewol::widget::Windows> tmpWindows = getWindows();
+		 *  ewol::widget::WindowsShared tmpWindows = getWindows();
 		 *  if (tmpWindows == nullptr) {
 		 *  	APPL_ERROR("Can not get the current windows !!! ");
 		 *  	return -1;

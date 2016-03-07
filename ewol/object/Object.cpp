@@ -22,7 +22,7 @@ void ewol::Object::autoDestroy() {
 		return;
 	}
 	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getObjectType());
-	std::shared_ptr<ewol::Object> parent = m_parent.lock();
+	ewol::ObjectShared parent = m_parent.lock();
 	// TODO : set a signal to do this ...
 	if (parent != nullptr) {
 		parent->requestDestroyFromChild(shared_from_this());
@@ -31,12 +31,12 @@ void ewol::Object::autoDestroy() {
 	m_destroy = true;
 }
 
-void ewol::Object::requestDestroyFromChild(const std::shared_ptr<ewol::Object>& _child) {
+void ewol::Object::requestDestroyFromChild(const ewol::ObjectShared& _child) {
 	EWOL_INFO("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
 	EWOL_CRITICAL("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
 }
 
-void ewol::Object::setParent(const std::shared_ptr<ewol::Object>& _newParent) {
+void ewol::Object::setParent(const ewol::ObjectShared& _newParent) {
 	// TODO : Implement change of parent ...
 	m_parent = _newParent;
 }
@@ -133,7 +133,7 @@ bool ewol::Object::storeXML(const std::shared_ptr<exml::Element>& _node) const {
 }
 
 bool ewol::Object::propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
-	std::shared_ptr<ewol::Object> object = getObjectManager().get(_objectName);
+	ewol::ObjectShared object = getObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
 	}
@@ -149,11 +149,11 @@ ewol::Context& ewol::Object::getContext() {
 	return ewol::getContext();
 }
 
-std::shared_ptr<ewol::Object> ewol::Object::getObjectNamed(const std::string& _objectName) {
+ewol::ObjectShared ewol::Object::getObjectNamed(const std::string& _objectName) {
 	return getObjectManager().getObjectNamed(_objectName);
 }
 
-std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string& _objectName) {
+ewol::ObjectShared ewol::Object::getSubObjectNamed(const std::string& _objectName) {
 	EWOL_VERBOSE("check if name : " << _objectName << " ?= " << propertyName.get());
 	if (_objectName == propertyName.get()) {
 		return shared_from_this();
@@ -163,7 +163,7 @@ std::shared_ptr<ewol::Object> ewol::Object::getSubObjectNamed(const std::string&
 
 
 bool ewol::propertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
-	std::shared_ptr<ewol::Object> object = ewol::getContext().getEObjectManager().get(_objectName);
+	ewol::ObjectShared object = ewol::getContext().getEObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
 	}

@@ -16,6 +16,9 @@
 
 namespace ewol {
 	namespace widget {
+		class Scroll;
+		using ScrollShared = ewol::SharedPtr<ewol::widget::Scroll>;
+		using ScrollWeak = ewol::WeakPtr<ewol::widget::Scroll>;
 		class Scroll : public ewol::widget::Container {
 			public: // properties
 				eproperty::Range<vec2> propertyLimit; //!< Set the limitation of the ratio in the sreen
@@ -50,7 +53,7 @@ namespace ewol {
 				virtual void onRegenerateDisplay();
 				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual std::shared_ptr<ewol::Widget> getWidgetAtPos(const vec2& _pos);
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
 				virtual void onDraw();
 			protected:
