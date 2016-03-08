@@ -13,7 +13,7 @@
 
 #include <etk/tool.h>
 #include <etk/os/FSNode.h>
-#include <etk/thread/tools.h>
+#include <ethread/tools.h>
 #include <mutex>
 
 #include <ewol/ewol.h>

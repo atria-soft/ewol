@@ -26,12 +26,12 @@ ewol::resource::TextureFile::TextureFile() {
 }
 
 void ewol::resource::TextureFile::init() {
-	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init();
 }
 
 void ewol::resource::TextureFile::init(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) {
-	std11::unique_lock<std11::recursive_mutex> lock(m_mutex);
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
 	if (egami::load(m_data, _tmpfileName, _size) == false) {

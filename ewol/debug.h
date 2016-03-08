@@ -7,12 +7,12 @@
  */
 #pragma once
 
-#include <etk/log.h>
+#include <elog/log.h>
 
 namespace ewol {
 	int32_t getLogId();
 };
-#define EWOL_BASE(info,data) TK_LOG_BASE(ewol::getLogId(),info,data)
+#define EWOL_BASE(info,data) ELOG_BASE(ewol::getLogId(),info,data)
 
 #define EWOL_PRINT(data)         EWOL_BASE(-1, data)
 #define EWOL_CRITICAL(data)      EWOL_BASE(1, data)

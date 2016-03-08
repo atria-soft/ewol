@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include <etk/log.h>
+#include <elog/log.h>
 
 namespace appl {
 	int32_t getLogId();
@@ -15,11 +15,11 @@ namespace appl {
 // TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
 #define APPL_BASE(info,data) \
 	do { \
-		if (info <= etk::log::getLevel(appl::getLogId())) { \
+		if (info <= elog::getLevel(appl::getLogId())) { \
 			std::stringbuf sb; \
 			std::ostream tmpStream(&sb); \
 			tmpStream << data; \
-			etk::log::logStream(appl::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
+			elog::logStream(appl::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
 		} \
 	} while(0)
 

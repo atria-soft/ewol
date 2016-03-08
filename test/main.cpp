@@ -13,7 +13,7 @@
 #include <etk/Hash.h>
 #include <etk/os/FSNode.h>
 #include <etk/archive/Archive.h>
-#include <etk/log.h>
+#include <elog/log.h>
 #include <etk/Color.h>
 #include <etk/stdTools.h>
 #include <string>
@@ -29,8 +29,8 @@ int main(int argc, const char *argv[]) {
 	// init Google test :
 	::testing::InitGoogleTest(&argc, const_cast<char **>(argv));
 	// the only one init for etk:
-	//etk::log::setLevel(etk::log::logLevelVerbose);
-	etk::log::setLevel(etk::log::logLevelInfo);
+	//elog::setLevel(elog::logLevelVerbose);
+	elog::setLevel(elog::logLevelInfo);
 	etk::setArgZero(argv[0]);
 	etk::initDefaultFolder("ewol-test");
 	return RUN_ALL_TESTS();

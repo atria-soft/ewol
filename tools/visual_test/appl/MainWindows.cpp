@@ -184,15 +184,6 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			*/
 			break;
 	}
-	
-	m_subWidget = ewol::widget::Spin::create("name", std::string("plop"));
-	// wrong: m_subWidget = ewol::widget::SpinBase::create("name", std::string("plop"), 1521);
-	m_subWidget = ewol::widget::Spin::create("name", std::string("plop"),
-	                                          "spin-mode", ewol::widget::spinPosition_RightRight);
-	
-	return;
-	
-	
 	// create the widget with a xml generator (readable for test ...):
 	m_subWidget = ewol::widget::composerGenerateString(tmpConstruct);
 	if (m_subWidget != nullptr) {

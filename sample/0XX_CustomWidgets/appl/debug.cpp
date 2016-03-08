@@ -10,6 +10,6 @@
 #include <appl/debug.h>
 
 int32_t appl::getLogId() {
-	static int32_t g_val = etk::log::registerInstance("example");
+	static int32_t g_val = elog::registerInstance("example");
 	return g_val;
 }
