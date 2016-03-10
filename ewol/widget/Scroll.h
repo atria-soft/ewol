@@ -44,18 +44,18 @@ namespace ewol {
 				enum gale::key::type m_highSpeedType;
 			protected:
 				Scroll();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
 				virtual ~Scroll();
-			public: // Derived function
-				void calculateMinMaxSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
-			protected: // Derived function
-				virtual void onDraw();
+			public:
+				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+			protected:
+				void onDraw() override;
 			protected:
 				virtual void onChangePropertyLimit();
 				virtual void onChangePropertyShapeVert();

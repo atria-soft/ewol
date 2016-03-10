@@ -38,10 +38,12 @@ namespace ewol {
 				virtual ~Spacer();
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
-			public: // Derived function
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) { return nullptr; };
-				virtual void onRegenerateDisplay();
-				virtual void onDraw();
+			public:
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override {
+					return nullptr;
+				};
+				void onRegenerateDisplay() override;
+				void onDraw() override;
 			protected:
 				virtual void onChangePropertyColor();
 		};

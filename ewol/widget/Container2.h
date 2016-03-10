@@ -157,20 +157,19 @@ namespace ewol {
 				 */
 				virtual void subWidgetReplace(const ewol::WidgetShared& _oldWidget,
 				                              const ewol::WidgetShared& _newWidget);
-			public: // Derived function
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay();
-				virtual void onChangeSize() {
+			public:
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
+				void onRegenerateDisplay() override;
+				void onChangeSize() override {
 					onChangeSizePadded();
 				}
-				virtual void calculateMinMaxSize() {
+				void calculateMinMaxSize() override {
 					calculateMinMaxSizePadded();
 				}
-				//virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
-				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
-				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
-				virtual void setOffset(const vec2& _newVal);
-				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
+				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
+				bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
+				void setOffset(const vec2& _newVal) override;
+				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 		};
 	};
 };

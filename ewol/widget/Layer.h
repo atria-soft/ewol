@@ -32,8 +32,8 @@ namespace ewol {
 				 * @brief Desstructor
 				 */
 				virtual ~Layer();
-			public: // Derived function
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
+			public:
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
 		};
 	};
 };

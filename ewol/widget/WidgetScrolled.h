@@ -74,19 +74,19 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper name if the scrolled widget.
 				 */
 				WidgetScrolled();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(WidgetScrolled, "WidgetScrolled");
 				/**
 				 * @brief Scroll widget destructor.
 				 */
 				virtual ~WidgetScrolled();
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
+			protected:
+				void onDraw() override;
+			public:
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
 			protected:
 				/**
 				 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled

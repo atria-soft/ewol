@@ -83,9 +83,9 @@ namespace ewol {
 				 */
 				void getProperty(float& _distance, float& _angle);
 				
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
+			public:
+				virtual void onRegenerateDisplay() override;
+				virtual bool onEventInput(const ewol::event::Input& _event) override;
 		};
 	};
 };

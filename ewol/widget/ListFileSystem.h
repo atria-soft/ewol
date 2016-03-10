@@ -44,13 +44,13 @@ namespace ewol {
 				int32_t m_colorIdBackground1; //!< Color of the Background.
 				int32_t m_colorIdBackground2; //!< Color of the Background 2.
 				int32_t m_colorIdBackgroundSelected; //!< Color of line selected.
-			protected : // Derived function from the List...
-				virtual etk::Color<> getBasicBG();
-				virtual uint32_t getNuberOfColomn();
-				virtual bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
-				virtual uint32_t getNuberOfRaw();
-				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
-				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
+			protected:
+				etk::Color<> getBasicBG() override;
+				uint32_t getNuberOfColomn() override;
+				bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg) override;
+				uint32_t getNuberOfRaw() override;
+				bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) override;
+				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) override;
 			protected:
 				// TODO: use shred_ptr
 				std::vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)

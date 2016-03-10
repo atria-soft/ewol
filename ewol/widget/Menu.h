@@ -42,10 +42,10 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Menu, "Menu");
 				virtual ~Menu();
 			private:
-				virtual void subWidgetRemoveAll();
-				virtual int32_t subWidgetAdd(ewol::WidgetShared _newWidget);
-				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
-				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
+				void subWidgetRemoveAll() override;
+				int32_t subWidgetAdd(ewol::WidgetShared _newWidget) override;
+				void subWidgetRemove(ewol::WidgetShared _newWidget) override;
+				void subWidgetUnLink(ewol::WidgetShared _newWidget) override;
 			private:
 				std::vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...

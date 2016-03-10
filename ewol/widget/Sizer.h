@@ -53,14 +53,14 @@ namespace ewol {
 				 * @brief Destructor
 				 */
 				virtual ~Sizer();
-			public: // Derived function
-				virtual void onChangeSize();
-				virtual void calculateMinMaxSize();
+			public:
+				void onChangeSize() override;
+				void calculateMinMaxSize() override;
 				// overwrite the set fuction to start annimations ...
-				virtual int32_t subWidgetAdd(ewol::WidgetShared _newWidget);
-				virtual int32_t subWidgetAddStart(ewol::WidgetShared _newWidget);
-				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
-				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
+				int32_t subWidgetAdd(ewol::WidgetShared _newWidget) override;
+				int32_t subWidgetAddStart(ewol::WidgetShared _newWidget) override;
+				void subWidgetRemove(ewol::WidgetShared _newWidget) override;
+				void subWidgetUnLink(ewol::WidgetShared _newWidget) override;
 			protected:
 				virtual void onChangePropertyMode();
 				virtual void onChangePropertyBorderSize();

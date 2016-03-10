@@ -48,7 +48,7 @@ namespace ewol {
 				ewol::widget::LabelShared m_widgetTitle;
 				ewol::widget::ParameterListShared m_paramList;
 				ewol::widget::WSliderShared m_wSlider;
-			private: //callback functions:
+			private:
 				void onCallbackMenuclosed();
 				void onCallbackParameterSave();
 				void onCallbackMenuSelected(const int32_t& _value);

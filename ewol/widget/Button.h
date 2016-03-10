@@ -56,7 +56,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				Button();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(Button, "Button");
 				/**
@@ -80,19 +80,19 @@ namespace ewol {
 				 */
 				void CheckStatus();
 			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void calculateMinMaxSize();
-				virtual void onChangeSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void onDetectPresenceToggleWidget() {
+				virtual void onDraw() override;
+			public:
+				void calculateMinMaxSize() override;
+				void onChangeSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				bool onEventEntry(const ewol::event::Entry& _event) override;
+				void onDetectPresenceToggleWidget() override {
 					propertyToggleMode.set(true);
 				}
-			private: // derived function
-				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual void onLostFocus();
+			protected:
+				void periodicCall(const ewol::event::Time& _event) override;
+				void onLostFocus() override;
 			protected:
 				virtual void onChangePropertyShape();
 				virtual void onChangePropertyValue();

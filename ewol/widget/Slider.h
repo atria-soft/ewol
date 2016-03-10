@@ -47,10 +47,10 @@ namespace ewol {
 				etk::Color<> m_textColorBg; //!< Background color
 				void updateValue(float _newValue);
 			public: // Derived function
-				virtual void onDraw();
-				virtual void calculateMinMaxSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
+				void onDraw() override;
+				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
 			protected:
 				virtual void onChangePropertyValue();
 				virtual void onChangePropertyMinimum();

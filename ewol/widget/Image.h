@@ -58,13 +58,13 @@ namespace ewol {
 				void set(const std::string& _file, const gale::Dimension& _border);
 			protected:
 				vec2 m_imageRenderSize; //!< size of the image when we render it
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void calculateMinMaxSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+			protected:
+				void onDraw() override;
+			public:
+				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
 			protected:
 				virtual void onChangePropertySource();
 				virtual void onChangePropertyImageSize();

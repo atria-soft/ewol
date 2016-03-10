@@ -57,7 +57,7 @@ namespace ewol {
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
 				Entry();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**
@@ -105,18 +105,18 @@ namespace ewol {
 				 * @note This request a regeneration of the display
 				 */
 				virtual void removeSelected();
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID);
-				virtual void calculateMinMaxSize();
-			protected: // Derived function
-				virtual void onDraw();
-				virtual void onGetFocus();
-				virtual void onLostFocus();
+			public:
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				bool onEventEntry(const ewol::event::Entry& _event) override;
+				void onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID) override;
+				void calculateMinMaxSize() override;
+			protected:
+				void onDraw() override;
+				void onGetFocus() override;
+				void onLostFocus() override;
 				virtual void changeStatusIn(int32_t _newStatusId);
-				virtual void periodicCall(const ewol::event::Time& _event);
+				void periodicCall(const ewol::event::Time& _event) override;
 			private: // callback functions
 				void onCallbackShortCut(const std::string& _value);
 				void onCallbackEntryClean();

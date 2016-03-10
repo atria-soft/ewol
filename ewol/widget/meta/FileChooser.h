@@ -77,15 +77,15 @@ namespace ewol {
 				eproperty::Value<std::string> propertyLabelCancel;
 			protected:
 				FileChooser();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(FileChooser, "FileChooser");
 				virtual ~FileChooser();
 			private:
 				std::string getCompleateFileName();
 				void updateCurrentFolder();
-			public: // Derived function
-				virtual void onGetFocus();
+			public:
+				void onGetFocus() override;
 			private:
 				// callback functions:
 				void onCallbackEntryFolderChangeValue(const std::string& _value);

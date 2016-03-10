@@ -122,6 +122,7 @@ namespace ewol {
 				 */
 				virtual void subWidgetUnLink(int32_t _colId, int32_t _rowId);
 			private:
+				// TODO : property
 				ivec2 m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
@@ -136,12 +137,12 @@ namespace ewol {
 				const ivec2& getBorderSize() {
 					return m_borderSize;
 				};
-			public: // Derived function
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay();
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& pos);
-				virtual void onChangeSize();
-				virtual void calculateMinMaxSize();
+			public:
+				virtual void systemDraw(const ewol::DrawProperty& _displayProp) override;
+				virtual void onRegenerateDisplay() override;
+				virtual ewol::WidgetShared getWidgetAtPos(const vec2& pos) override;
+				virtual void onChangeSize() override;
+				virtual void calculateMinMaxSize() override;
 		};
 	};
 };

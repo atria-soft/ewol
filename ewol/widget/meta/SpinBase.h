@@ -82,7 +82,7 @@ namespace ewol {
 				 * @param[in] _mode The mode to display the elements
 				 */
 				SpinBase();
-				void init();
+				void init() override;
 			public:
 				/**
 				 * @brief Destructor
@@ -93,8 +93,8 @@ namespace ewol {
 				ewol::widget::ButtonShared m_widgetButtonDown;
 				ewol::widget::ButtonShared m_widgetButtonUp;
 				virtual void updateGui();
-			public: // Derived function
-				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+			public:
+				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
 			protected:
 				virtual void onChangePropertySpinMode();
 				virtual void onChangePropertyShape();

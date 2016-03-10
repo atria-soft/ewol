@@ -53,8 +53,8 @@ namespace ewol {
 				void optionClear();
 				void optionAdd(int32_t _value, std::string _name);
 			protected:
-				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
-				virtual void updateGui();
+				bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
+				void updateGui() override;
 			protected:
 				void onCallbackOpenMenu();
 				void onCallbackLabelPressed(int32_t _value);

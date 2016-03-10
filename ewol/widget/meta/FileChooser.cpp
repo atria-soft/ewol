@@ -145,7 +145,7 @@ void ewol::widget::FileChooser::onChangePropertyPath() {
 
 void ewol::widget::FileChooser::onChangePropertyFile() {
 	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:entry-file", "value", propertyFile);
-	updateCurrentFolder();
+	//updateCurrentFolder();
 }
 
 void ewol::widget::FileChooser::onChangePropertyLabelTitle() {

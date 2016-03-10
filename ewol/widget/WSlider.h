@@ -67,12 +67,12 @@ namespace ewol {
 				 * @param[in] _widgetName Name of the subwidget name
 				 */
 				void subWidgetSelectSet(const std::string& _widgetName);
-			public: // Derived function
-				virtual void onChangeSize();
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay();
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
-				virtual void periodicCall(const ewol::event::Time& _event);
+			public:
+				void onChangeSize() override;
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
+				void onRegenerateDisplay() override;
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				void periodicCall(const ewol::event::Time& _event) override;
 			protected:
 				virtual void onChangePropertySelectWidget();
 				virtual void onChangePropertyTransitionMode();

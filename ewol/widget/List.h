@@ -26,7 +26,7 @@ namespace ewol {
 				List();
 			public:
 				virtual ~List();
-				virtual void calculateMinMaxSize();
+				void calculateMinMaxSize() override;
 				void setLabel(std::string _newLabel);
 			// drawing capabilities ....
 			private:
@@ -76,13 +76,13 @@ namespace ewol {
 				 * @param[in] _id Id of the raw that might be visible.
 				 */
 				void setRawVisible(int32_t _id);
-			protected: // Derived function
-				virtual void onGetFocus();
-				virtual void onLostFocus();
-				virtual void onDraw();
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
+			protected:
+				void onGetFocus() override;
+				void onLostFocus() override;
+				void onDraw() override;
+			public:
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
 		};
 	};
 };

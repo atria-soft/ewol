@@ -44,27 +44,26 @@ namespace ewol {
 				 * @param[in] _shaperName The new shaper filename.
 				 */
 				ButtonColor();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(ButtonColor, "ButtonColor");
 				/**
 				 * @brief Main destructor.
 				 */
 				virtual ~ButtonColor();
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void calculateMinMaxSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
+			protected:
+				void onDraw() override;
+			public:
+				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
 				 * @param[in] _newStatusId new state
 				 */
 				void changeStatusIn(int32_t _newStatusId);
-				// Derived function
-				virtual void periodicCall(const ewol::event::Time& _event);
+				void periodicCall(const ewol::event::Time& _event) override;
 				// Callback function:
 				void onCallbackColorChange(const etk::Color<>& _color);
 			protected:

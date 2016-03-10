@@ -514,8 +514,8 @@ namespace ewol {
 			 * @return the type of the cursor.
 			 */
 			virtual enum gale::context::cursor getCursor();
-		public: // Derived function
-			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+		public:
+			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  ==> this force the system to recalculate all the widget positions

@@ -73,14 +73,14 @@ namespace ewol {
 				 * @param[IN] the new requested color.
 				 */
 				void setBackgroundColor(const etk::Color<float>& _color);
-			protected: // Derived function
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
+			protected:
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
 			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual void onChangeSize();
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
-				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
-				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
+				void onRegenerateDisplay() override;
+				void onChangeSize() override;
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
+				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
 				void setTitle(const std::string& _title);
 			public:
 				enum popUpMessageType {

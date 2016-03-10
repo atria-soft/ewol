@@ -33,12 +33,12 @@ namespace ewol {
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
 				vec2 m_currentUserPos;
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void calculateMinMaxSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
+			protected:
+				void onDraw() override;
+			public:
+				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
 			protected:
 				virtual void onChangePropertyValue();
 		};

@@ -24,7 +24,7 @@ namespace ewol {
 				 * @brief Constructor.
 				 */
 				Worker();
-				void init();
+				void init() override;
 			public:
 				/**
 				 * @brief Factory
@@ -35,7 +35,7 @@ namespace ewol {
 				 */
 				virtual ~Worker();
 			public:
-				virtual void destroy();
+				void destroy() override;
 		};
 	}
 }

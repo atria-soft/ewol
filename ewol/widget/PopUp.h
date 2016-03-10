@@ -34,7 +34,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				PopUp();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(PopUp, "PopUp");
 				/**
@@ -43,18 +43,18 @@ namespace ewol {
 				virtual ~PopUp();
 			protected:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void periodicCall(const ewol::event::Time& _event);
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay();
-				virtual void onChangeSize();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
 			protected:
-				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
-				virtual void onStopAnnimation();
+				void onDraw() override;
+			public:
+				void periodicCall(const ewol::event::Time& _event) override;
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
+				void onRegenerateDisplay() override;
+				void onChangeSize() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+			protected:
+				bool onStartAnnimation(enum ewol::Widget::annimationMode _mode) override;
+				void onStopAnnimation() override;
 			protected:
 				virtual void onChangePropertyShape();
 				virtual void onChangePropertyLockExpand();

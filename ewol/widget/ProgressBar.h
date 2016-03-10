@@ -30,17 +30,17 @@ namespace ewol {
 				eproperty::Value<etk::Color<>> propertyTextColorBgOff; //!< bar color disable
 			protected:
 				ProgressBar();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(ProgressBar, "ProgressBar");
 				virtual ~ProgressBar();
 			private:
 				ewol::compositing::Drawing m_draw; // basic drawing element
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual void calculateMinMaxSize();
+			protected:
+				void onDraw() override;
+			public:
+				void onRegenerateDisplay() override;
+				void calculateMinMaxSize() override;
 			protected:
 				virtual void onChangePropertyValue();
 				virtual void onChangePropertyTextColorFg();

@@ -33,7 +33,7 @@ namespace ewol {
 				eproperty::Value<etk::Color<>> propertyValue;
 			protected:
 				ColorChooser();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
 				virtual ~ColorChooser();

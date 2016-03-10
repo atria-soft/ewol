@@ -45,7 +45,7 @@ namespace ewol {
 				std::vector<ewol::widget::elementPL *> m_list;
 			protected:
 				ParameterList();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(ParameterList, "ParameterList");
 				virtual ~ParameterList();
@@ -68,14 +68,14 @@ namespace ewol {
 				void menuClear();
 				void menuSeparator();
 				
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void calculateMinMaxSize();
-			protected: // Derived function
-				virtual void onGetFocus();
-				virtual void onLostFocus();
-				virtual void onDraw();
+			public:
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				void calculateMinMaxSize() override;
+			protected:
+				void onGetFocus() override;
+				void onLostFocus() override;
+				void onDraw() override;
 		};
 	};
 };

@@ -46,7 +46,7 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				CheckBox();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(CheckBox, "CheckBox");
 				/**
@@ -63,15 +63,15 @@ namespace ewol {
 				 * @brief update the status with the internal satte of the button ...
 				 */
 				void CheckStatus();
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void calculateMinMaxSize();
-				virtual void onChangeSize();
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual bool onEventEntry(const ewol::event::Entry& _event);
-				virtual void periodicCall(const ewol::event::Time& _event);
+			protected:
+				void onDraw() override;
+			public:
+				void calculateMinMaxSize() override;
+				void onChangeSize() override;
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				bool onEventEntry(const ewol::event::Entry& _event) override;
+				void periodicCall(const ewol::event::Time& _event) override;
 			protected:
 				virtual void onChangePropertyShape();
 				virtual void onChangePropertyValue();

@@ -38,7 +38,7 @@ namespace ewol {
 				eproperty::List<enum markPosition> propertyArrawBorder;
 			protected:
 				ContextMenu();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
 				virtual ~ContextMenu();
@@ -54,14 +54,14 @@ namespace ewol {
 			public:
 				void setPositionMarkAuto(const vec2& _origin, const vec2& _size);
 				void setPositionMark(enum markPosition _position, const vec2& _arrowPos);
-			protected: // Derived function
-				virtual void onDraw();
-			public: // Derived function
-				virtual void onRegenerateDisplay();
-				virtual bool onEventInput(const ewol::event::Input& _event);
-				virtual void onChangeSize();
-				virtual void calculateMinMaxSize();
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
+			protected:
+				void onDraw() override;
+			public:
+				void onRegenerateDisplay() override;
+				bool onEventInput(const ewol::event::Input& _event) override;
+				void onChangeSize() override;
+				void calculateMinMaxSize() override;
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
 			protected:
 				virtual void onChangePropertyArrowPos();
 				virtual void onChangePropertyArrawBorder();

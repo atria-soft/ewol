@@ -39,7 +39,7 @@ namespace ewol {
 			protected:
 				bvec2 m_subExpend; //!< reference of the sub element expention requested.
 				// herited function
-				virtual bvec2 canExpand();
+				virtual bvec2 canExpand() override;
 			public:
 				/**
 				 * @brief remove all sub element from the widget.
@@ -90,16 +90,16 @@ namespace ewol {
 				 * @param[in] _newWidget the element pointer.
 				 */
 				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
-			public:// Derived function
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual void onRegenerateDisplay();
-				virtual void onChangeSize();
-				virtual void calculateMinMaxSize();
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos);
-				virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
-				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
-				virtual void setOffset(const vec2& _newVal);
-				virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
+			public:
+				void systemDraw(const ewol::DrawProperty& _displayProp) override;
+				void onRegenerateDisplay() override;
+				void onChangeSize() override;
+				void calculateMinMaxSize() override;
+				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
+				bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
+				void setOffset(const vec2& _newVal) override;
+				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 			protected:
 				virtual void onChangePropertyLockExpand();
 		};
