@@ -18,8 +18,8 @@
 namespace ewol {
 	namespace widget {
 		class PopUp;
-		using PopUpShared = ewol::SharedPtr<ewol::widget::PopUp>;
-		using PopUpWeak = ewol::WeakPtr<ewol::widget::PopUp>;
+		using PopUpShared = ememory::SharedPtr<ewol::widget::PopUp>;
+		using PopUpWeak = ememory::WeakPtr<ewol::widget::PopUp>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

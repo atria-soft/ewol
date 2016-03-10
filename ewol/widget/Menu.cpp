@@ -99,7 +99,9 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			composeString+="</sizer>\n";
 			myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
 		} else {
-			myButton->setSubWidget(ewol::widget::Label::create("value", "<left>" + tmpObject.m_label + "</left>") );
+			ewol::widget::LabelShared label = ewol::widget::Label::create();
+			label->propertyValue.set("<left>" + tmpObject.m_label + "</left>");
+			myButton->setSubWidget(label);
 		}
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
@@ -174,8 +176,9 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 		tmpContext->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition);
 		ewol::widget::SizerShared mySizer;
 		ewol::widget::ButtonShared myButton;
-		mySizer = ewol::widget::Sizer::create("mode", widget::Sizer::modeVert);
+		mySizer = ewol::widget::Sizer::create();
 		if (mySizer != nullptr) {
+			mySizer->propertyMode.set(widget::Sizer::modeVert);
 			mySizer->propertyLockExpand.set(vec2(true,true));
 			mySizer->propertyFill.set(vec2(true,true));
 			// set it in the pop-up-system:

@@ -18,8 +18,8 @@
 namespace ewol {
 	namespace widget {
 		class Label;
-		using LabelShared = ewol::SharedPtr<ewol::widget::Label>;
-		using LabelWeak = ewol::WeakPtr<ewol::widget::Label>;
+		using LabelShared = ememory::SharedPtr<ewol::widget::Label>;
+		using LabelWeak = ememory::WeakPtr<ewol::widget::Label>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -27,6 +27,7 @@ namespace ewol {
 			public: // signals
 				esignal::ISignal<> signalPressed;
 			public: // properties
+				eproperty::Value<bool> propertyAutoTranslate; //!< if at true the data is translate automaticaly translate.
 				eproperty::Value<std::string> propertyValue; //!< decorated text to display.
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
@@ -55,6 +56,7 @@ namespace ewol {
 				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
 			protected:
 				virtual void onChangePropertyValue();
+				virtual void onChangePropertyAutoTranslate();
 		};
 	};
 };

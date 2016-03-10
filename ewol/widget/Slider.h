@@ -17,8 +17,8 @@
 namespace ewol {
 	namespace widget {
 		class Slider;
-		using SliderShared = ewol::SharedPtr<ewol::widget::Slider>;
-		using SliderWeak = ewol::WeakPtr<ewol::widget::Slider>;
+		using SliderShared = ememory::SharedPtr<ewol::widget::Slider>;
+		using SliderWeak = ememory::WeakPtr<ewol::widget::Slider>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

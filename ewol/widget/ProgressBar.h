@@ -17,8 +17,8 @@
 namespace ewol {
 	namespace widget {
 		class ProgressBar;
-		using ProgressBarShared = ewol::SharedPtr<ewol::widget::ProgressBar>;
-		using ProgressBarWeak = ewol::WeakPtr<ewol::widget::ProgressBar>;
+		using ProgressBarShared = ememory::SharedPtr<ewol::widget::ProgressBar>;
+		using ProgressBarWeak = ememory::WeakPtr<ewol::widget::ProgressBar>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

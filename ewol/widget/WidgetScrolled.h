@@ -18,8 +18,8 @@
 namespace ewol {
 	namespace widget {
 		class WidgetScrolled;
-		using WidgetScrolledShared = ewol::SharedPtr<ewol::widget::WidgetScrolled>;
-		using WidgetScrolledWeak = ewol::WeakPtr<ewol::widget::WidgetScrolled>;
+		using WidgetScrolledShared = ememory::SharedPtr<ewol::widget::WidgetScrolled>;
+		using WidgetScrolledWeak = ememory::WeakPtr<ewol::widget::WidgetScrolled>;
 		/**
 		 * @brief Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
 		 */

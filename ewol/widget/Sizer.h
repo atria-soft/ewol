@@ -17,8 +17,8 @@
 namespace ewol {
 	namespace widget {
 		class Sizer;
-		using SizerShared = ewol::SharedPtr<ewol::widget::Sizer>;
-		using SizerWeak = ewol::WeakPtr<ewol::widget::Sizer>;
+		using SizerShared = ememory::SharedPtr<ewol::widget::Sizer>;
+		using SizerWeak = ememory::WeakPtr<ewol::widget::Sizer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

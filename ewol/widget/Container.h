@@ -14,8 +14,8 @@
 namespace ewol {
 	namespace widget {
 		class Container;
-		using ContainerShared = ewol::SharedPtr<ewol::widget::Container>;
-		using ContainerWeak = ewol::WeakPtr<ewol::widget::Container>;
+		using ContainerShared = ememory::SharedPtr<ewol::widget::Container>;
+		using ContainerWeak = ememory::WeakPtr<ewol::widget::Container>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget

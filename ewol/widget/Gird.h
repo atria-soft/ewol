@@ -16,8 +16,8 @@
 namespace ewol {
 	namespace widget {
 		class Gird;
-		using GirdShared = ewol::SharedPtr<ewol::widget::Gird>;
-		using GirdWeak = ewol::WeakPtr<ewol::widget::Gird>;
+		using GirdShared = ememory::SharedPtr<ewol::widget::Gird>;
+		using GirdWeak = ememory::WeakPtr<ewol::widget::Gird>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

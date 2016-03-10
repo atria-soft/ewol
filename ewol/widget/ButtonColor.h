@@ -20,8 +20,8 @@
 namespace ewol {
 	namespace widget {
 		class ButtonColor;
-		using ButtonColorShared = ewol::SharedPtr<ewol::widget::ButtonColor>;
-		using ButtonColorWeak = ewol::WeakPtr<ewol::widget::ButtonColor>;
+		using ButtonColorShared = ememory::SharedPtr<ewol::widget::ButtonColor>;
+		using ButtonColorWeak = ememory::WeakPtr<ewol::widget::ButtonColor>;
 		class ButtonColor : public ewol::Widget {
 			public: // signals
 				esignal::ISignal<etk::Color<>> signalChange;

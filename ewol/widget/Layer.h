@@ -15,8 +15,8 @@
 namespace ewol {
 	namespace widget {
 		class Layer;
-		using LayerShared = ewol::SharedPtr<ewol::widget::Layer>;
-		using LayerWeak = ewol::WeakPtr<ewol::widget::Layer>;
+		using LayerShared = ememory::SharedPtr<ewol::widget::Layer>;
+		using LayerWeak = ememory::WeakPtr<ewol::widget::Layer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

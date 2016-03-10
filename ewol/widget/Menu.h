@@ -28,8 +28,8 @@ namespace ewol {
 				std::string m_message;
 		};
 		class Menu;
-		using MenuShared = ewol::SharedPtr<ewol::widget::Menu>;
-		using MenuWeak = ewol::WeakPtr<ewol::widget::Menu>;
+		using MenuShared = ememory::SharedPtr<ewol::widget::Menu>;
+		using MenuWeak = ememory::WeakPtr<ewol::widget::Menu>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

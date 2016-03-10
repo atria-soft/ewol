@@ -18,8 +18,8 @@
 namespace ewol {
 	namespace widget {
 		class ColorBar;
-		using ColorBarShared = ewol::SharedPtr<ewol::widget::ColorBar>;
-		using ColorBarWeak = ewol::WeakPtr<ewol::widget::ColorBar>;
+		using ColorBarShared = ememory::SharedPtr<ewol::widget::ColorBar>;
+		using ColorBarWeak = ememory::WeakPtr<ewol::widget::ColorBar>;
 		class ColorBar : public ewol::Widget {
 			public: // signals
 				esignal::ISignal<etk::Color<>> signalChange;

@@ -30,7 +30,7 @@ namespace ewol {
 		 * @brief Set the path folder of the translation files
 		 * @param[in] _lib Library name that the path depend
 		 * @param[in] _path ETK generic path (DATA:... or /xxx)
-		 * @param[in] _major This path is the major path (The last loaded, the one wichi overload all)
+		 * @param[in] _major This path is the major path (The last loaded, the one which overload all)
 		 */
 		void addPath(const std::string& _lib, const std::string& _path, bool _major = false);
 		/**
@@ -68,7 +68,7 @@ namespace ewol {
 		 * @param[in] _instance Text to translate.
 		 * @return The tranlated text.
 		 */
-		const std::string& get(const std::string& _instance);
+		std::string get(const std::string& _instance);
 	};
 };
 // Here we define a simple macro to Translate all string simply:

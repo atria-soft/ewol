@@ -21,8 +21,8 @@
 namespace ewol {
 	namespace widget {
 		class Entry;
-		using EntryShared = ewol::SharedPtr<ewol::widget::Entry>;
-		using EntryWeak = ewol::WeakPtr<ewol::widget::Entry>;
+		using EntryShared = ememory::SharedPtr<ewol::widget::Entry>;
+		using EntryWeak = ememory::WeakPtr<ewol::widget::Entry>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief Entry box display :

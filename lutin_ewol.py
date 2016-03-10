@@ -48,8 +48,7 @@ def create(target, module_name):
 		'ewol/Padding.h',
 		'ewol/translate.h',
 		'ewol/DrawProperty.h',
-		'ewol/gravity.h',
-		'ewol/memory.h'
+		'ewol/gravity.h'
 		])
 	
 	# compositing:
@@ -239,9 +238,11 @@ def create(target, module_name):
 	
 	# name of the dependency
 	my_module.add_module_depend([
+	    'elog',
 	    'etk',
 	    'esignal',
 	    'eproperty',
+	    'ememory',
 	    'gale',
 	    'freetype',
 	    'exml',

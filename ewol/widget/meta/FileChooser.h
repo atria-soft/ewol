@@ -15,8 +15,8 @@
 namespace ewol {
 	namespace widget {
 		class FileChooser;
-		using FileChooserShared = ewol::SharedPtr<ewol::widget::FileChooser>;
-		using FileChooserWeak = ewol::WeakPtr<ewol::widget::FileChooser>;
+		using FileChooserShared = ememory::SharedPtr<ewol::widget::FileChooser>;
+		using FileChooserWeak = ememory::WeakPtr<ewol::widget::FileChooser>;
 		/**
 		 *  @brief File Chooser is a simple selector of file for opening, saving, and what you want ...
 		 *  

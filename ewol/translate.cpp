@@ -103,17 +103,44 @@ class LocalInstanceTranslation {
 			return m_language;
 		};
 		
-		const std::string& get(const std::string& _instance) {
+		std::string get(const std::string& _instance) {
 			loadTranslation();
-			if (etk::start_with(_instance, "TRANSLATE:") == false) {
-				return _instance;
+			EWOL_VERBOSE("Request translate: '" << _instance << "'");
+			// find all iterance of '_T{' ... '}'
+			std::string out;
+			auto itOld = _instance.begin();
+			size_t pos = _instance.find("_T{");
+			while (pos != std::string::npos) {
+				out.append(itOld, _instance.begin() + pos);
+				auto it = _instance.begin() + pos + 3;
+				itOld = it;
+				pos = _instance.find("}", pos);
+				if (pos == std::string::npos) {
+					EWOL_WARNING("missing end translation '}' in: '" << _instance << "'");
+					it = _instance.end();
+				} else {
+					it = _instance.begin() + pos;
+				}
+				std::string basicEmptyValue = std::string(itOld, it);
+				auto itTranslate = m_translate.find(basicEmptyValue);
+				if (itTranslate == m_translate.end()) {
+					EWOL_DEBUG("Can not find tranlation : '" << _instance << "'");
+					out += basicEmptyValue;
+				} else {
+					out += itTranslate->second;
+				}
+				if (it != _instance.end()) {
+					itOld = it+1;
+				} else {
+					itOld = it;
+				}
+				pos = _instance.find("_T{", pos);
 			}
-			auto it = m_translate.find(std::string(_instance.begin() + 9, _instance.end()));
-			if (it == m_translate.end()) {
-				EWOL_DEBUG("Can not find tranlation : '" << _instance << "'");
-				return _instance;
+			if (itOld != _instance.end()) {
+				out.append(itOld, _instance.end());
 			}
-			return it->second;
+			EWOL_VERBOSE("      translation: '" << out << "'");
+			return out;
 		};
 	private:
 		void loadTranslation() {
@@ -229,7 +256,7 @@ void ewol::translate::autoDetectLanguage() {
 	#endif
 }
 
-const std::string& ewol::translate::get(const std::string& _instance) {
+std::string ewol::translate::get(const std::string& _instance) {
 	return getInstanceTranslation().get(_instance);
 }
 

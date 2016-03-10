@@ -45,15 +45,15 @@ ewol::widget::FileChooser::FileChooser() :
                      "",
                      &ewol::widget::FileChooser::onChangePropertyFile),
   propertyLabelTitle(this, "title",
-                           "TRANSLATE:FileChooser",
+                           "_T{FileChooser}",
                            "",
                            &ewol::widget::FileChooser::onChangePropertyLabelTitle),
   propertyLabelValidate(this, "label-validate",
-                              "TRANSLATE:Validate",
+                              "_T{Validate}",
                               "",
                               &ewol::widget::FileChooser::onChangePropertyLabelValidate),
   propertyLabelCancel(this, "label-cancel",
-                            "TRANSLATE:Cancel",
+                            "_T{Cancel}",
                             "",
                             &ewol::widget::FileChooser::onChangePropertyLabelCancel) {
 	addObjectType("ewol::widget::FileChooser");
@@ -66,19 +66,19 @@ void ewol::widget::FileChooser::init() {
 	      + "	<sizer mode='vert' lock='true' fill='true' expand='true'>\n"
 	      + "		<sizer mode='hori'>\n"
 	      + "			<checkbox name='[" + etk::to_string(getId()) + "]file-shooser:show-hiden-file'>\n"
-	      + "				<label>" + TRANSLATE("TRANSLATE:ShowHiddenFiles") + "</label>\n"
+	      + "				<label>_T{ShowHiddenFiles}</label>\n"
 	      + "			</checkbox>\n"
 	      + "			<spacer expand='true,false'/>\n"
 	      + "			<button name='[" + etk::to_string(getId()) + "]file-shooser:button-validate'>\n"
 	      + "				<sizer mode='hori'>\n"
 	      + "					<image src='{ewol}THEME:GUI:Load.edf' fill='true' size='7,7mm' distance-field='true'/>\n"
-	      + "					<label name='[" + etk::to_string(getId()) + "]file-shooser:validate-label'>" + TRANSLATE(propertyLabelValidate) + "</label>\n"
+	      + "					<label name='[" + etk::to_string(getId()) + "]file-shooser:validate-label'>" + *propertyLabelValidate + "</label>\n"
 	      + "				</sizer>\n"
 	      + "			</button>\n"
 	      + "			<button name='[" + etk::to_string(getId()) + "]file-shooser:button-cancel'>\n"
 	      + "				<sizer mode='hori'>\n"
 	      + "					<image src='{ewol}THEME:GUI:Remove.edf' fill='true' size='7,7mm' distance-field='true'/>\n"
-	      + "					<label name='[" + etk::to_string(getId()) + "]file-shooser:cancel-label'>" + TRANSLATE(propertyLabelCancel) + "</label>\n"
+	      + "					<label name='[" + etk::to_string(getId()) + "]file-shooser:cancel-label'>" + *propertyLabelCancel + "</label>\n"
 	      + "				</sizer>\n"
 	      + "			</button>\n"
 	      + "		</sizer>\n"
@@ -109,7 +109,7 @@ void ewol::widget::FileChooser::init() {
 	      + "			<entry name='[" + etk::to_string(getId()) + "]file-shooser:entry-folder' expand='true,false' fill='true,false'/>\n"
 	      + "			<image name='[" + etk::to_string(getId()) + "]file-shooser:img-home' src='{ewol}THEME:GUI:Home.edf' expand='false' size='8,8mm' distance-field='true'/>\n"
 	      + "		</sizer>\n"
-	      + "		<label name='[" + etk::to_string(getId()) + "]file-shooser:title-label'>" + TRANSLATE(propertyLabelTitle) + "</label>\n"
+	      + "		<label name='[" + etk::to_string(getId()) + "]file-shooser:title-label'>" + *propertyLabelTitle + "</label>\n"
 	      + "	</sizer>\n"
 	      + "</popup>";
 	loadFromString(myDescription);
@@ -149,15 +149,15 @@ void ewol::widget::FileChooser::onChangePropertyFile() {
 }
 
 void ewol::widget::FileChooser::onChangePropertyLabelTitle() {
-	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", TRANSLATE(propertyLabelTitle));
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:title-label", "value", propertyLabelTitle);
 }
 
 void ewol::widget::FileChooser::onChangePropertyLabelValidate() {
-	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", TRANSLATE(propertyLabelValidate));
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:validate-label", "value", propertyLabelValidate);
 }
 
 void ewol::widget::FileChooser::onChangePropertyLabelCancel() {
-	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", TRANSLATE(propertyLabelCancel));
+	propertySetOnWidgetNamed("[" + etk::to_string(getId()) + "]file-shooser:cancel-label", "value", propertyLabelCancel);
 }
 
 void ewol::widget::FileChooser::onCallbackEntryFolderChangeValue(const std::string& _value) {

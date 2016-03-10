@@ -15,7 +15,7 @@
 #include <unordered_map>
 
 #include <ewol/debug.h>
-#include <ewol/memory.h>
+#include <ememory/memory.h>
 #include <eproperty/Interface.h>
 #include <eproperty/Value.h>
 #include <eproperty/Range.h>
@@ -32,12 +32,12 @@ namespace ewol {
 	class Context;
 }
 
-template<class TYPE_OBJECT> static void baseInit(const ewol::SharedPtr<TYPE_OBJECT>& _object) {
+template<class TYPE_OBJECT> static void baseInit(const ememory::SharedPtr<TYPE_OBJECT>& _object) {
 	// end of recurtion
 	return;
 }
 
-template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const ewol::SharedPtr<TYPE_OBJECT>& _object, const std::string& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
+template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const ememory::SharedPtr<TYPE_OBJECT>& _object, const std::string& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
 	eproperty::Property* prop(nullptr);
 	eproperty::PropertyType<TYPE_VAL>* propType(nullptr);
 	if (_object == nullptr) {
@@ -61,17 +61,15 @@ exit_on_error:
 }
 
 #define UN_DECLARE_FACTORY(className) \
-	template<class ... TYPE> static ewol::SharedPtr<className> create(const TYPE& ... _all) = delete;
+	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) = delete;
 
 #define DECLARE_FACTORY(className) \
-	template<class ... TYPE> static ewol::SharedPtr<className> create(const TYPE& ... _all) { \
-		ewol::SharedPtr<className> object(new className()); \
+	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) { \
+		ememory::SharedPtr<className> object(new className()); \
 		if (object == nullptr) { \
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \
 		} \
-		/*object->initNoValue();*/ \
-		/*baseInit(object, std::forward<TYPE>(_all)... ); */ \
 		baseInit(object, _all... ); \
 		object->init(); \
 		if (object->objectHasBeenCorectlyInit() == false) { \
@@ -81,30 +79,40 @@ exit_on_error:
 	}
 
 #define DECLARE_SINGLE_FACTORY(className, uniqueName) \
-	template<class ... TYPE> static ewol::SharedPtr<className> create(const TYPE& ... _all) { \
-		ewol::SharedPtr<className> object; \
-		ewol::SharedPtr<ewol::Object> object2 = getObjectNamed(uniqueName); \
+	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) { \
+		ememory::SharedPtr<className> object; \
+		ememory::SharedPtr<ewol::Object> object2 = getObjectNamed(uniqueName); \
 		if (object2 != nullptr) { \
 			object = std::dynamic_pointer_cast<className>(object2); \
 			if (object == nullptr) { \
-				GALE_CRITICAL("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
+				EWOL_CRITICAL("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
 				return nullptr; \
 			} \
 		} \
 		if (object != nullptr) { \
 			return object; \
 		} \
-		return create("name", std::string(uniqueName), _all...); \
+		object = ememory::SharedPtr<className>(new className()); \
+		if (object == nullptr) { \
+			EWOL_ERROR("Factory error"); \
+			return nullptr; \
+		} \
+		baseInit(object, "name", std::string(uniqueName), _all... ); \
+		object->init(); \
+		if (object->objectHasBeenCorectlyInit() == false) { \
+			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+		} \
+		return object; \
 	}
 
 namespace ewol {
-	using ObjectShared = ewol::SharedPtr<ewol::Object>;
-	using ObjectWeak = ewol::WeakPtr<ewol::Object>;
+	using ObjectShared = ememory::SharedPtr<ewol::Object>;
+	using ObjectWeak = ememory::WeakPtr<ewol::Object>;
 	/**
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every Object to communicate between them.
 	 */
-	class Object : public ewol::EnableSharedFromThis<Object>,
+	class Object : public ememory::EnableSharedFromThis<Object>,
 	               public eproperty::Interface,
 	               public esignal::Interface {
 		public: // Event list
@@ -281,7 +289,7 @@ namespace ewol {
 			 * @brief link on an signal in the subwiget with his name
 			 */
 			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
-				ewol::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
+				ememory::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
 					myObject->_event.connect(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
@@ -289,8 +297,8 @@ namespace ewol {
 				} \
 			} while (false)
 			/*
-			template<class TYPE> void subBind(ewol::SharedPtr<ewol::Object> _obj, void (TYPE::*_func)()) {
-				ewol::SharedPtr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+			template<class TYPE> void subBind(ememory::SharedPtr<ewol::Object> _obj, void (TYPE::*_func)()) {
+				ememory::SharedPtr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
 				if (obj2 == nullptr) {
 					EWOL_ERROR("Can not connect signal ...");
 					return;
@@ -306,7 +314,7 @@ namespace ewol {
  * @brief link on an signal in the global object list with his name
  */
 #define globalBind(_type, _name, _event, _obj, _func, ...) do {\
-	ewol::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
+	ememory::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
@@ -318,7 +326,7 @@ namespace ewol {
  * @brief link on an signal in the subWidget of an object with his name
  */
 #define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
-	ewol::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
+	ememory::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \

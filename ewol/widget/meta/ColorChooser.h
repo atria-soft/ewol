@@ -21,8 +21,8 @@
 namespace ewol {
 	namespace widget {
 		class ColorChooser;
-		using ColorChooserShared = ewol::SharedPtr<ewol::widget::ColorChooser>;
-		using ColorChooserWeak = ewol::WeakPtr<ewol::widget::ColorChooser>;
+		using ColorChooserShared = ememory::SharedPtr<ewol::widget::ColorChooser>;
+		using ColorChooserWeak = ememory::WeakPtr<ewol::widget::ColorChooser>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

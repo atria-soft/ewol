@@ -24,7 +24,7 @@
 ewol::widget::Parameter::Parameter() :
   signalClose(this, "close", ""),
   propertyLabelTitle(this, "title",
-                           "TRANSLATE:Parameter",
+                           "_T{Parameter}",
                            "Title of the parameter interface",
                            &ewol::widget::Parameter::onChangePropertyLabelTitle),
   m_currentIdList(0),
@@ -76,9 +76,9 @@ void ewol::widget::Parameter::init() {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				tmpButton->setSubWidget(ewol::widget::composerGenerateString(
-				        "<sizer mode=\"hori\">\n"
-				        "	<image src=\"{ewol}THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
-				        "	<label>Save</label>\n"
+				        "<sizer mode='hori'>\n"
+				        "	<image src='{ewol}THEME:GUI:Save.svg' expand='true' size='8,8mm'/>\n"
+				        "	<label>_T{Save}</label>\n"
 				        "</sizer>\n"));
 				tmpButton->signalPressed.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackParameterSave);
 				mySizerHori->subWidgetAdd(tmpButton);
@@ -98,9 +98,9 @@ void ewol::widget::Parameter::init() {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				tmpButton->setSubWidget(ewol::widget::composerGenerateString(
-				        "<sizer mode=\"hori\">\n"
-				        "	<image src=\"{ewol}THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
-				        "	<label>Close</label>\n"
+				        "<sizer mode='hori'>\n"
+				        "	<image src='{ewol}THEME:GUI:Remove.svg' expand='true' size='8,8mm'/>\n"
+				        "	<label>_T{Close}</label>\n"
 				        "</sizer>\n"));
 				tmpButton->signalPressed.connect(shared_from_this(), &ewol::widget::Parameter::onCallbackMenuclosed);
 				mySizerHori->subWidgetAdd(tmpButton);
@@ -177,7 +177,7 @@ void ewol::widget::Parameter::init() {
 		if (m_widgetTitle == nullptr) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
-			m_widgetTitle->propertyValue.set(TRANSLATE(propertyLabelTitle));
+			m_widgetTitle->propertyValue.set(propertyLabelTitle);
 			m_widgetTitle->propertyExpand.set(bvec2(true,false));
 			mySizerVert->subWidgetAdd(m_widgetTitle);
 		}
@@ -191,7 +191,7 @@ ewol::widget::Parameter::~Parameter() {
 
 void ewol::widget::Parameter::onChangePropertyLabelTitle() {
 	if (m_widgetTitle != nullptr) {
-		m_widgetTitle->propertyValue.set(TRANSLATE(propertyLabelTitle));
+		m_widgetTitle->propertyValue.set(propertyLabelTitle);
 	}
 }
 

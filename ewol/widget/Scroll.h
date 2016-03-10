@@ -17,8 +17,8 @@
 namespace ewol {
 	namespace widget {
 		class Scroll;
-		using ScrollShared = ewol::SharedPtr<ewol::widget::Scroll>;
-		using ScrollWeak = ewol::WeakPtr<ewol::widget::Scroll>;
+		using ScrollShared = ememory::SharedPtr<ewol::widget::Scroll>;
+		using ScrollWeak = ememory::WeakPtr<ewol::widget::Scroll>;
 		class Scroll : public ewol::widget::Container {
 			public: // properties
 				eproperty::Range<vec2> propertyLimit; //!< Set the limitation of the ratio in the sreen

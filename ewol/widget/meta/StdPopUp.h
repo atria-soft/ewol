@@ -14,8 +14,8 @@
 namespace ewol {
 	namespace widget {
 		class StdPopUp;
-		using StdPopUpShared = ewol::SharedPtr<ewol::widget::StdPopUp>;
-		using StdPopUpWeak = ewol::WeakPtr<ewol::widget::StdPopUp>;
+		using StdPopUpShared = ememory::SharedPtr<ewol::widget::StdPopUp>;
+		using StdPopUpWeak = ememory::WeakPtr<ewol::widget::StdPopUp>;
 		/**
 		 * @brief The std pop up widget is a siple message widget to notify user of some simple things, like:
 		 *

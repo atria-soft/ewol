@@ -58,8 +58,8 @@ namespace ewol {
 			spinPosition_RightRight
 		};
 		class SpinBase;
-		using SpinBaseShared = ewol::SharedPtr<ewol::widget::SpinBase>;
-		using SpinBaseWeak = ewol::WeakPtr<ewol::widget::SpinBase>;
+		using SpinBaseShared = ememory::SharedPtr<ewol::widget::SpinBase>;
+		using SpinBaseWeak = ememory::WeakPtr<ewol::widget::SpinBase>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

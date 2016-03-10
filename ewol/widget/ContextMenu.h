@@ -18,8 +18,8 @@
 namespace ewol {
 	namespace widget {
 		class ContextMenu;
-		using ContextMenuShared = ewol::SharedPtr<ewol::widget::ContextMenu>;
-		using ContextMenuWeak = ewol::WeakPtr<ewol::widget::ContextMenu>;
+		using ContextMenuShared = ememory::SharedPtr<ewol::widget::ContextMenu>;
+		using ContextMenuWeak = ememory::WeakPtr<ewol::widget::ContextMenu>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

@@ -30,8 +30,8 @@ namespace ewol {
 				virtual ~elementPL() {};
 		};
 		class ParameterList;
-		using ParameterListShared = ewol::SharedPtr<ewol::widget::ParameterList>;
-		using ParameterListWeak = ewol::WeakPtr<ewol::widget::ParameterList>;
+		using ParameterListShared = ememory::SharedPtr<ewol::widget::ParameterList>;
+		using ParameterListWeak = ememory::WeakPtr<ewol::widget::ParameterList>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

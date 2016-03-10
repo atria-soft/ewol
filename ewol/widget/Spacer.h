@@ -17,8 +17,8 @@
 namespace ewol {
 	namespace widget {
 		class Spacer;
-		using SpacerShared = ewol::SharedPtr<ewol::widget::Spacer>;
-		using SpacerWeak = ewol::WeakPtr<ewol::widget::Spacer>;
+		using SpacerShared = ememory::SharedPtr<ewol::widget::Spacer>;
+		using SpacerWeak = ememory::WeakPtr<ewol::widget::Spacer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

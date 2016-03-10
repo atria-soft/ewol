@@ -22,8 +22,8 @@ namespace ewol {
 		class Manager;
 		class Windows;
 	};
-	using WidgetShared = ewol::SharedPtr<ewol::Widget>;
-	using WidgetWeak = ewol::WeakPtr<ewol::Widget>;
+	using WidgetShared = ememory::SharedPtr<ewol::Widget>;
+	using WidgetWeak = ememory::WeakPtr<ewol::Widget>;
 };
 #include <gale/context/clipBoard.h>
 #include <gale/key/key.h>
@@ -528,7 +528,7 @@ namespace ewol {
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::SharedPtr<ewol::widget::Windows> getWindows();
+			ememory::SharedPtr<ewol::widget::Windows> getWindows();
 		/*
 		 * Annimation section :
 		 */

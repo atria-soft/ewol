@@ -18,6 +18,10 @@
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :
   signalPressed(this, "pressed", ""),
+  propertyAutoTranslate(this, "auto-translate",
+                              true,
+                              "Translate the String with the marker _{T:xxxxxx}",
+                              &ewol::widget::Label::onChangePropertyAutoTranslate),
   propertyValue(this, "value",
                       "",
                       "displayed value string",
@@ -142,8 +146,15 @@ bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _n
 }
 
 void ewol::widget::Label::onChangePropertyValue() {
-	m_value = etk::to_u32string(propertyValue.get());
+	if (*propertyAutoTranslate == true) {
+		m_value = etk::to_u32string(ewol::translate::get(*propertyValue));
+	} else {
+		m_value = etk::to_u32string(*propertyValue);
+	}
 	markToRedraw();
 	requestUpdateSize();
 }
 
+void ewol::widget::Label::onChangePropertyAutoTranslate() {
+	onChangePropertyValue();
+}

@@ -22,8 +22,8 @@
 namespace ewol {
 	namespace widget {
 		class Parameter;
-		using ParameterShared = ewol::SharedPtr<ewol::widget::Parameter>;
-		using ParameterWeak = ewol::WeakPtr<ewol::widget::Parameter>;
+		using ParameterShared = ememory::SharedPtr<ewol::widget::Parameter>;
+		using ParameterWeak = ememory::WeakPtr<ewol::widget::Parameter>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */

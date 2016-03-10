@@ -17,8 +17,8 @@
 namespace ewol {
 	namespace widget {
 		class Windows;
-		using WindowsShared = ewol::SharedPtr<ewol::widget::Windows>;
-		using WindowsWeak = ewol::WeakPtr<ewol::widget::Windows>;
+		using WindowsShared = ememory::SharedPtr<ewol::widget::Windows>;
+		using WindowsWeak = ememory::WeakPtr<ewol::widget::Windows>;
 		/**
 		 * @brief Windows basic interface
 		 */
