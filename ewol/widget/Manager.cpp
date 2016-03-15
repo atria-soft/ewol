@@ -35,7 +35,6 @@
 #define __class__ "ewol::widget::Manager"
 
 ewol::widget::Manager::Manager() :
-  m_havePeriodic(false),
   m_haveRedraw(true) {
 	EWOL_DEBUG(" == > init Widget-Manager");
 	
@@ -137,28 +136,14 @@ void ewol::widget::Manager::focusRelease() {
 	}
 	m_focusWidgetCurrent = m_focusWidgetDefault;
 	focusWidgetCurrent = m_focusWidgetCurrent.lock();
-	if (nullptr != focusWidgetCurrent) {
+	if (focusWidgetCurrent != nullptr) {
 		EWOL_DEBUG("Set focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->setFocus();
 	}
 }
 
-
 ewol::WidgetShared ewol::widget::Manager::focusGet() {
 	return m_focusWidgetCurrent.lock();
-}
-
-void ewol::widget::Manager::focusRemoveIfRemove(const ewol::WidgetShared& _newWidget) {
-	ewol::WidgetShared focusWidgetDefault = m_focusWidgetDefault.lock();
-	ewol::WidgetShared focusWidgetCurrent = m_focusWidgetCurrent.lock();
-	if (focusWidgetCurrent == _newWidget) {
-		EWOL_WARNING("Release focus when remove widget");
-		focusRelease();
-	}
-	if (focusWidgetDefault == _newWidget) {
-		EWOL_WARNING("Release default focus when remove widget");
-		focusSetDefault(nullptr);
-	}
 }
 
 void ewol::widget::Manager::setCallbackonRedrawNeeded(const std::function<void()>& _func) {
@@ -183,27 +168,28 @@ bool ewol::widget::Manager::isDrawingNeeded() {
 
 // element that generate the list of elements
 void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
-                                             ewol::widget::Manager::creator_tf _pointer) {
-	if (nullptr == _pointer) {
+                                             ewol::widget::Manager::widgetCreatorFunction _pointer) {
+	if (_pointer == nullptr) {
 		return;
 	}
 	//Keep name in lower case :
 	std::string nameLower = etk::tolower(_name);
-	if (true == m_creatorList.exist(nameLower)) {
+	auto it = m_creatorList.find(nameLower);
+	if (it != m_creatorList.end()) {
 		EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
-		m_creatorList[nameLower] = _pointer;
+		it->second = _pointer;
 		return;
 	}
 	EWOL_INFO("Add Creator of a specify widget : " << nameLower);
-	m_creatorList.add(nameLower, _pointer);
+	m_creatorList.insert(make_pair(nameLower, _pointer));
 }
 
 ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
 	std::string nameLower = etk::tolower(_name);
-	if (m_creatorList.exist(nameLower) == true) {
-		ewol::widget::Manager::creator_tf pointerFunction = m_creatorList[nameLower];
-		if (pointerFunction != nullptr) {
-			return pointerFunction();
+	auto it = m_creatorList.find(nameLower);
+	if (it != m_creatorList.end()) {
+		if (it->second != nullptr) {
+			return it->second();
 		}
 	}
 	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);
@@ -212,14 +198,20 @@ ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
 
 bool ewol::widget::Manager::exist(const std::string& _name) {
 	std::string nameLower = etk::tolower(_name);
-	return m_creatorList.exist(nameLower);
+	auto it = m_creatorList.find(nameLower);
+	if (it != m_creatorList.end()) {
+		return false;
+	}
+	return true;
 }
 
 std::string ewol::widget::Manager::list() {
 	std::string tmpVal;
-	for (int32_t iii=0; iii<m_creatorList.size() ; iii++) {
-		tmpVal += m_creatorList.getKey(iii);
-		tmpVal += ",";
+	for (auto &it : m_creatorList) {
+		if (tmpVal.size() != 0) {
+			tmpVal += ",";
+		}
+		tmpVal += it.first;
 	}
 	return tmpVal;
 }

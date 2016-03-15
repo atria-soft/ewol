@@ -96,13 +96,16 @@ void ewol::Widget::onChangeSize() {
 }
 
 bool ewol::Widget::setFocus() {
+	EWOL_VERBOSE("set focus (start) *propertyCanFocus=" << *propertyCanFocus << " m_hasFocus=" << m_hasFocus);
 	if (*propertyCanFocus == true) {
 		if (m_hasFocus == false) {
 			m_hasFocus = true;
 			onGetFocus();
 		}
+		EWOL_VERBOSE("set focus (stop) ret true");
 		return true;
 	}
+	EWOL_VERBOSE("set focus (stop) ret false");
 	return false;
 }
 

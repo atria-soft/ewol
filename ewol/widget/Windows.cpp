@@ -61,13 +61,14 @@ void ewol::widget::Windows::onChangeSize() {
 }
 
 ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
+	EWOL_VERBOSE("Get widget at pos : " << _pos);
 	// calculate relative position
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
-	if (0 < m_popUpWidgetList.size()) {
+	if (m_popUpWidgetList.size() != 0) {
 		return m_popUpWidgetList.back()->getWidgetAtPos(_pos);
 	// otherwise in the normal windows
-	} else if (nullptr != m_subWidget) {
+	} else if (m_subWidget != nullptr) {
 		return m_subWidget->getWidgetAtPos(_pos);
 	}
 	// otherwise the event go to this widget ...
@@ -239,9 +240,11 @@ void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, cons
 }
 
 void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _child) {
+	EWOL_VERBOSE("A child has been removed");
 	auto it = m_popUpWidgetList.begin();
 	while (it != m_popUpWidgetList.end()) {
 		if (*it == _child) {
+			EWOL_VERBOSE("    Find it ...");
 			if (*it == nullptr) {
 				m_popUpWidgetList.erase(it);
 				it = m_popUpWidgetList.begin();
@@ -257,6 +260,7 @@ void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _c
 		++it;
 	}
 	if (m_subWidget == _child) {
+		EWOL_VERBOSE("    Find it ... 2");
 		if (m_subWidget == nullptr) {
 			return;
 		}

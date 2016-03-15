@@ -21,19 +21,32 @@ void ewol::Object::autoDestroy() {
 		EWOL_WARNING("try to auto destroy inside a constructor");
 		return;
 	}
-	EWOL_VERBOSE("Destroy object : [" << getId() << "] type:" << getObjectType());
+	EWOL_VERBOSE("Destroy object: [" << getId() << "] type:" << getObjectType());
 	ewol::ObjectShared parent = m_parent.lock();
 	// TODO : set a signal to do this ...
 	if (parent != nullptr) {
+		EWOL_VERBOSE("Destroy object: Call parrent");
 		parent->requestDestroyFromChild(shared_from_this());
 	}
 	//if no parent ==> noting to do ...
 	m_destroy = true;
 }
 
+bool ewol::Object::objectHasBeenCorectlyInit() {
+	return m_objectHasBeenInit;
+}
+
 void ewol::Object::requestDestroyFromChild(const ewol::ObjectShared& _child) {
 	EWOL_INFO("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
 	EWOL_CRITICAL("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
+}
+
+void ewol::Object::destroy() {
+	autoDestroy();
+}
+
+bool ewol::Object::isDestroyed() const {
+	return m_destroy;
 }
 
 void ewol::Object::setParent(const ewol::ObjectShared& _newParent) {

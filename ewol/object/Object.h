@@ -138,9 +138,7 @@ namespace ewol {
 			 * @brief Destructor
 			 */
 			virtual ~Object();
-			bool objectHasBeenCorectlyInit() {
-				return m_objectHasBeenInit;
-			}
+			bool objectHasBeenCorectlyInit();
 		protected:
 			ewol::ObjectWeak m_parent; //!< Reference on the current parrent.
 			bool m_destroy; //!< Flag to know if the object is requesting has destroy.
@@ -148,28 +146,25 @@ namespace ewol {
 			/**
 			 * @brief Auto-destroy the object
 			 */
-			void autoDestroy();
+			virtual void autoDestroy();
 		public:
 			/**
 			 * @brief Destroy the current object
 			 */
-			virtual void destroy() {
-				autoDestroy();
-			}
+			virtual void destroy();
 			/**
 			 * @brief Check if the current objetc his destroy (in removing)
 			 * @return true The object is removed
 			 * @return false The object is not removed
 			 */
-			bool isDestroyed() const {
-				return m_destroy;
-			}
-		public:
+			bool isDestroyed() const;
+		protected:
 			/**
 			 * @brief Called by a whild that want to remove pointer of itself from the current list of his parrent
 			 * @param[in] _child Object of the child that want to remove itself
 			 */
 			virtual void requestDestroyFromChild(const ewol::ObjectShared& _child);
+		public:
 			/**
 			 * @brief Set the Object has new parrent.
 			 * @param[in] _newParent Object that requesting the parenting
