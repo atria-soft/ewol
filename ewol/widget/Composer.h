@@ -21,6 +21,8 @@ namespace ewol {
 		 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 		 */
 		class Composer : public ewol::widget::Container {
+			public:
+				eproperty::Value<bool> propertyRemoveIfUnderRemove; //!< Remove the composer if sub element request a remove
 			protected:
 				/**
 				 * @brief Constructor
@@ -46,6 +48,8 @@ namespace ewol {
 				 * @return false  == > some error occured
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
+			private:
+				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 		};
 		ewol::WidgetShared composerGenerateString(const std::string& _data = "");
 		ewol::WidgetShared composerGenerateFile(const std::string& _data = "");

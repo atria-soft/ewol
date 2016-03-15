@@ -16,7 +16,8 @@
 #undef __class__
 #define __class__	"ewol::widget::Composer"
 
-ewol::widget::Composer::Composer() {
+ewol::widget::Composer::Composer() :
+  propertyRemoveIfUnderRemove(this, "remove-if-under-remove", true, "Demand the remove iof the widget if the subObject demand a remove") {
 	addObjectType("ewol::widget::Composer");
 	// nothing to do ...
 }
@@ -128,4 +129,12 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 	ewol::widget::Container::loadXML(root);
 	requestUpdateSize();
 	return true;
+}
+
+void ewol::widget::Composer::requestDestroyFromChild(const ewol::ObjectShared& _child) {
+	ewol::widget::Container::requestDestroyFromChild(_child);
+	if (*propertyRemoveIfUnderRemove == true) {
+		EWOL_DEBUG("Child widget remove ==> auto-remove");
+		autoDestroy();
+	}
 }
