@@ -199,7 +199,7 @@ ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
 bool ewol::widget::Manager::exist(const std::string& _name) {
 	std::string nameLower = etk::tolower(_name);
 	auto it = m_creatorList.find(nameLower);
-	if (it != m_creatorList.end()) {
+	if (it == m_creatorList.end()) {
 		return false;
 	}
 	return true;
