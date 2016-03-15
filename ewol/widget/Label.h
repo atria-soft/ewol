@@ -41,6 +41,7 @@ namespace ewol {
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
 				Label();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(Label, "Label");
 				/**

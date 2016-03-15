@@ -44,6 +44,13 @@ ewol::widget::Label::~Label() {
 	
 }
 
+void ewol::widget::Label::init() {
+	ewol::Widget::init();
+	// Force update the value of internal display
+	onChangePropertyValue();
+}
+
+
 void ewol::widget::Label::calculateMinMaxSize() {
 	vec2 tmpMax = propertyMaxSize->getPixel();
 	vec2 tmpMin = propertyMinSize->getPixel();
