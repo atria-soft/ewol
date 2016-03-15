@@ -106,7 +106,13 @@ ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const std::string& 
 		EWOL_ERROR("Can not allocate new button ...");
 		return nullptr;
 	}
-	myButton->setSubWidget(ewol::widget::Label::create("value", _text));
+	ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
+	if (myLabel == nullptr) {
+		EWOL_ERROR("Can not allocate new label ...");
+		return nullptr;
+	}
+	myLabel->propertyValue.set(_text);
+	myButton->setSubWidget(myLabel);
 	if(_autoExit == true) {
 		myButton->signalPressed.connect(shared_from_this(), &ewol::widget::StdPopUp::onCallBackButtonExit);
 	}
