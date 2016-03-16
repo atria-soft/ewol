@@ -17,20 +17,19 @@
 
 appl::Windows::Windows() {
 	addObjectType("appl::Windows");
+	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
 }
 
 void appl::Windows::init() {
 	ewol::widget::Windows::init();
-	setTitle("example Wallpaper");
-	std::shared_ptr<appl::WidgetDisplay> tmpWidget = appl::WidgetDisplay::create();
+	appl::WidgetDisplayShared tmpWidget = appl::WidgetDisplay::create();
 	if (tmpWidget == nullptr) {
 		APPL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
 		setSubWidget(tmpWidget);
-		tmpWidget->setExpand(bvec2(true,true));
-		tmpWidget->setFill(bvec2(true,true));
+		tmpWidget->propertyExpand.set(bvec2(true,true));
+		tmpWidget->propertyFill.set(bvec2(true,true));
 	}
-	setBackgroundColor(etk::Color<float>(0,0,0,0));
 }
 
 appl::Windows::~Windows() {

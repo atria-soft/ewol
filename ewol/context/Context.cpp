@@ -201,7 +201,18 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	m_objectManager.displayListObject();
 	// now All must be removed !!!
 	m_objectManager.unInit();
-	EWOL_INFO(" == > Ewol system destroy		 (END)");
+	EWOL_INFO(" == > Ewol system destroy (END)");
+}
+
+void ewol::Context::onKillDemand(gale::Context& _context) {
+	EWOL_INFO(" == > User demand a destroy (BEGIN)");
+	std::shared_ptr<ewol::context::Application> appl = m_application;
+	if (appl == nullptr) {
+		exit(0);
+		return;
+	}
+	appl->onKillDemand(*this);
+	EWOL_INFO(" == > User demand a destroy (END)");
 }
 
 void ewol::Context::onPointer(enum gale::key::type _type,
@@ -333,106 +344,9 @@ void ewol::Context::onPeriod(int64_t _time) {
 	m_objectManager.timeCall(_time);
 }
 
-#if 0
-bool ewol::Context::OS_Draw(bool _displayEveryTime) {
-	int64_t currentTime = ewol::getTime();
-	// this is to prevent the multiple display at the a high frequency ...
-	m_previousDisplayTime = currentTime;
-	
-	// process the events
-	if (m_displayFps == true) {
-		m_FpsSystemEvent.tic();
-	}
-	bool needRedraw = false;
-	//! Event management section ...
-	{
-		// set the curent interface :
-		processEvents();
-		if (m_initStepId < m_application->getNbStepInit()) {
-			ewol::eSystemMessage *data = new ewol::eSystemMessage();
-			if (data == nullptr) {
-				EWOL_ERROR("allocation error of message");
-			} else {
-				data->TypeMessage = eSystemMessage::msgInit;
-				m_msgSystem.post(data);
-			}
-		}
-		// call all the widget that neded to do something periodicly
-		m_objectManager.timeCall(currentTime);
-		
-		if (m_displayFps == true) {
-			m_FpsSystemEvent.incrementCounter();
-			m_FpsSystemEvent.toc();
-		}
-		//! bool needRedraw = ewol::widgetManager::isDrawingNeeded();
-		needRedraw = m_widgetManager.isDrawingNeeded();
-		// release the curent interface :
-	}
-	bool hasDisplayDone = false;
-	//! drawing section :
-	{
-		// Lock openGl context:
-		gale::openGL::lock();
-		if (m_displayFps == true) {
-			m_FpsSystemContext.tic();
-		}
-		if (nullptr != m_windowsCurrent) {
-			if(    true == needRedraw
-			    || true == _displayEveryTime) {
-				m_resourceManager.updateContext();
-				if (m_displayFps == true) {
-					m_FpsSystemContext.incrementCounter();
-				}
-			}
-		}
-		if (m_displayFps == true) {
-			m_FpsSystemContext.toc();
-			m_FpsSystem.tic();
-		}
-		if (nullptr != m_windowsCurrent) {
-			if(    true == needRedraw
-			    || true == _displayEveryTime) {
-				m_FpsSystem.incrementCounter();
-				m_windowsCurrent->sysDraw();
-				hasDisplayDone = true;
-			}
-		}
-		if (m_displayFps == true) {
-			m_FpsSystem.toc();
-			m_FpsFlush.tic();
-		}
-		if (hasDisplayDone == true) {
-			if (m_displayFps == true) {
-				m_FpsFlush.incrementCounter();
-			}
-			gale::openGL::flush();
-		}
-		if (m_displayFps == true) {
-			m_FpsFlush.toc();
-		}
-		// release open GL Context
-		gale::openGL::unLock();
-	}
-	{
-		// set the curent interface :
-		// release open GL Context
-		gale::openGL::lock();
-		// while The Gui is drawing in OpenGl, we do some not realTime things
-		m_resourceManager.updateContext();
-		// release open GL Context
-		gale::openGL::unLock();
-		m_objectManager.cleanInternalRemoved();
-		m_resourceManager.cleanInternalRemoved();
-		// release the curent interface :
-	}
-	return hasDisplayDone;
-}
-#endif
-
 void ewol::Context::resetIOEvent() {
 	m_input.newLayerSet();
 }
-
 
 void ewol::Context::setWindows(const ewol::widget::WindowsShared& _windows) {
 	EWOL_INFO("set New windows");
@@ -441,8 +355,12 @@ void ewol::Context::setWindows(const ewol::widget::WindowsShared& _windows) {
 	m_widgetManager.focusRelease();
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;
-	// set the new default focus :
+	// set the new default focus:
 	m_widgetManager.focusSetDefault(_windows);
+	// display the title of the Windows:
+	if (m_windowsCurrent != nullptr) {
+		setTitle(m_windowsCurrent->propertyTitle.get());
+	}
 	// request all the widget redrawing
 	forceRedrawAll();
 }
@@ -462,57 +380,5 @@ void ewol::Context::forceRedrawAll() {
 	ivec2 size = getSize();
 	m_windowsCurrent->setSize(vec2(size.x(), size.y()));
 	m_windowsCurrent->onChangeSize();
-}
-/*
-void ewol::Context::OS_Stop() {
-	// set the curent interface :
-	EWOL_INFO("OS_Stop...");
-	if (m_windowsCurrent != nullptr) {
-		m_windowsCurrent->sysOnKill();
-	}
-	// release the curent interface :
-}
-
-void ewol::Context::OS_Suspend() {
-	// set the curent interface :
-	EWOL_INFO("OS_Suspend...");
-	m_previousDisplayTime = -1;
-	if (m_windowsCurrent != nullptr) {
-		m_windowsCurrent->onStateSuspend();
-	}
-	// release the curent interface :
-}
-
-void ewol::Context::OS_Resume() {
-	// set the curent interface :
-	EWOL_INFO("OS_Resume...");
-	m_previousDisplayTime = ewol::getTime();
-	m_objectManager.timeCallResume(m_previousDisplayTime);
-	if (m_windowsCurrent != nullptr) {
-		m_windowsCurrent->onStateResume();
-	}
-	// release the curent interface :
-}
-void ewol::Context::OS_Foreground() {
-	// set the curent interface :
-	EWOL_INFO("OS_Foreground...");
-	if (m_windowsCurrent != nullptr) {
-		m_windowsCurrent->onStateForeground();
-	}
-	// release the curent interface :
-}
-
-void ewol::Context::OS_Background() {
-	// set the curent interface :
-	EWOL_INFO("OS_Background...");
-	if (m_windowsCurrent != nullptr) {
-		m_windowsCurrent->onStateBackground();
-	}
-	// release the curent interface :
-}
-*/
-
-void ewol::Context::stop() {
-	
 }
 

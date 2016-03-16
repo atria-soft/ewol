@@ -19,10 +19,10 @@ namespace appl {
 		protected:
 			Windows() {
 				addObjectType("appl::Windows");
+				propertyTitle.setDirectCheck("test set");
 			}
 			void init() {
 				ewol::widget::Windows::init();
-				setTitle("test set");
 			}
 		public:
 			DECLARE_FACTORY(Windows);

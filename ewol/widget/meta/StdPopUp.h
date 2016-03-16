@@ -27,7 +27,7 @@ namespace ewol {
 		 * 	|                                             |
 		 * 	|                                             |
 		 * 	|            +-------------------+            |
-		 * 	|            | Erreur:           |            |
+		 * 	|            | Title:            |            |
 		 * 	|            |                   |            |
 		 * 	|            | Message to diplay |            |
 		 * 	|            | to user           |            |
@@ -42,7 +42,8 @@ namespace ewol {
 		 */
 		class StdPopUp : public ewol::widget::PopUp {
 			public: // properties:
-				// TODO: ...
+				eproperty::Value<std::string> propertyTitle; //!< Title of the pop-up
+				eproperty::Value<std::string> propertyComment; //!< comment in the pop-up (can be decorated text)
 			protected:
 				/**
 				 * @brief std-pop-up constructor.
@@ -57,20 +58,15 @@ namespace ewol {
 				virtual ~StdPopUp();
 			protected:
 				ewol::widget::LabelShared m_title; //!< Title Label widget
-			public:
 				/**
-				 * @brief Set the title string.
-				 * @param[in] _text Decorated text to diplay in title.
+				 * @brief property callback when request a change of the title.
 				 */
-				void setTitle(const std::string& _text);
-			protected:
+				void onChangePropertyTitle();
 				ewol::widget::LabelShared m_comment; //!< Comment label widget
-			public:
 				/**
-				 * @brief Set the commentary string.
-				 * @param[in] _text Decorated text to diplay in Comment.
+				 * @brief property callback when request a change of the Comment.
 				 */
-				void setComment(const std::string& _text);
+				void onChangePropertyComment();
 			protected:
 				ewol::widget::SizerShared m_subBar; //!< subwidget bar containing all the button.
 			public:
@@ -79,8 +75,8 @@ namespace ewol {
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
 				ewol::widget::ButtonShared addButton(const std::string& _text, bool _autoExit=false);
-			public: // callback function
-				void onCallBackButtonExit();
+			public:
+				virtual void onCallBackButtonExit();
 		};
 	}
 }

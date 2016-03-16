@@ -63,22 +63,22 @@ void ewol::resource::FontFreeType::init(const std::string& _fontName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::FontBase::init(_fontName);
 	etk::FSNode myfile(_fontName);
-	if (false == myfile.exist()) {
+	if (myfile.exist() == false) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
 	}
 	m_FileSize = myfile.fileSize();
-	if (0 == m_FileSize) {
+	if (m_FileSize == 0) {
 		EWOL_ERROR("This file is empty : " << myfile);
 		return;
 	}
-	if (false == myfile.fileOpenRead()) {
+	if (myfile.fileOpenRead() == false) {
 		EWOL_ERROR("Can not open the file : " << myfile);
 		return;
 	}
 	// allocate data
 	m_FileBuffer = new FT_Byte[m_FileSize];
-	if (nullptr == m_FileBuffer) {
+	if (m_FileBuffer == nullptr) {
 		EWOL_ERROR("Error Memory allocation size=" << _fontName);
 		return;
 	}

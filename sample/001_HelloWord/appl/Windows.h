@@ -10,6 +10,9 @@
 #include <ewol/widget/Windows.h>
 
 namespace appl {
+	class Windows;
+	using WindowsShared = ememory::SharedPtr<appl::Windows>;
+	using WindowsWeak = ememory::WeakPtr<appl::Windows>;
 	class Windows : public ewol::widget::Windows {
 		protected:
 			Windows();

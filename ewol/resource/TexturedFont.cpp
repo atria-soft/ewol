@@ -99,7 +99,7 @@ void ewol::resource::TexturedFont::init(const std::string& _fontName) {
 		#if defined(__TARGET_OS__Android)
 			folderList.push_back("ROOT:system/fonts");
 		#elif defined(__TARGET_OS__Linux)
-			folderList.push_back("ROOT:usr/share/fonts/truetype");
+			folderList.push_back("ROOT:usr/share/fonts");
 		#endif
 	}
 	std::string applicationBaseFont = ewol::getContext().getFontDefault().getFolder();

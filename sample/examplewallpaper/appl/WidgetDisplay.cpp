@@ -18,12 +18,12 @@
 
 appl::WidgetDisplay::WidgetDisplay() {
 	addObjectType("appl::WidgetDisplay");
+	propertyCanFocus.setDirectCheck(true);
 }
 
 void appl::WidgetDisplay::init() {
 	ewol::Widget::init();
 	m_compositing.setSource("DATA:SnowFlake.svg", ivec2(128,128));
-	setCanHaveFocus(true);
 	periodicCallEnable();
 	for (int32_t iii=0; iii<250 ; ++iii) {
 		m_elements.push_back(appl::WidgetDisplay::Element());

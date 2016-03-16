@@ -16,16 +16,16 @@
 
 appl::Windows::Windows() {
 	addObjectType("appl::Windows");
+	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
 }
 void appl::Windows::init() {
 	ewol::widget::Windows::init();
-	setTitle("example 001_HelloWorld");
-	std::shared_ptr<ewol::widget::Label> tmpWidget = ewol::widget::Label::create();
+	ewol::widget::LabelShared tmpWidget = ewol::widget::Label::create();
 	if (tmpWidget == nullptr) {
 		APPL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
-		tmpWidget->setLabel("Hello <font color=\"blue\">World</font>");
-		tmpWidget->setExpand(bvec2(true,true));
+		tmpWidget->propertyValue.set("Hello <font color='blue'>World</font>");
+		tmpWidget->propertyExpand.set(bvec2(true,true));
 		setSubWidget(tmpWidget);
 	}
 }

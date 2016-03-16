@@ -7,11 +7,14 @@
  */
 #pragma once
 
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Image.h>
 
 namespace appl {
+	class WidgetDisplay;
+	using WidgetDisplayShared = ememory::SharedPtr<appl::WidgetDisplay>;
+	using WidgetDisplayWeak = ememory::WeakPtr<appl::WidgetDisplay>;
 	class WidgetDisplay : public ewol::Widget {
 		private:
 			class Element {

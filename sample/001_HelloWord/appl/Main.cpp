@@ -20,9 +20,16 @@
 
 class MainApplication : public ewol::context::Application {
 	public:
-		bool init(ewol::Context& _context, size_t _initId) {
-			APPL_INFO("==> Init APPL (START) [" << ewol::getBoardType() << "] (" << ewol::getCompilationMode() << ")");
-			
+		void onCreate(ewol::Context& _context) override {
+			APPL_INFO(" == > CREATE ... " << PROJECT_NAME << "  v" << APPL_VERSION << " (START) [" << ewol::getBoardType() << "] (" << ewol::getCompilationMode() << ") (BEGIN)");
+			for( int32_t iii=0 ; iii<_context.getCmd().size(); iii++) {
+				std::string tmpppp = _context.getCmd().get(iii);
+				if (    tmpppp == "-h"
+				     || tmpppp == "--help") {
+					APPL_INFO("  -h/--help display this help" );
+					exit(0);
+				}
+			}
 			// TODO : Remove this : Move if in the windows properties
 			_context.setSize(vec2(800, 600));
 			
@@ -30,17 +37,21 @@ class MainApplication : public ewol::context::Application {
 			_context.getFontDefault().setUseExternal(true);
 			_context.getFontDefault().set("FreeSerif;DejaVuSansMono", 19);
 			
-			std::shared_ptr<ewol::widget::Windows> basicWindows = appl::Windows::create();
+			ewol::widget::WindowsShared basicWindows = appl::Windows::create();
 			// create the specific windows
 			_context.setWindows(basicWindows);
-			APPL_INFO("==> Init APPL (END)");
-			return true;
+			APPL_INFO("==> CREATE ... " PROJECT_NAME " (END)");
 		}
 		
-		void unInit(ewol::Context& _context) {
-			APPL_INFO("==> Un-Init APPL (START)");
+		void onStart(ewol::Context& _context) override {
+			APPL_INFO("==> START ... " PROJECT_NAME " (BEGIN)");
 			// nothing to do ...
-			APPL_INFO("==> Un-Init APPL (END)");
+			APPL_INFO("==> START ... " PROJECT_NAME " (END)");
+		}
+		void onStop(ewol::Context& _context) override {
+			APPL_INFO("==> STOP ... " PROJECT_NAME " (START)");
+			// nothing to do ...
+			APPL_INFO("==> STOP ... " PROJECT_NAME " (END)");
 		}
 };
 

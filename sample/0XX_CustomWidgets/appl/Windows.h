@@ -11,9 +11,12 @@
 #include <ewol/widget/Composer.h>
 
 namespace appl {
+	class Windows;
+	using WindowsShared = ememory::SharedPtr<appl::Windows>;
+	using WindowsWeak = ememory::WeakPtr<appl::Windows>;
 	class Windows : public ewol::widget::Windows {
 		private:
-			std::shared_ptr<ewol::widget::Composer> m_composer;
+			ewol::widget::ComposerShared m_composer;
 		protected:
 			Windows();
 			void init();

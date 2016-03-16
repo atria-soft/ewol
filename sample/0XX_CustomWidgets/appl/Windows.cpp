@@ -21,12 +21,13 @@ static const char* const g_eventChangeValues = "appl-change-value";
 static const char* const g_eventAutoMode = "appl-change-auto";
 
 appl::Windows::Windows() :
-  m_composer(NULL) {
+  m_composer(nullptr) {
 	addObjectType("appl::Windows");
+	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
 }
 
 void appl::Windows::init() {
-	setTitle("example 001_HelloWord");
+	ewol::widget::Windows::init();
 	std::string composition = std::string("");
 	composition += "<sizer mode='vert'>\n";
 	composition += "	<sizer mode='hori'>\n";
@@ -44,11 +45,12 @@ void appl::Windows::init() {
 	composition += "	<VectorDisplay name='displayer' expand='true' fill='true'/>\n";
 	composition += "</sizer>\n";
 	
-	m_composer = ewol::widget::Composer::create(ewol::widget::Composer::String, composition);
-	if (m_composer == NULL) {
+	m_composer = ewol::widget::Composer::create();
+	if (m_composer == nullptr) {
 		APPL_CRITICAL(" An error occured ... in the windows creatrion ...");
 		return;
 	}
+	m_composer->loadFromString(composition);
 	setSubWidget(m_composer);
 	subBind(ewol::widget::Button, "bt-change", signalPressed, shared_from_this(), &appl::Windows::onCallbackChangeValues);
 	subBind(ewol::widget::Button, "bt-auto", signalPressed, shared_from_this(), &appl::Windows::onCallbackAutoMode);
@@ -60,14 +62,14 @@ void appl::Windows::onCallbackChangeValues() {
 		tmp.push_back(etk::tool::frand(-1.0, 1.0));
 	}
 	std::shared_ptr<appl::widget::VectorDisplay> tmpDisp = std::dynamic_pointer_cast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
-	if (tmpDisp != NULL) {
+	if (tmpDisp != nullptr) {
 		tmpDisp->setValue(tmp);
 	}
 }
 
 void appl::Windows::onCallbackAutoMode() {
 	std::shared_ptr<appl::widget::VectorDisplay> tmpDisp = std::dynamic_pointer_cast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
-	if (tmpDisp != NULL) {
+	if (tmpDisp != nullptr) {
 		tmpDisp->ToggleAuto();
 	}
 }

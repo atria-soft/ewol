@@ -66,7 +66,7 @@ class MainApplication : public ewol::context::Application {
 			_context.setWindows(basicWindows);
 			if (basicWindows == nullptr) {
 				APPL_ERROR("Can not allocate the basic windows");
-				_context.stop();
+				_context.exit(-1);
 				return;
 			}
 			

@@ -20,20 +20,20 @@
 #undef __class__
 #define __class__ "Windows"
 
-//list of local events : 
-extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
-
-
 ewol::widget::Windows::Windows() :
-  m_colorProperty(nullptr),
+  propertyColorConfiguration(this, "file-color", "{ewol}THEME:COLOR:Windows.json", "color file link on the theme", &ewol::widget::Windows::onChangePropertyColor),
+  propertyTitle(this, "title", "No title", "Title of the windows", &ewol::widget::Windows::onChangePropertyTitle),
+  m_resourceColor(nullptr),
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
-	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Windows.json");
-	if (m_colorProperty != nullptr) {
-		m_colorBg = m_colorProperty->request("background");
-	}
 	propertyCanFocus.setDirectCheck(true);
 	//KeyboardShow(KEYBOARD_MODE_CODE);
+}
+
+
+void ewol::widget::Windows::init() {
+	ewol::Widget::init();
+	onChangePropertyColor();
 }
 
 ewol::widget::Windows::~Windows() {
@@ -107,7 +107,7 @@ void ewol::widget::Windows::sysDraw() {
 }
 
 void ewol::widget::Windows::onRegenerateDisplay() {
-	if (nullptr != m_subWidget) {
+	if (m_subWidget != nullptr) {
 		m_subWidget->onRegenerateDisplay();
 	}
 	for (auto &it : m_popUpWidgetList) {
@@ -126,8 +126,8 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 	// clear the screen with transparency ...
 	etk::Color<float> colorBg(0.5, 0.5, 0.5, 0.5);
-	if (m_colorProperty != nullptr) {
-		colorBg = m_colorProperty->get(m_colorBg);
+	if (m_resourceColor != nullptr) {
+		colorBg = m_resourceColor->get(m_colorBg);
 	}
 	gale::openGL::clearColor(colorBg);
 	gale::openGL::clear(   gale::openGL::clearFlag_colorBuffer
@@ -199,44 +199,20 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	m_popUpWidgetList.pop_back();
 }
 
-void ewol::widget::Windows::setBackgroundColor(const etk::Color<float>& _color) {
-	if (m_backgroundColor != _color) {
-		m_backgroundColor = _color;
-		markToRedraw();
+void ewol::widget::Windows::onChangePropertyColor() {
+	m_resourceColor = ewol::resource::ColorFile::create(*propertyColorConfiguration);
+	if (m_resourceColor != nullptr) {
+		m_colorBg = m_resourceColor->request("background");
 	}
 }
 
-void ewol::widget::Windows::setTitle(const std::string& _title) {
-	// TODO : remove this ...
-	std::string title = _title;
-	getContext().setTitle(title);
-}
-
-
-void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message) {
-	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();
-	if (tmpPopUp == nullptr) {
-		EWOL_ERROR("Can not create a simple pop-up");
-		return;
+void ewol::widget::Windows::onChangePropertyTitle() {
+	ewol::Context& context = getContext();
+	if (context.getWindows() == shared_from_this()) {
+		context.setTitle(*propertyTitle);
+	} else {
+		EWOL_INFO("Set title is delayed ...");
 	}
-	switch(_type) {
-		case messageTypeInfo:
-			tmpPopUp->setTitle("<bold>Info</bold>");
-			break;
-		case messageTypeWarning:
-			tmpPopUp->setTitle("<bold><font color=\"orange\">Warning</font></bold>");
-			break;
-		case messageTypeError:
-			tmpPopUp->setTitle("<bold><font color=\"red\">Error</font></bold>");
-			break;
-		case messageTypeCritical:
-			tmpPopUp->setTitle("<bold><font colorBg=\"red\">Critical</font></bold>");
-			break;
-	}
-	tmpPopUp->setComment(_message);
-	tmpPopUp->addButton("close", true);
-	tmpPopUp->propertyCloseOutEvent.set(true);
-	popUpWidgetPush(tmpPopUp);
 }
 
 void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _child) {
@@ -295,9 +271,4 @@ ewol::ObjectShared ewol::widget::Windows::getSubObjectNamed(const std::string& _
 	return nullptr;
 }
 
-void ewol::widget::Windows::sysOnKill() {
-	if (onKill() == true) {
-		getContext().stop();
-	}
-}
 

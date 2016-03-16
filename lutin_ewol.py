@@ -79,6 +79,7 @@ def create(target, module_name):
 	my_module.add_src_file([
 		'ewol/context/ConfigFont.cpp',
 		'ewol/context/Context.cpp',
+		'ewol/context/Application.cpp',
 		'ewol/context/InputManager.cpp'
 		])
 	my_module.add_header_file([
@@ -218,6 +219,14 @@ def create(target, module_name):
 		'ewol/widget/List.h',
 		'ewol/widget/Select.h',
 		'ewol/widget/Spin.h'
+		])
+	
+	# tools:
+	my_module.add_src_file([
+		'ewol/tools/message.cpp'
+		])
+	my_module.add_header_file([
+		'ewol/tools/message.h'
 		])
 	
 	my_module.copy_path('data/theme/shape/square/*','theme/shape/square')

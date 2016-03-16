@@ -35,7 +35,9 @@ def create(target, module_name):
 		])
 	my_module.add_module_depend(['ewol'])
 	my_module.compile_flags('c++', [
-		"-DPROJECT_NAME=\"\\\""+my_module.name+"\\\"\""])
+		"-DPROJECT_NAME=\"\\\""+my_module.name+"\\\"\"",
+		"-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
+		])
 	my_module.add_path(tools.get_current_path(__file__))
 	return my_module
 

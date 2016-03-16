@@ -17,6 +17,14 @@
 #define __class__ "ewol::StdPopUp"
 
 ewol::widget::StdPopUp::StdPopUp() :
+  propertyTitle(this, "title",
+                      "<bold>Message</bold>",
+                      "Title of the pop-up",
+                      &ewol::widget::StdPopUp::onChangePropertyTitle),
+  propertyComment(this, "comment",
+                        "No Label",
+                        "Comment of the pop-up",
+                        &ewol::widget::StdPopUp::onChangePropertyComment),
   m_title(nullptr),
   m_comment(nullptr),
   m_subBar(nullptr) {
@@ -54,7 +62,7 @@ void ewol::widget::StdPopUp::init() {
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_comment = ewol::widget::Label::create();
-			m_comment->propertyValue.set("No Label");
+			m_comment->propertyValue.set(*propertyComment);
 			m_comment->propertyExpand.set(bvec2(true,true));
 			mySizerVert->subWidgetAdd(m_comment);
 		
@@ -70,7 +78,7 @@ void ewol::widget::StdPopUp::init() {
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_title = ewol::widget::Label::create();
-			m_title->propertyValue.set("<bold>Message</bold>");
+			m_title->propertyValue.set(*propertyTitle);
 			m_title->propertyExpand.set(bvec2(true,false));
 			m_title->propertyFill.set(bvec2(true,true));
 			mySizerVert->subWidgetAdd(m_title);
@@ -80,19 +88,19 @@ ewol::widget::StdPopUp::~StdPopUp() {
 	
 }
 
-void ewol::widget::StdPopUp::setTitle(const std::string& _text) {
+void ewol::widget::StdPopUp::onChangePropertyTitle() {
 	if (m_title == nullptr) {
 		return;
 	}
-	m_title->propertyValue.set(_text);
+	m_title->propertyValue.set(*propertyTitle);
 	markToRedraw();
 }
 
-void ewol::widget::StdPopUp::setComment(const std::string& _text) {
+void ewol::widget::StdPopUp::onChangePropertyComment() {
 	if (m_comment == nullptr) {
 		return;
 	}
-	m_comment->propertyValue.set(_text);
+	m_comment->propertyValue.set(*propertyComment);
 	markToRedraw();
 }
 

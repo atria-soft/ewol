@@ -64,33 +64,29 @@ namespace ewol {
 		private:
 			ewol::context::InputManager m_input;
 		public: // herited function:
-			virtual void onCreate(gale::Context& _context);
-			virtual void onStart(gale::Context& _context);
-			virtual void onResume(gale::Context& _context);
-			virtual void onRegenerateDisplay(gale::Context& _context);
-			virtual void onDraw(gale::Context& _context);
-			virtual void onPause(gale::Context& _context);
-			virtual void onStop(gale::Context& _context);
-			virtual void onDestroy(gale::Context& _context);
-			virtual void onPointer(enum gale::key::type _type,
-			                       int32_t _pointerID,
-			                       const vec2& _pos,
-			                       gale::key::status _state);
-			virtual void onKeyboard(const gale::key::Special& _special,
-			                        enum gale::key::keyboard _type,
-			                        char32_t _value,
-			                        gale::key::status _state);
-			virtual void onClipboardEvent(enum gale::context::clipBoard::clipboardListe _clipboardId);
-			
+			void onCreate(gale::Context& _context) override;
+			void onStart(gale::Context& _context) override;
+			void onResume(gale::Context& _context) override;
+			void onRegenerateDisplay(gale::Context& _context) override;
+			void onDraw(gale::Context& _context) override;
+			void onPause(gale::Context& _context) override;
+			void onStop(gale::Context& _context) override;
+			void onDestroy(gale::Context& _context) override;
+			void onKillDemand(gale::Context& _context) override;
+			void onPointer(enum gale::key::type _type,
+			               int32_t _pointerID,
+			               const vec2& _pos,
+			               gale::key::status _state) override;
+			void onKeyboard(const gale::key::Special& _special,
+			                enum gale::key::keyboard _type,
+			                char32_t _value,
+			                gale::key::status _state) override;
+			void onClipboardEvent(enum gale::context::clipBoard::clipboardListe _clipboardId) override;
 		public:
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
 			void resetIOEvent();
-			/**
-			 * @brief The application request that the Window will be killed
-			 */
-			virtual void stop();
 		private:
 			ewol::widget::WindowsShared m_windowsCurrent; //!< curent displayed windows
 		public:
@@ -126,46 +122,7 @@ namespace ewol {
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */
 			void inputEventUnGrabPointer();
-			// herited function:
-			virtual void onResize(const ivec2& _size);
-			#if 0
-			/**
-			 * @brief Inform the Gui that we want to have a copy of the clipboard
-			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
-			 */
-			virtual void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID);
-			/**
-			 * @brief Inform the Gui that we are the new owner of the clipboard
-			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
-			 */
-			virtual void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID);
-			/**
-			 * @brief Call by the OS when a clipboard arrive to US (previously requested by a widget)
-			 * @param[in] Id of the clipboard
-			 */
-			void OS_ClipBoardArrive(enum ewol::context::clipBoard::clipboardListe _clipboardID);
-			#endif
-			
-			#if 0
-			/**
-			 * @brief force the screen orientation (availlable on portable elements ...
-			 * @param[in] _orientation Selected orientation.
-			 */
-			virtual void forceOrientation(enum ewol::orientation _orientation) { };
-			/**
-			 * @brief get all the event from the X system
-			 * @param[in] _isGrabbed "true" if all the event will be get, false if we want only ours.
-			 * @param[in] _forcedPosition the position where the mouse might be reset at  every events ...
-			 */
-			virtual void grabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) { };
-			
-			/**
-			 * @brief get the curent time in micro-second
-			 * @note : must be implemented in all system OS implementation
-			 * @return The curent time of the process
-			 */
-			static int64_t getTime();
-			#endif
+			void onResize(const ivec2& _size) override;
 		public:
 			/**
 			 * @brief This is the only one things the User might done in his main();
@@ -189,22 +146,12 @@ namespace ewol {
 			 * @param[in] _fileName Name of the image to load
 			 */
 			void setInitImage(const std::string& _fileName);
-		protected:
-			# if 0
-			/**
-			 * @brief HARDWARE keyboard event from the system
-			 * @param[in] _key event type
-			 * @param[in] _status Up or down status
-			 * @return Keep the event or not
-			 */
-			virtual bool systemKeyboradEvent(enum gale:key::keyboardSystem _key, bool _down);
-			#endif
 		public:
 			/**
 			 * @brief Request a display after call a resize
 			 */
 			void requestUpdateSize();
-			virtual void onPeriod(int64_t _time);
+			void onPeriod(int64_t _time) override;
 	};
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.

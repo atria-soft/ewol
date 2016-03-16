@@ -10,7 +10,7 @@ def get_sub_type():
 	return "TOOL"
 
 def get_desc():
-	return "ewol test software (visual)"
+	return "ewol tools software (visual)"
 
 def get_licence():
 	return "APACHE-2"
@@ -28,28 +28,28 @@ def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
 	# add the file to compile:
 	my_module.add_src_file([
-	    'tools/visual_test/appl/debug.cpp',
-	    'tools/visual_test/appl/init.cpp',
-	    'tools/visual_test/appl/MainWindows.cpp',
-	    'tools/visual_test/appl/TestDistanceField.cpp',
-	    'tools/visual_test/appl/widget/SizerColor.cpp'
+	    'appl/debug.cpp',
+	    'appl/init.cpp',
+	    'appl/MainWindows.cpp',
+	    'appl/TestDistanceField.cpp',
+	    'appl/widget/SizerColor.cpp'
 	    ])
 	
 	my_module.add_module_depend(['ewol'])
 	
-	my_module.copy_file('tools/visual_test/data/icon.png','icon.png')
+	my_module.copy_file('data/icon.png','icon.png')
 	
-	my_module.copy_path('tools/visual_test/data/icon.*','')
-	my_module.copy_path('tools/visual_test/data/cube.*','')
-	my_module.copy_path('tools/visual_test/data/grass.*','')
-	my_module.copy_path('tools/visual_test/data/stone*','')
-	my_module.copy_path('tools/visual_test/data/sphere.png','')
-	my_module.copy_path('tools/visual_test/data/sphere.obj','')
-	my_module.copy_path('tools/visual_test/data/gui.xml','')
+	my_module.copy_path('data/icon.*','')
+	my_module.copy_path('data/cube.*','')
+	my_module.copy_path('data/grass.*','')
+	my_module.copy_path('data/stone*','')
+	my_module.copy_path('data/sphere.png','')
+	my_module.copy_path('data/sphere.obj','')
+	my_module.copy_path('data/gui.xml','')
 	
-	my_module.add_path(os.path.join(tools.get_current_path(__file__), "tools/visual_test/"))
+	my_module.add_path(tools.get_current_path(__file__))
 	
-	my_module.copy_path("tools/visual_test/data/FreeSerif*","fonts/")
+	my_module.copy_path("data/FreeSerif*","fonts/")
 	
 	"""
 	# set the package properties :
