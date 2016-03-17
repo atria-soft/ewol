@@ -97,7 +97,11 @@ Arch-linux:
 	# update the system:
 	Pacman -Syu
 	# install lib C:
-	pacman -S lib32-glibc
+	pacman -S lib32-glibc lib32-zlib lib32-gcc-libs
+	# install open-jdk 7.0
+	pacman -S jdk7-openjdk
+	# connect adb: (and you can do a "android/sdk/platform-tools/adb shell" to enable computer key on device)
+	pacman -S android-udev
 
 License (APACHE v2.0)
 =====================

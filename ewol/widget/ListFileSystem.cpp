@@ -45,7 +45,7 @@ ewol::widget::ListFileSystem::ListFileSystem() :
   m_selectedLine(-1) {
 	addObjectType("ewol::widget::ListFileSystem");
 	#if defined(__TARGET_OS__Windows)
-		propertyPath = "c:/";
+		propertyPath.setDirectCheck("c:/");
 	#endif
 	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:ListFileSystem.json");
 	if (m_colorProperty != nullptr) {
