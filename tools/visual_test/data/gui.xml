@@ -26,7 +26,7 @@
 			<label name="appl-label-test" expand="true,false" fill="true,true">Test :</label>
 			<spacer expand="true,true"/>
 		</sizer>
-		<spacer min-size="(3,3)px" expand="true,false" fill="true" corlor="red"/>
+		<spacer min-size="(3,3)px" expand="true,false" fill="true" color="black"/>
 		<sizer mode="hori"
 		       expand="true,true"
 		       lock="true,true"
@@ -35,7 +35,7 @@
 			        expand="false,true"
 			        gravity="top"
 			        lock="true,true"
-			        limit="0,0.75"
+			        limit="0,0.5"
 			        min-size="25%">
 				<sizer mode="vert"
 				       expand="false,false"

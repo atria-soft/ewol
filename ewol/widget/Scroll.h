@@ -28,9 +28,9 @@ namespace ewol {
 				enum highSpeedMode {
 					speedModeDisable,
 					speedModeInit,
-					speedModeEnableFinger,     // Specific for touchpad
+					speedModeEnableFinger, // Specific for touchpad
 					speedModeEnableHorizontal, // Specific for mouse
-					speedModeEnableVertical,   // Specific for mouse
+					speedModeEnableVertical, // Specific for mouse
 					speedModeGrepEndEvent
 				};
 			private:
@@ -49,6 +49,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
 				virtual ~Scroll();
 			public:
+				void onChangeSize() override;
 				void calculateMinMaxSize() override;
 				void onRegenerateDisplay() override;
 				bool onEventInput(const ewol::event::Input& _event) override;

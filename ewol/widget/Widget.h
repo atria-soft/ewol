@@ -180,7 +180,7 @@ namespace ewol {
 			 */
 			virtual void changeZoom(float _range) {};
 		protected:
-			vec2 m_origin; //!< internal ... I do not really known how i can use it ...
+			vec2 m_origin; //!< internal ... I do not really known how if can use it ...
 		public:
 			/**
 			 * @brief set origin at the widget (must be an parrent widget that set this parameter).

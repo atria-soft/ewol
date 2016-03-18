@@ -100,6 +100,9 @@ void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp)
 
 void ewol::widget::Container::onChangeSize() {
 	ewol::Widget::onChangeSize();
+	if (*propertyHide == true) {
+		return;
+	}
 	if (m_subWidget == nullptr) {
 		return;
 	}

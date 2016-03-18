@@ -125,6 +125,7 @@ void ewol::Widget::keepFocus() {
 }
 
 void ewol::Widget::setOffset(const vec2& _newVal) {
+	EWOL_INFO("Set offset: " << _newVal);
 	if (m_offset != _newVal) {
 		m_offset = _newVal;
 		markToRedraw();
