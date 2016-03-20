@@ -18,10 +18,11 @@
 namespace appl {
 	class MainWindows : public ewol::widget::Windows {
 		private:
-			std::shared_ptr<ewol::widget::Composer> m_composer;
-			std::shared_ptr<ewol::widget::Sizer> m_sizerVert;
-			std::shared_ptr<ewol::widget::Sizer> m_sizerDynamic;
-			std::shared_ptr<ewol::Widget> m_subWidget;
+			std::vector<esignal::Connection> m_listConnection;
+			ewol::widget::ComposerShared m_composer;
+			ewol::widget::SizerShared m_sizerVert;
+			ewol::widget::SizerShared m_sizerDynamic;
+			ewol::WidgetShared m_subWidget;
 			ewol::gravity m_gravity;
 			int32_t m_idWidget;
 		public:

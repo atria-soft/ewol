@@ -28,6 +28,9 @@ ewol::widget::Scroll::Scroll() :
                           "{ewol}THEME:GUI:WidgetScrolled.json",
                           "shape for the horizonal display",
                           &ewol::widget::Scroll::onChangePropertyShapeHori),
+  propertyHover(this, "hover",
+                      true,
+                      "the display bar are hover the subWidget"),
   m_pixelScrolling(20),
   m_highSpeedStartPos(0,0),
   m_highSpeedMode(speedModeDisable),
@@ -69,13 +72,38 @@ void ewol::widget::Scroll::onChangeSize() {
 	if (m_subWidget == nullptr) {
 		return;
 	}
+	// remove the bar if hover
+	vec2 basicSize = m_size;
+	if (*propertyHover == false) {
+		basicSize -= vec2(SCROLL_BAR_SPACE,SCROLL_BAR_SPACE);
+	}
+	
+	
 	vec2 origin = m_origin+m_offset;
 	vec2 minSize = m_subWidget->getCalculateMinSize();
 	bvec2 expand = m_subWidget->propertyExpand.get();
 	//The gravity is not set on the sub element ==> special use of the widget
 	//origin += ewol::gravityGenerateDelta(propertyGravity.get(), minSize - m_size);
-	m_subWidget->setOrigin(origin);
+	if (    expand.x() == true
+	     && minSize.x() < basicSize.x()) {
+		minSize.setX(basicSize.x());
+	}
+	if (    expand.y() == true
+	     && minSize.y() < basicSize.y()) {
+		minSize.setY(basicSize.y());
+	}
 	m_subWidget->setSize(minSize);
+	if (*propertyGravity == ewol::gravity_top) {
+		origin += vec2(0.0f, basicSize.y()-minSize.y());
+		if (*propertyHover == false) {
+			origin += vec2(0,SCROLL_BAR_SPACE);
+		}
+	} else if (*propertyGravity == ewol::gravity_buttom) {
+		// nothing to do ... origin += 
+	} else {
+		EWOL_ERROR(" Not manage other gravity ...");
+	}
+	m_subWidget->setOrigin(origin);
 	m_subWidget->onChangeSize();
 }
 
@@ -103,6 +131,7 @@ void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 void ewol::widget::Scroll::onDraw() {
 	m_shaperH.draw();
 	m_shaperV.draw();
+	/*
 	ewol::compositing::Drawing draw;
 	draw.setPos(vec2(10,10));
 	draw.setColor(etk::color::orange);
@@ -111,6 +140,7 @@ void ewol::widget::Scroll::onDraw() {
 	draw.setColor(etk::color::green);
 	draw.rectangleWidth(vec2(25,25));
 	draw.draw();
+	*/
 }
 
 void ewol::widget::Scroll::onRegenerateDisplay() {
@@ -169,7 +199,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
-	EWOL_ERROR("Get Event on scroll : " << _event);
+	EWOL_VERBOSE("Get Event on scroll : " << _event);
 	relativePos.setY(m_size.y() - relativePos.y());
 	if(    _event.getType() == gale::key::type_mouse
 	    && (    m_highSpeedType == gale::key::type_unknow
@@ -215,7 +245,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			return false;
 		} else if(    _event.getId() == 4
 		           && _event.getStatus() == gale::key::status_up) {
-			EWOL_ERROR("    mode UP " << m_size.y() << "<" << scrollSize.y());
+			EWOL_VERBOSE("    mode UP " << m_size.y() << "<" << scrollSize.y());
 			if(m_size.y() < scrollSize.y()) {
 				scrollOffset.setY(scrollOffset.y()-m_pixelScrolling);
 				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
@@ -227,7 +257,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 			}
 		} else if(    _event.getId() == 5
 		           && _event.getStatus() == gale::key::status_up) {
-			EWOL_ERROR("    mode DOWN " << m_size.y() << "<" << scrollSize.y());
+			EWOL_VERBOSE("    mode DOWN " << m_size.y() << "<" << scrollSize.y());
 			if(m_size.y() < scrollSize.y()) {
 				scrollOffset.setY(scrollOffset.y()+m_pixelScrolling);
 				scrollOffset.setY(std::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));

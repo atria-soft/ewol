@@ -36,9 +36,10 @@
 			        gravity="top"
 			        lock="true,true"
 			        limit="0,0.5"
-			        min-size="25%">
+			        min-size="25%"
+			        hover="false">
 				<sizer mode="vert"
-				       expand="false,false"
+				       expand="true,false"
 				       fill="true"
 				       name="appl-dynamic-config">
 					<label expand="true" fill="true">No config</label>

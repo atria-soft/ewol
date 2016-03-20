@@ -30,12 +30,6 @@
 #include <etk/os/FSNode.h>
 #include <eproperty/Value.h>
 
-
-static const char * l_eventChangeTheme           = "event-change-theme";
-static const char * l_eventChangeWidgetNext      = "event-change-widget-test-next";
-static const char * l_eventChangeWidgetPrevious  = "event-change-widget-test-previous";
-
-
 #undef __class__
 #define __class__ "MainWindows"
 
@@ -212,6 +206,7 @@ void appl::MainWindows::updateProperty() {
 	if (m_subWidget == nullptr) {
 		return;
 	}
+	m_listConnection.clear();
 	std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
 	widget->propertyValue.set(m_subWidget->getObjectType());
 	m_sizerDynamic->subWidgetAdd(widget);
@@ -222,164 +217,186 @@ void appl::MainWindows::updateProperty() {
 			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
 			continue;
 		}
-		std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create();
-		if (widgetSizer != nullptr) {
-			widgetSizer->propertyMode.set(ewol::widget::Sizer::modeHori);
-			widgetSizer->propertyExpand.set(bvec2(true,false));
-			widgetSizer->propertyFill.set(bvec2(true,true));
-			m_sizerDynamic->subWidgetAddStart(widgetSizer);
-			
-			std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
-			widget->propertyValue.set(param->getName() + ":");
-			widgetSizer->subWidgetAdd(widget);
-			//addSpacer(widgetSizer, etk::color::purple);
-			// Main part TODO: ...
-			std::string type = param->getType();
-			if (type == typeid(std::string).name()) {
-				std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
-				widgetSizer->subWidgetAdd(widgetTmp);
-				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
-				eproperty::Value<std::string>* paramValue = dynamic_cast<eproperty::Value<std::string>*>(param);
-				if (paramValue == nullptr) {
-					APPL_ERROR("nullptr...");
-					return;
-				}
-				std::string value = paramValue->get();
-				widgetTmp->propertyValue.set(value);
-				widgetTmp->propertyExpand.set(bvec2(true,false));
-				widgetTmp->propertyFill.set(bvec2(true,false));
-				widgetTmp->signalModify.connect([=](const std::string& _value) {
-						APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
-						paramValue->set(_value);
-						return;
-					});
-			} else if (type == typeid(gale::Dimension).name()) {
-				type = "gale::Dimension";
-			} else if (type == typeid(bvec2).name()) {
-				addSpacer(widgetSizer);
-				std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
-				widgetSizer->subWidgetAdd(widgetTmp);
-				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
-				eproperty::Value<bvec2>* paramValue = dynamic_cast<eproperty::Value<bvec2>*>(param);
-				if (paramValue == nullptr) {
-					APPL_ERROR("nullptr... 2 ");
-					return;
-				}
-				bvec2 value = paramValue->get();
-				widgetTmp->propertyValue.set(value.x());
-				widgetTmp->signalValue.connect([=](const bool& _value) {
-						APPL_INFO("set parameter : X name=" << param->getName() << " value=" << _value);
-						bvec2 lastValueInterpreted = paramValue->get();
-						lastValueInterpreted.setX(_value);
-						paramValue->set(lastValueInterpreted);
-						return;
-					});
-				std::shared_ptr<ewol::widget::Label> widgetLabel = ewol::widget::Label::create();
-				widgetLabel->propertyValue.set("x");
-				widgetTmp->setSubWidget(widgetLabel);
+		if (param->getPropertyType() != "eproperty::List") {
+			std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create();
+			if (widgetSizer != nullptr) {
+				widgetSizer->propertyMode.set(ewol::widget::Sizer::modeHori);
+				widgetSizer->propertyExpand.set(bvec2(true,false));
+				widgetSizer->propertyFill.set(bvec2(true,true));
+				m_sizerDynamic->subWidgetAddStart(widgetSizer);
 				
-				widgetTmp = ewol::widget::CheckBox::create();
-				widgetSizer->subWidgetAdd(widgetTmp);
-				widgetTmp->propertyValue.set(value.y());
-				widgetTmp->signalValue.connect([=](const bool& _value) {
-						APPL_INFO("set parameter : Y name=" << param->getName() << " value=" << _value);
-						bvec2 lastValueInterpreted = paramValue->get();
-						lastValueInterpreted.setY(_value);
-						paramValue->set(lastValueInterpreted);
+				std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
+				widget->propertyValue.set(param->getName() + ":");
+				widgetSizer->subWidgetAdd(widget);
+				//addSpacer(widgetSizer, etk::color::purple);
+				// Main part TODO: ...
+				std::string type = param->getType();
+				if (type == typeid(std::string).name()) {
+					std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
+					widgetSizer->subWidgetAdd(widgetTmp);
+					eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+					eproperty::Value<std::string>* paramValue = dynamic_cast<eproperty::Value<std::string>*>(param);
+					if (paramValue == nullptr) {
+						APPL_ERROR("nullptr...");
 						return;
-					});
-				widgetLabel = ewol::widget::Label::create();
-				widgetLabel->propertyValue.set("y");
-				widgetTmp->setSubWidget(widgetLabel);
-			} else if (type == typeid(ivec2).name()) {
-				type = "ivec2";
-			} else if (type == typeid(uivec2).name()) {
-				type = "uivec2";
-			} else if (type == typeid(vec2).name()) {
-				type = "vec2";
-			} else if (type == typeid(bool).name()) {
-				addSpacer(widgetSizer);
-				std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
-				widgetSizer->subWidgetAdd(widgetTmp);
-				widgetTmp->signalValue.connect([=](const bool& _value) {
-						if (m_subWidget == nullptr) {
-							APPL_ERROR("nullptr...");
+					}
+					std::string value = paramValue->get();
+					widgetTmp->propertyValue.set(value);
+					widgetTmp->propertyExpand.set(bvec2(true,false));
+					widgetTmp->propertyFill.set(bvec2(true,false));
+					esignal::Connection conn = widgetTmp->signalModify.connect(
+						[=](const std::string& _value) {
+							APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
+							paramValue->set(_value);
 							return;
-						}
-						APPL_INFO("set parameter : name=" << param->getName() << " value=" << _value);
-						m_subWidget->propertySet(param->getName(), etk::to_string(_value));
+						});
+					m_listConnection.push_back(std::move(conn));
+				} else if (type == typeid(gale::Dimension).name()) {
+					type = "gale::Dimension";
+				} else if (type == typeid(bvec2).name()) {
+					addSpacer(widgetSizer);
+					std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
+					widgetSizer->subWidgetAdd(widgetTmp);
+					eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+					eproperty::Value<bvec2>* paramValue = dynamic_cast<eproperty::Value<bvec2>*>(param);
+					if (paramValue == nullptr) {
+						APPL_ERROR("nullptr... 2 ");
 						return;
-					});
-			} else if (    type == typeid(int64_t).name()
-			            || type == typeid(int32_t).name()
-			            || type == typeid(int16_t).name()
-			            || type == typeid(int8_t).name()
-			            || type == typeid(uint64_t).name()
-			            || type == typeid(uint32_t).name()
-			            || type == typeid(uint16_t).name()
-			            || type == typeid(uint8_t).name()) {
-				std::shared_ptr<ewol::widget::Entry> widgetTmp = ewol::widget::Entry::create();
-				widgetSizer->subWidgetAdd(widgetTmp);
-				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
-				std::string value = param->getString();
-				widgetTmp->propertyValue.set(value);
-				widgetTmp->propertyExpand.set(bvec2(true,false));
-				widgetTmp->propertyFill.set(bvec2(true,false));
-				widgetTmp->signalModify.connect([=](const std::string& _value) {
-						APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
-						param->setString(_value);
+					}
+					bvec2 value = paramValue->get();
+					widgetTmp->propertyValue.set(value.x());
+					esignal::Connection conn = widgetTmp->signalValue.connect(
+						[=](const bool& _value) {
+							APPL_INFO("set parameter : X name=" << param->getName() << " value=" << _value);
+							bvec2 lastValueInterpreted = paramValue->get();
+							lastValueInterpreted.setX(_value);
+							paramValue->set(lastValueInterpreted);
+							return;
+						});
+					m_listConnection.push_back(std::move(conn));
+					std::shared_ptr<ewol::widget::Label> widgetLabel = ewol::widget::Label::create();
+					widgetLabel->propertyValue.set("x");
+					widgetTmp->setSubWidget(widgetLabel);
+					
+					widgetTmp = ewol::widget::CheckBox::create();
+					widgetSizer->subWidgetAdd(widgetTmp);
+					widgetTmp->propertyValue.set(value.y());
+					conn = widgetTmp->signalValue.connect(
+						[=](const bool& _value) {
+							APPL_INFO("set parameter : Y name=" << param->getName() << " value=" << _value);
+							bvec2 lastValueInterpreted = paramValue->get();
+							lastValueInterpreted.setY(_value);
+							paramValue->set(lastValueInterpreted);
+							return;
+						});
+					m_listConnection.push_back(std::move(conn));
+					widgetLabel = ewol::widget::Label::create();
+					widgetLabel->propertyValue.set("y");
+					widgetTmp->setSubWidget(widgetLabel);
+				} else if (type == typeid(ivec2).name()) {
+					type = "ivec2";
+				} else if (type == typeid(uivec2).name()) {
+					type = "uivec2";
+				} else if (type == typeid(vec2).name()) {
+					type = "vec2";
+				} else if (type == typeid(bool).name()) {
+					addSpacer(widgetSizer);
+					std::shared_ptr<ewol::widget::CheckBox> widgetTmp = ewol::widget::CheckBox::create();
+					widgetSizer->subWidgetAdd(widgetTmp);
+					esignal::Connection conn = widgetTmp->signalValue.connect(
+						[=](const bool& _value) {
+							if (m_subWidget == nullptr) {
+								APPL_ERROR("nullptr...");
+								return;
+							}
+							APPL_INFO("set parameter : name=" << param->getName() << " value=" << _value);
+							m_subWidget->propertySet(param->getName(), etk::to_string(_value));
+							return;
+						});
+					m_listConnection.push_back(std::move(conn));
+				} else if (    type == typeid(int64_t).name()
+				            || type == typeid(int32_t).name()
+				            || type == typeid(int16_t).name()
+				            || type == typeid(int8_t).name()
+				            || type == typeid(uint64_t).name()
+				            || type == typeid(uint32_t).name()
+				            || type == typeid(uint16_t).name()
+				            || type == typeid(uint8_t).name()) {
+					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
+					widgetSizer->subWidgetAdd(widgetTmp);
+					eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+					std::string value = param->getString();
+					widgetTmp->propertyValue.set(etk::string_to_int8_t(value));
+					widgetTmp->propertyExpand.set(bvec2(true,false));
+					widgetTmp->propertyFill.set(bvec2(true,false));
+					
+					esignal::Connection conn = widgetTmp->signalValue.connect(
+						[=](const int64_t& _value) {
+							APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
+							param->setString(etk::to_string(_value));
+							return;
+						});
+					m_listConnection.push_back(std::move(conn));
+					if (type == typeid(int64_t).name()) {
+						widgetTmp->propertyMin.set(0x8000000000000000LL);
+						widgetTmp->propertyMax.set(0x7FFFFFFFFFFFFFFFLL);
+					} else if (type == typeid(int32_t).name()) {
+						widgetTmp->propertyMin.set(0x80000000LL);
+						widgetTmp->propertyMax.set(0x7FFFFFFFLL);
+					} else if (type == typeid(int16_t).name()) {
+						type = "int16_t";
+					} else if (type == typeid(int8_t).name()) {
+						type = "int8_t";
+					} else if (type == typeid(uint64_t).name()) {
+						type = "uint64_t";
+					} else if (type == typeid(uint32_t).name()) {
+						type = "uint32_t";
+					} else if (type == typeid(uint16_t).name()) {
+						type = "uint16_t";
+					} else if (type == typeid(uint8_t).name()) {
+						type = "uint8_t";
+					}
+					
+				} else if (type == typeid(float).name()) {
+					type = "float";
+				} else if (type == typeid(double).name()) {
+					type = "double";
+				} else if (type == typeid(enum ewol::gravity).name()) {
+					// TODO: generize this for all list of parameters
+					type = "enum ewol::gravity";
+					std::shared_ptr<ewol::widget::Select> widgetTmp = ewol::widget::Select::create();
+					widgetSizer->subWidgetAdd(widgetTmp);
+					widgetTmp->propertyExpand.set(bvec2(true,false));
+					widgetTmp->propertyFill.set(bvec2(true,false));
+					widgetTmp->optionAdd(int32_t(ewol::gravity_center), "Center");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_top), "Top");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_buttom), "Buttom");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_right), "Right");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_left), "Left");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_topRight), "Top-right");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_topLeft), "Top-left");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_buttomRight), "Buttom-right");
+					widgetTmp->optionAdd(int32_t(ewol::gravity_buttomLeft), "Buttom-left");
+					eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+					eproperty::List<ewol::gravity>* paramValue = dynamic_cast<eproperty::List<ewol::gravity>*>(param);
+					if (paramValue == nullptr) {
+						APPL_ERROR("nullptr... 2 ");
 						return;
-					});
-				if (type == typeid(int64_t).name()) {
-					type = "int64_t";
-				} else if (type == typeid(int32_t).name()) {
-					type = "int32_t";
-				} else if (type == typeid(int16_t).name()) {
-					type = "int16_t";
-				} else if (type == typeid(int8_t).name()) {
-					type = "int8_t";
-				} else if (type == typeid(uint64_t).name()) {
-					type = "uint64_t";
-				} else if (type == typeid(uint32_t).name()) {
-					type = "uint32_t";
-				} else if (type == typeid(uint16_t).name()) {
-					type = "uint16_t";
-				} else if (type == typeid(uint8_t).name()) {
-					type = "uint8_t";
+					}
+					ewol::gravity value = paramValue->get();
+					widgetTmp->propertyValue.set(value);
+					esignal::Connection conn = widgetTmp->signalValue.connect(
+						[=](const int32_t& _value) {
+							enum ewol::gravity val = ewol::gravity(_value);
+							APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << val);
+							paramValue->set(val);
+							return;
+						});
+					m_listConnection.push_back(std::move(conn));
 				}
-			} else if (type == typeid(float).name()) {
-				type = "float";
-			} else if (type == typeid(double).name()) {
-				type = "double";
-			} else if (type == typeid(enum ewol::gravity).name()) {
-				type = "enum ewol::gravity";
-				std::shared_ptr<ewol::widget::Select> widgetTmp = ewol::widget::Select::create();
-				widgetSizer->subWidgetAdd(widgetTmp);
-				widgetTmp->propertyExpand.set(bvec2(true,false));
-				widgetTmp->propertyFill.set(bvec2(true,false));
-				widgetTmp->optionAdd(int32_t(ewol::gravity_center), "Center");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_top), "Top");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_buttom), "Buttom");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_right), "Right");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_left), "Left");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_topRight), "Top-right");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_topLeft), "Top-left");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_buttomRight), "Buttom-right");
-				widgetTmp->optionAdd(int32_t(ewol::gravity_buttomLeft), "Buttom-left");
-				eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
-				eproperty::List<ewol::gravity>* paramValue = dynamic_cast<eproperty::List<ewol::gravity>*>(param);
-				if (paramValue == nullptr) {
-					APPL_ERROR("nullptr... 2 ");
-					return;
-				}
-				ewol::gravity value = paramValue->get();
-				widgetTmp->propertyValue.set(value);
-				widgetTmp->signalValue.connect([=](const int32_t& _value) {
-					enum ewol::gravity val = ewol::gravity(_value);
-					APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << val);
-					paramValue->set(val);
-					return;
-				});
+			} else {
+				// property list ...
+				
 			}
 		}
 		std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
