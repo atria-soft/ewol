@@ -36,6 +36,8 @@ ewol::widget::Select::Select() :
 	addObjectType("ewol::widget::Select");
 	// override the basic parameter:
 	propertyShape.setDirectCheck("{ewol}THEME:GUI:Select.json");
+	propertySpinMode.setDirect(ewol::widget::spinPosition_noneRight);
+	propertySpinMode.changeDefault(ewol::widget::spinPosition_noneRight);
 	propertySpinMode.rename("none-none", "none");
 	propertySpinMode.rename("none-right", "right");
 	propertySpinMode.rename("left-none", "left");
