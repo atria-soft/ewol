@@ -65,7 +65,7 @@ download the software:
 Compile software and test:
 --------------------------
 
-	lutin ewol-test 0XX_customwidget 001_HelloWord
+	lutin ewol-*
 
 Dependency packages
 ===================

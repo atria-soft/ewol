@@ -14,8 +14,13 @@ This generate some restriction that you will see an overwiew in the under sectio
 ===User requires:===
 To use ewol you need to know only C++ language. It could be usefull to know:
 :** [b]Python[/b] for all build tool.
-:** [b]git[/b] for all version management
+:** [b]git[/b] and [b]repo[/b] for all version management.
 :** [b]OpenGL-ES2[/b] if you want to create custum advenced widget.
+
+If you just want to have an interface of the openGl just refer to the [lib[gale|Gale library]].
+
+Ewol does not manage the Audio but it is full integrated in [lib[audio-river|River library]].
+
 
 === Architecture:===
 One of the important point to know in this framwork is some of absurd things came from the multiple architecture type.
@@ -24,7 +29,7 @@ I will Explain the main points:
 :** IOs does [b]NOT[/b] simply support the shared object sub lib, this force ewol to be APACHE-2, and depend on some sub-library with small license restriction.
 :** Android have a JAVA main, then the application main will not be used with this platform
 :** Android event (keyboard, mouse, touch-screen and ...) will arrive in asynchron mode ==> need to be resynchronyse in one thread
-:** Only one graphyc framework is availlable on all platform. This is OpenGL
+:** Only one graphyc framework is availlable on all platform. This is OpenGL (nned check for windows phone)
 :** Main interesting point is packaging of the application data:
 ::** Linux store it in /usr/share/applName/*
 ::** MacOs store it in applName.app/subFolder/*

@@ -7,27 +7,37 @@
 Application generation is really simple, but package management can create some problems...
 
 For example :
-:** Android does not permit access on the file system, but we need data that is named assets, thes data in contained in a zip file.
+:** Android does not permit access on the file system, but we need data that is named assets, these data in contained in a zip file.
 :** Linux set his own application data in a special path : /usr/shared/applName/
 :** MacOs create a bundle (*.app) that is a folder with all application data.
 :** ...
 
-For all tese reason we need to wrap standard application interface. (you can acces directly but it could be tricky and depend on the target)
+For all these reasons we need to wrap standard application interface. (you can acces directly but it could be tricky and depend on the target)
 
 == Generic Properties ==
 
 By default we dertermine some basics for files.
 
-Then we need to determine file in the tree with :
+Then we need to determine file in the tree with:
 :** "DATA:XXX" Application internal data
+::** Linux: /usr/share/applName/
+::** Android: /xxx/yyy/applName.apk/asssets/
+::** IOs: applName.app/share
+::** MacOs: applName.app/Resources
 :** "USERDATA:XXX" User save data (like game save)
+::** Linux: ~/.local/share/applName/
+::** Android: /xxx/yyy/data/applName/
 :** "HOME:XXX" User home folder
+::** Linux: ~/
+::** Android: /sdcard/
+::** IOs: --- => no Home
+::** MacOs: ~/
 :** "/XXX" Direct acces on a file in the fileSystem
 :** ...
 
 When you will call a file, you need to just call it with the starting name.
 
-For example if I want to acces at an application data I will call the file : "DATA:myImage.png"
+For example if I want to access at an application data I will call the file : "DATA:myImage.png"
 
 == Integrate a file in a package ==
 
@@ -113,7 +123,7 @@ And when you want to change the theme, just call:
 [/code]
 
 [note]
-This is not done automaticly, because reloading the resources can have a real cost of time.
+	This is not done automaticly, because reloading the resources can have a real cost of time.
 [/note]
 
 You can acces on your theme with accessing the filename: "THEME:GUI_COLOR:your/sub/path/file.xx"

@@ -1,11 +1,11 @@
 
 === Objectifs ===
-:** Understand What is a resource
+:** Understand what is a resource
 :** Use resources
 
 === What is a resource: ===
 
-A resource is an usique element that can be used by manny element like:
+A resource is an unique element that can be used by many element like:
 :** An image (special resolution)
 :** A configuration file
 :** An application manager (special case)
@@ -23,25 +23,36 @@ For this example we will load a configuration file:
 #include <ewol/resource/ConfigFile.h>
 namespace appl {
 	class MyObj : public ewol::Object {
+		public:
+			eproperty::Value<std::string> propertyConfig;
 		private:
 			std::shared_ptr<ewol::resource::ConfigFile> m_config;
 			int32_t m_configValId;
 		protected:
 			//! @brief Constructor
 			MyObj(void) :
+			  propertyConfig(this, "file",
+			                       "DATA:ExapleConfig.json",
+			                       "no desc",
+			                       &appl::MyObj::onChangePropertyFile),
 			  m_configValId(-1) {
 				// nothing to do..
 			}
 			void init() {
 				ewol::Object::init();
-				m_config = ewol::resource::ConfigFile::create("DATA:ExapleConfig.json");
-				m_configValId = m_config->request("exampleConfigName");
+				onChangePropertyFile();
 			}
 		public:
 			//! @brief Destructor
 			virtual ~MyObj(void) { }
 			DECLARE_FACTORY(MyObj);
 		public:
+			void onChangePropertyFile() {
+				m_config = ewol::resource::ConfigFile::create(*propertyConfig);
+				if (m_config != nullptr) {
+					m_configValId = m_config->request("exampleConfigName");
+				}
+			}
 			void process() {
 				double value = m_config->getNumber(m_configValId);
 				APPL_DEBUG("example value : " << value);
@@ -53,7 +64,7 @@ namespace appl {
 
 === Create a new resource: ===
 
-A resource is a generic [class[ewol::Resource]] that hrited form a generic [class[ewol::Object]], simply change the FACTORY macro in :
+A resource is a generic [class[ewol::Resource]] that herited form a generic [class[ewol::Object]], simply change the FACTORY macro in:
 :** DECLARE_RESOURCE_FACTORY(className) To declare a resource with no name (unique for every creation)
 :** DECLARE_RESOURCE_NAMED_FACTORY(className) To create a resource that have a specific name. When created, we will find the previous resource with the specify name in the fanctory.
 :** DECLARE_RESOURCE_SINGLE_FACTORY(className,uniqueName) This is to have a unique resource for all the application (name is specify in the Macro)
@@ -66,7 +77,7 @@ The resources can be reloaded, then we need to reaload in the good order (level 
 
 The resources are loaded fron 0 to 5.
 
-Then for basic resource :
+Then for basic resource:
 
 [code style=c++]
 #include <ewol/object/Resource.h>

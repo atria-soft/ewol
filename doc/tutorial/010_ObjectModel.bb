@@ -5,7 +5,7 @@
 
 == Basis of the ewol::Object ==
 
-An object in Ewol is a simple class : [class[ewol::Object]] This object is the basis of all element in the ewol system.
+An object in Ewol is a simple class: [class[ewol::Object]] This object is the basis of all element in the ewol system.
 This is designed to manage many common things:
 
 :** Unique ID
@@ -14,7 +14,6 @@ This is designed to manage many common things:
 :** Signal generation
 :** Xml configuration
 :** Removing
-:** Perodic calling
 
 [note]
 Please do not compare with the gObject basic class...
@@ -26,18 +25,23 @@ Please do not compare with the gObject basic class...
 Creating an object is really simple:
 
 [code style=c++]
-	std::shared_ptr<ewol::Button> tmpButon = ewol::Button::create();
-	APPL_INFO("We just create a button widget with unique ID=" << tmpButon->getId() << " name='" << tmpButon->getName() << "'");
+	ewol::widget::ButtonShared tmpButon = ewol::widget::Button::create();
+	APPL_INFO("We just create a button widget with unique ID=" << tmpButon->getId() << " name='" << tmpButon->propertyName.get() << "'");
 [/code]
 
-Note that all object created are std::shared_ptr.
+Note that all object created are [class[ememory::SharedPtr]] base for the current version on [class[std::shared_ptr]].
+We wrapped it because the current inplementation of [class[std::shared_ptr]] is not thread safe, and we want use a thread-safe vertion of it.
 
+[note]
+	The widget is not stored in a ememory::SharedPtr<ewol::widget::Button> but in a ewol::widget::ButtonShared to simplify the using of the pointer.
+	You have also: ememory::WeakPtr<ewol::widget::Button> = ewol::widget::ButtonWeak
+[/note]
 
 Set the name of the object:
 
 [code style=c++]
-	tmpButon->setName("my widget name");
-	APPL_INFO("We just create an Object with ID=" << tmpButon->getId() << " name='" << tmpButon->getName() << "'");
+	tmpButon->propertyName.set("my widget name");
+	APPL_INFO("We just create an Object with ID=" << tmpButon->getId() << " name='" << tmpButon->propertyName.get() << "'");
 [/code]
 
 
@@ -48,13 +52,13 @@ Simply use the function:
 	tmpButon->destroy();
 [/code]
 
-This function request his parrent to remove the std::shared_ptr it keep on it.
+This function request his parrent to remove the [class[ememory::SharedPtr]] it keep on it.
 And when all std::shared_ptr is removed the object will be really removed.
 
-At his point we can think an object is allive all the time someone keep a reference on it, then when you are not a parrent of the object, do not keep a std::shared_ptr but a std::weak_ptr.
+At his point we can think an object is allive all the time someone keep a reference on it, then when you are not a parrent of the object, do not keep a [class[ememory::SharedPtr]] but a [class[ememory::WeakPtr]].
 
 [note]
-If some Object is not removed when you close the application, the system inform you with displaying all object already alive.
+If some Object is not removed when you close the application, the system inform you with displaying all object alive.
 [/note]
 
 
@@ -67,8 +71,8 @@ In Ewol this is possible to get a object with his name.
 [code style=c++]
 	#include <ewol/context/Context.h>
 	
-	std::shared_ptr<ewol::Object> tmpObject = ewol::getContext().getEObjectManager().getObjectNamed("obj Name");
-	if (tmpObject == NULL) {
+	ewol::ObjectShared tmpObject = ewol::getContext().getEObjectManager().getObjectNamed("obj Name");
+	if (tmpObject == nullptr) {
 		APPL_ERROR("The Object does not exist");
 	}
 [/code]
@@ -76,8 +80,8 @@ In Ewol this is possible to get a object with his name.
 === Find a global Object (inside an Object) ===
 
 [code style=c++]
-	std::shared_ptr<ewol::Object> tmpObject = getObjectNamed("obj Name");
-	if (tmpObject == NULL) {
+	ewol::ObjectShared tmpObject = getObjectNamed("obj Name");
+	if (tmpObject == nullptr) {
 		APPL_ERROR("The Object does not exist");
 	}
 [/code]
@@ -85,7 +89,7 @@ In Ewol this is possible to get a object with his name.
 === Find a sub-object ===
 
 [code style=c++]
-	std::shared_ptr<ewol::Object> tmpObject = getSubObjectNamed("obj Name");
+	ewol::ObjectShared tmpObject = getSubObjectNamed("obj Name");
 	if (tmpObject == NULL) {
 		APPL_ERROR("The Object does not exist");
 	}
@@ -96,13 +100,8 @@ In Ewol this is possible to get a object with his name.
 It could be really interesting to retrive your own instance:
 
 [code style=c++]
-	std::shared_ptr<ewol::Object> tmpObject ...;
+	ewol::ObjectShared tmpObject ...;
 	
-	std::shared_ptr<appl::MyOwnObject> myObject = std::dynamic_pointer_cast<appl::MyOwnObject>(tmpObject);
+	appl::MyOwnObjectShared myObject = std::dynamic_pointer_cast<appl::MyOwnObject>(tmpObject);
 [/code]
-
-== conclusion ==
-
-TODO ...
-
 

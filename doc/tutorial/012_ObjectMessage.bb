@@ -1,22 +1,18 @@
 
 === Objectif ===
-:** Understand ewol::Object Messaging system
+:** Understand base of [lib[esignal]] Messaging system
 :** Create extern message and receive Object message
 
 == Message system ==
 
-Message system is based on generic std::funtion and std::bind methode:
+esignal base his signal on landa functions
 
 It permit to an object to generate some [b]'signals'[/b].
 
-All signal are synchronous
+All signal are synchronous [i](asynchronous is not implemented yet)[/i]
 
 
 == Receive signals from other object ==
-
-[todo]
-Link with the signal name
-[/todo]
 
 Register on the 'up' and 'value' signal of a button:
 
@@ -24,10 +20,10 @@ Button header :
 [code style=c++]
 	...
 	public:
-		ewol::object::Signal<void> signalDown;
-		ewol::object::Signal<void> signalUp;
+		esignal::ISignal<> signalDown;
+		esignal::ISignal<> signalUp;
 		...
-		ewol::object::Signal<bool> signalValue;
+		esignal::ISignal<bool> signalValue;
 	...
 [/code]
 
@@ -39,10 +35,11 @@ Button header :
 namespace appl {
 	class MyObj : public ewol::Object {
 		private:
-			std::shared_ptr<ewol::widget::Button> m_button;
+			ewol::widget::ButtonShared m_button;
+			esignal::Connection m_connect;
 		protected:
 			//! @brief Constructor
-			MyObj(void) {
+			MyObj() {
 				// nothing to do..
 			}
 			void init() {
@@ -52,75 +49,43 @@ namespace appl {
 					APPL_ERROR("Can not create button...");
 					return;
 				}
-				// We connect signals here :
-				m_button->signalUp.bind(shared_from_this(), &appl::MyObj::onCallbackUp);
-				m_button->signalValue.bind(shared_from_this(), &appl::MyObj::onCallbackValue);
+				m_button.propertyToggle.set(true);
+				// We connect signals here: (permanent connection)
+				m_button->signalUp.connect(shared_from_this(), &appl::MyObj::onCallbackUp);
+				m_button->signalValue.connect(shared_from_this(), &appl::MyObj::onCallbackValue);
 			}
 		public:
 			//! @brief Destructor
-			virtual ~MyObj(void) { }
+			virtual ~MyObj() { }
 			DECLARE_FACTORY(MyObj);
 		private:
 			void onCallbackUp() {
-				APPL_INFO("button pressed: UP);
+				APPL_INFO("button pressed: UP");
+			}
+			void onCallbackDown() {
+				APPL_INFO("button pressed: DOWN");
 			}
 			void onCallbackValue(const bool& _value) {
 				APPL_INFO("button value: " << _value);
-			}
-	}
-}
-[/code]
-
-
-=== Advenced signal connection: ===
-
-Here we will see how to connect an advance function on a signal
-
-[code style=c++]
-#include <ewol/object/Object.h>
-#include <ewol/widget/Button.h>
-namespace appl {
-	class MyObj : public ewol::Object {
-		private:
-			std::shared_ptr<ewol::widget::Button> m_button;
-		protected:
-			//! @brief Constructor
-			MyObj(void) {
-				// nothing to do..
-			}
-			void init() {
-				ewol::Object::init();
-				m_button = ewol::widget::Button::Create();
-				if (m_button == nullptr) {
-					APPL_ERROR("Can not create button...");
-					return;
+				if (_value == true) {
+					// We connect signals here: (removable connection)
+					m_connect = m_button->signalDown.connect(this, &appl::MyObj::onCallbackDown);
+				} else {
+					// we disconnect the previous connection
+					m_connect.disconnect();
 				}
-				// We connect signals here :
-				m_button->signalUp.register(shared_from_this(), std::bind(&appl::MyObj::onCallbackUp, this, std::string("tmpVariableToSend")));
-				m_button->signalValue.register(shared_from_this(), std::bind(&appl::MyObj::onCallbackValue, this));
-			}
-		public:
-			//! @brief Destructor
-			virtual ~MyObj(void) { }
-			DECLARE_FACTORY(MyObj);
-		private:
-			void onCallbackUp(const std::string& _value) {
-				APPL_INFO("button pressed: UP inputMessage: " << _value);
-			}
-			void onCallbackValue() {
-				APPL_INFO("button value: " << _value);
 			}
 	}
 }
 [/code]
 
-=== Connect to a signal with a named widget ===
+[note]
+	The connection with SharedPtr are static. they keep in internal a WeakPtr to remove connection if the object is removed.
+[/note]
 
-TODO: documentation :
-:** subBind(_type, _name, _event, _obj, _func)
-:** globalBind(_type, _name, _event, _obj, _func)
-:** externSubBind(_object, _type, _name, _event, _obj, _func)
-
+[note]
+	The connection that return a [class[esignal::Connection]] are volatil, if you don't keep the connection handle, the connection is automaticly removed.
+[/note]
 
 == Declare Signal ==
 
@@ -132,23 +97,20 @@ TODO: documentation :
 namespace appl {
 	class MyObj : public ewol::Object {
 		public:
-			ewol::object::Signal<void> signalEmpty;
+			ewol::object::Signal<> signalEmpty;
 			ewol::object::Signal<bool> signalBoolean;
 			ewol::object::Signal<std::string> signalString;
 		protected:
 			//! @brief Constructor
-			MyObj(void) :
-			  signalEmpty(*this, "empty"),
-			  signalBoolean(*this, "boolean"),
-			  signalString(*this, "string") {
+			MyObj() :
+			  signalEmpty(this, "empty"),
+			  signalBoolean(this, "boolean"),
+			  signalString(this, "string") {
 				// nothing to do..
-			}
-			void init() {
-				ewol::Object::init();
 			}
 		public:
 			//! @brief Destructor
-			virtual ~MyObj(void) { }
+			virtual ~MyObj() { }
 			DECLARE_FACTORY(MyObj);
 		private:
 			void process() {
@@ -164,7 +126,7 @@ namespace appl {
 
 You will now able to reise signals between objects...
 
-
+For more information see [lib[esignal]]
 
 
 
