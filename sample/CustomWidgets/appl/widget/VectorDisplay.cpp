@@ -22,6 +22,8 @@ appl::widget::VectorDisplay::VectorDisplay() :
 void appl::widget::VectorDisplay::init() {
 	ewol::Widget::init();
 	markToRedraw();
+	// set call all time (sample ...).
+	getObjectManager().periodicCall.connect(shared_from_this(), &appl::widget::VectorDisplay::periodicEvent);
 }
 
 
@@ -37,10 +39,8 @@ void appl::widget::VectorDisplay::setValue(const std::vector<float>& _data) {
 
 void appl::widget::VectorDisplay::ToggleAuto() {
 	if (m_autoDisplay == false) {
-		periodicCallEnable();
 		m_autoDisplay = true;
 	} else {
-		periodicCallDisable();
 		m_autoDisplay = false;
 	}
 }
@@ -79,7 +79,10 @@ void appl::widget::VectorDisplay::onRegenerateDisplay() {
 	}
 }
 
-void appl::widget::VectorDisplay::periodicCall(const ewol::event::Time& _event) {
+void appl::widget::VectorDisplay::periodicEvent(const ewol::event::Time& _event) {
+	if (m_autoDisplay == false) {
+		return;
+	}
 	for (size_t iii=0; iii<std::max(m_data.size()/200.0f, 50.0f); ++iii) {
 		if (m_data.size() > 50) {
 			m_data.erase(m_data.begin());

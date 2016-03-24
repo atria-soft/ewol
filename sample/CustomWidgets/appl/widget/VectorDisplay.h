@@ -12,7 +12,7 @@
 namespace appl {
 	namespace widget {
 		class VectorDisplay : public ewol::Widget {
-			private:
+			protected:
 				ewol::compositing::Drawing m_draw; //!< drawing instance
 			protected:
 				//! @brief constructor
@@ -22,21 +22,21 @@ namespace appl {
 				DECLARE_WIDGET_FACTORY(VectorDisplay, "VectorDisplay");
 				//! @brief destructor
 				virtual ~VectorDisplay();
-			private:
+			protected:
 				std::vector<float> m_data; //!< data that might be displayed
 			public:
 				void setValue(const std::vector<float>& _data);
-			private:
+			protected:
 				bool m_autoDisplay;
 			public:
 				void ToggleAuto();
-			private:
+			protected:
 				float m_minVal; //!< display minimum value
 				float m_maxVal; //!< display maximum value
-			public: // herited function
-				virtual void onDraw();
-				virtual void onRegenerateDisplay();
-				virtual void periodicCall(const ewol::event::Time& _event);
+			public:
+				void onDraw() override;
+				void onRegenerateDisplay() override;
+				void periodicEvent(const ewol::event::Time& _event);
 		};
 	}
 }

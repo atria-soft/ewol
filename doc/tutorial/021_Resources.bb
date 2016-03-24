@@ -82,7 +82,7 @@ Then for basic resource:
 [code style=c++]
 #include <ewol/object/Resource.h>
 namespace appl {
-	class MyResource : public ewol::Resource {
+	class MyResource : public gale::Resource {
 		protected:
 			//! @brief Constructor
 			MyResource() :

@@ -39,11 +39,11 @@ namespace ewol {
 		 *  // no need of this event watching ...
 		 *  tmpWidget->signalCancel.connect(shared_from_this(), &****::onCallbackClosePopUp);
 		 *  // set the title:
-		 *   tmpWidget->setTitle("Open files ...");
+		 *   tmpWidget->propertyLabelTitle.set("Open files ...");
 		 *  // Set the validate Label:
-		 *  tmpWidget->setValidateLabel("Open");
+		 *  tmpWidget->propertyLabelValidate.set("Open");
 		 *  // simply set a folder (by default this is the home folder)
-		 *  //tmpWidget->setFolder("/home/me");
+		 *  //tmpWidget->propertyPath.set("/home/me");
 		 *  // add the widget as windows pop-up ...
 		 *  ewol::widget::WindowsShared tmpWindows = getWindows();
 		 *  if (tmpWindows == nullptr) {
@@ -67,14 +67,14 @@ namespace ewol {
 		 */
 		class FileChooser : public ewol::widget::Composer {
 			public: // signals
-				esignal::ISignal<> signalCancel;
-				esignal::ISignal<std::string> signalValidate;
+				esignal::ISignal<> signalCancel; //!< abort the display of the pop-up or press cancel button
+				esignal::ISignal<std::string> signalValidate; //!< select file(s)
 			public: // properties
-				eproperty::Value<std::string> propertyPath;
-				eproperty::Value<std::string> propertyFile;
-				eproperty::Value<std::string> propertyLabelTitle;
-				eproperty::Value<std::string> propertyLabelValidate;
-				eproperty::Value<std::string> propertyLabelCancel;
+				eproperty::Value<std::string> propertyPath; //!< Current path to explore
+				eproperty::Value<std::string> propertyFile; //!< Selected file
+				eproperty::Value<std::string> propertyLabelTitle; //!< Label of the pop-up (can use translation)
+				eproperty::Value<std::string> propertyLabelValidate; //!< Label of validate button of the pop-up (can use translation)
+				eproperty::Value<std::string> propertyLabelCancel; //!< Label of cancel/close button of the pop-up (can use translation)
 			protected:
 				FileChooser();
 				void init() override;
