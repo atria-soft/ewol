@@ -1,42 +1,42 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
- * @copyright 2010, Edouard DUPIN, all right reserved
+ * @copyright 2011, Edouard DUPIN, all right reserved
  * 
- * @license GPL v3 (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 #pragma once
 
 #include <elog/log.h>
+#include <assert.h>
 
 namespace appl {
+	/**
+	 * @brief Get local id of the library
+	 * @return Unique ID of the library
+	 */
 	int32_t getLogId();
 };
-// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
-#define APPL_BASE(info,data) \
-	do { \
-		if (info <= elog::getLevel(appl::getLogId())) { \
-			std::stringbuf sb; \
-			std::ostream tmpStream(&sb); \
-			tmpStream << data; \
-			elog::logStream(appl::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
-		} \
-	} while(0)
 
-#define APPL_CRITICAL(data)      APPL_BASE(1, data)
-#define APPL_ERROR(data)         APPL_BASE(2, data)
-#define APPL_WARNING(data)       APPL_BASE(3, data)
+#define APPL_BASIC(info,data) ELOG_BASE(appl::getLogId(),info,data)
+
+#define APPL_PRINT(data)         APPL_BASIC(-1, data)
+#define APPL_CRITICAL(data)      APPL_BASIC(1, data)
+#define APPL_ERROR(data)         APPL_BASIC(2, data)
+#define APPL_WARNING(data)       APPL_BASIC(3, data)
 #ifdef DEBUG
-	#define APPL_INFO(data)          APPL_BASE(4, data)
-	#define APPL_DEBUG(data)         APPL_BASE(5, data)
-	#define APPL_VERBOSE(data)       APPL_BASE(6, data)
-	#define APPL_TODO(data)          APPL_BASE(4, "TODO : " << data)
+	#define APPL_INFO(data)      APPL_BASIC(4, data)
+	#define APPL_DEBUG(data)     APPL_BASIC(5, data)
+	#define APPL_VERBOSE(data)   APPL_BASIC(6, data)
+	#define APPL_TODO(data)      APPL_BASIC(4, "TODO : " << data)
 #else
-	#define APPL_INFO(data)          do { } while(false)
-	#define APPL_DEBUG(data)         do { } while(false)
-	#define APPL_VERBOSE(data)       do { } while(false)
-	#define APPL_TODO(data)          do { } while(false)
+	#define APPL_INFO(data)      do { } while(false)
+	#define APPL_DEBUG(data)     do { } while(false)
+	#define APPL_VERBOSE(data)   do { } while(false)
+	#define APPL_TODO(data)      do { } while(false)
 #endif
+
+#define APPL_HIDDEN(data)          do { } while(false)
 
 #define APPL_ASSERT(cond,data) \
 	do { \
