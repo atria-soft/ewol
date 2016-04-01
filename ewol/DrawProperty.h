@@ -12,7 +12,7 @@
 
 namespace ewol {
 	/**
-	 * @not-in-doc
+	 * @not_in_doc
 	 */
 	class DrawProperty{
 		/*

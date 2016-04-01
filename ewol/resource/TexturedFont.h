@@ -13,7 +13,7 @@
 namespace ewol {
 	namespace font {
 		/**
-		 * @not-in-doc
+		 * @not_in_doc
 		 */
 		enum mode {
 			Regular=0,

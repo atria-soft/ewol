@@ -48,7 +48,7 @@ namespace ewol {
 
 namespace ewol {
 	/**
-	 * @not-in-doc
+	 * @not_in_doc
 	 */
 	// TODO: change position of this ...
 	class EventShortCut {

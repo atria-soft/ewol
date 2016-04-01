@@ -1,4 +1,4 @@
-FAQ
+FAQ                                {#page_FAQ}
 ===
 
 What is ewol licence

@@ -36,7 +36,7 @@ namespace ewol {
 				 */
 				void displayListObject();
 			private:
-				//! @not-in-doc
+				//! @not_in_doc
 				friend class ewol::Object;
 				/**
 				 * @brief Internal API that used only with Object toi reference itself in the manager.

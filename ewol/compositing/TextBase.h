@@ -20,7 +20,7 @@ namespace ewol {
 	namespace compositing {
 		/**
 		 * @brief This class represent the specific display for every char in the string ...
-		 * @not-in-doc
+		 * @not_in_doc
 		 */
 		class TextDecoration {
 			public:

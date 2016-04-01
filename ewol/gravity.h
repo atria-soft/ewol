@@ -13,7 +13,7 @@
 namespace ewol {
 	/**
 	 * @brief Gravity of the widget property
-	 * @not-in-doc
+	 * @not_in_doc
 	 */
 	enum gravity {
 		gravity_center      = 0x00, //!< gravity is in center

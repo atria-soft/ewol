@@ -9,7 +9,7 @@
 
 namespace ewol {
 	/**
-	 * @not-in-doc
+	 * @not_in_doc
 	 * @brief Kerning properties of one specific Glyph with an other
 	 * 
 	 * Without Kerning :

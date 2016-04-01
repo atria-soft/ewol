@@ -24,7 +24,7 @@ EWOL is written in C++ and is not (for now) supported for other languages.
 Are there any licensing restrictions?
 -------------------------------------
 
-EWOL is [b]FREE software[/b] and [i]all sub-library are FREE and staticly linkable !!![/i]
+EWOL is EWOL is **FREE software** and //all sub-library are FREE and staticly linkable !!!//
 
 That allow you to use it for every program you want, including those developing proprietary software, without any license fees or royalties.
 
@@ -117,6 +117,8 @@ Program Using EWOL
 Main documentation:
 -------------------
 
+[page_bases]
+[page_FAQ]
 [doc[001_bases | Global Documantation]]
 
 [tutorial[000_Build | Tutorials]]
