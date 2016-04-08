@@ -6,6 +6,7 @@
 
 #include <appl/debug.h>
 #include <appl/widget/VectorDisplay.h>
+#include <ewol/object/Manager.h>
 #include <etk/tool.h>
 
 #undef __class__

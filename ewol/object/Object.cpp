@@ -127,7 +127,7 @@ bool ewol::Object::loadXML(const std::shared_ptr<const exml::Element>& _node) {
 		if (pair.first == "") {
 			continue;
 		}
-		if (propertySet(pair.first, pair.second) == false) {
+		if (properties.set(pair.first, pair.second) == false) {
 			errorOccured = true;
 		}
 	}
@@ -139,7 +139,7 @@ bool ewol::Object::storeXML(const std::shared_ptr<exml::Element>& _node) const {
 		return false;
 	}
 	bool errorOccured = true;
-	for (auto &it : propertyGetAll(true)) {
+	for (auto &it : properties.getAll(true)) {
 		_node->setAttribute(it.first, it.second);
 	}
 	return errorOccured;
@@ -150,7 +150,7 @@ bool ewol::Object::propertySetOnWidgetNamed(const std::string& _objectName, cons
 	if (object == nullptr) {
 		return false;
 	}
-	return object->propertySet(_config, _value);
+	return object->properties.set(_config, _value);
 }
 
 ewol::object::Manager& ewol::Object::getObjectManager() {
@@ -180,6 +180,6 @@ bool ewol::propertySetOnObjectNamed(const std::string& _objectName, const std::s
 	if (object == nullptr) {
 		return false;
 	}
-	return object->propertySet(_config, _value);
+	return object->properties.set(_config, _value);
 }
 

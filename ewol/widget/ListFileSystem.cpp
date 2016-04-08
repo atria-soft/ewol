@@ -206,10 +206,10 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				           && nullptr != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
-						case etk::FSN_FILE :
+						case etk::typeNode_file :
 							signalFileSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
-						case etk::FSN_FOLDER :
+						case etk::typeNode_folder :
 							signalFolderSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
@@ -230,10 +230,10 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && nullptr != m_list[m_selectedLine-offset] ) {
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
-						case etk::FSN_FILE :
+						case etk::typeNode_file :
 							signalFileValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
-						case etk::FSN_FOLDER :
+						case etk::typeNode_folder :
 							signalFolderValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:

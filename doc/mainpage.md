@@ -1,13 +1,15 @@
 Ewol library                                {#mainpage}
 ============
 
-What is EWOL, and how can I use it?
------------------------------------
+@tableofcontents
+
+What is EWOL?                               {#ewol_mainpage_what}
+=============
 
 EWOL, or Edn Widget OpenGl Layer, is a multi-platform library for creating graphical user interfaces in OpenGL. Offering a complete set of widgets.
 
-Where can I use it?
--------------------
+Where can I use it?                         {#ewol_mainpage_where}
+===================
 
 Everywhere! EWOL is cross-platform devolopped to support bases OS:
 - Linux (X11) (mouse)
@@ -16,15 +18,16 @@ Everywhere! EWOL is cross-platform devolopped to support bases OS:
 - Android (mouse + touch)
 - IOs (touch)
 
-What languages are supported?
------------------------------
+What languages are supported?                   {#ewol_mainpage_language}
+=============================
 
 EWOL is written in C++ and is not (for now) supported for other languages.
 
-Are there any licensing restrictions?
--------------------------------------
 
-EWOL is EWOL is **FREE software** and //all sub-library are FREE and staticly linkable !!!//
+Are there any licensing restrictions?           {#ewol_mainpage_restriction}
+=====================================
+
+EWOL is **FREE software** and _all sub-library are FREE and staticly linkable !!!_
 
 That allow you to use it for every program you want, including those developing proprietary software, without any license fees or royalties.
 
@@ -39,8 +42,8 @@ This exclude the classical extern library with licence:
 - L-GPL
 - GPL
 
-License (APACHE 2)
-------------------
+License (APACHE 2)                            {#ewol_mainpage_license}
+==================
 
 Copyright ewol Edouard DUPIN
 
@@ -57,8 +60,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-Sub library:
-------------
+Sub library:                                  {#ewol_mainpage_sub}
+============
 
 License:
 
@@ -80,7 +83,7 @@ License:
 
 ...
 
-Description:
+Description:                                  {#ewol_mainpage_desc}
 ------------
 
 Internal:
@@ -97,7 +100,7 @@ Internal:
 - [**audio-river**](http://musicdsp.github.io/audio-river) : High level audio abstraction
 - [**ege**](http://musicdsp.github.io/ege) : Ewol Game engine is a wrapper on the the bullet physical engine and ewol renderer engin. This is in developpement for now (the simple objective is to produce game to make profitable all my work)
 
-External:
+External:                                     {#ewol_mainpage_ext}
 ---------
 
 - **linearmath** : bullet mathamatical sub lib (for using same vec3).
@@ -107,15 +110,15 @@ External:
 - **freetype** : The classicle true-type reader lib.
 - **bulletlib** : the classical bullet library physical engine. (dependence by ege)
 
-Program Using EWOL
+Program Using EWOL                            {#ewol_mainpage_using}
 ------------------
 
 - [**edn**](http://musicdsp.github.io/edn): (Application in GPLv3) Edn is the main application using this lib and designed for (in the first time). This is a "Code editor".
 - [**worddown**](http://play.google.com/store/apps/details?id=com.edouarddupin.worddown): (Proprietary) Worddown is a simple word game.
 
 
-Main documentation:
--------------------
+Main documentation:                            {#ewol_mainpage_sub_doc}
+===================
 
 [page_bases]
 [page_FAQ]

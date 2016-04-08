@@ -942,7 +942,7 @@ bool ewol::compositing::TextBase::extrapolateLastId(const std::string& _text,
 	_space = 0;
 	
 	int32_t lastSpacePosition = _start;
-	int32_t lastSpacefreeSize;
+	int32_t lastSpacefreeSize = 0;
 	
 	float endPos = m_position.x();
 	bool endOfLine = false;
@@ -1005,7 +1005,7 @@ bool ewol::compositing::TextBase::extrapolateLastId(const std::u32string& _text,
 	_space = 0;
 	
 	int32_t lastSpacePosition = _start;
-	int32_t lastSpacefreeSize;
+	int32_t lastSpacefreeSize = 0;
 	
 	float endPos = m_position.x();
 	bool endOfLine = false;

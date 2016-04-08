@@ -211,8 +211,8 @@ void appl::MainWindows::updateProperty() {
 	widget->propertyValue.set(m_subWidget->getObjectType());
 	m_sizerDynamic->subWidgetAdd(widget);
 	addSpacer(m_sizerDynamic, etk::color::red);
-	for (size_t iii=0; iii<m_subWidget->getPropertyCount(); ++iii) {
-		eproperty::Property* param = m_subWidget->getPropertyRaw(iii);
+	for (size_t iii=0; iii<m_subWidget->properties.size(); ++iii) {
+		eproperty::Property* param = m_subWidget->properties.getRaw(iii);
 		if (param == nullptr) {
 			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
 			continue;
@@ -487,7 +487,7 @@ void appl::MainWindows::updateProperty() {
 								return;
 							}
 							APPL_INFO("set parameter : name=" << param->getName() << " value=" << _value);
-							m_subWidget->propertySet(param->getName(), etk::to_string(_value));
+							m_subWidget->properties.set(param->getName(), etk::to_string(_value));
 							return;
 						});
 					m_listConnection.push_back(std::move(conn));

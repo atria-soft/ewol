@@ -44,7 +44,7 @@ template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit
 		EWOL_ERROR("EMPTY pointer");
 		return;
 	}
-	prop = _object->getPropertyRaw(_name);
+	prop = _object->properties.getRaw(_name);
 	if (prop == nullptr) {
 		EWOL_ERROR("property does not exit ... '" << _name << "'");
 		goto exit_on_error;
