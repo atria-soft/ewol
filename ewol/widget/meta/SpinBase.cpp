@@ -145,8 +145,8 @@ void ewol::widget::SpinBase::updateGui() {
 	}
 }
 
-bool ewol::widget::SpinBase::loadXML(const std::shared_ptr<const exml::Element>& _node) {
-	if (_node == nullptr) {
+bool ewol::widget::SpinBase::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
 		return false;
 	}
 	// parse generic properties: (we not parse the sizer property, it remove all subwidget)

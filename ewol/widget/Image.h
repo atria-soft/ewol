@@ -64,7 +64,7 @@ namespace ewol {
 				void calculateMinMaxSize() override;
 				void onRegenerateDisplay() override;
 				bool onEventInput(const ewol::event::Input& _event) override;
-				bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
+				bool loadXML(const exml::Element& _node) override;
 			protected:
 				virtual void onChangePropertySource();
 				virtual void onChangePropertyImageSize();

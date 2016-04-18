@@ -27,44 +27,44 @@ static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _d
 	if (_data == "") {
 		return nullptr;
 	}
-	std::shared_ptr<exml::Document> doc = exml::Document::create();
+	exml::Document doc;
 	if (_modeFile == true) {
-		if (doc->load(_data) == false) {
+		if (doc.load(_data) == false) {
 			EWOL_ERROR(" can not load file XML : " << _data);
 			return nullptr;
 		}
 	} else {
-		if (doc->parse(_data) == false) {
+		if (doc.parse(_data) == false) {
 			EWOL_ERROR(" can not load file XML string...");
 			return nullptr;
 		}
 	}
-	std::shared_ptr<const exml::Element> root = doc->toElement();
-	if (root->size() == 0) {
+	exml::Element root = doc.toElement();
+	if (root.nodes.size() == 0) {
 		EWOL_ERROR(" (l ?) No node in the XML file/string.");
 		return nullptr;
 	}
-	if (root->size() > 1) {
+	if (root.nodes.size() > 1) {
 		EWOL_WARNING(" (l ?) More than 1 node in the XML file/string. (JUST parse the first)");
 	}
-	std::shared_ptr<const exml::Element> pNode = root->getElement(0);
-	if (pNode == nullptr) {
+	exml::Element pNode = root.nodes[0].toElement();
+	if (pNode.exist() == false) {
 		EWOL_ERROR(" (l ?) No node in the XML file/string. {2}");
 		return nullptr;
 	}
-	std::string widgetName = pNode->getValue();
+	std::string widgetName = pNode.getValue();
 	if (widgetManager.exist(widgetName) == false) {
-		EWOL_ERROR("(l "<<pNode->getPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << widgetManager.list() << "]" );
+		EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << widgetManager.list() << "]" );
 		return nullptr;
 	}
 	EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
 	ewol::WidgetShared tmpWidget = widgetManager.create(widgetName);
 	if (tmpWidget == nullptr) {
-		EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
+		EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
 		return nullptr;
 	}
 	if (tmpWidget->loadXML(pNode) == false) {
-		EWOL_ERROR ("(l "<<pNode->getPos()<<") can not load widget properties : \"" << widgetName << "\"");
+		EWOL_ERROR ("(l " << pNode.getPos() << ") can not load widget properties : '" << widgetName << "'");
 	}
 	return tmpWidget;
 }
@@ -82,20 +82,20 @@ ewol::widget::Composer::~Composer() {
 }
 
 bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
-	std::shared_ptr<exml::Document> doc = exml::Document::create();
-	if (doc->load(_fileName) == false) {
+	exml::Document doc;
+	if (doc.load(_fileName) == false) {
 		EWOL_ERROR(" can not load file XML : " << _fileName);
 		return false;
 	}
-	std::shared_ptr<const exml::Element> root = doc->getNamed("composer");
-	if (root == nullptr) {
+	exml::Element root = doc.nodes["composer"];
+	if (root.exist() == false) {
 		// Maybe a multiple node XML for internal config:
-		root = doc->toElement();
-		if (root == nullptr) {
-			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
+		root = doc.toElement();
+		if (root.exist() == false) {
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: 'composer' ...");
 			return false;
 		}
-		if (root->size() == 0) {
+		if (root.nodes.size() == 0) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) no node in the Container XML element.");
 			return false;
 		}
@@ -107,20 +107,20 @@ bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 }
 
 bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlString) {
-	std::shared_ptr<exml::Document> doc = exml::Document::create();
-	if (doc->parse(_composerXmlString) == false) {
+	exml::Document doc;
+	if (doc.parse(_composerXmlString) == false) {
 		EWOL_ERROR(" can not load file XML string...");
 		return false;
 	}
-	std::shared_ptr<const exml::Element> root = doc->getNamed("composer");
-	if (root == nullptr) {
+	exml::Element root = doc.nodes["composer"];
+	if (root.exist() == false) {
 		// Maybe a multiple node XML for internal config:
-		root = doc->toElement();
-		if (root == nullptr) {
-			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
+		root = doc.toElement();
+		if (root.exist() == false) {
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: 'composer' ...");
 			return false;
 		}
-		if (root->size() == 0) {
+		if (root.nodes.size() == 0) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) no node in the Container XML element.");
 			return false;
 		}

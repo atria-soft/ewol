@@ -229,14 +229,14 @@ namespace ewol {
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
-			virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node);
+			virtual bool loadXML(const exml::Element& _node);
 			/**
 			 * @brief store properties in this XML node.
 			 * @param[in,out] _node Pointer on the tinyXML node.
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
-			virtual bool storeXML(const std::shared_ptr<exml::Element>& _node) const;
+			virtual bool storeXML(exml::Element& _node) const;
 		public:
 			/**
 			 * @breif get the current Object manager.

@@ -116,14 +116,14 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) {
 	return false;
 }
 
-bool ewol::Object::loadXML(const std::shared_ptr<const exml::Element>& _node) {
-	if (_node == nullptr) {
+bool ewol::Object::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
 		return false;
 	}
 	bool errorOccured = false;
 	
-	for(size_t iii=0 ; iii<_node->sizeAttribute() ; iii++) {
-		auto pair = _node->getAttrPair(iii);
+	for(const auto it : _node.attributes) {
+		auto pair = it.getPair();
 		if (pair.first == "") {
 			continue;
 		}
@@ -134,13 +134,13 @@ bool ewol::Object::loadXML(const std::shared_ptr<const exml::Element>& _node) {
 	return errorOccured;
 }
 
-bool ewol::Object::storeXML(const std::shared_ptr<exml::Element>& _node) const {
-	if (nullptr == _node) {
+bool ewol::Object::storeXML(exml::Element& _node) const {
+	if (_node.exist() == false) {
 		return false;
 	}
 	bool errorOccured = true;
 	for (auto &it : properties.getAll(true)) {
-		_node->setAttribute(it.first, it.second);
+		_node.attributes.set(it.first, it.second);
 	}
 	return errorOccured;
 }

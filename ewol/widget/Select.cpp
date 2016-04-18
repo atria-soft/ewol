@@ -111,8 +111,8 @@ void ewol::widget::Select::optionAdd(int32_t _value, std::string _data) {
 	m_listElement.push_back(ewol::widget::Select::Element(_value, _data, false));
 }
 
-bool ewol::widget::Select::loadXML(const std::shared_ptr<const exml::Element>& _node) {
-	if (_node == nullptr) {
+bool ewol::widget::Select::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
 		return false;
 	}
 	// parse generic properties:
@@ -120,26 +120,25 @@ bool ewol::widget::Select::loadXML(const std::shared_ptr<const exml::Element>& _
 	// remove previous element:
 	//subWidgetRemove();
 	// parse all the elements:
-	for(size_t iii=0; iii< _node->size(); iii++) {
-		std::shared_ptr<const exml::Element> pNode = _node->getElement(iii);
-		if (pNode == nullptr) {
+	for(const auto it : _node.nodes) {
+		exml::Element pNode = it.toElement();
+		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
-		if (pNode->getValue() != "option") {
-			EWOL_ERROR("(l "<<pNode->getPos()<<") Unknown basic node='" << pNode->getValue() << "' not in : [option]" );
+		if (pNode.getValue() != "option") {
+			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << pNode.getValue() << "' not in : [option]" );
 			continue;
 		}
-		std::string valId = pNode->getAttribute("id");
-		std::string valIsSelected = pNode->getAttribute("select");
-		std::string valText = pNode->getText();
+		std::string valId = pNode.attributes["id"];
+		std::string valIsSelected = pNode.attributes["select"];
+		std::string valText = pNode.getText();
 		int32_t id = etk::string_to_int32_t(valId);
-		int32_t select = etk::string_to_bool(valIsSelected);
+		bool select = etk::string_to_bool(valIsSelected);
 		optionAdd(id, valText);
 		if (select == true) {
 			propertyValue.set(id);
 		}
-		
 		EWOL_WARNING("Add option : id='" << valId << "' select='" << valIsSelected << "' text='" << valText << "'");
 	}
 	return true;

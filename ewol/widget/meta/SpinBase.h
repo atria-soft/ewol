@@ -94,7 +94,7 @@ namespace ewol {
 				ewol::widget::ButtonShared m_widgetButtonUp;
 				virtual void updateGui();
 			public:
-				virtual bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
+				virtual bool loadXML(const exml::Element& _node) override;
 			protected:
 				virtual void onChangePropertySpinMode();
 				virtual void onChangePropertyShape();

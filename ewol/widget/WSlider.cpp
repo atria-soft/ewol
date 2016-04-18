@@ -20,9 +20,6 @@ std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::s
 	return _os;
 }
 
-#undef __class__
-#define __class__ "WSlider"
-
 ewol::widget::WSlider::WSlider() :
   signalStartSlide(this, "start", ""),
   signalStopSlide(this, "stop", ""),

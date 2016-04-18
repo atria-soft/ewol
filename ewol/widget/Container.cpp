@@ -142,8 +142,8 @@ ewol::WidgetShared ewol::widget::Container::getWidgetAtPos(const vec2& _pos) {
 	return nullptr;
 };
 
-bool ewol::widget::Container::loadXML(const std::shared_ptr<const exml::Element>& _node) {
-	if (_node == nullptr) {
+bool ewol::widget::Container::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
 		return false;
 	}
 	// parse generic properties:
@@ -151,31 +151,31 @@ bool ewol::widget::Container::loadXML(const std::shared_ptr<const exml::Element>
 	// remove previous element:
 	subWidgetRemove();
 	// parse all the elements:
-	for(size_t iii=0; iii< _node->size(); iii++) {
-		std::shared_ptr<const exml::Element> pNode = _node->getElement(iii);
-		if (pNode == nullptr) {
+	for (const auto it : _node.nodes) {
+		exml::Element pNode = it.toElement();
+		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
-		std::string widgetName = pNode->getValue();
+		std::string widgetName = pNode.getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->getPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << getWidgetManager().list() << "]" );
+			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
 			continue;
 		}
 		if (getSubWidget() != nullptr) {
-			EWOL_ERROR("(l "<<pNode->getPos()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
+			EWOL_ERROR("(l " << pNode.getPos() << ") " << __class__ << " Can only have one subWidget ??? node='" << widgetName << "'" );
 			continue;
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
 		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName);
 		if (tmpWidget == nullptr) {
-			EWOL_ERROR ("(l "<<pNode->getPos()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
 			continue;
 		}
 		// add widget :
 		setSubWidget(tmpWidget);
-		if (false == tmpWidget->loadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->getPos()<<") can not load widget properties : \"" << widgetName << "\"");
+		if (tmpWidget->loadXML(pNode) == false) {
+			EWOL_ERROR ("(l " << pNode.getPos() << ") can not load widget properties : '" << widgetName << "'");
 			return false;
 		}
 	}

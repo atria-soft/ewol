@@ -141,14 +141,14 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-bool ewol::widget::Label::loadXML(const std::shared_ptr<const exml::Element>& _node) {
-	if (_node == nullptr) {
+bool ewol::widget::Label::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
 		return false;
 	}
 	ewol::Widget::loadXML(_node);
 	// get internal data : 
-	EWOL_DEBUG("Load label:" << _node->getText());
-	propertyValue.set(_node->getText());
+	EWOL_DEBUG("Load label:" << _node.getText());
+	propertyValue.set(_node.getText());
 	return true;
 }
 

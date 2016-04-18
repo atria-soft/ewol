@@ -245,47 +245,48 @@ void ewol::compositing::TextBase::print(const std::string& _text) {
 }
 
 
-void ewol::compositing::TextBase::parseHtmlNode(const std::shared_ptr<const exml::Element>& _element) {
+void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 	// get the static real pointer
-	if (_element == nullptr) {
+	if (_element.exist() == false) {
 		EWOL_ERROR( "Error Input node does not existed ...");
+		return;
 	}
-	for(size_t iii=0; iii< _element->size(); iii++) {
-		if (_element->getType(iii) == exml::typeComment) {
+	for(auto it : _element.nodes) {
+		if (it.isComment() == true) {
 			// nothing to do ...
-		} else if (_element->getType(iii) == exml::typeText) {
-			std::shared_ptr<const exml::Node> child = _element->getNode(iii);
-			htmlAddData(etk::to_u32string(child->getValue()));
-			EWOL_VERBOSE("XML add : " << child->getValue());
 			continue;
-		} else if (_element->getType(iii) != exml::typeElement) {
-			EWOL_ERROR("(l "<< _element->getNode(iii)->getPos() << ") node not suported type : " << _element->getType(iii) << " val=\""<< _element->getNode(iii)->getValue() << "\"" );
+		} else if (it.isText() == true) {
+			htmlAddData(etk::to_u32string(it.getValue()));
+			EWOL_VERBOSE("XML add : " << it.getValue());
+			continue;
+		} else if (it.isElement() == false) {
+			EWOL_ERROR("(l "<< it.getPos() << ") node not suported type : " << it.getType() << " val='"<< it.getValue() << "'" );
 			continue;
 		}
-		std::shared_ptr<const exml::Element> elem = _element->getElement(iii);
-		if (elem == nullptr) {
+		exml::Element elem = it.toElement();
+		if (elem.exist() == false) {
 			EWOL_ERROR("Cast error ...");
 			continue;
 		}
-		if(etk::compare_no_case(elem->getValue(), "br") == true) {
+		if(etk::compare_no_case(elem.getValue(), "br") == true) {
 			htmlFlush();
 			EWOL_VERBOSE("XML flush & newLine");
 			forceLineReturn();
-		} else if (etk::compare_no_case(elem->getValue(), "font") == true) {
+		} else if (etk::compare_no_case(elem.getValue(), "font") == true) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
-			std::string colorValue = elem->getAttribute("color");
+			std::string colorValue = elem.attributes["color"];
 			if (colorValue.size() != 0) {
 				m_htmlDecoTmp.m_colorFg = colorValue;
 			}
-			colorValue = elem->getAttribute("colorBg");
+			colorValue = elem.attributes["colorBg"];
 			if (colorValue.size() != 0) {
 				m_htmlDecoTmp.m_colorBg = colorValue;
 			}
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    etk::compare_no_case(elem->getValue(), "b") == true
-		           || etk::compare_no_case(elem->getValue(), "bold") == true) {
+		} else if(    etk::compare_no_case(elem.getValue(), "b") == true
+		           || etk::compare_no_case(elem.getValue(), "bold") == true) {
 			EWOL_VERBOSE("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -295,8 +296,8 @@ void ewol::compositing::TextBase::parseHtmlNode(const std::shared_ptr<const exml
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    etk::compare_no_case(elem->getValue(), "i") == true
-		           || etk::compare_no_case(elem->getValue(), "italic") == true) {
+		} else if(    etk::compare_no_case(elem.getValue(), "i") == true
+		           || etk::compare_no_case(elem.getValue(), "italic") == true) {
 			EWOL_VERBOSE("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -306,40 +307,40 @@ void ewol::compositing::TextBase::parseHtmlNode(const std::shared_ptr<const exml
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    etk::compare_no_case(elem->getValue(), "u") == true
-		           || etk::compare_no_case(elem->getValue(), "underline") == true) {
+		} else if(    etk::compare_no_case(elem.getValue(), "u") == true
+		           || etk::compare_no_case(elem.getValue(), "underline") == true) {
 			EWOL_VERBOSE("XML underline ...");
 			parseHtmlNode(elem);
-		} else if(    etk::compare_no_case(elem->getValue(), "p") == true
-		           || etk::compare_no_case(elem->getValue(), "paragraph") == true) {
+		} else if(    etk::compare_no_case(elem.getValue(), "p") == true
+		           || etk::compare_no_case(elem.getValue(), "paragraph") == true) {
 			EWOL_VERBOSE("XML paragraph ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
-		} else if (etk::compare_no_case(elem->getValue(), "center") == true) {
+		} else if (etk::compare_no_case(elem.getValue(), "center") == true) {
 			EWOL_VERBOSE("XML center ...");
 			htmlFlush();
 			m_alignement = alignCenter;
 			parseHtmlNode(elem);
-		} else if (etk::compare_no_case(elem->getValue(), "left") == true) {
+		} else if (etk::compare_no_case(elem.getValue(), "left") == true) {
 			EWOL_VERBOSE("XML left ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			parseHtmlNode(elem);
-		} else if (etk::compare_no_case(elem->getValue(), "right") == true) {
+		} else if (etk::compare_no_case(elem.getValue(), "right") == true) {
 			EWOL_VERBOSE("XML right ...");
 			htmlFlush();
 			m_alignement = alignRight;
 			parseHtmlNode(elem);
-		} else if (etk::compare_no_case(elem->getValue(), "justify") == true) {
+		} else if (etk::compare_no_case(elem.getValue(), "justify") == true) {
 			EWOL_VERBOSE("XML justify ...");
 			htmlFlush();
 			m_alignement = alignJustify;
 			parseHtmlNode(elem);
 		} else {
-			EWOL_ERROR("(l "<< elem->getPos() << ") node not suported type : " << elem->getType() << " val=\""<< elem->getValue() << "\"" );
+			EWOL_ERROR("(l "<< elem.getPos() << ") node not suported type: " << elem.getType() << " val='"<< elem.getValue() << "'" );
 		}
 	}
 }
@@ -373,15 +374,15 @@ void ewol::compositing::TextBase::printHTML(const std::string& _text) {
 		return;
 	}
 	
-	std::shared_ptr<const exml::Element> root = doc.getNamed( "html" );
-	if (root == nullptr) {
-		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
+	exml::Element root = doc.nodes["html"];
+	if (root.exist() == false) {
+		EWOL_ERROR( "can not load XML: main node not find: 'html'");
 		doc.display();
 		return;
 	}
-	std::shared_ptr<const exml::Element> bodyNode = root->getNamed( "body" );
-	if (root == nullptr) {
-		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
+	exml::Element bodyNode = root.nodes["body"];
+	if (root.exist() == false) {
+		EWOL_ERROR( "can not load XML: main node not find: 'body'");
 		return;
 	}
 	parseHtmlNode(bodyNode);
@@ -401,15 +402,15 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 		return;
 	}
 	
-	std::shared_ptr<exml::Element> root = doc.getNamed( "html" );
-	if (root == nullptr) {
-		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
+	exml::Element root = doc.nodes["html"];
+	if (root.exist() == false) {
+		EWOL_ERROR( "can not load XML: main node not find: 'html'");
 		doc.display();
 		return;
 	}
-	std::shared_ptr<exml::Element> bodyNode = root->getNamed( "body" );
-	if (root == nullptr) {
-		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
+	exml::Element bodyNode = root.nodes["body"];
+	if (root.exist() == false) {
+		EWOL_ERROR( "can not load XML: main node not find: 'body'");
 		return;
 	}
 	parseHtmlNode(bodyNode);

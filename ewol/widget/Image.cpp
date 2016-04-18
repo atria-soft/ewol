@@ -145,14 +145,14 @@ bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _node) {
-	if (_node == nullptr) {
+bool ewol::widget::Image::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
 		return false;
 	}
 	ewol::Widget::loadXML(_node);
 	// get internal data : 
 	
-	std::string tmpAttributeValue = _node->getAttribute("ratio");
+	std::string tmpAttributeValue = _node.attributes["ratio"];
 	if (tmpAttributeValue.size() != 0) {
 		if (etk::compare_no_case(tmpAttributeValue, "true") == true) {
 			propertyKeepRatio.setDirect(true);
@@ -162,25 +162,25 @@ bool ewol::widget::Image::loadXML(const std::shared_ptr<const exml::Element>& _n
 			propertyKeepRatio.setDirect(false);
 		}
 	}
-	tmpAttributeValue = _node->getAttribute("size");
+	tmpAttributeValue = _node.attributes["size"];
 	if (tmpAttributeValue.size() != 0) {
 		//EWOL_CRITICAL(" Parse SIZE : " << tmpAttributeValue);
 		propertyImageSize.setDirect(tmpAttributeValue);
 		//EWOL_CRITICAL("               == > " << propertyImageSize);
 	}
-	tmpAttributeValue = _node->getAttribute("border");
+	tmpAttributeValue = _node.attributes["border"];
 	if (tmpAttributeValue.size() != 0) {
 		propertyBorder.setDirect(tmpAttributeValue);
 	}
-	tmpAttributeValue = _node->getAttribute("smooth");
+	tmpAttributeValue = _node.attributes["smooth"];
 	if (tmpAttributeValue.size() != 0) {
 		propertySmooth.setDirect(etk::string_to_bool(tmpAttributeValue));
 	}
 	//EWOL_DEBUG("Load label:" << node->ToElement()->getText());
-	if (_node->size() != 0) {
-		propertySource.set(_node->getText());
+	if (_node.nodes.size() != 0) {
+		propertySource.set(_node.getText());
 	} else {
-		tmpAttributeValue = _node->getAttribute("src");
+		tmpAttributeValue = _node.attributes["src"];
 		if (tmpAttributeValue.size() != 0) {
 			propertySource.set(tmpAttributeValue);
 		}

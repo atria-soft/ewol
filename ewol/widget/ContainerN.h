@@ -97,7 +97,7 @@ namespace ewol {
 				void calculateMinMaxSize() override;
 				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
 				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
-				bool loadXML(const std::shared_ptr<const exml::Element>& _node) override;
+				bool loadXML(const exml::Element& _node) override;
 				void setOffset(const vec2& _newVal) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 			protected:

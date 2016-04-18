@@ -355,7 +355,7 @@ namespace ewol {
 				 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include).
 				 * @param[in] _element the exml element.
 				 */
-				void parseHtmlNode(const std::shared_ptr<const exml::Element>& _element);
+				void parseHtmlNode(const exml::Element& _element);
 			public:
 				/**
 				 * @brief This generate the possibility to generate the big text property
