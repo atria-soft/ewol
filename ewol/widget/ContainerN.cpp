@@ -273,20 +273,20 @@ bool ewol::widget::ContainerN::loadXML(const exml::Element& _node) {
 	}
 	// parse all the elements :
 	for (const auto nodeIt : _node.nodes) {
-		const exml::Element pNode = _node.toElement();
+		const exml::Element pNode = nodeIt.toElement();
 		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
 		std::string widgetName = pNode.getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
-			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Unknown basic node=\"" << widgetName << "\" not in : [" << getWidgetManager().list() << "]" );
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
 			continue;
 		}
-		EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} load new element : \"" << widgetName << "\"");
+		EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} load new element : '" << widgetName << "'");
 		ewol::WidgetShared subWidget = getWidgetManager().create(widgetName);
 		if (subWidget == nullptr) {
-			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
 			continue;
 		}
 		// add sub element : 
@@ -296,7 +296,7 @@ bool ewol::widget::ContainerN::loadXML(const exml::Element& _node) {
 			subWidgetAddStart(subWidget);
 		}
 		if (subWidget->loadXML(pNode) == false) {
-			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") can not load widget properties : \"" << widgetName << "\"");
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") can not load widget properties : '" << widgetName << "'");
 			return false;
 		}
 	}

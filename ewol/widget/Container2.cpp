@@ -125,7 +125,7 @@ ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& 
 		if (m_subWidget[iii] != nullptr) {
 			vec2 origin2 = origin+m_offset;
 			vec2 minSize = m_subWidget[iii]->getCalculateMinSize();
-			bvec2 expand = m_subWidget[iii]->propertyExpand.get();
+			//bvec2 expand = m_subWidget[iii]->propertyExpand.get();
 			origin2 += ewol::gravityGenerateDelta(propertyGravity, minSize - localAvaillable);
 			m_subWidget[iii]->setOrigin(m_origin + origin);
 			m_subWidget[iii]->setSize(subElementSize);
@@ -183,11 +183,12 @@ bool ewol::widget::Container2::loadXML(const exml::Element& _node) {
 	ewol::Widget::loadXML(_node);
 	// remove previous element :
 	subWidgetRemove();
-	
-	// parse all the elements :
+	EWOL_VERBOSE("Create en element 2 ... with nodes.size()=" << _node.nodes.size());
+	// parse all the elements:
 	for(const auto it : _node.nodes) {
-		exml::Element pNode = _node.toElement();
-		if (pNode.exist()) {
+		EWOL_VERBOSE("    node: " << it);
+		exml::Element pNode = it.toElement();
+		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
@@ -200,7 +201,7 @@ bool ewol::widget::Container2::loadXML(const exml::Element& _node) {
 		if (getSubWidget() != nullptr) {
 			toogleMode=true;
 			if (getSubWidgetToggle() != nullptr) {
-				EWOL_ERROR("(l " << pNode.getPos() << ") " << __class__ << " Can only have one subWidget ??? node='" << widgetName << "'" );
+				EWOL_ERROR("(l " << pNode.getPos() << ") Can only have one subWidget ??? node='" << widgetName << "'" );
 				continue;
 			}
 		}
