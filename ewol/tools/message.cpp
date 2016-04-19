@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -14,9 +14,6 @@
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/widget/meta/StdPopUp.h>
-
-#undef __class__
-#define __class__ "tools::message"
 
 void ewol::tools::message::create(enum ewol::tools::message::type _type, const std::string& _message) {
 	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();

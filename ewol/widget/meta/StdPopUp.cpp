@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,9 +12,6 @@
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Manager.h>
 #include <vector>
-
-#undef __class__
-#define __class__ "ewol::StdPopUp"
 
 ewol::widget::StdPopUp::StdPopUp() :
   propertyTitle(this, "title",

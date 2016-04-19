@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -13,9 +13,6 @@
 #include <ewol/widget/Manager.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/Padding.h>
-
-#undef __class__
-#define __class__	"ContextMenu"
 
 ewol::widget::ContextMenu::ContextMenu():
   propertyShape(this, "shape",

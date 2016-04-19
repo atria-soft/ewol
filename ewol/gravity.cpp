@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <ewol/debug.h>
 #include <ewol/gravity.h>
-
-#undef __class__
-#define __class__ "gravity"
 
 std::string ewol::gravityToString(const enum ewol::gravity _obj) {
 	switch(_obj) {

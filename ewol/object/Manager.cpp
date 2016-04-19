@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <ewol/ewol.h>
 #include <etk/stdTools.h>
 #include <unistd.h>
-
-#undef __class__
-#define __class__ "ewol::object::Manager"
 
 ewol::object::Manager::Manager(ewol::Context& _context) :
   m_context(_context),

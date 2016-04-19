@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -9,10 +9,6 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/Button.h>
-
-#undef __class__
-#define __class__ "Button"
-
 
 // DEFINE for the shader display system:
 const static int32_t STATUS_UP(0);

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,9 +12,6 @@
 #include <gale/renderer/openGL/openGL-include.h>
 #include <gale/resource/Manager.h>
 #include <ewol/resource/Texture.h>
-
-#undef __class__
-#define __class__ "resource::Texture"
 
 /**
  * @brief get the next power 2 if the input
@@ -32,7 +29,6 @@ static int32_t nextP2(int32_t _value) {
 	EWOL_CRITICAL("impossible CASE....");
 	return val;
 }
-
 
 void ewol::resource::Texture::init(const std::string& _filename) {
 	gale::Resource::init(_filename);

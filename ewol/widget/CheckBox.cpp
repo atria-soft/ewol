@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -14,9 +14,6 @@
 #define STATUS_HOVER     (2)
 #define STATUS_PRESSED   (1)
 #define STATUS_SELECTED  (2)
-
-#undef __class__
-#define __class__	"CheckBox"
 
 ewol::widget::CheckBox::CheckBox() :
   signalPressed(this, "pressed", "CheckBox is pressed"),

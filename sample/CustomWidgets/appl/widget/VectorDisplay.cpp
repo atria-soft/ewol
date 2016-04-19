@@ -9,10 +9,6 @@
 #include <ewol/object/Manager.h>
 #include <etk/tool.h>
 
-#undef __class__
-#define __class__ "VectorDisplay"
-
-
 appl::widget::VectorDisplay::VectorDisplay() :
   m_autoDisplay(false),
   m_minVal(-1.0f),

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,9 +12,6 @@
 #include <ewol/widget/Manager.h>
 
 #include <etk/Color.h>
-
-#undef __class__
-#define __class__ "ColorBar"
 
 ewol::widget::ColorBar::ColorBar() :
   signalChange(this, "change", "Color value change"),

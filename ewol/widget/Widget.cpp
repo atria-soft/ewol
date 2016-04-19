@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -13,9 +13,6 @@
 #include <gale/renderer/openGL/openGL.h>
 #include <gale/renderer/openGL/openGL-include.h>
 #include <ewol/context/Context.h>
-
-#undef __class__
-#define __class__ "Widget"
 
 ewol::Widget::Widget() :
   propertyMinSize(this, "min-size",

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2015, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <ewol/context/Context.h>
 #include <gtest/gtest.h>
 #define NAME "Application"
-
-#undef __class__
-#define __class__	"TestEwolApplication"
 
 TEST(TestEwolApplication, Creation) {
 	ewol::context::Application* tmpAppl = new ewol::context::Application();

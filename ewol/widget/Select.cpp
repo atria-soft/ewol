@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,20 +12,12 @@
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Windows.h>
 
-#undef __class__
-#define __class__ "widget::Select::Element"
-
-
 ewol::widget::Select::Element::Element(int32_t _value, std::string _name, bool _selected):
   m_value(_value),
   m_name(_name),
   m_selected(_selected) {
 	
 }
-
-#undef __class__
-#define __class__ "widget::Select"
-
 
 ewol::widget::Select::Select() :
   signalValue(this, "value", "Select value change"),

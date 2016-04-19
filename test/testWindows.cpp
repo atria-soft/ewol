@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2015, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <ewol/widget/Windows.h>
 #include <gtest/gtest.h>
 #define NAME "Windows"
-
-#undef __class__
-#define __class__	"TestEwolWindows"
 
 namespace appl {
 	class Windows : public ewol::widget::Windows {
@@ -27,9 +24,7 @@ namespace appl {
 		public:
 			DECLARE_FACTORY(Windows);
 	};
-};
-
-
+}
 
 
 TEST(TestEwolWindows, Creation) {

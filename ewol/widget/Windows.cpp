@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -16,9 +16,6 @@
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/widget/meta/StdPopUp.h>
-
-#undef __class__
-#define __class__ "Windows"
 
 ewol::widget::Windows::Windows() :
   propertyColorConfiguration(this, "file-color", "{ewol}THEME:COLOR:Windows.json", "color file link on the theme", &ewol::widget::Windows::onChangePropertyColor),

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2010, Edouard DUPIN, all right reserved
@@ -29,9 +29,6 @@
 #include <appl/TestDistanceField.h>
 #include <etk/os/FSNode.h>
 #include <eproperty/Value.h>
-
-#undef __class__
-#define __class__ "MainWindows"
 
 appl::MainWindows::MainWindows() :
   m_gravity(ewol::gravity_buttomLeft),

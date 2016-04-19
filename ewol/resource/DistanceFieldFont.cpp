@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -20,8 +20,6 @@
 #include <edtaa3/edtaa3func.h>
 #include <ejson/ejson.h>
 
-#undef __class__
-#define __class__ "resource::DistanceFieldFont"
 #define SIZE_GENERATION (30)
 
 ewol::resource::DistanceFieldFont::DistanceFieldFont() :

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
-
-#undef __class__
-#define __class__ "Image"
 
 ewol::widget::Image::Image() :
   signalPressed(this, "pressed", "Image is pressed"),

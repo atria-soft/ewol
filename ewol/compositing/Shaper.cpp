@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -9,9 +9,6 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/compositing/Shaper.h>
-
-#undef __class__
-#define __class__	"ewol::compositing::Shaper"
 
 ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_name(_shaperName),

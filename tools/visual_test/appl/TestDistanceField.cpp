@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2010, Edouard DUPIN, all right reserved
@@ -25,19 +25,16 @@
 #include <ewol/widget/meta/Parameter.h>
 #include <ewol/widget/Manager.h>
 
-#undef __class__
-#define __class__	"TestDistanceField"
-
 appl::TestDistanceField::TestDistanceField(){
 	addObjectType("appl::TestDistanceField");
 }
 
 void appl::TestDistanceField::init() {
 	ewol::Widget::init();
-	APPL_INFO("Create " __class__ " (start)");
+	APPL_INFO("Create appl::TestDistanceField (start)");
 	propertyExpand.set(bvec2(true, true));
 	propertyFill.set(bvec2(true, true));
-	APPL_INFO("Create " __class__ " (end)");
+	APPL_INFO("Create appl::TestDistanceField (end)");
 }
 
 

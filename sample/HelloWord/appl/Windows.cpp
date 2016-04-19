@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2010, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <appl/debug.h>
 #include <appl/Windows.h>
 #include <ewol/widget/Label.h>
-
-#undef __class__
-#define __class__ "Windows"
 
 appl::Windows::Windows() {
 	addObjectType("appl::Windows");

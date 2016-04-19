@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Windows.h>
-
-#undef __class__
-#define __class__ "widget::Spin"
 
 ewol::widget::Spin::Spin() :
   signalValue(this, "value",

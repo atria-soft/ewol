@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,15 +11,10 @@
 #include <ewol/context/Context.h>
 #include <etk/types.h>
 
-#undef __class__
-#define __class__	"ewol::compositing::Text"
-
-
 ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
   m_font(nullptr) {
 	setFont(_fontName, _fontSize);
 }
-
 
 ewol::compositing::Text::~Text() {
 	

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,10 +10,6 @@
 #include <ewol/widget/meta/SpinBase.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Composer.h>
-
-#undef __class__
-#define __class__ "widget::SpinBase"
-
 
 ewol::widget::SpinBase::SpinBase() :
   propertyShape(this, "shape",

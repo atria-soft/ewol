@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -29,9 +29,6 @@ extern "C" {
 }
 
 #include <ewol/ewol.h>
-
-#undef __class__
-#define __class__ "FileChooser"
 
 ewol::widget::FileChooser::FileChooser() :
   signalCancel(this, "cancel", ""),

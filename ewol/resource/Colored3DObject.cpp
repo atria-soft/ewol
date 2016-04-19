@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,10 +11,6 @@
 #include <gale/resource/Manager.h>
 #include <gale/renderer/openGL/openGL-include.h>
 #include <esignal/ISignal.h>
-
-#undef __class__
-#define __class__	"resource::Colored3DObject"
-
 
 ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(nullptr) {

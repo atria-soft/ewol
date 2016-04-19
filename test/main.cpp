@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -20,10 +20,6 @@
 
 #define NAME "Empty"
 #include <gtest/gtest.h>
-
-#undef __class__
-#define __class__	"ewol-test"
-
 
 int main(int argc, const char *argv[]) {
 	// init Google test :

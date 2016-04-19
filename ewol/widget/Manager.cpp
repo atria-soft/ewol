@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -30,9 +30,6 @@
 #include <ewol/widget/Select.h>
 #include <ewol/widget/Spin.h>
 #include <vector>
-
-#undef __class__
-#define __class__ "ewol::widget::Manager"
 
 ewol::widget::Manager::Manager() :
   m_haveRedraw(true) {

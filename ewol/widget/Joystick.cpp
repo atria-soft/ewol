@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -16,9 +16,6 @@ static bool l_displayBackground(true);
 static std::string l_background("");
 static std::string l_foreground("");
 static float l_ratio(1.0/7.0);
-
-#undef __class__
-#define __class__ "Joystick"
 
 ewol::widget::Joystick::Joystick() :
   signalEnable(this, "enable", ""),

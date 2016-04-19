@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,9 +12,6 @@
 #include <etk/os/FSNode.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/context/Context.h>
-
-#undef __class__
-#define __class__	"ewol::widget::Composer"
 
 ewol::widget::Composer::Composer() :
   propertyRemoveIfUnderRemove(this, "remove-if-under-remove", true, "Demand the remove iof the widget if the subObject demand a remove") {

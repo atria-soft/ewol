@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Sprite.h>
-
-#undef __class__
-#define __class__ "ewol::compositing::Sprite"
 
 ewol::compositing::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite, int32_t _size) :
   ewol::compositing::Image(_imageName, false, _size),

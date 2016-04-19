@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -17,9 +17,6 @@
 #include <ewol/resource/FontFreeType.h>
 #include <ewol/resource/font/FontBase.h>
 #include <gale/resource/Manager.h>
-
-#undef __class__
-#define __class__ "resource::FontFreeType"
 
 // free Font hnadle of librairies ... entry for acces ...
 static int32_t l_countLoaded=0;

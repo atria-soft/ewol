@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2010, Edouard DUPIN, all right reserved
@@ -13,12 +13,6 @@
 #include <ewol/widget/Button.h>
 #include <appl/widget/VectorDisplay.h>
 #include <etk/tool.h>
-
-#undef __class__
-#define __class__ "Windows"
-
-static const char* const g_eventChangeValues = "appl-change-value";
-static const char* const g_eventAutoMode = "appl-change-auto";
 
 appl::Windows::Windows() :
   m_composer(nullptr) {

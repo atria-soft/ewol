@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -13,10 +13,6 @@
 #include <ewol/resource/ImageDF.h>
 #include <ewol/resource/Texture.h>
 #include <edtaa3/edtaa3func.h>
-
-
-#undef __class__
-#define __class__ "resource::TextureFile"
 
 ewol::resource::ImageDF::ImageDF() {
 	addResourceType("ewol::resource::ImageDF");

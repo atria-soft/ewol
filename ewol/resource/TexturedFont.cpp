@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -38,9 +38,6 @@ std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::font::mode _obj) {
 	}
 	return _os;
 }
-
-#undef __class__
-#define __class__ "resource::TexturedFont"
 
 ewol::resource::TexturedFont::TexturedFont() {
 	addResourceType("ewol::resource::TexturedFont");

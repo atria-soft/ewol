@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,11 +10,6 @@
 #include <ewol/ewol.h>
 #include <ewol/widget/Container.h>
 #include <ewol/widget/Manager.h>
-
-
-#undef __class__
-#define __class__	"Container"
-
 
 ewol::widget::Container::Container() {
 	addObjectType("ewol::widget::Container");
@@ -163,7 +158,7 @@ bool ewol::widget::Container::loadXML(const exml::Element& _node) {
 			continue;
 		}
 		if (getSubWidget() != nullptr) {
-			EWOL_ERROR("(l " << pNode.getPos() << ") " << __class__ << " Can only have one subWidget ??? node='" << widgetName << "'" );
+			EWOL_ERROR("(l " << pNode.getPos() << ") Can only have one subWidget ??? node='" << widgetName << "'" );
 			continue;
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");

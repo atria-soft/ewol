@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -7,9 +7,6 @@
  */
 
 #include <ewol/widget/Widget.h>
-
-#undef __class__
-#define __class__ "event::Input"
 
 std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Input& _obj) {
 	_os << "{type=" << _obj.getType();

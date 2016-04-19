@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -14,9 +14,6 @@
 #include <ewol/widget/Composer.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Windows.h>
-
-#undef __class__
-#define __class__ "Menu"
 
 ewol::widget::Menu::Menu() :
   signalSelect(this, "select", "") {

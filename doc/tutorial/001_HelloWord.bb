@@ -138,9 +138,6 @@ See [tutorial[010_ObjectModel | Next: Object model]] to understand why this stru
 	#include <appl/Windows.h>
 	#include <ewol/widget/Label.h>
 	
-	#undef __class__
-	#define __class__ "Windows"
-	
 	appl::Windows::Windows() {
 		addObjectType("appl::Windows");
 		propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);

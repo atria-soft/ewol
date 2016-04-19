@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,10 +12,6 @@
 #include <gale/resource/Manager.h>
 #include <ewol/resource/Image.h>
 #include <ewol/resource/Texture.h>
-
-
-#undef __class__
-#define __class__ "resource::TextureFile"
 
 const ivec2 ewol::resource::TextureFile::sizeAuto(-1,-1);
 const ivec2 ewol::resource::TextureFile::sizeDefault(0,0);

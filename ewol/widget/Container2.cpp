@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,11 +10,6 @@
 #include <ewol/ewol.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-
-
-#undef __class__
-#define __class__	"Container2"
-
 
 ewol::widget::Container2::Container2() :
   m_idWidgetDisplayed(0) {

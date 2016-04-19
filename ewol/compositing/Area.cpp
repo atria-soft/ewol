@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Area.h>
-
-#undef __class__
-#define __class__	"ewol::compositing::Area"
 
 ewol::compositing::Area::Area(const ivec2& _size) :
   m_position(0.0, 0.0, 0.0),

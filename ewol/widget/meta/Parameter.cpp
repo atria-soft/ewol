@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -15,11 +15,7 @@
 #include <ewol/widget/Composer.h>
 #include <vector>
 
-
 #include <ewol/ewol.h>
-
-#undef __class__
-#define __class__ "Parameter"
 
 ewol::widget::Parameter::Parameter() :
   signalClose(this, "close", ""),

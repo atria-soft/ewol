@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,10 +10,6 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/context/Context.h>
 #include <etk/types.h>
-
-#undef __class__
-#define __class__	"ewol::compositing::TextBase"
-
 
 ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _loadProgram) :
   m_position(0.0, 0.0, 0.0),

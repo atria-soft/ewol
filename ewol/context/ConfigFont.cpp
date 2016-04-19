@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <ewol/context/ConfigFont.h>
 #include <ewol/resource/FontFreeType.h>
-
-#undef __class__
-#define __class__ "context::ConfigFont"
 
 ewol::context::ConfigFont::ConfigFont() :
   m_folder("{ewol}DATA:fonts"),

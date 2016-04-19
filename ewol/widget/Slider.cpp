@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -9,9 +9,6 @@
 #include <ewol/widget/Slider.h>
 
 #include <ewol/widget/Manager.h>
-
-#undef __class__
-#define __class__ "Slider"
 
 const int32_t dotRadius = 6;
 

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2010, Edouard DUPIN, all right reserved
@@ -10,11 +10,6 @@
 
 #include <appl/debug.h>
 #include <etk/tool.h>
-
-#undef __class__
-#define __class__ "WidgetDisplay"
-
-
 
 appl::WidgetDisplay::WidgetDisplay() {
 	addObjectType("appl::WidgetDisplay");
@@ -29,7 +24,6 @@ void appl::WidgetDisplay::init() {
 		m_elements.push_back(appl::WidgetDisplay::Element());
 	}
 }
-
 
 appl::WidgetDisplay::~WidgetDisplay() {
 	

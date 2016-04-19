@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Manager.h>
-
-#undef __class__
-#define __class__ "Spacer"
 
 ewol::widget::Spacer::Spacer() :
   propertyColor(this, "color",

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,10 +8,6 @@
 
 #include <ewol/widget/Layer.h>
 #include <ewol/widget/Manager.h>
-
-
-#undef __class__
-#define __class__ "Layer"
 
 ewol::widget::Layer::Layer() {
 	addObjectType("ewol::widget::Layer");

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <appl/debug.h>
 #include <appl/widget/SizerColor.h>
-
-#undef __class__
-#define __class__ "SizerColor"
 
 appl::widget::SizerColor::SizerColor() :
   propertyBorderColor(this, "border-color", etk::color::none, "Color of the border"),

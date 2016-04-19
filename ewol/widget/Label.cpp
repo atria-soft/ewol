@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
-
-#undef __class__
-#define __class__ "Label"
 
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :

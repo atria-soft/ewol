@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -14,10 +14,6 @@
 #include <ejson/Number.h>
 #include <ejson/String.h>
 #include <stdexcept>
-
-#undef __class__
-#define __class__ "resource::ConfigFile"
-
 
 ewol::resource::ConfigFile::ConfigFile() :
   gale::Resource() {

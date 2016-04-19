@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <ewol/object/Manager.h>
 #include <ewol/debug.h>
 #include <ewol/context/Context.h>
-
-#undef __class__
-#define __class__ "Object"
 
 size_t ewol::Object::m_valUID = 0;
 

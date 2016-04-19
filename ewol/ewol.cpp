@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -15,8 +15,6 @@
 #include <etk/os/FSNode.h>
 #include <gale/Dimension.h>
 
-#undef __class__
-#define __class__ "ewol"
 #ifndef EWOL_VERSION
 #define EWOL_VERSION "0.0.0"
 #endif

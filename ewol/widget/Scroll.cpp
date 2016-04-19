@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <ewol/widget/Manager.h>
 #include <ewol/debug.h>
 #include <ewol/compositing/Drawing.h>
-
-#undef __class__
-#define __class__ "Scroll"
 
 ewol::widget::Scroll::Scroll() :
   propertyLimit(this, "limit",
