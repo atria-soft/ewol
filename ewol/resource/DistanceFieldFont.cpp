@@ -351,25 +351,18 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
-	std::shared_ptr<ejson::Array> tmpList = ejson::Array::create();
-	if (tmpList == nullptr) {
-		EWOL_ERROR("nullptr pointer");
-		return;
-	}
+	ejson::Array tmpList;
 	for (size_t iii=0; iii<m_listElement.size(); ++iii) {
-		std::shared_ptr<ejson::Object> tmpObj = ejson::Object::create();
-		if (tmpObj == nullptr) {
-			continue;
-		}
-		tmpObj->addString("m_UVal", etk::to_string(m_listElement[iii].m_UVal));
-		tmpObj->addNumber("m_glyphIndex", m_listElement[iii].m_glyphIndex);
-		tmpObj->addString("m_sizeTexture", (std::string)m_listElement[iii].m_sizeTexture);
-		tmpObj->addString("m_bearing", (std::string)m_listElement[iii].m_bearing);
-		tmpObj->addString("m_advance", (std::string)m_listElement[iii].m_advance);
-		tmpObj->addString("m_texturePosStart", (std::string)m_listElement[iii].m_texturePosStart);
-		tmpObj->addString("m_texturePosSize", (std::string)m_listElement[iii].m_texturePosSize);
-		tmpObj->addBoolean("m_exist", m_listElement[iii].m_exist);
-		tmpList->add(tmpObj);
+		ejson::Object tmpObj;
+		tmpObj.addString("m_UVal", etk::to_string(m_listElement[iii].m_UVal));
+		tmpObj.addNumber("m_glyphIndex", m_listElement[iii].m_glyphIndex);
+		tmpObj.addString("m_sizeTexture", (std::string)m_listElement[iii].m_sizeTexture);
+		tmpObj.addString("m_bearing", (std::string)m_listElement[iii].m_bearing);
+		tmpObj.addString("m_advance", (std::string)m_listElement[iii].m_advance);
+		tmpObj.addString("m_texturePosStart", (std::string)m_listElement[iii].m_texturePosStart);
+		tmpObj.addString("m_texturePosSize", (std::string)m_listElement[iii].m_texturePosSize);
+		tmpObj.addBoolean("m_exist", m_listElement[iii].m_exist);
+		tmpList.add(tmpObj);
 	}
 	doc.add("m_listElement", tmpList);
 	doc.addNumber("m_sizeRatio", m_sizeRatio);
@@ -401,26 +394,26 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 	m_lastRawHeigh = doc.getNumberValue("m_lastRawHeigh", 0);
 	m_borderSize = doc.getNumberValue("m_borderSize", 2);
 	m_textureBorderSize = doc.addString("m_textureBorderSize", "0,0");
-	std::shared_ptr<ejson::Array> tmpList = doc.getArray("m_listElement");
-	if (tmpList == nullptr) {
+	ejson::Array tmpList = doc["m_listElement"].toArray();
+	if (tmpList.exist() == false) {
 		EWOL_ERROR("nullptr pointer array");
 		return false;
 	}
 	m_listElement.clear();
-	for (size_t iii=0; iii<tmpList->size(); ++iii) {
-		std::shared_ptr<ejson::Object> tmpObj = tmpList->getObject(iii);
-		if (tmpObj == nullptr) {
+	for (const auto it : tmpList) {
+		const ejson::Object tmpObj = it.toObject();
+		if (tmpObj.exist() == false) {
 			continue;
 		}
 		GlyphProperty prop;
-		prop.m_UVal = etk::string_to_int32_t(tmpObj->getStringValue("m_UVal", "0"));
-		prop.m_glyphIndex = tmpObj->getNumberValue("m_glyphIndex", 0);
-		prop.m_sizeTexture = tmpObj->getStringValue("m_sizeTexture", "0,0");
-		prop.m_bearing = tmpObj->getStringValue("m_bearing", "0,0");
-		prop.m_advance = tmpObj->getStringValue("m_advance", "0,0");
-		prop.m_texturePosStart = tmpObj->getStringValue("m_texturePosStart", "0,0");
-		prop.m_texturePosSize = tmpObj->getStringValue("m_texturePosSize", "0,0");
-		prop.m_exist = tmpObj->getBooleanValue("m_exist", false);
+		prop.m_UVal = etk::string_to_int32_t(tmpObj.getStringValue("m_UVal", "0"));
+		prop.m_glyphIndex = tmpObj.getNumberValue("m_glyphIndex", 0);
+		prop.m_sizeTexture = tmpObj.getStringValue("m_sizeTexture", "0,0");
+		prop.m_bearing = tmpObj.getStringValue("m_bearing", "0,0");
+		prop.m_advance = tmpObj.getStringValue("m_advance", "0,0");
+		prop.m_texturePosStart = tmpObj.getStringValue("m_texturePosStart", "0,0");
+		prop.m_texturePosSize = tmpObj.getStringValue("m_texturePosSize", "0,0");
+		prop.m_exist = tmpObj.getBooleanValue("m_exist", false);
 		m_listElement.push_back(prop);
 	}
 	egami::load(m_data, m_fileName + ".bmp");

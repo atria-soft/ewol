@@ -18,7 +18,7 @@ namespace ewol {
 		class ConfigFile : public gale::Resource {
 			private:
 				ejson::Document m_doc;
-				etk::Hash<std::shared_ptr<ejson::Value>> m_list;
+				etk::Hash<ejson::Value> m_list;
 			protected:
 				ConfigFile();
 				void init(const std::string& _filename);

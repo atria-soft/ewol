@@ -44,19 +44,19 @@ void ewol::resource::ColorFile::reload() {
 		EWOL_ERROR("Can not load file : '" << m_name << "' = " << etk::FSNode(m_name).getFileSystemName());
 		return;
 	}
-	std::shared_ptr<ejson::Array> baseArray = doc.getArray("color");
-	if (baseArray == nullptr) {
+	ejson::Array baseArray = doc["color"].toArray();
+	if (baseArray.exist() == false) {
 		EWOL_ERROR("Can not get basic array : 'color'");
 		return;
 	}
-	for (size_t iii = 0; iii < baseArray->size(); ++iii) {
-		std::shared_ptr<ejson::Object> tmpObj = baseArray->getObject(iii);
-		if (tmpObj == nullptr) {
-			EWOL_DEBUG(" can not get object in 'color' id=" << iii);
+	for (const auto it : baseArray) {
+		ejson::Object tmpObj = it.toObject();
+		if (tmpObj.exist() == false) {
+			EWOL_DEBUG(" can not get object in 'color' : " << it);
 			continue;
 		}
-		std::string name = tmpObj->getStringValue("name", "");
-		std::string color = tmpObj->getStringValue("color", m_errorColor.getHexString());
+		std::string name = tmpObj.getStringValue("name", "");
+		std::string color = tmpObj.getStringValue("color", m_errorColor.getHexString());
 		EWOL_DEBUG("find new color : '" << name << "' color='" << color << "'");
 		if (name.size() == 0) {
 			EWOL_ERROR("Drop an empty name");

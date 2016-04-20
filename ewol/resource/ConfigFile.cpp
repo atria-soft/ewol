@@ -36,14 +36,14 @@ void ewol::resource::ConfigFile::reload() {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	// reset all parameters
 	for (int32_t iii=0; iii<m_list.size(); iii++){
-		if (nullptr != m_list[iii]) {
-			m_list[iii] = nullptr;
+		if (m_list[iii].exist() == true) {
+			m_list[iii] = ejson::empty();
 		}
 	}
 	m_doc.load(m_name);
 	
 	for (auto elementName : m_list.getKeys()) {
-		if (m_doc.exist(elementName) == true) {
+		if (m_doc[elementName].exist() == true) {
 			m_list[elementName] = m_doc[elementName];
 		}
 	}
@@ -54,9 +54,9 @@ int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {
-		m_list.add(_paramName, nullptr);
+		m_list.add(_paramName, ejson::empty());
 	}
-	if (m_doc.exist(_paramName) == true) {
+	if (m_doc[_paramName].exist() == true) {
 		m_list[_paramName] = m_doc[_paramName];
 	}
 	return m_list.getId(_paramName);
@@ -66,39 +66,27 @@ int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
 double ewol::resource::ConfigFile::getNumber(int32_t _id) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (    _id < 0
-	     || m_list[_id] == nullptr) {
+	     || m_list[_id].exist() == false) {
 		return 0.0;
 	}
-	std::shared_ptr<ejson::Number> tmp = m_list[_id]->toNumber();
-	if (tmp == nullptr) {
-		return 0.0;
-	}
-	return tmp->get();
+	return m_list[_id].toNumber().get();
 }
 
 const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	static const std::string& errorString("");
 	if (    _id < 0
-	     || m_list[_id] == nullptr) {
+	     || m_list[_id].exist() == false) {
 		return errorString;
 	}
-	std::shared_ptr<ejson::String> tmp = m_list[_id]->toString();
-	if (tmp == nullptr) {
-		return errorString;
-	}
-	return tmp->get();
+	return m_list[_id].toString().get();
 }
 
 bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (    _id < 0
-	     || m_list[_id] == nullptr) {
+	     || m_list[_id].exist() == false) {
 		return false;
 	}
-	std::shared_ptr<ejson::Boolean> tmp = m_list[_id]->toBoolean();
-	if (tmp == nullptr) {
-		return false;
-	}
-	return tmp->get();
+	return m_list[_id].toBoolean().get();
 }
