@@ -37,6 +37,7 @@ namespace appl {
 			void onCallbackThemeChange(const bool& _value);
 			void onCallbackWidgetChange(int32_t _increment);
 			void updateProperty();
+			void onCallbackShortCut(const std::string& _value);
 	};
 };
 

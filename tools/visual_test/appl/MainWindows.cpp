@@ -60,6 +60,18 @@ void appl::MainWindows::init() {
 	if (m_subWidget == nullptr) {
 		APPL_CRITICAL("Can not get subWidget pointer");
 	}
+	shortCutAdd("F12",          "menu:reloade-shader");
+	signalShortcut.connect(shared_from_this(), &appl::MainWindows::onCallbackShortCut);
+}
+
+void appl::MainWindows::onCallbackShortCut(const std::string& _value) {
+	APPL_WARNING("Event from ShortCut : " << _value);
+	if (_value == "menu:reloade-shader") {
+		ewol::getContext().getResourcesManager().reLoadResources();
+		ewol::getContext().forceRedrawAll();
+	} else {
+		APPL_ERROR("Event from Menu UNKNOW : '" << _value << "'");
+	}
 }
 
 void appl::MainWindows::onCallbackThemeChange(const bool& _value) {

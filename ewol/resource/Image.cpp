@@ -26,18 +26,19 @@ void ewol::resource::TextureFile::init() {
 	ewol::resource::Texture::init();
 }
 
-void ewol::resource::TextureFile::init(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) {
+void ewol::resource::TextureFile::init(std::string _genName, const std::string& _tmpFilename, const ivec2& _size) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
-	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
-	if (egami::load(m_data, _tmpfileName, _size) == false) {
-		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
+	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpFilename=" << _tmpFilename << " size=" << _size);
+	if (egami::load(m_data, _tmpFilename, _size) == false) {
+		EWOL_ERROR("ERROR when loading the image : " << _tmpFilename);
 	}
+	//egami::store(m_data, "tmpResult.bmp");
 	ivec2 tmp = m_data.getSize();
 	m_realImageSize = vec2(tmp.x(), tmp.y());
 	#ifdef GENERATE_DISTANCE_FIELD_MODE
-		//egami::generateDistanceFieldFile(_tmpfileName, std::string(_tmpfileName, 0, _tmpfileName.size()-4) + ".bmp");
-		egami::generateDistanceFieldFile(_tmpfileName, std::string(_tmpfileName, 0, _tmpfileName.size()-4) + ".edf");
+		//egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
+		egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");
 	#endif
 	flush();
 }
@@ -84,7 +85,7 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 		_size.setY(-1);
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	std::string TmpFilename = _filename;
+	std::string tmpFilename = _filename;
 	if (etk::end_with(_filename, ".svg") == false) {
 		_size = ewol::resource::TextureFile::sizeAuto;
 	}
@@ -99,35 +100,35 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 		#endif
 		if (_sizeRegister != ewol::resource::TextureFile::sizeAuto) {
 			if (_sizeRegister != ewol::resource::TextureFile::sizeDefault) {
-				TmpFilename += ":";
-				TmpFilename += etk::to_string(_size.x());
-				TmpFilename += "x";
-				TmpFilename += etk::to_string(_size.y());
+				tmpFilename += ":";
+				tmpFilename += etk::to_string(_size.x());
+				tmpFilename += "x";
+				tmpFilename += etk::to_string(_size.y());
 			}
 		}
 	}
 	
-	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
+	EWOL_VERBOSE("KEEP: TextureFile: '" << tmpFilename << "' new size=" << _size);
 	std::shared_ptr<ewol::resource::TextureFile> object = nullptr;
-	std::shared_ptr<gale::Resource> object2 = getManager().localKeep(TmpFilename);
+	std::shared_ptr<gale::Resource> object2 = getManager().localKeep(tmpFilename);
 	if (object2 != nullptr) {
 		object = std::dynamic_pointer_cast<ewol::resource::TextureFile>(object2);
 		if (object == nullptr) {
-			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
+			EWOL_CRITICAL("Request resource file : '" << tmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
 		}
 	}
 	if (object != nullptr) {
 		return object;
 	}
-	EWOL_INFO("CREATE: TextureFile: '" << TmpFilename << "' size=" << _size);
+	EWOL_INFO("CREATE: TextureFile: '" << tmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = std::shared_ptr<ewol::resource::TextureFile>(new ewol::resource::TextureFile());
 	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}
-	object->init(TmpFilename, _filename, _size);
+	object->init(tmpFilename, _filename, _size);
 	getManager().localAdd(object);
 	return object;
 }
