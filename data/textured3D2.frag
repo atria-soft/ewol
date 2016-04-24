@@ -51,5 +51,5 @@ void main(void) {
 		specularLight = EW_directionalLight.specularColor * EW_material.specularFactor;
 	}
 	vec4 light = ambientLight + diffuseLight + specularLight;
-	gl_FragColor = tmpElementColor * light;
+	gl_FragColor = tmpElementColor;// * light;
 }

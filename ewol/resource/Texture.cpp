@@ -48,7 +48,7 @@ ewol::resource::Texture::~Texture() {
 	removeContext();
 }
 
-//#include <egami/wrapperBMP.h>
+#include <egami/egami.h>
 
 bool ewol::resource::Texture::updateContext() {
 	EWOL_INFO("updateContext [START]");
@@ -57,7 +57,7 @@ bool ewol::resource::Texture::updateContext() {
 		//Lock error ==> try later ...
 		return false;
 	}
-	if (false == m_loaded) {
+	if (m_loaded == false) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
 	}
@@ -74,16 +74,42 @@ bool ewol::resource::Texture::updateContext() {
 	//--- Mode linear
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	int32_t typeObject = GL_RGBA;
+	int32_t sizeObject = GL_UNSIGNED_BYTE;
+	switch (m_data.getType()) {
+		case egami::colorType::RGBA8:
+			typeObject = GL_RGBA;
+			sizeObject = GL_UNSIGNED_BYTE;
+			break;
+		case egami::colorType::RGB8:
+			typeObject = GL_RGB;
+			sizeObject = GL_UNSIGNED_BYTE;
+			break;
+		case egami::colorType::RGBAf:
+			typeObject = GL_RGBA;
+			sizeObject = GL_FLOAT;
+			break;
+		case egami::colorType::RGBf:
+			typeObject = GL_RGBA;
+			sizeObject = GL_FLOAT;
+			break;
+		case egami::colorType::unsignedInt16:
+		case egami::colorType::unsignedInt32:
+		case egami::colorType::float32:
+		case egami::colorType::float64:
+			EWOL_ERROR("Not manage the type " << m_data.getType() << " for texture");
+			break;
+	}
 	EWOL_INFO("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
-	//egami::storeBMP("~/bbb_image.bmp", m_data);
+	egami::store(m_data, std::string("~/texture_") + etk::to_string(getId()) + ".bmp");
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
-	             GL_RGBA, // Format internal
+	             typeObject, // Format internal
 	             m_data.getWidth(),
 	             m_data.getHeight(),
 	             0, // Border
-	             GL_RGBA, // format
-	             GL_UNSIGNED_BYTE, // type
+	             typeObject, // format
+	             sizeObject, // type
 	             m_data.getTextureDataPointer() );
 	// now the data is loaded
 	m_loaded = true;
@@ -93,7 +119,7 @@ bool ewol::resource::Texture::updateContext() {
 
 void ewol::resource::Texture::removeContext() {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
-	if (true == m_loaded) {
+	if (m_loaded == true) {
 		// Request remove texture ...
 		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
 		glDeleteTextures(1, &m_texId);

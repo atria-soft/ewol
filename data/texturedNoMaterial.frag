@@ -3,7 +3,7 @@ precision mediump float;
 precision mediump int;
 #endif
 
-// Input :
+// Input:
 uniform sampler2D EW_texID;
 
 varying vec2 f_texcoord;

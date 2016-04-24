@@ -22,6 +22,7 @@ ewol::widget::Image::Image() :
   propertyPosStop(this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
   propertyDistanceFieldMode(this, "distance-field", false, "Distance field mode", &ewol::widget::Image::onChangePropertyDistanceFieldMode),
   propertySmooth(this, "smooth", true, "Smooth display of the image", &ewol::widget::Image::onChangePropertySmooth),
+  propertyUseThemeColor(this, "use-theme-color", false, "use the theme color to display images", &ewol::widget::Image::onChangePropertyUseThemeColor),
   m_colorProperty(nullptr),
   m_colorId(-1) {
 	addObjectType("ewol::widget::Image");
@@ -52,8 +53,10 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	}
 	// remove data of the previous composition :
 	m_compositing.clear();
-	if (m_colorProperty != nullptr) {
-		m_compositing.setColor(m_colorProperty->get(m_colorId));
+	if (*propertyUseThemeColor == true) {
+		if (m_colorProperty != nullptr) {
+			m_compositing.setColor(m_colorProperty->get(m_colorId));
+		}
 	}
 	// calculate the new position and size :
 	vec2 imageBoder = propertyBorder->getPixel();
@@ -210,6 +213,10 @@ void ewol::widget::Image::onChangePropertySmooth() {
 
 void ewol::widget::Image::onChangePropertyDistanceFieldMode() {
 	m_compositing.setDistanceFieldMode(*propertyDistanceFieldMode);
+	markToRedraw();
+}
+
+void ewol::widget::Image::onChangePropertyUseThemeColor() {
 	markToRedraw();
 }
 
