@@ -40,29 +40,37 @@ void ewol::resource::ColorFile::reload() {
 	}
 	// open and read all json elements:
 	ejson::Document doc;
-	if (false == doc.load(m_name)) {
+	if (doc.load(m_name) == false) {
 		EWOL_ERROR("Can not load file : '" << m_name << "' = " << etk::FSNode(m_name).getFileSystemName());
 		return;
 	}
 	ejson::Array baseArray = doc["color"].toArray();
 	if (baseArray.exist() == false) {
-		EWOL_ERROR("Can not get basic array : 'color'");
+		EWOL_ERROR("Can not get basic array : 'color' in file:" << m_name);
+		doc.display();
 		return;
 	}
+	bool findError = false;
 	for (const auto it : baseArray) {
 		ejson::Object tmpObj = it.toObject();
 		if (tmpObj.exist() == false) {
-			EWOL_DEBUG(" can not get object in 'color' : " << it);
+			EWOL_ERROR(" can not get object in 'color' : " << it);
+			findError = true;
 			continue;
 		}
-		std::string name = tmpObj.getStringValue("name", "");
-		std::string color = tmpObj.getStringValue("color", m_errorColor.getHexString());
+		std::string name = tmpObj["name"].toString().get();
+		std::string color = tmpObj["color"].toString().get(m_errorColor.getHexString());
 		EWOL_DEBUG("find new color : '" << name << "' color='" << color << "'");
 		if (name.size() == 0) {
 			EWOL_ERROR("Drop an empty name");
+			findError = true;
 			continue;
 		}
 		m_list.add(name, etk::Color<float>(color));
+	}
+	if (findError == true) {
+		EWOL_ERROR("pb in parsing file:" << m_name);
+		doc.display();
 	}
 }
 

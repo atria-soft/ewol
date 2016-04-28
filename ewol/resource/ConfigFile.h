@@ -31,7 +31,7 @@ namespace ewol {
 				int32_t request(const std::string& _paramName);
 				
 				double getNumber(int32_t _id);
-				const std::string& getString(int32_t _id);
+				std::string getString(int32_t _id);
 				bool getBoolean(int32_t _id);
 			public:
 				/**

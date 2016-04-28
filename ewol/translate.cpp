@@ -154,13 +154,13 @@ class LocalInstanceTranslation {
 				ejson::Document doc;
 				doc.load(filename);
 				for (auto element : doc.getKeys()) {
-					std::string val = doc.getStringValue(element);
+					std::string val = doc[element].toString().get();
 					m_translate.insert(make_pair(element, val));
 				}
 				filename = itMajor->second + "/" + m_languageDefault + ".json";
 				doc.load(filename);
 				for (auto element : doc.getKeys()) {
-					std::string val = doc.getStringValue(element);
+					std::string val = doc[element].toString().get();
 					auto itTrans = m_translate.find(element);
 					if (itTrans == m_translate.end()) {
 						m_translate.insert(make_pair(element, val));
@@ -179,7 +179,7 @@ class LocalInstanceTranslation {
 				ejson::Document doc;
 				doc.load(filename);
 				for (auto element : doc.getKeys()) {
-					std::string val = doc.getStringValue(element);
+					std::string val = doc[element].toString().get();
 					auto itTrans = m_translate.find(element);
 					if (itTrans == m_translate.end()) {
 						m_translate.insert(make_pair(element, val));
@@ -198,7 +198,7 @@ class LocalInstanceTranslation {
 				ejson::Document doc;
 				doc.load(filename);
 				for (auto element : doc.getKeys()) {
-					std::string val = doc.getStringValue(element);
+					std::string val = doc[element].toString().get();
 					auto itTrans = m_translate.find(element);
 					if (itTrans == m_translate.end()) {
 						m_translate.insert(make_pair(element, val));

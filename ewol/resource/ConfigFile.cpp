@@ -72,12 +72,11 @@ double ewol::resource::ConfigFile::getNumber(int32_t _id) {
 	return m_list[_id].toNumber().get();
 }
 
-const std::string& ewol::resource::ConfigFile::getString(int32_t _id) {
+std::string ewol::resource::ConfigFile::getString(int32_t _id) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
-	static const std::string& errorString("");
 	if (    _id < 0
 	     || m_list[_id].exist() == false) {
-		return errorString;
+		return "";
 	}
 	return m_list[_id].toString().get();
 }

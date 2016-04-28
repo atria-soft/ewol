@@ -354,22 +354,22 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 	ejson::Array tmpList;
 	for (size_t iii=0; iii<m_listElement.size(); ++iii) {
 		ejson::Object tmpObj;
-		tmpObj.addString("m_UVal", etk::to_string(m_listElement[iii].m_UVal));
-		tmpObj.addNumber("m_glyphIndex", m_listElement[iii].m_glyphIndex);
-		tmpObj.addString("m_sizeTexture", (std::string)m_listElement[iii].m_sizeTexture);
-		tmpObj.addString("m_bearing", (std::string)m_listElement[iii].m_bearing);
-		tmpObj.addString("m_advance", (std::string)m_listElement[iii].m_advance);
-		tmpObj.addString("m_texturePosStart", (std::string)m_listElement[iii].m_texturePosStart);
-		tmpObj.addString("m_texturePosSize", (std::string)m_listElement[iii].m_texturePosSize);
-		tmpObj.addBoolean("m_exist", m_listElement[iii].m_exist);
+		tmpObj.add("m_UVal", ejson::String(etk::to_string(m_listElement[iii].m_UVal)));
+		tmpObj.add("m_glyphIndex", ejson::Number(m_listElement[iii].m_glyphIndex));
+		tmpObj.add("m_sizeTexture", ejson::String((std::string)m_listElement[iii].m_sizeTexture));
+		tmpObj.add("m_bearing", ejson::String((std::string)m_listElement[iii].m_bearing));
+		tmpObj.add("m_advance", ejson::String((std::string)m_listElement[iii].m_advance));
+		tmpObj.add("m_texturePosStart", ejson::String((std::string)m_listElement[iii].m_texturePosStart));
+		tmpObj.add("m_texturePosSize", ejson::String((std::string)m_listElement[iii].m_texturePosSize));
+		tmpObj.add("m_exist", ejson::Boolean(m_listElement[iii].m_exist));
 		tmpList.add(tmpObj);
 	}
 	doc.add("m_listElement", tmpList);
-	doc.addNumber("m_sizeRatio", m_sizeRatio);
-	doc.addString("m_lastGlyphPos", (std::string)m_lastGlyphPos);
-	doc.addNumber("m_lastRawHeigh", m_lastRawHeigh);
-	doc.addNumber("m_borderSize", m_borderSize);
-	doc.addString("m_textureBorderSize", (std::string)m_textureBorderSize);
+	doc.add("m_sizeRatio", ejson::Number(m_sizeRatio));
+	doc.add("m_lastGlyphPos", ejson::String(m_lastGlyphPos));
+	doc.add("m_lastRawHeigh", ejson::Number(m_lastRawHeigh));
+	doc.add("m_borderSize", ejson::Number(m_borderSize));
+	doc.add("m_textureBorderSize", ejson::String(m_textureBorderSize));
 	doc.store(m_fileName + ".json");
 	egami::store(m_data, m_fileName + ".bmp");
 	egami::store(m_data, m_fileName + ".png");
@@ -389,11 +389,11 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 	ejson::Document doc;
 	doc.load(m_fileName + ".json");
 	
-	m_sizeRatio = doc.getNumberValue("m_sizeRatio", 0);
-	m_lastGlyphPos = doc.getStringValue("m_lastGlyphPos", "0,0");
-	m_lastRawHeigh = doc.getNumberValue("m_lastRawHeigh", 0);
-	m_borderSize = doc.getNumberValue("m_borderSize", 2);
-	m_textureBorderSize = doc.addString("m_textureBorderSize", "0,0");
+	m_sizeRatio = doc["m_sizeRatio"].toNumber().get(0);
+	m_lastGlyphPos = doc["m_lastGlyphPos"].toString().get("0,0");
+	m_lastRawHeigh = doc["m_lastRawHeigh"].toNumber().get(0);
+	m_borderSize = doc["m_borderSize"].toNumber().get(2);
+	m_textureBorderSize = doc["m_textureBorderSize"].toString().get("0,0");
 	ejson::Array tmpList = doc["m_listElement"].toArray();
 	if (tmpList.exist() == false) {
 		EWOL_ERROR("nullptr pointer array");
@@ -406,14 +406,14 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 			continue;
 		}
 		GlyphProperty prop;
-		prop.m_UVal = etk::string_to_int32_t(tmpObj.getStringValue("m_UVal", "0"));
-		prop.m_glyphIndex = tmpObj.getNumberValue("m_glyphIndex", 0);
-		prop.m_sizeTexture = tmpObj.getStringValue("m_sizeTexture", "0,0");
-		prop.m_bearing = tmpObj.getStringValue("m_bearing", "0,0");
-		prop.m_advance = tmpObj.getStringValue("m_advance", "0,0");
-		prop.m_texturePosStart = tmpObj.getStringValue("m_texturePosStart", "0,0");
-		prop.m_texturePosSize = tmpObj.getStringValue("m_texturePosSize", "0,0");
-		prop.m_exist = tmpObj.getBooleanValue("m_exist", false);
+		prop.m_UVal = etk::string_to_int32_t(tmpObj["m_UVal"].toString().get("0"));
+		prop.m_glyphIndex = tmpObj["m_glyphIndex"].toNumber().get(0);
+		prop.m_sizeTexture = tmpObj["m_sizeTexture"].toString().get("0,0");
+		prop.m_bearing = tmpObj["m_bearing"].toString().get("0,0");
+		prop.m_advance = tmpObj["m_advance"].toString().get("0,0");
+		prop.m_texturePosStart = tmpObj["m_texturePosStart"].toString().get("0,0");
+		prop.m_texturePosSize = tmpObj["m_texturePosSize"].toString().get("0,0");
+		prop.m_exist = tmpObj["m_exist"].toBoolean().get(false);
 		m_listElement.push_back(prop);
 	}
 	egami::load(m_data, m_fileName + ".bmp");
