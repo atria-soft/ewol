@@ -93,8 +93,8 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	if(ewol::widget::Button::lockAccess == *propertyLock) {
 		return false;
 	}
-	if(    gale::key::status_leave == _event.getStatus()
-	    || gale::key::status_abort == _event.getStatus()) {
+	if(    gale::key::status::leave == _event.getStatus()
+	    || gale::key::status::abort == _event.getStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
@@ -113,19 +113,19 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
-			if(gale::key::status_down == _event.getStatus()) {
+			if(gale::key::status::down == _event.getStatus()) {
 				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
-			if(gale::key::status_up == _event.getStatus()) {
+			if(gale::key::status::up == _event.getStatus()) {
 				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
-			if(gale::key::status_single == _event.getStatus()) {
+			if(gale::key::status::pressSingle == _event.getStatus()) {
 				if(    (    *propertyValue == true
 				         && ewol::widget::Button::lockWhenPressed == propertyLock)
 				    || (    *propertyValue == false
@@ -157,8 +157,8 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 
 bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    _event.getType() == gale::key::keyboard_char
-	    && _event.getStatus() == gale::key::status_down
+	if(    _event.getType() == gale::key::keyboard::character
+	    && _event.getStatus() == gale::key::status::down
 	    && _event.getChar() == '\r') {
 		signalEnter.emit();
 		return true;

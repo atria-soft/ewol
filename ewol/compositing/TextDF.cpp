@@ -64,7 +64,7 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 	if (_enableDepthTest == true) {
 		gale::openGL::disable(gale::openGL::flag_depthTest);
@@ -102,7 +102,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	m_GLprogram->sendAttribute(m_GLglyphLevel, m_glyphLevel);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

@@ -161,8 +161,8 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 	if (1 == _event.getId()) {
 		relativePos.setValue( std::avg(0.0f, m_size.x(),relativePos.x()),
 		                      std::avg(0.0f, m_size.y(),relativePos.y()) );
-		if(    gale::key::status_single == _event.getStatus()
-		    || gale::key::status_move   == _event.getStatus()) {
+		if(    gale::key::status::pressSingle == _event.getStatus()
+		    || gale::key::status::move   == _event.getStatus()) {
 			// nothing to do ...
 			m_currentUserPos.setValue( relativePos.x()/m_size.x(),
 			                           relativePos.y()/m_size.y() );

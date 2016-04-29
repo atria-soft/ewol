@@ -61,7 +61,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, _vertices.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, _vertices.size());
 	m_GLprogram->unUse();
 	// Request the draw od the elements : 
 	//glDrawArrays(GL_LINES, 0, vertices.size());
@@ -104,7 +104,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, _vertices.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
@@ -144,7 +144,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::render_line, 0, _vertices.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::line, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {

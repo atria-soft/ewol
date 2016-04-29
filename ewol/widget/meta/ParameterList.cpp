@@ -169,7 +169,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	if (_event.getId() == 1 && _event.getStatus() == gale::key::status_single) {
+	if (_event.getId() == 1 && _event.getStatus() == gale::key::status::pressSingle) {
 		vec2 relativePos = relativePosition(_event.getPos());
 		// corection for the openGl abstraction
 		relativePos.setY(m_size.y() - relativePos.y());

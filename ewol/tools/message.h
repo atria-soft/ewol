@@ -15,11 +15,11 @@
 namespace ewol {
 	namespace tools {
 		namespace message {
-			enum type {
-				type_info, //!< information message pop-up
-				type_warning, //!< warning message pop-up
-				type_error, //!< Error message pop-up
-				type_critical //!< Critical message pop-up
+			enum class type {
+				info, //!< information message pop-up
+				warning, //!< warning message pop-up
+				error, //!< Error message pop-up
+				critical //!< Critical message pop-up
 			};
 			/**
 			 * @brief Create a simple pop-up message on the screen for application error.

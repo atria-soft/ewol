@@ -58,7 +58,7 @@ namespace ewol {
 			EventShortCut() {
 				message = "";
 				unicodeValue = 0;
-				keyboardMoveValue = gale::key::keyboard_unknow;
+				keyboardMoveValue = gale::key::keyboard::unknow;
 			};
 			virtual ~EventShortCut() { };
 	};

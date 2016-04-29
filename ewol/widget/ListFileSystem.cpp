@@ -178,7 +178,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 			offset = 2;
 		}
 	}
-	if (_typeEvent == gale::key::status_single) {
+	if (_typeEvent == gale::key::status::pressSingle) {
 		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;

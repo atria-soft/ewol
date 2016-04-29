@@ -135,7 +135,7 @@ void ewol::widget::Image::calculateMinMaxSize() {
 bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (_event.getId() == 1) {
-		if(gale::key::status_single == _event.getStatus()) {
+		if(gale::key::status::pressSingle == _event.getStatus()) {
 			signalPressed.emit();
 			return true;
 		}

@@ -14,11 +14,11 @@
 
 ewol::Widget::Widget() :
   propertyMinSize(this, "min-size",
-                        gale::Dimension(vec2(0,0),gale::Dimension::Pixel),
+                        gale::Dimension(vec2(0,0),gale::distance::pixel),
                         "User minimum size",
                         &ewol::Widget::onChangePropertyMinSize),
   propertyMaxSize(this, "max-size",
-                        gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel),
+                        gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel),
                         "User maximum size",
                         &ewol::Widget::onChangePropertyMaxSize),
   propertyExpand(this, "expand",
@@ -54,7 +54,7 @@ ewol::Widget::Widget() :
   signalShortcut(this, "shortcut", ""),
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
-  m_cursorDisplay(gale::context::cursor_arrow),
+  m_cursorDisplay(gale::context::cursor::arrow),
   signalAnnimationStart(this, "annimation-start", ""),
   signalAnnimationRatio(this, "annimation-ratio", ""),
   signalAnnimationStop(this, "annimation-stop", ""),
@@ -325,7 +325,7 @@ vec2 ewol::Widget::getCalculateMaxSize() {
 }
 
 void ewol::Widget::setNoMinSize() {
-	propertyMinSize.set(gale::Dimension(vec2(0,0),gale::Dimension::Pixel));
+	propertyMinSize.set(gale::Dimension(vec2(0,0),gale::distance::pixel));
 }
 
 void ewol::Widget::checkMinSize() {
@@ -335,7 +335,7 @@ void ewol::Widget::checkMinSize() {
 }
 
 void ewol::Widget::setNoMaxSize() {
-	propertyMaxSize.set(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel));
+	propertyMaxSize.set(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
 }
 
 void ewol::Widget::checkMaxSize() {
@@ -396,59 +396,59 @@ void ewol::Widget::shortCutAdd(const std::string& _descriptiveString, const std:
 		tmpElement->specialKey.setMeta(true);
 	}
 	if(_descriptiveString.find("F12") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f12;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f12;
 	} else if(_descriptiveString.find("F11") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f11;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f11;
 	} else if(_descriptiveString.find("F10") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f10;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f10;
 	} else if(_descriptiveString.find("F9") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f9;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f9;
 	} else if(_descriptiveString.find("F8") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f8;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f8;
 	} else if(_descriptiveString.find("F7") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f7;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f7;
 	} else if(_descriptiveString.find("F6") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f6;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f6;
 	} else if(_descriptiveString.find("F5") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f5;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f5;
 	} else if(_descriptiveString.find("F4") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f4;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f4;
 	} else if(_descriptiveString.find("F3") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f3;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f3;
 	} else if(_descriptiveString.find("F2") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f2;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f2;
 	} else if(_descriptiveString.find("F1") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_f1;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::f1;
 	} else if(_descriptiveString.find("LEFT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_left;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::left;
 	} else if(_descriptiveString.find("RIGHT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_right;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::right;
 	} else if(_descriptiveString.find("UP") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_up;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::up;
 	} else if(_descriptiveString.find("DOWN") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_down;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::down;
 	} else if(_descriptiveString.find("PAGE_UP") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_pageUp;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::pageUp;
 	} else if(_descriptiveString.find("PAGE_DOWN") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_pageDown;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::pageDown;
 	} else if(_descriptiveString.find("START") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_start;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::start;
 	} else if(_descriptiveString.find("END") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_end;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::end;
 	} else if(_descriptiveString.find("PRINT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_print;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::print;
 	} else if(_descriptiveString.find("ARRET_DEFIL") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_stopDefil;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::stopDefil;
 	} else if(_descriptiveString.find("WAIT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_wait;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::wait;
 	} else if(_descriptiveString.find("INSERT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_insert;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::insert;
 	} else if(_descriptiveString.find("CAPLOCK") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_capLock;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::capLock;
 	} else if(_descriptiveString.find("CONTEXT_MENU") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_contextMenu;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::contextMenu;
 	} else if(_descriptiveString.find("NUM_LOCK") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard_numLock;
+		tmpElement->keyboardMoveValue = gale::key::keyboard::numLock;
 	} else {
 		tmpElement->unicodeValue = _descriptiveString[_descriptiveString.size() -1];
 	}
@@ -494,7 +494,7 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 			     && m_localShortcut[iii]->specialKey.getCtrl()  == _special.getCtrl()
 			     && m_localShortcut[iii]->specialKey.getAlt()   == _special.getAlt()
 			     && m_localShortcut[iii]->specialKey.getMeta()  == _special.getMeta()
-			     && (    (    m_localShortcut[iii]->keyboardMoveValue == gale::key::keyboard_unknow
+			     && (    (    m_localShortcut[iii]->keyboardMoveValue == gale::key::keyboard::unknow
 			               && m_localShortcut[iii]->unicodeValue == _unicodeValue)
 			          || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
 			               && m_localShortcut[iii]->unicodeValue == 0)
@@ -604,7 +604,7 @@ void ewol::Widget::onChangePropertyMaxSize() {
 	}
 	if (error == true) {
 		EWOL_ERROR("Can not set a 'min size' > 'max size' reset to maximum ...");
-		propertyMaxSize.setDirect(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::Dimension::Pixel));
+		propertyMaxSize.setDirect(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
 	}
 	requestUpdateSize();
 }
@@ -622,7 +622,7 @@ void ewol::Widget::onChangePropertyMinSize() {
 	}
 	if (error == true) {
 		EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-		propertyMinSize.setDirect(gale::Dimension(vec2(0,0),gale::Dimension::Pixel));
+		propertyMinSize.setDirect(gale::Dimension(vec2(0,0),gale::distance::pixel));
 	}
 	requestUpdateSize();
 }

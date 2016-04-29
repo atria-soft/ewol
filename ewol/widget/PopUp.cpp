@@ -33,7 +33,7 @@ void ewol::widget::PopUp::init() {
 	ewol::widget::Container::init();
 	propertyFill.set(bvec2(false,false));
 	propertyShape.notifyChange();
-	propertyMinSize.set(gale::Dimension(vec2(80,80),gale::Dimension::Pourcent));
+	propertyMinSize.set(gale::Dimension(vec2(80,80),gale::distance::pourcent));
 	propertyExpand.set(bvec2(false, false));
 }
 ewol::widget::PopUp::~PopUp() {

@@ -28,7 +28,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 
 void ewol::widget::StdPopUp::init() {
 	ewol::widget::PopUp::init();
-	propertyMinSize.set(gale::Dimension(vec2(20,10),gale::Dimension::Pourcent));
+	propertyMinSize.set(gale::Dimension(vec2(20,10),gale::distance::pourcent));
 	ewol::widget::SizerShared mySizerVert;
 	ewol::widget::SpacerShared mySpacer;
 	
@@ -48,12 +48,12 @@ void ewol::widget::StdPopUp::init() {
 		mySpacer = ewol::widget::Spacer::create();
 			mySpacer->propertyExpand.set(bvec2(true,false));
 			mySpacer->propertyColor.set(etk::Color<>(0x88, 0x88, 0x88, 0xFF));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::Dimension::Pixel));
+			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		mySpacer = ewol::widget::Spacer::create();
 			mySpacer->propertyExpand.set(bvec2(true,false));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::Dimension::Pixel));
+			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_comment = ewol::widget::Label::create();
@@ -63,13 +63,13 @@ void ewol::widget::StdPopUp::init() {
 		
 		mySpacer = ewol::widget::Spacer::create();
 			mySpacer->propertyExpand.set(bvec2(true,false));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::Dimension::Pixel));
+			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		mySpacer = ewol::widget::Spacer::create();
 			mySpacer->propertyExpand.set(bvec2(true,false));
 			mySpacer->propertyColor.set(etk::Color<>(0x88, 0x88, 0x88, 0xFF));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::Dimension::Pixel));
+			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_title = ewol::widget::Label::create();

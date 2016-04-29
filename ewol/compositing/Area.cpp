@@ -66,7 +66,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	// color :
 	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::render_triangle, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
 

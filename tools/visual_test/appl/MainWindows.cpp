@@ -306,20 +306,20 @@ void appl::MainWindows::updateProperty() {
 					widgetSizer->subWidgetAdd(widgetSelectTmp);
 					widgetSelectTmp->propertyExpand.set(bvec2(true,false));
 					widgetSelectTmp->propertyFill.set(bvec2(true,false));
-					widgetSelectTmp->optionAdd(gale::Dimension::Pourcent, "Pourcent");
-					widgetSelectTmp->optionAdd(gale::Dimension::Pixel, "Pixel");
-					widgetSelectTmp->optionAdd(gale::Dimension::Meter, "Meter");
-					widgetSelectTmp->optionAdd(gale::Dimension::Centimeter, "Centimeter");
-					widgetSelectTmp->optionAdd(gale::Dimension::Millimeter, "Millimeter");
-					widgetSelectTmp->optionAdd(gale::Dimension::Kilometer, "Kilometer");
-					widgetSelectTmp->optionAdd(gale::Dimension::Inch, "Inch");
-					widgetSelectTmp->optionAdd(gale::Dimension::foot, "foot");
+					widgetSelectTmp->optionAdd(gale::distance::pourcent, "Pourcent");
+					widgetSelectTmp->optionAdd(gale::distance::pixel, "Pixel");
+					widgetSelectTmp->optionAdd(gale::distance::meter, "Meter");
+					widgetSelectTmp->optionAdd(gale::distance::centimeter, "Centimeter");
+					widgetSelectTmp->optionAdd(gale::distance::millimeter, "Millimeter");
+					widgetSelectTmp->optionAdd(gale::distance::kilometer, "Kilometer");
+					widgetSelectTmp->optionAdd(gale::distance::inch, "Inch");
+					widgetSelectTmp->optionAdd(gale::distance::foot, "foot");
 					widgetSelectTmp->propertyValue.set(value.getType());
 					conn = widgetSelectTmp->signalValue.connect(
 						[=](const int32_t& _value) {
-							APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << (enum gale::Dimension::distance)_value);
+							APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << (enum gale::distance)_value);
 							gale::Dimension lastValueInterpreted = paramValue->get();
-							lastValueInterpreted.set(lastValueInterpreted.get(lastValueInterpreted.getType()), (enum gale::Dimension::distance)_value);
+							lastValueInterpreted.set(lastValueInterpreted.get(lastValueInterpreted.getType()), (enum gale::distance)_value);
 							paramValue->set(lastValueInterpreted);
 							return;
 						});

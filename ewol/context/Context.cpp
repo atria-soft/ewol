@@ -215,16 +215,16 @@ void ewol::Context::onPointer(enum gale::key::type _type,
                               const vec2& _pos,
                               gale::key::status _state) {
 	switch (_state) {
-		case gale::key::status_move:
+		case gale::key::status::move:
 			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
 			m_input.motion(_type, _pointerID, _pos);
 			break;
-		case gale::key::status_down:
-		case gale::key::status_downRepeate:
+		case gale::key::status::down:
+		case gale::key::status::downRepeate:
 			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 			m_input.state(_type, _pointerID, true, _pos);
 			break;
-		case gale::key::status_up:
+		case gale::key::status::up:
 			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 			m_input.state(_type, _pointerID, false, _pos);
 			break;
@@ -244,9 +244,9 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 		// No windows ...
 		return;
 	}
-	bool repeate = (_state == gale::key::status_downRepeate);
-	bool isDown =    (_state == gale::key::status_downRepeate)
-	              || (_state == gale::key::status_down);
+	bool repeate = (_state == gale::key::status::downRepeate);
+	bool isDown =    (_state == gale::key::status::downRepeate)
+	              || (_state == gale::key::status::down);
 	if (m_windowsCurrent->onEventShortCut(_special,
 	                                      _value,
 	                                      _type,
@@ -271,22 +271,22 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 		                               _type,
 		                               isDown) == false) {
 			// generate the direct event ...
-			if (_type == gale::key::keyboard_char) {
-				ewol::event::EntrySystem tmpEntryEvent(gale::key::keyboard_char,
-				                                       gale::key::status_up,
+			if (_type == gale::key::keyboard::character) {
+				ewol::event::EntrySystem tmpEntryEvent(gale::key::keyboard::character,
+				                                       gale::key::status::up,
 				                                       _special,
 				                                       _value);
 				if(isDown == true) {
-					tmpEntryEvent.m_event.setStatus(gale::key::status_down);
+					tmpEntryEvent.m_event.setStatus(gale::key::status::down);
 				}
 				tmpWidget->systemEventEntry(tmpEntryEvent);
 			} else { // THREAD_KEYBORAD_MOVE
 				ewol::event::EntrySystem tmpEntryEvent(_type,
-				                                       gale::key::status_up,
+				                                       gale::key::status::up,
 				                                       _special,
 				                                       0);
 				if(isDown == true) {
-					tmpEntryEvent.m_event.setStatus(gale::key::status_down);
+					tmpEntryEvent.m_event.setStatus(gale::key::status::down);
 				}
 				tmpWidget->systemEventEntry(tmpEntryEvent);
 			}

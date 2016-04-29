@@ -197,8 +197,8 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getRendererId());
 	}
 	// Request the draw of the elements : 
-	//gale::openGL::drawArrays(gale::openGL::render_triangle, 0, SHAPER_NB_MAX_VERTEX);
-	gale::openGL::drawArrays(gale::openGL::render_triangleStrip, 0, m_nbVertexToDisplay);
+	//gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, SHAPER_NB_MAX_VERTEX);
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangleStrip, 0, m_nbVertexToDisplay);
 	m_GLprogram->unUse();
 }
 

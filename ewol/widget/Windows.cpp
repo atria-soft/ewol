@@ -125,8 +125,8 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 		colorBg = m_resourceColor->get(m_colorBg);
 	}
 	gale::openGL::clearColor(colorBg);
-	gale::openGL::clear(   gale::openGL::clearFlag_colorBuffer
-	                     | gale::openGL::clearFlag_depthBuffer);
+	gale::openGL::clear(   uint32_t(gale::openGL::clearFlag_colorBuffer)
+	                     | uint32_t(gale::openGL::clearFlag_depthBuffer));
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime0 = (float)(ewol::getTime() - ___startTime0) / 1000.0f;
 	EWOL_ERROR("      Windows000  : " << ___localTime0 << "ms ");

@@ -206,12 +206,12 @@ bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 		if (ewol::widget::Container::getWidgetAtPos(_event.getPos()) != nullptr) {
 			return false;
 		}
-		if(    _event.getStatus() == gale::key::status_down
-		    || _event.getStatus() == gale::key::status_move
-		    || _event.getStatus() == gale::key::status_single
-		    || _event.getStatus() == gale::key::status_up
-		    || _event.getStatus() == gale::key::status_enter
-		    || _event.getStatus() == gale::key::status_leave ) {
+		if(    _event.getStatus() == gale::key::status::down
+		    || _event.getStatus() == gale::key::status::move
+		    || _event.getStatus() == gale::key::status::pressSingle
+		    || _event.getStatus() == gale::key::status::up
+		    || _event.getStatus() == gale::key::status::enter
+		    || _event.getStatus() == gale::key::status::leave ) {
 			// Auto-remove ...
 			autoDestroy();
 			return true;

@@ -45,8 +45,8 @@ bool ewol::context::InputManager::localEventInput(enum gale::key::type _type,
                                                   enum gale::key::status _status,
                                                   vec2 _pos) {
 	if (_destWidget != nullptr) {
-		if (    _type == gale::key::type_mouse
-		     || _type == gale::key::type_finger) {
+		if (    _type == gale::key::type::mouse
+		     || _type == gale::key::type::finger) {
 			// create the system Event :
 			ewol::event::InputSystem tmpEventSystem(_type, _status, _IdInput, _pos, _destWidget, 0, m_specialKey); // TODO : set the real ID ...
 			// generate the event :
@@ -68,7 +68,7 @@ void ewol::context::InputManager::abortElement(InputPoperty *_eventTable,
 		localEventInput(_type, 
 		                _eventTable[_idInput].curentWidgetEvent.lock(),
 		                _eventTable[_idInput].destinationInputId,
-		                gale::key::status_abort,
+		                gale::key::status::abort,
 		                _eventTable[_idInput].posEvent);
 	}
 }
@@ -103,23 +103,23 @@ void ewol::context::InputManager::transfertEvent(ewol::WidgetShared _source, ewo
 		if (tmpWidget == _source) {
 			// inform the widget that it does not receive the event now
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventInputSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_ABORT] " << m_eventInputSaved[iii].posEvent);
-			localEventInput(gale::key::type_finger, tmpWidget, m_eventInputSaved[iii].destinationInputId, gale::key::status_abort, m_eventInputSaved[iii].posEvent);
+			localEventInput(gale::key::type::finger, tmpWidget, m_eventInputSaved[iii].destinationInputId, gale::key::status::abort, m_eventInputSaved[iii].posEvent);
 			// set the new widget ...
 			m_eventInputSaved[iii].curentWidgetEvent = _destination;
 			// inform the widget that he receive the event property now...
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventInputSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_TRANSFERT] " << m_eventInputSaved[iii].posEvent);
-			localEventInput(gale::key::type_finger, _destination, m_eventInputSaved[iii].destinationInputId, gale::key::status_transfert, m_eventInputSaved[iii].posEvent);
+			localEventInput(gale::key::type::finger, _destination, m_eventInputSaved[iii].destinationInputId, gale::key::status::transfert, m_eventInputSaved[iii].posEvent);
 		}
 		tmpWidget = m_eventMouseSaved[iii].curentWidgetEvent.lock();
 		if (tmpWidget == _source) {
 			// inform the widget that it does not receive the event now
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventMouseSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_ABORT] " << m_eventMouseSaved[iii].posEvent);
-			localEventInput(gale::key::type_mouse, tmpWidget, m_eventMouseSaved[iii].destinationInputId, gale::key::status_abort, m_eventMouseSaved[iii].posEvent);
+			localEventInput(gale::key::type::mouse, tmpWidget, m_eventMouseSaved[iii].destinationInputId, gale::key::status::abort, m_eventMouseSaved[iii].posEvent);
 			// set the new widget ...
 			m_eventMouseSaved[iii].curentWidgetEvent = _destination;
 			// inform the widget that he receive the event property now...
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventMouseSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_TRANSFERT] " << m_eventMouseSaved[iii].posEvent);
-			localEventInput(gale::key::type_mouse, _destination, m_eventMouseSaved[iii].destinationInputId, gale::key::status_transfert, m_eventMouseSaved[iii].posEvent);
+			localEventInput(gale::key::type::mouse, _destination, m_eventMouseSaved[iii].destinationInputId, gale::key::status::transfert, m_eventMouseSaved[iii].posEvent);
 		}
 	}
 }
@@ -144,9 +144,9 @@ void ewol::context::InputManager::unGrabPointer() {
 void ewol::context::InputManager::newLayerSet() {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
-		abortElement(m_eventInputSaved, iii, gale::key::type_finger);
+		abortElement(m_eventInputSaved, iii, gale::key::type::finger);
 		cleanElement(m_eventInputSaved, iii);
-		abortElement(m_eventMouseSaved, iii, gale::key::type_mouse);
+		abortElement(m_eventMouseSaved, iii, gale::key::type::mouse);
 		cleanElement(m_eventMouseSaved, iii);
 	}
 }
@@ -172,7 +172,7 @@ ewol::context::InputManager::~InputManager() {
 int32_t ewol::context::InputManager::localGetDestinationId(enum gale::key::type _type,
                                                            ewol::WidgetShared _destWidget,
                                                            int32_t _realInputId) {
-	if (_type == gale::key::type_finger) {
+	if (_type == gale::key::type::finger) {
 		int32_t lastMinimum = 0;
 		for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 			if (true == m_eventInputSaved[iii].isUsed) {
@@ -199,9 +199,9 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 		return;
 	}
 	InputPoperty *eventTable = nullptr;
-	if (_type == gale::key::type_mouse) {
+	if (_type == gale::key::type::mouse) {
 		eventTable = m_eventMouseSaved;
-	} else if (_type == gale::key::type_finger) {
+	} else if (_type == gale::key::type::finger) {
 		eventTable = m_eventInputSaved;
 	} else {
 		EWOL_ERROR("Unknown type of event");
@@ -214,7 +214,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 	}
 	ewol::widget::WindowsShared tmpWindows = m_context.getWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
-	if (    _type == gale::key::type_mouse
+	if (    _type == gale::key::type::mouse
 	     && _pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
@@ -239,7 +239,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent.lock(),
 			                eventTable[_pointerID].destinationInputId,
-			                gale::key::status_leave,
+			                gale::key::status::leave,
 			                _pos);
 		}
 		if (eventTable[_pointerID].isInside == false) {
@@ -261,7 +261,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 			localEventInput(_type,
 			                tmpWidget,
 			                eventTable[_pointerID].destinationInputId,
-			                gale::key::status_enter,
+			                gale::key::status::enter,
 			                _pos);
 		}
 		EVENT_DEBUG("GUI : Input ID=" << _pointerID
@@ -271,7 +271,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 		localEventInput(_type,
 		                tmpWidget,
 		                eventTable[_pointerID].destinationInputId,
-		                gale::key::status_move,
+		                gale::key::status::move,
 		                _pos);
 	} else if (eventTable[_pointerID].isUsed == true) {
 		if (eventTable[_pointerID].isInside == true) {
@@ -287,7 +287,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 				localEventInput(_type,
 				                eventTable[_pointerID].curentWidgetEvent.lock(),
 				                eventTable[_pointerID].destinationInputId,
-				                gale::key::status_leave,
+				                gale::key::status::leave,
 				                _pos);
 			}
 		} else {
@@ -303,7 +303,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 				localEventInput(_type,
 				                eventTable[_pointerID].curentWidgetEvent.lock(),
 				                eventTable[_pointerID].destinationInputId,
-				                gale::key::status_enter,
+				                gale::key::status::enter,
 				                _pos);
 			}
 		}
@@ -314,7 +314,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 		localEventInput(_type,
 		                eventTable[_pointerID].curentWidgetEvent.lock(),
 		                eventTable[_pointerID].destinationInputId,
-		                gale::key::status_move,
+		                gale::key::status::move,
 		                _pos);
 	}
 }
@@ -331,10 +331,10 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 	// convert position in open-GL coordonates ...
 	InputPoperty *eventTable = nullptr;
 	InputLimit   localLimit;
-	if (_type == gale::key::type_mouse) {
+	if (_type == gale::key::type::mouse) {
 		eventTable = m_eventMouseSaved;
 		localLimit = m_eventMouseLimit;
-	} else if (_type == gale::key::type_finger) {
+	} else if (_type == gale::key::type::finger) {
 		eventTable = m_eventInputSaved;
 		localLimit = m_eventInputLimit;
 	} else {
@@ -374,7 +374,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent.lock(),
 			                eventTable[_pointerID].destinationInputId,
-			                gale::key::status_down,
+			                gale::key::status::down,
 			                _pos);
 		} else {
 			// Mark it used :
@@ -389,7 +389,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			// get destination widget :
 			if(tmpWindows != nullptr) {
 				if (    tmpWidget != nullptr
-				     && _type == gale::key::type_mouse) {
+				     && _type == gale::key::type::mouse) {
 					eventTable[_pointerID].curentWidgetEvent = tmpWidget;
 				} else {
 					tmpWidget = tmpWindows->getWidgetAtPos(_pos);
@@ -419,7 +419,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			localEventInput(_type,
 			                tmpWidget,
 			                eventTable[_pointerID].destinationInputId,
-			                gale::key::status_down,
+			                gale::key::status::down,
 			                _pos);
 		}
 	} else {
@@ -451,7 +451,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			localEventInput(_type,
 			                tmpWidget,
 			                _pointerID,
-			                gale::key::status_up,
+			                gale::key::status::up,
 			                _pos);
 			// generate event (single)
 			if(    std::abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
@@ -469,7 +469,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 				}
 				// in grab mode the single to quinte event are not generated ....
 				if(    (    m_grabWidget.lock() == nullptr
-				         || _type != gale::key::type_mouse )
+				         || _type != gale::key::type::mouse )
 				    && eventTable[_pointerID].nbClickEvent < nbClickMax) {
 					// generate event SINGLE :
 					eventTable[_pointerID].nbClickEvent++;
@@ -480,7 +480,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 					localEventInput(_type,
 					                tmpWidget,
 					                eventTable[_pointerID].destinationInputId,
-					                (enum gale::key::status)(gale::key::status_single + eventTable[_pointerID].nbClickEvent-1),
+					                (enum gale::key::status)(uint32_t(gale::key::status::pressSingle) + eventTable[_pointerID].nbClickEvent-1),
 					                _pos);
 					if( eventTable[_pointerID].nbClickEvent >= nbClickMax) {
 						eventTable[_pointerID].nbClickEvent = 0;
@@ -493,10 +493,10 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			localEventInput(_type,
 			                tmpWidget,
 			                _pointerID,
-			                gale::key::status_upAfter,
+			                gale::key::status::upAfter,
 			                _pos);
 			// specific for tuch event
-			if (_type == gale::key::type_finger) {
+			if (_type == gale::key::type::finger) {
 				cleanElement(eventTable, _pointerID);
 			}
 		}

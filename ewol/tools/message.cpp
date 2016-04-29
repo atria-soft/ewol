@@ -20,16 +20,16 @@ void ewol::tools::message::create(enum ewol::tools::message::type _type, const s
 		return;
 	}
 	switch(_type) {
-		case ewol::tools::message::type_info:
+		case ewol::tools::message::type::info:
 			tmpPopUp->propertyTitle.set("<bold>_T{Info}</bold>");
 			break;
-		case ewol::tools::message::type_warning:
+		case ewol::tools::message::type::warning:
 			tmpPopUp->propertyTitle.set("<bold><font color='orange'>_T{Warning}</font></bold>");
 			break;
-		case ewol::tools::message::type_error:
+		case ewol::tools::message::type::error:
 			tmpPopUp->propertyTitle.set("<bold><font color='red'>_T{Error}</font></bold>");
 			break;
-		case ewol::tools::message::type_critical:
+		case ewol::tools::message::type::critical:
 			tmpPopUp->propertyTitle.set("<bold><font colorBg='red'>_T{Critical}</font></bold>");
 			break;
 	}
@@ -47,19 +47,19 @@ void ewol::tools::message::create(enum ewol::tools::message::type _type, const s
 }
 
 void ewol::tools::message::displayInfo(const std::string& _message) {
-	ewol::tools::message::create(ewol::tools::message::type_info, _message);
+	ewol::tools::message::create(ewol::tools::message::type::info, _message);
 }
 
 void ewol::tools::message::displayWarning(const std::string& _message) {
-	ewol::tools::message::create(ewol::tools::message::type_warning, _message);
+	ewol::tools::message::create(ewol::tools::message::type::warning, _message);
 }
 
 void ewol::tools::message::displayError(const std::string& _message) {
-	ewol::tools::message::create(ewol::tools::message::type_error, _message);
+	ewol::tools::message::create(ewol::tools::message::type::error, _message);
 }
 
 void ewol::tools::message::displayCritical(const std::string& _message) {
-	ewol::tools::message::create(ewol::tools::message::type_critical, _message);
+	ewol::tools::message::create(ewol::tools::message::type::critical, _message);
 }
 
 

@@ -124,7 +124,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 
 bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 	bool previousHoverState = m_mouseHover;
-	if(gale::key::status_leave == _event.getStatus()) {
+	if(gale::key::status::leave == _event.getStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
@@ -144,15 +144,15 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
-			if(gale::key::status_down == _event.getStatus()) {
+			if(gale::key::status::down == _event.getStatus()) {
 				m_buttonPressed = true;
 				markToRedraw();
 			}
-			if(gale::key::status_up == _event.getStatus()) {
+			if(gale::key::status::up == _event.getStatus()) {
 				m_buttonPressed = false;
 				markToRedraw();
 			}
-			if(gale::key::status_single == _event.getStatus()) {
+			if(gale::key::status::pressSingle == _event.getStatus()) {
 				m_buttonPressed = false;
 				m_mouseHover = false;
 				// create a context menu : 

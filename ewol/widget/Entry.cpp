@@ -246,12 +246,12 @@ void ewol::widget::Entry::copySelectionToClipBoard(enum gale::context::clipBoard
 bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (_event.getId() == 1) {
-		if (gale::key::status_single == _event.getStatus()) {
+		if (gale::key::status::pressSingle == _event.getStatus()) {
 			keepFocus();
 			signalClick.emit();
 			//nothing to do ...
 			return true;
-		} else if (gale::key::status_double == _event.getStatus()) {
+		} else if (gale::key::status::pressDouble == _event.getStatus()) {
 			keepFocus();
 			// select word
 			m_displayCursorPosSelection = m_displayCursorPos-1;
@@ -296,19 +296,19 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 			// Copy to clipboard Middle ...
 			copySelectionToClipBoard(gale::context::clipBoard::clipboardSelection);
 			markToRedraw();
-		} else if (gale::key::status_triple == _event.getStatus()) {
+		} else if (gale::key::status::pressTriple == _event.getStatus()) {
 			keepFocus();
 			m_displayCursorPosSelection = 0;
 			m_displayCursorPos = propertyValue->size();
-		} else if (gale::key::status_down == _event.getStatus()) {
+		} else if (gale::key::status::down == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos());
 			markToRedraw();
-		} else if (gale::key::status_move == _event.getStatus()) {
+		} else if (gale::key::status::move == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos(), true);
 			markToRedraw();
-		} else if (gale::key::status_up == _event.getStatus()) {
+		} else if (gale::key::status::up == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos(), true);
 			// Copy to clipboard Middle ...
@@ -316,17 +316,17 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 			markToRedraw();
 		}
 	}
-	else if(    gale::key::type_mouse == _event.getType()
+	else if(    gale::key::type::mouse == _event.getType()
 	         && _event.getId() == 2) {
-		if(    _event.getStatus() == gale::key::status_down
-		    || _event.getStatus() == gale::key::status_move
-		    || _event.getStatus() == gale::key::status_up) {
+		if(    _event.getStatus() == gale::key::status::down
+		    || _event.getStatus() == gale::key::status::move
+		    || _event.getStatus() == gale::key::status::up) {
 			keepFocus();
 			// updatethe cursor position : 
 			updateCursorPosition(_event.getPos());
 		}
 		// Paste current selection only when up button
-		if (_event.getStatus() == gale::key::status_up) {
+		if (_event.getStatus() == gale::key::status::up) {
 			keepFocus();
 			// middle button => past data...
 			gale::context::clipBoard::request(gale::context::clipBoard::clipboardSelection);
@@ -337,8 +337,8 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 
 
 bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
-	if (_event.getType() == gale::key::keyboard_char) {
-		if(_event.getStatus() == gale::key::status_down) {
+	if (_event.getType() == gale::key::keyboard::character) {
+		if(_event.getStatus() == gale::key::status::down) {
 			// remove curent selected data ...
 			removeSelected();
 			if(    _event.getChar() == '\n'
@@ -379,18 +379,18 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 		}
 		return false;
 	} else {
-		if(_event.getStatus() == gale::key::status_down) {
+		if(_event.getStatus() == gale::key::status::down) {
 			switch (_event.getType()) {
-				case gale::key::keyboard_left:
+				case gale::key::keyboard::left:
 					m_displayCursorPos--;
 					break;
-				case gale::key::keyboard_right:
+				case gale::key::keyboard::right:
 					m_displayCursorPos++;
 					break;
-				case gale::key::keyboard_start:
+				case gale::key::keyboard::start:
 					m_displayCursorPos = 0;
 					break;
-				case gale::key::keyboard_end:
+				case gale::key::keyboard::end:
 					m_displayCursorPos = propertyValue->size();
 					break;
 				default:
