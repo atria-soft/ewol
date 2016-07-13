@@ -414,6 +414,6 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 		prop.m_exist = tmpObj["m_exist"].toBoolean().get(false);
 		m_listElement.push_back(prop);
 	}
-	egami::load(m_data, m_fileName + ".bmp");
-	return true;
+	m_data = egami::load(m_fileName + ".bmp");
+	return m_data.exist();
 }
