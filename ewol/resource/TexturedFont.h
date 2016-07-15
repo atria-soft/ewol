@@ -31,7 +31,7 @@ namespace ewol {
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				std::shared_ptr<ewol::resource::FontBase> m_font[4];
+				ememory::SharedPtr<ewol::resource::FontBase> m_font[4];
 				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
 				std::vector<GlyphProperty> m_listElement[4];

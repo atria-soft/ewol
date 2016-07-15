@@ -33,9 +33,9 @@ namespace ewol {
 		 *  	return -1;
 		 *  }
 		 *  // register on the Validate event:
-		 *  tmpWidget->signalValidate.connect(shared_from_this(), &****::onCallbackOpenFile);
+		 *  tmpWidget->signalValidate.connect(sharedFromThis(), &****::onCallbackOpenFile);
 		 *  // no need of this event watching ...
-		 *  tmpWidget->signalCancel.connect(shared_from_this(), &****::onCallbackClosePopUp);
+		 *  tmpWidget->signalCancel.connect(sharedFromThis(), &****::onCallbackClosePopUp);
 		 *  // set the title:
 		 *   tmpWidget->propertyLabelTitle.set("Open files ...");
 		 *  // Set the validate Label:

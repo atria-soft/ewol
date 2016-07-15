@@ -169,7 +169,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				myColorChooser->propertyValue.set(propertyValue.get());
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
-				myColorChooser->signalChange.connect(shared_from_this(), &ewol::widget::ButtonColor::onCallbackColorChange);
+				myColorChooser->signalChange.connect(sharedFromThis(), &ewol::widget::ButtonColor::onCallbackColorChange);
 				ewol::widget::WindowsShared currentWindows = getWindows();
 				if (currentWindows == nullptr) {
 					EWOL_ERROR("Can not get the curent Windows...");

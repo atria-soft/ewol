@@ -144,7 +144,7 @@ void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
-	std::shared_ptr<ewol::resource::TexturedFont> previousFont = m_font;
+	ememory::SharedPtr<ewol::resource::TexturedFont> previousFont = m_font;
 	if (_fontSize <= 0) {
 		_fontSize = ewol::getContext().getFontDefault().getSize();
 	}

@@ -44,8 +44,8 @@ void appl::Windows::init() {
 	}
 	m_composer->loadFromString(composition);
 	setSubWidget(m_composer);
-	subBind(ewol::widget::Button, "bt-change", signalPressed, shared_from_this(), &appl::Windows::onCallbackChangeValues);
-	subBind(ewol::widget::Button, "bt-auto", signalPressed, shared_from_this(), &appl::Windows::onCallbackAutoMode);
+	subBind(ewol::widget::Button, "bt-change", signalPressed, sharedFromThis(), &appl::Windows::onCallbackChangeValues);
+	subBind(ewol::widget::Button, "bt-auto", signalPressed, sharedFromThis(), &appl::Windows::onCallbackAutoMode);
 }
 
 void appl::Windows::onCallbackChangeValues() {
@@ -53,14 +53,14 @@ void appl::Windows::onCallbackChangeValues() {
 	for (int32_t iii=0; iii<2048; ++iii) {
 		tmp.push_back(etk::tool::frand(-1.0, 1.0));
 	}
-	std::shared_ptr<appl::widget::VectorDisplay> tmpDisp = std::dynamic_pointer_cast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
+	ememory::SharedPtr<appl::widget::VectorDisplay> tmpDisp = ememory::dynamicPointerCast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
 	if (tmpDisp != nullptr) {
 		tmpDisp->setValue(tmp);
 	}
 }
 
 void appl::Windows::onCallbackAutoMode() {
-	std::shared_ptr<appl::widget::VectorDisplay> tmpDisp = std::dynamic_pointer_cast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
+	ememory::SharedPtr<appl::widget::VectorDisplay> tmpDisp = ememory::dynamicPointerCast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
 	if (tmpDisp != nullptr) {
 		tmpDisp->ToggleAuto();
 	}

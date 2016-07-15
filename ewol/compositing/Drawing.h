@@ -24,7 +24,7 @@ namespace ewol {
 				etk::Color<> m_color;   //!< The text foreground color
 				etk::Color<> m_colorBg; //!< The text background color
 			private:
-				std::shared_ptr<gale::resource::Program> m_GLprogram;  //!< pointer on the opengl display program
+				ememory::SharedPtr<gale::resource::Program> m_GLprogram;  //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLMatrixPosition; //!< position matrix

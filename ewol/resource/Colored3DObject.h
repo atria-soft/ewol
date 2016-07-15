@@ -14,7 +14,7 @@ namespace ewol {
 	namespace resource {
 		class Colored3DObject : public gale::Resource {
 			protected:
-				std::shared_ptr<gale::resource::Program> m_GLprogram;
+				ememory::SharedPtr<gale::resource::Program> m_GLprogram;
 				int32_t m_GLPosition;
 				int32_t m_GLMatrix;
 				int32_t m_GLColor;

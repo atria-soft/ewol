@@ -9,7 +9,7 @@
 #include <vector>
 #include <exml/exml.h>
 #include <mutex>
-#include <memory>
+#include <ememory/memory.h>
 #include <unordered_map>
 
 #include <ewol/debug.h>
@@ -81,7 +81,7 @@ exit_on_error:
 		ememory::SharedPtr<className> object; \
 		ememory::SharedPtr<ewol::Object> object2 = getObjectNamed(uniqueName); \
 		if (object2 != nullptr) { \
-			object = std::dynamic_pointer_cast<className>(object2); \
+			object = ememory::dynamicPointerCast<className>(object2); \
 			if (object == nullptr) { \
 				EWOL_CRITICAL("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
 				return nullptr; \
@@ -282,7 +282,7 @@ namespace ewol {
 			 * @brief link on an signal in the subwiget with his name
 			 */
 			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
-				ememory::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(getSubObjectNamed(_name)); \
+				ememory::SharedPtr<_type> myObject = ememory::dynamicPointerCast<_type>(getSubObjectNamed(_name)); \
 				if (myObject != nullptr) { \
 					myObject->_event.connect(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
@@ -291,7 +291,7 @@ namespace ewol {
 			} while (false)
 			/*
 			template<class TYPE> void subBind(ememory::SharedPtr<ewol::Object> _obj, void (TYPE::*_func)()) {
-				ememory::SharedPtr<TYPE> obj2 = std::dynamic_pointer_cast<TYPE>(_obj);
+				ememory::SharedPtr<TYPE> obj2 = ememory::dynamicPointerCast<TYPE>(_obj);
 				if (obj2 == nullptr) {
 					EWOL_ERROR("Can not connect signal ...");
 					return;
@@ -307,7 +307,7 @@ namespace ewol {
  * @brief link on an signal in the global object list with his name
  */
 #define globalBind(_type, _name, _event, _obj, _func, ...) do {\
-	ememory::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
+	ememory::SharedPtr<_type> myObject = ememory::dynamicPointerCast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
@@ -319,7 +319,7 @@ namespace ewol {
  * @brief link on an signal in the subWidget of an object with his name
  */
 #define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
-	ememory::SharedPtr<_type> myObject = std::dynamic_pointer_cast<_type>(_object->getObjectNamed(_name)); \
+	ememory::SharedPtr<_type> myObject = ememory::dynamicPointerCast<_type>(_object->getObjectNamed(_name)); \
 	if (myObject != nullptr) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \

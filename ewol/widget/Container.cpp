@@ -29,7 +29,7 @@ void ewol::widget::Container::setSubWidget(ewol::WidgetShared _newWidget) {
 	subWidgetRemove();
 	m_subWidget = _newWidget;
 	if (m_subWidget != nullptr) {
-		m_subWidget->setParent(shared_from_this());
+		m_subWidget->setParent(sharedFromThis());
 	}
 	markToRedraw();
 	requestUpdateSize();
@@ -45,7 +45,7 @@ void ewol::widget::Container::subWidgetReplace(const ewol::WidgetShared& _oldWid
 	m_subWidget.reset();
 	m_subWidget = _newWidget;
 	if (m_subWidget != nullptr) {
-		m_subWidget->setParent(shared_from_this());
+		m_subWidget->setParent(sharedFromThis());
 	}
 	markToRedraw();
 	requestUpdateSize();

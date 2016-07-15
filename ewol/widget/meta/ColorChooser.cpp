@@ -31,7 +31,7 @@ void ewol::widget::ColorChooser::init() {
 	propertyMode.set(ewol::widget::Sizer::modeVert);
 	propertyLockExpand.set(bvec2(true,true));
 		m_widgetColorBar = ewol::widget::ColorBar::create();
-			m_widgetColorBar->signalChange.connect(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChange);
+			m_widgetColorBar->signalChange.connect(sharedFromThis(), &ewol::widget::ColorChooser::onCallbackColorChange);
 			m_widgetColorBar->propertyFill.set(bvec2(true,true));
 			subWidgetAdd(m_widgetColorBar);
 		
@@ -39,7 +39,7 @@ void ewol::widget::ColorChooser::init() {
 		sliderColor = etk::color::black;
 		
 		m_widgetRed = ewol::widget::Slider::create();
-			m_widgetRed->signalChange.connect(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChangeRed);
+			m_widgetRed->signalChange.connect(sharedFromThis(), &ewol::widget::ColorChooser::onCallbackColorChangeRed);
 			m_widgetRed->propertyExpand.set(bvec2(true,false));
 			m_widgetRed->propertyFill.set(bvec2(true,false));
 			m_widgetRed->propertyMinimum.set(0);
@@ -48,7 +48,7 @@ void ewol::widget::ColorChooser::init() {
 			m_widgetRed->setColor(sliderColor);
 			subWidgetAdd(m_widgetRed);
 		m_widgetGreen = ewol::widget::Slider::create();
-			m_widgetGreen->signalChange.connect(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChangeGreen);
+			m_widgetGreen->signalChange.connect(sharedFromThis(), &ewol::widget::ColorChooser::onCallbackColorChangeGreen);
 			m_widgetGreen->propertyExpand.set(bvec2(true,false));
 			m_widgetGreen->propertyFill.set(bvec2(true,false));
 			m_widgetGreen->propertyMinimum.set(0);
@@ -57,7 +57,7 @@ void ewol::widget::ColorChooser::init() {
 			m_widgetGreen->setColor(sliderColor);
 			subWidgetAdd(m_widgetGreen);
 		m_widgetBlue = ewol::widget::Slider::create();
-			m_widgetBlue->signalChange.connect(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChangeBlue);
+			m_widgetBlue->signalChange.connect(sharedFromThis(), &ewol::widget::ColorChooser::onCallbackColorChangeBlue);
 			m_widgetBlue->propertyExpand.set(bvec2(true,false));
 			m_widgetBlue->propertyFill.set(bvec2(true,false));
 			m_widgetBlue->propertyMinimum.set(0);
@@ -66,7 +66,7 @@ void ewol::widget::ColorChooser::init() {
 			m_widgetBlue->setColor(sliderColor);
 			subWidgetAdd(m_widgetBlue);
 		m_widgetAlpha = ewol::widget::Slider::create();
-			m_widgetAlpha->signalChange.connect(shared_from_this(), &ewol::widget::ColorChooser::onCallbackColorChangeAlpha);
+			m_widgetAlpha->signalChange.connect(sharedFromThis(), &ewol::widget::ColorChooser::onCallbackColorChangeAlpha);
 			m_widgetAlpha->propertyExpand.set(bvec2(true,false));
 			m_widgetAlpha->propertyFill.set(bvec2(true,false));
 			m_widgetAlpha->propertyMinimum.set(0);

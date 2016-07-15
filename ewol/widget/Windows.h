@@ -25,7 +25,7 @@ namespace ewol {
 				eproperty::Value<std::string> propertyColorConfiguration; //!< Configuration file of the windows theme
 				eproperty::Value<std::string> propertyTitle; //!< Current title of the windows
 			protected:
-				std::shared_ptr<ewol::resource::ColorFile> m_resourceColor; //!< theme color property (name of file in @ref propertyColorConfiguration)
+				ememory::SharedPtr<ewol::resource::ColorFile> m_resourceColor; //!< theme color property (name of file in @ref propertyColorConfiguration)
 				int32_t m_colorBg; //!< Default background color of the windows
 			protected:
 				Windows();

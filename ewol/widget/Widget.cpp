@@ -116,7 +116,7 @@ bool ewol::Widget::rmFocus() {
 }
 
 void ewol::Widget::keepFocus() {
-	getWidgetManager().focusKeep(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
+	getWidgetManager().focusKeep(ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis()));
 }
 
 void ewol::Widget::setOffset(const vec2& _newVal) {
@@ -513,7 +513,7 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 
 void ewol::Widget::grabCursor() {
 	if (m_grabCursor == false) {
-		getContext().inputEventGrabPointer(std::dynamic_pointer_cast<ewol::Widget>(shared_from_this()));
+		getContext().inputEventGrabPointer(ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis()));
 		m_grabCursor = true;
 	}
 }
@@ -546,7 +546,7 @@ bool ewol::Widget::loadXML(const exml::Element& _node) {
 }
 
 bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
-	ewol::WidgetShared up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
+	ewol::WidgetShared up = ememory::dynamicPointerCast<ewol::Widget>(m_parent.lock());
 	if (up != nullptr) {
 		if (up->systemEventEntry(_event) == true) {
 			return true;
@@ -556,7 +556,7 @@ bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 }
 
 bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
-	ewol::WidgetShared up = std::dynamic_pointer_cast<ewol::Widget>(m_parent.lock());
+	ewol::WidgetShared up = ememory::dynamicPointerCast<ewol::Widget>(m_parent.lock());
 	if (up != nullptr) {
 		if (up->systemEventInput(_event) == true) {
 			return true;

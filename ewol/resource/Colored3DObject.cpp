@@ -233,7 +233,7 @@ namespace etk {
 
 // declare for signal event
 template class esignal::ISignal<ewol::resource::Colored3DObject>;
-template class esignal::ISignal<std::shared_ptr<ewol::resource::Colored3DObject>>;
+template class esignal::ISignal<ememory::SharedPtr<ewol::resource::Colored3DObject>>;
 template class esignal::Signal<ewol::resource::Colored3DObject>;
-template class esignal::Signal<std::shared_ptr<ewol::resource::Colored3DObject>>;
+template class esignal::Signal<ememory::SharedPtr<ewol::resource::Colored3DObject>>;
 

@@ -30,7 +30,7 @@ namespace ewol {
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
 				std::u32string m_value;
-				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorDefaultFgText; //!< Default color of the text
 				int32_t m_colorDefaultBgText; //!< Default Background color of the text
 			protected:

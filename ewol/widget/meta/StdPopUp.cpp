@@ -117,7 +117,7 @@ ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const std::string& 
 	myLabel->propertyValue.set(_text);
 	myButton->setSubWidget(myLabel);
 	if(_autoExit == true) {
-		myButton->signalPressed.connect(shared_from_this(), &ewol::widget::StdPopUp::onCallBackButtonExit);
+		myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::StdPopUp::onCallBackButtonExit);
 	}
 	m_subBar->subWidgetAdd(myButton);
 	markToRedraw();

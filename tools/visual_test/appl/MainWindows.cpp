@@ -41,25 +41,25 @@ void appl::MainWindows::init() {
 	m_composer = ewol::widget::Composer::create();
 	m_composer->loadFromFile("DATA:gui.xml");
 	setSubWidget(m_composer);
-	externSubBind(m_composer, ewol::widget::Button, "appl-theme-toggle", signalValue, shared_from_this(), &appl::MainWindows::onCallbackThemeChange);
-	externSubBind(m_composer, ewol::widget::Button, "appl-previous-widget", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, -1);
-	externSubBind(m_composer, ewol::widget::Button, "appl-next-widget", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackWidgetChange, 1);
-	externSubBind(m_composer, ewol::widget::Button, "appl-next-gravity", signalPressed, shared_from_this(), &appl::MainWindows::onCallbackGravityChange);
+	externSubBind(m_composer, ewol::widget::Button, "appl-theme-toggle", signalValue, sharedFromThis(), &appl::MainWindows::onCallbackThemeChange);
+	externSubBind(m_composer, ewol::widget::Button, "appl-previous-widget", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackWidgetChange, -1);
+	externSubBind(m_composer, ewol::widget::Button, "appl-next-widget", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackWidgetChange, 1);
+	externSubBind(m_composer, ewol::widget::Button, "appl-next-gravity", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackGravityChange);
 	
-	m_sizerVert = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-upper-test-widget"));
+	m_sizerVert = ememory::dynamicPointerCast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-upper-test-widget"));
 	if (m_sizerVert == nullptr) {
 		APPL_CRITICAL("Can not get vertical pointer");
 	}
-	m_sizerDynamic = std::dynamic_pointer_cast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-dynamic-config"));
+	m_sizerDynamic = ememory::dynamicPointerCast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-dynamic-config"));
 	if (m_sizerDynamic == nullptr) {
 		APPL_CRITICAL("Can not get dynamic pointer");
 	}
-	m_subWidget = std::dynamic_pointer_cast<ewol::Widget>(m_composer->getSubObjectNamed("[TEST]TO-TEST"));
+	m_subWidget = ememory::dynamicPointerCast<ewol::Widget>(m_composer->getSubObjectNamed("[TEST]TO-TEST"));
 	if (m_subWidget == nullptr) {
 		APPL_CRITICAL("Can not get subWidget pointer");
 	}
 	shortCutAdd("F12",          "menu:reloade-shader");
-	signalShortcut.connect(shared_from_this(), &appl::MainWindows::onCallbackShortCut);
+	signalShortcut.connect(sharedFromThis(), &appl::MainWindows::onCallbackShortCut);
 }
 
 void appl::MainWindows::onCallbackShortCut(const std::string& _value) {
@@ -119,7 +119,7 @@ void appl::MainWindows::onCallbackGravityChange() {
 
 void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	m_idWidget += _increment;
-	std::shared_ptr<ewol::Widget> oldWidget = m_subWidget;
+	ememory::SharedPtr<ewol::Widget> oldWidget = m_subWidget;
 	std::string tmpDescription;
 	std::string tmpConstruct;
 	switch(m_idWidget) {
@@ -194,8 +194,8 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	updateProperty();
 }
 
-static void addSpacer(const std::shared_ptr<ewol::widget::Sizer>& _sizer, etk::Color<> _color=etk::color::none) {
-	std::shared_ptr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
+static void addSpacer(const ememory::SharedPtr<ewol::widget::Sizer>& _sizer, etk::Color<> _color=etk::color::none) {
+	ememory::SharedPtr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
 	if (mySpacer != nullptr) {
 		mySpacer->propertyExpand.set(bvec2(true,false));
 		mySpacer->propertyFill.set(bvec2(true,false));
@@ -214,7 +214,7 @@ void appl::MainWindows::updateProperty() {
 		return;
 	}
 	m_listConnection.clear();
-	std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
+	ememory::SharedPtr<ewol::widget::Label> widget = ewol::widget::Label::create();
 	widget->propertyValue.set(m_subWidget->getObjectType());
 	m_sizerDynamic->subWidgetAdd(widget);
 	addSpacer(m_sizerDynamic, etk::color::red);
@@ -224,13 +224,13 @@ void appl::MainWindows::updateProperty() {
 			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
 			continue;
 		}
-		std::shared_ptr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create();
+		ememory::SharedPtr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create();
 		if (widgetSizer != nullptr) {
 			widgetSizer->propertyMode.set(ewol::widget::Sizer::modeHori);
 			widgetSizer->propertyExpand.set(bvec2(true,false));
 			widgetSizer->propertyFill.set(bvec2(true,true));
 			m_sizerDynamic->subWidgetAddStart(widgetSizer);
-			std::shared_ptr<ewol::widget::Label> widget = ewol::widget::Label::create();
+			ememory::SharedPtr<ewol::widget::Label> widget = ewol::widget::Label::create();
 			widget->propertyValue.set(param->getName() + ":");
 			widgetSizer->subWidgetAdd(widget);
 			std::string type = param->getType();

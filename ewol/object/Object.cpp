@@ -21,7 +21,7 @@ void ewol::Object::autoDestroy() {
 	// TODO : set a signal to do this ...
 	if (parent != nullptr) {
 		EWOL_VERBOSE("Destroy object: Call parrent");
-		parent->requestDestroyFromChild(shared_from_this());
+		parent->requestDestroyFromChild(sharedFromThis());
 	}
 	//if no parent ==> noting to do ...
 	m_destroy = true;
@@ -71,7 +71,7 @@ ewol::Object::~Object() {
 
 
 void ewol::Object::init() {
-	getObjectManager().add(shared_from_this());
+	getObjectManager().add(sharedFromThis());
 	//parameterDisplay();
 	m_objectHasBeenInit = true;
 }
@@ -164,7 +164,7 @@ ewol::ObjectShared ewol::Object::getObjectNamed(const std::string& _objectName) 
 ewol::ObjectShared ewol::Object::getSubObjectNamed(const std::string& _objectName) {
 	EWOL_VERBOSE("check if name : " << _objectName << " ?= " << propertyName.get());
 	if (_objectName == propertyName.get()) {
-		return shared_from_this();
+		return sharedFromThis();
 	}
 	return nullptr;
 }

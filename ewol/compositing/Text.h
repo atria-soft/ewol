@@ -21,7 +21,7 @@ namespace ewol {
 	namespace compositing {
 		class Text : public ewol::compositing::TextBase {
 			protected:
-				std::shared_ptr<ewol::resource::TexturedFont> m_font; //!< Font resources
+				ememory::SharedPtr<ewol::resource::TexturedFont> m_font; //!< Font resources
 			public:
 				/**
 				 * @brief generic constructor

@@ -67,7 +67,7 @@ ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 		return m_subWidget->getWidgetAtPos(_pos);
 	}
 	// otherwise the event go to this widget ...
-	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
+	return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
 }
 
 void ewol::widget::Windows::sysDraw() {
@@ -164,7 +164,7 @@ void ewol::widget::Windows::setSubWidget(ewol::WidgetShared _widget) {
 	}
 	if (_widget != nullptr) {
 		m_subWidget = _widget;
-		m_subWidget->setParent(shared_from_this());
+		m_subWidget->setParent(sharedFromThis());
 	}
 	
 	// Regenerate the size calculation :
@@ -178,7 +178,7 @@ void ewol::widget::Windows::popUpWidgetPush(ewol::WidgetShared _widget) {
 		return;
 	}
 	m_popUpWidgetList.push_back(_widget);
-	_widget->setParent(shared_from_this());
+	_widget->setParent(sharedFromThis());
 	// force the focus on the basic widget ==> this remove many time the virual keyboard area
 	_widget->keepFocus();
 	// Regenerate the size calculation :
@@ -203,7 +203,7 @@ void ewol::widget::Windows::onChangePropertyColor() {
 
 void ewol::widget::Windows::onChangePropertyTitle() {
 	ewol::Context& context = getContext();
-	if (context.getWindows() == shared_from_this()) {
+	if (context.getWindows() == sharedFromThis()) {
 		context.setTitle(*propertyTitle);
 	} else {
 		EWOL_INFO("Set title is delayed ...");

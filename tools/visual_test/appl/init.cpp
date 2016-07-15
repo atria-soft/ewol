@@ -55,7 +55,7 @@ class MainApplication : public ewol::context::Application {
 		void onStart(ewol::Context& _context) {
 			APPL_INFO("==> START ... (BEGIN)");
 			
-			std::shared_ptr<appl::MainWindows> basicWindows = appl::MainWindows::create();
+			ememory::SharedPtr<appl::MainWindows> basicWindows = appl::MainWindows::create();
 			if (basicWindows == nullptr) {
 				APPL_ERROR("Can not allocate the basic windows");
 				return;

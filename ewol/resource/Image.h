@@ -40,7 +40,7 @@ namespace ewol {
 				 * @param[in] _sizeRegister size register in named (When you preaload the images the size write here will be )
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static std::shared_ptr<ewol::resource::TextureFile> create(const std::string& _filename,
+				static ememory::SharedPtr<ewol::resource::TextureFile> create(const std::string& _filename,
 				                                                           ivec2 _size=ewol::resource::TextureFile::sizeAuto,
 				                                                           ivec2 _sizeRegister=ewol::resource::TextureFile::sizeAuto);
 		};

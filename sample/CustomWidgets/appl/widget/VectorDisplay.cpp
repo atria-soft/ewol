@@ -20,7 +20,7 @@ void appl::widget::VectorDisplay::init() {
 	ewol::Widget::init();
 	markToRedraw();
 	// set call all time (sample ...).
-	getObjectManager().periodicCall.connect(shared_from_this(), &appl::widget::VectorDisplay::periodicEvent);
+	getObjectManager().periodicCall.connect(sharedFromThis(), &appl::widget::VectorDisplay::periodicEvent);
 }
 
 

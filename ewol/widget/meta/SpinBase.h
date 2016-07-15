@@ -68,7 +68,7 @@ namespace ewol {
 			public:
 				UN_DECLARE_FACTORY(SpinBase);
 			protected:
-				std::shared_ptr<ewol::resource::ConfigFile> m_config;
+				ememory::SharedPtr<ewol::resource::ConfigFile> m_config;
 				int32_t m_confIdEntryShaper;
 				int32_t m_confIdUpShaper;
 				int32_t m_confIdDownShaper;

@@ -147,7 +147,7 @@ void ewol::compositing::TextDF::setFontSize(int32_t _fontSize) {
 void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	clear();
 	// remove old one
-	std::shared_ptr<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
+	ememory::SharedPtr<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
 	std::string fontName;
 	if (_fontName == "") {
 		fontName = ewol::getContext().getFontDefault().getName();

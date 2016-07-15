@@ -135,7 +135,7 @@ void ewol::resource::Texture::flush() {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	// request to the manager to be call at the next update ...
 	EWOL_INFO("Request UPDATE of Element");
-	getManager().update(std::dynamic_pointer_cast<gale::Resource>(shared_from_this()));
+	getManager().update(ememory::dynamicPointerCast<gale::Resource>(sharedFromThis()));
 }
 
 void ewol::resource::Texture::setImageSize(ivec2 _newSize) {

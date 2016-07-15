@@ -285,7 +285,7 @@ void ewol::compositing::Drawing::loadProgram() {
 	// oad the new ...
 	m_GLprogram = gale::resource::Program::create("{ewol}DATA:color3.prog");
 	// get the shader resource :
-	if (nullptr != m_GLprogram ) {
+	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor = m_GLprogram->getAttribute("EW_color");
 		m_GLMatrix = m_GLprogram->getUniform("EW_MatrixTransformation");

@@ -64,10 +64,10 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size, ivec2 _sizeRegister) {
+ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size, ivec2 _sizeRegister) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
 	if (_filename == "") {
-		std::shared_ptr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
+		ememory::SharedPtr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
 		if (nullptr == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
@@ -108,10 +108,10 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << tmpFilename << "' new size=" << _size);
-	std::shared_ptr<ewol::resource::TextureFile> object = nullptr;
-	std::shared_ptr<gale::Resource> object2 = getManager().localKeep(tmpFilename);
+	ememory::SharedPtr<ewol::resource::TextureFile> object = nullptr;
+	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep(tmpFilename);
 	if (object2 != nullptr) {
-		object = std::dynamic_pointer_cast<ewol::resource::TextureFile>(object2);
+		object = ememory::dynamicPointerCast<ewol::resource::TextureFile>(object2);
 		if (object == nullptr) {
 			EWOL_CRITICAL("Request resource file : '" << tmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
@@ -122,7 +122,7 @@ std::shared_ptr<ewol::resource::TextureFile> ewol::resource::TextureFile::create
 	}
 	EWOL_INFO("CREATE: TextureFile: '" << tmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = std::shared_ptr<ewol::resource::TextureFile>(new ewol::resource::TextureFile());
+	object = ememory::SharedPtr<ewol::resource::TextureFile>(new ewol::resource::TextureFile());
 	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;

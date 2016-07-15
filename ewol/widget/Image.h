@@ -36,7 +36,7 @@ namespace ewol {
 				eproperty::Value<bool> propertyUseThemeColor; //!< Use the themo color management ("{ewol}THEME:COLOR:Image.json") default false
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
-				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
+				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
 				int32_t m_colorId; //!< Color of the image.
 			public:
 				/**

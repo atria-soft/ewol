@@ -27,7 +27,7 @@ namespace appl {
 
 TEST(TestEwolWindows, Creation) {
 	/*
-	std::shared_ptr<appl::Windows> tmpWindows = appl::Windows::create();
+	ememory::SharedPtr<appl::Windows> tmpWindows = appl::Windows::create();
 	EXPECT_NE(tmpWindows, nullptr);
 	tmpWindows.reset();
 	*/

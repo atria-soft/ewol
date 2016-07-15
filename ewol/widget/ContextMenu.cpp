@@ -225,7 +225,7 @@ ewol::WidgetShared ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 	if (val != nullptr) {
 		return val;
 	}
-	return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
+	return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
 }
 
 void ewol::widget::ContextMenu::onChangePropertyArrowPos() {

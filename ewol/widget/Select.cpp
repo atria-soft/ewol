@@ -187,7 +187,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 		myLabel->propertyExpand.set(bvec2(true,true));
 		myLabel->propertyFill.set(bvec2(true,true));
 		// set callback
-		myLabel->signalPressed.connect(shared_from_this(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
+		myLabel->signalPressed.connect(sharedFromThis(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
 		myLabel->signalPressed.connect(tmpContext, &ewol::widget::ContextMenu::destroy);
 		// add it in the widget list
 		mySizer->subWidgetAddStart(myLabel);

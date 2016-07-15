@@ -19,15 +19,15 @@
 #include <ewol/context/Application.h>
 #include <ewol/context/ConfigFont.h>
 #include <ewol/context/InputManager.h>
-#include <memory>
+#include <ememory/memory.h>
 
 namespace ewol {
 	// Here we hereted from the gale application to be agnostic of the OW where we work ...
 	class Context : public gale::Application {
 		private:
-			std::shared_ptr<ewol::context::Application> m_application; //!< Application handle
+			ememory::SharedPtr<ewol::context::Application> m_application; //!< Application handle
 		public:
-			std::shared_ptr<ewol::context::Application> getApplication() {
+			ememory::SharedPtr<ewol::context::Application> getApplication() {
 				return m_application;
 			}
 		public:

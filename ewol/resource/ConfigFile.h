@@ -38,7 +38,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the configuration file.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static std::shared_ptr<ewol::resource::ConfigFile> keep(const std::string& _filename);
+				static ememory::SharedPtr<ewol::resource::ConfigFile> keep(const std::string& _filename);
 		};
 	};
 };

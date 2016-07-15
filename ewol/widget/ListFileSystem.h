@@ -37,7 +37,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(ListFileSystem, "ListFileSystem");
 				virtual ~ListFileSystem();
 			protected:
-				std::shared_ptr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
+				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
 				int32_t m_colorIdText; //!< Color of the text.
 				int32_t m_colorIdBackground1; //!< Color of the Background.
 				int32_t m_colorIdBackground2; //!< Color of the Background 2.

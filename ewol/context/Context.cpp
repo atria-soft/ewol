@@ -32,12 +32,12 @@
 static ewol::Context* l_curentInterface=nullptr;
 ewol::Context& ewol::getContext() {
 	gale::Context& context = gale::getContext();
-	std::shared_ptr<gale::Application> appl = context.getApplication();
+	ememory::SharedPtr<gale::Application> appl = context.getApplication();
 	if (appl == nullptr) {
 		EWOL_CRITICAL("[CRITICAL] try acces at an empty GALE application (can not get Context)");
 		// ???
 	}
-	return *(std::static_pointer_cast<ewol::Context>(appl));
+	return *(ememory::staticPointerCast<ewol::Context>(appl));
 }
 
 
@@ -100,7 +100,7 @@ void ewol::Context::onCreate(gale::Context& _context) {
 		forceOrientation(ewol::screenAuto);
 	#endif
 	*/
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		EWOL_ERROR(" == > Create without application");
 		return;
@@ -111,7 +111,7 @@ void ewol::Context::onCreate(gale::Context& _context) {
 
 void ewol::Context::onStart(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system start (BEGIN)");
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		// TODO : Request exit of the application .... with error ...
 		return;
@@ -122,7 +122,7 @@ void ewol::Context::onStart(gale::Context& _context) {
 
 void ewol::Context::onResume(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system resume (BEGIN)");
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		return;
 	}
@@ -160,7 +160,7 @@ void ewol::Context::onDraw(gale::Context& _context) {
 
 void ewol::Context::onPause(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system pause (BEGIN)");
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		return;
 	}
@@ -170,7 +170,7 @@ void ewol::Context::onPause(gale::Context& _context) {
 
 void ewol::Context::onStop(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system stop (BEGIN)");
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		return;
 	}
@@ -184,7 +184,7 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	m_windowsCurrent.reset();
 	// clean all widget and sub widget with their resources:
 	m_objectManager.cleanInternalRemoved();
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl != nullptr) {
 		// call application to uninit
 		appl->onDestroy(*this);
@@ -201,7 +201,7 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 
 void ewol::Context::onKillDemand(gale::Context& _context) {
 	EWOL_INFO(" == > User demand a destroy (BEGIN)");
-	std::shared_ptr<ewol::context::Application> appl = m_application;
+	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == nullptr) {
 		exit(0);
 		return;
@@ -315,7 +315,7 @@ void ewol::Context::onClipboardEvent(enum gale::context::clipBoard::clipboardLis
 
 
 ewol::Context::Context(ewol::context::Application* _application) :
-  //m_application(std::make_shared<ewol::context::Application>(_application)),
+  //m_application(ememory::makeShared<ewol::context::Application>(_application)),
   m_application(_application),
   m_objectManager(*this),
   m_input(*this),

@@ -18,7 +18,7 @@ namespace ewol {
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				std::shared_ptr<ewol::resource::FontBase> m_font;
+				ememory::SharedPtr<ewol::resource::FontBase> m_font;
 			public:
 				std::vector<GlyphProperty> m_listElement;
 			private:
@@ -68,7 +68,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the texture font.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static std::shared_ptr<ewol::resource::DistanceFieldFont> keep(const std::string& _filename);
+				static ememory::SharedPtr<ewol::resource::DistanceFieldFont> keep(const std::string& _filename);
 			private:
 				/**
 				 * @brief add a glyph in a texture font.

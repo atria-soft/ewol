@@ -192,7 +192,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	for (auto element : m_listAssiciatedId) {
 		m_GLprogram->uniform(element.x(), m_colorProperty->get(element.y()));
 	}
-	if (nullptr!=m_resourceTexture) {
+	if (m_resourceTexture != nullptr) {
 		// TextureID
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getRendererId());
 	}

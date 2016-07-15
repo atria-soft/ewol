@@ -350,7 +350,7 @@ namespace ewol {
 			 */
 			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) {
 				if (propertyHide.get() == false) {
-					return std::dynamic_pointer_cast<ewol::Widget>(shared_from_this());
+					return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
 				}
 				return nullptr;
 			};
