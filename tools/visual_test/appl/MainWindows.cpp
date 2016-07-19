@@ -194,7 +194,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	updateProperty();
 }
 
-static void addSpacer(const ememory::SharedPtr<ewol::widget::Sizer>& _sizer, etk::Color<> _color=etk::color::none) {
+static void addSpacer(ememory::SharedPtr<ewol::widget::Sizer> _sizer, etk::Color<> _color=etk::color::none) {
 	ememory::SharedPtr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
 	if (mySpacer != nullptr) {
 		mySpacer->propertyExpand.set(bvec2(true,false));
@@ -306,15 +306,15 @@ void appl::MainWindows::updateProperty() {
 					widgetSizer->subWidgetAdd(widgetSelectTmp);
 					widgetSelectTmp->propertyExpand.set(bvec2(true,false));
 					widgetSelectTmp->propertyFill.set(bvec2(true,false));
-					widgetSelectTmp->optionAdd(gale::distance::pourcent, "Pourcent");
-					widgetSelectTmp->optionAdd(gale::distance::pixel, "Pixel");
-					widgetSelectTmp->optionAdd(gale::distance::meter, "Meter");
-					widgetSelectTmp->optionAdd(gale::distance::centimeter, "Centimeter");
-					widgetSelectTmp->optionAdd(gale::distance::millimeter, "Millimeter");
-					widgetSelectTmp->optionAdd(gale::distance::kilometer, "Kilometer");
-					widgetSelectTmp->optionAdd(gale::distance::inch, "Inch");
-					widgetSelectTmp->optionAdd(gale::distance::foot, "foot");
-					widgetSelectTmp->propertyValue.set(value.getType());
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::pourcent), "Pourcent");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::pixel), "Pixel");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::meter), "Meter");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::centimeter), "Centimeter");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::millimeter), "Millimeter");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::kilometer), "Kilometer");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::inch), "Inch");
+					widgetSelectTmp->optionAdd(int32_t(gale::distance::foot), "foot");
+					widgetSelectTmp->propertyValue.set(int32_t(value.getType()));
 					conn = widgetSelectTmp->signalValue.connect(
 						[=](const int32_t& _value) {
 							APPL_INFO("set parameter: gravity name=" << param->getName() << " value=" << (enum gale::distance)_value);
