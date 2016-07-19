@@ -154,7 +154,7 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
 		ememory::SharedPtr<ewol::resource::ImageDF> object(new ewol::resource::ImageDF());
-		if (nullptr == object) {
+		if (object == nullptr) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
 		}
@@ -171,14 +171,15 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
 	std::string TmpFilename = _filename;
-	if (false == etk::end_with(_filename, ".svg") ) {
+	if (etk::end_with(_filename, ".svg") == false) {
 		_size = ivec2(-1,-1);
 	}
 	#ifdef __TARGET_OS__MacOs
 		EWOL_ERROR("TODO : remove this strange hack");
 		_size = ivec2(64,64);
 	#endif
-	if (_size.x()>0 && _size.y()>0) {
+	if (    _size.x() > 0
+	     && _size.y() > 0) {
 		EWOL_VERBOSE("     == > specific size : " << _size);
 		#ifdef __TARGET_OS__Android
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
@@ -192,20 +193,20 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
 	ememory::SharedPtr<ewol::resource::ImageDF> object = nullptr;
 	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
-	if (nullptr != object2) {
+	if (object2 != nullptr) {
 		object = ememory::dynamicPointerCast<ewol::resource::ImageDF>(object2);
-		if (nullptr == object) {
+		if (object == nullptr) {
 			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
 			return nullptr;
 		}
 	}
-	if (nullptr != object) {
+	if (object != nullptr) {
 		return object;
 	}
 	EWOL_INFO("CREATE: ImageDF: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = ememory::SharedPtr<ewol::resource::ImageDF>(new ewol::resource::ImageDF());
-	if (nullptr == object) {
+	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;
 	}

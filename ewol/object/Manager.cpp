@@ -39,7 +39,7 @@ void ewol::object::Manager::displayListObject() {
 	for (auto &it : m_eObjectList) {
 		ewol::ObjectShared element = it.lock();
 		if (element != nullptr) {
-			EWOL_INFO("  [" << element->getId() << "] ref=" << element.use_count()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
+			EWOL_INFO("  [" << element->getId() << "] ref=" << element.useCount()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
 		}
 	}
 }

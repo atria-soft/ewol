@@ -207,15 +207,15 @@ void ewol::widget::Parameter::onCallbackMenuSelected(const int32_t& _value) {
 }
 
 void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::WidgetShared _associateWidget) {
-	if (nullptr != m_paramList) {
+	if (m_paramList != nullptr) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
-		if (nullptr != m_wSlider) {
-			if (nullptr != _associateWidget) {
+		if (m_wSlider != nullptr) {
+			if (_associateWidget != nullptr) {
 				m_wSlider->subWidgetAdd(_associateWidget);
 			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
 				ewol::widget::LabelShared myLabel = widget::Label::create();
-				if (nullptr == myLabel) {
+				if (myLabel == nullptr) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
 					myLabel->propertyValue.set(std::string("No widget for : ") + _label);
@@ -231,21 +231,21 @@ void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ew
 	}
 }
 void ewol::widget::Parameter::menuAddGroup(std::string _label) {
-	if (nullptr != m_paramList) {
+	if (m_paramList != nullptr) {
 		m_paramList->menuSeparator();
 		m_paramList->menuAddGroup(_label);
 	}
 }
 
 void ewol::widget::Parameter::menuClear() {
-	if (nullptr != m_paramList) {
+	if (m_paramList != nullptr) {
 		m_paramList->menuClear();
 		m_currentIdList = 0;
 	}
 }
 
 void ewol::widget::Parameter::menuSeparator() {
-	if (nullptr != m_paramList) {
+	if (m_paramList != nullptr) {
 		m_paramList->menuSeparator();
 	}
 }

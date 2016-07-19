@@ -68,7 +68,7 @@ ewol::widget::Manager::~Manager() {
  * focus Area : 
  * *************************************************************************/
 
-void ewol::widget::Manager::focusKeep(const ewol::WidgetShared& _newWidget) {
+void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 	if (_newWidget == nullptr) {
 		// nothing to do ...
 		return;
@@ -96,7 +96,7 @@ void ewol::widget::Manager::focusKeep(const ewol::WidgetShared& _newWidget) {
 	}
 }
 
-void ewol::widget::Manager::focusSetDefault(const ewol::WidgetShared& _newWidget) {
+void ewol::widget::Manager::focusSetDefault(ewol::WidgetShared _newWidget) {
 	if(    _newWidget != nullptr
 	    && _newWidget->propertyCanFocus.get() == false) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );

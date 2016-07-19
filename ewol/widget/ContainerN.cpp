@@ -45,8 +45,8 @@ void ewol::widget::ContainerN::onChangePropertyLockExpand() {
 	requestUpdateSize();
 }
 
-void ewol::widget::ContainerN::subWidgetReplace(const ewol::WidgetShared& _oldWidget,
-                                                const ewol::WidgetShared& _newWidget) {
+void ewol::widget::ContainerN::subWidgetReplace(ewol::WidgetShared _oldWidget,
+                                                ewol::WidgetShared _newWidget) {
 	bool haveChange = false;
 	for (auto &it : m_subWidget) {
 		if (it != _oldWidget) {
@@ -82,7 +82,7 @@ int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::WidgetShared _newWidget) {
 }
 
 int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::WidgetShared _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Try to add start An empty Widget ... ");
 		return -1;
 	}
@@ -96,7 +96,7 @@ int32_t ewol::widget::ContainerN::subWidgetAddStart(ewol::WidgetShared _newWidge
 }
 
 void ewol::widget::ContainerN::subWidgetRemove(ewol::WidgetShared _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		return;
 	}
 	size_t errorControl = m_subWidget.size();
@@ -116,7 +116,7 @@ void ewol::widget::ContainerN::subWidgetRemove(ewol::WidgetShared _newWidget) {
 }
 
 void ewol::widget::ContainerN::subWidgetUnLink(ewol::WidgetShared _newWidget) {
-	if (nullptr == _newWidget) {
+	if (_newWidget == nullptr) {
 		return;
 	}
 	auto it(m_subWidget.begin());

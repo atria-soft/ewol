@@ -213,7 +213,7 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widg
 				// The element already exist  == > replace it ...
 				m_tmpWidget = m_subWidget[iii].widget;
 				m_subWidget[iii].widget = _newWidget;
-				if (nullptr != m_tmpWidget) {
+				if (m_tmpWidget != nullptr) {
 					m_tmpWidget.reset();
 					if (m_tmpWidget != nullptr) {
 						EWOL_CRITICAL("[" << getId() << "] Error while replacing a widget ...  == > never call when free");

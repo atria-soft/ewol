@@ -52,8 +52,8 @@ namespace ewol {
 				 * @param[in] _oldWidget The widget to replace.
 				 * @param[in] _newWidget The widget to set.
 				 */
-				virtual void subWidgetReplace(const ewol::WidgetShared& _oldWidget,
-				                              const ewol::WidgetShared& _newWidget);
+				virtual void subWidgetReplace(ewol::WidgetShared _oldWidget,
+				                              ewol::WidgetShared _newWidget);
 				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _newWidget the element pointer

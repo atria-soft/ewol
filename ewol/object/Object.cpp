@@ -76,7 +76,7 @@ void ewol::Object::init() {
 	m_objectHasBeenInit = true;
 }
 
-const char * const ewol::Object::getObjectType() {
+const char * const ewol::Object::getObjectType() const {
 	if (m_listType.size() == 0) {
 		return "ewol::Object";
 	}
@@ -90,7 +90,7 @@ void ewol::Object::addObjectType(const char* _type) {
 	}
 	m_listType.push_back(_type);
 }
-std::string ewol::Object::getTypeDescription() {
+std::string ewol::Object::getTypeDescription() const {
 	std::string ret("ewol::Object");
 	for(auto element : m_listType) {
 		ret += "|";
@@ -99,7 +99,7 @@ std::string ewol::Object::getTypeDescription() {
 	return ret;
 }
 
-bool ewol::Object::isTypeCompatible(const std::string& _type) {
+bool ewol::Object::isTypeCompatible(const std::string& _type) const {
 	if (_type == "ewol::Object") {
 		return true;
 	}

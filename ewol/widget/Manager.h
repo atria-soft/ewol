@@ -28,12 +28,12 @@ namespace ewol {
 				 * @brief Request a focus on a specify widget.
 				 * @param[in] _newWidget Widget that might get the focus.
 				 */
-				void focusKeep(const ewol::WidgetShared& _newWidget);
+				void focusKeep(ewol::WidgetShared _newWidget);
 				/**
 				 * @brief Set the default focus when none selected.
 				 * @param[in] _newWidget Widget that might get the focus (when nothing else).
 				 */
-				void focusSetDefault(const ewol::WidgetShared& _newWidget);
+				void focusSetDefault(ewol::WidgetShared _newWidget);
 				/**
 				 * @brief Release the current focus (back on default if possible).
 				 */

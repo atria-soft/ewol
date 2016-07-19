@@ -68,7 +68,7 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
 	if (_filename == "") {
 		ememory::SharedPtr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
-		if (nullptr == object) {
+		if (object == nullptr) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
 		}

@@ -299,7 +299,7 @@ ewol::WidgetShared ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
-				if (nullptr != tmpWidget) {
+				if (tmpWidget != nullptr) {
 					return tmpWidget;
 				}
 				return nullptr;
@@ -316,7 +316,7 @@ ewol::WidgetShared ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
-				if (nullptr != tmpWidget) {
+				if (tmpWidget != nullptr) {
 					return tmpWidget;
 				}
 				return nullptr;
@@ -332,7 +332,7 @@ ewol::WidgetShared ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
-				if (nullptr != tmpWidget) {
+				if (tmpWidget != nullptr) {
 					return tmpWidget;
 				}
 				return nullptr;

@@ -134,7 +134,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
-	if (nullptr != m_subWidget) {
+	if (m_subWidget != nullptr) {
 		m_subWidget->systemDraw(_displayProp);
 		//EWOL_DEBUG("Draw Windows");
 	}

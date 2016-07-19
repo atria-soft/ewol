@@ -157,7 +157,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_mouseHover = false;
 				// create a context menu : 
 				m_widgetContextMenu = ewol::widget::ContextMenu::create();
-				if (nullptr == m_widgetContextMenu) {
+				if (m_widgetContextMenu == nullptr) {
 					EWOL_ERROR("Allocation Error");
 					return true;
 				}
@@ -183,10 +183,10 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 	}
 	if(    m_mouseHover != previousHoverState
 	    || m_buttonPressed != previousPressed) {
-		if (true == m_buttonPressed) {
+		if (m_buttonPressed == true) {
 			changeStatusIn(STATUS_PRESSED);
 		} else {
-			if (true == m_mouseHover) {
+			if (m_mouseHover == true) {
 				changeStatusIn(STATUS_HOVER);
 			} else {
 				changeStatusIn(STATUS_UP);

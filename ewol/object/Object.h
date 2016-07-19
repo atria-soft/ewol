@@ -179,18 +179,18 @@ namespace ewol {
 			 * @brief get the current Object type of the Object
 			 * @return the last type name of the element
 			 */
-			const char * const getObjectType();
+			const char * const getObjectType() const;
 			/**
 			 * @brief Get the herarchie of the Object type.
 			 * @return descriptive string.
 			 */
-			std::string getTypeDescription();
+			std::string getTypeDescription() const;
 			/**
 			 * @brief check  if the element herited from a specific type
 			 * @param[in] _type Type to check.
 			 * @return true if the element is compatible.
 			 */
-			bool isTypeCompatible(const std::string& _type);
+			bool isTypeCompatible(const std::string& _type) const;
 		protected:
 			/**
 			 * @brief Add a type of the list of Object.
