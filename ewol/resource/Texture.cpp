@@ -141,5 +141,5 @@ void ewol::resource::Texture::flush() {
 void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
-	m_data.resize(_newSize);
+	m_data.configure(_newSize, egami::colorType::RGBA8);
 }
