@@ -37,6 +37,7 @@ void ewol::resource::Texture::init() {
 
 ewol::resource::Texture::Texture() :
   m_texId(0),
+  m_data(ivec2(32,32),egami::colorType::RGBA8),
   m_endPointSize(1,1),
   m_loaded(false) {
 	addResourceType("ewol::compositing::Texture");
