@@ -382,9 +382,9 @@ void ewol::compositing::Drawing::addVertex() {
 void ewol::compositing::Drawing::lineTo(const vec3& _dest) {
 	resetCount();
 	internalSetColor(m_color);
-	EWOL_VERBOSE("DrawLine : " << m_position << " to " << _dest);
+	//EWOL_VERBOSE("DrawLine : " << m_position << " to " << _dest);
 	if (m_position.x() == _dest.x() && m_position.y() == _dest.y() && m_position.z() == _dest.z()) {
-		EWOL_WARNING("Try to draw an line width 0");
+		//EWOL_WARNING("Try to draw a line width 0");
 		return;
 	}
 	//teta = tan-1(oposer/adjacent)
