@@ -10,7 +10,7 @@
 #include <etk/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 
 namespace ewol {
@@ -20,7 +20,7 @@ namespace ewol {
 		using ColorBarWeak = ememory::WeakPtr<ewol::widget::ColorBar>;
 		class ColorBar : public ewol::Widget {
 			public: // signals
-				esignal::ISignal<etk::Color<>> signalChange;
+				esignal::Signal<etk::Color<>> signalChange;
 			public:
 				eproperty::Value<etk::Color<>> propertyValue;
 			protected:

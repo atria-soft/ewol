@@ -30,7 +30,7 @@ namespace ewol {
 #include <ewol/event/Entry.h>
 #include <ewol/event/Time.h>
 #include <ewol/translate.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 #include <ewol/DrawProperty.h>
 #include <ewol/gravity.h>
 
@@ -408,7 +408,7 @@ namespace ewol {
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
 		public:
-			esignal::ISignal<std::string> signalShortcut; //!< signal handle of the message
+			esignal::Signal<std::string> signalShortcut; //!< signal handle of the message
 		private:
 			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
@@ -532,9 +532,9 @@ namespace ewol {
 		 */
 		public:
 			// event generated :
-			esignal::ISignal<> signalAnnimationStart; //!< event when start annimation
-			esignal::ISignal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
-			esignal::ISignal<> signalAnnimationStop;  //!< event when stop annimation
+			esignal::Signal<> signalAnnimationStart; //!< event when start annimation
+			esignal::Signal<float> signalAnnimationRatio; //!< event when % of annimation change (integer)
+			esignal::Signal<> signalAnnimationStop;  //!< event when stop annimation
 		protected:
 			enum annimationMode {
 				annimationModeEnableAdd,

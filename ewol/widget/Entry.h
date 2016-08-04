@@ -14,7 +14,7 @@
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -33,9 +33,9 @@ namespace ewol {
 		 */
 		class Entry : public ewol::Widget {
 			public: // Event list
-				esignal::ISignal<> signalClick; //!< bang on click the entry box
-				esignal::ISignal<std::string> signalEnter; //!< Enter key is pressed
-				esignal::ISignal<std::string> signalModify; //!< data change
+				esignal::Signal<> signalClick; //!< bang on click the entry box
+				esignal::Signal<std::string> signalEnter; //!< Enter key is pressed
+				esignal::Signal<std::string> signalModify; //!< data change
 			public: // propertie list
 				eproperty::Value<std::string> propertyShape;
 				eproperty::Value<std::string> propertyValue; //!< string that must be displayed

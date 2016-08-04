@@ -28,7 +28,6 @@ namespace etk {
 }
 
 // declare for signal event
-#include <esignal/details/ISignal.hxx>
-template class esignal::Signal<ewol::event::Time>;
-template class esignal::ISignal<ewol::event::Time>;
+#include <esignal/details/Signal.hxx>
+ESIGNAL_DECLARE_SIGNAL(ewol::event::Time);
 

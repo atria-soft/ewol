@@ -27,7 +27,7 @@ namespace ewol {
 		 */
 		class Parameter : public ewol::widget::PopUp {
 			public: // signals
-				esignal::ISignal<> signalClose;
+				esignal::Signal<> signalClose;
 			public: // properties
 				eproperty::Value<std::string> propertyLabelTitle;
 			protected:

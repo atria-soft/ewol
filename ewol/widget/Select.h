@@ -20,7 +20,7 @@ namespace ewol {
 		 */
 		class Select : public ewol::widget::SpinBase {
 			public: // signals
-				esignal::ISignal<int32_t> signalValue;
+				esignal::Signal<int32_t> signalValue;
 			public: // properties
 				eproperty::Value<int32_t> propertyValue; //!< Current state of the Select.
 			protected:

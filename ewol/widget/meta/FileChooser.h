@@ -8,7 +8,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Composer.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -65,8 +65,8 @@ namespace ewol {
 		 */
 		class FileChooser : public ewol::widget::Composer {
 			public: // signals
-				esignal::ISignal<> signalCancel; //!< abort the display of the pop-up or press cancel button
-				esignal::ISignal<std::string> signalValidate; //!< select file(s)
+				esignal::Signal<> signalCancel; //!< abort the display of the pop-up or press cancel button
+				esignal::Signal<std::string> signalValidate; //!< select file(s)
 			public: // properties
 				eproperty::Value<std::string> propertyPath; //!< Current path to explore
 				eproperty::Value<std::string> propertyFile; //!< Selected file

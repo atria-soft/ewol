@@ -10,7 +10,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Slider : public ewol::Widget {
 			public: // signals
-				esignal::ISignal<float> signalChange;
+				esignal::Signal<float> signalChange;
 			public:
 				//eproperty::Value<std::string> propertyShape; //!< name of the shape used
 				eproperty::Value<float> propertyValue; //!< current value of the Slider

@@ -16,6 +16,7 @@ ewol::object::Manager::Manager(ewol::Context& _context) :
   m_applWakeUpTime(0),
   m_lastPeriodicCallTime(0) {
 	EWOL_DEBUG(" == > init Object-Manager");
+	periodicCall.setPeriodic(true);
 	// set the basic time properties :
 	m_applWakeUpTime = ewol::getTime();
 	m_lastPeriodicCallTime = ewol::getTime();

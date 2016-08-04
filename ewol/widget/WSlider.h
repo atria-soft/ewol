@@ -9,7 +9,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -27,8 +27,8 @@ namespace ewol {
 					sladingTransition_count,
 				};
 			public: // signals:
-				esignal::ISignal<> signalStartSlide;
-				esignal::ISignal<> signalStopSlide;
+				esignal::Signal<> signalStartSlide;
+				esignal::Signal<> signalStopSlide;
 			public: // properties:
 				eproperty::Range<float> propertyTransitionSpeed; //!< speed of the transition (default 1  == > 1s)
 				eproperty::List<enum sladingMode> propertyTransitionMode; //!< mode to slide the widgets

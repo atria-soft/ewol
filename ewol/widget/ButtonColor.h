@@ -13,7 +13,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,7 +22,7 @@ namespace ewol {
 		using ButtonColorWeak = ememory::WeakPtr<ewol::widget::ButtonColor>;
 		class ButtonColor : public ewol::Widget {
 			public: // signals
-				esignal::ISignal<etk::Color<>> signalChange;
+				esignal::Signal<etk::Color<>> signalChange;
 			public: // properties
 				eproperty::Value<etk::Color<>> propertyValue; //!< Current color.
 				eproperty::Value<std::string> propertyShape; //!< Current color.

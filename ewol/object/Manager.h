@@ -7,7 +7,7 @@
 
 #include <etk/types.h>
 #include <ewol/object/Object.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 #include <ewol/event/Time.h>
 
 namespace ewol {
@@ -74,7 +74,7 @@ namespace ewol {
 				 */
 				void workerRemove(const ewol::ObjectShared& _worker);
 			public:
-				esignal::ISignal<ewol::event::Time> periodicCall;
+				esignal::Signal<ewol::event::Time> periodicCall;
 			private:
 				int64_t m_applWakeUpTime; //!< Time of the application initialize
 				int64_t m_lastPeriodicCallTime; //!< last call time ...

@@ -12,7 +12,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 
 
@@ -34,12 +34,12 @@ namespace ewol {
 					lockAccess, //!< all event are trashed  == > acctivity of the button is disable
 				};
 			public: // Event list
-				esignal::ISignal<> signalPressed;
-				esignal::ISignal<> signalDown;
-				esignal::ISignal<> signalUp;
-				esignal::ISignal<> signalEnter;
-				esignal::ISignal<> signalLeave;
-				esignal::ISignal<bool> signalValue;
+				esignal::Signal<> signalPressed;
+				esignal::Signal<> signalDown;
+				esignal::Signal<> signalUp;
+				esignal::Signal<> signalEnter;
+				esignal::Signal<> signalLeave;
+				esignal::Signal<bool> signalValue;
 			public: // propertie list
 				eproperty::Value<std::string> propertyShape; //!< shaper name property
 				eproperty::Value<bool> propertyValue; //!< Current state of the button.

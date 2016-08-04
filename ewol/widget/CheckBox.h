@@ -10,7 +10,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Container2.h>
 #include <ewol/widget/Manager.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 
 namespace ewol {
@@ -20,11 +20,11 @@ namespace ewol {
 		using CheckBoxWeak = ememory::WeakPtr<ewol::widget::CheckBox>;
 		class CheckBox : public ewol::widget::Container2 {
 			public: // Event list
-				esignal::ISignal<> signalPressed;
-				esignal::ISignal<> signalDown;
-				esignal::ISignal<> signalUp;
-				esignal::ISignal<> signalEnter;
-				esignal::ISignal<bool> signalValue;
+				esignal::Signal<> signalPressed;
+				esignal::Signal<> signalDown;
+				esignal::Signal<> signalUp;
+				esignal::Signal<> signalEnter;
+				esignal::Signal<bool> signalValue;
 			public: // propertie list
 				eproperty::Value<bool> propertyValue; //!< Current state of the checkbox.
 				eproperty::Value<std::string> propertyShape; //!< shape of the widget

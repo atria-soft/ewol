@@ -8,7 +8,7 @@
 #include <ewol/resource/Colored3DObject.h>
 #include <gale/resource/Manager.h>
 #include <gale/renderer/openGL/openGL-include.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(nullptr) {
@@ -229,11 +229,9 @@ namespace etk {
 		return "!!ewol::resource::Colored3DObject!ERROR!CAN_NOT_BE_CONVERT!!";
 	}
 }
-#include <esignal/details/ISignal.hxx>
+#include <esignal/details/Signal.hxx>
 
 // declare for signal event
-template class esignal::ISignal<ewol::resource::Colored3DObject>;
-template class esignal::ISignal<ememory::SharedPtr<ewol::resource::Colored3DObject>>;
-template class esignal::Signal<ewol::resource::Colored3DObject>;
-template class esignal::Signal<ememory::SharedPtr<ewol::resource::Colored3DObject>>;
+ESIGNAL_DECLARE_SIGNAL(ewol::resource::Colored3DObject);
+ESIGNAL_DECLARE_SIGNAL(ememory::SharedPtr<ewol::resource::Colored3DObject>);
 

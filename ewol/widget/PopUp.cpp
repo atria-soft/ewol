@@ -148,6 +148,9 @@ bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 	if (_event.getId() == 0) {
 		return false;
 	}
+	if (_event.getStatus() ==  gale::key::status::move) {
+		return false;
+	}
 	if (*propertyCloseOutEvent == true) {
 		return false;
 	}

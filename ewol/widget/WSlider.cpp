@@ -23,13 +23,15 @@ ewol::widget::WSlider::WSlider() :
   signalStopSlide(this, "stop", ""),
   propertyTransitionSpeed(this, "speed",
                                 1.0f, 0.0f, 200.0f,
-                                "Transition speed of the slider",
-                                &ewol::widget::WSlider::onChangePropertySelectWidget),
+                                "Transition speed of the slider"),
   propertyTransitionMode(this, "mode",
                                sladingTransitionHori,
                                "Transition mode of the slider",
                                &ewol::widget::WSlider::onChangePropertyTransitionMode),
-  propertySelectWidget(this, "select", "", "Select the requested widget to display"),
+  propertySelectWidget(this, "select",
+                             "",
+                             "Select the requested widget to display",
+                             &ewol::widget::WSlider::onChangePropertySelectWidget),
   m_windowsSources(0),
   m_windowsDestination(0),
   m_windowsRequested(-1),
@@ -163,6 +165,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 		EWOL_ERROR("Can not change to a widget with no name (input)");
 		return;
 	}
+	EWOL_VERBOSE("Select a new sub-widget to dosplay : '" << _widgetName << "'");
 	int32_t iii = 0;
 	for (auto &it : m_subWidget) {
 		if (    it != nullptr
@@ -178,6 +181,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 }
 
 void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
+	EWOL_VERBOSE("Periodic: " << m_slidingProgress << "/1.0 " << m_windowsSources << " ==> " << m_windowsDestination);
 	if (m_slidingProgress >= 1.0) {
 		m_windowsSources = m_windowsDestination;
 		if(    m_windowsRequested != -1

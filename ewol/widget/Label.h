@@ -11,7 +11,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/resource/ColorFile.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 namespace ewol {
 	namespace widget {
@@ -23,7 +23,7 @@ namespace ewol {
 		 */
 		class Label : public ewol::Widget {
 			public: // signals
-				esignal::ISignal<> signalPressed;
+				esignal::Signal<> signalPressed;
 			public: // properties
 				eproperty::Value<bool> propertyAutoTranslate; //!< if at true the data is translate automaticaly translate.
 				eproperty::Value<std::string> propertyValue; //!< decorated text to display.

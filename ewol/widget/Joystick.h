@@ -9,7 +9,7 @@
 #include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
-#include <esignal/ISignal.h>
+#include <esignal/Signal.h>
 
 // TODO : Rework ==> use property and shaper ...
 
@@ -24,9 +24,9 @@ namespace ewol {
 		class Joystick :public ewol::Widget {
 			public:
 				// Event list of properties
-				esignal::ISignal<> signalEnable;
-				esignal::ISignal<> signalDisable;
-				esignal::ISignal<vec2> signalMove;
+				esignal::Signal<> signalEnable;
+				esignal::Signal<> signalDisable;
+				esignal::Signal<vec2> signalMove;
 			public:
 				enum joystickMode {
 					modeNormal,
