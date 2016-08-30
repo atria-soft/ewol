@@ -25,7 +25,7 @@ def get_maintainer():
 	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
 
 def get_version():
-	return [0,9,8]
+	return [0,9,"dev"]
 
 def create(target, module_name):
 	# module name is 'edn' and type binary.
