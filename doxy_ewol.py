@@ -14,7 +14,7 @@ def create(target, module_name):
 	    module_name,
 	    "doc"
 	    ])
-	my_module.add_module_depend([
+	my_module.add_depend([
 	    'elog',
 	    'etk',
 	    'esignal',

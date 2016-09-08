@@ -32,7 +32,7 @@ def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
 	
 	# add extra compilation flags:
-	my_module.add_extra_compile_flags()
+	my_module.add_extra_flags()
 	# add the file to compile:
 	my_module.add_src_file([
 		'ewol/ewol.cpp',
@@ -246,7 +246,7 @@ def create(target, module_name):
 	my_module.copy_path('data/translate/*','translate/ewol')
 	
 	# name of the dependency
-	my_module.add_module_depend([
+	my_module.add_depend([
 	    'elog',
 	    'etk',
 	    'esignal',
@@ -261,7 +261,7 @@ def create(target, module_name):
 	
 	my_module.add_path(tools.get_current_path(__file__))
 	
-	my_module.compile_flags('c++', [
+	my_module.add_flag('c++', [
 		"-DEWOL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
 		])
 	

@@ -35,7 +35,7 @@ def create(target, module_name):
 	    'appl/widget/SizerColor.cpp'
 	    ])
 	
-	my_module.add_module_depend(['ewol'])
+	my_module.add_depend(['ewol'])
 	
 	my_module.copy_file('data/icon.png','icon.png')
 	

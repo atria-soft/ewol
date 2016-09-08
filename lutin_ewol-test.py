@@ -30,6 +30,6 @@ def create(target, module_name):
 		'test/testApplication.cpp',
 		'test/testWindows.cpp'
 		])
-	my_module.add_module_depend(['ewol', 'gtest', 'test-debug'])
+	my_module.add_depend(['ewol', 'gtest', 'test-debug'])
 	return my_module
 

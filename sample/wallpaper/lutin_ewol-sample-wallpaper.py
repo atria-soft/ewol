@@ -39,32 +39,32 @@ def create(target, module_name):
 		'appl/WidgetDisplay.cpp',
 		'appl/Windows.cpp',
 		])
-	my_module.add_module_depend(['ewol'])
-	my_module.compile_flags('c++', [
-		"-DPROJECT_NAME=\"\\\""+my_module.name+"\\\"\"",
+	my_module.add_depend(['ewol'])
+	my_module.add_flag('c++', [
+		"-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",
 		"-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
 		])
 	my_module.copy_path('data/SnowFlake.svg','')
 	my_module.add_path(tools.get_current_path(__file__))
 	# set the package properties :
-	my_module.pkg_set("COMPAGNY_TYPE", get_compagny_type())
-	my_module.pkg_set("COMPAGNY_NAME", get_compagny_name())
-	my_module.pkg_set("MAINTAINER", get_maintainer())
-	my_module.pkg_set("ICON", tools.get_current_path(__file__) + "/../data/icon.png")
-	my_module.pkg_set("SECTION", "example")
-	my_module.pkg_set("PRIORITY", "extra")
-	my_module.pkg_set("DESCRIPTION", get_desc())
-	my_module.pkg_set("NAME", get_name())
+	my_module.set_pkg("COMPAGNY_TYPE", get_compagny_type())
+	my_module.set_pkg("COMPAGNY_NAME", get_compagny_name())
+	my_module.set_pkg("MAINTAINER", get_maintainer())
+	my_module.set_pkg("ICON", tools.get_current_path(__file__) + "/../data/icon.png")
+	my_module.set_pkg("SECTION", "example")
+	my_module.set_pkg("PRIORITY", "extra")
+	my_module.set_pkg("DESCRIPTION", get_desc())
+	my_module.set_pkg("NAME", get_name())
 	
-	my_module.pkg_set("ANDROID_APPL_TYPE", "WALLPAPER")
+	my_module.set_pkg("ANDROID_APPL_TYPE", "WALLPAPER")
 	
 	#for the exemple : 
-	my_module.pkg_add("ANDROID_WALLPAPER_PROPERTIES", ["list", "testpattern", "Select test pattern", "Choose which test pattern to display", \
+	my_module.add_pkg("ANDROID_WALLPAPER_PROPERTIES", ["list", "testpattern", "Select test pattern", "Choose which test pattern to display", \
 	                                                         [ ["key","value display"],\
 	                                                           ["key2","value display 2"]\
 	                                                         ] \
 	                                                ])
-	my_module.pkg_add("ANDROID_WALLPAPER_PROPERTIES", ["bool", "movement", "Motion", "Apply movement to test pattern", ["Moving test pattern", "Still test pattern"]])
+	my_module.add_pkg("ANDROID_WALLPAPER_PROPERTIES", ["bool", "movement", "Motion", "Apply movement to test pattern", ["Moving test pattern", "Still test pattern"]])
 	
 	
 	# add the currrent module at the 
