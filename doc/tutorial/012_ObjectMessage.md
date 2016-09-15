@@ -1,9 +1,12 @@
 
-=== Objectif ===
+Objectifs:
+==========
+
 :** Understand base of [lib[esignal]] Messaging system
 :** Create extern message and receive Object message
 
-== Message system ==
+Message system
+==============
 
 esignal base his signal on landa functions
 
@@ -12,7 +15,8 @@ It permit to an object to generate some [b]'signals'[/b].
 All signal are synchronous [i](asynchronous is not implemented yet)[/i]
 
 
-== Receive signals from other object ==
+Receive signals from other object
+=================================
 
 Register on the 'up' and 'value' signal of a button:
 
@@ -27,7 +31,8 @@ Button header :
 	...
 [/code]
 
-=== simple signal connection: ===
+simple signal connection:
+-------------------------
 
 [code style=c++]
 #include <ewol/object/Object.h>
@@ -87,9 +92,11 @@ namespace appl {
 	The connection that return a [class[esignal::Connection]] are volatil, if you don't keep the connection handle, the connection is automaticly removed.
 [/note]
 
-== Declare Signal ==
+Declare Signal:
+===============
 
-=== source ===
+source
+-------
 
 [code style=c++]
 #include <ewol/object/Object.h>
@@ -122,7 +129,8 @@ namespace appl {
 }
 [/code]
 
-== Conclusion ==
+Conclusion:
+===========
 
 You will now able to reise signals between objects...
 

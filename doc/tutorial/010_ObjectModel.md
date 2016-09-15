@@ -1,9 +1,12 @@
 
-=== Objectif ===
+Objectifs:
+==========
+
 :** Understand ewol basic [class[ewol::Object]]
 :** Use [class[ewol::Object]] correctly
 
-== Basis of the ewol::Object ==
+Basis of the ewol::Object
+=========================
 
 An object in Ewol is a simple class: [class[ewol::Object]] This object is the basis of all element in the ewol system.
 This is designed to manage many common things:
@@ -20,7 +23,8 @@ Please do not compare with the gObject basic class...
 [/note]
 
 
-== Create an Object: ==
+Create an Object:
+=================
 
 Creating an object is really simple:
 
@@ -45,7 +49,8 @@ Set the name of the object:
 [/code]
 
 
-== Remove an Object: ==
+Remove an Object:
+=================
 
 Simply use the function:
 [code style=c++]
@@ -62,11 +67,13 @@ If some Object is not removed when you close the application, the system inform 
 [/note]
 
 
-== Retrieve an Object: ==
+Retrieve an Object:
+===================
 
 In Ewol this is possible to get a object with his name.
 
-=== Find a global Object (ouside an Object) ===
+Find a global Object (ouside an Object)
+---------------------------------------
 
 [code style=c++]
 	#include <ewol/context/Context.h>
@@ -77,7 +84,8 @@ In Ewol this is possible to get a object with his name.
 	}
 [/code]
 
-=== Find a global Object (inside an Object) ===
+Find a global Object (inside an Object)
+---------------------------------------
 
 [code style=c++]
 	ewol::ObjectShared tmpObject = getObjectNamed("obj Name");
@@ -86,7 +94,8 @@ In Ewol this is possible to get a object with his name.
 	}
 [/code]
 
-=== Find a sub-object ===
+Find a sub-object
+-----------------
 
 [code style=c++]
 	ewol::ObjectShared tmpObject = getSubObjectNamed("obj Name");
@@ -95,7 +104,8 @@ In Ewol this is possible to get a object with his name.
 	}
 [/code]
 
-=== retriving your object type ===
+retriving your object type
+--------------------------
 
 It could be really interesting to retrive your own instance:
 

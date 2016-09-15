@@ -1,19 +1,24 @@
 
-=== Objectif ===
+Objectifs:
+==========
+
 :** Understand base of [lib[eproperty]] configuration parameter
 :** Create an configurable object
 
-== Configuration using ==
+Configuration using
+===================
 
 All [class[ewol::Object]] have a configuration of parameters (the object name is a parameter), Then we need to set get and use xml to update parameters.
 
-=== Set a Parameter/Property ===
+Set a Parameter/Property
+------------------------
 
 [note]
 	Parameter is managed by the [lib[eproperty|e-property library]]
 [/note]
 
-==== With a string configuration ====
+With a string configuration
+***************************
 
 [code style=c++]
 	if (tmpObject->parameterSet("name", "new name of object") == false) {
@@ -21,7 +26,8 @@ All [class[ewol::Object]] have a configuration of parameters (the object name is
 	}
 [/code]
 
-==== whith the object name ====
+whith the object name
+*********************
 
 [code style=c++]
 	if (parameterSetOnWidgetNamed("objectName", "value", "16.2") == false) {
@@ -29,14 +35,16 @@ All [class[ewol::Object]] have a configuration of parameters (the object name is
 	}
 [/code]
 
-=== Get Parameter ===
+Get Parameter
+-------------
 
 [code style=c++]
 	std::string val = tmpObject->parameterGet("name");
 	APPL_INFO("Get Object property : name='" << val << "'");
 [/code]
 
-== Implement configuration ==
+Implement configuration
+=======================
 
 [code style=c++]
 #include <ewol/object/Object.h>

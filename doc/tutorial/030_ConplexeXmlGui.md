@@ -1,9 +1,12 @@
 
-=== Objectif ===
+Objectifs:
+==========
+
 :** What is a Widget
 :** Simply create a complex Gui
 
-=== What is a Widget ===
+What is a Widget
+================
 
 A widget is a simple entity of a graphical Object. It herited of every [class[ewol::Object]] class with many graphical interface to draw a complex gui.
 
@@ -13,10 +16,12 @@ We can consider some widget:
 :** Simple widget: all widget that display somthing.
 :** Meta widget: Widget composed with some wodget.
 
-=== Simple load & configure of a widget: ===
+Simple load & configure of a widget:
+====================================
 
 We have 4 way to create a widget:
-==== call create and configure ====
+call create and configure
+-------------------------
 
 First create the widget:
 

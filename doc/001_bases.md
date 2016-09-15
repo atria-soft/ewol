@@ -2,7 +2,7 @@ EWOL: Bases                                {#page_bases}
 ===========
 
 Overview:
----------
+=========
 
 EWOL is an OpenGL library for creating graphical user interfaces.
 It works on many UNIX-like platforms, Windows, and OS X and some mobile platforms Android, iOs(soon).
@@ -13,7 +13,7 @@ The main idea of EWOL is to create a complete abstraction of the platforms.
 This generate some restriction that you will see an overwiew in the under section.
 
 User requires:
---------------
+==============
 
 To use ewol you need to know only C++ language. It could be usefull to know:
 - **Python** for all build tool.
@@ -26,7 +26,7 @@ Ewol does not manage the Audio but it is full integrated in [lib[audio-river|Riv
 
 
 Architecture:
--------------
+=============
 One of the important point to know in this framwork is some of absurd things came from the multiple architecture type.
 
 I will Explain the main points:

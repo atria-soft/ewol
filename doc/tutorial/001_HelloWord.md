@@ -1,11 +1,14 @@
 
-=== Objectif ===
+Objectif:
+=========
 :** Understand basis of ewol
 :** Create a simple windows with a label "Hello Word"
 
-=== Application Sources: ===
+Application Sources:
+====================
 
-==== Application Main: ====
+Application Main:
+=================
 
 A generic Ewol application is manage by creating an [class[ewol::context::Application]] that is the basis of your application.
 
@@ -78,7 +81,8 @@ To simplify compabilities between platform it is recommanded to not add other th
 [/code]
 
 
-==== Some configuration are needed ====
+Some configuration are needed
+=============================
 
 In your application you can use many configuration, it is really better to set all your configuration dynamic.
 With this basic condiction will simplify the interface of the library if you would have many different application
@@ -100,7 +104,8 @@ We select an order to search the font names and the system basic size.
 [/code]
 
 
-==== Main Windows: ====
+Main Windows:
+=============
 
 Create the main Windows:
 
@@ -203,7 +208,8 @@ The last step is to add the widget on the windows:
 When we call this function, it use the shared_from_this() function that create an exception if we are in constructor (when setting the wub-widget parrent)
 
 
-==== Configure Ewol to have display the windows ====
+Configure Ewol to have display the windows
+==========================================
 
 At this point we have created the basic windows.
 But the system does not know it.
@@ -236,7 +242,8 @@ bool MainApplication::init(ewol::Context& _context, size_t _initId) {
 You can use many windows and select the one you want to display, but I do not think it is the best design.
 [/note]
 
-=== Build declaration: ===
+Build declaration:
+==================
 
 ewol commonly use the [b]lutin[/b] build system.
 
@@ -294,7 +301,8 @@ show lutin doc for more information...
 I do not explain again the lutin file, for next tutorial, show example sources ...
 [/note]
 
-=== Build your application ===
+Build your application
+======================
 
 Go to your workspace folder and launch
 [code style=shell]

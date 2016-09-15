@@ -1,8 +1,12 @@
 
-=== Objectif ===
-:** Understand why we wrap interface on file system
+Objectifs:
+==========
 
-== Limitation ==
+  - Understand why we wrap interface on file system
+
+
+Limitation
+==========
 
 Application generation is really simple, but package management can create some problems...
 
@@ -14,7 +18,8 @@ For example :
 
 For all these reasons we need to wrap standard application interface. (you can acces directly but it could be tricky and depend on the target)
 
-== Generic Properties ==
+Generic Properties
+==================
 
 By default we dertermine some basics for files.
 
@@ -39,7 +44,8 @@ When you will call a file, you need to just call it with the starting name.
 
 For example if I want to access at an application data I will call the file : "DATA:myImage.png"
 
-== Integrate a file in a package ==
+Integrate a file in a package
+=============================
 
 In your lutin_xxx.py file add:
 [code style=python]
@@ -52,7 +58,8 @@ In your lutin_xxx.py file add:
 And now you can acces on these file with : "DATA:destination/folder/file.svg"
 
 
-== Read a file ==
+Read a file
+===========
 
 [code style=c++]
 	#include <etk/os/FSNode.h>
@@ -79,7 +86,8 @@ And now you can acces on these file with : "DATA:destination/folder/file.svg"
 	file.fileClose();
 [/code]
 
-== Write a file ==
+Write a file
+============
 
 [code style=c++]
 	#include <etk/os/FSNode.h>
@@ -100,7 +108,8 @@ And now you can acces on these file with : "DATA:destination/folder/file.svg"
 	file.fileClose();
 [/code]
 
-== 'Theme' management ==
+'Theme' management:
+===================
 
 The theme management is a subset a file selected by a main key.
 For example The basic theme of an API can be manage with only 2 commands (set the theme, and request upate of GUI)

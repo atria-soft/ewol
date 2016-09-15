@@ -1,9 +1,11 @@
 
-=== Objectifs ===
+Objectifs
+=========
 :** Understand what is a resource
 :** Use resources
 
-=== What is a resource: ===
+What is a resource:
+===================
 
 A resource is an unique element that can be used by many element like:
 :** An image (special resolution)
@@ -15,7 +17,8 @@ A resource is an unique element that can be used by many element like:
 A resource have an other objective, form some platform, the graphic interface can be stopped, then we need to reload texture in the graphic inteface...
 Then the texture is an other graphic interface.
 
-=== Get a resource: ===
+Get a resource:
+===============
 
 For this example we will load a configuration file:
 [code style=c++]
@@ -62,7 +65,8 @@ namespace appl {
 [/code]
 
 
-=== Create a new resource: ===
+Create a new resource:
+======================
 
 A resource is a generic [class[ewol::Resource]] that herited form a generic [class[ewol::Object]], simply change the FACTORY macro in:
 :** DECLARE_RESOURCE_FACTORY(className) To declare a resource with no name (unique for every creation)
@@ -71,7 +75,8 @@ A resource is a generic [class[ewol::Resource]] that herited form a generic [cla
 
 we have now some specific interface to compleate (if needed):
 
-==== The Resource Level ====
+The Resource Level
+------------------
 
 The resources can be reloaded, then we need to reaload in the good order (level [0 .. 5])
 
