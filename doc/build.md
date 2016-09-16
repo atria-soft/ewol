@@ -1,13 +1,14 @@
-=?=Ewol extract and build examples=?=
-__________________________________________________
-[left][doc[001_bases | Previous: Doc]][/left] [right][tutorial[001_HelloWord | Next: Hello-Word]][/right]
+Build lib & build sample                           {#ewol_build}
+========================
 
-All developpement software will start by getting the dependency and the sources.
+@tableofcontents
+Linux dependency packages                          {#ewol_build_dependency}
+=========================
 
-=== Linux dependency packages ===
+Ubuntu or Debian                                   {#ewol_build_dependency_debian}
+----------------
 
-==== Ubuntu or Debian ====
-[code style=shell]
+```{.sh}
 	sudo apt-get install g++ libgl1-mesa-dev zlib1g-dev libasound2-dev
 	# Compile with Clang:
 	sudo apt-get install clang
@@ -20,10 +21,11 @@ All developpement software will start by getting the dependency and the sources.
 	# On 64 bits processor for compatibility:
 	sudo apt-get install ia32-libs
 	sudo apt-get install g++-multilib libc6-dev-i386
-[/code]
+```
 
-==== Arch-linux ====
-[code style=shell]
+Arch-linux                                         {#ewol_build_dependency_archlinux}
+----------
+```{.sh}
 	# Cross compile for windows:
 	pacman -S mingw-w64-gcc
 	
@@ -39,104 +41,148 @@ All developpement software will start by getting the dependency and the sources.
 	pacman -S jdk7-openjdk
 	# connect adb: (and you can do a "android/sdk/platform-tools/adb shell" to enable computer key on device)
 	pacman -S android-udev
-[/code]
+```
 
-=== Download instructions ===
+Download:                                          {#ewol_build_download}
+=========
 
-==== download Build system: ====
+ewol use some tools to manage source and build it:
 
-[code style=shell]
-	sudo pip install lutin
-	sudo pip install pillow
-[/code]
-
-==== need google repo: ====
+need google repo:                                  {#ewol_build_download_repo}
+-----------------
 
 see: http://source.android.com/source/downloading.html#installing-repo
 
-[code style=shell]
+On all platform:
+```{.sh}
 	mkdir ~/.bin
 	PATH=~/.bin:$PATH
 	curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
 	chmod a+x ~/.bin/repo
-[/code]
-==== download the software: ====
+```
 
-[code style=shell]
-	mkdir WORKING_DIRECTORY
-	cd WORKING_DIRECTORY
+On ubuntu
+```{.sh}
+	sudo apt-get install repo
+```
+
+On archlinux
+```{.sh}
+	sudo pacman -S repo
+```
+
+lutin (build-system):                              {#ewol_build_download_lutin}
+---------------------
+
+```{.sh}
+	pip install lutin --user
+	# optionnal dependency of lutin (manage image changing size for application release)
+	pip install pillow --user
+```
+
+The full build tool documentation is availlable here : [lutin](http://heeroyui.github.io/lutin/)
+
+
+dependency:                                        {#ewol_build_download_dependency}
+-----------
+
+```{.sh}
+	mkdir -p WORKING_DIRECTORY/framework
+	cd WORKING_DIRECTORY/framework
 	repo init -u git://github.com/atria-soft/manifest.git
 	repo sync -j8
-[/code]
+	cd ../..
+```
 
-==== Compile software and test: ====
+sources:                                           {#ewol_build_download_sources}
+--------
 
-[code style=shell]
-	lutin ewol-*
-[/code]
+They are already download in the repo manifest in:
 
-[note]
-The full build tool documentation is availlable here : [[http://heeroyui.github.io/lutin/ | lutin]]
-[/note]
+```{.sh}
+	cd WORKING_DIRECTORY/framework/atria-soft/ewol
+```
 
-=== Common build instructions ===
+Build:                                             {#ewol_build_build}
+======
 
-Compile software in debug for the curent platform :
-[code style=shell]
-	lutin -mdebug
-[/code]
+you must stay in zour working directory...
+```{.sh}
+	cd WORKING_DIRECTORY
+```
 
-You can specify the platform with:
-[code style=shell]
-	lutin -tAndroid -mdebug
-[/code]
+library:                                           {#ewol_build_build_library}
+--------
 
-It coud be usefull to disable the package generation in local debug:
-[code style=shell]
-	lutin -mdebug -p
-[/code]
+```{.sh}
+	lutin -mdebug ewol
+```
 
-Build with clang instead of gcc:
-[code style=shell]
-	lutin -cclang
-[/code]
+Sample:                                            {#ewol_build_build_sample}
+-------
 
-Display the build in color :
-[code style=shell]
-	lutin -C -mdebug -p
-[/code]
+```{.sh}
+	lutin -mdebug ewol-sample-*
+```
 
-Build in realease and install the program named 'ewol-sample-HelloWord'. Note the install will install it in user mode in the ~/.local/application/ in a stand-alone mode
-[code style=shell]
-	lutin -C ewol-sample-HelloWord?install
-	#or
-	lutin -C ewol-sample-HelloWord@install
-[/code]
+Run sample:                                        {#ewol_build_run_sample}
+-----------
 
-To run an application you will find it directly on the out 'staging' tree or execute the command:
-[code style=shell]
-	lutin -C ewol-sample-HelloWord@run
-	#or (with better log level
-	lutin -C ewol-sample-HelloWord@run:--elog-level=5
-	# or specify the lib
-	lutin -C ewol-sample-HelloWord@run:--elog-lib=etk:6
-[/code]
+Basic way
 
-== Simple explanation : ==
+```{.sh}
+	lutin -mdebug ewol-sample-*?run
+```
+
+With some option: (set global log leval at 2 (print, error, warning), and "appl" library at log level 6
+
+```{.sh}
+	lutin -mdebug ewol-sample-*?run:--elog-level=2:--elog-lib=appl:6
+```
+
+
+Build for Android and install:                     {#ewol_build_android}
+==============================
+
+Sample:                                            {#ewol_build_android_sample}
+-------
+
+```{.sh}
+	lutin -tAndroid -mdebug ewol-sample-*
+```
+
+Sample:                                            {#ewol_build_android_install_sample}
+-------
+
+```{.sh}
+	lutin -tAndroid -mdebug ewol-sample-*?install
+```
+
+Worktree explanation:                              {#ewol_build_workspace}
+=====================
 
 The workspace is a simple folder that contain all the modules ans sub module availlable for build.
 It will create a tree like this :
 
-:** workspace
-::** application
-:::** Application clone application area.
-::** framework
-:::** atria-soft
-::::** Graphic interface
-:::** generic-library
-::::** common untuch library (just wrap in lutin mode)
-:::** HeeroYui
-::::** unstable stuff
-:::** musicdsp
-::::** Common library for audio interfacing
-:::** tools
+  - **workspace**
+    * **application:** set your application here, it is a good position
+    * **framework:** framework download by repo
+      + **atria-soft:** graphic framework
+      + **generic-library:** open sources library that is wrapped on lutin builder
+      + **musicdsp:** Common library for audio interfacing
+      + **tools:** build tools (now only the IOs flasher)
+    * **out:**
+      + Android_arm_32
+      + Android_arm_64
+      + Windows_x86_32
+      + Windows_x86_64
+      + Linux_x86_32
+      + Linux_x86_64
+      + MacOs_x86_32
+      + MacOs_x86_64
+      + IOs_x86_32
+      + IOs_x86_64
+
+All the build object are set in the out path, then to restart with a clean build simply remove this folder
+
+

@@ -1,52 +1,59 @@
-
-Objectifs:
-==========
-
-:** Understand base of [lib[eproperty]] configuration parameter
-:** Create an configurable object
-
-Configuration using
+EWOL: Object config                                {#ewol_tutorial_object_config}
 ===================
 
-All [class[ewol::Object]] have a configuration of parameters (the object name is a parameter), Then we need to set get and use xml to update parameters.
+@tableofcontents
 
-Set a Parameter/Property
+Objectifs:                                {#ewol_tutorial_object_config_objectives}
+==========
+
+  - Understand base of [e-property](http://atria-soft.github.io/eproperty) configuration parameter
+  - Create an configurable object
+
+Configuration using                                {#ewol_tutorial_object_configusing}
+===================
+
+All ewol::Object have a configuration of parameters (the object name is a parameter),
+then we need to set get and use xml to update parameters.
+
+Set a Parameter/Property                                {#ewol_tutorial_object_config_prop}
 ------------------------
 
-[note]
-	Parameter is managed by the [lib[eproperty|e-property library]]
-[/note]
+**Note:**
+
+```
+	Parameter is managed by the [e-property](http://atria-soft.github.io/eproperty)
+```
 
 With a string configuration
 ***************************
 
-[code style=c++]
-	if (tmpObject->parameterSet("name", "new name of object") == false) {
+```{.cpp}
+	if (tmpObject->properties.set("name", "new name of object") == false) {
 		APPL_ERROR("Can not set object parameter");
 	}
-[/code]
+```
 
 whith the object name
 *********************
 
-[code style=c++]
-	if (parameterSetOnWidgetNamed("objectName", "value", "16.2") == false) {
+```{.cpp}
+	if (ewol::propertySetOnObjectNamed("objectName", "value", "16.2") == false) {
 		APPL_ERROR("Can not set object parameter");
 	}
-[/code]
+```
 
-Get Parameter
+Get Parameter                                {#ewol_tutorial_object_config_param}
 -------------
 
-[code style=c++]
-	std::string val = tmpObject->parameterGet("name");
-	APPL_INFO("Get Object property : name='" << val << "'");
-[/code]
+```{.cpp}
+	std::string val = tmpObject->properties.get("name");
+	APPL_INFO("Get Object property: name='" << val << "'");
+```
 
-Implement configuration
+Implement configuration                                {#ewol_tutorial_object_config_impl}
 =======================
 
-[code style=c++]
+```{.cpp}
 #include <ewol/object/Object.h>
 namespace appl {
 	class MyObj : public ewol::Object {
@@ -75,25 +82,29 @@ namespace appl {
 			}
 	}
 }
-[/code]
+```
 
 In the contructor we need to add:
-[code style=c++]
-m_value(*this, "value", false, "Value of the parameter (descrition string)")
-[/code]
-:** [b]'this':[/b] Pointer the main class to call it chen value change.
-:** [b]"value":[/b] Is the name of the parameter.
-:** [b]false:[/b] The default value.
-:** [b]"....."[/b] Description of the parameter (optionnal).
-:** [b]&appl::MyObj::onChangeParameterValue[/b] The callback when the value change (optionnal).
+```{.cpp}
+propertyValue(this,
+              "value",
+              false,
+              "Value of the parameter (descrition string)",
+              &appl::MyObj::onChangeParameterValue)
+```
+  - **'this':** Pointer the main class to call it chen value change.
+  - **"value":** Is the name of the parameter.
+  - **false:** The default value.
+  - **"....."** Description of the parameter (optionnal).
+  - **&appl::MyObj::onChangeParameterValue** The callback when the value change (optionnal).
 
 
-The last point is that the *m_value is an inline fuction then it take no more CPU cycle to access the value than normal variable.
+The last point is that the ```*propertyValue``` same as ```propertyValue.get()``` are inline fuction then it take no more CPU cycle to access the value than normal variable.
 
 Some other parameter are availlable :
-:** eproperty::Value<T> Basic parameter.
-:** eproperty::Range<T> For numeric parameter that range value are check befor setting new value.
-:** eproperty::List<T> For List of parameter values.
+  - eproperty::Value<T> Basic parameter.
+  - eproperty::Range<T> For numeric parameter that range value are check befor setting new value.
+  - eproperty::List<T> For List of parameter values.
 
-For more information see [lib[eproperty]]
+For more information see [e-property](http://atria-soft.github.io/eproperty)
 

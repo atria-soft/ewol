@@ -14,6 +14,9 @@ def create(target, module_name):
 	    module_name,
 	    "doc"
 	    ])
+	my_module.add_sample_path([
+	    "sample"
+	    ])
 	my_module.add_depend([
 	    'elog',
 	    'etk',
@@ -34,6 +37,7 @@ def create(target, module_name):
 	my_module.add_file_patterns([
 	    '*.h',
 	    '*.md',
+	    '*.py',
 	    ])
 	
 	return my_module

@@ -1,51 +1,53 @@
 Ewol coding style                       {#ewol_coding_style}
 =================
 
+@tableofcontents
 
-Comments
---------
+
+Comments                                {#ewol_coding_style_comment}
+========
 
 - One line comment: (never in #define xxx ==> too dangerous)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 //
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - Multiple line comment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 /*
  * xxxx yyyy
  * zzzz
  */
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - Documentation : doxygen (do not set un-nneded field)
 
-	@verbatim
-	/**
-	 * @brief my summery
-	 * @param[in,out] _xxxx Comment on the variable
-	 * @return my return explanation
-	 */
-	@endverbatim
-
+@verbatim
+/**
+ * @brief my summery
+ * @param[in,out] _xxxx Comment on the variable
+ * @return my return explanation
+ */
+@endverbatim
 
 - one line documlentation:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 xxxxx, //!< my comment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
 
-number of colomn
-----------------
+Number of colomn                                {#ewol_coding_style_number_of_colomn}
+================
 
 I do not linit the number of colomn, but it could be good to limit at 150 char. Many screen have the main display like this
 
 
 
-Indentation & braces
---------------------
+Indentation & braces                                {#ewol_coding_style_indent}
+====================
+
 Tab size is a personal choice then, when you write code, you might be
 tab proof. If someone want to have the golden number for theire tabs,
 he will be able to do it.
@@ -54,15 +56,16 @@ stop brace '}' you need to remove a tab
 To be simple : (tab stop at the 'if' start)
 
 - if:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	if (    xxx == yyy
-	     && xxx == kkk) {
-		your action ...;
+	     && (    xxx == kkk
+	          || xxx == zzz )) {
+		//your action ...;
 	}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - switch:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	switch (suffix) {
 		case 'G':
 		case 'g':
@@ -79,17 +82,17 @@ To be simple : (tab stop at the 'if' start)
 		default:
 			break;
 	}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - function:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	void myFunction(void) {
 		actions ...;
 	}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - classes:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	class MyClass {
 		public:
 			MyClass(void);
@@ -97,36 +100,36 @@ To be simple : (tab stop at the 'if' start)
 		private:
 			const char* getName(void);
 	};
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - namespace:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	namespace appl {
 		void get(void);
 	}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - For special element like : you might add a tabulation too
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	case xxx:
 		actions...
 	public:
 		definition ...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - An exception for the inline function inside c++ header:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	class Plop {
 		private:
 			int32_t m_value; //!< my value of money gain
 		public:
 			int32_t getValue(void) const { return m_value; };
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
-types
------
+Types                                {#ewol_coding_style_type}
+=====
 
 the element 'typedef' must not be use, like this it is not needed to add
 special element like '_te' or '_ts' to say respectively 'tpedef enum' and
@@ -135,21 +138,21 @@ Structure is not availlable in c++, just use normal class, this is the same.
 
 
 
-Star position
--------------
+Star position                                {#ewol_coding_style_star}
+=============
 
 The star will be near the type :
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 	void* myVariableName;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
-C and c++
----------
+C and c++                                {#ewol_coding_style_c_and_cpp}
+=========
 
 All C header files might have :
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 #ifdef __cplusplus
 	extern "C" {
 #endif
@@ -159,71 +162,72 @@ All C header files might have :
 #ifdef __cplusplus
 	}
 #endif
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
 
-Naming
-------
+Naming                                {#ewol_coding_style_naming}
+======
 
 - Fonction/Methods:
 Camel case with first letter in lower case.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 void myExampleFontionName(void);
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - Variable:
 Camel case with first letter in lower case.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 nt32_t myVariableExample;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - namespace:
 one world in lower case
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 namspace ewol {
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - Class:
 Camel case with first letter in upper case.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 class MyClass;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - Members fields:
 Put a 'm' prefix and then a normal Variable name
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 int32_t m_memberField;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - enum:
 Camel case with first letter in lower case.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 enum myEnum {
 	myEnum_def1,
 	myEnum_def2,
 	myEnum_def3,
 };
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 - structure (C only)
 use naming like Classes (and for mamber too)
 
 - minimum size : Do not use variable with size <3, the for a iterator 
 for a 'for' :
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 for (int32_t iii=0; iii<xxx; ++iii) {
 	// actions ...
 }
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
 
-Types
------
+Types                                {#ewol_coding_style_types}
+=====
+
 Une stanndard Type :
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.c}
+```{.cpp}
 		bool
 		int8_t / uint8_t
 		int16_t / uint16_t
@@ -233,13 +237,13 @@ Une stanndard Type :
 		int (some case needed)
 		float / double
 		float_t to automatic match whith the compilation choice between float or double
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
 
-C++ specificity
----------------
+C++ specificity                                {#ewol_coding_style_specific}
+===============
 
 - STL
 	You can use the Stl, but the porting and the result can be

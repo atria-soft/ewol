@@ -1,40 +1,44 @@
+EWOL: Object message                                {#ewol_tutorial_object_message}
+====================
 
-Objectifs:
+@tableofcontents
+
+Objectifs:                                {#ewol_tutorial_object_message_objectifs}
 ==========
 
-:** Understand base of [lib[esignal]] Messaging system
-:** Create extern message and receive Object message
+  - Understand base of [e-signal](http://atria-soft.github.io/esignal) Messaging system
+  - Create extern message and receive Object message
 
-Message system
+Message system                                {#ewol_tutorial_object_message_system}
 ==============
 
 esignal base his signal on landa functions
 
-It permit to an object to generate some [b]'signals'[/b].
+It permit to an object to generate some **'signals'**
 
-All signal are synchronous [i](asynchronous is not implemented yet)[/i]
+All signal are synchronous *(asynchronous is not implemented yet)*
 
 
-Receive signals from other object
+Receive signals from other object                                {#ewol_tutorial_object_message_from_object}
 =================================
 
 Register on the 'up' and 'value' signal of a button:
 
 Button header :
-[code style=c++]
+```{.cpp}
 	...
 	public:
-		esignal::ISignal<> signalDown;
-		esignal::ISignal<> signalUp;
+		esignal::Signal<> signalDown;
+		esignal::Signal<> signalUp;
 		...
-		esignal::ISignal<bool> signalValue;
+		esignal::Signal<bool> signalValue;
 	...
-[/code]
+```
 
 simple signal connection:
 -------------------------
 
-[code style=c++]
+```{.cpp}
 #include <ewol/object/Object.h>
 #include <ewol/widget/Button.h>
 namespace appl {
@@ -49,15 +53,15 @@ namespace appl {
 			}
 			void init() {
 				ewol::Object::init();
-				m_button = ewol::widget::Button::Create();
+				m_button = ewol::widget::Button::create();
 				if (m_button == nullptr) {
 					APPL_ERROR("Can not create button...");
 					return;
 				}
-				m_button.propertyToggle.set(true);
+				m_button->propertyToggle.set(true);
 				// We connect signals here: (permanent connection)
-				m_button->signalUp.connect(shared_from_this(), &appl::MyObj::onCallbackUp);
-				m_button->signalValue.connect(shared_from_this(), &appl::MyObj::onCallbackValue);
+				m_button->signalUp.connect(sharedFromThis(), &appl::MyObj::onCallbackUp);
+				m_button->signalValue.connect(sharedFromThis(), &appl::MyObj::onCallbackValue);
 			}
 		public:
 			//! @brief Destructor
@@ -82,23 +86,27 @@ namespace appl {
 			}
 	}
 }
-[/code]
+```
 
-[note]
+**Note:**
+
+```
 	The connection with SharedPtr are static. they keep in internal a WeakPtr to remove connection if the object is removed.
-[/note]
+```
 
-[note]
-	The connection that return a [class[esignal::Connection]] are volatil, if you don't keep the connection handle, the connection is automaticly removed.
-[/note]
+**Note:**
 
-Declare Signal:
+```
+	The connection that return a esignal::Connection are volatil, if you don't keep the connection handle, the connection is automaticly removed.
+```
+
+Declare Signal:                                {#ewol_tutorial_object_message_declare}
 ===============
 
 source
 -------
 
-[code style=c++]
+```{.cpp}
 #include <ewol/object/Object.h>
 #include <ewol/widget/Button.h>
 namespace appl {
@@ -127,14 +135,14 @@ namespace appl {
 			}
 	}
 }
-[/code]
+```
 
-Conclusion:
+Conclusion:                                {#ewol_tutorial_object_message_conclusion}
 ===========
 
 You will now able to reise signals between objects...
 
-For more information see [lib[esignal]]
+For more information see [e-signal](http://atria-soft.github.io/esignal)
 
 
 

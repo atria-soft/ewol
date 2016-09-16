@@ -9,19 +9,23 @@
 #include <ewol/object/Manager.h>
 #include <etk/tool.h>
 
+//! [EWOL_SAMPLE_CW_CONSTRUCTOR]
 appl::widget::VectorDisplay::VectorDisplay() :
   m_autoDisplay(false),
   m_minVal(-1.0f),
   m_maxVal(1.0f) {
 	addObjectType("appl::widget::VectorDisplay");
 }
+//! [EWOL_SAMPLE_CW_CONSTRUCTOR]
 
+//! [EWOL_SAMPLE_CW_INIT]
 void appl::widget::VectorDisplay::init() {
 	ewol::Widget::init();
 	markToRedraw();
 	// set call all time (sample ...).
 	getObjectManager().periodicCall.connect(sharedFromThis(), &appl::widget::VectorDisplay::periodicEvent);
 }
+//! [EWOL_SAMPLE_CW_INIT]
 
 
 appl::widget::VectorDisplay::~VectorDisplay() {
@@ -42,6 +46,7 @@ void appl::widget::VectorDisplay::ToggleAuto() {
 	}
 }
 
+//! [EWOL_SAMPLE_CW_DRAW]
 void appl::widget::VectorDisplay::onDraw() {
 	m_draw.draw();
 }

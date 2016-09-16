@@ -41,6 +41,3 @@ def create(target, module_name):
 	my_module.add_path(tools.get_current_path(__file__))
 	return my_module
 
-
-
-

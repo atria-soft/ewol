@@ -5,6 +5,8 @@
  */
 #pragma once
 
+//! [EWOL_SAMPLE_CW_HEADER]
+
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Manager.h>
@@ -22,6 +24,10 @@ namespace appl {
 				DECLARE_WIDGET_FACTORY(VectorDisplay, "VectorDisplay");
 				//! @brief destructor
 				virtual ~VectorDisplay();
+			public
+				void onDraw() override;
+				void onRegenerateDisplay() override;
+			//! [EWOL_SAMPLE_CW_HEADER]
 			protected:
 				std::vector<float> m_data; //!< data that might be displayed
 			public:
@@ -34,8 +40,6 @@ namespace appl {
 				float m_minVal; //!< display minimum value
 				float m_maxVal; //!< display maximum value
 			public:
-				void onDraw() override;
-				void onRegenerateDisplay() override;
 				void periodicEvent(const ewol::event::Time& _event);
 		};
 	}

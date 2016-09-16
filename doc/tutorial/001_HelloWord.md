@@ -1,71 +1,62 @@
-
-Objectif:
-=========
-:** Understand basis of ewol
-:** Create a simple windows with a label "Hello Word"
-
-Application Sources:
-====================
-
-Application Main:
+EWOL: Hello world                                {#ewol_tutorial_hello_world}
 =================
 
-A generic Ewol application is manage by creating an [class[ewol::context::Application]] that is the basis of your application.
+@tableofcontents
 
-Due to the fact the ewol library is a multi-platform framework (base on [lib[gale|Gale]]), you will have many contraint like:
-:** One application at the same time (note an exception for android wallpaper)
-:** One Windows displayable at the time (main point of view of apple developpers)
-:** Not a big CPU ...
+Objectif:                                        {#ewol_tutorial_hello_world_objectives}
+=========
+  - Understand basis of ewol
+  - Create a simple windows with a label "Hello Word"
+
+debug tools:                                     {#ewol_tutorial_hello_world_debug}
+============
+
+I will use for all test a basic template [elog](http://atria-soft.github.io/elog) for debug logger that redirect logs in Android and IOs
+
+File ```appl/debug.h```:
+
+@include HelloWord/appl/debug.h
+
+File ```appl/debug.cpp```:
+
+@include HelloWord/appl/debug.cpp
+
+
+Application Sources:                             {#ewol_tutorial_hello_world_sources}
+====================
+
+Application Main:                                {#ewol_tutorial_hello_world_sources_main}
+-----------------
+
+A generic Ewol application is manage by creating an ewol::context::Application that is the basis of your application.
+
+Due to the fact the ewol library is a multi-platform framework (base on [GALE](http://atria-soft.github.io/gale)), you will have many contraint like:
+  - One application at the same time (note an exception for android wallpaper)
+  - One Windows displayable at the time (main point of view of apple developpers)
+  - Not a big CPU ...
 
 Then we will create the application:
 
-[code style=c++]
-namespace appl {
-	class MainApplication : public ewol::context::Application {
-		public:
-			void onCreate(ewol::Context& _context) override {
-				APPL_INFO("==> CREATE ... " PROJECT_NAME " (BEGIN)");
-				// nothing to do ...
-				APPL_INFO("==> CREATE ... " PROJECT_NAME " (END)");
-			}
-			void onStart(ewol::Context& _context) override {
-				APPL_INFO("==> START ... " PROJECT_NAME " (BEGIN)");
-				// nothing to do ...
-				APPL_INFO("==> START ... " PROJECT_NAME " (END)");
-			}
-			void onResume(ewol::Context& _context) override {
-				APPL_INFO("==> RESUME ... " PROJECT_NAME " (BEGIN)");
-				// nothing to do ...
-				APPL_INFO("==> RESUME ... " PROJECT_NAME " (END)");
-			}
-			void onPause(ewol::Context& _context) override {
-				APPL_INFO("==> PAUSE ... " PROJECT_NAME " (BEGIN)");
-				// nothing to do ...
-				APPL_INFO("==> PAUSE ... " PROJECT_NAME " (END)");
-			}
-			void onStop(ewol::Context& _context) override {
-				APPL_INFO("==> STOP ... " PROJECT_NAME " (START)");
-				// nothing to do ...
-				APPL_INFO("==> STOP ... " PROJECT_NAME " (END)");
-			}
-			void onDestroy(ewol::Context& _context) override {
-				APPL_INFO("==> DESTROY ... " PROJECT_NAME " (START)");
-				// nothing to do ...
-				APPL_INFO("==> DESTROY ... " PROJECT_NAME " (END)");
-			}
-	};
-};
-[/code]
+First things: Some includes:
 
-The input [class[ewol::Context]] is the main system context.
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_include
 
-[note]
-It is important to know that the system can create your application multiple times, the basic exemple of this is the Wallpaper on Android.
+Declare the application:
+
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_application
+
+
+The input ewol::Context is the main system context (for ewol).
+
+**Note:**
+
+```
+It is important to know that the system can create your application multiple times, the basic example of this is the Wallpaper on Android.
 
 What is done:
-** When we select the wallpaper it create a new application (to show an example)
-** When applying your choice, it create the real one an remove the previous one.
-[/note]
+  - When we select the wallpaper it create a new application (to show an example)
+  - When applying your choice, it create the real one an remove the previous one.
+```
 
 In all program we need to have a main()
 
@@ -73,247 +64,151 @@ To be portable on Android, the "main" in the java might call your main through t
 
 To simplify compabilities between platform it is recommanded to not add other things in the application main:
 
-[code style=c++]
-	int main(int argc, const char *argv[]) {
-		// only one things to do : 
-		return ewol::run(new appl::MainApplication(), _argc, _argv);
-	}
-[/code]
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_main
 
 
-Some configuration are needed
-=============================
+Some configuration are needed                             {#ewol_tutorial_hello_world_sources_config}
+-----------------------------
 
 In your application you can use many configuration, it is really better to set all your configuration dynamic.
-With this basic condiction will simplify the interface of the library if you would have many different application
-(never forger the compilator garbage collector is really very efficient).
+With this basic condition will simplify the interface of the library if you would have many different application
+(never forget the compilator garbage collector is really very efficient).
+
+All of this will be done one time: 
+Then we will do it in:
+
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_create
+
+### Parse arguments: ####
+
+All the argument is store in the ewol main application context: just get it...
+
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_parse_arguments
+
+### Set basic windosw size (for desktop): ####
+
+On descktop you can specify a start windows size:
+
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_set_windows_size
 
 
-
-[b]Select fonts:[/b]
+### Select fonts: ####
 
 This can be a problem when you design an application for some other operating system (OS),
-They do not have the same default font.
+They do not have the same default fonts, than you can embended some of them or try to use the system fonts.
 
 We select an order to search the font names and the system basic size.
-[code style=c++]
-	// Use External font depending on the system (for specific application, it is better to provide fonts)
-	_context.getFontDefault().setUseExternal(true);
-	// Select font in order you want : if Ewol find FreeSerif, it selected it ...
-	_context.getFontDefault().set("FreeSerif;DejaVuSansMono", 19);
-[/code]
+
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_set_font_property
 
 
-Main Windows:
-=============
+Main Windows:                             {#ewol_tutorial_hello_world_sources_windows}
+-------------
 
 Create the main Windows:
 
-For this point we will create a class that herited form the basic [class[ewol::widget::Windows]] class:
+For this point we will create a class that herited form the basic ewol::widget::Windows class:
 
-[b]Windows.h[/b]
-[code style=c++]
-	#pragma once
-	#include <ewol/widget/Windows.h>
-	namespace appl {
-		class Windows;
-		using WindowsShared = ememory::SharedPtr<appl::Windows>;
-		using WindowsWeak = ememory::WeakPtr<appl::Windows>;
-		class Windows : public ewol::widget::Windows {
-			protected:
-				Windows(void);
-				init();
-			public:
-				DECLARE_FACTORY(Windows);
-				virtual ~Windows(void) {};
-		};
-	};
-[/code]
+@include HelloWord/appl/Windows.h
 
-The C macro "DECLARE_FACTORY" create a simple factory function "create" that return the [class[ewol::Object]] well create.
+The C macro "DECLARE_FACTORY" create a simple factory function "create" that return the ewol::Object well create.
 
 For some internal reason, we create the object and we call the "init" function after creating the object. When well done we return the shared object created.
 
-See [tutorial[010_ObjectModel | Next: Object model]] to understand why this structure is so complex.
+See @ref ewol_tutorial_object_model to understand why this structure is so complex.
 
-[b]Windows.cpp[/b]
-[code style=c++]
-	#include <ewol/ewol.h>
-	#include <appl/debug.h>
-	#include <appl/Windows.h>
-	#include <ewol/widget/Label.h>
-	
-	appl::Windows::Windows() {
-		addObjectType("appl::Windows");
-		propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
-	}
-	void appl::Windows::init() {
-		ewol::widget::Windows::init();
-		ewol::widget::LabelShared tmpWidget = ewol::widget::Label::create();
-		if (tmpWidget == nullptr) {
-			APPL_ERROR("Can not allocate widget ==> display might be in error");
-		} else {
-			tmpWidget->propertyValue.set("Hello <font color='blue'>World</font>");
-			tmpWidget->propertyExpand.set(bvec2(true,true));
-			setSubWidget(tmpWidget);
-		}
-	}
-[/code]
+@include HelloWord/appl/Windows.cpp
 
-The init function is virtual and you must call your parent object (or at least the [class[ewol::Object]] init)
-[code style=c++]
-	ewol::widget::Windows::init();
-[/code]
+The init function is virtual and you must call your parent object (or at least the ewol::Object::init)
 
-The title is assiciated on the current windows then it is a simple [class[ewol::widget::Windows]] property.
-Please use the "setDirectCheck" fucntion instead of "set" function when you are in the constructor (the callback can be unstable when we construct the object)
-[code style=c++]
-	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
-[/code]
+@snippet HelloWord/appl/Windows.cpp ewol_sample_HW_windows_init
 
-The object [class[ewol::widget::Windows]] is a simple container. But the reference between Object is shared_ptr, and this is not accessible in the constructor. This is the reason we use init function.
 
-After we simple create a [class[widget::Label]] in the main windows init.
+
+The title is associated on the current windows then it is a simple property of ewol::widget::Windows.
+
+We can change with calling the "setDirectCheck" function instead of "set" function when you are in the constructor (the callback can be unstable when we construct the object)
+
+@snippet HelloWord/appl/Windows.cpp ewol_sample_HW_windows_title
+
+
+The object ewol::widget::Windows is a simple container. 
+But the reference between Object is ememory::SharedPtr, and this is not accessible in the constructor.
+This is the reason we use init function.
+
+After we simple create a ewol::widget::Label in the main windows init.
 We set label and basic properties:
-[code style=c++]
-	std::shared_ptr<ewol::widget::Label> tmpWidget = ewol::widget::Label::create();
-	tmpWidget->propertyValue.set("Hello <font color='blue'>World</font>");
-	tmpWidget->propertyExpand.set(bvec2(true,true));
-[/code]
-We can see in this example that the label have some other property like the font color.
 
+@snippet HelloWord/appl/Windows.cpp ewol_sample_HW_windows_label
+
+When we call the function ```ewol::Windows::setSubWidget```, it use the SharedFromThis() function that create an exception if we are in constructor (when setting the sub-widget parrent)
+
+
+We can see in this example that the label have some other property like the font color.
 
 The label can have decorated text based on the html generic writing but it is composed with really simple set of balise.
 I will take a really long time to create a real html parser.
 
 The availlable property is:
-:** [b]<br/>[/b] : New line
-:** [b]<font color="#FF0000\"> ... </font>[/b] :  change the font color.
-:** [b]<center> ... </center>[/b] : center the text.
-:** [b]<left> ... </left>[/b] : Set the text on the left.
-:** [b]<right> ... </right>[/b] : Set the text on the right.
-:** [b]<justify> ... </justify>[/b] : Set the text mode in justify.
+  - ```<br/>``` : New line
+  - ```<font color="#FF0000\"> ... </font>``` :  change the font color.
+  - ```<center> ... </center>``` : center the text.
+  - ```<left> ... </left>``` : Set the text on the left.
+  - ```<right> ... </right>``` : Set the text on the right.
+  - ```<justify> ... </justify>``` : Set the text mode in justify.
 
-[note]
+**Note:**
+
+```
 The xml parser is a little strict on the case and end node (!! </br> !!),
 but it support to:
-:** Not have a main node.
-:** replace '"' with ''' to simplify xml writing in C code.
-[/note]
-
-The last step is to add the widget on the windows:
-[code style=c++]
-	setSubWidget(tmpWidget);
-[/code]
-When we call this function, it use the shared_from_this() function that create an exception if we are in constructor (when setting the wub-widget parrent)
+  - Not have a main node.
+  - replace '"' with ''' to simplify xml writing in C code.
+```
 
 
-Configure Ewol to have display the windows
-==========================================
+Configure Ewol to have display the windows                             {#ewol_tutorial_hello_world_sources_configure_ewol}
+------------------------------------------
 
-At this point we have created the basic windows.
-But the system does not know it.
-Then we create windows and set it in the main context main (in the appl::MainApplication::init()):
-[code style=c++]
-	ewol::WindowsShared basicWindows = appl::Windows::create());
-	// create the specific windows
-	_context.setWindows(basicWindows);
-[/code]
+At this point we have created the basic windows. 
+But the system does not know it. 
+Then we create windows and set it in the main context main ```appl::MainApplication::onCreate```:
+
+@snippet HelloWord/appl/Main.cpp ewol_sample_HW_main_set_windows
+
 Here we call the create function that is created by the DECLARE_FACTORY macro
 
 
-Then the init fuction is:
-[code style=c++]
-bool MainApplication::init(ewol::Context& _context, size_t _initId) {
-	APPL_INFO("==> Init APPL (START)");
-	// select internal data for font ...
-	_context.getFontDefault().setUseExternal(true);
-	_context.getFontDefault().set("FreeSerif;DejaVuSansMono", 19);
-	
-	ewol::WindowsShared basicWindows = appl::Windows::create();
-	// create the specific windows
-	_context.setWindows(basicWindows);
-	APPL_INFO("==> Init APPL (END)");
-	return true;
-}
-[/code]
+**Note:**
 
-[note]
+```
 You can use many windows and select the one you want to display, but I do not think it is the best design.
-[/note]
+```
 
-Build declaration:
+Build declaration:                             {#ewol_tutorial_hello_world_build}
 ==================
 
-ewol commonly use the [b]lutin[/b] build system.
+Ewol commonly use the [lutin](http://HeeroYui.github.io/lutin) build system.
 
-Then we need to add a "lutin_YourApplicationName.py", then for this example: [b]lutin_ewol-sample-HelloWord.py[/b]
+Then we need to add a "lutin_YourApplicationName.py", then for this example: ```lutin_ewol-sample-HelloWord.py```
 
+@include lutin_ewol-sample-HelloWord.py
 
-[code style=python]
-#!/usr/bin/python
-import lutin.module as module
-import lutin.tools as tools
+Show [lutin](http://HeeroYui.github.io/lutin/lutin_module.html) doc for more information...
 
-def get_type():
-	return "BINARY"
-
-def get_sub_type():
-	return "SAMPLE"
-
-def get_desc():
-	return "Tutorial 001 : Hello Word"
-
-def get_licence():
-	return "APACHE-2"
-
-def get_compagny_type():
-	return "com"
-
-def get_compagny_name():
-	return "atria-soft"
-
-def get_maintainer():
-	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
-
-def get_version():
-	return [0,1]
-
-def create(target, module_name):
-	my_module = module.Module(__file__, module_name, get_type())
-	my_module.add_src_file([
-		'appl/Main.cpp',
-		'appl/debug.cpp',
-		'appl/Windows.cpp',
-		])
-	my_module.add_module_depend(['ewol'])
-	my_module.compile_flags('c++', [
-		"-DPROJECT_NAME=\"\\\""+my_module.name+"\\\"\"",
-		"-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
-		])
-	my_module.add_path(tools.get_current_path(__file__))
-	return my_module
-[/code]
-
-show lutin doc for more information...
-
-[note]
-I do not explain again the lutin file, for next tutorial, show example sources ...
-[/note]
-
-Build your application
+Build your application                         {#ewol_tutorial_hello_world_buildappl}
 ======================
 
-Go to your workspace folder and launch
-[code style=shell]
+Go to your workspace folder and launch:
+
+```{.sh}
 	lutin -C -mdebug ewol-sample-HelloWord
 	# or
 	lutin -C -mdebug ewol-sample-HelloWord?build
-[/code]
+```
 
-Your program example will build correctly...
+You can now execute your application:
 
-Launch it :
-[code style=shell]
+```{.sh}
 	lutin -C -mdebug ewol-sample-HelloWord?run
-[/code]
+```
