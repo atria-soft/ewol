@@ -23,6 +23,7 @@ ewol::object::Manager::Manager(ewol::Context& _context) :
 }
 
 ewol::object::Manager::~Manager() {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	m_workerList.clear();
 	bool hasError = false;
 	if (m_eObjectList.size()!=0) {
@@ -36,6 +37,7 @@ ewol::object::Manager::~Manager() {
 }
 
 void ewol::object::Manager::displayListObject() {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	EWOL_INFO("List loaded object : ");
 	for (auto &it : m_eObjectList) {
 		ewol::ObjectShared element = it.lock();
@@ -46,6 +48,7 @@ void ewol::object::Manager::displayListObject() {
 }
 
 void ewol::object::Manager::unInit() {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	EWOL_DEBUG(" == > Un-Init Object-Manager");
 	if (m_workerList.size() > 0) {
 		EWOL_DEBUG(" == > Remove all workers");
@@ -64,6 +67,7 @@ void ewol::object::Manager::unInit() {
 }
 
 void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (_object == nullptr) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
@@ -71,11 +75,13 @@ void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
 }
 
 int32_t ewol::object::Manager::getNumberObject() {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	return m_eObjectList.size();
 }
 
 // clean all Object that request an autoRemove ...
 void ewol::object::Manager::cleanInternalRemoved() {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	size_t nbObject = m_eObjectList.size();
 	EWOL_VERBOSE("Clean Object List (if needed) : " << m_eObjectList.size() << " elements");
 	auto it(m_eObjectList.begin());
@@ -92,6 +98,7 @@ void ewol::object::Manager::cleanInternalRemoved() {
 }
 
 ewol::ObjectShared ewol::object::Manager::get(const std::string& _name) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (_name == "") {
 		return nullptr;
 	}
@@ -107,15 +114,18 @@ ewol::ObjectShared ewol::object::Manager::get(const std::string& _name) {
 
 
 ewol::ObjectShared ewol::object::Manager::getObjectNamed(const std::string& _name) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	return ewol::object::Manager::get(_name);
 }
 
 
 void ewol::object::Manager::workerAdd(const ewol::ObjectShared& _worker) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	m_workerList.push_back(_worker);
 }
 
 void ewol::object::Manager::workerRemove(const ewol::ObjectShared& _worker) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	auto it(m_workerList.begin());
 	while (it != m_workerList.end()) {
 		if (*it == _worker) {
@@ -127,6 +137,7 @@ void ewol::object::Manager::workerRemove(const ewol::ObjectShared& _worker) {
 }
 
 void ewol::object::Manager::timeCall(int64_t _localTime) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	int64_t previousTime = m_lastPeriodicCallTime;
 	m_lastPeriodicCallTime = _localTime;
 	if (periodicCall.size() <= 0) {
@@ -138,9 +149,11 @@ void ewol::object::Manager::timeCall(int64_t _localTime) {
 }
 
 void ewol::object::Manager::timeCallResume(int64_t _localTime) {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	m_lastPeriodicCallTime = _localTime;
 }
 
 bool ewol::object::Manager::timeCallHave() {
+	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	return periodicCall.size() > 0;
 }

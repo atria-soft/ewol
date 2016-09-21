@@ -14,6 +14,8 @@ namespace ewol {
 	class Context;
 	namespace object {
 		class Manager : public esignal::Interface {
+			protected:
+				std::recursive_mutex m_mutex;
 			private:
 				std::vector<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;

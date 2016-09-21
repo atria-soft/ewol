@@ -100,7 +100,7 @@ bool ewol::resource::Texture::updateContext() {
 			break;
 	}
 	EWOL_INFO("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
-	egami::store(m_data, std::string("~/texture_") + etk::to_string(getId()) + ".bmp");
+	//egami::store(m_data, std::string("~/texture_") + etk::to_string(getId()) + ".bmp");
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
 	             typeObject, // Format internal

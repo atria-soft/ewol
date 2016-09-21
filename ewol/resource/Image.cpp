@@ -43,7 +43,9 @@ void ewol::resource::TextureFile::init(std::string _genName, const std::string& 
 }
 
 
-#ifdef __TARGET_OS__Android
+#if    defined(__TARGET_OS__Android) \
+    || defined(__TARGET_OS__MacOs) \
+    || defined(__TARGET_OS__IOs)
 /**
  * @brief get the next power 2 if the input
  * @param[in] _value Value that we want the next power of 2
@@ -88,13 +90,11 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 	if (etk::end_with(_filename, ".svg") == false) {
 		_size = ewol::resource::TextureFile::sizeAuto;
 	}
-	#ifdef __TARGET_OS__MacOs
-		EWOL_ERROR("TODO : remove this strange hack");
-		_size = ivec2(64,64);
-	#endif
 	if (_size.x()>0 && _size.y()>0) {
 		EWOL_VERBOSE("     == > specific size : " << _size);
-		#ifdef __TARGET_OS__Android
+		#if    defined(__TARGET_OS__Android) \
+		    || defined(__TARGET_OS__MacOs) \
+		    || defined(__TARGET_OS__IOs)
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
 		if (_sizeRegister != ewol::resource::TextureFile::sizeAuto) {
