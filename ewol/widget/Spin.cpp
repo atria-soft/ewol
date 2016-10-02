@@ -3,12 +3,12 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license APACHE v2.0 (see license file)
  */
-#include <ewol/debug.h>
-#include <ewol/ewol.h>
-#include <ewol/widget/Spin.h>
-#include <ewol/widget/ContextMenu.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Windows.h>
+#include <ewol/debug.hpp>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Spin.hpp>
+#include <ewol/widget/ContextMenu.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Windows.hpp>
 
 ewol::widget::Spin::Spin() :
   signalValue(this, "value",

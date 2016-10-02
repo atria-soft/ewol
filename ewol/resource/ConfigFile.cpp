@@ -4,13 +4,13 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/os/FSNode.h>
-#include <ewol/debug.h>
-#include <ewol/resource/ConfigFile.h>
-#include <gale/resource/Manager.h>
-#include <ejson/ejson.h>
-#include <ejson/Number.h>
-#include <ejson/String.h>
+#include <etk/os/FSNode.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/resource/ConfigFile.hpp>
+#include <gale/resource/Manager.hpp>
+#include <ejson/ejson.hpp>
+#include <ejson/Number.hpp>
+#include <ejson/String.hpp>
 #include <stdexcept>
 
 ewol::resource::ConfigFile::ConfigFile() :

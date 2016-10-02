@@ -5,13 +5,13 @@
  */
 
 
-#include <ewol/widget/ButtonColor.h>
+#include <ewol/widget/ButtonColor.hpp>
 
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/meta/ColorChooser.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/ewol.h>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/meta/ColorChooser.hpp>
+#include <ewol/widget/Windows.hpp>
+#include <ewol/ewol.hpp>
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)

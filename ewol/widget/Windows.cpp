@@ -4,16 +4,16 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <etk/types.h>
-#include <ewol/ewol.h>
-#include <gale/renderer/openGL/openGL.h>
-#include <gale/renderer/openGL/openGL-include.h>
-#include <ewol/context/Context.h>
-#include <ewol/widget/Widget.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/meta/StdPopUp.h>
+#include <etk/types.hpp>
+#include <etk/types.hpp>
+#include <ewol/ewol.hpp>
+#include <gale/renderer/openGL/openGL.hpp>
+#include <gale/renderer/openGL/openGL-include.hpp>
+#include <ewol/context/Context.hpp>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/widget/Windows.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/meta/StdPopUp.hpp>
 
 ewol::widget::Windows::Windows() :
   propertyColorConfiguration(this, "file-color", "{ewol}THEME:COLOR:Windows.json", "color file link on the theme", &ewol::widget::Windows::onChangePropertyColor),

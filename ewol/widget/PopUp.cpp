@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/PopUp.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/ewol.h>
+#include <ewol/widget/PopUp.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/ewol.hpp>
 
 static const char* annimationIncrease = "increase";
 

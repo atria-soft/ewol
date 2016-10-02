@@ -4,17 +4,17 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
+#include <etk/types.hpp>
 #include <vector>
-#include <etk/os/FSNode.h>
+#include <etk/os/FSNode.hpp>
 
 
-#include <gale/renderer/openGL/openGL.h>
+#include <gale/renderer/openGL/openGL.hpp>
 
-#include <ewol/resource/Texture.h>
-#include <ewol/resource/FontFreeType.h>
-#include <ewol/resource/font/FontBase.h>
-#include <gale/resource/Manager.h>
+#include <ewol/resource/Texture.hpp>
+#include <ewol/resource/FontFreeType.hpp>
+#include <ewol/resource/font/FontBase.hpp>
+#include <gale/resource/Manager.hpp>
 
 // free Font hnadle of librairies ... entry for acces ...
 static int32_t l_countLoaded=0;

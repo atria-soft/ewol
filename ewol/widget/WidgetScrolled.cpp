@@ -4,12 +4,12 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/WidgetScrolled.h>
+#include <ewol/widget/WidgetScrolled.hpp>
 
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
-#include <gale/renderer/openGL/openGL.h>
-#include <ewol/ewol.h>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <gale/renderer/openGL/openGL.hpp>
+#include <ewol/ewol.hpp>
 
 ewol::widget::WidgetScrolled::WidgetScrolled() :
   propertyShapeVert(this, "shape-vert",

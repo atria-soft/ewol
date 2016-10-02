@@ -3,11 +3,11 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license APACHE v2.0 (see license file)
  */
-#include <etk/types.h>
-#include <ewol/debug.h>
-#include <ewol/widget/meta/SpinBase.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Composer.h>
+#include <etk/types.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/widget/meta/SpinBase.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Composer.hpp>
 
 ewol::widget::SpinBase::SpinBase() :
   propertyShape(this, "shape",

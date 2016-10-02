@@ -4,14 +4,14 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/context/Context.h>
-#include <gale/gale.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/context/Context.hpp>
+#include <gale/gale.hpp>
 
-#include <gale/context/commandLine.h>
-#include <etk/os/FSNode.h>
-#include <gale/Dimension.h>
+#include <gale/context/commandLine.hpp>
+#include <etk/os/FSNode.hpp>
+#include <gale/Dimension.hpp>
 
 #ifndef EWOL_VERSION
 #define EWOL_VERSION "0.0.0"

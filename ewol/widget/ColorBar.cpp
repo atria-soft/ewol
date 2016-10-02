@@ -4,12 +4,12 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/ColorBar.h>
+#include <ewol/widget/ColorBar.hpp>
 
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
 
-#include <etk/Color.h>
+#include <etk/Color.hpp>
 
 ewol::widget::ColorBar::ColorBar() :
   signalChange(this, "change", "Color value change"),

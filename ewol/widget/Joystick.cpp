@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Joystick.h>
-#include <math.h>
+#include <ewol/widget/Joystick.hpp>
+#include <cmath>
 
-#include <ewol/compositing/Image.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/compositing/Image.hpp>
+#include <ewol/widget/Manager.hpp>
 
 static bool l_displayBackground(true);
 static std::string l_background("");

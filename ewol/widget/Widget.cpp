@@ -4,13 +4,13 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Widget.h>
-#include <ewol/object/Manager.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/ewol.h>
-#include <gale/renderer/openGL/openGL.h>
-#include <gale/renderer/openGL/openGL-include.h>
-#include <ewol/context/Context.h>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/object/Manager.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/ewol.hpp>
+#include <gale/renderer/openGL/openGL.hpp>
+#include <gale/renderer/openGL/openGL-include.hpp>
+#include <ewol/context/Context.hpp>
 
 ewol::Widget::Widget() :
   propertyMinSize(this, "min-size",

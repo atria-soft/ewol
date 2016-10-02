@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <etk/math/Matrix4.h>
+#include <etk/types.hpp>
+#include <etk/math/Matrix4.hpp>
 
-#include <ewol/debug.h>
-#include <ewol/compositing/Compositing.h>
+#include <ewol/debug.hpp>
+#include <ewol/compositing/Compositing.hpp>
 
 
 ewol::Compositing::Compositing() {

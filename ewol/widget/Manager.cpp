@@ -4,29 +4,29 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/Joystick.h>
-#include <ewol/widget/Button.h>
-#include <ewol/widget/ContextMenu.h>
-#include <ewol/widget/ButtonColor.h>
-#include <ewol/widget/Spacer.h>
-#include <ewol/widget/Slider.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/ProgressBar.h>
-#include <ewol/widget/Layer.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Image.h>
-#include <ewol/widget/Gird.h>
-#include <ewol/widget/Entry.h>
-#include <ewol/widget/CheckBox.h>
-#include <ewol/widget/Scroll.h>
-#include <ewol/widget/PopUp.h>
-#include <ewol/widget/WSlider.h>
-#include <ewol/widget/ListFileSystem.h>
-#include <ewol/widget/Composer.h>
-#include <ewol/widget/Select.h>
-#include <ewol/widget/Spin.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/Joystick.hpp>
+#include <ewol/widget/Button.hpp>
+#include <ewol/widget/ContextMenu.hpp>
+#include <ewol/widget/ButtonColor.hpp>
+#include <ewol/widget/Spacer.hpp>
+#include <ewol/widget/Slider.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/ProgressBar.hpp>
+#include <ewol/widget/Layer.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Image.hpp>
+#include <ewol/widget/Gird.hpp>
+#include <ewol/widget/Entry.hpp>
+#include <ewol/widget/CheckBox.hpp>
+#include <ewol/widget/Scroll.hpp>
+#include <ewol/widget/PopUp.hpp>
+#include <ewol/widget/WSlider.hpp>
+#include <ewol/widget/ListFileSystem.hpp>
+#include <ewol/widget/Composer.hpp>
+#include <ewol/widget/Select.hpp>
+#include <ewol/widget/Spin.hpp>
 #include <vector>
 
 ewol::widget::Manager::Manager() :

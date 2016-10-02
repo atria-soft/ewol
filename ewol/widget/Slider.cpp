@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Slider.h>
+#include <ewol/widget/Slider.hpp>
 
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/Manager.hpp>
 
 const int32_t dotRadius = 6;
 

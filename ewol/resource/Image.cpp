@@ -5,11 +5,11 @@
  */
 
 
-#include <etk/types.h>
-#include <egami/egami.h>
-#include <gale/resource/Manager.h>
-#include <ewol/resource/Image.h>
-#include <ewol/resource/Texture.h>
+#include <etk/types.hpp>
+#include <egami/egami.hpp>
+#include <gale/resource/Manager.hpp>
+#include <ewol/resource/Image.hpp>
+#include <ewol/resource/Texture.hpp>
 
 const ivec2 ewol::resource::TextureFile::sizeAuto(-1,-1);
 const ivec2 ewol::resource::TextureFile::sizeDefault(0,0);

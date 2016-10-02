@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/object/Object.h>
-#include <ewol/object/Manager.h>
-#include <ewol/debug.h>
-#include <ewol/context/Context.h>
+#include <ewol/object/Object.hpp>
+#include <ewol/object/Manager.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/context/Context.hpp>
 
 size_t ewol::Object::m_valUID = 0;
 

@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Layer.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/Layer.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::Layer::Layer() {
 	addObjectType("ewol::widget::Layer");

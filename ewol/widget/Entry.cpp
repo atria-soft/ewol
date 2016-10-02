@@ -4,12 +4,12 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <ewol/widget/Entry.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/ewol.h>
-#include <ewol/context/Context.h>
-#include <ewol/Padding.h>
+#include <etk/types.hpp>
+#include <ewol/widget/Entry.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/ewol.hpp>
+#include <ewol/context/Context.hpp>
+#include <ewol/Padding.hpp>
 
 // DEFINE for the shader display system :
 #define STATUS_NORMAL    (0)

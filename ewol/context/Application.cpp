@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <ewol/context/Application.h>
-#include <ewol/context/Context.h>
+#include <etk/types.hpp>
+#include <ewol/context/Application.hpp>
+#include <ewol/context/Context.hpp>
 
 
 ewol::context::Application::Application() {

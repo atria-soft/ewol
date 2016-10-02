@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/context/ConfigFont.h>
-#include <ewol/resource/FontFreeType.h>
+#include <ewol/context/ConfigFont.hpp>
+#include <ewol/resource/FontFreeType.hpp>
 
 ewol::context::ConfigFont::ConfigFont() :
   m_folder("{ewol}DATA:fonts"),

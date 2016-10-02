@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/Padding.h>
+#include <ewol/Padding.hpp>
 
 ewol::Padding::Padding() {
 	// nothing to do...

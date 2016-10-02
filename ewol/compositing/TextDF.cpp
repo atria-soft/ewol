@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
-#include <ewol/compositing/TextDF.h>
-#include <ewol/context/Context.h>
+#include <ewol/debug.hpp>
+#include <ewol/compositing/TextDF.hpp>
+#include <ewol/context/Context.hpp>
 #include <etk/types.h>
 
 ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSize) :

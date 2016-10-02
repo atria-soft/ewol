@@ -5,28 +5,28 @@
  */
 
 
-#include <ewol/widget/meta/FileChooser.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/List.h>
-#include <ewol/widget/Button.h>
-#include <ewol/widget/CheckBox.h>
-#include <ewol/widget/ListFileSystem.h>
-#include <ewol/widget/Entry.h>
-#include <ewol/widget/Spacer.h>
-#include <ewol/widget/Image.h>
-#include <ewol/widget/Composer.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/meta/FileChooser.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/List.hpp>
+#include <ewol/widget/Button.hpp>
+#include <ewol/widget/CheckBox.hpp>
+#include <ewol/widget/ListFileSystem.hpp>
+#include <ewol/widget/Entry.hpp>
+#include <ewol/widget/Spacer.hpp>
+#include <ewol/widget/Image.hpp>
+#include <ewol/widget/Composer.hpp>
+#include <ewol/widget/Manager.hpp>
 //#include <vector>
 #include <vector>
-#include <etk/tool.h>
-#include <etk/os/FSNode.h>
+#include <etk/tool.hpp>
+#include <etk/os/FSNode.hpp>
 
 extern "C" {
 	// file browsing ...
 	#include <dirent.h>
 }
 
-#include <ewol/ewol.h>
+#include <ewol/ewol.hpp>
 
 ewol::widget::FileChooser::FileChooser() :
   signalCancel(this, "cancel", ""),

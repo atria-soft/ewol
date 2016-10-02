@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
+#include <ewol/debug.hpp>
 
 int32_t ewol::getLogId() {
 	static int32_t g_val = elog::registerInstance("ewol");

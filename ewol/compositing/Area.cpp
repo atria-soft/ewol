@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
-#include <ewol/compositing/Area.h>
+#include <ewol/debug.hpp>
+#include <ewol/compositing/Area.hpp>
 
 ewol::compositing::Area::Area(const ivec2& _size) :
   m_position(0.0, 0.0, 0.0),

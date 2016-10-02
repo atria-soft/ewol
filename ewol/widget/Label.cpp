@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Label.h>
+#include <ewol/widget/Label.hpp>
 
-#include <ewol/compositing/Text.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/ewol.h>
+#include <ewol/compositing/Text.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/ewol.hpp>
 
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :

@@ -5,11 +5,11 @@
  */
 
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Composer.h>
-#include <etk/os/FSNode.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/context/Context.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Composer.hpp>
+#include <etk/os/FSNode.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/context/Context.hpp>
 
 ewol::widget::Composer::Composer() :
   propertyRemoveIfUnderRemove(this, "remove-if-under-remove", true, "Demand the remove iof the widget if the subObject demand a remove") {

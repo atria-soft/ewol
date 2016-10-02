@@ -43,12 +43,12 @@ def create(target, module_name):
 		'ewol/gravity.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/debug.h', # TODO : Remove this ...
-		'ewol/ewol.h',
-		'ewol/Padding.h',
-		'ewol/translate.h',
-		'ewol/DrawProperty.h',
-		'ewol/gravity.h'
+		'ewol/debug.hpp', # TODO : Remove this ...
+		'ewol/ewol.hpp',
+		'ewol/Padding.hpp',
+		'ewol/translate.hpp',
+		'ewol/DrawProperty.hpp',
+		'ewol/gravity.hpp'
 		])
 	
 	# compositing:
@@ -64,15 +64,15 @@ def create(target, module_name):
 		'ewol/compositing/Area.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/compositing/Text.h',
-		'ewol/compositing/Drawing.h',
-		'ewol/compositing/Sprite.h',
-		'ewol/compositing/Area.h',
-		'ewol/compositing/Shaper.h',
-		'ewol/compositing/TextDF.h',
-		'ewol/compositing/TextBase.h',
-		'ewol/compositing/Compositing.h',
-		'ewol/compositing/Image.h'
+		'ewol/compositing/Text.hpp',
+		'ewol/compositing/Drawing.hpp',
+		'ewol/compositing/Sprite.hpp',
+		'ewol/compositing/Area.hpp',
+		'ewol/compositing/Shaper.hpp',
+		'ewol/compositing/TextDF.hpp',
+		'ewol/compositing/TextBase.hpp',
+		'ewol/compositing/Compositing.hpp',
+		'ewol/compositing/Image.hpp'
 		])
 	
 	# context:
@@ -83,10 +83,10 @@ def create(target, module_name):
 		'ewol/context/InputManager.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/context/ConfigFont.h',
-		'ewol/context/Context.h',
-		'ewol/context/Application.h',
-		'ewol/context/InputManager.h'
+		'ewol/context/ConfigFont.hpp',
+		'ewol/context/Context.hpp',
+		'ewol/context/Application.hpp',
+		'ewol/context/InputManager.hpp'
 		])
 	
 	# event properties:
@@ -96,9 +96,9 @@ def create(target, module_name):
 		'ewol/event/Input.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/event/Time.h',
-		'ewol/event/Input.h',
-		'ewol/event/Entry.h'
+		'ewol/event/Time.hpp',
+		'ewol/event/Input.hpp',
+		'ewol/event/Entry.hpp'
 		])
 	
 	# object:
@@ -108,9 +108,9 @@ def create(target, module_name):
 		'ewol/object/Worker.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/object/Worker.h',
-		'ewol/object/Manager.h',
-		'ewol/object/Object.h'
+		'ewol/object/Worker.hpp',
+		'ewol/object/Manager.hpp',
+		'ewol/object/Object.hpp'
 		])
 	
 	# resources:
@@ -126,18 +126,18 @@ def create(target, module_name):
 		'ewol/resource/DistanceFieldFont.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/resource/FontFreeType.h',
-		'ewol/resource/TexturedFont.h',
-		'ewol/resource/ColorFile.h',
-		'ewol/resource/font/FontBase.h',
-		'ewol/resource/font/Kerning.h',
-		'ewol/resource/font/GlyphProperty.h',
-		'ewol/resource/DistanceFieldFont.h',
-		'ewol/resource/ImageDF.h',
-		'ewol/resource/Colored3DObject.h',
-		'ewol/resource/ConfigFile.h',
-		'ewol/resource/Texture.h',
-		'ewol/resource/Image.h'
+		'ewol/resource/FontFreeType.hpp',
+		'ewol/resource/TexturedFont.hpp',
+		'ewol/resource/ColorFile.hpp',
+		'ewol/resource/font/FontBase.hpp',
+		'ewol/resource/font/Kerning.hpp',
+		'ewol/resource/font/GlyphProperty.hpp',
+		'ewol/resource/DistanceFieldFont.hpp',
+		'ewol/resource/ImageDF.hpp',
+		'ewol/resource/Colored3DObject.hpp',
+		'ewol/resource/ConfigFile.hpp',
+		'ewol/resource/Texture.hpp',
+		'ewol/resource/Image.hpp'
 		])
 	
 	# widget:
@@ -181,44 +181,44 @@ def create(target, module_name):
 		'ewol/widget/Spin.cpp',
 		])
 	my_module.add_header_file([
-		'ewol/widget/Menu.h',
-		'ewol/widget/Slider.h',
-		'ewol/widget/WidgetScrolled.h',
-		'ewol/widget/ListFileSystem.h',
-		'ewol/widget/Panned.h',
-		'ewol/widget/WSlider.h',
-		'ewol/widget/Container2.h',
-		'ewol/widget/Windows.h',
-		'ewol/widget/CheckBox.h',
-		'ewol/widget/Container.h',
-		'ewol/widget/PopUp.h',
-		'ewol/widget/Label.h',
-		'ewol/widget/Composer.h',
-		'ewol/widget/Sizer.h',
-		'ewol/widget/Scroll.h',
-		'ewol/widget/ContainerN.h',
-		'ewol/widget/Spacer.h',
-		'ewol/widget/Button.h',
-		'ewol/widget/Manager.h',
-		'ewol/widget/Entry.h',
-		'ewol/widget/ContextMenu.h',
-		'ewol/widget/Gird.h',
-		'ewol/widget/ProgressBar.h',
-		'ewol/widget/ColorBar.h',
-		'ewol/widget/ButtonColor.h',
-		'ewol/widget/Layer.h',
-		'ewol/widget/Joystick.h',
-		'ewol/widget/Widget.h',
-		'ewol/widget/meta/StdPopUp.h',
-		'ewol/widget/meta/SpinBase.h',
-		'ewol/widget/meta/ParameterList.h',
-		'ewol/widget/meta/ColorChooser.h',
-		'ewol/widget/meta/Parameter.h',
-		'ewol/widget/meta/FileChooser.h',
-		'ewol/widget/Image.h',
-		'ewol/widget/List.h',
-		'ewol/widget/Select.h',
-		'ewol/widget/Spin.h'
+		'ewol/widget/Menu.hpp',
+		'ewol/widget/Slider.hpp',
+		'ewol/widget/WidgetScrolled.hpp',
+		'ewol/widget/ListFileSystem.hpp',
+		'ewol/widget/Panned.hpp',
+		'ewol/widget/WSlider.hpp',
+		'ewol/widget/Container2.hpp',
+		'ewol/widget/Windows.hpp',
+		'ewol/widget/CheckBox.hpp',
+		'ewol/widget/Container.hpp',
+		'ewol/widget/PopUp.hpp',
+		'ewol/widget/Label.hpp',
+		'ewol/widget/Composer.hpp',
+		'ewol/widget/Sizer.hpp',
+		'ewol/widget/Scroll.hpp',
+		'ewol/widget/ContainerN.hpp',
+		'ewol/widget/Spacer.hpp',
+		'ewol/widget/Button.hpp',
+		'ewol/widget/Manager.hpp',
+		'ewol/widget/Entry.hpp',
+		'ewol/widget/ContextMenu.hpp',
+		'ewol/widget/Gird.hpp',
+		'ewol/widget/ProgressBar.hpp',
+		'ewol/widget/ColorBar.hpp',
+		'ewol/widget/ButtonColor.hpp',
+		'ewol/widget/Layer.hpp',
+		'ewol/widget/Joystick.hpp',
+		'ewol/widget/Widget.hpp',
+		'ewol/widget/meta/StdPopUp.hpp',
+		'ewol/widget/meta/SpinBase.hpp',
+		'ewol/widget/meta/ParameterList.hpp',
+		'ewol/widget/meta/ColorChooser.hpp',
+		'ewol/widget/meta/Parameter.hpp',
+		'ewol/widget/meta/FileChooser.hpp',
+		'ewol/widget/Image.hpp',
+		'ewol/widget/List.hpp',
+		'ewol/widget/Select.hpp',
+		'ewol/widget/Spin.hpp'
 		])
 	
 	# tools:
@@ -226,7 +226,7 @@ def create(target, module_name):
 		'ewol/tools/message.cpp'
 		])
 	my_module.add_header_file([
-		'ewol/tools/message.h'
+		'ewol/tools/message.hpp'
 		])
 	
 	my_module.copy_path('data/theme/shape/square/*','theme/shape/square')

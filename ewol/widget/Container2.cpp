@@ -5,9 +5,9 @@
  */
 
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Container2.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Container2.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::Container2::Container2() :
   m_idWidgetDisplayed(0) {

@@ -4,22 +4,17 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <etk/types.h>
-
-#include <ewol/debug.h>
-
-#include <ewol/ewol.h>
-
-#include <ewol/object/Object.h>
-#include <ewol/object/Manager.h>
-#include <ewol/context/Context.h>
-#include <ewol/context/InputManager.h>
-#include <ewol/resource/Texture.h>
-
-#include <ewol/widget/Widget.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/widget/Manager.h>
+#include <etk/types.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/ewol.hpp>
+#include <ewol/object/Object.hpp>
+#include <ewol/object/Manager.hpp>
+#include <ewol/context/Context.hpp>
+#include <ewol/context/InputManager.hpp>
+#include <ewol/resource/Texture.hpp>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/widget/Windows.hpp>
+#include <ewol/widget/Manager.hpp>
 
 
 

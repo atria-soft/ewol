@@ -4,16 +4,16 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <etk/os/FSNode.h>
-#include <egami/egami.h>
+#include <etk/types.hpp>
+#include <etk/os/FSNode.hpp>
+#include <egami/egami.hpp>
 
-#include <gale/resource/Manager.h>
+#include <gale/resource/Manager.hpp>
 
-#include <ewol/resource/font/FontBase.h>
-#include <ewol/resource/TexturedFont.h>
-#include <ewol/resource/FontFreeType.h>
-#include <ewol/context/Context.h>
+#include <ewol/resource/font/FontBase.hpp>
+#include <ewol/resource/TexturedFont.hpp>
+#include <ewol/resource/FontFreeType.hpp>
+#include <ewol/context/Context.hpp>
 
 
 std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::font::mode _obj) {

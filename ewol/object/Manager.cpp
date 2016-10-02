@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/object/Manager.h>
-#include <ewol/context/Context.h>
-#include <ewol/ewol.h>
-#include <etk/stdTools.h>
+#include <ewol/object/Manager.hpp>
+#include <ewol/context/Context.hpp>
+#include <ewol/ewol.hpp>
+#include <etk/stdTools.hpp>
 #include <unistd.h>
 
 ewol::object::Manager::Manager(ewol::Context& _context) :

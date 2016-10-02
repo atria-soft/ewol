@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
-#include <ewol/translate.h>
+#include <ewol/debug.hpp>
+#include <ewol/translate.hpp>
 #include <map>
-#include <etk/os/FSNode.h>
-#include <ejson/ejson.h>
+#include <etk/os/FSNode.hpp>
+#include <ejson/ejson.hpp>
 
 class LocalInstanceTranslation {
 	private:

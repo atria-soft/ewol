@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/os/FSNode.h>
-#include <ewol/debug.h>
-#include <ewol/compositing/Shaper.h>
+#include <etk/os/FSNode.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/compositing/Shaper.hpp>
 
 ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_name(_shaperName),

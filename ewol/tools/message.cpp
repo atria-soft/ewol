@@ -4,14 +4,14 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <ewol/ewol.h>
-#include <ewol/tools/message.h>
-#include <ewol/context/Context.h>
-#include <ewol/widget/Widget.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/meta/StdPopUp.h>
+#include <etk/types.hpp>
+#include <ewol/ewol.hpp>
+#include <ewol/tools/message.hpp>
+#include <ewol/context/Context.hpp>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/widget/Windows.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/meta/StdPopUp.hpp>
 
 void ewol::tools::message::create(enum ewol::tools::message::type _type, const std::string& _message) {
 	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();

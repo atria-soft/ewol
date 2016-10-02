@@ -5,12 +5,12 @@
  */
 
 
-#include <etk/types.h>
-#include <egami/egami.h>
-#include <gale/resource/Manager.h>
-#include <ewol/resource/ImageDF.h>
-#include <ewol/resource/Texture.h>
-#include <edtaa3/edtaa3func.h>
+#include <etk/types.hpp>
+#include <egami/egami.hpp>
+#include <gale/resource/Manager.hpp>
+#include <ewol/resource/ImageDF.hpp>
+#include <ewol/resource/Texture.hpp>
+#include <edtaa3/edtaa3func.hpp>
 
 ewol::resource::ImageDF::ImageDF() {
 	addResourceType("ewol::resource::ImageDF");

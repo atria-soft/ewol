@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
-#include <ewol/resource/Colored3DObject.h>
-#include <gale/resource/Manager.h>
-#include <gale/renderer/openGL/openGL-include.h>
-#include <esignal/Signal.h>
+#include <ewol/debug.hpp>
+#include <ewol/resource/Colored3DObject.hpp>
+#include <gale/resource/Manager.hpp>
+#include <gale/renderer/openGL/openGL-include.hpp>
+#include <esignal/Signal.hpp>
 
 ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(nullptr) {

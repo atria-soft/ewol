@@ -4,16 +4,16 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/meta/Parameter.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/List.h>
-#include <ewol/widget/Spacer.h>
-#include <ewol/widget/Image.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/Composer.h>
+#include <ewol/widget/meta/Parameter.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/List.hpp>
+#include <ewol/widget/Spacer.hpp>
+#include <ewol/widget/Image.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/Composer.hpp>
 #include <vector>
 
-#include <ewol/ewol.h>
+#include <ewol/ewol.hpp>
 
 ewol::widget::Parameter::Parameter() :
   signalClose(this, "close", ""),

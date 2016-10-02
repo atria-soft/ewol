@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/CheckBox.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/CheckBox.hpp>
+#include <ewol/widget/Manager.hpp>
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)

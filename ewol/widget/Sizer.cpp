@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::Sizer::Sizer() :
   propertyMode(this, "mode",

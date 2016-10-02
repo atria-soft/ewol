@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Gird.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Gird.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::Gird::Gird() :
   m_sizeRow(0),

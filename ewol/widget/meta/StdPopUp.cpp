@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/meta/StdPopUp.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/Spacer.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/meta/StdPopUp.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/Spacer.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Manager.hpp>
 #include <vector>
 
 ewol::widget::StdPopUp::StdPopUp() :

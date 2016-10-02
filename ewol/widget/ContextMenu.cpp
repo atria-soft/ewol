@@ -4,13 +4,13 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/ContextMenu.h>
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/Padding.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/ContextMenu.hpp>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/Windows.hpp>
+#include <ewol/Padding.hpp>
 
 ewol::widget::ContextMenu::ContextMenu():
   propertyShape(this, "shape",

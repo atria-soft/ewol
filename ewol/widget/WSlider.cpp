@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/WSlider.h>
-#include <ewol/ewol.h>
+#include <ewol/widget/WSlider.hpp>
+#include <ewol/ewol.hpp>
 
 
 static const char* l_listsladingMode[ewol::widget::WSlider::sladingTransition_count] = {

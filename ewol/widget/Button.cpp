@@ -5,8 +5,8 @@
  */
 
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Button.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Button.hpp>
 
 // DEFINE for the shader display system:
 const static int32_t STATUS_UP(0);

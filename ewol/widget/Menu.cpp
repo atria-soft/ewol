@@ -4,14 +4,14 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/widget/Menu.h>
-#include <ewol/widget/Button.h>
-#include <ewol/widget/ContextMenu.h>
-#include <ewol/widget/Composer.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Windows.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/widget/Menu.hpp>
+#include <ewol/widget/Button.hpp>
+#include <ewol/widget/ContextMenu.hpp>
+#include <ewol/widget/Composer.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Windows.hpp>
 
 ewol::widget::Menu::Menu() :
   signalSelect(this, "select", "") {

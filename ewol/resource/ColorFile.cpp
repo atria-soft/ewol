@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/os/FSNode.h>
-#include <ewol/debug.h>
-#include <ewol/resource/ColorFile.h>
-#include <ejson/ejson.h>
+#include <etk/os/FSNode.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/resource/ColorFile.hpp>
+#include <ejson/ejson.hpp>
 #include <stdexcept>
 
 ewol::resource::ColorFile::ColorFile() :

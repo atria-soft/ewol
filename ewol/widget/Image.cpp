@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Image.h>
-#include <ewol/compositing/Image.h>
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/ewol.h>
+#include <ewol/widget/Image.hpp>
+#include <ewol/compositing/Image.hpp>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/ewol.hpp>
 
 ewol::widget::Image::Image() :
   signalPressed(this, "pressed", "Image is pressed"),

@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Spacer.h>
+#include <ewol/widget/Spacer.hpp>
 
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::Spacer::Spacer() :
   propertyColor(this, "color",

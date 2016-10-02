@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Scroll.h>
-#include <ewol/ewol.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/debug.h>
-#include <ewol/compositing/Drawing.h>
+#include <ewol/widget/Scroll.hpp>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/debug.hpp>
+#include <ewol/compositing/Drawing.hpp>
 
 ewol::widget::Scroll::Scroll() :
   propertyLimit(this, "limit",

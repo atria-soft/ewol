@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/Widget.h>
+#include <ewol/widget/Widget.hpp>
 
 std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Entry& _obj) {
 	_os << "{type=" << _obj.getType();

@@ -5,9 +5,9 @@
  */
 
 
-#include <ewol/ewol.h>
-#include <ewol/widget/Container.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/Container.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::Container::Container() {
 	addObjectType("ewol::widget::Container");

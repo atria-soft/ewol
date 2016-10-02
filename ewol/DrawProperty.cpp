@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/DrawProperty.h>
-#include <ewol/debug.h>
+#include <ewol/DrawProperty.hpp>
+#include <ewol/debug.hpp>
 
 std::ostream& ewol::operator <<(std::ostream& _os, const ewol::DrawProperty& _obj) {
 	_os << "{ windowsSize=" << _obj.m_windowsSize << " start=" << _obj.m_origin << " stop=" << (_obj.m_origin+_obj.m_size) << "}";

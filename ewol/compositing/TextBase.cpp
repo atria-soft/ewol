@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
-#include <ewol/compositing/Text.h>
-#include <ewol/context/Context.h>
-#include <etk/types.h>
+#include <ewol/debug.hpp>
+#include <ewol/compositing/Text.hpp>
+#include <ewol/context/Context.hpp>
+#include <etk/types.hpp>
 
 ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _loadProgram) :
   m_position(0.0, 0.0, 0.0),

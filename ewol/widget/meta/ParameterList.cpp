@@ -4,14 +4,14 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/widget/meta/ParameterList.h>
-#include <etk/tool.h>
+#include <ewol/widget/meta/ParameterList.hpp>
+#include <etk/tool.hpp>
 
-#include <ewol/widget/List.h>
+#include <ewol/widget/List.hpp>
 
-#include <ewol/compositing/Drawing.h>
-#include <ewol/compositing/Text.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/compositing/Text.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::ParameterList::ParameterList() :
   signalSelect(this, "select", "") {

@@ -5,9 +5,9 @@
  */
 
 
-#include <ewol/ewol.h>
-#include <ewol/widget/ContainerN.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/ewol.hpp>
+#include <ewol/widget/ContainerN.hpp>
+#include <ewol/widget/Manager.hpp>
 
 ewol::widget::ContainerN::ContainerN() :
   propertyLockExpand(this, "lock",

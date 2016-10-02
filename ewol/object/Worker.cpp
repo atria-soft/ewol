@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <ewol/debug.h>
-#include <ewol/object/Worker.h>
-#include <ewol/object/Manager.h>
+#include <ewol/debug.hpp>
+#include <ewol/object/Worker.hpp>
+#include <ewol/object/Manager.hpp>
 
 ewol::object::Worker::Worker() {
 	addObjectType("ewol::Worker");
