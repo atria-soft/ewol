@@ -4,17 +4,17 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/types.h>
-#include <etk/types.h>
-#include <etk/os/FSNode.h>
-#include <ewol/ewol.h>
-#include <ewol/object/Object.h>
-#include <ewol/context/Context.h>
-#include <ewol/widget/Manager.h>
+#include <etk/types.hpp>
+#include <etk/types.hpp>
+#include <etk/os/FSNode.hpp>
+#include <ewol/ewol.hpp>
+#include <ewol/object/Object.hpp>
+#include <ewol/context/Context.hpp>
+#include <ewol/widget/Manager.hpp>
 
-#include <appl/debug.h>
-#include <appl/MainWindows.h>
-#include <appl/widget/SizerColor.h>
+#include <appl/debug.hpp>
+#include <appl/MainWindows.hpp>
+#include <appl/widget/SizerColor.hpp>
 
 class MainApplication : public ewol::context::Application {
 	public:

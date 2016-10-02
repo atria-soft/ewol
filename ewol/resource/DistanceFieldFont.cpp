@@ -15,7 +15,7 @@
 #include <ewol/resource/FontFreeType.hpp>
 #include <ewol/context/Context.hpp>
 #include <ewol/resource/DistanceFieldFont.hpp>
-#include <edtaa3/edtaa3func.hpp>
+#include <edtaa3/edtaa3func.h>
 #include <ejson/ejson.hpp>
 
 #define SIZE_GENERATION (30)

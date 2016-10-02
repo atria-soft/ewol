@@ -39,8 +39,8 @@ simple signal connection:
 -------------------------
 
 ```{.cpp}
-#include <ewol/object/Object.h>
-#include <ewol/widget/Button.h>
+#include <ewol/object/Object.hpp>
+#include <ewol/widget/Button.hpp>
 namespace appl {
 	class MyObj : public ewol::Object {
 		private:
@@ -107,8 +107,8 @@ source
 -------
 
 ```{.cpp}
-#include <ewol/object/Object.h>
-#include <ewol/widget/Button.h>
+#include <ewol/object/Object.hpp>
+#include <ewol/widget/Button.hpp>
 namespace appl {
 	class MyObj : public ewol::Object {
 		public:

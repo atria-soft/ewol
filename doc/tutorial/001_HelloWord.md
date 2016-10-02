@@ -13,9 +13,9 @@ debug tools:                                     {#ewol_tutorial_hello_world_deb
 
 I will use for all test a basic template [elog](http://atria-soft.github.io/elog) for debug logger that redirect logs in Android and IOs
 
-File ```appl/debug.h```:
+File ```appl/debug.hpp```:
 
-@include HelloWord/appl/debug.h
+@include HelloWord/appl/debug.hpp
 
 File ```appl/debug.cpp```:
 
@@ -109,7 +109,7 @@ Create the main Windows:
 
 For this point we will create a class that herited form the basic ewol::widget::Windows class:
 
-@include HelloWord/appl/Windows.h
+@include HelloWord/appl/Windows.hpp
 
 The C macro "DECLARE_FACTORY" create a simple factory function "create" that return the ewol::Object well create.
 

@@ -27,8 +27,8 @@ Get a resource:                                {#ewol_tutorial_resources_get}
 
 For this example we will load a configuration file:
 ```{.cpp}
-#include <ewol/object/Object.h>
-#include <ewol/resource/ConfigFile.h>
+#include <ewol/object/Object.hpp>
+#include <ewol/resource/ConfigFile.hpp>
 namespace appl {
 	class MyObj : public ewol::Object {
 		public:
@@ -90,7 +90,7 @@ The resources are loaded fron 0 to 5.
 Then for basic resource:
 
 ```{.cpp}
-#include <ewol/object/Resource.h>
+#include <ewol/object/Resource.hpp>
 namespace appl {
 	class MyResource : public gale::Resource {
 		protected:

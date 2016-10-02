@@ -4,13 +4,13 @@
  * @license BSD 3 clauses (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <appl/debug.h>
-#include <appl/Windows.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Button.h>
-#include <appl/widget/VectorDisplay.h>
-#include <etk/tool.h>
+#include <ewol/ewol.hpp>
+#include <appl/debug.hpp>
+#include <appl/Windows.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Button.hpp>
+#include <appl/widget/VectorDisplay.hpp>
+#include <etk/tool.hpp>
 
 appl::Windows::Windows() :
   m_composer(nullptr) {

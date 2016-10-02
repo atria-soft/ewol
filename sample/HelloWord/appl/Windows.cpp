@@ -4,10 +4,10 @@
  * @license GPL v3 (see license file)
  */
 
-#include <ewol/ewol.h>
-#include <appl/debug.h>
-#include <appl/Windows.h>
-#include <ewol/widget/Label.h>
+#include <ewol/ewol.hpp>
+#include <appl/debug.hpp>
+#include <appl/Windows.hpp>
+#include <ewol/widget/Label.hpp>
 
 appl::Windows::Windows() {
 	addObjectType("appl::Windows");

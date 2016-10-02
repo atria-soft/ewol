@@ -6,17 +6,17 @@
 //! [ewol_sample_HW_main_all]
 
 //! [ewol_sample_HW_main_include]
-#include <etk/types.h>
-#include <ewol/ewol.h>
-#include <gale/context/commandLine.h>
+#include <etk/types.hpp>
+#include <ewol/ewol.hpp>
+#include <gale/context/commandLine.hpp>
 //! [ewol_sample_HW_main_include]
 
 
-#include <appl/debug.h>
-#include <appl/Windows.h>
-#include <ewol/object/Object.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/context/Context.h>
+#include <appl/debug.hpp>
+#include <appl/Windows.hpp>
+#include <ewol/object/Object.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/context/Context.hpp>
 
 //! [ewol_sample_HW_main_application]
 namespace appl {

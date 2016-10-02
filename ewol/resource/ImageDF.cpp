@@ -10,7 +10,7 @@
 #include <gale/resource/Manager.hpp>
 #include <ewol/resource/ImageDF.hpp>
 #include <ewol/resource/Texture.hpp>
-#include <edtaa3/edtaa3func.hpp>
+#include <edtaa3/edtaa3func.h>
 
 ewol::resource::ImageDF::ImageDF() {
 	addResourceType("ewol::resource::ImageDF");

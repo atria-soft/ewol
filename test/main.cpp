@@ -4,16 +4,16 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <etk/types.h>
-#include <test-debug/debug.h>
+#include <etk/types.hpp>
+#include <test-debug/debug.hpp>
 #include <vector>
 #include <string>
-#include <etk/Hash.h>
-#include <etk/os/FSNode.h>
-#include <etk/archive/Archive.h>
-#include <etk/etk.h>
-#include <etk/Color.h>
-#include <etk/stdTools.h>
+#include <etk/Hash.hpp>
+#include <etk/os/FSNode.hpp>
+#include <etk/archive/Archive.hpp>
+#include <etk/etk.hpp>
+#include <etk/Color.hpp>
+#include <etk/stdTools.hpp>
 #include <string>
 
 #define NAME "Empty"

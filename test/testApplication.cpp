@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <test-debug/debug.h>
-#include <ewol/context/Context.h>
+#include <test-debug/debug.hpp>
+#include <ewol/context/Context.hpp>
 #include <gtest/gtest.h>
 #define NAME "Application"
 

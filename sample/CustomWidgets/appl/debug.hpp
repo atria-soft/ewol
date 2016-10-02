@@ -1,11 +1,11 @@
 /** @file
  * @author Edouard DUPIN
  * @copyright 2010, Edouard DUPIN, all right reserved
- * @license GPL v3 (see license file)
+ * @license BSD 3 clauses (see license file)
  */
 #pragma once
 
-#include <elog/log.h>
+#include <elog/log.hpp>
 
 namespace appl {
 	int32_t getLogId();

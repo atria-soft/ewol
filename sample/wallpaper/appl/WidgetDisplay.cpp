@@ -4,10 +4,10 @@
  * @license GPL v3 (see license file)
  */
 
-#include <appl/WidgetDisplay.h>
+#include <appl/WidgetDisplay.hpp>
 
-#include <appl/debug.h>
-#include <etk/tool.h>
+#include <appl/debug.hpp>
+#include <etk/tool.hpp>
 
 appl::WidgetDisplay::WidgetDisplay() {
 	addObjectType("appl::WidgetDisplay");

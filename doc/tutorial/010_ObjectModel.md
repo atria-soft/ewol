@@ -87,7 +87,7 @@ Find a global Object (ouside an Object)
 ---------------------------------------
 
 ```{.cpp}
-	#include <ewol/context/Context.h>
+	#include <ewol/context/Context.hpp>
 	
 	ewol::ObjectShared tmpObject = ewol::getContext().getEObjectManager().getObjectNamed("obj Name");
 	if (tmpObject == nullptr) {

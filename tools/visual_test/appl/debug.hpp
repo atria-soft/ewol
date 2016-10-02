@@ -5,8 +5,8 @@
  */
 #pragma once
 
-#include <elog/log.h>
-#include <assert.h>
+#include <elog/log.hpp>
+#include <cassert>
 
 namespace appl {
 	/**

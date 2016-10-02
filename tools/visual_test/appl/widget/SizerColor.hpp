@@ -5,10 +5,10 @@
  */
 #pragma once
 
-#include <etk/types.h>
-#include <ewol/widget/Sizer.h>
-#include <etk/Color.h>
-#include <ewol/compositing/Drawing.h>
+#include <etk/types.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <etk/Color.hpp>
+#include <ewol/compositing/Drawing.hpp>
 
 namespace appl {
 	namespace widget {

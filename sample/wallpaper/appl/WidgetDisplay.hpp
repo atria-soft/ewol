@@ -5,9 +5,9 @@
  */
 #pragma once
 
-#include <etk/Color.h>
-#include <ewol/widget/Widget.h>
-#include <ewol/compositing/Image.h>
+#include <etk/Color.hpp>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/compositing/Image.hpp>
 
 namespace appl {
 	class WidgetDisplay;

@@ -5,23 +5,23 @@
  */
 
 
-#include <appl/debug.h>
-#include <appl/TestDistanceField.h>
+#include <appl/debug.hpp>
+#include <appl/TestDistanceField.hpp>
 
-#include <ewol/widget/Button.h>
-#include <ewol/widget/CheckBox.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Entry.h>
-#include <ewol/widget/List.h>
-#include <ewol/widget/ContextMenu.h>
-#include <ewol/widget/PopUp.h>
-#include <ewol/widget/Slider.h>
-#include <ewol/widget/Composer.h>
-#include <ewol/widget/Menu.h>
-#include <ewol/widget/meta/FileChooser.h>
-#include <ewol/widget/meta/Parameter.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/Button.hpp>
+#include <ewol/widget/CheckBox.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Entry.hpp>
+#include <ewol/widget/List.hpp>
+#include <ewol/widget/ContextMenu.hpp>
+#include <ewol/widget/PopUp.hpp>
+#include <ewol/widget/Slider.hpp>
+#include <ewol/widget/Composer.hpp>
+#include <ewol/widget/Menu.hpp>
+#include <ewol/widget/meta/FileChooser.hpp>
+#include <ewol/widget/meta/Parameter.hpp>
+#include <ewol/widget/Manager.hpp>
 
 appl::TestDistanceField::TestDistanceField(){
 	addObjectType("appl::TestDistanceField");

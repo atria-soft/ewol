@@ -5,12 +5,12 @@
  */
 #pragma once
 
-#include <appl/debug.h>
-#include <ewol/widget/Widget.h>
-#include <ewol/compositing/Text.h>
-#include <ewol/compositing/TextDF.h>
-#include <gale/resource/Program.h>
-#include <ewol/resource/DistanceFieldFont.h>
+#include <appl/debug.hpp>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/compositing/Text.hpp>
+#include <ewol/compositing/TextDF.hpp>
+#include <gale/resource/Program.hpp>
+#include <ewol/resource/DistanceFieldFont.hpp>
 
 namespace appl {
 	class TestDistanceField : public ewol::Widget {

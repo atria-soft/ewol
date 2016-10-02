@@ -76,7 +76,7 @@ Call generic factory system (compositing)
 -----------------------------------------
 
 ```{.cpp}
-	#include <ewol::widget::Composer.h>
+	#include <ewol::widget::Composer.hpp>
 	ewol::widget::WidgetShared tmpWidget = ewol::widget::composerGenerateString("<button name='my name' expand='true,false' fill='true,true'/>");
 	if (tmpWidget == nullptr) {
 		APPL_CRITICAL("The widget can not be created");
@@ -97,7 +97,7 @@ File ```gui.xml```
 ```
 
 ```{.cpp}
-	#include <ewol::widget::Composer.h>
+	#include <ewol::widget::Composer.hpp>
 	ewol::widget::WidgetShared tmpWidget = ewol::widget::composerGenerateFile("DATA:gui.xml");
 	if (tmpWidget == nullptr) {
 		APPL_CRITICAL("The widget can not be created");

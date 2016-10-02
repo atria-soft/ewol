@@ -47,7 +47,7 @@ ewol::resource::Texture::~Texture() {
 	removeContext();
 }
 
-#include <egami/egami.h>
+#include <egami/egami.hpp>
 
 bool ewol::resource::Texture::updateContext() {
 	EWOL_INFO("updateContext [START]");

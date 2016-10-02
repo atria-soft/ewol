@@ -20,8 +20,8 @@ Header
 ------
 
 ```{.cpp}
-	#include <ewol/widget/Widget.h>
-	#include <ewol/compisiting/Widget.h>
+	#include <ewol/widget/Widget.hpp>
+	#include <ewol/compisiting/Widget.hpp>
 	namespace appl {
 		class myWidget : public ewol::Widget {
 			private:

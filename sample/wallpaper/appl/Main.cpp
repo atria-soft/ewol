@@ -5,15 +5,15 @@
  */
 
 
-#include <etk/types.h>
-#include <ewol/ewol.h>
-#include <gale/context/commandLine.h>
+#include <etk/types.hpp>
+#include <ewol/ewol.hpp>
+#include <gale/context/commandLine.hpp>
 
-#include <appl/debug.h>
-#include <appl/Windows.h>
-#include <ewol/object/Object.h>
-#include <ewol/widget/Manager.h>
-#include <ewol/context/Context.h>
+#include <appl/debug.hpp>
+#include <appl/Windows.hpp>
+#include <ewol/object/Object.hpp>
+#include <ewol/widget/Manager.hpp>
+#include <ewol/context/Context.hpp>
 
 
 class MainApplication : public ewol::context::Application {

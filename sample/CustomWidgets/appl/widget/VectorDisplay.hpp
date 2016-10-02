@@ -7,9 +7,9 @@
 
 //! [EWOL_SAMPLE_CW_HEADER]
 
-#include <ewol/widget/Widget.h>
-#include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Manager.h>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/compositing/Drawing.hpp>
+#include <ewol/widget/Manager.hpp>
 
 namespace appl {
 	namespace widget {
@@ -24,7 +24,7 @@ namespace appl {
 				DECLARE_WIDGET_FACTORY(VectorDisplay, "VectorDisplay");
 				//! @brief destructor
 				virtual ~VectorDisplay();
-			public
+			public:
 				void onDraw() override;
 				void onRegenerateDisplay() override;
 			//! [EWOL_SAMPLE_CW_HEADER]

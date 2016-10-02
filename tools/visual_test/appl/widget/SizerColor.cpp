@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <appl/debug.h>
-#include <appl/widget/SizerColor.h>
+#include <appl/debug.hpp>
+#include <appl/widget/SizerColor.hpp>
 
 appl::widget::SizerColor::SizerColor() :
   propertyBorderColor(this, "border-color", etk::color::none, "Color of the border"),

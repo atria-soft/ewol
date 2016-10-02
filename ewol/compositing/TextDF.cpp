@@ -7,7 +7,7 @@
 #include <ewol/debug.hpp>
 #include <ewol/compositing/TextDF.hpp>
 #include <ewol/context/Context.hpp>
-#include <etk/types.h>
+#include <etk/types.hpp>
 
 ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSize) :
   ewol::compositing::TextBase("", false),

@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <appl/debug.h>
-#include <appl/widget/VectorDisplay.h>
-#include <ewol/object/Manager.h>
-#include <etk/tool.h>
+#include <appl/debug.hpp>
+#include <appl/widget/VectorDisplay.hpp>
+#include <ewol/object/Manager.hpp>
+#include <etk/tool.hpp>
 
 //! [EWOL_SAMPLE_CW_CONSTRUCTOR]
 appl::widget::VectorDisplay::VectorDisplay() :

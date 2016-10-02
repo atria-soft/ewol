@@ -5,14 +5,14 @@
  */
 #pragma once
 
-#include <appl/debug.h>
-#include <ewol/widget/Widget.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/widget/Sizer.h>
-#include <ewol/widget/Button.h>
-#include <ewol/widget/Label.h>
-#include <ewol/widget/Spacer.h>
-#include <ewol/widget/Composer.h>
+#include <appl/debug.hpp>
+#include <ewol/widget/Widget.hpp>
+#include <ewol/widget/Windows.hpp>
+#include <ewol/widget/Sizer.hpp>
+#include <ewol/widget/Button.hpp>
+#include <ewol/widget/Label.hpp>
+#include <ewol/widget/Spacer.hpp>
+#include <ewol/widget/Composer.hpp>
 namespace appl {
 	class MainWindows : public ewol::widget::Windows {
 		private:
