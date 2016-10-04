@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import lutin.module as module
+import lutin.debug as debug
 import lutin.tools as tools
 
 def get_type():
@@ -26,18 +26,19 @@ def get_maintainer():
 def get_version():
 	return [0,1]
 
-def create(target, module_name):
-	my_module = module.Module(__file__, module_name, get_type())
+def configure(target, my_module):
 	my_module.add_src_file([
-		'appl/Main.cpp',
-		'appl/debug.cpp',
-		'appl/Windows.cpp',
-		])
-	my_module.add_depend(['ewol'])
+	    'appl/Main.cpp',
+	    'appl/debug.cpp',
+	    'appl/Windows.cpp',
+	    ])
+	my_module.add_depend([
+	    'ewol'
+	    ])
 	my_module.add_flag('c++', [
-		"-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",
-		"-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
-		])
-	my_module.add_path(tools.get_current_path(__file__))
-	return my_module
+	    "-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",
+	    "-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
+	    ])
+	my_module.add_path(".")
+	return True
 

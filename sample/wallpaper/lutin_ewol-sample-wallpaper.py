@@ -1,7 +1,6 @@
 #!/usr/bin/python
-import lutin.module as module
+import lutin.debug as debug
 import lutin.tools as tools
-import datetime
 
 
 def get_type():
@@ -31,30 +30,24 @@ def get_maintainer():
 def get_version():
 	return [0,1]
 
-def create(target, module_name):
-	my_module = module.Module(__file__, module_name, get_type())
+def configure(target, my_module):
 	my_module.add_src_file([
-		'appl/Main.cpp',
-		'appl/debug.cpp',
-		'appl/WidgetDisplay.cpp',
-		'appl/Windows.cpp',
-		])
+	    'appl/Main.cpp',
+	    'appl/debug.cpp',
+	    'appl/WidgetDisplay.cpp',
+	    'appl/Windows.cpp',
+	    ])
 	my_module.add_depend(['ewol'])
 	my_module.add_flag('c++', [
-		"-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",
-		"-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
-		])
+	    "-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",
+	    "-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
+	    ])
 	my_module.copy_path('data/SnowFlake.svg','')
-	my_module.add_path(tools.get_current_path(__file__))
+	my_module.add_path(".")
 	# set the package properties :
-	my_module.set_pkg("COMPAGNY_TYPE", get_compagny_type())
-	my_module.set_pkg("COMPAGNY_NAME", get_compagny_name())
-	my_module.set_pkg("MAINTAINER", get_maintainer())
-	my_module.set_pkg("ICON", tools.get_current_path(__file__) + "/../data/icon.png")
+	my_module.set_pkg("ICON", "../data/icon.png")
 	my_module.set_pkg("SECTION", "example")
 	my_module.set_pkg("PRIORITY", "extra")
-	my_module.set_pkg("DESCRIPTION", get_desc())
-	my_module.set_pkg("NAME", get_name())
 	
 	my_module.set_pkg("ANDROID_APPL_TYPE", "WALLPAPER")
 	
@@ -68,7 +61,7 @@ def create(target, module_name):
 	
 	
 	# add the currrent module at the 
-	return my_module
+	return True
 
 
 

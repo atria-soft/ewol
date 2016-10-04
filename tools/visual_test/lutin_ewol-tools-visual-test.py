@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import lutin.module as module
+import lutin.debug as debug
 import lutin.tools as tools
 import os
 
@@ -24,8 +24,7 @@ def get_compagny_name():
 def get_maintainer():
 	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
 
-def create(target, module_name):
-	my_module = module.Module(__file__, module_name, get_type())
+def configure(target, my_module):
 	# add the file to compile:
 	my_module.add_src_file([
 	    'appl/debug.cpp',
@@ -47,7 +46,7 @@ def create(target, module_name):
 	my_module.copy_path('data/sphere.obj','')
 	my_module.copy_path('data/gui.xml','')
 	
-	my_module.add_path(tools.get_current_path(__file__))
+	my_module.add_path(".")
 	
 	my_module.copy_path("data/FreeSerif*","fonts/")
 	
@@ -67,7 +66,7 @@ def create(target, module_name):
 	my_module.pkg_add("RIGHT", "VIBRATE")
 	"""
 	
-	return my_module
+	return True
 
 
 
