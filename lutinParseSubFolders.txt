@@ -2,3 +2,4 @@ sample/HelloWord
 sample/CustomWidgets
 sample/wallpaper
 tools/visual_test
+tools/platform_test

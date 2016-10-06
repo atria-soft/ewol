@@ -1,0 +1,69 @@
+<composer>
+	<sizer mode="vert"
+	       expand="true,true"
+	       lock="true,true"
+	       fill="true,true"
+	       border="2px"
+	       border-color="#0F08">
+		<sizer mode="hori"
+		       expand="true,false"
+		       lock="false,true"
+		       fill="true,true">
+			<entry name="appl-entry-clipboard">basic text</entry>
+			<button name="appl-copy">
+				<label expand="false,false" fill="true,true">copy</label>
+			</button>
+			<button name="appl-past">
+				<label expand="false,false" fill="true,true">past</label>
+			</button>
+			<spacer expand="true,true"/>
+		</sizer>
+		<sizer mode="hori"
+		       expand="true,false"
+		       lock="false,true"
+		       fill="true,true">
+			<label name="appl-label-special-key" expand="true,false" fill="true,true">Special Key :</label>
+			<label name="appl-special-key-value" expand="true,false" fill="true,true">---</label>
+			<spacer expand="true,true"/>
+		</sizer>
+		<sizer mode="hori"
+		       expand="true,false"
+		       lock="false,true"
+		       fill="true,true">
+			<label name="appl-label-key" expand="true,false" fill="true,true">LastKey :</label>
+			<label name="appl-last-key-pressed" expand="true,false" fill="true,true">NONE</label>
+			<spacer expand="true,true"/>
+		</sizer>
+		<sizer mode="hori"
+		       expand="true,false"
+		       lock="false,true"
+		       fill="true,true">
+			<label name="appl-label-mouse" expand="true,false" fill="true,true">Mouse Position :</label>
+			<label name="appl-mouse-vamue" expand="true,false" fill="true,true">out</label>
+			<spacer expand="true,true"/>
+		</sizer>
+		<sizer mode="hori"
+		       expand="true,false"
+		       lock="false,true"
+		       fill="true,true">
+			<button name="appl-set-title">
+				<label expand="false,false" fill="true,true">Set title</label>
+			</button>
+			<button name="appl-close">
+				<label expand="false,false" fill="true,true">Close Application</label>
+			</button>
+			<button name="appl-size">
+				<label expand="false,false" fill="true,true">Change Size</label>
+			</button>
+			<button name="appl-move">
+				<label expand="false,false" fill="true,true">Move Windows</label>
+			</button>
+			<button name="appl-full-screen"
+			        toggle="true">
+				<label expand="false,false" fill="true,true">set Full screen</label>
+				<label expand="false,false" fill="true,true">set window screen</label>
+			</button>
+			<spacer expand="true,true"/>
+		</sizer>
+	</sizer>
+</composer>
