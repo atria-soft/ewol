@@ -108,9 +108,11 @@ void ewol::widget::Image::onRegenerateDisplay() {
 }
 
 void ewol::widget::Image::calculateMinMaxSize() {
+	EWOL_VERBOSE("calculate min size: border=" << propertyBorder << " size=" << propertyImageSize << " min-size=" << propertyMinSize);
 	vec2 imageBoder = propertyBorder->getPixel()*2.0f;
 	vec2 imageSize = propertyImageSize->getPixel();
 	vec2 size = propertyMinSize->getPixel();
+	EWOL_VERBOSE("                ==> border=" << imageBoder << " size=" << imageSize << " min-size=" << size);
 	if (imageSize != vec2(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;

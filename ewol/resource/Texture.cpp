@@ -50,7 +50,7 @@ ewol::resource::Texture::~Texture() {
 #include <egami/egami.hpp>
 
 bool ewol::resource::Texture::updateContext() {
-	EWOL_INFO("updateContext [START]");
+	EWOL_DEBUG("updateContext [START]");
 	std::unique_lock<std::recursive_mutex> lock(m_mutex, std::defer_lock);
 	if (lock.try_lock() == false) {
 		//Lock error ==> try later ...
@@ -60,7 +60,7 @@ bool ewol::resource::Texture::updateContext() {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
 	}
-	EWOL_INFO("load the image:" << m_name);
+	EWOL_DEBUG("load the image:" << m_name);
 	// in all case we set the texture properties :
 	// TODO : check error ???
 	glBindTexture(GL_TEXTURE_2D, m_texId);
@@ -99,7 +99,7 @@ bool ewol::resource::Texture::updateContext() {
 			EWOL_ERROR("Not manage the type " << m_data.getType() << " for texture");
 			break;
 	}
-	EWOL_INFO("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+	EWOL_DEBUG("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	//egami::store(m_data, std::string("~/texture_") + etk::to_string(getId()) + ".bmp");
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
@@ -112,7 +112,7 @@ bool ewol::resource::Texture::updateContext() {
 	             m_data.getTextureDataPointer() );
 	// now the data is loaded
 	m_loaded = true;
-	EWOL_INFO("updateContext [STOP]");
+	EWOL_DEBUG("updateContext [STOP]");
 	return true;
 }
 
@@ -135,7 +135,7 @@ void ewol::resource::Texture::removeContextToLate() {
 void ewol::resource::Texture::flush() {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	// request to the manager to be call at the next update ...
-	EWOL_INFO("Request UPDATE of Element");
+	EWOL_VERBOSE("Request UPDATE of Element");
 	getManager().update(ememory::dynamicPointerCast<gale::Resource>(sharedFromThis()));
 }
 

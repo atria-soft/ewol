@@ -59,8 +59,8 @@ void ewol::widget::ContextMenu::onChangeSize() {
 	if (m_subWidget == nullptr) {
 		return;
 	}
-	vec2 subWidgetSize;
-	vec2 subWidgetOrigin;
+	vec2 subWidgetSize(0,0);
+	vec2 subWidgetOrigin(0,0);
 	subWidgetSize = m_subWidget->getCalculateMinSize();
 	if (m_subWidget->canExpand().x() == true) {
 		subWidgetSize.setX(m_size.x());
