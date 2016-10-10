@@ -9,14 +9,13 @@
 		       expand="true,false"
 		       lock="false,true"
 		       fill="true,true">
-			<entry name="appl-entry-clipboard">basic text</entry>
 			<button name="appl-copy">
 				<label expand="false,false" fill="true,true">copy</label>
 			</button>
 			<button name="appl-past">
 				<label expand="false,false" fill="true,true">past</label>
 			</button>
-			<spacer expand="true,true"/>
+			<entry name="appl-entry-clipboard" expand="true,true" value="basic text" />
 		</sizer>
 		<sizer mode="hori"
 		       expand="true,false"
@@ -39,7 +38,7 @@
 		       lock="false,true"
 		       fill="true,true">
 			<label name="appl-label-mouse" expand="true,false" fill="true,true">Mouse Position :</label>
-			<label name="appl-mouse-vamue" expand="true,false" fill="true,true">out</label>
+			<label name="appl-mouse-value" expand="true,false" fill="true,true">out</label>
 			<spacer expand="true,true"/>
 		</sizer>
 		<sizer mode="hori"

@@ -31,11 +31,13 @@ namespace appl {
 			DECLARE_FACTORY(MainWindows);
 			~MainWindows() {};
 		protected:
-			void onCallbackGravityChange();
-			void onCallbackThemeChange(const bool& _value);
-			void onCallbackWidgetChange(int32_t _increment);
-			void updateProperty();
-			void onCallbackShortCut(const std::string& _value);
+			void onCallbackPast();
+			void onCallbackCopy();
+			void onCallbackSetTitle();
+			void onCallbackClose();
+			void onCallbackSize();
+			void onCallbackMove();
+			void onCallbackFullScreen(const bool& _value);
 	};
 };
 
