@@ -18,15 +18,12 @@ namespace appl {
 		private:
 			std::vector<esignal::Connection> m_listConnection;
 			ewol::widget::ComposerShared m_composer;
-			ewol::widget::SizerShared m_sizerVert;
-			ewol::widget::SizerShared m_sizerDynamic;
-			ewol::WidgetShared m_subWidget;
-			ewol::gravity m_gravity;
 			int32_t m_idWidget;
+			
 		public:
 			// Constructeur
 			MainWindows();
-			void init();
+			void init() override;
 		public:
 			DECLARE_FACTORY(MainWindows);
 			~MainWindows() {};
@@ -38,6 +35,16 @@ namespace appl {
 			void onCallbackSize();
 			void onCallbackMove();
 			void onCallbackFullScreen(const bool& _value);
+			bool onEventInput(const ewol::event::Input& _event) override;
+			bool onEventEntry(const ewol::event::Entry& _event) override;
+			void forceFocusCall(const ewol::event::Time& _event);
+			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) {
+				ewol::WidgetShared wid = ewol::widget::Windows::getWidgetAtPos(_pos);
+				if (wid != nullptr) {
+					return wid;
+				}
+				return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
+			};
 	};
 };
 
