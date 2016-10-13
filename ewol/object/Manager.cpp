@@ -8,7 +8,7 @@
 #include <ewol/context/Context.hpp>
 #include <ewol/ewol.hpp>
 #include <etk/stdTools.hpp>
-#include <unistd.h>
+
 
 ewol::object::Manager::Manager(ewol::Context& _context) :
   m_context(_context),

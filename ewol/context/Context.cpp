@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <unistd.h>
+
 
 #include <etk/types.hpp>
 #include <etk/etk.hpp>
