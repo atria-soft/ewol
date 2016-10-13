@@ -239,14 +239,22 @@ const std::string& ewol::translate::getLanguage() {
 
 void ewol::translate::autoDetectLanguage() {
 	EWOL_VERBOSE("Auto-detect language of system");
-	std::string nonameLocalName = std::locale(std::locale(), new std::ctype<char>).name();
-	std::string userLocalName = std::locale("").name();
-	std::string globalLocalName = std::locale().name();
-	
-	EWOL_VERBOSE("    The default locale is '" << globalLocalName << "'");
-	EWOL_VERBOSE("    The user's locale is '" << userLocalName << "'");
-	EWOL_VERBOSE("    A nameless locale is '" << nonameLocalName << "'");
-	
+	std::string nonameLocalName;
+	std::string userLocalName;
+	std::string globalLocalName;
+	try {
+		nonameLocalName = std::locale(std::locale(), new std::ctype<char>).name();
+		userLocalName = std::locale("").name();
+		globalLocalName = std::locale().name();
+		EWOL_VERBOSE("    The default locale is '" << globalLocalName << "'");
+		EWOL_VERBOSE("    The user's locale is '" << userLocalName << "'");
+		EWOL_VERBOSE("    A nameless locale is '" << nonameLocalName << "'");
+	} catch (std::runtime_error e) {
+		EWOL_ERROR("Can not get Locals ==> set English ...");
+		nonameLocalName = "EN";
+		userLocalName = "EN";
+		globalLocalName = "EN";
+	}
 	std::string lang = nonameLocalName;
 	if (    lang == "*"
 	     || lang == "") {
