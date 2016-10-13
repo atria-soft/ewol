@@ -49,7 +49,7 @@ void appl::MainWindows::init() {
 	externSubBind(m_composer, ewol::widget::Button, "appl-move", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackMove);
 	
 	externSubBind(m_composer, ewol::widget::Button, "appl-full-screen", signalValue, sharedFromThis(), &appl::MainWindows::onCallbackFullScreen);
-	m_listConnection.push_back(getObjectManager().periodicCall.connect(this, &appl::MainWindows::forceFocusCall));
+	//m_listConnection.push_back(getObjectManager().periodicCall.connect(this, &appl::MainWindows::forceFocusCall));
 	keepFocus();
 	//shortCutAdd("F12", "menu:reloade-shader");
 	//signalShortcut.connect(sharedFromThis(), &appl::MainWindows::onCallbackShortCut);
@@ -118,6 +118,6 @@ bool appl::MainWindows::onEventEntry(const ewol::event::Entry& _event) {
 }
 
 void appl::MainWindows::forceFocusCall(const ewol::event::Time& _event) {
-	keepFocus();
+	//keepFocus();
 }
 

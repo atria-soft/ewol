@@ -104,7 +104,6 @@ namespace ewol {
 			 */
 			void forceRedrawAll();
 			
-			// TODO : Later ...
 			/**
 			 * @brief This is to transfert the event from one widget to another one
 			 * @param source the widget where the event came from

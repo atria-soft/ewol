@@ -73,7 +73,7 @@ void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 		// nothing to do ...
 		return;
 	}
-	EWOL_VERBOSE("focusKeep=" << _newWidget->getId() );
+	EWOL_DEBUG("focusKeep=" << _newWidget->getId() );
 	//elog::displayBacktrace();
 	auto focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (_newWidget == focusWidgetCurrent) {

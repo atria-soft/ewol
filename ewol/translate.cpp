@@ -145,6 +145,7 @@ class LocalInstanceTranslation {
 			if (m_translateLoadad == true) {
 				return;
 			}
+			EWOL_VERBOSE("Load Translation MAJOR='" << m_major << "' LANG='" << m_language << "' default=" << m_languageDefault );
 			// start parse language for Major:
 			auto itMajor = m_listPath.find(m_major);
 			if (itMajor != m_listPath.end()) {
@@ -237,7 +238,35 @@ const std::string& ewol::translate::getLanguage() {
 }
 
 void ewol::translate::autoDetectLanguage() {
-	EWOL_INFO("Auto-detect language of system");
+	EWOL_VERBOSE("Auto-detect language of system");
+	std::string nonameLocalName = std::locale(std::locale(), new std::ctype<char>).name();
+	std::string userLocalName = std::locale("").name();
+	std::string globalLocalName = std::locale().name();
+	
+	EWOL_VERBOSE("    The default locale is '" << globalLocalName << "'");
+	EWOL_VERBOSE("    The user's locale is '" << userLocalName << "'");
+	EWOL_VERBOSE("    A nameless locale is '" << nonameLocalName << "'");
+	
+	std::string lang = nonameLocalName;
+	if (    lang == "*"
+	     || lang == "") {
+		lang = userLocalName;
+	}
+	if (    lang == "*"
+	     || lang == "") {
+		lang = globalLocalName;
+	}
+	if (    lang == "C"
+	     || lang == ""
+	     || lang.size() < 2) {
+		lang = "EN";
+	}
+	lang = std::string(lang.begin(), lang.begin()+2);
+	lang = etk::toupper(lang);
+	EWOL_INFO("Select Language : '" << lang << "'");
+	getInstanceTranslation().setLanguage(lang);
+	return;
+	// dead code ...
 	#if defined(__TARGET_OS__Linux)
 		char *s = getenv("LANG");
 		if (s == nullptr || strlen(s) < 2) {
@@ -251,6 +280,7 @@ void ewol::translate::autoDetectLanguage() {
 		}
 	#else
 		EWOL_INFO("Can not auto-detect language ...");
+		getInstanceTranslation().setLanguage("EN");
 	#endif
 }
 
