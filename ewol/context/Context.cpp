@@ -20,7 +20,7 @@
 #include <gale/renderer/openGL/openGL.hpp>
 #include <gale/Dimension.hpp>
 
-#include <ewol/translate.hpp>
+#include <etranslate/etranslate.hpp>
 #include <ewol/object/Object.hpp>
 #include <ewol/object/Manager.hpp>
 #include <ewol/widget/Widget.hpp>
@@ -65,8 +65,8 @@ void ewol::Context::inputEventUnGrabPointer() {
 void ewol::Context::onCreate(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system create (BEGIN)");
 	// Add basic ewol translation:
-	ewol::translate::addPath("ewol", "{ewol}DATA:translate/ewol/");
-	ewol::translate::autoDetectLanguage();
+	etranslate::addPath("ewol", "{ewol}DATA:translate/ewol/");
+	etranslate::autoDetectLanguage();
 	// By default we set 2 themes (1 color and 1 shape ...) :
 	etk::theme::setNameDefault("GUI", "shape/square/");
 	etk::theme::setNameDefault("COLOR", "color/black/");
@@ -335,7 +335,7 @@ void ewol::Context::requestUpdateSize() {
 	context.requestUpdateSize();
 }
 
-void ewol::Context::onPeriod(int64_t _time) {
+void ewol::Context::onPeriod(const echrono::Clock& _time) {
 	m_objectManager.timeCall(_time);
 }
 

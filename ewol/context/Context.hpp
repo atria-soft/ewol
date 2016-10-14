@@ -148,7 +148,7 @@ namespace ewol {
 			 * @brief Request a display after call a resize
 			 */
 			void requestUpdateSize();
-			void onPeriod(int64_t _time) override;
+			void onPeriod(const echrono::Clock& _time) override;
 	};
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.

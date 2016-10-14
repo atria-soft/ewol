@@ -32,7 +32,6 @@ def configure(target, my_module):
 	    'ewol/ewol.cpp',
 	    'ewol/debug.cpp',
 	    'ewol/Padding.cpp',
-	    'ewol/translate.cpp',
 	    'ewol/DrawProperty.cpp',
 	    'ewol/gravity.cpp'
 	    ])
@@ -40,7 +39,6 @@ def configure(target, my_module):
 	    'ewol/debug.hpp', # TODO : Remove this ...
 	    'ewol/ewol.hpp',
 	    'ewol/Padding.hpp',
-	    'ewol/translate.hpp',
 	    'ewol/DrawProperty.hpp',
 	    'ewol/gravity.hpp'
 	    ])
@@ -251,7 +249,9 @@ def configure(target, my_module):
 	    'exml',
 	    'ejson',
 	    'egami',
-	    'edtaa3'])
+	    'edtaa3',
+	    'etranslate',
+	    ])
 	
 	my_module.add_path(".")
 	

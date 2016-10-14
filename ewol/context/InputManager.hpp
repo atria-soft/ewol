@@ -18,7 +18,7 @@ namespace ewol {
 			public:
 				bool isUsed;
 				int32_t destinationInputId;
-				int64_t lastTimeEvent;
+				echrono::Clock lastTimeEvent;
 				ewol::WidgetWeak curentWidgetEvent;
 				vec2 origin;
 				vec2 size;
@@ -35,7 +35,7 @@ namespace ewol {
 		 */
 		class InputLimit {
 			public:
-				int32_t sepatateTime;
+				echrono::Duration sepatateTime;
 				int32_t DpiOffset;
 		};
 		class Context;

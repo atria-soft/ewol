@@ -70,4 +70,4 @@ namespace ewol {
 	};
 };
 // Here we define a simple macro to Translate all string simply:
-#define TRANSLATE(a) ewol::translate::get(a)
+#define TRANSLATE(a) etranslate::get(a)

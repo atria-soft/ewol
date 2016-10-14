@@ -18,8 +18,8 @@ ewol::object::Manager::Manager(ewol::Context& _context) :
 	EWOL_DEBUG(" == > init Object-Manager");
 	periodicCall.setPeriodic(true);
 	// set the basic time properties :
-	m_applWakeUpTime = ewol::getTime();
-	m_lastPeriodicCallTime = ewol::getTime();
+	m_applWakeUpTime = echrono::Clock::now();
+	m_lastPeriodicCallTime = echrono::Clock::now();
 }
 
 ewol::object::Manager::~Manager() {
@@ -30,7 +30,7 @@ ewol::object::Manager::~Manager() {
 		EWOL_ERROR("Must not have anymore eObject !!!");
 		hasError = true;
 	}
-	if (true == hasError) {
+	if (hasError == true) {
 		EWOL_ERROR("Check if the function UnInit has been called !!!");
 	}
 	displayListObject();
@@ -136,19 +136,19 @@ void ewol::object::Manager::workerRemove(const ewol::ObjectShared& _worker) {
 	}
 }
 
-void ewol::object::Manager::timeCall(int64_t _localTime) {
+void ewol::object::Manager::timeCall(const echrono::Clock& _localTime) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
-	int64_t previousTime = m_lastPeriodicCallTime;
+	echrono::Clock previousTime = m_lastPeriodicCallTime;
 	m_lastPeriodicCallTime = _localTime;
 	if (periodicCall.size() <= 0) {
 		return;
 	}
-	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
+	echrono::Duration deltaTime = _localTime - previousTime;
 	ewol::event::Time myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
 	periodicCall.emit(myTime);
 }
 
-void ewol::object::Manager::timeCallResume(int64_t _localTime) {
+void ewol::object::Manager::timeCallResume(const echrono::Clock& _localTime) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	m_lastPeriodicCallTime = _localTime;
 }

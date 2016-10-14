@@ -149,7 +149,7 @@ bool ewol::widget::Label::loadXML(const exml::Element& _node) {
 
 void ewol::widget::Label::onChangePropertyValue() {
 	if (*propertyAutoTranslate == true) {
-		m_value = etk::to_u32string(ewol::translate::get(*propertyValue));
+		m_value = etk::to_u32string(etranslate::get(*propertyValue));
 	} else {
 		m_value = etk::to_u32string(*propertyValue);
 	}

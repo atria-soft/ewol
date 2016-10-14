@@ -9,6 +9,8 @@
 #include <ewol/object/Object.hpp>
 #include <esignal/Signal.hpp>
 #include <ewol/event/Time.hpp>
+#include <echrono/Steady.hpp>
+#include <echrono/Duration.hpp>
 
 namespace ewol {
 	class Context;
@@ -78,19 +80,19 @@ namespace ewol {
 			public:
 				esignal::Signal<ewol::event::Time> periodicCall;
 			private:
-				int64_t m_applWakeUpTime; //!< Time of the application initialize
-				int64_t m_lastPeriodicCallTime; //!< last call time ...
+				echrono::Clock m_applWakeUpTime; //!< Time of the application initialize
+				echrono::Clock m_lastPeriodicCallTime; //!< last call time ...
 			public: // ewol system internal :
 				/**
 				 * @brief Call every time we can with the current time
 				 * @param[in] _localTime Current system Time.
 				 */
-				void timeCall(int64_t _localTime);
+				void timeCall(const echrono::Clock& _localTime);
 				/**
 				 * @brief If the application is suspended The Ewol Object manager does not know it, just call this to update delta call
 				 * @param[in] _localTime Current system Time.
 				 */
-				void timeCallResume(int64_t _localTime);
+				void timeCallResume(const echrono::Clock& _localTime);
 				/**
 				 * @breif check if the Interface have some user that request a periodic call
 				 * @return true, have some periodic event...

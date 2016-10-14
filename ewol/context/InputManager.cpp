@@ -22,10 +22,10 @@
 //#define EVENT_DEBUG  EWOL_DEBUG
 
 void ewol::context::InputManager::calculateLimit() {
-	m_eventInputLimit.sepatateTime = 300000; // µs
+	m_eventInputLimit.sepatateTime = echrono::Duration(std::chrono::milliseconds(300));
 	m_eventInputLimit.DpiOffset = m_dpi*100;
-	m_eventMouseLimit.sepatateTime = 300000; // µs
-	m_eventMouseLimit.DpiOffset = (float)m_dpi*(float)0.1;
+	m_eventMouseLimit.sepatateTime = echrono::Duration(std::chrono::milliseconds(300));
+	m_eventMouseLimit.DpiOffset = float(m_dpi)*0.1f;
 }
 
 void ewol::context::InputManager::setDpi(int32_t newDPI) {
@@ -76,7 +76,7 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 	//EWOL_INFO("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
 	_eventTable[_idInput].isUsed = false;
 	_eventTable[_idInput].destinationInputId = 0;
-	_eventTable[_idInput].lastTimeEvent = 0;
+	_eventTable[_idInput].lastTimeEvent.reset();
 	_eventTable[_idInput].curentWidgetEvent.reset();
 	_eventTable[_idInput].origin.setValue(0,0);
 	_eventTable[_idInput].size.setValue(99999999,99999999);
@@ -342,7 +342,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 		return;
 	}
 	// get the curent time ...
-	int64_t currentTime = ewol::getTime();
+	echrono::Clock currentTime = echrono::Clock::now();
 	ewol::widget::WindowsShared tmpWindows = m_context.getWindows();
 	
 	if (_isDown == true) {

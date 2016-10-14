@@ -29,7 +29,7 @@ namespace ewol {
 #include <ewol/event/Input.hpp>
 #include <ewol/event/Entry.hpp>
 #include <ewol/event/Time.hpp>
-#include <ewol/translate.hpp>
+#include <etranslate/etranslate.hpp>
 #include <esignal/Signal.hpp>
 #include <ewol/DrawProperty.hpp>
 #include <ewol/gravity.hpp>

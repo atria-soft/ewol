@@ -5,7 +5,7 @@
  */
 
 #include <ewol/debug.hpp>
-#include <ewol/translate.hpp>
+#include <etranslate/etranslate.hpp>
 #include <map>
 #include <etk/os/FSNode.hpp>
 #include <ejson/ejson.hpp>
@@ -213,31 +213,31 @@ static LocalInstanceTranslation& getInstanceTranslation() {
 	return g_val;
 }
 
-void ewol::translate::addPath(const std::string& _lib, const std::string& _path, bool _major) {
+void etranslate::addPath(const std::string& _lib, const std::string& _path, bool _major) {
 	getInstanceTranslation().addPath(_lib, _path, _major);
 }
 
-const std::string& ewol::translate::getPaths(const std::string& _lib) {
+const std::string& etranslate::getPaths(const std::string& _lib) {
 	return getInstanceTranslation().getPaths(_lib);
 }
 
-void ewol::translate::setLanguageDefault(const std::string& _lang) {
+void etranslate::setLanguageDefault(const std::string& _lang) {
 	getInstanceTranslation().setLanguageDefault(_lang);
 }
 
-const std::string& ewol::translate::getLanguageDefault() {
+const std::string& etranslate::getLanguageDefault() {
 	return getInstanceTranslation().getLanguageDefault();
 }
 
-void ewol::translate::setLanguage(const std::string& _lang) {
+void etranslate::setLanguage(const std::string& _lang) {
 	getInstanceTranslation().setLanguage(_lang);
 }
 
-const std::string& ewol::translate::getLanguage() {
+const std::string& etranslate::getLanguage() {
 	return getInstanceTranslation().getLanguage();
 }
 
-void ewol::translate::autoDetectLanguage() {
+void etranslate::autoDetectLanguage() {
 	EWOL_VERBOSE("Auto-detect language of system");
 	std::string nonameLocalName;
 	std::string userLocalName;
@@ -292,7 +292,7 @@ void ewol::translate::autoDetectLanguage() {
 	#endif
 }
 
-std::string ewol::translate::get(const std::string& _instance) {
+std::string etranslate::get(const std::string& _instance) {
 	return getInstanceTranslation().get(_instance);
 }
 

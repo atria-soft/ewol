@@ -21,29 +21,10 @@ namespace ewol {
 	 * @param[in] _argv Standard argv
 	 * @return normal error int for the application error management
 	 */
-	int32_t run(ewol::context::Application* _application, int32_t _argc = 0, const char* _argv[] = NULL);
+	int32_t run(ewol::context::Application* _application, int32_t _argc = 0, const char* _argv[] = nullptr);
 	/**
 	 * @brief get EWOL version
 	 * @return The string that describe ewol version
 	 */
 	std::string getVersion();
-	/**
-	 * @brief get current time in us...
-	 * @return The current time
-	 * @note is implemented by the OS implementation cf renderer/X11/...
-	 */
-	// TODO : Remove ...
-	int64_t getTime();
-	/**
-	 * @brief get compilation mode (release/debug)
-	 * @return the string of the mode of commpilation
-	 */
-	// TODO : Remove ...
-	std::string getCompilationMode();
-	/**
-	 * @brief get the board type (Android/Linux/MacOs/...)
-	 * @return the string of the mode of commpilation
-	 */
-	// TODO : Remove ...
-	std::string getBoardType();
 };
