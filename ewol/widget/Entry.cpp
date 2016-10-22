@@ -538,14 +538,14 @@ void ewol::widget::Entry::onLostFocus() {
 
 void ewol::widget::Entry::changeStatusIn(int32_t _newStatusId) {
 	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		periodicCallEnable();
+		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::Entry::periodicCall);
 		markToRedraw();
 	}
 }
 
 void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 	if (m_shaper.periodicCall(_event) == false) {
-		periodicCallDisable();
+		m_PCH.disconnect();
 	}
 	markToRedraw();
 }

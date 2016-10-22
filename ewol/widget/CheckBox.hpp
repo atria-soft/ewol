@@ -69,7 +69,13 @@ namespace ewol {
 				void onRegenerateDisplay() override;
 				bool onEventInput(const ewol::event::Input& _event) override;
 				bool onEventEntry(const ewol::event::Entry& _event) override;
-				void periodicCall(const ewol::event::Time& _event) override;
+			protected:
+				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				/**
+				 * @brief Periodic call to update grapgic display
+				 * @param[in] _event Time generic event
+				 */
+				void periodicCall(const ewol::event::Time& _event);
 			protected:
 				virtual void onChangePropertyShape();
 				virtual void onChangePropertyValue();

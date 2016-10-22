@@ -7,6 +7,7 @@
 
 #include <ewol/ewol.hpp>
 #include <ewol/widget/Button.hpp>
+#include <ewol/object/Manager.hpp>
 
 // DEFINE for the shader display system:
 const static int32_t STATUS_UP(0);
@@ -189,7 +190,7 @@ void ewol::widget::Button::CheckStatus() {
 
 void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		periodicCallEnable();
+		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::Button::periodicCall);
 		markToRedraw();
 	}
 }
@@ -197,7 +198,7 @@ void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 
 void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	if (m_shaper.periodicCall(_event) == false) {
-		periodicCallDisable();
+		m_PCH.disconnect();
 	}
 	markToRedraw();
 }

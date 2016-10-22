@@ -8,6 +8,7 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/compositing/Drawing.hpp>
 #include <ewol/widget/Manager.hpp>
+#include <ewol/object/Manager.hpp>
 #include <ewol/ewol.hpp>
 
 static const char* annimationIncrease = "increase";
@@ -192,14 +193,14 @@ bool ewol::widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _m
 	}
 	return false;
 	if (m_shaper.changeStatusIn(1) == true) {
-		periodicCallEnable();
+		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::PopUp::periodicCall);
 		return true;
 	}
 	return false;
 }
 
 void ewol::widget::PopUp::onStopAnnimation() {
-	periodicCallDisable();
+	m_PCH.disconnect();
 }
 
 void ewol::widget::PopUp::periodicCall(const ewol::event::Time& _event) {

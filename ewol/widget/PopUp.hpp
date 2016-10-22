@@ -43,8 +43,13 @@ namespace ewol {
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			protected:
 				void onDraw() override;
+				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				/**
+				 * @brief Periodic call to update grapgic display
+				 * @param[in] _event Time generic event
+				 */
+				void periodicCall(const ewol::event::Time& _event);
 			public:
-				void periodicCall(const ewol::event::Time& _event) override;
 				void systemDraw(const ewol::DrawProperty& _displayProp) override;
 				void onRegenerateDisplay() override;
 				void onChangeSize() override;

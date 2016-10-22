@@ -6,6 +6,7 @@
 
 #include <ewol/widget/CheckBox.hpp>
 #include <ewol/widget/Manager.hpp>
+#include <ewol/object/Manager.hpp>
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
@@ -181,7 +182,7 @@ void ewol::widget::CheckBox::CheckStatus() {
 
 void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
 	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		periodicCallEnable();
+		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::CheckBox::periodicCall);
 		markToRedraw();
 	}
 }
@@ -189,7 +190,7 @@ void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
 
 void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
 	if (m_shaper.periodicCall(_event) == false) {
-		periodicCallDisable();
+		m_PCH.disconnect();
 	}
 	markToRedraw();
 }

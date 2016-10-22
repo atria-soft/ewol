@@ -89,7 +89,12 @@ namespace ewol {
 					propertyToggleMode.set(true);
 				}
 			protected:
-				void periodicCall(const ewol::event::Time& _event) override;
+				esignal::Connection m_PCH; //!< Periodic Call Handle to remove it when needed
+				/**
+				 * @brief Periodic call to update grapgic display
+				 * @param[in] _event Time generic event
+				 */
+				void periodicCall(const ewol::event::Time& _event);
 				void onLostFocus() override;
 			protected:
 				virtual void onChangePropertyShape();

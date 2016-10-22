@@ -12,6 +12,7 @@
 #include <ewol/widget/meta/ColorChooser.hpp>
 #include <ewol/widget/Windows.hpp>
 #include <ewol/ewol.hpp>
+#include <ewol/object/Manager.hpp>
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
@@ -202,14 +203,14 @@ void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color
 
 void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		periodicCallEnable();
+		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::ButtonColor::periodicCall);
 		markToRedraw();
 	}
 }
 
 void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 	if (m_shaper.periodicCall(_event) == false) {
-		periodicCallDisable();
+		m_PCH.disconnect();
 	}
 	markToRedraw();
 }

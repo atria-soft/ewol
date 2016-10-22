@@ -318,28 +318,6 @@ namespace ewol {
 			 * @brief Hide the virtual keyboard (if needed)
 			 */
 			virtual void hideKeyboard();
-		// ----------------------------------------------------------------------------------------------------------------
-		// -- periodic call Area
-		// ----------------------------------------------------------------------------------------------------------------
-		protected:
-			// TODO : Remove this API ==> deprecated since 28/10/2014
-			esignal::Connection m_periodicCallHandle;
-			/**
-			 * @brief disable the periodic call.
-			 */
-			void periodicCallDisable();
-			/**
-			 * @brief disable the periodic call.
-			 */
-			void periodicCallEnable();
-		public:
-			/**
-			 * @brief periodic call of this widget
-			 * @param _event Current time property
-			 */
-			virtual void periodicCall(const ewol::event::Time& _event) {
-				
-			};
 		public:
 			/**
 			 * @brief get the widget at the specific windows absolute position

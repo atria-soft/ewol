@@ -114,7 +114,13 @@ namespace ewol {
 				void onGetFocus() override;
 				void onLostFocus() override;
 				virtual void changeStatusIn(int32_t _newStatusId);
-				void periodicCall(const ewol::event::Time& _event) override;
+			protected:
+				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				/**
+				 * @brief Periodic call to update grapgic display
+				 * @param[in] _event Time generic event
+				 */
+				void periodicCall(const ewol::event::Time& _event);
 			private: // callback functions
 				void onCallbackShortCut(const std::string& _value);
 				void onCallbackEntryClean();

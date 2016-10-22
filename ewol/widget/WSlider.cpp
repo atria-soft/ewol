@@ -6,6 +6,7 @@
 
 #include <ewol/widget/WSlider.hpp>
 #include <ewol/ewol.hpp>
+#include <ewol/object/Manager.hpp>
 
 
 static const char* l_listsladingMode[ewol::widget::WSlider::sladingTransition_count] = {
@@ -106,7 +107,7 @@ void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
 	if (_id != m_windowsDestination) {
 		m_windowsRequested = _id;
 		signalStartSlide.emit();
-		periodicCallEnable();
+		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::WSlider::periodicCall);
 		markToRedraw();
 	}
 }
@@ -190,7 +191,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 			m_slidingProgress = 0.0;
 		} else {
 			// end of periodic :
-			periodicCallDisable();
+			m_PCH.disconnect();
 			signalStopSlide.emit();
 		}
 		m_windowsRequested = -1;
