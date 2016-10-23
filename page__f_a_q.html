@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
         <meta name="generator" content="Doxygen 1.8.12"/>
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <title>Ewol: Ewol Widget in OpenGl: Ewol library</title>
+        <title>Ewol: Ewol Widget in OpenGl: FAQ</title>
         <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
         <script type="text/javascript" src="dynsections.js"></script>
         <link href="search/search.css" rel="stylesheet" type="text/css"/>
@@ -112,7 +112,6 @@ $(function() {
 });
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -127,136 +126,26 @@ $(function() {
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Ewol library </div>  </div>
+<div class="title">FAQ </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#ewol_mainpage_what">What is EWOL?                               </a></li>
-<li class="level1"><a href="#ewol_mainpage_where">Where can I use it?                         </a></li>
-<li class="level1"><a href="#ewol_mainpage_language">What languages are supported?                   </a></li>
-<li class="level1"><a href="#ewol_mainpage_restriction">Are there any licensing restrictions?           </a></li>
-<li class="level1"><a href="#ewol_mainpage_license">License (APACHE 2)                            </a></li>
-<li class="level1"><a href="#ewol_mainpage_sub">Sub library:                                  </a><ul><li class="level2"><a href="#ewol_mainpage_desc">Description:                                  </a></li>
-<li class="level2"><a href="#ewol_mainpage_ext">External:                                     </a></li>
-<li class="level2"><a href="#ewol_mainpage_using">Program Using EWOL                            </a></li>
-</ul>
-</li>
-<li class="level1"><a href="#ewol_mainpage_sub_doc">Main documentation:                            </a></li>
-</ul>
-</div>
-<div class="textblock"><h1><a class="anchor" id="ewol_mainpage_what"></a>
-What is EWOL?                               </h1>
-<p>EWOL, or Edn Widget OpenGl Layer, is a multi-platform library for creating graphical user interfaces in OpenGL. Offering a complete set of widgets.</p>
-<h1><a class="anchor" id="ewol_mainpage_where"></a>
-Where can I use it?                         </h1>
-<p>Everywhere! EWOL is cross-platform devolopped to support bases OS:</p><ul>
-<li>Linux (X11) (mouse)</li>
-<li>Windows (mouse) (build on linux...)</li>
-<li>MacOs (mouse)</li>
-<li>Android (mouse + touch)</li>
-<li>IOs (touch)</li>
-</ul>
-<h1><a class="anchor" id="ewol_mainpage_language"></a>
-What languages are supported?                   </h1>
-<p>EWOL is written in C++ and is not (for now) supported for other languages.</p>
-<h1><a class="anchor" id="ewol_mainpage_restriction"></a>
-Are there any licensing restrictions?           </h1>
-<p>EWOL is <b>FREE software</b> and <em>all sub-library are FREE and staticly linkable !!!</em></p>
-<p>That allow you to use it for every program you want, including those developing proprietary software, without any license fees or royalties.</p>
-<p>The static support is important for some platform like IOs, and this limit the external library use at some license like:</p><ul>
-<li>BSD*</li>
-<li>MIT</li>
-<li>APPACHE-2</li>
-<li>PNG</li>
-<li>ZLIB</li>
-</ul>
-<p>This exclude the classical extern library with licence:</p><ul>
-<li>L-GPL</li>
-<li>GPL</li>
-</ul>
-<h1><a class="anchor" id="ewol_mainpage_license"></a>
-License (APACHE 2)                            </h1>
+<div class="textblock"><h2>What is ewol licence </h2>
+<p>This is really simple : APACHE-2 :</p>
 <p>Copyright ewol Edouard DUPIN</p>
 <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at</p>
 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 <p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
-<h1><a class="anchor" id="ewol_mainpage_sub"></a>
-Sub library:                                  </h1>
-<p>License:</p>
-<ul>
-<li><a href="http://atria-soft.github.io/etk"><b>etk</b></a> : APACHE-2</li>
-<li><a href="http://atria-soft.github.io/elog"><b>elog</b></a> : APACHE-2<ul>
-<li><b>linearmath</b> : z-lib (subset of bullet lib)</li>
-<li><a href="http://atria-soft.github.io/earchive"><b>earchive</b></a> : APACHE-2<ul>
-<li><b>zlib</b> : z-lib</li>
+<h2>Why we use "DECLARE_FACTORY" Macro? </h2>
+<p>For some reason!!! But everything might be clear:</p><ul>
+<li>In ewol we masively use <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a> (simple wrapper over std::shared_ptr (that is not thread safe ...)).</li>
+<li>The main class : <a class="el" href="classewol_1_1_object.html" title="Basic message classes for ewol system this class mermit at every Object to communicate between them...">ewol::Object</a> herited from ememory::EnableSharedFromThis&lt;ewol::Object&gt; to permit to access at his own <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>.</li>
+<li>Acces At his own <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a> is not allowed in the class contructor/destructor.</li>
+<li>Many time for meta-widget we need to propagate our <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a> in child through the <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_weak_ptr.html">ememory::WeakPtr</a>.</li>
 </ul>
-</li>
-</ul>
-</li>
-<li><a href="http://atria-soft.github.io/egami"><b>egami</b></a> : APACHE-2<ul>
-<li><a href="http://atria-soft.github.io/esvg"><b>esvg</b></a> : APACHE-2</li>
-<li><b>libpng</b> : PNG</li>
-</ul>
-</li>
-<li><b>libogg</b> : BSD-like</li>
-<li><b>libfreetype</b> : BSD-like</li>
-<li><a href="http://atria-soft.github.io/ejson"><b>e-json</b></a> : APACHE-2</li>
-<li><a href="http://atria-soft.github.io/exml"><b>e-xml</b></a> : APACHE-2</li>
-<li><a href="http://musicdsp.github.io/audio"><b>audio</b></a> : APACHE-2</li>
-<li><a href="http://musicdsp.github.io/audio-orchestra"><b>audio-orchestra</b></a> : MIT</li>
-<li><a href="http://musicdsp.github.io/audio-drain"><b>audio-drain</b></a> : APACHE-2</li>
-<li><a href="http://musicdsp.github.io/audio-river"><b>audio-river</b></a> : APACHE-2</li>
-<li><a href="http://musicdsp.github.io/audio-ess"><b>audio-ess</b></a> : APACHE-2</li>
-<li><a href="http://atria-soft.github.io/ege"><b>ege</b></a> : APACHE-2</li>
-<li><a href="http://atria-soft.github.io/dollar"><b>dollar</b></a> : APACHE-2 ...</li>
-</ul>
-<h2><a class="anchor" id="ewol_mainpage_desc"></a>
-Description:                                  </h2>
-<p>Internal:</p>
-<ul>
-<li><a href="http://atria-soft.github.io/elog"><b>elog</b></a> : Generic Log interface (for Android and MacOs) ...</li>
-<li><a href="http://atria-soft.github.io/etk"><b>etk</b></a> : Generic toolkit to acces on file, standardize acces on string (for Android and MacOs) ...</li>
-<li><a href="http://atria-soft.github.io/earchive"><b>earchive</b></a> : Generic access to a zip file (used to access on file on Android)</li>
-<li><a href="http://atria-soft.github.io/egami"><b>egami</b></a> : generic image accessor for PNG, svg and bmp image (might add some other type ...)</li>
-<li><a href="http://atria-soft.github.io/esvg"><b>e-svg</b></a> : Generic SVG image parser and displayer</li>
-<li><a href="http://atria-soft.github.io/ejson"><b>e-json</b></a> : JSON file access (read and write)</li>
-<li><a href="http://atria-soft.github.io/exml"><b>e-xml</b></a> : XML file access (read and write)</li>
-<li><a href="http://musicdsp.github.io/audio"><b>audio</b></a> : Basic audio format</li>
-<li><a href="http://musicdsp.github.io/audio-orchestra"><b>audio-orchestra</b></a> : Low level wrapper of audio interface (Linux/Windows/MacOs/IOs/Android)</li>
-<li><a href="http://musicdsp.github.io/audio-drain"><b>audio-drain</b></a> : single stream audio processing</li>
-<li><a href="http://musicdsp.github.io/audio-river"><b>audio-river</b></a> : High level audio abstraction</li>
-<li><a href="http://musicdsp.github.io/audio-ess"><b>audio-ess</b></a> : basic sound set manager</li>
-<li><a href="http://musicdsp.github.io/ege"><b>ege</b></a> : Ewol Game engine is a wrapper on the the bullet physical engine and ewol renderer engin. This is in developpement for now (the simple objective is to produce game to make profitable all my work)</li>
-<li><a href="http://atria-soft.github.io/zeus"><b>zeus</b></a> : RPC over websocket</li>
-<li><a href="http://atria-soft.github.io/dollar"><b>dollar</b></a> : $1 $n $p and $p+</li>
-</ul>
-<h2><a class="anchor" id="ewol_mainpage_ext"></a>
-External:                                     </h2>
-<ul>
-<li><b>linearmath</b> : bullet mathamatical sub lib (for using same vec3).</li>
-<li><b>Z lib</b> : Clkassical zlib lib.</li>
-<li><b>libPNG</b> : the classical png display lib.</li>
-<li><b>ogg</b> : The classical Ogg coder reader lib.</li>
-<li><b>freetype</b> : The classicle true-type reader lib.</li>
-<li><b>bulletlib</b> : the classical bullet library physical engine. (dependence by ege)</li>
-<li><b>openSSL</b> : generic SSL library. (dependence by zeus)</li>
-</ul>
-<h2><a class="anchor" id="ewol_mainpage_using"></a>
-Program Using EWOL                            </h2>
-<ul>
-<li><a href="http://github.com/HeeroYui/edn"><b>edn</b></a>: (Application in GPLv3) Edn is the main application using this lib and designed for (in the first time). This is a "Code editor".</li>
-<li><a href="http://play.google.com/store/apps/details?id=com.edouarddupin.worddown"><b>worddown</b></a>: (Proprietary) Worddown is a simple word game.</li>
-</ul>
-<h1><a class="anchor" id="ewol_mainpage_sub_doc"></a>
-Main documentation:                            </h1>
-<ul>
-<li><a class="el" href="ewol_build.html">Build lib &amp; build sample</a></li>
-<li><a class="el" href="ewol_page_bases.html">EWOL: Bases</a></li>
-<li><a class="el" href="ewol_tutorials.html">Tutorials</a></li>
-<li><a class="el" href="ewol_coding_style.html">Ewol coding style</a> </li>
-</ul>
+<p>Then for all these reasons, I have create a simple MACRO that create a static template funtion that create the object and just after creation call the init(...) function to permit to create a complex widget or others with some writing convinience. </p>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
 <!-- start footer part -->
@@ -266,7 +155,7 @@ Main documentation:                            </h1>
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 24 2016 14:06:04 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Oct 24 2016 14:06:03 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

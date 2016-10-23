@@ -1,0 +1,164 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: framework/atria-soft/ewol/ewol/context/ConfigFont.hpp Source File</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_644e041c3a6521da7b27eba0e4eb2b95.html">framework</a></li><li class="navelem"><a class="el" href="dir_a094892b17be858f66bf3446bbb755c7.html">atria-soft</a></li><li class="navelem"><a class="el" href="dir_90b06c1c445cb1731bd6346c36eb6f0c.html">ewol</a></li><li class="navelem"><a class="el" href="dir_b91da374a1ab60ee2d83a750c3a335b8.html">ewol</a></li><li class="navelem"><a class="el" href="dir_e40f6829cd26b601ee29fb1f3c38644c.html">context</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">ConfigFont.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_config_font_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;ewol/debug.hpp&gt;</span></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceewol.html">ewol</a> {</div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">namespace </span>context {</div><div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html">   12</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classewol_1_1context_1_1_config_font.html">ConfigFont</a> {</div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <a class="code" href="classewol_1_1context_1_1_config_font.html#a6cd2567f051a5e35284dddbc80517e8f">ConfigFont</a>();</div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keyword">virtual</span> ~<a class="code" href="classewol_1_1context_1_1_config_font.html">ConfigFont</a>();</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                std::string m_folder;</div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html#a861895ea4a9c7d53d9fd852b413693e1">   26</a></span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1context_1_1_config_font.html#a861895ea4a9c7d53d9fd852b413693e1">setFolder</a>(<span class="keyword">const</span> std::string&amp; _folder) {</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                    m_folder = _folder;</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                };</div><div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html#ad40f05d2cf8fbe433fc942f308d39aaf">   33</a></span>&#160;                <span class="keyword">const</span> std::string&amp; <a class="code" href="classewol_1_1context_1_1_config_font.html#ad40f05d2cf8fbe433fc942f308d39aaf">getFolder</a>() {</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                    <span class="keywordflow">return</span> m_folder;</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                };</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                std::string m_name;</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                int32_t m_size;</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> std::string&amp; _fontName, int32_t _size);</div><div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html#a443d39659733edc7bc77ae7adee3c0ce">   50</a></span>&#160;                <span class="keyword">const</span> std::string&amp; <a class="code" href="classewol_1_1context_1_1_config_font.html#a443d39659733edc7bc77ae7adee3c0ce">getName</a>() {</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                    <span class="keywordflow">return</span> m_name;</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                };</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1context_1_1_config_font.html#a1d0a082adeb7bc24ef4c7f6ae63b84b8">setName</a>(<span class="keyword">const</span> std::string&amp; _fontName);</div><div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html#a6c2c81e19bd6893c76e3952be70fd562">   62</a></span>&#160;                int32_t <a class="code" href="classewol_1_1context_1_1_config_font.html#a6c2c81e19bd6893c76e3952be70fd562">getSize</a>() {</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <span class="keywordflow">return</span> m_size;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                };</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1context_1_1_config_font.html#a4b166792ed13155df0a3def14bd7dc71">setSize</a>(int32_t _size);</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="keywordtype">bool</span> m_useExternal;</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html#a2d1bbc8ef0cf293e852f09f847086120">   77</a></span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1context_1_1_config_font.html#a2d1bbc8ef0cf293e852f09f847086120">setUseExternal</a>(<span class="keywordtype">bool</span> _val) {</div><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    m_useExternal=_val;</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                };</div><div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classewol_1_1context_1_1_config_font.html#a72bbf7457d23c24a8a0e882c61e25954">   84</a></span>&#160;                <span class="keywordtype">bool</span> <a class="code" href="classewol_1_1context_1_1_config_font.html#a72bbf7457d23c24a8a0e882c61e25954">getUseExternal</a>() {</div><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    <span class="keywordflow">return</span> m_useExternal;</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                };</div><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        };</div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    };</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;};</div><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div><div class="ttc" id="classewol_1_1context_1_1_config_font_html_a2d1bbc8ef0cf293e852f09f847086120"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a2d1bbc8ef0cf293e852f09f847086120">ewol::context::ConfigFont::setUseExternal</a></div><div class="ttdeci">void setUseExternal(bool _val)</div><div class="ttdoc">set use of internal/external Font </div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:77</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a6cd2567f051a5e35284dddbc80517e8f"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a6cd2567f051a5e35284dddbc80517e8f">ewol::context::ConfigFont::ConfigFont</a></div><div class="ttdeci">ConfigFont()</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a861895ea4a9c7d53d9fd852b413693e1"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a861895ea4a9c7d53d9fd852b413693e1">ewol::context::ConfigFont::setFolder</a></div><div class="ttdeci">void setFolder(const std::string &amp;_folder)</div><div class="ttdoc">Specify the default font folder for the Ewol search system (only needed when embended font) ...</div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:26</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a72bbf7457d23c24a8a0e882c61e25954"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a72bbf7457d23c24a8a0e882c61e25954">ewol::context::ConfigFont::getUseExternal</a></div><div class="ttdeci">bool getUseExternal()</div><div class="ttdoc">get the use of internal/external Font </div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:84</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a1d0a082adeb7bc24ef4c7f6ae63b84b8"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a1d0a082adeb7bc24ef4c7f6ae63b84b8">ewol::context::ConfigFont::setName</a></div><div class="ttdeci">void setName(const std::string &amp;_fontName)</div><div class="ttdoc">Set the current default font name. </div></div>
+<div class="ttc" id="namespaceewol_html"><div class="ttname"><a href="namespaceewol.html">ewol</a></div><div class="ttdef"><b>Definition:</b> Area.hpp:16</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a4b166792ed13155df0a3def14bd7dc71"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a4b166792ed13155df0a3def14bd7dc71">ewol::context::ConfigFont::setSize</a></div><div class="ttdeci">void setSize(int32_t _size)</div><div class="ttdoc">Set the default font size. </div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html">ewol::context::ConfigFont</a></div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:12</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a6c2c81e19bd6893c76e3952be70fd562"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a6c2c81e19bd6893c76e3952be70fd562">ewol::context::ConfigFont::getSize</a></div><div class="ttdeci">int32_t getSize()</div><div class="ttdoc">get the default font size. </div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:62</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_a443d39659733edc7bc77ae7adee3c0ce"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#a443d39659733edc7bc77ae7adee3c0ce">ewol::context::ConfigFont::getName</a></div><div class="ttdeci">const std::string &amp; getName()</div><div class="ttdoc">get the current default font name  a reference on the font name string </div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:50</div></div>
+<div class="ttc" id="classewol_1_1context_1_1_config_font_html_ad40f05d2cf8fbe433fc942f308d39aaf"><div class="ttname"><a href="classewol_1_1context_1_1_config_font.html#ad40f05d2cf8fbe433fc942f308d39aaf">ewol::context::ConfigFont::getFolder</a></div><div class="ttdeci">const std::string &amp; getFolder()</div><div class="ttdoc">get the default font folder. </div><div class="ttdef"><b>Definition:</b> ConfigFont.hpp:33</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:03 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

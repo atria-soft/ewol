@@ -1,0 +1,882 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: ewol::compositing::Shaper Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>ewol</b></li><li class="navelem"><b>compositing</b></li><li class="navelem"><a class="el" href="classewol_1_1compositing_1_1_shaper.html">Shaper</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classewol_1_1compositing_1_1_shaper-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">ewol::compositing::Shaper Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_shaper_8hpp_source.html">Shaper.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ewol::compositing::Shaper:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classewol_1_1compositing_1_1_shaper.png" usemap="#ewol::compositing::Shaper_map" alt=""/>
+  <map id="ewol::compositing::Shaper_map" name="ewol::compositing::Shaper_map">
+<area href="classewol_1_1_compositing.html" alt="ewol::Compositing" shape="rect" coords="0,0,157,24"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a579ad019ba1283b7515c53566ab0e391"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a579ad019ba1283b7515c53566ab0e391">Shaper</a> (const std::string &amp;_shaperName=&quot;&quot;)</td></tr>
+<tr class="separator:a579ad019ba1283b7515c53566ab0e391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d80d15aa9a254b1d7dd9ed50deadc6c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a4d80d15aa9a254b1d7dd9ed50deadc6c">~Shaper</a> ()</td></tr>
+<tr class="separator:a4d80d15aa9a254b1d7dd9ed50deadc6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28bbdee22070f1efff1a9618cb554af7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a28bbdee22070f1efff1a9618cb554af7">draw</a> (bool _disableDepthTest=true)</td></tr>
+<tr class="separator:a28bbdee22070f1efff1a9618cb554af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14f700567f2cd55edfa4f5f5a8238034"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a14f700567f2cd55edfa4f5f5a8238034">clear</a> ()</td></tr>
+<tr class="separator:a14f700567f2cd55edfa4f5f5a8238034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e490a9d8ed8614bcc62966cc41f8842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a3e490a9d8ed8614bcc62966cc41f8842">setState</a> (int32_t _newState)</td></tr>
+<tr class="separator:a3e490a9d8ed8614bcc62966cc41f8842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab45597f308289b2b4e39d0c1e25dda9d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#ab45597f308289b2b4e39d0c1e25dda9d">changeStatusIn</a> (int32_t _newStatusId)</td></tr>
+<tr class="separator:ab45597f308289b2b4e39d0c1e25dda9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e16d511ec3945a7e7098dda091dbb28"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a2e16d511ec3945a7e7098dda091dbb28">getCurrentDisplayedStatus</a> ()</td></tr>
+<tr class="separator:a2e16d511ec3945a7e7098dda091dbb28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59a0f488d9b3ba4a93f47b2728a12e4e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a59a0f488d9b3ba4a93f47b2728a12e4e">getNextDisplayedStatus</a> ()</td></tr>
+<tr class="separator:a59a0f488d9b3ba4a93f47b2728a12e4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44b409fa6762c957b97926e1a40a3984"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a44b409fa6762c957b97926e1a40a3984">getTransitionStatus</a> ()</td></tr>
+<tr class="separator:a44b409fa6762c957b97926e1a40a3984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3c2919932fec50eb894ee5f697c0786"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#ac3c2919932fec50eb894ee5f697c0786">periodicCall</a> (const <a class="el" href="classewol_1_1event_1_1_time.html">ewol::event::Time</a> &amp;_event)</td></tr>
+<tr class="separator:ac3c2919932fec50eb894ee5f697c0786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a026e2f8b0d83db963c815be46710ba0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classewol_1_1_padding.html">ewol::Padding</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a026e2f8b0d83db963c815be46710ba0f">getPadding</a> ()</td></tr>
+<tr class="separator:a026e2f8b0d83db963c815be46710ba0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a787358eab4d01314cb634c0be85b0fba"><td class="memItemLeft" align="right" valign="top"><a id="a787358eab4d01314cb634c0be85b0fba"></a>
+<a class="el" href="classewol_1_1_padding.html">ewol::Padding</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPaddingIn</b> ()</td></tr>
+<tr class="separator:a787358eab4d01314cb634c0be85b0fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa58117240e4aa9d43a4a2f1ebd7f1978"><td class="memItemLeft" align="right" valign="top"><a id="aa58117240e4aa9d43a4a2f1ebd7f1978"></a>
+<a class="el" href="classewol_1_1_padding.html">ewol::Padding</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPaddingOut</b> ()</td></tr>
+<tr class="separator:aa58117240e4aa9d43a4a2f1ebd7f1978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba14e9a13335de473c2b653d41d91f8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classewol_1_1_padding.html">ewol::Padding</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#aba14e9a13335de473c2b653d41d91f8f">getBorder</a> ()</td></tr>
+<tr class="separator:aba14e9a13335de473c2b653d41d91f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a006f2b484cdef66fdc8d1be585d2279d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a006f2b484cdef66fdc8d1be585d2279d">setSource</a> (const std::string &amp;_newFile)</td></tr>
+<tr class="separator:a006f2b484cdef66fdc8d1be585d2279d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5885d74f8cc005761ebf5d035215904"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#ab5885d74f8cc005761ebf5d035215904">getSource</a> () const</td></tr>
+<tr class="separator:ab5885d74f8cc005761ebf5d035215904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4882a36ab69d23a3310e7aad73a45936"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a4882a36ab69d23a3310e7aad73a45936">hasSources</a> ()</td></tr>
+<tr class="separator:a4882a36ab69d23a3310e7aad73a45936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4908288549886832f94c1cda78f9585b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a4908288549886832f94c1cda78f9585b">setShape</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_origin, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_size, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_insidePos, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_insideSize)</td></tr>
+<tr class="separator:a4908288549886832f94c1cda78f9585b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0384a3aa54018352b6b12a02a3d324c6"><td class="memItemLeft" align="right" valign="top"><a id="a0384a3aa54018352b6b12a02a3d324c6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setShape</b> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_origin, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_size)</td></tr>
+<tr class="separator:a0384a3aa54018352b6b12a02a3d324c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb8cb24db5a5c5f3617d419e7d5932a8"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#afb8cb24db5a5c5f3617d419e7d5932a8">requestColor</a> (const std::string &amp;_name)</td></tr>
+<tr class="separator:afb8cb24db5a5c5f3617d419e7d5932a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36b9ada14a0bec0f5d5e3e3beda2891f"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt; float &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a36b9ada14a0bec0f5d5e3e3beda2891f">getColor</a> (int32_t _id)</td></tr>
+<tr class="separator:a36b9ada14a0bec0f5d5e3e3beda2891f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40f2c2945450e4e5ec2c8eb7cf795080"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a40f2c2945450e4e5ec2c8eb7cf795080">requestConfig</a> (const std::string &amp;_name)</td></tr>
+<tr class="separator:a40f2c2945450e4e5ec2c8eb7cf795080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd371f864b071a2cdb7c327b19e2afe"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#a5dd371f864b071a2cdb7c327b19e2afe">getConfigNumber</a> (int32_t _id)</td></tr>
+<tr class="separator:a5dd371f864b071a2cdb7c327b19e2afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0cabd2655f4483707724cc8224cf48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_shaper.html#aed0cabd2655f4483707724cc8224cf48">setActivateState</a> (int32_t _status)</td></tr>
+<tr class="separator:aed0cabd2655f4483707724cc8224cf48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf1262334d7feba43771a2fe8484c8f3"><td class="memItemLeft" align="right" valign="top"><a id="aaf1262334d7feba43771a2fe8484c8f3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classewol_1_1compositing_1_1_shaper.html">Shaper</a> &amp;_obj) const</td></tr>
+<tr class="separator:aaf1262334d7feba43771a2fe8484c8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43685ba6904bd3714db21c8ff807298a"><td class="memItemLeft" align="right" valign="top"><a id="a43685ba6904bd3714db21c8ff807298a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classewol_1_1compositing_1_1_shaper.html">Shaper</a> &amp;_obj) const</td></tr>
+<tr class="separator:a43685ba6904bd3714db21c8ff807298a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classewol_1_1_compositing"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classewol_1_1_compositing')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classewol_1_1_compositing.html">ewol::Compositing</a></td></tr>
+<tr class="memitem:a352cfed594107e9fbf9ec5dff9385cff inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a352cfed594107e9fbf9ec5dff9385cff">Compositing</a> ()</td></tr>
+<tr class="separator:a352cfed594107e9fbf9ec5dff9385cff inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8519577d443b96014968ce6eedbf38ef inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a8519577d443b96014968ce6eedbf38ef">~Compositing</a> ()</td></tr>
+<tr class="separator:a8519577d443b96014968ce6eedbf38ef inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4a02936db08e8b6425fcfecc9a3255 inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#abd4a02936db08e8b6425fcfecc9a3255">resetMatrix</a> ()</td></tr>
+<tr class="separator:abd4a02936db08e8b6425fcfecc9a3255 inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accabd4fbdd379ccd09ff1f6b9ddd3bdd inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#accabd4fbdd379ccd09ff1f6b9ddd3bdd">translate</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_vect)</td></tr>
+<tr class="separator:accabd4fbdd379ccd09ff1f6b9ddd3bdd inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dae212bbf647202f0f988a3f20a1106 inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a8dae212bbf647202f0f988a3f20a1106">rotate</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_vect, float _angle)</td></tr>
+<tr class="separator:a8dae212bbf647202f0f988a3f20a1106 inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4636f148720b31428471bb7118ae7fef inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a4636f148720b31428471bb7118ae7fef">scale</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_vect)</td></tr>
+<tr class="separator:a4636f148720b31428471bb7118ae7fef inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a939a77b2a691a068bcd131dce1247896 inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a939a77b2a691a068bcd131dce1247896">setMatrix</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a> &amp;_mat)</td></tr>
+<tr class="separator:a939a77b2a691a068bcd131dce1247896 inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_attribs_classewol_1_1_compositing"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classewol_1_1_compositing')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classewol_1_1_compositing.html">ewol::Compositing</a></td></tr>
+<tr class="memitem:ae170cdfd412e6cd18f1d90a97c69e3f8 inherit pro_attribs_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top"><a id="ae170cdfd412e6cd18f1d90a97c69e3f8"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_matrixApply</b></td></tr>
+<tr class="separator:ae170cdfd412e6cd18f1d90a97c69e3f8 inherit pro_attribs_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>the <a class="el" href="classewol_1_1compositing_1_1_shaper.html" title="the Shaper system is a basic theme configuration for every widget, it corespond at a background displ...">Shaper</a> system is a basic theme configuration for every widget, it corespond at a background display described by a pool of files </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a579ad019ba1283b7515c53566ab0e391"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a579ad019ba1283b7515c53566ab0e391">&sect;&nbsp;</a></span>Shaper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ewol::compositing::Shaper::Shaper </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_shaperName</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>generic constructor </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_shaperName</td><td>Name of the file that might be loaded </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4d80d15aa9a254b1d7dd9ed50deadc6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d80d15aa9a254b1d7dd9ed50deadc6c">&sect;&nbsp;</a></span>~Shaper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ewol::compositing::Shaper::~Shaper </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>generic destructor </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab45597f308289b2b4e39d0c1e25dda9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab45597f308289b2b4e39d0c1e25dda9d">&sect;&nbsp;</a></span>changeStatusIn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ewol::compositing::Shaper::changeStatusIn </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_newStatusId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>change the current status in an other </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_newStatusId</td><td>the next new status requested </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true The widget must call this fuction periodicly (and redraw itself) </dd>
+<dd>
+false No need to request the periodic call. </dd></dl>
+
+</div>
+</div>
+<a id="a14f700567f2cd55edfa4f5f5a8238034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14f700567f2cd55edfa4f5f5a8238034">&sect;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::compositing::Shaper::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>clear alll tre registered element in the current element </p>
+
+<p>Reimplemented from <a class="el" href="classewol_1_1_compositing.html#a3a8bbc2734b095d9707ae39999603067">ewol::Compositing</a>.</p>
+
+</div>
+</div>
+<a id="a28bbdee22070f1efff1a9618cb554af7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28bbdee22070f1efff1a9618cb554af7">&sect;&nbsp;</a></span>draw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::compositing::Shaper::draw </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_disableDepthTest</em> = <code>true</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>draw All the refistered text in the current element on openGL </p>
+
+<p>Implements <a class="el" href="classewol_1_1_compositing.html#a53c16cc01ed3c3e3e160ebe1a3b5ead5">ewol::Compositing</a>.</p>
+
+</div>
+</div>
+<a id="aba14e9a13335de473c2b653d41d91f8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba14e9a13335de473c2b653d41d91f8f">&sect;&nbsp;</a></span>getBorder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classewol_1_1_padding.html">ewol::Padding</a> ewol::compositing::Shaper::getBorder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the padding declared by the user in the config file </p>
+<dl class="section return"><dt>Returns</dt><dd>the padding property </dd></dl>
+
+</div>
+</div>
+<a id="a36b9ada14a0bec0f5d5e3e3beda2891f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36b9ada14a0bec0f5d5e3e3beda2891f">&sect;&nbsp;</a></span>getColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;float&gt;&amp; ewol::compositing::Shaper::getColor </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get The color associated at an ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_id</td><td>Id of the color </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the reference on the color </dd></dl>
+
+</div>
+</div>
+<a id="a5dd371f864b071a2cdb7c327b19e2afe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dd371f864b071a2cdb7c327b19e2afe">&sect;&nbsp;</a></span>getConfigNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ewol::compositing::Shaper::getConfigNumber </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get The number associated at an ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_id</td><td>Id of the parameter </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the requested number. </dd></dl>
+
+</div>
+</div>
+<a id="a2e16d511ec3945a7e7098dda091dbb28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e16d511ec3945a7e7098dda091dbb28">&sect;&nbsp;</a></span>getCurrentDisplayedStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t ewol::compositing::Shaper::getCurrentDisplayedStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the current displayed status of the shaper </p>
+<dl class="section return"><dt>Returns</dt><dd>The Status Id </dd></dl>
+
+</div>
+</div>
+<a id="a59a0f488d9b3ba4a93f47b2728a12e4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59a0f488d9b3ba4a93f47b2728a12e4e">&sect;&nbsp;</a></span>getNextDisplayedStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t ewol::compositing::Shaper::getNextDisplayedStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the next displayed status of the shaper </p>
+<dl class="section return"><dt>Returns</dt><dd>The next status Id (-1 if no status in next) </dd></dl>
+
+</div>
+</div>
+<a id="a026e2f8b0d83db963c815be46710ba0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a026e2f8b0d83db963c815be46710ba0f">&sect;&nbsp;</a></span>getPadding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classewol_1_1_padding.html">ewol::Padding</a> ewol::compositing::Shaper::getPadding </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the padding declared by the user in the config file </p>
+<dl class="section return"><dt>Returns</dt><dd>the padding property </dd></dl>
+
+</div>
+</div>
+<a id="ab5885d74f8cc005761ebf5d035215904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5885d74f8cc005761ebf5d035215904">&sect;&nbsp;</a></span>getSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string&amp; ewol::compositing::Shaper::getSource </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the shaper file Source </p>
+<dl class="section return"><dt>Returns</dt><dd>the shapper file name </dd></dl>
+
+</div>
+</div>
+<a id="a44b409fa6762c957b97926e1a40a3984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44b409fa6762c957b97926e1a40a3984">&sect;&nbsp;</a></span>getTransitionStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ewol::compositing::Shaper::getTransitionStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the current trasion status </p>
+<dl class="section return"><dt>Returns</dt><dd>value of the transition status (0.0f when no activity) </dd></dl>
+
+</div>
+</div>
+<a id="a4882a36ab69d23a3310e7aad73a45936"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4882a36ab69d23a3310e7aad73a45936">&sect;&nbsp;</a></span>hasSources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ewol::compositing::Shaper::hasSources </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sometimes the user declare an image but not allocate the ressources all the time, this is to know it .. </p>
+<dl class="section return"><dt>Returns</dt><dd>the validity od the resources. </dd></dl>
+
+</div>
+</div>
+<a id="ac3c2919932fec50eb894ee5f697c0786"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3c2919932fec50eb894ee5f697c0786">&sect;&nbsp;</a></span>periodicCall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ewol::compositing::Shaper::periodicCall </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classewol_1_1event_1_1_time.html">ewol::event::Time</a> &amp;&#160;</td>
+          <td class="paramname"><em>_event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Same as the widfget periodic call (this is for change display) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_event</td><td>The current time of the call. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true The widget must call this fuction periodicly (and redraw itself) </dd>
+<dd>
+false No need to request the periodic call. </dd></dl>
+
+</div>
+</div>
+<a id="afb8cb24db5a5c5f3617d419e7d5932a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb8cb24db5a5c5f3617d419e7d5932a8">&sect;&nbsp;</a></span>requestColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t ewol::compositing::Shaper::requestColor </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get an ID on the color instance element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_name</td><td>Name of the element requested </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Id of the color </dd></dl>
+
+</div>
+</div>
+<a id="a40f2c2945450e4e5ec2c8eb7cf795080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40f2c2945450e4e5ec2c8eb7cf795080">&sect;&nbsp;</a></span>requestConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t ewol::compositing::Shaper::requestConfig </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get an ID on the configuration instance element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_name</td><td>Name of the element requested </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Id of the element </dd></dl>
+
+</div>
+</div>
+<a id="aed0cabd2655f4483707724cc8224cf48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0cabd2655f4483707724cc8224cf48">&sect;&nbsp;</a></span>setActivateState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::compositing::Shaper::setActivateState </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set activate state of the element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_status</td><td>New activate status </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4908288549886832f94c1cda78f9585b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4908288549886832f94c1cda78f9585b">&sect;&nbsp;</a></span>setShape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::compositing::Shaper::setShape </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_origin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_insidePos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_insideSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set the shape property: </p>
+<hr/>
+<ul>
+<li>_size *</li>
+<li>*</li>
+<li>* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - * *</li>
+<li>*</li>
+<li>| | * <hr/>
+</li>
+<li>| * * | * <hr/>
+</li>
+<li>| * * - - - - - - - - - - - - - - - - - - * * | *</li>
+<li>* _insideSize * *</li>
+<li>| * | | * | * <hr/>
+</li>
+<li>| * | | * | * <hr/>
+</li>
+<li>| * | | * | * <hr/>
+</li>
+<li>| * | | * | * <hr/>
+</li>
+<li>| * | | * | * <hr/>
+</li>
+<li>| * | | * | *</li>
+<li>* _insidePos * *</li>
+<li>| * * - - - - - - - - - - - - - - - - - - * * | * <hr/>
+</li>
+<li>| *************************************************** | *</li>
+<li>*</li>
+<li>| | *</li>
+<li>*</li>
+<li>* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - * *</li>
+<li>*</li>
+<li>* <hr/>
+ _origin</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_origin</td><td>Origin of the display </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_size</td><td>Size of the display </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_insidePos</td><td>Positin of the internal data </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_insideSize</td><td>Size of the internal data </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a006f2b484cdef66fdc8d1be585d2279d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a006f2b484cdef66fdc8d1be585d2279d">&sect;&nbsp;</a></span>setSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::compositing::Shaper::setSource </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_newFile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>change the shaper Source </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_newFile</td><td>New file of the shaper </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3e490a9d8ed8614bcc62966cc41f8842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e490a9d8ed8614bcc62966cc41f8842">&sect;&nbsp;</a></span>setState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ewol::compositing::Shaper::setState </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_newState</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change the current state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_newState</td><td>Current state of the configuration </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true Need redraw. </dd>
+<dd>
+false No need redraw. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/ewol/ewol/compositing/<a class="el" href="_shaper_8hpp_source.html">Shaper.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:04 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

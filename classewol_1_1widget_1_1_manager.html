@@ -1,0 +1,450 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: ewol::widget::Manager Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>ewol</b></li><li class="navelem"><b>widget</b></li><li class="navelem"><a class="el" href="classewol_1_1widget_1_1_manager.html">Manager</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classewol_1_1widget_1_1_manager-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">ewol::widget::Manager Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a125862d754306c85a38b5de6a5c2b2d8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#a125862d754306c85a38b5de6a5c2b2d8">widgetCreatorFunction</a> = std::function&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>()&gt;</td></tr>
+<tr class="separator:a125862d754306c85a38b5de6a5c2b2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad7efcc49ec31bab801f906788f3efa57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#ad7efcc49ec31bab801f906788f3efa57">focusKeep</a> (<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> _newWidget)</td></tr>
+<tr class="separator:ad7efcc49ec31bab801f906788f3efa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdeec29d8b3269b38863c8d6ca56aa92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#acdeec29d8b3269b38863c8d6ca56aa92">focusSetDefault</a> (<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> _newWidget)</td></tr>
+<tr class="separator:acdeec29d8b3269b38863c8d6ca56aa92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c3b7940e0f3db07bd29d686aba77880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#a4c3b7940e0f3db07bd29d686aba77880">focusRelease</a> ()</td></tr>
+<tr class="separator:a4c3b7940e0f3db07bd29d686aba77880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a5228788ee8de112a6ee563313cb0ed"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#a5a5228788ee8de112a6ee563313cb0ed">focusGet</a> ()</td></tr>
+<tr class="separator:a5a5228788ee8de112a6ee563313cb0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a375755afd3b116ff6b7a9941948ce6d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#a375755afd3b116ff6b7a9941948ce6d7">addWidgetCreator</a> (const std::string &amp;_name, <a class="el" href="classewol_1_1widget_1_1_manager.html#a125862d754306c85a38b5de6a5c2b2d8">widgetCreatorFunction</a> _factory)</td></tr>
+<tr class="separator:a375755afd3b116ff6b7a9941948ce6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66c2a87877f71b93ce043898238ccb83"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#a66c2a87877f71b93ce043898238ccb83">create</a> (const std::string &amp;_name)</td></tr>
+<tr class="separator:a66c2a87877f71b93ce043898238ccb83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3996873c44502743e79fda28930b669"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#ae3996873c44502743e79fda28930b669">exist</a> (const std::string &amp;_name)</td></tr>
+<tr class="separator:ae3996873c44502743e79fda28930b669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa99166d3cf0dc68d1a9c8dd2c227332e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#aa99166d3cf0dc68d1a9c8dd2c227332e">list</a> ()</td></tr>
+<tr class="separator:aa99166d3cf0dc68d1a9c8dd2c227332e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa78716af4d48c7f40d28605a79461717"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#aa78716af4d48c7f40d28605a79461717">markDrawingIsNeeded</a> ()</td></tr>
+<tr class="separator:aa78716af4d48c7f40d28605a79461717"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a920446cb964f849fe4a02b4e6bad3041"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1widget_1_1_manager.html#a920446cb964f849fe4a02b4e6bad3041">isDrawingNeeded</a> ()</td></tr>
+<tr class="separator:a920446cb964f849fe4a02b4e6bad3041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a125862d754306c85a38b5de6a5c2b2d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a125862d754306c85a38b5de6a5c2b2d8">&sect;&nbsp;</a></span>widgetCreatorFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classewol_1_1widget_1_1_manager.html#a125862d754306c85a38b5de6a5c2b2d8">ewol::widget::Manager::widgetCreatorFunction</a> =  std::function&lt;<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>()&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>funtion factory basic definition </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a375755afd3b116ff6b7a9941948ce6d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a375755afd3b116ff6b7a9941948ce6d7">&sect;&nbsp;</a></span>addWidgetCreator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::widget::Manager::addWidgetCreator </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classewol_1_1widget_1_1_manager.html#a125862d754306c85a38b5de6a5c2b2d8">widgetCreatorFunction</a>&#160;</td>
+          <td class="paramname"><em>_factory</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>add a factory of a specific widget. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_name</td><td>Name of the widget that is associated of the factory. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_factory</td><td>Function pointer to create the widget </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a66c2a87877f71b93ce043898238ccb83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66c2a87877f71b93ce043898238ccb83">&sect;&nbsp;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> ewol::widget::Manager::create </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a widget with his name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_name</td><td>Name of the widget to create. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The widget created (nullptr if it does not exist). </dd></dl>
+
+</div>
+</div>
+<a id="ae3996873c44502743e79fda28930b669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3996873c44502743e79fda28930b669">&sect;&nbsp;</a></span>exist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ewol::widget::Manager::exist </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if an <a class="el" href="classewol_1_1_widget.html" title="Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...">Widget</a> exist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_name</td><td>Name of the widget to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true The <a class="el" href="classewol_1_1_widget.html" title="Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...">Widget</a> exist. </dd>
+<dd>
+false The <a class="el" href="classewol_1_1_widget.html" title="Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...">Widget</a> Does NOT exist. </dd></dl>
+
+</div>
+</div>
+<a id="a5a5228788ee8de112a6ee563313cb0ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a5228788ee8de112a6ee563313cb0ed">&sect;&nbsp;</a></span>focusGet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> ewol::widget::Manager::focusGet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the current Focused widget. </p>
+<dl class="section return"><dt>Returns</dt><dd>The pointer on the current focused element. </dd></dl>
+
+</div>
+</div>
+<a id="ad7efcc49ec31bab801f906788f3efa57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7efcc49ec31bab801f906788f3efa57">&sect;&nbsp;</a></span>focusKeep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::widget::Manager::focusKeep </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>&#160;</td>
+          <td class="paramname"><em>_newWidget</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Request a focus on a specify widget. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_newWidget</td><td><a class="el" href="classewol_1_1_widget.html" title="Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...">Widget</a> that might get the focus. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4c3b7940e0f3db07bd29d686aba77880"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c3b7940e0f3db07bd29d686aba77880">&sect;&nbsp;</a></span>focusRelease()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::widget::Manager::focusRelease </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Release the current focus (back on default if possible). </p>
+
+</div>
+</div>
+<a id="acdeec29d8b3269b38863c8d6ca56aa92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdeec29d8b3269b38863c8d6ca56aa92">&sect;&nbsp;</a></span>focusSetDefault()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::widget::Manager::focusSetDefault </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>&#160;</td>
+          <td class="paramname"><em>_newWidget</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the default focus when none selected. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_newWidget</td><td><a class="el" href="classewol_1_1_widget.html" title="Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...">Widget</a> that might get the focus (when nothing else). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a920446cb964f849fe4a02b4e6bad3041"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a920446cb964f849fe4a02b4e6bad3041">&sect;&nbsp;</a></span>isDrawingNeeded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ewol::widget::Manager::isDrawingNeeded </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a redraw has been requested (set the local value back at false) </p>
+<dl class="section return"><dt>Returns</dt><dd>true if something to be redraw </dd></dl>
+
+</div>
+</div>
+<a id="aa99166d3cf0dc68d1a9c8dd2c227332e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa99166d3cf0dc68d1a9c8dd2c227332e">&sect;&nbsp;</a></span>list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string ewol::widget::Manager::list </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the list of all <a class="el" href="classewol_1_1_widget.html" title="Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...">Widget</a> that can be created. </p>
+<dl class="section return"><dt>Returns</dt><dd>Separate with ',' string list. </dd></dl>
+
+</div>
+</div>
+<a id="aa78716af4d48c7f40d28605a79461717"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa78716af4d48c7f40d28605a79461717">&sect;&nbsp;</a></span>markDrawingIsNeeded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::widget::Manager::markDrawingIsNeeded </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mark the display to redraw. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/ewol/ewol/widget/<a class="el" href="widget_2_manager_8hpp_source.html">Manager.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:04 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

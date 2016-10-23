@@ -1,0 +1,176 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: framework/atria-soft/ewol/ewol/compositing/Area.hpp Source File</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_644e041c3a6521da7b27eba0e4eb2b95.html">framework</a></li><li class="navelem"><a class="el" href="dir_a094892b17be858f66bf3446bbb755c7.html">atria-soft</a></li><li class="navelem"><a class="el" href="dir_90b06c1c445cb1731bd6346c36eb6f0c.html">ewol</a></li><li class="navelem"><a class="el" href="dir_b91da374a1ab60ee2d83a750c3a335b8.html">ewol</a></li><li class="navelem"><a class="el" href="dir_377f7ca7e7608e286d128fa3c9f505bf.html">compositing</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">Area.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_area_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/__color__8hpp.html">etk/Color.hpp</a>&gt;</span></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;ewol/debug.hpp&gt;</span></div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="_compositing_8hpp.html">ewol/compositing/Compositing.hpp</a>&gt;</span></div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;gale/resource/Program.hpp&gt;</span></div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="_texture_8hpp.html">ewol/resource/Texture.hpp</a>&gt;</span></div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/egami.tag:http://atria-soft.github.io/egami/" href="http://atria-soft.github.io/egami/__image__8hpp.html">egami/Image.hpp</a>&gt;</span></div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/memory__8hpp.html">ememory/memory.hpp</a>&gt;</span></div><div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceewol.html">ewol</a> {</div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">namespace </span>compositing {</div><div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classewol_1_1compositing_1_1_area.html">   18</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classewol_1_1compositing_1_1_area.html">Area</a> : <span class="keyword">public</span> <a class="code" href="classewol_1_1_compositing.html">ewol::Compositing</a> {</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">vec3</a> m_position; </div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color&lt;&gt;</a> m_color; </div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr&lt;gale::resource::Program&gt;</a> m_GLprogram;  </div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                int32_t m_GLPosition; </div><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                int32_t m_GLMatrix;   </div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                int32_t m_GLColor;    </div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                int32_t m_GLtexture;  </div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                int32_t m_GLtexID;    </div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr&lt;ewol::resource::Texture&gt;</a> m_resource; </div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                std::vector&lt;vec3 &gt; m_coord; </div><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                std::vector&lt;vec2 &gt; m_coordTex; </div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                std::vector&lt;etk::Color&lt;float&gt; &gt; m_coordColor; </div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <span class="keywordtype">void</span> loadProgram();</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <a class="code" href="classewol_1_1compositing_1_1_area.html#ab8ec321230e107faaaca3939f6cab785">Area</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size);</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#a43809edaf2571c33705b7a6488f1cc0c">~Area</a>();</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#a57aa113a2edb561aae1b1509045b7021">draw</a>(<span class="keywordtype">bool</span> _disableDepthTest=<span class="keyword">true</span>);</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#aa70cf3b0e41c5e8572f67e89d3f8b9d8">clear</a>();</div><div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classewol_1_1compositing_1_1_area.html#a38e297a9eef5339b1b512b7822f7b955">   62</a></span>&#160;                <span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">vec3</a>&amp; <a class="code" href="classewol_1_1compositing_1_1_area.html#a38e297a9eef5339b1b512b7822f7b955">getPos</a>() {</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <span class="keywordflow">return</span> m_position;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                };</div><div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classewol_1_1compositing_1_1_area.html#a6ab060abac660008a7a67c90efc4fc6c">   69</a></span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#a6ab060abac660008a7a67c90efc4fc6c">setPos</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">vec3</a>&amp; _pos) {</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                    m_position = _pos;</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                };</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#a6ab060abac660008a7a67c90efc4fc6c">setPos</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a>&amp; _pos) {</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                    <a class="code" href="classewol_1_1compositing_1_1_area.html#a6ab060abac660008a7a67c90efc4fc6c">setPos</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">vec3</a>(_pos.<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html#a8409de5d430e5cdcb7326aee94176873">x</a>(),_pos.<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html#abc8a9a46cb0bf2c32916bfa3a35dfb22">y</a>(),0));</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                };</div><div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classewol_1_1compositing_1_1_area.html#a25c6a4aebd1252282ff2e3b1d349a3d5">   79</a></span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#a25c6a4aebd1252282ff2e3b1d349a3d5">setRelPos</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">vec3</a>&amp; _pos) {</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                    m_position += _pos;</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                };</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#a25c6a4aebd1252282ff2e3b1d349a3d5">setRelPos</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a>&amp; _pos) {</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    <a class="code" href="classewol_1_1compositing_1_1_area.html#a25c6a4aebd1252282ff2e3b1d349a3d5">setRelPos</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">vec3</a>(_pos.<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html#a8409de5d430e5cdcb7326aee94176873">x</a>(),_pos.<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html#abc8a9a46cb0bf2c32916bfa3a35dfb22">y</a>(),0));</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                };</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1compositing_1_1_area.html#ab4e1158a51fa21f64a044b6e018df52e">print</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size);</div><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                </div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/egami.tag:http://atria-soft.github.io/egami/" href="http://atria-soft.github.io/egami/classegami_1_1_image.html">egami::Image</a>&amp; <span class="keyword">get</span>() {</div><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                    <span class="keywordflow">return</span> m_resource-&gt;get();</div><div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                };</div><div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                <span class="keywordtype">void</span> flush() {</div><div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    m_resource-&gt;flush();</div><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                };</div><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        };</div><div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    };</div><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;};</div><div class="ttc" id="classetk_1_1_vector2_d_html_a8409de5d430e5cdcb7326aee94176873"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html#a8409de5d430e5cdcb7326aee94176873">etk::Vector2D::x</a></div><div class="ttdeci">const T &amp; x() const</div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_a38e297a9eef5339b1b512b7822f7b955"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#a38e297a9eef5339b1b512b7822f7b955">ewol::compositing::Area::getPos</a></div><div class="ttdeci">const vec3 &amp; getPos()</div><div class="ttdoc">get the current display position (sometime needed in the gui control) </div><div class="ttdef"><b>Definition:</b> Area.hpp:62</div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_ab8ec321230e107faaaca3939f6cab785"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#ab8ec321230e107faaaca3939f6cab785">ewol::compositing::Area::Area</a></div><div class="ttdeci">Area(const ivec2 &amp;_size)</div><div class="ttdoc">generic constructor </div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_a43809edaf2571c33705b7a6488f1cc0c"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#a43809edaf2571c33705b7a6488f1cc0c">ewol::compositing::Area::~Area</a></div><div class="ttdeci">virtual ~Area()</div><div class="ttdoc">generic destructor </div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_a25c6a4aebd1252282ff2e3b1d349a3d5"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#a25c6a4aebd1252282ff2e3b1d349a3d5">ewol::compositing::Area::setRelPos</a></div><div class="ttdeci">void setRelPos(const vec3 &amp;_pos)</div><div class="ttdoc">set relative position for the next text writen </div><div class="ttdef"><b>Definition:</b> Area.hpp:79</div></div>
+<div class="ttc" id="__color__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/__color__8hpp.html">Color.hpp</a></div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html">ewol::compositing::Area</a></div><div class="ttdef"><b>Definition:</b> Area.hpp:18</div></div>
+<div class="ttc" id="_compositing_8hpp_html"><div class="ttname"><a href="_compositing_8hpp.html">Compositing.hpp</a></div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_a6ab060abac660008a7a67c90efc4fc6c"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#a6ab060abac660008a7a67c90efc4fc6c">ewol::compositing::Area::setPos</a></div><div class="ttdeci">void setPos(const vec3 &amp;_pos)</div><div class="ttdoc">set position for the next text writen </div><div class="ttdef"><b>Definition:</b> Area.hpp:69</div></div>
+<div class="ttc" id="namespaceewol_html"><div class="ttname"><a href="namespaceewol.html">ewol</a></div><div class="ttdef"><b>Definition:</b> Area.hpp:16</div></div>
+<div class="ttc" id="_texture_8hpp_html"><div class="ttname"><a href="_texture_8hpp.html">Texture.hpp</a></div></div>
+<div class="ttc" id="classetk_1_1_vector2_d_html_abc8a9a46cb0bf2c32916bfa3a35dfb22"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html#abc8a9a46cb0bf2c32916bfa3a35dfb22">etk::Vector2D::y</a></div><div class="ttdeci">const T &amp; y() const</div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_aa70cf3b0e41c5e8572f67e89d3f8b9d8"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#aa70cf3b0e41c5e8572f67e89d3f8b9d8">ewol::compositing::Area::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">clear alll the registered element in the current element </div></div>
+<div class="ttc" id="classegami_1_1_image_html"><div class="ttname"><a href="http://atria-soft.github.io/egami/classegami_1_1_image.html">egami::Image</a></div></div>
+<div class="ttc" id="__image__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/egami/__image__8hpp.html">Image.hpp</a></div></div>
+<div class="ttc" id="classewol_1_1_compositing_html"><div class="ttname"><a href="classewol_1_1_compositing.html">ewol::Compositing</a></div><div class="ttdef"><b>Definition:</b> Compositing.hpp:13</div></div>
+<div class="ttc" id="classetk_1_1_vector2_d_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">etk::Vector2D&lt; int32_t &gt;</a></div></div>
+<div class="ttc" id="classetk_1_1_vector3_d_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_vector3_d.html">etk::Vector3D&lt; float &gt;</a></div></div>
+<div class="ttc" id="classememory_1_1_shared_ptr_html"><div class="ttname"><a href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr&lt; gale::resource::Program &gt;</a></div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_a57aa113a2edb561aae1b1509045b7021"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#a57aa113a2edb561aae1b1509045b7021">ewol::compositing::Area::draw</a></div><div class="ttdeci">void draw(bool _disableDepthTest=true)</div><div class="ttdoc">draw All the refistered text in the current element on openGL </div></div>
+<div class="ttc" id="memory__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/ememory/memory__8hpp.html">memory.hpp</a></div></div>
+<div class="ttc" id="classetk_1_1_color_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a></div></div>
+<div class="ttc" id="classewol_1_1compositing_1_1_area_html_ab4e1158a51fa21f64a044b6e018df52e"><div class="ttname"><a href="classewol_1_1compositing_1_1_area.html#ab4e1158a51fa21f64a044b6e018df52e">ewol::compositing::Area::print</a></div><div class="ttdeci">void print(const ivec2 &amp;_size)</div><div class="ttdoc">add a compleate of the image to display with the requested size </div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:03 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

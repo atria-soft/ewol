@@ -1,0 +1,429 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: ewol::resource::DistanceFieldFont Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>ewol</b></li><li class="navelem"><b>resource</b></li><li class="navelem"><a class="el" href="classewol_1_1resource_1_1_distance_field_font.html">DistanceFieldFont</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="classewol_1_1resource_1_1_distance_field_font-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">ewol::resource::DistanceFieldFont Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+Inheritance diagram for ewol::resource::DistanceFieldFont:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classewol_1_1resource_1_1_distance_field_font.png" usemap="#ewol::resource::DistanceFieldFont_map" alt=""/>
+  <map id="ewol::resource::DistanceFieldFont_map" name="ewol::resource::DistanceFieldFont_map">
+<area href="classewol_1_1resource_1_1_texture.html" alt="ewol::resource::Texture" shape="rect" coords="0,56,203,80"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a44ec2623ba08fc5991a75e5d649a0863"><td class="memItemLeft" align="right" valign="top"><a id="a44ec2623ba08fc5991a75e5d649a0863"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DECLARE_RESOURCE_NAMED_FACTORY</b> (<a class="el" href="classewol_1_1resource_1_1_distance_field_font.html">DistanceFieldFont</a>)</td></tr>
+<tr class="separator:a44ec2623ba08fc5991a75e5d649a0863"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5d4dbb9b1b30ddc2789ddbf86ae3341"><td class="memItemLeft" align="right" valign="top"><a id="ae5d4dbb9b1b30ddc2789ddbf86ae3341"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getDisplayRatio</b> (float _size)</td></tr>
+<tr class="separator:ae5d4dbb9b1b30ddc2789ddbf86ae3341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26d9eb599dd11336ff5e32fcc9bce2da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1resource_1_1_distance_field_font.html#a26d9eb599dd11336ff5e32fcc9bce2da">getHeight</a> (float _size)</td></tr>
+<tr class="separator:a26d9eb599dd11336ff5e32fcc9bce2da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb490aa0e5e8fa09f24fada2b5cc3478"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1resource_1_1_distance_field_font.html#aeb490aa0e5e8fa09f24fada2b5cc3478">getSize</a> (float _fontHeight)</td></tr>
+<tr class="separator:aeb490aa0e5e8fa09f24fada2b5cc3478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21b564b0951416957c62ad5e00ae1a07"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1resource_1_1_distance_field_font.html#a21b564b0951416957c62ad5e00ae1a07">getIndex</a> (char32_t _charcode)</td></tr>
+<tr class="separator:a21b564b0951416957c62ad5e00ae1a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dc15cac6cef3aaab11986a78343c64d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classewol_1_1_glyph_property.html">ewol::GlyphProperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1resource_1_1_distance_field_font.html#a2dc15cac6cef3aaab11986a78343c64d">getGlyphPointer</a> (const char32_t &amp;_charcode)</td></tr>
+<tr class="separator:a2dc15cac6cef3aaab11986a78343c64d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbe2d616244a60e09dbe0b1403020a11"><td class="memItemLeft" align="right" valign="top"><a id="acbe2d616244a60e09dbe0b1403020a11"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getPixelBorderSize</b> ()</td></tr>
+<tr class="separator:acbe2d616244a60e09dbe0b1403020a11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33909b9e6e2fc943952eac9bb09819ba"><td class="memItemLeft" align="right" valign="top"><a id="a33909b9e6e2fc943952eac9bb09819ba"></a>
+const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTextureBorderSize</b> ()</td></tr>
+<tr class="separator:a33909b9e6e2fc943952eac9bb09819ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a546aa2c4e51922eafbefe1d62e7ceacf"><td class="memItemLeft" align="right" valign="top"><a id="a546aa2c4e51922eafbefe1d62e7ceacf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>exportOnFile</b> ()</td></tr>
+<tr class="separator:a546aa2c4e51922eafbefe1d62e7ceacf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada4a2085ebd4c42013285925fbd3ef18"><td class="memItemLeft" align="right" valign="top"><a id="ada4a2085ebd4c42013285925fbd3ef18"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>importFromFile</b> ()</td></tr>
+<tr class="separator:ada4a2085ebd4c42013285925fbd3ef18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classewol_1_1resource_1_1_texture"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classewol_1_1resource_1_1_texture')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classewol_1_1resource_1_1_texture.html">ewol::resource::Texture</a></td></tr>
+<tr class="memitem:aeaf228d829cef04b5feafab09ecc4af0 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="aeaf228d829cef04b5feafab09ecc4af0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DECLARE_RESOURCE_FACTORY</b> (<a class="el" href="classewol_1_1resource_1_1_texture.html">Texture</a>)</td></tr>
+<tr class="separator:aeaf228d829cef04b5feafab09ecc4af0 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a025d7ede60049a1e59d353d06015b58e inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a025d7ede60049a1e59d353d06015b58e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setImageSize</b> (<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#a920aac35b92f04facb6f3e01b9b3670b">ivec2</a> newSize)</td></tr>
+<tr class="separator:a025d7ede60049a1e59d353d06015b58e inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17599736e40850e01d726e85ac95d767 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a17599736e40850e01d726e85ac95d767"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/egami.tag:http://atria-soft.github.io/egami/" href="http://atria-soft.github.io/egami/classegami_1_1_image.html">egami::Image</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> ()</td></tr>
+<tr class="separator:a17599736e40850e01d726e85ac95d767 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba70e0a13b8af40c2c4d1fffd463fcab inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="aba70e0a13b8af40c2c4d1fffd463fcab"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>flush</b> ()</td></tr>
+<tr class="separator:aba70e0a13b8af40c2c4d1fffd463fcab inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a0d2aca07e5b9cad71635d8abbf4e43 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a4a0d2aca07e5b9cad71635d8abbf4e43"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>updateContext</b> ()</td></tr>
+<tr class="separator:a4a0d2aca07e5b9cad71635d8abbf4e43 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ec1ea28fc61765fc59c20296c8838b0 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a4ec1ea28fc61765fc59c20296c8838b0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeContext</b> ()</td></tr>
+<tr class="separator:a4ec1ea28fc61765fc59c20296c8838b0 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63e47bd4d55e4c302ad360fb2328bfb1 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a63e47bd4d55e4c302ad360fb2328bfb1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeContextToLate</b> ()</td></tr>
+<tr class="separator:a63e47bd4d55e4c302ad360fb2328bfb1 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a61a51ada1d7346545567438904b25e inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a6a61a51ada1d7346545567438904b25e"></a>
+const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#a920aac35b92f04facb6f3e01b9b3670b">ivec2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getOpenGlSize</b> () const</td></tr>
+<tr class="separator:a6a61a51ada1d7346545567438904b25e inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a302338e58202f3feee459d4795659d77 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a302338e58202f3feee459d4795659d77"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRendererId</b> () const</td></tr>
+<tr class="separator:a302338e58202f3feee459d4795659d77 inherit pub_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a40a8339267aad46674fe200c42bf2618"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>&lt; <a class="el" href="classewol_1_1resource_1_1_distance_field_font.html">ewol::resource::DistanceFieldFont</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1resource_1_1_distance_field_font.html#a40a8339267aad46674fe200c42bf2618">keep</a> (const std::string &amp;_filename)</td></tr>
+<tr class="separator:a40a8339267aad46674fe200c42bf2618"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a0b19353913e7108c42d61edd606e6326"><td class="memItemLeft" align="right" valign="top"><a id="a0b19353913e7108c42d61edd606e6326"></a>
+std::vector&lt; <a class="el" href="classewol_1_1_glyph_property.html">GlyphProperty</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_listElement</b></td></tr>
+<tr class="separator:a0b19353913e7108c42d61edd606e6326"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a5fd4972ce52b1ffaa09fc474d5714ebc"><td class="memItemLeft" align="right" valign="top"><a id="a5fd4972ce52b1ffaa09fc474d5714ebc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (const std::string &amp;_fontName)</td></tr>
+<tr class="separator:a5fd4972ce52b1ffaa09fc474d5714ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classewol_1_1resource_1_1_texture"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classewol_1_1resource_1_1_texture')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classewol_1_1resource_1_1_texture.html">ewol::resource::Texture</a></td></tr>
+<tr class="memitem:a9b737132e25ab64a3044cd22d4e44d4f inherit pro_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a9b737132e25ab64a3044cd22d4e44d4f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (const std::string &amp;_filename)</td></tr>
+<tr class="separator:a9b737132e25ab64a3044cd22d4e44d4f inherit pro_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a153fc175720fbc7abd0333698288283e inherit pro_methods_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a153fc175720fbc7abd0333698288283e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
+<tr class="separator:a153fc175720fbc7abd0333698288283e inherit pro_methods_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_attribs_classewol_1_1resource_1_1_texture"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classewol_1_1resource_1_1_texture')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classewol_1_1resource_1_1_texture.html">ewol::resource::Texture</a></td></tr>
+<tr class="memitem:a9eab3df79dffca771b331e913f67f04c inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1resource_1_1_texture.html#a9eab3df79dffca771b331e913f67f04c">m_texId</a></td></tr>
+<tr class="separator:a9eab3df79dffca771b331e913f67f04c inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91fdfe2e425f96ceae00251cd40a5f0e inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a91fdfe2e425f96ceae00251cd40a5f0e"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/egami.tag:http://atria-soft.github.io/egami/" href="http://atria-soft.github.io/egami/classegami_1_1_image.html">egami::Image</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_data</b></td></tr>
+<tr class="separator:a91fdfe2e425f96ceae00251cd40a5f0e inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cd0363458ddaeedb45d0bf9bee279cc inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="a4cd0363458ddaeedb45d0bf9bee279cc"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_endPointSize</b></td></tr>
+<tr class="separator:a4cd0363458ddaeedb45d0bf9bee279cc inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9c866bdb7e2f840f25ea265c526d8ca inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memItemLeft" align="right" valign="top"><a id="ab9c866bdb7e2f840f25ea265c526d8ca"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_loaded</b></td></tr>
+<tr class="separator:ab9c866bdb7e2f840f25ea265c526d8ca inherit pro_attribs_classewol_1_1resource_1_1_texture"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2dc15cac6cef3aaab11986a78343c64d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dc15cac6cef3aaab11986a78343c64d">&sect;&nbsp;</a></span>getGlyphPointer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classewol_1_1_glyph_property.html">ewol::GlyphProperty</a>* ewol::resource::DistanceFieldFont::getGlyphPointer </td>
+          <td>(</td>
+          <td class="paramtype">const char32_t &amp;&#160;</td>
+          <td class="paramname"><em>_charcode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the pointer on the coresponding glyph </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_charcode</td><td>The unicodeValue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pointer on the glyph == &gt; never nullptr </dd></dl>
+
+</div>
+</div>
+<a id="a26d9eb599dd11336ff5e32fcc9bce2da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26d9eb599dd11336ff5e32fcc9bce2da">&sect;&nbsp;</a></span>getHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ewol::resource::DistanceFieldFont::getHeight </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the display height of this font </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_size</td><td>Request font size </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Dimention of the font need between 2 lines </dd></dl>
+
+</div>
+</div>
+<a id="a21b564b0951416957c62ad5e00ae1a07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21b564b0951416957c62ad5e00ae1a07">&sect;&nbsp;</a></span>getIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t ewol::resource::DistanceFieldFont::getIndex </td>
+          <td>(</td>
+          <td class="paramtype">char32_t&#160;</td>
+          <td class="paramname"><em>_charcode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the ID of a unicode charcode </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_charcode</td><td>The unicodeValue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The ID in the table (if it does not exist : return 0) </dd></dl>
+
+</div>
+</div>
+<a id="aeb490aa0e5e8fa09f24fada2b5cc3478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb490aa0e5e8fa09f24fada2b5cc3478">&sect;&nbsp;</a></span>getSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ewol::resource::DistanceFieldFont::getSize </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_fontHeight</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the font size with a specific display size </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_fontHeight</td><td>Request font height </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Dimention of the font for this compleate line size. </dd></dl>
+
+</div>
+</div>
+<a id="a40a8339267aad46674fe200c42bf2618"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40a8339267aad46674fe200c42bf2618">&sect;&nbsp;</a></span>keep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>&lt;<a class="el" href="classewol_1_1resource_1_1_distance_field_font.html">ewol::resource::DistanceFieldFont</a>&gt; ewol::resource::DistanceFieldFont::keep </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>keep the resource pointer. </p>
+<dl class="section note"><dt>Note</dt><dd>Never free this pointer by your own... </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_filename</td><td>Name of the texture font. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer on the resource or nullptr if an error occured. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/ewol/ewol/resource/<a class="el" href="_distance_field_font_8hpp_source.html">DistanceFieldFont.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:04 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

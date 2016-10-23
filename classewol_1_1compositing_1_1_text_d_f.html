@@ -1,0 +1,948 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: ewol::compositing::TextDF Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>ewol</b></li><li class="navelem"><b>compositing</b></li><li class="navelem"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html">TextDF</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="classewol_1_1compositing_1_1_text_d_f-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">ewol::compositing::TextDF Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+Inheritance diagram for ewol::compositing::TextDF:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classewol_1_1compositing_1_1_text_d_f.png" usemap="#ewol::compositing::TextDF_map" alt=""/>
+  <map id="ewol::compositing::TextDF_map" name="ewol::compositing::TextDF_map">
+<area href="classewol_1_1compositing_1_1_text_base.html" alt="ewol::compositing::TextBase" shape="rect" coords="0,56,167,80"/>
+<area href="classewol_1_1_compositing.html" alt="ewol::Compositing" shape="rect" coords="0,0,167,24"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aacd66d6b0e117940a5822c36738f31d3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#aacd66d6b0e117940a5822c36738f31d3">TextDF</a> (const std::string &amp;_fontName=&quot;&quot;, int32_t _fontSize=-1)</td></tr>
+<tr class="separator:aacd66d6b0e117940a5822c36738f31d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b46cec5b34d9b747f20d22fc0736d3c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a4b46cec5b34d9b747f20d22fc0736d3c">~TextDF</a> ()</td></tr>
+<tr class="separator:a4b46cec5b34d9b747f20d22fc0736d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e3b4b82bec000a1b40227df34d6d24d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a2e3b4b82bec000a1b40227df34d6d24d">updateSizeToRender</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_size)</td></tr>
+<tr class="separator:a2e3b4b82bec000a1b40227df34d6d24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cfb0d226d38b879136712a0635ea2ae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a7cfb0d226d38b879136712a0635ea2ae">clear</a> ()</td></tr>
+<tr class="separator:a7cfb0d226d38b879136712a0635ea2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a313aee851f9e5aa682a4fb47a361b967"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a313aee851f9e5aa682a4fb47a361b967">drawD</a> (bool _disableDepthTest)</td></tr>
+<tr class="separator:a313aee851f9e5aa682a4fb47a361b967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a037d62b8d7fa04e399b7561369eff10d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a037d62b8d7fa04e399b7561369eff10d">drawMT</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a> &amp;_transformationMatrix, bool _enableDepthTest)</td></tr>
+<tr class="separator:a037d62b8d7fa04e399b7561369eff10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff50c12225b3f763c9a46ccdc4002fcb"><td class="memItemLeft" align="right" valign="top"><a id="aff50c12225b3f763c9a46ccdc4002fcb"></a>
+virtual float&#160;</td><td class="memItemRight" valign="bottom"><b>getHeight</b> ()</td></tr>
+<tr class="separator:aff50c12225b3f763c9a46ccdc4002fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a795324bb117dce9625f54b3dd310a8bd"><td class="memItemLeft" align="right" valign="top"><a id="a795324bb117dce9625f54b3dd310a8bd"></a>
+virtual float&#160;</td><td class="memItemRight" valign="bottom"><b>getSize</b> ()</td></tr>
+<tr class="separator:a795324bb117dce9625f54b3dd310a8bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f997531a491612931ddcfbe719a90ac"><td class="memItemLeft" align="right" valign="top"><a id="a0f997531a491612931ddcfbe719a90ac"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setSize</b> (float _size)</td></tr>
+<tr class="separator:a0f997531a491612931ddcfbe719a90ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1afcc767530c04483b6e942c7934ac58"><td class="memItemLeft" align="right" valign="top"><a id="a1afcc767530c04483b6e942c7934ac58"></a>
+virtual <a class="el" href="classewol_1_1_glyph_property.html">ewol::GlyphProperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getGlyphPointer</b> (char32_t _charcode)</td></tr>
+<tr class="separator:a1afcc767530c04483b6e942c7934ac58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9037cc3e230629c70f3b0c8276e32317"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a9037cc3e230629c70f3b0c8276e32317">loadProgram</a> (const std::string &amp;_shaderName)</td></tr>
+<tr class="separator:a9037cc3e230629c70f3b0c8276e32317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d81bdc8a2f4e5c157079b32ed5c4264"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a0d81bdc8a2f4e5c157079b32ed5c4264">setFontSize</a> (int32_t _fontSize)</td></tr>
+<tr class="separator:a0d81bdc8a2f4e5c157079b32ed5c4264"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fa394401162361b4a28f27742b39065"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a4fa394401162361b4a28f27742b39065">setFontName</a> (const std::string &amp;_fontName)</td></tr>
+<tr class="separator:a4fa394401162361b4a28f27742b39065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8927ba1761816b4ad873c5f65f6bb453"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a8927ba1761816b4ad873c5f65f6bb453">setFont</a> (std::string _fontName, int32_t _fontSize)</td></tr>
+<tr class="separator:a8927ba1761816b4ad873c5f65f6bb453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac77f2edd2bb4b7c734f872eec16b9d38"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#ac77f2edd2bb4b7c734f872eec16b9d38">setFontMode</a> (enum <a class="el" href="_textured_font_8hpp.html#a2e7a6a11ccb4558346e9766c9225eb46">ewol::font::mode</a> _mode)</td></tr>
+<tr class="separator:ac77f2edd2bb4b7c734f872eec16b9d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71ad6a159e437297cf52d19f1fd4d8a9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a71ad6a159e437297cf52d19f1fd4d8a9">printChar</a> (const char32_t &amp;_charcode)</td></tr>
+<tr class="separator:a71ad6a159e437297cf52d19f1fd4d8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5077adbdbe5ce00b4376b7d92dbca2ce"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a5077adbdbe5ce00b4376b7d92dbca2ce">calculateSizeChar</a> (const char32_t &amp;_charcode)</td></tr>
+<tr class="separator:a5077adbdbe5ce00b4376b7d92dbca2ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classewol_1_1compositing_1_1_text_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classewol_1_1compositing_1_1_text_base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classewol_1_1compositing_1_1_text_base.html">ewol::compositing::TextBase</a></td></tr>
+<tr class="memitem:a8fc0a0b68996908b69c95f07f7bb490b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a id="a8fc0a0b68996908b69c95f07f7bb490b"></a>
+virtual <a class="el" href="classewol_1_1compositing_1_1_drawing.html">ewol::compositing::Drawing</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDrawing</b> ()</td></tr>
+<tr class="separator:a8fc0a0b68996908b69c95f07f7bb490b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee7e998e29d2150941f6ea75c6beea6b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aee7e998e29d2150941f6ea75c6beea6b">TextBase</a> (const std::string &amp;_shaderName=&quot;{ewol}DATA:text.prog&quot;, bool _loadProgram=true)</td></tr>
+<tr class="separator:aee7e998e29d2150941f6ea75c6beea6b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4298e3dec584b863c8b3df22edfeb91d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a4298e3dec584b863c8b3df22edfeb91d">~TextBase</a> ()</td></tr>
+<tr class="separator:a4298e3dec584b863c8b3df22edfeb91d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5ed4dea08f0c4cfac29486dd365226a inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae5ed4dea08f0c4cfac29486dd365226a">translate</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_vect)</td></tr>
+<tr class="separator:ae5ed4dea08f0c4cfac29486dd365226a inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf4b67fe49011950a9ee75569fd6c80b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#adf4b67fe49011950a9ee75569fd6c80b">rotate</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_vect, float _angle)</td></tr>
+<tr class="separator:adf4b67fe49011950a9ee75569fd6c80b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a363ef41dbc74511b6a1cfe353baacd31 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a363ef41dbc74511b6a1cfe353baacd31">scale</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_vect)</td></tr>
+<tr class="separator:a363ef41dbc74511b6a1cfe353baacd31 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adda23157825b6a2569fbe449b223767c inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#adda23157825b6a2569fbe449b223767c">draw</a> (bool _disableDepthTest=true)</td></tr>
+<tr class="separator:adda23157825b6a2569fbe449b223767c inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9343c7440425dd902cf2a0b9b5e40d85 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a9343c7440425dd902cf2a0b9b5e40d85">draw</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a> &amp;_transformationMatrix, bool _enableDepthTest=false)</td></tr>
+<tr class="separator:a9343c7440425dd902cf2a0b9b5e40d85 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a283472d9c5384829d0769e21e6093a inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a9a283472d9c5384829d0769e21e6093a">reset</a> ()</td></tr>
+<tr class="separator:a9a283472d9c5384829d0769e21e6093a inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88da239a330542b6cfdcbdb193a2f8c4 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a88da239a330542b6cfdcbdb193a2f8c4">getPos</a> ()</td></tr>
+<tr class="separator:a88da239a330542b6cfdcbdb193a2f8c4 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23d9f2c80e49531aad7d9ea6788e6a3f inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a23d9f2c80e49531aad7d9ea6788e6a3f">setPos</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_pos)</td></tr>
+<tr class="separator:a23d9f2c80e49531aad7d9ea6788e6a3f inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe6db7087e59f5402aeab68a8bd2cb60 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abe6db7087e59f5402aeab68a8bd2cb60">setPos</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_pos)</td></tr>
+<tr class="separator:abe6db7087e59f5402aeab68a8bd2cb60 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a058b43f1dcbde4c8160636b4e770f50f inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a058b43f1dcbde4c8160636b4e770f50f">setRelPos</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_pos)</td></tr>
+<tr class="separator:a058b43f1dcbde4c8160636b4e770f50f inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc109b5cf82d134b13e8d508a44e1e0d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abc109b5cf82d134b13e8d508a44e1e0d">setRelPos</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_pos)</td></tr>
+<tr class="separator:abc109b5cf82d134b13e8d508a44e1e0d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e3f0821e2ff15786ddd454b94f8be9 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a75e3f0821e2ff15786ddd454b94f8be9">setDefaultColorBg</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;&gt; &amp;_color)</td></tr>
+<tr class="separator:a75e3f0821e2ff15786ddd454b94f8be9 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d9af587e1a231b442902e2598a6128 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#af1d9af587e1a231b442902e2598a6128">setDefaultColorFg</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;&gt; &amp;_color)</td></tr>
+<tr class="separator:af1d9af587e1a231b442902e2598a6128 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab74d44aaac3386d72018ddc5c4fe8468 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ab74d44aaac3386d72018ddc5c4fe8468">setColor</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;&gt; &amp;_color)</td></tr>
+<tr class="separator:ab74d44aaac3386d72018ddc5c4fe8468 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87e4aafab58531c7a5344578d6f011f4 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a87e4aafab58531c7a5344578d6f011f4">setColorBg</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;&gt; &amp;_color)</td></tr>
+<tr class="separator:a87e4aafab58531c7a5344578d6f011f4 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27cf1903604637d628c1af2c92ecbc3e inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a27cf1903604637d628c1af2c92ecbc3e">setClippingWidth</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_pos, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_width)</td></tr>
+<tr class="separator:a27cf1903604637d628c1af2c92ecbc3e inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba023214ede6c1a7b964799564a8af8d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aba023214ede6c1a7b964799564a8af8d">setClippingWidth</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_pos, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_width)</td></tr>
+<tr class="separator:aba023214ede6c1a7b964799564a8af8d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a359e3c0504dbcd096828c5bf681f8ac5 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a359e3c0504dbcd096828c5bf681f8ac5">setClipping</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_pos, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &amp;_posEnd)</td></tr>
+<tr class="separator:a359e3c0504dbcd096828c5bf681f8ac5 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a217b704dbd9aa2dba3acd58b541300 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a1a217b704dbd9aa2dba3acd58b541300">setClipping</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_pos, const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_posEnd)</td></tr>
+<tr class="separator:a1a217b704dbd9aa2dba3acd58b541300 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0b1194b4c2e03d9daef2d96e7442bf9 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#af0b1194b4c2e03d9daef2d96e7442bf9">setClippingMode</a> (bool _newMode)</td></tr>
+<tr class="separator:af0b1194b4c2e03d9daef2d96e7442bf9 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65ab0a572d8af87b96556d0e3049b23b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="_textured_font_8hpp.html#a2e7a6a11ccb4558346e9766c9225eb46">ewol::font::mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a65ab0a572d8af87b96556d0e3049b23b">getFontMode</a> ()</td></tr>
+<tr class="separator:a65ab0a572d8af87b96556d0e3049b23b inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d18e1de7271b5d73d9445b56f226cff inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a8d18e1de7271b5d73d9445b56f226cff">setFontBold</a> (bool _status)</td></tr>
+<tr class="separator:a8d18e1de7271b5d73d9445b56f226cff inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d14b430c87238bfd9ca050c327eeded inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a1d14b430c87238bfd9ca050c327eeded">setFontItalic</a> (bool _status)</td></tr>
+<tr class="separator:a1d14b430c87238bfd9ca050c327eeded inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8a2ddb95be89ee05247fc184db18fbd inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae8a2ddb95be89ee05247fc184db18fbd">setKerningMode</a> (bool _newMode)</td></tr>
+<tr class="separator:ae8a2ddb95be89ee05247fc184db18fbd inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2750a3a2ab1366008c2c69418877a9c inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ac2750a3a2ab1366008c2c69418877a9c">print</a> (const std::string &amp;_text)</td></tr>
+<tr class="separator:ac2750a3a2ab1366008c2c69418877a9c inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac715421a52efdb33633110cf922c3be inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aac715421a52efdb33633110cf922c3be">print</a> (const std::u32string &amp;_text)</td></tr>
+<tr class="separator:aac715421a52efdb33633110cf922c3be inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21d5bdba089bcc30843bb59425d548de inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a21d5bdba089bcc30843bb59425d548de">printDecorated</a> (const std::string &amp;_text)</td></tr>
+<tr class="separator:a21d5bdba089bcc30843bb59425d548de inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1efb828edb12d9d00cef3a3e205e0040 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a1efb828edb12d9d00cef3a3e205e0040">printDecorated</a> (const std::u32string &amp;_text)</td></tr>
+<tr class="separator:a1efb828edb12d9d00cef3a3e205e0040 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a668bbab703663bc5caa6f9fe035594d0 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a668bbab703663bc5caa6f9fe035594d0">printHTML</a> (const std::string &amp;_text)</td></tr>
+<tr class="separator:a668bbab703663bc5caa6f9fe035594d0 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdaf1e96d757abccb328ff6be8763dbe inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#acdaf1e96d757abccb328ff6be8763dbe">printHTML</a> (const std::u32string &amp;_text)</td></tr>
+<tr class="separator:acdaf1e96d757abccb328ff6be8763dbe inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a868bef9ce6d06703a17f9cc004fcbb inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a1a868bef9ce6d06703a17f9cc004fcbb">print</a> (const std::string &amp;_text, const std::vector&lt; <a class="el" href="classewol_1_1compositing_1_1_text_decoration.html">TextDecoration</a> &gt; &amp;_decoration)</td></tr>
+<tr class="separator:a1a868bef9ce6d06703a17f9cc004fcbb inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e41b20a79d1593984a8752f4a012b3 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a96e41b20a79d1593984a8752f4a012b3">print</a> (const std::u32string &amp;_text, const std::vector&lt; <a class="el" href="classewol_1_1compositing_1_1_text_decoration.html">TextDecoration</a> &gt; &amp;_decoration)</td></tr>
+<tr class="separator:a96e41b20a79d1593984a8752f4a012b3 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29be79f2a806fb5ebeb0dd9528ae080 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ab29be79f2a806fb5ebeb0dd9528ae080">forceLineReturn</a> ()</td></tr>
+<tr class="separator:ab29be79f2a806fb5ebeb0dd9528ae080 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d35829ef05d5e75964b928354532ba5 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a6d35829ef05d5e75964b928354532ba5">setTextAlignement</a> (float _startTextpos, float _stopTextPos, enum ewol::compositing::aligneMode _alignement=ewol::compositing::alignDisable)</td></tr>
+<tr class="separator:a6d35829ef05d5e75964b928354532ba5 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b021804053127defba9bf0da3c469e5 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a8b021804053127defba9bf0da3c469e5">disableAlignement</a> ()</td></tr>
+<tr class="separator:a8b021804053127defba9bf0da3c469e5 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a166e1137e2d26e8c79c0b8e776977262 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">enum ewol::compositing::aligneMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a166e1137e2d26e8c79c0b8e776977262">getAlignement</a> ()</td></tr>
+<tr class="separator:a166e1137e2d26e8c79c0b8e776977262 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09515ffdbb9e99748d34c4c2f647fc90 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a09515ffdbb9e99748d34c4c2f647fc90">calculateSizeHTML</a> (const std::string &amp;_text)</td></tr>
+<tr class="separator:a09515ffdbb9e99748d34c4c2f647fc90 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc78490f74c2944c9463e6071da79233 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abc78490f74c2944c9463e6071da79233">calculateSizeHTML</a> (const std::u32string &amp;_text)</td></tr>
+<tr class="separator:abc78490f74c2944c9463e6071da79233 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a913878cef1119dfb4167dfd3d0e02cf8 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a913878cef1119dfb4167dfd3d0e02cf8">calculateSizeDecorated</a> (const std::string &amp;_text)</td></tr>
+<tr class="separator:a913878cef1119dfb4167dfd3d0e02cf8 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c7aeb6ba0ab8b9b42ed9a5b2da151b3 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a7c7aeb6ba0ab8b9b42ed9a5b2da151b3">calculateSizeDecorated</a> (const std::u32string &amp;_text)</td></tr>
+<tr class="separator:a7c7aeb6ba0ab8b9b42ed9a5b2da151b3 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abec0f7285fc85c774ae2afedc0c71668 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abec0f7285fc85c774ae2afedc0c71668">calculateSize</a> (const std::string &amp;_text)</td></tr>
+<tr class="separator:abec0f7285fc85c774ae2afedc0c71668 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a136d42b22d5dff5dd9dcf3fd969a9 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ad7a136d42b22d5dff5dd9dcf3fd969a9">calculateSize</a> (const std::u32string &amp;_text)</td></tr>
+<tr class="separator:ad7a136d42b22d5dff5dd9dcf3fd969a9 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff32ea72c70c2d5b215b7ef1801c8c5d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aff32ea72c70c2d5b215b7ef1801c8c5d">calculateSize</a> (const char32_t &amp;_charcode)</td></tr>
+<tr class="separator:aff32ea72c70c2d5b215b7ef1801c8c5d inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6629acf3d55026c795d068cec04adc40 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a6629acf3d55026c795d068cec04adc40">printCursor</a> (bool _isInsertMode, float _cursorSize=20.0f)</td></tr>
+<tr class="separator:a6629acf3d55026c795d068cec04adc40 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad878bb3432e82b81fce38ecbdd150983 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ad878bb3432e82b81fce38ecbdd150983">disableCursor</a> ()</td></tr>
+<tr class="separator:ad878bb3432e82b81fce38ecbdd150983 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49df8c763b51c38e072f94ff449465c7 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a49df8c763b51c38e072f94ff449465c7">setCursorPos</a> (int32_t _cursorPos)</td></tr>
+<tr class="separator:a49df8c763b51c38e072f94ff449465c7 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12128b8817b4f58b3c408142975c7a4f inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a12128b8817b4f58b3c408142975c7a4f">setCursorSelection</a> (int32_t _cursorPos, int32_t _selectionStartPos)</td></tr>
+<tr class="separator:a12128b8817b4f58b3c408142975c7a4f inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18ecd24d2840e5e93ffdd20ffe6d9029 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a18ecd24d2840e5e93ffdd20ffe6d9029">setSelectionColor</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;&gt; &amp;_color)</td></tr>
+<tr class="separator:a18ecd24d2840e5e93ffdd20ffe6d9029 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af42bd3b306e1043bc2553da796254aa4 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#af42bd3b306e1043bc2553da796254aa4">setCursorColor</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt;&gt; &amp;_color)</td></tr>
+<tr class="separator:af42bd3b306e1043bc2553da796254aa4 inherit pub_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classewol_1_1_compositing"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classewol_1_1_compositing')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classewol_1_1_compositing.html">ewol::Compositing</a></td></tr>
+<tr class="memitem:a352cfed594107e9fbf9ec5dff9385cff inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a352cfed594107e9fbf9ec5dff9385cff">Compositing</a> ()</td></tr>
+<tr class="separator:a352cfed594107e9fbf9ec5dff9385cff inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8519577d443b96014968ce6eedbf38ef inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a8519577d443b96014968ce6eedbf38ef">~Compositing</a> ()</td></tr>
+<tr class="separator:a8519577d443b96014968ce6eedbf38ef inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4a02936db08e8b6425fcfecc9a3255 inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#abd4a02936db08e8b6425fcfecc9a3255">resetMatrix</a> ()</td></tr>
+<tr class="separator:abd4a02936db08e8b6425fcfecc9a3255 inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a939a77b2a691a068bcd131dce1247896 inherit pub_methods_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1_compositing.html#a939a77b2a691a068bcd131dce1247896">setMatrix</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a> &amp;_mat)</td></tr>
+<tr class="separator:a939a77b2a691a068bcd131dce1247896 inherit pub_methods_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a3a432f9f19d878f741abcf7eb04a9a05"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>&lt; <a class="el" href="classewol_1_1resource_1_1_distance_field_font.html">ewol::resource::DistanceFieldFont</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a3a432f9f19d878f741abcf7eb04a9a05">m_fontDF</a></td></tr>
+<tr class="separator:a3a432f9f19d878f741abcf7eb04a9a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75434553c3b01cadbbfb5eb21505cef2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a75434553c3b01cadbbfb5eb21505cef2">m_glyphLevel</a></td></tr>
+<tr class="separator:a75434553c3b01cadbbfb5eb21505cef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a614fb14158161a9c1d9be2aaf13332c6"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_d_f.html#a614fb14158161a9c1d9be2aaf13332c6">m_GLglyphLevel</a></td></tr>
+<tr class="separator:a614fb14158161a9c1d9be2aaf13332c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f197265e6978754cf6557c5d7cec812"><td class="memItemLeft" align="right" valign="top"><a id="a4f197265e6978754cf6557c5d7cec812"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>m_size</b></td></tr>
+<tr class="separator:a4f197265e6978754cf6557c5d7cec812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classewol_1_1compositing_1_1_text_base"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classewol_1_1compositing_1_1_text_base')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classewol_1_1compositing_1_1_text_base.html">ewol::compositing::TextBase</a></td></tr>
+<tr class="memitem:ad9880168c72858d9c38984ffc0530bd8 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classewol_1_1compositing_1_1_drawing.html">ewol::compositing::Drawing</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ad9880168c72858d9c38984ffc0530bd8">m_vectorialDraw</a></td></tr>
+<tr class="separator:ad9880168c72858d9c38984ffc0530bd8 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92e80500753260c414a1f3087fbf06bf inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a92e80500753260c414a1f3087fbf06bf">m_nbCharDisplayed</a></td></tr>
+<tr class="separator:a92e80500753260c414a1f3087fbf06bf inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a657d3c2ba4efa95f364cb777ec96a3 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a4a657d3c2ba4efa95f364cb777ec96a3">m_sizeDisplayStart</a></td></tr>
+<tr class="separator:a4a657d3c2ba4efa95f364cb777ec96a3 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae505b7780255791f98e2495f61be148b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae505b7780255791f98e2495f61be148b">m_sizeDisplayStop</a></td></tr>
+<tr class="separator:ae505b7780255791f98e2495f61be148b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe5a7a39e99996daf46f89fe2f1f873c inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abe5a7a39e99996daf46f89fe2f1f873c">m_needDisplay</a></td></tr>
+<tr class="separator:abe5a7a39e99996daf46f89fe2f1f873c inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fc6a408bc69f150ea0a27058d9fd03 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ad6fc6a408bc69f150ea0a27058d9fd03">m_position</a></td></tr>
+<tr class="separator:ad6fc6a408bc69f150ea0a27058d9fd03 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92f7d35d50924fa8922eb774b547ee01 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a92f7d35d50924fa8922eb774b547ee01">m_clippingPosStart</a></td></tr>
+<tr class="separator:a92f7d35d50924fa8922eb774b547ee01 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b7e1609ea16d154d51851abb9e65c1 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae4b7e1609ea16d154d51851abb9e65c1">m_clippingPosStop</a></td></tr>
+<tr class="separator:ae4b7e1609ea16d154d51851abb9e65c1 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8914d1a852d8d72d6b95da0923b74c2 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#af8914d1a852d8d72d6b95da0923b74c2">m_clippingEnable</a></td></tr>
+<tr class="separator:af8914d1a852d8d72d6b95da0923b74c2 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a457e88aea31fd718fdb29d660e4fc10e inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a457e88aea31fd718fdb29d660e4fc10e">m_defaultColorFg</a></td></tr>
+<tr class="separator:a457e88aea31fd718fdb29d660e4fc10e inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae428f595254a5b1ec4e218d5ee0cae70 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae428f595254a5b1ec4e218d5ee0cae70">m_defaultColorBg</a></td></tr>
+<tr class="separator:ae428f595254a5b1ec4e218d5ee0cae70 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0cce9b43b7aaad9c45cc20dbb3c9eaa inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#af0cce9b43b7aaad9c45cc20dbb3c9eaa">m_color</a></td></tr>
+<tr class="separator:af0cce9b43b7aaad9c45cc20dbb3c9eaa inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada4c6f84c2edf7c497d3ec60aa0912d0 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ada4c6f84c2edf7c497d3ec60aa0912d0">m_colorBg</a></td></tr>
+<tr class="separator:ada4c6f84c2edf7c497d3ec60aa0912d0 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72078af983324b60d13d9f41bf7a9d56 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a72078af983324b60d13d9f41bf7a9d56">m_colorCursor</a></td></tr>
+<tr class="separator:a72078af983324b60d13d9f41bf7a9d56 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1a19911d3379bb866da35d8940d8c4f inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ab1a19911d3379bb866da35d8940d8c4f">m_colorSelection</a></td></tr>
+<tr class="separator:ab1a19911d3379bb866da35d8940d8c4f inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad001f59581963675063cdd572bd334d7 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="_textured_font_8hpp.html#a2e7a6a11ccb4558346e9766c9225eb46">ewol::font::mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ad001f59581963675063cdd572bd334d7">m_mode</a></td></tr>
+<tr class="separator:ad001f59581963675063cdd572bd334d7 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcb41ba69ee7bf4c0c67f5a67fe2cfd2 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#adcb41ba69ee7bf4c0c67f5a67fe2cfd2">m_kerning</a></td></tr>
+<tr class="separator:adcb41ba69ee7bf4c0c67f5a67fe2cfd2 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4748eab8abcb4d221cdbdc14ca531159 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">char32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a4748eab8abcb4d221cdbdc14ca531159">m_previousCharcode</a></td></tr>
+<tr class="separator:a4748eab8abcb4d221cdbdc14ca531159 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82848a6ad9832255f81b0148cdb730b3 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a82848a6ad9832255f81b0148cdb730b3">m_startTextpos</a></td></tr>
+<tr class="separator:a82848a6ad9832255f81b0148cdb730b3 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a593959a0e0b5c6192a797db3aa96b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a49a593959a0e0b5c6192a797db3aa96b">m_stopTextPos</a></td></tr>
+<tr class="separator:a49a593959a0e0b5c6192a797db3aa96b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5076bcef4d7b1fdffabd9f7bb3158ae inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">enum aligneMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ab5076bcef4d7b1fdffabd9f7bb3158ae">m_alignement</a></td></tr>
+<tr class="separator:ab5076bcef4d7b1fdffabd9f7bb3158ae inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b3705e8136327f83b87ddcfb6ef981 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>&lt; gale::resource::Program &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aa7b3705e8136327f83b87ddcfb6ef981">m_GLprogram</a></td></tr>
+<tr class="separator:aa7b3705e8136327f83b87ddcfb6ef981 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36e5d0e3a257ed55d69b0290686e5e7e inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a36e5d0e3a257ed55d69b0290686e5e7e">m_GLPosition</a></td></tr>
+<tr class="separator:a36e5d0e3a257ed55d69b0290686e5e7e inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45270d197c400e2cdd36d2e4a223648b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a45270d197c400e2cdd36d2e4a223648b">m_GLMatrix</a></td></tr>
+<tr class="separator:a45270d197c400e2cdd36d2e4a223648b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc125e16d6ee379e83a77b6ce1651d5c inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abc125e16d6ee379e83a77b6ce1651d5c">m_GLColor</a></td></tr>
+<tr class="separator:abc125e16d6ee379e83a77b6ce1651d5c inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f62811e689fc142ade2c8cd3b2ef070 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a4f62811e689fc142ade2c8cd3b2ef070">m_GLtexture</a></td></tr>
+<tr class="separator:a4f62811e689fc142ade2c8cd3b2ef070 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6365c5c7e970fc4da9842ebdf219556 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aa6365c5c7e970fc4da9842ebdf219556">m_GLtexID</a></td></tr>
+<tr class="separator:aa6365c5c7e970fc4da9842ebdf219556 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d4a771924fcfdce234b3bd20820dd0f inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a2d4a771924fcfdce234b3bd20820dd0f">m_GLtextWidth</a></td></tr>
+<tr class="separator:a2d4a771924fcfdce234b3bd20820dd0f inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4c3fd920377f9c7ea96eb29a8a4979d inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ac4c3fd920377f9c7ea96eb29a8a4979d">m_GLtextHeight</a></td></tr>
+<tr class="separator:ac4c3fd920377f9c7ea96eb29a8a4979d inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56121c963cc4cac7224197eecf3c22de inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a56121c963cc4cac7224197eecf3c22de">m_selectionStartPos</a></td></tr>
+<tr class="separator:a56121c963cc4cac7224197eecf3c22de inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20f916b2dbbfc2446814a7ce3c12e64b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a20f916b2dbbfc2446814a7ce3c12e64b">m_cursorPos</a></td></tr>
+<tr class="separator:a20f916b2dbbfc2446814a7ce3c12e64b inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac97f6d6f41e88691bd0386be6cf78487 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ac97f6d6f41e88691bd0386be6cf78487">m_coord</a></td></tr>
+<tr class="separator:ac97f6d6f41e88691bd0386be6cf78487 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1c2517e871a08ab7eecb4c4530a63a3 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#af1c2517e871a08ab7eecb4c4530a63a3">m_coordTex</a></td></tr>
+<tr class="separator:af1c2517e871a08ab7eecb4c4530a63a3 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fad738cf4b30949728e9b0198b04efb inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt; float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a7fad738cf4b30949728e9b0198b04efb">m_coordColor</a></td></tr>
+<tr class="separator:a7fad738cf4b30949728e9b0198b04efb inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7d6ee7d35feb56333eabc4b540368f9 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">std::u32string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ac7d6ee7d35feb56333eabc4b540368f9">m_htmlCurrrentLine</a></td></tr>
+<tr class="separator:ac7d6ee7d35feb56333eabc4b540368f9 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa453d58f85266af6d0edf3cfef4674be inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classewol_1_1compositing_1_1_text_decoration.html">TextDecoration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aa453d58f85266af6d0edf3cfef4674be">m_htmlDecoration</a></td></tr>
+<tr class="separator:aa453d58f85266af6d0edf3cfef4674be inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df26bcbb1c02d4ee1411c57420f3622 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classewol_1_1compositing_1_1_text_decoration.html">TextDecoration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a1df26bcbb1c02d4ee1411c57420f3622">m_htmlDecoTmp</a></td></tr>
+<tr class="separator:a1df26bcbb1c02d4ee1411c57420f3622 inherit pro_attribs_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classewol_1_1_compositing"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classewol_1_1_compositing')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classewol_1_1_compositing.html">ewol::Compositing</a></td></tr>
+<tr class="memitem:ae170cdfd412e6cd18f1d90a97c69e3f8 inherit pro_attribs_classewol_1_1_compositing"><td class="memItemLeft" align="right" valign="top"><a id="ae170cdfd412e6cd18f1d90a97c69e3f8"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_matrixApply</b></td></tr>
+<tr class="separator:ae170cdfd412e6cd18f1d90a97c69e3f8 inherit pro_attribs_classewol_1_1_compositing"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classewol_1_1compositing_1_1_text_base"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classewol_1_1compositing_1_1_text_base')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classewol_1_1compositing_1_1_text_base.html">ewol::compositing::TextBase</a></td></tr>
+<tr class="memitem:ae52c1cc2b1a2ff78a68dfbb1e4b5e773 inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae52c1cc2b1a2ff78a68dfbb1e4b5e773">parseHtmlNode</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a> &amp;_element)</td></tr>
+<tr class="separator:ae52c1cc2b1a2ff78a68dfbb1e4b5e773 inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d978f75efcebefb933ecf45e54de14 inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#a02d978f75efcebefb933ecf45e54de14">extrapolateLastId</a> (const std::string &amp;_text, const int32_t _start, int32_t &amp;_stop, int32_t &amp;_space, int32_t &amp;_freeSpace)</td></tr>
+<tr class="separator:a02d978f75efcebefb933ecf45e54de14 inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9b48b1f34e5be2f5ef776489110b63f inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#ae9b48b1f34e5be2f5ef776489110b63f">extrapolateLastId</a> (const std::u32string &amp;_text, const int32_t _start, int32_t &amp;_stop, int32_t &amp;_space, int32_t &amp;_freeSpace)</td></tr>
+<tr class="separator:ae9b48b1f34e5be2f5ef776489110b63f inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf278f9748eaa7962d6b0dce0fe2c112 inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#abf278f9748eaa7962d6b0dce0fe2c112">htmlAddData</a> (const std::u32string &amp;_data)</td></tr>
+<tr class="separator:abf278f9748eaa7962d6b0dce0fe2c112 inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01f4741aec3e56ba2e09f83d4fe258d inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classewol_1_1compositing_1_1_text_base.html#aa01f4741aec3e56ba2e09f83d4fe258d">htmlFlush</a> ()</td></tr>
+<tr class="separator:aa01f4741aec3e56ba2e09f83d4fe258d inherit pro_methods_classewol_1_1compositing_1_1_text_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aacd66d6b0e117940a5822c36738f31d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacd66d6b0e117940a5822c36738f31d3">&sect;&nbsp;</a></span>TextDF()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ewol::compositing::TextDF::TextDF </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_fontName</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_fontSize</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>generic constructor </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_fontName</td><td>Name of the font that might be loaded </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_fontSize</td><td>size of the font that might be loaded </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b46cec5b34d9b747f20d22fc0736d3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b46cec5b34d9b747f20d22fc0736d3c">&sect;&nbsp;</a></span>~TextDF()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ewol::compositing::TextDF::~TextDF </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>generic destructor </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5077adbdbe5ce00b4376b7d92dbca2ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5077adbdbe5ce00b4376b7d92dbca2ce">&sect;&nbsp;</a></span>calculateSizeChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector3_d_8hpp.html#a65b33f8f48df3f057393b2b09211829f">vec3</a> ewol::compositing::TextDF::calculateSizeChar </td>
+          <td>(</td>
+          <td class="paramtype">const char32_t &amp;&#160;</td>
+          <td class="paramname"><em>_charcode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p></p>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#a7a48b1de46766e196bce74b70b5e703f">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a7cfb0d226d38b879136712a0635ea2ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cfb0d226d38b879136712a0635ea2ae">&sect;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>clear all the registered element in the current element </p>
+
+<p>Reimplemented from <a class="el" href="classewol_1_1compositing_1_1_text_base.html#aef54c8cfb039a3c25384aa7198e970a8">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a313aee851f9e5aa682a4fb47a361b967"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a313aee851f9e5aa682a4fb47a361b967">&sect;&nbsp;</a></span>drawD()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::drawD </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_disableDepthTest</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>draw All the refistered text in the current element on openGL </p>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#a82fdbbf71e135cf12bccc0ec62ffd2be">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a037d62b8d7fa04e399b7561369eff10d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a037d62b8d7fa04e399b7561369eff10d">&sect;&nbsp;</a></span>drawMT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::drawMT </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix4_8hpp.html#a116ae4cbc40b3ab7e0925cb605258ac9">mat4</a> &amp;&#160;</td>
+          <td class="paramname"><em>_transformationMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_enableDepthTest</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p></p>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#a988dbaa34ee534a3eec39e51f1c79dce">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a9037cc3e230629c70f3b0c8276e32317"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9037cc3e230629c70f3b0c8276e32317">&sect;&nbsp;</a></span>loadProgram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::loadProgram </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_shaderName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>load the openGL program and get all the ID needed </p>
+
+<p>Reimplemented from <a class="el" href="classewol_1_1compositing_1_1_text_base.html#a896d431ccc3442fd56d8426339255127">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a71ad6a159e437297cf52d19f1fd4d8a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71ad6a159e437297cf52d19f1fd4d8a9">&sect;&nbsp;</a></span>printChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::printChar </td>
+          <td>(</td>
+          <td class="paramtype">const char32_t &amp;&#160;</td>
+          <td class="paramname"><em>_charcode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>display the current char in the current element (note that the kerning is availlable if the position is not changed) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_charcode</td><td>Char that might be dispalyed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#abb4606c5de1f276c6fa7062565331986">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a8927ba1761816b4ad873c5f65f6bb453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8927ba1761816b4ad873c5f65f6bb453">&sect;&nbsp;</a></span>setFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::setFont </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>_fontName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_fontSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specify the font property (this reset the internal element of the current text (system requirement) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fontName</td><td>Current name of the selected font </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fontSize</td><td>New font size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#ad8013c2dfeb0ac3098bec29321acdeef">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="ac77f2edd2bb4b7c734f872eec16b9d38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac77f2edd2bb4b7c734f872eec16b9d38">&sect;&nbsp;</a></span>setFontMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::setFontMode </td>
+          <td>(</td>
+          <td class="paramtype">enum <a class="el" href="_textured_font_8hpp.html#a2e7a6a11ccb4558346e9766c9225eb46">ewol::font::mode</a>&#160;</td>
+          <td class="paramname"><em>_mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specify the font mode for the next <a class="el" href="classewol_1_1compositing_1_1_text_base.html#ac2750a3a2ab1366008c2c69418877a9c">print</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>The font mode requested </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#aa906579c6a940b6310694c4139153549">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a4fa394401162361b4a28f27742b39065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fa394401162361b4a28f27742b39065">&sect;&nbsp;</a></span>setFontName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::setFontName </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_fontName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specify the font name (this reset the internal element of the current text (system requirement) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_fontName</td><td>Current name of the selected font </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#a9130d3d5fa79d14ee6e83e3f5aec94b0">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a0d81bdc8a2f4e5c157079b32ed5c4264"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d81bdc8a2f4e5c157079b32ed5c4264">&sect;&nbsp;</a></span>setFontSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ewol::compositing::TextDF::setFontSize </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_fontSize</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specify the font size (this reset the internal element of the current text (system requirement) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_fontSize</td><td>New font size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classewol_1_1compositing_1_1_text_base.html#a9180c1d7fbf1c218af106919945cd5d0">ewol::compositing::TextBase</a>.</p>
+
+</div>
+</div>
+<a id="a2e3b4b82bec000a1b40227df34d6d24d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e3b4b82bec000a1b40227df34d6d24d">&sect;&nbsp;</a></span>updateSizeToRender()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ewol::compositing::TextDF::updateSizeToRender </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate size to be at the best size for a render in this special size. </p>
+<dl class="section note"><dt>Note</dt><dd>special for Distance field mode. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_size</td><td>request dimention. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a3a432f9f19d878f741abcf7eb04a9a05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a432f9f19d878f741abcf7eb04a9a05">&sect;&nbsp;</a></span>m_fontDF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>&lt;<a class="el" href="classewol_1_1resource_1_1_distance_field_font.html">ewol::resource::DistanceFieldFont</a>&gt; ewol::compositing::TextDF::m_fontDF</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Font resources. </p>
+
+</div>
+</div>
+<a id="a614fb14158161a9c1d9be2aaf13332c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a614fb14158161a9c1d9be2aaf13332c6">&sect;&nbsp;</a></span>m_GLglyphLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t ewol::compositing::TextDF::m_GLglyphLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>openGL Id on the glyph level display </p>
+
+</div>
+</div>
+<a id="a75434553c3b01cadbbfb5eb21505cef2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75434553c3b01cadbbfb5eb21505cef2">&sect;&nbsp;</a></span>m_glyphLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;float&gt; ewol::compositing::TextDF::m_glyphLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Level of display of the glyph (notmal : 0.50, bold : 0.40, super bold : 0.30 ...) </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/ewol/ewol/compositing/<a class="el" href="_text_d_f_8hpp_source.html">TextDF.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:04 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

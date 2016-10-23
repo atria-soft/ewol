@@ -1,0 +1,179 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>Ewol: Ewol Widget in OpenGl: framework/atria-soft/ewol/ewol/widget/Container.hpp Source File</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Ewol: Ewol Widget in OpenGl 0.10.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_644e041c3a6521da7b27eba0e4eb2b95.html">framework</a></li><li class="navelem"><a class="el" href="dir_a094892b17be858f66bf3446bbb755c7.html">atria-soft</a></li><li class="navelem"><a class="el" href="dir_90b06c1c445cb1731bd6346c36eb6f0c.html">ewol</a></li><li class="navelem"><a class="el" href="dir_b91da374a1ab60ee2d83a750c3a335b8.html">ewol</a></li><li class="navelem"><a class="el" href="dir_7f8e63c4a8103cf6be6e72e26b36725d.html">widget</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">Container.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_container_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/types__8hpp.html">etk/types.hpp</a>&gt;</span></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;ewol/debug.hpp&gt;</span></div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="_widget_8hpp.html">ewol/widget/Widget.hpp</a>&gt;</span></div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceewol.html">ewol</a> {</div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">namespace </span>widget {</div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">class </span>Container;</div><div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">using</span> ContainerShared = <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr&lt;ewol::widget::Container&gt;</a>;</div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> ContainerWeak = <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_weak_ptr.html">ememory::WeakPtr&lt;ewol::widget::Container&gt;</a>;</div><div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classewol_1_1widget_1_1_container.html">   21</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classewol_1_1widget_1_1_container.html">Container</a> : <span class="keyword">public</span> <a class="code" href="classewol_1_1_widget.html">ewol::Widget</a> {</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keyword">protected</span>:</div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> m_subWidget;</div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keyword">protected</span>:</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <a class="code" href="classewol_1_1widget_1_1_container.html#a89de6455cb09afc84c3496f7f88b7e47">Container</a>();</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="keyword">virtual</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a41f805ca673e483149202c4331fff27e">~Container</a>();</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> <a class="code" href="classewol_1_1widget_1_1_container.html#acfed08a1d5a57f3f7ec3932e03b7666b">getSubWidget</a>();</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#ad1ebd77755cf62e401712b0ab93078c9">setSubWidget</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> _newWidget);</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#aa86d6fced673f6a455f67ed0f4002f78">subWidgetReplace</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>&amp; _oldWidget,</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                                              <span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a>&amp; _newWidget);</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#aa2acbbe6ba49e9a41bcb58b8d9b78d5e">subWidgetRemove</a>();</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a230a898720d4ff66173f63defc365fb0">subWidgetUnLink</a>();</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a1f74fc9b6aaad8ef2c8dbfb5f72dee2c">systemDraw</a>(<span class="keyword">const</span> <a class="code" href="classewol_1_1_draw_property.html">ewol::DrawProperty</a>&amp; _displayProp) <span class="keyword">override</span>;</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a7950ff82388a8d0b71e05346a7df12ad">onRegenerateDisplay</a>() <span class="keyword">override</span>;</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#aa360eefdc70cf32ebc12e452873764ff">onChangeSize</a>() <span class="keyword">override</span>;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a13e8ea00cabb6d1e68ef1084538ffe1c">calculateMinMaxSize</a>() <span class="keyword">override</span>;</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::WidgetShared</a> <a class="code" href="classewol_1_1widget_1_1_container.html#a35d74aff6b0dc9ec3eed01c00edc79b6">getWidgetAtPos</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a>&amp; _pos) <span class="keyword">override</span>;</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::ObjectShared</a> <a class="code" href="classewol_1_1widget_1_1_container.html#a3d95ee5fb3c3e4d2608d7abf346be648">getSubObjectNamed</a>(<span class="keyword">const</span> std::string&amp; _objectName) <span class="keyword">override</span>;</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                <span class="keywordtype">bool</span> <a class="code" href="classewol_1_1widget_1_1_container.html#af9bebcdd1c181142f0eeb1324553e10a">loadXML</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a>&amp; _node) <span class="keyword">override</span>;</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a38699fd060b03922a66ea08d7b841b95">setOffset</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a>&amp; _newVal) <span class="keyword">override</span>;</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classewol_1_1widget_1_1_container.html#a4e3e1d3a3df50791c7179086b4601829">requestDestroyFromChild</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ewol::ObjectShared</a>&amp; _child) <span class="keyword">override</span>;</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        };</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    };</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};</div><div class="ttc" id="classememory_1_1_weak_ptr_html"><div class="ttname"><a href="http://atria-soft.github.io/ememory/classememory_1_1_weak_ptr.html">ememory::WeakPtr</a></div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a4e3e1d3a3df50791c7179086b4601829"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a4e3e1d3a3df50791c7179086b4601829">ewol::widget::Container::requestDestroyFromChild</a></div><div class="ttdeci">void requestDestroyFromChild(const ewol::ObjectShared &amp;_child) override</div><div class="ttdoc">Called by a whild that want to remove pointer of itself from the current list of his parrent...</div></div>
+<div class="ttc" id="classewol_1_1_draw_property_html"><div class="ttname"><a href="classewol_1_1_draw_property.html">ewol::DrawProperty</a></div><div class="ttdef"><b>Definition:</b> DrawProperty.hpp:15</div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a230a898720d4ff66173f63defc365fb0"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a230a898720d4ff66173f63defc365fb0">ewol::widget::Container::subWidgetUnLink</a></div><div class="ttdeci">void subWidgetUnLink()</div><div class="ttdoc">Unlink the subwidget Node. </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_aa360eefdc70cf32ebc12e452873764ff"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#aa360eefdc70cf32ebc12e452873764ff">ewol::widget::Container::onChangeSize</a></div><div class="ttdeci">void onChangeSize() override</div><div class="ttdoc">Parent have set the size and the origin. the container need to update the subwidget property...</div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html">ewol::widget::Container</a></div><div class="ttdoc">the Cotainer widget is a widget that have an only one subWidget </div><div class="ttdef"><b>Definition:</b> Container.hpp:21</div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_aa86d6fced673f6a455f67ed0f4002f78"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#aa86d6fced673f6a455f67ed0f4002f78">ewol::widget::Container::subWidgetReplace</a></div><div class="ttdeci">virtual void subWidgetReplace(const ewol::WidgetShared &amp;_oldWidget, const ewol::WidgetShared &amp;_newWidget)</div><div class="ttdoc">Replace a old subwidget with a new one. </div></div>
+<div class="ttc" id="_widget_8hpp_html"><div class="ttname"><a href="_widget_8hpp.html">Widget.hpp</a></div></div>
+<div class="ttc" id="types__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/types__8hpp.html">types.hpp</a></div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_ad1ebd77755cf62e401712b0ab93078c9"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#ad1ebd77755cf62e401712b0ab93078c9">ewol::widget::Container::setSubWidget</a></div><div class="ttdeci">void setSubWidget(ewol::WidgetShared _newWidget)</div><div class="ttdoc">set the subWidget node widget. </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a35d74aff6b0dc9ec3eed01c00edc79b6"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a35d74aff6b0dc9ec3eed01c00edc79b6">ewol::widget::Container::getWidgetAtPos</a></div><div class="ttdeci">ewol::WidgetShared getWidgetAtPos(const vec2 &amp;_pos) override</div><div class="ttdoc">get the widget at the specific windows absolute position </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_acfed08a1d5a57f3f7ec3932e03b7666b"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#acfed08a1d5a57f3f7ec3932e03b7666b">ewol::widget::Container::getSubWidget</a></div><div class="ttdeci">ewol::WidgetShared getSubWidget()</div><div class="ttdoc">get the main node widget </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a7950ff82388a8d0b71e05346a7df12ad"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a7950ff82388a8d0b71e05346a7df12ad">ewol::widget::Container::onRegenerateDisplay</a></div><div class="ttdeci">void onRegenerateDisplay() override</div><div class="ttdoc">Event generated when a redraw is needed. </div></div>
+<div class="ttc" id="namespaceewol_html"><div class="ttname"><a href="namespaceewol.html">ewol</a></div><div class="ttdef"><b>Definition:</b> Area.hpp:16</div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_af9bebcdd1c181142f0eeb1324553e10a"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#af9bebcdd1c181142f0eeb1324553e10a">ewol::widget::Container::loadXML</a></div><div class="ttdeci">bool loadXML(const exml::Element &amp;_node) override</div><div class="ttdoc">load properties with an XML node. </div></div>
+<div class="ttc" id="classexml_1_1_element_html"><div class="ttname"><a href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a></div></div>
+<div class="ttc" id="classetk_1_1_vector2_d_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">etk::Vector2D&lt; float &gt;</a></div></div>
+<div class="ttc" id="classememory_1_1_shared_ptr_html"><div class="ttname"><a href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a></div></div>
+<div class="ttc" id="classewol_1_1_widget_html"><div class="ttname"><a href="classewol_1_1_widget.html">ewol::Widget</a></div><div class="ttdoc">Widget class is the main widget interface, it hase some generic properties: :** known his parent :** ...</div><div class="ttdef"><b>Definition:</b> Widget.hpp:73</div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a41f805ca673e483149202c4331fff27e"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a41f805ca673e483149202c4331fff27e">ewol::widget::Container::~Container</a></div><div class="ttdeci">virtual ~Container()</div><div class="ttdoc">Destructor. </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_aa2acbbe6ba49e9a41bcb58b8d9b78d5e"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#aa2acbbe6ba49e9a41bcb58b8d9b78d5e">ewol::widget::Container::subWidgetRemove</a></div><div class="ttdeci">void subWidgetRemove()</div><div class="ttdoc">remove the subWidget node (async). </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a13e8ea00cabb6d1e68ef1084538ffe1c"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a13e8ea00cabb6d1e68ef1084538ffe1c">ewol::widget::Container::calculateMinMaxSize</a></div><div class="ttdeci">void calculateMinMaxSize() override</div><div class="ttdoc">calculate the minimum and maximum size (need to estimate expend properties of the widget) ...</div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a1f74fc9b6aaad8ef2c8dbfb5f72dee2c"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a1f74fc9b6aaad8ef2c8dbfb5f72dee2c">ewol::widget::Container::systemDraw</a></div><div class="ttdeci">void systemDraw(const ewol::DrawProperty &amp;_displayProp) override</div><div class="ttdoc">{SYSTEM} extern interface to request a draw ... (called by the drawing thread [Android, X11, ...]) This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a38699fd060b03922a66ea08d7b841b95"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a38699fd060b03922a66ea08d7b841b95">ewol::widget::Container::setOffset</a></div><div class="ttdeci">void setOffset(const vec2 &amp;_newVal) override</div><div class="ttdoc">set the zoom property of the widget. </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a89de6455cb09afc84c3496f7f88b7e47"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a89de6455cb09afc84c3496f7f88b7e47">ewol::widget::Container::Container</a></div><div class="ttdeci">Container()</div><div class="ttdoc">Constructor. </div></div>
+<div class="ttc" id="classewol_1_1widget_1_1_container_html_a3d95ee5fb3c3e4d2608d7abf346be648"><div class="ttname"><a href="classewol_1_1widget_1_1_container.html#a3d95ee5fb3c3e4d2608d7abf346be648">ewol::widget::Container::getSubObjectNamed</a></div><div class="ttdeci">ewol::ObjectShared getSubObjectNamed(const std::string &amp;_objectName) override</div><div class="ttdoc">Retrive an object with his name (in the global list) </div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 14:06:03 for Ewol: Ewol Widget in OpenGl by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
