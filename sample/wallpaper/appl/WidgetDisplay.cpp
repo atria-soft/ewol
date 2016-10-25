@@ -8,6 +8,7 @@
 
 #include <appl/debug.hpp>
 #include <etk/tool.hpp>
+#include <ewol/object/Manager.hpp>
 
 appl::WidgetDisplay::WidgetDisplay() {
 	addObjectType("appl::WidgetDisplay");
@@ -17,7 +18,7 @@ appl::WidgetDisplay::WidgetDisplay() {
 void appl::WidgetDisplay::init() {
 	ewol::Widget::init();
 	m_compositing.setSource("DATA:SnowFlake.svg", ivec2(128,128));
-	periodicCallEnable();
+	getObjectManager().periodicCall.connect(sharedFromThis(), &appl::WidgetDisplay::periodicCall);
 	for (int32_t iii=0; iii<250 ; ++iii) {
 		m_elements.push_back(appl::WidgetDisplay::Element());
 	}

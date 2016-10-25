@@ -38,9 +38,9 @@ namespace appl {
 			std::vector<Element> m_elements;
 		public: // Derived function
 			void onRegenerateDisplay();
-			virtual void periodicCall(const ewol::event::Time& _event);
-			virtual bool onEventInput(const ewol::event::Input& _event);
-			virtual void onDraw();
+			void periodicCall(const ewol::event::Time& _event);
+			bool onEventInput(const ewol::event::Input& _event) override;
+			void onDraw() override;
 	};
 }
 
