@@ -20,7 +20,7 @@
 class MainApplication : public ewol::context::Application {
 	public:
 		void onCreate(ewol::Context& _context) override {
-			APPL_INFO(" == > CREATE ... " << PROJECT_NAME << "  v" << APPL_VERSION << " (START) [" << ewol::getBoardType() << "] (" << ewol::getCompilationMode() << ") (BEGIN)");
+			APPL_INFO(" == > CREATE ... " << PROJECT_NAME << "  v" << APPL_VERSION << " (START) [" << gale::getBoardType() << "] (" << gale::getCompilationMode() << ") (BEGIN)");
 			for( int32_t iii=0 ; iii<_context.getCmd().size(); iii++) {
 				std::string tmpppp = _context.getCmd().get(iii);
 				if (    tmpppp == "-h"
