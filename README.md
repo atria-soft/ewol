@@ -103,6 +103,12 @@ Arch-linux:
 	# connect adb: (and you can do a "android/sdk/platform-tools/adb shell" to enable computer key on device)
 	pacman -S android-udev
 
+
+Simple framework overview
+=========================
+
+![overview](overview.svg)
+
 License (APACHE v2.0)
 =====================
 
