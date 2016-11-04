@@ -72,12 +72,11 @@ namespace ewol {
 				int32_t m_stateOld;               //!< previous state
 				int32_t m_stateNew;               //!< destination state
 				float   m_stateTransition;        //!< working state between 2 states
-				vec2    m_coord[SHAPER_NB_MAX_VERTEX]; //!< coordonate of the display ...
-				vec2    m_pos[SHAPER_NB_MAX_VERTEX]; //!< podition to display property
 				int32_t m_nbVertexToDisplay;
 				// color management theme:
 				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
 				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
+				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed

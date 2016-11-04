@@ -28,9 +28,7 @@ namespace ewol {
 				int32_t m_GLtexID;    //!< openGL id on the element (texture ID)
 			private:
 				ememory::SharedPtr<ewol::resource::Texture> m_resource; //!< texture resources
-				std::vector<vec3 > m_coord; //!< internal coord of the object
-				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
-				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
+				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed

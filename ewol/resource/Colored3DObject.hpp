@@ -10,6 +10,8 @@
 #include <ewol/resource/Image.hpp>
 #include <gale/resource/Program.hpp>
 
+#define EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID 0
+
 namespace ewol {
 	namespace resource {
 		class Colored3DObject : public gale::Resource {
@@ -18,6 +20,7 @@ namespace ewol {
 				int32_t m_GLPosition;
 				int32_t m_GLMatrix;
 				int32_t m_GLColor;
+				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			protected:
 				Colored3DObject();
 				void init();
@@ -25,17 +28,14 @@ namespace ewol {
 				DECLARE_RESOURCE_FACTORY(Colored3DObject);
 				virtual ~Colored3DObject();
 			public:
-				virtual void draw(std::vector<vec3>& _vertices,
-				                  const etk::Color<float>& _color,
+				virtual void draw(const etk::Color<float>& _color,
 				                  bool _updateDepthBuffer=true,
 				                  bool _depthtest=true);
-				virtual void draw(std::vector<vec3>& _vertices,
-				                  const etk::Color<float>& _color,
+				virtual void draw(const etk::Color<float>& _color,
 				                  mat4& _transformationMatrix,
 				                  bool _updateDepthBuffer=true,
 				                  bool _depthtest=true);
-				virtual void drawLine(std::vector<vec3>& _vertices,
-				                      const etk::Color<float>& _color,
+				virtual void drawLine(const etk::Color<float>& _color,
 				                      mat4& _transformationMatrix,
 				                      bool _updateDepthBuffer=true,
 				                      bool _depthtest=true);
