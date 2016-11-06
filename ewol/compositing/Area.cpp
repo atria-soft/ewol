@@ -54,7 +54,7 @@ void ewol::compositing::Area::loadProgram() {
 }
 
 void ewol::compositing::Area::draw(bool _disableDepthTest) {
-	if (m_coord.size() <= 0) {
+	if (m_VBO->bufferSize(EWOL_COMPOSITING_VBO_COORDINATE) <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -79,7 +79,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	// color:
 	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, EWOL_COMPOSITING_VBO_TEXTURE);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(EWOL_COMPOSITING_VBO_COORDINATE));
 	m_GLprogram->unUse();
 }
 
@@ -87,7 +87,7 @@ void ewol::compositing::Area::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset all VBOs:
-	m_VBO.clear();
+	m_VBO->clear();
 	// reset temporal variables :
 	m_position = vec3(0.0, 0.0, 0.0);
 }

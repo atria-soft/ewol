@@ -180,15 +180,18 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
+	if (m_VBO->bufferSize(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE) <= 0) {
+		return;
+	}
 	//glScalef(m_scaling.x, m_scaling.y, 1.0);
 	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = gale::openGL::getMatrix();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position:
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, );
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, EWOL_COMPOSITING_SHAPER_VBO_COORDINATE);
 	// property
-	m_GLprogram->sendAttributePointer(m_GLPropertyPos, m_VBO, );
+	m_GLprogram->sendAttributePointer(m_GLPropertyPos, m_VBO, EWOL_COMPOSITING_SHAPER_VBO_POS);
 	// all entry parameters :
 	m_GLprogram->uniform1i(m_GLStateActivate,   m_stateActivate);
 	m_GLprogram->uniform1i(m_GLStateOld,        m_stateOld);
@@ -213,7 +216,7 @@ void ewol::compositing::Shaper::clear() {
 	m_propertyOrigin = vec2(0,0);
 	m_propertyInsidePosition = vec2(0,0);
 	m_propertyInsideSize = vec2(0,0);
-	m_VBO->clear()
+	m_VBO->clear();
 }
 
 bool ewol::compositing::Shaper::setState(int32_t _newState) {

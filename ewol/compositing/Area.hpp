@@ -18,7 +18,7 @@ namespace ewol {
 		class Area : public ewol::Compositing {
 			private:
 				vec3 m_position; //!< The current position to draw
-				etk::Color<> m_color; //!< The text foreground color
+				etk::Color<float,4> m_color; //!< The text foreground color
 			private:
 				ememory::SharedPtr<gale::resource::Program> m_GLprogram;  //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
