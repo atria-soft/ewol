@@ -76,6 +76,9 @@ namespace ewol {
 				// color management theme:
 				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
 				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
+			protected:
+				static const int32_t m_vboIdCoord;
+				static const int32_t m_vboIdPos;
 				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			private:
 				/**

@@ -9,6 +9,12 @@
 
 const int32_t ewol::compositing::Image::sizeAuto(0);
 
+// VBO table property:
+const int32_t ewol::compositing::Image::m_vboIdCoord(0);
+const int32_t ewol::compositing::Image::m_vboIdCoordTex(1);
+const int32_t ewol::compositing::Image::m_vboIdColor(2);
+#define NB_VBO (3)
+
 ewol::compositing::Image::Image(const std::string& _imageName,
                                 bool _df,
                                 int32_t _size) :
@@ -29,6 +35,14 @@ ewol::compositing::Image::Image(const std::string& _imageName,
   m_distanceFieldMode(_df),
   m_resource(nullptr),
   m_resourceDF(nullptr) {
+	// Create the VBO:
+	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (m_VBO == nullptr) {
+		EWOL_ERROR("can not instanciate VBO ...");
+		return;
+	}
+	// TO facilitate some debugs we add a name of the VBO:
+	m_VBO->setName("[VBO] of ewol::compositing::Image");
 	setSource(_imageName, _size);
 	loadProgram();
 }
@@ -56,7 +70,7 @@ void ewol::compositing::Image::loadProgram() {
 }
 
 void ewol::compositing::Image::draw(bool _disableDepthTest) {
-	if (m_coord.size() <= 0) {
+	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -69,6 +83,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
+	//EWOL_WARNING("Display image : " << m_VBO->bufferSize(m_vboIdCoord));
 	if (_disableDepthTest == true) {
 		gale::openGL::disable(gale::openGL::flag_depthTest);
 	} else {
@@ -76,7 +91,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	}
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
-	m_GLprogram->use(); 
+	m_GLprogram->use();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
 	if (m_resource != nullptr) {
@@ -90,14 +105,14 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		}
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getRendererId());
 	}
-	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
-	// Texture :
-	m_GLprogram->sendAttribute(m_GLtexture, m_coordTex);
-	// color :
-	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
-	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
+	// position:
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	// Texture:
+	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdCoordTex);
+	// color:
+	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
+	// Request the draw of the elements:
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
 	m_GLprogram->unUse();
 }
 
@@ -105,9 +120,7 @@ void ewol::compositing::Image::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
-	m_coord.clear();
-	m_coordTex.clear();
-	m_coordColor.clear();
+	m_VBO->clear();
 	// reset temporal variables :
 	m_position = vec3(0.0, 0.0, 0.0);
 	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
@@ -154,47 +167,46 @@ void ewol::compositing::Image::print(const vec2& _size) {
 void ewol::compositing::Image::printPart(const vec2& _size,
                                          const vec2& _sourcePosStart,
                                          const vec2& _sourcePosStop) {
+	//EWOL_ERROR("Debug image " << m_filename << "  ==> " << m_position << " " << _size << " " << _sourcePosStart << " " << _sourcePosStop);
 	if (m_angle == 0.0f) {
 		vec3 point = m_position;
 		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
-		
-		m_coord.push_back(point);
-		m_coordTex.push_back(tex);
-		m_coordColor.push_back(m_color);
-		
+		m_VBO->pushOnBuffer(m_vboIdCoord, point);
+		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 		
 		tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
 		point.setX(m_position.x() + _size.x());
 		point.setY(m_position.y());
-		m_coord.push_back(point);
-		m_coordTex.push_back(tex);
-		m_coordColor.push_back(m_color);
-		
+		m_VBO->pushOnBuffer(m_vboIdCoord, point);
+		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 		
 		tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
 		point.setX(m_position.x() + _size.x());
 		point.setY(m_position.y() + _size.y());
-		m_coord.push_back(point);
-		m_coordTex.push_back(tex);
-		m_coordColor.push_back(m_color);
+		m_VBO->pushOnBuffer(m_vboIdCoord, point);
+		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 		
-		m_coord.push_back(point);
-		m_coordTex.push_back(tex);
-		m_coordColor.push_back(m_color);
+		m_VBO->pushOnBuffer(m_vboIdCoord, point);
+		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 		
 		tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
 		point.setX(m_position.x());
 		point.setY(m_position.y() + _size.y());
-		m_coord.push_back(point);
-		m_coordTex.push_back(tex);
-		m_coordColor.push_back(m_color);
+		m_VBO->pushOnBuffer(m_vboIdCoord, point);
+		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 		
 		tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
 		point.setX(m_position.x());
 		point.setY(m_position.y());
-		m_coord.push_back(point);
-		m_coordTex.push_back(tex);
-		m_coordColor.push_back(m_color);
+		m_VBO->pushOnBuffer(m_vboIdCoord, point);
+		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+		m_VBO->flush();
 		return;
 	}
 	vec3 center = m_position + vec3(_size.x(),_size.y(),0)/2.0f;
@@ -205,43 +217,43 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 	
 	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(m_color);
-	
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
 	point.setValue(limitedSize.x(), -limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(m_color);
-	
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
 	point.setValue(limitedSize.x(), limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
 	point.setValue(-limitedSize.x(), limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
 	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	
+	m_VBO->flush();
 }
 
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {

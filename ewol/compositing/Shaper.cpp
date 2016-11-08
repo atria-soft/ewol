@@ -9,8 +9,9 @@
 #include <ewol/compositing/Shaper.hpp>
 
 // VBO table property:
-#define EWOL_COMPOSITING_SHAPER_VBO_COORDINATE (0)
-#define EWOL_COMPOSITING_SHAPER_VBO_POS        (1)
+const int32_t ewol::compositing::Shaper::m_vboIdCoord(0);
+const int32_t ewol::compositing::Shaper::m_vboIdPos(1);
+#define NB_VBO (2)
 
 ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
   m_name(_shaperName),
@@ -45,7 +46,7 @@ ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
 		m_confIdPaddingIn[iii] = -1;
 	}
 	// Create the VBO:
-	m_VBO = gale::resource::VirtualBufferObject::create(3);
+	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == nullptr) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
@@ -180,7 +181,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (m_VBO->bufferSize(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE) <= 0) {
+	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
 		return;
 	}
 	//glScalef(m_scaling.x, m_scaling.y, 1.0);
@@ -189,9 +190,9 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	mat4 tmpMatrix = gale::openGL::getMatrix();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position:
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, EWOL_COMPOSITING_SHAPER_VBO_COORDINATE);
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
 	// property
-	m_GLprogram->sendAttributePointer(m_GLPropertyPos, m_VBO, EWOL_COMPOSITING_SHAPER_VBO_POS);
+	m_GLprogram->sendAttributePointer(m_GLPropertyPos, m_VBO, m_vboIdPos);
 	// all entry parameters :
 	m_GLprogram->uniform1i(m_GLStateActivate,   m_stateActivate);
 	m_GLprogram->uniform1i(m_GLStateOld,        m_stateOld);
@@ -297,104 +298,104 @@ void ewol::compositing::Shaper::addVertexLine(float _yTop,
                                               bool _displayOutside) {
 	if (m_nbVertexToDisplay != 0) {
 		// change line ...
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE,
-		                    m_VBO->getOnBufferVec2(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, m_nbVertexToDisplay-1));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,
-		                    m_VBO->getOnBufferVec2(EWOL_COMPOSITING_SHAPER_VBO_POS, m_nbVertexToDisplay-1));
+		m_VBO->pushOnBuffer(m_vboIdCoord,
+		                    m_VBO->getOnBufferVec2(m_vboIdCoord, m_nbVertexToDisplay-1));
+		m_VBO->pushOnBuffer(m_vboIdPos,
+		                    m_VBO->getOnBufferVec2(m_vboIdPos, m_nbVertexToDisplay-1));
 		
 		m_nbVertexToDisplay++;
 		if (_displayOutside == true) {
-			m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x1, _yButtom));
-			m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[0],_yValButtom));
+			m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x1, _yButtom));
+			m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[0],_yValButtom));
 			m_nbVertexToDisplay++;
 		} else {
-			m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x2, _yButtom));
-			m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[1],_yValButtom));
+			m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yButtom));
+			m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValButtom));
 			m_nbVertexToDisplay++;
 		}
 	}
 	
 	if (_displayOutside == true) {
 		// A
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x1, _yButtom));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[0],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x1, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[0],_yValButtom));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x1, _yTop));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[0],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x1, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[0],_yValTop));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x2, _yButtom));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[1],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValButtom));
 		m_nbVertexToDisplay++;
 		// B
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x2, _yTop));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[1],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValTop));
 		m_nbVertexToDisplay++;
 		
 		// C
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x3, _yButtom));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[2],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x3, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[2],_yValButtom));
 		m_nbVertexToDisplay++;
 	} else {
 		// C
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x2, _yButtom));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[1],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValButtom));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x2, _yTop));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[1],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValTop));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x3, _yButtom));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[2],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x3, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[2],_yValButtom));
 		m_nbVertexToDisplay++;
 	}
 	// D
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x3, _yTop));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[2],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x3, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[2],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// E
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x4, _yButtom));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[3],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x4, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[3],_yValButtom));
 	m_nbVertexToDisplay++;
 	// F
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x4, _yTop));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[3],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x4, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[3],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// G
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x5, _yButtom));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[4],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x5, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[4],_yValButtom));
 	m_nbVertexToDisplay++;
 	// H
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x5, _yTop));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[4],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x5, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[4],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// I
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x6, _yButtom));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[5],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x6, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[5],_yValButtom));
 	m_nbVertexToDisplay++;
 	// J
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x6, _yTop));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[5],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x6, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[5],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// K
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x7, _yButtom));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[6],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x7, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[6],_yValButtom));
 	m_nbVertexToDisplay++;
 	// L
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x7, _yTop));
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[6],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x7, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[6],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	if (_displayOutside == true) {
 		// M
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x8, _yButtom));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[7],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x8, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[7],_yValButtom));
 		m_nbVertexToDisplay++;
 		// N
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_COORDINATE, vec2(_x8, _yTop));
-		m_VBO->pushOnBuffer(EWOL_COMPOSITING_SHAPER_VBO_POS,        vec2(_table[7],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x8, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[7],_yValTop));
 		m_nbVertexToDisplay++;
 	}
 }
@@ -446,6 +447,7 @@ const float modeDisplay[][8] = {
 };
 
 void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size, const vec2& _insidePos, const vec2& _insideSize) {
+	m_VBO->clear();
 	ewol::Padding borderTmp = getBorder();
 	ewol::Padding paddingIn = getPaddingIn();
 	ewol::Padding paddingOut = getPaddingOut();

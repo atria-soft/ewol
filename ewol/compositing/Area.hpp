@@ -28,6 +28,10 @@ namespace ewol {
 				int32_t m_GLtexID;    //!< openGL id on the element (texture ID)
 			private:
 				ememory::SharedPtr<ewol::resource::Texture> m_resource; //!< texture resources
+			protected:
+				static const int32_t m_vboIdCoord;
+				static const int32_t m_vboIdCoordText;
+				static const int32_t m_vboIdColor;
 				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			private:
 				/**

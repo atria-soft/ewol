@@ -5,22 +5,24 @@
  */
 #pragma once
 
+#ifndef __TARGET_OS__Web
+
 #include <etk/types.hpp>
 #include <gale/resource/Resource.hpp>
 #include <ewol/resource/Image.hpp>
 #include <gale/resource/Program.hpp>
 
-#define EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID 0
-
 namespace ewol {
 	namespace resource {
+		/**
+		 * @brief simple display of Colored3DObject ==> for DEBUG only Not availlable on ALL platform (like webGL)
+		 */
 		class Colored3DObject : public gale::Resource {
 			protected:
 				ememory::SharedPtr<gale::resource::Program> m_GLprogram;
 				int32_t m_GLPosition;
 				int32_t m_GLMatrix;
 				int32_t m_GLColor;
-				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			protected:
 				Colored3DObject();
 				void init();
@@ -28,14 +30,17 @@ namespace ewol {
 				DECLARE_RESOURCE_FACTORY(Colored3DObject);
 				virtual ~Colored3DObject();
 			public:
-				virtual void draw(const etk::Color<float>& _color,
+				virtual void draw(std::vector<vec3>& _vertices,
+				                  const etk::Color<float>& _color,
 				                  bool _updateDepthBuffer=true,
 				                  bool _depthtest=true);
-				virtual void draw(const etk::Color<float>& _color,
+				virtual void draw(std::vector<vec3>& _vertices,
+				                  const etk::Color<float>& _color,
 				                  mat4& _transformationMatrix,
 				                  bool _updateDepthBuffer=true,
 				                  bool _depthtest=true);
-				virtual void drawLine(const etk::Color<float>& _color,
+				virtual void drawLine(std::vector<vec3>& _vertices,
+				                      const etk::Color<float>& _color,
 				                      mat4& _transformationMatrix,
 				                      bool _updateDepthBuffer=true,
 				                      bool _depthtest=true);
@@ -52,3 +57,4 @@ namespace ewol {
 	};
 };
 
+#endif

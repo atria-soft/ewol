@@ -20,7 +20,6 @@ namespace ewol {
 		class TextDF : public ewol::compositing::TextBase {
 			protected:
 				ememory::SharedPtr<ewol::resource::DistanceFieldFont> m_fontDF; //!< Font resources
-				std::vector<float> m_glyphLevel; //!< Level of display of the glyph (notmal : 0.50, bold : 0.40, super bold : 0.30 ...)
 			protected:
 				int32_t m_GLglyphLevel; //!< openGL Id on the glyph level display
 			public:
@@ -42,7 +41,6 @@ namespace ewol {
 				 */
 				void updateSizeToRender(const vec2& _size);
 			public:
-				virtual void clear();
 				virtual void drawD(bool _disableDepthTest);
 				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);
 			protected:

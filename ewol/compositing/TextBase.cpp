@@ -9,6 +9,13 @@
 #include <ewol/context/Context.hpp>
 #include <etk/types.hpp>
 
+
+const int32_t ewol::compositing::TextBase::m_vboIdCoord(0);
+const int32_t ewol::compositing::TextBase::m_vboIdCoordText(1);
+const int32_t ewol::compositing::TextBase::m_vboIdColor(2);
+const int32_t ewol::compositing::TextBase::m_vboIdGlyphLevel(3);
+#define NB_VBO (4)
+
 ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _loadProgram) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
@@ -37,6 +44,14 @@ ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _load
 	if (_loadProgram == true) {
 		loadProgram(_shaderName);
 	}
+	// Create the VBO:
+	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (m_VBO == nullptr) {
+		EWOL_ERROR("can not instanciate VBO ...");
+		return;
+	}
+	// TO facilitate some debugs we add a name of the VBO:
+	m_VBO->setName("[VBO] of ewol::compositing::TextBase");
 }
 
 
@@ -45,7 +60,7 @@ ewol::compositing::TextBase::~TextBase() {
 }
 
 void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
-	// get the shader resource :
+	// get the shader resource:
 	m_GLPosition = 0;
 	ememory::SharedPtr<gale::resource::Program> old = m_GLprogram;
 	m_GLprogram = gale::resource::Program::create(_shaderName);
@@ -84,11 +99,9 @@ void ewol::compositing::TextBase::clear() {
 	ewol::Compositing::clear();
 	// remove sub draw system
 	m_vectorialDraw.clear();
-	// reset Buffer :
-	m_coord.clear();
-	m_coordTex.clear();
-	m_coordColor.clear();
-	// reset temporal variables :
+	// reset Buffer:
+	m_VBO->clear();
+	// reset temporal variables:
 	reset();
 }
 

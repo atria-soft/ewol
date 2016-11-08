@@ -4,6 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
+#ifndef __TARGET_OS__Web
+
 #include <ewol/debug.hpp>
 #include <ewol/resource/Colored3DObject.hpp>
 #include <gale/resource/Manager.hpp>
@@ -25,11 +27,6 @@ void ewol::resource::Colored3DObject::init() {
 		m_GLColor    = m_GLprogram->getUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
 	}
-	m_VBO = gale::resource::VirtualBufferObject::create(3);
-	if (m_VBO == nullptr) {
-		EWOL_ERROR("can not instanciate VBO ...");
-		return;
-	}
 }
 
 ewol::resource::Colored3DObject::~Colored3DObject() {
@@ -37,17 +34,18 @@ ewol::resource::Colored3DObject::~Colored3DObject() {
 }
 
 
-void ewol::resource::Colored3DObject::draw(const etk::Color<float>& _color,
+void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
+                                           const etk::Color<float>& _color,
                                            bool _updateDepthBuffer,
                                            bool _depthtest) {
-	if (m_VBO->bufferSize(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID) <= 0) {
+	if (_vertices.size() <= 0) {
 		return;
 	}
 	if (m_GLprogram == nullptr) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (_depthtest == true) {
+	if (true == _depthtest) {
 		gale::openGL::enable(gale::openGL::flag_depthTest);
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
@@ -61,11 +59,11 @@ void ewol::resource::Colored3DObject::draw(const etk::Color<float>& _color,
 	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID);
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &_vertices[0], 4*sizeof(float));
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID));
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, _vertices.size());
 	m_GLprogram->unUse();
 	// Request the draw od the elements : 
 	//glDrawArrays(GL_LINES, 0, vertices.size());
@@ -78,11 +76,12 @@ void ewol::resource::Colored3DObject::draw(const etk::Color<float>& _color,
 	}
 }
 
-void ewol::resource::Colored3DObject::draw(const etk::Color<float>& _color,
+void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
+                                           const etk::Color<float>& _color,
                                            mat4& _transformationMatrix,
                                            bool _updateDepthBuffer,
                                            bool _depthtest) {
-	if (m_VBO->bufferSize(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID) <= 0) {
+	if (_vertices.size() <= 0) {
 		return;
 	}
 	if (m_GLprogram == nullptr) {
@@ -103,11 +102,11 @@ void ewol::resource::Colored3DObject::draw(const etk::Color<float>& _color,
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID);
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID));
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
@@ -117,11 +116,12 @@ void ewol::resource::Colored3DObject::draw(const etk::Color<float>& _color,
 	}
 }
 
-void ewol::resource::Colored3DObject::drawLine(const etk::Color<float>& _color,
+void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
+                                               const etk::Color<float>& _color,
                                                mat4& _transformationMatrix,
                                                bool _updateDepthBuffer,
                                                bool _depthtest) {
-	if (m_VBO->bufferSize(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID) <= 0) {
+	if (_vertices.size() <= 0) {
 		return;
 	}
 	if (m_GLprogram == nullptr) {
@@ -142,11 +142,11 @@ void ewol::resource::Colored3DObject::drawLine(const etk::Color<float>& _color,
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// position :
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID);
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
 	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::line, 0, m_VBO->bufferSize(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID));
+	gale::openGL::drawArrays(gale::openGL::renderMode::line, 0, _vertices.size());
 	m_GLprogram->unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
@@ -163,7 +163,7 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor) {
 	int i, j;
-	m_VBO->clear();
+	std::vector<vec3> EwolVertices;
 	for(i = 0; i <= _lats; i++) {
 		btScalar lat0 = SIMD_PI * (-btScalar(0.5) + (btScalar) (i - 1) / _lats);
 		btScalar z0  = _radius*sin(lat0);
@@ -187,22 +187,22 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
 			vec3 v2 = vec3(x * zr1, y * zr1, z1);
 			vec3 v3 = vec3(x * zr0, y * zr0, z0);
 			
-			m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, v1);
-			m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, v2);
-			m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, v3);
+			EwolVertices.push_back(v1);
+			EwolVertices.push_back(v2);
+			EwolVertices.push_back(v3);
 			
-			m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, v1);
-			m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, v3);
-			m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, v4);
+			EwolVertices.push_back(v1);
+			EwolVertices.push_back(v3);
+			EwolVertices.push_back(v4);
 		}
 	}
-	draw(_tmpColor, _transformationMatrix);
+	draw(EwolVertices, _tmpColor, _transformationMatrix);
 }
 
 void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor){
-	m_VBO->clear();
+	std::vector<vec3> tmpVertices;
 	static int indices[36] = { 0,1,2,	3,2,1,	4,0,6,
 	                           6,0,2,	5,1,4,	4,1,0,
 	                           7,3,1,	7,1,5,	5,4,7,
@@ -215,15 +215,16 @@ void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
 	                   vec3(-_size[0],_size[1],-_size[2]),
 	                   vec3(_size[0],-_size[1],-_size[2]),
 	                   vec3(-_size[0],-_size[1],-_size[2])};
+	tmpVertices.clear();
 	for (int32_t iii=0 ; iii<36 ; iii+=3) {
 		// normal calculation :
 		//btVector3 normal = (vertices[indices[iii+2]]-vertices[indices[iii]]).cross(vertices[indices[iii+1]]-vertices[indices[iii]]);
 		//normal.normalize ();
-		m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, vertices[indices[iii]]);
-		m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, vertices[indices[iii+1]]);
-		m_VBO->pushOnBuffer(EWOL_RESOURCE_COLORED3DOBJECT_VBO_VERTEX_ID, vertices[indices[iii+2]]);
+		tmpVertices.push_back(vertices[indices[iii]]);
+		tmpVertices.push_back(vertices[indices[iii+1]]);
+		tmpVertices.push_back(vertices[indices[iii+2]]);
 	}
-	draw(_tmpColor, _transformationMatrix);
+	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 namespace etk {
 	template<> std::string to_string(ewol::resource::Colored3DObject const&) {
@@ -235,4 +236,6 @@ namespace etk {
 // declare for signal event
 ESIGNAL_DECLARE_SIGNAL(ewol::resource::Colored3DObject);
 ESIGNAL_DECLARE_SIGNAL(ememory::SharedPtr<ewol::resource::Colored3DObject>);
+
+#endif
 

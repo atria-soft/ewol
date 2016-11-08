@@ -7,6 +7,10 @@
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Drawing.hpp>
 
+// VBO table property:
+const int32_t ewol::compositing::Drawing::m_vboIdCoord(0);
+const int32_t ewol::compositing::Drawing::m_vboIdColor(1);
+#define NB_VBO (2)
 
 #if 0
 
@@ -234,6 +238,14 @@ ewol::compositing::Drawing::Drawing() :
 		m_triangle[iii] = m_position;
 		m_tricolor[iii] = m_color;
 	}
+	// Create the VBO:
+	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (m_VBO == nullptr) {
+		EWOL_ERROR("can not instanciate VBO ...");
+		return;
+	}
+	// TO facilitate some debugs we add a name of the VBO:
+	m_VBO->setName("[VBO] of ewol::compositing::Area");
 }
 
 ewol::compositing::Drawing::~Drawing() {
@@ -243,12 +255,12 @@ ewol::compositing::Drawing::~Drawing() {
 void ewol::compositing::Drawing::generateTriangle() {
 	m_triElement = 0;
 	
-	m_coord.push_back(m_triangle[0]);
-	m_coordColor.push_back(m_tricolor[0]);
-	m_coord.push_back(m_triangle[1]);
-	m_coordColor.push_back(m_tricolor[1]);
-	m_coord.push_back(m_triangle[2]);
-	m_coordColor.push_back(m_tricolor[2]);
+	m_VBO->pushOnBuffer(m_vboIdCoord, m_triangle[0]);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_tricolor[0]);
+	m_VBO->pushOnBuffer(m_vboIdCoord, m_triangle[1]);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_tricolor[1]);
+	m_VBO->pushOnBuffer(m_vboIdCoord, m_triangle[2]);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_tricolor[2]);
 }
 
 void ewol::compositing::Drawing::internalSetColor(const etk::Color<>& _color) {
@@ -269,6 +281,7 @@ void ewol::compositing::Drawing::setPoint(const vec3& _point) {
 	if (m_triElement >= 3) {
 		generateTriangle();
 	}
+	m_VBO->flush();
 }
 
 void ewol::compositing::Drawing::resetCount() {
@@ -294,8 +307,8 @@ void ewol::compositing::Drawing::loadProgram() {
 }
 
 void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
-	if (m_coord.size() <= 0) {
-		// TODO : a remÃštre ...
+	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
+		// TODO : set it back ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -309,12 +322,12 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	mat4 tmpMatrix2;
 	m_GLprogram->uniformMatrix(m_GLMatrixPosition, tmpMatrix2);
-	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
-	// color :
-	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
+	// position:
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	// color:
+	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
 	m_GLprogram->unUse();
 }
 
@@ -322,8 +335,7 @@ void ewol::compositing::Drawing::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
-	m_coord.clear();
-	m_coordColor.clear();
+	m_VBO->clear();
 	// reset temporal variables :
 	m_position = vec3(0.0, 0.0, 0.0);
 	

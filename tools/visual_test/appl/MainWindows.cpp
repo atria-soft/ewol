@@ -124,8 +124,8 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	std::string tmpConstruct;
 	switch(m_idWidget) {
 		case 0:
-			tmpConstruct = "<spin/>\n";
-			tmpDescription = "Test ewol::widget::Spin";
+			tmpConstruct = "<image src='DATA:sphere.png'/>\n";
+			tmpDescription = "Test ewol::widget::Image";
 			break;
 		case 1:
 			tmpConstruct = std::string()
@@ -147,8 +147,8 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			tmpDescription = "Test ewol::widget::Label";
 			break;
 		case 4:
-			tmpConstruct = "<image src='DATA:sphere.png'/>\n";
-			tmpDescription = "Test ewol::widget::Image";
+			tmpConstruct = "<spin/>\n";
+			tmpDescription = "Test ewol::widget::Spin";
 			break;
 		case 5:
 			tmpConstruct = "<checkbox><label>Simple string</label></checkbox>\n";

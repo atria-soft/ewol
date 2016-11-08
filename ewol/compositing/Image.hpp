@@ -24,7 +24,7 @@ namespace ewol {
 				vec3 m_clippingPosStop; //!< Clipping stop position
 				bool m_clippingEnable; //!< true if the clipping must be activated
 			private:
-				etk::Color<> m_color; //!< The text foreground color
+				etk::Color<float,4> m_color; //!< The text foreground color
 				float m_angle; //!< Angle to set at the axes
 			private:
 				ememory::SharedPtr<gale::resource::Program> m_GLprogram; //!< pointer on the opengl display program
@@ -37,9 +37,10 @@ namespace ewol {
 				bool m_distanceFieldMode; //!< select distance field mode
 				ememory::SharedPtr<ewol::resource::TextureFile> m_resource; //!< texture resources
 				ememory::SharedPtr<ewol::resource::ImageDF> m_resourceDF; //!< texture resources
-				std::vector<vec3 > m_coord; //!< internal coord of the object
-				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
-				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
+				static const int32_t m_vboIdCoord;
+				static const int32_t m_vboIdCoordTex;
+				static const int32_t m_vboIdColor;
+				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed

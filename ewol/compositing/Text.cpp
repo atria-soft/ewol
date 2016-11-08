@@ -23,8 +23,9 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || m_font == nullptr) {
-		// TODO : a remÃtre ...
+	if (    m_VBO->bufferSize(m_vboIdCoord) <= 0
+	     || m_font == nullptr) {
+		// TODO : set it back ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -45,18 +46,18 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->use(); 
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
-	// Texture :
+	// Texture:
 	m_GLprogram->setTexture0(m_GLtexID, m_font->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
-	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &m_coord[0]);
-	// Texture :
-	m_GLprogram->sendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
-	// color :
-	m_GLprogram->sendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
-	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
+	// position:
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	// Texture:
+	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdCoordText);
+	// color:
+	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
+	// Request the draw od the elements:
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
 	m_GLprogram->unUse();
 	if (_enableDepthTest == true) {
 		gale::openGL::disable(gale::openGL::flag_depthTest);
@@ -67,7 +68,8 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// draw BG in any case:
 	m_vectorialDraw.draw(_disableDepthTest);
 	
-	if (m_coord.size() <= 0 || m_font == nullptr) {
+	if (    m_VBO->bufferSize(m_vboIdCoord) <= 0
+	     || m_font == nullptr) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -87,14 +89,14 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	m_GLprogram->setTexture0(m_GLtexID, m_font->getRendererId());
 	m_GLprogram->uniform1i(m_GLtextWidth, m_font->getOpenGlSize().x());
 	m_GLprogram->uniform1i(m_GLtextHeight, m_font->getOpenGlSize().x());
-	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
-	// Texture :
-	m_GLprogram->sendAttribute(m_GLtexture, m_coordTex);
-	// color :
-	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
+	// position:
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	// Texture:
+	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdCoordText);
+	// color:
+	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_coord.size());
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
 	m_GLprogram->unUse();
 }
 
@@ -180,7 +182,7 @@ void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 	
 	// get the kerning ofset :
 	float kerningOffset = 0;
-	if (true == m_kerning) {
+	if (m_kerning == true) {
 		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
 		if (kerningOffset != 0) {
 			//EWOL_DEBUG("Kerning between : '" << m_previousCharcode << "'&'" << myGlyph->m_UVal << "' value : " << kerningOffset);
@@ -292,17 +294,17 @@ void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 					 *                
 					 */
 					// set texture coordonates :
-					m_coordTex.push_back(texturePos[0]);
-					m_coordTex.push_back(texturePos[1]);
-					m_coordTex.push_back(texturePos[2]);
+					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[0]);
+					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[1]);
+					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[2]);
 					// set display positions :
-					m_coord.push_back(bitmapDrawPos[0]);
-					m_coord.push_back(bitmapDrawPos[1]);
-					m_coord.push_back(bitmapDrawPos[2]);
+					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[0]);
+					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[1]);
+					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[2]);
 					// set the color
-					m_coordColor.push_back(m_color);
-					m_coordColor.push_back(m_color);
-					m_coordColor.push_back(m_color);
+					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 					/* Step 2 : 
 					 *              
 					 *   **         
@@ -311,17 +313,17 @@ void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 					 *   ********   
 					 */
 					// set texture coordonates :
-					m_coordTex.push_back(texturePos[0]);
-					m_coordTex.push_back(texturePos[2]);
-					m_coordTex.push_back(texturePos[3]);
+					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[0]);
+					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[2]);
+					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[3]);
 					// set display positions :
-					m_coord.push_back(bitmapDrawPos[0]);
-					m_coord.push_back(bitmapDrawPos[2]);
-					m_coord.push_back(bitmapDrawPos[3]);
+					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[0]);
+					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[2]);
+					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[3]);
 					// set the color
-					m_coordColor.push_back(m_color);
-					m_coordColor.push_back(m_color);
-					m_coordColor.push_back(m_color);
+					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 				}
 			}
 		}
@@ -332,6 +334,7 @@ void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 	//EWOL_DEBUG(" 6 print '" << charcode << "' : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	// Register the previous character
 	m_previousCharcode = _charcode;
+	m_VBO->flush();
 	return;
 }
 

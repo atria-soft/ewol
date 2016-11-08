@@ -8,9 +8,10 @@
 #include <ewol/compositing/Area.hpp>
 
 // VBO table property:
-#define EWOL_COMPOSITING_VBO_COORDINATE (0)
-#define EWOL_COMPOSITING_VBO_COLOR      (1)
-#define EWOL_COMPOSITING_VBO_TEXTURE    (2)
+const int32_t ewol::compositing::Area::m_vboIdCoord(0);
+const int32_t ewol::compositing::Area::m_vboIdCoordText(1);
+const int32_t ewol::compositing::Area::m_vboIdColor(2);
+#define NB_VBO (3)
 
 ewol::compositing::Area::Area(const ivec2& _size) :
   m_position(0.0, 0.0, 0.0),
@@ -26,7 +27,7 @@ ewol::compositing::Area::Area(const ivec2& _size) :
 	m_resource->setImageSize(_size);
 	m_resource->flush();
 	// Create the VBO:
-	m_VBO = gale::resource::VirtualBufferObject::create(3);
+	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == nullptr) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
@@ -54,7 +55,7 @@ void ewol::compositing::Area::loadProgram() {
 }
 
 void ewol::compositing::Area::draw(bool _disableDepthTest) {
-	if (m_VBO->bufferSize(EWOL_COMPOSITING_VBO_COORDINATE) <= 0) {
+	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -73,13 +74,13 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	// TextureID
 	m_GLprogram->setTexture0(m_GLtexID, m_resource->getRendererId());
 	// position:
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, EWOL_COMPOSITING_VBO_COORDINATE);
+	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
 	// Texture:
-	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, EWOL_COMPOSITING_VBO_COLOR);
+	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdColor);
 	// color:
-	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, EWOL_COMPOSITING_VBO_TEXTURE);
+	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdCoordText);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(EWOL_COMPOSITING_VBO_COORDINATE));
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
 	m_GLprogram->unUse();
 }
 
@@ -97,41 +98,41 @@ void ewol::compositing::Area::print(const ivec2& _size) {
 	vec2 tex(0,1);
 	point.setX(m_position.x());
 	point.setY(m_position.y());
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COORDINATE, point);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COLOR, m_color);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_TEXTURE, tex);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
 	
 	tex.setValue(1,1);
 	point.setX(m_position.x() + _size.x());
 	point.setY(m_position.y());
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COORDINATE, point);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COLOR, m_color);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_TEXTURE, tex);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
 	
 	tex.setValue(1,0);
 	point.setX(m_position.x() + _size.x());
 	point.setY(m_position.y() + _size.y());
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COORDINATE, point);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COLOR, m_color);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_TEXTURE, tex);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
 	
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COORDINATE, point);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COLOR, m_color);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_TEXTURE, tex);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
 	
 	tex.setValue(0,0);
 	point.setX(m_position.x());
 	point.setY(m_position.y() + _size.y());
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COORDINATE, point);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COLOR, m_color);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_TEXTURE, tex);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
 	
 	tex.setValue(0,1);
 	point.setX(m_position.x());
 	point.setY(m_position.y());
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COORDINATE, point);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_COLOR, m_color);
-	m_VBO->pushOnBuffer(EWOL_COMPOSITING_VBO_TEXTURE, tex);
+	m_VBO->pushOnBuffer(m_vboIdCoord, point);
+	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
 	
 	m_VBO->flush();
 }

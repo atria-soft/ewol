@@ -29,9 +29,10 @@ namespace ewol {
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLMatrixPosition; //!< position matrix
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)
-			public: // Background Color (display only when needed)
-				std::vector<vec3 > m_coord; //!< internal position for the text display
-				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the background
+			protected:
+				static const int32_t m_vboIdCoord;
+				static const int32_t m_vboIdColor;
+				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			public:
 				/**
 				 * @brief Basic constructor
@@ -53,7 +54,7 @@ namespace ewol {
 				float m_thickness; //!< when drawing line and other things
 				int32_t m_triElement; //!< special counter of the single dot generated
 				vec3 m_triangle[3]; //!< Register every system with a combinaison of tiangle
-				etk::Color<float> m_tricolor[3]; //!< Register every the associated color foreground
+				etk::Color<float,4> m_tricolor[3]; //!< Register every the associated color foreground
 			// internal API for the generation abstraction of triangles
 				/**
 				 * @brief Lunch the generation of triangle

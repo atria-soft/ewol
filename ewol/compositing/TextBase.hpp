@@ -22,8 +22,8 @@ namespace ewol {
 		 */
 		class TextDecoration {
 			public:
-				etk::Color<> m_colorBg; //!< display background color
-				etk::Color<> m_colorFg; //!< display foreground color
+				etk::Color<float,4> m_colorBg; //!< display background color
+				etk::Color<float,4> m_colorFg; //!< display foreground color
 				enum ewol::font::mode m_mode; //!< display mode Regular/Bold/Italic/BoldItalic
 				TextDecoration() {
 					m_colorBg = etk::color::blue;
@@ -57,13 +57,13 @@ namespace ewol {
 				vec3 m_clippingPosStop; //!< Clipping stop position
 				bool m_clippingEnable; //!< true if the clipping must be activated
 			protected:
-				etk::Color<> m_defaultColorFg; //!< The text foreground color
-				etk::Color<> m_defaultColorBg; //!< The text background color
+				etk::Color<float,4> m_defaultColorFg; //!< The text foreground color
+				etk::Color<float,4> m_defaultColorBg; //!< The text background color
 			protected:
-				etk::Color<> m_color; //!< The text foreground color
-				etk::Color<> m_colorBg; //!< The text background color
-				etk::Color<> m_colorCursor; //!< The text cursor color
-				etk::Color<> m_colorSelection; //!< The text Selection color
+				etk::Color<float,4> m_color; //!< The text foreground color
+				etk::Color<float,4> m_colorBg; //!< The text background color
+				etk::Color<float,4> m_colorCursor; //!< The text cursor color
+				etk::Color<float,4> m_colorSelection; //!< The text Selection color
 			protected:
 				enum ewol::font::mode m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
 				bool m_kerning; //!< Kerning enable or disable on the next elements displayed
@@ -85,9 +85,11 @@ namespace ewol {
 				int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
 				int32_t m_cursorPos; //!< Cursor position (default no cursor  == > -100)
 			protected: // Text
-				std::vector<vec3 > m_coord; //!< internal coord of the object
-				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
-				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
+				static const int32_t m_vboIdCoord;
+				static const int32_t m_vboIdCoordText;
+				static const int32_t m_vboIdColor;
+				static const int32_t m_vboIdGlyphLevel;
+				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
 			public:
 				/**
 				 * @brief load the openGL program and get all the ID needed
