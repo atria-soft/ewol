@@ -16,11 +16,6 @@ ewol::Compositing::Compositing() {
 }
 
 
-ewol::Compositing::~Compositing() {
-	// nothing to do
-}
-
-
 void ewol::Compositing::resetMatrix() {
 	m_matrixApply.identity();
 }

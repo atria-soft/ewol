@@ -80,10 +80,6 @@ ewol::Widget::Widget() :
 	propertyAnnimationTypeStop.add(0, "none");
 }
 
-ewol::Widget::~Widget() {
-	// clean all the short-cut ...
-	shortCutClean();
-}
 
 void ewol::Widget::onChangeSize() {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} update size : " << m_size);
@@ -356,111 +352,100 @@ void ewol::Widget::shortCutAdd(const std::string& _descriptiveString, const std:
 		EWOL_ERROR("try to add shortcut with no descriptive string ...");
 		return;
 	}
-	EventShortCut* tmpElement = new EventShortCut();
-	if (nullptr == tmpElement) {
-		EWOL_ERROR("allocation error ... Memory error ...");
-		return;
-	}
+	EventShortCut tmpElement;
 	if (_message.size() == 0) {
-		tmpElement->message = _descriptiveString;
+		tmpElement.message = _descriptiveString;
 	} else {
-		tmpElement->message = _message;
+		tmpElement.message = _message;
 	}
 	// parsing of the string :
 	//"ctrl+shift+alt+meta+s"
 	if(_descriptiveString.find("ctrl") != std::string::npos) {
-		tmpElement->specialKey.setCtrl(true);
+		tmpElement.specialKey.setCtrl(true);
 	}
 	if(_descriptiveString.find("shift") != std::string::npos) {
-		tmpElement->specialKey.setShift(true);
+		tmpElement.specialKey.setShift(true);
 	}
 	if(_descriptiveString.find("alt") != std::string::npos) {
-		tmpElement->specialKey.setAlt(true);
+		tmpElement.specialKey.setAlt(true);
 	}
 	if(_descriptiveString.find("meta") != std::string::npos) {
-		tmpElement->specialKey.setMeta(true);
+		tmpElement.specialKey.setMeta(true);
 	}
 	if(_descriptiveString.find("F12") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f12;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f12;
 	} else if(_descriptiveString.find("F11") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f11;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f11;
 	} else if(_descriptiveString.find("F10") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f10;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f10;
 	} else if(_descriptiveString.find("F9") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f9;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f9;
 	} else if(_descriptiveString.find("F8") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f8;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f8;
 	} else if(_descriptiveString.find("F7") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f7;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f7;
 	} else if(_descriptiveString.find("F6") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f6;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f6;
 	} else if(_descriptiveString.find("F5") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f5;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f5;
 	} else if(_descriptiveString.find("F4") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f4;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f4;
 	} else if(_descriptiveString.find("F3") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f3;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f3;
 	} else if(_descriptiveString.find("F2") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f2;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f2;
 	} else if(_descriptiveString.find("F1") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::f1;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::f1;
 	} else if(_descriptiveString.find("LEFT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::left;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::left;
 	} else if(_descriptiveString.find("RIGHT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::right;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::right;
 	} else if(_descriptiveString.find("UP") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::up;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::up;
 	} else if(_descriptiveString.find("DOWN") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::down;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::down;
 	} else if(_descriptiveString.find("PAGE_UP") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::pageUp;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::pageUp;
 	} else if(_descriptiveString.find("PAGE_DOWN") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::pageDown;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::pageDown;
 	} else if(_descriptiveString.find("START") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::start;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::start;
 	} else if(_descriptiveString.find("END") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::end;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::end;
 	} else if(_descriptiveString.find("PRINT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::print;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::print;
 	} else if(_descriptiveString.find("ARRET_DEFIL") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::stopDefil;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::stopDefil;
 	} else if(_descriptiveString.find("WAIT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::wait;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::wait;
 	} else if(_descriptiveString.find("INSERT") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::insert;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::insert;
 	} else if(_descriptiveString.find("CAPLOCK") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::capLock;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::capLock;
 	} else if(_descriptiveString.find("CONTEXT_MENU") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::contextMenu;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::contextMenu;
 	} else if(_descriptiveString.find("NUM_LOCK") != std::string::npos) {
-		tmpElement->keyboardMoveValue = gale::key::keyboard::numLock;
+		tmpElement.keyboardMoveValue = gale::key::keyboard::numLock;
 	} else {
-		tmpElement->unicodeValue = _descriptiveString[_descriptiveString.size() -1];
+		tmpElement.unicodeValue = _descriptiveString[_descriptiveString.size() -1];
 	}
 	// add it on the List ...
-	m_localShortcut.push_back(tmpElement);
+	m_localShortcut.push_back(std::move(tmpElement));
 }
 
 void ewol::Widget::shortCutRemove(const std::string& _message) {
 	auto it(m_localShortcut.begin());
 	while(it != m_localShortcut.end()) {
-		if (    *it != nullptr
-		     && (*it)->message != _message) {
+		if (it->message != _message) {
 			++it;
 			continue;
 		}
-		delete(*it);
-		*it = nullptr;
 		m_localShortcut.erase(it);
 		it = m_localShortcut.begin();
 	}
 }
 
 void ewol::Widget::shortCutClean() {
-	for (auto &it : m_localShortcut) {
-		delete(it);
-		it = nullptr;
-	}
 	m_localShortcut.clear();
 }
 
@@ -474,22 +459,20 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 	}
 	//EWOL_INFO("Try to find generic shortcut ...");
 	for (int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
-		if (m_localShortcut[iii] != nullptr) {
-			if (    m_localShortcut[iii]->specialKey.getShift() == _special.getShift()
-			     && m_localShortcut[iii]->specialKey.getCtrl()  == _special.getCtrl()
-			     && m_localShortcut[iii]->specialKey.getAlt()   == _special.getAlt()
-			     && m_localShortcut[iii]->specialKey.getMeta()  == _special.getMeta()
-			     && (    (    m_localShortcut[iii]->keyboardMoveValue == gale::key::keyboard::unknow
-			               && m_localShortcut[iii]->unicodeValue == _unicodeValue)
-			          || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
-			               && m_localShortcut[iii]->unicodeValue == 0)
-			        )
-			   ) {
-				if (_isDown) {
-					signalShortcut.emit(m_localShortcut[iii]->message);
-				}
-				return true;
+		if (    m_localShortcut[iii].specialKey.getShift() == _special.getShift()
+		     && m_localShortcut[iii].specialKey.getCtrl()  == _special.getCtrl()
+		     && m_localShortcut[iii].specialKey.getAlt()   == _special.getAlt()
+		     && m_localShortcut[iii].specialKey.getMeta()  == _special.getMeta()
+		     && (    (    m_localShortcut[iii].keyboardMoveValue == gale::key::keyboard::unknow
+		               && m_localShortcut[iii].unicodeValue == _unicodeValue)
+		          || (    m_localShortcut[iii].keyboardMoveValue == _kbMove
+		               && m_localShortcut[iii].unicodeValue == 0)
+		        )
+		   ) {
+			if (_isDown) {
+				signalShortcut.emit(m_localShortcut[iii].message);
 			}
+			return true;
 		}
 	}
 	return false;

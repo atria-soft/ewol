@@ -21,7 +21,7 @@ namespace ewol {
 			/**
 			 * @brief Generic destructor
 			 */
-			virtual ~Compositing();
+			virtual ~Compositing() = default;
 			/**
 			 * @brief Virtal pure function that request the draw of all openGl elements
 			 */

@@ -121,6 +121,11 @@ namespace ewol {
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
 			bool m_objectHasBeenInit; //!< Know if the init function has bben called
+		public:
+			/**
+			 * @brief Destructor
+			 */
+			virtual ~Object();
 		protected:
 			/**
 			 * @brief Constructor.
@@ -132,10 +137,6 @@ namespace ewol {
 			 * @brief Factory
 			 */
 			DECLARE_FACTORY(Object);
-			/**
-			 * @brief Destructor
-			 */
-			virtual ~Object();
 			bool objectHasBeenCorectlyInit();
 		protected:
 			ewol::ObjectWeak m_parent; //!< Reference on the current parrent.

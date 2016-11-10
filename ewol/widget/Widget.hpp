@@ -91,7 +91,7 @@ namespace ewol {
 			/**
 			 * @brief Destructor of the widget classes
 			 */
-			virtual ~Widget();
+			virtual ~Widget() = default;
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget size:
 		// ----------------------------------------------------------------------------------------------------------------
@@ -388,7 +388,7 @@ namespace ewol {
 		public:
 			esignal::Signal<std::string> signalShortcut; //!< signal handle of the message
 		private:
-			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
+			std::vector<EventShortCut> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
 			/**
 			 * @brief add a specific shortcut with his description
