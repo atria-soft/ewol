@@ -10,9 +10,28 @@
 #include <gale/resource/Manager.hpp>
 #include <ewol/resource/Image.hpp>
 #include <ewol/resource/Texture.hpp>
+#include <thread>
 
 const ivec2 ewol::resource::TextureFile::sizeAuto(-1,-1);
 const ivec2 ewol::resource::TextureFile::sizeDefault(0,0);
+
+/**
+ * @brief get the next power 2 if the input
+ * @param[in] _value Value that we want the next power of 2
+ * @return result value
+ */
+static int32_t nextP2(int32_t _value) {
+	int32_t val=1;
+	for (int32_t iii=1; iii<31; iii++) {
+		if (_value <= val) {
+			return val;
+		}
+		val *=2;
+	}
+	EWOL_CRITICAL("impossible CASE.... request P2 of " << _value);
+	return val;
+}
+
 
 ewol::resource::TextureFile::TextureFile() {
 	addResourceType("ewol::resource::Image");
@@ -35,36 +54,18 @@ void ewol::resource::TextureFile::init(std::string _genName, const std::string& 
 	//egami::store(m_data, "tmpResult.bmp");
 	ivec2 tmp = m_data.getSize();
 	m_realImageSize = vec2(tmp.x(), tmp.y());
+	vec2 compatibilityHWSize = vec2(nextP2(tmp.x()), nextP2(tmp.y()));
+	if (m_realImageSize != compatibilityHWSize) {
+		EWOL_ERROR("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
+		m_data.resize(ivec2(compatibilityHWSize.x(),compatibilityHWSize.y()));
+	}
+	m_endPointSize = m_realImageSize;
 	#ifdef GENERATE_DISTANCE_FIELD_MODE
 		//egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
 		egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");
 	#endif
 	flush();
 }
-
-
-#if    defined(__TARGET_OS__Android) \
-    || defined(__TARGET_OS__MacOs) \
-    || defined(__TARGET_OS__IOs)
-/**
- * @brief get the next power 2 if the input
- * @param[in] _value Value that we want the next power of 2
- * @return result value
- */
-static int32_t nextP2(int32_t _value) {
-	int32_t val=1;
-	for (int32_t iii=1; iii<31; iii++) {
-		if (_value <= val) {
-			return val;
-		}
-		val *=2;
-	}
-	EWOL_CRITICAL("impossible CASE.... request P2 of " << _value);
-	return val;
-}
-#endif
-
-
 
 ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size, ivec2 _sizeRegister) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
@@ -92,11 +93,7 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 	}
 	if (_size.x()>0 && _size.y()>0) {
 		EWOL_VERBOSE("     == > specific size : " << _size);
-		#if    defined(__TARGET_OS__Android) \
-		    || defined(__TARGET_OS__MacOs) \
-		    || defined(__TARGET_OS__IOs)
-			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
-		#endif
+		_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		if (_sizeRegister != ewol::resource::TextureFile::sizeAuto) {
 			if (_sizeRegister != ewol::resource::TextureFile::sizeDefault) {
 				tmpFilename += ":";

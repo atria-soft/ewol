@@ -43,6 +43,7 @@ namespace ewol {
 				 * @brief 
 				 */
 				Image();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**

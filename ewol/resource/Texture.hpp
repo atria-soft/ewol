@@ -31,7 +31,7 @@ namespace ewol {
 				virtual ~Texture();
 			public:
 				// you must set the size here, because it will be set in multiple of pow(2)
-				void setImageSize(ivec2 newSize);
+				void setImageSize(ivec2 _newSize);
 				// get the reference on this image to draw nomething on it ...
 				inline egami::Image& get() {
 					return m_data;
@@ -43,6 +43,9 @@ namespace ewol {
 				void removeContextToLate();
 				const ivec2& getOpenGlSize() const {
 					return m_data.getSize();
+				};
+				const vec2& getUsableSize() const {
+					return m_endPointSize;
 				};
 				uint32_t getRendererId() const {
 					return m_texId;

@@ -30,9 +30,15 @@ ewol::widget::Image::Image() :
 		m_colorId = m_colorProperty->request("foreground");
 	}
 }
-
 ewol::widget::Image::~Image() {
 	
+}
+
+void ewol::widget::Image::init() {
+	ewol::Widget::init();
+	if (*propertySource != "") {
+		onChangePropertySource();
+	}
 }
 
 void ewol::widget::Image::set(const std::string& _file, const gale::Dimension& _border) {

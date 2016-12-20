@@ -151,8 +151,8 @@ namespace ewol {
 				 * @param[in] _sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 				 */
 				void printPart(const vec2& _size,
-				               const vec2& _sourcePosStart,
-				               const vec2& _sourcePosStop);
+				               vec2 _sourcePosStart,
+				               vec2 _sourcePosStop);
 				/**
 				 * @brief change the image Source  == > can not be done to display 2 images at the same time ...
 				 * @param[in] _newFile New file of the Image

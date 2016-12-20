@@ -49,7 +49,7 @@ namespace ewol {
 				int32_t m_colorIdCursor; //!< color property of the text cursor
 				int32_t m_colorIdSelection; //!< color property of the text selection
 				ewol::compositing::Text m_text; //!< text display m_text
-			public:
+			protected:
 				/**
 				 * @brief Contuctor
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)

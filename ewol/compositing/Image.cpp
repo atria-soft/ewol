@@ -52,7 +52,7 @@ ewol::compositing::Image::~Image() {
 }
 
 void ewol::compositing::Image::loadProgram() {
-	// get the shader resource :
+	// get the shader resource:
 	m_GLPosition = 0;
 	m_GLprogram.reset();
 	if (m_distanceFieldMode == true) {
@@ -165,8 +165,17 @@ void ewol::compositing::Image::print(const vec2& _size) {
 }
 
 void ewol::compositing::Image::printPart(const vec2& _size,
-                                         const vec2& _sourcePosStart,
-                                         const vec2& _sourcePosStop) {
+                                         vec2 _sourcePosStart,
+                                         vec2 _sourcePosStop) {
+	if (m_resource == nullptr) {
+		return;
+	}
+	vec2 openGLSize = vec2(m_resource->getOpenGlSize().x(), m_resource->getOpenGlSize().y());
+	vec2 usefullSize = m_resource->getUsableSize();
+	vec2 ratio = usefullSize/openGLSize;
+	_sourcePosStart *= ratio;
+	_sourcePosStop *= ratio;
+	
 	//EWOL_ERROR("Debug image " << m_filename << "  ==> " << m_position << " " << _size << " " << _sourcePosStart << " " << _sourcePosStop);
 	if (m_angle == 0.0f) {
 		vec3 point = m_position;
