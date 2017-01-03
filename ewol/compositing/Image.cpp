@@ -267,6 +267,11 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
+	if (    m_filename == _newFile
+	     && m_requestSize == _size) {
+		// Nothing to do ...
+		return;
+	}
 	ememory::SharedPtr<ewol::resource::TextureFile> resource = m_resource;
 	ememory::SharedPtr<ewol::resource::ImageDF> resourceDF = m_resourceDF;
 	m_filename = _newFile;
