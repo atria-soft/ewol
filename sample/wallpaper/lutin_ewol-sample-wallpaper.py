@@ -16,7 +16,7 @@ def get_desc():
 	return "Tutorial xxx example wallpaper"
 
 def get_licence():
-	return "APACHE-2"
+	return "MPL-2"
 
 def get_compagny_type():
 	return "com"

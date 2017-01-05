@@ -42,16 +42,16 @@ This exclude the classical extern library with licence:
   - L-GPL
   - GPL
 
-License (APACHE 2)                            {#ewol_mainpage_license}
+License (MPL v2.0)                            {#ewol_mainpage_license}
 ==================
 
 Copyright ewol Edouard DUPIN
 
-Licensed under the Apache License, Version 2.0 (the "License");
+Licensed under the Mozilla Public License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-<http://www.apache.org/licenses/LICENSE-2.0>
+<https://www.mozilla.org/MPL/2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -65,25 +65,25 @@ Sub library:                                  {#ewol_mainpage_sub}
 
 License:
 
-  - [**etk**](http://atria-soft.github.io/etk) : APACHE-2
-  - [**elog**](http://atria-soft.github.io/elog) : APACHE-2
+  - [**etk**](http://atria-soft.github.io/etk) : MPL v2.0
+  - [**elog**](http://atria-soft.github.io/elog) : MPL v2.0
     + **linearmath** : z-lib (subset of bullet lib)
-    + [**earchive**](http://atria-soft.github.io/earchive) : APACHE-2
+    + [**earchive**](http://atria-soft.github.io/earchive) : MPL v2.0
       * **zlib** : z-lib
-  - [**egami**](http://atria-soft.github.io/egami) : APACHE-2
-    + [**esvg**](http://atria-soft.github.io/esvg) : APACHE-2
+  - [**egami**](http://atria-soft.github.io/egami) : MPL v2.0
+    + [**esvg**](http://atria-soft.github.io/esvg) : MPL v2.0
     + **libpng** : PNG
   - **libogg** : BSD-like
   - **libfreetype** : BSD-like
-  - [**e-json**](http://atria-soft.github.io/ejson) : APACHE-2
-  - [**e-xml**](http://atria-soft.github.io/exml) : APACHE-2
-  - [**audio**](http://musicdsp.github.io/audio) : APACHE-2
+  - [**e-json**](http://atria-soft.github.io/ejson) : MPL v2.0
+  - [**e-xml**](http://atria-soft.github.io/exml) : MPL v2.0
+  - [**audio**](http://musicdsp.github.io/audio) : MPL v2.0
   - [**audio-orchestra**](http://musicdsp.github.io/audio-orchestra) : MIT
-  - [**audio-drain**](http://musicdsp.github.io/audio-drain) : APACHE-2
-  - [**audio-river**](http://musicdsp.github.io/audio-river) : APACHE-2
-  - [**audio-ess**](http://musicdsp.github.io/audio-ess) : APACHE-2
-  - [**ege**](http://atria-soft.github.io/ege) : APACHE-2
-  - [**dollar**](http://atria-soft.github.io/dollar) : APACHE-2
+  - [**audio-drain**](http://musicdsp.github.io/audio-drain) : MPL v2.0
+  - [**audio-river**](http://musicdsp.github.io/audio-river) : MPL v2.0
+  - [**audio-ess**](http://musicdsp.github.io/audio-ess) : MPL v2.0
+  - [**ege**](http://atria-soft.github.io/ege) : MPL v2.0
+  - [**dollar**](http://atria-soft.github.io/dollar) : MPL v2.0
 ...
 
 Description:                                  {#ewol_mainpage_desc}

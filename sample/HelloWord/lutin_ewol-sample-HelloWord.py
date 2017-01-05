@@ -12,7 +12,7 @@ def get_desc():
 	return "Tutorial 001 : Hello Word"
 
 def get_licence():
-	return "APACHE-2"
+	return "MPL-2"
 
 def get_compagny_type():
 	return "com"

@@ -1,7 +1,7 @@
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
- * @license APACHE v2.0 (see license file)
+ * @license MPL v2.0 (see license file)
  */
 
 
@@ -94,8 +94,8 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	if(ewol::widget::Button::lockAccess == *propertyLock) {
 		return false;
 	}
-	if(    gale::key::status::leave == _event.getStatus()
-	    || gale::key::status::abort == _event.getStatus()) {
+	if(    _event.getStatus() == gale::key::status::leave
+	    || _event.getStatus() == gale::key::status::abort) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
@@ -112,25 +112,25 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 		}
 	}
 	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
-	if (true == m_mouseHover) {
-		if (1 == _event.getId()) {
-			if(gale::key::status::down == _event.getStatus()) {
+	if (m_mouseHover == true) {
+		if (_event.getId() == 1) {
+			if(_event.getStatus() == gale::key::status::down) {
 				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
-			if(gale::key::status::up == _event.getStatus()) {
+			if(_event.getStatus() == gale::key::status::up) {
 				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
 			}
-			if(gale::key::status::pressSingle == _event.getStatus()) {
+			if(_event.getStatus() == gale::key::status::pressSingle) {
 				if(    (    *propertyValue == true
-				         && ewol::widget::Button::lockWhenPressed == propertyLock)
+				         && *propertyLock == ewol::widget::Button::lockWhenPressed)
 				    || (    *propertyValue == false
-				         && ewol::widget::Button::lockWhenReleased == propertyLock) ) {
+				         && *propertyLock == ewol::widget::Button::lockWhenReleased) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
