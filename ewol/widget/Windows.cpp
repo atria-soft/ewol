@@ -79,11 +79,6 @@ void ewol::widget::Windows::sysDraw() {
 	gale::openGL::disable(gale::openGL::flag_stencilTest);
 	gale::openGL::disable(gale::openGL::flag_alphaTest);
 	gale::openGL::disable(gale::openGL::flag_fog);
-	#if (    !defined(__TARGET_OS__Android) \
-	      && !defined(__TARGET_OS__IOs) \
-	      && !defined(__TARGET_OS__Web))
-		glPixelZoom(1.0,1.0);
-	#endif
 	gale::openGL::disable(gale::openGL::flag_texture2D);
 	gale::openGL::disable(gale::openGL::flag_depthTest);
 	

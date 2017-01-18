@@ -169,7 +169,6 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (tmpSize.m_size.x() <= 0 || tmpSize.m_size.y() <= 0) {
 		return;
 	}
-	
 	glViewport( (int32_t)tmpSize.m_origin.x(),
 	            (int32_t)tmpSize.m_origin.y(),
 	            (int32_t)tmpSize.m_size.x(),
