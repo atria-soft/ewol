@@ -1,7 +1,7 @@
 #ifdef GL_ES
+#extension GL_OES_standard_derivatives : enable
 precision mediump float;
 precision mediump int;
-#extension GL_OES_standard_derivatives : enable
 #endif
 
 // Input :

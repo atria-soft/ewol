@@ -82,6 +82,7 @@ void ewol::widget::Entry::onCallbackShortCut(const std::string& _value) {
 	} else if (_value == "copy") {
 		onCallbackCopy();
 	} else if (_value == "paste") {
+		EWOL_WARNING("Request past ...");
 		onCallbackPaste();
 	} else if (_value == "select:all") {
 		onCallbackSelect(true);
@@ -244,7 +245,7 @@ void ewol::widget::Entry::copySelectionToClipBoard(enum gale::context::clipBoard
 
 
 bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
-	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
+	EWOL_WARNING("Event on Input ... " << _event);
 	if (_event.getId() == 1) {
 		if (gale::key::status::pressSingle == _event.getStatus()) {
 			keepFocus();
@@ -337,6 +338,7 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 
 
 bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
+	EWOL_WARNING("Event on Entry ... " << _event);
 	if (_event.getType() == gale::key::keyboard::character) {
 		if(_event.getStatus() == gale::key::status::down) {
 			// remove curent selected data ...
