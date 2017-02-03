@@ -236,6 +236,7 @@ def configure(target, my_module):
 	my_module.copy_path('data/texturedDF.*','')
 	my_module.copy_path('data/fontDistanceField/*','fontDistanceField')
 	my_module.copy_path('data/translate/*','translate/ewol')
+	my_module.copy_path('data/ewol-gui-*.xml')
 	
 	# name of the dependency
 	my_module.add_depend([

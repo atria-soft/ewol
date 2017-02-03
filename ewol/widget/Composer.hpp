@@ -35,21 +35,23 @@ namespace ewol {
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _fileName Name of the file
+				 * @param[in] _id Unique ID that is used in replacing the balise "{ID}" inside the File (do nothing if == 0)
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */
-				bool loadFromFile(const std::string& _fileName);
+				bool loadFromFile(const std::string& _fileName, uint64_t _id=0);
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _composerXmlString xml to parse directly
+				 * @param[in] _id Unique ID that is used in replacing the balise "{ID}" inside the String (do nothing if == 0)
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */
-				bool loadFromString(const std::string& _composerXmlString);
+				bool loadFromString(const std::string& _composerXmlString, uint64_t _id=0);
 			private:
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 		};
-		ewol::WidgetShared composerGenerateString(const std::string& _data = "");
-		ewol::WidgetShared composerGenerateFile(const std::string& _data = "");
+		ewol::WidgetShared composerGenerateString(const std::string& _data = "", uint64_t _id=0);
+		ewol::WidgetShared composerGenerateFile(const std::string& _data = "", uint64_t _id=0);
 	};
 };

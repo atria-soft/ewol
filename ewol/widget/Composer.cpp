@@ -17,19 +17,29 @@ ewol::widget::Composer::Composer() :
 	// nothing to do ...
 }
 
-static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _data) {
+static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _data, uint64_t _id) {
 	ewol::widget::Manager& widgetManager = ewol::getContext().getWidgetManager();
 	if (_data == "") {
 		return nullptr;
 	}
 	exml::Document doc;
 	if (_modeFile == true) {
-		if (doc.load(_data) == false) {
+		std::string tmpData = etk::FSNodeReadAllData(_data);
+		// replace all elements:
+		if (_id != 0) {
+			tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
+		}
+		if (doc.parse(tmpData) == false) {
 			EWOL_ERROR(" can not load file XML : " << _data);
 			return nullptr;
 		}
 	} else {
-		if (doc.parse(_data) == false) {
+		std::string tmpData = _data;
+		// replace all elements:
+		if (_id != 0) {
+			tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
+		}
+		if (doc.parse(tmpData) == false) {
 			EWOL_ERROR(" can not load file XML string...");
 			return nullptr;
 		}
@@ -64,21 +74,26 @@ static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _d
 	return tmpWidget;
 }
 
-ewol::WidgetShared ewol::widget::composerGenerateFile(const std::string& _data) {
-	return composerGenerate(true, _data);
+ewol::WidgetShared ewol::widget::composerGenerateFile(const std::string& _data, uint64_t _id) {
+	return composerGenerate(true, _data, _id);
 }
 
-ewol::WidgetShared ewol::widget::composerGenerateString(const std::string& _data) {
-	return composerGenerate(false, _data);
+ewol::WidgetShared ewol::widget::composerGenerateString(const std::string& _data, uint64_t _id) {
+	return composerGenerate(false, _data, _id);
 }
 
 ewol::widget::Composer::~Composer() {
 	
 }
 
-bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
+bool ewol::widget::Composer::loadFromFile(const std::string& _fileName, uint64_t _id) {
 	exml::Document doc;
-	if (doc.load(_fileName) == false) {
+	std::string tmpData = etk::FSNodeReadAllData(_fileName);
+	// replace all elements:
+	if (_id != 0) {
+		tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
+	}
+	if (doc.parse(tmpData) == false) {
 		EWOL_ERROR(" can not load file XML : " << _fileName);
 		return false;
 	}
@@ -101,9 +116,14 @@ bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 	return true;
 }
 
-bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlString) {
+bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlString, uint64_t _id) {
 	exml::Document doc;
-	if (doc.parse(_composerXmlString) == false) {
+	std::string tmpData = _composerXmlString;
+	// replace all elements:
+	if (_id != 0) {
+		tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
+	}
+	if (doc.parse(tmpData) == false) {
 		EWOL_ERROR(" can not load file XML string...");
 		return false;
 	}

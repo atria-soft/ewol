@@ -1,0 +1,50 @@
+<popup>
+	<sizer mode="vert" lock="true" fill="true" expand="true">
+		<sizer mode="hori">
+			<checkbox name="[{ID}]file-shooser:show-hiden-file">
+				<label>_T{ShowHiddenFiles}</label>
+			</checkbox>
+			<spacer expand="true,false"/>
+			<button name="[{ID}]file-shooser:button-validate">
+				<sizer mode="hori">
+					<image src="{ewol}THEME:GUI:Load.edf" fill="true" size="7,7mm" distance-field="true"/>
+					<label name="[{ID}]file-shooser:validate-label">_T{Validate}</label>
+				</sizer>
+			</button>
+			<button name="[{ID}]file-shooser:button-cancel">
+				<sizer mode="hori">
+					<image src="{ewol}THEME:GUI:Remove.edf" fill="true" size="7,7mm" distance-field="true"/>
+					<label name="[{ID}]file-shooser:cancel-label">_T{Cancel}</label>
+				</sizer>
+			</button>
+		</sizer>
+		<sizer mode="hori">
+			<spacer min-size="2,2mm"/>
+			<ListFileSystem name="[{ID}]file-shooser:list-folder"
+			                min-size="20,0%"
+			                expand="false,true"
+			                show-hidden="false"
+			                show-file="false"
+			                show-folder="true"
+			                show-temporary="false"/>
+			<spacer min-size="2,2mm"/>
+			<ListFileSystem name="[{ID}]file-shooser:list-files"
+			                expand="true,true"
+			                show-hidden="false"
+			                show-file="true"
+			                show-folder="false"
+			                show-temporary="false"/>
+			<spacer min-size="2,2mm"/>
+		</sizer>
+		<sizer mode="hori">
+			<image name="[{ID}]file-shooser:img-file" src="{ewol}THEME:GUI:File.edf" expand="false" size="8,8mm" distance-field="true"/>
+			<entry name="[{ID}]file-shooser:entry-file" expand="true,false" fill="true,false"/>
+		</sizer>
+		<sizer mode="hori">
+			<image name="[{ID}]file-shooser:img-folder" src="{ewol}THEME:GUI:Folder.edf" expand="false" size="8,8mm" distance-field="true"/>
+			<entry name="[{ID}]file-shooser:entry-folder" expand="true,false" fill="true,false"/>
+			<image name="[{ID}]file-shooser:img-home" src="{ewol}THEME:GUI:Home.edf" expand="false" size="8,8mm" distance-field="true"/>
+		</sizer>
+		<label name="[{ID}]file-shooser:title-label">_T{Title}</label>
+	</sizer>
+</popup>
