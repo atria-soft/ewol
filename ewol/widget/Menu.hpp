@@ -43,6 +43,7 @@ namespace ewol {
 				int32_t subWidgetAdd(ewol::WidgetShared _newWidget) override;
 				void subWidgetRemove(ewol::WidgetShared _newWidget) override;
 				void subWidgetUnLink(ewol::WidgetShared _newWidget) override;
+				bool loadXML(const exml::Element& _node) override;
 			private:
 				std::vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...

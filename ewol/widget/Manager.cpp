@@ -27,6 +27,7 @@
 #include <ewol/widget/Composer.hpp>
 #include <ewol/widget/Select.hpp>
 #include <ewol/widget/Spin.hpp>
+#include <ewol/widget/Menu.hpp>
 #include <vector>
 
 ewol::widget::Manager::Manager() :
@@ -44,6 +45,7 @@ ewol::widget::Manager::Manager() :
 	ewol::widget::Image::createManagerWidget(*this);
 	ewol::widget::Gird::createManagerWidget(*this);
 	ewol::widget::Entry::createManagerWidget(*this);
+	ewol::widget::Menu::createManagerWidget(*this);
 	ewol::widget::CheckBox::createManagerWidget(*this);
 	ewol::widget::Scroll::createManagerWidget(*this);
 	ewol::widget::ContextMenu::createManagerWidget(*this);

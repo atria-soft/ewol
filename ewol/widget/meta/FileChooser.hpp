@@ -22,12 +22,12 @@ namespace ewol {
 		 *  
 		 *  Fist global static declaration and inclusion:
 		 *  [code style=c++]
-		 *  #include <ewol/widget/meta/FileChooser.h>
+		 *  #include <ewol/widget/meta/FileChooser.hpp>
 		 *  [/code]
 		 *  
 		 *  The first step is to create the file chooser pop-up : (never in the constructor!!!)
 		 *  [code style=c++]
-		 *  ewol::widget::FileChooserShared tmpWidget = ewol::Widget::FileChooser::create();
+		 *  ewol::widget::FileChooserShared tmpWidget = ewol::widget::FileChooser::create();
 		 *  if (tmpWidget == nullptr) {
 		 *  	APPL_ERROR("Can not open File chooser !!! ");
 		 *  	return -1;

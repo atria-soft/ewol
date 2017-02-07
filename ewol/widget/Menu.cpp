@@ -246,4 +246,47 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 	}
 }
 
-
+bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
+	if (_node.exist() == false) {
+		return false;
+	}
+	// parse generic properties:
+	ewol::Widget::loadXML(_node);
+	// parse all the elements :
+	for (const auto nodeIt : _node.nodes) {
+		const exml::Element pNode = nodeIt.toElement();
+		if (pNode.exist() == false) {
+			// trash here all that is not element
+			continue;
+		}
+		std::string widgetName = pNode.getValue();
+		EWOL_INFO("Get node : " << pNode);
+		if (widgetName == "elem") {
+			// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
+			int32_t idMenu = addTitle(pNode.attributes["title"], pNode.attributes["image"], pNode.attributes["event"]);
+			for (const auto nodeIt2 : pNode.nodes) {
+				
+				const exml::Element pNode2 = nodeIt2.toElement();
+				if (pNode2.exist() == false) {
+					// trash here all that is not element
+					continue;
+				}
+				std::string widgetName2 = pNode2.getValue();
+				EWOL_INFO("Get node : " << pNode2);
+				if (widgetName2 == "elem") {
+					// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
+					add(idMenu, pNode2.attributes["title"], pNode2.attributes["image"], pNode2.attributes["event"]);
+				} else if (widgetName2 == "separator") {
+					addSpacer();
+				} else {
+					EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode2.getPos() << ") Unknown basic node='" << widgetName2 << "' not in : [elem,separator]" );
+				}
+			}
+		} else if (widgetName == "separator") {
+			addSpacer();
+		} else {
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [elem,separator]" );
+		}
+	}
+	return true;
+}
