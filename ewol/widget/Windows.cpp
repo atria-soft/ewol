@@ -263,4 +263,16 @@ ewol::ObjectShared ewol::widget::Windows::getSubObjectNamed(const std::string& _
 	return nullptr;
 }
 
+void ewol::widget::Windows::drawWidgetTree(int32_t _level) {
+	ewol::Widget::drawWidgetTree(_level);
+	_level++;
+	if (m_subWidget != nullptr) {
+		m_subWidget->drawWidgetTree(_level);
+	}
+	for (auto &it: m_popUpWidgetList) {
+		if (it != nullptr) {
+			it->drawWidgetTree(_level);
+		}
+	}
+}
 

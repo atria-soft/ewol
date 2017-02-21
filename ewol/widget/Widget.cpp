@@ -151,6 +151,7 @@ void ewol::Widget::setOffset(const vec2& _newVal) {
    (0,0)
 */
 void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
+	//EWOL_INFO("[" << getId() << "] Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size << " hide=" << propertyHide);
 	if (*propertyHide == true){
 		// widget is hidden ...
 		return;
@@ -658,4 +659,13 @@ bool ewol::Widget::stopAnnimation() {
 	m_annimationMode = ewol::Widget::annimationModeDisable;
 	onStopAnnimation();
 	return true; // ???
+}
+
+
+void ewol::Widget::drawWidgetTree(int32_t _level) {
+	std::string space;
+	for (int32_t iii=0; iii<_level; ++iii) {
+		space += "    ";
+	}
+	EWOL_PRINT(space << "[" << getId() << "] name='" << propertyName << "' type=" << getObjectType() << " o=" << m_origin << "  s=" << m_size << " hide=" << propertyHide);
 }

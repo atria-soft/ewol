@@ -176,6 +176,7 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 	prop.limit(m_origin, m_size);
 	for (auto it(m_subWidget.rbegin()); it!=m_subWidget.rend(); ++it) {
 		if (*it != nullptr) {
+			//EWOL_INFO("       ***** : [" << (*it)->propertyName << "] t=" << (*it)->getObjectType() << " o=" << (*it)->m_origin << "  s=" << (*it)->m_size);
 			(*it)->systemDraw(prop);
 		}
 	}
@@ -273,12 +274,13 @@ bool ewol::widget::ContainerN::loadXML(const exml::Element& _node) {
 			continue;
 		}
 		std::string widgetName = pNode.getValue();
+		EWOL_VERBOSE(" t=" << getObjectType() << " Load node name : '" << widgetName << "'");
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
 			continue;
 		}
 		EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} load new element : '" << widgetName << "'");
-		ewol::WidgetShared subWidget = getWidgetManager().create(widgetName);
+		ewol::WidgetShared subWidget = getWidgetManager().create(widgetName, pNode);
 		if (subWidget == nullptr) {
 			EWOL_ERROR ("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
 			continue;
@@ -326,3 +328,12 @@ void ewol::widget::ContainerN::requestDestroyFromChild(const ewol::ObjectShared&
 	}
 }
 
+void ewol::widget::ContainerN::drawWidgetTree(int32_t _level) {
+	ewol::Widget::drawWidgetTree(_level);
+	_level++;
+	for (auto &it: m_subWidget) {
+		if (it != nullptr) {
+			it->drawWidgetTree(_level);
+		}
+	}
+}

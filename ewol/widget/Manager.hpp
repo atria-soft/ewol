@@ -48,21 +48,31 @@ namespace ewol {
 			// ---------------------------------------------
 			public:
 				using widgetCreatorFunction = std::function<ewol::WidgetShared()>; //!< funtion factory basic definition
+				using widgetCreatorFunctionXml = std::function<ewol::WidgetShared(const exml::Element& _node)>; //!< funtion factory basic definition
 			private:
 				std::unordered_map<std::string, widgetCreatorFunction> m_creatorList; //!< List of factory of a widget
+				std::unordered_map<std::string, widgetCreatorFunctionXml> m_creatorListXml; //!< List of factory of a widget
 			public:
 				/**
 				 * @brief add a factory of a specific widget.
 				 * @param[in] _name Name of the widget that is associated of the factory.
 				 * @param[in] _factory Function pointer to create the widget
+				 * @param[in] _factoryXml Function pointer to create the widget with XML node for parsing of XML
 				 */
-				void addWidgetCreator(const std::string& _name, widgetCreatorFunction _factory);
+				void addWidgetCreator(const std::string& _name, widgetCreatorFunction _factory, widgetCreatorFunctionXml _factoryXml);
 				/**
 				 * @brief Create a widget with his name.
 				 * @param[in] _name Name of the widget to create.
 				 * @return The widget created (nullptr if it does not exist).
 				 */
 				ewol::WidgetShared create(const std::string& _name);
+				/**
+				 * @brief Create a widget with his name.
+				 * @param[in] _name Name of the widget to create.
+				 * @param[in] _node Reference on the XML node.
+				 * @return The widget created (nullptr if it does not exist).
+				 */
+				ewol::WidgetShared create(const std::string& _name, const exml::Element& _node);
 				/**
 				 * @brief Check if an Widget exist
 				 * @param[in] _name Name of the widget to check.

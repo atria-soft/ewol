@@ -111,7 +111,7 @@ bool ewol::Object::isTypeCompatible(const std::string& _type) const {
 	return false;
 }
 
-bool ewol::Object::loadXML(const exml::Element& _node) {
+bool ewol::Object::loadXMLAttributes(const exml::Element& _node) {
 	if (_node.exist() == false) {
 		return false;
 	}
@@ -127,6 +127,10 @@ bool ewol::Object::loadXML(const exml::Element& _node) {
 		}
 	}
 	return errorOccured;
+}
+
+bool ewol::Object::loadXML(const exml::Element& _node) {
+	return true; //loadXMLAttributes(_node);
 }
 
 bool ewol::Object::storeXML(exml::Element& _node) const {

@@ -233,6 +233,7 @@ void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 		std::advance(it, m_windowsDestination);
 		if (    it != m_subWidget.end()
 		     && *it != nullptr) {
+			//EWOL_INFO("Draw : [" << propertyName << "] t=" << getObjectType() << "o=" << m_origin << "  s=" << m_size);
 			(*it)->systemDraw(prop);
 		}
 	} else {

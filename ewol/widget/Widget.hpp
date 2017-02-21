@@ -39,9 +39,13 @@ namespace ewol {
 #define DECLARE_WIDGET_FACTORY(className, name) \
 	DECLARE_FACTORY(className); \
 	static void createManagerWidget(ewol::widget::Manager& _widgetManager) { \
-		_widgetManager.addWidgetCreator(name,   []() -> ewol::WidgetShared { \
-		                                        	return className::create(); \
-		                                        }); \
+		_widgetManager.addWidgetCreator(name, \
+		                                []() -> ewol::WidgetShared { \
+		                                	return className::create(); \
+		                                }, \
+		                                [](const exml::Element& _node) -> ewol::WidgetShared { \
+		                                	return className::createXml(_node); \
+		                                }); \
 	}
 
 namespace ewol {
@@ -578,6 +582,8 @@ namespace ewol {
 			virtual void onChangePropertyExpand();
 			virtual void onChangePropertyMaxSize();
 			virtual void onChangePropertyMinSize();
+		public:
+			virtual void drawWidgetTree(int32_t _level=0);
 	};
 };
 

@@ -96,6 +96,7 @@ void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp
 	}
 	ewol::Widget::systemDraw(_displayProp);
 	if (m_subWidget[m_idWidgetDisplayed] != nullptr) {
+		//EWOL_INFO("Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size);
 		m_subWidget[m_idWidgetDisplayed]->systemDraw(_displayProp);
 	}
 }
@@ -199,7 +200,7 @@ bool ewol::widget::Container2::loadXML(const exml::Element& _node) {
 			}
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName);
+		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName, pNode);
 		if (tmpWidget == nullptr) {
 			EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget: '" << widgetName << "'");
 			continue;
@@ -245,4 +246,13 @@ void ewol::widget::Container2::requestDestroyFromChild(const ewol::ObjectShared&
 	}
 }
 
-
+void ewol::widget::Container2::drawWidgetTree(int32_t _level) {
+	ewol::Widget::drawWidgetTree(_level);
+	_level++;
+	if (m_subWidget[0] != nullptr) {
+		m_subWidget[0]->drawWidgetTree(_level);
+	}
+	if (m_subWidget[1] != nullptr) {
+		m_subWidget[1]->drawWidgetTree(_level);
+	}
+}

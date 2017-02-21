@@ -53,7 +53,7 @@ namespace ewol {
 				void clear();
 				int32_t addTitle(const std::string& _label, const std::string& _image="", const std::string& _message = "");
 				int32_t add(int32_t _parent, const std::string& _label, const std::string& _image="", const std::string& _message = "");
-				int32_t addSpacer();
+				int32_t addSpacer(int32_t _parent=-1);
 				void remove(int32_t _id);
 			private:
 				void onButtonPressed(ewol::widget::ButtonWeak _button);

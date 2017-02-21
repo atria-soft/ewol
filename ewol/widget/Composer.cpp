@@ -12,37 +12,31 @@
 #include <ewol/context/Context.hpp>
 
 ewol::widget::Composer::Composer() :
-  propertyRemoveIfUnderRemove(this, "remove-if-under-remove", true, "Demand the remove iof the widget if the subObject demand a remove") {
+  propertyRemoveIfUnderRemove(this, "remove-if-under-remove", true, "Demand the remove iof the widget if the subObject demand a remove"),
+  propertySubFile(this, "sub-file", "", "compose with a subXML file", &ewol::widget::Composer::onChangePropertySubFile) {
 	addObjectType("ewol::widget::Composer");
 	// nothing to do ...
 }
 
-static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _data, uint64_t _id) {
+ewol::WidgetShared ewol::widget::composerGenerateFile(const std::string& _fileName, uint64_t _id) {
+	std::string tmpData = etk::FSNodeReadAllData(_fileName);
+	return ewol::widget::composerGenerateString(tmpData, _id);
+}
+
+ewol::WidgetShared ewol::widget::composerGenerateString(const std::string& _data, uint64_t _id) {
 	ewol::widget::Manager& widgetManager = ewol::getContext().getWidgetManager();
 	if (_data == "") {
 		return nullptr;
 	}
 	exml::Document doc;
-	if (_modeFile == true) {
-		std::string tmpData = etk::FSNodeReadAllData(_data);
-		// replace all elements:
-		if (_id != 0) {
-			tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
-		}
-		if (doc.parse(tmpData) == false) {
-			EWOL_ERROR(" can not load file XML : " << _data);
-			return nullptr;
-		}
-	} else {
-		std::string tmpData = _data;
-		// replace all elements:
-		if (_id != 0) {
-			tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
-		}
-		if (doc.parse(tmpData) == false) {
-			EWOL_ERROR(" can not load file XML string...");
-			return nullptr;
-		}
+	std::string tmpData = _data;
+	// replace all elements:
+	if (_id != 0) {
+		tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
+	}
+	if (doc.parse(tmpData) == false) {
+		EWOL_ERROR(" can not load file XML string...");
+		return nullptr;
 	}
 	exml::Element root = doc.toElement();
 	if (root.nodes.size() == 0) {
@@ -74,46 +68,13 @@ static ewol::WidgetShared composerGenerate(bool _modeFile, const std::string& _d
 	return tmpWidget;
 }
 
-ewol::WidgetShared ewol::widget::composerGenerateFile(const std::string& _data, uint64_t _id) {
-	return composerGenerate(true, _data, _id);
-}
-
-ewol::WidgetShared ewol::widget::composerGenerateString(const std::string& _data, uint64_t _id) {
-	return composerGenerate(false, _data, _id);
-}
-
 ewol::widget::Composer::~Composer() {
 	
 }
 
 bool ewol::widget::Composer::loadFromFile(const std::string& _fileName, uint64_t _id) {
-	exml::Document doc;
 	std::string tmpData = etk::FSNodeReadAllData(_fileName);
-	// replace all elements:
-	if (_id != 0) {
-		tmpData = etk::replace(tmpData, "{ID}", etk::to_string(_id));
-	}
-	if (doc.parse(tmpData) == false) {
-		EWOL_ERROR(" can not load file XML : " << _fileName);
-		return false;
-	}
-	exml::Element root = doc.nodes["composer"];
-	if (root.exist() == false) {
-		// Maybe a multiple node XML for internal config:
-		root = doc.toElement();
-		if (root.exist() == false) {
-			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: 'composer' ...");
-			return false;
-		}
-		if (root.nodes.size() == 0) {
-			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) no node in the Container XML element.");
-			return false;
-		}
-	}
-	// call upper class to parse his elements ...
-	ewol::widget::Container::loadXML(root);
-	
-	return true;
+	return loadFromString(tmpData, _id);
 }
 
 bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlString, uint64_t _id) {
@@ -142,6 +103,13 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 	}
 	// call upper class to parse his elements ...
 	ewol::widget::Container::loadXML(root);
+	if (m_subWidget == nullptr) {
+		EWOL_WARNING("Load data from composer and have no under Widget after loading");
+		if (_composerXmlString.size() != 0) {
+			EWOL_ERROR("Error Loading XML data : " << _composerXmlString);
+			return false;
+		}
+	}
 	requestUpdateSize();
 	return true;
 }
@@ -152,4 +120,33 @@ void ewol::widget::Composer::requestDestroyFromChild(const ewol::ObjectShared& _
 		EWOL_DEBUG("Child widget remove ==> auto-remove");
 		autoDestroy();
 	}
+}
+
+void ewol::widget::Composer::onChangePropertySubFile() {
+	EWOL_INFO("Load compositing form external file : " << propertySubFile);
+	if (*propertySubFile == "") {
+		// remove all elements:
+		subWidgetRemove();
+		return;
+	}
+	if (loadFromFile(*propertySubFile, getId()) == false) {
+		EWOL_ERROR("Can not load Player GUI from file ... " << propertySubFile);
+		return;
+	}
+}
+
+bool ewol::widget::Composer::loadXML(const exml::Element& _node) {
+	//EWOL_VERBOSE("[" << getId() << "] t=" << getObjectType() << " Load XML (start)");
+	if (_node.exist() == false) {
+		return false;
+	}
+	// parse generic properties:
+	ewol::Widget::loadXML(_node);
+	// parse all the elements:
+	if (_node.nodes.size() != 0) {
+		EWOL_ERROR("a composer Node Can not have Sub-element in XML ==> must be done in an external file and load it with attribute: 'sub-file'");
+	}
+	//drawWidgetTree();
+	//EWOL_VERBOSE("[" << getId() << "] t=" << getObjectType() << " Load XML (stop)");
+	return true;
 }

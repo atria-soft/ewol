@@ -165,20 +165,37 @@ bool ewol::widget::Manager::isDrawingNeeded() {
 
 // element that generate the list of elements
 void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
-                                             ewol::widget::Manager::widgetCreatorFunction _pointer) {
-	if (_pointer == nullptr) {
+                                             ewol::widget::Manager::widgetCreatorFunction _pointer,
+                                             ewol::widget::Manager::widgetCreatorFunctionXml _pointerXml) {
+	if (    _pointer == nullptr
+	     || _pointerXml == nullptr) {
 		return;
 	}
 	//Keep name in lower case :
 	std::string nameLower = etk::tolower(_name);
-	auto it = m_creatorList.find(nameLower);
-	if (it != m_creatorList.end()) {
-		EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
-		it->second = _pointer;
+	bool find = false;
+	{
+		auto it = m_creatorList.find(nameLower);
+		if (it != m_creatorList.end()) {
+			EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
+			it->second = _pointer;
+			find = true;
+		}
+	}
+	{
+		auto it = m_creatorListXml.find(nameLower);
+		if (it != m_creatorListXml.end()) {
+			EWOL_WARNING("Replace CreatorXml of a specify widget : " << nameLower);
+			it->second = _pointerXml;
+			find = true;
+		}
+	}
+	if (find == true) {
 		return;
 	}
 	EWOL_INFO("Add Creator of a specify widget : " << nameLower);
 	m_creatorList.insert(make_pair(nameLower, _pointer));
+	m_creatorListXml.insert(make_pair(nameLower, _pointerXml));
 }
 
 ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
@@ -187,6 +204,18 @@ ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
 	if (it != m_creatorList.end()) {
 		if (it->second != nullptr) {
 			return it->second();
+		}
+	}
+	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);
+	return nullptr;
+}
+
+ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name, const exml::Element& _node) {
+	std::string nameLower = etk::tolower(_name);
+	auto it = m_creatorListXml.find(nameLower);
+	if (it != m_creatorListXml.end()) {
+		if (it->second != nullptr) {
+			return it->second(_node);
 		}
 	}
 	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);

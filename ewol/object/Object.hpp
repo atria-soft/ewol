@@ -74,6 +74,19 @@ exit_on_error:
 			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
 		} \
 		return object; \
+	} \
+	static ememory::SharedPtr<className> createXml(const exml::Element& _node) { \
+		ememory::SharedPtr<className> object(new className()); \
+		if (object == nullptr) { \
+			EWOL_ERROR("Factory error"); \
+			return nullptr; \
+		} \
+		object->loadXMLAttributes(_node); \
+		object->init(); \
+		if (object->objectHasBeenCorectlyInit() == false) { \
+			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+		} \
+		return object; \
 	}
 
 #define DECLARE_SINGLE_FACTORY(className, uniqueName) \
@@ -223,15 +236,22 @@ namespace ewol {
 			bool propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
 		public:
 			/**
+			 * @brief load attribute properties with an XML node.
+			 * @param[in] _node Reference on the XML node.
+			 * @return true : All has been done corectly.
+			 * @return false : An error occured.
+			 */
+			bool loadXMLAttributes(const exml::Element& _node);
+			/**
 			 * @brief load properties with an XML node.
-			 * @param[in] _node Pointer on the tinyXML node.
+			 * @param[in] _node Reference on the XML node.
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
 			virtual bool loadXML(const exml::Element& _node);
 			/**
 			 * @brief store properties in this XML node.
-			 * @param[in,out] _node Pointer on the tinyXML node.
+			 * @param[in,out] _node Reference on the XML node.
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */

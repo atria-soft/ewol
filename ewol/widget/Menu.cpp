@@ -12,11 +12,13 @@
 #include <ewol/widget/Composer.hpp>
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Windows.hpp>
+#include <ewol/widget/Spacer.hpp>
 
 ewol::widget::Menu::Menu() :
   signalSelect(this, "select", "") {
 	addObjectType("ewol::widget::Menu");
 	m_staticId = 666;
+	propertyLockExpand.setDirect(bvec2(true,true));
 }
 
 ewol::widget::Menu::~Menu() {
@@ -66,7 +68,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
                                 const std::string& _label,
                                 const std::string& _image,
                                 const std::string& _message) {
-	// try to find one already created :
+	// try to find one already created:
 	int32_t previous = get(_label);
 	if (previous != -1) {
 		return previous;
@@ -77,7 +79,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 	tmpObject.m_label = _label;
 	tmpObject.m_image = _image;
 	tmpObject.m_message = _message;
-	if (-1 == tmpObject.m_parentId) {
+	if (tmpObject.m_parentId == -1) {
 		ewol::widget::ButtonShared myButton = ewol::widget::Button::create();
 		if (myButton == nullptr) {
 			EWOL_ERROR("Allocation button error");
@@ -113,9 +115,29 @@ void ewol::widget::Menu::remove(int32_t _id) {
 }
 
 
-int32_t ewol::widget::Menu::addSpacer() {
-	EWOL_TODO("NOT addSpacer...");
-	return -1;
+int32_t ewol::widget::Menu::addSpacer(int32_t _parent) {
+	ewol::widget::MenuElement tmpObject;
+	tmpObject.m_localId = m_staticId++;
+	tmpObject.m_parentId = _parent;
+	tmpObject.m_label = "";
+	tmpObject.m_image = "";
+	tmpObject.m_message = "";
+	if (tmpObject.m_parentId == -1) {
+		ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
+		if (mySpacer == nullptr) {
+			EWOL_ERROR("Allocation spacer error");
+			return tmpObject.m_localId;
+		}
+		mySpacer->propertyExpand.set(bvec2(true,true));
+		mySpacer->propertyFill.set(bvec2(true,true));
+		mySpacer->propertyMinSize.set(gale::Dimension(vec2(2,0), gale::distance::pixel));
+		mySpacer->propertyMaxSize.set(gale::Dimension(vec2(2,10000), gale::distance::pixel));
+		mySpacer->propertyColor.set(etk::Color<>(0,0,0,0xFF));
+		// add it in the widget list
+		ewol::widget::Sizer::subWidgetAdd(mySpacer);
+	}
+	m_listElement.push_back(tmpObject);
+	return tmpObject.m_localId;
 }
 
 void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
@@ -192,48 +214,63 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 				if (it.m_localId != it2->m_parentId) {
 					continue;
 				}
-				myButton = ewol::widget::Button::create();
-				if (myButton == nullptr) {
-					EWOL_ERROR("Allocation Error");
-					continue;
-				}
-				myButton->propertyExpand.set(bvec2(true,true));
-				myButton->propertyFill.set(bvec2(true,true));
-				// set callback
-				myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
-				// add it in the widget list
-				mySizer->subWidgetAdd(myButton);
-				if (it2->m_image.size() != 0) {
-					std::string composeString;
-					composeString+= "    <sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n";
-					if (etk::end_with(it2->m_image, ".edf") == true) {
-						composeString+="        <image src='" + it2->m_image + "' size='8,8mm' distance-field='true'/>\n";
-					} else {
-						composeString+="        <image src='" + it2->m_image + "' size='8,8mm'/>\n";
+				if (it2->m_message == "" && it2->m_label == "") {
+					ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
+					if (mySpacer == nullptr) {
+						EWOL_ERROR("Allocation spacer error");
+						continue;
 					}
-					composeString+="        <label exand='true,true' fill='true,true'><left>" + it2->m_label + "</left></label>\n";
-					composeString+="    </sizer>\n";
-					myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
+					mySpacer->propertyExpand.set(bvec2(true,true));
+					mySpacer->propertyFill.set(bvec2(true,true));
+					mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,2), gale::distance::pixel));
+					mySpacer->propertyMaxSize.set(gale::Dimension(vec2(10000,2), gale::distance::pixel));
+					mySpacer->propertyColor.set(etk::Color<>(0,0,0,0xFF));
+					// add it in the widget list
+					mySizer->subWidgetAdd(mySpacer);
 				} else {
-					if (menuHaveImage == true) {
-						myButton->setSubWidget(ewol::widget::composerGenerateString(
-						        std::string() +
-						        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
-						        "		<spacer min-size='8,0mm'/>\n"
-						        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
-						        "	</sizer>\n")
-						    );
+					myButton = ewol::widget::Button::create();
+					if (myButton == nullptr) {
+						EWOL_ERROR("Allocation Error");
+						continue;
+					}
+					myButton->propertyExpand.set(bvec2(true,true));
+					myButton->propertyFill.set(bvec2(true,true));
+					// set callback
+					myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
+					// add it in the widget list
+					mySizer->subWidgetAdd(myButton);
+					if (it2->m_image.size() != 0) {
+						std::string composeString;
+						composeString+= "    <sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n";
+						if (etk::end_with(it2->m_image, ".edf") == true) {
+							composeString+="        <image src='" + it2->m_image + "' size='8,8mm' distance-field='true'/>\n";
+						} else {
+							composeString+="        <image src='" + it2->m_image + "' size='8,8mm'/>\n";
+						}
+						composeString+="        <label exand='true,true' fill='true,true'><left>" + it2->m_label + "</left></label>\n";
+						composeString+="    </sizer>\n";
+						myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
 					} else {
-						ewol::widget::LabelShared tmpLabel = widget::Label::create();
-						if (tmpLabel != nullptr) {
-							tmpLabel->propertyValue.set(std::string("<left>") + it2->m_label + "</left>\n");
-							tmpLabel->propertyExpand.set(bvec2(true,false));
-							tmpLabel->propertyFill.set(bvec2(true,true));
-							myButton->setSubWidget(tmpLabel);
+						if (menuHaveImage == true) {
+							myButton->setSubWidget(ewol::widget::composerGenerateString(
+							        std::string() +
+							        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
+							        "		<spacer min-size='8,0mm'/>\n"
+							        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
+							        "	</sizer>\n")
+							    );
+						} else {
+							ewol::widget::LabelShared tmpLabel = widget::Label::create();
+							if (tmpLabel != nullptr) {
+								tmpLabel->propertyValue.set(std::string("<left>") + it2->m_label + "</left>\n");
+								tmpLabel->propertyExpand.set(bvec2(true,false));
+								tmpLabel->propertyFill.set(bvec2(true,true));
+								myButton->setSubWidget(tmpLabel);
+							}
 						}
 					}
+					it2->m_widgetPointer = myButton;
 				}
-				it2->m_widgetPointer = myButton;
 			}
 		}
 		ewol::widget::WindowsShared currentWindows = getWindows();
@@ -272,12 +309,11 @@ bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
 					continue;
 				}
 				std::string widgetName2 = pNode2.getValue();
-				EWOL_INFO("Get node : " << pNode2);
 				if (widgetName2 == "elem") {
 					// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
 					add(idMenu, pNode2.attributes["title"], pNode2.attributes["image"], pNode2.attributes["event"]);
 				} else if (widgetName2 == "separator") {
-					addSpacer();
+					addSpacer(idMenu);
 				} else {
 					EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode2.getPos() << ") Unknown basic node='" << widgetName2 << "' not in : [elem,separator]" );
 				}

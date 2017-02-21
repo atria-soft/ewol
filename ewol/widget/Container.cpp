@@ -87,7 +87,10 @@ void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp)
 	if (m_subWidget != nullptr) {
 		ewol::DrawProperty prop = _displayProp;
 		prop.limit(m_origin, m_size);
+		//EWOL_INFO("Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size);
 		m_subWidget->systemDraw(prop);
+	} else {
+		EWOL_INFO("[" << getId() << "]       ++++++ : [nullptr]");
 	}
 }
 
@@ -151,6 +154,7 @@ bool ewol::widget::Container::loadXML(const exml::Element& _node) {
 			continue;
 		}
 		std::string widgetName = pNode.getValue();
+		EWOL_VERBOSE("[" << getId() << "] t=" << getObjectType() << " Load node name : '" << widgetName << "'");
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
 			continue;
@@ -160,7 +164,7 @@ bool ewol::widget::Container::loadXML(const exml::Element& _node) {
 			continue;
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName);
+		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName, pNode);
 		if (tmpWidget == nullptr) {
 			EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
 			continue;
@@ -171,6 +175,10 @@ bool ewol::widget::Container::loadXML(const exml::Element& _node) {
 			EWOL_ERROR ("(l " << pNode.getPos() << ") can not load widget properties : '" << widgetName << "'");
 			return false;
 		}
+	}
+	if (    _node.nodes.size() != 0
+	     && m_subWidget == nullptr) {
+		EWOL_WARNING("Load container with no data inside");
 	}
 	return true;
 }
@@ -193,4 +201,12 @@ void ewol::widget::Container::requestDestroyFromChild(const ewol::ObjectShared& 
 	m_subWidget->removeParent();
 	m_subWidget.reset();
 	markToRedraw();
+}
+
+void ewol::widget::Container::drawWidgetTree(int32_t _level) {
+	ewol::Widget::drawWidgetTree(_level);
+	_level++;
+	if (m_subWidget != nullptr) {
+		m_subWidget->drawWidgetTree(_level);
+	}
 }

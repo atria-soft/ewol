@@ -21,6 +21,7 @@ namespace ewol {
 		class Composer : public ewol::widget::Container {
 			public:
 				eproperty::Value<bool> propertyRemoveIfUnderRemove; //!< Remove the composer if sub element request a remove
+				eproperty::Value<std::string> propertySubFile; //!< If loading a sub-file, we must do it here ==> permit to con,figure it in the xml and not have wrong display
 			protected:
 				/**
 				 * @brief Constructor
@@ -50,6 +51,10 @@ namespace ewol {
 				bool loadFromString(const std::string& _composerXmlString, uint64_t _id=0);
 			private:
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
+			public:
+				bool loadXML(const exml::Element& _node) override;
+			protected:
+				virtual void onChangePropertySubFile();
 		};
 		ewol::WidgetShared composerGenerateString(const std::string& _data = "", uint64_t _id=0);
 		ewol::WidgetShared composerGenerateFile(const std::string& _data = "", uint64_t _id=0);

@@ -70,6 +70,7 @@ namespace ewol {
 				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
+				void drawWidgetTree(int32_t _level=0) override;
 			protected:
 				/**
 				 * @brief Called when property change: Title
