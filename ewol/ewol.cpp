@@ -8,6 +8,7 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/context/Context.hpp>
 #include <gale/gale.hpp>
+#include <etranslate/etranslate.hpp>
 
 #include <gale/context/commandLine.hpp>
 #include <etk/os/FSNode.hpp>
@@ -25,6 +26,7 @@ std::string ewol::getVersion() {
 int32_t ewol::run(ewol::context::Application* _application,
                   int32_t _argc,
                   const char* _argv[]) {
+	etranslate::init(_argc, _argv);
 	return gale::run(new ewol::Context(_application), _argc, _argv);
 }
 
