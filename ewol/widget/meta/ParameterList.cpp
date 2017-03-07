@@ -12,6 +12,7 @@
 #include <ewol/compositing/Drawing.hpp>
 #include <ewol/compositing/Text.hpp>
 #include <ewol/widget/Manager.hpp>
+#include <etranslate/etranslate.hpp>
 
 ewol::widget::ParameterList::ParameterList() :
   signalSelect(this, "select", "") {
@@ -33,10 +34,6 @@ void ewol::widget::ParameterList::init() {
 
 ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object
-	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		delete(m_listOObject[iii]);
-		m_listOObject[iii] = nullptr;
-	}
 	m_listOObject.clear();
 	menuClear();
 }
@@ -51,8 +48,8 @@ void ewol::widget::ParameterList::calculateMinMaxSize() {
 	m_minSize.setValue(150, 150);
 }
 
-void ewol::widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
-	if (nullptr == _newObject) {
+void ewol::widget::ParameterList::addOObject(const ememory::SharedPtr<ewol::Compositing>& _newObject, int32_t _pos) {
+	if (_newObject == nullptr) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
@@ -64,24 +61,20 @@ void ewol::widget::ParameterList::addOObject(ewol::Compositing* _newObject, int3
 }
 
 void ewol::widget::ParameterList::clearOObjectList() {
-	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		delete(m_listOObject[iii]);
-		m_listOObject[iii] = nullptr;
-	}
 	m_listOObject.clear();
 }
 
 void ewol::widget::ParameterList::onDraw() {
-	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		if (nullptr != m_listOObject[iii]) {
-			m_listOObject[iii]->draw();
+	for (auto &it : m_listOObject) {
+		if (it != nullptr) {
+			it->draw();
 		}
 	}
 	WidgetScrolled::onDraw();
 }
 
 void ewol::widget::ParameterList::onRegenerateDisplay() {
-	if (true == needRedraw()) {
+	if (needRedraw() == true) {
 		// clean the object list ...
 		clearOObjectList();
 		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
@@ -116,7 +109,10 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		std::vector<int32_t> listSizeColomn;
 		
 		// set background color :
-		ewol::compositing::Drawing * tmpDraw = new ewol::compositing::Drawing();
+		ememory::SharedPtr<ewol::compositing::Drawing> tmpDraw = ememory::makeShared<ewol::compositing::Drawing>();
+		if (tmpDraw == nullptr) {
+			return;
+		}
 		tmpDraw->setColor(etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF));
 		tmpDraw->setPos(vec3(0,0,0) );
 		tmpDraw->rectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
@@ -138,10 +134,10 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 			std::string myTextToWrite = "???";
 			etk::Color<> fg(0x00, 0x00, 0x00, 0xFF);
 			if (m_list[iii] != nullptr) {
-				myTextToWrite = m_list[iii]->m_label;
+				myTextToWrite = TRANSLATE(m_list[iii]->m_label);
 			}
 			
-			ewol::compositing::Text * tmpText = new ewol::compositing::Text();
+			ememory::SharedPtr<ewol::compositing::Text> tmpText = ememory::makeShared<ewol::compositing::Text>();
 			
 			vec3 textPos;
 			textPos.setX((int32_t)tmpOriginX);
@@ -205,33 +201,31 @@ void ewol::widget::ParameterList::onLostFocus() {
 }
 
 void ewol::widget::ParameterList::menuAdd(std::string& _label, int32_t _refId, std::string& _image) {
-	ewol::widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
-	if (nullptr != tmpEmement) {
-		m_list.push_back(tmpEmement);
-		if (m_idSelected == -1 && _label != "---" && _refId>0) {
-			m_idSelected = m_list.size()-1;
-		}
-		markToRedraw();
+	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, _refId, _image, false);
+	if (tmpEmement == nullptr) {
+		EWOL_ERROR("Can not allocacte menu parameter");
+		return;
 	}
+	m_list.push_back(tmpEmement);
+	if (m_idSelected == -1 && _label != "---" && _refId>0) {
+		m_idSelected = m_list.size()-1;
+	}
+	markToRedraw();
 }
 
 void ewol::widget::ParameterList::menuAddGroup(std::string& _label) {
 	std::string image = "";
-	ewol::widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
-	if (nullptr != tmpEmement) {
-		m_list.push_back(tmpEmement);
-		markToRedraw();
+	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, -1, image, true);
+	if (tmpEmement == nullptr) {
+		EWOL_ERROR("Can not allocacte menu parameter");
+		return;
 	}
+	m_list.push_back(tmpEmement);
+	markToRedraw();
 }
 
 void ewol::widget::ParameterList::menuClear() {
 	m_idSelected = -1;
-	for (size_t iii=0; iii<m_list.size(); iii++) {
-		if (nullptr != m_list[iii]) {
-			delete(m_list[iii]);
-			m_list[iii] = nullptr;
-		}
-	}
 	m_list.clear();
 }
 
