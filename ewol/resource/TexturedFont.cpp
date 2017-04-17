@@ -243,7 +243,7 @@ bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 		GlyphProperty tmpchar;
 		tmpchar.m_UVal = _val;
 		
-		if (true == m_font[iii]->getGlyphProperty(m_size, tmpchar)) {
+		if (m_font[iii]->getGlyphProperty(m_size, tmpchar) == true) {
 			//EWOL_DEBUG("load char : '" << _val << "'=" << _val.get());
 			hasChange = true;
 			// change line if needed ...
@@ -295,6 +295,7 @@ bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 	}
 	if (hasChange == true) {
 		flush();
+		ewol::getContext().forceRedrawAll();
 		//egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
 	}
 	return hasChange;

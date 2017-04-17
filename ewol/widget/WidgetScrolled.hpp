@@ -62,6 +62,12 @@ namespace ewol {
 				bool getSingleFinger() {
 					return m_singleFingerMode;
 				}
+				/**
+				 * @brief Reset the scoll of the subWidget
+				 */
+				void resetScrollOrigin() {
+					m_originScrooled = vec2(0,0);
+				}
 			private:
 				bool m_fingerPresent[CALCULATE_SIMULTANEOUS_FINGER];
 				bool m_fingerScoolActivated;
