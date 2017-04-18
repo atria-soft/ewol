@@ -26,8 +26,7 @@ ewol::widget::PopUp::PopUp() :
                               false,
                               "Remove the widget if the use click outside") {
 	addObjectType("ewol::widget::PopUp");
-	// Add annimations :
-	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
+	
 }
 
 void ewol::widget::PopUp::init() {
@@ -174,39 +173,5 @@ bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 		return true;
 	}
 	return false;
-}
-
-
-bool ewol::widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _mode) {
-	if (_mode == 0) {
-		/*
-		if (m_annimationTypeStart.get() != annimationIncrease) {
-			return false;
-		}
-		*/
-	} else {
-		/*
-		if (m_annimationTypeStop.get() != annimationIncrease) {
-			return false;
-		}
-		*/
-	}
-	return false;
-	if (m_shaper.changeStatusIn(1) == true) {
-		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::PopUp::periodicCall);
-		return true;
-	}
-	return false;
-}
-
-void ewol::widget::PopUp::onStopAnnimation() {
-	m_PCH.disconnect();
-}
-
-void ewol::widget::PopUp::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper.periodicCall(_event) == false) {
-		stopAnnimation();
-	}
-	markToRedraw();
 }
 

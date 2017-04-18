@@ -54,16 +54,7 @@ ewol::Widget::Widget() :
   signalShortcut(this, "shortcut", ""),
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
-  m_cursorDisplay(gale::context::cursor::arrow),
-  signalAnnimationStart(this, "annimation-start", ""),
-  signalAnnimationRatio(this, "annimation-ratio", ""),
-  signalAnnimationStop(this, "annimation-stop", ""),
-  m_annimationMode(annimationModeDisable),
-  m_annimationratio(0.0f),
-  propertyAnnimationTypeStart(this, "annimation-start-type", 0, "Annimation type, when adding/show a widget"),
-  propertyAnnimationTimeStart(this, "annimation-start-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when adding/show a widget"),
-  propertyAnnimationTypeStop(this, "annimation-stop-type", 0, "Annimation type, when removing/hide a widget"),
-  propertyAnnimationTimeStop(this, "annimation-stop-time", 0.1f, 0.0f, 200.0f, "Annimation time in second, when removing/hide a widget"){
+  m_cursorDisplay(gale::context::cursor::arrow){
 	addObjectType("ewol::Widget");
 	
 	// TODO : Set a static interface for list ==> this methode create a multiple allocation
@@ -76,8 +67,6 @@ ewol::Widget::Widget() :
 	propertyGravity.add(ewol::gravity_buttom, "buttom");
 	propertyGravity.add(ewol::gravity_buttomLeft, "buttom-left");
 	propertyGravity.add(ewol::gravity_left, "left");
-	propertyAnnimationTypeStart.add(0, "none");
-	propertyAnnimationTypeStop.add(0, "none");
 }
 
 
@@ -614,53 +603,6 @@ void ewol::Widget::showKeyboard() {
 void ewol::Widget::hideKeyboard() {
 	getContext().keyboardHide();
 }
-
-void ewol::Widget::addAnnimationType(enum ewol::Widget::annimationMode _mode, const char* _type) {
-	if (_mode == ewol::Widget::annimationModeDisable) {
-		EWOL_CRITICAL("Not suported mode ==> only for internal properties");
-		return;
-	}
-	/*
-	for (size_t iii = 0; iii < m_annimationList[_mode].size(); ++iii) {
-		if (m_annimationList[_mode][iii] == _type) {
-			return;
-		}
-	}
-	m_annimationList[_mode].push_back(_type);
-	*/
-}
-
-void ewol::Widget::setAnnimationType(enum ewol::Widget::annimationMode _mode, const std::string& _type) {
-	if (_mode == 0) {
-		propertyAnnimationTypeStart.setString(_type);
-	} else {
-		propertyAnnimationTypeStop.setString(_type);
-	}
-}
-
-void ewol::Widget::setAnnimationTime(enum ewol::Widget::annimationMode _mode, float _time) {
-	if (_mode == 0) {
-		propertyAnnimationTimeStart.set(_time);
-	} else {
-		propertyAnnimationTimeStop.set(_time);
-	}
-}
-
-bool ewol::Widget::startAnnimation(enum ewol::Widget::annimationMode _mode) {
-	if (_mode == ewol::Widget::annimationModeDisable) {
-		EWOL_CRITICAL("Not suported mode ==> only for internal properties");
-		return false;
-	}
-	m_annimationMode = _mode;
-	return onStartAnnimation(_mode);
-}
-
-bool ewol::Widget::stopAnnimation() {
-	m_annimationMode = ewol::Widget::annimationModeDisable;
-	onStopAnnimation();
-	return true; // ???
-}
-
 
 void ewol::Widget::drawWidgetTree(int32_t _level) {
 	std::string space;

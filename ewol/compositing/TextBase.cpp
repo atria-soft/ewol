@@ -807,7 +807,8 @@ void ewol::compositing::TextBase::setTextAlignement(float _startTextpos, float _
 	m_stopTextPos = _stopTextPos+1;
 	m_alignement = _alignement;
 	if (m_startTextpos >= m_stopTextPos) {
-		EWOL_ERROR("Request allignement with Borne position error : " << _startTextpos << " => " << _stopTextPos);
+		// TODO: understand why this flush ... 
+		EWOL_VERBOSE("Request allignement with Borne position error : " << _startTextpos << " => " << _stopTextPos);
 	}
 }
 
