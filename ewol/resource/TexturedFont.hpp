@@ -34,6 +34,7 @@ namespace ewol {
 				ememory::SharedPtr<ewol::resource::FontBase> m_font[4];
 				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
+				GlyphProperty m_emptyGlyph;
 				std::vector<GlyphProperty> m_listElement[4];
 			private:
 				// for the texture generation :

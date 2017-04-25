@@ -64,9 +64,9 @@ namespace ewol {
 			  m_UVal(0),
 			  m_exist(true),
 			  m_glyphIndex(0),
-			  m_sizeTexture(0,0),
-			  m_bearing(0,0),
-			  m_advance(0,0),
+			  m_sizeTexture(10,10),
+			  m_bearing(2,2),
+			  m_advance(10,10),
 			  m_texturePosStart(0,0),
 			  m_texturePosSize(0,0) {
 				
