@@ -429,10 +429,12 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
 			bool m_needRegenerateDisplay; //!< the display might be done the next regeneration
+		public:
 			/**
 			 * @brief The widget mark itself that it need to regenerate the nest time.
 			 */
 			virtual void markToRedraw();
+		protected:
 			/**
 			 * @brief get the need of the redrawing of the widget and reset it to false
 			 * @return true if we need to redraw
