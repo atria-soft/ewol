@@ -37,6 +37,7 @@ namespace ewol {
 				esignal::Signal<std::string> signalEnter; //!< Enter key is pressed
 				esignal::Signal<std::string> signalModify; //!< data change
 			public: // propertie list
+				eproperty::Value<bool> propertyPassword; //!< Disable display of the content of the entry
 				eproperty::Value<std::string> propertyShape;
 				eproperty::Value<std::string> propertyValue; //!< string that must be displayed
 				eproperty::Range<int32_t> propertyMaxCharacter; //!< number max of xharacter in the list
@@ -129,6 +130,7 @@ namespace ewol {
 				void onCallbackPaste();
 				void onCallbackSelect(bool _all);
 			protected:
+				virtual void onChangePropertyPassword();
 				virtual void onChangePropertyShaper();
 				virtual void onChangePropertyValue();
 				virtual void onChangePropertyMaxCharacter();

@@ -20,6 +20,10 @@ ewol::widget::Entry::Entry() :
   signalClick(this, "click", "the user Click on the Entry box"),
   signalEnter(this, "enter", "The cursor enter inside the button"),
   signalModify(this, "modify", "Entry box value change"),
+  propertyPassword(this, "password",
+                         false,
+                         "Not display content in password mode",
+                         &ewol::widget::Entry::onChangePropertyPassword),
   propertyShape(this, "shape",
                       "{ewol}THEME:GUI:Entry.json",
                       "Shaper to display the background",
@@ -157,8 +161,15 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 		} else {
 			m_text.setCursorPos(m_displayCursorPos);
 		}
-		if (propertyValue->size() != 0) {
-			m_text.print(propertyValue);
+		std::string valueToDisplay = *propertyValue;
+		if (*propertyPassword == true) {
+			for (auto &it: valueToDisplay) {
+				it = '*';
+			}
+		}
+		
+		if (valueToDisplay.size() != 0) {
+			m_text.print(valueToDisplay);
 		} else {
 			if (propertyTextWhenNothing->size() != 0) {
 				m_text.printDecorated(propertyTextWhenNothing);
@@ -549,6 +560,10 @@ void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 	if (m_shaper.periodicCall(_event) == false) {
 		m_PCH.disconnect();
 	}
+	markToRedraw();
+}
+
+void ewol::widget::Entry::onChangePropertyPassword() {
 	markToRedraw();
 }
 
