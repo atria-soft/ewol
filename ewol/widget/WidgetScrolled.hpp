@@ -38,7 +38,7 @@ namespace ewol {
 			protected:
 				vec2 m_originScrooled; //!< pixel distance from the origin of the display (Bottum left)
 				vec2 m_maxSize; //!< Maximum size of the Widget ==> to display scrollbar
-				float m_limitScrolling; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
+				vec2 m_limitScrolling; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
 			private: // Mouse section :
 				enum scrollingMode m_scroollingMode; //!< mode of management of the scrooling
 				float m_pixelScrolling;
@@ -123,7 +123,15 @@ namespace ewol {
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 				 */
 				void setLimitScrolling(float _poucentageLimit) {
-					m_limitScrolling = std::avg(0.1f, _poucentageLimit,0.9f);
+					_poucentageLimit = std::avg(0.1f, _poucentageLimit,1.0f);
+					m_limitScrolling = vec2(_poucentageLimit, _poucentageLimit);
+				};
+				/**
+				 * @brief set the scrolling limit when arriving at he end of the widget
+				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end for axis specific...
+				 */
+				void setLimitScrolling(const vec2& _poucentageLimit) {
+					m_limitScrolling = vec2(std::avg(0.1f, _poucentageLimit.x(),1.0f), std::avg(0.1f, _poucentageLimit.y(),1.0f));
 				};
 			protected:
 				virtual void onChangePropertyShapeVert();
