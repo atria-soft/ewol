@@ -16,13 +16,12 @@ namespace ewol {
 #define EWOL_CRITICAL(data)      EWOL_BASE(1, data)
 #define EWOL_ERROR(data)         EWOL_BASE(2, data)
 #define EWOL_WARNING(data)       EWOL_BASE(3, data)
+#define EWOL_INFO(data)          EWOL_BASE(4, data)
 #ifdef DEBUG
-	#define EWOL_INFO(data)          EWOL_BASE(4, data)
 	#define EWOL_DEBUG(data)         EWOL_BASE(5, data)
 	#define EWOL_VERBOSE(data)       EWOL_BASE(6, data)
 	#define EWOL_TODO(data)          EWOL_BASE(4, "TODO : " << data)
 #else
-	#define EWOL_INFO(data)          do { } while(false)
 	#define EWOL_DEBUG(data)         do { } while(false)
 	#define EWOL_VERBOSE(data)       do { } while(false)
 	#define EWOL_TODO(data)          do { } while(false)
