@@ -165,23 +165,23 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
 	int i, j;
 	std::vector<vec3> EwolVertices;
 	for(i = 0; i <= _lats; i++) {
-		btScalar lat0 = SIMD_PI * (-btScalar(0.5) + (btScalar) (i - 1) / _lats);
+		btScalar lat0 = M_PI * (-0.5f + float(i - 1) / _lats);
 		btScalar z0  = _radius*sin(lat0);
 		btScalar zr0 = _radius*cos(lat0);
 		
-		btScalar lat1 = SIMD_PI * (-btScalar(0.5) + (btScalar) i / _lats);
+		btScalar lat1 = M_PI * (-0.5f + float(i) / _lats);
 		btScalar z1 = _radius*sin(lat1);
 		btScalar zr1 = _radius*cos(lat1);
 		
 		//glBegin(GL_QUAD_STRIP);
 		for(j = 0; j < _longs; j++) {
-			btScalar lng = 2 * SIMD_PI * (btScalar) (j - 1) / _longs;
+			btScalar lng = 2.0f * M_PI * float(j - 1) / _longs;
 			btScalar x = cos(lng);
 			btScalar y = sin(lng);
 			vec3 v1 = vec3(x * zr1, y * zr1, z1);
 			vec3 v4 = vec3(x * zr0, y * zr0, z0);
 			
-			lng = 2 * SIMD_PI * (btScalar) (j) / _longs;
+			lng = 2 * M_PI * float(j) / _longs;
 			x = cos(lng);
 			y = sin(lng);
 			vec3 v2 = vec3(x * zr1, y * zr1, z1);

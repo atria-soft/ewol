@@ -202,8 +202,8 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 	}
 	// draw it on the output Image :
 	etk::Color<> tlpppp(0xFF, 0xFF, 0xFF, 0x00);
-	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
-		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
+	for(size_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
+		for(size_t iii=0; iii < slot->bitmap.width; iii++){
 			tlpppp = _imageOut.get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
@@ -265,8 +265,8 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
 	// resize output image :
 	_imageOut.resize(ivec2(slot->bitmap.width+2*_borderSize, slot->bitmap.rows+2*_borderSize), 0);
 	
-	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
-		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
+	for(size_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
+		for(size_t iii=0; iii < slot->bitmap.width; iii++){
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// real set of color
 			_imageOut.set(ivec2(_borderSize+iii, _borderSize+jjj), valueColor );
