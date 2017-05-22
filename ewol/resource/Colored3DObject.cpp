@@ -156,6 +156,55 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	}
 }
 
+
+void ewol::resource::Colored3DObject::drawCubeLine(const vec3& _min,
+                                                   const vec3& _max,
+                                                   const etk::Color<float>& _color,
+                                                   mat4& _transformationMatrix,
+                                                   bool _updateDepthBuffer,
+                                                   bool _depthtest) {
+	std::vector<vec3> vertices;
+	vertices.push_back(vec3(_min.x(), _min.y(),_min.z()));
+	vertices.push_back(vec3(_max.x(), _min.y(),_min.z()));
+	
+	vertices.push_back(vec3(_max.x(), _min.y(),_min.z()));
+	vertices.push_back(vec3(_max.x(), _min.y(),_max.z()));
+	
+	vertices.push_back(vec3(_max.x(), _min.y(),_max.z()));
+	vertices.push_back(vec3(_min.x(), _min.y(),_max.z()));
+	
+	vertices.push_back(vec3(_min.x(), _min.y(),_max.z()));
+	vertices.push_back(vec3(_min.x(), _min.y(),_min.z()));
+	
+	
+	vertices.push_back(vec3(_min.x(), _max.y(),_min.z()));
+	vertices.push_back(vec3(_max.x(), _max.y(),_min.z()));
+	
+	vertices.push_back(vec3(_max.x(), _max.y(),_min.z()));
+	vertices.push_back(vec3(_max.x(), _max.y(),_max.z()));
+	
+	vertices.push_back(vec3(_max.x(), _max.y(),_max.z()));
+	vertices.push_back(vec3(_min.x(), _max.y(),_max.z()));
+	
+	vertices.push_back(vec3(_min.x(), _max.y(),_max.z()));
+	vertices.push_back(vec3(_min.x(), _max.y(),_min.z()));
+	
+	
+	vertices.push_back(vec3(_min.x(), _min.y(),_min.z()));
+	vertices.push_back(vec3(_min.x(), _max.y(),_min.z()));
+	
+	vertices.push_back(vec3(_max.x(), _min.y(),_min.z()));
+	vertices.push_back(vec3(_max.x(), _max.y(),_min.z()));
+	
+	vertices.push_back(vec3(_max.x(), _min.y(),_max.z()));
+	vertices.push_back(vec3(_max.x(), _max.y(),_max.z()));
+	
+	vertices.push_back(vec3(_min.x(), _min.y(),_max.z()));
+	vertices.push_back(vec3(_min.x(), _max.y(),_max.z()));
+	
+	drawLine(vertices, _color, _transformationMatrix, _updateDepthBuffer, _depthtest);
+}
+
 void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor) {

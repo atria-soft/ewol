@@ -44,6 +44,12 @@ namespace ewol {
 				                      mat4& _transformationMatrix,
 				                      bool _updateDepthBuffer=true,
 				                      bool _depthtest=true);
+				virtual void drawCubeLine(const vec3& _min,
+				                          const vec3& _max,
+				                          const etk::Color<float>& _color,
+				                          mat4& _transformationMatrix,
+				                          bool _updateDepthBuffer=true,
+				                          bool _depthtest=true);
 			public:
 				void drawSquare(const vec3& _size,
 				                mat4& _transformationMatrix,
