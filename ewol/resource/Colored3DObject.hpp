@@ -45,14 +45,32 @@ namespace ewol {
 				                      bool _updateDepthBuffer=true,
 				                      bool _depthtest=true);
 			public:
+				void drawSquare(const vec3& _size,
+				                mat4& _transformationMatrix,
+				                const etk::Color<float>& _tmpColor);
 				void drawSphere(float _radius,
 				                int _lats,
 				                int _longs,
 				                mat4& _transformationMatrix,
 				                const etk::Color<float>& _tmpColor);
-				void drawSquare(const vec3& _size, // halph size
-				                mat4& _transformationMatrix,
-				                const etk::Color<float>& _tmpColor);
+				void drawCylinder(float _radius,
+				                  float _size,
+				                  int _lats,
+				                  int _longs,
+				                  mat4& _transformationMatrix,
+				                  const etk::Color<float>& _tmpColor);
+				void drawCapsule(float _radius,
+				                 float _size,
+				                 int _lats,
+				                 int _longs,
+				                 mat4& _transformationMatrix,
+				                 const etk::Color<float>& _tmpColor);
+				void drawCone(float _radius,
+				              float _size,
+				              int _lats,
+				              int _longs,
+				              mat4& _transformationMatrix,
+				              const etk::Color<float>& _tmpColor);
 		};
 	};
 };
