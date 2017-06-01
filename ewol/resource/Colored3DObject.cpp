@@ -241,25 +241,25 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
 	std::vector<vec3> tmpVertices;
 	for(int32_t iii=0; iii<=_lats; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
-		float y0  = _radius*sin(lat0);
-		float yr0 = _radius*cos(lat0);
+		float z0  = _radius*sin(lat0);
+		float zr0 = _radius*cos(lat0);
 		
 		float lat1 = M_PI * (-0.5f + float(iii) / _lats);
-		float y1 = _radius*sin(lat1);
-		float yr1 = _radius*cos(lat1);
+		float z1 = _radius*sin(lat1);
+		float zr1 = _radius*cos(lat1);
 		
 		for(int32_t jjj=0; jjj<_longs; ++jjj) {
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
-			float z = sin(lng);
-			vec3 v1 = vec3(x * yr1, y1, z * yr1);
-			vec3 v4 = vec3(x * yr0, y0, z * yr0);
+			float y = sin(lng);
+			vec3 v1 = vec3(x * zr1, y * zr1, z1);
+			vec3 v4 = vec3(x * zr0, y * zr0, z0);
 			
 			lng = 2 * M_PI * float(jjj) / _longs;
 			x = cos(lng);
-			z = sin(lng);
-			vec3 v2 = vec3(x * yr1, y1, z * yr1);
-			vec3 v3 = vec3(x * yr0, y0, z * yr0);
+			y = sin(lng);
+			vec3 v2 = vec3(x * zr1, y * zr1, z1);
+			vec3 v3 = vec3(x * zr0, y * zr0, z0);
 			
 			tmpVertices.push_back(v1);
 			tmpVertices.push_back(v2);
@@ -280,19 +280,21 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
                                                    const etk::Color<float>& _tmpColor) {
 	std::vector<vec3> tmpVertices;
 	// center to border (TOP)
+	
+	// center to border (TOP)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
-		float y = _size*0.5f;
-		vec3 v1 = vec3(0.0f, y, 0.0f);
+		float z = _size*0.5f;
+		vec3 v1 = vec3(0.0f, 0.0f, z);
 		
 		float x = cos(lng)*_radius;
-		float z = sin(lng)*_radius;
+		float y = sin(lng)*_radius;
 		vec3 v2 = vec3(x, y, z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
-		z = sin(lng)*_radius;
+		y = sin(lng)*_radius;
 		vec3 v3 = vec3(x, y, z);
 		tmpVertices.push_back(v1);
 		tmpVertices.push_back(v3);
@@ -302,18 +304,18 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
-		float y = _size*0.5f;
+		float z = _size*0.5f;
 		
 		float x = cos(lng)*_radius;
-		float z = sin(lng)*_radius;
+		float y = sin(lng)*_radius;
 		vec3 v2  = vec3(x, y, z);
-		vec3 v2b = vec3(x, -y, z);
+		vec3 v2b = vec3(x, y, -z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
-		z = sin(lng)*_radius;
+		y = sin(lng)*_radius;
 		vec3 v3  = vec3(x, y, z);
-		vec3 v3b = vec3(x, -y, z);
+		vec3 v3b = vec3(x, y, -z);
 		
 		tmpVertices.push_back(v2);
 		tmpVertices.push_back(v3);
@@ -323,21 +325,20 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		tmpVertices.push_back(v3b);
 		tmpVertices.push_back(v2b);
 	}
-	
 	// center to border (BUTTOM)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
-		float y = _size*-0.5f;
-		vec3 v1 = vec3(0.0f, y, 0.0f);
+		float z = _size*-0.5f;
+		vec3 v1 = vec3(0.0f, 0.0f, z);
 		
 		float x = cos(lng)*_radius;
-		float z = sin(lng)*_radius;
+		float y = sin(lng)*_radius;
 		vec3 v2 = vec3(x, y, z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
-		z = sin(lng)*_radius;
+		y = sin(lng)*_radius;
 		vec3 v3 = vec3(x, y, z);
 		tmpVertices.push_back(v1);
 		tmpVertices.push_back(v2);
@@ -353,30 +354,30 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
                                                   const etk::Color<float>& _tmpColor) {
 	std::vector<vec3> tmpVertices;
 	_lats = int32_t(_lats / 2)*2;
+	
 	// center to border (TOP)
 	float offset = _size*0.5f;
 	for(int32_t iii=_lats/2+1; iii<=_lats; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
-		float y0  = _radius*sin(lat0);
-		float yr0 = _radius*cos(lat0);
+		float z0  = _radius*sin(lat0);
+		float zr0 = _radius*cos(lat0);
 		
 		float lat1 = M_PI * (-0.5f + float(iii) / _lats);
-		float y1 = _radius*sin(lat1);
-		float yr1 = _radius*cos(lat1);
+		float z1 = _radius*sin(lat1);
+		float zr1 = _radius*cos(lat1);
 		
 		for(int32_t jjj=0; jjj<_longs; ++jjj) {
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
-			float z = sin(lng);
-			vec3 v1 = vec3(x * yr1, y1+offset, z * yr1);
-			vec3 v4 = vec3(x * yr0, y0+offset, z * yr0);
+			float y = sin(lng);
+			vec3 v1 = vec3(x * zr1, y * zr1, z1+offset);
+			vec3 v4 = vec3(x * zr0, y * zr0, z0+offset);
 			
 			lng = 2 * M_PI * float(jjj) / _longs;
 			x = cos(lng);
-			z = sin(lng);
-			vec3 v2 = vec3(x * yr1, y1+offset, z * yr1);
-			vec3 v3 = vec3(x * yr0, y0+offset, z * yr0);
-			
+			y = sin(lng);
+			vec3 v2 = vec3(x * zr1, y * zr1, z1+offset);
+			vec3 v3 = vec3(x * zr0, y * zr0, z0+offset);
 			tmpVertices.push_back(v1);
 			tmpVertices.push_back(v2);
 			tmpVertices.push_back(v3);
@@ -390,18 +391,18 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
-		float y = _size*0.5f;
+		float z = _size*0.5f;
 		
 		float x = cos(lng)*_radius;
-		float z = sin(lng)*_radius;
+		float y = sin(lng)*_radius;
 		vec3 v2  = vec3(x, y, z);
-		vec3 v2b = vec3(x, -y, z);
+		vec3 v2b = vec3(x, y, -z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
-		z = sin(lng)*_radius;
+		y = sin(lng)*_radius;
 		vec3 v3  = vec3(x, y, z);
-		vec3 v3b = vec3(x, -y, z);
+		vec3 v3b = vec3(x, y, -z);
 		
 		tmpVertices.push_back(v2);
 		tmpVertices.push_back(v3);
@@ -411,29 +412,29 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 		tmpVertices.push_back(v3b);
 		tmpVertices.push_back(v2b);
 	}
+	// center to border (BUTTOM)
 	offset = -_size*0.5f;
 	for(int32_t iii=0; iii<=_lats/2; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
-		float y0  = _radius*sin(lat0);
-		float yr0 = _radius*cos(lat0);
+		float z0  = _radius*sin(lat0);
+		float zr0 = _radius*cos(lat0);
 		
 		float lat1 = M_PI * (-0.5f + float(iii) / _lats);
-		float y1 = _radius*sin(lat1);
-		float yr1 = _radius*cos(lat1);
+		float z1 = _radius*sin(lat1);
+		float zr1 = _radius*cos(lat1);
 		
 		for(int32_t jjj=0; jjj<_longs; ++jjj) {
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
-			float z = sin(lng);
-			vec3 v1 = vec3(x * yr1, y1+offset, z * yr1);
-			vec3 v4 = vec3(x * yr0, y0+offset, z * yr0);
+			float y = sin(lng);
+			vec3 v1 = vec3(x * zr1, y * zr1, z1+offset);
+			vec3 v4 = vec3(x * zr0, y * zr0, z0+offset);
 			
 			lng = 2 * M_PI * float(jjj) / _longs;
 			x = cos(lng);
-			z = sin(lng);
-			vec3 v2 = vec3(x * yr1, y1+offset, z * yr1);
-			vec3 v3 = vec3(x * yr0, y0+offset, z * yr0);
-			
+			y = sin(lng);
+			vec3 v2 = vec3(x * zr1, y * zr1, z1+offset);
+			vec3 v3 = vec3(x * zr0, y * zr0, z0+offset);
 			tmpVertices.push_back(v1);
 			tmpVertices.push_back(v2);
 			tmpVertices.push_back(v3);
@@ -456,16 +457,16 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 	// center to border (TOP)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
-		vec3 v1 = vec3(0.0f, _size/2, 0.0f);
+		vec3 v1 = vec3(0.0f, 0.0f, -_size/2);
 		
 		float x = cos(lng)*_radius;
-		float z = sin(lng)*_radius;
-		vec3 v2 = vec3(x, -_size/2, z);
+		float y = sin(lng)*_radius;
+		vec3 v2 = vec3(x, y, _size/2);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
-		z = sin(lng)*_radius;
-		vec3 v3 = vec3(x, -_size/2, z);
+		y = sin(lng)*_radius;
+		vec3 v3 = vec3(x, y, _size/2);
 		tmpVertices.push_back(v1);
 		tmpVertices.push_back(v3);
 		tmpVertices.push_back(v2);
@@ -474,16 +475,16 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
-		vec3 v1 = vec3(0.0f, -_size/2, 0.0f);
+		vec3 v1 = vec3(0.0f, 0.0f, _size/2);
 		
 		float x = cos(lng)*_radius;
-		float z = sin(lng)*_radius;
-		vec3 v2 = vec3(x, -_size/2, z);
+		float y = sin(lng)*_radius;
+		vec3 v2 = vec3(x, y, _size/2);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
-		z = sin(lng)*_radius;
-		vec3 v3 = vec3(x, -_size/2, z);
+		y = sin(lng)*_radius;
+		vec3 v3 = vec3(x, y, _size/2);
 		tmpVertices.push_back(v1);
 		tmpVertices.push_back(v2);
 		tmpVertices.push_back(v3);

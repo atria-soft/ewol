@@ -38,7 +38,7 @@ namespace ewol {
 				void setApplWakeUpTime(const echrono::Clock& _timeUpAppl) {
 					m_timeUpAppl = _timeUpAppl;
 				};
-				inline const echrono::Clock&  getApplWakeUpTime() const {
+				inline const echrono::Clock& getApplWakeUpTime() const {
 					return m_timeUpAppl;
 				};
 				inline echrono::Duration getApplUpTime() const {
