@@ -59,7 +59,7 @@ void ewol::resource::TextureFile::init(std::string _genName, const std::string& 
 		EWOL_ERROR("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
 		m_data.resize(ivec2(compatibilityHWSize.x(),compatibilityHWSize.y()));
 	}
-	m_endPointSize = m_realImageSize;
+	m_lastSize = m_realImageSize;
 	#ifdef GENERATE_DISTANCE_FIELD_MODE
 		//egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
 		egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");

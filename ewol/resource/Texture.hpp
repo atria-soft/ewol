@@ -18,9 +18,11 @@ namespace ewol {
 				// openGl Context propoerties :
 				egami::Image m_data;
 				// some image are not square  == > we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
-				vec2 m_endPointSize;
+				vec2 m_lastSize;
 				// internal state of the openGl system :
 				bool m_loaded;
+				int32_t m_lastTypeObject;
+				int32_t m_lastSizeObject;
 			// Public API:
 			protected:
 				void init(const std::string& _filename);
@@ -45,7 +47,7 @@ namespace ewol {
 					return m_data.getSize();
 				};
 				const vec2& getUsableSize() const {
-					return m_endPointSize;
+					return m_lastSize;
 				};
 				uint32_t getRendererId() const {
 					return m_texId;

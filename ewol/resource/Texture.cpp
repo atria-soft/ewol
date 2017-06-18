@@ -10,6 +10,7 @@
 #include <gale/renderer/openGL/openGL-include.hpp>
 #include <gale/resource/Manager.hpp>
 #include <ewol/resource/Texture.hpp>
+#include <echrono/Steady.hpp>
 
 /**
  * @brief get the next power 2 if the input
@@ -38,8 +39,10 @@ void ewol::resource::Texture::init() {
 ewol::resource::Texture::Texture() :
   m_texId(0),
   m_data(ivec2(32,32),egami::colorType::RGBA8),
-  m_endPointSize(1,1),
-  m_loaded(false) {
+  m_lastSize(1,1),
+  m_loaded(false),
+  m_lastTypeObject(0),
+  m_lastSizeObject(0) {
 	addResourceType("ewol::compositing::Texture");
 }
 
@@ -50,29 +53,19 @@ ewol::resource::Texture::~Texture() {
 #include <egami/egami.hpp>
 
 bool ewol::resource::Texture::updateContext() {
-	EWOL_DEBUG("updateContext [START]");
+	EWOL_VERBOSE("updateContext [START]");
+	if (false) {
+		echrono::Steady tic = echrono::Steady::now();
+		gale::openGL::flush();
+		echrono::Steady toc = echrono::Steady::now();
+		EWOL_VERBOSE("    updateContext [FLUSH] ==> " << (toc - tic));
+	}
 	std::unique_lock<std::recursive_mutex> lock(m_mutex, std::defer_lock);
+	echrono::Steady tic = echrono::Steady::now();
 	if (lock.try_lock() == false) {
 		//Lock error ==> try later ...
 		return false;
 	}
-	if (m_loaded == false) {
-		// Request a new texture at openGl :
-		glGenTextures(1, &m_texId);
-	}
-	EWOL_DEBUG("load the image:" << m_name);
-	// in all case we set the texture properties :
-	// TODO : check error ???
-	glBindTexture(GL_TEXTURE_2D, m_texId);
-	// TODO : Check error ???
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//--- mode nearest
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//--- Mode linear
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	int32_t typeObject = GL_RGBA;
 	int32_t sizeObject = GL_UNSIGNED_BYTE;
 	switch (m_data.getType()) {
@@ -99,20 +92,106 @@ bool ewol::resource::Texture::updateContext() {
 			EWOL_ERROR("Not manage the type " << m_data.getType() << " for texture");
 			break;
 	}
-	EWOL_DEBUG("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+	if (m_loaded == true) {
+		if (    m_lastTypeObject != typeObject
+		     || m_lastSizeObject != sizeObject
+		     || m_lastSize != m_data.getSize()) {
+			EWOL_VERBOSE("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
+			glDeleteTextures(1, &m_texId);
+			m_loaded = false;
+		}
+	}
+	if (m_loaded == false) {
+		// Request a new texture at openGl :
+		glGenTextures(1, &m_texId);
+		m_lastSize = m_data.getSize();
+		m_lastTypeObject = typeObject;
+		m_lastSizeObject = sizeObject;
+		EWOL_VERBOSE("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+	} else {
+		EWOL_VERBOSE("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+	}
+	// in all case we set the texture properties :
+	// TODO : check error ???
+	glBindTexture(GL_TEXTURE_2D, m_texId);
+	if (m_loaded == false) {
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+		// TODO : Check error ???
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		//--- mode nearest
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // 18/20
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//--- Mode linear
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // 16/17
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	//glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+	echrono::Steady toc1 = echrono::Steady::now();
+	EWOL_VERBOSE("    BIND                 ==> " << (toc1 - tic));
 	//egami::store(m_data, std::string("~/texture_") + etk::to_string(getId()) + ".bmp");
-	glTexImage2D(GL_TEXTURE_2D, // Target
-	             0, // Level
-	             typeObject, // Format internal
-	             m_data.getWidth(),
-	             m_data.getHeight(),
-	             0, // Border
-	             typeObject, // format
-	             sizeObject, // type
-	             m_data.getTextureDataPointer() );
+	#if    defined(__TARGET_OS__Android) \
+	    || defined(__TARGET_OS__IOs)
+		// On some embended target, the texture size must be square of 2:
+		if (m_loaded == false) {
+			// 1: Create the square 2 texture:
+			int32_t bufferSize = m_data.getGPUSize().x() * m_data.getGPUSize().y() * 8;
+			static std::vector<float> tmpData;
+			if (tmpData.size() < bufferSize) {
+				tmpData.resize(bufferSize, 0.0f);
+			}
+			EWOL_DEBUG("    CREATE texture ==> " << m_data.getGPUSize());
+			// 2 create a new emprty texture:
+			glTexImage2D(GL_TEXTURE_2D, // Target
+			             0, // Level
+			             typeObject, // Format internal
+			             m_data.getGPUSize().x(),
+			             m_data.getGPUSize().y(),
+			             0, // Border
+			             typeObject, // format
+			             sizeObject, // type
+			             &tmpData[0] );
+			gale::openGL::flush();
+		}
+		//3 Flush all time the data:
+		glTexSubImage2D(GL_TEXTURE_2D, // Target
+		                0, // Level
+		                0, // x offset
+		                0, // y offset
+		                m_data.getWidth(),
+		                m_data.getHeight(),
+		                typeObject, // format
+		                sizeObject, // type
+		                m_data.getTextureDataPointer() );
+	#else
+		// This is the normal case ==> set the image and after set just the update of the data
+		if (m_loaded == false) {
+			glTexImage2D(GL_TEXTURE_2D, // Target
+			             0, // Level
+			             typeObject, // Format internal
+			             m_data.getWidth(),
+			             m_data.getHeight(),
+			             0, // Border
+			             typeObject, // format
+			             sizeObject, // type
+			             m_data.getTextureDataPointer() );
+		} else {
+			glTexSubImage2D(GL_TEXTURE_2D, // Target
+			                0, // Level
+			                0, // x offset
+			                0, // y offset
+			                m_data.getWidth(),
+			                m_data.getHeight(),
+			                typeObject, // format
+			                sizeObject, // type
+			                m_data.getTextureDataPointer() );
+		}
+	#endif
 	// now the data is loaded
 	m_loaded = true;
-	EWOL_DEBUG("updateContext [STOP]");
+	echrono::Steady toc = echrono::Steady::now();
+	EWOL_VERBOSE("    updateContext [STOP] ==> " << (toc - toc1));
 	return true;
 }
 
@@ -120,7 +199,7 @@ void ewol::resource::Texture::removeContext() {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (m_loaded == true) {
 		// Request remove texture ...
-		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
+		EWOL_DEBUG("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
 		glDeleteTextures(1, &m_texId);
 		m_loaded = false;
 	}
