@@ -36,6 +36,7 @@ namespace ewol {
 			private:
 				bool m_distanceFieldMode; //!< select distance field mode
 				ememory::SharedPtr<ewol::resource::TextureFile> m_resource; //!< texture resources
+				ememory::SharedPtr<ewol::resource::Texture> m_resourceImage; //!< texture resources
 				ememory::SharedPtr<ewol::resource::ImageDF> m_resourceDF; //!< texture resources
 				static const int32_t m_vboIdCoord;
 				static const int32_t m_vboIdCoordTex;
@@ -162,6 +163,7 @@ namespace ewol {
 					setSource(_newFile, vec2(_size,_size));
 				};
 				void setSource(const std::string& _newFile, const vec2& _size);
+				void setSource(egami::Image _image);
 				/**
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 				 * @return the validity od the resources.

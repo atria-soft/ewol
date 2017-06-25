@@ -75,7 +75,8 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (    m_resource == nullptr
-	     && m_resourceDF == nullptr) {
+	     && m_resourceDF == nullptr
+	     && m_resourceImage == nullptr) {
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
@@ -94,7 +95,9 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	m_GLprogram->use();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
-	if (m_resource != nullptr) {
+	if (m_resourceImage != nullptr) {
+		m_GLprogram->setTexture0(m_GLtexID, m_resourceImage->getRendererId());
+	} else if (m_resource != nullptr) {
 		if (m_distanceFieldMode == true) {
 			EWOL_ERROR("FONT type error Request distance field and display normal ...");
 		}
@@ -274,10 +277,12 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 	}
 	ememory::SharedPtr<ewol::resource::TextureFile> resource = m_resource;
 	ememory::SharedPtr<ewol::resource::ImageDF> resourceDF = m_resourceDF;
+	ememory::SharedPtr<ewol::resource::Texture> resourceTex = m_resourceImage;
 	m_filename = _newFile;
 	m_requestSize = _size;
 	m_resource.reset();
 	m_resourceDF.reset();
+	m_resourceImage.reset();
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
@@ -304,7 +309,19 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 			EWOL_WARNING("Retrive previous resource (DF)");
 			m_resourceDF = resourceDF;
 		}
+		if (resourceTex != nullptr) {
+			EWOL_WARNING("Retrive previous resource (image)");
+			m_resourceImage = resourceTex;
+		}
 	}
+}
+void ewol::compositing::Image::setSource(egami::Image _image) {
+	clear();
+	m_filename = "direct image BUFFER";
+	m_requestSize = _image.getSize();
+	m_resourceImage = ewol::resource::Texture::create();
+	m_resourceImage->get() = _image;
+	m_resourceImage->flush();
 }
 
 bool ewol::compositing::Image::hasSources() {
