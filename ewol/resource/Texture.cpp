@@ -40,7 +40,7 @@ ewol::resource::Texture::Texture() :
   m_texId(0),
   #ifdef EWOL_USE_FBO
     m_texPboId(0),
-  #ifdef EWOL_USE_FBO
+  #endif
   m_data(ivec2(32,32),egami::colorType::RGBA8),
   m_lastSize(1,1),
   m_loaded(false),
