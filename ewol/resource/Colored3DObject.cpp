@@ -34,7 +34,7 @@ ewol::resource::Colored3DObject::~Colored3DObject() {
 }
 
 
-void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::draw(const std::vector<vec3>& _vertices,
                                            const etk::Color<float>& _color,
                                            bool _updateDepthBuffer,
                                            bool _depthtest) {
@@ -76,7 +76,7 @@ void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::draw(const std::vector<vec3>& _vertices,
                                            const etk::Color<float>& _color,
                                            mat4& _transformationMatrix,
                                            bool _updateDepthBuffer,
@@ -489,6 +489,23 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 		tmpVertices.push_back(v2);
 		tmpVertices.push_back(v3);
 	}
+	draw(tmpVertices, _tmpColor, _transformationMatrix);
+}
+
+void ewol::resource::Colored3DObject::drawTriangles(const std::vector<vec3>& _vertex,
+                                                    const std::vector<uint32_t>& _indice,
+                                                    mat4& _transformationMatrix,
+                                                    const etk::Color<float>& _tmpColor,
+                                                    const vec3& _offset) {
+	std::vector<vec3> tmpVertices;
+	for (size_t iii=0; iii<_indice.size()/3; ++iii) {
+		tmpVertices.push_back(_vertex[_indice[iii*3 + 0]]+_offset);
+		tmpVertices.push_back(_vertex[_indice[iii*3 + 1]]+_offset);
+		tmpVertices.push_back(_vertex[_indice[iii*3 + 2]]+_offset);
+		//EWOL_INFO("  indices " << _indice[iii*3 + 0] << " " << _indice[iii*3 + 1] << " " << _indice[iii*3 + 2]);
+		//EWOL_INFO(" triangle " << _vertex[_indice[iii*3 + 0]] << " " << _vertex[_indice[iii*3 + 1]] << " " << _vertex[_indice[iii*3 + 2]]);
+	}
+	//EWOL_INFO("display " << tmpVertices.size() << " vertices form " << _indice.size());
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 
