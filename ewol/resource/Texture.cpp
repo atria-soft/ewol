@@ -38,6 +38,9 @@ void ewol::resource::Texture::init() {
 
 ewol::resource::Texture::Texture() :
   m_texId(0),
+  #ifdef EWOL_USE_FBO
+    m_texPboId(0),
+  #ifdef EWOL_USE_FBO
   m_data(ivec2(32,32),egami::colorType::RGBA8),
   m_lastSize(1,1),
   m_loaded(false),
@@ -68,22 +71,37 @@ bool ewol::resource::Texture::updateContext() {
 	}
 	int32_t typeObject = GL_RGBA;
 	int32_t sizeObject = GL_UNSIGNED_BYTE;
+	#ifdef EWOL_USE_FBO
+		int32_t sizeByte = 1;
+	#endif
 	switch (m_data.getType()) {
 		case egami::colorType::RGBA8:
 			typeObject = GL_RGBA;
 			sizeObject = GL_UNSIGNED_BYTE;
+			#ifdef EWOL_USE_FBO
+				sizeByte = 4;
+			#endif
 			break;
 		case egami::colorType::RGB8:
 			typeObject = GL_RGB;
 			sizeObject = GL_UNSIGNED_BYTE;
+			#ifdef EWOL_USE_FBO
+				sizeByte = 3;
+			#endif
 			break;
 		case egami::colorType::RGBAf:
 			typeObject = GL_RGBA;
 			sizeObject = GL_FLOAT;
+			#ifdef EWOL_USE_FBO
+				sizeByte = 16;
+			#endif
 			break;
 		case egami::colorType::RGBf:
 			typeObject = GL_RGBA;
 			sizeObject = GL_FLOAT;
+			#ifdef EWOL_USE_FBO
+				sizeByte = 12;
+			#endif
 			break;
 		case egami::colorType::unsignedInt16:
 		case egami::colorType::unsignedInt32:
@@ -104,6 +122,18 @@ bool ewol::resource::Texture::updateContext() {
 	if (m_loaded == false) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
+		
+		#ifdef EWOL_USE_FBO
+			EWOL_ERROR("CREATE PBO");
+			glGenBuffers(1, &m_texPboId);
+			EWOL_ERROR("CREATE PBO 1");
+			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_texPboId);
+			EWOL_ERROR("CREATE PBO 2");
+			glBufferData(GL_PIXEL_UNPACK_BUFFER, m_data.getGPUSize().x()*m_data.getGPUSize().y()*sizeByte, 0, GL_STREAM_DRAW);
+			EWOL_ERROR("CREATE PBO 3");
+			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+			EWOL_ERROR("CREATE PBO 4 (done)");
+		#endif
 		m_lastSize = m_data.getSize();
 		m_lastTypeObject = typeObject;
 		m_lastSizeObject = sizeObject;
@@ -142,28 +172,61 @@ bool ewol::resource::Texture::updateContext() {
 				tmpData.resize(bufferSize, 0.0f);
 			}
 			EWOL_DEBUG("    CREATE texture ==> " << m_data.getGPUSize());
-			// 2 create a new emprty texture:
-			glTexImage2D(GL_TEXTURE_2D, // Target
-			             0, // Level
-			             typeObject, // Format internal
-			             m_data.getGPUSize().x(),
-			             m_data.getGPUSize().y(),
-			             0, // Border
-			             typeObject, // format
-			             sizeObject, // type
-			             &tmpData[0] );
-			gale::openGL::flush();
+			// 2 create a new empty texture:
+			#ifdef EWOL_USE_FBO
+				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_texPboId);
+				void* pBuff = ::glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_data.getGPUSize().x() * m_data.getGPUSize().y() * sizeByte, GL_MAP_WRITE_BIT);
+				memcpy(pBuff, &tmpData[0], m_data.getGPUSize().x()*m_data.getGPUSize().y()*sizeByte);
+				glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+				glTexImage2D(GL_TEXTURE_2D, // Target
+				             0, // Level
+				             typeObject, // Format internal
+				             m_data.getGPUSize().x(),
+				             m_data.getGPUSize().y(),
+				             0, // Border
+				             typeObject, // format
+				             sizeObject, // type
+				             (void*)0 );
+			#else
+				glTexImage2D(GL_TEXTURE_2D, // Target
+				             0, // Level
+				             typeObject, // Format internal
+				             m_data.getGPUSize().x(),
+				             m_data.getGPUSize().y(),
+				             0, // Border
+				             typeObject, // format
+				             sizeObject, // type
+				             &tmpData[0] );
+			#endif
 		}
-		//3 Flush all time the data:
-		glTexSubImage2D(GL_TEXTURE_2D, // Target
-		                0, // Level
-		                0, // x offset
-		                0, // y offset
-		                m_data.getWidth(),
-		                m_data.getHeight(),
-		                typeObject, // format
-		                sizeObject, // type
-		                m_data.getTextureDataPointer() );
+		#ifdef EWOL_USE_FBO
+			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_texPboId);
+			void* pBuff = ::glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_data.getGPUSize().x() * m_data.getGPUSize().y() * sizeByte, GL_MAP_WRITE_BIT);
+			memcpy(pBuff, m_data.getTextureDataPointer(), m_data.getWidth()*m_data.getHeight()*sizeByte);
+			glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+			//3 Flush all time the data:
+			glTexSubImage2D(GL_TEXTURE_2D, // Target
+			                0, // Level
+			                0, // x offset
+			                0, // y offset
+			                m_data.getWidth(),
+			                m_data.getHeight(),
+			                typeObject, // format
+			                sizeObject, // type
+			                (void *)0 );
+			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		#else
+			//3 Flush all time the data:
+			glTexSubImage2D(GL_TEXTURE_2D, // Target
+			                0, // Level
+			                0, // x offset
+			                0, // y offset
+			                m_data.getWidth(),
+			                m_data.getHeight(),
+			                typeObject, // format
+			                sizeObject, // type
+			                m_data.getTextureDataPointer() );
+		#endif
 	#else
 		// This is the normal case ==> set the image and after set just the update of the data
 		if (m_loaded == false) {

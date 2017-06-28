@@ -10,11 +10,16 @@
 #include <egami/Image.hpp>
 #include <gale/resource/Texture.hpp>
 
+//#define EWOL_USE_FBO 1
+
 namespace ewol {
 	namespace resource {
 		class Texture : public gale::Resource {
 			protected:
 				uint32_t m_texId; //!< openGl textureID.
+				#ifdef EWOL_USE_FBO
+					uint32_t m_texPboId; //!< openGl textureID.
+				#endif
 				// openGl Context propoerties :
 				egami::Image m_data;
 				// some image are not square  == > we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
