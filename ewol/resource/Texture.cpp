@@ -263,7 +263,7 @@ void ewol::resource::Texture::removeContext() {
 	if (m_loaded == true) {
 		// Request remove texture ...
 		EWOL_DEBUG("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
-		glDeleteTextures(1, &m_texId);
+		//glDeleteTextures(1, &m_texId);
 		m_loaded = false;
 	}
 }
