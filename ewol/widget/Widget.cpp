@@ -347,19 +347,19 @@ void ewol::Widget::shortCutAdd(const std::string& _descriptiveString, const std:
 	} else {
 		tmpElement.message = _message;
 	}
-	// parsing of the string :
+	// parsing of the string:
 	//"ctrl+shift+alt+meta+s"
 	if(_descriptiveString.find("ctrl") != std::string::npos) {
-		tmpElement.specialKey.setCtrl(true);
+		tmpElement.specialKey.setCtrlLeft(true);
 	}
 	if(_descriptiveString.find("shift") != std::string::npos) {
-		tmpElement.specialKey.setShift(true);
+		tmpElement.specialKey.setShiftLeft(true);
 	}
 	if(_descriptiveString.find("alt") != std::string::npos) {
-		tmpElement.specialKey.setAlt(true);
+		tmpElement.specialKey.setAltLeft(true);
 	}
 	if(_descriptiveString.find("meta") != std::string::npos) {
-		tmpElement.specialKey.setMeta(true);
+		tmpElement.specialKey.setMetaLeft(true);
 	}
 	if(_descriptiveString.find("F12") != std::string::npos) {
 		tmpElement.keyboardMoveValue = gale::key::keyboard::f12;
@@ -446,6 +446,25 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 	     && _unicodeValue <= 'Z') {
 		_unicodeValue += 'a' - 'A';
 	}
+	EWOL_VERBOSE("check shortcut...." << _special << " " << _unicodeValue << " " << _kbMove << " " << (_isDown?"DOWN":"UP") << " nb shortcut:" << m_localShortcut.size());
+	// Remove the up event of the shortcut...
+	if (_isDown == false) {
+		for (int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
+			if (m_localShortcut[iii].isActive == false) {
+				continue;
+			}
+			if (    (    m_localShortcut[iii].keyboardMoveValue == gale::key::keyboard::unknow
+			               && m_localShortcut[iii].unicodeValue == _unicodeValue)
+			          || (    m_localShortcut[iii].keyboardMoveValue == _kbMove
+			               && m_localShortcut[iii].unicodeValue == 0)
+			        ) {
+				// In this case we grap the event in case of an error can occured ...
+				m_localShortcut[iii].isActive = false;
+				EWOL_VERBOSE("detect up of a shortcut");
+				return true;
+			}
+		}
+	}
 	//EWOL_INFO("Try to find generic shortcut ...");
 	for (int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
 		if (    m_localShortcut[iii].specialKey.getShift() == _special.getShift()
@@ -458,7 +477,9 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 		               && m_localShortcut[iii].unicodeValue == 0)
 		        )
 		   ) {
-			if (_isDown) {
+			if (_isDown == true) {
+				m_localShortcut[iii].isActive = true;
+				EWOL_VERBOSE("Generate shortCut: " << m_localShortcut[iii].message);
 				signalShortcut.emit(m_localShortcut[iii].message);
 			}
 			return true;

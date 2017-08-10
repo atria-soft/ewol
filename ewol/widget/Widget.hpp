@@ -59,10 +59,14 @@ namespace ewol {
 			gale::key::Special specialKey; //!< special board key
 			char32_t unicodeValue; //!< 0 if not used
 			enum gale::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
-			EventShortCut() {
-				message = "";
-				unicodeValue = 0;
-				keyboardMoveValue = gale::key::keyboard::unknow;
+			bool isActive; //!< If true, we need to filter the up key of ascii element (not control)
+			EventShortCut() :
+			  message(""),
+			  specialKey(),
+			  unicodeValue(0),
+			  keyboardMoveValue(gale::key::keyboard::unknow),
+			  isActive(false) {
+				// nothing to do
 			};
 			virtual ~EventShortCut() { };
 	};
