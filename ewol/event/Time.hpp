@@ -63,7 +63,7 @@ namespace ewol {
 					return m_timeDeltaCall.toSeconds();
 				};
 		};
-		std::ostream& operator <<(std::ostream& _os, const ewol::event::Time& _obj);
+		etk::Stream& operator <<(etk::Stream& _os, const ewol::event::Time& _obj);
 	}
 }
 

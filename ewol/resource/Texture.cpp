@@ -29,7 +29,7 @@ static int32_t nextP2(int32_t _value) {
 	return val;
 }
 
-void ewol::resource::Texture::init(const std::string& _filename) {
+void ewol::resource::Texture::init(const etk::String& _filename) {
 	gale::Resource::init(_filename);
 }
 void ewol::resource::Texture::init() {
@@ -45,12 +45,23 @@ ewol::resource::Texture::Texture() :
   m_lastSize(1,1),
   m_loaded(false),
   m_lastTypeObject(0),
-  m_lastSizeObject(0) {
+  m_lastSizeObject(0),
+  m_repeat(false),
+  m_filter(ewol::resource::TextureFilter::linear) {
 	addResourceType("ewol::compositing::Texture");
 }
 
 ewol::resource::Texture::~Texture() {
 	removeContext();
+}
+
+
+void ewol::resource::Texture::setRepeat(bool _value) {
+	m_repeat = _value;
+}
+
+void ewol::resource::Texture::setFilterMode(enum ewol::resource::TextureFilter _filter) {
+	m_filter = _filter;
 }
 
 #include <egami/egami.hpp>
@@ -71,37 +82,27 @@ bool ewol::resource::Texture::updateContext() {
 	}
 	int32_t typeObject = GL_RGBA;
 	int32_t sizeObject = GL_UNSIGNED_BYTE;
-	#ifdef EWOL_USE_FBO
-		int32_t sizeByte = 1;
-	#endif
+	int32_t sizeByte = 1;
 	switch (m_data.getType()) {
 		case egami::colorType::RGBA8:
 			typeObject = GL_RGBA;
 			sizeObject = GL_UNSIGNED_BYTE;
-			#ifdef EWOL_USE_FBO
-				sizeByte = 4;
-			#endif
+			sizeByte = 4;
 			break;
 		case egami::colorType::RGB8:
 			typeObject = GL_RGB;
 			sizeObject = GL_UNSIGNED_BYTE;
-			#ifdef EWOL_USE_FBO
-				sizeByte = 3;
-			#endif
+			sizeByte = 3;
 			break;
 		case egami::colorType::RGBAf:
 			typeObject = GL_RGBA;
 			sizeObject = GL_FLOAT;
-			#ifdef EWOL_USE_FBO
-				sizeByte = 16;
-			#endif
+			sizeByte = 16;
 			break;
 		case egami::colorType::RGBf:
 			typeObject = GL_RGBA;
 			sizeObject = GL_FLOAT;
-			#ifdef EWOL_USE_FBO
-				sizeByte = 12;
-			#endif
+			sizeByte = 12;
 			break;
 		case egami::colorType::unsignedInt16:
 		case egami::colorType::unsignedInt32:
@@ -145,29 +146,32 @@ bool ewol::resource::Texture::updateContext() {
 	// TODO : check error ???
 	glBindTexture(GL_TEXTURE_2D, m_texId);
 	if (m_loaded == false) {
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-		// TODO : Check error ???
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		//--- mode nearest
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // 18/20
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//--- Mode linear
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // 16/17
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		if (m_repeat == false) {
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+		} else {
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+		}
+		if (m_filter == ewol::resource::TextureFilter::linear) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		} else {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		}
 	}
 	//glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 	echrono::Steady toc1 = echrono::Steady::now();
 	EWOL_VERBOSE("    BIND                 ==> " << (toc1 - tic));
-	//egami::store(m_data, std::string("~/texture_") + etk::to_string(getId()) + ".bmp");
+	//egami::store(m_data, etk::String("~/texture_") + etk::toString(getId()) + ".bmp");
 	#if    defined(__TARGET_OS__Android) \
 	    || defined(__TARGET_OS__IOs)
 		// On some embended target, the texture size must be square of 2:
 		if (m_loaded == false) {
 			// 1: Create the square 2 texture:
 			int32_t bufferSize = m_data.getGPUSize().x() * m_data.getGPUSize().y() * 8;
-			static std::vector<float> tmpData;
+			static etk::Vector<float> tmpData;
 			if (tmpData.size() < bufferSize) {
 				tmpData.resize(bufferSize, 0.0f);
 			}
@@ -217,6 +221,7 @@ bool ewol::resource::Texture::updateContext() {
 			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		#else
 			//3 Flush all time the data:
+			echrono::Steady tic1 = echrono::Steady::now();
 			glTexSubImage2D(GL_TEXTURE_2D, // Target
 			                0, // Level
 			                0, // x offset
@@ -225,7 +230,9 @@ bool ewol::resource::Texture::updateContext() {
 			                m_data.getHeight(),
 			                typeObject, // format
 			                sizeObject, // type
-			                m_data.getTextureDataPointer() );
+			                (void*)((char*)m_data.getTextureDataPointer()) );
+			echrono::Steady toc2 = echrono::Steady::now();
+			EWOL_INFO("    updateContext [STOP] ==> " << (toc2 - tic1));
 		#endif
 	#else
 		// This is the normal case ==> set the image and after set just the update of the data
@@ -254,7 +261,7 @@ bool ewol::resource::Texture::updateContext() {
 	// now the data is loaded
 	m_loaded = true;
 	echrono::Steady toc = echrono::Steady::now();
-	EWOL_VERBOSE("    updateContext [STOP] ==> " << (toc - toc1));
+	//EWOL_ERROR("    updateContext [STOP] ==> " << (toc - toc1));
 	return true;
 }
 

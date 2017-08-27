@@ -20,7 +20,7 @@ void appl::WidgetDisplay::init() {
 	m_compositing.setSource("DATA:SnowFlake.svg", ivec2(128,128));
 	getObjectManager().periodicCall.connect(sharedFromThis(), &appl::WidgetDisplay::periodicCall);
 	for (int32_t iii=0; iii<250 ; ++iii) {
-		m_elements.push_back(appl::WidgetDisplay::Element());
+		m_elements.pushBack(appl::WidgetDisplay::Element());
 	}
 }
 

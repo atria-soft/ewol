@@ -16,7 +16,7 @@
 namespace appl {
 	class MainWindows : public ewol::widget::Windows {
 		private:
-			std::vector<esignal::Connection> m_listConnection;
+			etk::Vector<esignal::Connection> m_listConnection;
 			ewol::widget::ComposerShared m_composer;
 			int32_t m_idWidget;
 			

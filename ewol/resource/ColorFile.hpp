@@ -26,7 +26,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the file needed
 				 */
 				ColorFile();
-				void init(const std::string& _filename);
+				void init(const etk::String& _filename);
 			public:
 				DECLARE_RESOURCE_NAMED_FACTORY(ColorFile);
 				/**
@@ -46,7 +46,7 @@ namespace ewol {
 				 * @param[in] _paramName Name of the color.
 				 * @return A unique ID of the color (or -1 if an error occured).
 				 */
-				int32_t request(const std::string& _paramName);
+				int32_t request(const etk::String& _paramName);
 				/**
 				 * @brief Get the associated color of the ID.
 				 * @param[in] _Id Id of the color.
@@ -62,7 +62,7 @@ namespace ewol {
 				 * @brief Get All color name
 				 * @return list of all color existing
 				 */
-				std::vector<std::string> getColors() const {
+				etk::Vector<etk::String> getColors() const {
 					return m_list.getKeys();
 				}
 			public: // herited function:

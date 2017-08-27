@@ -24,7 +24,7 @@ namespace ewol {
 			protected:
 				TextureFile();
 				void init();
-				void init(std::string _genName, const std::string& _fileName, const ivec2& _size);
+				void init(etk::String _genName, const etk::String& _fileName, const ivec2& _size);
 			public:
 				virtual ~TextureFile() { };
 			public:
@@ -40,7 +40,7 @@ namespace ewol {
 				 * @param[in] _sizeRegister size register in named (When you preaload the images the size write here will be )
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::TextureFile> create(const std::string& _filename,
+				static ememory::SharedPtr<ewol::resource::TextureFile> create(const etk::String& _filename,
 				                                                           ivec2 _size=ewol::resource::TextureFile::sizeAuto,
 				                                                           ivec2 _sizeRegister=ewol::resource::TextureFile::sizeAuto);
 		};

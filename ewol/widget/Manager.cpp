@@ -28,7 +28,7 @@
 #include <ewol/widget/Select.hpp>
 #include <ewol/widget/Spin.hpp>
 #include <ewol/widget/Menu.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 
 ewol::widget::Manager::Manager() :
   m_haveRedraw(true) {
@@ -164,7 +164,7 @@ bool ewol::widget::Manager::isDrawingNeeded() {
 }
 
 // element that generate the list of elements
-void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
+void ewol::widget::Manager::addWidgetCreator(const etk::String& _name,
                                              ewol::widget::Manager::widgetCreatorFunction _pointer,
                                              ewol::widget::Manager::widgetCreatorFunctionXml _pointerXml) {
 	if (    _pointer == nullptr
@@ -172,7 +172,7 @@ void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
 		return;
 	}
 	//Keep name in lower case :
-	std::string nameLower = etk::tolower(_name);
+	etk::String nameLower = etk::tolower(_name);
 	bool find = false;
 	{
 		auto it = m_creatorList.find(nameLower);
@@ -198,8 +198,8 @@ void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
 	m_creatorListXml.insert(make_pair(nameLower, _pointerXml));
 }
 
-ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
-	std::string nameLower = etk::tolower(_name);
+ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name) {
+	etk::String nameLower = etk::tolower(_name);
 	auto it = m_creatorList.find(nameLower);
 	if (it != m_creatorList.end()) {
 		if (it->second != nullptr) {
@@ -210,8 +210,8 @@ ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name) {
 	return nullptr;
 }
 
-ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name, const exml::Element& _node) {
-	std::string nameLower = etk::tolower(_name);
+ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name, const exml::Element& _node) {
+	etk::String nameLower = etk::tolower(_name);
 	auto it = m_creatorListXml.find(nameLower);
 	if (it != m_creatorListXml.end()) {
 		if (it->second != nullptr) {
@@ -222,8 +222,8 @@ ewol::WidgetShared ewol::widget::Manager::create(const std::string& _name, const
 	return nullptr;
 }
 
-bool ewol::widget::Manager::exist(const std::string& _name) {
-	std::string nameLower = etk::tolower(_name);
+bool ewol::widget::Manager::exist(const etk::String& _name) {
+	etk::String nameLower = etk::tolower(_name);
 	auto it = m_creatorList.find(nameLower);
 	if (it == m_creatorList.end()) {
 		return false;
@@ -231,8 +231,8 @@ bool ewol::widget::Manager::exist(const std::string& _name) {
 	return true;
 }
 
-std::string ewol::widget::Manager::list() {
-	std::string tmpVal;
+etk::String ewol::widget::Manager::list() {
+	etk::String tmpVal;
 	for (auto &it : m_creatorList) {
 		if (tmpVal.size() != 0) {
 			tmpVal += ",";

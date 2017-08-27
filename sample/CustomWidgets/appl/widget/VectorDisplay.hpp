@@ -29,9 +29,9 @@ namespace appl {
 				void onRegenerateDisplay() override;
 			//! [EWOL_SAMPLE_CW_HEADER]
 			protected:
-				std::vector<float> m_data; //!< data that might be displayed
+				etk::Vector<float> m_data; //!< data that might be displayed
 			public:
-				void setValue(const std::vector<float>& _data);
+				void setValue(const etk::Vector<float>& _data);
 			protected:
 				bool m_autoDisplay;
 			public:

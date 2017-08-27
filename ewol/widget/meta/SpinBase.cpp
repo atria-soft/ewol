@@ -68,7 +68,7 @@ void ewol::widget::SpinBase::updateGui() {
 	markToRedraw();
 	requestUpdateSize();
 	if (m_widgetEntry == nullptr) {
-		std::string shaper;
+		etk::String shaper;
 		if (m_config != nullptr) {
 			shaper = m_config->getString(m_confIdEntryShaper);
 			EWOL_VERBOSE("shaper entry : " << shaper);
@@ -80,7 +80,7 @@ void ewol::widget::SpinBase::updateGui() {
 		}
 	}
 	if (m_widgetButtonDown == nullptr) {
-		std::string shaper;
+		etk::String shaper;
 		if (m_config != nullptr) {
 			shaper = m_config->getString(m_confIdDownShaper);
 			EWOL_VERBOSE("shaper button DOWN : " << shaper);
@@ -89,13 +89,13 @@ void ewol::widget::SpinBase::updateGui() {
 		if (m_widgetButtonDown != nullptr) {
 			m_widgetButtonDown->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonDown->propertyFill.set(bvec2(true,true));
-			std::string data = m_config->getString(m_confIdDownData);
+			etk::String data = m_config->getString(m_confIdDownData);
 			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonDown->setSubWidget(widget);
 		}
 	}
 	if (m_widgetButtonUp == nullptr) {
-		std::string shaper;
+		etk::String shaper;
 		if (m_config != nullptr) {
 			shaper = m_config->getString(m_confIdUpShaper);
 			EWOL_VERBOSE("shaper button UP : " << shaper);
@@ -104,7 +104,7 @@ void ewol::widget::SpinBase::updateGui() {
 		if (m_widgetButtonUp != nullptr) {
 			m_widgetButtonUp->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonUp->propertyFill.set(bvec2(true,true));
-			std::string data = m_config->getString(m_confIdUpData);
+			etk::String data = m_config->getString(m_confIdUpData);
 			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonUp->setSubWidget(widget);
 		}

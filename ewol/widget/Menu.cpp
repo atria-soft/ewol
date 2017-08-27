@@ -47,15 +47,15 @@ void ewol::widget::Menu::clear() {
 	m_listElement.clear();
 }
 
-int32_t ewol::widget::Menu::addTitle(const std::string& _label,
-                                     const std::string& _image,
-                                     const std::string& _message) {
+int32_t ewol::widget::Menu::addTitle(const etk::String& _label,
+                                     const etk::String& _image,
+                                     const etk::String& _message) {
 	return add(-1, _label, _image, _message);
 }
 
 static const char* eventButtonPressed = "menu-local-pressed";
 
-int32_t ewol::widget::Menu::get(const std::string& _label) {
+int32_t ewol::widget::Menu::get(const etk::String& _label) {
 	for (auto &it : m_listElement) {
 		if (it.m_label == _label) {
 			return it.m_localId;
@@ -65,9 +65,9 @@ int32_t ewol::widget::Menu::get(const std::string& _label) {
 }
 
 int32_t ewol::widget::Menu::add(int32_t _parent,
-                                const std::string& _label,
-                                const std::string& _image,
-                                const std::string& _message) {
+                                const etk::String& _label,
+                                const etk::String& _image,
+                                const etk::String& _message) {
 	// try to find one already created:
 	int32_t previous = get(_label);
 	if (previous != -1) {
@@ -86,7 +86,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 			return tmpObject.m_localId;
 		}
 		if (tmpObject.m_image.size()!=0) {
-			std::string composeString ="<sizer mode='hori' expand='true,false' fill='true,true'>\n";
+			etk::String composeString ="<sizer mode='hori' expand='true,false' fill='true,true'>\n";
 			if (etk::end_with(tmpObject.m_image, ".edf") == true) {
 				composeString+="    <image src='" + tmpObject.m_image + "' size='8,8mm' distance-field='true'/>\n";
 			} else {
@@ -106,7 +106,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 		myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
 		tmpObject.m_widgetPointer = myButton;
 	}
-	m_listElement.push_back(tmpObject);
+	m_listElement.pushBack(tmpObject);
 	return tmpObject.m_localId;
 }
 
@@ -136,7 +136,7 @@ int32_t ewol::widget::Menu::addSpacer(int32_t _parent) {
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(mySpacer);
 	}
-	m_listElement.push_back(tmpObject);
+	m_listElement.pushBack(tmpObject);
 	return tmpObject.m_localId;
 }
 
@@ -240,7 +240,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 					// add it in the widget list
 					mySizer->subWidgetAdd(myButton);
 					if (it2->m_image.size() != 0) {
-						std::string composeString;
+						etk::String composeString;
 						composeString+= "    <sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n";
 						if (etk::end_with(it2->m_image, ".edf") == true) {
 							composeString+="        <image src='" + it2->m_image + "' size='8,8mm' distance-field='true'/>\n";
@@ -253,7 +253,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 					} else {
 						if (menuHaveImage == true) {
 							myButton->setSubWidget(ewol::widget::composerGenerateString(
-							        std::string() +
+							        etk::String() +
 							        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
 							        "		<spacer min-size='8,0mm'/>\n"
 							        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
@@ -262,7 +262,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 						} else {
 							ewol::widget::LabelShared tmpLabel = widget::Label::create();
 							if (tmpLabel != nullptr) {
-								tmpLabel->propertyValue.set(std::string("<left>") + it2->m_label + "</left>\n");
+								tmpLabel->propertyValue.set(etk::String("<left>") + it2->m_label + "</left>\n");
 								tmpLabel->propertyExpand.set(bvec2(true,false));
 								tmpLabel->propertyFill.set(bvec2(true,true));
 								myButton->setSubWidget(tmpLabel);
@@ -296,7 +296,7 @@ bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
 			// trash here all that is not element
 			continue;
 		}
-		std::string widgetName = pNode.getValue();
+		etk::String widgetName = pNode.getValue();
 		EWOL_INFO("Get node : " << pNode);
 		if (widgetName == "elem") {
 			// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
@@ -308,7 +308,7 @@ bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
 					// trash here all that is not element
 					continue;
 				}
-				std::string widgetName2 = pNode2.getValue();
+				etk::String widgetName2 = pNode2.getValue();
 				if (widgetName2 == "elem") {
 					// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
 					add(idMenu, pNode2.attributes["title"], pNode2.attributes["image"], pNode2.attributes["event"]);

@@ -15,10 +15,10 @@ namespace ewol {
 		class elementPL {
 			public :
 				bool m_group;
-				std::string m_label;
+				etk::String m_label;
 				int32_t m_refId;
-				std::string m_image;
-				elementPL(std::string& _label, int32_t _refId, std::string& _image, bool _isGroup) :
+				etk::String m_image;
+				elementPL(etk::String& _label, int32_t _refId, etk::String& _image, bool _isGroup) :
 				  m_group(_isGroup),
 				  m_label(_label),
 				  m_refId(_refId),
@@ -40,17 +40,17 @@ namespace ewol {
 				
 			private:
 				int32_t m_idSelected;
-				std::vector<ememory::SharedPtr<ewol::widget::elementPL>> m_list;
+				etk::Vector<ememory::SharedPtr<ewol::widget::elementPL>> m_list;
 			protected:
 				ParameterList();
 				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(ParameterList, "ParameterList");
 				virtual ~ParameterList();
-				void setLabel(std::string _newLabel);
+				void setLabel(etk::String _newLabel);
 			// drawing capabilities ....
 			private:
-				std::vector<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
+				etk::Vector<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
 			public:
 				void addOObject(const ememory::SharedPtr<ewol::Compositing>& _newObject, int32_t _pos=-1);
 				void clearOObjectList();
@@ -61,8 +61,8 @@ namespace ewol {
 				int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 				int32_t m_displayCurrentNbLine; //!< Number of line in the display
 			public:
-				void menuAdd(std::string& _label, int32_t _refId, std::string& _image);
-				void menuAddGroup(std::string& _label);
+				void menuAdd(etk::String& _label, int32_t _refId, etk::String& _image);
+				void menuAddGroup(etk::String& _label);
 				void menuClear();
 				void menuSeparator();
 				

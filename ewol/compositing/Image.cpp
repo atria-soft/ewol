@@ -15,7 +15,7 @@ const int32_t ewol::compositing::Image::m_vboIdCoordTex(1);
 const int32_t ewol::compositing::Image::m_vboIdColor(2);
 #define NB_VBO (3)
 
-ewol::compositing::Image::Image(const std::string& _imageName,
+ewol::compositing::Image::Image(const etk::String& _imageName,
                                 bool _df,
                                 int32_t _size) :
   m_filename(_imageName),
@@ -268,7 +268,7 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 	m_VBO->flush();
 }
 
-void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
+void ewol::compositing::Image::setSource(const etk::String& _newFile, const vec2& _size) {
 	clear();
 	if (    m_filename == _newFile
 	     && m_requestSize == _size) {

@@ -21,7 +21,7 @@ class MainApplication : public ewol::context::Application {
 		virtual void onCreate(ewol::Context& _context) {
 			APPL_INFO(" == > CREATE ... (START) [" << gale::getBoardType() << "] (" << gale::getCompilationMode() << ") (BEGIN)");
 			for( int32_t iii=0 ; iii<_context.getCmd().size(); iii++) {
-				std::string tmpppp = _context.getCmd().get(iii);
+				etk::String tmpppp = _context.getCmd().get(iii);
 				if (    tmpppp == "-h"
 				     || tmpppp == "--help") {
 					APPL_INFO("  -t c-flags-file-name" );

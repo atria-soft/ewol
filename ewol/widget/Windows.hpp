@@ -22,8 +22,8 @@ namespace ewol {
 		 */
 		class Windows : public ewol::Widget {
 			public:
-				eproperty::Value<std::string> propertyColorConfiguration; //!< Configuration file of the windows theme
-				eproperty::Value<std::string> propertyTitle; //!< Current title of the windows
+				eproperty::Value<etk::String> propertyColorConfiguration; //!< Configuration file of the windows theme
+				eproperty::Value<etk::String> propertyTitle; //!< Current title of the windows
 			protected:
 				ememory::SharedPtr<ewol::resource::ColorFile> m_resourceColor; //!< theme color property (name of file in @ref propertyColorConfiguration)
 				int32_t m_colorBg; //!< Default background color of the windows
@@ -69,7 +69,7 @@ namespace ewol {
 				void onChangeSize() override;
 				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
-				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
+				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
 				void drawWidgetTree(int32_t _level=0) override;
 			protected:
 				/**

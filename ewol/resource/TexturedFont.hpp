@@ -20,12 +20,12 @@ namespace ewol {
 			BoldItalic,
 		};
 	}
-	std::ostream& operator <<(std::ostream& _os, enum ewol::font::mode _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum ewol::font::mode _obj);
 	
 	namespace resource {
 		class TexturedFont : public ewol::resource::Texture {
 			private:
-				std::string m_fileName[4];
+				etk::String m_fileName[4];
 				int32_t m_size;
 				int32_t m_height[4];
 				// specific element to have the the know if the specify element is known...
@@ -35,14 +35,14 @@ namespace ewol {
 				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
 				GlyphProperty m_emptyGlyph;
-				std::vector<GlyphProperty> m_listElement[4];
+				etk::Vector<GlyphProperty> m_listElement[4];
 			private:
 				// for the texture generation :
 				ivec2 m_lastGlyphPos[4];
 				int32_t m_lastRawHeigh[4];
 			protected:
 				TexturedFont();
-				void init(const std::string& _fontName);
+				void init(const etk::String& _fontName);
 			public:
 				DECLARE_RESOURCE_NAMED_FACTORY(TexturedFont);
 				virtual ~TexturedFont();

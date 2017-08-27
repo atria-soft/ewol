@@ -164,7 +164,7 @@ namespace ewol {
 				void calculateMinMaxSize() override {
 					calculateMinMaxSizePadded();
 				}
-				ewol::ObjectShared getSubObjectNamed(const std::string& _objectName) override;
+				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
 				bool loadXML(const exml::Element& _node) override;
 				void setOffset(const vec2& _newVal) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;

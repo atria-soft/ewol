@@ -34,15 +34,15 @@ namespace ewol {
 		class Entry : public ewol::Widget {
 			public: // Event list
 				esignal::Signal<> signalClick; //!< bang on click the entry box
-				esignal::Signal<std::string> signalEnter; //!< Enter key is pressed
-				esignal::Signal<std::string> signalModify; //!< data change
+				esignal::Signal<etk::String> signalEnter; //!< Enter key is pressed
+				esignal::Signal<etk::String> signalModify; //!< data change
 			public: // propertie list
 				eproperty::Value<bool> propertyPassword; //!< Disable display of the content of the entry
-				eproperty::Value<std::string> propertyShape;
-				eproperty::Value<std::string> propertyValue; //!< string that must be displayed
+				eproperty::Value<etk::String> propertyShape;
+				eproperty::Value<etk::String> propertyValue; //!< string that must be displayed
 				eproperty::Range<int32_t> propertyMaxCharacter; //!< number max of xharacter in the list
-				eproperty::Value<std::string> propertyRegex; //!< regular expression value
-				eproperty::Value<std::string> propertyTextWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
+				eproperty::Value<etk::String> propertyRegex; //!< regular expression value
+				eproperty::Value<etk::String> propertyTextWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			private:
 				ewol::compositing::Shaper m_shaper;
 				int32_t m_colorIdTextFg; //!< color property of the text foreground
@@ -68,7 +68,7 @@ namespace ewol {
 				 * @brief internal check the value with RegExp checking
 				 * @param[in] _newData The new string to display
 				 */
-				void setInternalValue(const std::string& _newData);
+				void setInternalValue(const etk::String& _newData);
 			private:
 				std::regex m_regex; //!< regular expression to check content
 			private:
@@ -123,7 +123,7 @@ namespace ewol {
 				 */
 				void periodicCall(const ewol::event::Time& _event);
 			private: // callback functions
-				void onCallbackShortCut(const std::string& _value);
+				void onCallbackShortCut(const etk::String& _value);
 				void onCallbackEntryClean();
 				void onCallbackCut();
 				void onCallbackCopy();

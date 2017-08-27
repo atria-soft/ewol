@@ -174,7 +174,7 @@ int32_t ewol::context::InputManager::localGetDestinationId(enum gale::key::type 
 				ewol::WidgetShared tmpWidget = m_eventInputSaved[iii].curentWidgetEvent.lock();
 				if (tmpWidget == _destWidget) {
 					if (iii != _realInputId) {
-						lastMinimum = std::max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
+						lastMinimum = etk::max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
 					}
 				}
 			}

@@ -13,7 +13,7 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/widget/meta/StdPopUp.hpp>
 
-void ewol::tools::message::create(enum ewol::tools::message::type _type, const std::string& _message) {
+void ewol::tools::message::create(enum ewol::tools::message::type _type, const etk::String& _message) {
 	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();
 	if (tmpPopUp == nullptr) {
 		EWOL_ERROR("Can not create a simple pop-up");
@@ -46,19 +46,19 @@ void ewol::tools::message::create(enum ewol::tools::message::type _type, const s
 	windows->popUpWidgetPush(tmpPopUp);
 }
 
-void ewol::tools::message::displayInfo(const std::string& _message) {
+void ewol::tools::message::displayInfo(const etk::String& _message) {
 	ewol::tools::message::create(ewol::tools::message::type::info, _message);
 }
 
-void ewol::tools::message::displayWarning(const std::string& _message) {
+void ewol::tools::message::displayWarning(const etk::String& _message) {
 	ewol::tools::message::create(ewol::tools::message::type::warning, _message);
 }
 
-void ewol::tools::message::displayError(const std::string& _message) {
+void ewol::tools::message::displayError(const etk::String& _message) {
 	ewol::tools::message::create(ewol::tools::message::type::error, _message);
 }
 
-void ewol::tools::message::displayCritical(const std::string& _message) {
+void ewol::tools::message::displayCritical(const etk::String& _message) {
 	ewol::tools::message::create(ewol::tools::message::type::critical, _message);
 }
 

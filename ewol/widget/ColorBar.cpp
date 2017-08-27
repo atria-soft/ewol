@@ -159,8 +159,8 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
-		relativePos.setValue( std::avg(0.0f, m_size.x(),relativePos.x()),
-		                      std::avg(0.0f, m_size.y(),relativePos.y()) );
+		relativePos.setValue( etk::avg(0.0f, m_size.x(),relativePos.x()),
+		                      etk::avg(0.0f, m_size.y(),relativePos.y()) );
 		if(    gale::key::status::pressSingle == _event.getStatus()
 		    || gale::key::status::move   == _event.getStatus()) {
 			// nothing to do ...

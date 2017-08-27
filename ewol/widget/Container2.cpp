@@ -72,7 +72,7 @@ void ewol::widget::Container2::subWidgetUnLink(int32_t _idWidget) {
 	m_subWidget[_idWidget].reset();
 }
 
-ewol::ObjectShared ewol::widget::Container2::getSubObjectNamed(const std::string& _widgetName) {
+ewol::ObjectShared ewol::widget::Container2::getSubObjectNamed(const etk::String& _widgetName) {
 	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_widgetName);
 	if (tmpObject != nullptr) {
 		return tmpObject;
@@ -186,7 +186,7 @@ bool ewol::widget::Container2::loadXML(const exml::Element& _node) {
 			// trash here all that is not element
 			continue;
 		}
-		std::string widgetName = pNode.getValue();
+		etk::String widgetName = pNode.getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in: [" << getWidgetManager().list() << "]" );
 			continue;

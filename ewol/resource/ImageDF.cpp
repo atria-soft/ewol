@@ -22,7 +22,7 @@ void ewol::resource::ImageDF::init() {
 	ewol::resource::Texture::init();
 }
 
-void ewol::resource::ImageDF::init(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) {
+void ewol::resource::ImageDF::init(etk::String _genName, const etk::String& _tmpfileName, const ivec2& _size) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
@@ -51,13 +51,13 @@ void ewol::resource::ImageDF::init(std::string _genName, const std::string& _tmp
 void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
-	std::vector<short> xdist(size);
-	std::vector<short> ydist(size);
-	std::vector<double> gx(size);
-	std::vector<double> gy(size);
-	std::vector<double> data(size);
-	std::vector<double> outside(size);
-	std::vector<double> inside(size);
+	etk::Vector<short> xdist(size);
+	etk::Vector<short> ydist(size);
+	etk::Vector<double> gx(size);
+	etk::Vector<double> gy(size);
+	etk::Vector<double> data(size);
+	etk::Vector<double> outside(size);
+	etk::Vector<double> inside(size);
 	// Convert img into double (data)
 	double img_min = 255, img_max = -255;
 	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
@@ -150,7 +150,7 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const std::string& _filename, ivec2 _size) {
+ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const etk::String& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
 		ememory::SharedPtr<ewol::resource::ImageDF> object(new ewol::resource::ImageDF());
@@ -170,7 +170,7 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 		_size.setY(-1);
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	std::string TmpFilename = _filename;
+	etk::String TmpFilename = _filename;
 	if (etk::end_with(_filename, ".svg") == false) {
 		_size = ivec2(-1,-1);
 	}
@@ -185,9 +185,9 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
 		TmpFilename += ":";
-		TmpFilename += etk::to_string(_size.x());
+		TmpFilename += etk::toString(_size.x());
 		TmpFilename += "x";
-		TmpFilename += etk::to_string(_size.y());
+		TmpFilename += etk::toString(_size.y());
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);

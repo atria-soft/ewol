@@ -23,8 +23,8 @@ namespace ewol {
 		 */
 		class WidgetScrolled : public ewol::Widget {
 			public: // properties:
-				eproperty::Value<std::string> propertyShapeVert; //!< Vertical shaper name
-				eproperty::Value<std::string> propertyShapeHori; //!< Horizontal shaper name
+				eproperty::Value<etk::String> propertyShapeVert; //!< Vertical shaper name
+				eproperty::Value<etk::String> propertyShapeHori; //!< Horizontal shaper name
 				// TODO : All property
 			public:
 				enum scrollingMode {
@@ -123,7 +123,7 @@ namespace ewol {
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 				 */
 				void setLimitScrolling(float _poucentageLimit) {
-					_poucentageLimit = std::avg(0.1f, _poucentageLimit,1.0f);
+					_poucentageLimit = etk::avg(0.1f, _poucentageLimit,1.0f);
 					m_limitScrolling = vec2(_poucentageLimit, _poucentageLimit);
 				};
 				/**
@@ -131,7 +131,7 @@ namespace ewol {
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end for axis specific...
 				 */
 				void setLimitScrolling(const vec2& _poucentageLimit) {
-					m_limitScrolling = vec2(std::avg(0.1f, _poucentageLimit.x(),1.0f), std::avg(0.1f, _poucentageLimit.y(),1.0f));
+					m_limitScrolling = vec2(etk::avg(0.1f, _poucentageLimit.x(),1.0f), etk::avg(0.1f, _poucentageLimit.y(),1.0f));
 				};
 			protected:
 				virtual void onChangePropertyShapeVert();

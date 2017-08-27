@@ -6,7 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <exml/exml.hpp>
 #include <mutex>
 #include <ememory/memory.hpp>
@@ -35,7 +35,7 @@ template<class TYPE_OBJECT> static void baseInit(const ememory::SharedPtr<TYPE_O
 	return;
 }
 
-template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const ememory::SharedPtr<TYPE_OBJECT>& _object, const std::string& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
+template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const ememory::SharedPtr<TYPE_OBJECT>& _object, const etk::String& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
 	eproperty::Property* prop(nullptr);
 	eproperty::PropertyType<TYPE_VAL>* propType(nullptr);
 	if (_object == nullptr) {
@@ -108,7 +108,7 @@ exit_on_error:
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \
 		} \
-		baseInit(object, "name", std::string(uniqueName), _all... ); \
+		baseInit(object, "name", etk::String(uniqueName), _all... ); \
 		object->init(); \
 		if (object->objectHasBeenCorectlyInit() == false) { \
 			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
@@ -129,7 +129,7 @@ namespace ewol {
 		public: // Event list
 			
 		public: // propertie list
-			eproperty::Value<std::string> propertyName; //!< name of the element ...
+			eproperty::Value<etk::String> propertyName; //!< name of the element ...
 		private:
 			static size_t m_valUID; //!< Static used for the unique ID definition
 		private:
@@ -187,7 +187,7 @@ namespace ewol {
 			 */
 			virtual void removeParent();
 		private:
-			std::vector<const char*> m_listType;
+			etk::Vector<const char*> m_listType;
 		public:
 			/**
 			 * @brief get the current Object type of the Object
@@ -198,13 +198,13 @@ namespace ewol {
 			 * @brief Get the herarchie of the Object type.
 			 * @return descriptive string.
 			 */
-			std::string getTypeDescription() const;
+			etk::String getTypeDescription() const;
 			/**
 			 * @brief check  if the element herited from a specific type
 			 * @param[in] _type Type to check.
 			 * @return true if the element is compatible.
 			 */
-			bool isTypeCompatible(const std::string& _type) const;
+			bool isTypeCompatible(const etk::String& _type) const;
 		protected:
 			/**
 			 * @brief Add a type of the list of Object.
@@ -233,7 +233,7 @@ namespace ewol {
 			};
 		public:
 			// TODO : Rework the position on this function ... This is a convignent function ...
-			bool propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
+			bool propertySetOnWidgetNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value);
 		public:
 			/**
 			 * @brief load attribute properties with an XML node.
@@ -290,13 +290,13 @@ namespace ewol {
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
-			static ewol::ObjectShared getObjectNamed(const std::string& _objectName);
+			static ewol::ObjectShared getObjectNamed(const etk::String& _objectName);
 			/**
 			 * @brief Retrive an object with his name (in the global list)
 			 * @param[in] _name Name of the object
 			 * @return the requested object or nullptr
 			 */
-			virtual ewol::ObjectShared getSubObjectNamed(const std::string& _objectName);
+			virtual ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName);
 		protected:
 			// TODO : Create a template ...
 			/**
@@ -317,11 +317,11 @@ namespace ewol {
 					EWOL_ERROR("Can not connect signal ...");
 					return;
 				}
-				m_callerList.push_back(std::make_pair(ewol::ObjectWeak(_obj), std::connect(_func, obj2.get())));
+				m_callerList.pushBack(etk::makePair(ewol::ObjectWeak(_obj), std::connect(_func, obj2.get())));
 			}
 			*/
 	};
-	bool propertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value);
+	bool propertySetOnObjectNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value);
 };
 
 /**

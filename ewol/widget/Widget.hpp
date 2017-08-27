@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/types.hpp>
 #include <etk/math/Vector2D.hpp>
 
@@ -55,7 +55,7 @@ namespace ewol {
 	// TODO: change position of this ...
 	class EventShortCut {
 		public:
-			std::string message; //!< data link with the event
+			etk::String message; //!< data link with the event
 			gale::key::Special specialKey; //!< special board key
 			char32_t unicodeValue; //!< 0 if not used
 			enum gale::key::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
@@ -71,7 +71,7 @@ namespace ewol {
 			virtual ~EventShortCut() { };
 	};
 	/**
-	 * @brief Widget class is the main widget interface, it hase some generic properties: 
+	 * @brief Widget class is the main widget interface, it has some generic properties: 
 	 * :** known his parent
 	 * :** Can be display at a special position with a special scale
 	 * :** Can get focus
@@ -85,14 +85,14 @@ namespace ewol {
 			eproperty::Value<gale::Dimension> propertyMinSize; //!< user define the minimum size of the widget
 			eproperty::Value<gale::Dimension> propertyMaxSize; //!< user define the maximum size of the widget
 			eproperty::Value<bvec2> propertyExpand; //!< the widget will expand if possible
-			eproperty::Value<bvec2> propertyFill; //!< the widget will fill all the space provided by the parrent.
+			eproperty::Value<bvec2> propertyFill; //!< the widget will fill all the space provided by the parent.
 			eproperty::Value<bool> propertyHide; //!< hide a widget on the display
 			eproperty::List<enum ewol::gravity> propertyGravity; //!< Gravity of the widget
 			eproperty::Value<bool> propertyCanFocus; //!< the focus can be done on this widget
 		protected:
 			/**
 			 * @brief Constructor of the widget classes
-			 * @return (no execption generated (not managed in embended platform))
+			 * @return (no exception generated (not managed in embedded platform))
 			 */
 			Widget();
 		public:
@@ -109,14 +109,14 @@ namespace ewol {
 			vec2 m_maxSize; //!< internal: maximum size of the widget
 		public:
 			/**
-			 * @brief convert the absolute position in the local Position (Relative)
-			 * @param[in] _pos Absolute position that you request convertion
-			 * @return the relative position
+			 * @brief Convert the absolute position in the local Position (Relative)
+			 * @param[in] _pos Absolute position that you request conversion.
+			 * @return The relative position.
 			 */
 			virtual vec2 relativePosition(const vec2& _pos);
 			/**
-			 * @brief Parent have set the size and the origin. the container need to update the subwidget property
-			 * @note : INTERNAL EWOL SYSTEM
+			 * @brief Parent have set the size and the origin. The container need to update the child widget property
+			 * @note INTERNAL EWOL SYSTEM
 			 */
 			virtual void onChangeSize();
 			virtual void calculateSize() {};
@@ -152,7 +152,7 @@ namespace ewol {
 			 */
 			virtual vec2 getCalculateMaxSize();
 		protected:
-			vec2 m_offset; //!< Offset of the display in the viewport
+			vec2 m_offset; //!< Offset of the display in the view-port
 		public:
 			/**
 			 * @brief set the zoom property of the widget.
@@ -189,15 +189,15 @@ namespace ewol {
 			vec2 m_origin; //!< internal ... I do not really known how if can use it ...
 		public:
 			/**
-			 * @brief set origin at the widget (must be an parrent widget that set this parameter).
-			 * This represent the absolute origin in the program windows
-			 * @param[in] _pos Position of the origin
+			 * @brief Set origin at the widget (must be an parent widget that set this parameter).
+			 * This represent the absolute origin in the program windows.
+			 * @param[in] _pos Position of the origin.
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual void setOrigin(const vec2& _pos);
 			/**
-			 * @brief get the origin (obsolute position in the windows)
-			 * @return coordonate of the origin requested
+			 * @brief Get the origin (absolute position in the windows).
+			 * @return Coordinate of the origin requested.
 			 */
 			virtual vec2 getOrigin();
 		public:
@@ -227,7 +227,7 @@ namespace ewol {
 		public:
 			/**
 			 * @brief get the expend capabilities (x&y)
-			 * @return 2D boolean repensent the capacity to expend
+			 * @return 2D boolean represents the capacity to expend
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual bvec2 canExpand();
@@ -268,7 +268,7 @@ namespace ewol {
 			virtual void keepFocus();
 		protected:
 			/**
-			 * @brief Event of the focus has been grep by the current widget
+			 * @brief Event of the focus has been grabed by the current widget
 			 */
 			virtual void onGetFocus() {};
 			/**
@@ -300,23 +300,23 @@ namespace ewol {
 		// -- keyboard event properties Area
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			bool m_allowRepeateKeyboardEvent; //!< This remove the repeating keybord event due to the constant pressing key.
+			bool m_allowRepeatKeyboardEvent; //!< This remove the repeating keybord event due to the constant pressing key.
 		public:
 			/**
 			 * @brief get the keyboard repeating event supporting.
 			 * @return true : the event can be repeated.
 			 * @return false : the event must not be repeated.
 			 */
-			virtual bool getKeyboardRepeate() {
-				return m_allowRepeateKeyboardEvent;
+			virtual bool getKeyboardRepeat() {
+				return m_allowRepeatKeyboardEvent;
 			};
 		protected:
 			/**
 			 * @brief set the keyboard repeating event supporting.
 			 * @param[in] _state The repeating status (true: enable, false disable).
 			 */
-			virtual void setKeyboardRepeate(bool _state) {
-				m_allowRepeateKeyboardEvent = _state;
+			virtual void setKeyboardRepeat(bool _state) {
+				m_allowRepeatKeyboardEvent = _state;
 			};
 			/**
 			 * @brief display the virtual keyboard (if needed)
@@ -352,7 +352,7 @@ namespace ewol {
 			virtual bool systemEventInput(ewol::event::InputSystem& _event);
 		protected:
 			/**
-			 * @brief Event on an input of this Widget (finger, mouse, stilet)
+			 * @brief Event on an input of this Widget (finger, mouse, stylet)
 			 * @param[in] _event Event properties
 			 * @return true the event is used
 			 * @return false the event is not used
@@ -384,7 +384,7 @@ namespace ewol {
 			};
 		public:
 			/**
-			 * @brief Event on a past event  == > this event is asynchronous due to all system does not support direct getting datas
+			 * @brief Event on a past event  == > this event is asynchronous due to all system does not support direct getting data.
 			 * @note : need to have focus ...
 			 * @param[in] mode Mode of data requested
 			 */
@@ -394,26 +394,26 @@ namespace ewol {
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
 		public:
-			esignal::Signal<std::string> signalShortcut; //!< signal handle of the message
+			esignal::Signal<etk::String> signalShortcut; //!< signal handle of the message
 		private:
-			std::vector<EventShortCut> m_localShortcut; //!< list of all shortcut in the widget
+			etk::Vector<EventShortCut> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
 			/**
 			 * @brief add a specific shortcut with his description
 			 * @param[in] _descriptiveString Description string of the shortcut
 			 * @param[in] _message massage to generate (or shortcut name)
 			 */
-			virtual void shortCutAdd(const std::string& _descriptiveString,
-			                         const std::string& _message="");
+			virtual void shortCutAdd(const etk::String& _descriptiveString,
+			                         const etk::String& _message="");
 			/**
-			 * @brief remove all curent shortCut
+			 * @brief remove all current shortCut
 			 */
 			virtual void shortCutClean();
 			/**
-			 * @brief remove a specific shortCut whith his event name
-			 * @param[in] _message renerated event name
+			 * @brief remove a specific shortCut with his event name
+			 * @param[in] _message generated event name
 			 */
-			virtual void shortCutRemove(const std::string& _message);
+			virtual void shortCutRemove(const etk::String& _message);
 		public:
 			/**
 			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref onEventKb).
@@ -422,7 +422,7 @@ namespace ewol {
 			 * @param[in] _kbMove Special key of the keyboard.
 			 * @return true if the event has been used.
 			 * @return false if the event has not been used.
-			 * @note To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
+			 * @note To prevent some error when you get an event get it if it is down and Up ...  ==> like this it could not generate some mistake in the error.
 			 */
 			virtual bool onEventShortCut(const gale::key::Special& _special,
 			                             char32_t _unicodeValue,
@@ -452,8 +452,8 @@ namespace ewol {
 		public:
 			/**
 			 * @brief {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
-			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
-			 * @note This function is virtual for the scrolled widget, and the more complicated openGl widget
+			 * This function generate a clipping with the view-port openGL system. Like this a widget draw can not draw over an other widget
+			 * @note This function is virtual for the scrolled widget, and the more complicated openGL widget
 			 * @param[in] _displayProp properties of the current display
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
@@ -473,7 +473,7 @@ namespace ewol {
 			bool m_grabCursor;
 		public:
 			/**
-			 * @brief Grab the cursor : This get all the mouvement of the mouse in PC mode, and generate an ofset instead of a position.
+			 * @brief Grab the cursor : This get all the movement of the mouse in PC mode, and generate an offset instead of a position.
 			 * @note : the generation of the offset is due to the fact the cursor position is forced at the center of the widget.
 			 * @note This done nothing in "Finger" or "Stylet" mode.
 			 */
@@ -484,7 +484,7 @@ namespace ewol {
 			virtual void unGrabCursor();
 			/**
 			 * @brief get the grabbing status of the cursor.
-			 * @return true if the cursor is curently grabbed
+			 * @return true if the cursor is currently grabbed
 			 */
 			virtual bool getGrabStatus();
 		private:
@@ -496,7 +496,7 @@ namespace ewol {
 			 */
 			virtual void setCursor(enum gale::context::cursor _newCursor);
 			/**
-			 * @brief get the currrent cursor.
+			 * @brief get the current cursor.
 			 * @return the type of the cursor.
 			 */
 			virtual enum gale::context::cursor getCursor();
@@ -504,15 +504,15 @@ namespace ewol {
 			virtual bool loadXML(const exml::Element& _node) override;
 		public:
 			/**
-			 * @brief need to be call When the size of the current widget have change  ==> this force the system to recalculate all the widget positions
+			 * @brief Need to be call When the size of the current widget have change  ==> this force the system to recalculate all the widget positions.
 			 */
 			void requestUpdateSize();
 			/**
-			 * @brief get the current Widget Manager
+			 * @brief Get the current Widget Manager.
 			 */
 			ewol::widget::Manager& getWidgetManager();
 			/**
-			 * @brief get the curent Windows
+			 * @brief Get the current Windows.
 			 */
 			ememory::SharedPtr<ewol::widget::Windows> getWindows();
 		protected:

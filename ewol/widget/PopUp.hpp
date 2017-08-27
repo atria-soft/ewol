@@ -23,7 +23,7 @@ namespace ewol {
 		 */
 		class PopUp : public ewol::widget::Container {
 			public: // properties
-				eproperty::Value<std::string> propertyShape; //!< Compositing theme.
+				eproperty::Value<etk::String> propertyShape; //!< Compositing theme.
 				eproperty::Value<bvec2> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 				eproperty::Value<bool> propertyCloseOutEvent; //!< ratio progression of a sliding
 			protected:

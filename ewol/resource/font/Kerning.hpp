@@ -43,7 +43,7 @@ namespace ewol {
 			float     m_value; //!< kerning real offset
 		public:
 			/**
-			 * @brief Simple constructor that allow to allocate the std::vector element
+			 * @brief Simple constructor that allow to allocate the etk::Vector element
 			 */
 			Kerning() :
 			  m_UVal(0),

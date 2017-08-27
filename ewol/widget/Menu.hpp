@@ -20,9 +20,9 @@ namespace ewol {
 				int32_t m_localId;
 				int32_t m_parentId;
 				ewol::WidgetWeak m_widgetPointer;
-				std::string m_label;
-				std::string m_image;
-				std::string m_message;
+				etk::String m_label;
+				etk::String m_image;
+				etk::String m_message;
 		};
 		class Menu;
 		using MenuShared = ememory::SharedPtr<ewol::widget::Menu>;
@@ -32,7 +32,7 @@ namespace ewol {
 		 */
 		class Menu :public ewol::widget::Sizer {
 			public:
-				esignal::Signal<std::string> signalSelect; // event on a menu button or ...
+				esignal::Signal<etk::String> signalSelect; // event on a menu button or ...
 			protected:
 				Menu();
 			public:
@@ -45,14 +45,14 @@ namespace ewol {
 				void subWidgetUnLink(ewol::WidgetShared _newWidget) override;
 				bool loadXML(const exml::Element& _node) override;
 			private:
-				std::vector<ewol::widget::MenuElement> m_listElement;
+				etk::Vector<ewol::widget::MenuElement> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
 				ewol::widget::ContextMenuWeak m_widgetContextMenu;
-				int32_t get(const std::string& _label);
+				int32_t get(const etk::String& _label);
 			public:
 				void clear();
-				int32_t addTitle(const std::string& _label, const std::string& _image="", const std::string& _message = "");
-				int32_t add(int32_t _parent, const std::string& _label, const std::string& _image="", const std::string& _message = "");
+				int32_t addTitle(const etk::String& _label, const etk::String& _image="", const etk::String& _message = "");
+				int32_t add(int32_t _parent, const etk::String& _label, const etk::String& _image="", const etk::String& _message = "");
 				int32_t addSpacer(int32_t _parent=-1);
 				void remove(int32_t _id);
 			private:

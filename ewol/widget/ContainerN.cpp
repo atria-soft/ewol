@@ -74,7 +74,7 @@ int32_t ewol::widget::ContainerN::subWidgetAdd(ewol::WidgetShared _newWidget) {
 		return -1;
 	}
 	_newWidget->setParent(sharedFromThis());
-	m_subWidget.push_back(_newWidget);
+	m_subWidget.pushBack(_newWidget);
 	markToRedraw();
 	requestUpdateSize();
 	// added at the last eelement :
@@ -148,7 +148,7 @@ void ewol::widget::ContainerN::subWidgetRemoveAllDelayed() {
 	subWidgetRemoveAll();
 }
 
-ewol::ObjectShared ewol::widget::ContainerN::getSubObjectNamed(const std::string& _objectName) {
+ewol::ObjectShared ewol::widget::ContainerN::getSubObjectNamed(const etk::String& _objectName) {
 	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
 	if (tmpObject != nullptr) {
 		return tmpObject;
@@ -209,8 +209,8 @@ void ewol::widget::ContainerN::calculateMinMaxSize() {
 				m_subExpend.setY(true);
 			}
 			vec2 tmpSize = it->getCalculateMinSize();
-			m_minSize.setValue( std::max(tmpSize.x(), m_minSize.x()),
-			                    std::max(tmpSize.y(), m_minSize.y()) );
+			m_minSize.setValue( etk::max(tmpSize.x(), m_minSize.x()),
+			                    etk::max(tmpSize.y(), m_minSize.y()) );
 		}
 	}
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
@@ -257,7 +257,7 @@ bool ewol::widget::ContainerN::loadXML(const exml::Element& _node) {
 	// remove previous element :
 	subWidgetRemoveAll();
 	
-	std::string tmpAttributeValue = _node.attributes["lock"];
+	etk::String tmpAttributeValue = _node.attributes["lock"];
 	if (tmpAttributeValue.size()!=0) {
 		propertyLockExpand.set(tmpAttributeValue);
 	}
@@ -273,7 +273,7 @@ bool ewol::widget::ContainerN::loadXML(const exml::Element& _node) {
 			// trash here all that is not element
 			continue;
 		}
-		std::string widgetName = pNode.getValue();
+		etk::String widgetName = pNode.getValue();
 		EWOL_VERBOSE(" t=" << getObjectType() << " Load node name : '" << widgetName << "'");
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );

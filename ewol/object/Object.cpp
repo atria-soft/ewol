@@ -88,10 +88,10 @@ void ewol::Object::addObjectType(const char* _type) {
 		EWOL_ERROR(" try to add a type with no value...");
 		return;
 	}
-	m_listType.push_back(_type);
+	m_listType.pushBack(_type);
 }
-std::string ewol::Object::getTypeDescription() const {
-	std::string ret("ewol::Object");
+etk::String ewol::Object::getTypeDescription() const {
+	etk::String ret("ewol::Object");
 	for(auto element : m_listType) {
 		ret += "|";
 		ret += element;
@@ -99,7 +99,7 @@ std::string ewol::Object::getTypeDescription() const {
 	return ret;
 }
 
-bool ewol::Object::isTypeCompatible(const std::string& _type) const {
+bool ewol::Object::isTypeCompatible(const etk::String& _type) const {
 	if (_type == "ewol::Object") {
 		return true;
 	}
@@ -144,7 +144,7 @@ bool ewol::Object::storeXML(exml::Element& _node) const {
 	return errorOccured;
 }
 
-bool ewol::Object::propertySetOnWidgetNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+bool ewol::Object::propertySetOnWidgetNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value) {
 	ewol::ObjectShared object = getObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;
@@ -161,11 +161,11 @@ ewol::Context& ewol::Object::getContext() {
 	return ewol::getContext();
 }
 
-ewol::ObjectShared ewol::Object::getObjectNamed(const std::string& _objectName) {
+ewol::ObjectShared ewol::Object::getObjectNamed(const etk::String& _objectName) {
 	return getObjectManager().getObjectNamed(_objectName);
 }
 
-ewol::ObjectShared ewol::Object::getSubObjectNamed(const std::string& _objectName) {
+ewol::ObjectShared ewol::Object::getSubObjectNamed(const etk::String& _objectName) {
 	EWOL_VERBOSE("check if name : " << _objectName << " ?= " << propertyName.get());
 	if (_objectName == propertyName.get()) {
 		return sharedFromThis();
@@ -174,7 +174,7 @@ ewol::ObjectShared ewol::Object::getSubObjectNamed(const std::string& _objectNam
 }
 
 
-bool ewol::propertySetOnObjectNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+bool ewol::propertySetOnObjectNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value) {
 	ewol::ObjectShared object = ewol::getContext().getEObjectManager().get(_objectName);
 	if (object == nullptr) {
 		return false;

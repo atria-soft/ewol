@@ -16,7 +16,7 @@ const int32_t ewol::compositing::TextBase::m_vboIdColor(2);
 const int32_t ewol::compositing::TextBase::m_vboIdGlyphLevel(3);
 #define NB_VBO (4)
 
-ewol::compositing::TextBase::TextBase(const std::string& _shaderName, bool _loadProgram) :
+ewol::compositing::TextBase::TextBase(const etk::String& _shaderName, bool _loadProgram) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -59,7 +59,7 @@ ewol::compositing::TextBase::~TextBase() {
 	
 }
 
-void ewol::compositing::TextBase::loadProgram(const std::string& _shaderName) {
+void ewol::compositing::TextBase::loadProgram(const etk::String& _shaderName) {
 	// get the shader resource:
 	m_GLPosition = 0;
 	ememory::SharedPtr<gale::resource::Program> old = m_GLprogram;
@@ -132,10 +132,10 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
 		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(std::max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(std::max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(std::min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(std::min(m_position.y(), m_sizeDisplayStart.y()));
+		m_sizeDisplayStop.setX(etk::max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(etk::max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(etk::min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(etk::min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 	// update position
@@ -150,10 +150,10 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	} else {
 		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(std::max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(std::max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(std::min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(std::min(m_position.y(), m_sizeDisplayStart.y()));
+		m_sizeDisplayStop.setX(etk::max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(etk::max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(etk::min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(etk::min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 }
@@ -241,13 +241,13 @@ void ewol::compositing::TextBase::setKerningMode(bool _newMode) {
 	m_kerning = _newMode;
 }
 
-void ewol::compositing::TextBase::print(const std::u32string& _text) {
-	std::vector<TextDecoration> decorationEmpty;
+void ewol::compositing::TextBase::print(const etk::UString& _text) {
+	etk::Vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
-void ewol::compositing::TextBase::print(const std::string& _text) {
-	std::vector<TextDecoration> decorationEmpty;
+void ewol::compositing::TextBase::print(const etk::String& _text) {
+	etk::Vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
@@ -263,7 +263,7 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 			// nothing to do ...
 			continue;
 		} else if (it.isText() == true) {
-			htmlAddData(etk::to_u32string(it.getValue()));
+			htmlAddData(etk::toUString(it.getValue()));
 			EWOL_VERBOSE("XML add : " << it.getValue());
 			continue;
 		} else if (it.isElement() == false) {
@@ -282,7 +282,7 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 		} else if (etk::compare_no_case(elem.getValue(), "font") == true) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
-			std::string colorValue = elem.attributes["color"];
+			etk::String colorValue = elem.attributes["color"];
 			if (colorValue.size() != 0) {
 				m_htmlDecoTmp.m_colorFg = colorValue;
 			}
@@ -352,23 +352,23 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 	}
 }
 
-void ewol::compositing::TextBase::printDecorated(const std::string& _text) {
-	std::string tmpData("<html>\n<body>\n");
+void ewol::compositing::TextBase::printDecorated(const etk::String& _text) {
+	etk::String tmpData("<html>\n<body>\n");
 	tmpData += _text;
 	tmpData += "\n</body>\n</html>\n";
 	//EWOL_DEBUG("plop : " << tmpData);
 	printHTML(tmpData);
 }
 
-void ewol::compositing::TextBase::printDecorated(const std::u32string& _text) {
-	std::u32string tmpData(U"<html>\n<body>\n");
+void ewol::compositing::TextBase::printDecorated(const etk::UString& _text) {
+	etk::UString tmpData(U"<html>\n<body>\n");
 	tmpData += _text;
 	tmpData += U"\n</body>\n</html>\n";
 	//EWOL_DEBUG("plop : " << tmpData);
 	printHTML(tmpData);
 }
 
-void ewol::compositing::TextBase::printHTML(const std::string& _text) {
+void ewol::compositing::TextBase::printHTML(const etk::String& _text) {
 	exml::Document doc;
 	
 	// reset parameter :
@@ -396,15 +396,15 @@ void ewol::compositing::TextBase::printHTML(const std::string& _text) {
 	htmlFlush();
 }
 
-void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
+void ewol::compositing::TextBase::printHTML(const etk::UString& _text) {
 	exml::Document doc;
 	
 	// reset parameter :
 	m_htmlDecoTmp.m_colorBg = m_defaultColorBg;
 	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
-	// TODO : Create an instance of xml parser to manage std::u32string...
-	if (doc.parse(etk::to_string(_text)) == false) {
+	// TODO : Create an instance of xml parser to manage etk::UString...
+	if (doc.parse(etk::toString(_text)) == false) {
 		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
@@ -424,7 +424,7 @@ void ewol::compositing::TextBase::printHTML(const std::u32string& _text) {
 	htmlFlush();
 }
 
-void ewol::compositing::TextBase::print(const std::string& _text, const std::vector<TextDecoration>& _decoration) {
+void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vector<TextDecoration>& _decoration) {
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == alignDisable) {
@@ -609,7 +609,7 @@ void ewol::compositing::TextBase::print(const std::string& _text, const std::vec
 	}
 }
 
-void ewol::compositing::TextBase::print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration) {
+void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration) {
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == alignDisable) {
@@ -820,7 +820,7 @@ void ewol::compositing::TextBase::disableAlignement() {
 	m_alignement = alignDisable;
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::string& _text) {
+vec3 ewol::compositing::TextBase::calculateSizeHTML(const etk::String& _text) {
 	// remove intermediate result 
 	reset();
 	//EWOL_DEBUG("        0 size for=\n" << text);
@@ -834,11 +834,11 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::string& _text) {
 	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(std::max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           std::max(m_position.y(), m_sizeDisplayStop.y()) ,
+	m_sizeDisplayStop.setValue(etk::max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           etk::max(m_position.y(), m_sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(std::min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            std::min(m_position.y(), m_sizeDisplayStart.y()) ,
+	m_sizeDisplayStart.setValue(etk::min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            etk::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
 	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
@@ -851,7 +851,7 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::string& _text) {
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::u32string& _text) {
+vec3 ewol::compositing::TextBase::calculateSizeHTML(const etk::UString& _text) {
 	// remove intermediate result 
 	reset();
 	//EWOL_DEBUG("        0 size for=\n" << text);
@@ -865,11 +865,11 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::u32string& _text)
 	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(std::max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           std::max(m_position.y(), m_sizeDisplayStop.y()) ,
+	m_sizeDisplayStop.setValue(etk::max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           etk::max(m_position.y(), m_sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(std::min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            std::min(m_position.y(), m_sizeDisplayStart.y()) ,
+	m_sizeDisplayStart.setValue(etk::min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            etk::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
 	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
@@ -882,29 +882,29 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const std::u32string& _text)
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeDecorated(const std::string& _text) {
+vec3 ewol::compositing::TextBase::calculateSizeDecorated(const etk::String& _text) {
 	if (_text.size() == 0) {
 		return vec3(0,0,0);
 	}
-	std::string tmpData("<html><body>\n");
+	etk::String tmpData("<html><body>\n");
 	tmpData+=_text;
 	tmpData+="\n</body></html>\n";
 	vec3 tmpVal = calculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeDecorated(const std::u32string& _text) {
+vec3 ewol::compositing::TextBase::calculateSizeDecorated(const etk::UString& _text) {
 	if (_text.size() == 0) {
 		return vec3(0,0,0);
 	}
-	std::u32string tmpData(U"<html><body>\n");
+	etk::UString tmpData(U"<html><body>\n");
 	tmpData += _text;
 	tmpData += U"\n</body></html>\n";
 	vec3 tmpVal = calculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-vec3 ewol::compositing::TextBase::calculateSize(const std::string& _text) {
+vec3 ewol::compositing::TextBase::calculateSize(const etk::String& _text) {
 	vec3 outputSize(0, 0, 0);
 	for(auto element : _text) {
 		vec3 tmpp = calculateSize(element);
@@ -916,7 +916,7 @@ vec3 ewol::compositing::TextBase::calculateSize(const std::string& _text) {
 	return outputSize;
 }
 
-vec3 ewol::compositing::TextBase::calculateSize(const std::u32string& _text) {
+vec3 ewol::compositing::TextBase::calculateSize(const etk::UString& _text) {
 	vec3 outputSize(0, 0, 0);
 	for(auto element : _text) {
 		vec3 tmpp = calculateSize(element);
@@ -939,7 +939,7 @@ void ewol::compositing::TextBase::printCursor(bool _isInsertMode, float _cursorS
 	}
 }
 
-bool ewol::compositing::TextBase::extrapolateLastId(const std::string& _text,
+bool ewol::compositing::TextBase::extrapolateLastId(const etk::String& _text,
                                                 const int32_t _start,
                                                 int32_t& _stop,
                                                 int32_t& _space,
@@ -1002,7 +1002,7 @@ bool ewol::compositing::TextBase::extrapolateLastId(const std::string& _text,
 	}
 }
 
-bool ewol::compositing::TextBase::extrapolateLastId(const std::u32string& _text,
+bool ewol::compositing::TextBase::extrapolateLastId(const etk::UString& _text,
                                                 const int32_t _start,
                                                 int32_t& _stop,
                                                 int32_t& _space,
@@ -1065,20 +1065,20 @@ bool ewol::compositing::TextBase::extrapolateLastId(const std::u32string& _text,
 	}
 }
 
-void ewol::compositing::TextBase::htmlAddData(const std::u32string& _data) {
+void ewol::compositing::TextBase::htmlAddData(const etk::UString& _data) {
 	if(    m_htmlCurrrentLine.size()>0
 	    && m_htmlCurrrentLine[m_htmlCurrrentLine.size()-1] != ' ') {
 		m_htmlCurrrentLine += U" ";
 		if(m_htmlDecoration.size()>0) {
 			TextDecoration tmp = m_htmlDecoration[m_htmlDecoration.size()-1];
-			m_htmlDecoration.push_back(tmp);
+			m_htmlDecoration.pushBack(tmp);
 		} else {
-			m_htmlDecoration.push_back(m_htmlDecoTmp);
+			m_htmlDecoration.pushBack(m_htmlDecoTmp);
 		}
 	}
 	m_htmlCurrrentLine += _data;
 	for(size_t iii=0; iii<_data.size() ; iii++) {
-		m_htmlDecoration.push_back(m_htmlDecoTmp);
+		m_htmlDecoration.pushBack(m_htmlDecoTmp);
 	}
 }
 

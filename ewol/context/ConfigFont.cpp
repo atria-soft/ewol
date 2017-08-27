@@ -23,7 +23,7 @@ ewol::context::ConfigFont::~ConfigFont() {
 	ewol::resource::freeTypeUnInit();
 }
 
-void ewol::context::ConfigFont::set(const std::string& _fontName, int32_t _size) {
+void ewol::context::ConfigFont::set(const etk::String& _fontName, int32_t _size) {
 	m_name = _fontName;
 	m_size = _size;
 	EWOL_INFO("Set default Font : '" << m_name << "' size=" << m_size);
@@ -34,7 +34,7 @@ void ewol::context::ConfigFont::setSize(int32_t _size) {
 	EWOL_INFO("Set default Font : '" << m_name << "' size=" << m_size << " (change size only)");
 }
 
-void ewol::context::ConfigFont::setName(const std::string& _fontName) {
+void ewol::context::ConfigFont::setName(const etk::String& _fontName) {
 	m_name = _fontName;
 	EWOL_INFO("Set default Font : '" << m_name << "' size=" << m_size << " (change name only)");
 }

@@ -14,7 +14,7 @@ static const char* l_listsladingMode[ewol::widget::WSlider::sladingTransition_co
 	"transition horisantal"
 };
 
-std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj) {
+etk::Stream& operator <<(etk::Stream& _os, const enum ewol::widget::WSlider::sladingMode _obj) {
 	_os << l_listsladingMode[_obj];
 	return _os;
 }
@@ -161,7 +161,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const ewol::WidgetShared& _widget
 	EWOL_ERROR("Can not change to a widget not present");
 }
 
-void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
+void ewol::widget::WSlider::subWidgetSelectSet(const etk::String& _widgetName) {
 	if (_widgetName == "") {
 		EWOL_ERROR("Can not change to a widget with no name (input)");
 		return;
@@ -210,7 +210,7 @@ void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 			}
 		}
 		m_slidingProgress += _event.getDeltaCall()/propertyTransitionSpeed;
-		m_slidingProgress = std::avg(0.0f, m_slidingProgress, 1.0f);
+		m_slidingProgress = etk::avg(0.0f, m_slidingProgress, 1.0f);
 	}
 	onChangeSize();
 }

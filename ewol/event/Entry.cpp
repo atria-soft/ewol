@@ -6,7 +6,7 @@
 
 #include <ewol/widget/Widget.hpp>
 
-std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Entry& _obj) {
+etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::Entry& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
 	if (_obj.getType() == gale::key::keyboard::character) {
@@ -16,7 +16,7 @@ std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Ent
 	return _os;
 }
 
-std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::EntrySystem& _obj) {
+etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::EntrySystem& _obj) {
 	_os << _obj.m_event;
 	return _os;
 }

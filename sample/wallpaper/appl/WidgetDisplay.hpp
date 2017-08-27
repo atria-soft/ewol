@@ -35,7 +35,7 @@ namespace appl {
 			DECLARE_FACTORY(WidgetDisplay);
 			virtual ~WidgetDisplay();
 			ewol::compositing::Image m_compositing;
-			std::vector<Element> m_elements;
+			etk::Vector<Element> m_elements;
 		public: // Derived function
 			void onRegenerateDisplay();
 			void periodicCall(const ewol::event::Time& _event);

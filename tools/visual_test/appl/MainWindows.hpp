@@ -16,7 +16,7 @@
 namespace appl {
 	class MainWindows : public ewol::widget::Windows {
 		private:
-			std::vector<esignal::Connection> m_listConnection;
+			etk::Vector<esignal::Connection> m_listConnection;
 			ewol::widget::ComposerShared m_composer;
 			ewol::widget::SizerShared m_sizerVert;
 			ewol::widget::SizerShared m_sizerDynamic;
@@ -35,7 +35,7 @@ namespace appl {
 			void onCallbackThemeChange(const bool& _value);
 			void onCallbackWidgetChange(int32_t _increment);
 			void updateProperty();
-			void onCallbackShortCut(const std::string& _value);
+			void onCallbackShortCut(const etk::String& _value);
 	};
 };
 

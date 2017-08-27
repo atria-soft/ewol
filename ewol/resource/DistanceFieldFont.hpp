@@ -13,21 +13,21 @@ namespace ewol {
 	namespace resource {
 		class DistanceFieldFont : public ewol::resource::Texture {
 			private:
-				std::string m_fileName;
+				etk::String m_fileName;
 				float m_sizeRatio;
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
 				ememory::SharedPtr<ewol::resource::FontBase> m_font;
 			public:
-				std::vector<GlyphProperty> m_listElement;
+				etk::Vector<GlyphProperty> m_listElement;
 			private:
 				// for the texture generation :
 				ivec2 m_lastGlyphPos;
 				int32_t m_lastRawHeigh;
 			protected:
 				DistanceFieldFont();
-				void init(const std::string& _fontName);
+				void init(const etk::String& _fontName);
 			public:
 				DECLARE_RESOURCE_NAMED_FACTORY(DistanceFieldFont);
 				virtual ~DistanceFieldFont();
@@ -68,7 +68,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the texture font.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::DistanceFieldFont> keep(const std::string& _filename);
+				static ememory::SharedPtr<ewol::resource::DistanceFieldFont> keep(const etk::String& _filename);
 			private:
 				/**
 				 * @brief add a glyph in a texture font.

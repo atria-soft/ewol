@@ -11,7 +11,7 @@
 
 appl::Windows::Windows() {
 	addObjectType("appl::Windows");
-	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
+	propertyTitle.setDirectCheck(etk::String("sample ") + PROJECT_NAME);
 }
 
 void appl::Windows::init() {

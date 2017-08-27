@@ -25,7 +25,7 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<> signalPressed;
 			public: // properties
-				eproperty::Value<std::string> propertySource; //!< file name of the image.
+				eproperty::Value<etk::String> propertySource; //!< file name of the image.
 				eproperty::Value<gale::Dimension> propertyBorder; //!< border to add at the image.
 				eproperty::Value<gale::Dimension> propertyImageSize; //!< border to add at the image.
 				eproperty::Value<bool> propertyKeepRatio; //!< keep the image ratio between width and hight
@@ -55,7 +55,7 @@ namespace ewol {
 				 * @param[in] _file Filaneme of the new image
 				 * @param[in] _border New border size to set
 				 */
-				void set(const std::string& _file, const gale::Dimension& _border);
+				void set(const etk::String& _file, const gale::Dimension& _border);
 			protected:
 				vec2 m_imageRenderSize; //!< size of the image when we render it
 			protected:

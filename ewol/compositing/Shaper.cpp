@@ -13,7 +13,7 @@ const int32_t ewol::compositing::Shaper::m_vboIdCoord(0);
 const int32_t ewol::compositing::Shaper::m_vboIdPos(1);
 #define NB_VBO (2)
 
-ewol::compositing::Shaper::Shaper(const std::string& _shaperName) :
+ewol::compositing::Shaper::Shaper(const etk::String& _shaperName) :
   m_name(_shaperName),
   m_config(nullptr),
   m_confIdMode(-1),
@@ -106,10 +106,10 @@ void ewol::compositing::Shaper::loadProgram() {
 		m_confImageFile    = m_config->request("image");
 		m_confColorFile    = m_config->request("color");
 	}
-	std::string basicShaderFile = m_config->getString(m_confProgramFile);
+	etk::String basicShaderFile = m_config->getString(m_confProgramFile);
 	if (basicShaderFile != "") {
-		std::string tmpFilename(basicShaderFile);
-		if (tmpFilename.find(':') == std::string::npos) {
+		etk::String tmpFilename(basicShaderFile);
+		if (tmpFilename.find(':') == etk::String::npos) {
 			// get the relative position of the current file ...
 			etk::FSNode file(m_name);
 			tmpFilename = file.getRelativeFolder() + basicShaderFile;
@@ -133,10 +133,10 @@ void ewol::compositing::Shaper::loadProgram() {
 			// for the texture ID : 
 			m_GLtexID = m_GLprogram->getUniform("EW_texID");
 		}
-		std::string basicImageFile = m_config->getString(m_confImageFile);
+		etk::String basicImageFile = m_config->getString(m_confImageFile);
 		if (basicImageFile != "") {
-			std::string tmpFilename(basicImageFile);
-			if (tmpFilename.find(':') == std::string::npos) {
+			etk::String tmpFilename(basicImageFile);
+			if (tmpFilename.find(':') == etk::String::npos) {
 				// get the relative position of the current file ...
 				etk::FSNode file(m_name);
 				tmpFilename = file.getRelativeFolder() + basicImageFile;
@@ -148,10 +148,10 @@ void ewol::compositing::Shaper::loadProgram() {
 			m_resourceTexture = ewol::resource::TextureFile::create(tmpFilename, size);
 		}
 	}
-	std::string basicColorFile = m_config->getString(m_confColorFile);
+	etk::String basicColorFile = m_config->getString(m_confColorFile);
 	if (basicColorFile != "") {
-		std::string tmpFilename(basicColorFile);
-		if (tmpFilename.find(':') == std::string::npos) {
+		etk::String tmpFilename(basicColorFile);
+		if (tmpFilename.find(':') == etk::String::npos) {
 			// get the relative position of the current file ...
 			etk::FSNode file(m_name);
 			tmpFilename = file.getRelativeFolder() + basicColorFile;
@@ -162,11 +162,11 @@ void ewol::compositing::Shaper::loadProgram() {
 		m_colorProperty = ewol::resource::ColorFile::create(tmpFilename);
 		if (    m_GLprogram != nullptr
 		     && m_colorProperty != nullptr) {
-			std::vector<std::string> listColor = m_colorProperty->getColors();
+			etk::Vector<etk::String> listColor = m_colorProperty->getColors();
 			for (auto tmpColor : listColor) {
 				int32_t glId = m_GLprogram->getUniform(tmpColor);
 				int32_t colorID = m_colorProperty->request(tmpColor);
-				m_listAssiciatedId.push_back(ivec2(glId, colorID));
+				m_listAssiciatedId.pushBack(ivec2(glId, colorID));
 			}
 		}
 	}
@@ -275,7 +275,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 		}
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
-		m_stateTransition = std::avg(0.0f, m_stateTransition, 1.0f);
+		m_stateTransition = etk::avg(0.0f, m_stateTransition, 1.0f);
 		EWOL_VERBOSE("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
@@ -478,10 +478,10 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 		                           border.yTop()    - borderTmp.yTop(),
 		                           border.xRight()  - borderTmp.xRight(),
 		                           border.yButtom() + borderTmp.yButtom());
-		ewol::Padding inside(insideBorder.xLeft()   + std::max(0.0f, paddingIn.xLeft()),
-		                     insideBorder.yTop()    - std::max(0.0f, paddingIn.yTop()),
-		                     insideBorder.xRight()  - std::max(0.0f, paddingIn.xRight()),
-		                     insideBorder.yButtom() + std::max(0.0f, paddingIn.yButtom()));
+		ewol::Padding inside(insideBorder.xLeft()   + etk::max(0.0f, paddingIn.xLeft()),
+		                     insideBorder.yTop()    - etk::max(0.0f, paddingIn.yTop()),
+		                     insideBorder.xRight()  - etk::max(0.0f, paddingIn.xRight()),
+		                     insideBorder.yButtom() + etk::max(0.0f, paddingIn.yButtom()));
 		
 	#endif
 	/*
@@ -624,7 +624,7 @@ ewol::Padding ewol::compositing::Shaper::getBorder() {
 	return padding;
 }
 
-void ewol::compositing::Shaper::setSource(const std::string& _newFile) {
+void ewol::compositing::Shaper::setSource(const etk::String& _newFile) {
 	clear();
 	unLoadProgram();
 	m_name = _newFile;
@@ -645,7 +645,7 @@ const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
 	return m_colorProperty->get(_id);
 }
 
-int32_t ewol::compositing::Shaper::requestColor(const std::string& _name) {
+int32_t ewol::compositing::Shaper::requestColor(const etk::String& _name) {
 	if (m_colorProperty == nullptr) {
 		EWOL_WARNING("nullptr of m_colorProperty ==> return -1 for name " << _name);
 		return -1;
@@ -653,7 +653,7 @@ int32_t ewol::compositing::Shaper::requestColor(const std::string& _name) {
 	return m_colorProperty->request(_name);
 }
 
-int32_t ewol::compositing::Shaper::requestConfig(const std::string& _name) {
+int32_t ewol::compositing::Shaper::requestConfig(const etk::String& _name) {
 	if (m_config == nullptr) {
 		EWOL_WARNING("nullptr of m_config ==> return -1 for name " << _name);
 		return -1;
@@ -672,17 +672,17 @@ double ewol::compositing::Shaper::getConfigNumber(int32_t _id) {
 
 
 namespace etk {
-	template<> std::string to_string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+	template<> etk::String toString<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
 		return _obj.getSource();
 	}
-	template<> std::u32string to_u32string<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
-		return etk::to_u32string(etk::to_string(_obj));
+	template<> etk::UString toUString<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+		return etk::toUString(etk::toString(_obj));
 	}
-	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::string& _value) {
+	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const etk::String& _value) {
 		_variableRet.setSource(_value);
 		return true;
 	}
-	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const std::u32string& _value) {
-		return from_string(_variableRet,  etk::to_string(_value));
+	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const etk::UString& _value) {
+		return from_string(_variableRet,  etk::toString(_value));
 	}
 };

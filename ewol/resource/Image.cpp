@@ -43,7 +43,7 @@ void ewol::resource::TextureFile::init() {
 	ewol::resource::Texture::init();
 }
 
-void ewol::resource::TextureFile::init(std::string _genName, const std::string& _tmpFilename, const ivec2& _size) {
+void ewol::resource::TextureFile::init(etk::String _genName, const etk::String& _tmpFilename, const ivec2& _size) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpFilename=" << _tmpFilename << " size=" << _size);
@@ -61,13 +61,13 @@ void ewol::resource::TextureFile::init(std::string _genName, const std::string& 
 	}
 	m_lastSize = m_realImageSize;
 	#ifdef GENERATE_DISTANCE_FIELD_MODE
-		//egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
-		egami::generateDistanceFieldFile(_tmpFilename, std::string(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");
+		//egami::generateDistanceFieldFile(_tmpFilename, etk::String(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
+		egami::generateDistanceFieldFile(_tmpFilename, etk::String(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");
 	#endif
 	flush();
 }
 
-ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const std::string& _filename, ivec2 _size, ivec2 _sizeRegister) {
+ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const etk::String& _filename, ivec2 _size, ivec2 _sizeRegister) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
 	if (_filename == "") {
 		ememory::SharedPtr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
@@ -87,7 +87,7 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 		_size.setY(-1);
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	std::string tmpFilename = _filename;
+	etk::String tmpFilename = _filename;
 	if (etk::end_with(_filename, ".svg") == false) {
 		_size = ewol::resource::TextureFile::sizeAuto;
 	}
@@ -97,9 +97,9 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 		if (_sizeRegister != ewol::resource::TextureFile::sizeAuto) {
 			if (_sizeRegister != ewol::resource::TextureFile::sizeDefault) {
 				tmpFilename += ":";
-				tmpFilename += etk::to_string(_size.x());
+				tmpFilename += etk::toString(_size.x());
 				tmpFilename += "x";
-				tmpFilename += etk::to_string(_size.y());
+				tmpFilename += etk::toString(_size.y());
 			}
 		}
 	}

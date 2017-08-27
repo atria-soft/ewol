@@ -9,7 +9,7 @@
 #include <ewol/context/Context.hpp>
 #include <etk/types.hpp>
 
-ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
+ewol::compositing::Text::Text(const etk::String& _fontName, int32_t _fontSize) :
   m_font(nullptr) {
 	setFont(_fontName, _fontSize);
 }
@@ -124,7 +124,7 @@ ewol::GlyphProperty * ewol::compositing::Text::getGlyphPointer(char32_t _charcod
 
 void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 	// get old size
-	std::string fontName = "";
+	etk::String fontName = "";
 	if (m_font != nullptr) {
 		fontName = m_font->getName();
 		// Remove the :XX for the size ...
@@ -134,7 +134,7 @@ void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 	setFont(fontName, _fontSize);
 }
 
-void ewol::compositing::Text::setFontName(const std::string& _fontName) {
+void ewol::compositing::Text::setFontName(const etk::String& _fontName) {
 	// get old size
 	int32_t fontSize = -1;
 	if (m_font != nullptr) {
@@ -143,7 +143,7 @@ void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 	setFont(_fontName, fontSize);
 }
 
-void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) {
+void ewol::compositing::Text::setFont(etk::String _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
 	ememory::SharedPtr<ewol::resource::TexturedFont> previousFont = m_font;
@@ -154,7 +154,7 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 		_fontName = ewol::getContext().getFontDefault().getName();
 	}
 	_fontName += ":";
-	_fontName += etk::to_string(_fontSize);
+	_fontName += etk::toString(_fontSize);
 	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
 	m_font = ewol::resource::TexturedFont::create(_fontName);

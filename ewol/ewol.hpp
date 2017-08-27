@@ -26,5 +26,5 @@ namespace ewol {
 	 * @brief get EWOL version
 	 * @return The string that describe ewol version
 	 */
-	std::string getVersion();
+	etk::String getVersion();
 };

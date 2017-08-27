@@ -15,12 +15,12 @@
 appl::Windows::Windows() :
   m_composer(nullptr) {
 	addObjectType("appl::Windows");
-	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
+	propertyTitle.setDirectCheck(etk::String("sample ") + PROJECT_NAME);
 }
 
 void appl::Windows::init() {
 	ewol::widget::Windows::init();
-	std::string composition = std::string("");
+	etk::String composition = etk::String("");
 	composition += "<sizer mode='vert'>\n";
 	composition += "	<sizer mode='hori'>\n";
 	composition += "		<button name='bt-change'>\n";
@@ -49,9 +49,9 @@ void appl::Windows::init() {
 }
 
 void appl::Windows::onCallbackChangeValues() {
-	std::vector<float> tmp;
+	etk::Vector<float> tmp;
 	for (int32_t iii=0; iii<2048; ++iii) {
-		tmp.push_back(etk::tool::frand(-1.0, 1.0));
+		tmp.pushBack(etk::tool::frand(-1.0, 1.0));
 	}
 	ememory::SharedPtr<appl::widget::VectorDisplay> tmpDisp = ememory::dynamicPointerCast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
 	if (tmpDisp != nullptr) {

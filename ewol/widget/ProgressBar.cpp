@@ -42,8 +42,8 @@ ewol::widget::ProgressBar::~ProgressBar() {
 
 void ewol::widget::ProgressBar::calculateMinMaxSize() {
 	vec2 tmpMin = propertyMinSize->getPixel();
-	m_minSize.setValue( std::max(tmpMin.x(), 40.0f),
-	                    std::max(tmpMin.y(), dotRadius*2.0f) );
+	m_minSize.setValue( etk::max(tmpMin.x(), 40.0f),
+	                    etk::max(tmpMin.y(), dotRadius*2.0f) );
 	markToRedraw();
 }
 

@@ -78,7 +78,7 @@ ewol::widget::Entry::~Entry() {
 	
 }
 
-void ewol::widget::Entry::onCallbackShortCut(const std::string& _value) {
+void ewol::widget::Entry::onCallbackShortCut(const etk::String& _value) {
 	if (_value == "clean") {
 		onCallbackEntryClean();
 	} else if (_value == "cut") {
@@ -161,7 +161,7 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 		} else {
 			m_text.setCursorPos(m_displayCursorPos);
 		}
-		std::string valueToDisplay = *propertyValue;
+		etk::String valueToDisplay = *propertyValue;
 		if (*propertyPassword == true) {
 			for (auto &it: valueToDisplay) {
 				it = '*';
@@ -188,13 +188,13 @@ void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection
 	vec2 relPos = relativePosition(_pos);
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.xLeft());
 	// try to find the new cursor position :
-	std::string tmpDisplay = std::string(propertyValue, 0, m_displayStartPosition);
+	etk::String tmpDisplay = etk::String(propertyValue, 0, m_displayStartPosition);
 	int32_t displayHidenSize = m_text.calculateSize(tmpDisplay).x();
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = padding.xLeft();
 	for (size_t iii=0; iii<propertyValue->size(); iii++) {
-		tmpDisplay = std::string(propertyValue, 0, iii);
+		tmpDisplay = etk::String(propertyValue, 0, iii);
 		int32_t tmpWidth = m_text.calculateSize(tmpDisplay).x() - displayHidenSize;
 		if (tmpWidth >= relPos.x()-tmpTextOriginX) {
 			newCursorPosition = iii;
@@ -250,7 +250,7 @@ void ewol::widget::Entry::copySelectionToClipBoard(enum gale::context::clipBoard
 		pos1 = m_displayCursorPos;
 	}
 	// Copy
-	std::string tmpData = std::string(propertyValue, pos1, pos2);
+	etk::String tmpData = etk::String(propertyValue, pos1, pos2);
 	gale::context::clipBoard::set(_clipboardID, tmpData);
 }
 
@@ -362,7 +362,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				// SUPPR :
 				if (propertyValue->size() > 0 && m_displayCursorPos < (int64_t)propertyValue->size()) {
 					propertyValue.getDirect().erase(m_displayCursorPos, 1);
-					m_displayCursorPos = std::max(m_displayCursorPos, 0);
+					m_displayCursorPos = etk::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if (_event.getChar() == 0x08) {
@@ -370,14 +370,14 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				if (propertyValue->size() > 0 && m_displayCursorPos != 0) {
 					propertyValue.getDirect().erase(m_displayCursorPos-1, 1);
 					m_displayCursorPos--;
-					m_displayCursorPos = std::max(m_displayCursorPos, 0);
+					m_displayCursorPos = etk::max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
 				if ((int64_t)propertyValue->size() > propertyMaxCharacter) {
 					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
-					std::string newData = propertyValue;
+					etk::String newData = propertyValue;
 					newData.insert(newData.begin()+m_displayCursorPos, _event.getChar());
 					setInternalValue(newData);
 					if (propertyValue.get() == newData) {
@@ -409,7 +409,7 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				default:
 					return false;
 			}
-			m_displayCursorPos = std::avg(0, m_displayCursorPos, (int32_t)propertyValue->size());
+			m_displayCursorPos = etk::avg(0, m_displayCursorPos, (int32_t)propertyValue->size());
 			m_displayCursorPosSelection = m_displayCursorPos;
 			markToRedraw();
 			return true;
@@ -418,8 +418,8 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 	return false;
 }
 
-void ewol::widget::Entry::setInternalValue(const std::string& _newData) {
-	std::string previous = propertyValue;
+void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
+	etk::String previous = propertyValue;
 	// check the RegExp :
 	if (_newData.size()>0) {
 		std::smatch resultMatch;
@@ -445,10 +445,10 @@ void ewol::widget::Entry::onEventClipboard(enum gale::context::clipBoard::clipbo
 	// remove curent selected data ...
 	removeSelected();
 	// get current selection / Copy :
-	std::string tmpData = get(_clipboardID);
+	etk::String tmpData = get(_clipboardID);
 	// add it on the current display :
 	if (tmpData.size() != 0) {
-		std::string newData = propertyValue;
+		etk::String newData = propertyValue;
 		newData.insert(m_displayCursorPos, &tmpData[0]);
 		setInternalValue(newData);
 		if (propertyValue.get() == newData) {
@@ -518,17 +518,17 @@ void ewol::widget::Entry::updateTextPosition() {
 		m_displayStartPosition = 0;
 	} else {
 		// all can not be set :
-		std::string tmpDisplay = std::string(propertyValue, 0, m_displayCursorPos);
+		etk::String tmpDisplay = etk::String(propertyValue, 0, m_displayCursorPos);
 		int32_t pixelCursorPos = m_text.calculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
 		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
 		if (tmp1<10) {
 			// set the cursor on le left
-			m_displayStartPosition = std::min(-pixelCursorPos+10, 0);
+			m_displayStartPosition = etk::min(-pixelCursorPos+10, 0);
 		} else if (tmp1>tmpUserSize-10) {
 			// set the cursor of the Right
-			m_displayStartPosition = std::min(-pixelCursorPos + tmpUserSize - 10, 0);
+			m_displayStartPosition = etk::min(-pixelCursorPos + tmpUserSize - 10, 0);
 		}
 		// else : the cursor is inside the display
 		//m_displayStartPosition = -totalWidth + tmpUserSize;
@@ -576,10 +576,10 @@ void ewol::widget::Entry::onChangePropertyShaper() {
 }
 
 void ewol::widget::Entry::onChangePropertyValue() {
-	std::string newData = propertyValue.get();
+	etk::String newData = propertyValue.get();
 	if ((int64_t)newData.size() > propertyMaxCharacter) {
-		newData = std::string(newData, 0, propertyMaxCharacter);
-		EWOL_DEBUG("Limit entry set of data... " << std::string(newData, propertyMaxCharacter));
+		newData = etk::String(newData, 0, propertyMaxCharacter);
+		EWOL_DEBUG("Limit entry set of data... " << etk::String(newData, propertyMaxCharacter));
 	}
 	// set the value with the check of the RegExp ...
 	setInternalValue(newData);

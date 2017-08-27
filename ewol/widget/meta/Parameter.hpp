@@ -29,7 +29,7 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<> signalClose;
 			public: // properties
-				eproperty::Value<std::string> propertyLabelTitle;
+				eproperty::Value<etk::String> propertyLabelTitle;
 			protected:
 				Parameter();
 				void init();
@@ -37,8 +37,8 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Parameter, "Parameter");
 				virtual ~Parameter();
 			public:
-				void menuAdd(std::string _label, std::string _image, ewol::WidgetShared _associateWidget);
-				void menuAddGroup(std::string _label);
+				void menuAdd(etk::String _label, etk::String _image, ewol::WidgetShared _associateWidget);
+				void menuAddGroup(etk::String _label);
 				void menuClear();
 				void menuSeparator();
 			private:

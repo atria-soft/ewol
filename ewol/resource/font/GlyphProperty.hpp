@@ -58,7 +58,7 @@ namespace ewol {
 			vec2 m_texturePosStart; //!< Texture normalized position (START)
 			vec2 m_texturePosSize; //!< Texture normalized position (SIZE)
 		private:
-			std::vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
+			etk::Vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
 			GlyphProperty() :
 			  m_UVal(0),
@@ -80,7 +80,7 @@ namespace ewol {
 				return 0;
 			};
 			void kerningAdd(const char32_t _charcode, float _value) {
-				m_kerning.push_back(ewol::Kerning(_charcode, _value));
+				m_kerning.pushBack(ewol::Kerning(_charcode, _value));
 			};
 			void kerningClear() {
 				m_kerning.clear();

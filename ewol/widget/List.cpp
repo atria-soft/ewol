@@ -73,7 +73,7 @@ void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos)
 		return;
 	}
 	if (_pos < 0 || (size_t)_pos >= m_listOObject.size() ) {
-		m_listOObject.push_back(_newObject);
+		m_listOObject.pushBack(_newObject);
 	} else {
 		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
 	}
@@ -123,7 +123,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 		                  (minHeight + 2*m_paddingSizeY) * nbRaw );
 		
 		
-		std::vector<int32_t> listSizeColomn;
+		etk::Vector<int32_t> listSizeColomn;
 		
 		ewol::compositing::Drawing * BGOObjects = new ewol::compositing::Drawing();
 		etk::Color<> basicBG = getBasicBG();
@@ -154,7 +154,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 		int32_t displayPositionX = 0;
 		ivec2 tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
-		m_lineSize.push_back(tmpRegister);
+		m_lineSize.pushBack(tmpRegister);
 		
 		for (size_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
 			int32_t sizeColom = 0;
@@ -162,7 +162,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 			m_nbVisibleRaw = 0;
 			for (int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 				m_nbVisibleRaw++;
-				std::string myTextToWrite;
+				etk::String myTextToWrite;
 				etk::Color<> fg;
 				etk::Color<> bg;
 				getElement(jjj, iii, myTextToWrite, fg, bg);
@@ -179,7 +179,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 					
 					// get the maximum size of the colomn :
 					vec3 textSize = tmpText->calculateSize(myTextToWrite);
-					sizeColom = std::max(sizeColom, (int32_t)textSize.x());
+					sizeColom = etk::max(sizeColom, (int32_t)textSize.x());
 					
 					tmpText->setColor(fg);
 					tmpText->setPos(vec3(tmpOriginX + displayPositionX, displayPositionY, 0) );
@@ -191,14 +191,14 @@ void ewol::widget::List::onRegenerateDisplay() {
 					// add the raw position to remember it ...
 					tmpRegister.setX(tmpRegister.x()+1);
 					tmpRegister.setY(displayPositionY);
-					m_lineSize.push_back(tmpRegister);
+					m_lineSize.pushBack(tmpRegister);
 					//EWOL_DEBUG("List indexation:" << tmpRegister);
 				}
 			}
 			displayPositionX += sizeColom;
 			tmpOriginX += m_paddingSizeX*2*2;
 		}
-		//m_lineSize.push_back(tmpOriginY);
+		//m_lineSize.pushBack(tmpOriginY);
 		addOObject(BGOObjects, 0);
 		
 		// call the herited class...

@@ -5,7 +5,7 @@
  */
 
 #include <etk/types.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/os/FSNode.hpp>
 
 
@@ -54,7 +54,7 @@ ewol::resource::FontFreeType::FontFreeType() {
 	m_FileSize = 0;
 }
 
-void ewol::resource::FontFreeType::init(const std::string& _fontName) {
+void ewol::resource::FontFreeType::init(const etk::String& _fontName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::FontBase::init(_fontName);
 	etk::FSNode myfile(_fontName);
@@ -106,7 +106,7 @@ ewol::resource::FontFreeType::~FontFreeType() {
 	FT_Done_Face( m_fftFace );
 }
 
-vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const std::string& _unicodeString) {
+vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const etk::String& _unicodeString) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if(false == m_init) {
 		return vec2(0,0);
@@ -276,7 +276,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
 }
 
 
-void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::GlyphProperty>& listGlyph) {
+void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if(m_init == false) {
 		return;

@@ -52,7 +52,7 @@ namespace ewol {
 					return m_unicodeData;
 				};
 		};
-		std::ostream& operator <<(std::ostream& _os, const ewol::event::Entry& _obj);
+		etk::Stream& operator <<(etk::Stream& _os, const ewol::event::Entry& _obj);
 		
 		class EntrySystem {
 			public:
@@ -65,6 +65,6 @@ namespace ewol {
 				};
 				ewol::event::Entry m_event;
 		};
-		std::ostream& operator <<(std::ostream& _os, const ewol::event::EntrySystem& _obj);
+		etk::Stream& operator <<(etk::Stream& _os, const ewol::event::EntrySystem& _obj);
 	};
 };

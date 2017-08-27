@@ -46,8 +46,8 @@ ewol::widget::Slider::~Slider() {
 
 void ewol::widget::Slider::calculateMinMaxSize() {
 	vec2 minTmp = propertyMinSize->getPixel();
-	m_minSize.setValue(std::max(minTmp.x(), 40.0f),
-	                   std::max(minTmp.y(), dotRadius*2.0f) );
+	m_minSize.setValue(etk::max(minTmp.x(), 40.0f),
+	                   etk::max(minTmp.y(), dotRadius*2.0f) );
 	markToRedraw();
 }
 
@@ -98,7 +98,7 @@ bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 }
 
 void ewol::widget::Slider::updateValue(float _newValue) {
-	_newValue = std::max(std::min(_newValue, *propertyMaximum), *propertyMinimum);
+	_newValue = etk::max(etk::min(_newValue, *propertyMaximum), *propertyMinimum);
 	if (*propertyStep == 0.0f) {
 		propertyValue.setDirect(_newValue);
 	} else {

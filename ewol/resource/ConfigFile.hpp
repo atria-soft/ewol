@@ -19,17 +19,17 @@ namespace ewol {
 				etk::Hash<ejson::Value> m_list;
 			protected:
 				ConfigFile();
-				void init(const std::string& _filename);
+				void init(const etk::String& _filename);
 			public:
 				virtual ~ConfigFile();
 				DECLARE_RESOURCE_NAMED_FACTORY(ConfigFile);
 			public:
 				void reload();
 				
-				int32_t request(const std::string& _paramName);
+				int32_t request(const etk::String& _paramName);
 				
 				double getNumber(int32_t _id);
-				std::string getString(int32_t _id);
+				etk::String getString(int32_t _id);
 				bool getBoolean(int32_t _id);
 			public:
 				/**
@@ -38,7 +38,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the configuration file.
 				 * @return pointer on the resource or nullptr if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::ConfigFile> keep(const std::string& _filename);
+				static ememory::SharedPtr<ewol::resource::ConfigFile> keep(const etk::String& _filename);
 		};
 	};
 };

@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/types.hpp>
 #include <ewol/widget/meta/SpinBase.hpp>
 

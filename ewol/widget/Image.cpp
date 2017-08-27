@@ -41,7 +41,7 @@ void ewol::widget::Image::init() {
 	}
 }
 
-void ewol::widget::Image::set(const std::string& _file, const gale::Dimension& _border) {
+void ewol::widget::Image::set(const etk::String& _file, const gale::Dimension& _border) {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
 	propertyBorder.set(_border);
 	propertySource.set(_file);
@@ -158,7 +158,7 @@ bool ewol::widget::Image::loadXML(const exml::Element& _node) {
 	ewol::Widget::loadXML(_node);
 	// get internal data : 
 	
-	std::string tmpAttributeValue = _node.attributes["ratio"];
+	etk::String tmpAttributeValue = _node.attributes["ratio"];
 	if (tmpAttributeValue.size() != 0) {
 		if (etk::compare_no_case(tmpAttributeValue, "true") == true) {
 			propertyKeepRatio.setDirect(true);

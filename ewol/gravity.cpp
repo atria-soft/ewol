@@ -7,7 +7,7 @@
 #include <ewol/debug.hpp>
 #include <ewol/gravity.hpp>
 
-std::string ewol::gravityToString(const enum ewol::gravity _obj) {
+etk::String ewol::gravityToString(const enum ewol::gravity _obj) {
 	switch(_obj) {
 		case ewol::gravity_center:
 			return "center";
@@ -31,7 +31,7 @@ std::string ewol::gravityToString(const enum ewol::gravity _obj) {
 	return "unknow";
 }
 
-enum ewol::gravity ewol::stringToGravity(const std::string& _obj) {
+enum ewol::gravity ewol::stringToGravity(const etk::String& _obj) {
 	if (_obj == "center") {
 		return ewol::gravity_center;
 	} else if (_obj == "top-left") {
@@ -76,7 +76,7 @@ vec2 ewol::gravityGenerateDelta(const enum ewol::gravity _gravity, const vec2& _
 	return out;
 }
 
-std::ostream& ewol::operator <<(std::ostream& _os, const enum ewol::gravity _obj) {
+etk::Stream& ewol::operator <<(etk::Stream& _os, const enum ewol::gravity _obj) {
 	_os << ewol::gravityToString(_obj);
 	return _os;
 }

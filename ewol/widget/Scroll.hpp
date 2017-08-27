@@ -20,8 +20,8 @@ namespace ewol {
 		class Scroll : public ewol::widget::Container {
 			public: // properties
 				eproperty::Range<vec2> propertyLimit; //!< Set the limitation of the ratio in the sreen
-				eproperty::Value<std::string> propertyShapeVert; //!< Vertical shaper name
-				eproperty::Value<std::string> propertyShapeHori; //!< Horizontal shaper name
+				eproperty::Value<etk::String> propertyShapeVert; //!< Vertical shaper name
+				eproperty::Value<etk::String> propertyShapeHori; //!< Horizontal shaper name
 				eproperty::Value<bool> propertyHover; //!< Horizontal shaper name
 			public:
 				enum highSpeedMode {

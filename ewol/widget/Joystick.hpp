@@ -43,8 +43,8 @@ namespace ewol {
 			private:
 				// generic property of the joystick:
 				bool m_displayBackground;
-				std::string m_background;
-				std::string m_foreground;
+				etk::String m_background;
+				etk::String m_foreground;
 				float m_ratio;
 			protected:
 				Joystick();
@@ -68,12 +68,12 @@ namespace ewol {
 				 * @param[in] _imageNameInData the new rbackground that might be set
 				 * @param[in] _display
 				 */
-				void background(std::string _imageNameInData, bool _display=true);
+				void background(etk::String _imageNameInData, bool _display=true);
 				/**
 				 * @brief set the Foreground of the widget joystick
 				 * @param[in] _imageNameInData the new Foreground that might be set
 				 */
-				void foreground(std::string _imageNameInData);
+				void foreground(etk::String _imageNameInData);
 				/**
 				 * @brief get the property of the joystick
 				 * @param[out] _distance distance to the center

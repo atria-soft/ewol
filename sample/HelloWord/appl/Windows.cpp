@@ -12,7 +12,7 @@
 appl::Windows::Windows() {
 	addObjectType("appl::Windows");
 	//! [ewol_sample_HW_windows_title]
-	propertyTitle.setDirectCheck(std::string("sample ") + PROJECT_NAME);
+	propertyTitle.setDirectCheck(etk::String("sample ") + PROJECT_NAME);
 	//! [ewol_sample_HW_windows_title]
 }
 

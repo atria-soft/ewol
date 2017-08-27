@@ -40,8 +40,8 @@ namespace ewol {
 		 */
 		class StdPopUp : public ewol::widget::PopUp {
 			public: // properties:
-				eproperty::Value<std::string> propertyTitle; //!< Title of the pop-up
-				eproperty::Value<std::string> propertyComment; //!< comment in the pop-up (can be decorated text)
+				eproperty::Value<etk::String> propertyTitle; //!< Title of the pop-up
+				eproperty::Value<etk::String> propertyComment; //!< comment in the pop-up (can be decorated text)
 			protected:
 				/**
 				 * @brief std-pop-up constructor.
@@ -72,7 +72,7 @@ namespace ewol {
 				 * @brief Add a buttom button.
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
-				ewol::widget::ButtonShared addButton(const std::string& _text, bool _autoExit=false);
+				ewol::widget::ButtonShared addButton(const etk::String& _text, bool _autoExit=false);
 			public:
 				virtual void onCallBackButtonExit();
 		};

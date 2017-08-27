@@ -63,7 +63,7 @@ namespace ewol {
 		 */
 		class SpinBase : public ewol::widget::Sizer {
 			public: // properties list:
-				eproperty::Value<std::string> propertyShape; //!< Shape of the widget
+				eproperty::Value<etk::String> propertyShape; //!< Shape of the widget
 				eproperty::List<enum ewol::widget::spinPosition> propertySpinMode; //!< How to display the spin base
 			public:
 				UN_DECLARE_FACTORY(SpinBase);

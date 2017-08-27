@@ -96,10 +96,10 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 			vec2 tmpSize = m_subWidget[iii].widget->getCalculateMinSize();
 			EWOL_DEBUG("     [" << iii << "] subWidgetMinSize=" << tmpSize);
 			// for all we get the max size :
-			m_uniformSizeRow = std::max((int32_t)tmpSize.y(), m_uniformSizeRow);
+			m_uniformSizeRow = etk::max((int32_t)tmpSize.y(), m_uniformSizeRow);
 			// for the colomn size : We set the autamatic value in negative : 
 			if (m_sizeCol[m_subWidget[iii].col] <= 0) {
-				m_sizeCol[m_subWidget[iii].col] = std::min(m_sizeCol[m_subWidget[iii].col], (int32_t)-tmpSize.x() );
+				m_sizeCol[m_subWidget[iii].col] = etk::min(m_sizeCol[m_subWidget[iii].col], (int32_t)-tmpSize.x() );
 			}
 		}
 	}
@@ -145,7 +145,7 @@ void ewol::widget::Gird::setColNumber(int32_t _colNumber) {
 	} else {
 		// just add the col size:
 		for (int32_t iii=m_sizeCol.size()-1; iii<_colNumber-1 ; iii++) {
-			m_sizeCol.push_back(0);
+			m_sizeCol.pushBack(0);
 		}
 	}
 }
@@ -224,7 +224,7 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widg
 		}
 	}
 	// not find  == > just adding it ...
-	m_subWidget.push_back(prop);
+	m_subWidget.pushBack(prop);
 }
 
 void ewol::widget::Gird::subWidgetRemove(ewol::WidgetShared _newWidget) {

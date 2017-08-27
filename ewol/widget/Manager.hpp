@@ -7,7 +7,7 @@
 
 #include <etk/types.hpp>
 #include <ewol/debug.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <unordered_map>
 #include <ewol/widget/Widget.hpp>
 
@@ -50,8 +50,8 @@ namespace ewol {
 				using widgetCreatorFunction = std::function<ewol::WidgetShared()>; //!< funtion factory basic definition
 				using widgetCreatorFunctionXml = std::function<ewol::WidgetShared(const exml::Element& _node)>; //!< funtion factory basic definition
 			private:
-				std::unordered_map<std::string, widgetCreatorFunction> m_creatorList; //!< List of factory of a widget
-				std::unordered_map<std::string, widgetCreatorFunctionXml> m_creatorListXml; //!< List of factory of a widget
+				std::unordered_map<etk::String, widgetCreatorFunction> m_creatorList; //!< List of factory of a widget
+				std::unordered_map<etk::String, widgetCreatorFunctionXml> m_creatorListXml; //!< List of factory of a widget
 			public:
 				/**
 				 * @brief add a factory of a specific widget.
@@ -59,32 +59,32 @@ namespace ewol {
 				 * @param[in] _factory Function pointer to create the widget
 				 * @param[in] _factoryXml Function pointer to create the widget with XML node for parsing of XML
 				 */
-				void addWidgetCreator(const std::string& _name, widgetCreatorFunction _factory, widgetCreatorFunctionXml _factoryXml);
+				void addWidgetCreator(const etk::String& _name, widgetCreatorFunction _factory, widgetCreatorFunctionXml _factoryXml);
 				/**
 				 * @brief Create a widget with his name.
 				 * @param[in] _name Name of the widget to create.
 				 * @return The widget created (nullptr if it does not exist).
 				 */
-				ewol::WidgetShared create(const std::string& _name);
+				ewol::WidgetShared create(const etk::String& _name);
 				/**
 				 * @brief Create a widget with his name.
 				 * @param[in] _name Name of the widget to create.
 				 * @param[in] _node Reference on the XML node.
 				 * @return The widget created (nullptr if it does not exist).
 				 */
-				ewol::WidgetShared create(const std::string& _name, const exml::Element& _node);
+				ewol::WidgetShared create(const etk::String& _name, const exml::Element& _node);
 				/**
 				 * @brief Check if an Widget exist
 				 * @param[in] _name Name of the widget to check.
 				 * @return true The Widget exist.
 				 * @return false The Widget Does NOT exist.
 				 */
-				bool exist(const std::string& _name);
+				bool exist(const etk::String& _name);
 				/**
 				 * @brief Get the list of all Widget that can be created.
 				 * @return Separate with ',' string list.
 				 */
-				std::string list();
+				etk::String list();
 			// ---------------------------------------------
 			// --  Something change area (TODO: maybe set it in the windows)
 			// ---------------------------------------------

@@ -6,16 +6,16 @@
 
 #include <ewol/widget/Widget.hpp>
 
-std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Input& _obj) {
+etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::Input& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
-	_os << " id=" << etk::to_string(_obj.getId());
+	_os << " id=" << etk::toString(_obj.getId());
 	_os << " pos=" << _obj.getPos();
 	_os << "}";
 	return _os;
 }
 
-std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::InputSystem& _obj) {
+etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::InputSystem& _obj) {
 	_os << _obj.m_event;
 	return _os;
 }

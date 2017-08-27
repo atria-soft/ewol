@@ -44,7 +44,7 @@ ewol::widget::ButtonColor::~ButtonColor() {
 
 void ewol::widget::ButtonColor::calculateMinMaxSize() {
 	ewol::Padding padding = m_shaper.getPadding();
-	std::string label = propertyValue.getString();
+	etk::String label = propertyValue.getString();
 	vec3 minSize = m_text.calculateSize(label);
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
 	m_minSize.setY(padding.y()*2 + minSize.y() );
@@ -69,7 +69,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	
 	ewol::Padding padding = m_shaper.getPadding();
 	
-	std::string label = propertyValue.getString();
+	etk::String label = propertyValue.getString();
 	
 	ivec2 localSize = m_minSize;
 	

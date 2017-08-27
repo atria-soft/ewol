@@ -37,6 +37,6 @@ namespace ewol {
 			Padding operator+(const Padding& _v);
 			
 	};
-	std::ostream& operator <<(std::ostream& _os, const ewol::Padding& _obj);
+	etk::Stream& operator <<(etk::Stream& _os, const ewol::Padding& _obj);
 };
 

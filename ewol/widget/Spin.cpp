@@ -88,9 +88,9 @@ void ewol::widget::Spin::updateGui() {
 }
 
 void ewol::widget::Spin::checkValue(int64_t _value) {
-	_value = std::avg(propertyMin.get(), _value, propertyMax.get());
+	_value = etk::avg(propertyMin.get(), _value, propertyMax.get());
 	propertyValue.setDirect(_value);
-	m_widgetEntry->propertyValue.set(etk::to_string(_value));
+	m_widgetEntry->propertyValue.set(etk::toString(_value));
 }
 
 void ewol::widget::Spin::onCallbackUp() {

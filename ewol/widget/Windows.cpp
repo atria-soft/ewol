@@ -174,7 +174,7 @@ void ewol::widget::Windows::popUpWidgetPush(ewol::WidgetShared _widget) {
 		EWOL_ERROR("can not set widget pop-up (null pointer)");
 		return;
 	}
-	m_popUpWidgetList.push_back(_widget);
+	m_popUpWidgetList.pushBack(_widget);
 	_widget->setParent(sharedFromThis());
 	// force the focus on the basic widget ==> this remove many time the virual keyboard area
 	_widget->keepFocus();
@@ -188,7 +188,7 @@ void ewol::widget::Windows::popUpWidgetPop() {
 	if (m_popUpWidgetList.size() == 0) {
 		return;
 	}
-	m_popUpWidgetList.pop_back();
+	m_popUpWidgetList.popBack();
 }
 
 void ewol::widget::Windows::onChangePropertyColor() {
@@ -238,7 +238,7 @@ void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _c
 	}
 }
 
-ewol::ObjectShared ewol::widget::Windows::getSubObjectNamed(const std::string& _objectName) {
+ewol::ObjectShared ewol::widget::Windows::getSubObjectNamed(const etk::String& _objectName) {
 	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
 	if (tmpObject != nullptr) {
 		return tmpObject;

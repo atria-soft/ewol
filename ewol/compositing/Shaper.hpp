@@ -38,7 +38,7 @@ namespace ewol {
 		// TODO : Abstaraction between states (call by name and the system greate IDs
 		class Shaper : public ewol::Compositing {
 			private:
-				std::string m_name; //!< Name of the configuration of the shaper.
+				etk::String m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
 				ememory::SharedPtr<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
 				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
@@ -75,7 +75,7 @@ namespace ewol {
 				int32_t m_nbVertexToDisplay;
 				// color management theme:
 				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
-				std::vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
+				etk::Vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
 			protected:
 				static const int32_t m_vboIdCoord;
 				static const int32_t m_vboIdPos;
@@ -94,7 +94,7 @@ namespace ewol {
 				 * @brief generic constructor
 				 * @param[in] _shaperName Name of the file that might be loaded
 				 */
-				Shaper(const std::string& _shaperName="");
+				Shaper(const etk::String& _shaperName="");
 				/**
 				 * @brief generic destructor
 				 */
@@ -166,12 +166,12 @@ namespace ewol {
 				 * @brief change the shaper Source
 				 * @param[in] _newFile New file of the shaper
 				 */
-				void setSource(const std::string& _newFile);
+				void setSource(const etk::String& _newFile);
 				/**
 				 * @brief get the shaper file Source
 				 * @return the shapper file name
 				 */
-				const std::string& getSource() const {
+				const etk::String& getSource() const {
 					return m_name;
 				};
 				/**
@@ -236,7 +236,7 @@ namespace ewol {
 				 * @param[in] _name Name of the element requested
 				 * @return The Id of the color
 				 */
-				int32_t requestColor(const std::string& _name);
+				int32_t requestColor(const etk::String& _name);
 				/**
 				 * @brief Get The color associated at an ID.
 				 * @param[in] _id Id of the color
@@ -249,7 +249,7 @@ namespace ewol {
 				 * @param[in] _name Name of the element requested
 				 * @return The Id of the element
 				 */
-				int32_t requestConfig(const std::string& _name);
+				int32_t requestConfig(const etk::String& _name);
 				/**
 				 * @brief Get The number associated at an ID.
 				 * @param[in] _id Id of the parameter

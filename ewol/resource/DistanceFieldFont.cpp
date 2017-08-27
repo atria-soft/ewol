@@ -31,29 +31,29 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
 	m_sizeRatio = 1.0f;
 }
 
-void ewol::resource::DistanceFieldFont::init(const std::string& _fontName) {
+void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
-	std::string localName = _fontName;
-	std::vector<std::string> folderList;
+	etk::String localName = _fontName;
+	etk::Vector<etk::String> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
 		#if defined(__TARGET_OS__Android)
-			folderList.push_back("ROOT:system/fonts");
+			folderList.pushBack("ROOT:system/fonts");
 		#elif defined(__TARGET_OS__Linux)
-			folderList.push_back("ROOT:usr/share/fonts/truetype");
+			folderList.pushBack("ROOT:usr/share/fonts/truetype");
 		#endif
 	}
-	std::string applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
-	std::vector<std::string> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
+	etk::String applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
+	etk::Vector<etk::String> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
 	for (auto &it : applicationBaseFontList) {
-		folderList.push_back(it);
+		folderList.pushBack(it);
 	}
 	for (size_t folderID = 0; folderID < folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
-		std::vector<std::string> output;
+		etk::Vector<etk::String> output;
 		myFolder.folderGetRecursiveFiles(output);
-		std::vector<std::string> split = etk::split(localName, ';');
+		etk::Vector<etk::String> split = etk::split(localName, ';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
@@ -139,13 +139,13 @@ float ewol::resource::DistanceFieldFont::getDisplayRatio(float _size) {
 void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
-	std::vector<short> xdist(size);
-	std::vector<short> ydist(size);
-	std::vector<double> gx(size);
-	std::vector<double> gy(size);
-	std::vector<double> data(size);
-	std::vector<double> outside(size);
-	std::vector<double> inside(size);
+	etk::Vector<short> xdist(size);
+	etk::Vector<short> ydist(size);
+	etk::Vector<double> gx(size);
+	etk::Vector<double> gy(size);
+	etk::Vector<double> data(size);
+	etk::Vector<double> outside(size);
+	etk::Vector<double> inside(size);
 	// Convert img into double (data)
 	double img_min = 255, img_max = -255;
 	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
@@ -284,7 +284,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 		EWOL_WARNING("Did not find char : '" << _val << "'=" << _val);
 		tmpchar.setNotExist();
 	}
-	m_listElement.push_back(tmpchar);
+	m_listElement.pushBack(tmpchar);
 	//m_font[iii]->display();
 	// generate the kerning for all the characters :
 	if (tmpchar.exist() == true) {
@@ -352,13 +352,13 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 	ejson::Array tmpList;
 	for (size_t iii=0; iii<m_listElement.size(); ++iii) {
 		ejson::Object tmpObj;
-		tmpObj.add("m_UVal", ejson::String(etk::to_string(m_listElement[iii].m_UVal)));
+		tmpObj.add("m_UVal", ejson::String(etk::toString(m_listElement[iii].m_UVal)));
 		tmpObj.add("m_glyphIndex", ejson::Number(m_listElement[iii].m_glyphIndex));
-		tmpObj.add("m_sizeTexture", ejson::String((std::string)m_listElement[iii].m_sizeTexture));
-		tmpObj.add("m_bearing", ejson::String((std::string)m_listElement[iii].m_bearing));
-		tmpObj.add("m_advance", ejson::String((std::string)m_listElement[iii].m_advance));
-		tmpObj.add("m_texturePosStart", ejson::String((std::string)m_listElement[iii].m_texturePosStart));
-		tmpObj.add("m_texturePosSize", ejson::String((std::string)m_listElement[iii].m_texturePosSize));
+		tmpObj.add("m_sizeTexture", ejson::String((etk::String)m_listElement[iii].m_sizeTexture));
+		tmpObj.add("m_bearing", ejson::String((etk::String)m_listElement[iii].m_bearing));
+		tmpObj.add("m_advance", ejson::String((etk::String)m_listElement[iii].m_advance));
+		tmpObj.add("m_texturePosStart", ejson::String((etk::String)m_listElement[iii].m_texturePosStart));
+		tmpObj.add("m_texturePosSize", ejson::String((etk::String)m_listElement[iii].m_texturePosSize));
 		tmpObj.add("m_exist", ejson::Boolean(m_listElement[iii].m_exist));
 		tmpList.add(tmpObj);
 	}
@@ -412,7 +412,7 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 		prop.m_texturePosStart = tmpObj["m_texturePosStart"].toString().get("0,0");
 		prop.m_texturePosSize = tmpObj["m_texturePosSize"].toString().get("0,0");
 		prop.m_exist = tmpObj["m_exist"].toBoolean().get(false);
-		m_listElement.push_back(prop);
+		m_listElement.pushBack(prop);
 	}
 	m_data = egami::load(m_fileName + ".bmp");
 	return m_data.exist();

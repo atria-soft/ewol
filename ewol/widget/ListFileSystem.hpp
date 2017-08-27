@@ -20,17 +20,17 @@ namespace ewol {
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public: // signals
-				esignal::Signal<std::string> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
-				esignal::Signal<std::string> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
-				esignal::Signal<std::string> signalFolderSelect;
-				esignal::Signal<std::string> signalFolderValidate;
+				esignal::Signal<etk::String> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
+				esignal::Signal<etk::String> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
+				esignal::Signal<etk::String> signalFolderSelect;
+				esignal::Signal<etk::String> signalFolderValidate;
 			public: // properties
-				eproperty::Value<std::string> propertyPath; //!< Current folder that display point on.
-				eproperty::Value<std::string> propertyFile; //!< current selected file
+				eproperty::Value<etk::String> propertyPath; //!< Current folder that display point on.
+				eproperty::Value<etk::String> propertyFile; //!< current selected file
 				eproperty::Value<bool> propertyShowFile; //!< Show files elements
 				eproperty::Value<bool> propertyShowFolder; //!< Display the folders elements
 				eproperty::Value<bool> propertyShowHidden; //!< Display hidden elements
-				eproperty::Value<std::string> propertyFilter; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
+				eproperty::Value<etk::String> propertyFilter; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
 			protected:
 				ListFileSystem();
 			public:
@@ -45,13 +45,13 @@ namespace ewol {
 			protected:
 				etk::Color<> getBasicBG() override;
 				uint32_t getNuberOfColomn() override;
-				bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg) override;
+				bool getTitle(int32_t _colomn, etk::String& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg) override;
 				uint32_t getNuberOfRaw() override;
-				bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) override;
+				bool getElement(int32_t _colomn, int32_t _raw, etk::String& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) override;
 				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) override;
 			protected:
 				// TODO: use shred_ptr
-				std::vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)
+				etk::Vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)
 				/**
 				 * @brief Clean the list of element.
 				 */
@@ -67,12 +67,12 @@ namespace ewol {
 				 * @brief Select a specific file in the path
 				 * @param[in] _data File to selested.
 				 */
-				virtual void setSelect(const std::string& _data);
+				virtual void setSelect(const etk::String& _data);
 				/**
 				 * @brief Get the current selected file/folder/... in the list
 				 * @return the String of the element selected.
 				 */
-				std::string getSelect() const ;
+				etk::String getSelect() const ;
 			protected:
 				virtual void onChangePropertyPath();
 				virtual void onChangePropertyFile();

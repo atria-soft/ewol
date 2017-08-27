@@ -11,7 +11,7 @@
 #include <ewol/widget/Image.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <ewol/widget/Composer.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 
 #include <ewol/ewol.hpp>
 
@@ -206,7 +206,7 @@ void ewol::widget::Parameter::onCallbackMenuSelected(const int32_t& _value) {
 	}
 }
 
-void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::WidgetShared _associateWidget) {
+void ewol::widget::Parameter::menuAdd(etk::String _label, etk::String _image, ewol::WidgetShared _associateWidget) {
 	if (m_paramList != nullptr) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
 		if (m_wSlider != nullptr) {
@@ -218,7 +218,7 @@ void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ew
 				if (myLabel == nullptr) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
-					myLabel->propertyValue.set(std::string("No widget for : ") + _label);
+					myLabel->propertyValue.set(etk::String("No widget for : ") + _label);
 					myLabel->propertyExpand.set(bvec2(true,true));
 					m_wSlider->subWidgetAdd(myLabel);
 				}
@@ -230,7 +230,7 @@ void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ew
 		m_currentIdList++;
 	}
 }
-void ewol::widget::Parameter::menuAddGroup(std::string _label) {
+void ewol::widget::Parameter::menuAddGroup(etk::String _label) {
 	if (m_paramList != nullptr) {
 		m_paramList->menuSeparator();
 		m_paramList->menuAddGroup(_label);

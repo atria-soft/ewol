@@ -15,7 +15,7 @@ namespace ewol {
 				ivec2 m_nbSprite; //!< number of sprite in vertical and horizontal
 				vec2 m_unitarySpriteSize; //!< size of a unique sprite
 			public:
-				Sprite(const std::string& _imageName,
+				Sprite(const etk::String& _imageName,
 				       const ivec2& _nbSprite,
 				       int32_t _size=ewol::compositing::Image::sizeAuto);
 				virtual ~Sprite() {};

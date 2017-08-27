@@ -16,7 +16,7 @@
 #include <ewol/context/Context.hpp>
 
 
-std::ostream& ewol::operator <<(std::ostream& _os, enum ewol::font::mode _obj) {
+etk::Stream& ewol::operator <<(etk::Stream& _os, enum ewol::font::mode _obj) {
 	switch(_obj) {
 		default :
 			_os << "error";
@@ -42,7 +42,7 @@ ewol::resource::TexturedFont::TexturedFont():
 	addResourceType("ewol::resource::TexturedFont");
 }
 
-void ewol::resource::TexturedFont::init(const std::string& _fontName) {
+void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
 	EWOL_DEBUG("Load font : '" << _fontName << "'" );
@@ -83,32 +83,32 @@ void ewol::resource::TexturedFont::init(const std::string& _fontName) {
 			return;
 		}
 	}
-	std::string localName(_fontName, 0, (tmpPos - tmpData));
+	etk::String localName(_fontName, 0, (tmpPos - tmpData));
 	if (tmpSize>400) {
 		EWOL_ERROR("Font size too big ==> limit at 400 when exxeed ==> error : " << tmpSize << "==>30");
 		tmpSize = 30;
 	}
 	m_size = tmpSize;
 	
-	std::vector<std::string> folderList;
+	etk::Vector<etk::String> folderList;
 	if (ewol::getContext().getFontDefault().getUseExternal() == true) {
 		#if defined(__TARGET_OS__Android)
-			folderList.push_back("ROOT:system/fonts");
+			folderList.pushBack("ROOT:system/fonts");
 		#elif defined(__TARGET_OS__Linux)
-			folderList.push_back("ROOT:usr/share/fonts");
+			folderList.pushBack("ROOT:usr/share/fonts");
 		#endif
 	}
-	std::string applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
-	std::vector<std::string> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
+	etk::String applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
+	etk::Vector<etk::String> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
 	for (auto &it : applicationBaseFontList) {
-		folderList.push_back(it);
+		folderList.pushBack(it);
 	}
 	for (size_t folderID=0; folderID<folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
-		std::vector<std::string> output;
+		etk::Vector<etk::String> output;
 		myFolder.folderGetRecursiveFiles(output);
-		std::vector<std::string> split = etk::split(localName, ';');
+		etk::Vector<etk::String> split = etk::split(localName, ';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
@@ -286,7 +286,7 @@ bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 			EWOL_WARNING("Did not find char : '" << _val << "'=" << _val);
 			tmpchar.setNotExist();
 		}
-		m_listElement[iii].push_back(tmpchar);
+		m_listElement[iii].pushBack(tmpchar);
 		//m_font[iii]->display();
 		// generate the kerning for all the characters :
 		if (tmpchar.exist() == true) {

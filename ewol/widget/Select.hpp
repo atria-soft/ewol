@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/types.hpp>
 #include <ewol/widget/meta/SpinBase.hpp>
 
@@ -39,17 +39,17 @@ namespace ewol {
 				class Element {
 					public:
 						int32_t m_value;
-						std::string m_name;
+						etk::String m_name;
 						bool m_selected;
 					public:
-						Element(int32_t _value, std::string _name, bool _selected=false);
+						Element(int32_t _value, etk::String _name, bool _selected=false);
 				};
-				std::vector<ewol::widget::Select::Element> m_listElement;
+				etk::Vector<ewol::widget::Select::Element> m_listElement;
 			public:
 				void optionSelectDefault();
 				void optionRemove(int32_t _value);
 				void optionClear();
-				void optionAdd(int32_t _value, std::string _name);
+				void optionAdd(int32_t _value, etk::String _name);
 			protected:
 				bool loadXML(const exml::Element& _node) override;
 				void updateGui() override;

@@ -16,7 +16,7 @@ ewol::resource::ColorFile::ColorFile() :
 	addResourceType("ewol::ColorFile");
 }
 
-void ewol::resource::ColorFile::init(const std::string& _filename) {
+void ewol::resource::ColorFile::init(const etk::String& _filename) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	gale::Resource::init(_filename);
 	EWOL_DEBUG("CF : load \"" << _filename << "\"");
@@ -56,8 +56,8 @@ void ewol::resource::ColorFile::reload() {
 			findError = true;
 			continue;
 		}
-		std::string name = tmpObj["name"].toString().get();
-		std::string color = tmpObj["color"].toString().get(m_errorColor.getHexString());
+		etk::String name = tmpObj["name"].toString().get();
+		etk::String color = tmpObj["color"].toString().get(m_errorColor.getHexString());
 		EWOL_DEBUG("find new color : '" << name << "' color='" << color << "'");
 		if (name.size() == 0) {
 			EWOL_ERROR("Drop an empty name");
@@ -73,7 +73,7 @@ void ewol::resource::ColorFile::reload() {
 }
 
 
-int32_t ewol::resource::ColorFile::request(const std::string& _paramName) {
+int32_t ewol::resource::ColorFile::request(const etk::String& _paramName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {

@@ -76,7 +76,7 @@ ewol::Padding ewol::Padding::operator+(const Padding& _v) {
 	               m_value[3] + _v.m_value[3]);
 }
 
-std::ostream& ewol::operator <<(std::ostream& _os, const ewol::Padding& _obj) {
+etk::Stream& ewol::operator <<(etk::Stream& _os, const ewol::Padding& _obj) {
 	_os << "{";
 	_os << _obj.xLeft();
 	_os << ",";

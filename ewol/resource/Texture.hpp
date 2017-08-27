@@ -14,6 +14,10 @@
 
 namespace ewol {
 	namespace resource {
+		enum class TextureFilter {
+			nearest,
+			linear
+		};
 		class Texture : public gale::Resource {
 			protected:
 				uint32_t m_texId; //!< openGl textureID.
@@ -28,9 +32,25 @@ namespace ewol {
 				bool m_loaded;
 				int32_t m_lastTypeObject;
 				int32_t m_lastSizeObject;
+			protected:
+				bool m_repeat; //!< repeate mode of the image (repeat the image if out of range [0..1]
+			public:
+				/**
+				 * @brief Set the repeate mode of the images if UV range is out of [0..1]
+				 * @param[in] _value Value of the new repeate mode
+				 */
+				void setRepeat(bool _value);
+			protected:
+				enum ewol::resource::TextureFilter m_filter; //!< Filter apply at the image when rendering it
+			public:
+				/**
+				 * @brief Set the Filter mode to apply at the image when display with a scale (not 1:1 ratio)
+				 * @param[in] _value Value of the new filter mode
+				 */
+				void setFilterMode(enum ewol::resource::TextureFilter _filter);
 			// Public API:
 			protected:
-				void init(const std::string& _filename);
+				void init(const etk::String& _filename);
 				void init();
 				Texture();
 			public:

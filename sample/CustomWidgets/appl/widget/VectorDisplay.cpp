@@ -33,7 +33,7 @@ appl::widget::VectorDisplay::~VectorDisplay() {
 }
 
 
-void appl::widget::VectorDisplay::setValue(const std::vector<float>& _data) {
+void appl::widget::VectorDisplay::setValue(const etk::Vector<float>& _data) {
 	m_data = _data;
 	markToRedraw();
 }
@@ -85,11 +85,11 @@ void appl::widget::VectorDisplay::periodicEvent(const ewol::event::Time& _event)
 	if (m_autoDisplay == false) {
 		return;
 	}
-	for (size_t iii=0; iii<std::max(m_data.size()/200.0f, 50.0f); ++iii) {
+	for (size_t iii=0; iii<etk::max(m_data.size()/200.0f, 50.0f); ++iii) {
 		if (m_data.size() > 50) {
 			m_data.erase(m_data.begin());
 		}
-		m_data.push_back(etk::tool::frand(m_minVal, m_maxVal));
+		m_data.pushBack(etk::tool::frand(m_minVal, m_maxVal));
 	}
 	markToRedraw();
 }

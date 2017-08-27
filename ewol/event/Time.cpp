@@ -6,7 +6,7 @@
 
 #include <ewol/widget/Widget.hpp>
 
-std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Time& _obj) {
+etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::Time& _obj) {
 	_os << "{time=" << _obj.getTime();
 	_os << " uptime=" << _obj.getApplUpTime();
 	_os << " delta=" << _obj.getDelta();
@@ -16,12 +16,12 @@ std::ostream& ewol::event::operator <<(std::ostream& _os, const ewol::event::Tim
 }
 
 namespace etk {
-	template<> std::string to_string<ewol::event::Time>(ewol::event::Time const& _obj) {
-		std::string out;
-		out =  "{[ewol::event::Time]time=" + etk::to_string(_obj.getTime());
-		out += ";uptime=" + etk::to_string(_obj.getApplUpTime());
-		out += ";delta=" + etk::to_string(_obj.getDelta());
-		out += ";deltaCall=" + etk::to_string(_obj.getDeltaCall());
+	template<> etk::String toString<ewol::event::Time>(ewol::event::Time const& _obj) {
+		etk::String out;
+		out =  "{[ewol::event::Time]time=" + etk::toString(_obj.getTime());
+		out += ";uptime=" + etk::toString(_obj.getApplUpTime());
+		out += ";delta=" + etk::toString(_obj.getDelta());
+		out += ";deltaCall=" + etk::toString(_obj.getDeltaCall());
 		out += "}";
 		return out;
 	}

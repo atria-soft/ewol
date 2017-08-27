@@ -10,7 +10,7 @@
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Windows.hpp>
 
-ewol::widget::Select::Element::Element(int32_t _value, std::string _name, bool _selected):
+ewol::widget::Select::Element::Element(int32_t _value, etk::String _name, bool _selected):
   m_value(_value),
   m_name(_name),
   m_selected(_selected) {
@@ -91,14 +91,14 @@ void ewol::widget::Select::optionClear() {
 	optionSelectDefault();
 }
 
-void ewol::widget::Select::optionAdd(int32_t _value, std::string _data) {
+void ewol::widget::Select::optionAdd(int32_t _value, etk::String _data) {
 	for (auto &it : m_listElement) {
 		if (_value == it.m_value) {
 			EWOL_DEBUG("replace element: " << _value << " with: '" << _data << "'");
 			it.m_name = _data;
 		}
 	}
-	m_listElement.push_back(ewol::widget::Select::Element(_value, _data, false));
+	m_listElement.pushBack(ewol::widget::Select::Element(_value, _data, false));
 }
 
 bool ewol::widget::Select::loadXML(const exml::Element& _node) {
@@ -120,9 +120,9 @@ bool ewol::widget::Select::loadXML(const exml::Element& _node) {
 			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << pNode.getValue() << "' not in : [option]" );
 			continue;
 		}
-		std::string valId = pNode.attributes["id"];
-		std::string valIsSelected = pNode.attributes["select"];
-		std::string valText = pNode.getText();
+		etk::String valId = pNode.attributes["id"];
+		etk::String valIsSelected = pNode.attributes["select"];
+		etk::String valText = pNode.getText();
 		int32_t id = etk::string_to_int32_t(valId);
 		bool select = etk::string_to_bool(valIsSelected);
 		optionAdd(id, valText);
@@ -180,7 +180,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 			continue;
 		}
 		if (it.m_selected == true) {
-			myLabel->propertyValue.set(std::string("<b>") + it.m_name + "</b>");
+			myLabel->propertyValue.set(etk::String("<b>") + it.m_name + "</b>");
 		} else {
 			myLabel->propertyValue.set(it.m_name);
 		}

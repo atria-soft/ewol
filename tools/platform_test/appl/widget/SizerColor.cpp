@@ -52,13 +52,13 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 		vec2 size = it->getSize();
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
 			underSize += vec2(0.0f, size.y());
-			underSize.setX(std::max(underSize.x(), size.x()));
+			underSize.setX(etk::max(underSize.x(), size.x()));
 		} else {
 			underSize += vec2(size.x(), 0.0f);
-			underSize.setY(std::max(underSize.y(), size.y()));
+			underSize.setY(etk::max(underSize.y(), size.y()));
 		}
-		underOrigin.setX(std::min(it->getOrigin().x(), underOrigin.x()));
-		underOrigin.setY(std::min(it->getOrigin().y(), underOrigin.y()));
+		underOrigin.setX(etk::min(it->getOrigin().x(), underOrigin.x()));
+		underOrigin.setY(etk::min(it->getOrigin().y(), underOrigin.y()));
 	}
 	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
 	vec2 localWidgetOrigin = m_origin + tmpBorderSize;

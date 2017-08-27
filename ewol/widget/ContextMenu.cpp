@@ -70,8 +70,8 @@ void ewol::widget::ContextMenu::onChangeSize() {
 	}
 	int32_t minWidth = 100;
 	int32_t maxWidth = 300;
-	subWidgetSize.setX((int32_t)std::max(minWidth, (int32_t)subWidgetSize.x()));
-	subWidgetSize.setX((int32_t)std::min(maxWidth, (int32_t)subWidgetSize.x()));
+	subWidgetSize.setX((int32_t)etk::max(minWidth, (int32_t)subWidgetSize.x()));
+	subWidgetSize.setX((int32_t)etk::min(maxWidth, (int32_t)subWidgetSize.x()));
 	subWidgetSize.setY((int32_t)subWidgetSize.y());
 	
 	// set config to the Sub-widget
@@ -92,9 +92,9 @@ void ewol::widget::ContextMenu::onChangeSize() {
 			break;
 	}
 	// set the widget position at the border of the screen
-	subWidgetOrigin.setX( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.x()-padding.x()))
+	subWidgetOrigin.setX( (int32_t)(   etk::max(0, (int32_t)(subWidgetOrigin.x()-padding.x()))
 	                                 + padding.x()) );
-	subWidgetOrigin.setY( (int32_t)(   std::max(0, (int32_t)(subWidgetOrigin.y()-padding.y()))
+	subWidgetOrigin.setY( (int32_t)(   etk::max(0, (int32_t)(subWidgetOrigin.y()-padding.y()))
 	                                 + padding.y()) );
 	switch (propertyArrawBorder.get()) {
 		default:

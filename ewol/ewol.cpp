@@ -18,7 +18,7 @@
 #define EWOL_VERSION "0.0.0"
 #endif
 
-std::string ewol::getVersion() {
+etk::String ewol::getVersion() {
 	return EWOL_VERSION;
 }
 

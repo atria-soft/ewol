@@ -24,7 +24,7 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<float> signalChange;
 			public:
-				//eproperty::Value<std::string> propertyShape; //!< name of the shape used
+				//eproperty::Value<etk::String> propertyShape; //!< name of the shape used
 				eproperty::Value<float> propertyValue; //!< current value of the Slider
 				eproperty::Value<float> propertyMinimum; //!< minimum value of the slider
 				eproperty::Value<float> propertyMaximum; //!< maximum value of the slider

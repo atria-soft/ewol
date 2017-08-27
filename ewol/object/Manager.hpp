@@ -19,7 +19,7 @@ namespace ewol {
 			protected:
 				std::recursive_mutex m_mutex;
 			private:
-				std::vector<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
+				etk::Vector<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;
 			public:
 				Manager(Context& _context);
@@ -56,16 +56,16 @@ namespace ewol {
 				 * @param[in] _name Name of the Object
 				 * @return Pointer on the finded Object.
 				 */
-				ewol::ObjectShared get(const std::string& _name);
+				ewol::ObjectShared get(const etk::String& _name);
 			public:
 				/**
 				 * @brief retrive an object with his name
 				 * @param[in] _name Name of the object
 				 * @return the requested object or nullptr
 				 */
-				ewol::ObjectShared getObjectNamed(const std::string& _name);
+				ewol::ObjectShared getObjectNamed(const etk::String& _name);
 			private:
-				std::vector<ewol::ObjectShared> m_workerList;
+				etk::Vector<ewol::ObjectShared> m_workerList;
 			public:
 				/**
 				 * @brief Add a worker on the system list.

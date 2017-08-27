@@ -6,7 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/widget/Widget.hpp>
 #include <ewol/widget/Manager.hpp>
@@ -29,8 +29,8 @@ namespace ewol {
 				};
 				int32_t m_sizeRow; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
 				int32_t m_uniformSizeRow;
-				std::vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
-				std::vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
+				etk::Vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
+				etk::Vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
 				ewol::WidgetShared m_tmpWidget; //!< use when replace a widget ...
 				bool m_gavityButtom;
 			protected:

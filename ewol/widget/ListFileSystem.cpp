@@ -82,8 +82,8 @@ void ewol::widget::ListFileSystem::regenerateView() {
 	markToRedraw();
 }
 
-std::string ewol::widget::ListFileSystem::getSelect() const {
-	std::string tmpVal = "";
+etk::String ewol::widget::ListFileSystem::getSelect() const {
+	etk::String tmpVal = "";
 	if (m_selectedLine >= 0) {
 		if (m_list[m_selectedLine] != nullptr) {
 			tmpVal = m_list[m_selectedLine]->getNameFile();
@@ -93,7 +93,7 @@ std::string ewol::widget::ListFileSystem::getSelect() const {
 }
 
 // select the specific file
-void ewol::widget::ListFileSystem::setSelect(const std::string& _data) {
+void ewol::widget::ListFileSystem::setSelect(const etk::String& _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
@@ -113,7 +113,7 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfColomn() {
 	return 1;
 }
 
-bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
+bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, etk::String &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
 	_myTitle = "title";
 	return true;
 }
@@ -130,7 +130,7 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 	return m_list.size() + offset;
 }
 
-bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
+bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::String& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
 	if (*propertyShowFolder == true) {
 		if (*propertyPath == "/") {

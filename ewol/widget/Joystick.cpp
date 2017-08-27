@@ -11,8 +11,8 @@
 #include <ewol/widget/Manager.hpp>
 
 static bool l_displayBackground(true);
-static std::string l_background("");
-static std::string l_foreground("");
+static etk::String l_background("");
+static etk::String l_foreground("");
 static float l_ratio(1.0/7.0);
 
 ewol::widget::Joystick::Joystick() :
@@ -129,7 +129,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 			if(gale::key::status::down == typeEvent) {
 				signalEnable.emit();
 			} else {
-				std::string tmp = std::string("distance=") + std::string(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
+				etk::String tmp = etk::String("distance=") + etk::String(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
 				signalMove.emit(m_angle+M_PI/2);
 			}
 			//teta += M_PI/2;
@@ -165,7 +165,7 @@ void ewol::widget::Joystick::ratio(float newRatio) {
 }
 
 
-void ewol::widget::Joystick::background(std::string imageNameInData, bool display) {
+void ewol::widget::Joystick::background(etk::String imageNameInData, bool display) {
 	// TODO : check if it existed
 	m_background = imageNameInData;
 	m_displayBackground = display;
@@ -173,7 +173,7 @@ void ewol::widget::Joystick::background(std::string imageNameInData, bool displa
 }
 
 
-void ewol::widget::Joystick::foreground(std::string imageNameInData) {
+void ewol::widget::Joystick::foreground(etk::String imageNameInData) {
 	// TODO : check if it existed
 	m_foreground = imageNameInData;
 	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);

@@ -9,7 +9,7 @@
 #include <ewol/context/Context.hpp>
 #include <etk/types.hpp>
 
-ewol::compositing::TextDF::TextDF(const std::string& _fontName, int32_t _fontSize) :
+ewol::compositing::TextDF::TextDF(const etk::String& _fontName, int32_t _fontSize) :
   ewol::compositing::TextBase("", false),
   m_fontDF(nullptr),
   m_GLglyphLevel(-1),
@@ -23,7 +23,7 @@ ewol::compositing::TextDF::~TextDF() {
 }
 
 void ewol::compositing::TextDF::updateSizeToRender(const vec2& _size) {
-	float minSize = std::min(_size.x(), _size.y());
+	float minSize = etk::min(_size.x(), _size.y());
 	if (m_fontDF != nullptr) {
 		setFontSize(m_fontDF->getSize(minSize));
 	}
@@ -106,7 +106,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::compositing::TextDF::loadProgram(const std::string& _shaderName) {
+void ewol::compositing::TextDF::loadProgram(const etk::String& _shaderName) {
 	ewol::compositing::TextBase::loadProgram(_shaderName);
 	if (m_GLprogram != nullptr) {
 		m_GLglyphLevel = m_GLprogram->getAttribute("EW_glyphLevel");
@@ -140,11 +140,11 @@ void ewol::compositing::TextDF::setFontSize(int32_t _fontSize) {
 	}
 }
 
-void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
+void ewol::compositing::TextDF::setFontName(const etk::String& _fontName) {
 	clear();
 	// remove old one
 	ememory::SharedPtr<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
-	std::string fontName;
+	etk::String fontName;
 	if (_fontName == "") {
 		fontName = ewol::getContext().getFontDefault().getName();
 	} else {
@@ -159,7 +159,7 @@ void ewol::compositing::TextDF::setFontName(const std::string& _fontName) {
 	}
 }
 
-void ewol::compositing::TextDF::setFont(std::string _fontName, int32_t _fontSize) {
+void ewol::compositing::TextDF::setFont(etk::String _fontName, int32_t _fontSize) {
 	setFontSize(_fontSize);
 	setFontName(_fontName);
 }

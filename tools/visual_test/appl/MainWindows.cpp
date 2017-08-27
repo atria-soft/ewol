@@ -62,7 +62,7 @@ void appl::MainWindows::init() {
 	signalShortcut.connect(sharedFromThis(), &appl::MainWindows::onCallbackShortCut);
 }
 
-void appl::MainWindows::onCallbackShortCut(const std::string& _value) {
+void appl::MainWindows::onCallbackShortCut(const etk::String& _value) {
 	APPL_WARNING("Event from ShortCut : " << _value);
 	if (_value == "menu:reloade-shader") {
 		ewol::getContext().getResourcesManager().reLoadResources();
@@ -120,15 +120,15 @@ void appl::MainWindows::onCallbackGravityChange() {
 void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	m_idWidget += _increment;
 	ememory::SharedPtr<ewol::Widget> oldWidget = m_subWidget;
-	std::string tmpDescription;
-	std::string tmpConstruct;
+	etk::String tmpDescription;
+	etk::String tmpConstruct;
 	switch(m_idWidget) {
 		case 0:
 			tmpConstruct = "<image src='DATA:sphere.png'/>\n";
 			tmpDescription = "Test ewol::widget::Image";
 			break;
 		case 1:
-			tmpConstruct = std::string()
+			tmpConstruct = etk::String()
 			    + "<select>\n"
 			    + "    <option id='1'>plop 1</option>\n"
 			    + "    <option id='2'>plop 2</option>\n"
@@ -163,7 +163,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			tmpDescription = "Test ewol::widget::Entry";
 			break;
 		case 8:
-			tmpConstruct = std::string()
+			tmpConstruct = etk::String()
 			    + "<button name='[TEST]Button:TO-TEST' expand='false,false' fill='false,false' >\n"
 			    + "    <label>My <font color='#FF0000'>Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...</label>\n"
 			    + "</button>\n";
@@ -233,29 +233,29 @@ void appl::MainWindows::updateProperty() {
 			ememory::SharedPtr<ewol::widget::Label> widget = ewol::widget::Label::create();
 			widget->propertyValue.set(param->getName() + ":");
 			widgetSizer->subWidgetAdd(widget);
-			std::string type = param->getType();
+			etk::String type = param->getType();
 			if (param->getPropertyType() != "eproperty::List") {
 				//addSpacer(widgetSizer, etk::color::purple);
 				// Main part TODO: ...
-				if (type == typeid(std::string).name()) {
+				if (type == typeid(etk::String).name()) {
 					ewol::widget::EntryShared widgetTmp = ewol::widget::Entry::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
-					eproperty::Value<std::string>* paramValue = dynamic_cast<eproperty::Value<std::string>*>(param);
+					eproperty::Value<etk::String>* paramValue = dynamic_cast<eproperty::Value<etk::String>*>(param);
 					if (paramValue == nullptr) {
 						APPL_ERROR("nullptr...");
 						return;
 					}
-					std::string value = paramValue->get();
+					etk::String value = paramValue->get();
 					widgetTmp->propertyValue.set(value);
 					widgetTmp->propertyExpand.set(bvec2(true,false));
 					widgetTmp->propertyFill.set(bvec2(true,false));
 					esignal::Connection conn = widgetTmp->signalModify.connect(
-						[=](const std::string& _value) {
+						[=](const etk::String& _value) {
 							APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
 							paramValue->set(_value);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 				} else if (type == typeid(gale::Dimension).name()) {
 					addSpacer(widgetSizer);
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
@@ -278,7 +278,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					ewol::widget::LabelShared widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("x");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -297,7 +297,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -323,7 +323,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					
 				} else if (type == typeid(bvec2).name()) {
 					addSpacer(widgetSizer);
@@ -344,7 +344,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					ewol::widget::LabelShared widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("x");
 					widgetTmp->setSubWidget(widgetLabel);
@@ -360,7 +360,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetTmp->setSubWidget(widgetLabel);
@@ -383,7 +383,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					ewol::widget::LabelShared widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("x");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -399,7 +399,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -422,7 +422,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					ewol::widget::LabelShared widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("x");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -438,7 +438,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -462,7 +462,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					ewol::widget::LabelShared widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("x");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -479,7 +479,7 @@ void appl::MainWindows::updateProperty() {
 							paramValue->set(lastValueInterpreted);
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
@@ -494,10 +494,10 @@ void appl::MainWindows::updateProperty() {
 								return;
 							}
 							APPL_INFO("set parameter : name=" << param->getName() << " value=" << _value);
-							m_subWidget->properties.set(param->getName(), etk::to_string(_value));
+							m_subWidget->properties.set(param->getName(), etk::toString(_value));
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 				} else if (    type == typeid(int64_t).name()
 				            || type == typeid(int32_t).name()
 				            || type == typeid(int16_t).name()
@@ -508,7 +508,7 @@ void appl::MainWindows::updateProperty() {
 				            || type == typeid(uint8_t).name()) {
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
-					std::string value = param->getString();
+					etk::String value = param->getString();
 					widgetTmp->propertyValue.set(etk::string_to_int8_t(value));
 					widgetTmp->propertyExpand.set(bvec2(true,false));
 					widgetTmp->propertyFill.set(bvec2(true,false));
@@ -516,10 +516,10 @@ void appl::MainWindows::updateProperty() {
 					esignal::Connection conn = widgetTmp->signalValue.connect(
 						[=](const int64_t& _value) {
 							APPL_INFO("set parameter : NAME name=" << param->getName() << " value=" << _value);
-							param->setString(etk::to_string(_value));
+							param->setString(etk::toString(_value));
 							return;
 						});
-					m_listConnection.push_back(std::move(conn));
+					m_listConnection.pushBack(etk::move(conn));
 					if (type == typeid(int64_t).name()) {
 						widgetTmp->propertyMin.set(0x8000000000000000LL);
 						widgetTmp->propertyMax.set(0x7FFFFFFFFFFFFFFFLL);
@@ -552,12 +552,12 @@ void appl::MainWindows::updateProperty() {
 				}
 			} else {
 				// property list ...
-				std::vector<std::string> listElement = param->getListValue();
+				etk::Vector<etk::String> listElement = param->getListValue();
 				ewol::widget::SelectShared widgetTmp = ewol::widget::Select::create();
 				widgetSizer->subWidgetAdd(widgetTmp);
 				widgetTmp->propertyExpand.set(bvec2(true,false));
 				widgetTmp->propertyFill.set(bvec2(true,false));
-				std::string value = param->getString();
+				etk::String value = param->getString();
 				int32_t selectId = 0;
 				for (int32_t iii=0; iii<listElement.size(); ++iii) {
 					widgetTmp->optionAdd(iii, listElement[iii]);
@@ -572,7 +572,7 @@ void appl::MainWindows::updateProperty() {
 						param->setString(listElement[_value]);
 						return;
 					});
-				m_listConnection.push_back(std::move(conn));
+				m_listConnection.pushBack(etk::move(conn));
 			}
 		}
 		ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();

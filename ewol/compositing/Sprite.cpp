@@ -7,7 +7,7 @@
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Sprite.hpp>
 
-ewol::compositing::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite, int32_t _size) :
+ewol::compositing::Sprite::Sprite(const etk::String& _imageName, const ivec2& _nbSprite, int32_t _size) :
   ewol::compositing::Image(_imageName, false, _size),
   m_nbSprite(_nbSprite),
   m_unitarySpriteSize(0,0) {

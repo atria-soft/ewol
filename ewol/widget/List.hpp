@@ -25,11 +25,11 @@ namespace ewol {
 			public:
 				virtual ~List();
 				void calculateMinMaxSize() override;
-				void setLabel(std::string _newLabel);
+				void setLabel(etk::String _newLabel);
 			// drawing capabilities ....
 			private:
-				std::vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
-				std::vector<ivec2 > m_lineSize;
+				etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
+				etk::Vector<ivec2 > m_lineSize;
 			public:
 				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 				void clearOObjectList();
@@ -48,14 +48,14 @@ namespace ewol {
 				virtual uint32_t getNuberOfColomn() {
 					return 1;
 				};
-				virtual bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
+				virtual bool getTitle(int32_t _colomn, etk::String& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
 					_myTitle = "";
 					return false;
 				};
 				virtual uint32_t getNuberOfRaw() {
 					return 0;
 				};
-				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
+				virtual bool getElement(int32_t _colomn, int32_t _raw, etk::String &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
 					_myTextToWrite = "";
 					_bg = etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
 					_fg = etk::Color<>(0x00, 0x00, 0x00, 0xFF);

@@ -34,7 +34,7 @@ ewol::resource::Colored3DObject::~Colored3DObject() {
 }
 
 
-void ewol::resource::Colored3DObject::draw(const std::vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
                                            const etk::Color<float>& _color,
                                            bool _updateDepthBuffer,
                                            bool _depthtest) {
@@ -76,7 +76,7 @@ void ewol::resource::Colored3DObject::draw(const std::vector<vec3>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::draw(const std::vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
                                            const etk::Color<float>& _color,
                                            mat4& _transformationMatrix,
                                            bool _updateDepthBuffer,
@@ -116,7 +116,7 @@ void ewol::resource::Colored3DObject::draw(const std::vector<vec3>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
                                                const etk::Color<float>& _color,
                                                mat4& _transformationMatrix,
                                                bool _updateDepthBuffer,
@@ -163,44 +163,44 @@ void ewol::resource::Colored3DObject::drawCubeLine(const vec3& _min,
                                                    mat4& _transformationMatrix,
                                                    bool _updateDepthBuffer,
                                                    bool _depthtest) {
-	std::vector<vec3> vertices;
-	vertices.push_back(vec3(_min.x(), _min.y(),_min.z()));
-	vertices.push_back(vec3(_max.x(), _min.y(),_min.z()));
+	etk::Vector<vec3> vertices;
+	vertices.pushBack(vec3(_min.x(), _min.y(),_min.z()));
+	vertices.pushBack(vec3(_max.x(), _min.y(),_min.z()));
 	
-	vertices.push_back(vec3(_max.x(), _min.y(),_min.z()));
-	vertices.push_back(vec3(_max.x(), _min.y(),_max.z()));
+	vertices.pushBack(vec3(_max.x(), _min.y(),_min.z()));
+	vertices.pushBack(vec3(_max.x(), _min.y(),_max.z()));
 	
-	vertices.push_back(vec3(_max.x(), _min.y(),_max.z()));
-	vertices.push_back(vec3(_min.x(), _min.y(),_max.z()));
+	vertices.pushBack(vec3(_max.x(), _min.y(),_max.z()));
+	vertices.pushBack(vec3(_min.x(), _min.y(),_max.z()));
 	
-	vertices.push_back(vec3(_min.x(), _min.y(),_max.z()));
-	vertices.push_back(vec3(_min.x(), _min.y(),_min.z()));
-	
-	
-	vertices.push_back(vec3(_min.x(), _max.y(),_min.z()));
-	vertices.push_back(vec3(_max.x(), _max.y(),_min.z()));
-	
-	vertices.push_back(vec3(_max.x(), _max.y(),_min.z()));
-	vertices.push_back(vec3(_max.x(), _max.y(),_max.z()));
-	
-	vertices.push_back(vec3(_max.x(), _max.y(),_max.z()));
-	vertices.push_back(vec3(_min.x(), _max.y(),_max.z()));
-	
-	vertices.push_back(vec3(_min.x(), _max.y(),_max.z()));
-	vertices.push_back(vec3(_min.x(), _max.y(),_min.z()));
+	vertices.pushBack(vec3(_min.x(), _min.y(),_max.z()));
+	vertices.pushBack(vec3(_min.x(), _min.y(),_min.z()));
 	
 	
-	vertices.push_back(vec3(_min.x(), _min.y(),_min.z()));
-	vertices.push_back(vec3(_min.x(), _max.y(),_min.z()));
+	vertices.pushBack(vec3(_min.x(), _max.y(),_min.z()));
+	vertices.pushBack(vec3(_max.x(), _max.y(),_min.z()));
 	
-	vertices.push_back(vec3(_max.x(), _min.y(),_min.z()));
-	vertices.push_back(vec3(_max.x(), _max.y(),_min.z()));
+	vertices.pushBack(vec3(_max.x(), _max.y(),_min.z()));
+	vertices.pushBack(vec3(_max.x(), _max.y(),_max.z()));
 	
-	vertices.push_back(vec3(_max.x(), _min.y(),_max.z()));
-	vertices.push_back(vec3(_max.x(), _max.y(),_max.z()));
+	vertices.pushBack(vec3(_max.x(), _max.y(),_max.z()));
+	vertices.pushBack(vec3(_min.x(), _max.y(),_max.z()));
 	
-	vertices.push_back(vec3(_min.x(), _min.y(),_max.z()));
-	vertices.push_back(vec3(_min.x(), _max.y(),_max.z()));
+	vertices.pushBack(vec3(_min.x(), _max.y(),_max.z()));
+	vertices.pushBack(vec3(_min.x(), _max.y(),_min.z()));
+	
+	
+	vertices.pushBack(vec3(_min.x(), _min.y(),_min.z()));
+	vertices.pushBack(vec3(_min.x(), _max.y(),_min.z()));
+	
+	vertices.pushBack(vec3(_max.x(), _min.y(),_min.z()));
+	vertices.pushBack(vec3(_max.x(), _max.y(),_min.z()));
+	
+	vertices.pushBack(vec3(_max.x(), _min.y(),_max.z()));
+	vertices.pushBack(vec3(_max.x(), _max.y(),_max.z()));
+	
+	vertices.pushBack(vec3(_min.x(), _min.y(),_max.z()));
+	vertices.pushBack(vec3(_min.x(), _max.y(),_max.z()));
 	
 	drawLine(vertices, _color, _transformationMatrix, _updateDepthBuffer, _depthtest);
 }
@@ -208,7 +208,7 @@ void ewol::resource::Colored3DObject::drawCubeLine(const vec3& _min,
 void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor) {
-	std::vector<vec3> tmpVertices;
+	etk::Vector<vec3> tmpVertices;
 	static int indices[36] = { 0,1,2,	3,2,1,	4,0,6,
 	                           6,0,2,	5,1,4,	4,1,0,
 	                           7,3,1,	7,1,5,	5,4,7,
@@ -226,9 +226,9 @@ void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
 		// normal calculation :
 		//btVector3 normal = (vertices[indices[iii+2]]-vertices[indices[iii]]).cross(vertices[indices[iii+1]]-vertices[indices[iii]]);
 		//normal.normalize ();
-		tmpVertices.push_back(vertices[indices[iii]]);
-		tmpVertices.push_back(vertices[indices[iii+1]]);
-		tmpVertices.push_back(vertices[indices[iii+2]]);
+		tmpVertices.pushBack(vertices[indices[iii]]);
+		tmpVertices.pushBack(vertices[indices[iii+1]]);
+		tmpVertices.pushBack(vertices[indices[iii+2]]);
 	}
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
@@ -238,7 +238,7 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
                                                  int _longs,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor) {
-	std::vector<vec3> tmpVertices;
+	etk::Vector<vec3> tmpVertices;
 	for(int32_t iii=0; iii<=_lats; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
 		float z0  = _radius*sin(lat0);
@@ -261,13 +261,13 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
 			vec3 v2 = vec3(x * zr1, y * zr1, z1);
 			vec3 v3 = vec3(x * zr0, y * zr0, z0);
 			
-			tmpVertices.push_back(v1);
-			tmpVertices.push_back(v2);
-			tmpVertices.push_back(v3);
+			tmpVertices.pushBack(v1);
+			tmpVertices.pushBack(v2);
+			tmpVertices.pushBack(v3);
 			
-			tmpVertices.push_back(v1);
-			tmpVertices.push_back(v3);
-			tmpVertices.push_back(v4);
+			tmpVertices.pushBack(v1);
+			tmpVertices.pushBack(v3);
+			tmpVertices.pushBack(v4);
 		}
 	}
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
@@ -278,7 +278,7 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
                                                    int _longs,
                                                    mat4& _transformationMatrix,
                                                    const etk::Color<float>& _tmpColor) {
-	std::vector<vec3> tmpVertices;
+	etk::Vector<vec3> tmpVertices;
 	// center to border (TOP)
 	
 	// center to border (TOP)
@@ -296,9 +296,9 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
 		vec3 v3 = vec3(x, y, z);
-		tmpVertices.push_back(v1);
-		tmpVertices.push_back(v3);
-		tmpVertices.push_back(v2);
+		tmpVertices.pushBack(v1);
+		tmpVertices.pushBack(v3);
+		tmpVertices.pushBack(v2);
 	}
 	// Cylinder
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
@@ -317,13 +317,13 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		vec3 v3  = vec3(x, y, z);
 		vec3 v3b = vec3(x, y, -z);
 		
-		tmpVertices.push_back(v2);
-		tmpVertices.push_back(v3);
-		tmpVertices.push_back(v3b);
+		tmpVertices.pushBack(v2);
+		tmpVertices.pushBack(v3);
+		tmpVertices.pushBack(v3b);
 		
-		tmpVertices.push_back(v2);
-		tmpVertices.push_back(v3b);
-		tmpVertices.push_back(v2b);
+		tmpVertices.pushBack(v2);
+		tmpVertices.pushBack(v3b);
+		tmpVertices.pushBack(v2b);
 	}
 	// center to border (BUTTOM)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
@@ -340,9 +340,9 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
 		vec3 v3 = vec3(x, y, z);
-		tmpVertices.push_back(v1);
-		tmpVertices.push_back(v2);
-		tmpVertices.push_back(v3);
+		tmpVertices.pushBack(v1);
+		tmpVertices.pushBack(v2);
+		tmpVertices.pushBack(v3);
 	}
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
@@ -352,7 +352,7 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
                                                   int _longs,
                                                   mat4& _transformationMatrix,
                                                   const etk::Color<float>& _tmpColor) {
-	std::vector<vec3> tmpVertices;
+	etk::Vector<vec3> tmpVertices;
 	_lats = int32_t(_lats / 2)*2;
 	
 	// center to border (TOP)
@@ -378,13 +378,13 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 			y = sin(lng);
 			vec3 v2 = vec3(x * zr1, y * zr1, z1+offset);
 			vec3 v3 = vec3(x * zr0, y * zr0, z0+offset);
-			tmpVertices.push_back(v1);
-			tmpVertices.push_back(v2);
-			tmpVertices.push_back(v3);
+			tmpVertices.pushBack(v1);
+			tmpVertices.pushBack(v2);
+			tmpVertices.pushBack(v3);
 			
-			tmpVertices.push_back(v1);
-			tmpVertices.push_back(v3);
-			tmpVertices.push_back(v4);
+			tmpVertices.pushBack(v1);
+			tmpVertices.pushBack(v3);
+			tmpVertices.pushBack(v4);
 		}
 	}
 	// Cylinder
@@ -404,13 +404,13 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 		vec3 v3  = vec3(x, y, z);
 		vec3 v3b = vec3(x, y, -z);
 		
-		tmpVertices.push_back(v2);
-		tmpVertices.push_back(v3);
-		tmpVertices.push_back(v3b);
+		tmpVertices.pushBack(v2);
+		tmpVertices.pushBack(v3);
+		tmpVertices.pushBack(v3b);
 		
-		tmpVertices.push_back(v2);
-		tmpVertices.push_back(v3b);
-		tmpVertices.push_back(v2b);
+		tmpVertices.pushBack(v2);
+		tmpVertices.pushBack(v3b);
+		tmpVertices.pushBack(v2b);
 	}
 	// center to border (BUTTOM)
 	offset = -_size*0.5f;
@@ -435,13 +435,13 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 			y = sin(lng);
 			vec3 v2 = vec3(x * zr1, y * zr1, z1+offset);
 			vec3 v3 = vec3(x * zr0, y * zr0, z0+offset);
-			tmpVertices.push_back(v1);
-			tmpVertices.push_back(v2);
-			tmpVertices.push_back(v3);
+			tmpVertices.pushBack(v1);
+			tmpVertices.pushBack(v2);
+			tmpVertices.pushBack(v3);
 			
-			tmpVertices.push_back(v1);
-			tmpVertices.push_back(v3);
-			tmpVertices.push_back(v4);
+			tmpVertices.pushBack(v1);
+			tmpVertices.pushBack(v3);
+			tmpVertices.pushBack(v4);
 		}
 	}
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
@@ -453,7 +453,7 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
                                                int _longs,
                                                mat4& _transformationMatrix,
                                                const etk::Color<float>& _tmpColor) {
-	std::vector<vec3> tmpVertices;
+	etk::Vector<vec3> tmpVertices;
 	// center to border (TOP)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
@@ -467,9 +467,9 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
 		vec3 v3 = vec3(x, y, _size/2);
-		tmpVertices.push_back(v1);
-		tmpVertices.push_back(v3);
-		tmpVertices.push_back(v2);
+		tmpVertices.pushBack(v1);
+		tmpVertices.pushBack(v3);
+		tmpVertices.pushBack(v2);
 	}
 	// center to border (BUTTOM)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
@@ -485,23 +485,23 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
 		vec3 v3 = vec3(x, y, _size/2);
-		tmpVertices.push_back(v1);
-		tmpVertices.push_back(v2);
-		tmpVertices.push_back(v3);
+		tmpVertices.pushBack(v1);
+		tmpVertices.pushBack(v2);
+		tmpVertices.pushBack(v3);
 	}
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 
-void ewol::resource::Colored3DObject::drawTriangles(const std::vector<vec3>& _vertex,
-                                                    const std::vector<uint32_t>& _indice,
+void ewol::resource::Colored3DObject::drawTriangles(const etk::Vector<vec3>& _vertex,
+                                                    const etk::Vector<uint32_t>& _indice,
                                                     mat4& _transformationMatrix,
                                                     const etk::Color<float>& _tmpColor,
                                                     const vec3& _offset) {
-	std::vector<vec3> tmpVertices;
+	etk::Vector<vec3> tmpVertices;
 	for (size_t iii=0; iii<_indice.size()/3; ++iii) {
-		tmpVertices.push_back(_vertex[_indice[iii*3 + 0]]+_offset);
-		tmpVertices.push_back(_vertex[_indice[iii*3 + 1]]+_offset);
-		tmpVertices.push_back(_vertex[_indice[iii*3 + 2]]+_offset);
+		tmpVertices.pushBack(_vertex[_indice[iii*3 + 0]]+_offset);
+		tmpVertices.pushBack(_vertex[_indice[iii*3 + 1]]+_offset);
+		tmpVertices.pushBack(_vertex[_indice[iii*3 + 2]]+_offset);
 		//EWOL_INFO("  indices " << _indice[iii*3 + 0] << " " << _indice[iii*3 + 1] << " " << _indice[iii*3 + 2]);
 		//EWOL_INFO(" triangle " << _vertex[_indice[iii*3 + 0]] << " " << _vertex[_indice[iii*3 + 1]] << " " << _vertex[_indice[iii*3 + 2]]);
 	}
@@ -510,7 +510,7 @@ void ewol::resource::Colored3DObject::drawTriangles(const std::vector<vec3>& _ve
 }
 
 namespace etk {
-	template<> std::string to_string(ewol::resource::Colored3DObject const&) {
+	template<> etk::String toString(ewol::resource::Colored3DObject const&) {
 		return "!!ewol::resource::Colored3DObject!ERROR!CAN_NOT_BE_CONVERT!!";
 	}
 }

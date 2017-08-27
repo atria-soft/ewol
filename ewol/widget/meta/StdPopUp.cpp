@@ -9,7 +9,7 @@
 #include <ewol/widget/Spacer.hpp>
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Manager.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 
 ewol::widget::StdPopUp::StdPopUp() :
   propertyTitle(this, "title",
@@ -99,7 +99,7 @@ void ewol::widget::StdPopUp::onChangePropertyComment() {
 	markToRedraw();
 }
 
-ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
+ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const etk::String& _text, bool _autoExit) {
 	if (m_subBar == nullptr) {
 		EWOL_ERROR("button-bar does not existed ...");
 		return nullptr;

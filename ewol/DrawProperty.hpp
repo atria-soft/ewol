@@ -43,6 +43,6 @@ namespace ewol {
 			ivec2 m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
 			void limit(const vec2& _origin, const vec2& _size);
 	};
-	std::ostream& operator <<(std::ostream& _os, const ewol::DrawProperty& _obj);
+	etk::Stream& operator <<(etk::Stream& _os, const ewol::DrawProperty& _obj);
 	
 }

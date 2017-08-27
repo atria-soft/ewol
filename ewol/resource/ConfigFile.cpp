@@ -18,7 +18,7 @@ ewol::resource::ConfigFile::ConfigFile() :
 	addResourceType("ewol::ConfigFile");
 }
 
-void ewol::resource::ConfigFile::init(const std::string& _filename) {
+void ewol::resource::ConfigFile::init(const etk::String& _filename) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	gale::Resource::init(_filename);
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
@@ -48,7 +48,7 @@ void ewol::resource::ConfigFile::reload() {
 }
 
 
-int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
+int32_t ewol::resource::ConfigFile::request(const etk::String& _paramName) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {
@@ -70,7 +70,7 @@ double ewol::resource::ConfigFile::getNumber(int32_t _id) {
 	return m_list[_id].toNumber().get();
 }
 
-std::string ewol::resource::ConfigFile::getString(int32_t _id) {
+etk::String ewol::resource::ConfigFile::getString(int32_t _id) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (    _id < 0
 	     || m_list[_id].exist() == false) {

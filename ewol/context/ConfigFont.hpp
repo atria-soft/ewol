@@ -17,24 +17,24 @@ namespace ewol {
 				ConfigFont();
 				virtual ~ConfigFont();
 			private:
-				std::string m_folder;
+				etk::String m_folder;
 			public:
 				/**
 				 * @brief Specify the default font folder for the Ewol search system (only needed when embended font)
 				 * @param[in] _folder basic folder of the font (ex: DATA:fonts)
 				 */
-				void setFolder(const std::string& _folder) {
+				void setFolder(const etk::String& _folder) {
 					m_folder = _folder;
 				};
 				/**
 				 * @brief get the default font folder.
 				 * @return The default font folder.
 				 */
-				const std::string& getFolder() {
+				const etk::String& getFolder() {
 					return m_folder;
 				};
 			private:
-				std::string m_name;
+				etk::String m_name;
 				int32_t m_size;
 			public:
 				/**
@@ -42,19 +42,19 @@ namespace ewol {
 				 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
 				 * @param[in] _size The default size of the font default=10.
 				 */
-				void set(const std::string& _fontName, int32_t _size);
+				void set(const etk::String& _fontName, int32_t _size);
 				/**
 				 * @brief get the current default font name
 				 * @raturn a reference on the font name string
 				 */
-				const std::string& getName() {
+				const etk::String& getName() {
 					return m_name;
 				};
 				/**
 				 * @brief Set the current default font name
 				 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
 				 */
-				void setName(const std::string& _fontName);
+				void setName(const etk::String& _fontName);
 				/**
 				 * @brief get the default font size.
 				 * @return the font size.

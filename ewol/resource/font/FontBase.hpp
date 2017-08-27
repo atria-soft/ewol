@@ -21,7 +21,7 @@ namespace ewol {
 				FontBase() {
 					addResourceType("ewol::FontFreeType");
 				}
-				void init(const std::string& _fontName) {
+				void init(const etk::String& _fontName) {
 					gale::Resource::init(_fontName);
 				};
 				
@@ -41,12 +41,12 @@ namespace ewol {
 				                       ewol::GlyphProperty& _property,
 				                       int32_t _borderSize = 0) = 0;
 				
-				virtual vec2 getSize(int32_t _fontSize, const std::string& _unicodeString) = 0;
+				virtual vec2 getSize(int32_t _fontSize, const etk::String& _unicodeString) = 0;
 				virtual float getSizeWithHeight(float _fontHeight) = 0;
 				
 				virtual int32_t getHeight(int32_t _fontSize) = 0;
 				
-				virtual void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph) { };
+				virtual void generateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph) { };
 				
 				virtual void display() {};
 		};

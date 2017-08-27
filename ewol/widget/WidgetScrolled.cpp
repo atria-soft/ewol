@@ -60,9 +60,9 @@ void ewol::widget::WidgetScrolled::onRegenerateDisplay() {
 	if(    m_size.y() < m_maxSize.y()
 	    || m_originScrooled.y()!=0) {
 		float lenScrollBar = m_size.y()*m_size.y() / m_maxSize.y();
-		lenScrollBar = std::avg(10.0f, lenScrollBar, m_size.y());
+		lenScrollBar = etk::avg(10.0f, lenScrollBar, m_size.y());
 		float originScrollBar = m_originScrooled.y() / (m_maxSize.y()-m_size.y()*m_limitScrolling.y());
-		originScrollBar = std::avg(0.0f, originScrollBar, 1.0f);
+		originScrollBar = etk::avg(0.0f, originScrollBar, 1.0f);
 		originScrollBar *= (m_size.y()-lenScrollBar);
 		m_shaperV.setShape(vec2(m_size.x() - paddingVert.x(), 0),
 		                   vec2(paddingVert.x(), m_size.y()),
@@ -72,9 +72,9 @@ void ewol::widget::WidgetScrolled::onRegenerateDisplay() {
 	if(    m_size.x() < m_maxSize.x()
 	    || m_originScrooled.x()!=0) {
 		float lenScrollBar = (m_size.x()-paddingHori.xLeft())*(m_size.x()-paddingVert.x()) / m_maxSize.x();
-		lenScrollBar = std::avg(10.0f, lenScrollBar, (m_size.x()-paddingVert.x()));
+		lenScrollBar = etk::avg(10.0f, lenScrollBar, (m_size.x()-paddingVert.x()));
 		float originScrollBar = m_originScrooled.x() / (m_maxSize.x()-m_size.x()*m_limitScrolling.x());
-		originScrollBar = std::avg(0.0f, originScrollBar, 1.0f);
+		originScrollBar = etk::avg(0.0f, originScrollBar, 1.0f);
 		originScrollBar *= (m_size.x()-paddingHori.xRight()-lenScrollBar);
 		m_shaperH.setShape(vec2(0, 0),
 		                   vec2(m_size.x()-paddingVert.x(), paddingHori.y()),
@@ -107,7 +107,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						m_highSpeedButton = 1;
 						// force direct scrolling in this case
 						m_originScrooled.setY((int32_t)(m_maxSize.y() * (relativePos.y()-paddingV.yButtom()) / (m_size.y()-paddingV.yButtom()*2)));
-						m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+						m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 						markToRedraw();
 						return true;
 					}
@@ -121,7 +121,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						m_highSpeedButton = 1;
 						// force direct scrolling in this case
 						m_originScrooled.setX((int32_t)(m_maxSize.x() * (relativePos.x()-paddingH.xLeft()) / (m_size.x()-paddingH.xLeft()*2)));
-						m_originScrooled.setX(std::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
+						m_originScrooled.setX(etk::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
 						markToRedraw();
 						return true;
 					}
@@ -133,7 +133,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 					changeZoom(1);
 					/*
 					float zoom = getZoom()*1.1;
-					zoom = std::avg(0.1f, zoom, 5000.0f);
+					zoom = etk::avg(0.1f, zoom, 5000.0f);
 					setZoom(zoom);
 					*/
 				} else {
@@ -141,7 +141,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 					    || m_originScrooled.y() != 0
 					    || m_size.y()*m_limitScrolling.y() < m_maxSize.y() ) {
 						m_originScrooled.setY(m_originScrooled.y()-m_pixelScrolling);
-						m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+						m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 						markToRedraw();
 						return true;
 					}
@@ -152,7 +152,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 					changeZoom(-1);
 					/*
 					float zoom = getZoom()*0.9;
-					zoom = std::avg(0.1f, zoom, 5000.0f);
+					zoom = etk::avg(0.1f, zoom, 5000.0f);
 					setZoom(zoom);
 					*/
 				} else {
@@ -160,7 +160,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 					    || m_originScrooled.y()!=0
 					    || m_size.y()*m_limitScrolling.y() < m_maxSize.y() ) {
 						m_originScrooled.setY(m_originScrooled.y()+m_pixelScrolling);
-						m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+						m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 						markToRedraw();
 						return true;
 					}
@@ -172,7 +172,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 				    || m_originScrooled.x()!=0
 				    || m_size.x()*m_limitScrolling.x() < m_maxSize.x() ) {
 					m_originScrooled.setX(m_originScrooled.x()-m_pixelScrolling);
-					m_originScrooled.setX(std::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
+					m_originScrooled.setX(etk::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
 					markToRedraw();
 					return true;
 				}
@@ -183,7 +183,7 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 				    || m_originScrooled.x()!=0
 				    || m_size.x()*m_limitScrolling.x() < m_maxSize.x() ) {
 					m_originScrooled.setX(m_originScrooled.x()+m_pixelScrolling);
-					m_originScrooled.setX(std::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
+					m_originScrooled.setX(etk::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
 					markToRedraw();
 					return true;
 				}
@@ -252,20 +252,20 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						}
 						markToRedraw();
 					}
-					m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+					m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 					return true;
 				}
 				if (    m_highSpeedMode == ewol::widget::Scroll::speedModeEnableHorizontal
 				     && _event.getStatus() == gale::key::status::move) {
 					m_originScrooled.setX((int32_t)(m_maxSize.x() * (relativePos.x()-paddingH.xLeft()) / (m_size.x()-paddingH.x())));
-					m_originScrooled.setX(std::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
+					m_originScrooled.setX(etk::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
 					markToRedraw();
 					return true;
 				}
 				if (    m_highSpeedMode == ewol::widget::Scroll::speedModeEnableVertical
 				     && _event.getStatus() == gale::key::status::move) {
 					m_originScrooled.setY((int32_t)(m_maxSize.y() * (relativePos.y()-paddingV.yButtom()) / (m_size.y()-paddingV.y())));
-					m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+					m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 					markToRedraw();
 					return true;
 				}
@@ -301,8 +301,8 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 					if (_event.getStatus() == gale::key::status::move) {
 						m_originScrooled.setX(m_originScrooled.x() - (relativePos.x() - m_fingerMoveStartPos[idTable].x())*0.5f);
 						m_originScrooled.setY(m_originScrooled.y() - (relativePos.y() - m_fingerMoveStartPos[idTable].y())*0.5f);
-						m_originScrooled.setX(std::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
-						m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+						m_originScrooled.setX(etk::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
+						m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 						m_fingerMoveStartPos[idTable] = relativePos;
 						EWOL_VERBOSE("SCROOL  == > MOVE m_originScrooled=" << m_originScrooled << " " << relativePos << " " << m_highSpeedStartPos);
 						markToRedraw();
@@ -360,8 +360,8 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 						//m_originScrooled.x = (int32_t)(m_maxSize.x * x / m_size.x);
 						m_originScrooled.setX(m_originScrooled.x() - (relativePos.x() - m_highSpeedStartPos.x()));
 						m_originScrooled.setY(m_originScrooled.y() - (relativePos.y() - m_highSpeedStartPos.y()));
-						m_originScrooled.setX(std::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
-						m_originScrooled.setY(std::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
+						m_originScrooled.setX(etk::avg(0.0f, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling.x())));
+						m_originScrooled.setY(etk::avg(0.0f, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling.y())));
 						m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
 						EWOL_VERBOSE("SCROOL  == > MOVE m_originScrooled=" << m_originScrooled << " " << relativePos << " " << m_highSpeedStartPos);
 						markToRedraw();
@@ -382,14 +382,14 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 			float tmp1=m_size.x() / m_maxSize.y();
 			float tmp2=m_size.y() / m_maxSize.x();
 			//EWOL_INFO(" elements Zoom : " << tmp1 << " " << tmp2);
-			tmp1 = std::min(tmp1, tmp2);
+			tmp1 = etk::min(tmp1, tmp2);
 			if (    _event.getId() == 4
 			     && _event.getStatus() == gale::key::status::up) {
 				m_zoom -= 0.1;
 				if (tmp1 < 1.0) {
-					m_zoom = std::max(tmp1, m_zoom);
+					m_zoom = etk::max(tmp1, m_zoom);
 				} else {
-					m_zoom = std::max(1.0f, m_zoom);
+					m_zoom = etk::max(1.0f, m_zoom);
 				}
 				markToRedraw();
 				return true;
@@ -397,9 +397,9 @@ bool ewol::widget::WidgetScrolled::onEventInput(const ewol::event::Input& _event
 			            && _event.getStatus() == gale::key::status::up) {
 				m_zoom += 0.1;
 				if (tmp1 > 1.0) {
-					m_zoom = std::min(tmp1, m_zoom);
+					m_zoom = etk::min(tmp1, m_zoom);
 				} else {
-					m_zoom = std::min(1.0f, m_zoom);
+					m_zoom = etk::min(1.0f, m_zoom);
 				}
 				markToRedraw();
 				return true;
@@ -456,18 +456,18 @@ void ewol::widget::WidgetScrolled::setScrollingPositionDynamic(vec2 _borderWidth
 	// check scrooling in X
 	if (_currentPosition.x() < (m_originScrooled.x() + _borderWidth.x()) ) {
 		m_originScrooled.setX(_currentPosition.x() - _borderWidth.x());
-		m_originScrooled.setX(std::max(0.0f, m_originScrooled.x()));
+		m_originScrooled.setX(etk::max(0.0f, m_originScrooled.x()));
 	} else if (_currentPosition.x() > (m_originScrooled.x()+m_size.x()-2*_borderWidth.x()) ) {
 		m_originScrooled.setX(_currentPosition.x() - m_size.x() + 2*_borderWidth.x());
-		m_originScrooled.setX(std::max(0.0f, m_originScrooled.x()));
+		m_originScrooled.setX(etk::max(0.0f, m_originScrooled.x()));
 	}
 	// check scrooling in Y
 	if (_currentPosition.y() < (m_originScrooled.y() + _borderWidth.y()) ) {
 		m_originScrooled.setY(_currentPosition.y() - _borderWidth.y());
-		m_originScrooled.setY(std::max(0.0f, m_originScrooled.y()));
+		m_originScrooled.setY(etk::max(0.0f, m_originScrooled.y()));
 	} else if (_currentPosition.y() > (m_originScrooled.y()+m_size.y()-2*_borderWidth.y()) ) {
 		m_originScrooled.setY(_currentPosition.y() - m_size.y() + 2*_borderWidth.y());
-		m_originScrooled.setY(std::max(0.0f, m_originScrooled.y()));
+		m_originScrooled.setY(etk::max(0.0f, m_originScrooled.y()));
 	}
 }
 
@@ -475,7 +475,7 @@ void ewol::widget::WidgetScrolled::scroolingMode(enum scrollingMode _newMode) {
 	m_scroollingMode = _newMode;
 	if (m_scroollingMode == scroolModeGame) {
 		// set the scene maximum size :
-		m_maxSize.setValue(std::max(m_size.x(), m_size.y()),
+		m_maxSize.setValue(etk::max(m_size.x(), m_size.y()),
 		                   m_maxSize.x());
 		m_zoom = 1;
 	}

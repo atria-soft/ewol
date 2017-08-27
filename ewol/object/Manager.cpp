@@ -71,7 +71,7 @@ void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
 	if (_object == nullptr) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
-	m_eObjectList.push_back(_object);
+	m_eObjectList.pushBack(_object);
 }
 
 int32_t ewol::object::Manager::getNumberObject() {
@@ -97,7 +97,7 @@ void ewol::object::Manager::cleanInternalRemoved() {
 	}
 }
 
-ewol::ObjectShared ewol::object::Manager::get(const std::string& _name) {
+ewol::ObjectShared ewol::object::Manager::get(const etk::String& _name) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	if (_name == "") {
 		return nullptr;
@@ -113,7 +113,7 @@ ewol::ObjectShared ewol::object::Manager::get(const std::string& _name) {
 }
 
 
-ewol::ObjectShared ewol::object::Manager::getObjectNamed(const std::string& _name) {
+ewol::ObjectShared ewol::object::Manager::getObjectNamed(const etk::String& _name) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
 	return ewol::object::Manager::get(_name);
 }
@@ -121,7 +121,7 @@ ewol::ObjectShared ewol::object::Manager::getObjectNamed(const std::string& _nam
 
 void ewol::object::Manager::workerAdd(const ewol::ObjectShared& _worker) {
 	std::unique_lock<std::recursive_mutex> lock(m_mutex);
-	m_workerList.push_back(_worker);
+	m_workerList.pushBack(_worker);
 }
 
 void ewol::object::Manager::workerRemove(const ewol::ObjectShared& _worker) {

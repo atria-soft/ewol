@@ -32,7 +32,7 @@ namespace ewol {
 			public: // properties:
 				eproperty::Range<float> propertyTransitionSpeed; //!< speed of the transition (default 1  == > 1s)
 				eproperty::List<enum sladingMode> propertyTransitionMode; //!< mode to slide the widgets
-				eproperty::Value<std::string> propertySelectWidget; //!< current select configuration
+				eproperty::Value<etk::String> propertySelectWidget; //!< current select configuration
 			protected:
 				WSlider();
 			public:
@@ -64,7 +64,7 @@ namespace ewol {
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetName Name of the subwidget name
 				 */
-				void subWidgetSelectSet(const std::string& _widgetName);
+				void subWidgetSelectSet(const etk::String& _widgetName);
 			public:
 				void onChangeSize() override;
 				void systemDraw(const ewol::DrawProperty& _displayProp) override;
@@ -82,6 +82,6 @@ namespace ewol {
 				virtual void onChangePropertyTransitionMode();
 		};
 	}
-	std::ostream& operator <<(std::ostream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
+	etk::Stream& operator <<(etk::Stream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
 }
 

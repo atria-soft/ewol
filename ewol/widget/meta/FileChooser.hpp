@@ -54,7 +54,7 @@ namespace ewol {
 		 *  Now we just need to wait the the open event message.
 		 *  
 		 *  [code style=c++]
-		 *  void ****::onCallbackOpenFile(const std::string& _value) {
+		 *  void ****::onCallbackOpenFile(const etk::String& _value) {
 		 *  	APPL_INFO("Request open file : '" << _value << "'");
 		 *  }
 		 *  void ****::onCallbackClosePopUp() {
@@ -66,13 +66,13 @@ namespace ewol {
 		class FileChooser : public ewol::widget::Composer {
 			public: // signals
 				esignal::Signal<> signalCancel; //!< abort the display of the pop-up or press cancel button
-				esignal::Signal<std::string> signalValidate; //!< select file(s)
+				esignal::Signal<etk::String> signalValidate; //!< select file(s)
 			public: // properties
-				eproperty::Value<std::string> propertyPath; //!< Current path to explore
-				eproperty::Value<std::string> propertyFile; //!< Selected file
-				eproperty::Value<std::string> propertyLabelTitle; //!< Label of the pop-up (can use translation)
-				eproperty::Value<std::string> propertyLabelValidate; //!< Label of validate button of the pop-up (can use translation)
-				eproperty::Value<std::string> propertyLabelCancel; //!< Label of cancel/close button of the pop-up (can use translation)
+				eproperty::Value<etk::String> propertyPath; //!< Current path to explore
+				eproperty::Value<etk::String> propertyFile; //!< Selected file
+				eproperty::Value<etk::String> propertyLabelTitle; //!< Label of the pop-up (can use translation)
+				eproperty::Value<etk::String> propertyLabelValidate; //!< Label of validate button of the pop-up (can use translation)
+				eproperty::Value<etk::String> propertyLabelCancel; //!< Label of cancel/close button of the pop-up (can use translation)
 			protected:
 				FileChooser();
 				void init() override;
@@ -80,19 +80,19 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(FileChooser, "FileChooser");
 				virtual ~FileChooser();
 			private:
-				std::string getCompleateFileName();
+				etk::String getCompleateFileName();
 				void updateCurrentFolder();
 			public:
 				void onGetFocus() override;
 			private:
 				// callback functions:
-				void onCallbackEntryFolderChangeValue(const std::string& _value);
-				void onCallbackEntryFileChangeValue(const std::string& _value);
+				void onCallbackEntryFolderChangeValue(const etk::String& _value);
+				void onCallbackEntryFileChangeValue(const etk::String& _value);
 				void onCallbackButtonCancelPressed();
 				void onCallbackHidenFileChangeChangeValue(const bool& _value);
-				void onCallbackListFolderSelectChange(const std::string& _value);
-				void onCallbackListFileSelectChange(const std::string& _value);
-				void onCallbackListFileValidate(const std::string& _value);
+				void onCallbackListFolderSelectChange(const etk::String& _value);
+				void onCallbackListFileSelectChange(const etk::String& _value);
+				void onCallbackListFileValidate(const etk::String& _value);
 				void onCallbackListValidate();
 				void onCallbackHomePressed();
 			protected:

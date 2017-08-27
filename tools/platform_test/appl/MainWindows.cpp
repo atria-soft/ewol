@@ -49,7 +49,7 @@ void appl::MainWindows::init() {
 	externSubBind(m_composer, ewol::widget::Button, "appl-move", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackMove);
 	
 	externSubBind(m_composer, ewol::widget::Button, "appl-full-screen", signalValue, sharedFromThis(), &appl::MainWindows::onCallbackFullScreen);
-	//m_listConnection.push_back(getObjectManager().periodicCall.connect(this, &appl::MainWindows::forceFocusCall));
+	//m_listConnection.pushBack(getObjectManager().periodicCall.connect(this, &appl::MainWindows::forceFocusCall));
 	keepFocus();
 	//shortCutAdd("F12", "menu:reloade-shader");
 	//signalShortcut.connect(sharedFromThis(), &appl::MainWindows::onCallbackShortCut);
@@ -58,21 +58,21 @@ void appl::MainWindows::init() {
 void appl::MainWindows::onCallbackCopy() {
 	static int32_t iii = 0;
 	APPL_INFO("copy");
-	gale::context::clipBoard::set(gale::context::clipBoard::clipboardStd, "bonjour, injection in the clipboard " + etk::to_string(iii++) );
+	gale::context::clipBoard::set(gale::context::clipBoard::clipboardStd, "bonjour, injection in the clipboard " + etk::toString(iii++) );
 }
 
 void appl::MainWindows::onCallbackPast() {
 	APPL_INFO("past");
 	gale::context::clipBoard::request(gale::context::clipBoard::clipboardStd);
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	std::string value = gale::context::clipBoard::get(gale::context::clipBoard::clipboardStd);
+	etk::String value = gale::context::clipBoard::get(gale::context::clipBoard::clipboardStd);
 	APPL_INFO("past : '" << value << "'");
 	propertySetOnWidgetNamed("appl-entry-clipboard", "value", value);
 }
 void appl::MainWindows::onCallbackSetTitle() {
 	static int32_t iii = 0;
 	APPL_INFO("title");
-	gale::getContext().setTitle("set title " + etk::to_string(iii++));
+	gale::getContext().setTitle("set title " + etk::toString(iii++));
 }
 void appl::MainWindows::onCallbackClose() {
 	APPL_INFO("close");
@@ -105,15 +105,15 @@ void appl::MainWindows::onCallbackFullScreen(const bool& _value) {
 
 bool appl::MainWindows::onEventInput(const ewol::event::Input& _event) {
 	APPL_INFO("get Event: " << _event);
-	propertySetOnWidgetNamed("appl-special-key-value", "value", etk::to_string(_event.getSpecialKey()));
-	propertySetOnWidgetNamed("appl-mouse-value", "value", etk::to_string(_event.getType()) + " " + etk::to_string(_event.getId()) + " " + etk::to_string(_event.getPos()));
+	propertySetOnWidgetNamed("appl-special-key-value", "value", etk::toString(_event.getSpecialKey()));
+	propertySetOnWidgetNamed("appl-mouse-value", "value", etk::toString(_event.getType()) + " " + etk::to_string(_event.getId()) + " " + etk::to_string(_event.getPos()));
 	return false;
 }
 
 bool appl::MainWindows::onEventEntry(const ewol::event::Entry& _event) {
 	APPL_INFO("get Event: " << _event);
-	propertySetOnWidgetNamed("appl-special-key-value", "value", etk::to_string(_event.getSpecialKey()));
-	propertySetOnWidgetNamed("appl-last-key-pressed", "value", etk::to_string(_event.getType()) + " " + etk::to_string(_event.getStatus()) + " " + etk::to_string(_event.getChar()));
+	propertySetOnWidgetNamed("appl-special-key-value", "value", etk::toString(_event.getSpecialKey()));
+	propertySetOnWidgetNamed("appl-last-key-pressed", "value", etk::toString(_event.getType()) + " " + etk::to_string(_event.getStatus()) + " " + etk::to_string(_event.getChar()));
 	return false;
 }
 

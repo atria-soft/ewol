@@ -17,7 +17,7 @@ namespace ewol {
 			public:
 				static const int32_t sizeAuto;
 			private:
-				std::string m_filename;
+				etk::String m_filename;
 				ivec2 m_requestSize;
 				vec3 m_position; //!< The current position to draw
 				vec3 m_clippingPosStart; //!< Clipping start position
@@ -54,7 +54,7 @@ namespace ewol {
 				 * @param[in] _df enable distance field mode
 				 * @param[in] _size for the image when Verctorial image loading is requested
 				 */
-				Image(const std::string& _imageName="",
+				Image(const etk::String& _imageName="",
 				      bool _df=false,
 				      int32_t _size=ewol::compositing::Image::sizeAuto);
 				/**
@@ -159,10 +159,10 @@ namespace ewol {
 				 * @param[in] _newFile New file of the Image
 				 * @param[in] _size for the image when Verctorial image loading is requested
 				 */
-				void setSource(const std::string& _newFile, int32_t _size=32) {
+				void setSource(const etk::String& _newFile, int32_t _size=32) {
 					setSource(_newFile, vec2(_size,_size));
 				};
-				void setSource(const std::string& _newFile, const vec2& _size);
+				void setSource(const etk::String& _newFile, const vec2& _size);
 				void setSource(egami::Image _image);
 				/**
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..

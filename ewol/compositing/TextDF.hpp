@@ -13,7 +13,7 @@
 #include <ewol/resource/DistanceFieldFont.hpp>
 #include <ewol/compositing/TextBase.hpp>
 #include <exml/exml.hpp>
-#include <string>
+#include <etk/String.hpp>
 
 namespace ewol {
 	namespace compositing {
@@ -28,7 +28,7 @@ namespace ewol {
 				 * @param[in] _fontName Name of the font that might be loaded
 				 * @param[in] _fontSize size of the font that might be loaded
 				 */
-				TextDF(const std::string& _fontName="", int32_t _fontSize=-1);
+				TextDF(const etk::String& _fontName="", int32_t _fontSize=-1);
 				/**
 				 * @brief generic destructor
 				 */
@@ -56,10 +56,10 @@ namespace ewol {
 				virtual ewol::GlyphProperty * getGlyphPointer(char32_t _charcode);
 				
 			public:
-				virtual void loadProgram(const std::string& _shaderName);
+				virtual void loadProgram(const etk::String& _shaderName);
 				virtual void setFontSize(int32_t _fontSize);
-				virtual void setFontName(const std::string& _fontName);
-				virtual void setFont(std::string _fontName, int32_t _fontSize);
+				virtual void setFontName(const etk::String& _fontName);
+				virtual void setFont(etk::String _fontName, int32_t _fontSize);
 				virtual void setFontMode(enum ewol::font::mode _mode);
 				virtual void printChar(const char32_t& _charcode);
 				virtual vec3 calculateSizeChar(const char32_t& _charcode);

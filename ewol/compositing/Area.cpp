@@ -44,7 +44,7 @@ ewol::compositing::Area::~Area() {
 void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = gale::resource::Program::create(std::string("{ewol}DATA:textured3D.prog"));
+	m_GLprogram = gale::resource::Program::create(etk::String("{ewol}DATA:textured3D.prog"));
 	if (m_GLprogram != nullptr) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");

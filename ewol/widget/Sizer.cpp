@@ -52,11 +52,11 @@ void ewol::widget::Sizer::onChangeSize() {
 		}
 		vec2 tmpSize = it->getCalculateMinSize();
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
-			minSize = vec2(std::max(minSize.x(), tmpSize.x()),
+			minSize = vec2(etk::max(minSize.x(), tmpSize.x()),
 			               minSize.y() + tmpSize.y());
 		} else {
 			minSize = vec2(minSize.x() + tmpSize.x(),
-			               std::max(minSize.y(), tmpSize.y()));
+			               etk::max(minSize.y(), tmpSize.y()));
 		}
 		bvec2 expand = it->canExpand();
 		nbWidgetExpand += ivec2(expand.x()==true?1:0,
@@ -150,14 +150,14 @@ void ewol::widget::Sizer::onChangeSize() {
 				continue;
 			}
 			vec2 tmpSizeMin = it->getSize();
-			tmpSizeMin.setX(std::avg(tmpSizeMin.x(), localWidgetSize.x(), it->getCalculateMaxSize().x()));
+			tmpSizeMin.setX(etk::avg(tmpSizeMin.x(), localWidgetSize.x(), it->getCalculateMaxSize().x()));
 			it->setSize(tmpSizeMin);
 		} else {
 			if (it->canExpand().y() == false) {
 				continue;
 			}
 			vec2 tmpSizeMin = it->getSize();
-			tmpSizeMin.setY(std::avg(tmpSizeMin.y(), localWidgetSize.y(), it->getCalculateMaxSize().y()));
+			tmpSizeMin.setY(etk::avg(tmpSizeMin.y(), localWidgetSize.y(), it->getCalculateMaxSize().y()));
 			it->setSize(tmpSizeMin);
 		}
 	}
@@ -177,10 +177,10 @@ void ewol::widget::Sizer::onChangeSize() {
 		vec2 size = it->getSize();
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
 			underSize += vec2(0.0f, size.y());
-			underSize.setX(std::max(underSize.x(), size.x()));
+			underSize.setX(etk::max(underSize.x(), size.x()));
 		} else {
 			underSize += vec2(size.x(), 0.0f);
-			underSize.setY(std::max(underSize.y(), size.y()));
+			underSize.setY(etk::max(underSize.y(), size.y()));
 		}
 	}
 	vec2 deltas = localWidgetSize - underSize;
