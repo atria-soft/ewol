@@ -241,7 +241,7 @@ def configure(target, my_module):
 	my_module.add_path(".")
 	
 	my_module.add_flag('c++', [
-	    "-DEWOL_VERSION=\"\\\"" + tools.version_toString(my_module.get_pkg("VERSION")) + "\\\"\""
+	    "-DEWOL_VERSION=\"\\\"" + tools.version_to_string(my_module.get_pkg("VERSION")) + "\\\"\""
 	    ])
 	
 	return True
