@@ -6,7 +6,7 @@
 
 #include <test-debug/debug.hpp>
 #include <ewol/context/Context.hpp>
-#include <gtest/gtest.h>
+#include <etest/etest.hpp>
 #define NAME "Application"
 
 TEST(TestEwolApplication, Creation) {

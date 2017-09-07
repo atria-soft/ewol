@@ -143,7 +143,7 @@ ewol::WidgetShared ewol::widget::Manager::focusGet() {
 	return m_focusWidgetCurrent.lock();
 }
 
-void ewol::widget::Manager::setCallbackonRedrawNeeded(const std::function<void()>& _func) {
+void ewol::widget::Manager::setCallbackonRedrawNeeded(const etk::Function<void()>& _func) {
 	m_funcRedrawNeeded = _func;
 }
 

@@ -10,7 +10,7 @@
 #include <gale/resource/Manager.hpp>
 #include <ewol/resource/Image.hpp>
 #include <ewol/resource/Texture.hpp>
-#include <thread>
+#include <ethread/Thread.hpp>
 
 const ivec2 ewol::resource::TextureFile::sizeAuto(-1,-1);
 const ivec2 ewol::resource::TextureFile::sizeDefault(0,0);

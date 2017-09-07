@@ -8,7 +8,7 @@
 #include <etk/types.hpp>
 #include <etk/Vector.hpp>
 #include <exml/exml.hpp>
-#include <mutex>
+#include <ethread/Mutex.hpp>
 #include <ememory/memory.hpp>
 #include <unordered_map>
 

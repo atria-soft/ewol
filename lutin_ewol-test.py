@@ -31,7 +31,7 @@ def configure(target, my_module):
 	    ])
 	my_module.add_depend([
 	    'ewol',
-	    'gtest',
+	    'etest',
 	    'test-debug'
 	    ])
 	return True

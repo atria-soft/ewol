@@ -17,7 +17,7 @@
 #include <etk/String.hpp>
 
 #define NAME "Empty"
-#include <gtest/gtest.h>
+#include <etest/etest.hpp>
 
 int main(int argc, const char *argv[]) {
 	// init Google test :

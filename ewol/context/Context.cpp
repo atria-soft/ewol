@@ -12,7 +12,7 @@
 #include <etk/tool.hpp>
 #include <etk/os/FSNode.hpp>
 #include <ethread/tools.hpp>
-#include <mutex>
+#include <ethread/Mutex.hpp>
 
 #include <ewol/ewol.hpp>
 #include <ewol/debug.hpp>

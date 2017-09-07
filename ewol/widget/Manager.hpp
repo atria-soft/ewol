@@ -47,8 +47,8 @@ namespace ewol {
 			// --  Factory area
 			// ---------------------------------------------
 			public:
-				using widgetCreatorFunction = std::function<ewol::WidgetShared()>; //!< funtion factory basic definition
-				using widgetCreatorFunctionXml = std::function<ewol::WidgetShared(const exml::Element& _node)>; //!< funtion factory basic definition
+				using widgetCreatorFunction = etk::Function<ewol::WidgetShared()>; //!< funtion factory basic definition
+				using widgetCreatorFunctionXml = etk::Function<ewol::WidgetShared(const exml::Element& _node)>; //!< funtion factory basic definition
 			private:
 				std::unordered_map<etk::String, widgetCreatorFunction> m_creatorList; //!< List of factory of a widget
 				std::unordered_map<etk::String, widgetCreatorFunctionXml> m_creatorListXml; //!< List of factory of a widget
@@ -91,7 +91,7 @@ namespace ewol {
 			private:
 				bool m_haveRedraw; //!< something request a redraw
 			private:
-				std::function<void()> m_funcRedrawNeeded;
+				etk::Function<void()> m_funcRedrawNeeded;
 			public:
 				/**
 				 * @brief Mark the display to redraw
@@ -108,7 +108,7 @@ namespace ewol {
 				 * @brief Set a callback when we need redraw the display (need by MacOs)
 				 * @param[in] _func function to call
 				 */
-				void setCallbackonRedrawNeeded(const std::function<void()>& _func);
+				void setCallbackonRedrawNeeded(const etk::Function<void()>& _func);
 			
 		};
 	};

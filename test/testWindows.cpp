@@ -6,7 +6,7 @@
 
 #include <test-debug/debug.hpp>
 #include <ewol/widget/Windows.hpp>
-#include <gtest/gtest.h>
+#include <etest/etest.hpp>
 #define NAME "Windows"
 
 namespace appl {
