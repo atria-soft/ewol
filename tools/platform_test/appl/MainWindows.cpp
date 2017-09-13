@@ -64,7 +64,7 @@ void appl::MainWindows::onCallbackCopy() {
 void appl::MainWindows::onCallbackPast() {
 	APPL_INFO("past");
 	gale::context::clipBoard::request(gale::context::clipBoard::clipboardStd);
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	ethread::sleepMilliSeconds((100));
 	etk::String value = gale::context::clipBoard::get(gale::context::clipBoard::clipboardStd);
 	APPL_INFO("past : '" << value << "'");
 	propertySetOnWidgetNamed("appl-entry-clipboard", "value", value);

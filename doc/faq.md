@@ -27,7 +27,7 @@ Why we use "DECLARE_FACTORY" Macro?
 -----------------------------------
 
 For some reason!!! But everything might be clear:
-- In ewol we masively use ememory::SharedPtr (simple wrapper over std::shared_ptr (that is not thread safe ...)).
+- In ewol we masively use ememory::SharedPtr.
 - The main class : ewol::Object herited from ememory::EnableSharedFromThis<ewol::Object> to permit to access at his own ememory::SharedPtr.
 - Acces At his own ememory::SharedPtr is not allowed in the class contructor/destructor.
 - Many time for meta-widget we need to propagate our ememory::SharedPtr in child through the ememory::WeakPtr.

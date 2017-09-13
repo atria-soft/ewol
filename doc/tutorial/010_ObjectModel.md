@@ -39,9 +39,6 @@ Creating an object is really simple:
 	APPL_INFO("We just create a button widget with unique ID=" << tmpButon->getId() << " name='" << tmpButon->propertyName.get() << "'");
 ```
 
-Note that all object created are ememory::SharedPtr base for the current version on std::shared_ptr.
-We wrapped it because the current inplementation of std::shared_ptr is not thread safe, and we want use a thread-safe version of it.
-
 **Note:**
 
 ```
@@ -123,6 +120,6 @@ It could be really interesting to retrive your own instance:
 ```{.cpp}
 	ewol::ObjectShared tmpObject ...;
 	
-	appl::MyOwnObjectShared myObject = std::dynamic_pointer_cast<appl::MyOwnObject>(tmpObject);
+	appl::MyOwnObjectShared myObject = ememory::dynamicPointerCast<appl::MyOwnObject>(tmpObject);
 ```
 

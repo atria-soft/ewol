@@ -74,9 +74,9 @@ bool ewol::resource::Texture::updateContext() {
 		echrono::Steady toc = echrono::Steady::now();
 		EWOL_VERBOSE("    updateContext [FLUSH] ==> " << (toc - tic));
 	}
-	std::unique_lock<std::recursive_mutex> lock(m_mutex, std::defer_lock);
+	ethread::RecursiveLock lock(m_mutex, true);
 	echrono::Steady tic = echrono::Steady::now();
-	if (lock.try_lock() == false) {
+	if (lock.tryLock() == false) {
 		//Lock error ==> try later ...
 		return false;
 	}
@@ -266,7 +266,7 @@ bool ewol::resource::Texture::updateContext() {
 }
 
 void ewol::resource::Texture::removeContext() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if (m_loaded == true) {
 		// Request remove texture ...
 		EWOL_DEBUG("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
@@ -276,20 +276,20 @@ void ewol::resource::Texture::removeContext() {
 }
 
 void ewol::resource::Texture::removeContextToLate() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	m_loaded = false;
 	m_texId=0;
 }
 
 void ewol::resource::Texture::flush() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	// request to the manager to be call at the next update ...
 	EWOL_VERBOSE("Request UPDATE of Element");
 	getManager().update(ememory::dynamicPointerCast<gale::Resource>(sharedFromThis()));
 }
 
 void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }

@@ -39,12 +39,12 @@ ewol::resource::TextureFile::TextureFile() {
 }
 
 void ewol::resource::TextureFile::init() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init();
 }
 
 void ewol::resource::TextureFile::init(etk::String _genName, const etk::String& _tmpFilename, const ivec2& _size) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpFilename=" << _tmpFilename << " size=" << _size);
 	m_data = egami::load(_tmpFilename, _size);

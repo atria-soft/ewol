@@ -74,7 +74,7 @@ Simple example:
 			continue;
 		}
 		// Get the sub-node name:
-		std::string widgetName = pNode.getValue();
+		etk::String widgetName = pNode.getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
 			APPL_ERROR("[" << getId() << "] (l "<<pNode->getPos()<<") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
 			continue;

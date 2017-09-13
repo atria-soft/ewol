@@ -32,7 +32,7 @@ For this example we will load a configuration file:
 namespace appl {
 	class MyObj : public ewol::Object {
 		public:
-			eproperty::Value<std::string> propertyConfig;
+			eproperty::Value<etk::String> propertyConfig;
 		private:
 			ememory::SharedPtr<ewol::resource::ConfigFile> m_config;
 			int32_t m_configValId;
@@ -100,7 +100,7 @@ namespace appl {
 				m_resourceLevel = 4;
 				addObjectType("appl::MyResource");
 			}
-			void init(const std::string& _name) {
+			void init(const etk::String& _name) {
 				ewol::Resource::init(_name);
 			}
 		public:

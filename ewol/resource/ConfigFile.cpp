@@ -11,15 +11,16 @@
 #include <ejson/ejson.hpp>
 #include <ejson/Number.hpp>
 #include <ejson/String.hpp>
-#include <stdexcept>
 
 ewol::resource::ConfigFile::ConfigFile() :
-  gale::Resource() {
+  gale::Resource(),
+  // set map unorderred
+  m_list(0, false) {
 	addResourceType("ewol::ConfigFile");
 }
 
 void ewol::resource::ConfigFile::init(const etk::String& _filename) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	gale::Resource::init(_filename);
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
@@ -31,11 +32,11 @@ ewol::resource::ConfigFile::~ConfigFile() {
 }
 
 void ewol::resource::ConfigFile::reload() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	// reset all parameters
 	for (int32_t iii=0; iii<m_list.size(); iii++){
-		if (m_list[iii].exist() == true) {
-			m_list[iii] = ejson::empty();
+		if (m_list.getValue(iii).exist() == true) {
+			m_list.getValue(iii) = ejson::empty();
 		}
 	}
 	m_doc.load(m_name);
@@ -49,7 +50,7 @@ void ewol::resource::ConfigFile::reload() {
 
 
 int32_t ewol::resource::ConfigFile::request(const etk::String& _paramName) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {
 		m_list.add(_paramName, ejson::empty());
@@ -62,28 +63,28 @@ int32_t ewol::resource::ConfigFile::request(const etk::String& _paramName) {
 
 
 double ewol::resource::ConfigFile::getNumber(int32_t _id) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if (    _id < 0
-	     || m_list[_id].exist() == false) {
+	     || m_list.getValue(_id).exist() == false) {
 		return 0.0;
 	}
-	return m_list[_id].toNumber().get();
+	return m_list.getValue(_id).toNumber().get();
 }
 
 etk::String ewol::resource::ConfigFile::getString(int32_t _id) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if (    _id < 0
-	     || m_list[_id].exist() == false) {
+	     || m_list.getValue(_id).exist() == false) {
 		return "";
 	}
-	return m_list[_id].toString().get();
+	return m_list.getValue(_id).toString().get();
 }
 
 bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if (    _id < 0
-	     || m_list[_id].exist() == false) {
+	     || m_list.getValue(_id).exist() == false) {
 		return false;
 	}
-	return m_list[_id].toBoolean().get();
+	return m_list.getValue(_id).toBoolean().get();
 }

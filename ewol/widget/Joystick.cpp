@@ -129,7 +129,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 			if(gale::key::status::down == typeEvent) {
 				signalEnable.emit();
 			} else {
-				etk::String tmp = etk::String("distance=") + etk::String(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
+				etk::String tmp = etk::String("distance=") + etk::String(m_distance) + etk::String("angle=") + etk::String(m_angle+M_PI/2);
 				signalMove.emit(m_angle+M_PI/2);
 			}
 			//teta += M_PI/2;

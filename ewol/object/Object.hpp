@@ -10,7 +10,6 @@
 #include <exml/exml.hpp>
 #include <ethread/Mutex.hpp>
 #include <ememory/memory.hpp>
-#include <unordered_map>
 
 #include <ewol/debug.hpp>
 #include <ememory/memory.hpp>
@@ -49,12 +48,12 @@ template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit
 	}
 	propType = dynamic_cast<eproperty::PropertyType<TYPE_VAL>*>(prop);
 	if (propType == nullptr) {
-		EWOL_ERROR("property does not cast in requested type ... '" << _name << "' require type : " << typeid(_val).name() << "' instead of '" << prop->getType() << "'");
+		EWOL_ERROR("property does not cast in requested type ... '" << _name << "' require type : " << /*typeid(_val).name()*/ "?TODO?" << "' instead of '" << prop->getType() << "'");
 		goto exit_on_error;
 	}
 	propType->setDirectCheck(_val);
 exit_on_error:
-	baseInit(_object, std::forward<TYPE>(_all)... );
+	baseInit(_object, etk::forward<TYPE>(_all)... );
 	return;
 }
 
@@ -310,16 +309,6 @@ namespace ewol {
 					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
 			} while (false)
-			/*
-			template<class TYPE> void subBind(ememory::SharedPtr<ewol::Object> _obj, void (TYPE::*_func)()) {
-				ememory::SharedPtr<TYPE> obj2 = ememory::dynamicPointerCast<TYPE>(_obj);
-				if (obj2 == nullptr) {
-					EWOL_ERROR("Can not connect signal ...");
-					return;
-				}
-				m_callerList.pushBack(etk::makePair(ewol::ObjectWeak(_obj), std::connect(_func, obj2.get())));
-			}
-			*/
 	};
 	bool propertySetOnObjectNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value);
 };

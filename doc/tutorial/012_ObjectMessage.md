@@ -114,7 +114,7 @@ namespace appl {
 		public:
 			ewol::object::Signal<> signalEmpty;
 			ewol::object::Signal<bool> signalBoolean;
-			ewol::object::Signal<std::string> signalString;
+			ewol::object::Signal<etk::String> signalString;
 		protected:
 			//! @brief Constructor
 			MyObj() :

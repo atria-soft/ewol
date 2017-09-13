@@ -22,9 +22,9 @@
 //#define EVENT_DEBUG  EWOL_DEBUG
 
 void ewol::context::InputManager::calculateLimit() {
-	m_eventInputLimit.sepatateTime = echrono::Duration(std::chrono::milliseconds(300));
+	m_eventInputLimit.sepatateTime = echrono::Duration(echrono::milliseconds(300));
 	m_eventInputLimit.DpiOffset = m_dpi*100;
-	m_eventMouseLimit.sepatateTime = echrono::Duration(std::chrono::milliseconds(300));
+	m_eventMouseLimit.sepatateTime = echrono::Duration(echrono::milliseconds(300));
 	m_eventMouseLimit.DpiOffset = float(m_dpi)*0.1f;
 }
 
@@ -353,8 +353,8 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			// we have an event previously ... check delay between click and offset position
 			if (currentTime - eventTable[_pointerID].lastTimeEvent > localLimit.sepatateTime) {
 				cleanElement(eventTable, _pointerID);
-			} else if(    std::abs(eventTable[_pointerID].downStart.x() - _pos.x()) >= localLimit.DpiOffset
-			           || std::abs(eventTable[_pointerID].downStart.y() - _pos.y()) >= localLimit.DpiOffset ){
+			} else if(    etk::abs(eventTable[_pointerID].downStart.x() - _pos.x()) >= localLimit.DpiOffset
+			           || etk::abs(eventTable[_pointerID].downStart.y() - _pos.y()) >= localLimit.DpiOffset ){
 				cleanElement(eventTable, _pointerID);
 			}
 		}
@@ -449,8 +449,8 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			                gale::key::status::up,
 			                _pos);
 			// generate event (single)
-			if(    std::abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
-			    && std::abs(eventTable[_pointerID].downStart.y() - _pos.y()) < localLimit.DpiOffset ){
+			if(    etk::abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
+			    && etk::abs(eventTable[_pointerID].downStart.y() - _pos.y()) < localLimit.DpiOffset ){
 				// Save current position :
 				eventTable[_pointerID].downStart = _pos;
 				// save start time

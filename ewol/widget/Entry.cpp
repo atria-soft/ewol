@@ -57,10 +57,9 @@ void ewol::widget::Entry::init() {
 	ewol::Widget::init();
 	propertyShape.notifyChange();
 	
-	try {
-		m_regex.assign(".*", std::regex_constants::optimize | std::regex_constants::ECMAScript);
-	} catch (std::regex_error e) {
-		EWOL_ERROR("can not parse regex : '" << e.what() << "' for : " << propertyRegex);
+	m_regex.compile(propertyRegex.get());
+	if (m_regex.getStatus() == false) {
+		EWOL_ERROR("can not parse regex for : " << propertyRegex);
 	}
 	markToRedraw();
 	
@@ -422,17 +421,15 @@ void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
 	etk::String previous = propertyValue;
 	// check the RegExp :
 	if (_newData.size()>0) {
-		std::smatch resultMatch;
-		std::regex_search(_newData.begin(), _newData.end(), resultMatch, m_regex, std::regex_constants::match_continuous);
-		if (resultMatch.size() <= 0) {
+		if (m_regex.parse(_newData, 0, _newData.size()) == false) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "'" );
 			return;
 		}
-		if (_newData.begin() != resultMatch[0].first) {
+		if (m_regex.start() != 0) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (start position error)" );
 			return;
 		}
-		if (_newData.end() !=  resultMatch[0].second) {
+		if (m_regex.start() != _newData.size()) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (stop position error)" );
 			return;
 		}
@@ -596,10 +593,9 @@ void ewol::widget::Entry::onChangePropertyMaxCharacter() {
 }
 
 void ewol::widget::Entry::onChangePropertyRegex() {
-	try {
-		m_regex.assign(propertyRegex.get(), std::regex_constants::optimize | std::regex_constants::ECMAScript);
-	} catch (std::regex_error e) {
-		EWOL_ERROR("can not parse regex : '" << e.what() << "' for : " << propertyRegex);
+	m_regex.compile(propertyRegex.get());
+	if (m_regex.getStatus() == false) {
+		EWOL_ERROR("can not parse regex for : " << propertyRegex);
 	}
 	markToRedraw();
 }

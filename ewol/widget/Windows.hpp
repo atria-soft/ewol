@@ -10,7 +10,6 @@
 #include <ewol/widget/Widget.hpp>
 #include <etk/Color.hpp>
 #include <ewol/resource/ColorFile.hpp>
-#include <list>
 
 namespace ewol {
 	namespace widget {
@@ -44,7 +43,7 @@ namespace ewol {
 				 */
 				void setSubWidget(ewol::WidgetShared _widget);
 			protected:
-				std::list<ewol::WidgetShared> m_popUpWidgetList; //!< List of pop-up displayed
+				etk::Vector<ewol::WidgetShared> m_popUpWidgetList; //!< List of pop-up displayed
 			public:
 				/**
 				 * @brief Add a pop-up on the Windows.

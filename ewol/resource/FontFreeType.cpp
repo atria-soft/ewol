@@ -55,7 +55,7 @@ ewol::resource::FontFreeType::FontFreeType() {
 }
 
 void ewol::resource::FontFreeType::init(const etk::String& _fontName) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::FontBase::init(_fontName);
 	etk::FSNode myfile(_fontName);
 	if (myfile.exist() == false) {
@@ -96,7 +96,7 @@ void ewol::resource::FontFreeType::init(const etk::String& _fontName) {
 }
 
 ewol::resource::FontFreeType::~FontFreeType() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	// clean the tmp memory
 	if (nullptr != m_FileBuffer) {
 		delete[] m_FileBuffer;
@@ -107,7 +107,7 @@ ewol::resource::FontFreeType::~FontFreeType() {
 }
 
 vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const etk::String& _unicodeString) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if(false == m_init) {
 		return vec2(0,0);
 	}
@@ -117,16 +117,16 @@ vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const etk::String&
 }
 
 int32_t ewol::resource::FontFreeType::getHeight(int32_t _fontSize) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	return _fontSize*1.43f; // this is a really "magic" number ...
 }
 float ewol::resource::FontFreeType::getSizeWithHeight(float _fontHeight) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	return _fontHeight*0.6993f; // this is a really "magic" number ...
 }
 
 bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if(false == m_init) {
 		return false;
 	}
@@ -171,7 +171,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
                                              ivec2 _glyphPosition,
                                              ewol::GlyphProperty& _property,
                                              int8_t _posInImage) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if(false == m_init) {
 		return false;
 	}
@@ -233,7 +233,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
                                              int32_t _fontSize,
                                              ewol::GlyphProperty& _property,
                                              int32_t _borderSize) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if(false == m_init) {
 		return false;
 	}
@@ -277,7 +277,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
 
 
 void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if(m_init == false) {
 		return;
 	}
@@ -311,7 +311,7 @@ void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, etk::Vector
 
 
 void ewol::resource::FontFreeType::display() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if(m_init == false) {
 		return;
 	}

@@ -43,7 +43,7 @@ ewol::resource::TexturedFont::TexturedFont():
 }
 
 void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
 	EWOL_DEBUG("Load font : '" << _fontName << "'" );
 
@@ -233,7 +233,7 @@ ewol::resource::TexturedFont::~TexturedFont() {
 }
 
 bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	bool hasChange = false;
 	// for each font :
 	for (int32_t iii=0; iii<4 ; iii++) {
@@ -303,7 +303,7 @@ bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 }
 
 int32_t ewol::resource::TexturedFont::getIndex(char32_t _charcode, const enum ewol::font::mode _displayMode) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if (_charcode < 0x20) {
 		return 0;
 	} else if (_charcode < 0x80) {
@@ -330,7 +330,7 @@ int32_t ewol::resource::TexturedFont::getIndex(char32_t _charcode, const enum ew
 }
 
 ewol::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0

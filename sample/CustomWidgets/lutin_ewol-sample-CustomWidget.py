@@ -38,7 +38,7 @@ def configure(target, my_module):
 	    ])
 	my_module.add_flag('c++', [
 	    "-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",
-	    "-DAPPL_VERSION=\"\\\"" + tools.version_toString(get_version()) + "\\\"\""
+	    "-DAPPL_VERSION=\"\\\"" + tools.version_to_string(get_version()) + "\\\"\""
 	    ])
 	my_module.add_path(".")
 	return True

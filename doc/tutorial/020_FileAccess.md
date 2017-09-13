@@ -86,7 +86,7 @@ Read a file                                {#ewol_tutorial_file_access_read}
 	// get a char
 	APPL_INFO("read in: " << file << " the first char='" << file.fileGet() << "'");
 	// Get a line
-	std::string output;
+	etk::String output;
 	file.fileGets(output);
 	APPL_INFO("and the end of the line ='" << output << "'");
 	// close the file (note : if you did not do it, it will be close automaticly with an error)

@@ -11,13 +11,14 @@
 #include <ewol/event/Time.hpp>
 #include <echrono/Steady.hpp>
 #include <echrono/Duration.hpp>
+#include <ethread/MutexRecursive.hpp>
 
 namespace ewol {
 	class Context;
 	namespace object {
 		class Manager : public esignal::Interface {
 			protected:
-				std::recursive_mutex m_mutex;
+				ethread::MutexRecursive m_mutex;
 			private:
 				etk::Vector<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;

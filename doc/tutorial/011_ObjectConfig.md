@@ -46,7 +46,7 @@ Get Parameter                                {#ewol_tutorial_object_config_param
 -------------
 
 ```{.cpp}
-	std::string val = tmpObject->properties.get("name");
+	etk::String val = tmpObject->properties.get("name");
 	APPL_INFO("Get Object property: name='" << val << "'");
 ```
 

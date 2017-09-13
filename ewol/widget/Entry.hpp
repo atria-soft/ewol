@@ -6,7 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <regex>
+#include <etk/RegEx.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Text.hpp>
 #include <ewol/compositing/Drawing.hpp>
@@ -70,7 +70,7 @@ namespace ewol {
 				 */
 				void setInternalValue(const etk::String& _newData);
 			private:
-				std::regex m_regex; //!< regular expression to check content
+				etk::RegEx<etk::String> m_regex; //!< regular expression to check content
 			private:
 				bool m_needUpdateTextPos; //!< text position can have change
 				int32_t m_displayStartPosition; //!< ofset in pixel of the display of the UString

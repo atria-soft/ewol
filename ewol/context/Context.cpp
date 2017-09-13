@@ -264,7 +264,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 	//EWOL_INFO("repeating test :" << repeate << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << isDown);
 	if(    repeate == false
 	    || (    repeate == true
-	         && tmpWidget->getKeyboardRepeate() == true) ) {
+	         && tmpWidget->getKeyboardRepeat() == true) ) {
 		// check Widget shortcut
 		if (tmpWidget->onEventShortCut(_special,
 		                               _value,

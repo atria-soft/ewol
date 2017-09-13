@@ -8,7 +8,6 @@
 #include <etk/types.hpp>
 #include <ewol/debug.hpp>
 #include <etk/Vector.hpp>
-#include <unordered_map>
 #include <ewol/widget/Widget.hpp>
 
 namespace ewol {
@@ -50,8 +49,8 @@ namespace ewol {
 				using widgetCreatorFunction = etk::Function<ewol::WidgetShared()>; //!< funtion factory basic definition
 				using widgetCreatorFunctionXml = etk::Function<ewol::WidgetShared(const exml::Element& _node)>; //!< funtion factory basic definition
 			private:
-				std::unordered_map<etk::String, widgetCreatorFunction> m_creatorList; //!< List of factory of a widget
-				std::unordered_map<etk::String, widgetCreatorFunctionXml> m_creatorListXml; //!< List of factory of a widget
+				etk::Map<etk::String, widgetCreatorFunction> m_creatorList; //!< List of factory of a widget
+				etk::Map<etk::String, widgetCreatorFunctionXml> m_creatorListXml; //!< List of factory of a widget
 			public:
 				/**
 				 * @brief add a factory of a specific widget.

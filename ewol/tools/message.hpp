@@ -10,7 +10,6 @@
 #include <ewol/widget/Widget.hpp>
 #include <etk/Color.hpp>
 #include <ewol/resource/ColorFile.hpp>
-#include <list>
 
 namespace ewol {
 	namespace tools {

@@ -31,6 +31,8 @@
 #include <etk/Vector.hpp>
 
 ewol::widget::Manager::Manager() :
+  m_creatorList(0, false),
+  m_creatorListXml(0, false),
   m_haveRedraw(true) {
 	EWOL_DEBUG(" == > init Widget-Manager");
 	

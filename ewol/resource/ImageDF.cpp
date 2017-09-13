@@ -18,12 +18,12 @@ ewol::resource::ImageDF::ImageDF() {
 
 
 void ewol::resource::ImageDF::init() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init();
 }
 
 void ewol::resource::ImageDF::init(etk::String _genName, const etk::String& _tmpfileName, const ivec2& _size) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
 	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
 	m_data = egami::load(_tmpfileName, _size);
@@ -49,7 +49,7 @@ void ewol::resource::ImageDF::init(etk::String _genName, const etk::String& _tmp
 
 
 void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
 	etk::Vector<short> xdist(size);
 	etk::Vector<short> ydist(size);

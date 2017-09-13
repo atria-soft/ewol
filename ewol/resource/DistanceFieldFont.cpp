@@ -32,7 +32,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
 }
 
 void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
 	etk::String localName = _fontName;
 	etk::Vector<etk::String> folderList;
@@ -131,13 +131,13 @@ ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
 
 
 float ewol::resource::DistanceFieldFont::getDisplayRatio(float _size) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	return _size / (float)SIZE_GENERATION;
 }
 
 
 void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
 	etk::Vector<short> xdist(size);
 	etk::Vector<short> ydist(size);
@@ -217,7 +217,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 }
 
 bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	bool hasChange = false;
 	if (m_font == nullptr) {
 		return false;
@@ -258,9 +258,8 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 		if (_val == 'Z') {
 			for (int32_t yyy = 0; yyy < imageGlyphDistanceField.getSize().y(); ++yyy) {
 				for (int32_t xxx = 0; xxx < imageGlyphDistanceField.getSize().x(); ++xxx) {
-					std::cout << (int)(imageGlyphDistanceField.get(ivec2(xxx, yyy)).r()) << "	";
+					EWOL_DEBUG((int)(imageGlyphDistanceField.get(ivec2(xxx, yyy)).r()) << "	");
 				}
-				//std::cout << std::endl;
 			}
 		}
 		*/
@@ -299,7 +298,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 }
 
 int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	if (_charcode < 0x20) {
 		return 0;
 	} else if (_charcode < 0x80) {
@@ -326,7 +325,7 @@ int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
 }
 
 ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const char32_t& _charcode) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode);
 	if(    index < 0
@@ -346,7 +345,7 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 }
 
 void ewol::resource::DistanceFieldFont::exportOnFile() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	EWOL_DEBUG("EXPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	ejson::Document doc;
 	ejson::Array tmpList;
@@ -374,7 +373,7 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 }
 
 bool ewol::resource::DistanceFieldFont::importFromFile() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
 	// test file existance:
 	etk::FSNode fileJSON(m_fileName + ".json");

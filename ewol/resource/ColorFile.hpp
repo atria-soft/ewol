@@ -7,7 +7,7 @@
 
 #include <etk/types.hpp>
 #include <etk/Color.hpp>
-#include <etk/Hash.hpp>
+#include <etk/Map.hpp>
 #include <ewol/debug.hpp>
 #include <gale/resource/Resource.hpp>
 
@@ -18,7 +18,7 @@ namespace ewol {
 		 */
 		class ColorFile : public gale::Resource {
 			private:
-				etk::Hash<etk::Color<float> > m_list; //!< List of all color in the file
+				etk::Map<etk::String, etk::Color<float> > m_list; //!< List of all color in the file
 				etk::Color<float> m_errorColor; //!< Error returned color
 			protected:
 				/**

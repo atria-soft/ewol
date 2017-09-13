@@ -8,7 +8,6 @@
 #include <etk/types.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/widget/Widget.hpp>
-#include <list>
 
 namespace ewol {
 	namespace widget {
@@ -23,7 +22,7 @@ namespace ewol {
 			public: // properties:
 				eproperty::Value<bvec2> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			protected:
-				std::list<ewol::WidgetShared> m_subWidget;
+				etk::Vector<ewol::WidgetShared> m_subWidget;
 			protected:
 				/**
 				 * @brief Constructor

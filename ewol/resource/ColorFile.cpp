@@ -8,16 +8,17 @@
 #include <ewol/debug.hpp>
 #include <ewol/resource/ColorFile.hpp>
 #include <ejson/ejson.hpp>
-#include <stdexcept>
 
 ewol::resource::ColorFile::ColorFile() :
   gale::Resource(),
+  // Set the list unodered
+  m_list(0, false),
   m_errorColor(etk::color::orange) {
 	addResourceType("ewol::ColorFile");
 }
 
 void ewol::resource::ColorFile::init(const etk::String& _filename) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	gale::Resource::init(_filename);
 	EWOL_DEBUG("CF : load \"" << _filename << "\"");
 	reload();
@@ -31,10 +32,10 @@ ewol::resource::ColorFile::~ColorFile() {
 
 
 void ewol::resource::ColorFile::reload() {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	// remove all previous set of value :
 	for (int32_t iii = 0; iii < m_list.size() ; ++iii) {
-		m_list[iii] = m_errorColor;
+		m_list.getValue(iii) = m_errorColor;
 	}
 	// open and read all json elements:
 	ejson::Document doc;
@@ -74,7 +75,7 @@ void ewol::resource::ColorFile::reload() {
 
 
 int32_t ewol::resource::ColorFile::request(const etk::String& _paramName) {
-	std::unique_lock<std::recursive_mutex> lock(m_mutex);
+	ethread::RecursiveLock lock(m_mutex);
 	// check if the parameters existed :
 	if (m_list.exist(_paramName) == false) {
 		m_list.add(_paramName, m_errorColor);

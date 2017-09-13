@@ -57,7 +57,7 @@ Call create and direct configuration
 We can configure the wiget before the init() is called.
 ```{.cpp}
 	ewol::widget::ButtonShared tmpWidget = ewol::widget::Button::create(
-	    "name", std::string("my name"),
+	    "name", etk::String("my name"),
 	    "expand", bvec2(true,false),
 	    "fill", bvec2(true,true));
 	if (tmpWidget == nullptr) {

@@ -6,7 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <etk/Hash.hpp>
+#include <etk/Map.hpp>
 #include <ewol/debug.hpp>
 #include <ejson/ejson.hpp>
 #include <gale/resource/Resource.hpp>
@@ -16,7 +16,7 @@ namespace ewol {
 		class ConfigFile : public gale::Resource {
 			private:
 				ejson::Document m_doc;
-				etk::Hash<ejson::Value> m_list;
+				etk::Map<etk::String, ejson::Value> m_list;
 			protected:
 				ConfigFile();
 				void init(const etk::String& _filename);

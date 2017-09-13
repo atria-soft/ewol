@@ -32,7 +32,7 @@ ewol::WidgetShared ewol::widget::composerGenerateString(const etk::String& _data
 	etk::String tmpData = _data;
 	// replace all elements:
 	if (_id != 0) {
-		tmpData = etk::replace(tmpData, "{ID}", etk::toString(_id));
+		tmpData.replace("{ID}", etk::toString(_id));
 	}
 	if (doc.parse(tmpData) == false) {
 		EWOL_ERROR(" can not load file XML string...");
@@ -82,7 +82,7 @@ bool ewol::widget::Composer::loadFromString(const etk::String& _composerXmlStrin
 	etk::String tmpData = _composerXmlString;
 	// replace all elements:
 	if (_id != 0) {
-		tmpData = etk::replace(tmpData, "{ID}", etk::toString(_id));
+		tmpData.replace("{ID}", etk::toString(_id));
 	}
 	if (doc.parse(tmpData) == false) {
 		EWOL_ERROR(" can not load file XML string...");
