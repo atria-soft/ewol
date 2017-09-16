@@ -6,6 +6,8 @@
 
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Area.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::Area);
 
 // VBO table property:
 const int32_t ewol::compositing::Area::m_vboIdCoord(0);

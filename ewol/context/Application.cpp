@@ -8,6 +8,8 @@
 #include <ewol/context/Application.hpp>
 #include <ewol/context/Context.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::context::Application);
 
 ewol::context::Application::Application() {
 	

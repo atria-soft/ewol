@@ -9,6 +9,8 @@
 #include <ewol/widget/ContextMenu.hpp>
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Windows.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Spin);
 
 ewol::widget::Spin::Spin() :
   signalValue(this, "value",

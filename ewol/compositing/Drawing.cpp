@@ -7,6 +7,9 @@
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Drawing.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::Drawing);
+
 // VBO table property:
 const int32_t ewol::compositing::Drawing::m_vboIdCoord(0);
 const int32_t ewol::compositing::Drawing::m_vboIdColor(1);

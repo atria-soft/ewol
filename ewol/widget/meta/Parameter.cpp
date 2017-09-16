@@ -15,6 +15,9 @@
 
 #include <ewol/ewol.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Parameter);
+
 ewol::widget::Parameter::Parameter() :
   signalClose(this, "close", ""),
   propertyLabelTitle(this, "title",

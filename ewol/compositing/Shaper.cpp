@@ -7,6 +7,8 @@
 #include <etk/os/FSNode.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Shaper.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::Shaper);
 
 // VBO table property:
 const int32_t ewol::compositing::Shaper::m_vboIdCoord(0);

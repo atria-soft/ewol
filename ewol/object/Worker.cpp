@@ -7,6 +7,8 @@
 #include <ewol/debug.hpp>
 #include <ewol/object/Worker.hpp>
 #include <ewol/object/Manager.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::object::Worker);
 
 ewol::object::Worker::Worker() {
 	addObjectType("ewol::Worker");

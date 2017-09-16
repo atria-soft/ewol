@@ -8,7 +8,9 @@
 #include <ewol/ewol.hpp>
 #include <ewol/widget/Button.hpp>
 #include <ewol/object/Manager.hpp>
-
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Button);
+ETK_DECLARE_TYPE(ewol::widget::Button::buttonLock);
 // DEFINE for the shader display system:
 const static int32_t STATUS_UP(0);
 const static int32_t STATUS_HOVER(2);

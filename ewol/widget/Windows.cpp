@@ -14,6 +14,8 @@
 #include <ewol/widget/Windows.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <ewol/widget/meta/StdPopUp.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Windows);
 
 ewol::widget::Windows::Windows() :
   propertyColorConfiguration(this, "file-color", "{ewol}THEME:COLOR:Windows.json", "color file link on the theme", &ewol::widget::Windows::onChangePropertyColor),
@@ -195,6 +197,8 @@ void ewol::widget::Windows::onChangePropertyColor() {
 	m_resourceColor = ewol::resource::ColorFile::create(*propertyColorConfiguration);
 	if (m_resourceColor != nullptr) {
 		m_colorBg = m_resourceColor->request("background");
+	} else {
+		EWOL_WARNING("Can not open the default color configuration file for the windows: " << *propertyColorConfiguration);
 	}
 }
 

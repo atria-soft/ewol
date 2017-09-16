@@ -20,6 +20,9 @@
 
 #define SIZE_GENERATION (30)
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::DistanceFieldFont);
+
 ewol::resource::DistanceFieldFont::DistanceFieldFont() :
   ewol::resource::Texture(),
   m_borderSize(10),

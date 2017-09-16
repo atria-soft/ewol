@@ -7,6 +7,9 @@
 #include <ewol/widget/Layer.hpp>
 #include <ewol/widget/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Layer);
+
 ewol::widget::Layer::Layer() {
 	addObjectType("ewol::widget::Layer");
 }

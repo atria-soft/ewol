@@ -12,6 +12,9 @@
 #include <ewol/resource/Texture.hpp>
 #include <edtaa3/edtaa3func.h>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::ImageDF);
+
 ewol::resource::ImageDF::ImageDF() {
 	addResourceType("ewol::resource::ImageDF");
 }

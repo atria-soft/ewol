@@ -6,6 +6,8 @@
 
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Image.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::Image);
 
 const int32_t ewol::compositing::Image::sizeAuto(0);
 

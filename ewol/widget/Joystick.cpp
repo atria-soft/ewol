@@ -9,6 +9,8 @@
 
 #include <ewol/compositing/Image.hpp>
 #include <ewol/widget/Manager.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Joystick);
 
 static bool l_displayBackground(true);
 static etk::String l_background("");

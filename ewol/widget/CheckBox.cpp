@@ -7,6 +7,8 @@
 #include <ewol/widget/CheckBox.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <ewol/object/Manager.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::CheckBox);
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)

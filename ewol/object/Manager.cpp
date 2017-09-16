@@ -9,6 +9,8 @@
 #include <ewol/ewol.hpp>
 #include <etk/stdTools.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::object::Manager);
 
 ewol::object::Manager::Manager(ewol::Context& _context) :
   m_context(_context),

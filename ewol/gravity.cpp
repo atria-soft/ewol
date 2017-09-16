@@ -7,6 +7,9 @@
 #include <ewol/debug.hpp>
 #include <ewol/gravity.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(enum ewol::gravity);
+
 etk::String ewol::gravityToString(const enum ewol::gravity _obj) {
 	switch(_obj) {
 		case ewol::gravity_center:

@@ -8,6 +8,8 @@
 #include <ewol/object/Manager.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/context/Context.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::Object);
 
 size_t ewol::Object::m_valUID = 0;
 

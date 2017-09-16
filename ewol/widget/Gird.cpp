@@ -8,6 +8,9 @@
 #include <ewol/widget/Gird.hpp>
 #include <ewol/widget/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Gird);
+
 ewol::widget::Gird::Gird() :
   m_sizeRow(0),
   m_tmpWidget(nullptr),

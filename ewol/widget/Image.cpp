@@ -10,6 +10,9 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/ewol.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Image);
+
 ewol::widget::Image::Image() :
   signalPressed(this, "pressed", "Image is pressed"),
   propertySource(this, "src", "", "Image source path", &ewol::widget::Image::onChangePropertySource),

@@ -8,6 +8,8 @@
 
 #include <ewol/compositing/Drawing.hpp>
 #include <ewol/widget/Manager.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ProgressBar);
 
 const int32_t dotRadius = 6;
 

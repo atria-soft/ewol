@@ -9,6 +9,8 @@
 #include <ewol/compositing/Text.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <ewol/ewol.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Label);
 
 // TODO : Remove the label name in the constructor ...
 ewol::widget::Label::Label() :

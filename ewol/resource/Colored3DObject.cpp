@@ -12,6 +12,9 @@
 #include <gale/renderer/openGL/openGL-include.hpp>
 #include <esignal/Signal.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::Colored3DObject);
+
 ewol::resource::Colored3DObject::Colored3DObject() :
   m_GLprogram(nullptr) {
 	addResourceType("ewol::Colored3DObject");

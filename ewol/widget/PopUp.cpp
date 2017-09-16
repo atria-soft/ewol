@@ -10,6 +10,8 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/object/Manager.hpp>
 #include <ewol/ewol.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::PopUp);
 
 static const char* annimationIncrease = "increase";
 

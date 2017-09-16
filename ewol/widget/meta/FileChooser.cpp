@@ -27,6 +27,8 @@ extern "C" {
 }
 
 #include <ewol/ewol.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::FileChooser);
 
 ewol::widget::FileChooser::FileChooser() :
   signalCancel(this, "cancel", ""),

@@ -13,6 +13,8 @@
 #include <ewol/widget/Windows.hpp>
 #include <ewol/ewol.hpp>
 #include <ewol/object/Manager.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ButtonColor);
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)

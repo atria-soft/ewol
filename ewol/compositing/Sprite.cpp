@@ -7,6 +7,9 @@
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Sprite.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::Sprite);
+
 ewol::compositing::Sprite::Sprite(const etk::String& _imageName, const ivec2& _nbSprite, int32_t _size) :
   ewol::compositing::Image(_imageName, false, _size),
   m_nbSprite(_nbSprite),

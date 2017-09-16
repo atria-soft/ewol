@@ -9,6 +9,10 @@
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Composer.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::SpinBase);
+ETK_DECLARE_TYPE(enum ewol::widget::spinPosition);
+
 ewol::widget::SpinBase::SpinBase() :
   propertyShape(this, "shape",
                       "",

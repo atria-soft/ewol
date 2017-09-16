@@ -27,6 +27,7 @@ void appl::Windows::init() {
 	} else {
 		tmpWidget->propertyValue.set("Hello <font color='blue'>World</font>");
 		tmpWidget->propertyExpand.set(bvec2(true,true));
+		tmpWidget->propertyFill.set(bvec2(true,true));
 		// confidure the label as a windows sub-widget
 		setSubWidget(tmpWidget);
 	}

@@ -11,6 +11,8 @@
 #include <ewol/widget/Manager.hpp>
 //#include <etk/Vector.hpp>
 #include <etk/Vector.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ColorChooser);
 
 extern "C" {
 	// file browsing ...

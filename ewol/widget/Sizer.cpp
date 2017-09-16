@@ -7,7 +7,10 @@
 #include <ewol/ewol.hpp>
 #include <ewol/widget/Sizer.hpp>
 #include <ewol/widget/Manager.hpp>
-
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Sizer);
+ETK_DECLARE_TYPE(enum ewol::widget::Sizer::animation);
+ETK_DECLARE_TYPE(enum ewol::widget::Sizer::displayMode);
 ewol::widget::Sizer::Sizer() :
   propertyMode(this, "mode",
                      modeHori,

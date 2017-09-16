@@ -5,6 +5,8 @@
  */
 
 #include <ewol/Padding.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::Padding);
 
 ewol::Padding::Padding() {
 	// nothing to do...

@@ -5,6 +5,8 @@
  */
 
 #include <ewol/widget/Widget.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::event::Time);
 
 etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::Time& _obj) {
 	_os << "{time=" << _obj.getTime();

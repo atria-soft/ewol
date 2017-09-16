@@ -8,6 +8,9 @@
 #include <etk/tool.hpp>
 #include <etk/os/FSNode.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ListFileSystem);
+
 ewol::widget::ListFileSystem::ListFileSystem() :
   signalFileSelect(this, "file-select", ""),
   signalFileValidate(this, "file-validate", ""),

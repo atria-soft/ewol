@@ -6,6 +6,8 @@
 
 #include <ewol/context/ConfigFont.hpp>
 #include <ewol/resource/FontFreeType.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::context::ConfigFont);
 
 ewol::context::ConfigFont::ConfigFont() :
   m_folder("{ewol}DATA:fonts"),

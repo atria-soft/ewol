@@ -9,6 +9,9 @@
 #include <ewol/widget/ContainerN.hpp>
 #include <ewol/widget/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ContainerN);
+
 ewol::widget::ContainerN::ContainerN() :
   propertyLockExpand(this, "lock",
                            vec2(false,false),
@@ -174,10 +177,10 @@ void ewol::widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp
 	// subwidget draw
 	ewol::DrawProperty prop = _displayProp;
 	prop.limit(m_origin, m_size);
-	for (auto it(m_subWidget.rbegin()); it!=m_subWidget.rend(); ++it) {
-		if (*it != nullptr) {
+	for (int64_t iii = m_subWidget.size()-1; iii>=0; --iii) {
+		if (m_subWidget[iii] != nullptr) {
 			//EWOL_INFO("       ***** : [" << (*it)->propertyName << "] t=" << (*it)->getObjectType() << " o=" << (*it)->m_origin << "  s=" << (*it)->m_size);
-			(*it)->systemDraw(prop);
+			m_subWidget[iii]->systemDraw(prop);
 		}
 	}
 }

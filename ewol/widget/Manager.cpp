@@ -30,6 +30,9 @@
 #include <ewol/widget/Menu.hpp>
 #include <etk/Vector.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Manager);
+
 ewol::widget::Manager::Manager() :
   m_creatorList(0, false),
   m_creatorListXml(0, false),
@@ -196,8 +199,8 @@ void ewol::widget::Manager::addWidgetCreator(const etk::String& _name,
 		return;
 	}
 	EWOL_INFO("Add Creator of a specify widget : " << nameLower);
-	m_creatorList.insert(make_pair(nameLower, _pointer));
-	m_creatorListXml.insert(make_pair(nameLower, _pointerXml));
+	m_creatorList.set(nameLower, _pointer);
+	m_creatorListXml.set(nameLower, _pointerXml);
 }
 
 ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name) {

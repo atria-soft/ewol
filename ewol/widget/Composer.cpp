@@ -10,6 +10,8 @@
 #include <etk/os/FSNode.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <ewol/context/Context.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Composer);
 
 ewol::widget::Composer::Composer() :
   propertyRemoveIfUnderRemove(this, "remove-if-under-remove", true, "Demand the remove iof the widget if the subObject demand a remove"),

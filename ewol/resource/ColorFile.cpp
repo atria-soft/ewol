@@ -8,6 +8,8 @@
 #include <ewol/debug.hpp>
 #include <ewol/resource/ColorFile.hpp>
 #include <ejson/ejson.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::ColorFile);
 
 ewol::resource::ColorFile::ColorFile() :
   gale::Resource(),
@@ -34,7 +36,7 @@ ewol::resource::ColorFile::~ColorFile() {
 void ewol::resource::ColorFile::reload() {
 	ethread::RecursiveLock lock(m_mutex);
 	// remove all previous set of value :
-	for (int32_t iii = 0; iii < m_list.size() ; ++iii) {
+	for (size_t iii = 0; iii < m_list.size() ; ++iii) {
 		m_list.getValue(iii) = m_errorColor;
 	}
 	// open and read all json elements:

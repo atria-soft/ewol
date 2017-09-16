@@ -11,6 +11,8 @@
 #include <gale/renderer/openGL/openGL.hpp>
 #include <gale/renderer/openGL/openGL-include.hpp>
 #include <ewol/context/Context.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::Widget::Widget);
 
 ewol::Widget::Widget() :
   propertyMinSize(this, "min-size",

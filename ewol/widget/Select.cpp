@@ -10,6 +10,9 @@
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Windows.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Select);
+
 ewol::widget::Select::Element::Element(int32_t _value, etk::String _name, bool _selected):
   m_value(_value),
   m_name(_name),

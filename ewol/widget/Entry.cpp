@@ -10,6 +10,8 @@
 #include <ewol/ewol.hpp>
 #include <ewol/context/Context.hpp>
 #include <ewol/Padding.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Entry);
 
 // DEFINE for the shader display system :
 #define STATUS_NORMAL    (0)
@@ -429,7 +431,7 @@ void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (start position error)" );
 			return;
 		}
-		if (m_regex.start() != _newData.size()) {
+		if (m_regex.stop() != _newData.size()) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (stop position error)" );
 			return;
 		}

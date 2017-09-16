@@ -9,6 +9,8 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Drawing.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Scroll);
 
 ewol::widget::Scroll::Scroll() :
   propertyLimit(this, "limit",

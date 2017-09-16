@@ -106,14 +106,14 @@ void appl::MainWindows::onCallbackFullScreen(const bool& _value) {
 bool appl::MainWindows::onEventInput(const ewol::event::Input& _event) {
 	APPL_INFO("get Event: " << _event);
 	propertySetOnWidgetNamed("appl-special-key-value", "value", etk::toString(_event.getSpecialKey()));
-	propertySetOnWidgetNamed("appl-mouse-value", "value", etk::toString(_event.getType()) + " " + etk::to_string(_event.getId()) + " " + etk::to_string(_event.getPos()));
+	propertySetOnWidgetNamed("appl-mouse-value", "value", etk::toString(_event.getType()) + " " + etk::toString(_event.getId()) + " " + etk::toString(_event.getPos()));
 	return false;
 }
 
 bool appl::MainWindows::onEventEntry(const ewol::event::Entry& _event) {
 	APPL_INFO("get Event: " << _event);
 	propertySetOnWidgetNamed("appl-special-key-value", "value", etk::toString(_event.getSpecialKey()));
-	propertySetOnWidgetNamed("appl-last-key-pressed", "value", etk::toString(_event.getType()) + " " + etk::to_string(_event.getStatus()) + " " + etk::to_string(_event.getChar()));
+	propertySetOnWidgetNamed("appl-last-key-pressed", "value", etk::toString(_event.getType()) + " " + etk::toString(_event.getStatus()) + " " + etk::toString(_event.getChar()));
 	return false;
 }
 

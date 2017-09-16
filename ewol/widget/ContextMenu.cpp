@@ -12,6 +12,10 @@
 #include <ewol/widget/Windows.hpp>
 #include <ewol/Padding.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ContextMenu);
+ETK_DECLARE_TYPE(enum ewol::widget::ContextMenu::markPosition);
+
 ewol::widget::ContextMenu::ContextMenu():
   propertyShape(this, "shape",
                       "{ewol}THEME:GUI:ContextMenu.json",

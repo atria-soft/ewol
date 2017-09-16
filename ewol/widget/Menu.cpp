@@ -13,6 +13,8 @@
 #include <ewol/widget/Label.hpp>
 #include <ewol/widget/Windows.hpp>
 #include <ewol/widget/Spacer.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Menu);
 
 ewol::widget::Menu::Menu() :
   signalSelect(this, "select", "") {
@@ -210,11 +212,11 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 					break;
 				}
 			}
-			for (auto it2=m_listElement.rbegin(); it2!=m_listElement.rend() ; ++it2) {
-				if (it.m_localId != it2->m_parentId) {
+			for (int64_t iii=m_listElement.size()-1; iii>=0; --iii) {
+				if (it.m_localId != m_listElement[iii].m_parentId) {
 					continue;
 				}
-				if (it2->m_message == "" && it2->m_label == "") {
+				if (m_listElement[iii].m_message == "" && m_listElement[iii].m_label == "") {
 					ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
 					if (mySpacer == nullptr) {
 						EWOL_ERROR("Allocation spacer error");
@@ -239,15 +241,15 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 					myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
 					// add it in the widget list
 					mySizer->subWidgetAdd(myButton);
-					if (it2->m_image.size() != 0) {
+					if (m_listElement[iii].m_image.size() != 0) {
 						etk::String composeString;
 						composeString+= "    <sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n";
-						if (etk::end_with(it2->m_image, ".edf") == true) {
-							composeString+="        <image src='" + it2->m_image + "' size='8,8mm' distance-field='true'/>\n";
+						if (etk::end_with(m_listElement[iii].m_image, ".edf") == true) {
+							composeString+="        <image src='" + m_listElement[iii].m_image + "' size='8,8mm' distance-field='true'/>\n";
 						} else {
-							composeString+="        <image src='" + it2->m_image + "' size='8,8mm'/>\n";
+							composeString+="        <image src='" + m_listElement[iii].m_image + "' size='8,8mm'/>\n";
 						}
-						composeString+="        <label exand='true,true' fill='true,true'><left>" + it2->m_label + "</left></label>\n";
+						composeString+="        <label exand='true,true' fill='true,true'><left>" + m_listElement[iii].m_label + "</left></label>\n";
 						composeString+="    </sizer>\n";
 						myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
 					} else {
@@ -256,20 +258,20 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 							        etk::String() +
 							        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
 							        "		<spacer min-size='8,0mm'/>\n"
-							        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + it2->m_label + "</left>]]></label>\n"
+							        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + m_listElement[iii].m_label + "</left>]]></label>\n"
 							        "	</sizer>\n")
 							    );
 						} else {
 							ewol::widget::LabelShared tmpLabel = widget::Label::create();
 							if (tmpLabel != nullptr) {
-								tmpLabel->propertyValue.set(etk::String("<left>") + it2->m_label + "</left>\n");
+								tmpLabel->propertyValue.set(etk::String("<left>") + m_listElement[iii].m_label + "</left>\n");
 								tmpLabel->propertyExpand.set(bvec2(true,false));
 								tmpLabel->propertyFill.set(bvec2(true,true));
 								myButton->setSubWidget(tmpLabel);
 							}
 						}
 					}
-					it2->m_widgetPointer = myButton;
+					m_listElement[iii].m_widgetPointer = myButton;
 				}
 			}
 		}

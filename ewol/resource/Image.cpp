@@ -11,6 +11,8 @@
 #include <ewol/resource/Image.hpp>
 #include <ewol/resource/Texture.hpp>
 #include <ethread/Thread.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::TextureFile);
 
 const ivec2 ewol::resource::TextureFile::sizeAuto(-1,-1);
 const ivec2 ewol::resource::TextureFile::sizeDefault(0,0);

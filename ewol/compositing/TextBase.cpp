@@ -9,6 +9,8 @@
 #include <ewol/context/Context.hpp>
 #include <etk/types.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::TextBase);
 
 const int32_t ewol::compositing::TextBase::m_vboIdCoord(0);
 const int32_t ewol::compositing::TextBase::m_vboIdCoordText(1);

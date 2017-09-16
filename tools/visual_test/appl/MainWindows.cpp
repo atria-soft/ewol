@@ -38,6 +38,10 @@ appl::MainWindows::MainWindows() :
 void appl::MainWindows::init() {
 	ewol::widget::Windows::init();
 	
+		APPL_WARNING("plop " << ETK_GET_TYPE_NAME(etk::String));
+		APPL_WARNING("plop " << ETK_GET_TYPE_NAME(vec3));
+		APPL_WARNING("plop " << ETK_GET_TYPE_NAME(double));
+		APPL_WARNING("plop " << ETK_GET_TYPE_NAME(uint32_t));
 	m_composer = ewol::widget::Composer::create();
 	m_composer->loadFromFile("DATA:gui.xml");
 	setSubWidget(m_composer);
@@ -234,10 +238,11 @@ void appl::MainWindows::updateProperty() {
 			widget->propertyValue.set(param->getName() + ":");
 			widgetSizer->subWidgetAdd(widget);
 			etk::String type = param->getType();
+			APPL_WARNING("Parameter TYPE=" << param->getType() << " name=" << param->getName());
 			if (param->getPropertyType() != "eproperty::List") {
 				//addSpacer(widgetSizer, etk::color::purple);
 				// Main part TODO: ...
-				if (type == typeid(etk::String).name()) {
+				if (type == ETK_GET_TYPE_NAME(etk::String)) {
 					ewol::widget::EntryShared widgetTmp = ewol::widget::Entry::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<etk::String>* paramValue = dynamic_cast<eproperty::Value<etk::String>*>(param);
@@ -256,7 +261,7 @@ void appl::MainWindows::updateProperty() {
 							return;
 						});
 					m_listConnection.pushBack(etk::move(conn));
-				} else if (type == typeid(gale::Dimension).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(gale::Dimension)) {
 					addSpacer(widgetSizer);
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
@@ -325,7 +330,7 @@ void appl::MainWindows::updateProperty() {
 						});
 					m_listConnection.pushBack(etk::move(conn));
 					
-				} else if (type == typeid(bvec2).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(bvec2)) {
 					addSpacer(widgetSizer);
 					ewol::widget::CheckBoxShared widgetTmp = ewol::widget::CheckBox::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
@@ -364,7 +369,7 @@ void appl::MainWindows::updateProperty() {
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetTmp->setSubWidget(widgetLabel);
-				} else if (type == typeid(ivec2).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(ivec2)) {
 					addSpacer(widgetSizer);
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
@@ -403,7 +408,7 @@ void appl::MainWindows::updateProperty() {
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
-				} else if (type == typeid(uivec2).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(uivec2)) {
 					addSpacer(widgetSizer);
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
@@ -442,7 +447,7 @@ void appl::MainWindows::updateProperty() {
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
-				} else if (type == typeid(vec2).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(vec2)) {
 					addSpacer(widgetSizer);
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
@@ -483,7 +488,7 @@ void appl::MainWindows::updateProperty() {
 					widgetLabel = ewol::widget::Label::create();
 					widgetLabel->propertyValue.set("y");
 					widgetSizer->subWidgetAdd(widgetLabel);
-				} else if (type == typeid(bool).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(bool)) {
 					addSpacer(widgetSizer);
 					ewol::widget::CheckBoxShared widgetTmp = ewol::widget::CheckBox::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
@@ -498,14 +503,14 @@ void appl::MainWindows::updateProperty() {
 							return;
 						});
 					m_listConnection.pushBack(etk::move(conn));
-				} else if (    type == typeid(int64_t).name()
-				            || type == typeid(int32_t).name()
-				            || type == typeid(int16_t).name()
-				            || type == typeid(int8_t).name()
-				            || type == typeid(uint64_t).name()
-				            || type == typeid(uint32_t).name()
-				            || type == typeid(uint16_t).name()
-				            || type == typeid(uint8_t).name()) {
+				} else if (    type == ETK_GET_TYPE_NAME(int64_t)
+				            || type == ETK_GET_TYPE_NAME(int32_t)
+				            || type == ETK_GET_TYPE_NAME(int16_t)
+				            || type == ETK_GET_TYPE_NAME(int8_t)
+				            || type == ETK_GET_TYPE_NAME(uint64_t)
+				            || type == ETK_GET_TYPE_NAME(uint32_t)
+				            || type == ETK_GET_TYPE_NAME(uint16_t)
+				            || type == ETK_GET_TYPE_NAME(uint8_t)) {
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					etk::String value = param->getString();
@@ -520,34 +525,34 @@ void appl::MainWindows::updateProperty() {
 							return;
 						});
 					m_listConnection.pushBack(etk::move(conn));
-					if (type == typeid(int64_t).name()) {
+					if (type == ETK_GET_TYPE_NAME(int64_t)) {
 						widgetTmp->propertyMin.set(0x8000000000000000LL);
 						widgetTmp->propertyMax.set(0x7FFFFFFFFFFFFFFFLL);
-					} else if (type == typeid(int32_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(int32_t)) {
 						widgetTmp->propertyMin.set(0x80000000LL);
 						widgetTmp->propertyMax.set(0x7FFFFFFFLL);
-					} else if (type == typeid(int16_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(int16_t)) {
 						widgetTmp->propertyMin.set(-65338);
 						widgetTmp->propertyMax.set(65337);
-					} else if (type == typeid(int8_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(int8_t)) {
 						widgetTmp->propertyMin.set(-128);
 						widgetTmp->propertyMax.set(127);
-					} else if (type == typeid(uint64_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(uint64_t)) {
 						widgetTmp->propertyMin.set(0);
 						widgetTmp->propertyMax.set(0x7FFFFFFFFFFFFFFFLL);
-					} else if (type == typeid(uint32_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(uint32_t)) {
 						widgetTmp->propertyMin.set(0);
 						widgetTmp->propertyMax.set(0x7FFFFFFFLL);
-					} else if (type == typeid(uint16_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(uint16_t)) {
 						widgetTmp->propertyMin.set(0);
 						widgetTmp->propertyMax.set(65337*2);
-					} else if (type == typeid(uint8_t).name()) {
+					} else if (type == ETK_GET_TYPE_NAME(uint8_t)) {
 						widgetTmp->propertyMin.set(0);
 						widgetTmp->propertyMax.set(256);
 					}
-				} else if (type == typeid(float).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(float)) {
 					type = "float";
-				} else if (type == typeid(double).name()) {
+				} else if (type == ETK_GET_TYPE_NAME(double)) {
 					type = "double";
 				}
 			} else {

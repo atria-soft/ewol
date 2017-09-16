@@ -16,6 +16,9 @@
 #include <ewol/resource/font/FontBase.hpp>
 #include <gale/resource/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::FontFreeType);
+
 // free Font hnadle of librairies ... entry for acces ...
 static int32_t l_countLoaded=0;
 static FT_Library library;

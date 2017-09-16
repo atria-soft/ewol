@@ -16,7 +16,8 @@
 #include <ewol/widget/Windows.hpp>
 #include <ewol/widget/Manager.hpp>
 
-
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::context::InputManager);
 
 #define EVENT_DEBUG  EWOL_VERBOSE
 //#define EVENT_DEBUG  EWOL_DEBUG

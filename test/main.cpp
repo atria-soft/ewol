@@ -8,7 +8,6 @@
 #include <test-debug/debug.hpp>
 #include <etk/Vector.hpp>
 #include <etk/String.hpp>
-#include <etk/Hash.hpp>
 #include <etk/os/FSNode.hpp>
 #include <etk/archive/Archive.hpp>
 #include <etk/etk.hpp>
@@ -20,10 +19,7 @@
 #include <etest/etest.hpp>
 
 int main(int argc, const char *argv[]) {
-	// init Google test :
-	::testing::InitGoogleTest(&argc, const_cast<char **>(argv));
-	etk::init(argc, argv);
-	etk::initDefaultFolder("ewol-test");
+	etest::init(argc, argv);
 	return RUN_ALL_TESTS();
 }
 

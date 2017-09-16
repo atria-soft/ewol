@@ -14,7 +14,9 @@
 #include <ewol/resource/TexturedFont.hpp>
 #include <ewol/resource/FontFreeType.hpp>
 #include <ewol/context/Context.hpp>
-
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::font::mode);
+ETK_DECLARE_TYPE(ewol::resource::TexturedFont);
 
 etk::Stream& ewol::operator <<(etk::Stream& _os, enum ewol::font::mode _obj) {
 	switch(_obj) {

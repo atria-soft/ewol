@@ -10,6 +10,8 @@
 #include <ewol/widget/Manager.hpp>
 
 #include <etk/Color.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ColorBar);
 
 ewol::widget::ColorBar::ColorBar() :
   signalChange(this, "change", "Color value change"),

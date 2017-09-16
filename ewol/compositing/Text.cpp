@@ -9,6 +9,9 @@
 #include <ewol/context/Context.hpp>
 #include <etk/types.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::Text);
+
 ewol::compositing::Text::Text(const etk::String& _fontName, int32_t _fontSize) :
   m_font(nullptr) {
 	setFont(_fontName, _fontSize);

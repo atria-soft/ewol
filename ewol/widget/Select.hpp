@@ -42,6 +42,8 @@ namespace ewol {
 						etk::String m_name;
 						bool m_selected;
 					public:
+						// TODO: Remove this: due to the fact my etk::Vector is not full implemented
+						Element() {}
 						Element(int32_t _value, etk::String _name, bool _selected=false);
 				};
 				etk::Vector<ewol::widget::Select::Element> m_listElement;

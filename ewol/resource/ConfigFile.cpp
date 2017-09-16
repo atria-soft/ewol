@@ -11,6 +11,8 @@
 #include <ejson/ejson.hpp>
 #include <ejson/Number.hpp>
 #include <ejson/String.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::ConfigFile);
 
 ewol::resource::ConfigFile::ConfigFile() :
   gale::Resource(),

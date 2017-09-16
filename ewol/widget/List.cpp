@@ -10,6 +10,9 @@
 #include <ewol/compositing/Text.hpp>
 #include <ewol/widget/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::List);
+
 ewol::widget::List::List() {
 	addObjectType("ewol::widget::List");
 	m_paddingSizeX = 2;

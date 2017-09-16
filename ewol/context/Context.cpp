@@ -29,6 +29,9 @@
 
 #include <ewol/context/Context.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::Context);
+
 static ewol::Context* l_curentInterface=nullptr;
 ewol::Context& ewol::getContext() {
 	gale::Context& context = gale::getContext();

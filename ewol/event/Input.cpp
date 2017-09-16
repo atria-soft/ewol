@@ -6,6 +6,9 @@
 
 #include <ewol/widget/Widget.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::event::Input);
+
 etk::Stream& ewol::event::operator <<(etk::Stream& _os, const ewol::event::Input& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();

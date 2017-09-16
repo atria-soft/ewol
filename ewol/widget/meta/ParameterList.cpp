@@ -13,6 +13,8 @@
 #include <ewol/compositing/Text.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <etranslate/etranslate.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::ParameterList);
 
 ewol::widget::ParameterList::ParameterList() :
   signalSelect(this, "select", "") {

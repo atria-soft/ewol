@@ -9,6 +9,9 @@
 #include <ewol/widget/Container.hpp>
 #include <ewol/widget/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::Container);
+
 ewol::widget::Container::Container() {
 	addObjectType("ewol::widget::Container");
 	// nothing to do ...

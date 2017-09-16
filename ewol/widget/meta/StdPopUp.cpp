@@ -11,6 +11,9 @@
 #include <ewol/widget/Manager.hpp>
 #include <etk/Vector.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::StdPopUp);
+
 ewol::widget::StdPopUp::StdPopUp() :
   propertyTitle(this, "title",
                       "<bold>Message</bold>",

@@ -8,6 +8,8 @@
 #include <ewol/compositing/TextDF.hpp>
 #include <ewol/context/Context.hpp>
 #include <etk/types.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::compositing::TextDF);
 
 ewol::compositing::TextDF::TextDF(const etk::String& _fontName, int32_t _fontSize) :
   ewol::compositing::TextBase("", false),

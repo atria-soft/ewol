@@ -9,7 +9,8 @@
 
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Compositing.hpp>
-
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::Compositing);
 
 ewol::Compositing::Compositing() {
 	// nothing to do

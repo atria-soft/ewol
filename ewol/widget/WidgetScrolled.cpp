@@ -10,6 +10,8 @@
 #include <ewol/widget/Manager.hpp>
 #include <gale/renderer/openGL/openGL.hpp>
 #include <ewol/ewol.hpp>
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::widget::WidgetScrolled);
 
 ewol::widget::WidgetScrolled::WidgetScrolled() :
   propertyShapeVert(this, "shape-vert",

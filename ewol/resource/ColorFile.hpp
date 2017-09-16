@@ -52,11 +52,11 @@ namespace ewol {
 				 * @param[in] _Id Id of the color.
 				 * @return The requested color.
 				 */
-				const etk::Color<float>& get(int32_t _id) {
-					if (_id<0) {
+				const etk::Color<float>& get(int32_t _id) const {
+					if (_id < 0) {
 						return m_errorColor;
 					}
-					return m_list[_id];
+					return m_list.getValue(_id);
 				};
 				/**
 				 * @brief Get All color name

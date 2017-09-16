@@ -8,6 +8,9 @@
 #include <ewol/ewol.hpp>
 #include <ewol/object/Manager.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(enum ewol::widget::WSlider::sladingMode);
+ETK_DECLARE_TYPE(ewol::widget::WSlider);
 
 static const char* l_listsladingMode[ewol::widget::WSlider::sladingTransition_count] = {
 	"transition vertical",

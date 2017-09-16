@@ -12,6 +12,9 @@
 #include <ewol/resource/Texture.hpp>
 #include <echrono/Steady.hpp>
 
+#include <etk/typeInfo.hpp>
+ETK_DECLARE_TYPE(ewol::resource::Texture);
+
 /**
  * @brief get the next power 2 if the input
  * @param[in] value Value that we want the next power of 2
