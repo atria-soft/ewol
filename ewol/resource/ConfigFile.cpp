@@ -36,7 +36,7 @@ ewol::resource::ConfigFile::~ConfigFile() {
 void ewol::resource::ConfigFile::reload() {
 	ethread::RecursiveLock lock(m_mutex);
 	// reset all parameters
-	for (int32_t iii=0; iii<m_list.size(); iii++){
+	for (size_t iii=0; iii<m_list.size(); ++iii){
 		if (m_list.getValue(iii).exist() == true) {
 			m_list.getValue(iii) = ejson::empty();
 		}
