@@ -183,9 +183,8 @@ void ewol::widget::WSlider::subWidgetSelectSet(const etk::String& _widgetName) {
 	}
 	EWOL_ERROR("Can not change to a widget not present");
 }
-
 void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
-	EWOL_VERBOSE("Periodic: " << m_slidingProgress << "/1.0 " << m_windowsSources << " ==> " << m_windowsDestination);
+	EWOL_ERROR("Periodic: " << m_slidingProgress << "/1.0 " << m_windowsSources << " ==> " << m_windowsDestination << "  " << _event);
 	if (m_slidingProgress >= 1.0) {
 		m_windowsSources = m_windowsDestination;
 		if(    m_windowsRequested != -1
@@ -284,6 +283,7 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 
 void ewol::widget::WSlider::onChangePropertySelectWidget() {
 	if (propertySelectWidget.get() != "") {
+		EWOL_ERROR("SELECT new widget: " << propertySelectWidget.get());
 		subWidgetSelectSet(*propertySelectWidget);
 	}
 }

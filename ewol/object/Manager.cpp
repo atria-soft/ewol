@@ -21,7 +21,7 @@ ewol::object::Manager::Manager(ewol::Context& _context) :
 	periodicCall.setPeriodic(true);
 	// set the basic time properties :
 	m_applWakeUpTime = echrono::Clock::now();
-	m_lastPeriodicCallTime = echrono::Clock::now();
+	m_lastPeriodicCallTime = m_applWakeUpTime;
 }
 
 ewol::object::Manager::~Manager() {
