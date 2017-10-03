@@ -58,10 +58,10 @@ void ewol::resource::TextureFile::init(etk::String _genName, const etk::String& 
 	m_realImageSize = vec2(tmp.x(), tmp.y());
 	vec2 compatibilityHWSize = vec2(nextP2(tmp.x()), nextP2(tmp.y()));
 	if (m_realImageSize != compatibilityHWSize) {
-		EWOL_ERROR("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
+		EWOL_DEBUG("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
 		m_data.resize(ivec2(compatibilityHWSize.x(),compatibilityHWSize.y()));
 	}
-	m_lastSize = m_realImageSize;
+	//m_lastSize = m_realImageSize;
 	#ifdef GENERATE_DISTANCE_FIELD_MODE
 		//egami::generateDistanceFieldFile(_tmpFilename, etk::String(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
 		egami::generateDistanceFieldFile(_tmpFilename, etk::String(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");

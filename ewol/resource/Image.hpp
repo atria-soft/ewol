@@ -19,8 +19,6 @@ namespace ewol {
 			public:
 				static const ivec2 sizeAuto;
 				static const ivec2 sizeDefault;
-			private:
-				vec2 m_realImageSize;
 			protected:
 				TextureFile();
 				void init();

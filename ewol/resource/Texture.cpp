@@ -45,6 +45,7 @@ ewol::resource::Texture::Texture() :
     m_texPboId(0),
   #endif
   m_data(ivec2(32,32),egami::colorType::RGBA8),
+  m_realImageSize(1,1),
   m_lastSize(1,1),
   m_loaded(false),
   m_lastTypeObject(0),

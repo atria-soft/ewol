@@ -180,6 +180,7 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 	vec2 ratio = usefullSize/openGLSize;
 	_sourcePosStart *= ratio;
 	_sourcePosStop *= ratio;
+	EWOL_VERBOSE("     openGLSize=" << openGLSize << " usableSize=" << usefullSize << " start=" << _sourcePosStart << " stop=" << _sourcePosStop);
 	
 	//EWOL_ERROR("Debug image " << m_filename << "  ==> " << m_position << " " << _size << " " << _sourcePosStart << " " << _sourcePosStop);
 	if (m_angle == 0.0f) {

@@ -113,7 +113,8 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	}
 	m_compositing.printPart(imageRealSize, *propertyPosStart, *propertyPosStop);
 	//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
-	EWOL_VERBOSE("Paint Image :" << *propertySource << " realsize=" << *m_compositing.getRealSize() << " size=" << imageRealSize);
+	EWOL_WARNING("Paint Image :" << *propertySource << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
+	EWOL_WARNING("      start=" << *propertyPosStart << " stop=" << *propertyPosStop);
 }
 
 void ewol::widget::Image::calculateMinMaxSize() {
