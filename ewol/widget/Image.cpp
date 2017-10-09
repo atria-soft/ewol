@@ -118,8 +118,8 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		m_compositing.setPos(ivec2(origin));
 	}
 	m_compositing.printPart(imageRealSize, *propertyPosStart, *propertyPosStop);
-	//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
-	EWOL_WARNING("Paint Image :" << *propertySource << " realsize=" << m_compositing.getRealSize() << " size=" << imageRealSize);
+	EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize);
+	EWOL_WARNING("Paint Image :" << *propertySource << " realsize=" << m_compositing.getRealSize() << " origin=" << origin << " size=" << imageRealSize);
 	EWOL_WARNING("      start=" << *propertyPosStart << " stop=" << *propertyPosStop);
 }
 

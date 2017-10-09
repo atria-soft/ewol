@@ -111,7 +111,7 @@ def configure(target, my_module):
 	    'ewol/resource/ColorFile.cpp',
 	    'ewol/resource/ConfigFile.cpp',
 	    'ewol/resource/FontFreeType.cpp',
-	    'ewol/resource/Image.cpp',
+	    'ewol/resource/TextureFile.cpp',
 	    'ewol/resource/ImageDF.cpp',
 	    'ewol/resource/Texture.cpp',
 	    'ewol/resource/TexturedFont.cpp',
@@ -129,7 +129,7 @@ def configure(target, my_module):
 	    'ewol/resource/Colored3DObject.hpp',
 	    'ewol/resource/ConfigFile.hpp',
 	    'ewol/resource/Texture.hpp',
-	    'ewol/resource/Image.hpp'
+	    'ewol/resource/TextureFile.hpp'
 	    ])
 	
 	# widget:

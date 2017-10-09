@@ -303,7 +303,8 @@ void ewol::compositing::Image::setSource(const etk::String& _newFile, const vec2
 		}
 	}
 	if (    m_resource == nullptr
-	     && m_resourceDF == nullptr) {
+	     && m_resourceDF == nullptr
+	     && m_resourceImage == nullptr) {
 		if (resource != nullptr) {
 			EWOL_WARNING("Retrive previous resource");
 			m_resource = resource;

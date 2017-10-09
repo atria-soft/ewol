@@ -8,7 +8,7 @@
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Compositing.hpp>
 #include <gale/resource/Program.hpp>
-#include <ewol/resource/Image.hpp>
+#include <ewol/resource/TextureFile.hpp>
 #include <ewol/resource/ImageDF.hpp>
 
 namespace ewol {

@@ -9,7 +9,7 @@
 
 #include <etk/types.hpp>
 #include <gale/resource/Resource.hpp>
-#include <ewol/resource/Image.hpp>
+#include <ewol/resource/TextureFile.hpp>
 #include <gale/resource/Program.hpp>
 
 namespace ewol {

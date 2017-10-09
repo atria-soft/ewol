@@ -8,7 +8,7 @@
 #include <etk/types.hpp>
 #include <egami/egami.hpp>
 #include <gale/resource/Manager.hpp>
-#include <ewol/resource/Image.hpp>
+#include <ewol/resource/TextureFile.hpp>
 #include <ewol/resource/Texture.hpp>
 #include <ethread/Thread.hpp>
 #include <etk/typeInfo.hpp>

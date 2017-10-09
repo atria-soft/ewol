@@ -119,7 +119,7 @@ bool ewol::resource::Texture::updateContext() {
 		if (    m_lastTypeObject != typeObject
 		     || m_lastSizeObject != sizeObject
 		     || m_lastSize != m_data.getSize()) {
-			EWOL_VERBOSE("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
+			EWOL_WARNING("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
 			glDeleteTextures(1, &m_texId);
 			m_loaded = false;
 		}
@@ -142,9 +142,9 @@ bool ewol::resource::Texture::updateContext() {
 		m_lastSize = m_data.getSize();
 		m_lastTypeObject = typeObject;
 		m_lastSizeObject = sizeObject;
-		EWOL_VERBOSE("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+		EWOL_WARNING("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	} else {
-		EWOL_VERBOSE("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+		EWOL_WARNING("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	}
 	// in all case we set the texture properties :
 	// TODO : check error ???

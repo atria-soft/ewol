@@ -10,7 +10,7 @@
 #include <gale/resource/Program.hpp>
 #include <ewol/resource/ConfigFile.hpp>
 #include <ewol/resource/ColorFile.hpp>
-#include <ewol/resource/Image.hpp>
+#include <ewol/resource/TextureFile.hpp>
 #include <ewol/event/Time.hpp>
 #include <ewol/Padding.hpp>
 
