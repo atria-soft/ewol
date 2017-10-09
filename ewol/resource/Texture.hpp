@@ -59,13 +59,19 @@ namespace ewol {
 				DECLARE_RESOURCE_FACTORY(Texture);
 				virtual ~Texture();
 			public:
-				// you must set the size here, because it will be set in multiple of pow(2)
+				// You must set the size here, because it will be set in multiple of pow(2)
 				void setImageSize(ivec2 _newSize);
-				// get the reference on this image to draw nomething on it ...
+				// Get the reference on this image to draw nomething on it ...
 				inline egami::Image& get() {
 					return m_data;
 				};
-				// flush the data to send it at the openGl system
+				/**
+				 * @brief Set the image in the texture system
+				 * @note It will reize in square2 if needed by the system.
+				 * @param[in] _image Image to set. (use @code set(etk::move(xxx)); @endcode )
+				 */
+				void set(egami::Image _image);
+				// Flush the data to send it at the openGl system
 				void flush();
 				bool updateContext();
 				void removeContext();

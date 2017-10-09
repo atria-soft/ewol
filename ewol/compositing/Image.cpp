@@ -323,8 +323,7 @@ void ewol::compositing::Image::setSource(egami::Image _image) {
 	m_filename = "direct image BUFFER";
 	m_requestSize = _image.getSize();
 	m_resourceImage = ewol::resource::Texture::create();
-	m_resourceImage->get() = _image;
-	m_resourceImage->flush();
+	m_resourceImage->set(etk::move(_image));
 }
 
 bool ewol::compositing::Image::hasSources() {
@@ -335,7 +334,8 @@ bool ewol::compositing::Image::hasSources() {
 
 vec2 ewol::compositing::Image::getRealSize() {
 	if (    m_resource == nullptr
-	     && m_resourceDF == nullptr) {
+	     && m_resourceDF == nullptr
+	     && m_resourceImage == nullptr) {
 		return vec2(0,0);
 	}
 	if (m_resource != nullptr) {
@@ -343,6 +343,9 @@ vec2 ewol::compositing::Image::getRealSize() {
 	}
 	if (m_resourceDF != nullptr) {
 		return m_resourceDF->getRealSize();
+	}
+	if (m_resourceImage != nullptr) {
+		return m_resourceImage->getUsableSize();
 	}
 	return vec2(0,0);
 }

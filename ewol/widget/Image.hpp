@@ -56,6 +56,11 @@ namespace ewol {
 				 * @param[in] _border New border size to set
 				 */
 				void set(const etk::String& _file, const gale::Dimension& _border);
+				/**
+				 * @brief Set an image with direct elements
+				 * @param[in] _image Image to set in the display
+				 */
+				void setCustumSource(const egami::Image& _image);
 			protected:
 				vec2 m_imageRenderSize; //!< size of the image when we render it
 			protected:

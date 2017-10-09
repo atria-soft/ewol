@@ -400,7 +400,7 @@ namespace ewol {
 				vec3 calculateSize(const etk::UString& _text);
 				/**
 				 * @brief calculate a theoric charcode size
-				 * @param[in] _charcode The µUnicode value to calculate dimention.
+				 * @param[in] _charcode The Unicode value to calculate dimention.
 				 * @return The theoric size used.
 				 */
 				inline vec3 calculateSize(const char32_t& _charcode) {

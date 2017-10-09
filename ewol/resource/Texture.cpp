@@ -297,3 +297,22 @@ void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }
+
+void ewol::resource::Texture::set(egami::Image _image) {
+	EWOL_WARNING("Set a new image in a texture:");
+	ethread::RecursiveLock lock(m_mutex);
+	if (_image.exist() == false) {
+		EWOL_ERROR("ERROR when loading the image : [raw data]");
+		return;
+	}
+	EWOL_WARNING("    size=" << _image.getSize());
+	etk::swap(m_data, _image);
+	ivec2 tmp = m_data.getSize();
+	m_realImageSize = vec2(tmp.x(), tmp.y());
+	vec2 compatibilityHWSize = vec2(nextP2(tmp.x()), nextP2(tmp.y()));
+	if (m_realImageSize != compatibilityHWSize) {
+		EWOL_ERROR("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
+		m_data.resize(ivec2(compatibilityHWSize.x(),compatibilityHWSize.y()));
+	}
+	flush();
+}
