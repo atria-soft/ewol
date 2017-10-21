@@ -156,7 +156,7 @@ static int32_t nextP2(int32_t _value) {
 ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const etk::String& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
-		ememory::SharedPtr<ewol::resource::ImageDF> object(new ewol::resource::ImageDF());
+		ememory::SharedPtr<ewol::resource::ImageDF> object(ETK_NEW(ewol::resource::ImageDF));
 		if (object == nullptr) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
@@ -208,7 +208,7 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 	}
 	EWOL_INFO("CREATE: ImageDF: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = ememory::SharedPtr<ewol::resource::ImageDF>(new ewol::resource::ImageDF());
+	object = ememory::SharedPtr<ewol::resource::ImageDF>(ETK_NEW(ewol::resource::ImageDF));
 	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;

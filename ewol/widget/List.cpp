@@ -28,7 +28,7 @@ ewol::widget::List::List() {
 ewol::widget::List::~List() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		delete(m_listOObject[iii]);
+		ETK_DELETE(ewol::Compositing, m_listOObject[iii]);
 		m_listOObject[iii] = nullptr;
 	}
 	m_listOObject.clear();
@@ -71,11 +71,12 @@ void ewol::widget::List::calculateMinMaxSize() {
 }
 
 void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
-	if (nullptr == _newObject) {
+	if (_newObject == nullptr) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (_pos < 0 || (size_t)_pos >= m_listOObject.size() ) {
+	if (    _pos < 0
+	     || (size_t)_pos >= m_listOObject.size() ) {
 		m_listOObject.pushBack(_newObject);
 	} else {
 		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
@@ -84,7 +85,7 @@ void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos)
 
 void ewol::widget::List::clearOObjectList() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		delete(m_listOObject[iii]);
+		ETK_DELETE(ewol::Compositing, m_listOObject[iii]);
 		m_listOObject[iii] = nullptr;
 	}
 	m_listOObject.clear();
@@ -92,7 +93,7 @@ void ewol::widget::List::clearOObjectList() {
 
 void ewol::widget::List::onDraw() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		if (nullptr != m_listOObject[iii]) {
+		if (m_listOObject[iii] != nullptr) {
 			m_listOObject[iii]->draw();
 		}
 	}
@@ -100,8 +101,7 @@ void ewol::widget::List::onDraw() {
 }
 
 void ewol::widget::List::onRegenerateDisplay() {
-	if (true == needRedraw()) {
-		
+	if (needRedraw() == true) {
 		// clean the object list ...
 		clearOObjectList();
 		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
@@ -128,7 +128,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 		
 		etk::Vector<int32_t> listSizeColomn;
 		
-		ewol::compositing::Drawing * BGOObjects = new ewol::compositing::Drawing();
+		ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
 		etk::Color<> basicBG = getBasicBG();
 		BGOObjects->setColor(basicBG);
 		BGOObjects->setPos(vec3(0, 0, 0) );
@@ -170,7 +170,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 				etk::Color<> bg;
 				getElement(jjj, iii, myTextToWrite, fg, bg);
 				
-				ewol::compositing::Text * tmpText = new ewol::compositing::Text();
+				ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
 				if (nullptr != tmpText) {
 					// get font size : 
 					int32_t tmpFontHeight = tmpText->calculateSize(char32_t('A')).y();

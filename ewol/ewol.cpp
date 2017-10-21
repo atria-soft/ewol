@@ -27,7 +27,7 @@ int32_t ewol::run(ewol::context::Application* _application,
                   int32_t _argc,
                   const char* _argv[]) {
 	etranslate::init(_argc, _argv);
-	return gale::run(new ewol::Context(_application), _argc, _argv);
+	return gale::run(ETK_NEW(ewol::Context, _application), _argc, _argv);
 }
 
 

@@ -48,7 +48,7 @@ ewol::widget::Joystick::~Joystick() {
 }
 
 void ewol::widget::Joystick::onRegenerateDisplay() {
-	if (true == needRedraw()) {
+	if (needRedraw() == true) {
 		// clean the object list ...
 		
 		/*
@@ -58,11 +58,11 @@ void ewol::widget::Joystick::onRegenerateDisplay() {
 		// set background
 		if (true == m_displayBackground) {
 			if (m_background == "") {
-				tmpOObjects = new ewol::OObject2DColored;
+				tmpOObjects = ne w ewol::OObject2DColored;
 				tmpOObjects->setColor(m_colorBg);
 				tmpOObjects->Disc( m_size.x/2, m_size.y/2, m_size.x/2-1);
 			} else {
-				tmpOOtexBg = new ewol::OObject2DTextured(m_background, m_size.x, m_size.y);
+				tmpOOtexBg = n ew ewol::OObject2DTextured(m_background, m_size.x, m_size.y);
 				tmpOOtexBg->rectangle(0, 0, m_size.x, m_size.y);
 			}
 		}
@@ -70,13 +70,13 @@ void ewol::widget::Joystick::onRegenerateDisplay() {
 		float sizeElement = m_size.x*m_ratio;
 		if (m_foreground == "") {
 			if (nullptr == tmpOObjects) {
-				tmpOObjects = new ewol::OObject2DColored;
+				tmpOObjects = ne w ewol::OObject2DColored;
 			}
 			tmpOObjects->setColor(m_colorFg);
 			tmpOObjects->Disc( ((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement) + sizeElement,
 			                   ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement) + sizeElement, sizeElement);
 		} else {
-			tmpOOtexFg = new ewol::OObject2DTextured(m_foreground,sizeElement*2, sizeElement*2);
+			tmpOOtexFg = ne w ewol::OObject2DTextured(m_foreground,sizeElement*2, sizeElement*2);
 			tmpOOtexFg->rectangle(((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement),
 			                      ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement), sizeElement*2, sizeElement*2);
 		}
@@ -123,7 +123,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 			// clip if needed ...
 			if (m_distance > 1.0) {
 				m_distance = 1.0;
-				// regenerate new display position : 
+				// regenerate n ew display position : 
 				m_displayPos.x = cos(m_angle)*m_distance;
 				m_displayPos.y = sin(m_angle)*m_distance;
 			}
@@ -158,19 +158,19 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 }
 
 
-void ewol::widget::Joystick::ratio(float newRatio) {
-	if (newRatio > 1) {
-		newRatio = 1;
+void ewol::widget::Joystick::ratio(float _newRatio) {
+	if (_newRatio > 1) {
+		_newRatio = 1;
 	}
-	m_ratio = newRatio;
+	m_ratio = _newRatio;
 	EWOL_INFO("Set default Joystick ratio at " << m_ratio);
 }
 
 
-void ewol::widget::Joystick::background(etk::String imageNameInData, bool display) {
+void ewol::widget::Joystick::background(etk::String _imageNameInData, bool _display) {
 	// TODO : check if it existed
-	m_background = imageNameInData;
-	m_displayBackground = display;
+	m_background = _imageNameInData;
+	m_displayBackground = _display;
 	EWOL_INFO("Set default Joystick background at " << m_background << " display it=" << m_displayBackground);
 }
 

@@ -63,5 +63,5 @@ class MainApplication : public ewol::context::Application {
  */
 int main(int _argc, const char *_argv[]) {
 	// second possibility
-	return ewol::run(new MainApplication(), _argc, _argv);
+	return ewol::run(ETK_NEW(appl::MainApplication)(), _argc, _argv);
 }

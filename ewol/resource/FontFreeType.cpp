@@ -53,7 +53,6 @@ void ewol::resource::freeTypeUnInit() {
 ewol::resource::FontFreeType::FontFreeType() {
 	addResourceType("ewol::FontFreeType");
 	m_init = false;
-	m_FileBuffer = nullptr;
 	m_FileSize = 0;
 }
 
@@ -75,17 +74,17 @@ void ewol::resource::FontFreeType::init(const etk::String& _fontName) {
 		return;
 	}
 	// allocate data
-	m_FileBuffer = new FT_Byte[m_FileSize];
-	if (m_FileBuffer == nullptr) {
+	m_FileBuffer.resize(m_FileSize, 0);
+	if (m_FileBuffer.size() != m_FileSize) {
 		EWOL_ERROR("Error Memory allocation size=" << _fontName);
 		return;
 	}
 	// load data from the file :
-	myfile.fileRead(m_FileBuffer, 1, m_FileSize);
+	myfile.fileRead(&m_FileBuffer[0], 1, m_FileSize);
 	// close the file:
 	myfile.fileClose();
 	// load Face ...
-	int32_t error = FT_New_Memory_Face( library, m_FileBuffer, m_FileSize, 0, &m_fftFace );
+	int32_t error = FT_New_Memory_Face(library, &m_FileBuffer[0], m_FileSize, 0, &m_fftFace );
 	if( FT_Err_Unknown_File_Format == error) {
 		EWOL_ERROR("... the font file could be opened and read, but it appears ... that its font format is unsupported");
 	} else if (0 != error) {
@@ -101,17 +100,14 @@ void ewol::resource::FontFreeType::init(const etk::String& _fontName) {
 ewol::resource::FontFreeType::~FontFreeType() {
 	ethread::RecursiveLock lock(m_mutex);
 	// clean the tmp memory
-	if (nullptr != m_FileBuffer) {
-		delete[] m_FileBuffer;
-		m_FileBuffer = nullptr;
-	}
+	m_FileBuffer.clear();
 	// must be deleted fftFace
-	FT_Done_Face( m_fftFace );
+	FT_Done_Face(m_fftFace);
 }
 
 vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const etk::String& _unicodeString) {
 	ethread::RecursiveLock lock(m_mutex);
-	if(false == m_init) {
+	if (m_init == false) {
 		return vec2(0,0);
 	}
 	// TODO : ...

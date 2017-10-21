@@ -10,8 +10,8 @@
 #define NAME "Application"
 
 TEST(TestEwolApplication, Creation) {
-	ewol::context::Application* tmpAppl = new ewol::context::Application();
+	ewol::context::Application* tmpAppl = ETK_NEW(ewol::context::Application);
 	EXPECT_NE(tmpAppl, nullptr);
-	delete tmpAppl;
+	ETK_DELETE(ewol::context::Application, tmpAppl);
 }
 

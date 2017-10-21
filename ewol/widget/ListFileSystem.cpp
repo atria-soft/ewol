@@ -62,7 +62,7 @@ ewol::widget::ListFileSystem::~ListFileSystem() {
 void ewol::widget::ListFileSystem::clearList() {
 	for (auto &it : m_list) {
 		if (it != nullptr) {
-			delete(it);
+			ETK_DELETE(etk::FSNode, it);
 			it = nullptr;
 		}
 	}
@@ -79,7 +79,7 @@ void ewol::widget::ListFileSystem::regenerateView() {
 	m_list.clear();
 	m_originScrooled.setValue(0,0);
 	etk::FSNode tmpFolder(*propertyPath);
-	// get the new list : 
+	// get the list:
 	m_list = tmpFolder.folderGetSubList(*propertyShowHidden, *propertyShowFolder, *propertyShowFile, *propertyFilter);
 	// request a redraw ...
 	markToRedraw();

@@ -61,7 +61,7 @@ void ewol::resource::TextureFile::init(etk::String _genName, const etk::String& 
 ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const etk::String& _filename, ivec2 _size, ivec2 _sizeRegister) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
 	if (_filename == "") {
-		ememory::SharedPtr<ewol::resource::TextureFile> object(new ewol::resource::TextureFile());
+		ememory::SharedPtr<ewol::resource::TextureFile> object(ETK_NEW(ewol::resource::TextureFile));
 		if (object == nullptr) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return nullptr;
@@ -110,7 +110,7 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 	}
 	EWOL_INFO("CREATE: TextureFile: '" << tmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = ememory::SharedPtr<ewol::resource::TextureFile>(new ewol::resource::TextureFile());
+	object = ememory::SharedPtr<ewol::resource::TextureFile>(ETK_NEW(ewol::resource::TextureFile));
 	if (object == nullptr) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return nullptr;

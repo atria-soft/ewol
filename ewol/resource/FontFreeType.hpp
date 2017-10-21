@@ -19,7 +19,7 @@ namespace ewol {
 		// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
 		class FontFreeType : public ewol::resource::FontBase {
 			private:
-				FT_Byte* m_FileBuffer;
+				etk::Vector<FT_Byte> m_FileBuffer;
 				int32_t m_FileSize;
 				FT_Face m_fftFace;
 				bool m_init;

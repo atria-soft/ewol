@@ -62,7 +62,7 @@ exit_on_error:
 
 #define DECLARE_FACTORY(className) \
 	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) { \
-		ememory::SharedPtr<className> object(new className()); \
+		ememory::SharedPtr<className> object(ETK_NEW(className)); \
 		if (object == nullptr) { \
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \
@@ -75,7 +75,7 @@ exit_on_error:
 		return object; \
 	} \
 	static ememory::SharedPtr<className> createXml(const exml::Element& _node) { \
-		ememory::SharedPtr<className> object(new className()); \
+		ememory::SharedPtr<className> object(ETK_NEW(className)); \
 		if (object == nullptr) { \
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \
@@ -102,7 +102,7 @@ exit_on_error:
 		if (object != nullptr) { \
 			return object; \
 		} \
-		object = ememory::SharedPtr<className>(new className()); \
+		object = ememory::SharedPtr<className>(ETK_NEW(className)); \
 		if (object == nullptr) { \
 			EWOL_ERROR("Factory error"); \
 			return nullptr; \

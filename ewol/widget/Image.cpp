@@ -124,29 +124,29 @@ void ewol::widget::Image::onRegenerateDisplay() {
 }
 
 void ewol::widget::Image::calculateMinMaxSize() {
-	EWOL_WARNING("calculate min size: border=" << propertyBorder << " size=" << propertyImageSize << " min-size=" << propertyMinSize);
+	EWOL_DEBUG("calculate min size: border=" << propertyBorder << " size=" << propertyImageSize << " min-size=" << propertyMinSize);
 	vec2 imageBoder = propertyBorder->getPixel()*2.0f;
 	vec2 imageSize = propertyImageSize->getPixel();
 	vec2 size = propertyMinSize->getPixel();
-	EWOL_WARNING("                ==> border=" << imageBoder << " size=" << imageSize << " min-size=" << size);
+	EWOL_DEBUG("                ==> border=" << imageBoder << " size=" << imageSize << " min-size=" << size);
 	if (imageSize != vec2(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;
 	} else {
 		vec2 imageSizeReal = m_compositing.getRealSize();
-		EWOL_WARNING(" Real Size = " << imageSizeReal);
+		EWOL_VERBOSE(" Real Size = " << imageSizeReal);
 		vec2 min1 = imageBoder+propertyMinSize->getPixel();
 		m_minSize = imageBoder+imageSizeReal;
-		EWOL_WARNING(" set max : " << m_minSize << " min1=" << min1);
+		EWOL_VERBOSE(" set max : " << m_minSize << " min1=" << min1);
 		m_minSize.setMax(min1);
-		EWOL_WARNING("     result : " << m_minSize);
+		EWOL_VERBOSE("     result : " << m_minSize);
 		m_maxSize = imageBoder+propertyMaxSize->getPixel();
 		m_minSize.setMin(m_maxSize);
 	}
 	m_imageRenderSize = m_minSize;
 	m_minSize.setMax(size);
 	m_maxSize.setMax(m_minSize);
-	EWOL_ERROR("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << m_imageRenderSize << " img size=" << imageSize << "  " << propertyImageSize);
+	EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << m_imageRenderSize << " img size=" << imageSize << "  " << propertyImageSize);
 	markToRedraw();
 }
 

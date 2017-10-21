@@ -274,7 +274,8 @@ void ewol::resource::Texture::removeContext() {
 	if (m_loaded == true) {
 		// Request remove texture ...
 		EWOL_DEBUG("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
-		//glDeleteTextures(1, &m_texId);
+		// TODO: Check if we are in the correct thread
+		glDeleteTextures(1, &m_texId);
 		m_loaded = false;
 	}
 }
@@ -311,7 +312,7 @@ void ewol::resource::Texture::set(egami::Image _image) {
 	m_realImageSize = vec2(tmp.x(), tmp.y());
 	vec2 compatibilityHWSize = vec2(nextP2(tmp.x()), nextP2(tmp.y()));
 	if (m_realImageSize != compatibilityHWSize) {
-		EWOL_ERROR("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
+		EWOL_VERBOSE("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
 		m_data.resize(ivec2(compatibilityHWSize.x(),compatibilityHWSize.y()));
 	}
 	flush();
