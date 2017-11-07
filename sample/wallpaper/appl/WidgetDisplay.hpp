@@ -30,14 +30,14 @@ namespace appl {
 			};
 		protected:
 			WidgetDisplay();
-			void init();
+			void init() override;
 		public:
 			DECLARE_FACTORY(WidgetDisplay);
 			virtual ~WidgetDisplay();
 			ewol::compositing::Image m_compositing;
 			etk::Vector<Element> m_elements;
 		public: // Derived function
-			void onRegenerateDisplay();
+			void onRegenerateDisplay() override;
 			void periodicCall(const ewol::event::Time& _event);
 			bool onEventInput(const ewol::event::Input& _event) override;
 			void onDraw() override;

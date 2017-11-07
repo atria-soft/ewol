@@ -95,7 +95,7 @@ namespace appl {
  */
 int main(int _argc, const char *_argv[]) {
 	// second possibility
-	return ewol::run(ETK_NEW(appl::MainApplication)(), _argc, _argv);
+	return ewol::run(ETK_NEW(appl::MainApplication), _argc, _argv);
 }
 //! [ewol_sample_HW_main_main]
 

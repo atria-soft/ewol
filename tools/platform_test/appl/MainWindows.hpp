@@ -38,7 +38,7 @@ namespace appl {
 			bool onEventInput(const ewol::event::Input& _event) override;
 			bool onEventEntry(const ewol::event::Entry& _event) override;
 			void forceFocusCall(const ewol::event::Time& _event);
-			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) {
+			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override {
 				ewol::WidgetShared wid = ewol::widget::Windows::getWidgetAtPos(_pos);
 				if (wid != nullptr) {
 					return wid;

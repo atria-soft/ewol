@@ -19,7 +19,7 @@ namespace appl {
 			protected:
 				//! @brief constructor
 				VectorDisplay();
-				void init();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(VectorDisplay, "VectorDisplay");
 				//! @brief destructor
