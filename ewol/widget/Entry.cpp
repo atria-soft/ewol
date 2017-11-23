@@ -423,6 +423,7 @@ void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
 	etk::String previous = propertyValue;
 	// check the RegExp :
 	if (_newData.size()>0) {
+		/*
 		if (m_regex.parse(_newData, 0, _newData.size()) == false) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "'" );
 			return;
@@ -435,6 +436,7 @@ void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
 			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (stop position error)" );
 			return;
 		}
+		*/
 	}
 	propertyValue.setDirect(_newData);
 	markToRedraw();
