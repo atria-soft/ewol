@@ -177,7 +177,7 @@ void ewol::widget::Manager::addWidgetCreator(const etk::String& _name,
 		return;
 	}
 	//Keep name in lower case :
-	etk::String nameLower = etk::tolower(_name);
+	etk::String nameLower = etk::toLower(_name);
 	bool find = false;
 	{
 		auto it = m_creatorList.find(nameLower);
@@ -204,7 +204,7 @@ void ewol::widget::Manager::addWidgetCreator(const etk::String& _name,
 }
 
 ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name) {
-	etk::String nameLower = etk::tolower(_name);
+	etk::String nameLower = etk::toLower(_name);
 	auto it = m_creatorList.find(nameLower);
 	if (it != m_creatorList.end()) {
 		if (it->second != nullptr) {
@@ -216,7 +216,7 @@ ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name) {
 }
 
 ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name, const exml::Element& _node) {
-	etk::String nameLower = etk::tolower(_name);
+	etk::String nameLower = etk::toLower(_name);
 	auto it = m_creatorListXml.find(nameLower);
 	if (it != m_creatorListXml.end()) {
 		if (it->second != nullptr) {
@@ -228,7 +228,7 @@ ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name, const
 }
 
 bool ewol::widget::Manager::exist(const etk::String& _name) {
-	etk::String nameLower = etk::tolower(_name);
+	etk::String nameLower = etk::toLower(_name);
 	auto it = m_creatorList.find(nameLower);
 	if (it == m_creatorList.end()) {
 		return false;
