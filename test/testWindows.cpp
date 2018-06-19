@@ -28,7 +28,7 @@ namespace appl {
 TEST(TestEwolWindows, Creation) {
 	/*
 	ememory::SharedPtr<appl::Windows> tmpWindows = appl::Windows::create();
-	EXPECT_NE(tmpWindows, nullptr);
+	EXPECT_NE(tmpWindows, null);
 	tmpWindows.reset();
 	*/
 }

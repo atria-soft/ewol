@@ -20,7 +20,7 @@ ETK_DECLARE_TYPE(ewol::widget::Windows);
 ewol::widget::Windows::Windows() :
   propertyColorConfiguration(this, "file-color", "{ewol}THEME:COLOR:Windows.json", "color file link on the theme", &ewol::widget::Windows::onChangePropertyColor),
   propertyTitle(this, "title", "No title", "Title of the windows", &ewol::widget::Windows::onChangePropertyTitle),
-  m_resourceColor(nullptr),
+  m_resourceColor(null),
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");
 	propertyCanFocus.setDirectCheck(true);
@@ -40,7 +40,7 @@ ewol::widget::Windows::~Windows() {
 
 void ewol::widget::Windows::onChangeSize() {
 	ewol::Widget::onChangeSize();
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_subWidget->calculateMinMaxSize();
 		// TODO : do it better ... and manage gravity ...
 		m_subWidget->setSize(m_size);
@@ -48,7 +48,7 @@ void ewol::widget::Windows::onChangeSize() {
 		m_subWidget->onChangeSize();
 	}
 	for (auto &it : m_popUpWidgetList) {
-		if(it != nullptr) {
+		if(it != null) {
 			it->calculateMinMaxSize();
 			it->setSize(m_size);
 			it->setOrigin(vec2(0.0f, 0.0f));
@@ -65,7 +65,7 @@ ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	if (m_popUpWidgetList.size() != 0) {
 		return m_popUpWidgetList.back()->getWidgetAtPos(_pos);
 	// otherwise in the normal windows
-	} else if (m_subWidget != nullptr) {
+	} else if (m_subWidget != null) {
 		return m_subWidget->getWidgetAtPos(_pos);
 	}
 	// otherwise the event go to this widget ...
@@ -101,11 +101,11 @@ void ewol::widget::Windows::sysDraw() {
 }
 
 void ewol::widget::Windows::onRegenerateDisplay() {
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_subWidget->onRegenerateDisplay();
 	}
 	for (auto &it : m_popUpWidgetList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->onRegenerateDisplay();
 		}
 	}
@@ -120,7 +120,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 	// clear the screen with transparency ...
 	etk::Color<float> colorBg(0.5, 0.5, 0.5, 0.5);
-	if (m_resourceColor != nullptr) {
+	if (m_resourceColor != null) {
 		colorBg = m_resourceColor->get(m_colorBg);
 	}
 	gale::openGL::clearColor(colorBg);
@@ -133,7 +133,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_subWidget->systemDraw(_displayProp);
 		//EWOL_DEBUG("Draw Windows");
 	}
@@ -144,7 +144,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 	// second display the pop-up
 	for (auto &it : m_popUpWidgetList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->systemDraw(_displayProp);
 			//EWOL_DEBUG("Draw Pop-up");
 		}
@@ -156,12 +156,12 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 }
 
 void ewol::widget::Windows::setSubWidget(ewol::WidgetShared _widget) {
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		EWOL_INFO("Remove current main windows Widget...");
 		m_subWidget->removeParent();
 		m_subWidget.reset();
 	}
-	if (_widget != nullptr) {
+	if (_widget != null) {
 		m_subWidget = _widget;
 		m_subWidget->setParent(sharedFromThis());
 	}
@@ -171,7 +171,7 @@ void ewol::widget::Windows::setSubWidget(ewol::WidgetShared _widget) {
 }
 
 void ewol::widget::Windows::popUpWidgetPush(ewol::WidgetShared _widget) {
-	if (_widget == nullptr) {
+	if (_widget == null) {
 		// nothing to do an error appear :
 		EWOL_ERROR("can not set widget pop-up (null pointer)");
 		return;
@@ -195,7 +195,7 @@ void ewol::widget::Windows::popUpWidgetPop() {
 
 void ewol::widget::Windows::onChangePropertyColor() {
 	m_resourceColor = ewol::resource::ColorFile::create(*propertyColorConfiguration);
-	if (m_resourceColor != nullptr) {
+	if (m_resourceColor != null) {
 		m_colorBg = m_resourceColor->request("background");
 	} else {
 		EWOL_WARNING("Can not open the default color configuration file for the windows: " << *propertyColorConfiguration);
@@ -217,7 +217,7 @@ void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _c
 	while (it != m_popUpWidgetList.end()) {
 		if (*it == _child) {
 			EWOL_VERBOSE("    Find it ...");
-			if (*it == nullptr) {
+			if (*it == null) {
 				m_popUpWidgetList.erase(it);
 				it = m_popUpWidgetList.begin();
 				continue;
@@ -233,7 +233,7 @@ void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _c
 	}
 	if (m_subWidget == _child) {
 		EWOL_VERBOSE("    Find it ... 2");
-		if (m_subWidget == nullptr) {
+		if (m_subWidget == null) {
 			return;
 		}
 		m_subWidget->removeParent();
@@ -244,37 +244,37 @@ void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _c
 
 ewol::ObjectShared ewol::widget::Windows::getSubObjectNamed(const etk::String& _objectName) {
 	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_objectName);
-	if (tmpObject != nullptr) {
+	if (tmpObject != null) {
 		return tmpObject;
 	}
 	// check direct subwidget
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		tmpObject = m_subWidget->getSubObjectNamed(_objectName);
-		if (tmpObject != nullptr) {
+		if (tmpObject != null) {
 			return tmpObject;
 		}
 	}
 	// get all subwidget "pop-up"
 	for (auto &it : m_popUpWidgetList) {
-		if (it != nullptr) {
+		if (it != null) {
 			tmpObject = it->getSubObjectNamed(_objectName);
-			if (tmpObject != nullptr) {
+			if (tmpObject != null) {
 				return tmpObject;
 			}
 		}
 	}
 	// not find ...
-	return nullptr;
+	return null;
 }
 
 void ewol::widget::Windows::drawWidgetTree(int32_t _level) {
 	ewol::Widget::drawWidgetTree(_level);
 	_level++;
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_subWidget->drawWidgetTree(_level);
 	}
 	for (auto &it: m_popUpWidgetList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->drawWidgetTree(_level);
 		}
 	}

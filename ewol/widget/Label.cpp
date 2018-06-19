@@ -24,12 +24,12 @@ ewol::widget::Label::Label() :
                       "displayed value string",
                       &ewol::widget::Label::onChangePropertyValue),
   m_value(U""),
-  m_colorProperty(nullptr),
+  m_colorProperty(null),
   m_colorDefaultFgText(-1),
   m_colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
 	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Label.json");
-	if (m_colorProperty != nullptr) {
+	if (m_colorProperty != null) {
 		m_colorDefaultFgText = m_colorProperty->request("foreground");
 		m_colorDefaultBgText = m_colorProperty->request("background");
 	}
@@ -115,7 +115,7 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	
 	// clean the element
 	m_text.reset();
-	if (m_colorProperty != nullptr) {
+	if (m_colorProperty != null) {
 		m_text.setDefaultColorFg(m_colorProperty->get(m_colorDefaultFgText));
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
 	}

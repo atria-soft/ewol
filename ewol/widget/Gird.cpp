@@ -13,7 +13,7 @@ ETK_DECLARE_TYPE(ewol::widget::Gird);
 
 ewol::widget::Gird::Gird() :
   m_sizeRow(0),
-  m_tmpWidget(nullptr),
+  m_tmpWidget(null),
   m_gavityButtom(true),
   m_borderSize(0,0) {
 	addObjectType("ewol::widget::Gird");
@@ -44,7 +44,7 @@ void ewol::widget::Gird::onChangeSize() {
 	m_size -= m_borderSize*2;
 	
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (m_subWidget[iii].widget != nullptr) {
+		if (m_subWidget[iii].widget != null) {
 			//calculate the origin :
 			vec2 tmpOrigin = m_origin + m_borderSize;
 			if (false == m_gavityButtom) {
@@ -94,7 +94,7 @@ void ewol::widget::Gird::calculateMinMaxSize() {
 			// change of line : 
 			lastLineID = m_subWidget[iii].row;
 		}
-		if (m_subWidget[iii].widget != nullptr) {
+		if (m_subWidget[iii].widget != null) {
 			m_subWidget[iii].widget->calculateMinMaxSize();
 			vec2 tmpSize = m_subWidget[iii].widget->getCalculateMinSize();
 			EWOL_DEBUG("     [" << iii << "] subWidgetMinSize=" << tmpSize);
@@ -130,7 +130,7 @@ void ewol::widget::Gird::setColNumber(int32_t _colNumber) {
 		for (int64_t iii=m_subWidget.size(); iii >= 0; iii--) {
 			if (m_subWidget[iii].col > (_colNumber-1)) {
 				// out of bounds : must remove it ...
-				if (m_subWidget[iii].widget != nullptr) {
+				if (m_subWidget[iii].widget != null) {
 					m_subWidget[iii].widget.reset();
 					// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 					if (errorControl == m_subWidget.size()) {
@@ -189,7 +189,7 @@ void ewol::widget::Gird::subWidgetRemoveAll() {
 
 
 void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::WidgetShared _newWidget) {
-	if (_newWidget == nullptr) {
+	if (_newWidget == null) {
 		return;
 	}
 	GirdProperties prop;
@@ -216,11 +216,11 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widg
 				// The element already exist  == > replace it ...
 				m_tmpWidget = m_subWidget[iii].widget;
 				m_subWidget[iii].widget = _newWidget;
-				if (m_tmpWidget != nullptr) {
+				if (m_tmpWidget != null) {
 					m_tmpWidget.reset();
-					if (m_tmpWidget != nullptr) {
+					if (m_tmpWidget != null) {
 						EWOL_CRITICAL("[" << getId() << "] Error while replacing a widget ...  == > never call when free");
-						m_tmpWidget = nullptr;
+						m_tmpWidget = null;
 					}
 				}
 			}
@@ -259,7 +259,7 @@ void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 }
 
 void ewol::widget::Gird::subWidgetUnLink(ewol::WidgetShared _newWidget) {
-	if (_newWidget == nullptr) {
+	if (_newWidget == null) {
 		return;
 	}
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
@@ -290,7 +290,7 @@ void ewol::widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	for (auto &it : m_subWidget) {
-		if (it.widget != nullptr) {
+		if (it.widget != null) {
 			it.widget->systemDraw(_displayProp);
 		}
 	}
@@ -298,7 +298,7 @@ void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 
 void ewol::widget::Gird::onRegenerateDisplay() {
 	for (auto &it : m_subWidget) {
-		if (it.widget != nullptr) {
+		if (it.widget != null) {
 			it.widget->onRegenerateDisplay();
 		}
 	}
@@ -306,11 +306,11 @@ void ewol::widget::Gird::onRegenerateDisplay() {
 
 ewol::WidgetShared ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {
-		return nullptr;
+		return null;
 	}
 	// for all element in the sizer ...
 	for (auto &it : m_subWidget) {
-		if (it.widget == nullptr) {
+		if (it.widget == null) {
 			continue;
 		}
 		vec2 tmpSize = it.widget->getSize();
@@ -318,13 +318,13 @@ ewol::WidgetShared ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
 		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
 			ewol::WidgetShared tmpWidget = it.widget->getWidgetAtPos(_pos);
-			if (tmpWidget != nullptr) {
+			if (tmpWidget != null) {
 				return tmpWidget;
 			}
 			// stop searching
 			break;
 		}
 	}
-	return nullptr;
+	return null;
 }
 

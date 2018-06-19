@@ -51,15 +51,15 @@ void appl::MainWindows::init() {
 	externSubBind(m_composer, ewol::widget::Button, "appl-next-gravity", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackGravityChange);
 	
 	m_sizerVert = ememory::dynamicPointerCast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-upper-test-widget"));
-	if (m_sizerVert == nullptr) {
+	if (m_sizerVert == null) {
 		APPL_CRITICAL("Can not get vertical pointer");
 	}
 	m_sizerDynamic = ememory::dynamicPointerCast<ewol::widget::Sizer>(m_composer->getSubObjectNamed("appl-dynamic-config"));
-	if (m_sizerDynamic == nullptr) {
+	if (m_sizerDynamic == null) {
 		APPL_CRITICAL("Can not get dynamic pointer");
 	}
 	m_subWidget = ememory::dynamicPointerCast<ewol::Widget>(m_composer->getSubObjectNamed("[TEST]TO-TEST"));
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		APPL_CRITICAL("Can not get subWidget pointer");
 	}
 	shortCutAdd("F12",          "menu:reloade-shader");
@@ -182,7 +182,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			break;
 		case 1:
 			m_subWidget = TestDistanceField::create();
-			if (m_subWidget != nullptr) {
+			if (m_subWidget != null) {
 				m_sizerVert->subWidgetAdd(m_subWidget);
 			}
 			tmpDescription = "Test Distance Field";
@@ -191,7 +191,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	}
 	// create the widget with a xml generator (readable for test ...):
 	m_subWidget = ewol::widget::composerGenerateString(tmpConstruct);
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_sizerVert->subWidgetReplace(oldWidget, m_subWidget);
 	}
 	propertySetOnWidgetNamed("appl-label-test", "value", tmpDescription);
@@ -200,7 +200,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 
 static void addSpacer(ememory::SharedPtr<ewol::widget::Sizer> _sizer, etk::Color<> _color=etk::color::none) {
 	ememory::SharedPtr<ewol::widget::Spacer> mySpacer = ewol::widget::Spacer::create();
-	if (mySpacer != nullptr) {
+	if (mySpacer != null) {
 		mySpacer->propertyExpand.set(bvec2(true,false));
 		mySpacer->propertyFill.set(bvec2(true,false));
 		if (_color == etk::color::none) {
@@ -214,7 +214,7 @@ static void addSpacer(ememory::SharedPtr<ewol::widget::Sizer> _sizer, etk::Color
 void appl::MainWindows::updateProperty() {
 	// remove all elements:
 	m_sizerDynamic->subWidgetRemoveAll();
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		return;
 	}
 	m_listConnection.clear();
@@ -224,12 +224,12 @@ void appl::MainWindows::updateProperty() {
 	addSpacer(m_sizerDynamic, etk::color::red);
 	for (size_t iii=0; iii<m_subWidget->properties.size(); ++iii) {
 		eproperty::Property* param = m_subWidget->properties.getRaw(iii);
-		if (param == nullptr) {
-			APPL_WARNING("Parameter EMPTY . " << iii << " : nullptr");
+		if (param == null) {
+			APPL_WARNING("Parameter EMPTY . " << iii << " : null");
 			continue;
 		}
 		ememory::SharedPtr<ewol::widget::Sizer> widgetSizer = ewol::widget::Sizer::create();
-		if (widgetSizer != nullptr) {
+		if (widgetSizer != null) {
 			widgetSizer->propertyMode.set(ewol::widget::Sizer::modeHori);
 			widgetSizer->propertyExpand.set(bvec2(true,false));
 			widgetSizer->propertyFill.set(bvec2(true,true));
@@ -246,8 +246,8 @@ void appl::MainWindows::updateProperty() {
 					ewol::widget::EntryShared widgetTmp = ewol::widget::Entry::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<etk::String>* paramValue = dynamic_cast<eproperty::Value<etk::String>*>(param);
-					if (paramValue == nullptr) {
-						APPL_ERROR("nullptr...");
+					if (paramValue == null) {
+						APPL_ERROR("null...");
 						return;
 					}
 					etk::String value = paramValue->get();
@@ -266,8 +266,8 @@ void appl::MainWindows::updateProperty() {
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<gale::Dimension>* paramValue = dynamic_cast<eproperty::Value<gale::Dimension>*>(param);
-					if (paramValue == nullptr) {
-						APPL_ERROR("nullptr... 2 ");
+					if (paramValue == null) {
+						APPL_ERROR("null... 2 ");
 						return;
 					}
 					gale::Dimension value = paramValue->get();
@@ -335,8 +335,8 @@ void appl::MainWindows::updateProperty() {
 					ewol::widget::CheckBoxShared widgetTmp = ewol::widget::CheckBox::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<bvec2>* paramValue = dynamic_cast<eproperty::Value<bvec2>*>(param);
-					if (paramValue == nullptr) {
-						APPL_ERROR("nullptr... 2 ");
+					if (paramValue == null) {
+						APPL_ERROR("null... 2 ");
 						return;
 					}
 					bvec2 value = paramValue->get();
@@ -374,8 +374,8 @@ void appl::MainWindows::updateProperty() {
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<ivec2>* paramValue = dynamic_cast<eproperty::Value<ivec2>*>(param);
-					if (paramValue == nullptr) {
-						APPL_ERROR("nullptr... 2 ");
+					if (paramValue == null) {
+						APPL_ERROR("null... 2 ");
 						return;
 					}
 					ivec2 value = paramValue->get();
@@ -413,8 +413,8 @@ void appl::MainWindows::updateProperty() {
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<uivec2>* paramValue = dynamic_cast<eproperty::Value<uivec2>*>(param);
-					if (paramValue == nullptr) {
-						APPL_ERROR("nullptr... 2 ");
+					if (paramValue == null) {
+						APPL_ERROR("null... 2 ");
 						return;
 					}
 					uivec2 value = paramValue->get();
@@ -452,8 +452,8 @@ void appl::MainWindows::updateProperty() {
 					ewol::widget::SpinShared widgetTmp = ewol::widget::Spin::create();
 					widgetSizer->subWidgetAdd(widgetTmp);
 					eproperty::Value<vec2>* paramValue = dynamic_cast<eproperty::Value<vec2>*>(param);
-					if (paramValue == nullptr) {
-						APPL_ERROR("nullptr... 2 ");
+					if (paramValue == null) {
+						APPL_ERROR("null... 2 ");
 						return;
 					}
 					vec2 value = paramValue->get();
@@ -494,8 +494,8 @@ void appl::MainWindows::updateProperty() {
 					widgetSizer->subWidgetAdd(widgetTmp);
 					esignal::Connection conn = widgetTmp->signalValue.connect(
 						[=](const bool& _value) {
-							if (m_subWidget == nullptr) {
-								APPL_ERROR("nullptr...");
+							if (m_subWidget == null) {
+								APPL_ERROR("null...");
 								return;
 							}
 							APPL_INFO("set parameter : name=" << param->getName() << " value=" << _value);
@@ -581,7 +581,7 @@ void appl::MainWindows::updateProperty() {
 			}
 		}
 		ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
-		if (mySpacer != nullptr) {
+		if (mySpacer != null) {
 			mySpacer->propertyExpand.set(bvec2(true,false));
 			mySpacer->propertyFill.set(bvec2(true,false));
 			mySpacer->propertyMinSize.set(vec2(3,3));

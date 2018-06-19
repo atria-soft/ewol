@@ -28,18 +28,18 @@ ewol::compositing::Image::Image(const etk::String& _imageName,
   m_clippingEnable(false),
   m_color(etk::color::white),
   m_angle(0.0),
-  m_GLprogram(nullptr),
+  m_GLprogram(null),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLColor(-1),
   m_GLtexture(-1),
   m_GLtexID(-1),
   m_distanceFieldMode(_df),
-  m_resource(nullptr),
-  m_resourceDF(nullptr) {
+  m_resource(null),
+  m_resourceDF(null) {
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == nullptr) {
+	if (m_VBO == null) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
 	}
@@ -62,7 +62,7 @@ void ewol::compositing::Image::loadProgram() {
 	} else {
 		m_GLprogram = gale::resource::Program::create("{ewol}DATA:textured3D.prog");
 	}
-	if (m_GLprogram != nullptr) {
+	if (m_GLprogram != null) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
@@ -76,13 +76,13 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (    m_resource == nullptr
-	     && m_resourceDF == nullptr
-	     && m_resourceImage == nullptr) {
+	if (    m_resource == null
+	     && m_resourceDF == null
+	     && m_resourceImage == null) {
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -97,9 +97,9 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	m_GLprogram->use();
 	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
 	// TextureID
-	if (m_resourceImage != nullptr) {
+	if (m_resourceImage != null) {
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceImage->getRendererId());
-	} else if (m_resource != nullptr) {
+	} else if (m_resource != null) {
 		if (m_distanceFieldMode == true) {
 			EWOL_ERROR("FONT type error Request distance field and display normal ...");
 		}
@@ -172,7 +172,7 @@ void ewol::compositing::Image::print(const vec2& _size) {
 void ewol::compositing::Image::printPart(const vec2& _size,
                                          vec2 _sourcePosStart,
                                          vec2 _sourcePosStop) {
-	if (m_resource == nullptr) {
+	if (m_resource == null) {
 		return;
 	}
 	vec2 openGLSize = vec2(m_resource->getOpenGlSize().x(), m_resource->getOpenGlSize().y());
@@ -292,28 +292,28 @@ void ewol::compositing::Image::setSource(const etk::String& _newFile, const vec2
 		// link to new one
 		if (m_distanceFieldMode == false) {
 			m_resource = ewol::resource::TextureFile::create(m_filename, tmpSize);
-			if (m_resource == nullptr) {
+			if (m_resource == null) {
 				EWOL_ERROR("Can not get Image resource");
 			}
 		} else {
 			m_resourceDF = ewol::resource::ImageDF::create(m_filename, tmpSize);
-			if (m_resourceDF == nullptr) {
+			if (m_resourceDF == null) {
 				EWOL_ERROR("Can not get Image resource DF");
 			}
 		}
 	}
-	if (    m_resource == nullptr
-	     && m_resourceDF == nullptr
-	     && m_resourceImage == nullptr) {
-		if (resource != nullptr) {
+	if (    m_resource == null
+	     && m_resourceDF == null
+	     && m_resourceImage == null) {
+		if (resource != null) {
 			EWOL_WARNING("Retrive previous resource");
 			m_resource = resource;
 		}
-		if (resourceDF != nullptr) {
+		if (resourceDF != null) {
 			EWOL_WARNING("Retrive previous resource (DF)");
 			m_resourceDF = resourceDF;
 		}
-		if (resourceTex != nullptr) {
+		if (resourceTex != null) {
 			EWOL_WARNING("Retrive previous resource (image)");
 			m_resourceImage = resourceTex;
 		}
@@ -328,24 +328,24 @@ void ewol::compositing::Image::setSource(egami::Image _image) {
 }
 
 bool ewol::compositing::Image::hasSources() {
-	return    m_resource != nullptr
-	       || m_resourceDF != nullptr;
+	return    m_resource != null
+	       || m_resourceDF != null;
 }
 
 
 vec2 ewol::compositing::Image::getRealSize() {
-	if (    m_resource == nullptr
-	     && m_resourceDF == nullptr
-	     && m_resourceImage == nullptr) {
+	if (    m_resource == null
+	     && m_resourceDF == null
+	     && m_resourceImage == null) {
 		return vec2(0,0);
 	}
-	if (m_resource != nullptr) {
+	if (m_resource != null) {
 		return m_resource->getRealSize();
 	}
-	if (m_resourceDF != nullptr) {
+	if (m_resourceDF != null) {
 		return m_resourceDF->getRealSize();
 	}
-	if (m_resourceImage != nullptr) {
+	if (m_resourceImage != null) {
 		return m_resourceImage->getUsableSize();
 	}
 	return vec2(0,0);

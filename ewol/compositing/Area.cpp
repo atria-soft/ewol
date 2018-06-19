@@ -18,19 +18,19 @@ const int32_t ewol::compositing::Area::m_vboIdColor(2);
 ewol::compositing::Area::Area(const ivec2& _size) :
   m_position(0.0, 0.0, 0.0),
   m_color(etk::color::white),
-  m_GLprogram(nullptr),
+  m_GLprogram(null),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLColor(-1),
   m_GLtexture(-1),
   m_GLtexID(-1),
-  m_resource(nullptr) {
+  m_resource(null) {
 	m_resource = ewol::resource::Texture::create();
 	m_resource->setImageSize(_size);
 	m_resource->flush();
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == nullptr) {
+	if (m_VBO == null) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
 	}
@@ -47,7 +47,7 @@ void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = gale::resource::Program::create(etk::String("{ewol}DATA:textured3D.prog"));
-	if (m_GLprogram != nullptr) {
+	if (m_GLprogram != null) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
@@ -61,11 +61,11 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_resource == nullptr) {
+	if (m_resource == null) {
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}

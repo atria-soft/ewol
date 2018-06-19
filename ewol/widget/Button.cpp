@@ -219,12 +219,12 @@ void ewol::widget::Button::onChangePropertyValue() {
 	}
 	if (*propertyEnableSingle == true) {
 		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == nullptr
-		     && m_subWidget[1] != nullptr) {
+		     && m_subWidget[0] == null
+		     && m_subWidget[1] != null) {
 			m_idWidgetDisplayed = 1;
 		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == nullptr
-		            && m_subWidget[0] != nullptr) {
+		            && m_subWidget[1] == null
+		            && m_subWidget[0] != null) {
 			m_idWidgetDisplayed = 0;
 		}
 	}
@@ -257,12 +257,12 @@ void ewol::widget::Button::onChangePropertyToggleMode() {
 	}
 	if (*propertyEnableSingle == true) {
 		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == nullptr
-		     && m_subWidget[1] != nullptr) {
+		     && m_subWidget[0] == null
+		     && m_subWidget[1] != null) {
 			m_idWidgetDisplayed = 1;
 		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == nullptr
-		            && m_subWidget[0] != nullptr) {
+		            && m_subWidget[1] == null
+		            && m_subWidget[0] != null) {
 			m_idWidgetDisplayed = 0;
 		}
 	}
@@ -273,15 +273,15 @@ void ewol::widget::Button::onChangePropertyToggleMode() {
 void ewol::widget::Button::onChangePropertyEnableSingle() {
 	if (*propertyEnableSingle == true) {
 		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == nullptr
-		     && m_subWidget[1] != nullptr) {
+		     && m_subWidget[0] == null
+		     && m_subWidget[1] != null) {
 			m_idWidgetDisplayed = 1;
 		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == nullptr
-		            && m_subWidget[0] != nullptr) {
+		            && m_subWidget[1] == null
+		            && m_subWidget[0] != null) {
 			m_idWidgetDisplayed = 0;
-		} else if (    m_subWidget[0] == nullptr
-		            && m_subWidget[1] == nullptr) {
+		} else if (    m_subWidget[0] == null
+		            && m_subWidget[1] == null) {
 			m_idWidgetDisplayed = 0;
 		}
 	}

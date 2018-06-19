@@ -83,26 +83,26 @@ ewol::widget::ColorChooser::~ColorChooser() {
 
 
 void ewol::widget::ColorChooser::onChangePropertyValue() {
-	if (m_widgetRed != nullptr) {
+	if (m_widgetRed != null) {
 		m_widgetRed->propertyValue.set(propertyValue->r());
 	}
-	if (m_widgetGreen != nullptr) {
+	if (m_widgetGreen != null) {
 		m_widgetGreen->propertyValue.set(propertyValue->g());
 	}
-	if (m_widgetBlue != nullptr) {
+	if (m_widgetBlue != null) {
 		m_widgetBlue->propertyValue.set(propertyValue->b());
 	}
-	if (m_widgetAlpha != nullptr) {
+	if (m_widgetAlpha != null) {
 		m_widgetAlpha->propertyValue.set(propertyValue->a());
 	}
-	if (m_widgetColorBar != nullptr) {
+	if (m_widgetColorBar != null) {
 		m_widgetColorBar->propertyValue.set(propertyValue);
 	}
 }
 
 void ewol::widget::ColorChooser::onCallbackColorChangeRed(const float& _newColor) {
 	propertyValue.getDirect().setR(_newColor);
-	if (m_widgetColorBar != nullptr) {
+	if (m_widgetColorBar != null) {
 		m_widgetColorBar->propertyValue.set(propertyValue);
 	}
 	signalChange.emit(propertyValue);
@@ -110,7 +110,7 @@ void ewol::widget::ColorChooser::onCallbackColorChangeRed(const float& _newColor
 
 void ewol::widget::ColorChooser::onCallbackColorChangeGreen(const float& _newColor) {
 	propertyValue.getDirect().setG(_newColor);
-	if (m_widgetColorBar != nullptr) {
+	if (m_widgetColorBar != null) {
 		m_widgetColorBar->propertyValue.set(propertyValue);
 	}
 	signalChange.emit(propertyValue);
@@ -118,7 +118,7 @@ void ewol::widget::ColorChooser::onCallbackColorChangeGreen(const float& _newCol
 
 void ewol::widget::ColorChooser::onCallbackColorChangeBlue(const float& _newColor) {
 	propertyValue.getDirect().setB(_newColor);
-	if (m_widgetColorBar != nullptr) {
+	if (m_widgetColorBar != null) {
 		m_widgetColorBar->propertyValue.set(propertyValue);
 	}
 	signalChange.emit(propertyValue);
@@ -126,7 +126,7 @@ void ewol::widget::ColorChooser::onCallbackColorChangeBlue(const float& _newColo
 
 void ewol::widget::ColorChooser::onCallbackColorChangeAlpha(const float& _newColor) {
 	propertyValue.getDirect().setA(_newColor);
-	if (m_widgetColorBar != nullptr) {
+	if (m_widgetColorBar != null) {
 		m_widgetColorBar->propertyValue.set(propertyValue);
 	}
 	signalChange.emit(propertyValue);
@@ -137,16 +137,16 @@ void ewol::widget::ColorChooser::onCallbackColorChange(const etk::Color<>& _newC
 	uint8_t tmpAlpha = propertyValue->a();
 	propertyValue.getDirect() = _newColor;
 	propertyValue.getDirect().setA(tmpAlpha);
-	if (m_widgetRed != nullptr) {
+	if (m_widgetRed != null) {
 		m_widgetRed->propertyValue.set(propertyValue->r());
 	}
-	if (m_widgetGreen != nullptr) {
+	if (m_widgetGreen != null) {
 		m_widgetGreen->propertyValue.set(propertyValue->g());
 	}
-	if (m_widgetBlue != nullptr) {
+	if (m_widgetBlue != null) {
 		m_widgetBlue->propertyValue.set(propertyValue->b());
 	}
-	if (m_widgetAlpha != nullptr) {
+	if (m_widgetAlpha != null) {
 		m_widgetAlpha->propertyValue.set(propertyValue->a());
 	}
 	signalChange.emit(propertyValue);

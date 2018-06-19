@@ -29,7 +29,7 @@ ewol::widget::List::~List() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		ETK_DELETE(ewol::Compositing, m_listOObject[iii]);
-		m_listOObject[iii] = nullptr;
+		m_listOObject[iii] = null;
 	}
 	m_listOObject.clear();
 }
@@ -71,7 +71,7 @@ void ewol::widget::List::calculateMinMaxSize() {
 }
 
 void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
-	if (_newObject == nullptr) {
+	if (_newObject == null) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
@@ -86,14 +86,14 @@ void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos)
 void ewol::widget::List::clearOObjectList() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		ETK_DELETE(ewol::Compositing, m_listOObject[iii]);
-		m_listOObject[iii] = nullptr;
+		m_listOObject[iii] = null;
 	}
 	m_listOObject.clear();
 }
 
 void ewol::widget::List::onDraw() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		if (m_listOObject[iii] != nullptr) {
+		if (m_listOObject[iii] != null) {
 			m_listOObject[iii]->draw();
 		}
 	}
@@ -171,7 +171,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 				getElement(jjj, iii, myTextToWrite, fg, bg);
 				
 				ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
-				if (nullptr != tmpText) {
+				if (null != tmpText) {
 					// get font size : 
 					int32_t tmpFontHeight = tmpText->calculateSize(char32_t('A')).y();
 					displayPositionY-=(tmpFontHeight+m_paddingSizeY);

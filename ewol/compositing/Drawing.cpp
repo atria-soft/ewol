@@ -229,7 +229,7 @@ ewol::compositing::Drawing::Drawing() :
   m_clippingEnable(false),
   m_color(etk::color::black),
   m_colorBg(etk::color::none),
-  m_GLprogram(nullptr),
+  m_GLprogram(null),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLMatrixPosition(-1),
@@ -243,7 +243,7 @@ ewol::compositing::Drawing::Drawing() :
 	}
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == nullptr) {
+	if (m_VBO == null) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
 	}
@@ -301,7 +301,7 @@ void ewol::compositing::Drawing::loadProgram() {
 	// oad the new ...
 	m_GLprogram = gale::resource::Program::create("{ewol}DATA:color3.prog");
 	// get the shader resource :
-	if (m_GLprogram != nullptr) {
+	if (m_GLprogram != null) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor = m_GLprogram->getAttribute("EW_color");
 		m_GLMatrix = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -315,7 +315,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}

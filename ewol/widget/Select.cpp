@@ -45,7 +45,7 @@ ewol::widget::Select::~Select() {
 
 void ewol::widget::Select::onChangePropertyValue() {
 	markToRedraw();
-	if (m_widgetEntry == nullptr) {
+	if (m_widgetEntry == null) {
 		EWOL_ERROR("Can not acces at entry ...");
 		return;
 	}
@@ -63,7 +63,7 @@ void ewol::widget::Select::onChangePropertyValue() {
 }
 
 void ewol::widget::Select::optionSelectDefault() {
-	if (m_widgetEntry == nullptr) {
+	if (m_widgetEntry == null) {
 		EWOL_ERROR("Can not acces at entry ...");
 		return;
 	}
@@ -140,11 +140,11 @@ bool ewol::widget::Select::loadXML(const exml::Element& _node) {
 void ewol::widget::Select::updateGui() {
 	ewol::widget::SpinBase::updateGui();
 	
-	if (    m_widgetEntry != nullptr
+	if (    m_widgetEntry != null
 	     && m_connectionEntry.isConnected() == false) {
 		
 	}
-	if (    m_widgetButtonUp != nullptr
+	if (    m_widgetButtonUp != null
 	     && m_connectionButton.isConnected() == false) {
 		m_connectionButton = m_widgetButtonUp->signalPressed.connect(this, &ewol::widget::Select::onCallbackOpenMenu);
 	}
@@ -159,7 +159,7 @@ void ewol::widget::Select::onCallbackLabelPressed(int32_t _value) {
 void ewol::widget::Select::onCallbackOpenMenu() {
 	// create a context menu:
 	ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
-	if (tmpContext == nullptr) {
+	if (tmpContext == null) {
 		EWOL_ERROR("Allocation Error");
 		return;
 	}
@@ -167,7 +167,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	tmpContext->setPositionMarkAuto(m_origin, m_size);
 	ewol::widget::SizerShared mySizer;
 	mySizer = ewol::widget::Sizer::create();
-	if (mySizer == nullptr) {
+	if (mySizer == null) {
 		EWOL_ERROR("Allocation Error or sizer");
 		return;
 	}
@@ -178,7 +178,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	tmpContext->setSubWidget(mySizer);
 	for (auto &it : m_listElement) {
 		ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
-		if (myLabel == nullptr) {
+		if (myLabel == null) {
 			EWOL_ERROR("Allocation Error");
 			continue;
 		}
@@ -196,7 +196,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 		mySizer->subWidgetAddStart(myLabel);
 	}
 	ewol::widget::WindowsShared currentWindows = getWindows();
-	if (currentWindows == nullptr) {
+	if (currentWindows == null) {
 		EWOL_ERROR("Can not get the curent Windows...");
 	} else {
 		currentWindows->popUpWidgetPush(tmpContext);

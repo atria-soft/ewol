@@ -62,7 +62,7 @@ namespace ewol {
 				/**
 				 * @brief retrive an object with his name
 				 * @param[in] _name Name of the object
-				 * @return the requested object or nullptr
+				 * @return the requested object or null
 				 */
 				ewol::ObjectShared getObjectNamed(const etk::String& _name);
 			private:

@@ -32,11 +32,11 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::Context);
 
-static ewol::Context* l_curentInterface=nullptr;
+static ewol::Context* l_curentInterface=null;
 ewol::Context& ewol::getContext() {
 	gale::Context& context = gale::getContext();
 	ememory::SharedPtr<gale::Application> appl = context.getApplication();
-	if (appl == nullptr) {
+	if (appl == null) {
 		EWOL_CRITICAL("[CRITICAL] try acces at an empty GALE application (can not get Context)");
 		// ???
 	}
@@ -104,7 +104,7 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	#endif
 	*/
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl == nullptr) {
+	if (appl == null) {
 		EWOL_ERROR(" == > Create without application");
 		return;
 	}
@@ -115,7 +115,7 @@ void ewol::Context::onCreate(gale::Context& _context) {
 void ewol::Context::onStart(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system start (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl == nullptr) {
+	if (appl == null) {
 		// TODO : Request exit of the application .... with error ...
 		return;
 	}
@@ -126,7 +126,7 @@ void ewol::Context::onStart(gale::Context& _context) {
 void ewol::Context::onResume(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system resume (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl == nullptr) {
+	if (appl == null) {
 		return;
 	}
 	appl->onResume(*this);
@@ -137,7 +137,7 @@ void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 	//EWOL_INFO("REGENERATE_DISPLAY");
 	// check if the user selected a windows
 	ewol::widget::WindowsShared window = m_windowsCurrent;
-	if (window == nullptr) {
+	if (window == null) {
 		EWOL_DEBUG("No windows ...");
 		return;
 	}
@@ -155,7 +155,7 @@ void ewol::Context::onDraw(gale::Context& _context) {
 	m_objectManager.cleanInternalRemoved();
 	// real draw...
 	ewol::widget::WindowsShared window = m_windowsCurrent;
-	if (window == nullptr) {
+	if (window == null) {
 		return;
 	}
 	window->sysDraw();
@@ -164,7 +164,7 @@ void ewol::Context::onDraw(gale::Context& _context) {
 void ewol::Context::onPause(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system pause (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl == nullptr) {
+	if (appl == null) {
 		return;
 	}
 	appl->onPause(*this);
@@ -174,7 +174,7 @@ void ewol::Context::onPause(gale::Context& _context) {
 void ewol::Context::onStop(gale::Context& _context) {
 	EWOL_INFO(" == > Ewol system stop (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl == nullptr) {
+	if (appl == null) {
 		return;
 	}
 	appl->onStop(*this);
@@ -188,7 +188,7 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	// clean all widget and sub widget with their resources:
 	m_objectManager.cleanInternalRemoved();
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl != nullptr) {
+	if (appl != null) {
 		// call application to uninit
 		appl->onDestroy(*this);
 		m_application.reset();
@@ -205,7 +205,7 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 void ewol::Context::onKillDemand(gale::Context& _context) {
 	EWOL_INFO(" == > User demand a destroy (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
-	if (appl == nullptr) {
+	if (appl == null) {
 		exit(0);
 		return;
 	}
@@ -243,7 +243,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 	EWOL_VERBOSE("event {" << _special << "} " << _type << " " << _value << " " << _state);
 	// store the keyboard special key status for mouse event...
 	m_input.setLastKeyboardSpecial(_special);
-	if (m_windowsCurrent == nullptr) {
+	if (m_windowsCurrent == null) {
 		// No windows ...
 		return;
 	}
@@ -259,7 +259,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 	}
 	// get the current focused Widget :
 	ewol::WidgetShared tmpWidget = m_widgetManager.focusGet();
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		// no Widget ...
 		return;
 	}
@@ -311,7 +311,7 @@ void ewol::Context::processEvents() {
 
 void ewol::Context::onClipboardEvent(enum gale::context::clipBoard::clipboardListe _clipboardId) {
 	ewol::WidgetShared tmpWidget = m_widgetManager.focusGet();
-	if (tmpWidget != nullptr) {
+	if (tmpWidget != null) {
 		tmpWidget->onEventClipboard(_clipboardId);
 	}
 }
@@ -322,9 +322,9 @@ ewol::Context::Context(ewol::context::Application* _application) :
   m_application(_application),
   m_objectManager(*this),
   m_input(*this),
-  m_windowsCurrent(nullptr),
+  m_windowsCurrent(null),
   m_initStepId(0) {
-	if (m_application == nullptr) {
+	if (m_application == null) {
 		EWOL_CRITICAL("Can not start context with no Application ==> rtfm ...");
 	}
 }
@@ -349,14 +349,14 @@ void ewol::Context::resetIOEvent() {
 void ewol::Context::setWindows(const ewol::widget::WindowsShared& _windows) {
 	EWOL_INFO("set New windows");
 	// remove current focus :
-	m_widgetManager.focusSetDefault(nullptr);
+	m_widgetManager.focusSetDefault(null);
 	m_widgetManager.focusRelease();
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;
 	// set the new default focus:
 	m_widgetManager.focusSetDefault(_windows);
 	// display the title of the Windows:
-	if (m_windowsCurrent != nullptr) {
+	if (m_windowsCurrent != null) {
 		setTitle(m_windowsCurrent->propertyTitle.get());
 	}
 	// request all the widget redrawing
@@ -372,7 +372,7 @@ void ewol::Context::onResize(const ivec2& _size) {
 }
 
 void ewol::Context::forceRedrawAll() {
-	if (m_windowsCurrent == nullptr) {
+	if (m_windowsCurrent == null) {
 		return;
 	}
 	ivec2 size = getSize();

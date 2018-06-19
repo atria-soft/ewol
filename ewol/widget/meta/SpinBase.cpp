@@ -55,7 +55,7 @@ void ewol::widget::SpinBase::onChangePropertySpinMode() {
 
 void ewol::widget::SpinBase::onChangePropertyShape() {
 	m_config = ewol::resource::ConfigFile::create(propertyShape);
-	if (m_config != nullptr) {
+	if (m_config != null) {
 		m_confIdEntryShaper = m_config->request("entry-shaper");
 		m_confIdUpShaper = m_config->request("up-shaper");
 		m_confIdDownShaper = m_config->request("down-shaper");
@@ -71,26 +71,26 @@ void ewol::widget::SpinBase::updateGui() {
 	subWidgetRemoveAll();
 	markToRedraw();
 	requestUpdateSize();
-	if (m_widgetEntry == nullptr) {
+	if (m_widgetEntry == null) {
 		etk::String shaper;
-		if (m_config != nullptr) {
+		if (m_config != null) {
 			shaper = m_config->getString(m_confIdEntryShaper);
 			EWOL_VERBOSE("shaper entry : " << shaper);
 		}
 		m_widgetEntry = ewol::widget::Entry::create("shape", shaper);
-		if (m_widgetEntry != nullptr) {
+		if (m_widgetEntry != null) {
 			m_widgetEntry->propertyExpand.set(bvec2(true,false));
 			m_widgetEntry->propertyFill.set(bvec2(true,true));
 		}
 	}
-	if (m_widgetButtonDown == nullptr) {
+	if (m_widgetButtonDown == null) {
 		etk::String shaper;
-		if (m_config != nullptr) {
+		if (m_config != null) {
 			shaper = m_config->getString(m_confIdDownShaper);
 			EWOL_VERBOSE("shaper button DOWN : " << shaper);
 		}
 		m_widgetButtonDown = ewol::widget::Button::create("shape", shaper);
-		if (m_widgetButtonDown != nullptr) {
+		if (m_widgetButtonDown != null) {
 			m_widgetButtonDown->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonDown->propertyFill.set(bvec2(true,true));
 			etk::String data = m_config->getString(m_confIdDownData);
@@ -98,14 +98,14 @@ void ewol::widget::SpinBase::updateGui() {
 			m_widgetButtonDown->setSubWidget(widget);
 		}
 	}
-	if (m_widgetButtonUp == nullptr) {
+	if (m_widgetButtonUp == null) {
 		etk::String shaper;
-		if (m_config != nullptr) {
+		if (m_config != null) {
 			shaper = m_config->getString(m_confIdUpShaper);
 			EWOL_VERBOSE("shaper button UP : " << shaper);
 		}
 		m_widgetButtonUp = ewol::widget::Button::create("shape", shaper);
-		if (m_widgetButtonUp != nullptr) {
+		if (m_widgetButtonUp != null) {
 			m_widgetButtonUp->propertyExpand.set(bvec2(false,false));
 			m_widgetButtonUp->propertyFill.set(bvec2(true,true));
 			etk::String data = m_config->getString(m_confIdUpData);

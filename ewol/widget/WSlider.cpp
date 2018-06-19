@@ -56,7 +56,7 @@ void ewol::widget::WSlider::onChangeSize() {
 		auto it = m_subWidget.begin();
 		it+= m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			(*it)->setOrigin(m_origin+m_offset);
 			(*it)->setSize(m_size);
 			(*it)->onChangeSize();
@@ -69,7 +69,7 @@ void ewol::widget::WSlider::onChangeSize() {
 		auto it = m_subWidget.begin();
 		it += m_windowsSources;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 		     if (*propertyTransitionMode == sladingTransitionHori) {
 				(*it)->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress),
 				                         m_origin.y())
@@ -85,7 +85,7 @@ void ewol::widget::WSlider::onChangeSize() {
 		it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			if (*propertyTransitionMode == sladingTransitionHori) {
 				(*it)->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress - m_size.x()),
 				                         m_origin.y())
@@ -120,7 +120,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	// search element in the list : 
 	for (auto &it : m_subWidget) {
 		elementID ++;
-		if (it != nullptr) {
+		if (it != null) {
 			if (it->getId() == _id) {
 				if (it->propertyName.get() != "") {
 					// change the internal event parameter (in case...) ==> no event generation
@@ -142,13 +142,13 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 }
 
 void ewol::widget::WSlider::subWidgetSelectSet(const ewol::WidgetShared& _widgetPointer) {
-	if (_widgetPointer == nullptr) {
-		EWOL_ERROR("Can not change to a widget nullptr");
+	if (_widgetPointer == null) {
+		EWOL_ERROR("Can not change to a widget null");
 		return;
 	}
 	int32_t iii = 0;
 	for (auto &it : m_subWidget) {
-		if (    it != nullptr
+		if (    it != null
 		     && it == _widgetPointer) {
 			subWidgetSelectSetVectorId(iii);
 			if (_widgetPointer->propertyName.get() != "") {
@@ -172,7 +172,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const etk::String& _widgetName) {
 	EWOL_VERBOSE("Select a new sub-widget to dosplay : '" << _widgetName << "'");
 	int32_t iii = 0;
 	for (auto &it : m_subWidget) {
-		if (    it != nullptr
+		if (    it != null
 		     && it->propertyName.get() == _widgetName) {
 			subWidgetSelectSetVectorId(iii);
 			// change the internal event parameter (in case...) ==> no event generation
@@ -234,7 +234,7 @@ void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 		auto it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			//EWOL_INFO("Draw : [" << propertyName << "] t=" << getObjectType() << "o=" << m_origin << "  s=" << m_size);
 			(*it)->systemDraw(prop);
 		}
@@ -244,14 +244,14 @@ void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 		auto it = m_subWidget.begin();
 		it += m_windowsSources;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			(*it)->systemDraw(prop);
 		}
 		// draw Destination : 
 		it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			(*it)->systemDraw(prop);
 		}
 	}
@@ -262,20 +262,20 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 		auto it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			(*it)->onRegenerateDisplay();
 		}
 	} else {
 		auto it = m_subWidget.begin();
 		it += m_windowsSources;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			(*it)->onRegenerateDisplay();
 		}
 		it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			(*it)->onRegenerateDisplay();
 		}
 	}
@@ -295,59 +295,59 @@ void ewol::widget::WSlider::onChangePropertyTransitionMode() {
 
 ewol::WidgetShared ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (*propertyHide == true) {
-		return nullptr;
+		return null;
 	}
 	if (m_windowsDestination == m_windowsSources) {
 		auto it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			vec2 tmpSize = (*it)->getSize();
 			vec2 tmpOrigin = (*it)->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
-				if (tmpWidget != nullptr) {
+				if (tmpWidget != null) {
 					return tmpWidget;
 				}
-				return nullptr;
+				return null;
 			}
 		}
 	} else {
 		auto it = m_subWidget.begin();
 		it += m_windowsDestination;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			vec2 tmpSize = (*it)->getSize();
 			vec2 tmpOrigin = (*it)->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
-				if (tmpWidget != nullptr) {
+				if (tmpWidget != null) {
 					return tmpWidget;
 				}
-				return nullptr;
+				return null;
 			}
 		}
 		it = m_subWidget.begin();
 		it += m_windowsSources;
 		if (    it != m_subWidget.end()
-		     && *it != nullptr) {
+		     && *it != null) {
 			vec2 tmpSize = (*it)->getSize();
 			vec2 tmpOrigin = (*it)->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
 				ewol::WidgetShared tmpWidget = (*it)->getWidgetAtPos(_pos);
-				if (tmpWidget != nullptr) {
+				if (tmpWidget != null) {
 					return tmpWidget;
 				}
-				return nullptr;
+				return null;
 			}
 		}
 	}
-	return nullptr;
+	return null;
 }
 

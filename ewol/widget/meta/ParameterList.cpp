@@ -51,7 +51,7 @@ void ewol::widget::ParameterList::calculateMinMaxSize() {
 }
 
 void ewol::widget::ParameterList::addOObject(const ememory::SharedPtr<ewol::Compositing>& _newObject, int32_t _pos) {
-	if (_newObject == nullptr) {
+	if (_newObject == null) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
@@ -68,7 +68,7 @@ void ewol::widget::ParameterList::clearOObjectList() {
 
 void ewol::widget::ParameterList::onDraw() {
 	for (auto &it : m_listOObject) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->draw();
 		}
 	}
@@ -112,7 +112,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		
 		// set background color :
 		ememory::SharedPtr<ewol::compositing::Drawing> tmpDraw = ememory::makeShared<ewol::compositing::Drawing>();
-		if (tmpDraw == nullptr) {
+		if (tmpDraw == null) {
 			return;
 		}
 		tmpDraw->setColor(etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF));
@@ -135,7 +135,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		for (int32_t iii=startRaw; iii<nbRaw && iii<(int32_t)(startRaw+displayableRaw); iii++) {
 			etk::String myTextToWrite = "???";
 			etk::Color<> fg(0x00, 0x00, 0x00, 0xFF);
-			if (m_list[iii] != nullptr) {
+			if (m_list[iii] != null) {
 				myTextToWrite = TRANSLATE(m_list[iii]->m_label);
 			}
 			
@@ -181,7 +181,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		int32_t rawID = (relativePos.y()+m_originScrooled.y()) / (minHeight + 2*m_paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
 		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
-			if (m_list[rawID]!=nullptr) {
+			if (m_list[rawID]!=null) {
 				if (m_list[rawID]->m_refId >= 0) {
 					signalSelect.emit(m_list[rawID]->m_refId);
 					m_idSelected = rawID;
@@ -204,7 +204,7 @@ void ewol::widget::ParameterList::onLostFocus() {
 
 void ewol::widget::ParameterList::menuAdd(etk::String& _label, int32_t _refId, etk::String& _image) {
 	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, _refId, _image, false);
-	if (tmpEmement == nullptr) {
+	if (tmpEmement == null) {
 		EWOL_ERROR("Can not allocacte menu parameter");
 		return;
 	}
@@ -218,7 +218,7 @@ void ewol::widget::ParameterList::menuAdd(etk::String& _label, int32_t _refId, e
 void ewol::widget::ParameterList::menuAddGroup(etk::String& _label) {
 	etk::String image = "";
 	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, -1, image, true);
-	if (tmpEmement == nullptr) {
+	if (tmpEmement == null) {
 		EWOL_ERROR("Can not allocacte menu parameter");
 		return;
 	}

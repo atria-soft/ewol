@@ -65,7 +65,7 @@ ewol::widget::Manager::Manager() :
 ewol::widget::Manager::~Manager() {
 	EWOL_DEBUG(" == > Un-Init Widget-Manager");
 	EWOL_INFO("Realease all FOCUS");
-	focusSetDefault(nullptr);
+	focusSetDefault(null);
 	focusRelease();
 	
 	m_creatorList.clear();
@@ -76,7 +76,7 @@ ewol::widget::Manager::~Manager() {
  * *************************************************************************/
 
 void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
-	if (_newWidget == nullptr) {
+	if (_newWidget == null) {
 		// nothing to do ...
 		return;
 	}
@@ -87,7 +87,7 @@ void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 		// nothing to do ...
 		return;
 	}
-	if (focusWidgetCurrent != nullptr) {
+	if (focusWidgetCurrent != null) {
 		EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->rmFocus();
 		focusWidgetCurrent.reset();
@@ -97,14 +97,14 @@ void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 		return;
 	}
 	m_focusWidgetCurrent = _newWidget;
-	if (_newWidget != nullptr) {
+	if (_newWidget != null) {
 		EWOL_DEBUG("Set focus on WidgetID=" << _newWidget->getId() );
 		_newWidget->setFocus();
 	}
 }
 
 void ewol::widget::Manager::focusSetDefault(ewol::WidgetShared _newWidget) {
-	if(    _newWidget != nullptr
+	if(    _newWidget != null
 	    && _newWidget->propertyCanFocus.get() == false) {
 		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
@@ -112,12 +112,12 @@ void ewol::widget::Manager::focusSetDefault(ewol::WidgetShared _newWidget) {
 	ewol::WidgetShared focusWidgetDefault = m_focusWidgetDefault.lock();
 	ewol::WidgetShared focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (focusWidgetDefault == focusWidgetCurrent) {
-		if (focusWidgetCurrent != nullptr) {
+		if (focusWidgetCurrent != null) {
 			EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
 			focusWidgetCurrent->rmFocus();
 		}
 		m_focusWidgetCurrent = _newWidget;
-		if (_newWidget != nullptr) {
+		if (_newWidget != null) {
 			EWOL_DEBUG("Set focus on WidgetID=" << _newWidget->getId() );
 			_newWidget->setFocus();
 		}
@@ -132,13 +132,13 @@ void ewol::widget::Manager::focusRelease() {
 		// nothink to do ...
 		return;
 	}
-	if (focusWidgetCurrent != nullptr) {
+	if (focusWidgetCurrent != null) {
 		EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->rmFocus();
 	}
 	m_focusWidgetCurrent = m_focusWidgetDefault;
 	focusWidgetCurrent = m_focusWidgetCurrent.lock();
-	if (focusWidgetCurrent != nullptr) {
+	if (focusWidgetCurrent != null) {
 		EWOL_DEBUG("Set focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->setFocus();
 	}
@@ -157,7 +157,7 @@ void ewol::widget::Manager::markDrawingIsNeeded() {
 		return;
 	}
 	m_haveRedraw = true;
-	if (m_funcRedrawNeeded != nullptr) {
+	if (m_funcRedrawNeeded != null) {
 		m_funcRedrawNeeded();
 	}
 }
@@ -172,8 +172,8 @@ bool ewol::widget::Manager::isDrawingNeeded() {
 void ewol::widget::Manager::addWidgetCreator(const etk::String& _name,
                                              ewol::widget::Manager::widgetCreatorFunction _pointer,
                                              ewol::widget::Manager::widgetCreatorFunctionXml _pointerXml) {
-	if (    _pointer == nullptr
-	     || _pointerXml == nullptr) {
+	if (    _pointer == null
+	     || _pointerXml == null) {
 		return;
 	}
 	//Keep name in lower case :
@@ -207,24 +207,24 @@ ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name) {
 	etk::String nameLower = etk::toLower(_name);
 	auto it = m_creatorList.find(nameLower);
 	if (it != m_creatorList.end()) {
-		if (it->second != nullptr) {
+		if (it->second != null) {
 			return it->second();
 		}
 	}
 	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);
-	return nullptr;
+	return null;
 }
 
 ewol::WidgetShared ewol::widget::Manager::create(const etk::String& _name, const exml::Element& _node) {
 	etk::String nameLower = etk::toLower(_name);
 	auto it = m_creatorListXml.find(nameLower);
 	if (it != m_creatorListXml.end()) {
-		if (it->second != nullptr) {
+		if (it->second != null) {
 			return it->second(_node);
 		}
 	}
 	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);
-	return nullptr;
+	return null;
 }
 
 bool ewol::widget::Manager::exist(const etk::String& _name) {

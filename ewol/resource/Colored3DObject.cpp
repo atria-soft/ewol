@@ -16,7 +16,7 @@
 ETK_DECLARE_TYPE(ewol::resource::Colored3DObject);
 
 ewol::resource::Colored3DObject::Colored3DObject() :
-  m_GLprogram(nullptr) {
+  m_GLprogram(null) {
 	addResourceType("ewol::Colored3DObject");
 }
 
@@ -25,7 +25,7 @@ void ewol::resource::Colored3DObject::init() {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = gale::resource::Program::create("{ewol}DATA:simple3D.prog");
-	if (m_GLprogram != nullptr) {
+	if (m_GLprogram != null) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -44,7 +44,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -87,7 +87,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -127,7 +127,7 @@ void ewol::resource::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}

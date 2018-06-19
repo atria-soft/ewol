@@ -50,7 +50,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	vec2 minSize(0.0f, 0.0f);
 	ivec2 nbWidgetExpand(0,0);
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		vec2 tmpSize = it->getCalculateMinSize();
@@ -79,7 +79,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	}
 	// -3- Configure all at the min size ...
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		it->setSize(it->getCalculateMinSize());
@@ -94,7 +94,7 @@ void ewol::widget::Sizer::onChangeSize() {
 		}
 		// -4.1- Update every subWidget size
 		for (auto &it : m_subWidget) {
-			if (it == nullptr) {
+			if (it == null) {
 				continue;
 			}
 			vec2 tmpSizeMin = it->getSize();
@@ -144,7 +144,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	}
 	// -5- Update the expand in the second size if vert ==> X and if hori ==> Y
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		// Now update his size  his size in X and the curent sizer size in Y:
@@ -166,7 +166,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	}
 	// -6- Force size at the entire number:
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		it->setSize(vec2ClipInt32(it->getSize()));
@@ -174,7 +174,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	// -7- get under Size
 	vec2 underSize(0,0);
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		vec2 size = it->getSize();
@@ -192,7 +192,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	vec2 tmpOrigin = m_origin + tmpBorderSize + ewol::gravityGenerateDelta(propertyGravity, deltas);
 	// -9- Set sub widget origin:
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		vec2 origin;
@@ -211,7 +211,7 @@ void ewol::widget::Sizer::onChangeSize() {
 	}
 	// -10- Update all subSize at every element:
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		it->onChangeSize();
@@ -226,7 +226,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 	vec2 tmpBorderSize = propertyBorderSize->getPixel();
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		it->calculateMinMaxSize();

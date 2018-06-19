@@ -23,9 +23,9 @@ ewol::widget::StdPopUp::StdPopUp() :
                         "No Label",
                         "Comment of the pop-up",
                         &ewol::widget::StdPopUp::onChangePropertyComment),
-  m_title(nullptr),
-  m_comment(nullptr),
-  m_subBar(nullptr) {
+  m_title(null),
+  m_comment(null),
+  m_subBar(null) {
 	addObjectType("ewol::widget::StdPopUp");
 }
 
@@ -87,7 +87,7 @@ ewol::widget::StdPopUp::~StdPopUp() {
 }
 
 void ewol::widget::StdPopUp::onChangePropertyTitle() {
-	if (m_title == nullptr) {
+	if (m_title == null) {
 		return;
 	}
 	m_title->propertyValue.set(*propertyTitle);
@@ -95,7 +95,7 @@ void ewol::widget::StdPopUp::onChangePropertyTitle() {
 }
 
 void ewol::widget::StdPopUp::onChangePropertyComment() {
-	if (m_comment == nullptr) {
+	if (m_comment == null) {
 		return;
 	}
 	m_comment->propertyValue.set(*propertyComment);
@@ -103,19 +103,19 @@ void ewol::widget::StdPopUp::onChangePropertyComment() {
 }
 
 ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const etk::String& _text, bool _autoExit) {
-	if (m_subBar == nullptr) {
+	if (m_subBar == null) {
 		EWOL_ERROR("button-bar does not existed ...");
-		return nullptr;
+		return null;
 	}
 	ewol::widget::ButtonShared myButton = widget::Button::create();
-	if (myButton == nullptr) {
+	if (myButton == null) {
 		EWOL_ERROR("Can not allocate new button ...");
-		return nullptr;
+		return null;
 	}
 	ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
-	if (myLabel == nullptr) {
+	if (myLabel == null) {
 		EWOL_ERROR("Can not allocate new label ...");
-		return nullptr;
+		return null;
 	}
 	myLabel->propertyValue.set(_text);
 	myButton->setSubWidget(myLabel);

@@ -22,7 +22,7 @@ void appl::Windows::init() {
 	//! [ewol_sample_HW_windows_init]
 	//! [ewol_sample_HW_windows_label]
 	ewol::widget::LabelShared tmpWidget = ewol::widget::Label::create();
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		APPL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
 		tmpWidget->propertyValue.set("Hello <font color='blue'>World</font>");

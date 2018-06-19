@@ -35,19 +35,19 @@ template<class TYPE_OBJECT> static void baseInit(const ememory::SharedPtr<TYPE_O
 }
 
 template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit(const ememory::SharedPtr<TYPE_OBJECT>& _object, const etk::String& _name, const TYPE_VAL& _val, TYPE&& ... _all ) {
-	eproperty::Property* prop(nullptr);
-	eproperty::PropertyType<TYPE_VAL>* propType(nullptr);
-	if (_object == nullptr) {
+	eproperty::Property* prop(null);
+	eproperty::PropertyType<TYPE_VAL>* propType(null);
+	if (_object == null) {
 		EWOL_ERROR("EMPTY pointer");
 		return;
 	}
 	prop = _object->properties.getRaw(_name);
-	if (prop == nullptr) {
+	if (prop == null) {
 		EWOL_ERROR("property does not exit ... '" << _name << "'");
 		goto exit_on_error;
 	}
 	propType = dynamic_cast<eproperty::PropertyType<TYPE_VAL>*>(prop);
-	if (propType == nullptr) {
+	if (propType == null) {
 		EWOL_ERROR("property does not cast in requested type ... '" << _name << "' require type : " << /*typeid(_val).name()*/ "?TODO?" << "' instead of '" << prop->getType() << "'");
 		goto exit_on_error;
 	}
@@ -63,9 +63,9 @@ exit_on_error:
 #define DECLARE_FACTORY(className) \
 	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) { \
 		ememory::SharedPtr<className> object(ETK_NEW(className)); \
-		if (object == nullptr) { \
+		if (object == null) { \
 			EWOL_ERROR("Factory error"); \
-			return nullptr; \
+			return null; \
 		} \
 		baseInit(object, _all... ); \
 		object->init(); \
@@ -76,9 +76,9 @@ exit_on_error:
 	} \
 	static ememory::SharedPtr<className> createXml(const exml::Element& _node) { \
 		ememory::SharedPtr<className> object(ETK_NEW(className)); \
-		if (object == nullptr) { \
+		if (object == null) { \
 			EWOL_ERROR("Factory error"); \
-			return nullptr; \
+			return null; \
 		} \
 		object->loadXMLAttributes(_node); \
 		object->init(); \
@@ -92,20 +92,20 @@ exit_on_error:
 	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) { \
 		ememory::SharedPtr<className> object; \
 		ememory::SharedPtr<ewol::Object> object2 = getObjectNamed(uniqueName); \
-		if (object2 != nullptr) { \
+		if (object2 != null) { \
 			object = ememory::dynamicPointerCast<className>(object2); \
-			if (object == nullptr) { \
+			if (object == null) { \
 				EWOL_CRITICAL("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
-				return nullptr; \
+				return null; \
 			} \
 		} \
-		if (object != nullptr) { \
+		if (object != null) { \
 			return object; \
 		} \
 		object = ememory::SharedPtr<className>(ETK_NEW(className)); \
-		if (object == nullptr) { \
+		if (object == null) { \
 			EWOL_ERROR("Factory error"); \
-			return nullptr; \
+			return null; \
 		} \
 		baseInit(object, "name", etk::String(uniqueName), _all... ); \
 		object->init(); \
@@ -287,13 +287,13 @@ namespace ewol {
 			/**
 			 * @brief Retrive an object with his name (in the global list)
 			 * @param[in] _name Name of the object
-			 * @return the requested object or nullptr
+			 * @return the requested object or null
 			 */
 			static ewol::ObjectShared getObjectNamed(const etk::String& _objectName);
 			/**
 			 * @brief Retrive an object with his name (in the global list)
 			 * @param[in] _name Name of the object
-			 * @return the requested object or nullptr
+			 * @return the requested object or null
 			 */
 			virtual ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName);
 		protected:
@@ -303,7 +303,7 @@ namespace ewol {
 			 */
 			#define subBind(_type, _name, _event, _shared_ptr, _func, ...) do {\
 				ememory::SharedPtr<_type> myObject = ememory::dynamicPointerCast<_type>(getSubObjectNamed(_name)); \
-				if (myObject != nullptr) { \
+				if (myObject != null) { \
 					myObject->_event.connect(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
 					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
@@ -318,7 +318,7 @@ namespace ewol {
  */
 #define globalBind(_type, _name, _event, _obj, _func, ...) do {\
 	ememory::SharedPtr<_type> myObject = ememory::dynamicPointerCast<_type>(ewol::getContext().getEObjectManager().getObjectNamed(_name)); \
-	if (myObject != nullptr) { \
+	if (myObject != null) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
@@ -330,7 +330,7 @@ namespace ewol {
  */
 #define externSubBind(_object, _type, _name, _event, _obj, _func, ...) do {\
 	ememory::SharedPtr<_type> myObject = ememory::dynamicPointerCast<_type>(_object->getObjectNamed(_name)); \
-	if (myObject != nullptr) { \
+	if (myObject != null) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
 		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \

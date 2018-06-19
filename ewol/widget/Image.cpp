@@ -24,12 +24,12 @@ ewol::widget::Image::Image() :
   propertyDistanceFieldMode(this, "distance-field", false, "Distance field mode", &ewol::widget::Image::onChangePropertyDistanceFieldMode),
   propertySmooth(this, "smooth", true, "Smooth display of the image", &ewol::widget::Image::onChangePropertySmooth),
   propertyUseThemeColor(this, "use-theme-color", false, "use the theme color to display images", &ewol::widget::Image::onChangePropertyUseThemeColor),
-  m_colorProperty(nullptr),
+  m_colorProperty(null),
   m_colorId(-1) {
 	addObjectType("ewol::widget::Image");
 	m_imageRenderSize = vec2(0,0);
 	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Image.json");
-	if (m_colorProperty != nullptr) {
+	if (m_colorProperty != null) {
 		m_colorId = m_colorProperty->request("foreground");
 	}
 }
@@ -68,7 +68,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	// remove data of the previous composition :
 	m_compositing.clear();
 	if (    *propertyUseThemeColor == true
-	     && m_colorProperty != nullptr) {
+	     && m_colorProperty != null) {
 		m_compositing.setColor(m_colorProperty->get(m_colorId));
 	}
 	// Calculate the new position and size:

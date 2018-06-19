@@ -17,7 +17,7 @@ appl::Windows::Windows() {
 void appl::Windows::init() {
 	ewol::widget::Windows::init();
 	appl::WidgetDisplayShared tmpWidget = appl::WidgetDisplay::create();
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		APPL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
 		setSubWidget(tmpWidget);

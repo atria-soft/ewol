@@ -62,14 +62,14 @@ namespace ewol {
 				/**
 				 * @brief Create a widget with his name.
 				 * @param[in] _name Name of the widget to create.
-				 * @return The widget created (nullptr if it does not exist).
+				 * @return The widget created (null if it does not exist).
 				 */
 				ewol::WidgetShared create(const etk::String& _name);
 				/**
 				 * @brief Create a widget with his name.
 				 * @param[in] _name Name of the widget to create.
 				 * @param[in] _node Reference on the XML node.
-				 * @return The widget created (nullptr if it does not exist).
+				 * @return The widget created (null if it does not exist).
 				 */
 				ewol::WidgetShared create(const etk::String& _name, const exml::Element& _node);
 				/**

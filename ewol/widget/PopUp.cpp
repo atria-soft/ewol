@@ -44,7 +44,7 @@ ewol::widget::PopUp::~PopUp() {
 
 void ewol::widget::PopUp::onChangeSize() {
 	markToRedraw();
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		return;
 	}
 	ewol::Padding padding = m_shaper.getPadding();
@@ -83,7 +83,7 @@ void ewol::widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
 		return;
 	}
 	ewol::Widget::systemDraw(_displayProp);
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		return;
 	}
 	if(    m_shaper.getNextDisplayedStatus() == -1
@@ -111,7 +111,7 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 		if (fill.y() == true) {
 			tmpSize.setY(m_size.y()-padding.y());
 		}
-		if (m_subWidget != nullptr) {
+		if (m_subWidget != null) {
 			vec2 tmpSize = m_subWidget->getSize();
 		}
 		tmpSize.setMax(m_minSize);
@@ -122,14 +122,14 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 		                  vec2ClipInt32(tmpSize + vec2(padding.x(), padding.y())));
 	}
 	// SUBwIDGET GENERATION ...
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_subWidget->onRegenerateDisplay();
 	}
 }
 
 ewol::WidgetShared ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
 	ewol::WidgetShared val = ewol::widget::Container::getWidgetAtPos(_pos);
-	if (val != nullptr) {
+	if (val != null) {
 		return val;
 	}
 	return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
@@ -158,7 +158,7 @@ bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 	}
 	ewol::Padding padding = m_shaper.getPadding();
 	vec2 tmpSize(0,0);
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		vec2 tmpSize = m_subWidget->getSize();
 	}
 	tmpSize.setMax(m_minSize);

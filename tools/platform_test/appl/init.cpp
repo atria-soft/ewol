@@ -56,13 +56,13 @@ namespace appl {
 				APPL_INFO("==> START ... (BEGIN)");
 				
 				ememory::SharedPtr<appl::MainWindows> basicWindows = appl::MainWindows::create();
-				if (basicWindows == nullptr) {
+				if (basicWindows == null) {
 					APPL_ERROR("Can not allocate the basic windows");
 					return;
 				}
 				// create the specific windows
 				_context.setWindows(basicWindows);
-				if (basicWindows == nullptr) {
+				if (basicWindows == null) {
 					APPL_ERROR("Can not allocate the basic windows");
 					_context.exit(-1);
 					return;

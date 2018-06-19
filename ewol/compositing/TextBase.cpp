@@ -35,7 +35,7 @@ ewol::compositing::TextBase::TextBase(const etk::String& _shaderName, bool _load
   m_startTextpos(0),
   m_stopTextPos(0),
   m_alignement(alignDisable),
-  m_GLprogram(nullptr),
+  m_GLprogram(null),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLColor(-1),
@@ -48,7 +48,7 @@ ewol::compositing::TextBase::TextBase(const etk::String& _shaderName, bool _load
 	}
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == nullptr) {
+	if (m_VBO == null) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
 	}
@@ -66,7 +66,7 @@ void ewol::compositing::TextBase::loadProgram(const etk::String& _shaderName) {
 	m_GLPosition = 0;
 	ememory::SharedPtr<gale::resource::Program> old = m_GLprogram;
 	m_GLprogram = gale::resource::Program::create(_shaderName);
-	if (m_GLprogram != nullptr) {
+	if (m_GLprogram != null) {
 		m_GLPosition   = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor      = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture    = m_GLprogram->getAttribute("EW_texture2d");
@@ -77,7 +77,7 @@ void ewol::compositing::TextBase::loadProgram(const etk::String& _shaderName) {
 	} else {
 		EWOL_ERROR("Can not load the program => create previous one...");
 		m_GLprogram = old;
-		old = nullptr;
+		old = null;
 	}
 }
 

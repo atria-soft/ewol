@@ -66,7 +66,7 @@ void ewol::widget::Scroll::onChangeSize() {
 	if (*propertyHide == true) {
 		return;
 	}
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		return;
 	}
 	// remove the bar if hover
@@ -108,7 +108,7 @@ void ewol::widget::Scroll::calculateMinMaxSize() {
 	// Note: No call of container ==> normal case ...
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		m_subWidget->calculateMinMaxSize();
 	}
 }
@@ -117,7 +117,7 @@ void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (*propertyHide == true) {
 		return;
 	}
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		ewol::DrawProperty prop = _displayProp;
 		prop.limit(m_origin, m_size);
 		m_subWidget->systemDraw(prop);
@@ -156,7 +156,7 @@ void ewol::widget::Scroll::onRegenerateDisplay() {
 	ewol::Padding paddingHori = m_shaperH.getPadding();
 	vec2 scrollOffset(0,0);
 	vec2 scrollSize(0,0);
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
@@ -192,7 +192,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	vec2 scrollOffset(0,0);
 	vec2 scrollSize(0,0);
-	if (m_subWidget != nullptr) {
+	if (m_subWidget != null) {
 		scrollOffset = m_subWidget->getOffset();
 		scrollSize = m_subWidget->getSize();
 	}
@@ -216,7 +216,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
 					scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 					markToRedraw();
-					if (m_subWidget != nullptr) {
+					if (m_subWidget != null) {
 						m_subWidget->setOffset(scrollOffset);
 					}
 					return true;
@@ -233,7 +233,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
 					scrollOffset.setY(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x())));
 					markToRedraw();
-					if (m_subWidget != nullptr) {
+					if (m_subWidget != null) {
 						m_subWidget->setOffset(scrollOffset);
 					}
 					return true;
@@ -247,7 +247,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				scrollOffset.setY(scrollOffset.y()-m_pixelScrolling);
 				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				markToRedraw();
-				if (m_subWidget != nullptr) {
+				if (m_subWidget != null) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -259,7 +259,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				scrollOffset.setY(scrollOffset.y()+m_pixelScrolling);
 				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
 				markToRedraw();
-				if (m_subWidget != nullptr) {
+				if (m_subWidget != null) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -328,7 +328,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 					markToRedraw();
 				}
 				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
-				if (m_subWidget != nullptr) {
+				if (m_subWidget != null) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -338,7 +338,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
 				scrollOffset.setX(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x() )));
 				markToRedraw();
-				if (m_subWidget != nullptr) {
+				if (m_subWidget != null) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -348,7 +348,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
 				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->x())));
 				markToRedraw();
-				if (m_subWidget != nullptr) {
+				if (m_subWidget != null) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -400,7 +400,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 				m_highSpeedStartPos = relativePos;
 				EWOL_VERBOSE("SCROOL  == > MOVE " << scrollOffset);
 				markToRedraw();
-				if (m_subWidget != nullptr) {
+				if (m_subWidget != null) {
 					m_subWidget->setOffset(scrollOffset);
 				}
 				return true;
@@ -422,7 +422,7 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 
 ewol::WidgetShared ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
 	ewol::WidgetShared tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
-	if (tmpWidget != nullptr) {
+	if (tmpWidget != null) {
 		return tmpWidget;
 	}
 	return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());;

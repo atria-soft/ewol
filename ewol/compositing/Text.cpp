@@ -13,7 +13,7 @@
 ETK_DECLARE_TYPE(ewol::compositing::Text);
 
 ewol::compositing::Text::Text(const etk::String& _fontName, int32_t _fontSize) :
-  m_font(nullptr) {
+  m_font(null) {
 	setFont(_fontName, _fontSize);
 }
 
@@ -27,16 +27,16 @@ void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _en
 	m_vectorialDraw.draw();
 	
 	if (    m_VBO->bufferSize(m_vboIdCoord) <= 0
-	     || m_font == nullptr) {
+	     || m_font == null) {
 		// TODO : set it back ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_WARNING("no font...");
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -72,15 +72,15 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	m_vectorialDraw.draw(_disableDepthTest);
 	
 	if (    m_VBO->bufferSize(m_vboIdCoord) <= 0
-	     || m_font == nullptr) {
+	     || m_font == null) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_WARNING("no font...");
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -104,23 +104,23 @@ void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 }
 
 float ewol::compositing::Text::getSize() {
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_WARNING("no font...");
 		return 1.0f;
 	}
 	return m_font->getFontSize();
 }
 float ewol::compositing::Text::getHeight() {
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_WARNING("no font...");
 		return 10.0f;
 	}
 	return m_font->getHeight(m_mode);
 }
 ewol::GlyphProperty * ewol::compositing::Text::getGlyphPointer(char32_t _charcode) {
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_WARNING("no font...");
-		return nullptr;
+		return null;
 	}
 	return m_font->getGlyphPointer(_charcode, m_mode);
 }
@@ -128,7 +128,7 @@ ewol::GlyphProperty * ewol::compositing::Text::getGlyphPointer(char32_t _charcod
 void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 	// get old size
 	etk::String fontName = "";
-	if (m_font != nullptr) {
+	if (m_font != null) {
 		fontName = m_font->getName();
 		// Remove the :XX for the size ...
 		size_t pos = fontName.rfind(':');
@@ -140,7 +140,7 @@ void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 void ewol::compositing::Text::setFontName(const etk::String& _fontName) {
 	// get old size
 	int32_t fontSize = -1;
-	if (m_font != nullptr) {
+	if (m_font != null) {
 		fontSize = m_font->getFontSize();
 	}
 	setFont(_fontName, fontSize);
@@ -161,14 +161,14 @@ void ewol::compositing::Text::setFont(etk::String _fontName, int32_t _fontSize) 
 	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
 	m_font = ewol::resource::TexturedFont::create(_fontName);
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_ERROR("Can not get font resource");
 		m_font = previousFont;
 	}
 }
 
 void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
-	if (m_font != nullptr) {
+	if (m_font != null) {
 		m_mode = m_font->getWrappingMode(_mode);
 	}
 }
@@ -176,7 +176,7 @@ void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
 void ewol::compositing::Text::printChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty* myGlyph = getGlyphPointer(_charcode);
-	if (nullptr == myGlyph) {
+	if (null == myGlyph) {
 		EWOL_ERROR(" font does not really existed ...");
 		return;
 	}
@@ -346,8 +346,8 @@ vec3 ewol::compositing::Text::calculateSizeChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
 	int32_t fontHeigh = getHeight();
-	if (myGlyph == nullptr) {
-		if (m_font == nullptr) {
+	if (myGlyph == null) {
+		if (m_font == null) {
 			EWOL_WARNING("no Glyph... in no font");
 		} else {
 			EWOL_WARNING("no Glyph... in font : " << m_font->getName());

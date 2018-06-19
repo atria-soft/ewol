@@ -46,7 +46,7 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 		propertyPath.setDirectCheck("c:/");
 	#endif
 	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:ListFileSystem.json");
-	if (m_colorProperty != nullptr) {
+	if (m_colorProperty != null) {
 		m_colorIdText = m_colorProperty->request("text");
 		m_colorIdBackground1 = m_colorProperty->request("background1");
 		m_colorIdBackground2 = m_colorProperty->request("background2");
@@ -61,9 +61,9 @@ ewol::widget::ListFileSystem::~ListFileSystem() {
 
 void ewol::widget::ListFileSystem::clearList() {
 	for (auto &it : m_list) {
-		if (it != nullptr) {
+		if (it != null) {
 			ETK_DELETE(etk::FSNode, it);
-			it = nullptr;
+			it = null;
 		}
 	}
 }
@@ -88,7 +88,7 @@ void ewol::widget::ListFileSystem::regenerateView() {
 etk::String ewol::widget::ListFileSystem::getSelect() const {
 	etk::String tmpVal = "";
 	if (m_selectedLine >= 0) {
-		if (m_list[m_selectedLine] != nullptr) {
+		if (m_list[m_selectedLine] != null) {
 			tmpVal = m_list[m_selectedLine]->getNameFile();
 		}
 	}
@@ -101,7 +101,7 @@ void ewol::widget::ListFileSystem::setSelect(const etk::String& _data) {
 	m_selectedLine = -1;
 	// search the coresponding file :
 	for (size_t iii=0; iii<m_list.size(); ++iii) {
-		if (m_list[iii] != nullptr) {
+		if (m_list[iii] != null) {
 			if (m_list[iii]->getNameFile() == _data) {
 				// we find the line :
 				m_selectedLine = iii;
@@ -150,7 +150,7 @@ bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk
 	}
 	if(    _raw-offset >= 0
 	    && _raw-offset < (int32_t)m_list.size()
-	    && m_list[_raw-offset] != nullptr) {
+	    && m_list[_raw-offset] != null) {
 		_myTextToWrite = m_list[_raw-offset]->getNameFile();
 		EWOL_VERBOSE("get filename for : '" << *m_list[_raw-offset] << ":'" << _myTextToWrite << "'");
 	}
@@ -201,7 +201,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					signalFolderSelect.emit("..");
 				} else if(    m_selectedLine-offset  >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && nullptr != m_list[m_selectedLine-offset] ) {
+				           && null != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::typeNode_file :
@@ -226,7 +226,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					signalFolderValidate.emit("..");
 				} else if(    m_selectedLine-offset >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && nullptr != m_list[m_selectedLine-offset] ) {
+				           && null != m_list[m_selectedLine-offset] ) {
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::typeNode_file :
 							signalFileValidate.emit(m_list[m_selectedLine-offset]->getNameFile());

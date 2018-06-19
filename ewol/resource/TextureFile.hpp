@@ -36,7 +36,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the image file.
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
 				 * @param[in] _sizeRegister size register in named (When you preaload the images the size write here will be )
-				 * @return pointer on the resource or nullptr if an error occured.
+				 * @return pointer on the resource or null if an error occured.
 				 */
 				static ememory::SharedPtr<ewol::resource::TextureFile> create(const etk::String& _filename,
 				                                                           ivec2 _size=ewol::resource::TextureFile::sizeAuto,

@@ -73,7 +73,7 @@ namespace ewol {
 				 * @brief get the pointer on the coresponding glyph
 				 * @param[in] _charcode The unicodeValue
 				 * @param[in] _displayMode Mode to display the currrent font
-				 * @return The pointer on the glyph  == > never nullptr
+				 * @return The pointer on the glyph  == > never null
 				 */
 				ewol::GlyphProperty* getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode);
 				/**

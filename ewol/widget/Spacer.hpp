@@ -38,7 +38,7 @@ namespace ewol {
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
 			public:
 				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override {
-					return nullptr;
+					return null;
 				};
 				void onRegenerateDisplay() override;
 				void onDraw() override;

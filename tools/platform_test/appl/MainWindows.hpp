@@ -40,7 +40,7 @@ namespace appl {
 			void forceFocusCall(const ewol::event::Time& _event);
 			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override {
 				ewol::WidgetShared wid = ewol::widget::Windows::getWidgetAtPos(_pos);
-				if (wid != nullptr) {
+				if (wid != null) {
 					return wid;
 				}
 				return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());

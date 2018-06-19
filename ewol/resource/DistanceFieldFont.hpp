@@ -58,7 +58,7 @@ namespace ewol {
 				/**
 				 * @brief get the pointer on the coresponding glyph
 				 * @param[in] _charcode The unicodeValue
-				 * @return The pointer on the glyph  == > never nullptr
+				 * @return The pointer on the glyph  == > never null
 				 */
 				ewol::GlyphProperty* getGlyphPointer(const char32_t& _charcode);
 			public:
@@ -66,7 +66,7 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the texture font.
-				 * @return pointer on the resource or nullptr if an error occured.
+				 * @return pointer on the resource or null if an error occured.
 				 */
 				static ememory::SharedPtr<ewol::resource::DistanceFieldFont> keep(const etk::String& _filename);
 			private:

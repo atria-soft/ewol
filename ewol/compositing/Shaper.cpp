@@ -17,21 +17,21 @@ const int32_t ewol::compositing::Shaper::m_vboIdPos(1);
 
 ewol::compositing::Shaper::Shaper(const etk::String& _shaperName) :
   m_name(_shaperName),
-  m_config(nullptr),
+  m_config(null),
   m_confIdMode(-1),
   m_confIdDisplayOutside(-1),
   m_confIdChangeTime(-1),
   m_confProgramFile(-1),
   m_confColorFile(-1),
   m_confImageFile(-1),
-  m_GLprogram(nullptr),
+  m_GLprogram(null),
   m_GLPosition(-1),
   m_GLMatrix(-1),
   m_GLStateActivate(-1),
   m_GLStateOld(-1),
   m_GLStateNew(-1),
   m_GLStateTransition(-1),
-  m_resourceTexture(nullptr),
+  m_resourceTexture(null),
   m_nextStatusRequested(-1),
   m_propertyOrigin(0,0),
   m_propertySize(0,0),
@@ -49,7 +49,7 @@ ewol::compositing::Shaper::Shaper(const etk::String& _shaperName) :
 	}
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == nullptr) {
+	if (m_VBO == null) {
 		EWOL_ERROR("can not instanciate VBO ...");
 		return;
 	}
@@ -88,7 +88,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		return;
 	}
 	m_config = ewol::resource::ConfigFile::create(m_name);
-	if (m_config != nullptr) {
+	if (m_config != null) {
 		m_confIdMode = m_config->request("mode");
 		m_confIdDisplayOutside = m_config->request("display-outside");
 		m_confIdPaddingOut[shaperPosLeft]   = m_config->request("padding-out-left");
@@ -122,7 +122,7 @@ void ewol::compositing::Shaper::loadProgram() {
 		// get the shader resource :
 		m_GLPosition = 0;
 		m_GLprogram = gale::resource::Program::create(tmpFilename);
-		if (m_GLprogram != nullptr) {
+		if (m_GLprogram != null) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
 			// Widget property  == > for the Vertex shader
@@ -162,8 +162,8 @@ void ewol::compositing::Shaper::loadProgram() {
 			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "'");
 		}
 		m_colorProperty = ewol::resource::ColorFile::create(tmpFilename);
-		if (    m_GLprogram != nullptr
-		     && m_colorProperty != nullptr) {
+		if (    m_GLprogram != null
+		     && m_colorProperty != null) {
 			etk::Vector<etk::String> listColor = m_colorProperty->getColors();
 			for (auto tmpColor : listColor) {
 				int32_t glId = m_GLprogram->getUniform(tmpColor);
@@ -175,11 +175,11 @@ void ewol::compositing::Shaper::loadProgram() {
 }
 
 void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
-	if (m_config == nullptr) {
+	if (m_config == null) {
 		// this is a normale case ... the user can choice to have no config basic file ...
 		return;
 	}
-	if (m_GLprogram == nullptr) {
+	if (m_GLprogram == null) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
@@ -203,7 +203,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 	for (auto element : m_listAssiciatedId) {
 		m_GLprogram->uniform(element.x(), m_colorProperty->get(element.y()));
 	}
-	if (m_resourceTexture != nullptr) {
+	if (m_resourceTexture != null) {
 		// TextureID
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getRendererId());
 	}
@@ -272,7 +272,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 			}
 		}
 		float timeRelativity = 0.0f;
-		if (m_config != nullptr) {
+		if (m_config != null) {
 			timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
 		}
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
@@ -493,7 +493,7 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 	*/
 	int32_t mode = 0;
 	bool displayOutside = false;
-	if (m_config != nullptr) {
+	if (m_config != null) {
 		mode = m_config->getNumber(m_confIdMode);
 		displayOutside = m_config->getBoolean(m_confIdDisplayOutside);
 	}
@@ -595,7 +595,7 @@ ewol::Padding ewol::compositing::Shaper::getPadding() {
 
 ewol::Padding ewol::compositing::Shaper::getPaddingIn() {
 	ewol::Padding padding(0,0,0,0);
-	if (m_config != nullptr) {
+	if (m_config != null) {
 		padding.setValue(m_config->getNumber(m_confIdPaddingIn[shaperPosLeft]),
 		                 m_config->getNumber(m_confIdPaddingIn[shaperPosTop]),
 		                 m_config->getNumber(m_confIdPaddingIn[shaperPosRight]),
@@ -606,7 +606,7 @@ ewol::Padding ewol::compositing::Shaper::getPaddingIn() {
 
 ewol::Padding ewol::compositing::Shaper::getPaddingOut() {
 	ewol::Padding padding(0,0,0,0);
-	if (m_config != nullptr) {
+	if (m_config != null) {
 		padding.setValue(m_config->getNumber(m_confIdPaddingOut[shaperPosLeft]),
 		                 m_config->getNumber(m_confIdPaddingOut[shaperPosTop]),
 		                 m_config->getNumber(m_confIdPaddingOut[shaperPosRight]),
@@ -617,7 +617,7 @@ ewol::Padding ewol::compositing::Shaper::getPaddingOut() {
 
 ewol::Padding ewol::compositing::Shaper::getBorder() {
 	ewol::Padding padding(0,0,0,0);
-	if (m_config != nullptr) {
+	if (m_config != null) {
 		padding.setValue(m_config->getNumber(m_confIdBorder[shaperPosLeft]),
 		                 m_config->getNumber(m_confIdBorder[shaperPosTop]),
 		                 m_config->getNumber(m_confIdBorder[shaperPosRight]),
@@ -634,30 +634,30 @@ void ewol::compositing::Shaper::setSource(const etk::String& _newFile) {
 }
 
 bool ewol::compositing::Shaper::hasSources() {
-	return m_GLprogram!=nullptr;
+	return m_GLprogram!=null;
 }
 
 
 const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
 	static const etk::Color<float> errorValue(0,0,0,0);
-	if (m_colorProperty == nullptr) {
-		EWOL_WARNING("nullptr of m_colorProperty ==> return #0000 for id " << _id);
+	if (m_colorProperty == null) {
+		EWOL_WARNING("null of m_colorProperty ==> return #0000 for id " << _id);
 		return errorValue;
 	}
 	return m_colorProperty->get(_id);
 }
 
 int32_t ewol::compositing::Shaper::requestColor(const etk::String& _name) {
-	if (m_colorProperty == nullptr) {
-		EWOL_WARNING("nullptr of m_colorProperty ==> return -1 for name " << _name);
+	if (m_colorProperty == null) {
+		EWOL_WARNING("null of m_colorProperty ==> return -1 for name " << _name);
 		return -1;
 	}
 	return m_colorProperty->request(_name);
 }
 
 int32_t ewol::compositing::Shaper::requestConfig(const etk::String& _name) {
-	if (m_config == nullptr) {
-		EWOL_WARNING("nullptr of m_config ==> return -1 for name " << _name);
+	if (m_config == null) {
+		EWOL_WARNING("null of m_config ==> return -1 for name " << _name);
 		return -1;
 	}
 	return m_config->request(_name);
@@ -665,8 +665,8 @@ int32_t ewol::compositing::Shaper::requestConfig(const etk::String& _name) {
 
 double ewol::compositing::Shaper::getConfigNumber(int32_t _id) {
 	if (    _id == -1
-	     || m_config == nullptr) {
-		EWOL_WARNING("nullptr of m_config ==> return 0.0 for id " << _id);
+	     || m_config == null) {
+		EWOL_WARNING("null of m_config ==> return 0.0 for id " << _id);
 		return 0.0;
 	}
 	return m_config->getNumber(_id);

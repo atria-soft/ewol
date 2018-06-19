@@ -28,7 +28,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
   m_borderSize(10),
   m_textureBorderSize(0,0) {
 	addResourceType("ewol::resource::DistanceFieldFont");
-	m_font = nullptr;
+	m_font = null;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
 	m_sizeRatio = 1.0f;
@@ -92,18 +92,18 @@ void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
 	
 	if (m_fileName.size() == 0) {
 		EWOL_ERROR("can not load FONT name : '" << m_fileName << "'" );
-		m_font = nullptr;
+		m_font = null;
 		return;
 	}
 	EWOL_INFO("Load FONT name : '" << m_fileName << "'");
 	m_font = ewol::resource::FontFreeType::create(m_fileName);
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		EWOL_ERROR("Pb Loading FONT name : '" << m_fileName << "'" );
 	}
 	
 	// set the bassic charset:
 	m_listElement.clear();
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		return;
 	}
 	if (importFromFile() == true) {
@@ -222,7 +222,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	ethread::RecursiveLock lock(m_mutex);
 	bool hasChange = false;
-	if (m_font == nullptr) {
+	if (m_font == null) {
 		return false;
 	}
 	// add the curent "char"
@@ -337,7 +337,7 @@ ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const ch
 		if (m_listElement.size() > 0) {
 			return &((m_listElement)[0]);
 		}
-		return nullptr;
+		return null;
 	}
 	//EWOL_ERROR("      index=" << index);
 	//EWOL_ERROR("      m_UVal=" << m_listElement[_displayMode][index].m_UVal);
@@ -396,7 +396,7 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 	m_textureBorderSize = doc["m_textureBorderSize"].toString().get("0,0");
 	ejson::Array tmpList = doc["m_listElement"].toArray();
 	if (tmpList.exist() == false) {
-		EWOL_ERROR("nullptr pointer array");
+		EWOL_ERROR("null pointer array");
 		return false;
 	}
 	m_listElement.clear();

@@ -13,7 +13,7 @@
 #include <etk/tool.hpp>
 
 appl::Windows::Windows() :
-  m_composer(nullptr) {
+  m_composer(null) {
 	addObjectType("appl::Windows");
 	propertyTitle.setDirectCheck(etk::String("sample ") + PROJECT_NAME);
 }
@@ -38,7 +38,7 @@ void appl::Windows::init() {
 	composition += "</sizer>\n";
 	
 	m_composer = ewol::widget::Composer::create();
-	if (m_composer == nullptr) {
+	if (m_composer == null) {
 		APPL_CRITICAL(" An error occured ... in the windows creatrion ...");
 		return;
 	}
@@ -54,14 +54,14 @@ void appl::Windows::onCallbackChangeValues() {
 		tmp.pushBack(etk::tool::frand(-1.0, 1.0));
 	}
 	ememory::SharedPtr<appl::widget::VectorDisplay> tmpDisp = ememory::dynamicPointerCast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
-	if (tmpDisp != nullptr) {
+	if (tmpDisp != null) {
 		tmpDisp->setValue(tmp);
 	}
 }
 
 void appl::Windows::onCallbackAutoMode() {
 	ememory::SharedPtr<appl::widget::VectorDisplay> tmpDisp = ememory::dynamicPointerCast<appl::widget::VectorDisplay>(getSubObjectNamed("displayer"));
-	if (tmpDisp != nullptr) {
+	if (tmpDisp != null) {
 		tmpDisp->ToggleAuto();
 	}
 }

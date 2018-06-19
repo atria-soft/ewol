@@ -11,7 +11,7 @@
 
 TEST(TestEwolApplication, Creation) {
 	ewol::context::Application* tmpAppl = ETK_NEW(ewol::context::Application);
-	EXPECT_NE(tmpAppl, nullptr);
+	EXPECT_NE(tmpAppl, null);
 	ETK_DELETE(ewol::context::Application, tmpAppl);
 }
 

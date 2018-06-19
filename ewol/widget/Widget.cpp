@@ -527,7 +527,7 @@ bool ewol::Widget::loadXML(const exml::Element& _node) {
 
 bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 	ewol::WidgetShared up = ememory::dynamicPointerCast<ewol::Widget>(m_parent.lock());
-	if (up != nullptr) {
+	if (up != null) {
 		if (up->systemEventEntry(_event) == true) {
 			return true;
 		}
@@ -537,7 +537,7 @@ bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 
 bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
 	ewol::WidgetShared up = ememory::dynamicPointerCast<ewol::Widget>(m_parent.lock());
-	if (up != nullptr) {
+	if (up != null) {
 		if (up->systemEventInput(_event) == true) {
 			return true;
 		}

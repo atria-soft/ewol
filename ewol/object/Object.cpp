@@ -21,7 +21,7 @@ void ewol::Object::autoDestroy() {
 	EWOL_VERBOSE("Destroy object: [" << getId() << "] type:" << getObjectType());
 	ewol::ObjectShared parent = m_parent.lock();
 	// TODO : set a signal to do this ...
-	if (parent != nullptr) {
+	if (parent != null) {
 		EWOL_VERBOSE("Destroy object: Call parrent");
 		parent->requestDestroyFromChild(sharedFromThis());
 	}
@@ -86,7 +86,7 @@ const char * const ewol::Object::getObjectType() const {
 }
 
 void ewol::Object::addObjectType(const char* _type) {
-	if (_type == nullptr) {
+	if (_type == null) {
 		EWOL_ERROR(" try to add a type with no value...");
 		return;
 	}
@@ -148,7 +148,7 @@ bool ewol::Object::storeXML(exml::Element& _node) const {
 
 bool ewol::Object::propertySetOnWidgetNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value) {
 	ewol::ObjectShared object = getObjectManager().get(_objectName);
-	if (object == nullptr) {
+	if (object == null) {
 		return false;
 	}
 	return object->properties.set(_config, _value);
@@ -172,13 +172,13 @@ ewol::ObjectShared ewol::Object::getSubObjectNamed(const etk::String& _objectNam
 	if (_objectName == propertyName.get()) {
 		return sharedFromThis();
 	}
-	return nullptr;
+	return null;
 }
 
 
 bool ewol::propertySetOnObjectNamed(const etk::String& _objectName, const etk::String& _config, const etk::String& _value) {
 	ewol::ObjectShared object = ewol::getContext().getEObjectManager().get(_objectName);
-	if (object == nullptr) {
+	if (object == null) {
 		return false;
 	}
 	return object->properties.set(_config, _value);

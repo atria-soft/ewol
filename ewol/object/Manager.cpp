@@ -43,7 +43,7 @@ void ewol::object::Manager::displayListObject() {
 	EWOL_INFO("List loaded object : ");
 	for (auto &it : m_eObjectList) {
 		ewol::ObjectShared element = it.lock();
-		if (element != nullptr) {
+		if (element != null) {
 			EWOL_INFO("  [" << element->getId() << "] ref=" << element.useCount()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
 		}
 	}
@@ -58,7 +58,7 @@ void ewol::object::Manager::unInit() {
 	}
 	for (auto &it : m_eObjectList) {
 		ewol::ObjectShared element = it.lock();
-		if (element != nullptr) {
+		if (element != null) {
 			//it->removeObject();
 		}
 	}
@@ -70,7 +70,7 @@ void ewol::object::Manager::unInit() {
 
 void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
 	ethread::RecursiveLock lock(m_mutex);
-	if (_object == nullptr) {
+	if (_object == null) {
 		EWOL_ERROR("try to add an inexistant Object in manager");
 	}
 	m_eObjectList.pushBack(_object);
@@ -102,16 +102,16 @@ void ewol::object::Manager::cleanInternalRemoved() {
 ewol::ObjectShared ewol::object::Manager::get(const etk::String& _name) {
 	ethread::RecursiveLock lock(m_mutex);
 	if (_name == "") {
-		return nullptr;
+		return null;
 	}
 	for (auto &it : m_eObjectList) {
 		ewol::ObjectShared element = it.lock();
-		if (    element != nullptr
+		if (    element != null
 		     && element->propertyName.get() == _name) {
 			return element;
 		}
 	}
-	return nullptr;
+	return null;
 }
 
 

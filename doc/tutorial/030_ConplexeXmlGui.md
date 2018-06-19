@@ -32,7 +32,7 @@ First create the widget:
 
 ```{.cpp}
 	ewol::widget::ButtonShared tmpWidget = ewol::widget::Button::create();
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		APPL_CRITICAL("The widget can not be created");
 	}
 ```
@@ -60,7 +60,7 @@ We can configure the wiget before the init() is called.
 	    "name", etk::String("my name"),
 	    "expand", bvec2(true,false),
 	    "fill", bvec2(true,true));
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		APPL_CRITICAL("The widget can not be created");
 	}
 ```
@@ -78,7 +78,7 @@ Call generic factory system (compositing)
 ```{.cpp}
 	#include <ewol::widget::Composer.hpp>
 	ewol::widget::WidgetShared tmpWidget = ewol::widget::composerGenerateString("<button name='my name' expand='true,false' fill='true,true'/>");
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		APPL_CRITICAL("The widget can not be created");
 	}
 ```
@@ -99,7 +99,7 @@ File ```gui.xml```
 ```{.cpp}
 	#include <ewol::widget::Composer.hpp>
 	ewol::widget::WidgetShared tmpWidget = ewol::widget::composerGenerateFile("DATA:gui.xml");
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		APPL_CRITICAL("The widget can not be created");
 	}
 ```

@@ -40,7 +40,7 @@ bool ewol::context::InputManager::localEventInput(enum gale::key::type _type,
                                                   int32_t _IdInput,
                                                   enum gale::key::status _status,
                                                   vec2 _pos) {
-	if (_destWidget != nullptr) {
+	if (_destWidget != null) {
 		if (    _type == gale::key::type::mouse
 		     || _type == gale::key::type::finger) {
 			// create the system Event :
@@ -57,7 +57,7 @@ bool ewol::context::InputManager::localEventInput(enum gale::key::type _type,
 void ewol::context::InputManager::abortElement(InputPoperty *_eventTable,
                                                int32_t _idInput,
                                                enum gale::key::type _type) {
-	if (_eventTable == nullptr) {
+	if (_eventTable == null) {
 		return;
 	}
 	if (_eventTable[_idInput].isUsed == true) {
@@ -71,7 +71,7 @@ void ewol::context::InputManager::abortElement(InputPoperty *_eventTable,
 
 void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
                                                int32_t _idInput) {
-	if (_eventTable == nullptr) {
+	if (_eventTable == null) {
 		return;
 	}
 	//EWOL_INFO("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
@@ -89,8 +89,8 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 }
 
 void ewol::context::InputManager::transfertEvent(ewol::WidgetShared _source, ewol::WidgetShared _destination) {
-	if(    _source == nullptr
-	    || _destination == nullptr) {
+	if(    _source == null
+	    || _destination == null) {
 		// prevent errors ...
 		return;
 	}
@@ -121,7 +121,7 @@ void ewol::context::InputManager::transfertEvent(ewol::WidgetShared _source, ewo
 }
 
 void ewol::context::InputManager::grabPointer(ewol::WidgetShared _widget) {
-	if(_widget == nullptr) {
+	if(_widget == null) {
 		return;
 	}
 	m_grabWidget = _widget;
@@ -194,7 +194,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 		// reject pointer  == > out of IDs...
 		return;
 	}
-	InputPoperty *eventTable = nullptr;
+	InputPoperty *eventTable = null;
 	if (_type == gale::key::type::mouse) {
 		eventTable = m_eventMouseSaved;
 	} else if (_type == gale::key::type::finger) {
@@ -215,11 +215,11 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
 		ewol::WidgetShared tmpWidget;
-		if (m_grabWidget.lock() != nullptr) {
+		if (m_grabWidget.lock() != null) {
 			// grab all events ...
 			tmpWidget = m_grabWidget.lock();
 		} else {
-			if (tmpWindows != nullptr) {
+			if (tmpWindows != null) {
 				tmpWidget = tmpWindows->getWidgetAtPos(_pos);
 			}
 		}
@@ -243,7 +243,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 			eventTable[_pointerID].isInside = true;
 			// get destination widget :
 			eventTable[_pointerID].curentWidgetEvent = tmpWidget;
-			if (tmpWidget == nullptr) {
+			if (tmpWidget == null) {
 				eventTable[_pointerID].isInside = false;
 			} else {
 				eventTable[_pointerID].origin = tmpWidget->getOrigin();
@@ -325,7 +325,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 	}
 	EVENT_DEBUG("event pointerId=" << _pointerID);
 	// convert position in open-GL coordonates ...
-	InputPoperty *eventTable = nullptr;
+	InputPoperty *eventTable = null;
 	InputLimit   localLimit;
 	if (_type == gale::key::type::mouse) {
 		eventTable = m_eventMouseSaved;
@@ -383,14 +383,14 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			eventTable[_pointerID].isInside = true;
 			ewol::WidgetShared tmpWidget = m_grabWidget.lock();
 			// get destination widget :
-			if(tmpWindows != nullptr) {
-				if (    tmpWidget != nullptr
+			if(tmpWindows != null) {
+				if (    tmpWidget != null
 				     && _type == gale::key::type::mouse) {
 					eventTable[_pointerID].curentWidgetEvent = tmpWidget;
 				} else {
 					tmpWidget = tmpWindows->getWidgetAtPos(_pos);
 					eventTable[_pointerID].curentWidgetEvent = tmpWidget;
-					if (tmpWidget != nullptr) {
+					if (tmpWidget != null) {
 						EVENT_DEBUG("Get widget at pos=" << _pos << " type: " << tmpWidget->getObjectType());
 					} else {
 						EVENT_DEBUG("Get widget at pos=" << _pos << " NO WIDGET");
@@ -400,7 +400,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 				eventTable[_pointerID].curentWidgetEvent.reset();
 			}
 			tmpWidget = eventTable[_pointerID].curentWidgetEvent.lock();
-			if (tmpWidget != nullptr) {
+			if (tmpWidget != null) {
 				eventTable[_pointerID].origin = tmpWidget->getOrigin();
 				eventTable[_pointerID].size = tmpWidget->getSize();
 				eventTable[_pointerID].destinationInputId = localGetDestinationId(_type, tmpWidget, _pointerID);
@@ -430,7 +430,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 			eventTable[_pointerID].isUsed = false;
 			// revove the widget ...
 			eventTable[_pointerID].curentWidgetEvent.reset();
-		} else if (tmpWidget == nullptr) {
+		} else if (tmpWidget == null) {
 			// The widget has been removed:
 			EVENT_DEBUG("    Object Removed ...");
 			// Mark it un-used :
@@ -457,14 +457,14 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 				// save start time
 				eventTable[_pointerID].lastTimeEvent = currentTime;
 				int32_t nbClickMax = 0;
-				if(tmpWidget != nullptr) {
+				if(tmpWidget != null) {
 					nbClickMax = tmpWidget->getMouseLimit();
 					if (nbClickMax>5) {
 						nbClickMax = 5;
 					}
 				}
 				// in grab mode the single to quinte event are not generated ....
-				if(    (    m_grabWidget.lock() == nullptr
+				if(    (    m_grabWidget.lock() == null
 				         || _type != gale::key::type::mouse )
 				    && eventTable[_pointerID].nbClickEvent < nbClickMax) {
 					// generate event SINGLE :

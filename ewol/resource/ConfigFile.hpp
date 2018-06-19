@@ -36,7 +36,7 @@ namespace ewol {
 				 * @brief keep the resource pointer.
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the configuration file.
-				 * @return pointer on the resource or nullptr if an error occured.
+				 * @return pointer on the resource or null if an error occured.
 				 */
 				static ememory::SharedPtr<ewol::resource::ConfigFile> keep(const etk::String& _filename);
 		};

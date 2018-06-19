@@ -26,7 +26,7 @@ ewol::widget::ButtonColor::ButtonColor() :
   signalChange(this, "change", "Button color change value"),
   propertyValue(this, "color", etk::color::black, "Current color", &ewol::widget::ButtonColor::onChangePropertyValue),
   propertyShape(this, "shape", "{ewol}THEME:GUI:Button.json", "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
-  m_widgetContextMenu(nullptr) {
+  m_widgetContextMenu(null) {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);
 	// Limit event at 1:
@@ -160,7 +160,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_mouseHover = false;
 				// create a context menu : 
 				m_widgetContextMenu = ewol::widget::ContextMenu::create();
-				if (m_widgetContextMenu == nullptr) {
+				if (m_widgetContextMenu == null) {
 					EWOL_ERROR("Allocation Error");
 					return true;
 				}
@@ -174,7 +174,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				m_widgetContextMenu->setSubWidget(myColorChooser);
 				myColorChooser->signalChange.connect(sharedFromThis(), &ewol::widget::ButtonColor::onCallbackColorChange);
 				ewol::widget::WindowsShared currentWindows = getWindows();
-				if (currentWindows == nullptr) {
+				if (currentWindows == null) {
 					EWOL_ERROR("Can not get the curent Windows...");
 					m_widgetContextMenu.reset();
 				} else {

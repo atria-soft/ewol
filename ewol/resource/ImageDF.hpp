@@ -38,7 +38,7 @@ namespace ewol {
 				 * @note Never free this pointer by your own...
 				 * @param[in] _filename Name of the image file.
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
-				 * @return pointer on the resource or nullptr if an error occured.
+				 * @return pointer on the resource or null if an error occured.
 				 */
 				static ememory::SharedPtr<ewol::resource::ImageDF> create(const etk::String& _filename, ivec2 _size=ivec2(-1,-1));
 		};

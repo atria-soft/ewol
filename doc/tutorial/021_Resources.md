@@ -57,7 +57,7 @@ namespace appl {
 		public:
 			void onChangePropertyFile() {
 				m_config = ewol::resource::ConfigFile::create(*propertyConfig);
-				if (m_config != nullptr) {
+				if (m_config != null) {
 					m_configValId = m_config->request("exampleConfigName");
 				}
 			}

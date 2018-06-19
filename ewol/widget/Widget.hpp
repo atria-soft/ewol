@@ -330,7 +330,7 @@ namespace ewol {
 			/**
 			 * @brief get the widget at the specific windows absolute position
 			 * @param[in] _pos gAbsolute position of the requested widget knowledge
-			 * @return nullptr No widget found
+			 * @return null No widget found
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
@@ -338,7 +338,7 @@ namespace ewol {
 				if (propertyHide.get() == false) {
 					return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
 				}
-				return nullptr;
+				return null;
 			};
 		
 		// event section:

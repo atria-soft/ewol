@@ -60,7 +60,7 @@ void ewol::widget::ContextMenu::onChangeSize() {
 	// pop-up fill all the display :
 	ewol::Padding padding = m_shaper.getPadding();
 	EWOL_VERBOSE("our origin=" << m_origin << " size=" << m_size);
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		return;
 	}
 	vec2 subWidgetSize(0,0);
@@ -149,7 +149,7 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 	m_shaper.clear();
 	ewol::Padding padding = m_shaper.getPadding();
 	
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		return;
 	}
 	vec2 tmpSize = m_subWidget->getSize();
@@ -207,7 +207,7 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 
 bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 	if (_event.getId() > 0) {
-		if (ewol::widget::Container::getWidgetAtPos(_event.getPos()) != nullptr) {
+		if (ewol::widget::Container::getWidgetAtPos(_event.getPos()) != null) {
 			return false;
 		}
 		if(    _event.getStatus() == gale::key::status::down
@@ -226,7 +226,7 @@ bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 
 ewol::WidgetShared ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 	ewol::WidgetShared val = ewol::widget::Container::getWidgetAtPos(_pos);
-	if (val != nullptr) {
+	if (val != null) {
 		return val;
 	}
 	return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());

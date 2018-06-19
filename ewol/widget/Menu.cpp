@@ -83,7 +83,7 @@ int32_t ewol::widget::Menu::add(int32_t _parent,
 	tmpObject.m_message = _message;
 	if (tmpObject.m_parentId == -1) {
 		ewol::widget::ButtonShared myButton = ewol::widget::Button::create();
-		if (myButton == nullptr) {
+		if (myButton == null) {
 			EWOL_ERROR("Allocation button error");
 			return tmpObject.m_localId;
 		}
@@ -126,7 +126,7 @@ int32_t ewol::widget::Menu::addSpacer(int32_t _parent) {
 	tmpObject.m_message = "";
 	if (tmpObject.m_parentId == -1) {
 		ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
-		if (mySpacer == nullptr) {
+		if (mySpacer == null) {
 			EWOL_ERROR("Allocation spacer error");
 			return tmpObject.m_localId;
 		}
@@ -144,7 +144,7 @@ int32_t ewol::widget::Menu::addSpacer(int32_t _parent) {
 
 void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 	ewol::widget::ButtonShared caller = _button.lock();
-	if (caller == nullptr) {
+	if (caller == null) {
 		return;
 	}
 	for (auto &it : m_listElement) {
@@ -157,7 +157,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 			// Send a multicast event ...
 			signalSelect.emit(it.m_message);
 			ewol::widget::ContextMenuShared tmpContext = m_widgetContextMenu.lock();
-			if (tmpContext != nullptr) {
+			if (tmpContext != null) {
 				EWOL_DEBUG("Mark the menu to remove ...");
 				tmpContext->destroy();
 			}
@@ -178,14 +178,14 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 		// create a context menu:
 		ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
 		m_widgetContextMenu = tmpContext;
-		if (tmpContext == nullptr) {
+		if (tmpContext == null) {
 			EWOL_ERROR("Allocation Error");
 			return;
 		}
 		// get the button widget:
 		vec2 newPosition;
 		ewol::WidgetShared eventFromWidget = ememory::dynamicPointerCast<ewol::Widget>(caller);
-		if (eventFromWidget != nullptr) {
+		if (eventFromWidget != null) {
 			vec2 tmpOri  = eventFromWidget->getOrigin();
 			vec2 tmpSize = eventFromWidget->getSize();
 			// calculate the correct position
@@ -196,7 +196,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 		ewol::widget::SizerShared mySizer;
 		ewol::widget::ButtonShared myButton;
 		mySizer = ewol::widget::Sizer::create();
-		if (mySizer != nullptr) {
+		if (mySizer != null) {
 			mySizer->propertyMode.set(widget::Sizer::modeVert);
 			mySizer->propertyLockExpand.set(vec2(true,true));
 			mySizer->propertyFill.set(vec2(true,true));
@@ -218,7 +218,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 				}
 				if (m_listElement[iii].m_message == "" && m_listElement[iii].m_label == "") {
 					ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
-					if (mySpacer == nullptr) {
+					if (mySpacer == null) {
 						EWOL_ERROR("Allocation spacer error");
 						continue;
 					}
@@ -231,7 +231,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 					mySizer->subWidgetAdd(mySpacer);
 				} else {
 					myButton = ewol::widget::Button::create();
-					if (myButton == nullptr) {
+					if (myButton == null) {
 						EWOL_ERROR("Allocation Error");
 						continue;
 					}
@@ -263,7 +263,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 							    );
 						} else {
 							ewol::widget::LabelShared tmpLabel = widget::Label::create();
-							if (tmpLabel != nullptr) {
+							if (tmpLabel != null) {
 								tmpLabel->propertyValue.set(etk::String("<left>") + m_listElement[iii].m_label + "</left>\n");
 								tmpLabel->propertyExpand.set(bvec2(true,false));
 								tmpLabel->propertyFill.set(bvec2(true,true));
@@ -276,7 +276,7 @@ void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
 			}
 		}
 		ewol::widget::WindowsShared currentWindows = getWindows();
-		if (currentWindows == nullptr) {
+		if (currentWindows == null) {
 			EWOL_ERROR("Can not get the curent Windows...");
 		} else {
 			currentWindows->popUpWidgetPush(tmpContext);

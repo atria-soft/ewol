@@ -54,7 +54,7 @@ namespace appl {
 			void init() {
 				ewol::Object::init();
 				m_button = ewol::widget::Button::create();
-				if (m_button == nullptr) {
+				if (m_button == null) {
 					APPL_ERROR("Can not create button...");
 					return;
 				}

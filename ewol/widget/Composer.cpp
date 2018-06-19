@@ -28,7 +28,7 @@ ewol::WidgetShared ewol::widget::composerGenerateFile(const etk::String& _fileNa
 ewol::WidgetShared ewol::widget::composerGenerateString(const etk::String& _data, uint64_t _id) {
 	ewol::widget::Manager& widgetManager = ewol::getContext().getWidgetManager();
 	if (_data == "") {
-		return nullptr;
+		return null;
 	}
 	exml::Document doc;
 	etk::String tmpData = _data;
@@ -38,12 +38,12 @@ ewol::WidgetShared ewol::widget::composerGenerateString(const etk::String& _data
 	}
 	if (doc.parse(tmpData) == false) {
 		EWOL_ERROR(" can not load file XML string...");
-		return nullptr;
+		return null;
 	}
 	exml::Element root = doc.toElement();
 	if (root.nodes.size() == 0) {
 		EWOL_ERROR(" (l ?) No node in the XML file/string.");
-		return nullptr;
+		return null;
 	}
 	if (root.nodes.size() > 1) {
 		EWOL_WARNING(" (l ?) More than 1 node in the XML file/string. (JUST parse the first)");
@@ -51,18 +51,18 @@ ewol::WidgetShared ewol::widget::composerGenerateString(const etk::String& _data
 	exml::Element pNode = root.nodes[0].toElement();
 	if (pNode.exist() == false) {
 		EWOL_ERROR(" (l ?) No node in the XML file/string. {2}");
-		return nullptr;
+		return null;
 	}
 	etk::String widgetName = pNode.getValue();
 	if (widgetManager.exist(widgetName) == false) {
 		EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << widgetManager.list() << "]" );
-		return nullptr;
+		return null;
 	}
 	EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
 	ewol::WidgetShared tmpWidget = widgetManager.create(widgetName);
-	if (tmpWidget == nullptr) {
+	if (tmpWidget == null) {
 		EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
-		return nullptr;
+		return null;
 	}
 	if (tmpWidget->loadXML(pNode) == false) {
 		EWOL_ERROR ("(l " << pNode.getPos() << ") can not load widget properties : '" << widgetName << "'");
@@ -105,7 +105,7 @@ bool ewol::widget::Composer::loadFromString(const etk::String& _composerXmlStrin
 	}
 	// call upper class to parse his elements ...
 	ewol::widget::Container::loadXML(root);
-	if (m_subWidget == nullptr) {
+	if (m_subWidget == null) {
 		EWOL_WARNING("Load data from composer and have no under Widget after loading");
 		if (_composerXmlString.size() != 0) {
 			EWOL_ERROR("Error Loading XML data : " << _composerXmlString);

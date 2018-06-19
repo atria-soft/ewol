@@ -47,7 +47,7 @@ ewol::widget::Spin::~Spin() {
 
 void ewol::widget::Spin::onChangePropertyValue() {
 	markToRedraw();
-	if (m_widgetEntry == nullptr) {
+	if (m_widgetEntry == null) {
 		EWOL_ERROR("Can not acces at entry ...");
 		return;
 	}
@@ -74,15 +74,15 @@ void ewol::widget::Spin::updateGui() {
 	EWOL_WARNING("updateGui [START]");
 	ewol::widget::SpinBase::updateGui();
 	
-	if (    m_widgetEntry != nullptr
+	if (    m_widgetEntry != null
 	     && m_connectionEntry.isConnected() == false) {
 		
 	}
-	if (    m_widgetButtonUp != nullptr
+	if (    m_widgetButtonUp != null
 	     && m_connectionButtonUp.isConnected() == false) {
 		m_connectionButtonUp = m_widgetButtonUp->signalPressed.connect(this, &ewol::widget::Spin::onCallbackUp);
 	}
-	if (    m_widgetButtonDown != nullptr
+	if (    m_widgetButtonDown != null
 	     && m_connectionButtonDown.isConnected() == false) {
 		m_connectionButtonDown = m_widgetButtonDown->signalPressed.connect(this, &ewol::widget::Spin::onCallbackDown);
 	}

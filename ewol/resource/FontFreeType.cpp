@@ -44,7 +44,7 @@ void ewol::resource::freeTypeUnInit() {
 		return;
 	}
 	int32_t error = FT_Done_FreeType( library );
-	library = nullptr;
+	library = null;
 	if(0 != error) {
 		EWOL_CRITICAL(" when Un-loading FreeType Librairy ...");
 	}

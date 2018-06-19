@@ -52,9 +52,9 @@ void ewol::widget::Joystick::onRegenerateDisplay() {
 		// clean the object list ...
 		
 		/*
-		ewol::OObject2DColored * tmpOObjects = nullptr;
-		ewol::OObject2DTextured * tmpOOtexBg = nullptr;
-		ewol::OObject2DTextured * tmpOOtexFg = nullptr;
+		ewol::OObject2DColored * tmpOObjects = null;
+		ewol::OObject2DTextured * tmpOOtexBg = null;
+		ewol::OObject2DTextured * tmpOOtexFg = null;
 		// set background
 		if (true == m_displayBackground) {
 			if (m_background == "") {
@@ -69,7 +69,7 @@ void ewol::widget::Joystick::onRegenerateDisplay() {
 		// set cursor point
 		float sizeElement = m_size.x*m_ratio;
 		if (m_foreground == "") {
-			if (nullptr == tmpOObjects) {
+			if (null == tmpOObjects) {
 				tmpOObjects = ne w ewol::OObject2DColored;
 			}
 			tmpOObjects->setColor(m_colorFg);
@@ -81,13 +81,13 @@ void ewol::widget::Joystick::onRegenerateDisplay() {
 			                      ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement), sizeElement*2, sizeElement*2);
 		}
 		// add all needed objects ...
-		if (nullptr != tmpOObjects) {
+		if (null != tmpOObjects) {
 			addOObject(tmpOObjects);
 		}
-		if (nullptr != tmpOOtexBg) {
+		if (null != tmpOOtexBg) {
 			addOObject(tmpOOtexBg);
 		}
-		if (nullptr != tmpOOtexFg) {
+		if (null != tmpOOtexFg) {
 			addOObject(tmpOOtexFg);
 		}
 		*/

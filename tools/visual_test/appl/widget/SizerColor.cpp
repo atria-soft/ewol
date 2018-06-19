@@ -46,7 +46,7 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 	vec2 underSize(0,0);
 	vec2 underOrigin(999999999999.0,999999999999.0);
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		vec2 size = it->getSize();
@@ -63,7 +63,7 @@ void appl::widget::SizerColor::onRegenerateDisplay() {
 	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
 	vec2 localWidgetOrigin = m_origin + tmpBorderSize;
 	for (auto &it : m_subWidget) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		vec2 origin = it->getOrigin();

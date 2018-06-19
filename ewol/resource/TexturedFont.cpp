@@ -49,10 +49,10 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	ewol::resource::Texture::init(_fontName);
 	EWOL_DEBUG("Load font : '" << _fontName << "'" );
 
-	m_font[0] = nullptr;
-	m_font[1] = nullptr;
-	m_font[2] = nullptr;
-	m_font[3] = nullptr;
+	m_font[0] = null;
+	m_font[1] = null;
+	m_font[2] = null;
+	m_font[3] = null;
 	
 	m_modeWraping[0] = ewol::font::Regular;
 	m_modeWraping[1] = ewol::font::Regular;
@@ -74,7 +74,7 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	const char * tmpData = _fontName.c_str();
 	const char * tmpPos = strchr(tmpData, ':');
 	
-	if (tmpPos == nullptr) {
+	if (tmpPos == null) {
 		m_size = 1;
 		EWOL_CRITICAL("Can not parse the font name : '" << _fontName << "' ??? ':' " );
 		return;
@@ -194,19 +194,19 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		if (m_fileName[iiiFontId].size() == 0) {
 			EWOL_DEBUG("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size );
-			m_font[iiiFontId] = nullptr;
+			m_font[iiiFontId] = null;
 			continue;
 		}
 		EWOL_INFO("Load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size);
 		m_font[iiiFontId] = ewol::resource::FontFreeType::create(m_fileName[iiiFontId]);
-		if (m_font[iiiFontId] == nullptr) {
+		if (m_font[iiiFontId] == null) {
 			EWOL_DEBUG("error in loading FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size );
 		}
 	}
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		// set the bassic charset:
 		m_listElement[iiiFontId].clear();
-		if (m_font[iiiFontId] == nullptr) {
+		if (m_font[iiiFontId] == null) {
 			continue;
 		}
 		m_height[iiiFontId] = m_font[iiiFontId]->getHeight(m_size);
@@ -239,7 +239,7 @@ bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 	bool hasChange = false;
 	// for each font :
 	for (int32_t iii=0; iii<4 ; iii++) {
-		if (m_font[iii] == nullptr) {
+		if (m_font[iii] == null) {
 			continue;
 		}
 		// add the curent "char"
