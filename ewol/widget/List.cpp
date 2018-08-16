@@ -118,9 +118,8 @@ void ewol::widget::List::onRegenerateDisplay() {
 		tmpOriginY += m_paddingSizeY;
 		// TODO : remove this ...
 		int32_t minHeight = 25;
-	
 		uint32_t nbColomn = getNuberOfColomn();
-		int32_t nbRaw    = getNuberOfRaw();
+		int32_t nbRaw     = getNuberOfRaw();
 		// For the scrooling windows
 		m_maxSize = ivec2(m_size.x(),
 		                  (minHeight + 2*m_paddingSizeY) * nbRaw );
@@ -165,10 +164,10 @@ void ewol::widget::List::onRegenerateDisplay() {
 			m_nbVisibleRaw = 0;
 			for (int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 				m_nbVisibleRaw++;
-				etk::String myTextToWrite;
-				etk::Color<> fg;
-				etk::Color<> bg;
-				getElement(jjj, iii, myTextToWrite, fg, bg);
+				ivec2 position(jjj, iii);
+				etk::String myTextToWrite = getData(ListRole::Text, position).getSafeString();
+				etk::Color<> fg = getData(ListRole::FgColor, position).getSafeColor();
+				etk::Color<> bg = getData(ListRole::BgColor, position).getSafeColor();
 				
 				ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
 				if (null != tmpText) {
@@ -227,10 +226,8 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 			break;
 		}
 	}
-	
-	//EWOL_DEBUG("List event : idInput=" << IdInput << " typeEvent=" << typeEvent << "  raw=" << rawID << " pos=" << pos << "");
-	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), 0, rawID, _event.getPos().x(), _event.getPos().y());
-	if (true == isUsed) {
+	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), ivec2(0, rawID), _event.getPos());
+	if (isUsed == true) {
 		// TODO : this generate bugs ... I did not understand why ..
 		//ewol::WidgetSharedManager::focusKeep(this);
 	}

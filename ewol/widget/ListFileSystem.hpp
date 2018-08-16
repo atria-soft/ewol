@@ -47,7 +47,7 @@ namespace ewol {
 				uint32_t getNuberOfColomn() override;
 				bool getTitle(int32_t _colomn, etk::String& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg) override;
 				uint32_t getNuberOfRaw() override;
-				bool getElement(int32_t _colomn, int32_t _raw, etk::String& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) override;
+				fluorine::Variant getData(int32_t _role, const ivec2& _pos) override;
 				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) override;
 			protected:
 				// TODO: use shred_ptr

@@ -133,39 +133,45 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 	return m_list.size() + offset;
 }
 
-bool ewol::widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::String& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
-	int32_t offset = 0;
-	if (*propertyShowFolder == true) {
-		if (*propertyPath == "/") {
-			offset = 1;
-		} else {
-			offset = 2;
-		}
-		if (_raw == 0) {
-			_myTextToWrite = ".";
-		} else if (    _raw == 1
-		            && propertyPath.get() != "/") {
-			_myTextToWrite = "..";
-		}
+fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ivec2& _pos) {
+	switch (_role) {
+		case ListRole::Text:
+			{
+				int32_t offset = 0;
+				if (*propertyShowFolder == true) {
+					if (*propertyPath == "/") {
+						offset = 1;
+					} else {
+						offset = 2;
+					}
+					if (_pos.y() == 0) {
+						return ".";
+					} else if (    _pos.y() == 1
+					            && propertyPath.get() != "/") {
+						return "..";
+					}
+				}
+				if(    _pos.y()-offset >= 0
+				    && _pos.y()-offset < (int32_t)m_list.size()
+				    && m_list[_pos.y()-offset] != null) {
+					EWOL_VERBOSE("get filename for : '" << *m_list[_pos.y()-offset] << ":'" << m_list[_pos.y()-offset]->getNameFile() << "'");
+					return m_list[_pos.y()-offset]->getNameFile();
+				}
+			}
+			return "<<<ERROR>>>";
+		case ListRole::FgColor:
+			return m_colorProperty->get(m_colorIdText);
+		case ListRole::BgColor:
+			if (m_selectedLine == _pos.y()) {
+				return m_colorProperty->get(m_colorIdBackgroundSelected);
+			}
+			if (_pos.y() % 2) {
+				return m_colorProperty->get(m_colorIdBackground1);
+			}
+			return m_colorProperty->get(m_colorIdBackground2);
 	}
-	if(    _raw-offset >= 0
-	    && _raw-offset < (int32_t)m_list.size()
-	    && m_list[_raw-offset] != null) {
-		_myTextToWrite = m_list[_raw-offset]->getNameFile();
-		EWOL_VERBOSE("get filename for : '" << *m_list[_raw-offset] << ":'" << _myTextToWrite << "'");
-	}
-	_fg = m_colorProperty->get(m_colorIdText);
-	if (_raw % 2) {
-		_bg = m_colorProperty->get(m_colorIdBackground1);
-	} else {
-		_bg = m_colorProperty->get(m_colorIdBackground2);
-	}
-	if (m_selectedLine == _raw) {
-		_bg = m_colorProperty->get(m_colorIdBackgroundSelected);
-	}
-	return true;
-};
-
+	return fluorine::Variant();
+}
 
 bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
                                                enum gale::key::status _typeEvent,

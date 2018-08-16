@@ -235,7 +235,8 @@ def configure(target, my_module):
 	    'egami',
 	    'edtaa3',
 	    'etranslate',
-	    'ewol-data'
+	    'ewol-data',
+	    'fluorine',
 	    ])
 	
 	my_module.add_path(".")

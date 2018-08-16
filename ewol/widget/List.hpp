@@ -10,12 +10,22 @@
 #include <ewol/debug.hpp>
 #include <ewol/widget/WidgetScrolled.hpp>
 #include <ewol/compositing/Compositing.hpp>
+#include <fluorine/Variant.hpp>
 
 namespace ewol {
 	namespace widget {
 		class List;
 		using ListShared = ememory::SharedPtr<ewol::widget::List>;
 		using ListWeak = ememory::WeakPtr<ewol::widget::List>;
+		
+		enum ListRole {
+			Text = 11234,
+			BgColor,
+			FgColor,
+			// Every other role must be set here:
+			EndOfEwolRole
+		};
+		
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
@@ -55,18 +65,21 @@ namespace ewol {
 				virtual uint32_t getNuberOfRaw() {
 					return 0;
 				};
-				virtual bool getElement(int32_t _colomn, int32_t _raw, etk::String &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
-					_myTextToWrite = "";
-					_bg = etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
-					_fg = etk::Color<>(0x00, 0x00, 0x00, 0xFF);
-					if (_raw % 2) {
-						_bg = etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
-					} else {
-						_bg = etk::Color<>(0x7F, 0x7F, 0x7F, 0xFF);
+				virtual fluorine::Variant getData(int32_t _role, const ivec2& _pos) {
+					switch (_role) {
+						case ListRole::Text:
+							return "";
+						case ListRole::FgColor:
+							return etk::Color<>(0x00, 0x00, 0x00, 0xFF);
+						case ListRole::BgColor:
+							if (_pos.y() % 2 == 0) {
+								return etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
+							}
+							return etk::Color<>(0x7F, 0x7F, 0x7F, 0xFF);
 					}
-					return false;
+					return fluorine::Variant();
 				};
-				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
+				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, const ivec2& _pos, const vec2& _mousePosition) {
 					return false;
 				}
 				/**
