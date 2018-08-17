@@ -44,11 +44,10 @@ namespace ewol {
 				int32_t m_colorIdBackgroundSelected; //!< Color of line selected.
 			protected:
 				etk::Color<> getBasicBG() override;
-				uint32_t getNuberOfColomn() override;
 				bool getTitle(int32_t _colomn, etk::String& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg) override;
-				uint32_t getNuberOfRaw() override;
+				ivec2 getMatrixSize() const override;
 				fluorine::Variant getData(int32_t _role, const ivec2& _pos) override;
-				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) override;
+				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, const ivec2& _pos, const vec2& _mousePosition) override;
 			protected:
 				// TODO: use shred_ptr
 				etk::Vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)

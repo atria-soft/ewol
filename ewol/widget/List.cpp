@@ -50,8 +50,9 @@ void ewol::widget::List::setRawVisible(int32_t _id) {
 			m_displayStartRaw = _id - m_nbVisibleRaw + 2;
 		}
 	}
-	if (m_displayStartRaw > (int32_t)getNuberOfRaw()) {
-		m_displayStartRaw = getNuberOfRaw()-2;
+	ivec2 matrixSize = getMatrixSize();
+	if (m_displayStartRaw > matrixSize.y()) {
+		m_displayStartRaw = matrixSize.y()-2;
 	}
 	if (m_displayStartRaw<0) {
 		m_displayStartRaw = 0;
@@ -104,129 +105,168 @@ void ewol::widget::List::onRegenerateDisplay() {
 	if (needRedraw() == true) {
 		// clean the object list ...
 		clearOObjectList();
-		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
-		int32_t tmpOriginX = 0;
-		int32_t tmpOriginY = 0;
-		/*
-		if (true == m_userFill.x) {
-			tmpOriginX = 0;
+		// -------------------------------------------------------
+		// -- Calculate the size of each element
+		// -------------------------------------------------------
+		ivec2 matrixSize = getMatrixSize();
+		m_listSizeX.clear();
+		m_listSizeX.resize(matrixSize.x(), 0);
+		m_listSizeY.clear();
+		m_listSizeY.resize(matrixSize.y(), 0);
+		for (int_t yyy=0; yyy<matrixSize.y(); ++yyy) {
+			for (int_t xxx=0; xxx<matrixSize.x(); ++xxx) {
+				ivec2 pos(xxx, yyy);
+				vec2 elementSize = calculateElementSize(pos);
+				if (elementSize.x() > m_listSizeX[xxx]) {
+					m_listSizeX[xxx] = elementSize.x();
+				}
+				if (elementSize.y() > m_listSizeY[yyy]) {
+					m_listSizeY[yyy] = elementSize.y();
+				}
+			}
 		}
-		if (true == m_userFill.y) {
-			tmpOriginY = 0;
-		}*/
-		tmpOriginX += m_paddingSizeX;
-		tmpOriginY += m_paddingSizeY;
-		// TODO : remove this ...
-		int32_t minHeight = 25;
-		uint32_t nbColomn = getNuberOfColomn();
-		int32_t nbRaw     = getNuberOfRaw();
-		// For the scrooling windows
-		m_maxSize = ivec2(m_size.x(),
-		                  (minHeight + 2*m_paddingSizeY) * nbRaw );
-		
-		
-		etk::Vector<int32_t> listSizeColomn;
-		
-		ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+		// -------------------------------------------------------
+		// -- Calculate the start position size of each element
+		// -------------------------------------------------------
+		etk::Vector<int32_t> listStartPosX;
+		etk::Vector<int32_t> listStartPosY;
+		int32_t lastPositionX = 0;
+		for (auto &size: m_listSizeX) {
+			listStartPosX.pushBack(lastPositionX);
+			lastPositionX += size;
+		}
+		int32_t lastPositionY = 0;
+		for (auto &size: m_listSizeY) {
+			lastPositionY += size;
+			listStartPosY.pushBack(lastPositionY);
+		}
+		// -------------------------------------------------------
+		// -- Update the scroolBar
+		// -------------------------------------------------------
+		m_maxSize = ivec2(lastPositionX, lastPositionY);
+		// -------------------------------------------------------
+		// -- Clean the background
+		// -------------------------------------------------------
+		drawBackground();
+		// -------------------------------------------------------
+		// -- Draw each element
+		// -------------------------------------------------------
+		for (int_t yyy=0; yyy<matrixSize.y(); ++yyy) {
+			float startYposition = m_size.y() + m_originScrooled.y() - listStartPosY[yyy];
+			/*
+			if (startYposition + m_listSizeY[yyy] < 0) {
+				// ==> element out of range ==> nothing to display
+				continue;
+			}
+			if (startYposition > m_size.y()) {
+				// ==> element out of range ==> nothing to display
+				break;
+			}
+			*/
+			for (int_t xxx=0; xxx<matrixSize.x(); ++xxx) {
+				float startXposition = m_originScrooled.x() + listStartPosX[xxx];
+				/*
+				if (startYposition + m_listSizeX[xxx] < 0) {
+					// ==> element out of range ==> nothing to display
+					continue;
+				}
+				if (startYposition > m_size.x()) {
+					// ==> element out of range ==> nothing to display
+					break;
+				}
+				*/
+				drawElement(ivec2(xxx, yyy),
+				            vec2(m_paddingSizeX + listStartPosX[xxx], startYposition),
+				            vec2(m_listSizeX[xxx], m_listSizeY[yyy]));
+			}
+		}
+		// -------------------------------------------------------
+		// -- Draw Scrooling widget
+		// -------------------------------------------------------
+		WidgetScrolled::onRegenerateDisplay();
+	}
+}
+
+ivec2 ewol::widget::List::getMatrixSize() const {
+	return ivec2(1,0);
+}
+
+vec2 ewol::widget::List::calculateElementSize(const ivec2& _pos) {
+	ewol::compositing::Text tmpText;
+	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
+	vec3 textSize = tmpText.calculateSize(myTextToWrite);
+	ivec2 count = getMatrixSize();
+	return vec2(textSize.x(),
+	            textSize.y() + m_paddingSizeY*3
+	            );
+}
+
+void ewol::widget::List::drawBackground() {
+	ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+	if (BGOObjects != null) {
+		addOObject(BGOObjects);
 		etk::Color<> basicBG = getBasicBG();
 		BGOObjects->setColor(basicBG);
 		BGOObjects->setPos(vec3(0, 0, 0) );
-		BGOObjects->rectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
-		
-		int32_t startRaw = m_originScrooled.y() / (minHeight + 2*m_paddingSizeY);
-		
-		if (startRaw >= nbRaw-1 ) {
-			startRaw = nbRaw - 1;
+		BGOObjects->rectangleWidth(m_size);
+	}
+}
+
+void ewol::widget::List::drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size) {
+	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
+	etk::Color<> fg = getData(ListRole::FgColor, _pos).getSafeColor();
+	etk::Color<> bg = getData(ListRole::BgColor, _pos).getSafeColor();
+	
+	ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+	if (BGOObjects != null) {
+		addOObject(BGOObjects);
+		BGOObjects->setColor(bg);
+		BGOObjects->setPos(vec3(_start.x(), _start.y(), 0) );
+		BGOObjects->rectangleWidth(_size);
+	}
+	if (myTextToWrite != "") {
+		ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
+		if (tmpText != null) {
+			addOObject(tmpText);
+			int32_t displayPositionY = _start.y() + m_paddingSizeY;
+			tmpText->setColor(fg);
+			tmpText->setPos(vec3(_start.x() + m_paddingSizeX, displayPositionY, 0) );
+			tmpText->print(myTextToWrite);;
 		}
-		if (startRaw<0) {
-			startRaw = 0;
-		}
-		// We display only compleate lines ...
-		//EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws ; start display : " << m_originScrooled.y << "  == > " << tmpOriginY << " line size=" << minHeight + 2*m_paddingSizeY );
-		
-		/*clipping_ts drawClipping;
-		drawClipping.x = 0;
-		drawClipping.y = 0;
-		drawClipping.w = m_size.x - (2*m_paddingSizeX);
-		drawClipping.h = m_size.y;
-		*/
-		// remove all the positions :
-		m_lineSize.clear();
-		int32_t displayPositionY = m_size.y();
-		int32_t displayPositionX = 0;
-		ivec2 tmpRegister(startRaw, displayPositionY);
-		// add the default position raw :
-		m_lineSize.pushBack(tmpRegister);
-		
-		for (size_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
-			int32_t sizeColom = 0;
-			displayPositionY = m_size.y();
-			m_nbVisibleRaw = 0;
-			for (int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
-				m_nbVisibleRaw++;
-				ivec2 position(jjj, iii);
-				etk::String myTextToWrite = getData(ListRole::Text, position).getSafeString();
-				etk::Color<> fg = getData(ListRole::FgColor, position).getSafeColor();
-				etk::Color<> bg = getData(ListRole::BgColor, position).getSafeColor();
-				
-				ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
-				if (null != tmpText) {
-					// get font size : 
-					int32_t tmpFontHeight = tmpText->calculateSize(char32_t('A')).y();
-					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
-					
-					BGOObjects->setColor(bg);
-					BGOObjects->setPos(vec3(displayPositionX, displayPositionY, 0) );
-					BGOObjects->rectangleWidth(vec3(m_size.x()-displayPositionX, tmpFontHeight+2*m_paddingSizeY, 0));
-					
-					// get the maximum size of the colomn :
-					vec3 textSize = tmpText->calculateSize(myTextToWrite);
-					sizeColom = etk::max(sizeColom, (int32_t)textSize.x());
-					
-					tmpText->setColor(fg);
-					tmpText->setPos(vec3(tmpOriginX + displayPositionX, displayPositionY, 0) );
-					tmpText->print(myTextToWrite);
-					addOObject(tmpText);
-					// madding move ...
-					displayPositionY -= m_paddingSizeY;
-					
-					// add the raw position to remember it ...
-					tmpRegister.setX(tmpRegister.x()+1);
-					tmpRegister.setY(displayPositionY);
-					m_lineSize.pushBack(tmpRegister);
-					//EWOL_DEBUG("List indexation:" << tmpRegister);
-				}
-			}
-			displayPositionX += sizeColom;
-			tmpOriginX += m_paddingSizeX*2*2;
-		}
-		//m_lineSize.pushBack(tmpOriginY);
-		addOObject(BGOObjects, 0);
-		
-		// call the herited class...
-		WidgetScrolled::onRegenerateDisplay();
 	}
 }
 
 bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
-	
-	if (true == WidgetScrolled::onEventInput(_event)) {
+	if (WidgetScrolled::onEventInput(_event) == true) {
 		keepFocus();
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	// parse all the loged row position to find the good one...
-	int32_t rawID = -1;
-	for (size_t iii=0; iii<m_lineSize.size()-1; iii++) {
-		if(    relativePos.y()<m_lineSize[iii].y()
-		    && relativePos.y() >= m_lineSize[iii+1].y() ) {
-			// we find the raw :
-			rawID = m_lineSize[iii].x();
+	relativePos = vec2(relativePos.x(),m_size.y() - relativePos.y()) + m_originScrooled;
+	// Find the colomn and the row
+	ivec2 pos{-1,-1};
+	int32_t offset = 0;
+	for (size_t iii=0; iii<m_listSizeY.size()-1; iii++) {
+		int32_t previous = offset;
+		offset += m_listSizeY[iii];
+		if(    relativePos.y() < offset
+		    && relativePos.y() >= previous ) {
+			pos.setY(iii);
 			break;
 		}
 	}
-	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), ivec2(0, rawID), _event.getPos());
+	offset = 0;
+	for (size_t iii=0; iii<m_listSizeX.size()-1; iii++) {
+		int32_t previous = offset;
+		offset += m_listSizeX[iii];
+		if(    relativePos.x() < offset
+		    && relativePos.x() >= previous ) {
+			pos.setX(iii);
+			break;
+		}
+	}
+	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), pos, _event.getPos());
 	if (isUsed == true) {
 		// TODO : this generate bugs ... I did not understand why ..
 		//ewol::WidgetSharedManager::focusKeep(this);

@@ -19,9 +19,15 @@ namespace ewol {
 		using ListWeak = ememory::WeakPtr<ewol::widget::List>;
 		
 		enum ListRole {
-			Text = 11234,
-			BgColor,
-			FgColor,
+			Text = 11234, // string
+			IsSelected, // bool
+			IsExpand, // bool
+			Icon, // string
+			ChildCount, // uint_t
+			HaveChild, // bool
+			ParentId, // uint_t
+			BgColor, // color
+			FgColor, // color
 			// Every other role must be set here:
 			EndOfEwolRole
 		};
@@ -39,7 +45,8 @@ namespace ewol {
 			// drawing capabilities ....
 			private:
 				etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
-				etk::Vector<ivec2 > m_lineSize;
+				etk::Vector<int32_t> m_listSizeX; //!< size of every colomns
+				etk::Vector<int32_t> m_listSizeY; //!< size of every rows
 			public:
 				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 				void clearOObjectList();
@@ -55,16 +62,17 @@ namespace ewol {
 				virtual etk::Color<> getBasicBG() {
 					return etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
 				}
-				virtual uint32_t getNuberOfColomn() {
-					return 1;
-				};
+				
 				virtual bool getTitle(int32_t _colomn, etk::String& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
 					_myTitle = "";
 					return false;
 				};
-				virtual uint32_t getNuberOfRaw() {
-					return 0;
-				};
+				/**
+				 * @brief Get the number of colomn and row availlable in the list
+				 * @return Number of colomn and row
+				 */
+				virtual ivec2 getMatrixSize() const;
+				
 				virtual fluorine::Variant getData(int32_t _role, const ivec2& _pos) {
 					switch (_role) {
 						case ListRole::Text:
@@ -79,6 +87,27 @@ namespace ewol {
 					}
 					return fluorine::Variant();
 				};
+				/**
+				 * @brief Calculate an element size to extimate the render size.
+				 * @note Does not generate the with the same size.
+				 * @param[in] _pos Position of colomn and Raw of the element.
+				 * @return The estimate size of the element.
+				 */
+				virtual vec2 calculateElementSize(const ivec2& _pos);
+				/**
+				 * @brief Draw an element in the specific size and position.
+				 * @param[in] _pos Position of colomn and Raw of the element.
+				 * @param[in] _start Start display position.
+				 * @param[in] _size Render raw size
+				 * @return The estimate size of the element.
+				 */
+				virtual void drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size);
+				
+				/**
+				 * @brief Draw the background
+				 */
+				virtual void drawBackground();
+				
 				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, const ivec2& _pos, const vec2& _mousePosition) {
 					return false;
 				}

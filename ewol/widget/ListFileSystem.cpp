@@ -112,16 +112,7 @@ void ewol::widget::ListFileSystem::setSelect(const etk::String& _data) {
 	markToRedraw();
 }
 
-uint32_t ewol::widget::ListFileSystem::getNuberOfColomn() {
-	return 1;
-}
-
-bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, etk::String &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
-	_myTitle = "title";
-	return true;
-}
-
-uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
+ivec2 ewol::widget::ListFileSystem::getMatrixSize() const {
 	int32_t offset = 0;
 	if (*propertyShowFolder == true) {
 		if (propertyPath.get() == "/") {
@@ -130,7 +121,12 @@ uint32_t ewol::widget::ListFileSystem::getNuberOfRaw() {
 			offset = 2;
 		}
 	}
-	return m_list.size() + offset;
+	return ivec2(1, m_list.size() + offset);
+}
+
+bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, etk::String &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
+	_myTitle = "title";
+	return true;
 }
 
 fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ivec2& _pos) {
@@ -175,10 +171,8 @@ fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ive
 
 bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
                                                enum gale::key::status _typeEvent,
-                                               int32_t _colomn,
-                                               int32_t _raw,
-                                               float _x,
-                                               float _y) {
+                                               const ivec2& _pos,
+                                               const vec2& _mousePosition) {
 	int32_t offset = 0;
 	if (*propertyShowFolder == true) {
 		if (*propertyPath == "/") {
@@ -188,13 +182,13 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 		}
 	}
 	if (_typeEvent == gale::key::status::pressSingle) {
-		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
+		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " _pos=" << _pos );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;
-			if (_raw > (int32_t)m_list.size()+offset ) {
+			if (_pos.y() > (int32_t)m_list.size()+offset ) {
 				m_selectedLine = -1;
 			} else {
-				m_selectedLine = _raw;
+				m_selectedLine = _pos.y();
 			}
 			if (previousRaw != m_selectedLine) {
 				if(    *propertyShowFolder == true
