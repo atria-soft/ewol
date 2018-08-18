@@ -250,14 +250,16 @@ void ewol::widget::List::drawBackground() {
 void ewol::widget::List::drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size) {
 	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
 	etk::Color<> fg = getData(ListRole::FgColor, _pos).getSafeColor();
-	etk::Color<> bg = getData(ListRole::BgColor, _pos).getSafeColor();
-	
-	ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
-	if (BGOObjects != null) {
-		addOObject(BGOObjects);
-		BGOObjects->setColor(bg);
-		BGOObjects->setPos(vec3(_start.x(), _start.y(), 0) );
-		BGOObjects->rectangleWidth(_size);
+	auto backgroundVariant = getData(ListRole::BgColor, _pos);
+	if (backgroundVariant.isColor() == true) {
+		etk::Color<> bg = backgroundVariant.getColor();
+		ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+		if (BGOObjects != null) {
+			addOObject(BGOObjects);
+			BGOObjects->setColor(bg);
+			BGOObjects->setPos(vec3(_start.x(), _start.y(), 0) );
+			BGOObjects->rectangleWidth(_size);
+		}
 	}
 	if (myTextToWrite != "") {
 		ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
