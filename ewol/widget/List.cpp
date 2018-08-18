@@ -23,6 +23,7 @@ ewol::widget::List::List() {
 	#endif
 	m_nbVisibleRaw = 0;
 	propertyCanFocus.setDirectCheck(true);
+	m_limitScrolling = vec2(1, 0.5);
 }
 
 ewol::widget::List::~List() {
