@@ -115,7 +115,7 @@ namespace ewol {
 				 * @brief set a raw visible in the main display
 				 * @param[in] _id Id of the raw that might be visible.
 				 */
-				void setRawVisible(int32_t _id);
+				//void setRawVisible(int32_t _id);
 			protected:
 				void onGetFocus() override;
 				void onLostFocus() override;

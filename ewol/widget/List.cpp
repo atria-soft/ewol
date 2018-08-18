@@ -34,7 +34,7 @@ ewol::widget::List::~List() {
 	}
 	m_listOObject.clear();
 }
-
+/*
 void ewol::widget::List::setRawVisible(int32_t _id) {
 	EWOL_DEBUG("Set Raw visible : " << _id);
 	if (_id<0) {
@@ -61,6 +61,7 @@ void ewol::widget::List::setRawVisible(int32_t _id) {
 	EWOL_DEBUG("Set start raw : " << m_displayStartRaw);
 	markToRedraw();
 }
+*/
 
 void ewol::widget::List::calculateMinMaxSize() {
 	/*int32_t fontId = getDefaultFontId();
