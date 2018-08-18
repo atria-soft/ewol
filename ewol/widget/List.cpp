@@ -188,30 +188,27 @@ void ewol::widget::List::onRegenerateDisplay() {
 		// -------------------------------------------------------
 		for (int_t yyy=0; yyy<matrixSize.y(); ++yyy) {
 			float startYposition = m_size.y() + m_originScrooled.y() - listStartPosY[yyy];
-			/*
 			if (startYposition + m_listSizeY[yyy] < 0) {
-				// ==> element out of range ==> nothing to display
-				continue;
-			}
-			if (startYposition > m_size.y()) {
 				// ==> element out of range ==> nothing to display
 				break;
 			}
-			*/
+			if (startYposition > m_size.y()) {
+				// ==> element out of range ==> nothing to display
+				continue;
+			}
 			for (int_t xxx=0; xxx<matrixSize.x(); ++xxx) {
-				float startXposition = m_originScrooled.x() + listStartPosX[xxx];
-				/*
-				if (startYposition + m_listSizeX[xxx] < 0) {
+				float startXposition = -m_originScrooled.x() + listStartPosX[xxx];
+				//EWOL_ERROR("display start: " << startXposition);
+				if (startXposition + m_listSizeX[xxx] < 0) {
 					// ==> element out of range ==> nothing to display
 					continue;
 				}
-				if (startYposition > m_size.x()) {
+				if (startXposition > m_size.x()) {
 					// ==> element out of range ==> nothing to display
 					break;
 				}
-				*/
 				drawElement(ivec2(xxx, yyy),
-				            vec2(m_paddingSizeX + listStartPosX[xxx], startYposition),
+				            vec2(startXposition, startYposition),
 				            vec2(m_listSizeX[xxx], m_listSizeY[yyy]));
 			}
 		}
