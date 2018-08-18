@@ -127,6 +127,39 @@ void ewol::widget::List::onRegenerateDisplay() {
 			}
 		}
 		// -------------------------------------------------------
+		// -- Fill property applyence
+		// -------------------------------------------------------
+		if (propertyFill->x() == true) {
+			int32_t fullSize = 0;
+			for (auto &size: m_listSizeX) {
+				fullSize += size;
+			}
+			if (fullSize < m_size.x() ) {
+				// need to expand all elements:
+				int32_t residualAdd = (m_size.x() - fullSize) / matrixSize.x();
+				if (residualAdd != 0) {
+					for (auto &size: m_listSizeX) {
+						size += residualAdd;
+					}
+				}
+			}
+		}
+		if (propertyFill->y() == true) {
+			int32_t fullSize = 0;
+			for (auto &size: m_listSizeY) {
+				fullSize += size;
+			}
+			if (fullSize < m_size.y() ) {
+				// need to expand all elements:
+				int32_t residualAdd = (m_size.y() - fullSize) / matrixSize.y();
+				if (residualAdd != 0) {
+					for (auto &size: m_listSizeY) {
+						size += residualAdd;
+					}
+				}
+			}
+		}
+		// -------------------------------------------------------
 		// -- Calculate the start position size of each element
 		// -------------------------------------------------------
 		etk::Vector<int32_t> listStartPosX;
