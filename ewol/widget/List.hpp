@@ -63,10 +63,6 @@ namespace ewol {
 					return etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
 				}
 				
-				virtual bool getTitle(int32_t _colomn, etk::String& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
-					_myTitle = "";
-					return false;
-				};
 				/**
 				 * @brief Get the number of colomn and row availlable in the list
 				 * @return Number of colomn and row
@@ -102,7 +98,6 @@ namespace ewol {
 				 * @return The estimate size of the element.
 				 */
 				virtual void drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size);
-				
 				/**
 				 * @brief Draw the background
 				 */

@@ -124,11 +124,6 @@ ivec2 ewol::widget::ListFileSystem::getMatrixSize() const {
 	return ivec2(1, m_list.size() + offset);
 }
 
-bool ewol::widget::ListFileSystem::getTitle(int32_t _colomn, etk::String &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
-	_myTitle = "title";
-	return true;
-}
-
 fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ivec2& _pos) {
 	switch (_role) {
 		case ListRole::Text:
