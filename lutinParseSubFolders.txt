@@ -1,5 +1,6 @@
 sample/HelloWord
 sample/CustomWidgets
 sample/wallpaper
+sample/treeView
 tools/visual_test
 tools/platform_test
