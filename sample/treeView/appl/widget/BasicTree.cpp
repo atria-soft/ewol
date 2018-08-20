@@ -14,16 +14,22 @@ ETK_DECLARE_TYPE(appl::widget::BasicTree);
 appl::widget::BasicTree::BasicTree() {
 	addObjectType("appl::widget::BasicTree");
 	setMouseLimit(1);
-	m_tree = NodeElement::create("root");
+	m_tree = NodeElement::create(TreeElement("root", false, true));
 	for (size_t iii=0; iii<10; ++iii) {
-		auto elem_iii = NodeElement::create("elem_" + etk::toString(iii));
+		auto elem_iii = NodeElement::create(TreeElement("elem_" + etk::toString(iii)));
 		m_tree->addChild(elem_iii);
 		for (size_t jjj=0; jjj<iii; ++jjj) {
-			auto elem_iii_jjj = NodeElement::create("elem_" + etk::toString(iii) + "____" + etk::toString(jjj));
+			auto elem_iii_jjj = NodeElement::create(TreeElement("elem_" + etk::toString(iii) + "____" + etk::toString(jjj)));
 			elem_iii->addChild(elem_iii_jjj);
 		}
 	}
-	m_flatTree.setRoot(m_tree);
+	m_flatTree.setRoot(m_tree,
+	    [&](TreeElement* _value){
+	    	return true;
+	    },
+	    [&](TreeElement* _value){
+	    	return _value.m_isExpand;
+	    });
 }
 
 appl::widget::BasicTree::~BasicTree() {
@@ -41,11 +47,11 @@ ivec2 appl::widget::BasicTree::getMatrixSize() const {
 
 fluorine::Variant appl::widget::BasicTree::getData(int32_t _role, const ivec2& _pos) {
 	auto elem = m_flatTree[_pos.y()];
-	etk::String value = elem->getData();
+	TreeElement& value = elem->getData();
 	switch (_role) {
 		case ewol::widget::ListRole::Text:
 			if (_pos.x() == 0) {
-				return value;
+				return value.m_display;
 			}
 			if (_pos.x() == 1) {
 				//return etk::toString(countToRoot);
