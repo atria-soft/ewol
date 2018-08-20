@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include <ewol/widget/List.hpp>
+#include <ewol/widget/TreeView.hpp>
 #include <etk/os/FSNode.hpp>
 #include <ewol/resource/ColorFile.hpp>
 #include <esignal/Signal.hpp>
@@ -19,7 +19,7 @@ namespace appl {
 		/**
 		 * @brief Generic display folder class. This widget display the content of a single folder :
 		 */
-		class BasicTree : public ewol::widget::List {
+		class BasicTree : public ewol::widget::TreeView {
 			protected:
 				BasicTree();
 			public:

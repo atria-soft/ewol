@@ -28,6 +28,7 @@ namespace ewol {
 			ParentId, // uint_t
 			BgColor, // color
 			FgColor, // color
+			DistanceToRoot, // uint_t
 			// Every other role must be set here:
 			EndOfEwolRole
 		};
@@ -41,9 +42,8 @@ namespace ewol {
 			public:
 				virtual ~List();
 				void calculateMinMaxSize() override;
-				void setLabel(etk::String _newLabel);
 			// drawing capabilities ....
-			private:
+			protected:
 				etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 				etk::Vector<int32_t> m_listSizeX; //!< size of every colomns
 				etk::Vector<int32_t> m_listSizeY; //!< size of every rows
@@ -51,7 +51,7 @@ namespace ewol {
 				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 				void clearOObjectList();
 			// list properties ...
-			private:
+			protected:
 				int32_t m_paddingSizeX;
 				int32_t m_paddingSizeY;
 				int32_t m_displayStartRaw; //!< Current starting diaplayed raw

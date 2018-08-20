@@ -171,6 +171,7 @@ def configure(target, my_module):
 	    'ewol/widget/Windows.cpp',
 	    'ewol/widget/WSlider.cpp',
 	    'ewol/widget/Spin.cpp',
+	    'ewol/widget/TreeView.cpp',
 	    ])
 	my_module.add_header_file([
 	    'ewol/widget/Menu.hpp',
@@ -210,7 +211,8 @@ def configure(target, my_module):
 	    'ewol/widget/Image.hpp',
 	    'ewol/widget/List.hpp',
 	    'ewol/widget/Select.hpp',
-	    'ewol/widget/Spin.hpp'
+	    'ewol/widget/Spin.hpp',
+	    'ewol/widget/TreeView.hpp',
 	    ])
 	
 	# tools:

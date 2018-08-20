@@ -14,8 +14,6 @@ ETK_DECLARE_TYPE(appl::widget::BasicTree);
 appl::widget::BasicTree::BasicTree() {
 	addObjectType("appl::widget::BasicTree");
 	setMouseLimit(1);
-	
-	
 	m_tree = NodeElement::create("root");
 	for (size_t iii=0; iii<10; ++iii) {
 		auto elem_iii = NodeElement::create("elem_" + etk::toString(iii));
@@ -33,18 +31,39 @@ appl::widget::BasicTree::~BasicTree() {
 }
 
 etk::Color<> appl::widget::BasicTree::getBasicBG() {
-	return etk::Color<>(0,0,0xFF,0xFF);
+	return etk::Color<>(0xAF,0xAF,0xAF,0xFF);
 }
 
 
 ivec2 appl::widget::BasicTree::getMatrixSize() const {
-	return ivec2(3, 10);
+	return ivec2(4, m_flatTree.size());
 }
 
 fluorine::Variant appl::widget::BasicTree::getData(int32_t _role, const ivec2& _pos) {
+	auto elem = m_flatTree[_pos.y()];
+	etk::String value = elem->getData();
 	switch (_role) {
 		case ewol::widget::ListRole::Text:
+			if (_pos.x() == 0) {
+				return value;
+			}
+			if (_pos.x() == 1) {
+				//return etk::toString(countToRoot);
+			}
 			return "value: " + etk::toString(_pos);
+		case ewol::widget::ListRole::DistanceToRoot:
+			return uint_t(elem->countToRoot());
+		case ewol::widget::ListRole::Icon:
+			if (elem->countToRoot() == 0) {
+				return "{ewol}THEME:GUI:Home.svg";
+			}
+			if (elem->countToRoot() == 1) {
+				return "{ewol}THEME:GUI:Folder.svg";
+			}
+			if (elem->countToRoot() == 2) {
+				return "{ewol}THEME:GUI:File.svg";
+			}
+			return "";
 		case ewol::widget::ListRole::FgColor:
 			return etk::Color<>(0,0,0,0xFF);
 		case ewol::widget::ListRole::BgColor:
