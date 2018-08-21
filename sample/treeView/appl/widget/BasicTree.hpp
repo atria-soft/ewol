@@ -18,7 +18,7 @@ namespace appl {
 		using BasicTreeWeak = ememory::WeakPtr<appl::widget::BasicTree>;
 		class TreeElement {
 			public:
-				TreeElement(const etk::String& _display="", bool _isSelected = false, bool m_isExpand=false):
+				TreeElement(const etk::String& _display="", bool _isSelected = false, bool _isExpand=false):
 				  m_display(_display),
 				  m_isSelected(_isSelected),
 				  m_isExpand(_isExpand) {
@@ -27,23 +27,25 @@ namespace appl {
 				etk::String m_display;
 				bool m_isSelected = false;
 				bool m_isExpand = false;
-		}
+		};
 		/**
 		 * @brief Generic display folder class. This widget display the content of a single folder :
 		 */
 		class BasicTree : public ewol::widget::TreeView {
 			protected:
 				BasicTree();
+				void init() override;
 			public:
 				DECLARE_WIDGET_FACTORY(BasicTree, "BasicTree");
 				virtual ~BasicTree();
 			protected:
+				void updateFlatTree();
 				etk::Color<> getBasicBG() override;
 				ivec2 getMatrixSize() const override;
 				fluorine::Variant getData(int32_t _role, const ivec2& _pos) override;
-				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, const ivec2& _pos, const vec2& _mousePosition) override;
-				
-				ememory::SharedPtr<etk::TreeNode<NodeElement>> m_tree;
+				//bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) override;
+				void onItemExpandEvent(const ivec2& _pos) override;
+				ememory::SharedPtr<etk::TreeNode<TreeElement>> m_tree;
 				etk::FlatTree<TreeElement> m_flatTree;
 		};
 	};

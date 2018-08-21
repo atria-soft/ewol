@@ -164,8 +164,7 @@ fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ive
 	return fluorine::Variant();
 }
 
-bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
-                                               enum gale::key::status _typeEvent,
+bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
                                                const ivec2& _pos,
                                                const vec2& _mousePosition) {
 	int32_t offset = 0;
@@ -176,9 +175,9 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 			offset = 2;
 		}
 	}
-	if (_typeEvent == gale::key::status::pressSingle) {
-		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " _pos=" << _pos );
-		if (1 == _IdInput) {
+	if (_event.getStatus() == gale::key::status::pressSingle) {
+		EWOL_VERBOSE("Event on List : IdInput=" << _event.getId() << " _pos=" << _pos );
+		if (1 == _event.getId()) {
 			int32_t previousRaw = m_selectedLine;
 			if (_pos.y() > (int32_t)m_list.size()+offset ) {
 				m_selectedLine = -1;

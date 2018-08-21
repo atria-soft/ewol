@@ -46,7 +46,7 @@ namespace ewol {
 				etk::Color<> getBasicBG() override;
 				ivec2 getMatrixSize() const override;
 				fluorine::Variant getData(int32_t _role, const ivec2& _pos) override;
-				bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, const ivec2& _pos, const vec2& _mousePosition) override;
+				bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) override;
 			protected:
 				// TODO: use shred_ptr
 				etk::Vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)

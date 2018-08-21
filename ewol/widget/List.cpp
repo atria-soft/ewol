@@ -26,6 +26,12 @@ ewol::widget::List::List() {
 	m_limitScrolling = vec2(1, 0.5);
 }
 
+
+void ewol::widget::List::init() {
+	ewol::widget::WidgetScrolled::init();
+}
+
+
 ewol::widget::List::~List() {
 	//clean all the object
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
@@ -145,6 +151,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 				}
 			}
 		}
+		/*
 		if (propertyFill->y() == true) {
 			int32_t fullSize = 0;
 			for (auto &size: m_listSizeY) {
@@ -160,6 +167,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 				}
 			}
 		}
+		*/
 		// -------------------------------------------------------
 		// -- Calculate the start position size of each element
 		// -------------------------------------------------------
@@ -277,30 +285,46 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
+	if (m_listSizeY.size() == 0) {
+		return false;
+	}
 	relativePos = vec2(relativePos.x(),m_size.y() - relativePos.y()) + m_originScrooled;
 	// Find the colomn and the row
-	ivec2 pos{-1,-1};
-	int32_t offset = 0;
+	ivec2 pos{0,0};
+	float_t offsetY = 0;
 	for (size_t iii=0; iii<m_listSizeY.size()-1; iii++) {
-		int32_t previous = offset;
-		offset += m_listSizeY[iii];
-		if(    relativePos.y() < offset
-		    && relativePos.y() >= previous ) {
+		int32_t previous = offsetY;
+		offsetY += m_listSizeY[iii];
+		if (    relativePos.y() < offsetY
+		     && relativePos.y() >= previous ) {
 			pos.setY(iii);
+			offsetY = previous;
+			break;
+		}
+		if (    iii == m_listSizeY.size()-2
+		     && relativePos.y() >= offsetY ) {
+			pos.setY(iii+1);
 			break;
 		}
 	}
-	offset = 0;
+	float_t offsetX = 0;
 	for (size_t iii=0; iii<m_listSizeX.size()-1; iii++) {
-		int32_t previous = offset;
-		offset += m_listSizeX[iii];
-		if(    relativePos.x() < offset
-		    && relativePos.x() >= previous ) {
+		int32_t previous = offsetX;
+		offsetX += m_listSizeX[iii];
+		if (    relativePos.x() < offsetX
+		     && relativePos.x() >= previous ) {
 			pos.setX(iii);
+			offsetX = previous;
+			break;
+		}
+		if (    iii == m_listSizeX.size()-2
+		     && relativePos.x() >= offsetX ) {
+			pos.setX(iii+1);
 			break;
 		}
 	}
-	bool isUsed = onItemEvent(_event.getId(), _event.getStatus(), pos, _event.getPos());
+	vec2 posInternalMouse = relativePos - vec2(offsetX, offsetY);
+	bool isUsed = onItemEvent(_event, pos, posInternalMouse);
 	if (isUsed == true) {
 		// TODO : this generate bugs ... I did not understand why ..
 		//ewol::WidgetSharedManager::focusKeep(this);

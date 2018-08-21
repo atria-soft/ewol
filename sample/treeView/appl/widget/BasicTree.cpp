@@ -7,30 +7,47 @@
 #include "BasicTree.hpp"
 #include <etk/tool.hpp>
 #include <etk/os/FSNode.hpp>
+#include <test-debug/debug.hpp>
 
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(appl::widget::BasicTree);
 
 appl::widget::BasicTree::BasicTree() {
 	addObjectType("appl::widget::BasicTree");
+}
+
+void appl::widget::BasicTree::init() {
+	ewol::widget::TreeView::init();
 	setMouseLimit(1);
-	m_tree = NodeElement::create(TreeElement("root", false, true));
+	m_tree = etk::TreeNode<TreeElement>::create(TreeElement("root", false, true));
 	for (size_t iii=0; iii<10; ++iii) {
-		auto elem_iii = NodeElement::create(TreeElement("elem_" + etk::toString(iii)));
+		auto elem_iii = etk::TreeNode<TreeElement>::create(TreeElement("elem_" + etk::toString(iii), false, false));
 		m_tree->addChild(elem_iii);
 		for (size_t jjj=0; jjj<iii; ++jjj) {
-			auto elem_iii_jjj = NodeElement::create(TreeElement("elem_" + etk::toString(iii) + "____" + etk::toString(jjj)));
-			elem_iii->addChild(elem_iii_jjj);
+			if (jjj%3 == 0) {
+				auto elem_iii_jjj = etk::TreeNode<TreeElement>::create(TreeElement("elem_" + etk::toString(iii) + "____" + etk::toString(jjj) + "<br/> an other line ...", false, false));
+				elem_iii->addChild(elem_iii_jjj);
+			} else {
+				auto elem_iii_jjj = etk::TreeNode<TreeElement>::create(TreeElement("elem_" + etk::toString(iii) + "____" + etk::toString(jjj), false, false));
+				elem_iii->addChild(elem_iii_jjj);
+			}
 		}
 	}
+	updateFlatTree();
+}
+
+
+void appl::widget::BasicTree::updateFlatTree() {
 	m_flatTree.setRoot(m_tree,
-	    [&](TreeElement* _value){
+	    [&](const TreeElement& _value){
 	    	return true;
 	    },
-	    [&](TreeElement* _value){
+	    [&](const TreeElement& _value){
 	    	return _value.m_isExpand;
 	    });
+	markToRedraw();
 }
+
 
 appl::widget::BasicTree::~BasicTree() {
 	
@@ -59,6 +76,10 @@ fluorine::Variant appl::widget::BasicTree::getData(int32_t _role, const ivec2& _
 			return "value: " + etk::toString(_pos);
 		case ewol::widget::ListRole::DistanceToRoot:
 			return uint_t(elem->countToRoot());
+		case ewol::widget::ListRole::HaveChild:
+			return elem->haveChild();
+		case ewol::widget::ListRole::IsExpand:
+			return value.m_isExpand;
 		case ewol::widget::ListRole::Icon:
 			if (elem->countToRoot() == 0) {
 				return "{ewol}THEME:GUI:Home.svg";
@@ -73,88 +94,16 @@ fluorine::Variant appl::widget::BasicTree::getData(int32_t _role, const ivec2& _
 		case ewol::widget::ListRole::FgColor:
 			return etk::Color<>(0,0,0,0xFF);
 		case ewol::widget::ListRole::BgColor:
+			if ((_pos.y()%2) == 0) {
+				return etk::Color<>(0,0,0,0x15);
+			}
 			return fluorine::Variant();
 	}
 	return fluorine::Variant();
 }
 
-bool appl::widget::BasicTree::onItemEvent(int32_t _IdInput,
-                                               enum gale::key::status _typeEvent,
-                                               const ivec2& _pos,
-                                               const vec2& _mousePosition) {
-	/*
-	int32_t offset = 0;
-	if (*propertyShowFolder == true) {
-		if (*propertyPath == "/") {
-			offset = 1;
-		} else {
-			offset = 2;
-		}
-	}
-	if (_typeEvent == gale::key::status::pressSingle) {
-		EWOL_VERBOSE("Event on List : IdInput=" << _IdInput << " _pos=" << _pos );
-		if (1 == _IdInput) {
-			int32_t previousRaw = m_selectedLine;
-			if (_pos.y() > (int32_t)m_list.size()+offset ) {
-				m_selectedLine = -1;
-			} else {
-				m_selectedLine = _pos.y();
-			}
-			if (previousRaw != m_selectedLine) {
-				if(    *propertyShowFolder == true
-				    && m_selectedLine == 0) {
-					// "." folder
-					signalFolderSelect.emit(".");
-				} else if (    *propertyShowFolder == true
-				            && m_selectedLine == 1) {
-					// ".." folder
-					signalFolderSelect.emit("..");
-				} else if(    m_selectedLine-offset  >= 0
-				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && null != m_list[m_selectedLine-offset] ) {
-					// generate event extern : 
-					switch(m_list[m_selectedLine-offset]->getNodeType()) {
-						case etk::typeNode_file :
-							signalFileSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						case etk::typeNode_folder :
-							signalFolderSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						default:
-							EWOL_ERROR("Can not generate event on an unknow type");
-							break;
-					}
-				}
-			} else {
-				if(    *propertyShowFolder == true
-				    && m_selectedLine == 0) {
-					// "." folder
-					signalFolderValidate.emit(".");
-				} else if (    *propertyShowFolder == true
-				            && m_selectedLine == 1) {
-					// ".." folder
-					signalFolderValidate.emit("..");
-				} else if(    m_selectedLine-offset >= 0
-				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && null != m_list[m_selectedLine-offset] ) {
-					switch(m_list[m_selectedLine-offset]->getNodeType()) {
-						case etk::typeNode_file :
-							signalFileValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						case etk::typeNode_folder :
-							signalFolderValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						default:
-							EWOL_ERROR("Can not generate event on an unknow type");
-							break;
-					}
-				}
-			}
-			// need to regenerate the display of the list : 
-			markToRedraw();
-			return true;
-		}
-	}
-	*/
-	return false;
+void appl::widget::BasicTree::onItemExpandEvent(const ivec2& _pos) {
+	TEST_WARNING("Event on expand on " << _pos);
+	m_flatTree[_pos.y()]->getData().m_isExpand = m_flatTree[_pos.y()]->getData().m_isExpand?false:true;
+	updateFlatTree();
 }

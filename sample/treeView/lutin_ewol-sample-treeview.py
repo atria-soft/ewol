@@ -34,7 +34,8 @@ def configure(target, my_module):
 	    'appl/widget/BasicTree.cpp',
 	    ])
 	my_module.add_depend([
-	    'ewol'
+	    'ewol',
+	    'test-debug',
 	    ])
 	my_module.add_flag('c++', [
 	    "-DPROJECT_NAME=\"\\\""+my_module.get_name()+"\\\"\"",

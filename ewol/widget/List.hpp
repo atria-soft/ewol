@@ -39,6 +39,7 @@ namespace ewol {
 		class List : public ewol::widget::WidgetScrolled {
 			protected:
 				List();
+				void init() override;
 			public:
 				virtual ~List();
 				void calculateMinMaxSize() override;
@@ -103,7 +104,7 @@ namespace ewol {
 				 */
 				virtual void drawBackground();
 				
-				virtual bool onItemEvent(int32_t _IdInput, enum gale::key::status _typeEvent, const ivec2& _pos, const vec2& _mousePosition) {
+				virtual bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) {
 					return false;
 				}
 				/**
