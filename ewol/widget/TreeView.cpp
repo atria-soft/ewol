@@ -21,7 +21,7 @@ ewol::widget::TreeView::TreeView():
                                "Offset indentation for each node",
                                &ewol::widget::TreeView::onChangePropertyOffsetTreeView),
   propertyIconTreeViewSize(this, "iconTreeViewSize",
-                                 30,
+                                 20,
                                  "Size of the icon for treeView",
                                  &ewol::widget::TreeView::onChangePropertyOffsetTreeView) {
 	addObjectType("ewol::widget::TreeView");
@@ -62,7 +62,7 @@ vec2 ewol::widget::TreeView::calculateElementSize(const ivec2& _pos) {
 	vec3 textSize = tmpText.calculateSizeDecorated(myTextToWrite);
 	ivec2 count = getMatrixSize();
 	return vec2(textSize.x() + treeOffset + iconSize,
-	            etk::max(textSize.y(), iconSize) + m_paddingSizeY*3
+	            etk::max(textSize.y(), iconSize) + m_paddingSizeY*2
 	            );
 }
 
