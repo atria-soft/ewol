@@ -26,6 +26,7 @@ namespace ewol {
 			public: // properties
 				eproperty::Value<float> propertyOffsetTreeView; //!< indentation betwwen every new element.
 				eproperty::Value<float> propertyIconTreeViewSize; //!< Size of the icon.
+				eproperty::Value<bool> propertyTextIsDecorated; //!< Size of the icon.
 			protected:
 				TreeView();
 				void init() override;
@@ -49,6 +50,7 @@ namespace ewol {
 				void drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size) override;
 			protected:
 				virtual void onChangePropertyOffsetTreeView();
+				virtual void onChangePropertyTextDecorated();
 				
 				bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) override;
 				virtual void onItemExpandEvent(const ivec2& _pos) { };

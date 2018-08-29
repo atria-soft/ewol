@@ -23,7 +23,11 @@ ewol::widget::TreeView::TreeView():
   propertyIconTreeViewSize(this, "iconTreeViewSize",
                                  20,
                                  "Size of the icon for treeView",
-                                 &ewol::widget::TreeView::onChangePropertyOffsetTreeView) {
+                                 &ewol::widget::TreeView::onChangePropertyOffsetTreeView),
+  propertyTextIsDecorated(this, "textIsDecorated",
+                                 true,
+                                 "Text is draw as decorated mode",
+                                 &ewol::widget::TreeView::onChangePropertyTextDecorated) {
 	addObjectType("ewol::widget::TreeView");
 }
 
@@ -59,7 +63,12 @@ vec2 ewol::widget::TreeView::calculateElementSize(const ivec2& _pos) {
 			iconSize += propertyIconTreeViewSize.get();
 		}
 	}
-	vec3 textSize = tmpText.calculateSizeDecorated(myTextToWrite);
+	vec3 textSize;
+	if (propertyTextIsDecorated.get() == true) {
+		textSize = tmpText.calculateSizeDecorated(myTextToWrite);
+	} else {
+		textSize = tmpText.calculateSize(myTextToWrite);
+	}
 	ivec2 count = getMatrixSize();
 	return vec2(textSize.x() + treeOffset + iconSize,
 	            etk::max(textSize.y(), iconSize) + m_paddingSizeY*2
@@ -125,9 +134,17 @@ void ewol::widget::TreeView::drawElement(const ivec2& _pos, const vec2& _start, 
 			addOObject(tmpText);
 			tmpText->setColor(fg);
 			tmpText->setPos(posStart);
-			tmpText->printDecorated(myTextToWrite);;
+			if (propertyTextIsDecorated.get() == true) {
+				tmpText->printDecorated(myTextToWrite);
+			} else {
+				tmpText->print(myTextToWrite);
+			}
 		}
 	}
+}
+
+void ewol::widget::TreeView::onChangePropertyTextDecorated() {
+	markToRedraw();
 }
 
 void ewol::widget::TreeView::onChangePropertyOffsetTreeView() {
