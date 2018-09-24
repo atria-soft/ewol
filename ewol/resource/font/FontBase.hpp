@@ -21,8 +21,8 @@ namespace ewol {
 				FontBase() {
 					addResourceType("ewol::FontFreeType");
 				}
-				void init(const etk::String& _fontName) {
-					gale::Resource::init(_fontName);
+				void init(const etk::Uri& _uri) {
+					gale::Resource::init(_uri);
 				};
 				
 				virtual ~FontBase() { };

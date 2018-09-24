@@ -7,6 +7,7 @@
 
 #include <etk/types.hpp>
 #include <ewol/resource/font/FontBase.hpp>
+#include <etk/uri/uri.hpp>
 #include <egami/egami.hpp>
 
 extern "C" {
@@ -26,9 +27,9 @@ namespace ewol {
 				void display();
 			protected:
 				FontFreeType();
-				void init(const etk::String& _fontName);
+				void init(const etk::Uri& _uri);
 			public:
-				DECLARE_RESOURCE_NAMED_FACTORY(FontFreeType);
+				DECLARE_RESOURCE_URI_FACTORY(FontFreeType);
 				virtual ~FontFreeType();
 			public:
 				

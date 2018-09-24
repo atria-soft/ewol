@@ -6,7 +6,7 @@
 
 #include <ewol/widget/ListFileSystem.hpp>
 #include <etk/tool.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/path/fileSystem.hpp>
 
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::widget::ListFileSystem);
@@ -17,11 +17,11 @@ ewol::widget::ListFileSystem::ListFileSystem() :
   signalFolderSelect(this, "folder-select", ""),
   signalFolderValidate(this, "folder-validate", ""),
   propertyPath(this, "path",
-                     "/",
+                     etk::Path("/"),
                      "Path to display",
                      &ewol::widget::ListFileSystem::onChangePropertyPath),
   propertyFile(this, "select",
-                     "",
+                     etk::Path(),
                      "selection af a specific file",
                      &ewol::widget::ListFileSystem::onChangePropertyFile),
   propertyShowFile(this, "show-file",
@@ -60,12 +60,7 @@ ewol::widget::ListFileSystem::~ListFileSystem() {
 }
 
 void ewol::widget::ListFileSystem::clearList() {
-	for (auto &it : m_list) {
-		if (it != null) {
-			ETK_DELETE(etk::FSNode, it);
-			it = null;
-		}
-	}
+	m_list.clear();
 }
 
 etk::Color<> ewol::widget::ListFileSystem::getBasicBG() {
@@ -78,35 +73,39 @@ void ewol::widget::ListFileSystem::regenerateView() {
 	m_selectedLine = -1;
 	m_list.clear();
 	m_originScrooled.setValue(0,0);
-	etk::FSNode tmpFolder(*propertyPath);
-	// get the list:
-	m_list = tmpFolder.folderGetSubList(*propertyShowHidden, *propertyShowFolder, *propertyShowFile, *propertyFilter);
+	uint32_t flags = 0;
+	if (*propertyShowHidden == true) {
+		flags |= etk::path::LIST_HIDDEN;
+	}
+	if (*propertyShowFolder == true) {
+		flags |= etk::path::LIST_FOLDER;
+	}
+	if (*propertyShowFile == true) {
+		flags |= etk::path::LIST_FILE;
+	}
+	m_list = etk::path::list(*propertyPath, flags);
 	// request a redraw ...
 	markToRedraw();
 }
 
-etk::String ewol::widget::ListFileSystem::getSelect() const {
+etk::Path ewol::widget::ListFileSystem::getSelect() const {
 	etk::String tmpVal = "";
 	if (m_selectedLine >= 0) {
-		if (m_list[m_selectedLine] != null) {
-			tmpVal = m_list[m_selectedLine]->getNameFile();
-		}
+		tmpVal = m_list[m_selectedLine].getFileName();
 	}
 	return tmpVal;
 }
 
 // select the specific file
-void ewol::widget::ListFileSystem::setSelect(const etk::String& _data) {
+void ewol::widget::ListFileSystem::setSelect(const etk::Path& _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
 	for (size_t iii=0; iii<m_list.size(); ++iii) {
-		if (m_list[iii] != null) {
-			if (m_list[iii]->getNameFile() == _data) {
-				// we find the line :
-				m_selectedLine = iii;
-				break;
-			}
+		if (m_list[iii] == _data) {
+			// we find the line :
+			m_selectedLine = iii;
+			break;
 		}
 	}
 	markToRedraw();
@@ -143,10 +142,9 @@ fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ive
 					}
 				}
 				if(    _pos.y()-offset >= 0
-				    && _pos.y()-offset < (int32_t)m_list.size()
-				    && m_list[_pos.y()-offset] != null) {
-					EWOL_VERBOSE("get filename for : '" << *m_list[_pos.y()-offset] << ":'" << m_list[_pos.y()-offset]->getNameFile() << "'");
-					return m_list[_pos.y()-offset]->getNameFile();
+				    && _pos.y()-offset < (int32_t)m_list.size()) {
+					EWOL_VERBOSE("get filename for : '" << m_list[_pos.y()-offset] << ":'" << m_list[_pos.y()-offset].getFileName() << "'");
+					return m_list[_pos.y()-offset].getFileName();
 				}
 			}
 			return "<<<ERROR>>>";
@@ -194,19 +192,12 @@ bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
 					// ".." folder
 					signalFolderSelect.emit("..");
 				} else if(    m_selectedLine-offset  >= 0
-				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && null != m_list[m_selectedLine-offset] ) {
+				           && m_selectedLine-offset < (int32_t)m_list.size() ) {
 					// generate event extern : 
-					switch(m_list[m_selectedLine-offset]->getNodeType()) {
-						case etk::typeNode_file :
-							signalFileSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						case etk::typeNode_folder :
-							signalFolderSelect.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						default:
-							EWOL_ERROR("Can not generate event on an unknow type");
-							break;
+					if(etk::path::isDirectory(m_list[m_selectedLine-offset])) {
+						signalFolderSelect.emit(m_list[m_selectedLine-offset].getFileName());
+					} else {
+						signalFileSelect.emit(m_list[m_selectedLine-offset].getFileName());
 					}
 				}
 			} else {
@@ -219,18 +210,11 @@ bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
 					// ".." folder
 					signalFolderValidate.emit("..");
 				} else if(    m_selectedLine-offset >= 0
-				           && m_selectedLine-offset < (int32_t)m_list.size()
-				           && null != m_list[m_selectedLine-offset] ) {
-					switch(m_list[m_selectedLine-offset]->getNodeType()) {
-						case etk::typeNode_file :
-							signalFileValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						case etk::typeNode_folder :
-							signalFolderValidate.emit(m_list[m_selectedLine-offset]->getNameFile());
-							break;
-						default:
-							EWOL_ERROR("Can not generate event on an unknow type");
-							break;
+				           && m_selectedLine-offset < (int32_t)m_list.size()) {
+					if(etk::path::isDirectory(m_list[m_selectedLine-offset])) {
+						signalFolderSelect.emit(m_list[m_selectedLine-offset].getFileName());
+					} else {
+						signalFileSelect.emit(m_list[m_selectedLine-offset].getFileName());
 					}
 				}
 			}

@@ -8,9 +8,9 @@
 
 #include <etk/types.hpp>
 #include <etk/etk.hpp>
-
 #include <etk/tool.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/theme/theme.hpp>
+
 #include <ethread/tools.hpp>
 #include <ethread/Mutex.hpp>
 

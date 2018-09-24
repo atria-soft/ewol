@@ -18,7 +18,7 @@ namespace ewol {
 			protected:
 				ImageDF();
 				void init();
-				void init(etk::String _genName, const etk::String& _fileName, const ivec2& _size);
+				void init(etk::String _genName, const etk::Uri& _uri, const ivec2& _size);
 			public:
 				virtual ~ImageDF() { };
 			protected:

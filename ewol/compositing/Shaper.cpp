@@ -4,7 +4,7 @@
  * @license MPL v2.0 (see license file)
  */
 
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/uri.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/compositing/Shaper.hpp>
 #include <etk/typeInfo.hpp>
@@ -15,8 +15,8 @@ const int32_t ewol::compositing::Shaper::m_vboIdCoord(0);
 const int32_t ewol::compositing::Shaper::m_vboIdPos(1);
 #define NB_VBO (2)
 
-ewol::compositing::Shaper::Shaper(const etk::String& _shaperName) :
-  m_name(_shaperName),
+ewol::compositing::Shaper::Shaper(const etk::Uri& _uri) :
+  m_uri(_uri),
   m_config(null),
   m_confIdMode(-1),
   m_confIdDisplayOutside(-1),
@@ -83,11 +83,11 @@ void ewol::compositing::Shaper::unLoadProgram() {
 }
 
 void ewol::compositing::Shaper::loadProgram() {
-	if (m_name == "") {
+	if (m_uri.isEmpty() == true) {
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
 	}
-	m_config = ewol::resource::ConfigFile::create(m_name);
+	m_config = ewol::resource::ConfigFile::create(m_uri.get());
 	if (m_config != null) {
 		m_confIdMode = m_config->request("mode");
 		m_confIdDisplayOutside = m_config->request("display-outside");
@@ -113,8 +113,9 @@ void ewol::compositing::Shaper::loadProgram() {
 		etk::String tmpFilename(basicShaderFile);
 		if (tmpFilename.find(':') == etk::String::npos) {
 			// get the relative position of the current file ...
-			etk::FSNode file(m_name);
-			tmpFilename = file.getRelativeFolder() + basicShaderFile;
+			etk::Uri tmpUri = m_uri;
+			tmpUri.setPath(m_uri.getPath().getParent() / basicShaderFile);
+			tmpFilename = tmpUri.get();
 			EWOL_DEBUG("Shaper try load shader : '" << tmpFilename << "' with base : '" << basicShaderFile << "'");
 		} else {
 			EWOL_DEBUG("Shaper try load shader : '" << tmpFilename << "'");
@@ -140,8 +141,9 @@ void ewol::compositing::Shaper::loadProgram() {
 			etk::String tmpFilename(basicImageFile);
 			if (tmpFilename.find(':') == etk::String::npos) {
 				// get the relative position of the current file ...
-				etk::FSNode file(m_name);
-				tmpFilename = file.getRelativeFolder() + basicImageFile;
+				etk::Uri tmpUri = m_uri;
+				tmpUri.setPath(m_uri.getPath().getParent() / basicImageFile);
+				tmpFilename = tmpUri.get();
 				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "' with base : '" << basicImageFile << "'");
 			} else {
 				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "'");
@@ -155,8 +157,9 @@ void ewol::compositing::Shaper::loadProgram() {
 		etk::String tmpFilename(basicColorFile);
 		if (tmpFilename.find(':') == etk::String::npos) {
 			// get the relative position of the current file ...
-			etk::FSNode file(m_name);
-			tmpFilename = file.getRelativeFolder() + basicColorFile;
+			etk::Uri tmpUri = m_uri;
+			tmpUri.setPath(m_uri.getPath().getParent() / basicColorFile);
+			tmpFilename = tmpUri.get();
 			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "' with base : '" << basicColorFile << "'");
 		} else {
 			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "'");
@@ -626,15 +629,15 @@ ewol::Padding ewol::compositing::Shaper::getBorder() {
 	return padding;
 }
 
-void ewol::compositing::Shaper::setSource(const etk::String& _newFile) {
+void ewol::compositing::Shaper::setSource(const etk::Uri& _uri) {
 	clear();
 	unLoadProgram();
-	m_name = _newFile;
+	m_uri = _uri;
 	loadProgram();
 }
 
 bool ewol::compositing::Shaper::hasSources() {
-	return m_GLprogram!=null;
+	return m_GLprogram != null;
 }
 
 
@@ -675,7 +678,7 @@ double ewol::compositing::Shaper::getConfigNumber(int32_t _id) {
 
 namespace etk {
 	template<> etk::String toString<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
-		return _obj.getSource();
+		return _obj.getSource().get();
 	}
 	template<> etk::UString toUString<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
 		return etk::toUString(etk::toString(_obj));

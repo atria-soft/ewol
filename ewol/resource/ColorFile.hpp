@@ -23,10 +23,10 @@ namespace ewol {
 			protected:
 				/**
 				 * @brief Constructor of the color property file
-				 * @param[in] _filename Name of the file needed
+				 * @param[in] _uri Name of the file needed
 				 */
 				ColorFile();
-				void init(const etk::String& _filename);
+				void init(const etk::Uri& _uri);
 			public:
 				DECLARE_RESOURCE_NAMED_FACTORY(ColorFile);
 				/**

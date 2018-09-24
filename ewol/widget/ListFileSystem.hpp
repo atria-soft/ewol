@@ -6,7 +6,6 @@
 #pragma once
 
 #include <ewol/widget/List.hpp>
-#include <etk/os/FSNode.hpp>
 #include <ewol/resource/ColorFile.hpp>
 #include <esignal/Signal.hpp>
 
@@ -20,13 +19,13 @@ namespace ewol {
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public: // signals
-				esignal::Signal<etk::String> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
-				esignal::Signal<etk::String> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
-				esignal::Signal<etk::String> signalFolderSelect;
-				esignal::Signal<etk::String> signalFolderValidate;
+				esignal::Signal<etk::Path> signalFileSelect; //!< @event "file-select" Generated when a file is selected.
+				esignal::Signal<etk::Path> signalFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
+				esignal::Signal<etk::Path> signalFolderSelect;
+				esignal::Signal<etk::Path> signalFolderValidate;
 			public: // properties
-				eproperty::Value<etk::String> propertyPath; //!< Current folder that display point on.
-				eproperty::Value<etk::String> propertyFile; //!< current selected file
+				eproperty::Value<etk::Path> propertyPath; //!< Current folder that display point on.
+				eproperty::Value<etk::Path> propertyFile; //!< current selected file
 				eproperty::Value<bool> propertyShowFile; //!< Show files elements
 				eproperty::Value<bool> propertyShowFolder; //!< Display the folders elements
 				eproperty::Value<bool> propertyShowHidden; //!< Display hidden elements
@@ -48,8 +47,7 @@ namespace ewol {
 				fluorine::Variant getData(int32_t _role, const ivec2& _pos) override;
 				bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) override;
 			protected:
-				// TODO: use shred_ptr
-				etk::Vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)
+				etk::Vector<etk::Path> m_list; //!< List of all element in the path. (they are filtered)
 				/**
 				 * @brief Clean the list of element.
 				 */
@@ -65,12 +63,12 @@ namespace ewol {
 				 * @brief Select a specific file in the path
 				 * @param[in] _data File to selested.
 				 */
-				virtual void setSelect(const etk::String& _data);
+				virtual void setSelect(const etk::Path& _data);
 				/**
 				 * @brief Get the current selected file/folder/... in the list
 				 * @return the String of the element selected.
 				 */
-				etk::String getSelect() const ;
+				etk::Path getSelect() const ;
 			protected:
 				virtual void onChangePropertyPath();
 				virtual void onChangePropertyFile();

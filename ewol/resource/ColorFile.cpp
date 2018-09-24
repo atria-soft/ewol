@@ -4,7 +4,7 @@
  * @license MPL v2.0 (see license file)
  */
 
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/uri.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/resource/ColorFile.hpp>
 #include <ejson/ejson.hpp>
@@ -19,10 +19,10 @@ ewol::resource::ColorFile::ColorFile() :
 	addResourceType("ewol::ColorFile");
 }
 
-void ewol::resource::ColorFile::init(const etk::String& _filename) {
+void ewol::resource::ColorFile::init(const etk::Uri& _uri) {
 	ethread::RecursiveLock lock(m_mutex);
-	gale::Resource::init(_filename);
-	EWOL_DEBUG("CF : load \"" << _filename << "\"");
+	gale::Resource::init(_uri.get());
+	EWOL_DEBUG("CF : load \"" << _uri << "\"");
 	reload();
 	EWOL_DEBUG("List of all color : " << m_list.getKeys());
 }
@@ -41,8 +41,8 @@ void ewol::resource::ColorFile::reload() {
 	}
 	// open and read all json elements:
 	ejson::Document doc;
-	if (doc.load(m_name) == false) {
-		EWOL_ERROR("Can not load file : '" << m_name << "' = " << etk::FSNode(m_name).getFileSystemName());
+	if (doc.load(etk::Uri(m_name)) == false) {
+		EWOL_ERROR("Can not load file : '" << m_name << "'");
 		return;
 	}
 	ejson::Array baseArray = doc["color"].toArray();

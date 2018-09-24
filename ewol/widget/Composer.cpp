@@ -7,7 +7,7 @@
 
 #include <ewol/ewol.hpp>
 #include <ewol/widget/Composer.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/uri.hpp>
 #include <ewol/widget/Manager.hpp>
 #include <ewol/context/Context.hpp>
 #include <etk/typeInfo.hpp>
@@ -20,8 +20,12 @@ ewol::widget::Composer::Composer() :
 	// nothing to do ...
 }
 
-ewol::WidgetShared ewol::widget::composerGenerateFile(const etk::String& _fileName, uint64_t _id) {
-	etk::String tmpData = etk::FSNodeReadAllData(_fileName);
+ewol::WidgetShared ewol::widget::composerGenerateFile(const etk::Uri& _uri, uint64_t _id) {
+	etk::String tmpData;
+	if (etk::uri::readAll(_uri, tmpData) == false) {
+		EWOL_ERROR("Can not read the file: " << _uri);
+		return null;
+	}
 	return ewol::widget::composerGenerateString(tmpData, _id);
 }
 
@@ -74,8 +78,12 @@ ewol::widget::Composer::~Composer() {
 	
 }
 
-bool ewol::widget::Composer::loadFromFile(const etk::String& _fileName, uint64_t _id) {
-	etk::String tmpData = etk::FSNodeReadAllData(_fileName);
+bool ewol::widget::Composer::loadFromFile(const etk::Uri& _uri, uint64_t _id) {
+	etk::String tmpData;
+	if (etk::uri::readAll(_uri, tmpData) == false) {
+		EWOL_ERROR("Can not read the file: " << _uri);
+		return false;
+	}
 	return loadFromString(tmpData, _id);
 }
 

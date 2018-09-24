@@ -25,7 +25,7 @@ namespace ewol {
 	namespace resource {
 		class TexturedFont : public ewol::resource::Texture {
 			private:
-				etk::String m_fileName[4];
+				etk::Uri m_fileName[4];
 				int32_t m_size;
 				int32_t m_height[4];
 				// specific element to have the the know if the specify element is known...

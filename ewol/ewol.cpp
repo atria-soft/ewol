@@ -11,7 +11,6 @@
 #include <etranslate/etranslate.hpp>
 
 #include <gale/context/commandLine.hpp>
-#include <etk/os/FSNode.hpp>
 #include <gale/Dimension.hpp>
 
 #ifndef EWOL_VERSION

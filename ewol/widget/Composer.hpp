@@ -8,6 +8,7 @@
 #include <etk/types.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/widget/Container.hpp>
+#include <etk/uri/uri.hpp>
 
 namespace ewol {
 	namespace widget {
@@ -21,7 +22,7 @@ namespace ewol {
 		class Composer : public ewol::widget::Container {
 			public:
 				eproperty::Value<bool> propertyRemoveIfUnderRemove; //!< Remove the composer if sub element request a remove
-				eproperty::Value<etk::String> propertySubFile; //!< If loading a sub-file, we must do it here ==> permit to con,figure it in the xml and not have wrong display
+				eproperty::Value<etk::Uri> propertySubFile; //!< If loading a sub-file, we must do it here ==> permit to configure it in the xml and not have wrong display
 			protected:
 				/**
 				 * @brief Constructor
@@ -35,12 +36,12 @@ namespace ewol {
 				virtual ~Composer();
 				/**
 				 * @brief load a composition with a file
-				 * @param[in] _fileName Name of the file
+				 * @param[in] _uri Name of the file
 				 * @param[in] _id Unique ID that is used in replacing the balise "{ID}" inside the File (do nothing if == 0)
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */
-				bool loadFromFile(const etk::String& _fileName, uint64_t _id=0);
+				bool loadFromFile(const etk::Uri& _uri, uint64_t _id=0);
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _composerXmlString xml to parse directly
@@ -57,6 +58,6 @@ namespace ewol {
 				virtual void onChangePropertySubFile();
 		};
 		ewol::WidgetShared composerGenerateString(const etk::String& _data = "", uint64_t _id=0);
-		ewol::WidgetShared composerGenerateFile(const etk::String& _data = "", uint64_t _id=0);
+		ewol::WidgetShared composerGenerateFile(const etk::Uri& _uri = "", uint64_t _id=0);
 	};
 };

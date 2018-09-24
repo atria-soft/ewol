@@ -6,7 +6,6 @@
 
 #include <etk/types.hpp>
 #include <etk/Vector.hpp>
-#include <etk/os/FSNode.hpp>
 
 
 #include <gale/renderer/openGL/openGL.hpp>
@@ -56,42 +55,30 @@ ewol::resource::FontFreeType::FontFreeType() {
 	m_FileSize = 0;
 }
 
-void ewol::resource::FontFreeType::init(const etk::String& _fontName) {
+void ewol::resource::FontFreeType::init(const etk::Uri& _uri) {
 	ethread::RecursiveLock lock(m_mutex);
-	ewol::resource::FontBase::init(_fontName);
-	etk::FSNode myfile(_fontName);
-	if (myfile.exist() == false) {
-		EWOL_ERROR("File Does not exist : " << myfile);
+	ewol::resource::FontBase::init(_uri);
+	auto fileIO = etk::uri::get(_uri);
+	if (fileIO == null) {
+		EWOL_ERROR("File Does not exist : " << _uri);
 		return;
 	}
-	m_FileSize = myfile.fileSize();
-	if (m_FileSize == 0) {
-		EWOL_ERROR("This file is empty : " << myfile);
+	if (fileIO->open(etk::io::OpenMode::Read) == false) {
+		EWOL_ERROR("Can not open the file : " << _uri);
 		return;
 	}
-	if (myfile.fileOpenRead() == false) {
-		EWOL_ERROR("Can not open the file : " << myfile);
-		return;
-	}
-	// allocate data
-	m_FileBuffer.resize(m_FileSize, 0);
-	if (m_FileBuffer.size() != m_FileSize) {
-		EWOL_ERROR("Error Memory allocation size=" << _fontName);
-		return;
-	}
-	// load data from the file :
-	myfile.fileRead(&m_FileBuffer[0], 1, m_FileSize);
+	m_FileBuffer = fileIO->readAll<FT_Byte>();
 	// close the file:
-	myfile.fileClose();
+	fileIO->close();
 	// load Face ...
-	int32_t error = FT_New_Memory_Face(library, &m_FileBuffer[0], m_FileSize, 0, &m_fftFace );
+	int32_t error = FT_New_Memory_Face(library, &m_FileBuffer[0], m_FileBuffer.size(), 0, &m_fftFace );
 	if( FT_Err_Unknown_File_Format == error) {
 		EWOL_ERROR("... the font file could be opened and read, but it appears ... that its font format is unsupported");
 	} else if (0 != error) {
 		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_INFO("load font : \"" << _fontName << "\" glyph count = " << (int)m_fftFace->num_glyphs);
+		EWOL_INFO("load font : \"" << _uri << "\" glyph count = " << (int)m_fftFace->num_glyphs);
 		m_init = true;
 		//display();
 	}

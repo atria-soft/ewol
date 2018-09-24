@@ -5,7 +5,6 @@
  */
 
 #include <etk/types.hpp>
-#include <etk/os/FSNode.hpp>
 #include <egami/egami.hpp>
 
 #include <gale/resource/Manager.hpp>
@@ -44,6 +43,26 @@ ewol::resource::TexturedFont::TexturedFont():
 	addResourceType("ewol::resource::TexturedFont");
 }
 
+/**
+ * @brief Get all the Path contain in the specidy path:
+ * @param[in] _path Generic path to parse ...
+ * @return The list of path found
+ * @example[start]
+ *     auto out = explodeMultiplePath("DATA:///font?lib=ewol");
+ *     // out contain: {"DATA:///font", "DATA:///font?lib=ewol"}
+ * @example[stop]
+ */
+static etk::Vector<etk::Uri> explodeMultiplePath(const etk::Uri& _uri) {
+	etk::Vector<etk::Uri> out;
+	out.pushBack(_uri);
+	if (_uri.getQuery().exist("lib") == true) {
+		etk::Uri tmp = _uri;
+		tmp.getQuery().erase("lib");
+		out.pushBack(tmp);
+	}
+	return out;
+}
+
 void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
@@ -76,84 +95,82 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	
 	if (tmpPos == null) {
 		m_size = 1;
-		EWOL_CRITICAL("Can not parse the font name : '" << _fontName << "' ??? ':' " );
+		EWOL_CRITICAL("Can not parse the font name: '" << _fontName << "' ??? ':' " );
 		return;
 	} else {
 		if (sscanf(tmpPos+1, "%d", &tmpSize)!=1) {
 			m_size = 1;
-			EWOL_CRITICAL("Can not parse the font name : '" << _fontName << "'  == > size ???");
+			EWOL_CRITICAL("Can not parse the font name: '" << _fontName << "'  == > size ???");
 			return;
 		}
 	}
 	etk::String localName(_fontName, 0, (tmpPos - tmpData));
 	if (tmpSize>400) {
-		EWOL_ERROR("Font size too big ==> limit at 400 when exxeed ==> error : " << tmpSize << "==>30");
+		EWOL_ERROR("Font size too big ==> limit at 400 when exxeed ==> error: " << tmpSize << "==>30");
 		tmpSize = 30;
 	}
 	m_size = tmpSize;
 	
-	etk::Vector<etk::String> folderList;
+	etk::Vector<etk::Uri> folderList;
 	if (ewol::getContext().getFontDefault().getUseExternal() == true) {
 		#if defined(__TARGET_OS__Android)
-			folderList.pushBack("ROOT:system/fonts");
+			folderList.pushBack(etk::Path("/system/fonts"));
 		#elif defined(__TARGET_OS__Linux)
-			folderList.pushBack("ROOT:usr/share/fonts");
+			folderList.pushBack(etk::Path("/usr/share/fonts/truetype"));
 		#endif
 	}
-	etk::String applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
-	etk::Vector<etk::String> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
-	for (auto &it : applicationBaseFontList) {
+	etk::Uri applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
+	for (auto &it : explodeMultiplePath(applicationBaseFont)) {
 		folderList.pushBack(it);
 	}
-	for (size_t folderID=0; folderID<folderList.size() ; folderID++) {
-		etk::FSNode myFolder(folderList[folderID]);
-		// find the real Font name :
-		etk::Vector<etk::String> output;
-		myFolder.folderGetRecursiveFiles(output);
+	for (size_t folderID = 0; folderID < folderList.size() ; folderID++) {
+		etk::Vector<etk::Uri> output = etk::uri::listRecursive(folderList[folderID]);
+		
 		etk::Vector<etk::String> split = etk::split(localName, ';');
-		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
+		EWOL_INFO("try to find font named : " << split << " in: " << output);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
 		for (size_t jjj=0; jjj<split.size(); jjj++) {
 			EWOL_INFO("    try with : '" << split[jjj] << "'");
 			for (size_t iii=0; iii<output.size(); iii++) {
+				etk::String nameFolder = output[iii].getPath().getString();
 				//EWOL_DEBUG(" file : " << output[iii]);
-				if(    etk::end_with(output[iii], split[jjj]+"-"+"bold"+".ttf", false) == true
-				    || etk::end_with(output[iii], split[jjj]+"-"+"b"+".ttf", false) == true
-				    || etk::end_with(output[iii], split[jjj]+"-"+"bd"+".ttf", false) == true
-				    || etk::end_with(output[iii], split[jjj]+"bold"+".ttf", false) == true
-				    || etk::end_with(output[iii], split[jjj]+"bd"+".ttf", false) == true
-				    || etk::end_with(output[iii], split[jjj]+"b"+".ttf", false) == true) {
+				if(    etk::end_with(nameFolder, split[jjj]+"-"+"bold"+".ttf", false) == true
+				    || etk::end_with(nameFolder, split[jjj]+"-"+"b"+".ttf", false) == true
+				    || etk::end_with(nameFolder, split[jjj]+"-"+"bd"+".ttf", false) == true
+				    || etk::end_with(nameFolder, split[jjj]+"bold"+".ttf", false) == true
+				    || etk::end_with(nameFolder, split[jjj]+"bd"+".ttf", false) == true
+				    || etk::end_with(nameFolder, split[jjj]+"b"+".ttf", false) == true) {
 					EWOL_INFO(" find Font [Bold]        : " << output[iii]);
 					m_fileName[ewol::font::Bold] = output[iii];
 					hasFindAFont = true;
-				} else if(    etk::end_with(output[iii], split[jjj]+"-"+"oblique"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"italic"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"Light"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"i"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"oblique"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"italic"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"light"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"i"+".ttf", false) == true) {
+				} else if(    etk::end_with(nameFolder, split[jjj]+"-"+"oblique"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"italic"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"Light"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"i"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"oblique"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"italic"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"light"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"i"+".ttf", false) == true) {
 					EWOL_INFO(" find Font [Italic]      : " << output[iii]);
 					m_fileName[ewol::font::Italic] = output[iii];
 					hasFindAFont = true;
-				} else if(    etk::end_with(output[iii], split[jjj]+"-"+"bolditalic"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"boldoblique"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"bi"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"z"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"bolditalic"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"boldoblique"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"bi"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"z"+".ttf", false) == true) {
+				} else if(    etk::end_with(nameFolder, split[jjj]+"-"+"bolditalic"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"boldoblique"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"bi"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"z"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"bolditalic"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"boldoblique"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"bi"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"z"+".ttf", false) == true) {
 					EWOL_INFO(" find Font [Bold-Italic] : " << output[iii]);
 					m_fileName[ewol::font::BoldItalic] = output[iii];
 					hasFindAFont = true;
-				} else if(    etk::end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"regular"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+"r"+".ttf", false) == true
-				           || etk::end_with(output[iii], split[jjj]+".ttf", false) == true) {
+				} else if(    etk::end_with(nameFolder, split[jjj]+"-"+"regular"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"-"+"r"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"regular"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+"r"+".ttf", false) == true
+				           || etk::end_with(nameFolder, split[jjj]+".ttf", false) == true) {
 					EWOL_INFO(" find Font [Regular]     : " << output[iii]);
 					m_fileName[ewol::font::Regular] = output[iii];
 					hasFindAFont = true;
@@ -176,7 +193,7 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	// try to find the reference mode :
 	enum ewol::font::mode refMode = ewol::font::Regular;
 	for(int32_t iii=3; iii >= 0; iii--) {
-		if (m_fileName[iii].size() != 0) {
+		if (m_fileName[iii].isEmpty() == false) {
 			refMode = (enum ewol::font::mode)iii;
 		}
 	}
@@ -184,7 +201,7 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	EWOL_DEBUG("         set reference mode : " << refMode);
 	// generate the wrapping on the preventing error
 	for(int32_t iii=3; iii >= 0; iii--) {
-		if (m_fileName[iii].size() != 0) {
+		if (m_fileName[iii].isEmpty() == false) {
 			m_modeWraping[iii] = (enum ewol::font::mode)iii;
 		} else {
 			m_modeWraping[iii] = refMode;
@@ -192,7 +209,7 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 	}
 	
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		if (m_fileName[iiiFontId].size() == 0) {
+		if (m_fileName[iiiFontId].isEmpty() == true) {
 			EWOL_DEBUG("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size );
 			m_font[iiiFontId] = null;
 			continue;

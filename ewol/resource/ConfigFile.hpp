@@ -19,7 +19,7 @@ namespace ewol {
 				etk::Map<etk::String, ejson::Value> m_list;
 			protected:
 				ConfigFile();
-				void init(const etk::String& _filename);
+				void init(const etk::Uri& _filename);
 			public:
 				virtual ~ConfigFile();
 				DECLARE_RESOURCE_NAMED_FACTORY(ConfigFile);

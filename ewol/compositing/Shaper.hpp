@@ -38,7 +38,7 @@ namespace ewol {
 		// TODO : Abstaraction between states (call by name and the system greate IDs
 		class Shaper : public ewol::Compositing {
 			private:
-				etk::String m_name; //!< Name of the configuration of the shaper.
+				etk::Uri m_uri; //!< Name of the configuration of the shaper.
 				// External theme config:
 				ememory::SharedPtr<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
 				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
@@ -92,9 +92,9 @@ namespace ewol {
 			public:
 				/**
 				 * @brief generic constructor
-				 * @param[in] _shaperName Name of the file that might be loaded
+				 * @param[in] _uri URI of the file that might be loaded
 				 */
-				Shaper(const etk::String& _shaperName="");
+				Shaper(const etk::Uri& _uri="");
 				/**
 				 * @brief generic destructor
 				 */
@@ -164,15 +164,15 @@ namespace ewol {
 				ewol::Padding getBorder();
 				/**
 				 * @brief change the shaper Source
-				 * @param[in] _newFile New file of the shaper
+				 * @param[in] _uri New file of the shaper
 				 */
-				void setSource(const etk::String& _newFile);
+				void setSource(const etk::Uri& _uri);
 				/**
 				 * @brief get the shaper file Source
 				 * @return the shapper file name
 				 */
-				const etk::String& getSource() const {
-					return m_name;
+				const etk::Uri& getSource() const {
+					return m_uri;
 				};
 				/**
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
@@ -284,10 +284,10 @@ namespace ewol {
 				 *    == operator
 				 *****************************************************/
 				bool operator== (const Shaper& _obj) const {
-					return _obj.m_name == m_name;
+					return _obj.m_uri == m_uri;
 				}
 				bool operator!= (const Shaper& _obj) const {
-					return _obj.m_name != m_name;
+					return _obj.m_uri != m_uri;
 				}
 		};
 	}

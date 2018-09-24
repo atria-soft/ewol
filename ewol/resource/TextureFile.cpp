@@ -45,16 +45,16 @@ void ewol::resource::TextureFile::init() {
 	ewol::resource::Texture::init();
 }
 
-void ewol::resource::TextureFile::init(etk::String _genName, const etk::String& _tmpFilename, const ivec2& _size) {
+void ewol::resource::TextureFile::init(etk::String _genName, const etk::Uri& _uri, const ivec2& _size) {
 	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
-	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpFilename=" << _tmpFilename << " size=" << _size);
-	egami::Image tmp = egami::load(_tmpFilename, _size);
+	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _uri=" << _uri << " size=" << _size);
+	egami::Image tmp = egami::load(_uri, _size);
 	set(etk::move(tmp));
 	//m_lastSize = m_realImageSize;
 	#ifdef GENERATE_DISTANCE_FIELD_MODE
-		//egami::generateDistanceFieldFile(_tmpFilename, etk::String(_tmpFilename, 0, _tmpFilename.size()-4) + ".bmp");
-		egami::generateDistanceFieldFile(_tmpFilename, etk::String(_tmpFilename, 0, _tmpFilename.size()-4) + ".edf");
+		//egami::generateDistanceFieldFile(_uri, etk::String(_uri, 0, _uri.size()-4) + ".bmp");
+		egami::generateDistanceFieldFile(_uri, etk::String(_uri, 0, _uri.size()-4) + ".edf");
 	#endif
 }
 

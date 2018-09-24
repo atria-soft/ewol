@@ -13,7 +13,7 @@ namespace ewol {
 	namespace resource {
 		class DistanceFieldFont : public ewol::resource::Texture {
 			private:
-				etk::String m_fileName;
+				etk::Uri m_fileName;
 				float m_sizeRatio;
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...

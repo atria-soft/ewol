@@ -4,7 +4,7 @@
  * @license MPL v2.0 (see license file)
  */
 
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/uri.hpp>
 #include <ewol/debug.hpp>
 #include <ewol/resource/ConfigFile.hpp>
 #include <gale/resource/Manager.hpp>
@@ -21,10 +21,10 @@ ewol::resource::ConfigFile::ConfigFile() :
 	addResourceType("ewol::ConfigFile");
 }
 
-void ewol::resource::ConfigFile::init(const etk::String& _filename) {
+void ewol::resource::ConfigFile::init(const etk::Uri& _uri) {
 	ethread::RecursiveLock lock(m_mutex);
-	gale::Resource::init(_filename);
-	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
+	gale::Resource::init(_uri.get());
+	EWOL_DEBUG("SFP : load \"" << _uri << "\"");
 	reload();
 }
 
@@ -41,7 +41,7 @@ void ewol::resource::ConfigFile::reload() {
 			m_list.getValue(iii) = ejson::empty();
 		}
 	}
-	m_doc.load(m_name);
+	m_doc.load(etk::Uri(m_name));
 	
 	for (auto elementName : m_list.getKeys()) {
 		if (m_doc[elementName].exist() == true) {

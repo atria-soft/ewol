@@ -5,7 +5,7 @@
  */
 
 #include <etk/types.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/uri.hpp>
 #include <egami/egami.hpp>
 
 #include <gale/resource/Manager.hpp>
@@ -34,41 +34,59 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont() :
 	m_sizeRatio = 1.0f;
 }
 
+/**
+ * @brief Get all the Path contain in the specidy path:
+ * @param[in] _path Generic path to parse ...
+ * @return The list of path found
+ * @example[start]
+ *     auto out = explodeMultiplePath("DATA:///font?lib=ewol");
+ *     // out contain: {"DATA:///font", "DATA:///font?lib=ewol"}
+ * @example[stop]
+ */
+static etk::Vector<etk::Uri> explodeMultiplePath(const etk::Uri& _uri) {
+	etk::Vector<etk::Uri> out;
+	out.pushBack(_uri);
+	if (_uri.getQuery().exist("lib") == true) {
+		etk::Uri tmp = _uri;
+		tmp.getQuery().erase("lib");
+		out.pushBack(tmp);
+	}
+	return out;
+}
+
 void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
 	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_fontName);
 	etk::String localName = _fontName;
-	etk::Vector<etk::String> folderList;
-	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
+	etk::Vector<etk::Uri> folderList;
+	if (ewol::getContext().getFontDefault().getUseExternal() == true) {
 		#if defined(__TARGET_OS__Android)
-			folderList.pushBack("ROOT:system/fonts");
+			folderList.pushBack(etk::Path("/system/fonts"));
 		#elif defined(__TARGET_OS__Linux)
-			folderList.pushBack("ROOT:usr/share/fonts/truetype");
+			folderList.pushBack(etk::Path("/usr/share/fonts/truetype"));
 		#endif
 	}
-	etk::String applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
-	etk::Vector<etk::String> applicationBaseFontList = etk::FSNodeExplodeMultiplePath(applicationBaseFont);
-	for (auto &it : applicationBaseFontList) {
+	etk::Uri applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
+	for (auto &it : explodeMultiplePath(applicationBaseFont)) {
 		folderList.pushBack(it);
 	}
 	for (size_t folderID = 0; folderID < folderList.size() ; folderID++) {
-		etk::FSNode myFolder(folderList[folderID]);
-		// find the real Font name :
-		etk::Vector<etk::String> output;
-		myFolder.folderGetRecursiveFiles(output);
+		etk::Vector<etk::Uri> output = etk::uri::listRecursive(folderList[folderID]);
+		
 		etk::Vector<etk::String> split = etk::split(localName, ';');
-		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
+		EWOL_INFO("try to find font named : " << split << " in: " << output);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
 		for (size_t jjj=0; jjj<split.size(); jjj++) {
 			EWOL_INFO("    try with : '" << split[jjj] << "'");
 			for (size_t iii=0; iii<output.size(); iii++) {
+				etk::String nameFolder = output[iii].getPath().getString();
 				//EWOL_DEBUG(" file : " << output[iii]);
-				if(    true == etk::end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false)
-				    || true == etk::end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false)
-				    || true == etk::end_with(output[iii], split[jjj]+"regular"+".ttf", false)
-				    || true == etk::end_with(output[iii], split[jjj]+"r"+".ttf", false)
-				    || true == etk::end_with(output[iii], split[jjj]+".ttf", false)) {
+				if(    true == etk::end_with(nameFolder, split[jjj]+"-"+"regular"+".ttf", false)
+				    || true == etk::end_with(nameFolder, split[jjj]+"-"+"r"+".ttf", false)
+				    || true == etk::end_with(nameFolder, split[jjj]+"regular"+".ttf", false)
+				    || true == etk::end_with(nameFolder, split[jjj]+"r"+".ttf", false)
+				    || true == etk::end_with(nameFolder, split[jjj]+".ttf", false)) {
 					EWOL_INFO(" find Font [Regular]     : " << output[iii]);
 					m_fileName = output[iii];
 					hasFindAFont=true;
@@ -90,8 +108,8 @@ void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
 		}
 	}
 	
-	if (m_fileName.size() == 0) {
-		EWOL_ERROR("can not load FONT name : '" << m_fileName << "'" );
+	if (m_fileName.isEmpty() == true) {
+		EWOL_ERROR("can not load FONT name : '" << _fontName << "'" );
 		m_font = null;
 		return;
 	}
@@ -370,24 +388,30 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 	doc.add("m_lastRawHeigh", ejson::Number(m_lastRawHeigh));
 	doc.add("m_borderSize", ejson::Number(m_borderSize));
 	doc.add("m_textureBorderSize", ejson::String(m_textureBorderSize));
-	doc.store(m_fileName + ".json");
-	egami::store(m_data, m_fileName + ".bmp");
-	egami::store(m_data, m_fileName + ".png");
+	etk::Uri tmpUri = m_fileName;
+	tmpUri.setPath(m_fileName.getPath() + ".json");
+	doc.store(tmpUri);
+	tmpUri.setPath(m_fileName.getPath() + ".bmp");
+	egami::store(m_data, tmpUri);
+	tmpUri.setPath(m_fileName.getPath() + ".png");
+	egami::store(m_data, tmpUri);
 }
 
 bool ewol::resource::DistanceFieldFont::importFromFile() {
 	ethread::RecursiveLock lock(m_mutex);
-	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << m_fileName << ".json'");
+	etk::Uri tmpUriJson = m_fileName;
+	tmpUriJson.setPath(m_fileName.getPath() + ".json");
+	etk::Uri tmpUriBmp = m_fileName;
+	tmpUriBmp.setPath(m_fileName.getPath() + ".bmp");
+	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << tmpUriJson << "'");
 	// test file existance:
-	etk::FSNode fileJSON(m_fileName + ".json");
-	etk::FSNode fileBMP(m_fileName + ".bmp");
-	if (    fileJSON.exist() == false
-	     || fileBMP.exist() == false) {
+	if (    etk::uri::exist(tmpUriJson) == false
+	     || etk::uri::exist(tmpUriBmp) == false) {
 		EWOL_DEBUG("Does not import file for distance field system");
 		return false;
 	}
 	ejson::Document doc;
-	doc.load(m_fileName + ".json");
+	doc.load(tmpUriJson);
 	
 	m_sizeRatio = doc["m_sizeRatio"].toNumber().get(0);
 	m_lastGlyphPos = doc["m_lastGlyphPos"].toString().get("0,0");
@@ -416,6 +440,6 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 		prop.m_exist = tmpObj["m_exist"].toBoolean().get(false);
 		m_listElement.pushBack(prop);
 	}
-	m_data = egami::load(m_fileName + ".bmp");
+	m_data = egami::load(tmpUriBmp);
 	return m_data.exist();
 }

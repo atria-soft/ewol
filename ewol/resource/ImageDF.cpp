@@ -25,13 +25,13 @@ void ewol::resource::ImageDF::init() {
 	ewol::resource::Texture::init();
 }
 
-void ewol::resource::ImageDF::init(etk::String _genName, const etk::String& _tmpfileName, const ivec2& _size) {
+void ewol::resource::ImageDF::init(etk::String _genName, const etk::Uri& _uri, const ivec2& _size) {
 	ethread::RecursiveLock lock(m_mutex);
 	ewol::resource::Texture::init(_genName);
-	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
-	m_data = egami::load(_tmpfileName, _size);
+	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _uri=" << _uri << " size=" << _size);
+	m_data = egami::load(_uri, _size);
 	if (m_data.exist() == false) {
-		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
+		EWOL_ERROR("ERROR when loading the image : " << _uri);
 	}
 	ivec2 tmp = m_data.getSize();
 	m_realImageSize = vec2(tmp.x(), tmp.y());

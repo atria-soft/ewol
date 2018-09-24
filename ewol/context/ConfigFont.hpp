@@ -6,6 +6,7 @@
 #pragma once
 
 #include <ewol/debug.hpp>
+#include <etk/uri/uri.hpp>
 
 namespace ewol {
 	namespace context {
@@ -17,20 +18,20 @@ namespace ewol {
 				ConfigFont();
 				virtual ~ConfigFont();
 			private:
-				etk::String m_folder;
+				etk::Uri m_folder;
 			public:
 				/**
 				 * @brief Specify the default font folder for the Ewol search system (only needed when embended font)
 				 * @param[in] _folder basic folder of the font (ex: DATA:fonts)
 				 */
-				void setFolder(const etk::String& _folder) {
+				void setFolder(const etk::Uri& _folder) {
 					m_folder = _folder;
 				};
 				/**
 				 * @brief get the default font folder.
 				 * @return The default font folder.
 				 */
-				const etk::String& getFolder() {
+				const etk::Uri& getFolder() {
 					return m_folder;
 				};
 			private:
