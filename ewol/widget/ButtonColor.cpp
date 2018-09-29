@@ -25,7 +25,7 @@ ETK_DECLARE_TYPE(ewol::widget::ButtonColor);
 ewol::widget::ButtonColor::ButtonColor() :
   signalChange(this, "change", "Button color change value"),
   propertyValue(this, "color", etk::color::black, "Current color", &ewol::widget::ButtonColor::onChangePropertyValue),
-  propertyShape(this, "shape", "{ewol}THEME:GUI:Button.json", "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
+  propertyShape(this, "shape", etk::Uri("THEME_GUI://Button.json?lib=ewol"), "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
   m_widgetContextMenu(null) {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);

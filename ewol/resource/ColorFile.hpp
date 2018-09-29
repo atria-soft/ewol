@@ -28,7 +28,7 @@ namespace ewol {
 				ColorFile();
 				void init(const etk::Uri& _uri);
 			public:
-				DECLARE_RESOURCE_NAMED_FACTORY(ColorFile);
+				DECLARE_RESOURCE_URI_FACTORY(ColorFile);
 				/**
 				 * @brief Simple Destructor of this class (nothing specific ...)
 				 */

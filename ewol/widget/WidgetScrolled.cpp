@@ -15,11 +15,11 @@ ETK_DECLARE_TYPE(ewol::widget::WidgetScrolled);
 
 ewol::widget::WidgetScrolled::WidgetScrolled() :
   propertyShapeVert(this, "shape-vert",
-                          "{ewol}THEME:GUI:WidgetScrolled.json",
+                          etk::Uri("THEME_GUI://WidgetScrolled.json?lib=ewol"),
                           "shape for the vertical display",
                           &ewol::widget::WidgetScrolled::onChangePropertyShapeVert),
   propertyShapeHori(this, "shape-hori",
-                          "{ewol}THEME:GUI:WidgetScrolled.json",
+                          etk::Uri("THEME_GUI://WidgetScrolled.json?lib=ewol"),
                           "shape for the horizonal display",
                           &ewol::widget::WidgetScrolled::onChangePropertyShapeHori),
   m_shaperH(),

@@ -18,8 +18,16 @@
 ETK_DECLARE_TYPE(ewol::widget::Windows);
 
 ewol::widget::Windows::Windows() :
-  propertyColorConfiguration(this, "file-color", "{ewol}THEME:COLOR:Windows.json", "color file link on the theme", &ewol::widget::Windows::onChangePropertyColor),
-  propertyTitle(this, "title", "No title", "Title of the windows", &ewol::widget::Windows::onChangePropertyTitle),
+  propertyColorConfiguration(this,
+                             "file-color",
+                             etk::Uri("THEME_COLOR://Windows.json?lib=ewol"),
+                             "File color of the Windows",
+                             &ewol::widget::Windows::onChangePropertyColor),
+  propertyTitle(this,
+                "title",
+                "No title",
+                "Title of the windows",
+                &ewol::widget::Windows::onChangePropertyTitle),
   m_resourceColor(null),
   m_colorBg(-1) {
 	addObjectType("ewol::widget::Windows");

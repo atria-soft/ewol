@@ -22,7 +22,7 @@ namespace ewol {
 				void init(const etk::Uri& _filename);
 			public:
 				virtual ~ConfigFile();
-				DECLARE_RESOURCE_NAMED_FACTORY(ConfigFile);
+				DECLARE_RESOURCE_URI_FACTORY(ConfigFile);
 			public:
 				void reload();
 				

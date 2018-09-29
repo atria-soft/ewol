@@ -41,7 +41,7 @@ namespace ewol {
 				esignal::Signal<> signalLeave;
 				esignal::Signal<bool> signalValue;
 			public: // propertie list
-				eproperty::Value<etk::String> propertyShape; //!< shaper name property
+				eproperty::Value<etk::Uri> propertyShape; //!< shaper name property
 				eproperty::Value<bool> propertyValue; //!< Current state of the button.
 				eproperty::List<enum buttonLock> propertyLock; //!< Current lock state of the button.
 				eproperty::Value<bool> propertyToggleMode; //!< The button is able to toggle.

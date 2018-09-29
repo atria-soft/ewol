@@ -38,7 +38,7 @@ namespace ewol {
 				esignal::Signal<etk::String> signalModify; //!< data change
 			public: // propertie list
 				eproperty::Value<bool> propertyPassword; //!< Disable display of the content of the entry
-				eproperty::Value<etk::String> propertyShape;
+				eproperty::Value<etk::Uri> propertyShape;
 				eproperty::Value<etk::String> propertyValue; //!< string that must be displayed
 				eproperty::Range<int32_t> propertyMaxCharacter; //!< number max of xharacter in the list
 				eproperty::Value<etk::String> propertyRegex; //!< regular expression value

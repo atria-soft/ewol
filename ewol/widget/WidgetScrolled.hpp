@@ -23,8 +23,8 @@ namespace ewol {
 		 */
 		class WidgetScrolled : public ewol::Widget {
 			public: // properties:
-				eproperty::Value<etk::String> propertyShapeVert; //!< Vertical shaper name
-				eproperty::Value<etk::String> propertyShapeHori; //!< Horizontal shaper name
+				eproperty::Value<etk::Uri> propertyShapeVert; //!< Vertical shaper name
+				eproperty::Value<etk::Uri> propertyShapeHori; //!< Horizontal shaper name
 				// TODO : All property
 			public:
 				enum scrollingMode {

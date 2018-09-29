@@ -27,7 +27,7 @@ ewol::widget::Entry::Entry() :
                          "Not display content in password mode",
                          &ewol::widget::Entry::onChangePropertyPassword),
   propertyShape(this, "shape",
-                      "{ewol}THEME:GUI:Entry.json",
+                      etk::Uri("THEME_GUI://Entry.json?lib=ewol"),
                       "Shaper to display the background",
                       &ewol::widget::Entry::onChangePropertyShaper),
   propertyValue(this, "value",

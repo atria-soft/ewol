@@ -27,7 +27,7 @@ ewol::widget::CheckBox::CheckBox() :
                       "Basic value of the widget",
                       &ewol::widget::CheckBox::onChangePropertyValue),
   propertyShape(this, "shape",
-                      "{ewol}THEME:GUI:CheckBox.json",
+                      etk::Uri("THEME_GUI://CheckBox.json?lib=ewol"),
                       "The display name for config file",
                       &ewol::widget::CheckBox::onChangePropertyShape),
   m_mouseHover(false),

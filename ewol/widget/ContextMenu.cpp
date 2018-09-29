@@ -18,7 +18,7 @@ ETK_DECLARE_TYPE(enum ewol::widget::ContextMenu::markPosition);
 
 ewol::widget::ContextMenu::ContextMenu():
   propertyShape(this, "shape",
-                      "{ewol}THEME:GUI:ContextMenu.json",
+                      etk::Uri("THEME_GUI://ContextMenu.json?lib=ewol"),
                       "the display name for config file",
                       &ewol::widget::ContextMenu::onChangePropertyShape),
   propertyArrowPos(this, "arrow-position",

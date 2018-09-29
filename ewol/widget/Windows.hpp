@@ -21,7 +21,7 @@ namespace ewol {
 		 */
 		class Windows : public ewol::Widget {
 			public:
-				eproperty::Value<etk::String> propertyColorConfiguration; //!< Configuration file of the windows theme
+				eproperty::Value<etk::Uri> propertyColorConfiguration; //!< Configuration file of the windows theme
 				eproperty::Value<etk::String> propertyTitle; //!< Current title of the windows
 			protected:
 				ememory::SharedPtr<ewol::resource::ColorFile> m_resourceColor; //!< theme color property (name of file in @ref propertyColorConfiguration)

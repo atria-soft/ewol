@@ -25,7 +25,7 @@ namespace ewol {
 				esignal::Signal<etk::Color<>> signalChange;
 			public: // properties
 				eproperty::Value<etk::Color<>> propertyValue; //!< Current color.
-				eproperty::Value<etk::String> propertyShape; //!< Current color.
+				eproperty::Value<etk::Uri> propertyShape; //!< Current color.
 			private:
 				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 				ewol::compositing::Text m_text; //!< Compositing Test display.

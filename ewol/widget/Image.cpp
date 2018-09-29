@@ -28,7 +28,7 @@ ewol::widget::Image::Image() :
   m_colorId(-1) {
 	addObjectType("ewol::widget::Image");
 	m_imageRenderSize = vec2(0,0);
-	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:Image.json");
+	m_colorProperty = ewol::resource::ColorFile::create(etk::Uri("THEME_COLOR://Image.json?lib=ewol"));
 	if (m_colorProperty != null) {
 		m_colorId = m_colorProperty->request("foreground");
 	}

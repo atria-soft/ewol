@@ -66,10 +66,10 @@ namespace ewol {
 		class FileChooser : public ewol::widget::Composer {
 			public: // signals
 				esignal::Signal<> signalCancel; //!< abort the display of the pop-up or press cancel button
-				esignal::Signal<etk::String> signalValidate; //!< select file(s)
+				esignal::Signal<etk::Path> signalValidate; //!< select file(s)
 			public: // properties
-				eproperty::Value<etk::String> propertyPath; //!< Current path to explore
-				eproperty::Value<etk::String> propertyFile; //!< Selected file
+				eproperty::Value<etk::Path> propertyPath; //!< Current path to explore
+				eproperty::Value<etk::Path> propertyFile; //!< Selected file
 				eproperty::Value<etk::String> propertyLabelTitle; //!< Label of the pop-up (can use translation)
 				eproperty::Value<etk::String> propertyLabelValidate; //!< Label of validate button of the pop-up (can use translation)
 				eproperty::Value<etk::String> propertyLabelCancel; //!< Label of cancel/close button of the pop-up (can use translation)
@@ -80,7 +80,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(FileChooser, "FileChooser");
 				virtual ~FileChooser();
 			private:
-				etk::String getCompleateFileName();
+				etk::Path getCompleateFileName();
 				void updateCurrentFolder();
 			public:
 				void onGetFocus() override;
@@ -88,11 +88,12 @@ namespace ewol {
 				// callback functions:
 				void onCallbackEntryFolderChangeValue(const etk::String& _value);
 				void onCallbackEntryFileChangeValue(const etk::String& _value);
+				void onCallbackEntryFileChangeValidate(const etk::String& _value);
 				void onCallbackButtonCancelPressed();
 				void onCallbackHidenFileChangeChangeValue(const bool& _value);
-				void onCallbackListFolderSelectChange(const etk::String& _value);
-				void onCallbackListFileSelectChange(const etk::String& _value);
-				void onCallbackListFileValidate(const etk::String& _value);
+				void onCallbackListFolderSelectChange(const etk::Path& _value);
+				void onCallbackListFileSelectChange(const etk::Path& _value);
+				void onCallbackListFileValidate(const etk::Path& _value);
 				void onCallbackListValidate();
 				void onCallbackHomePressed();
 			protected:

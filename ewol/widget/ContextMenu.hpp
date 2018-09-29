@@ -31,7 +31,7 @@ namespace ewol {
 					markNone
 				};
 			public: // properties
-				eproperty::Value<etk::String> propertyShape; //!< shape of the widget.
+				eproperty::Value<etk::Uri> propertyShape; //!< shape of the widget.
 				eproperty::Value<vec2> propertyArrowPos;
 				eproperty::List<enum markPosition> propertyArrawBorder;
 			protected:

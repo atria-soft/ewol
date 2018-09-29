@@ -24,7 +24,7 @@ ewol::widget::Button::Button() :
   signalEnter(this, "enter", "The cursor enter inside the button"),
   signalLeave(this, "leave", "the cursor leave the button"),
   signalValue(this, "value", "button value change"),
-  propertyShape(this, "shape", "{ewol}THEME:GUI:Button.json", "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
+  propertyShape(this, "shape", etk::Uri("THEME_GUI://Button.json?lib=ewol"), "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
   propertyValue(this, "value", false, "Value of the Button", &ewol::widget::Button::onChangePropertyValue),
   propertyLock(this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder", &ewol::widget::Button::onChangePropertyLock),
   propertyToggleMode(this, "toggle", false, "The Button can toogle", &ewol::widget::Button::onChangePropertyToggleMode),
@@ -129,10 +129,10 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 				markToRedraw();
 			}
 			if(_event.getStatus() == gale::key::status::pressSingle) {
-				if(    (    *propertyValue == true
-				         && *propertyLock == ewol::widget::Button::lockWhenPressed)
-				    || (    *propertyValue == false
-				         && *propertyLock == ewol::widget::Button::lockWhenReleased) ) {
+				if (    (    *propertyValue == true
+				          && *propertyLock == ewol::widget::Button::lockWhenPressed)
+				     || (    *propertyValue == false
+				          && *propertyLock == ewol::widget::Button::lockWhenReleased) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
