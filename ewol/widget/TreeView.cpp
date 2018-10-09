@@ -17,7 +17,7 @@ ETK_DECLARE_TYPE(ewol::widget::TreeView);
 ewol::widget::TreeView::TreeView():
   ewol::widget::List(),
   propertyOffsetTreeView(this, "offsetTreeView",
-                               30,
+                               15,
                                "Offset indentation for each node",
                                &ewol::widget::TreeView::onChangePropertyOffsetTreeView),
   propertyIconTreeViewSize(this, "iconTreeViewSize",
@@ -34,6 +34,8 @@ ewol::widget::TreeView::TreeView():
 void ewol::widget::TreeView::init() {
 	ewol::widget::List::init();
 	propertyFill.set(bvec2(true,false));
+	addComposeElemnent("image_ChevronRight", ememory::makeShared<ewol::compositing::Image>("THEME_GUI:///ChevronRight.svg?lib=ewol"));
+	addComposeElemnent("image_ChevronMore", ememory::makeShared<ewol::compositing::Image>("THEME_GUI:///ChevronMore.svg?lib=ewol"));
 }
 
 ewol::widget::TreeView::~TreeView() {
@@ -41,7 +43,7 @@ ewol::widget::TreeView::~TreeView() {
 }
 
 vec2 ewol::widget::TreeView::calculateElementSize(const ivec2& _pos) {
-	ewol::compositing::Text tmpText;
+	auto tmpText = ememory::staticPointerCast<ewol::compositing::Text>(getComposeElemnent("text"));
 	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
 	float_t treeOffset = 0;
 	if (_pos.x() == 0) {
@@ -65,9 +67,9 @@ vec2 ewol::widget::TreeView::calculateElementSize(const ivec2& _pos) {
 	}
 	vec3 textSize;
 	if (propertyTextIsDecorated.get() == true) {
-		textSize = tmpText.calculateSizeDecorated(myTextToWrite);
+		textSize = tmpText->calculateSizeDecorated(myTextToWrite);
 	} else {
-		textSize = tmpText.calculateSize(myTextToWrite);
+		textSize = tmpText->calculateSize(myTextToWrite);
 	}
 	ivec2 count = getMatrixSize();
 	return vec2(textSize.x() + treeOffset + iconSize,
@@ -87,14 +89,13 @@ void ewol::widget::TreeView::drawElement(const ivec2& _pos, const vec2& _start, 
 		iconName = getData(ListRole::Icon, _pos).getSafeString();
 		bool haveChild = getData(ListRole::HaveChild, _pos).getSafeBoolean();
 		if (haveChild == true) {
-			ewol::compositing::Image * tmpImage = null;
+			ememory::SharedPtr<ewol::compositing::Image> tmpImage = null;
 			if ( getData(ListRole::IsExpand, _pos).getSafeBoolean() == false) {
-				tmpImage = ETK_NEW(ewol::compositing::Image, "{ewol}THEME:GUI:ChevronRight.svg");
+				tmpImage = ememory::staticPointerCast<ewol::compositing::Image>(getComposeElemnent("image_ChevronRight"));
 			} else {
-				tmpImage = ETK_NEW(ewol::compositing::Image, "{ewol}THEME:GUI:ChevronMore.svg");
+				tmpImage = ememory::staticPointerCast<ewol::compositing::Image>(getComposeElemnent("image_ChevronMore"));
 			}
 			if (tmpImage != null) {
-				addOObject(tmpImage);
 				tmpImage->setColor(fg);
 				tmpImage->setPos(posStart);
 				tmpImage->print(vec2(propertyIconTreeViewSize.get(), propertyIconTreeViewSize.get()));
@@ -108,9 +109,8 @@ void ewol::widget::TreeView::drawElement(const ivec2& _pos, const vec2& _start, 
 	auto backgroundVariant = getData(ListRole::BgColor, _pos);
 	if (backgroundVariant.isColor() == true) {
 		etk::Color<> bg = backgroundVariant.getColor();
-		ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+		auto BGOObjects = ememory::staticPointerCast<ewol::compositing::Drawing>(getComposeElemnent("drawing"));
 		if (BGOObjects != null) {
-			addOObject(BGOObjects);
 			BGOObjects->setColor(bg);
 			BGOObjects->setPos(_start);
 			BGOObjects->rectangleWidth(_size);
@@ -118,20 +118,20 @@ void ewol::widget::TreeView::drawElement(const ivec2& _pos, const vec2& _start, 
 	}
 	posStart += vec2(m_paddingSizeX, m_paddingSizeY);
 	if (iconName != "") {
-		ewol::compositing::Image * tmpImage = ETK_NEW(ewol::compositing::Image, iconName);
+		auto tmpImage = ememory::staticPointerCast<ewol::compositing::Image>(getComposeElemnent(iconName));
 		if (tmpImage != null) {
-			addOObject(tmpImage);
 			tmpImage->setColor(fg);
 			tmpImage->setPos(posStart);
 			tmpImage->print(vec2(propertyIconTreeViewSize.get(), propertyIconTreeViewSize.get()));
+		} else {
+			EWOL_ERROR("can not get : " << iconName );
 		}
 		// move right
 		posStart.setX(posStart.x() + propertyIconTreeViewSize.get());
 	}
 	if (myTextToWrite != "") {
-		ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
+		auto tmpText = ememory::staticPointerCast<ewol::compositing::Text>(getComposeElemnent("text"));
 		if (tmpText != null) {
-			addOObject(tmpText);
 			tmpText->setColor(fg);
 			tmpText->setPos(posStart);
 			if (propertyTextIsDecorated.get() == true) {

@@ -301,7 +301,7 @@ bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
 		etk::String widgetName = pNode.getValue();
 		EWOL_INFO("Get node : " << pNode);
 		if (widgetName == "elem") {
-			// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
+			// <elem title="_T{Title of the button}" image="DATA:///List.svg" event="menu:exit">
 			int32_t idMenu = addTitle(pNode.attributes["title"], pNode.attributes["image"], pNode.attributes["event"]);
 			for (const auto nodeIt2 : pNode.nodes) {
 				
@@ -312,7 +312,7 @@ bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
 				}
 				etk::String widgetName2 = pNode2.getValue();
 				if (widgetName2 == "elem") {
-					// <elem title="_T{Title of the button}" image="DATA:List.svg" event="menu:exit">
+					// <elem title="_T{Title of the button}" image="DATA:///List.svg" event="menu:exit">
 					add(idMenu, pNode2.attributes["title"], pNode2.attributes["image"], pNode2.attributes["event"]);
 				} else if (widgetName2 == "separator") {
 					addSpacer(idMenu);

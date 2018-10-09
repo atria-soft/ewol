@@ -10,7 +10,7 @@
 ETK_DECLARE_TYPE(ewol::context::ConfigFont);
 
 ewol::context::ConfigFont::ConfigFont() :
-  m_folder("{ewol}DATA:fonts"),
+  m_folder("DATA:///fonts?lib=ewol"),
   m_name("Arial;Helvetica"),
   m_size(10),
   m_useExternal(false) {

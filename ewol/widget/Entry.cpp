@@ -27,7 +27,7 @@ ewol::widget::Entry::Entry() :
                          "Not display content in password mode",
                          &ewol::widget::Entry::onChangePropertyPassword),
   propertyShape(this, "shape",
-                      etk::Uri("THEME_GUI://Entry.json?lib=ewol"),
+                      etk::Uri("THEME_GUI:///Entry.json?lib=ewol"),
                       "Shaper to display the background",
                       &ewol::widget::Entry::onChangePropertyShaper),
   propertyValue(this, "value",
@@ -162,7 +162,7 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 		} else {
 			m_text.setCursorPos(m_displayCursorPos);
 		}
-		etk::String valueToDisplay = *propertyValue;
+		etk::UString valueToDisplay = etk::toUString(*propertyValue);
 		if (*propertyPassword == true) {
 			for (auto &it: valueToDisplay) {
 				it = '*';
@@ -375,14 +375,16 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
+				EWOL_ERROR("get data: '" << _event.getChar() << "' = '" << u32char::convertToUtf8(_event.getChar()) << "'");
 				if ((int64_t)propertyValue->size() > propertyMaxCharacter) {
 					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
 					etk::String newData = propertyValue;
-					newData.insert(newData.begin()+m_displayCursorPos, _event.getChar());
+					etk::String inputData = u32char::convertToUtf8(_event.getChar());
+					newData.insert(newData.begin()+m_displayCursorPos, inputData);
 					setInternalValue(newData);
 					if (propertyValue.get() == newData) {
-						m_displayCursorPos++;
+						m_displayCursorPos += inputData.size();
 						m_displayCursorPosSelection = m_displayCursorPos;
 					}
 				}

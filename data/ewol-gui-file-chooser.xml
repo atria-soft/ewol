@@ -7,13 +7,13 @@
 			<spacer expand="true,false"/>
 			<button name="[{ID}]file-shooser:button-validate">
 				<sizer mode="hori">
-					<image src="{ewol}THEME:GUI:Load.svg" fill="true" size="7,7mm"/>
+					<image src="THEME_GUI:///Load.svg?lib=ewol" fill="true" size="7,7mm"/>
 					<label name="[{ID}]file-shooser:validate-label">_T{Validate}</label>
 				</sizer>
 			</button>
 			<button name="[{ID}]file-shooser:button-cancel">
 				<sizer mode="hori">
-					<image src="{ewol}THEME:GUI:Remove.svg" fill="true" size="7,7mm"/>
+					<image src="THEME_GUI:///Remove.svg?lib=ewol" fill="true" size="7,7mm"/>
 					<label name="[{ID}]file-shooser:cancel-label">_T{Cancel}</label>
 				</sizer>
 			</button>
@@ -37,13 +37,13 @@
 			<spacer min-size="2,2mm"/>
 		</sizer>
 		<sizer mode="hori">
-			<image name="[{ID}]file-shooser:img-file" src="{ewol}THEME:GUI:File.svg" expand="false" size="8,8mm"/>
+			<image name="[{ID}]file-shooser:img-file" src="THEME_GUI:///File.svg?lib=ewol" expand="false" size="8,8mm"/>
 			<entry name="[{ID}]file-shooser:entry-file" expand="true,false" fill="true,false"/>
 		</sizer>
 		<sizer mode="hori">
-			<image name="[{ID}]file-shooser:img-folder" src="{ewol}THEME:GUI:Folder.svg" expand="false" size="8,8mm"/>
+			<image name="[{ID}]file-shooser:img-folder" src="THEME_GUI:///Folder.svg?lib=ewol" expand="false" size="8,8mm"/>
 			<entry name="[{ID}]file-shooser:entry-folder" expand="true,false" fill="true,false"/>
-			<image name="[{ID}]file-shooser:img-home" src="{ewol}THEME:GUI:Home.svg" expand="false" size="8,8mm"/>
+			<image name="[{ID}]file-shooser:img-home" src="THEME_GUI:///Home.svg?lib=ewol" expand="false" size="8,8mm"/>
 		</sizer>
 		<label name="[{ID}]file-shooser:title-label">_T{Title}</label>
 	</sizer>

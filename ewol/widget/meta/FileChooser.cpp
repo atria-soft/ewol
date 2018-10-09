@@ -59,7 +59,7 @@ ewol::widget::FileChooser::FileChooser() :
 void ewol::widget::FileChooser::init() {
 	ewol::widget::Composer::init();
 	// Load file with replacing the "{ID}" with the local ID of the widget ==> obtain unique ID
-	loadFromFile("{ewol}DATA:ewol-gui-file-chooser.xml", getId());
+	loadFromFile("DATA:///ewol-gui-file-chooser.xml?lib=ewol", getId());
 	// Basic replacement of labels
 	propertySetOnWidgetNamed("[" + etk::toString(getId()) + "]file-shooser:title-label", "value", propertyLabelTitle);
 	propertySetOnWidgetNamed("[" + etk::toString(getId()) + "]file-shooser:validate-label", "value", propertyLabelValidate);
@@ -96,7 +96,7 @@ void ewol::widget::FileChooser::onChangePropertyPath() {
 }
 
 void ewol::widget::FileChooser::onChangePropertyFile() {
-	propertySetOnWidgetNamed("[" + etk::toString(getId()) + "]file-shooser:entry-file", "value", propertyFile.getString());
+	propertySetOnWidgetNamed("[" + etk::toString(getId()) + "]file-shooser:entry-file", "value", propertyFile->getFileName());
 	//updateCurrentFolder();
 }
 
@@ -142,8 +142,8 @@ void ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue(const bool&
 
 void ewol::widget::FileChooser::onCallbackListFolderSelectChange(const etk::Path& _value) {
 	// == > this is an internal event ...
-	EWOL_DEBUG(" old PATH: '" << *propertyPath << "' + '" << _value << "'");
-	propertyPath.setDirect(*propertyPath / _value);
+	EWOL_DEBUG(" old PATH: '" << *propertyPath << "' ==> '" << _value << "'");
+	propertyPath.setDirect(_value);
 	EWOL_DEBUG("new PATH: '" << *propertyPath << "'");
 	propertyFile.setDirect("");
 	updateCurrentFolder();
@@ -161,8 +161,8 @@ void ewol::widget::FileChooser::onCallbackListFileSelectChange(const etk::Path& 
 void ewol::widget::FileChooser::onCallbackListFileValidate(const etk::Path& _value) {
 	// select the file  == > generate a validate
 	propertyFile.set(_value);
-	EWOL_VERBOSE(" generate a fiel opening : '" << propertyPath << "' / '" << propertyFile << "'");
-	signalValidate.emit(getCompleateFileName());
+	EWOL_VERBOSE(" generate a fiel opening : '" << propertyFile << "'");
+	signalValidate.emit(_value);
 	autoDestroy();
 }
 
@@ -172,11 +172,11 @@ void ewol::widget::FileChooser::onCallbackEntryFileChangeValidate(const etk::Str
 
 void ewol::widget::FileChooser::onCallbackListValidate() {
 	if (propertyFile.get() == "") {
-		EWOL_WARNING(" Validate : '" << propertyPath << "' / '" << propertyFile << "' ==> error No name ...");
+		EWOL_WARNING(" Validate : '" << *propertyFile << "' ==> error No name ...");
 		return;
 	}
-	EWOL_DEBUG(" generate a file opening : '" << propertyPath << "' / '" << propertyFile << "'");
-	signalValidate.emit(getCompleateFileName());
+	EWOL_DEBUG(" generate a file opening : '" << *propertyFile << "'");
+	signalValidate.emit(*propertyFile);
 	autoDestroy();
 }
 
@@ -194,8 +194,4 @@ void ewol::widget::FileChooser::updateCurrentFolder() {
 	propertySetOnWidgetNamed("[" + etk::toString(getId()) + "]file-shooser:list-folder", "path", propertyPath.getString());
 	propertySetOnWidgetNamed("[" + etk::toString(getId()) + "]file-shooser:entry-folder", "value", propertyPath.getString());
 	markToRedraw();
-}
-
-etk::Path ewol::widget::FileChooser::getCompleateFileName() {
-	return *propertyPath / *propertyFile;
 }

@@ -18,6 +18,6 @@
 	padding-in-buttom:2,
 	
 	change-time:356,
-	program:"{ewol}THEME:GUI:ContextMenu.prog",
-	color:"{ewol}THEME:COLOR:ContextMenu.json"
+	program:"THEME_GUI:///ContextMenu.prog?lib=ewol",
+	color:"THEME_COLOR:///ContextMenu.json?lib=ewol"
 }

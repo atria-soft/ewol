@@ -17,7 +17,7 @@ static const char* annimationIncrease = "increase";
 
 ewol::widget::PopUp::PopUp() :
   propertyShape(this, "shaper",
-                      etk::Uri("THEME_GUI://PopUp.json?lib=ewol"),
+                      etk::Uri("THEME_GUI:///PopUp.json?lib=ewol"),
                       "The shaper properties",
                       &ewol::widget::PopUp::onChangePropertyShape),
   propertyLockExpand(this, "lock",

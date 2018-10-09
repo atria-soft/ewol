@@ -29,7 +29,7 @@ Generic Properties                                {#ewol_tutorial_file_access_pr
 By default we dertermine some basics for files.
 
 Then we need to determine file in the tree with:
-  - **"DATA:XXX"** Application internal data
+  - **"DATA:///XXX"** Application internal data
     * Linux: /usr/share/applName/
     * Android: /xxx/yyy/applName.apk/asssets/
     * IOs: applName.app/share
@@ -47,7 +47,7 @@ Then we need to determine file in the tree with:
 
 When you will call a file, you need to just call it with the starting name.
 
-For example if I want to access at an application data I will call the file : "DATA:myImage.png"
+For example if I want to access at an application data I will call the file : "DATA:///myImage.png"
 
 Integrate a file in a package                                {#ewol_tutorial_file_access_package}
 =============================
@@ -61,7 +61,7 @@ In your ```lutin_xxx.py``` file add:
 	myModule.copy_path("relative/path/start*.png","destination/folder/")
 ```
 
-And now you can acces on these file with : "DATA:destination/folder/fileNewName.svg"
+And now you can acces on these file with : "DATA:///destination/folder/fileNewName.svg"
 
 
 Read a file                                {#ewol_tutorial_file_access_read}
@@ -73,7 +73,7 @@ Read a file                                {#ewol_tutorial_file_access_read}
 	
 	...
 	
-	etk::FSNode file("DATA:destination/folder/file.svg");
+	etk::FSNode file("DATA:///destination/folder/file.svg");
 	if (file.exist() == false) {
 		APPL_ERROR("Can not read the file (Does not exist)");
 		return;
@@ -144,7 +144,7 @@ And when you want to change the theme, just call:
 	This is not done automaticly, because reloading the resources can have a real cost of time.
 ```
 
-You can acces on your theme with accessing the filename: "THEME:GUI_COLOR:your/sub/path/file.xx"
+You can acces on your theme with accessing the filename: "THEME_GUI_COLOR:///your/sub/path/file.xx"
 
 An important think is that the theme file is searching in many path in the order:
   - USERDATA:GUI_COLOR:your/sub/path/file.xx

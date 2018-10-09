@@ -20,7 +20,7 @@ ETK_DECLARE_TYPE(ewol::widget::Windows);
 ewol::widget::Windows::Windows() :
   propertyColorConfiguration(this,
                              "file-color",
-                             etk::Uri("THEME_COLOR://Windows.json?lib=ewol"),
+                             etk::Uri("THEME_COLOR:///Windows.json?lib=ewol"),
                              "File color of the Windows",
                              &ewol::widget::Windows::onChangePropertyColor),
   propertyTitle(this,

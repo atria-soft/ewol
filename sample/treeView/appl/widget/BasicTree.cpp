@@ -82,13 +82,13 @@ fluorine::Variant appl::widget::BasicTree::getData(int32_t _role, const ivec2& _
 			return value.m_isExpand;
 		case ewol::widget::ListRole::Icon:
 			if (elem->countToRoot() == 0) {
-				return "{ewol}THEME:GUI:Home.svg";
+				return "THEME_GUI:///Home.svg?lib=ewol";
 			}
 			if (elem->countToRoot() == 1) {
-				return "{ewol}THEME:GUI:Folder.svg";
+				return "THEME_GUI:///Folder.svg?lib=ewol";
 			}
 			if (elem->countToRoot() == 2) {
-				return "{ewol}THEME:GUI:File.svg";
+				return "THEME_GUI:///File.svg?lib=ewol";
 			}
 			return "";
 		case ewol::widget::ListRole::FgColor:

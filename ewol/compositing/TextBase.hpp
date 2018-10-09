@@ -99,7 +99,7 @@ namespace ewol {
 				/**
 				 * @brief generic constructor
 				 */
-				TextBase(const etk::String& _shaderName = "{ewol}DATA:text.prog", bool _loadProgram = true);
+				TextBase(const etk::String& _shaderName = "DATA:///text.prog?lib=ewol", bool _loadProgram = true);
 				/**
 				 * @brief generic destructor
 				 */

@@ -1,7 +1,7 @@
 {
-	entry-shaper:"{ewol}THEME:GUI:SpinEntry.json",
-	up-shaper:"{ewol}THEME:GUI:SpinUp.json",
+	entry-shaper:"THEME_GUI:///SpinEntry.json?lib=ewol",
+	up-shaper:"THEME_GUI:///SpinUp.json?lib=ewol",
 	up-data:"<label>+</label>",
-	down-shaper:"{ewol}THEME:GUI:SpinDown.json",
+	down-shaper:"THEME_GUI:///SpinDown.json?lib=ewol",
 	down-data:"<label>-</label>",
 }

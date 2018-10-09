@@ -8,6 +8,8 @@
 #include <appl/debug.hpp>
 #include <appl/MainWindows.hpp>
 
+#include <etk/theme/theme.hpp>
+
 #include <ewol/widget/Button.hpp>
 #include <ewol/widget/CheckBox.hpp>
 #include <ewol/widget/Sizer.hpp>
@@ -25,7 +27,6 @@
 #include <ewol/widget/Spin.hpp>
 #include <ewol/context/Context.hpp>
 #include <appl/TestDistanceField.hpp>
-#include <etk/os/FSNode.hpp>
 #include <eproperty/Value.hpp>
 
 appl::MainWindows::MainWindows() :
@@ -43,7 +44,7 @@ void appl::MainWindows::init() {
 		APPL_WARNING("plop " << ETK_GET_TYPE_NAME(double));
 		APPL_WARNING("plop " << ETK_GET_TYPE_NAME(uint32_t));
 	m_composer = ewol::widget::Composer::create();
-	m_composer->loadFromFile("DATA:gui.xml");
+	m_composer->loadFromFile("DATA:///gui.xml");
 	setSubWidget(m_composer);
 	externSubBind(m_composer, ewol::widget::Button, "appl-theme-toggle", signalValue, sharedFromThis(), &appl::MainWindows::onCallbackThemeChange);
 	externSubBind(m_composer, ewol::widget::Button, "appl-previous-widget", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackWidgetChange, -1);
@@ -128,7 +129,7 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	etk::String tmpConstruct;
 	switch(m_idWidget) {
 		case 0:
-			tmpConstruct = "<image src='DATA:sphere.png'/>\n";
+			tmpConstruct = "<image src='DATA:///sphere.png'/>\n";
 			tmpDescription = "Test ewol::widget::Image";
 			break;
 		case 1:

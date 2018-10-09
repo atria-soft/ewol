@@ -299,7 +299,7 @@ void ewol::compositing::Drawing::loadProgram() {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
-	m_GLprogram = gale::resource::Program::create("{ewol}DATA:color3.prog");
+	m_GLprogram = gale::resource::Program::create("DATA:///color3.prog?lib=ewol");
 	// get the shader resource :
 	if (m_GLprogram != null) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");

@@ -20,6 +20,6 @@
 	box-size:20,
 	box-inside:12,
 	change-time:356,
-	program:"{ewol}THEME:GUI:CheckBox.prog",
-	color:"{ewol}THEME:COLOR:CheckBox.json"
+	program:"THEME_GUI:///CheckBox.prog?lib=ewol",
+	color:"THEME_COLOR:///CheckBox.json?lib=ewol"
 }

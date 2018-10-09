@@ -80,7 +80,6 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(FileChooser, "FileChooser");
 				virtual ~FileChooser();
 			private:
-				etk::Path getCompleateFileName();
 				void updateCurrentFolder();
 			public:
 				void onGetFocus() override;

@@ -45,11 +45,16 @@ namespace ewol {
 				void calculateMinMaxSize() override;
 			// drawing capabilities ....
 			protected:
-				etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
+				etk::Vector<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
 				etk::Vector<int32_t> m_listSizeX; //!< size of every colomns
 				etk::Vector<int32_t> m_listSizeY; //!< size of every rows
+			protected:
+				etk::Map<etk::String, ememory::SharedPtr<ewol::Compositing>> m_compositingElements;
+				void addComposeElemnent(const etk::String& _name, const ememory::SharedPtr<ewol::Compositing>& _element);
+				void clearComposeElemnent();
+				void removeComposeElemnent();
+				ememory::SharedPtr<ewol::Compositing> getComposeElemnent(const etk::String& _name);
 			public:
-				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 				void clearOObjectList();
 			// list properties ...
 			protected:

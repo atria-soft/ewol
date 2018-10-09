@@ -74,7 +74,7 @@ void ewol::widget::Parameter::init() {
 			} else {
 				tmpButton->setSubWidget(ewol::widget::composerGenerateString(
 				        "<sizer mode='hori'>\n"
-				        "	<image src='{ewol}THEME:GUI:Save.svg' expand='true' size='8,8mm'/>\n"
+				        "	<image src='THEME_GUI:///Save.svg?lib=ewol' expand='true' size='8,8mm'/>\n"
 				        "	<label>_T{Save}</label>\n"
 				        "</sizer>\n"));
 				tmpButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Parameter::onCallbackParameterSave);
@@ -96,7 +96,7 @@ void ewol::widget::Parameter::init() {
 			} else {
 				tmpButton->setSubWidget(ewol::widget::composerGenerateString(
 				        "<sizer mode='hori'>\n"
-				        "	<image src='{ewol}THEME:GUI:Remove.svg' expand='true' size='8,8mm'/>\n"
+				        "	<image src='THEME_GUI:///Remove.svg?lib=ewol' expand='true' size='8,8mm'/>\n"
 				        "	<label>_T{Close}</label>\n"
 				        "</sizer>\n"));
 				tmpButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Parameter::onCallbackMenuclosed);

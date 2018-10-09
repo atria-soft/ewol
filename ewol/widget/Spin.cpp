@@ -38,7 +38,7 @@ ewol::widget::Spin::Spin() :
                        "fix-point mantis",
                        &ewol::widget::Spin::onChangePropertyMantis) {
 	addObjectType("ewol::widget::Spin");
-	propertyShape.setDirectCheck(etk::Uri("THEME_GUI://Spin.json?lib=ewol"));
+	propertyShape.setDirectCheck(etk::Uri("THEME_GUI:///Spin.json?lib=ewol"));
 }
 
 ewol::widget::Spin::~Spin() {

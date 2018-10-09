@@ -24,7 +24,7 @@ ewol::widget::Button::Button() :
   signalEnter(this, "enter", "The cursor enter inside the button"),
   signalLeave(this, "leave", "the cursor leave the button"),
   signalValue(this, "value", "button value change"),
-  propertyShape(this, "shape", etk::Uri("THEME_GUI://Button.json?lib=ewol"), "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
+  propertyShape(this, "shape", etk::Uri("THEME_GUI:///Button.json?lib=ewol"), "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
   propertyValue(this, "value", false, "Value of the Button", &ewol::widget::Button::onChangePropertyValue),
   propertyLock(this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder", &ewol::widget::Button::onChangePropertyLock),
   propertyToggleMode(this, "toggle", false, "The Button can toogle", &ewol::widget::Button::onChangePropertyToggleMode),

@@ -45,7 +45,7 @@ namespace appl {
 				#endif
 				
 				// set the application icon ...
-				_context.setIcon("DATA:icon.png");
+				_context.setIcon("DATA:///icon.png");
 				
 				appl::widget::SizerColor::createManagerWidget(_context.getWidgetManager());
 				

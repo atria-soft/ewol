@@ -5,8 +5,7 @@
  */
 
 #include <etk/types.hpp>
-#include <etk/types.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/theme/theme.hpp>
 #include <ewol/ewol.hpp>
 #include <ewol/object/Object.hpp>
 #include <ewol/context/Context.hpp>
@@ -45,7 +44,7 @@ namespace appl {
 				#endif
 				
 				// set the application icon ...
-				_context.setIcon("DATA:icon.png");
+				_context.setIcon("DATA:///icon.png");
 				
 				appl::widget::SizerColor::createManagerWidget(_context.getWidgetManager());
 				

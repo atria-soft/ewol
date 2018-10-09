@@ -4,6 +4,6 @@
 	padding-top:16,
 	padding-buttom:16,
 	change-time:200,
-	program:"{ewol}THEME:GUI:WidgetScrolled.prog",
-	color:"{ewol}THEME:COLOR:WidgetScrolled.json"
+	program:"THEME_GUI:///WidgetScrolled.prog?lib=ewol",
+	color:"THEME_COLOR:///WidgetScrolled.json?lib=ewol"
 }

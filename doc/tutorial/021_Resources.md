@@ -40,7 +40,7 @@ namespace appl {
 			//! @brief Constructor
 			MyObj(void) :
 			  propertyConfig(this, "file",
-			                       "DATA:ExapleConfig.json",
+			                       "DATA:///ExapleConfig.json",
 			                       "no desc",
 			                       &appl::MyObj::onChangePropertyFile),
 			  m_configValId(-1) {
@@ -128,7 +128,7 @@ When loose hardware (juste update internal state the hardware is no more present
 	void removeContextToLate();
 ```
 
-When user request to reload all resources (can be usefull when using file type : THEME:GUI:xxx)
+When user request to reload all resources (can be usefull when using file type : THEME_GUI:///xxx)
 ```{.cpp}
 	void reload();
 ```

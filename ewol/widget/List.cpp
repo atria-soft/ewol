@@ -29,16 +29,31 @@ ewol::widget::List::List() {
 
 void ewol::widget::List::init() {
 	ewol::widget::WidgetScrolled::init();
+	addComposeElemnent("drawing", ememory::makeShared<ewol::compositing::Drawing>());
+	addComposeElemnent("text", ememory::makeShared<ewol::compositing::Text>());
 }
 
 
 ewol::widget::List::~List() {
-	//clean all the object
-	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		ETK_DELETE(ewol::Compositing, m_listOObject[iii]);
-		m_listOObject[iii] = null;
+}
+
+void ewol::widget::List::addComposeElemnent(const etk::String& _name, const ememory::SharedPtr<ewol::Compositing>& _element) {
+	m_compositingElements.set(_name, _element);
+	m_listOObject.pushBack(_element);
+}
+
+void ewol::widget::List::clearComposeElemnent() {
+	for (auto &it: m_compositingElements) {
+		it.second->clear();
 	}
-	m_listOObject.clear();
+}
+
+void ewol::widget::List::removeComposeElemnent() {
+	m_compositingElements.clear();
+}
+
+ememory::SharedPtr<ewol::Compositing> ewol::widget::List::getComposeElemnent(const etk::String& _name) {
+	return m_compositingElements[_name];
 }
 /*
 void ewol::widget::List::setRawVisible(int32_t _id) {
@@ -79,27 +94,6 @@ void ewol::widget::List::calculateMinMaxSize() {
 	m_minSize.setValue(200, 150);
 }
 
-void ewol::widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
-	if (_newObject == null) {
-		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
-		return;
-	}
-	if (    _pos < 0
-	     || (size_t)_pos >= m_listOObject.size() ) {
-		m_listOObject.pushBack(_newObject);
-	} else {
-		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
-	}
-}
-
-void ewol::widget::List::clearOObjectList() {
-	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
-		ETK_DELETE(ewol::Compositing, m_listOObject[iii]);
-		m_listOObject[iii] = null;
-	}
-	m_listOObject.clear();
-}
-
 void ewol::widget::List::onDraw() {
 	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (m_listOObject[iii] != null) {
@@ -112,7 +106,7 @@ void ewol::widget::List::onDraw() {
 void ewol::widget::List::onRegenerateDisplay() {
 	if (needRedraw() == true) {
 		// clean the object list ...
-		clearOObjectList();
+		clearComposeElemnent();
 		// -------------------------------------------------------
 		// -- Calculate the size of each element
 		// -------------------------------------------------------
@@ -232,9 +226,9 @@ ivec2 ewol::widget::List::getMatrixSize() const {
 }
 
 vec2 ewol::widget::List::calculateElementSize(const ivec2& _pos) {
-	ewol::compositing::Text tmpText;
+	auto tmpText = ememory::staticPointerCast<ewol::compositing::Text>(getComposeElemnent("text"));
 	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
-	vec3 textSize = tmpText.calculateSize(myTextToWrite);
+	vec3 textSize = tmpText->calculateSize(myTextToWrite);
 	ivec2 count = getMatrixSize();
 	return vec2(textSize.x(),
 	            textSize.y() + m_paddingSizeY*3
@@ -242,9 +236,8 @@ vec2 ewol::widget::List::calculateElementSize(const ivec2& _pos) {
 }
 
 void ewol::widget::List::drawBackground() {
-	ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+	auto BGOObjects = ememory::staticPointerCast<ewol::compositing::Drawing>(getComposeElemnent("drawing"));
 	if (BGOObjects != null) {
-		addOObject(BGOObjects);
 		etk::Color<> basicBG = getBasicBG();
 		BGOObjects->setColor(basicBG);
 		BGOObjects->setPos(vec3(0, 0, 0) );
@@ -258,18 +251,16 @@ void ewol::widget::List::drawElement(const ivec2& _pos, const vec2& _start, cons
 	auto backgroundVariant = getData(ListRole::BgColor, _pos);
 	if (backgroundVariant.isColor() == true) {
 		etk::Color<> bg = backgroundVariant.getColor();
-		ewol::compositing::Drawing * BGOObjects = ETK_NEW(ewol::compositing::Drawing);
+		auto BGOObjects = ememory::staticPointerCast<ewol::compositing::Drawing>(getComposeElemnent("drawing"));
 		if (BGOObjects != null) {
-			addOObject(BGOObjects);
 			BGOObjects->setColor(bg);
 			BGOObjects->setPos(vec3(_start.x(), _start.y(), 0) );
 			BGOObjects->rectangleWidth(_size);
 		}
 	}
 	if (myTextToWrite != "") {
-		ewol::compositing::Text * tmpText = ETK_NEW(ewol::compositing::Text);
+		auto tmpText = ememory::staticPointerCast<ewol::compositing::Text>(getComposeElemnent("text"));
 		if (tmpText != null) {
-			addOObject(tmpText);
 			int32_t displayPositionY = _start.y() + m_paddingSizeY;
 			tmpText->setColor(fg);
 			tmpText->setPos(vec3(_start.x() + m_paddingSizeX, displayPositionY, 0) );

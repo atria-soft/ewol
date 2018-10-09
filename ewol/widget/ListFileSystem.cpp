@@ -7,7 +7,7 @@
 #include <ewol/widget/ListFileSystem.hpp>
 #include <etk/tool.hpp>
 #include <etk/path/fileSystem.hpp>
-
+#include <etk/algorithm.hpp>
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::widget::ListFileSystem);
 
@@ -45,14 +45,14 @@ ewol::widget::ListFileSystem::ListFileSystem() :
 	#if defined(__TARGET_OS__Windows)
 		propertyPath.setDirectCheck("c:/");
 	#endif
-	m_colorProperty = ewol::resource::ColorFile::create("{ewol}THEME:COLOR:ListFileSystem.json");
+	m_colorProperty = ewol::resource::ColorFile::create("THEME_COLOR:///ListFileSystem.json?lib=ewol");
 	if (m_colorProperty != null) {
 		m_colorIdText = m_colorProperty->request("text");
 		m_colorIdBackground1 = m_colorProperty->request("background1");
 		m_colorIdBackground2 = m_colorProperty->request("background2");
 		m_colorIdBackgroundSelected = m_colorProperty->request("selected");
 	}
-	setMouseLimit(1);
+	setMouseLimit(2);
 }
 
 ewol::widget::ListFileSystem::~ListFileSystem() {
@@ -67,6 +67,9 @@ etk::Color<> ewol::widget::ListFileSystem::getBasicBG() {
 	return m_colorProperty->get(m_colorIdBackground1);
 }
 
+static bool localSort(const etk::Path& _left, const etk::Path& _right) {
+	return _left.getString().toUpper() <= _right.getString().toUpper();
+}
 
 void ewol::widget::ListFileSystem::regenerateView() {
 	clearList();
@@ -84,6 +87,9 @@ void ewol::widget::ListFileSystem::regenerateView() {
 		flags |= etk::path::LIST_FILE;
 	}
 	m_list = etk::path::list(*propertyPath, flags);
+	EWOL_ERROR("Lsit of element: " << m_list.size() );
+	// Sort the list:
+	etk::algorithm::quickSort(m_list, localSort);
 	// request a redraw ...
 	markToRedraw();
 }
@@ -173,48 +179,45 @@ bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
 			offset = 2;
 		}
 	}
-	if (_event.getStatus() == gale::key::status::pressSingle) {
+	if (    _event.getStatus() == gale::key::status::pressSingle
+	     || _event.getStatus() == gale::key::status::pressDouble) {
 		EWOL_VERBOSE("Event on List : IdInput=" << _event.getId() << " _pos=" << _pos );
 		if (1 == _event.getId()) {
-			int32_t previousRaw = m_selectedLine;
 			if (_pos.y() > (int32_t)m_list.size()+offset ) {
 				m_selectedLine = -1;
 			} else {
 				m_selectedLine = _pos.y();
 			}
-			if (previousRaw != m_selectedLine) {
-				if(    *propertyShowFolder == true
-				    && m_selectedLine == 0) {
-					// "." folder
-					signalFolderSelect.emit(".");
-				} else if (    *propertyShowFolder == true
-				            && m_selectedLine == 1) {
-					// ".." folder
-					signalFolderSelect.emit("..");
-				} else if(    m_selectedLine-offset  >= 0
-				           && m_selectedLine-offset < (int32_t)m_list.size() ) {
-					// generate event extern : 
-					if(etk::path::isDirectory(m_list[m_selectedLine-offset])) {
-						signalFolderSelect.emit(m_list[m_selectedLine-offset].getFileName());
-					} else {
-						signalFileSelect.emit(m_list[m_selectedLine-offset].getFileName());
-					}
+			if(    *propertyShowFolder == true
+			    && m_selectedLine == 0) {
+				// "." folder
+				if (_event.getStatus() == gale::key::status::pressSingle) {
+					signalFolderSelect.emit(*propertyPath);
+				} else {
+					signalFolderValidate.emit(*propertyPath);
 				}
-			} else {
-				if(    *propertyShowFolder == true
-				    && m_selectedLine == 0) {
-					// "." folder
-					signalFolderValidate.emit(".");
-				} else if (    *propertyShowFolder == true
-				            && m_selectedLine == 1) {
-					// ".." folder
-					signalFolderValidate.emit("..");
-				} else if(    m_selectedLine-offset >= 0
-				           && m_selectedLine-offset < (int32_t)m_list.size()) {
-					if(etk::path::isDirectory(m_list[m_selectedLine-offset])) {
-						signalFolderSelect.emit(m_list[m_selectedLine-offset].getFileName());
+			} else if (    *propertyShowFolder == true
+			            && m_selectedLine == 1) {
+				// ".." folder
+				if (_event.getStatus() == gale::key::status::pressSingle) {
+					signalFolderSelect.emit(propertyPath->getParent());
+				} else {
+					signalFolderValidate.emit(propertyPath->getParent());
+				}
+			} else if(    m_selectedLine-offset  >= 0
+			           && m_selectedLine-offset < (int32_t)m_list.size() ) {
+				// generate event extern:
+				if(etk::path::isDirectory(m_list[m_selectedLine-offset])) {
+					if (_event.getStatus() == gale::key::status::pressSingle) {
+						signalFolderSelect.emit(m_list[m_selectedLine-offset]);
 					} else {
-						signalFileSelect.emit(m_list[m_selectedLine-offset].getFileName());
+						signalFolderValidate.emit(m_list[m_selectedLine-offset]);
+					}
+				} else {
+					if (_event.getStatus() == gale::key::status::pressSingle) {
+						signalFileSelect.emit(m_list[m_selectedLine-offset]);
+					} else {
+						signalFileValidate.emit(m_list[m_selectedLine-offset]);
 					}
 				}
 			}
@@ -227,6 +230,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
 }
 
 void ewol::widget::ListFileSystem::onChangePropertyPath() {
+	EWOL_WARNING("Change Path: " << *propertyPath << " selected File=" << *propertyFile);;
 	regenerateView();
 }
 

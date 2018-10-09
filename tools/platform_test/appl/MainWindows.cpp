@@ -38,7 +38,7 @@ void appl::MainWindows::init() {
 	propertyFill.set(bvec2(true, true));
 	propertyExpand.set(bvec2(true, true));
 	m_composer = ewol::widget::Composer::create();
-	m_composer->loadFromFile("DATA:gui.xml");
+	m_composer->loadFromFile("DATA:///gui.xml");
 	setSubWidget(m_composer);
 	externSubBind(m_composer, ewol::widget::Button, "appl-past", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackPast);
 	externSubBind(m_composer, ewol::widget::Button, "appl-copy", signalPressed, sharedFromThis(), &appl::MainWindows::onCallbackCopy);

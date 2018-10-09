@@ -98,7 +98,7 @@ File ```gui.xml```
 
 ```{.cpp}
 	#include <ewol::widget::Composer.hpp>
-	ewol::widget::WidgetShared tmpWidget = ewol::widget::composerGenerateFile("DATA:gui.xml");
+	ewol::widget::WidgetShared tmpWidget = ewol::widget::composerGenerateFile("DATA:///gui.xml");
 	if (tmpWidget == null) {
 		APPL_CRITICAL("The widget can not be created");
 	}

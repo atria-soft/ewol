@@ -33,7 +33,7 @@ namespace ewol {
 				eproperty::Range<vec2> propertyPosStop; //!< position in the image to start the sisplay (when we want not to display all the image)
 				eproperty::Value<bool> propertyDistanceFieldMode; //!< to have a parameter
 				eproperty::Value<bool> propertySmooth; //!< display is done in the pixed approximation if false
-				eproperty::Value<bool> propertyUseThemeColor; //!< Use the themo color management ("{ewol}THEME:COLOR:Image.json") default false
+				eproperty::Value<bool> propertyUseThemeColor; //!< Use the themo color management ("THEME_COLOR:///Image.json?lib=ewol") default false
 			protected:
 				ewol::compositing::Image m_compositing; //!< compositing element of the image.
 				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
