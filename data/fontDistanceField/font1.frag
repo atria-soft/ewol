@@ -30,7 +30,7 @@ void main(void) {
 	
 	// Smooth
 	gl_FragColor = vec4(f_color[0], f_color[1], f_color[2], f_color[3]*alpha);
-	
+	//gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 	// Outline
 	/*
 	float mu = smoothstep(outline_center-width, outline_center+width, dist);

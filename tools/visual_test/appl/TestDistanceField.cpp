@@ -60,15 +60,17 @@ void appl::TestDistanceField::onRegenerateDisplay() {
 	if (false == needRedraw()) {
 		return;
 	}
-	APPL_WARNING("Regenerate...");
+	APPL_DEBUG("Regenerate...");
 	m_text1.clear();
-	m_text1.setPos(vec3(m_size.x()*0.5-20,m_size.y()*0.5+10,0));
-	m_text1.printDecorated("Text To compare ... Avenue AAVVAA ... Normal generic test");
+	m_text1.setPos(vec3(m_size.x()*0.5-20,m_size.y()*0.5+20,0));
+	m_text1.printDecorated("Text To compare ... <br/>Avenue AAVVAA ... Normal generic test");
 	
+	APPL_DEBUG("Regenerate.2.");
 	m_text2.clear();
-	m_text2.setPos(vec3(m_size.x()*0.5-20,m_size.y()*0.5-10,0));
-	m_text2.printDecorated("Text To compare ... Avenue AAVVAA ... Test en distance field Mode");
+	m_text2.setPos(vec3(m_size.x()*0.5-20,m_size.y()*0.5-20,0));
+	m_text2.printDecorated("Text To compare ... <br/>Avenue AAVVAA ... Test en distance field Mode");
 	
+	APPL_DEBUG("Regenerate.3.");
 }
 
 bool appl::TestDistanceField::onEventInput(const ewol::event::Input& _event) {

@@ -132,10 +132,9 @@ void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
 	
 	m_sizeRatio = ((float)SIZE_GENERATION) / ((float)m_font->getHeight(SIZE_GENERATION));
 	// TODO : basic font use 512 is better ...  == > maybe estimate it with the dpi ???
-	setImageSize(ivec2(256,32));
+	setImageSize(ivec2(512,32));
 	// now we can acces directly on the image
 	m_data.clear(etk::Color<>(0x00000000));
-	
 	// add error glyph
 	addGlyph(0);
 	// by default we set only the first AINSI char availlable
@@ -143,7 +142,12 @@ void ewol::resource::DistanceFieldFont::init(const etk::String& _fontName) {
 		addGlyph(iii);
 	}
 	flush();
-	//exportOnFile();
+	if (true) {
+		EWOL_ERROR("Save in cache the loaded data ..... ");
+		egami::store(m_data, "CACHE:///fileFont.bmp"); // ==> for debug test only ...
+		egami::store(m_data, "CACHE:///fileFont.png");
+	}
+	exportOnFile();
 }
 
 ewol::resource::DistanceFieldFont::~DistanceFieldFont() {
@@ -158,15 +162,25 @@ float ewol::resource::DistanceFieldFont::getDisplayRatio(float _size) {
 
 
 void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	EWOL_INFO("Generate Distance field font [START]");
+	EWOL_INFO("    _input.getSize()=" << _input.getSize());
 	ethread::RecursiveLock lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
-	etk::Vector<short> xdist(size);
-	etk::Vector<short> ydist(size);
-	etk::Vector<double> gx(size);
-	etk::Vector<double> gy(size);
-	etk::Vector<double> data(size);
-	etk::Vector<double> outside(size);
-	etk::Vector<double> inside(size);
+	etk::Vector<short> xdist;
+	etk::Vector<short> ydist;
+	etk::Vector<double> gx;
+	etk::Vector<double> gy;
+	etk::Vector<double> data;
+	etk::Vector<double> outside;
+	etk::Vector<double> inside;
+	xdist.resize(size, 0);
+	ydist.resize(size, 0);
+	gx.resize(size, 0.0);
+	gy.resize(size, 0.0);
+	data.resize(size, 0.0);
+	outside.resize(size, 0.0);
+	inside.resize(size, 0.0);
+	EWOL_INFO("    size=" << size);
 	// Convert img into double (data)
 	double img_min = 255, img_max = -255;
 	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
@@ -189,7 +203,6 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 			data[iii] = (_input.get(ivec2(xxx, yyy))-img_min)/img_max;
 		}
 	}
-	
 	// Compute outside = edtaa3(bitmap); % Transform background (0's)
 	computegradient(&data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
 	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().x(), _input.getSize().y(), &xdist[0], &ydist[0], &outside[0]);
@@ -198,7 +211,6 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 			outside[iii] = 0.0;
 		}
 	}
-	
 	// Compute inside = edtaa3(1-bitmap); % Transform foreground (1's)
 	for(size_t iii = 0; iii < gx.size(); ++iii) {
 		gx[iii] = 0;
@@ -216,7 +228,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 			inside[iii] = 0.0;
 		}
 	}
-	
+	EWOL_INFO("    _output=" << _output);
 	_output.resize(_input.getSize(), etk::Color<>(0));
 	_output.clear(etk::Color<>(0));
 	for (int32_t xxx = 0; xxx < _output.getSize().x(); ++xxx) {
@@ -235,6 +247,7 @@ void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::Image
 			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,255));
 		}
 	}
+	EWOL_INFO("    _output=" << _output);
 }
 
 bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
@@ -247,11 +260,11 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	GlyphProperty tmpchar;
 	tmpchar.m_UVal = _val;
 	egami::ImageMono imageGlyphRaw;
-	egami::Image imageGlyphDistanceField;
+	egami::Image imageGlyphDistanceField(ivec2(32,32), egami::colorType::RGBA8);
 	EWOL_DEBUG("Generate Glyph : " << _val);
 	
 	if (m_font->getGlyphProperty(SIZE_GENERATION, tmpchar) == true) {
-		//EWOL_DEBUG("load char : '" << _val << "'=" << _val.get());
+		//EWOL_DEBUG("load char: '" << _val << "'=" << _val);
 		hasChange = true;
 		// change line if needed ...
 		if (m_lastGlyphPos.x() + tmpchar.m_sizeTexture.x()+m_borderSize*2.0 > m_data.getSize().x()) {
@@ -262,6 +275,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 		while(m_lastGlyphPos.y()+tmpchar.m_sizeTexture.y()+m_borderSize*2.0 > m_data.getSize().y()) {
 			ivec2 size = m_data.getSize();
 			size.setY(size.y()*2);
+			EWOL_VERBOSE("resize " << m_data.getSize() << " => " << size);
 			m_data.resize(size, etk::Color<>(0));
 			// change the coordonate on the element in the texture
 			for (size_t jjj = 0; jjj < m_listElement.size(); ++jjj) {
@@ -275,15 +289,16 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 		m_font->drawGlyph(imageGlyphRaw, SIZE_GENERATION, tmpchar, m_borderSize);
 		
 		generateDistanceField(imageGlyphRaw, imageGlyphDistanceField);
-		/*
-		if (_val == 'Z') {
+		
+		if (_val == 100) {
+			EWOL_DEBUG("print char: " << _val << " size=" << imageGlyphDistanceField.getSize());
 			for (int32_t yyy = 0; yyy < imageGlyphDistanceField.getSize().y(); ++yyy) {
 				for (int32_t xxx = 0; xxx < imageGlyphDistanceField.getSize().x(); ++xxx) {
-					EWOL_DEBUG((int)(imageGlyphDistanceField.get(ivec2(xxx, yyy)).r()) << "	");
+					EWOL_PRINT((int)(imageGlyphDistanceField.get(ivec2(xxx, yyy)).r()) << "	");
 				}
 			}
 		}
-		*/
+		
 		m_data.insert(m_lastGlyphPos, imageGlyphDistanceField);
 		
 		// set image position
@@ -313,7 +328,9 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	}
 	if (hasChange == true) {
 		flush();
-		//egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
+		//EWOL_ERROR("Save in cache the loaded data ..... ");
+		//egami::store(m_data, "CACHE:///fileFont.bmp"); // ==> for debug test only ...
+		//egami::store(m_data, "CACHE:///fileFont.png");
 	}
 	return hasChange;
 }
@@ -347,7 +364,7 @@ int32_t ewol::resource::DistanceFieldFont::getIndex(char32_t _charcode) {
 
 ewol::GlyphProperty* ewol::resource::DistanceFieldFont::getGlyphPointer(const char32_t& _charcode) {
 	ethread::RecursiveLock lock(m_mutex);
-	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
+	EWOL_VERBOSE("getGlyphPointer : " << uint32_t(_charcode));
 	int32_t index = getIndex(_charcode);
 	if(    index < 0
 	    || (size_t)index >= m_listElement.size() ) {
@@ -389,10 +406,11 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 	doc.add("m_borderSize", ejson::Number(m_borderSize));
 	doc.add("m_textureBorderSize", ejson::String(m_textureBorderSize));
 	etk::Uri tmpUri = m_fileName;
+	tmpUri.setScheme("CACHE");
 	tmpUri.setPath(m_fileName.getPath() + ".json");
 	doc.store(tmpUri);
-	tmpUri.setPath(m_fileName.getPath() + ".bmp");
-	egami::store(m_data, tmpUri);
+	//tmpUri.setPath(m_fileName.getPath() + ".bmp");
+	//egami::store(m_data, tmpUri);
 	tmpUri.setPath(m_fileName.getPath() + ".png");
 	egami::store(m_data, tmpUri);
 }
@@ -400,9 +418,11 @@ void ewol::resource::DistanceFieldFont::exportOnFile() {
 bool ewol::resource::DistanceFieldFont::importFromFile() {
 	ethread::RecursiveLock lock(m_mutex);
 	etk::Uri tmpUriJson = m_fileName;
+	tmpUriJson.setScheme("CACHE");
 	tmpUriJson.setPath(m_fileName.getPath() + ".json");
 	etk::Uri tmpUriBmp = m_fileName;
-	tmpUriBmp.setPath(m_fileName.getPath() + ".bmp");
+	tmpUriBmp.setScheme("CACHE");
+	tmpUriBmp.setPath(m_fileName.getPath() + ".png");
 	EWOL_DEBUG("IMPORT: DistanceFieldFont : file : '" << tmpUriJson << "'");
 	// test file existance:
 	if (    etk::uri::exist(tmpUriJson) == false
@@ -411,8 +431,14 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 		return false;
 	}
 	ejson::Document doc;
-	doc.load(tmpUriJson);
-	
+	if (doc.load(tmpUriJson) == false) {
+		return false;
+	}
+	egami::Image tmpImage = egami::load(tmpUriBmp);
+	if (tmpImage.exist() == false) {
+		return false;
+	}
+	m_data = tmpImage;
 	m_sizeRatio = doc["m_sizeRatio"].toNumber().get(0);
 	m_lastGlyphPos = doc["m_lastGlyphPos"].toString().get("0,0");
 	m_lastRawHeigh = doc["m_lastRawHeigh"].toNumber().get(0);
@@ -440,6 +466,5 @@ bool ewol::resource::DistanceFieldFont::importFromFile() {
 		prop.m_exist = tmpObj["m_exist"].toBoolean().get(false);
 		m_listElement.pushBack(prop);
 	}
-	m_data = egami::load(tmpUriBmp);
 	return m_data.exist();
 }

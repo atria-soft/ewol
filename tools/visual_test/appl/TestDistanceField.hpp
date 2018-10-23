@@ -21,7 +21,7 @@ namespace appl {
 			TestDistanceField();
 			void init();
 		public:
-			DECLARE_FACTORY(TestDistanceField);
+			DECLARE_WIDGET_FACTORY(TestDistanceField, "TestDistanceField");
 			virtual ~TestDistanceField() {};
 		public: // Derived function
 			virtual void onDraw();

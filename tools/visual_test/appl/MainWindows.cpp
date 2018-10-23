@@ -129,10 +129,14 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 	etk::String tmpConstruct;
 	switch(m_idWidget) {
 		case 0:
+			tmpConstruct = "<TestDistanceField />\n";
+			tmpDescription = "Test Distance Field";
+			break;
+		case 1:
 			tmpConstruct = "<image src='DATA:///sphere.png'/>\n";
 			tmpDescription = "Test ewol::widget::Image";
 			break;
-		case 1:
+		case 2:
 			tmpConstruct = etk::String()
 			    + "<select>\n"
 			    + "    <option id='1'>plop 1</option>\n"
@@ -143,31 +147,31 @@ void appl::MainWindows::onCallbackWidgetChange(int32_t _increment) {
 			    + "</select>\n";
 			tmpDescription = "Test ewol::widget::Select";
 			break;
-		case 2:
+		case 3:
 			tmpConstruct = "<ButtonColor/>";
 			tmpDescription = "Test ewol::widget::ButtonColor";
 			break;
-		case 3:
+		case 4:
 			tmpConstruct = "<label>Simple string</label>\n";
 			tmpDescription = "Test ewol::widget::Label";
 			break;
-		case 4:
+		case 5:
 			tmpConstruct = "<spin/>\n";
 			tmpDescription = "Test ewol::widget::Spin";
 			break;
-		case 5:
+		case 6:
 			tmpConstruct = "<checkbox><label>Simple string</label></checkbox>\n";
 			tmpDescription = "Test ewol::widget::Checkbox";
 			break;
-		case 6:
+		case 7:
 			tmpConstruct = "<entry/>\n";
 			tmpDescription = "Test ewol::widget::Entry";
 			break;
-		case 7:
+		case 8:
 			tmpConstruct = "<slider/>\n";
 			tmpDescription = "Test ewol::widget::Entry";
 			break;
-		case 8:
+		case 9:
 			tmpConstruct = etk::String()
 			    + "<button name='[TEST]Button:TO-TEST' expand='false,false' fill='false,false' >\n"
 			    + "    <label>My <font color='#FF0000'>Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...</label>\n"

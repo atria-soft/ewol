@@ -158,7 +158,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
                                              ewol::GlyphProperty& _property,
                                              int8_t _posInImage) {
 	ethread::RecursiveLock lock(m_mutex);
-	if(false == m_init) {
+	if(m_init == false) {
 		return false;
 	}
 	// 300dpi (hight quality) 96 dpi (normal quality)

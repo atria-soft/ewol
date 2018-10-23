@@ -54,13 +54,20 @@ void ewol::resource::ImageDF::init(etk::String _genName, const etk::Uri& _uri, c
 void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
 	ethread::RecursiveLock lock(m_mutex);
 	int32_t size = _input.getSize().x() * _input.getSize().y();
-	etk::Vector<short> xdist(size);
-	etk::Vector<short> ydist(size);
-	etk::Vector<double> gx(size);
-	etk::Vector<double> gy(size);
-	etk::Vector<double> data(size);
-	etk::Vector<double> outside(size);
-	etk::Vector<double> inside(size);
+	etk::Vector<short> xdist;
+	etk::Vector<short> ydist;
+	etk::Vector<double> gx;
+	etk::Vector<double> gy;
+	etk::Vector<double> data;
+	etk::Vector<double> outside;
+	etk::Vector<double> inside;
+	xdist.resize(size, 0);
+	ydist.resize(size, 0);
+	gx.resize(size, 0.0);
+	gy.resize(size, 0.0);
+	data.resize(size, 0.0);
+	outside.resize(size, 0.0);
+	inside.resize(size, 0.0);
 	// Convert img into double (data)
 	double img_min = 255, img_max = -255;
 	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {

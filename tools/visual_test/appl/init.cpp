@@ -14,6 +14,7 @@
 #include <appl/debug.hpp>
 #include <appl/MainWindows.hpp>
 #include <appl/widget/SizerColor.hpp>
+#include <appl/TestDistanceField.hpp>
 namespace appl {
 	class MainApplication : public ewol::context::Application {
 		public:
@@ -47,6 +48,7 @@ namespace appl {
 				_context.setIcon("DATA:///icon.png");
 				
 				appl::widget::SizerColor::createManagerWidget(_context.getWidgetManager());
+				appl::TestDistanceField::createManagerWidget(_context.getWidgetManager());
 				
 				APPL_INFO("==> CREATE ... (END)");
 			}
