@@ -58,9 +58,9 @@ void ewol::resource::TextureFile::init(etk::String _genName, const etk::Uri& _ur
 	#endif
 }
 
-ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const etk::String& _filename, ivec2 _size, ivec2 _sizeRegister) {
-	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size << " sizeRegister=" << _sizeRegister);
-	if (_filename == "") {
+ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::create(const etk::Uri& _uri, ivec2 _size, ivec2 _sizeRegister) {
+	EWOL_VERBOSE("KEEP: TextureFile: '" << _uri << "' size=" << _size << " sizeRegister=" << _sizeRegister);
+	if (_uri.isEmpty() == true) {
 		ememory::SharedPtr<ewol::resource::TextureFile> object(ETK_NEW(ewol::resource::TextureFile));
 		if (object == null) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
@@ -78,8 +78,8 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 		_size.setY(-1);
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	etk::String tmpFilename = _filename;
-	if (etk::end_with(_filename, ".svg") == false) {
+	etk::Uri tmpFilename = _uri;
+	if (etk::toLower(_uri.getPath().getExtention()) != "svg") {
 		_size = ewol::resource::TextureFile::sizeAuto;
 	}
 	if (_size.x()>0 && _size.y()>0) {
@@ -87,17 +87,15 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 		_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		if (_sizeRegister != ewol::resource::TextureFile::sizeAuto) {
 			if (_sizeRegister != ewol::resource::TextureFile::sizeDefault) {
-				tmpFilename += ":";
-				tmpFilename += etk::toString(_size.x());
-				tmpFilename += "x";
-				tmpFilename += etk::toString(_size.y());
+				tmpFilename.getQuery().set("x", etk::toString(_size.x()));
+				tmpFilename.getQuery().set("y", etk::toString(_size.y()));
 			}
 		}
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << tmpFilename << "' new size=" << _size);
 	ememory::SharedPtr<ewol::resource::TextureFile> object = null;
-	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep(tmpFilename);
+	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep(tmpFilename.getString());
 	if (object2 != null) {
 		object = ememory::dynamicPointerCast<ewol::resource::TextureFile>(object2);
 		if (object == null) {
@@ -112,10 +110,10 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 	// need to crate a new one ...
 	object = ememory::SharedPtr<ewol::resource::TextureFile>(ETK_NEW(ewol::resource::TextureFile));
 	if (object == null) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
+		EWOL_ERROR("allocation error of a resource : " << _uri);
 		return null;
 	}
-	object->init(tmpFilename, _filename, _size);
+	object->init(tmpFilename.getString(), _uri, _size);
 	getManager().localAdd(object);
 	return object;
 }

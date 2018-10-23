@@ -142,7 +142,7 @@ namespace ewol {
 			 * @brief Special for init (main) set the start image when loading data
 			 * @param[in] _fileName Name of the image to load
 			 */
-			void setInitImage(const etk::String& _fileName);
+			void setInitImage(const etk::Uri& _fileName);
 		public:
 			/**
 			 * @brief Request a display after call a resize

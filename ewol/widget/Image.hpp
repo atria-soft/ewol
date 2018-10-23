@@ -25,7 +25,7 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<> signalPressed;
 			public: // properties
-				eproperty::Value<etk::String> propertySource; //!< file name of the image.
+				eproperty::Value<etk::Uri> propertySource; //!< file name of the image.
 				eproperty::Value<gale::Dimension> propertyBorder; //!< border to add at the image.
 				eproperty::Value<gale::Dimension> propertyImageSize; //!< border to add at the image.
 				eproperty::Value<bool> propertyKeepRatio; //!< keep the image ratio between width and hight
@@ -52,10 +52,10 @@ namespace ewol {
 				virtual ~Image();
 				/**
 				 * @brief set All the configuration of the current image
-				 * @param[in] _file Filaneme of the new image
+				 * @param[in] _uri URI of the new image
 				 * @param[in] _border New border size to set
 				 */
-				void set(const etk::String& _file, const gale::Dimension& _border);
+				void set(const etk::Uri& _uri, const gale::Dimension& _border);
 				/**
 				 * @brief Set an image with direct elements
 				 * @param[in] _image Image to set in the display

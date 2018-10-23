@@ -44,10 +44,10 @@ void ewol::widget::Image::init() {
 	}
 }
 
-void ewol::widget::Image::set(const etk::String& _file, const gale::Dimension& _border) {
-	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
+void ewol::widget::Image::set(const etk::Uri& _uri, const gale::Dimension& _border) {
+	EWOL_VERBOSE("Set Image : " << _uri << " border=" << _border);
 	propertyBorder.set(_border);
-	propertySource.set(_file);
+	propertySource.set(_uri);
 }
 
 void ewol::widget::Image::setCustumSource(const egami::Image& _image) {

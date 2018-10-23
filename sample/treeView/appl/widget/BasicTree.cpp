@@ -6,7 +6,6 @@
 
 #include "BasicTree.hpp"
 #include <etk/tool.hpp>
-#include <etk/os/FSNode.hpp>
 #include <test-debug/debug.hpp>
 
 #include <etk/typeInfo.hpp>

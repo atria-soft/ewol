@@ -44,7 +44,7 @@ ewol::Context& ewol::getContext() {
 }
 
 
-void ewol::Context::setInitImage(const etk::String& _fileName) {
+void ewol::Context::setInitImage(const etk::Uri& _fileName) {
 	//m_initDisplayImageName = _fileName;
 }
 

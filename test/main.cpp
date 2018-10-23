@@ -8,7 +8,6 @@
 #include <test-debug/debug.hpp>
 #include <etk/Vector.hpp>
 #include <etk/String.hpp>
-#include <etk/os/FSNode.hpp>
 #include <etk/archive/Archive.hpp>
 #include <etk/etk.hpp>
 #include <etk/Color.hpp>

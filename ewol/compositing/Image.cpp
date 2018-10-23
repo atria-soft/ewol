@@ -17,7 +17,7 @@ const int32_t ewol::compositing::Image::m_vboIdCoordTex(1);
 const int32_t ewol::compositing::Image::m_vboIdColor(2);
 #define NB_VBO (3)
 
-ewol::compositing::Image::Image(const etk::String& _imageName,
+ewol::compositing::Image::Image(const etk::Uri& _imageName,
                                 bool _df,
                                 int32_t _size) :
   m_filename(_imageName),
@@ -271,9 +271,9 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 	m_VBO->flush();
 }
 
-void ewol::compositing::Image::setSource(const etk::String& _newFile, const vec2& _size) {
+void ewol::compositing::Image::setSource(const etk::Uri& _uri, const vec2& _size) {
 	clear();
-	if (    m_filename == _newFile
+	if (    m_filename == _uri
 	     && m_requestSize == _size) {
 		// Nothing to do ...
 		return;
@@ -281,14 +281,14 @@ void ewol::compositing::Image::setSource(const etk::String& _newFile, const vec2
 	ememory::SharedPtr<ewol::resource::TextureFile> resource = m_resource;
 	ememory::SharedPtr<ewol::resource::ImageDF> resourceDF = m_resourceDF;
 	ememory::SharedPtr<ewol::resource::Texture> resourceTex = m_resourceImage;
-	m_filename = _newFile;
+	m_filename = _uri;
 	m_requestSize = _size;
 	m_resource.reset();
 	m_resourceDF.reset();
 	m_resourceImage.reset();
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
-	if (_newFile != "") {
+	if (_uri.isEmpty() == false) {
 		// link to new one
 		if (m_distanceFieldMode == false) {
 			m_resource = ewol::resource::TextureFile::create(m_filename, tmpSize);

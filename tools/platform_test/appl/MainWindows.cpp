@@ -24,8 +24,6 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/widget/Spin.hpp>
 #include <ewol/context/Context.hpp>
-#include <appl/TestDistanceField.hpp>
-#include <etk/os/FSNode.hpp>
 #include <eproperty/Value.hpp>
 
 appl::MainWindows::MainWindows() {

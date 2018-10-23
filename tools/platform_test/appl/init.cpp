@@ -6,15 +6,16 @@
 
 #include <etk/types.hpp>
 #include <etk/types.hpp>
-#include <etk/os/FSNode.hpp>
 #include <ewol/ewol.hpp>
 #include <ewol/object/Object.hpp>
 #include <ewol/context/Context.hpp>
 #include <ewol/widget/Manager.hpp>
+#include <etk/theme/theme.hpp>
 
 #include <appl/debug.hpp>
 #include <appl/MainWindows.hpp>
 #include <appl/widget/SizerColor.hpp>
+
 namespace appl {
 	class MainApplication : public ewol::context::Application {
 		public:

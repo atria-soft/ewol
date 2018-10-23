@@ -64,5 +64,6 @@
 			</button>
 			<spacer expand="true,true"/>
 		</sizer>
+		<TestDistanceField expand="true,false" fill="true,true"/>
 	</sizer>
 </composer>

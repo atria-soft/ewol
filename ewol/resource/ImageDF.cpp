@@ -160,9 +160,9 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const etk::String& _filename, ivec2 _size) {
-	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
-	if (_filename == "") {
+ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const etk::Uri& _uri, ivec2 _size) {
+	EWOL_VERBOSE("KEEP: TextureFile: '" << _uri << "' size=" << _size);
+	if (_uri.isEmpty() == true) {
 		ememory::SharedPtr<ewol::resource::ImageDF> object(ETK_NEW(ewol::resource::ImageDF));
 		if (object == null) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
@@ -180,8 +180,8 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 		_size.setY(-1);
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	etk::String TmpFilename = _filename;
-	if (etk::end_with(_filename, ".svg") == false) {
+	etk::Uri tmpFilename = _uri;
+	if (etk::toLower(_uri.getPath().getExtention()) != "svg") {
 		_size = ivec2(-1,-1);
 	}
 	#ifdef __TARGET_OS__MacOs
@@ -194,33 +194,31 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 		#ifdef __TARGET_OS__Android
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
-		TmpFilename += ":";
-		TmpFilename += etk::toString(_size.x());
-		TmpFilename += "x";
-		TmpFilename += etk::toString(_size.y());
+		tmpFilename.getQuery().set("x", etk::toString(_size.x()));
+		tmpFilename.getQuery().set("y", etk::toString(_size.y()));
 	}
 	
-	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
+	EWOL_VERBOSE("KEEP: TextureFile: '" << tmpFilename << "' new size=" << _size);
 	ememory::SharedPtr<ewol::resource::ImageDF> object = null;
-	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep("DF__" + TmpFilename);
+	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep("DF__" + tmpFilename.getString());
 	if (object2 != null) {
 		object = ememory::dynamicPointerCast<ewol::resource::ImageDF>(object2);
 		if (object == null) {
-			EWOL_CRITICAL("Request resource file : '" << TmpFilename << "' With the wrong type (dynamic cast error)");
+			EWOL_CRITICAL("Request resource file : '" << tmpFilename << "' With the wrong type (dynamic cast error)");
 			return null;
 		}
 	}
 	if (object != null) {
 		return object;
 	}
-	EWOL_INFO("CREATE: ImageDF: '" << TmpFilename << "' size=" << _size);
+	EWOL_INFO("CREATE: ImageDF: '" << tmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = ememory::SharedPtr<ewol::resource::ImageDF>(ETK_NEW(ewol::resource::ImageDF));
 	if (object == null) {
-		EWOL_ERROR("allocation error of a resource : " << _filename);
+		EWOL_ERROR("allocation error of a resource : " << _uri);
 		return null;
 	}
-	object->init("DF__" + TmpFilename, _filename, _size);
+	object->init("DF__" + tmpFilename.getString(), _uri, _size);
 	getManager().localAdd(object);
 	return object;
 }

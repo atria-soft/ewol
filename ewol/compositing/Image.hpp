@@ -17,7 +17,7 @@ namespace ewol {
 			public:
 				static const int32_t sizeAuto;
 			private:
-				etk::String m_filename;
+				etk::Uri m_filename;
 				ivec2 m_requestSize;
 				vec3 m_position; //!< The current position to draw
 				vec3 m_clippingPosStart; //!< Clipping start position
@@ -50,11 +50,11 @@ namespace ewol {
 			public:
 				/**
 				 * @brief generic constructor
-				 * @param[in] _imageName Name of the file that might be loaded
+				 * @param[in] _uri URI of the file that might be loaded
 				 * @param[in] _df enable distance field mode
 				 * @param[in] _size for the image when Verctorial image loading is requested
 				 */
-				Image(const etk::String& _imageName="",
+				Image(const etk::Uri& _uri="",
 				      bool _df=false,
 				      int32_t _size=ewol::compositing::Image::sizeAuto);
 				/**
@@ -156,13 +156,13 @@ namespace ewol {
 				               vec2 _sourcePosStop);
 				/**
 				 * @brief change the image Source  == > can not be done to display 2 images at the same time ...
-				 * @param[in] _newFile New file of the Image
+				 * @param[in] _uri New file of the Image
 				 * @param[in] _size for the image when Verctorial image loading is requested
 				 */
-				void setSource(const etk::String& _newFile, int32_t _size=32) {
-					setSource(_newFile, vec2(_size,_size));
+				void setSource(const etk::Uri& _uri, int32_t _size=32) {
+					setSource(_uri, vec2(_size,_size));
 				};
-				void setSource(const etk::String& _newFile, const vec2& _size);
+				void setSource(const etk::Uri& _uri, const vec2& _size);
 				void setSource(egami::Image _image);
 				/**
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..

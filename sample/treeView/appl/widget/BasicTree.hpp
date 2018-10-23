@@ -6,7 +6,6 @@
 #pragma once
 
 #include <ewol/widget/TreeView.hpp>
-#include <etk/os/FSNode.hpp>
 #include <ewol/resource/ColorFile.hpp>
 #include <esignal/Signal.hpp>
 #include <etk/FlatTree.hpp>

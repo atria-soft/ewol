@@ -40,7 +40,7 @@ namespace ewol {
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
 				 * @return pointer on the resource or null if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::ImageDF> create(const etk::String& _filename, ivec2 _size=ivec2(-1,-1));
+				static ememory::SharedPtr<ewol::resource::ImageDF> create(const etk::Uri& _uri, ivec2 _size=ivec2(-1,-1));
 		};
 	};
 };
