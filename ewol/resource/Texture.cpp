@@ -142,9 +142,9 @@ bool ewol::resource::Texture::updateContext() {
 		m_lastSize = m_data.getSize();
 		m_lastTypeObject = typeObject;
 		m_lastSizeObject = sizeObject;
-		EWOL_WARNING("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+		EWOL_DEBUG("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	} else {
-		EWOL_WARNING("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+		EWOL_DEBUG("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	}
 	// in all case we set the texture properties :
 	// TODO : check error ???
@@ -300,13 +300,13 @@ void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 }
 
 void ewol::resource::Texture::set(egami::Image _image) {
-	EWOL_WARNING("Set a new image in a texture:");
+	EWOL_DEBUG("Set a new image in a texture:");
 	ethread::RecursiveLock lock(m_mutex);
 	if (_image.exist() == false) {
 		EWOL_ERROR("ERROR when loading the image : [raw data]");
 		return;
 	}
-	EWOL_WARNING("    size=" << _image.getSize());
+	EWOL_DEBUG("    size=" << _image.getSize());
 	etk::swap(m_data, _image);
 	ivec2 tmp = m_data.getSize();
 	m_realImageSize = vec2(tmp.x(), tmp.y());

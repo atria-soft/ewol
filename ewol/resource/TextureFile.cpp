@@ -106,7 +106,7 @@ ememory::SharedPtr<ewol::resource::TextureFile> ewol::resource::TextureFile::cre
 	if (object != null) {
 		return object;
 	}
-	EWOL_INFO("CREATE: TextureFile: '" << tmpFilename << "' size=" << _size);
+	EWOL_DEBUG("CREATE: TextureFile: '" << tmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = ememory::SharedPtr<ewol::resource::TextureFile>(ETK_NEW(ewol::resource::TextureFile));
 	if (object == null) {

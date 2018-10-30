@@ -78,7 +78,7 @@ void ewol::resource::FontFreeType::init(const etk::Uri& _uri) {
 		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_INFO("load font : \"" << _uri << "\" glyph count = " << (int)m_fftFace->num_glyphs);
+		EWOL_DEBUG("load font : \"" << _uri << "\" glyph count = " << (int)m_fftFace->num_glyphs);
 		m_init = true;
 		//display();
 	}

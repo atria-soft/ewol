@@ -28,16 +28,16 @@ ewol::context::ConfigFont::~ConfigFont() {
 void ewol::context::ConfigFont::set(const etk::String& _fontName, int32_t _size) {
 	m_name = _fontName;
 	m_size = _size;
-	EWOL_INFO("Set default Font : '" << m_name << "' size=" << m_size);
+	EWOL_DEBUG("Set default Font : '" << m_name << "' size=" << m_size);
 }
 
 void ewol::context::ConfigFont::setSize(int32_t _size) {
 	m_size = _size;
-	EWOL_INFO("Set default Font : '" << m_name << "' size=" << m_size << " (change size only)");
+	EWOL_DEBUG("Set default Font : '" << m_name << "' size=" << m_size << " (change size only)");
 }
 
 void ewol::context::ConfigFont::setName(const etk::String& _fontName) {
 	m_name = _fontName;
-	EWOL_INFO("Set default Font : '" << m_name << "' size=" << m_size << " (change name only)");
+	EWOL_DEBUG("Set default Font : '" << m_name << "' size=" << m_size << " (change name only)");
 }
 
