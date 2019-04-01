@@ -27,6 +27,7 @@ namespace ewol {
 			public: // properties
 				eproperty::Value<bool> propertyAutoTranslate; //!< if at true the data is translate automaticaly translate.
 				eproperty::Value<etk::String> propertyValue; //!< decorated text to display.
+				eproperty::Value<int32_t> propertyFontSize; //!< default size of the font.
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
 				etk::UString m_value;
@@ -56,6 +57,7 @@ namespace ewol {
 			protected:
 				virtual void onChangePropertyValue();
 				virtual void onChangePropertyAutoTranslate();
+				virtual void onChangePropertyFontSize();
 		};
 	};
 };

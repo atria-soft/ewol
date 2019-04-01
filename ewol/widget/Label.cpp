@@ -23,6 +23,10 @@ ewol::widget::Label::Label() :
                       "",
                       "displayed value string",
                       &ewol::widget::Label::onChangePropertyValue),
+  propertyFontSize(this, "font-size",
+                      0,
+                      "default font size (0=> system default)",
+                      &ewol::widget::Label::onChangePropertyFontSize),
   m_value(U""),
   m_colorProperty(null),
   m_colorDefaultFgText(-1),
@@ -115,6 +119,9 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	
 	// clean the element
 	m_text.reset();
+	if (propertyFontSize.get() != 0) {
+		m_text.setFontSize(propertyFontSize.get());
+	}
 	if (m_colorProperty != null) {
 		m_text.setDefaultColorFg(m_colorProperty->get(m_colorDefaultFgText));
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
@@ -157,6 +164,10 @@ void ewol::widget::Label::onChangePropertyValue() {
 	}
 	markToRedraw();
 	requestUpdateSize();
+}
+
+void ewol::widget::Label::onChangePropertyFontSize() {
+	onChangePropertyValue();
 }
 
 void ewol::widget::Label::onChangePropertyAutoTranslate() {
