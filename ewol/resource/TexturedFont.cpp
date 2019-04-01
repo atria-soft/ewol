@@ -116,7 +116,7 @@ void ewol::resource::TexturedFont::init(const etk::String& _fontName) {
 		#if defined(__TARGET_OS__Android)
 			folderList.pushBack(etk::Path("/system/fonts"));
 		#elif defined(__TARGET_OS__Linux)
-			folderList.pushBack(etk::Path("/usr/share/fonts/truetype"));
+			folderList.pushBack(etk::Path("/usr/share/fonts"));
 		#endif
 	}
 	etk::Uri applicationBaseFont = ewol::getContext().getFontDefault().getFolder();
