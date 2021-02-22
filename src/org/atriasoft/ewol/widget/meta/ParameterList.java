@@ -40,7 +40,7 @@ namespace ewol {
 				
 			private:
 				int32_t m_idSelected;
-				etk::Vector<ememory::SharedPtr<ewol::widget::elementPL>> m_list;
+				List<ememory::SharedPtr<ewol::widget::elementPL>> m_list;
 			protected:
 				ParameterList();
 				void init() override;
@@ -50,7 +50,7 @@ namespace ewol {
 				void setLabel(etk::String _newLabel);
 			// drawing capabilities ....
 			private:
-				etk::Vector<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
+				List<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
 			public:
 				void addOObject(const ememory::SharedPtr<ewol::Compositing>& _newObject, int32_t _pos=-1);
 				void clearOObjectList();

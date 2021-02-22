@@ -19,7 +19,7 @@ namespace ewol {
 		using ScrollWeak = ememory::WeakPtr<ewol::widget::Scroll>;
 		class Scroll : public ewol::widget::Container {
 			public: // properties
-				eproperty::Range<vec2> propertyLimit; //!< Set the limitation of the ratio in the sreen
+				eproperty::Range<Vector2f> propertyLimit; //!< Set the limitation of the ratio in the sreen
 				eproperty::Value<etk::Uri> propertyShapeVert; //!< Vertical shaper name
 				eproperty::Value<etk::Uri> propertyShapeHori; //!< Horizontal shaper name
 				eproperty::Value<bool> propertyHover; //!< Horizontal shaper name
@@ -37,7 +37,7 @@ namespace ewol {
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
 			private:
 				float m_pixelScrolling;
-				vec2 m_highSpeedStartPos;
+				Vector2f m_highSpeedStartPos;
 				enum highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
 				enum gale::key::type m_highSpeedType;
@@ -53,7 +53,7 @@ namespace ewol {
 				void onRegenerateDisplay() override;
 				bool onEventInput(const ewol::event::Input& _event) override;
 				void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 			protected:
 				void onDraw() override;
 			protected:

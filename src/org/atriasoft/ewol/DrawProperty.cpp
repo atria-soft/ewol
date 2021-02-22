@@ -15,7 +15,7 @@ etk::Stream& ewol::operator <<(etk::Stream& _os, const ewol::DrawProperty& _obj)
 	return _os;
 }
 
-void ewol::DrawProperty::limit(const vec2& _origin, const vec2& _size) {
+void ewol::DrawProperty::limit(const Vector2f& _origin, const Vector2f& _size) {
 	m_size += m_origin;
 	m_origin.setMax(_origin);
 	m_size.setMin(_origin+_size);

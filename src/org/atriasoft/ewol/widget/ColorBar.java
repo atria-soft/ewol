@@ -30,7 +30,7 @@ namespace ewol {
 				virtual ~ColorBar();
 			private:
 				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
-				vec2 m_currentUserPos;
+				Vector2f m_currentUserPos;
 			protected:
 				void onDraw() override;
 			public:

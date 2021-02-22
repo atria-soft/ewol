@@ -32,7 +32,7 @@ namespace ewol {
 				
 				virtual bool drawGlyph(egami::Image& _imageOut,
 				                       int32_t _fontSize,
-				                       ivec2 _glyphPosition,
+				                       Vector2i _glyphPosition,
 				                       ewol::GlyphProperty& _property,
 				                       int8_t _posInImage) = 0;
 				
@@ -41,12 +41,12 @@ namespace ewol {
 				                       ewol::GlyphProperty& _property,
 				                       int32_t _borderSize = 0) = 0;
 				
-				virtual vec2 getSize(int32_t _fontSize, const etk::String& _unicodeString) = 0;
+				virtual Vector2f getSize(int32_t _fontSize, const etk::String& _unicodeString) = 0;
 				virtual float getSizeWithHeight(float _fontHeight) = 0;
 				
 				virtual int32_t getHeight(int32_t _fontSize) = 0;
 				
-				virtual void generateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph) { };
+				virtual void generateKerning(int32_t _fontSize, List<ewol::GlyphProperty>& _listGlyph) { };
 				
 				virtual void display() {};
 		};

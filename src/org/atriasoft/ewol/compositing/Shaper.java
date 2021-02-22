@@ -54,7 +54,7 @@ namespace ewol {
 				ememory::SharedPtr<gale::resource::Program> m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
-				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on vec2(X,Y))
+				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on Vector2f(X,Y))
 				int32_t m_GLStateActivate;      //!< openGL id on the element (activate state displayed)
 				int32_t m_GLStateOld;           //!< openGL id on the element (old state displayed)
 				int32_t m_GLStateNew;           //!< openGL id on the element (new state displayed)
@@ -64,10 +64,10 @@ namespace ewol {
 				ememory::SharedPtr<ewol::resource::TextureFile> m_resourceTexture; //!< texture resources (for the image)
 				// internal needed data :
 				int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
-				vec2    m_propertyOrigin;         //!< widget origin
-				vec2    m_propertySize;           //!< widget size
-				vec2    m_propertyInsidePosition; //!< internal subwidget position
-				vec2    m_propertyInsideSize;     //!< internal subwidget size
+				Vector2f    m_propertyOrigin;         //!< widget origin
+				Vector2f    m_propertySize;           //!< widget size
+				Vector2f    m_propertyInsidePosition; //!< internal subwidget position
+				Vector2f    m_propertyInsideSize;     //!< internal subwidget size
 				int32_t m_stateActivate;          //!< Activate state of the element
 				int32_t m_stateOld;               //!< previous state
 				int32_t m_stateNew;               //!< destination state
@@ -75,7 +75,7 @@ namespace ewol {
 				int32_t m_nbVertexToDisplay;
 				// color management theme:
 				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
-				etk::Vector<ivec2> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
+				List<Vector2i> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
 			protected:
 				static const int32_t m_vboIdCoord;
 				static const int32_t m_vboIdPos;
@@ -224,11 +224,11 @@ namespace ewol {
 				 * @param[in] _insidePos Positin of the internal data
 				 * @param[in] _insideSize Size of the internal data
 				 */
-				void setShape(const vec2& _origin, const vec2& _size, const vec2& _insidePos, const vec2& _insideSize);
+				void setShape(const Vector2f& _origin, const Vector2f& _size, const Vector2f& _insidePos, const Vector2f& _insideSize);
 				// @previous
-				void setShape(const vec2& _origin, const vec2& _size) {
+				void setShape(const Vector2f& _origin, const Vector2f& _size) {
 					ewol::Padding tmp = getPadding();
-					setShape(_origin, _size, _origin+vec2(tmp.xLeft(), tmp.yButtom()), _size - vec2(tmp.x(), tmp.y()));
+					setShape(_origin, _size, _origin+Vector2f(tmp.xLeft(), tmp.yButtom()), _size - Vector2f(tmp.x(), tmp.y()));
 				}
 			public:
 				/**

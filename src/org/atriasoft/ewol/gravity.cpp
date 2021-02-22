@@ -56,24 +56,24 @@ enum ewol::gravity ewol::stringToGravity(const etk::String& _obj) {
 	}
 	return ewol::gravity_center;
 }
-vec2 ewol::gravityGenerateDelta(const enum ewol::gravity _gravity, const vec2& _deltas) {
-	vec2 out(0.0f,0.0f);
+Vector2f ewol::gravityGenerateDelta(const enum ewol::gravity _gravity, const Vector2f& _deltas) {
+	Vector2f out(0.0f,0.0f);
 	if (_deltas.x() > 0.0001f) {
 		if ((uint32_t(_gravity) & uint32_t(ewol::gravity_left)) != 0) {
 			// nothing to do
 		} else if ((uint32_t(_gravity) & uint32_t(ewol::gravity_right)) != 0) {
-			out = vec2(int32_t(_deltas.x()), 0.0f);
+			out = Vector2f(int32_t(_deltas.x()), 0.0f);
 		} else {
-			out = vec2(int32_t(_deltas.x()*0.5f), 0.0f);
+			out = Vector2f(int32_t(_deltas.x()*0.5f), 0.0f);
 		}
 	}
 	if (_deltas.y() > 0.0001f) {
 		if ((uint32_t(_gravity) & uint32_t(ewol::gravity_buttom)) != 0) {
 			// nothing to do
 		} else if ((uint32_t(_gravity) & uint32_t(ewol::gravity_top)) != 0) {
-			out += vec2(0.0f, int32_t(_deltas.y()));
+			out += Vector2f(0.0f, int32_t(_deltas.y()));
 		} else {
-			out += vec2(0.0f, int32_t(_deltas.y()*0.5f));
+			out += Vector2f(0.0f, int32_t(_deltas.y()*0.5f));
 		}
 	}
 	return out;

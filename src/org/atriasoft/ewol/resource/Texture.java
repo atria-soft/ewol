@@ -27,9 +27,9 @@ namespace ewol {
 				// openGl Context propoerties :
 				egami::Image m_data;
 				//! Last loaded size in the system openGL
-				vec2 m_lastSize;
+				Vector2f m_lastSize;
 				//! some image are not square == > we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
-				vec2 m_realImageSize;
+				Vector2f m_realImageSize;
 				// internal state of the openGl system :
 				bool m_loaded;
 				int32_t m_lastTypeObject;
@@ -60,7 +60,7 @@ namespace ewol {
 				virtual ~Texture();
 			public:
 				// You must set the size here, because it will be set in multiple of pow(2)
-				void setImageSize(ivec2 _newSize);
+				void setImageSize(Vector2i _newSize);
 				// Get the reference on this image to draw nomething on it ...
 				inline egami::Image& get() {
 					return m_data;
@@ -76,10 +76,10 @@ namespace ewol {
 				bool updateContext();
 				void removeContext();
 				void removeContextToLate();
-				const ivec2& getOpenGlSize() const {
+				const Vector2i& getOpenGlSize() const {
 					return m_data.getSize();
 				};
-				const vec2& getUsableSize() const {
+				const Vector2f& getUsableSize() const {
 					return m_realImageSize;
 				};
 				uint32_t getRendererId() const {

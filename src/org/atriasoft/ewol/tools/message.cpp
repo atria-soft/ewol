@@ -16,7 +16,7 @@
 void ewol::tools::message::create(enum ewol::tools::message::type _type, const etk::String& _message) {
 	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();
 	if (tmpPopUp == null) {
-		EWOL_ERROR("Can not create a simple pop-up");
+		Log.error("Can not create a simple pop-up");
 		return;
 	}
 	switch(_type) {
@@ -40,7 +40,7 @@ void ewol::tools::message::create(enum ewol::tools::message::type _type, const e
 	ewol::Context& context = ewol::getContext();
 	ewol::widget::WindowsShared windows = context.getWindows();
 	if (windows == null) {
-		EWOL_ERROR("can not get the current windows ... ==> can not display message : " << _message);
+		Log.error("can not get the current windows ... ==> can not display message : " << _message);
 		return;
 	}
 	windows->popUpWidgetPush(tmpPopUp);

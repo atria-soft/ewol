@@ -46,7 +46,7 @@ ewol::widget::Select::~Select() {
 void ewol::widget::Select::onChangePropertyValue() {
 	markToRedraw();
 	if (m_widgetEntry == null) {
-		EWOL_ERROR("Can not acces at entry ...");
+		Log.error("Can not acces at entry ...");
 		return;
 	}
 	for (auto &it : m_listElement) {
@@ -64,7 +64,7 @@ void ewol::widget::Select::onChangePropertyValue() {
 
 void ewol::widget::Select::optionSelectDefault() {
 	if (m_widgetEntry == null) {
-		EWOL_ERROR("Can not acces at entry ...");
+		Log.error("Can not acces at entry ...");
 		return;
 	}
 	for (auto &it : m_listElement) {
@@ -81,7 +81,7 @@ void ewol::widget::Select::optionSelectDefault() {
 void ewol::widget::Select::optionRemove(int32_t _value) {
 	for (auto it=m_listElement.begin(); it != m_listElement.end(); ++it) {
 		if (_value == it->m_value) {
-			EWOL_DEBUG("remove element: " << _value);
+			Log.debug("remove element: " << _value);
 			m_listElement.erase(it);
 			break;
 		}
@@ -97,7 +97,7 @@ void ewol::widget::Select::optionClear() {
 void ewol::widget::Select::optionAdd(int32_t _value, etk::String _data) {
 	for (auto &it : m_listElement) {
 		if (_value == it.m_value) {
-			EWOL_DEBUG("replace element: " << _value << " with: '" << _data << "'");
+			Log.debug("replace element: " << _value << " with: '" << _data << "'");
 			it.m_name = _data;
 		}
 	}
@@ -120,7 +120,7 @@ bool ewol::widget::Select::loadXML(const exml::Element& _node) {
 			continue;
 		}
 		if (pNode.getValue() != "option") {
-			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << pNode.getValue() << "' not in : [option]" );
+			Log.error("(l " << pNode.getPos() << ") Unknown basic node='" << pNode.getValue() << "' not in : [option]" );
 			continue;
 		}
 		etk::String valId = pNode.attributes["id"];
@@ -152,7 +152,7 @@ void ewol::widget::Select::updateGui() {
 }
 
 void ewol::widget::Select::onCallbackLabelPressed(int32_t _value) {
-	EWOL_VERBOSE("User select:" << _value);
+	Log.verbose("User select:" << _value);
 	propertyValue.set(_value);
 }
 
@@ -160,7 +160,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	// create a context menu:
 	ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
 	if (tmpContext == null) {
-		EWOL_ERROR("Allocation Error");
+		Log.error("Allocation Error");
 		return;
 	}
 	// auto-select mark position:
@@ -168,18 +168,18 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	ewol::widget::SizerShared mySizer;
 	mySizer = ewol::widget::Sizer::create();
 	if (mySizer == null) {
-		EWOL_ERROR("Allocation Error or sizer");
+		Log.error("Allocation Error or sizer");
 		return;
 	}
 	mySizer->propertyMode.set(widget::Sizer::modeVert);
-	mySizer->propertyLockExpand.set(vec2(true,true));
-	mySizer->propertyFill.set(vec2(true,true));
+	mySizer->propertyLockExpand.set(Vector2f(true,true));
+	mySizer->propertyFill.set(Vector2f(true,true));
 	// set it in the pop-up-system:
 	tmpContext->setSubWidget(mySizer);
 	for (auto &it : m_listElement) {
 		ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
 		if (myLabel == null) {
-			EWOL_ERROR("Allocation Error");
+			Log.error("Allocation Error");
 			continue;
 		}
 		if (it.m_selected == true) {
@@ -187,8 +187,8 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 		} else {
 			myLabel->propertyValue.set(it.m_name);
 		}
-		myLabel->propertyExpand.set(bvec2(true,true));
-		myLabel->propertyFill.set(bvec2(true,true));
+		myLabel->propertyExpand.set(Vector2b(true,true));
+		myLabel->propertyFill.set(Vector2b(true,true));
 		// set callback
 		myLabel->signalPressed.connect(sharedFromThis(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
 		myLabel->signalPressed.connect(tmpContext, &ewol::widget::ContextMenu::destroy);
@@ -197,7 +197,7 @@ void ewol::widget::Select::onCallbackOpenMenu() {
 	}
 	ewol::widget::WindowsShared currentWindows = getWindows();
 	if (currentWindows == null) {
-		EWOL_ERROR("Can not get the curent Windows...");
+		Log.error("Can not get the curent Windows...");
 	} else {
 		currentWindows->popUpWidgetPush(tmpContext);
 	}

@@ -31,7 +31,7 @@ namespace ewol {
 				 */
 				virtual ~Layer();
 			public:
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 		};
 	};
 };

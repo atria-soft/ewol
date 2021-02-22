@@ -20,10 +20,10 @@ namespace ewol {
 				int32_t destinationInputId;
 				echrono::Clock lastTimeEvent;
 				ewol::WidgetWeak curentWidgetEvent;
-				vec2 origin;
-				vec2 size;
-				vec2 downStart;
-				vec2 posEvent;
+				Vector2f origin;
+				Vector2f size;
+				Vector2f downStart;
+				Vector2f posEvent;
 				bool isDown;
 				bool isInside;
 				int32_t nbClickEvent; // 0 .. 1 .. 2 .. 3
@@ -65,7 +65,7 @@ namespace ewol {
 				                     ewol::WidgetShared _destWidget,
 				                     int32_t _IdInput,
 				                     enum gale::key::status _typeEvent,
-				                     vec2 _pos);
+				                     Vector2f _pos);
 				/**
 				 * @brief convert the system event id in the correct EWOL id depending of the system management mode
 				 *        This function find the next input id unused on the specifiic widget
@@ -86,8 +86,8 @@ namespace ewol {
 				void setDpi(int32_t _newDPI);
 				
 				// note if id<0  == > the it was finger event ...
-				void motion(enum gale::key::type _type, int _pointerID, vec2 _pos );
-				void state(enum gale::key::type _type, int _pointerID, bool _isDown, vec2 _pos);
+				void motion(enum gale::key::type _type, int _pointerID, Vector2f _pos );
+				void state(enum gale::key::type _type, int _pointerID, bool _isDown, Vector2f _pos);
 			public:
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...

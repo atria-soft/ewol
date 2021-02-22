@@ -17,7 +17,7 @@ ewol::object::Manager::Manager(ewol::Context& _context) :
   periodicCall(this, "periodic", "Call every time system render"),
   m_applWakeUpTime(0),
   m_lastPeriodicCallTime(0) {
-	EWOL_DEBUG(" == > init Object-Manager");
+	Log.debug(" == > init Object-Manager");
 	periodicCall.setPeriodic(true);
 	// set the basic time properties :
 	m_applWakeUpTime = echrono::Clock::now();
@@ -29,31 +29,31 @@ ewol::object::Manager::~Manager() {
 	m_workerList.clear();
 	bool hasError = false;
 	if (m_eObjectList.size()!=0) {
-		EWOL_ERROR("Must not have anymore eObject !!!");
+		Log.error("Must not have anymore eObject !!!");
 		hasError = true;
 	}
 	if (hasError == true) {
-		EWOL_ERROR("Check if the function UnInit has been called !!!");
+		Log.error("Check if the function UnInit has been called !!!");
 	}
 	displayListObject();
 }
 
 void ewol::object::Manager::displayListObject() {
 	ethread::RecursiveLock lock(m_mutex);
-	EWOL_INFO("List loaded object : ");
+	Log.info("List loaded object : ");
 	for (auto &it : m_eObjectList) {
 		ewol::ObjectShared element = it.lock();
 		if (element != null) {
-			EWOL_INFO("  [" << element->getId() << "] ref=" << element.useCount()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
+			Log.info("  [" << element->getId() << "] ref=" << element.useCount()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
 		}
 	}
 }
 
 void ewol::object::Manager::unInit() {
 	ethread::RecursiveLock lock(m_mutex);
-	EWOL_DEBUG(" == > Un-Init Object-Manager");
+	Log.debug(" == > Un-Init Object-Manager");
 	if (m_workerList.size() > 0) {
-		EWOL_DEBUG(" == > Remove all workers");
+		Log.debug(" == > Remove all workers");
 		m_workerList.clear();
 	}
 	for (auto &it : m_eObjectList) {
@@ -63,7 +63,7 @@ void ewol::object::Manager::unInit() {
 		}
 	}
 	if (m_eObjectList.size() != 0) {
-		EWOL_ERROR("Have " << m_eObjectList.size() << " active Object");
+		Log.error("Have " << m_eObjectList.size() << " active Object");
 	}
 	m_eObjectList.clear();
 }
@@ -71,7 +71,7 @@ void ewol::object::Manager::unInit() {
 void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
 	ethread::RecursiveLock lock(m_mutex);
 	if (_object == null) {
-		EWOL_ERROR("try to add an inexistant Object in manager");
+		Log.error("try to add an inexistant Object in manager");
 	}
 	m_eObjectList.pushBack(_object);
 }
@@ -85,7 +85,7 @@ int32_t ewol::object::Manager::getNumberObject() {
 void ewol::object::Manager::cleanInternalRemoved() {
 	ethread::RecursiveLock lock(m_mutex);
 	size_t nbObject = m_eObjectList.size();
-	EWOL_VERBOSE("Clean Object List (if needed) : " << m_eObjectList.size() << " elements");
+	Log.verbose("Clean Object List (if needed) : " << m_eObjectList.size() << " elements");
 	auto it(m_eObjectList.begin());
 	while (it != m_eObjectList.end()) {
 		if (it->expired() == true) {
@@ -95,7 +95,7 @@ void ewol::object::Manager::cleanInternalRemoved() {
 		}
 	}
 	if (m_eObjectList.size() != nbObject) {
-		EWOL_VERBOSE(" remove " << nbObject - m_eObjectList.size() << " deprecated objects");
+		Log.verbose(" remove " << nbObject - m_eObjectList.size() << " deprecated objects");
 	}
 }
 

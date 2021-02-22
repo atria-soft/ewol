@@ -12,17 +12,17 @@ namespace ewol {
 	namespace compositing {
 		class Sprite : public ewol::compositing::Image {
 			protected:
-				ivec2 m_nbSprite; //!< number of sprite in vertical and horizontal
-				vec2 m_unitarySpriteSize; //!< size of a unique sprite
+				Vector2i m_nbSprite; //!< number of sprite in vertical and horizontal
+				Vector2f m_unitarySpriteSize; //!< size of a unique sprite
 			public:
 				Sprite(const etk::String& _imageName,
-				       const ivec2& _nbSprite,
+				       const Vector2i& _nbSprite,
 				       int32_t _size=ewol::compositing::Image::sizeAuto);
 				virtual ~Sprite() {};
-				void printSprite(const ivec2& _spriteID, const vec2& _size) {
-					printSprite(_spriteID, vec3(_size.x(), _size.y(),0));
+				void printSprite(const Vector2i& _spriteID, const Vector2f& _size) {
+					printSprite(_spriteID, Vector3f(_size.x(), _size.y(),0));
 				};
-				void printSprite(const ivec2& _spriteID, const vec3& _size);
+				void printSprite(const Vector2i& _spriteID, const Vector3f& _size);
 		};
 	}
 }

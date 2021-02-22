@@ -45,9 +45,9 @@ namespace ewol {
 				void calculateMinMaxSize() override;
 			// drawing capabilities ....
 			protected:
-				etk::Vector<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
-				etk::Vector<int32_t> m_listSizeX; //!< size of every colomns
-				etk::Vector<int32_t> m_listSizeY; //!< size of every rows
+				List<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
+				List<int32_t> m_listSizeX; //!< size of every colomns
+				List<int32_t> m_listSizeY; //!< size of every rows
 			protected:
 				etk::Map<etk::String, ememory::SharedPtr<ewol::Compositing>> m_compositingElements;
 				void addComposeElemnent(const etk::String& _name, const ememory::SharedPtr<ewol::Compositing>& _element);
@@ -73,9 +73,9 @@ namespace ewol {
 				 * @brief Get the number of colomn and row availlable in the list
 				 * @return Number of colomn and row
 				 */
-				virtual ivec2 getMatrixSize() const;
+				virtual Vector2i getMatrixSize() const;
 				
-				virtual fluorine::Variant getData(int32_t _role, const ivec2& _pos) {
+				virtual fluorine::Variant getData(int32_t _role, const Vector2i& _pos) {
 					switch (_role) {
 						case ListRole::Text:
 							return "";
@@ -95,7 +95,7 @@ namespace ewol {
 				 * @param[in] _pos Position of colomn and Raw of the element.
 				 * @return The estimate size of the element.
 				 */
-				virtual vec2 calculateElementSize(const ivec2& _pos);
+				virtual Vector2f calculateElementSize(const Vector2i& _pos);
 				/**
 				 * @brief Draw an element in the specific size and position.
 				 * @param[in] _pos Position of colomn and Raw of the element.
@@ -103,13 +103,13 @@ namespace ewol {
 				 * @param[in] _size Render raw size
 				 * @return The estimate size of the element.
 				 */
-				virtual void drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size);
+				virtual void drawElement(const Vector2i& _pos, const Vector2f& _start, const Vector2f& _size);
 				/**
 				 * @brief Draw the background
 				 */
 				virtual void drawBackground();
 				
-				virtual bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) {
+				virtual bool onItemEvent(const ewol::event::Input& _event, const Vector2i& _pos, const Vector2f& _mousePosition) {
 					return false;
 				}
 				/**

@@ -22,9 +22,9 @@ ewol::resource::ColorFile::ColorFile() :
 void ewol::resource::ColorFile::init(const etk::Uri& _uri) {
 	ethread::RecursiveLock lock(m_mutex);
 	gale::Resource::init(_uri.get());
-	EWOL_DEBUG("CF : load \"" << _uri << "\"");
+	Log.debug("CF : load \"" << _uri << "\"");
 	reload();
-	EWOL_DEBUG("List of all color : " << m_list.getKeys());
+	Log.debug("List of all color : " << m_list.getKeys());
 }
 
 ewol::resource::ColorFile::~ColorFile() {
@@ -42,12 +42,12 @@ void ewol::resource::ColorFile::reload() {
 	// open and read all json elements:
 	ejson::Document doc;
 	if (doc.load(etk::Uri(m_name)) == false) {
-		EWOL_ERROR("Can not load file : '" << m_name << "'");
+		Log.error("Can not load file : '" << m_name << "'");
 		return;
 	}
 	ejson::Array baseArray = doc["color"].toArray();
 	if (baseArray.exist() == false) {
-		EWOL_ERROR("Can not get basic array : 'color' in file:" << m_name);
+		Log.error("Can not get basic array : 'color' in file:" << m_name);
 		doc.display();
 		return;
 	}
@@ -55,22 +55,22 @@ void ewol::resource::ColorFile::reload() {
 	for (const auto it : baseArray) {
 		ejson::Object tmpObj = it.toObject();
 		if (tmpObj.exist() == false) {
-			EWOL_ERROR(" can not get object in 'color' : " << it);
+			Log.error(" can not get object in 'color' : " << it);
 			findError = true;
 			continue;
 		}
 		etk::String name = tmpObj["name"].toString().get();
 		etk::String color = tmpObj["color"].toString().get(m_errorColor.getHexString());
-		EWOL_DEBUG("find new color : '" << name << "' color='" << color << "'");
+		Log.debug("find new color : '" << name << "' color='" << color << "'");
 		if (name.size() == 0) {
-			EWOL_ERROR("Drop an empty name");
+			Log.error("Drop an empty name");
 			findError = true;
 			continue;
 		}
 		m_list.add(name, etk::Color<float>(color));
 	}
 	if (findError == true) {
-		EWOL_ERROR("pb in parsing file:" << m_name);
+		Log.error("pb in parsing file:" << m_name);
 		doc.display();
 	}
 }

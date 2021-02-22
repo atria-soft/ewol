@@ -24,7 +24,7 @@ ewol::compositing::TextDF::~TextDF() {
 	
 }
 
-void ewol::compositing::TextDF::updateSizeToRender(const vec2& _size) {
+void ewol::compositing::TextDF::updateSizeToRender(const Vector2f& _size) {
 	float minSize = etk::min(_size.x(), _size.y());
 	if (m_fontDF != null) {
 		setFontSize(m_fontDF->getSize(minSize));
@@ -44,7 +44,7 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	if (_enableDepthTest == true) {
@@ -88,7 +88,7 @@ void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	// set Matrix: translation/positionMatrix
@@ -134,7 +134,7 @@ ewol::GlyphProperty * ewol::compositing::TextDF::getGlyphPointer(char32_t _charc
 
 void ewol::compositing::TextDF::setFontSize(int32_t _fontSize) {
 	clear();
-	EWOL_VERBOSE("Set font Size: " << _fontSize);
+	Log.verbose("Set font Size: " << _fontSize);
 	if (_fontSize <= 1) {
 		m_size = ewol::getContext().getFontDefault().getSize();
 	} else {
@@ -152,11 +152,11 @@ void ewol::compositing::TextDF::setFontName(const etk::String& _fontName) {
 	} else {
 		fontName = _fontName;
 	}
-	EWOL_VERBOSE("Set font name: '" << fontName << "'");
+	Log.verbose("Set font name: '" << fontName << "'");
 	// link to new one
 	m_fontDF = ewol::resource::DistanceFieldFont::create(fontName);
 	if (m_fontDF == null) {
-		EWOL_ERROR("Can not get find resource");
+		Log.error("Can not get find resource");
 		m_fontDF = previousFont;
 	}
 }
@@ -178,7 +178,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty* myGlyph = getGlyphPointer(_charcode);
 	if (null == myGlyph) {
-		EWOL_ERROR(" font does not really existed ...");
+		Log.error(" font does not really existed ...");
 		return;
 	}
 	float fontSize = getSize();
@@ -191,7 +191,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 	if (true == m_kerning) {
 		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
 		if (kerningOffset != 0) {
-			//EWOL_DEBUG("Kerning between : '" << m_previousCharcode << "'&'" << myGlyph->m_UVal << "' value : " << kerningOffset);
+			//Log.debug("Kerning between : '" << m_previousCharcode << "'&'" << myGlyph->m_UVal << "' value : " << kerningOffset);
 		}
 	}
 	// 0x01 == 0x20 == ' ';
@@ -223,7 +223,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 		float dyC = m_position.y() + (myGlyph->m_bearing.y() + fontHeigh - fontSize) * factorDisplay;
 		float dyD = dyC - myGlyph->m_sizeTexture.y() * factorDisplay;
 		#else
-		//EWOL_DEBUG(" plop : fontHeigh" << fontHeigh << " fontSize=" << fontSize);
+		//Log.debug(" plop : fontHeigh" << fontHeigh << " fontSize=" << fontSize);
 		float dxA = m_position.x() + ((float)myGlyph->m_bearing.x() + kerningOffset - (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay;
 		float dxB = dxA + ((float)myGlyph->m_sizeTexture.x() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
 		float dyC = m_position.y() + (fontHeigh - fontSize + ((float)myGlyph->m_bearing.y() + (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay);
@@ -235,13 +235,13 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 		float tvC = myGlyph->m_texturePosStart.y();
 		float tvD = tvC + myGlyph->m_texturePosSize.y();
 		/*
-		vec3 drawingPos = m_vectorialDraw.getPos();
+		Vector3f drawingPos = m_vectorialDraw.getPos();
 		etk::Color<> backColor = m_vectorialDraw.getColor();
 		
-		m_vectorialDraw.setPos(vec2(dxA, dyC));
+		m_vectorialDraw.setPos(Vector2f(dxA, dyC));
 		
 		m_vectorialDraw.setColor(etk::Color<>(0.0,1.0,0.0,1.0));
-		m_vectorialDraw.rectangle(vec2(dxB, dyD));
+		m_vectorialDraw.rectangle(Vector2f(dxB, dyD));
 		
 		m_vectorialDraw.setPos(drawingPos);
 		m_vectorialDraw.setColor(backColor);
@@ -306,7 +306,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 				 *   3------2
 				 */
 				if (m_needDisplay == true) {
-					vec3 bitmapDrawPos[4];
+					Vector3f bitmapDrawPos[4];
 					bitmapDrawPos[0].setValue(dxA+italicMove, dyC, 0);
 					bitmapDrawPos[1].setValue(dxB+italicMove, dyC, 0);
 					bitmapDrawPos[2].setValue(dxB, dyD, 0);
@@ -317,7 +317,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 					 *   |      |
 					 *   3------2
 					 */
-					vec2 texturePos[4];
+					Vector2f texturePos[4];
 					texturePos[0].setValue(tuA+m_mode, tvC);
 					texturePos[1].setValue(tuB+m_mode, tvC);
 					texturePos[2].setValue(tuB+m_mode, tvD);
@@ -375,9 +375,9 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 		}
 	}
 	// move the position :
-	//EWOL_DEBUG(" 5 pos=" << m_position << " advance=" << myGlyph->m_advance.x() << " kerningOffset=" << kerningOffset);
+	//Log.debug(" 5 pos=" << m_position << " advance=" << myGlyph->m_advance.x() << " kerningOffset=" << kerningOffset);
 	m_position.setX(m_position.x() + (myGlyph->m_advance.x() + kerningOffset) * factorDisplay);
-	//EWOL_DEBUG(" 6 print '" << charcode << "' : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+	//Log.debug(" 6 print '" << charcode << "' : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	// Register the previous character
 	m_previousCharcode = _charcode;
 	m_VBO->flush();
@@ -385,7 +385,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 }
 
 
-vec3 ewol::compositing::TextDF::calculateSizeChar(const char32_t& _charcode) {
+Vector3f ewol::compositing::TextDF::calculateSizeChar(const char32_t& _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
 	int32_t fontHeigh = getHeight();
@@ -396,7 +396,7 @@ vec3 ewol::compositing::TextDF::calculateSizeChar(const char32_t& _charcode) {
 		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
 	}
 	
-	vec3 outputSize((float)(myGlyph->m_advance.x() + kerningOffset)*m_fontDF->getDisplayRatio(getSize()),
+	Vector3f outputSize((float)(myGlyph->m_advance.x() + kerningOffset)*m_fontDF->getDisplayRatio(getSize()),
 	                (float)(fontHeigh),
 	                (float)(0.0));
 	// Register the previous character

@@ -16,18 +16,18 @@ ETK_DECLARE_TYPE(ewol::widget::Image);
 ewol::widget::Image::Image() :
   signalPressed(this, "pressed", "Image is pressed"),
   propertySource(this, "src", "", "Image source path", &ewol::widget::Image::onChangePropertySource),
-  propertyBorder(this, "border", vec2(0,0), "Border of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
-  propertyImageSize(this, "size", vec2(0,0), "Basic display size of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyBorder(this, "border", Vector2f(0,0), "Border of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyImageSize(this, "size", Vector2f(0,0), "Basic display size of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
   propertyKeepRatio(this, "ratio", true, "Keep ratio of the image", &ewol::widget::Image::onChangePropertyGlobalSize),
-  propertyPosStart(this, "part-start", vec2(0.0f, 0.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
-  propertyPosStop(this, "part-stop", vec2(1.0f, 1.0f), vec2(0.0f, 0.0f), vec2(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyPosStart(this, "part-start", Vector2f(0.0f, 0.0f), Vector2f(0.0f, 0.0f), Vector2f(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
+  propertyPosStop(this, "part-stop", Vector2f(1.0f, 1.0f), Vector2f(0.0f, 0.0f), Vector2f(1.0f, 1.0f), "Start display position in the image", &ewol::widget::Image::onChangePropertyGlobalSize),
   propertyDistanceFieldMode(this, "distance-field", false, "Distance field mode", &ewol::widget::Image::onChangePropertyDistanceFieldMode),
   propertySmooth(this, "smooth", true, "Smooth display of the image", &ewol::widget::Image::onChangePropertySmooth),
   propertyUseThemeColor(this, "use-theme-color", false, "use the theme color to display images", &ewol::widget::Image::onChangePropertyUseThemeColor),
   m_colorProperty(null),
   m_colorId(-1) {
 	addObjectType("ewol::widget::Image");
-	m_imageRenderSize = vec2(0,0);
+	m_imageRenderSize = Vector2f(0,0);
 	m_colorProperty = ewol::resource::ColorFile::create(etk::Uri("THEME_COLOR:///Image.json?lib=ewol"));
 	if (m_colorProperty != null) {
 		m_colorId = m_colorProperty->request("foreground");
@@ -45,7 +45,7 @@ void ewol::widget::Image::init() {
 }
 
 void ewol::widget::Image::set(const etk::Uri& _uri, const gale::Dimension& _border) {
-	EWOL_VERBOSE("Set Image : " << _uri << " border=" << _border);
+	Log.verbose("Set Image : " << _uri << " border=" << _border);
 	propertyBorder.set(_border);
 	propertySource.set(_uri);
 }
@@ -72,16 +72,16 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		m_compositing.setColor(m_colorProperty->get(m_colorId));
 	}
 	// Calculate the new position and size:
-	vec2 imageBoder = propertyBorder->getPixel();
-	vec2 origin = imageBoder;
+	Vector2f imageBoder = propertyBorder->getPixel();
+	Vector2f origin = imageBoder;
 	imageBoder *= 2.0f;
-	vec2 imageRealSize = m_imageRenderSize - imageBoder;
-	vec2 imageRealSizeMax = m_size - imageBoder;
+	Vector2f imageRealSize = m_imageRenderSize - imageBoder;
+	Vector2f imageRealSizeMax = m_size - imageBoder;
 	
-	vec2 ratioSizeDisplayRequested = *propertyPosStop - *propertyPosStart;
+	Vector2f ratioSizeDisplayRequested = *propertyPosStop - *propertyPosStart;
 	//imageRealSizeMax *= ratioSizeDisplayRequested;
 	
-	vec2 delta = ewol::gravityGenerateDelta(*propertyGravity, m_size-m_imageRenderSize);
+	Vector2f delta = ewol::gravityGenerateDelta(*propertyGravity, m_size-m_imageRenderSize);
 	if (propertyFill->x() == true) {
 		imageRealSize.setX(imageRealSizeMax.x());
 		delta.setX(0.0);
@@ -93,7 +93,7 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	origin += delta;
 	
 	if (*propertyKeepRatio == true) {
-		vec2 tmpSize = m_compositing.getRealSize();
+		Vector2f tmpSize = m_compositing.getRealSize();
 		//float ratio = tmpSize.x() / tmpSize.y();
 		float ratio = (tmpSize.x()*ratioSizeDisplayRequested.x()) / (tmpSize.y() * ratioSizeDisplayRequested.y());
 		//float ratioCurrent = (imageRealSize.x()*ratioSizeDisplayRequested.x()) / (imageRealSize.y() * ratioSizeDisplayRequested.y());
@@ -103,11 +103,11 @@ void ewol::widget::Image::onRegenerateDisplay() {
 		} else if (ratio < ratioCurrent) {
 			float oldX = imageRealSize.x();
 			imageRealSize.setX(imageRealSize.y()*ratio);
-			origin += vec2((oldX - imageRealSize.x()) * 0.5f, 0);
+			origin += Vector2f((oldX - imageRealSize.x()) * 0.5f, 0);
 		} else {
 			float oldY = imageRealSize.y();
 			imageRealSize.setY(imageRealSize.x()/ratio);
-			origin += vec2(0, (oldY - imageRealSize.y()) * 0.5f);
+			origin += Vector2f(0, (oldY - imageRealSize.y()) * 0.5f);
 		}
 	}
 	
@@ -115,44 +115,44 @@ void ewol::widget::Image::onRegenerateDisplay() {
 	if (*propertySmooth == true) {
 		m_compositing.setPos(origin);
 	} else {
-		m_compositing.setPos(ivec2(origin));
+		m_compositing.setPos(Vector2i(origin));
 	}
 	m_compositing.printPart(imageRealSize, *propertyPosStart, *propertyPosStop);
-	EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize);
-	EWOL_DEBUG("Paint Image :" << *propertySource << " realsize=" << m_compositing.getRealSize() << " origin=" << origin << " size=" << imageRealSize);
-	EWOL_DEBUG("      start=" << *propertyPosStart << " stop=" << *propertyPosStop);
+	Log.debug("Paint Image at : " << origin << " size=" << imageRealSize);
+	Log.debug("Paint Image :" << *propertySource << " realsize=" << m_compositing.getRealSize() << " origin=" << origin << " size=" << imageRealSize);
+	Log.debug("      start=" << *propertyPosStart << " stop=" << *propertyPosStop);
 }
 
 void ewol::widget::Image::calculateMinMaxSize() {
-	EWOL_DEBUG("calculate min size: border=" << propertyBorder << " size=" << propertyImageSize << " min-size=" << propertyMinSize);
-	vec2 imageBoder = propertyBorder->getPixel()*2.0f;
-	vec2 imageSize = propertyImageSize->getPixel();
-	vec2 size = propertyMinSize->getPixel();
-	EWOL_DEBUG("                ==> border=" << imageBoder << " size=" << imageSize << " min-size=" << size);
-	if (imageSize != vec2(0,0)) {
+	Log.debug("calculate min size: border=" << propertyBorder << " size=" << propertyImageSize << " min-size=" << propertyMinSize);
+	Vector2f imageBoder = propertyBorder->getPixel()*2.0f;
+	Vector2f imageSize = propertyImageSize->getPixel();
+	Vector2f size = propertyMinSize->getPixel();
+	Log.debug("                ==> border=" << imageBoder << " size=" << imageSize << " min-size=" << size);
+	if (imageSize != Vector2f(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;
 	} else {
-		vec2 imageSizeReal = m_compositing.getRealSize();
-		EWOL_VERBOSE(" Real Size = " << imageSizeReal);
-		vec2 min1 = imageBoder+propertyMinSize->getPixel();
+		Vector2f imageSizeReal = m_compositing.getRealSize();
+		Log.verbose(" Real Size = " << imageSizeReal);
+		Vector2f min1 = imageBoder+propertyMinSize->getPixel();
 		m_minSize = imageBoder+imageSizeReal;
-		EWOL_VERBOSE(" set max : " << m_minSize << " min1=" << min1);
+		Log.verbose(" set max : " << m_minSize << " min1=" << min1);
 		m_minSize.setMax(min1);
-		EWOL_VERBOSE("     result : " << m_minSize);
+		Log.verbose("     result : " << m_minSize);
 		m_maxSize = imageBoder+propertyMaxSize->getPixel();
 		m_minSize.setMin(m_maxSize);
 	}
 	m_imageRenderSize = m_minSize;
 	m_minSize.setMax(size);
 	m_maxSize.setMax(m_minSize);
-	EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << m_imageRenderSize << " img size=" << imageSize << "  " << propertyImageSize);
+	Log.debug("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << m_imageRenderSize << " img size=" << imageSize << "  " << propertyImageSize);
 	markToRedraw();
 }
 
 
 bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
-	//EWOL_DEBUG("Event on BT ...");
+	//Log.debug("Event on BT ...");
 	if (_event.getId() == 1) {
 		if(gale::key::status::pressSingle == _event.getStatus()) {
 			signalPressed.emit();
@@ -181,9 +181,9 @@ bool ewol::widget::Image::loadXML(const exml::Element& _node) {
 	}
 	tmpAttributeValue = _node.attributes["size"];
 	if (tmpAttributeValue.size() != 0) {
-		//EWOL_CRITICAL(" Parse SIZE : " << tmpAttributeValue);
+		//Log.critical(" Parse SIZE : " << tmpAttributeValue);
 		propertyImageSize.setDirect(tmpAttributeValue);
-		//EWOL_CRITICAL("               == > " << propertyImageSize);
+		//Log.critical("               == > " << propertyImageSize);
 	}
 	tmpAttributeValue = _node.attributes["border"];
 	if (tmpAttributeValue.size() != 0) {
@@ -193,7 +193,7 @@ bool ewol::widget::Image::loadXML(const exml::Element& _node) {
 	if (tmpAttributeValue.size() != 0) {
 		propertySmooth.setDirect(etk::string_to_bool(tmpAttributeValue));
 	}
-	//EWOL_DEBUG("Load label:" << node->ToElement()->getText());
+	//Log.debug("Load label:" << node->ToElement()->getText());
 	if (_node.nodes.size() != 0) {
 		propertySource.set(_node.getText());
 	} else {
@@ -208,14 +208,14 @@ bool ewol::widget::Image::loadXML(const exml::Element& _node) {
 void ewol::widget::Image::onChangePropertySource() {
 	markToRedraw();
 	requestUpdateSize();
-	EWOL_VERBOSE("Set sources : " << *propertySource << " size=" << *propertyImageSize);
+	Log.verbose("Set sources : " << *propertySource << " size=" << *propertyImageSize);
 	m_compositing.setSource(*propertySource, propertyImageSize->getPixel());
 }
 
 void ewol::widget::Image::onChangePropertyImageSize() {
 	markToRedraw();
 	requestUpdateSize();
-	EWOL_VERBOSE("Set sources : " << *propertySource << " size=" << *propertyImageSize);
+	Log.verbose("Set sources : " << *propertySource << " size=" << *propertyImageSize);
 	m_compositing.setSource(*propertySource, propertyImageSize->getPixel());
 }
 

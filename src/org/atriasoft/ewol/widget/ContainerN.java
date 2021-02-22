@@ -20,9 +20,9 @@ namespace ewol {
 		 */
 		class ContainerN : public ewol::Widget {
 			public: // properties:
-				eproperty::Value<bvec2> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
+				eproperty::Value<Vector2b> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			protected:
-				etk::Vector<ewol::WidgetShared> m_subWidget;
+				List<ewol::WidgetShared> m_subWidget;
 			protected:
 				/**
 				 * @brief Constructor
@@ -34,9 +34,9 @@ namespace ewol {
 				 */
 				virtual ~ContainerN();
 			protected:
-				bvec2 m_subExpend; //!< reference of the sub element expention requested.
+				Vector2b m_subExpend; //!< reference of the sub element expention requested.
 				// herited function
-				virtual bvec2 canExpand() override;
+				virtual Vector2b canExpand() override;
 			public:
 				/**
 				 * @brief remove all sub element from the widget.
@@ -92,10 +92,10 @@ namespace ewol {
 				void onRegenerateDisplay() override;
 				void onChangeSize() override;
 				void calculateMinMaxSize() override;
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
 				bool loadXML(const exml::Element& _node) override;
-				void setOffset(const vec2& _newVal) override;
+				void setOffset(const Vector2f& _newVal) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 				void drawWidgetTree(int32_t _level=0) override;
 			protected:

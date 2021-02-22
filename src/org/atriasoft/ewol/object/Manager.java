@@ -20,7 +20,7 @@ namespace ewol {
 			protected:
 				ethread::MutexRecursive m_mutex;
 			private:
-				etk::Vector<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
+				List<ewol::ObjectWeak> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 				Context& m_context;
 			public:
 				Manager(Context& _context);
@@ -66,7 +66,7 @@ namespace ewol {
 				 */
 				ewol::ObjectShared getObjectNamed(const etk::String& _name);
 			private:
-				etk::Vector<ewol::ObjectShared> m_workerList;
+				List<ewol::ObjectShared> m_workerList;
 			public:
 				/**
 				 * @brief Add a worker on the system list.

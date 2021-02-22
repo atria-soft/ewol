@@ -51,7 +51,7 @@ static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
 void ewol::widget::ColorBar::onChangePropertyValue() {
 	propertyValue.getDirect().setA(0xFF);
 	// estimate the cursor position:
-	EWOL_TODO("Later when really needed ...");
+	Log.todo("Later when really needed ...");
 }
 
 void ewol::widget::ColorBar::onDraw() {
@@ -89,13 +89,13 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *   ********   
 		 */
 		m_draw.setColor(s_listColorWhite);
-		m_draw.setPos(vec3(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+		m_draw.setPos(Vector3f(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
 		m_draw.addVertex();
 		m_draw.setColor(s_listColor[iii+1]);
-		m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
 		m_draw.addVertex();
 		m_draw.setColor(s_listColor[iii]);
-		m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
 		m_draw.addVertex();
 		/* Step 2 : 
 		 *   ********     
@@ -105,13 +105,13 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *                
 		 */
 		m_draw.setColor(s_listColorWhite);
-		m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
 		m_draw.addVertex();
 		m_draw.setColor(s_listColorWhite);
-		m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
 		m_draw.addVertex();
 		m_draw.setColor(s_listColor[iii+1]);
-		m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
 		m_draw.addVertex();
 		/* Step 3 : 
 		 *              
@@ -121,13 +121,13 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *   ********   
 		 */
 		m_draw.setColor(s_listColor[iii]);
-		m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
 		m_draw.addVertex();
 		m_draw.setColor(s_listColorBlack);
-		m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
 		m_draw.addVertex();
 		m_draw.setColor(s_listColorBlack);
-		m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
 		m_draw.addVertex();
 		/* Step 4 : 
 		 *   ********     
@@ -137,13 +137,13 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *                
 		 */
 		m_draw.setColor(s_listColor[iii]);
-		m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
 		m_draw.addVertex();
 		m_draw.setColor(s_listColor[iii+1]);
-		m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
 		m_draw.addVertex();
 		m_draw.setColor(s_listColorBlack);
-		m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
 		m_draw.addVertex();
 	}
 	if (m_currentUserPos.y() > 0.5) {
@@ -151,15 +151,15 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 	} else {
 		m_draw.setColor(etk::color::black);
 	}
-	m_draw.setPos(vec3(m_currentUserPos.x()*m_size.x(), m_currentUserPos.y()*m_size.y(), 0) );
+	m_draw.setPos(Vector3f(m_currentUserPos.x()*m_size.x(), m_currentUserPos.y()*m_size.y(), 0) );
 	m_draw.setThickness(1);
 	m_draw.circle(3.0);
 }
 
 
 bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
-	vec2 relativePos = relativePosition(_event.getPos());
-	//EWOL_DEBUG("Event on BT ...");
+	Vector2f relativePos = relativePosition(_event.getPos());
+	//Log.debug("Event on BT ...");
 	if (1 == _event.getId()) {
 		relativePos.setValue( etk::avg(0.0f, m_size.x(),relativePos.x()),
 		                      etk::avg(0.0f, m_size.y(),relativePos.y()) );
@@ -170,11 +170,11 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 			                           relativePos.y()/m_size.y() );
 			markToRedraw();
 			// == > try to estimate color
-			EWOL_VERBOSE("event on (" << relativePos.x() << "," << relativePos.y() << ")");
+			Log.verbose("event on (" << relativePos.x() << "," << relativePos.y() << ")");
 			int32_t bandID = (int32_t)(relativePos.x()/(m_size.x()/6));
 			float localPos = relativePos.x() - (m_size.x()/6) * bandID;
 			float poroportionnalPos = localPos/(m_size.x()/6);
-			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << localPos);
+			Log.verbose("bandId=" << bandID << "  relative pos=" << localPos);
 			etk::Color<> estimateColor = etk::color::white;
 			if (s_listColor[bandID].r() == s_listColor[bandID+1].r()) {
 				estimateColor.setR(s_listColor[bandID].r());

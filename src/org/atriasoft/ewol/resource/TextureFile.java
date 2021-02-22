@@ -17,16 +17,16 @@ namespace ewol {
 	namespace resource {
 		class TextureFile : public ewol::resource::Texture {
 			public:
-				static const ivec2 sizeAuto;
-				static const ivec2 sizeDefault;
+				static const Vector2i sizeAuto;
+				static const Vector2i sizeDefault;
 			protected:
 				TextureFile();
 				void init();
-				void init(etk::String _genName, const etk::Uri& _uri, const ivec2& _size);
+				void init(etk::String _genName, const etk::Uri& _uri, const Vector2i& _size);
 			public:
 				virtual ~TextureFile() { };
 			public:
-				const vec2& getRealSize() {
+				const Vector2f& getRealSize() {
 					return m_realImageSize;
 				};
 			public:
@@ -39,8 +39,8 @@ namespace ewol {
 				 * @return pointer on the resource or null if an error occured.
 				 */
 				static ememory::SharedPtr<ewol::resource::TextureFile> create(const etk::Uri& _filename,
-				                                                           ivec2 _size=ewol::resource::TextureFile::sizeAuto,
-				                                                           ivec2 _sizeRegister=ewol::resource::TextureFile::sizeAuto);
+				                                                           Vector2i _size=ewol::resource::TextureFile::sizeAuto,
+				                                                           Vector2i _sizeRegister=ewol::resource::TextureFile::sizeAuto);
 		};
 	};
 };

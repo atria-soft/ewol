@@ -52,13 +52,13 @@ namespace ewol {
 			bool m_exist;
 		public:
 			int32_t m_glyphIndex; //!< Glyph index in the system
-			ivec2 m_sizeTexture; //!< size of the element to display
-			ivec2 m_bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
-			ivec2 m_advance; //!< space use in the display for this specific char
-			vec2 m_texturePosStart; //!< Texture normalized position (START)
-			vec2 m_texturePosSize; //!< Texture normalized position (SIZE)
+			Vector2i m_sizeTexture; //!< size of the element to display
+			Vector2i m_bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
+			Vector2i m_advance; //!< space use in the display for this specific char
+			Vector2f m_texturePosStart; //!< Texture normalized position (START)
+			Vector2f m_texturePosSize; //!< Texture normalized position (SIZE)
 		private:
-			etk::Vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
+			List<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
 			GlyphProperty() :
 			  m_UVal(0),

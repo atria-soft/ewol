@@ -17,7 +17,7 @@ const int32_t ewol::compositing::Drawing::m_vboIdColor(1);
 
 #if 0
 
-static void generatePolyGone(etk::Vector<vec2 > & input, etk::Vector<vec2 > & output )
+static void generatePolyGone(List<Vector2f > & input, List<Vector2f > & output )
 {
 	if (input.size()<3) {
 		return;
@@ -28,10 +28,10 @@ static void generatePolyGone(etk::Vector<vec2 > & input, etk::Vector<vec2 > & ou
 		output.pushBack(input[iii]);
 		output.pushBack(input[iii+1]);
 	}
-	//EWOL_DEBUG("generate Plygone : " << input.size() << "  == > " << output.size() );
+	//Log.debug("generate Plygone : " << input.size() << "  == > " << output.size() );
 }
 
-static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & output, float sx, float sy, float ex, float ey)
+static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.size() <0) {
@@ -39,17 +39,17 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 	}
 	//int32_t sizeInit=input.size();
 	// last element :
-	vec2 destPoint;
-	vec2 lastElement = input[input.size()-1];
+	Vector2f destPoint;
+	Vector2f lastElement = input[input.size()-1];
 	bool inside = true;
 	if (lastElement.x < sx) {
 		inside = false;
 	}
-	//EWOL_DEBUG("generate an crop : ");
+	//Log.debug("generate an crop : ");
 	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].x < sx) {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > OUT ");
+				//Log.debug("element IN  == > OUT ");
 				//new point intersection ...
 				//y=aaax+bbb
 				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
@@ -58,15 +58,15 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				destPoint.x = sx;
 				output.pushBack(destPoint);
 			} else {
-				//EWOL_DEBUG("element OUT  == > OUT ");
+				//Log.debug("element OUT  == > OUT ");
 			}
 			inside = false;
 		} else {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > IN ");
+				//Log.debug("element IN  == > IN ");
 				output.pushBack(input[iii]);
 			} else {
-				//EWOL_DEBUG("element OUT  == > IN ");
+				//Log.debug("element OUT  == > IN ");
 				//new point intersection ...
 				//y=aaax+bbb
 				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
@@ -83,7 +83,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 		lastElement.y = input[iii].y;
 	}
 	
-	//EWOL_DEBUG("generate an crop on element : " << sizeInit << "  == > " << output.size() << "intermediate (1)");
+	//Log.debug("generate an crop on element : " << sizeInit << "  == > " << output.size() << "intermediate (1)");
 	input = output;
 	output.clear();
 	lastElement = input[input.size()-1];
@@ -94,7 +94,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].y < sy) {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > OUT ");
+				//Log.debug("element IN  == > OUT ");
 				//new point intersection ...
 				//x=aaay+bbb
 				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
@@ -103,15 +103,15 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				destPoint.x = sy*aaa + bbb;
 				output.pushBack(destPoint);
 			} else {
-				//EWOL_DEBUG("element OUT  == > OUT ");
+				//Log.debug("element OUT  == > OUT ");
 			}
 			inside = false;
 		} else {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > IN ");
+				//Log.debug("element IN  == > IN ");
 				output.pushBack(input[iii]);
 			} else {
-				//EWOL_DEBUG("element OUT  == > IN ");
+				//Log.debug("element OUT  == > IN ");
 				//new point intersection ...
 				//y=aaax+bbb
 				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
@@ -135,11 +135,11 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 	if (lastElement.x > ex) {
 		inside = false;
 	}
-	//EWOL_DEBUG("generate an crop : ");
+	//Log.debug("generate an crop : ");
 	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].x > ex) {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > OUT ");
+				//Log.debug("element IN  == > OUT ");
 				//new point intersection ...
 				//y=aaax+bbb
 				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
@@ -148,15 +148,15 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				destPoint.x = ex;
 				output.pushBack(destPoint);
 			} else {
-				//EWOL_DEBUG("element OUT  == > OUT ");
+				//Log.debug("element OUT  == > OUT ");
 			}
 			inside = false;
 		} else {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > IN ");
+				//Log.debug("element IN  == > IN ");
 				output.pushBack(input[iii]);
 			} else {
-				//EWOL_DEBUG("element OUT  == > IN ");
+				//Log.debug("element OUT  == > IN ");
 				//new point intersection ...
 				//y=aaax+bbb
 				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
@@ -183,7 +183,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].y > ey) {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > OUT ");
+				//Log.debug("element IN  == > OUT ");
 				//new point intersection ...
 				//x=aaay+bbb
 				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
@@ -192,15 +192,15 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				destPoint.x = ey*aaa + bbb;
 				output.pushBack(destPoint);
 			} else {
-				//EWOL_DEBUG("element OUT  == > OUT ");
+				//Log.debug("element OUT  == > OUT ");
 			}
 			inside = false;
 		} else {
 			if(true == inside) {
-				//EWOL_DEBUG("element IN  == > IN ");
+				//Log.debug("element IN  == > IN ");
 				output.pushBack(input[iii]);
 			} else {
-				//EWOL_DEBUG("element OUT  == > IN ");
+				//Log.debug("element OUT  == > IN ");
 				//new point intersection ...
 				//y=aaax+bbb
 				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
@@ -218,7 +218,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 	}
 	
 	
-	//EWOL_DEBUG("generate an crop on element : " << sizeInit << "  == > " << output.size() );
+	//Log.debug("generate an crop on element : " << sizeInit << "  == > " << output.size() );
 }
 #endif
 
@@ -244,7 +244,7 @@ ewol::compositing::Drawing::Drawing() :
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == null) {
-		EWOL_ERROR("can not instanciate VBO ...");
+		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
@@ -278,7 +278,7 @@ void ewol::compositing::Drawing::internalSetColor(const etk::Color<>& _color) {
 	}
 }
 
-void ewol::compositing::Drawing::setPoint(const vec3& _point) {
+void ewol::compositing::Drawing::setPoint(const Vector3f& _point) {
 	m_triangle[m_triElement] = _point;
 	m_triElement++;
 	if (m_triElement >= 3) {
@@ -316,7 +316,7 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	// set Matrix : translation/positionMatrix
@@ -340,10 +340,10 @@ void ewol::compositing::Drawing::clear() {
 	// reset Buffer :
 	m_VBO->clear();
 	// reset temporal variables :
-	m_position = vec3(0.0, 0.0, 0.0);
+	m_position = Vector3f(0.0, 0.0, 0.0);
 	
-	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
-	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
+	m_clippingPosStart = Vector3f(0.0, 0.0, 0.0);
+	m_clippingPosStop = Vector3f(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	
 	m_color = etk::color::black;
@@ -355,7 +355,7 @@ void ewol::compositing::Drawing::clear() {
 	}
 }
 
-void ewol::compositing::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd) {
+void ewol::compositing::Drawing::setClipping(const Vector3f& _pos, const Vector3f& _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -394,10 +394,10 @@ void ewol::compositing::Drawing::addVertex() {
 	setPoint(m_position);
 }
 
-void ewol::compositing::Drawing::lineTo(const vec3& _dest) {
+void ewol::compositing::Drawing::lineTo(const Vector3f& _dest) {
 	resetCount();
 	internalSetColor(m_color);
-	//EWOL_VERBOSE("DrawLine : " << m_position << " to " << _dest);
+	//Log.verbose("DrawLine : " << m_position << " to " << _dest);
 	if (m_position.x() == _dest.x() && m_position.y() == _dest.y() && m_position.z() == _dest.z()) {
 		//EWOL_WARNING("Try to draw a line width 0");
 		return;
@@ -414,21 +414,21 @@ void ewol::compositing::Drawing::lineTo(const vec3& _dest) {
 	} else if (teta > 2*M_PI) {
 		teta -= 2*M_PI;
 	}
-	//EWOL_DEBUG("teta = " << (teta*180/(M_PI)) << " deg." );
+	//Log.debug("teta = " << (teta*180/(M_PI)) << " deg." );
 	float offsety = sin(teta-M_PI/2) * (m_thickness/2);
 	float offsetx = cos(teta-M_PI/2) * (m_thickness/2);
-	setPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, m_position.z()) );
-	setPoint(vec3(m_position.x() + offsetx, m_position.y() + offsety, m_position.z()) );
-	setPoint(vec3(_dest.x()      + offsetx, _dest.y()      + offsety, m_position.z()) );
+	setPoint(Vector3f(m_position.x() - offsetx, m_position.y() - offsety, m_position.z()) );
+	setPoint(Vector3f(m_position.x() + offsetx, m_position.y() + offsety, m_position.z()) );
+	setPoint(Vector3f(_dest.x()      + offsetx, _dest.y()      + offsety, m_position.z()) );
 	
-	setPoint(vec3(_dest.x()      + offsetx, _dest.y()      + offsety, _dest.z()) );
-	setPoint(vec3(_dest.x()      - offsetx, _dest.y()      - offsety, _dest.z()) );
-	setPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, _dest.z()) );
+	setPoint(Vector3f(_dest.x()      + offsetx, _dest.y()      + offsety, _dest.z()) );
+	setPoint(Vector3f(_dest.x()      - offsetx, _dest.y()      - offsety, _dest.z()) );
+	setPoint(Vector3f(m_position.x() - offsetx, m_position.y() - offsety, _dest.z()) );
 	// update the system position :
 	m_position = _dest;
 }
 
-void ewol::compositing::Drawing::rectangle(const vec3& _dest) {
+void ewol::compositing::Drawing::rectangle(const Vector3f& _dest) {
 	resetCount();
 	internalSetColor(m_color);
 	/* Bitmap position
@@ -472,16 +472,16 @@ void ewol::compositing::Drawing::rectangle(const vec3& _dest) {
 	    || dxA >= dxB) {
 		return;
 	}
-	setPoint(vec3(dxA, dyD, 0) );
-	setPoint(vec3(dxA, dyC, 0) );
-	setPoint(vec3(dxB, dyC, 0) );
+	setPoint(Vector3f(dxA, dyD, 0) );
+	setPoint(Vector3f(dxA, dyC, 0) );
+	setPoint(Vector3f(dxB, dyC, 0) );
 
-	setPoint(vec3(dxB, dyC, 0) );
-	setPoint(vec3(dxB, dyD, 0) );
-	setPoint(vec3(dxA, dyD, 0) );
+	setPoint(Vector3f(dxB, dyC, 0) );
+	setPoint(Vector3f(dxB, dyD, 0) );
+	setPoint(Vector3f(dxA, dyD, 0) );
 }
 
-void ewol::compositing::Drawing::cube(const vec3& _dest) {
+void ewol::compositing::Drawing::cube(const Vector3f& _dest) {
 	
 }
 
@@ -504,7 +504,7 @@ void ewol::compositing::Drawing::circle(float _radius, float _angleStart, float 
 	if (m_colorBg.a()!=0) {
 		internalSetColor(m_colorBg);
 		for (int32_t iii=0; iii<nbOcurence; iii++) {
-			setPoint(vec3(m_position.x(),
+			setPoint(Vector3f(m_position.x(),
 			              m_position.y(),
 			              0) );
 			
@@ -512,7 +512,7 @@ void ewol::compositing::Drawing::circle(float _radius, float _angleStart, float 
 			float offsety = sin(angleOne) * _radius;
 			float offsetx = cos(angleOne) * _radius;
 			
-			setPoint(vec3(m_position.x() + offsetx,
+			setPoint(Vector3f(m_position.x() + offsetx,
 			              m_position.y() + offsety,
 			              0) );
 			
@@ -520,7 +520,7 @@ void ewol::compositing::Drawing::circle(float _radius, float _angleStart, float 
 			offsety = sin(angleTwo) * _radius;
 			offsetx = cos(angleTwo) * _radius;
 			
-			setPoint(vec3(m_position.x() + offsetx,
+			setPoint(Vector3f(m_position.x() + offsetx,
 			              m_position.y() + offsety,
 			              0) );
 		}
@@ -546,13 +546,13 @@ void ewol::compositing::Drawing::circle(float _radius, float _angleStart, float 
 		float offsetInt2y = sin(angleTwo) * (_radius-m_thickness/2);
 		float offsetInt2x = cos(angleTwo) * (_radius-m_thickness/2);
 		
-		setPoint(vec3(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
-		setPoint(vec3(m_position.x() + offsetExtx,  m_position.y() + offsetExty,  0));
-		setPoint(vec3(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
+		setPoint(Vector3f(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
+		setPoint(Vector3f(m_position.x() + offsetExtx,  m_position.y() + offsetExty,  0));
+		setPoint(Vector3f(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
 		
-		setPoint(vec3(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
-		setPoint(vec3(m_position.x() + offsetInt2x, m_position.y() + offsetInt2y, 0));
-		setPoint(vec3(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
+		setPoint(Vector3f(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
+		setPoint(Vector3f(m_position.x() + offsetInt2x, m_position.y() + offsetInt2y, 0));
+		setPoint(Vector3f(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
 	}
 }
 

@@ -92,7 +92,7 @@ namespace ewol {
 				 * @param[in] _pos Absolute position of the event
 				 * @note The display is automaticly requested when change apear.
 				 */
-				virtual void updateCursorPosition(const vec2& _pos, bool _Selection=false);
+				virtual void updateCursorPosition(const Vector2f& _pos, bool _Selection=false);
 			public:
 				/**
 				 * @brief Copy the selected data on the specify clipboard

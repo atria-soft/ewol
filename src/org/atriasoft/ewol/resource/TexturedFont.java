@@ -35,10 +35,10 @@ namespace ewol {
 				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
 				GlyphProperty m_emptyGlyph;
-				etk::Vector<GlyphProperty> m_listElement[4];
+				List<GlyphProperty> m_listElement[4];
 			private:
 				// for the texture generation :
-				ivec2 m_lastGlyphPos[4];
+				Vector2i m_lastGlyphPos[4];
 				int32_t m_lastRawHeigh[4];
 			protected:
 				TexturedFont();

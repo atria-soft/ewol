@@ -90,10 +90,10 @@ void ewol::widget::Container::systemDraw(const ewol::DrawProperty& _displayProp)
 	if (m_subWidget != null) {
 		ewol::DrawProperty prop = _displayProp;
 		prop.limit(m_origin, m_size);
-		//EWOL_INFO("Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size);
+		//Log.info("Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size);
 		m_subWidget->systemDraw(prop);
 	} else {
-		EWOL_INFO("[" << getId() << "]       ++++++ : [null]");
+		Log.info("[" << getId() << "]       ++++++ : [null]");
 	}
 }
 
@@ -105,9 +105,9 @@ void ewol::widget::Container::onChangeSize() {
 	if (m_subWidget == null) {
 		return;
 	}
-	vec2 origin = m_origin+m_offset;
-	vec2 minSize = m_subWidget->getCalculateMinSize();
-	bvec2 expand = m_subWidget->propertyExpand.get();
+	Vector2f origin = m_origin+m_offset;
+	Vector2f minSize = m_subWidget->getCalculateMinSize();
+	Vector2b expand = m_subWidget->propertyExpand.get();
 	origin += ewol::gravityGenerateDelta(propertyGravity.get(), minSize - m_size);
 	m_subWidget->setOrigin(origin);
 	m_subWidget->setSize(m_size);
@@ -120,10 +120,10 @@ void ewol::widget::Container::calculateMinMaxSize() {
 	// call sub classes
 	if (m_subWidget != null) {
 		m_subWidget->calculateMinMaxSize();
-		vec2 min = m_subWidget->getCalculateMinSize();
+		Vector2f min = m_subWidget->getCalculateMinSize();
 		m_minSize.setMax(min);
 	}
-	//EWOL_ERROR("[" << getId() << "] Result min size : " <<  m_minSize);
+	//Log.error("[" << getId() << "] Result min size : " <<  m_minSize);
 }
 
 void ewol::widget::Container::onRegenerateDisplay() {
@@ -132,7 +132,7 @@ void ewol::widget::Container::onRegenerateDisplay() {
 	}
 }
 
-ewol::WidgetShared ewol::widget::Container::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::Container::getWidgetAtPos(const Vector2f& _pos) {
 	if (propertyHide.get() == false) {
 		if (m_subWidget != null) {
 			return m_subWidget->getWidgetAtPos(_pos);
@@ -157,16 +157,16 @@ bool ewol::widget::Container::loadXML(const exml::Element& _node) {
 			continue;
 		}
 		etk::String widgetName = pNode.getValue();
-		EWOL_VERBOSE("[" << getId() << "] t=" << getObjectType() << " Load node name : '" << widgetName << "'");
+		Log.verbose("[" << getId() << "] t=" << getObjectType() << " Load node name : '" << widgetName << "'");
 		if (getWidgetManager().exist(widgetName) == false) {
-			EWOL_ERROR("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
+			Log.error("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [" << getWidgetManager().list() << "]" );
 			continue;
 		}
 		if (getSubWidget() != null) {
-			EWOL_ERROR("(l " << pNode.getPos() << ") Can only have one subWidget ??? node='" << widgetName << "'" );
+			Log.error("(l " << pNode.getPos() << ") Can only have one subWidget ??? node='" << widgetName << "'" );
 			continue;
 		}
-		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
+		Log.debug("try to create subwidget : '" << widgetName << "'");
 		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName, pNode);
 		if (tmpWidget == null) {
 			EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget : '" << widgetName << "'");
@@ -186,7 +186,7 @@ bool ewol::widget::Container::loadXML(const exml::Element& _node) {
 	return true;
 }
 
-void ewol::widget::Container::setOffset(const vec2& _newVal) {
+void ewol::widget::Container::setOffset(const Vector2f& _newVal) {
 	if (m_offset != _newVal) {
 		ewol::Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...

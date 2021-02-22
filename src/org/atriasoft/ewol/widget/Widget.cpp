@@ -16,19 +16,19 @@ ETK_DECLARE_TYPE(ewol::Widget);
 
 ewol::Widget::Widget() :
   propertyMinSize(this, "min-size",
-                        gale::Dimension(vec2(0,0),gale::distance::pixel),
+                        gale::Dimension(Vector2f(0,0),gale::distance::pixel),
                         "User minimum size",
                         &ewol::Widget::onChangePropertyMinSize),
   propertyMaxSize(this, "max-size",
-                        gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel),
+                        gale::Dimension(Vector2f(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel),
                         "User maximum size",
                         &ewol::Widget::onChangePropertyMaxSize),
   propertyExpand(this, "expand",
-                       bvec2(false,false),
+                       Vector2b(false,false),
                        "Request the widget Expand size wile space is available",
                        &ewol::Widget::onChangePropertyExpand),
   propertyFill(this, "fill",
-                     bvec2(true,true),
+                     Vector2b(true,true),
                      "Fill the widget available size",
                      &ewol::Widget::onChangePropertyFill),
   propertyHide(this, "hide",
@@ -46,7 +46,7 @@ ewol::Widget::Widget() :
                          &ewol::Widget::onChangePropertyCanFocus),
   m_size(10,10),
   m_minSize(0,0),
-  m_maxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)),
+  m_maxSize(Vector2f(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)),
   m_offset(0,0),
   m_zoom(1.0f),
   m_origin(0,0),
@@ -73,21 +73,21 @@ ewol::Widget::Widget() :
 
 
 void ewol::Widget::onChangeSize() {
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} update size : " << m_size);
+	Log.verbose("[" << getId() << "] {" << getObjectType() << "} update size : " << m_size);
 	markToRedraw();
 }
 
 bool ewol::Widget::setFocus() {
-	EWOL_VERBOSE("set focus (start) *propertyCanFocus=" << *propertyCanFocus << " m_hasFocus=" << m_hasFocus);
+	Log.verbose("set focus (start) *propertyCanFocus=" << *propertyCanFocus << " m_hasFocus=" << m_hasFocus);
 	if (*propertyCanFocus == true) {
 		if (m_hasFocus == false) {
 			m_hasFocus = true;
 			onGetFocus();
 		}
-		EWOL_VERBOSE("set focus (stop) ret true");
+		Log.verbose("set focus (stop) ret true");
 		return true;
 	}
-	EWOL_VERBOSE("set focus (stop) ret false");
+	Log.verbose("set focus (stop) ret false");
 	return false;
 }
 
@@ -106,8 +106,8 @@ void ewol::Widget::keepFocus() {
 	getWidgetManager().focusKeep(ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis()));
 }
 
-void ewol::Widget::setOffset(const vec2& _newVal) {
-	EWOL_INFO("Set offset: " << _newVal);
+void ewol::Widget::setOffset(const Vector2f& _newVal) {
+	Log.info("Set offset: " << _newVal);
 	if (m_offset != _newVal) {
 		m_offset = _newVal;
 		markToRedraw();
@@ -142,12 +142,12 @@ void ewol::Widget::setOffset(const vec2& _newVal) {
    (0,0)
 */
 void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
-	//EWOL_INFO("[" << getId() << "] Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size << " hide=" << propertyHide);
+	//Log.info("[" << getId() << "] Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size << " hide=" << propertyHide);
 	if (*propertyHide == true){
 		// widget is hidden ...
 		return;
 	}
-	vec2 displayOrigin = m_origin + m_offset;
+	Vector2f displayOrigin = m_origin + m_offset;
 	
 	// check if the element is displayable in the windows : 
 	if(    _displayProp.m_windowsSize.x() < m_origin.x()
@@ -166,13 +166,13 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	            (int32_t)tmpSize.m_size.x(),
 	            (int32_t)tmpSize.m_size.y());
 	// special case, when origin < display origin, we need to cut the display :
-	ivec2 downOffset = m_origin - tmpSize.m_origin;
-	downOffset.setMin(ivec2(0,0));
+	Vector2i downOffset = m_origin - tmpSize.m_origin;
+	downOffset.setMin(Vector2i(0,0));
 	
-	mat4 tmpTranslate = etk::matTranslate(vec3ClipInt32(vec3(-tmpSize.m_size.x()/2+m_offset.x() + downOffset.x(),
+	mat4 tmpTranslate = etk::matTranslate(Vector3fClipInt32(Vector3f(-tmpSize.m_size.x()/2+m_offset.x() + downOffset.x(),
 	                                                         -tmpSize.m_size.y()/2+m_offset.y() + downOffset.y(),
 	                                                         -1.0f)));
-	mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
+	mat4 tmpScale = etk::matScale(Vector3f(m_zoom, m_zoom, 1.0f));
 	mat4 tmpProjection = etk::matOrtho((int32_t)(-tmpSize.m_size.x())>>1,
 	                                   (int32_t)( tmpSize.m_size.x())>>1,
 	                                   (int32_t)(-tmpSize.m_size.y())>>1,
@@ -205,8 +205,8 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		            tmpOriginY,
 		            tmpclipX,
 		            m_size.y());
-		mat4 tmpTranslate = etk::matTranslate(vec3((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x())), (float)(-m_size.y()/2.0), -1.0f));
-		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1));
+		mat4 tmpTranslate = etk::matTranslate(Vector3f((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x())), (float)(-m_size.y()/2.0), -1.0f));
+		mat4 tmpScale = etk::matScale(Vector3f(m_zoom, m_zoom, 1));
 		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
@@ -214,15 +214,15 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		//int64_t ___startTime = ewol::getTime();
 		onDraw();
 		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
-		//EWOL_DEBUG("      Widget1  : " << ___localTime << "ms ");
+		//Log.debug("      Widget1  : " << ___localTime << "ms ");
 	} else {
-		EWOL_DEBUG("rasta..");
+		Log.debug("rasta..");
 		glViewport( m_origin.x(),
 		            m_origin.y(),
 		            m_size.x(),
 		            m_size.y());
-		mat4 tmpTranslate = etk::matTranslate(vec3(-m_size.x()/2, -m_size.y()/2, -1.0f));
-		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
+		mat4 tmpTranslate = etk::matTranslate(Vector3f(-m_size.x()/2, -m_size.y()/2, -1.0f));
+		mat4 tmpScale = etk::matScale(Vector3f(m_zoom, m_zoom, 1.0f));
 		mat4 tmpProjection = etk::matOrtho(-m_size.x()/2, m_size.x()/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
@@ -230,7 +230,7 @@ void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 		//int64_t ___startTime = ewol::getTime();
 		onDraw();
 		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
-		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
+		//Log.debug("      Widget2  : " << ___localTime << "ms ");
 	}
 	#endif
 	gale::openGL::pop();
@@ -257,7 +257,7 @@ float ewol::Widget::getZoom() {
 	return m_zoom;
 }
 
-void ewol::Widget::setOrigin(const vec2& _pos) {
+void ewol::Widget::setOrigin(const Vector2f& _pos) {
 	#if DEBUG_LEVEL > 2
 		if(    m_origin.x() < -5000
 		    || m_origin.y() < -5000) {
@@ -267,70 +267,70 @@ void ewol::Widget::setOrigin(const vec2& _pos) {
 	m_origin = _pos;
 }
 
-vec2 ewol::Widget::getOrigin() {
+Vector2f ewol::Widget::getOrigin() {
 	return m_origin;
 }
 
-vec2 ewol::Widget::relativePosition(const vec2& _pos) {
+Vector2f ewol::Widget::relativePosition(const Vector2f& _pos) {
 	return _pos - m_origin;
 }
 
 void ewol::Widget::calculateMinMaxSize() {
 	m_minSize = propertyMinSize->getPixel();
-	//EWOL_ERROR("[" << getId() << "] convert in min size : " << propertyMinSize << " out=" << m_minSize);
+	//Log.error("[" << getId() << "] convert in min size : " << propertyMinSize << " out=" << m_minSize);
 	m_maxSize = propertyMaxSize->getPixel();
 	markToRedraw();
 }
 
-vec2 ewol::Widget::getCalculateMinSize() {
+Vector2f ewol::Widget::getCalculateMinSize() {
 	if (*propertyHide == false) {
 		return m_minSize;
 	}
-	return vec2(0,0);
+	return Vector2f(0,0);
 }
 
-vec2 ewol::Widget::getCalculateMaxSize() {
+Vector2f ewol::Widget::getCalculateMaxSize() {
 	if (*propertyHide == false) {
 		return m_maxSize;
 	}
-	return vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
+	return Vector2f(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 }
 
 void ewol::Widget::setNoMinSize() {
-	propertyMinSize.set(gale::Dimension(vec2(0,0),gale::distance::pixel));
+	propertyMinSize.set(gale::Dimension(Vector2f(0,0),gale::distance::pixel));
 }
 
 void ewol::Widget::checkMinSize() {
-	vec2 pixelSize = propertyMinSize->getPixel();
+	Vector2f pixelSize = propertyMinSize->getPixel();
 	m_minSize.setX(etk::max(m_minSize.x(), pixelSize.x()));
 	m_minSize.setY(etk::max(m_minSize.y(), pixelSize.y()));
 }
 
 void ewol::Widget::setNoMaxSize() {
-	propertyMaxSize.set(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
+	propertyMaxSize.set(gale::Dimension(Vector2f(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
 }
 
 void ewol::Widget::checkMaxSize() {
-	vec2 pixelSize = propertyMaxSize->getPixel();
+	Vector2f pixelSize = propertyMaxSize->getPixel();
 	m_maxSize.setX(etk::min(m_maxSize.x(), pixelSize.x()));
 	m_maxSize.setY(etk::min(m_maxSize.y(), pixelSize.y()));
 }
 
-vec2 ewol::Widget::getSize() {
+Vector2f ewol::Widget::getSize() {
 	if (*propertyHide == false) {
 		return m_size;
 	}
-	return vec2(0,0);
+	return Vector2f(0,0);
 }
 
-bvec2 ewol::Widget::canExpand() {
+Vector2b ewol::Widget::canExpand() {
 	if (*propertyHide == false) {
 		return *propertyExpand;
 	}
-	return bvec2(false,false);
+	return Vector2b(false,false);
 }
 
-const bvec2& ewol::Widget::canFill() {
+const Vector2b& ewol::Widget::canFill() {
 	return *propertyFill;
 }
 
@@ -340,7 +340,7 @@ const bvec2& ewol::Widget::canFill() {
 
 void ewol::Widget::shortCutAdd(const etk::String& _descriptiveString, const etk::String& _message) {
 	if (_descriptiveString.size() == 0) {
-		EWOL_ERROR("try to add shortcut with no descriptive string ...");
+		Log.error("try to add shortcut with no descriptive string ...");
 		return;
 	}
 	EventShortCut tmpElement;
@@ -448,7 +448,7 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 	     && _unicodeValue <= 'Z') {
 		_unicodeValue += 'a' - 'A';
 	}
-	EWOL_VERBOSE("check shortcut...." << _special << " " << _unicodeValue << " " << _kbMove << " " << (_isDown?"DOWN":"UP") << " nb shortcut:" << m_localShortcut.size());
+	Log.verbose("check shortcut...." << _special << " " << _unicodeValue << " " << _kbMove << " " << (_isDown?"DOWN":"UP") << " nb shortcut:" << m_localShortcut.size());
 	// Remove the up event of the shortcut...
 	if (_isDown == false) {
 		for (int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
@@ -462,12 +462,12 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 			        ) {
 				// In this case we grap the event in case of an error can occured ...
 				m_localShortcut[iii].isActive = false;
-				EWOL_VERBOSE("detect up of a shortcut");
+				Log.verbose("detect up of a shortcut");
 				return true;
 			}
 		}
 	}
-	//EWOL_INFO("Try to find generic shortcut ...");
+	//Log.info("Try to find generic shortcut ...");
 	for (int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
 		if (    m_localShortcut[iii].specialKey.getShift() == _special.getShift()
 		     && m_localShortcut[iii].specialKey.getCtrl()  == _special.getCtrl()
@@ -481,7 +481,7 @@ bool ewol::Widget::onEventShortCut(const gale::key::Special& _special,
 		   ) {
 			if (_isDown == true) {
 				m_localShortcut[iii].isActive = true;
-				EWOL_VERBOSE("Generate shortCut: " << m_localShortcut[iii].message);
+				Log.verbose("Generate shortCut: " << m_localShortcut[iii].message);
 				signalShortcut.emit(m_localShortcut[iii].message);
 			}
 			return true;
@@ -510,7 +510,7 @@ bool ewol::Widget::getGrabStatus() {
 }
 
 void ewol::Widget::setCursor(enum gale::context::cursor _newCursor) {
-	EWOL_DEBUG("Change Cursor in " << _newCursor);
+	Log.debug("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
 	getContext().setCursor(m_cursorDisplay);
 }
@@ -572,8 +572,8 @@ void ewol::Widget::onChangePropertyExpand() {
 }
 
 void ewol::Widget::onChangePropertyMaxSize() {
-	vec2 pixelMin = propertyMinSize->getPixel();
-	vec2 pixelMax = propertyMaxSize->getPixel();
+	Vector2f pixelMin = propertyMinSize->getPixel();
+	Vector2f pixelMax = propertyMaxSize->getPixel();
 	// check minimum & maximum compatibility :
 	bool error=false;
 	if (pixelMin.x()>pixelMax.x()) {
@@ -583,15 +583,15 @@ void ewol::Widget::onChangePropertyMaxSize() {
 		error=true;
 	}
 	if (error == true) {
-		EWOL_ERROR("Can not set a 'min size' > 'max size' reset to maximum ...");
-		propertyMaxSize.setDirect(gale::Dimension(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
+		Log.error("Can not set a 'min size' > 'max size' reset to maximum ...");
+		propertyMaxSize.setDirect(gale::Dimension(Vector2f(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
 	}
 	requestUpdateSize();
 }
 
 void ewol::Widget::onChangePropertyMinSize() {
-	vec2 pixelMin = propertyMinSize->getPixel();
-	vec2 pixelMax = propertyMaxSize->getPixel();
+	Vector2f pixelMin = propertyMinSize->getPixel();
+	Vector2f pixelMax = propertyMaxSize->getPixel();
 	// check minimum & maximum compatibility :
 	bool error=false;
 	if (pixelMin.x()>pixelMax.x()) {
@@ -601,8 +601,8 @@ void ewol::Widget::onChangePropertyMinSize() {
 		error=true;
 	}
 	if (error == true) {
-		EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
-		propertyMinSize.setDirect(gale::Dimension(vec2(0,0),gale::distance::pixel));
+		Log.error("Can not set a 'min size' > 'max size' set nothing ...");
+		propertyMinSize.setDirect(gale::Dimension(Vector2f(0,0),gale::distance::pixel));
 	}
 	requestUpdateSize();
 }
@@ -632,5 +632,5 @@ void ewol::Widget::drawWidgetTree(int32_t _level) {
 	for (int32_t iii=0; iii<_level; ++iii) {
 		space += "    ";
 	}
-	EWOL_PRINT(space << "[" << getId() << "] name='" << propertyName << "' type=" << getObjectType() << " o=" << m_origin << "  s=" << m_size << " hide=" << propertyHide);
+	Log.print(space << "[" << getId() << "] name='" << propertyName << "' type=" << getObjectType() << " o=" << m_origin << "  s=" << m_size << " hide=" << propertyHide);
 }

@@ -14,13 +14,13 @@ namespace ewol {
 				enum gale::key::type m_type;
 				enum gale::key::status m_status;
 				uint8_t m_inputId;
-				vec2 m_pos;
+				Vector2f m_pos;
 				gale::key::Special m_specialKey; //!< input key status (prevent change in time..)
 			public:
 				Input(enum gale::key::type _type,
 				      enum gale::key::status _status,
 				      uint8_t _id,
-				      const vec2& _pos,
+				      const Vector2f& _pos,
 				      gale::key::Special _specialKey):
 				  m_type(_type),
 				  m_status(_status),
@@ -47,10 +47,10 @@ namespace ewol {
 				inline const uint8_t& getId() const {
 					return m_inputId;
 				};
-				void setPos(const vec2& _pos) {
+				void setPos(const Vector2f& _pos) {
 					m_pos = _pos;
 				};
-				inline const vec2& getPos() const {
+				inline const Vector2f& getPos() const {
 					return m_pos;
 				};
 				void setSpecialKey(const gale::key::Special& _specialKey) {
@@ -73,7 +73,7 @@ namespace ewol {
 				InputSystem(enum gale::key::type _type,
 				            enum gale::key::status _status,
 				            uint8_t _id,
-				            const vec2& _pos,
+				            const Vector2f& _pos,
 				            ewol::WidgetShared _dest,
 				            int32_t _realIdEvent,
 				            gale::key::Special _specialKey) :

@@ -47,7 +47,7 @@ ewol::widget::Slider::~Slider() {
 }
 
 void ewol::widget::Slider::calculateMinMaxSize() {
-	vec2 minTmp = propertyMinSize->getPixel();
+	Vector2f minTmp = propertyMinSize->getPixel();
 	m_minSize.setValue(etk::max(minTmp.x(), 40.0f),
 	                   etk::max(minTmp.y(), dotRadius*2.0f) );
 	markToRedraw();
@@ -66,13 +66,13 @@ void ewol::widget::Slider::onRegenerateDisplay() {
 	m_draw.setColor(m_textColorFg);
 	// draw a line :
 	m_draw.setThickness(1);
-	m_draw.setPos(vec3(dotRadius, m_size.y()/2, 0) );
-	m_draw.lineTo(vec3(m_size.x()-dotRadius, m_size.y()/2, 0) );
+	m_draw.setPos(Vector3f(dotRadius, m_size.y()/2, 0) );
+	m_draw.lineTo(Vector3f(m_size.x()-dotRadius, m_size.y()/2, 0) );
 	m_draw.setThickness(0);
 	
 	etk::Color<> borderDot = m_textColorFg;
 	borderDot.setA(borderDot.a()/2);
-	m_draw.setPos(vec3(4+((propertyValue-propertyMinimum)/(propertyMaximum-propertyMinimum))*(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
+	m_draw.setPos(Vector3f(4+((propertyValue-propertyMinimum)/(propertyMaximum-propertyMinimum))*(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
 	m_draw.setColorBg(borderDot);
 	m_draw.circle(dotRadius);
 	m_draw.setColorBg(m_textColorFg);
@@ -80,17 +80,17 @@ void ewol::widget::Slider::onRegenerateDisplay() {
 }
 
 bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
-	vec2 relativePos = relativePosition(_event.getPos());
-	//EWOL_DEBUG("Event on Slider ..." << _event);
+	Vector2f relativePos = relativePosition(_event.getPos());
+	//Log.debug("Event on Slider ..." << _event);
 	if (1 == _event.getId()) {
 		if(    gale::key::status::pressSingle == _event.getStatus()
 		    || gale::key::status::move   == _event.getStatus()) {
 			// get the new position :
-			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
+			Log.verbose("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
 			float oldValue = *propertyValue;
 			updateValue(*propertyMinimum + (float)(relativePos.x() - dotRadius) / (m_size.x()-2*dotRadius) * (*propertyMaximum-*propertyMinimum));
 			if (oldValue != *propertyValue) {
-				EWOL_VERBOSE(" new value : " << *propertyValue << " in [" << *propertyMinimum << ".." << *propertyMaximum << "]");
+				Log.verbose(" new value : " << *propertyValue << " in [" << *propertyMinimum << ".." << *propertyMaximum << "]");
 				signalChange.emit(*propertyValue);
 			}
 			return true;

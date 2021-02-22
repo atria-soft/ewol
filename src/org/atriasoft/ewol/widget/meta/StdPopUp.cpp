@@ -31,7 +31,7 @@ ewol::widget::StdPopUp::StdPopUp() :
 
 void ewol::widget::StdPopUp::init() {
 	ewol::widget::PopUp::init();
-	propertyMinSize.set(gale::Dimension(vec2(20,10),gale::distance::pourcent));
+	propertyMinSize.set(gale::Dimension(Vector2f(20,10),gale::distance::pourcent));
 	ewol::widget::SizerShared mySizerVert;
 	ewol::widget::SpacerShared mySpacer;
 	
@@ -41,44 +41,44 @@ void ewol::widget::StdPopUp::init() {
 		mySizerVert->propertyMode.set(widget::Sizer::modeVert);
 		m_subBar = ewol::widget::Sizer::create();
 			m_subBar->propertyMode.set(widget::Sizer::modeHori);
-			m_subBar->propertyLockExpand.set(bvec2(true,true));
-			m_subBar->propertyExpand.set(bvec2(true,false));
+			m_subBar->propertyLockExpand.set(Vector2b(true,true));
+			m_subBar->propertyExpand.set(Vector2b(true,false));
 			mySizerVert->subWidgetAdd(m_subBar);
 			mySpacer = ewol::widget::Spacer::create();
-				mySpacer->propertyExpand.set(bvec2(true,false));
+				mySpacer->propertyExpand.set(Vector2b(true,false));
 				m_subBar->subWidgetAdd(mySpacer);
 		
 		mySpacer = ewol::widget::Spacer::create();
-			mySpacer->propertyExpand.set(bvec2(true,false));
+			mySpacer->propertyExpand.set(Vector2b(true,false));
 			mySpacer->propertyColor.set(etk::Color<>(0x88, 0x88, 0x88, 0xFF));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::distance::pixel));
+			mySpacer->propertyMinSize.set(gale::Dimension(Vector2f(0,3),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		mySpacer = ewol::widget::Spacer::create();
-			mySpacer->propertyExpand.set(bvec2(true,false));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::distance::pixel));
+			mySpacer->propertyExpand.set(Vector2b(true,false));
+			mySpacer->propertyMinSize.set(gale::Dimension(Vector2f(0,5),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_comment = ewol::widget::Label::create();
 			m_comment->propertyValue.set(*propertyComment);
-			m_comment->propertyExpand.set(bvec2(true,true));
+			m_comment->propertyExpand.set(Vector2b(true,true));
 			mySizerVert->subWidgetAdd(m_comment);
 		
 		mySpacer = ewol::widget::Spacer::create();
-			mySpacer->propertyExpand.set(bvec2(true,false));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,5),gale::distance::pixel));
+			mySpacer->propertyExpand.set(Vector2b(true,false));
+			mySpacer->propertyMinSize.set(gale::Dimension(Vector2f(0,5),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		mySpacer = ewol::widget::Spacer::create();
-			mySpacer->propertyExpand.set(bvec2(true,false));
+			mySpacer->propertyExpand.set(Vector2b(true,false));
 			mySpacer->propertyColor.set(etk::Color<>(0x88, 0x88, 0x88, 0xFF));
-			mySpacer->propertyMinSize.set(gale::Dimension(vec2(0,3),gale::distance::pixel));
+			mySpacer->propertyMinSize.set(gale::Dimension(Vector2f(0,3),gale::distance::pixel));
 			mySizerVert->subWidgetAdd(mySpacer);
 		
 		m_title = ewol::widget::Label::create();
 			m_title->propertyValue.set(*propertyTitle);
-			m_title->propertyExpand.set(bvec2(true,false));
-			m_title->propertyFill.set(bvec2(true,true));
+			m_title->propertyExpand.set(Vector2b(true,false));
+			m_title->propertyFill.set(Vector2b(true,true));
 			mySizerVert->subWidgetAdd(m_title);
 }
 
@@ -104,17 +104,17 @@ void ewol::widget::StdPopUp::onChangePropertyComment() {
 
 ewol::widget::ButtonShared ewol::widget::StdPopUp::addButton(const etk::String& _text, bool _autoExit) {
 	if (m_subBar == null) {
-		EWOL_ERROR("button-bar does not existed ...");
+		Log.error("button-bar does not existed ...");
 		return null;
 	}
 	ewol::widget::ButtonShared myButton = widget::Button::create();
 	if (myButton == null) {
-		EWOL_ERROR("Can not allocate new button ...");
+		Log.error("Can not allocate new button ...");
 		return null;
 	}
 	ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
 	if (myLabel == null) {
-		EWOL_ERROR("Can not allocate new label ...");
+		Log.error("Can not allocate new label ...");
 		return null;
 	}
 	myLabel->propertyValue.set(_text);

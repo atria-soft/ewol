@@ -35,7 +35,7 @@ ewol::widget::SpinBase::SpinBase() :
 	propertySpinMode.add(ewol::widget::spinPosition_leftRight, "left-right");
 	propertySpinMode.add(ewol::widget::spinPosition_leftLeft, "left-left");
 	propertySpinMode.add(ewol::widget::spinPosition_RightRight, "right-right");
-	propertyLockExpand.setDirectCheck(bvec2(true,true));
+	propertyLockExpand.setDirectCheck(Vector2b(true,true));
 	propertyGravity.setDirectCheck(gravity_center);
 }
 
@@ -75,24 +75,24 @@ void ewol::widget::SpinBase::updateGui() {
 		etk::String shaper;
 		if (m_config != null) {
 			shaper = m_config->getString(m_confIdEntryShaper);
-			EWOL_VERBOSE("shaper entry : " << shaper);
+			Log.verbose("shaper entry : " << shaper);
 		}
 		m_widgetEntry = ewol::widget::Entry::create("shape", shaper);
 		if (m_widgetEntry != null) {
-			m_widgetEntry->propertyExpand.set(bvec2(true,false));
-			m_widgetEntry->propertyFill.set(bvec2(true,true));
+			m_widgetEntry->propertyExpand.set(Vector2b(true,false));
+			m_widgetEntry->propertyFill.set(Vector2b(true,true));
 		}
 	}
 	if (m_widgetButtonDown == null) {
 		etk::String shaper;
 		if (m_config != null) {
 			shaper = m_config->getString(m_confIdDownShaper);
-			EWOL_VERBOSE("shaper button DOWN : " << shaper);
+			Log.verbose("shaper button DOWN : " << shaper);
 		}
 		m_widgetButtonDown = ewol::widget::Button::create("shape", shaper);
 		if (m_widgetButtonDown != null) {
-			m_widgetButtonDown->propertyExpand.set(bvec2(false,false));
-			m_widgetButtonDown->propertyFill.set(bvec2(true,true));
+			m_widgetButtonDown->propertyExpand.set(Vector2b(false,false));
+			m_widgetButtonDown->propertyFill.set(Vector2b(true,true));
 			etk::String data = m_config->getString(m_confIdDownData);
 			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonDown->setSubWidget(widget);
@@ -102,12 +102,12 @@ void ewol::widget::SpinBase::updateGui() {
 		etk::String shaper;
 		if (m_config != null) {
 			shaper = m_config->getString(m_confIdUpShaper);
-			EWOL_VERBOSE("shaper button UP : " << shaper);
+			Log.verbose("shaper button UP : " << shaper);
 		}
 		m_widgetButtonUp = ewol::widget::Button::create("shape", shaper);
 		if (m_widgetButtonUp != null) {
-			m_widgetButtonUp->propertyExpand.set(bvec2(false,false));
-			m_widgetButtonUp->propertyFill.set(bvec2(true,true));
+			m_widgetButtonUp->propertyExpand.set(Vector2b(false,false));
+			m_widgetButtonUp->propertyFill.set(Vector2b(true,true));
 			etk::String data = m_config->getString(m_confIdUpData);
 			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
 			m_widgetButtonUp->setSubWidget(widget);

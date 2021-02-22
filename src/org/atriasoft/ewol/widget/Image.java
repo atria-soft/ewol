@@ -29,8 +29,8 @@ namespace ewol {
 				eproperty::Value<gale::Dimension> propertyBorder; //!< border to add at the image.
 				eproperty::Value<gale::Dimension> propertyImageSize; //!< border to add at the image.
 				eproperty::Value<bool> propertyKeepRatio; //!< keep the image ratio between width and hight
-				eproperty::Range<vec2> propertyPosStart; //!< position in the image to start the sisplay (when we want not to display all the image)
-				eproperty::Range<vec2> propertyPosStop; //!< position in the image to start the sisplay (when we want not to display all the image)
+				eproperty::Range<Vector2f> propertyPosStart; //!< position in the image to start the sisplay (when we want not to display all the image)
+				eproperty::Range<Vector2f> propertyPosStop; //!< position in the image to start the sisplay (when we want not to display all the image)
 				eproperty::Value<bool> propertyDistanceFieldMode; //!< to have a parameter
 				eproperty::Value<bool> propertySmooth; //!< display is done in the pixed approximation if false
 				eproperty::Value<bool> propertyUseThemeColor; //!< Use the themo color management ("THEME_COLOR:///Image.json?lib=ewol") default false
@@ -62,7 +62,7 @@ namespace ewol {
 				 */
 				void setCustumSource(const egami::Image& _image);
 			protected:
-				vec2 m_imageRenderSize; //!< size of the image when we render it
+				Vector2f m_imageRenderSize; //!< size of the image when we render it
 			protected:
 				void onDraw() override;
 			public:

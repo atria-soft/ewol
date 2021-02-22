@@ -21,7 +21,7 @@ ewol::widget::PopUp::PopUp() :
                       "The shaper properties",
                       &ewol::widget::PopUp::onChangePropertyShape),
   propertyLockExpand(this, "lock",
-                           bvec2(true,true),
+                           Vector2b(true,true),
                            "Lock expand contamination",
                            &ewol::widget::PopUp::onChangePropertyLockExpand),
   propertyCloseOutEvent(this, "out-click-remove",
@@ -33,10 +33,10 @@ ewol::widget::PopUp::PopUp() :
 
 void ewol::widget::PopUp::init() {
 	ewol::widget::Container::init();
-	propertyFill.set(bvec2(false,false));
+	propertyFill.set(Vector2b(false,false));
 	propertyShape.notifyChange();
-	propertyMinSize.set(gale::Dimension(vec2(80,80),gale::distance::pourcent));
-	propertyExpand.set(bvec2(false, false));
+	propertyMinSize.set(gale::Dimension(Vector2f(80,80),gale::distance::pourcent));
+	propertyExpand.set(Vector2b(false, false));
 }
 ewol::widget::PopUp::~PopUp() {
 	
@@ -48,7 +48,7 @@ void ewol::widget::PopUp::onChangeSize() {
 		return;
 	}
 	ewol::Padding padding = m_shaper.getPadding();
-	vec2 subWidgetSize = m_subWidget->getCalculateMinSize();
+	Vector2f subWidgetSize = m_subWidget->getCalculateMinSize();
 	if (m_subWidget->canExpand().x() == true) {
 		if (propertyLockExpand->x() == true) {
 			subWidgetSize.setX(m_minSize.x());
@@ -66,11 +66,11 @@ void ewol::widget::PopUp::onChangeSize() {
 	// limit the size of the element :
 	//subWidgetSize.setMin(m_minSize);
 	// posiition at a int32_t pos :
-	subWidgetSize = vec2ClipInt32(subWidgetSize);
+	subWidgetSize = Vector2fClipInt32(subWidgetSize);
 	
 	// set config to the Sub-widget
-	vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
-	subWidgetOrigin = vec2ClipInt32(subWidgetOrigin);
+	Vector2f subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
+	subWidgetOrigin = Vector2fClipInt32(subWidgetOrigin);
 	
 	m_subWidget->setOrigin(subWidgetOrigin);
 	m_subWidget->setSize(subWidgetSize);
@@ -102,9 +102,9 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 	if (needRedraw() == true) {
 		m_shaper.clear();
 		ewol::Padding padding = m_shaper.getPadding();
-		vec2 tmpSize(0,0);
-		bvec2 expand = canExpand();
-		bvec2 fill = canFill();
+		Vector2f tmpSize(0,0);
+		Vector2b expand = canExpand();
+		Vector2b fill = canFill();
 		if (fill.x() == true) {
 			tmpSize.setX(m_size.x()-padding.x());
 		}
@@ -112,14 +112,14 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 			tmpSize.setY(m_size.y()-padding.y());
 		}
 		if (m_subWidget != null) {
-			vec2 tmpSize = m_subWidget->getSize();
+			Vector2f tmpSize = m_subWidget->getSize();
 		}
 		tmpSize.setMax(m_minSize);
-		vec2 tmpOrigin = (m_size-tmpSize)/2.0f;
-		m_shaper.setShape(vec2(0,0),
-		                  vec2ClipInt32(m_size),
-		                  vec2ClipInt32(tmpOrigin-vec2(padding.xLeft(), padding.yButtom())),
-		                  vec2ClipInt32(tmpSize + vec2(padding.x(), padding.y())));
+		Vector2f tmpOrigin = (m_size-tmpSize)/2.0f;
+		m_shaper.setShape(Vector2f(0,0),
+		                  Vector2fClipInt32(m_size),
+		                  Vector2fClipInt32(tmpOrigin-Vector2f(padding.xLeft(), padding.yButtom())),
+		                  Vector2fClipInt32(tmpSize + Vector2f(padding.x(), padding.y())));
 	}
 	// SUBwIDGET GENERATION ...
 	if (m_subWidget != null) {
@@ -127,7 +127,7 @@ void ewol::widget::PopUp::onRegenerateDisplay() {
 	}
 }
 
-ewol::WidgetShared ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::PopUp::getWidgetAtPos(const Vector2f& _pos) {
 	ewol::WidgetShared val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (val != null) {
 		return val;
@@ -157,16 +157,16 @@ bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 		return false;
 	}
 	ewol::Padding padding = m_shaper.getPadding();
-	vec2 tmpSize(0,0);
+	Vector2f tmpSize(0,0);
 	if (m_subWidget != null) {
-		vec2 tmpSize = m_subWidget->getSize();
+		Vector2f tmpSize = m_subWidget->getSize();
 	}
 	tmpSize.setMax(m_minSize);
-	vec2 tmpOrigin = (m_size-tmpSize)/2.0f;
+	Vector2f tmpOrigin = (m_size-tmpSize)/2.0f;
 	
-	tmpOrigin -= vec2(padding.xLeft(), padding.yButtom());
-	tmpSize += vec2(padding.x(), padding.y());
-	vec2 pos = relativePosition(_event.getPos());
+	tmpOrigin -= Vector2f(padding.xLeft(), padding.yButtom());
+	tmpSize += Vector2f(padding.x(), padding.y());
+	Vector2f pos = relativePosition(_event.getPos());
 	if(    pos.x() < tmpOrigin.x()
 	    || pos.y() < tmpOrigin.y()
 	    || pos.x() > tmpOrigin.x()+tmpSize.x()

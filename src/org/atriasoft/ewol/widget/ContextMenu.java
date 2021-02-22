@@ -32,7 +32,7 @@ namespace ewol {
 				};
 			public: // properties
 				eproperty::Value<etk::Uri> propertyShape; //!< shape of the widget.
-				eproperty::Value<vec2> propertyArrowPos;
+				eproperty::Value<Vector2f> propertyArrowPos;
 				eproperty::List<enum markPosition> propertyArrawBorder;
 			protected:
 				ContextMenu();
@@ -50,8 +50,8 @@ namespace ewol {
 				
 				float m_offset;
 			public:
-				void setPositionMarkAuto(const vec2& _origin, const vec2& _size);
-				void setPositionMark(enum markPosition _position, const vec2& _arrowPos);
+				void setPositionMarkAuto(const Vector2f& _origin, const Vector2f& _size);
+				void setPositionMark(enum markPosition _position, const Vector2f& _arrowPos);
 			protected:
 				void onDraw() override;
 			public:
@@ -59,7 +59,7 @@ namespace ewol {
 				bool onEventInput(const ewol::event::Input& _event) override;
 				void onChangeSize() override;
 				void calculateMinMaxSize() override;
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 			protected:
 				virtual void onChangePropertyArrowPos();
 				virtual void onChangePropertyArrawBorder();

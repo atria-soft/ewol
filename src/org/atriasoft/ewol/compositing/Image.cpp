@@ -40,7 +40,7 @@ ewol::compositing::Image::Image(const etk::Uri& _imageName,
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == null) {
-		EWOL_ERROR("can not instanciate VBO ...");
+		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
@@ -83,7 +83,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	//EWOL_WARNING("Display image : " << m_VBO->bufferSize(m_vboIdCoord));
@@ -101,12 +101,12 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceImage->getRendererId());
 	} else if (m_resource != null) {
 		if (m_distanceFieldMode == true) {
-			EWOL_ERROR("FONT type error Request distance field and display normal ...");
+			Log.error("FONT type error Request distance field and display normal ...");
 		}
 		m_GLprogram->setTexture0(m_GLtexID, m_resource->getRendererId());
 	} else {
 		if (m_distanceFieldMode == false) {
-			EWOL_ERROR("FONT type error Request normal and display distance field ...");
+			Log.error("FONT type error Request normal and display distance field ...");
 		}
 		m_GLprogram->setTexture0(m_GLtexID, m_resourceDF->getRendererId());
 	}
@@ -127,15 +127,15 @@ void ewol::compositing::Image::clear() {
 	// reset Buffer :
 	m_VBO->clear();
 	// reset temporal variables :
-	m_position = vec3(0.0, 0.0, 0.0);
-	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
-	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
+	m_position = Vector3f(0.0, 0.0, 0.0);
+	m_clippingPosStart = Vector3f(0.0, 0.0, 0.0);
+	m_clippingPosStop = Vector3f(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	m_color = etk::color::white;
 	m_angle = 0.0;
 }
 
-void ewol::compositing::Image::setClipping(const vec3& _pos, vec3 _posEnd) {
+void ewol::compositing::Image::setClipping(const Vector3f& _pos, Vector3f _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -165,27 +165,27 @@ void ewol::compositing::Image::setAngle(float _angle) {
 	m_angle = _angle;
 }
 
-void ewol::compositing::Image::print(const vec2& _size) {
-	printPart(_size, vec2(0,0), vec2(1.0,1.0));
+void ewol::compositing::Image::print(const Vector2f& _size) {
+	printPart(_size, Vector2f(0,0), Vector2f(1.0,1.0));
 }
 
-void ewol::compositing::Image::printPart(const vec2& _size,
-                                         vec2 _sourcePosStart,
-                                         vec2 _sourcePosStop) {
+void ewol::compositing::Image::printPart(const Vector2f& _size,
+                                         Vector2f _sourcePosStart,
+                                         Vector2f _sourcePosStop) {
 	if (m_resource == null) {
 		return;
 	}
-	vec2 openGLSize = vec2(m_resource->getOpenGlSize().x(), m_resource->getOpenGlSize().y());
-	vec2 usefullSize = m_resource->getUsableSize();
-	vec2 ratio = usefullSize/openGLSize;
+	Vector2f openGLSize = Vector2f(m_resource->getOpenGlSize().x(), m_resource->getOpenGlSize().y());
+	Vector2f usefullSize = m_resource->getUsableSize();
+	Vector2f ratio = usefullSize/openGLSize;
 	_sourcePosStart *= ratio;
 	_sourcePosStop *= ratio;
-	EWOL_VERBOSE("     openGLSize=" << openGLSize << " usableSize=" << usefullSize << " start=" << _sourcePosStart << " stop=" << _sourcePosStop);
+	Log.verbose("     openGLSize=" << openGLSize << " usableSize=" << usefullSize << " start=" << _sourcePosStart << " stop=" << _sourcePosStop);
 	
-	//EWOL_ERROR("Debug image " << m_filename << "  ==> " << m_position << " " << _size << " " << _sourcePosStart << " " << _sourcePosStop);
+	//Log.error("Debug image " << m_filename << "  ==> " << m_position << " " << _size << " " << _sourcePosStart << " " << _sourcePosStop);
 	if (m_angle == 0.0f) {
-		vec3 point = m_position;
-		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
+		Vector3f point = m_position;
+		Vector2f tex(_sourcePosStart.x(),_sourcePosStop.y());
 		m_VBO->pushOnBuffer(m_vboIdCoord, point);
 		m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
 		m_VBO->pushOnBuffer(m_vboIdColor, m_color);
@@ -224,28 +224,28 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 		m_VBO->flush();
 		return;
 	}
-	vec3 center = m_position + vec3(_size.x(),_size.y(),0)/2.0f;
-	vec3 limitedSize(_size.x()*0.5f, _size.y()*0.5f, 0.0f);
+	Vector3f center = m_position + Vector3f(_size.x(),_size.y(),0)/2.0f;
+	Vector3f limitedSize(_size.x()*0.5f, _size.y()*0.5f, 0.0f);
 	
-	vec3 point(0,0,0);
-	vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
+	Vector3f point(0,0,0);
+	Vector2f tex(_sourcePosStart.x(),_sourcePosStop.y());
 	
 	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
-	point = point.rotate(vec3(0,0,1), m_angle) + center;
+	point = point.rotate(Vector3f(0,0,1), m_angle) + center;
 	m_VBO->pushOnBuffer(m_vboIdCoord, point);
 	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
 	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
 	point.setValue(limitedSize.x(), -limitedSize.y(), 0);
-	point = point.rotate(vec3(0,0,1), m_angle) + center;
+	point = point.rotate(Vector3f(0,0,1), m_angle) + center;
 	m_VBO->pushOnBuffer(m_vboIdCoord, point);
 	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
 	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
 	point.setValue(limitedSize.x(), limitedSize.y(), 0);
-	point = point.rotate(vec3(0,0,1), m_angle) + center;
+	point = point.rotate(Vector3f(0,0,1), m_angle) + center;
 	m_VBO->pushOnBuffer(m_vboIdCoord, point);
 	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
 	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
@@ -256,14 +256,14 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
 	point.setValue(-limitedSize.x(), limitedSize.y(), 0);
-	point = point.rotate(vec3(0,0,1), m_angle) + center;
+	point = point.rotate(Vector3f(0,0,1), m_angle) + center;
 	m_VBO->pushOnBuffer(m_vboIdCoord, point);
 	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
 	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
 	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
 	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
-	point = point.rotate(vec3(0,0,1), m_angle) + center;
+	point = point.rotate(Vector3f(0,0,1), m_angle) + center;
 	m_VBO->pushOnBuffer(m_vboIdCoord, point);
 	m_VBO->pushOnBuffer(m_vboIdCoordTex, tex);
 	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
@@ -271,7 +271,7 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 	m_VBO->flush();
 }
 
-void ewol::compositing::Image::setSource(const etk::Uri& _uri, const vec2& _size) {
+void ewol::compositing::Image::setSource(const etk::Uri& _uri, const Vector2f& _size) {
 	clear();
 	if (    m_filename == _uri
 	     && m_requestSize == _size) {
@@ -286,19 +286,19 @@ void ewol::compositing::Image::setSource(const etk::Uri& _uri, const vec2& _size
 	m_resource.reset();
 	m_resourceDF.reset();
 	m_resourceImage.reset();
-	ivec2 tmpSize(_size.x(),_size.y());
+	Vector2i tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_uri.isEmpty() == false) {
 		// link to new one
 		if (m_distanceFieldMode == false) {
 			m_resource = ewol::resource::TextureFile::create(m_filename, tmpSize);
 			if (m_resource == null) {
-				EWOL_ERROR("Can not get Image resource");
+				Log.error("Can not get Image resource");
 			}
 		} else {
 			m_resourceDF = ewol::resource::ImageDF::create(m_filename, tmpSize);
 			if (m_resourceDF == null) {
-				EWOL_ERROR("Can not get Image resource DF");
+				Log.error("Can not get Image resource DF");
 			}
 		}
 	}
@@ -333,11 +333,11 @@ bool ewol::compositing::Image::hasSources() {
 }
 
 
-vec2 ewol::compositing::Image::getRealSize() {
+Vector2f ewol::compositing::Image::getRealSize() {
 	if (    m_resource == null
 	     && m_resourceDF == null
 	     && m_resourceImage == null) {
-		return vec2(0,0);
+		return Vector2f(0,0);
 	}
 	if (m_resource != null) {
 		return m_resource->getRealSize();
@@ -348,7 +348,7 @@ vec2 ewol::compositing::Image::getRealSize() {
 	if (m_resourceImage != null) {
 		return m_resourceImage->getUsableSize();
 	}
-	return vec2(0,0);
+	return Vector2f(0,0);
 }
 
 

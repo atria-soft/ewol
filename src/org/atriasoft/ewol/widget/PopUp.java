@@ -24,7 +24,7 @@ namespace ewol {
 		class PopUp : public ewol::widget::Container {
 			public: // properties
 				eproperty::Value<etk::Uri> propertyShape; //!< Compositing theme.
-				eproperty::Value<bvec2> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
+				eproperty::Value<Vector2b> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 				eproperty::Value<bool> propertyCloseOutEvent; //!< ratio progression of a sliding
 			protected:
 				/**
@@ -48,7 +48,7 @@ namespace ewol {
 				void onRegenerateDisplay() override;
 				void onChangeSize() override;
 				bool onEventInput(const ewol::event::Input& _event) override;
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 			protected:
 				virtual void onChangePropertyShape();
 				virtual void onChangePropertyLockExpand();

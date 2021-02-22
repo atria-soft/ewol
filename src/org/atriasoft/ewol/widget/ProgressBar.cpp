@@ -43,7 +43,7 @@ ewol::widget::ProgressBar::~ProgressBar() {
 }
 
 void ewol::widget::ProgressBar::calculateMinMaxSize() {
-	vec2 tmpMin = propertyMinSize->getPixel();
+	Vector2f tmpMin = propertyMinSize->getPixel();
 	m_minSize.setValue( etk::max(tmpMin.x(), 40.0f),
 	                    etk::max(tmpMin.y(), dotRadius*2.0f) );
 	markToRedraw();
@@ -67,11 +67,11 @@ void ewol::widget::ProgressBar::onRegenerateDisplay() {
 	int32_t tmpOriginX = 5;
 	int32_t tmpOriginY = 5;
 	m_draw.setColor(propertyTextColorBgOn);
-	m_draw.setPos(vec3(tmpOriginX, tmpOriginY, 0) );
-	m_draw.rectangleWidth(vec3(tmpSizeX*propertyValue, tmpSizeY, 0) );
+	m_draw.setPos(Vector3f(tmpOriginX, tmpOriginY, 0) );
+	m_draw.rectangleWidth(Vector3f(tmpSizeX*propertyValue, tmpSizeY, 0) );
 	m_draw.setColor(propertyTextColorBgOff);
-	m_draw.setPos(vec3(tmpOriginX+tmpSizeX*propertyValue, tmpOriginY, 0) );
-	m_draw.rectangleWidth(vec3(tmpSizeX*(1.0-propertyValue), tmpSizeY, 0) );
+	m_draw.setPos(Vector3f(tmpOriginX+tmpSizeX*propertyValue, tmpOriginY, 0) );
+	m_draw.rectangleWidth(Vector3f(tmpSizeX*(1.0-propertyValue), tmpSizeY, 0) );
 	
 	// TODO : Create a better progress Bar ...
 	//m_draw.setColor(propertyTextColorFg);

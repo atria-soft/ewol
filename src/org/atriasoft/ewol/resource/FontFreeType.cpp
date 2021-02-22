@@ -23,7 +23,7 @@ static int32_t l_countLoaded=0;
 static FT_Library library;
 
 void ewol::resource::freeTypeInit() {
-	EWOL_DEBUG(" == > init Font-Manager");
+	Log.debug(" == > init Font-Manager");
 	l_countLoaded++;
 	if (l_countLoaded>1) {
 		// already loaded ...
@@ -31,12 +31,12 @@ void ewol::resource::freeTypeInit() {
 	}
 	int32_t error = FT_Init_FreeType( &library );
 	if(0 != error) {
-		EWOL_CRITICAL(" when loading FreeType Librairy ...");
+		Log.critical(" when loading FreeType Librairy ...");
 	}
 }
 
 void ewol::resource::freeTypeUnInit() {
-	EWOL_DEBUG(" == > Un-Init Font-Manager");
+	Log.debug(" == > Un-Init Font-Manager");
 	l_countLoaded--;
 	if (l_countLoaded>0) {
 		// already needed ...
@@ -45,7 +45,7 @@ void ewol::resource::freeTypeUnInit() {
 	int32_t error = FT_Done_FreeType( library );
 	library = null;
 	if(0 != error) {
-		EWOL_CRITICAL(" when Un-loading FreeType Librairy ...");
+		Log.critical(" when Un-loading FreeType Librairy ...");
 	}
 }
 
@@ -60,11 +60,11 @@ void ewol::resource::FontFreeType::init(const etk::Uri& _uri) {
 	ewol::resource::FontBase::init(_uri);
 	auto fileIO = etk::uri::get(_uri);
 	if (fileIO == null) {
-		EWOL_ERROR("File Does not exist : " << _uri);
+		Log.error("File Does not exist : " << _uri);
 		return;
 	}
 	if (fileIO->open(etk::io::OpenMode::Read) == false) {
-		EWOL_ERROR("Can not open the file : " << _uri);
+		Log.error("Can not open the file : " << _uri);
 		return;
 	}
 	m_FileBuffer = fileIO->readAll<FT_Byte>();
@@ -73,12 +73,12 @@ void ewol::resource::FontFreeType::init(const etk::Uri& _uri) {
 	// load Face ...
 	int32_t error = FT_New_Memory_Face(library, &m_FileBuffer[0], m_FileBuffer.size(), 0, &m_fftFace );
 	if( FT_Err_Unknown_File_Format == error) {
-		EWOL_ERROR("... the font file could be opened and read, but it appears ... that its font format is unsupported");
+		Log.error("... the font file could be opened and read, but it appears ... that its font format is unsupported");
 	} else if (0 != error) {
-		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
+		Log.error("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_DEBUG("load font : \"" << _uri << "\" glyph count = " << (int)m_fftFace->num_glyphs);
+		Log.debug("load font : \"" << _uri << "\" glyph count = " << (int)m_fftFace->num_glyphs);
 		m_init = true;
 		//display();
 	}
@@ -92,13 +92,13 @@ ewol::resource::FontFreeType::~FontFreeType() {
 	FT_Done_Face(m_fftFace);
 }
 
-vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const etk::String& _unicodeString) {
+Vector2f ewol::resource::FontFreeType::getSize(int32_t _fontSize, const etk::String& _unicodeString) {
 	ethread::RecursiveLock lock(m_mutex);
 	if (m_init == false) {
-		return vec2(0,0);
+		return Vector2f(0,0);
 	}
 	// TODO : ...
-	vec2 outputSize(0,0);
+	Vector2f outputSize(0,0);
 	return outputSize;
 }
 
@@ -122,7 +122,7 @@ bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::Gly
 	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
+		Log.error("FT_Set_Char_Size  == > error in settings ...");
 		return false;
 	}
 	// a small shortcut
@@ -134,13 +134,13 @@ bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::Gly
 	                      glyph_index, // glyph index
 	                      FT_LOAD_DEFAULT );
 	if (0!=error ) {
-		EWOL_ERROR("FT_Load_Glyph specify Glyph");
+		Log.error("FT_Load_Glyph specify Glyph");
 		return false;
 	}
 	// convert to an anti-aliased bitmap
 	error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL );
 	if (0!=error) {
-		EWOL_ERROR("FT_Render_Glyph");
+		Log.error("FT_Render_Glyph");
 		return false;
 	}
 	// set properties :
@@ -154,7 +154,7 @@ bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::Gly
 
 bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
                                              int32_t _fontSize,
-                                             ivec2 _glyphPosition,
+                                             Vector2i _glyphPosition,
                                              ewol::GlyphProperty& _property,
                                              int8_t _posInImage) {
 	ethread::RecursiveLock lock(m_mutex);
@@ -167,7 +167,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
+		Log.error("FT_Set_Char_Size  == > error in settings ...");
 		return false;
 	}
 	// a small shortcut
@@ -177,20 +177,20 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 	                      _property.m_glyphIndex, // glyph index
 	                      FT_LOAD_DEFAULT );
 	if (0!=error ) {
-		EWOL_ERROR("FT_Load_Glyph specify Glyph");
+		Log.error("FT_Load_Glyph specify Glyph");
 		return false;
 	}
 	// convert to an anti-aliased bitmap
 	error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL );
 	if (0!=error) {
-		EWOL_ERROR("FT_Render_Glyph");
+		Log.error("FT_Render_Glyph");
 		return false;
 	}
 	// draw it on the output Image :
 	etk::Color<> tlpppp(0xFF, 0xFF, 0xFF, 0x00);
 	for(size_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(size_t iii=0; iii < slot->bitmap.width; iii++){
-			tlpppp = _imageOut.get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
+			tlpppp = _imageOut.get(Vector2i(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
 			switch(_posInImage) {
@@ -209,7 +209,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 					break;
 			}
 			// real set of color
-			_imageOut.set(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj), tlpppp );
+			_imageOut.set(Vector2i(_glyphPosition.x()+iii, _glyphPosition.y()+jjj), tlpppp );
 		}
 	}
 	return true;
@@ -229,7 +229,7 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
 	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
+		Log.error("FT_Set_Char_Size  == > error in settings ...");
 		return false;
 	}
 	// a small shortcut
@@ -239,36 +239,36 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
 	                      _property.m_glyphIndex, // glyph index
 	                      FT_LOAD_DEFAULT );
 	if (0!=error ) {
-		EWOL_ERROR("FT_Load_Glyph specify Glyph");
+		Log.error("FT_Load_Glyph specify Glyph");
 		return false;
 	}
 	// convert to an anti-aliased bitmap
 	error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL ); // TODO : set FT_RENDER_MODE_MONO ==> 1 bit value ==> faster generation ...
 	if (0!=error) {
-		EWOL_ERROR("FT_Render_Glyph");
+		Log.error("FT_Render_Glyph");
 		return false;
 	}
 	// resize output image :
-	_imageOut.resize(ivec2(slot->bitmap.width+2*_borderSize, slot->bitmap.rows+2*_borderSize), 0);
+	_imageOut.resize(Vector2i(slot->bitmap.width+2*_borderSize, slot->bitmap.rows+2*_borderSize), 0);
 	
 	for(size_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(size_t iii=0; iii < slot->bitmap.width; iii++){
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// real set of color
-			_imageOut.set(ivec2(_borderSize+iii, _borderSize+jjj), valueColor );
+			_imageOut.set(Vector2i(_borderSize+iii, _borderSize+jjj), valueColor );
 		}
 	}
 	return true;
 }
 
 
-void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph) {
+void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, List<ewol::GlyphProperty>& listGlyph) {
 	ethread::RecursiveLock lock(m_mutex);
 	if(m_init == false) {
 		return;
 	}
 	if ((FT_FACE_FLAG_KERNING & m_fftFace->face_flags) == 0) {
-		EWOL_INFO("No kerning generation (disable) in the font");
+		Log.info("No kerning generation (disable) in the font");
 	}
 	// 300dpi (hight quality) 96 dpi (normal quality)
 	int32_t fontQuality = 96;
@@ -276,7 +276,7 @@ void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, etk::Vector
 	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
+		Log.error("FT_Set_Char_Size  == > error in settings ...");
 		return;
 	}
 	// For all the kerning element we get the kerning value :
@@ -289,7 +289,7 @@ void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, etk::Vector
 			if (kerning.x != 0) {
 				listGlyph[iii].kerningAdd(listGlyph[kkk].m_UVal,
 				                          kerning.x/32.0f );
-				//EWOL_DEBUG("Kerning between : '" << (char)listGlyph[iii].m_UVal << "'&'" << (char)listGlyph[kkk].m_UVal << "' value : " << kerning.x << " => " << (kerning.x/64.0f));
+				//Log.debug("Kerning between : '" << (char)listGlyph[iii].m_UVal << "'&'" << (char)listGlyph[kkk].m_UVal << "' value : " << kerning.x << " => " << (kerning.x/64.0f));
 			}
 		}
 	}
@@ -301,84 +301,84 @@ void ewol::resource::FontFreeType::display() {
 	if(m_init == false) {
 		return;
 	}
-	EWOL_INFO("    number of glyph       = " << (int)m_fftFace->num_glyphs);
+	Log.info("    number of glyph       = " << (int)m_fftFace->num_glyphs);
 	if ((FT_FACE_FLAG_SCALABLE & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_SCALABLE (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_SCALABLE (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_SCALABLE (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_SCALABLE (disable)");
 	}
 	if ((FT_FACE_FLAG_FIXED_SIZES & m_fftFace->face_flags) != 0) {
-			EWOL_INFO("    flags                = FT_FACE_FLAG_FIXED_SIZES (enable)");
+			Log.info("    flags                = FT_FACE_FLAG_FIXED_SIZES (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_FIXED_SIZES (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_FIXED_SIZES (disable)");
 	}
 	if ((FT_FACE_FLAG_FIXED_WIDTH & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_FIXED_WIDTH (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_FIXED_WIDTH (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_FIXED_WIDTH (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_FIXED_WIDTH (disable)");
 	}
 	if ((FT_FACE_FLAG_SFNT & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_SFNT (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_SFNT (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_SFNT (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_SFNT (disable)");
 	}
 	if ((FT_FACE_FLAG_HORIZONTAL & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_HORIZONTAL (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_HORIZONTAL (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_HORIZONTAL (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_HORIZONTAL (disable)");
 	}
 	if ((FT_FACE_FLAG_VERTICAL & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_VERTICAL (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_VERTICAL (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_VERTICAL (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_VERTICAL (disable)");
 	}
 	if ((FT_FACE_FLAG_KERNING & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_KERNING (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_KERNING (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_KERNING (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_KERNING (disable)");
 	}
 	/* Deprecated flag
 	if ((FT_FACE_FLAG_FAST_GLYPHS & face->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_FAST_GLYPHS (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_FAST_GLYPHS (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_FAST_GLYPHS (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_FAST_GLYPHS (disable)");
 	}
 	*/
 	if ((FT_FACE_FLAG_MULTIPLE_MASTERS & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_MULTIPLE_MASTERS (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_MULTIPLE_MASTERS (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_MULTIPLE_MASTERS (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_MULTIPLE_MASTERS (disable)");
 	}
 	if ((FT_FACE_FLAG_GLYPH_NAMES & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_GLYPH_NAMES (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_GLYPH_NAMES (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_GLYPH_NAMES (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_GLYPH_NAMES (disable)");
 	}
 	if ((FT_FACE_FLAG_EXTERNAL_STREAM & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_EXTERNAL_STREAM (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_EXTERNAL_STREAM (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_EXTERNAL_STREAM (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_EXTERNAL_STREAM (disable)");
 	}
 	if ((FT_FACE_FLAG_HINTER & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_HINTER (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_HINTER (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_HINTER (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_HINTER (disable)");
 	}
 	if ((FT_FACE_FLAG_CID_KEYED & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_CID_KEYED (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_CID_KEYED (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_CID_KEYED (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_CID_KEYED (disable)");
 	}
 	/*
 	if ((FT_FACE_FLAG_TRICKY & m_fftFace->face_flags) != 0) {
-		EWOL_INFO("    flags                = FT_FACE_FLAG_TRICKY (enable)");
+		Log.info("    flags                = FT_FACE_FLAG_TRICKY (enable)");
 	} else {
-		EWOL_DEBUG("    flags                = FT_FACE_FLAG_TRICKY (disable)");
+		Log.debug("    flags                = FT_FACE_FLAG_TRICKY (disable)");
 	}
 	*/
-	EWOL_INFO("    unit per EM          = " << m_fftFace->units_per_EM);
-	EWOL_INFO("    num of fixed sizes   = " << m_fftFace->num_fixed_sizes);
-	//EWOL_INFO("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
+	Log.info("    unit per EM          = " << m_fftFace->units_per_EM);
+	Log.info("    num of fixed sizes   = " << m_fftFace->num_fixed_sizes);
+	//Log.info("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
 	
-	//EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
+	//Log.info("    Current size         = " << (int)m_fftFace->size);
 }

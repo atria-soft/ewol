@@ -142,9 +142,9 @@ void ewol::widget::FileChooser::onCallbackHidenFileChangeChangeValue(const bool&
 
 void ewol::widget::FileChooser::onCallbackListFolderSelectChange(const etk::Path& _value) {
 	// == > this is an internal event ...
-	EWOL_DEBUG(" old PATH: '" << *propertyPath << "' ==> '" << _value << "'");
+	Log.debug(" old PATH: '" << *propertyPath << "' ==> '" << _value << "'");
 	propertyPath.setDirect(_value);
-	EWOL_DEBUG("new PATH: '" << *propertyPath << "'");
+	Log.debug("new PATH: '" << *propertyPath << "'");
 	propertyFile.setDirect("");
 	updateCurrentFolder();
 }
@@ -161,7 +161,7 @@ void ewol::widget::FileChooser::onCallbackListFileSelectChange(const etk::Path& 
 void ewol::widget::FileChooser::onCallbackListFileValidate(const etk::Path& _value) {
 	// select the file  == > generate a validate
 	propertyFile.set(_value);
-	EWOL_VERBOSE(" generate a fiel opening : '" << propertyFile << "'");
+	Log.verbose(" generate a fiel opening : '" << propertyFile << "'");
 	signalValidate.emit(_value);
 	autoDestroy();
 }
@@ -175,14 +175,14 @@ void ewol::widget::FileChooser::onCallbackListValidate() {
 		EWOL_WARNING(" Validate : '" << *propertyFile << "' ==> error No name ...");
 		return;
 	}
-	EWOL_DEBUG(" generate a file opening : '" << *propertyFile << "'");
+	Log.debug(" generate a file opening : '" << *propertyFile << "'");
 	signalValidate.emit(*propertyFile);
 	autoDestroy();
 }
 
 void ewol::widget::FileChooser::onCallbackHomePressed() {
 	etk::Path tmpUserFolder = etk::path::getHomePath();
-	EWOL_DEBUG("new PATH: '" << tmpUserFolder << "'");
+	Log.debug("new PATH: '" << tmpUserFolder << "'");
 	
 	propertyPath.setDirect(tmpUserFolder);
 	propertyFile.setDirect("");

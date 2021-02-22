@@ -43,11 +43,11 @@ namespace ewol {
 				int32_t m_colorIdBackgroundSelected; //!< Color of line selected.
 			protected:
 				etk::Color<> getBasicBG() override;
-				ivec2 getMatrixSize() const override;
-				fluorine::Variant getData(int32_t _role, const ivec2& _pos) override;
-				bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) override;
+				Vector2i getMatrixSize() const override;
+				fluorine::Variant getData(int32_t _role, const Vector2i& _pos) override;
+				bool onItemEvent(const ewol::event::Input& _event, const Vector2i& _pos, const Vector2f& _mousePosition) override;
 			protected:
-				etk::Vector<etk::Path> m_list; //!< List of all element in the path. (they are filtered)
+				List<etk::Path> m_list; //!< List of all element in the path. (they are filtered)
 				/**
 				 * @brief Clean the list of element.
 				 */

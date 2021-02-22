@@ -27,5 +27,5 @@ namespace ewol {
 	etk::Stream& operator <<(etk::Stream& _os, const enum ewol::gravity _obj);
 	etk::String gravityToString(const enum ewol::gravity _obj);
 	enum ewol::gravity stringToGravity(const etk::String& _obj);
-	vec2 gravityGenerateDelta(const enum ewol::gravity _gravity, const vec2& _deltas);
+	Vector2f gravityGenerateDelta(const enum ewol::gravity _gravity, const Vector2f& _deltas);
 }

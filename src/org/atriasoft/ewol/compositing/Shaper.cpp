@@ -50,7 +50,7 @@ ewol::compositing::Shaper::Shaper(const etk::Uri& _uri) :
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == null) {
-		EWOL_ERROR("can not instanciate VBO ...");
+		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
@@ -84,7 +84,7 @@ void ewol::compositing::Shaper::unLoadProgram() {
 
 void ewol::compositing::Shaper::loadProgram() {
 	if (m_uri.isEmpty() == true) {
-		EWOL_DEBUG("no Shaper set for loading resources ...");
+		Log.debug("no Shaper set for loading resources ...");
 		return;
 	}
 	m_config = ewol::resource::ConfigFile::create(m_uri.get());
@@ -116,9 +116,9 @@ void ewol::compositing::Shaper::loadProgram() {
 			etk::Uri tmpUri = m_uri;
 			tmpUri.setPath(m_uri.getPath().getParent() / basicShaderFile);
 			tmpFilename = tmpUri.get();
-			EWOL_DEBUG("Shaper try load shader : '" << tmpFilename << "' with base : '" << basicShaderFile << "'");
+			Log.debug("Shaper try load shader : '" << tmpFilename << "' with base : '" << basicShaderFile << "'");
 		} else {
-			EWOL_DEBUG("Shaper try load shader : '" << tmpFilename << "'");
+			Log.debug("Shaper try load shader : '" << tmpFilename << "'");
 		}
 		// get the shader resource :
 		m_GLPosition = 0;
@@ -144,11 +144,11 @@ void ewol::compositing::Shaper::loadProgram() {
 				etk::Uri tmpUri = m_uri;
 				tmpUri.setPath(m_uri.getPath().getParent() / basicImageFile);
 				tmpFilename = tmpUri.get();
-				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "' with base : '" << basicImageFile << "'");
+				Log.debug("Shaper try load shaper image : '" << tmpFilename << "' with base : '" << basicImageFile << "'");
 			} else {
-				EWOL_DEBUG("Shaper try load shaper image : '" << tmpFilename << "'");
+				Log.debug("Shaper try load shaper image : '" << tmpFilename << "'");
 			}
-			ivec2 size(64,64);
+			Vector2i size(64,64);
 			m_resourceTexture = ewol::resource::TextureFile::create(tmpFilename, size);
 		}
 	}
@@ -160,18 +160,18 @@ void ewol::compositing::Shaper::loadProgram() {
 			etk::Uri tmpUri = m_uri;
 			tmpUri.setPath(m_uri.getPath().getParent() / basicColorFile);
 			tmpFilename = tmpUri.get();
-			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "' with base : '" << basicColorFile << "'");
+			Log.debug("Shaper try load colorFile : '" << tmpFilename << "' with base : '" << basicColorFile << "'");
 		} else {
-			EWOL_DEBUG("Shaper try load colorFile : '" << tmpFilename << "'");
+			Log.debug("Shaper try load colorFile : '" << tmpFilename << "'");
 		}
 		m_colorProperty = ewol::resource::ColorFile::create(tmpFilename);
 		if (    m_GLprogram != null
 		     && m_colorProperty != null) {
-			etk::Vector<etk::String> listColor = m_colorProperty->getColors();
+			List<etk::String> listColor = m_colorProperty->getColors();
 			for (auto tmpColor : listColor) {
 				int32_t glId = m_GLprogram->getUniform(tmpColor);
 				int32_t colorID = m_colorProperty->request(tmpColor);
-				m_listAssiciatedId.pushBack(ivec2(glId, colorID));
+				m_listAssiciatedId.pushBack(Vector2i(glId, colorID));
 			}
 		}
 	}
@@ -183,7 +183,7 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
@@ -218,10 +218,10 @@ void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
 
 void ewol::compositing::Shaper::clear() {
 	// nothing to do ...
-	m_propertySize = vec2(0,0);
-	m_propertyOrigin = vec2(0,0);
-	m_propertyInsidePosition = vec2(0,0);
-	m_propertyInsideSize = vec2(0,0);
+	m_propertySize = Vector2f(0,0);
+	m_propertyOrigin = Vector2f(0,0);
+	m_propertyInsidePosition = Vector2f(0,0);
+	m_propertyInsideSize = Vector2f(0,0);
 	m_VBO->clear();
 }
 
@@ -246,7 +246,7 @@ bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {
 }
 
 bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
-	EWOL_VERBOSE("call=" << _event << "state transition=" << m_stateTransition << " speedTime=" << m_config->getNumber(m_confIdChangeTime));
+	Log.verbose("call=" << _event << "state transition=" << m_stateTransition << " speedTime=" << m_config->getNumber(m_confIdChangeTime));
 	// start :
 	if (m_stateTransition >= 1.0) {
 		m_stateOld = m_stateNew;
@@ -255,7 +255,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 			m_stateNew = m_nextStatusRequested;
 			m_nextStatusRequested = -1;
 			m_stateTransition = 0.0;
-			EWOL_VERBOSE("     ##### START #####  ");
+			Log.verbose("     ##### START #####  ");
 		} else {
 			m_nextStatusRequested = -1;
 			// disable periodic call ...
@@ -281,7 +281,7 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
 		m_stateTransition = etk::avg(0.0f, m_stateTransition, 1.0f);
-		EWOL_VERBOSE("relative=" << timeRelativity << " Transition : " << m_stateTransition);
+		Log.verbose("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
 }
@@ -310,97 +310,97 @@ void ewol::compositing::Shaper::addVertexLine(float _yTop,
 		
 		m_nbVertexToDisplay++;
 		if (_displayOutside == true) {
-			m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x1, _yButtom));
-			m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[0],_yValButtom));
+			m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x1, _yButtom));
+			m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[0],_yValButtom));
 			m_nbVertexToDisplay++;
 		} else {
-			m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yButtom));
-			m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValButtom));
+			m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yButtom));
+			m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValButtom));
 			m_nbVertexToDisplay++;
 		}
 	}
 	
 	if (_displayOutside == true) {
 		// A
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x1, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[0],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x1, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[0],_yValButtom));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x1, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[0],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x1, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[0],_yValTop));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValButtom));
 		m_nbVertexToDisplay++;
 		// B
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValTop));
 		m_nbVertexToDisplay++;
 		
 		// C
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x3, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[2],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x3, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[2],_yValButtom));
 		m_nbVertexToDisplay++;
 	} else {
 		// C
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValButtom));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x2, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[1],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValTop));
 		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x3, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[2],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x3, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[2],_yValButtom));
 		m_nbVertexToDisplay++;
 	}
 	// D
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x3, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[2],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x3, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[2],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// E
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x4, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[3],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x4, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[3],_yValButtom));
 	m_nbVertexToDisplay++;
 	// F
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x4, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[3],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x4, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[3],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// G
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x5, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[4],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x5, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[4],_yValButtom));
 	m_nbVertexToDisplay++;
 	// H
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x5, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[4],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x5, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[4],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// I
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x6, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[5],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x6, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[5],_yValButtom));
 	m_nbVertexToDisplay++;
 	// J
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x6, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[5],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x6, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[5],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	// K
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x7, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[6],_yValButtom));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x7, _yButtom));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[6],_yValButtom));
 	m_nbVertexToDisplay++;
 	// L
-	m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x7, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[6],_yValTop));
+	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x7, _yTop));
+	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[6],_yValTop));
 	m_nbVertexToDisplay++;
 	
 	if (_displayOutside == true) {
 		// M
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x8, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[7],_yValButtom));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x8, _yButtom));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[7],_yValButtom));
 		m_nbVertexToDisplay++;
 		// N
-		m_VBO->pushOnBuffer(m_vboIdCoord, vec2(_x8, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        vec2(_table[7],_yValTop));
+		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x8, _yTop));
+		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[7],_yValTop));
 		m_nbVertexToDisplay++;
 	}
 }
@@ -451,7 +451,7 @@ const float modeDisplay[][8] = {
 	{ 1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f }
 };
 
-void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size, const vec2& _insidePos, const vec2& _insideSize) {
+void ewol::compositing::Shaper::setShape(const Vector2f& _origin, const Vector2f& _size, const Vector2f& _insidePos, const Vector2f& _insideSize) {
 	m_VBO->clear();
 	ewol::Padding borderTmp = getBorder();
 	ewol::Padding paddingIn = getPaddingIn();
@@ -490,9 +490,9 @@ void ewol::compositing::Shaper::setShape(const vec2& _origin, const vec2& _size,
 		
 	#endif
 	/*
-	EWOL_ERROR(" enveloppe = " << enveloppe);
-	EWOL_ERROR(" border = " << border);
-	EWOL_ERROR(" inside = " << inside);
+	Log.error(" enveloppe = " << enveloppe);
+	Log.error(" border = " << border);
+	Log.error(" inside = " << inside);
 	*/
 	int32_t mode = 0;
 	bool displayOutside = false;

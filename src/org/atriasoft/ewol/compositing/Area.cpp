@@ -15,7 +15,7 @@ const int32_t ewol::compositing::Area::m_vboIdCoordText(1);
 const int32_t ewol::compositing::Area::m_vboIdColor(2);
 #define NB_VBO (3)
 
-ewol::compositing::Area::Area(const ivec2& _size) :
+ewol::compositing::Area::Area(const Vector2i& _size) :
   m_position(0.0, 0.0, 0.0),
   m_color(etk::color::white),
   m_GLprogram(null),
@@ -31,7 +31,7 @@ ewol::compositing::Area::Area(const ivec2& _size) :
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == null) {
-		EWOL_ERROR("can not instanciate VBO ...");
+		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
@@ -66,7 +66,7 @@ void ewol::compositing::Area::draw(bool _disableDepthTest) {
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	// set Matrix : translation/positionMatrix
@@ -92,12 +92,12 @@ void ewol::compositing::Area::clear() {
 	// reset all VBOs:
 	m_VBO->clear();
 	// reset temporal variables :
-	m_position = vec3(0.0, 0.0, 0.0);
+	m_position = Vector3f(0.0, 0.0, 0.0);
 }
 
-void ewol::compositing::Area::print(const ivec2& _size) {
-	vec3 point(0,0,0);
-	vec2 tex(0,1);
+void ewol::compositing::Area::print(const Vector2i& _size) {
+	Vector3f point(0,0,0);
+	Vector2f tex(0,1);
 	point.setX(m_position.x());
 	point.setY(m_position.y());
 	m_VBO->pushOnBuffer(m_vboIdCoord, point);

@@ -16,9 +16,9 @@ namespace ewol {
 	namespace compositing {
 		class Drawing : public ewol::Compositing {
 			private:
-				vec3 m_position;         //!< The current position to draw
-				vec3 m_clippingPosStart; //!< Clipping start position
-				vec3 m_clippingPosStop;  //!< Clipping stop position
+				Vector3f m_position;         //!< The current position to draw
+				Vector3f m_clippingPosStart; //!< Clipping start position
+				Vector3f m_clippingPosStop;  //!< Clipping stop position
 				bool m_clippingEnable;   //!< true if the clipping must be activated
 			private:
 				etk::Color<> m_color;   //!< The text foreground color
@@ -53,7 +53,7 @@ namespace ewol {
 				void unLoadProgram();
 				float m_thickness; //!< when drawing line and other things
 				int32_t m_triElement; //!< special counter of the single dot generated
-				vec3 m_triangle[3]; //!< Register every system with a combinaison of tiangle
+				Vector3f m_triangle[3]; //!< Register every system with a combinaison of tiangle
 				etk::Color<float,4> m_tricolor[3]; //!< Register every the associated color foreground
 			// internal API for the generation abstraction of triangles
 				/**
@@ -73,7 +73,7 @@ namespace ewol {
 				 * @brief internal add of the specific point
 				 * @param[in] _point The requeste dpoint to add
 				 */
-				void setPoint(const vec3& point);
+				void setPoint(const Vector3f& point);
 				
 			public:
 				/**
@@ -88,28 +88,28 @@ namespace ewol {
 				 * @brief get the current display position (sometime needed in the gui control)
 				 * @return the current position.
 				 */
-				const vec3& getPos() {
+				const Vector3f& getPos() {
 					return m_position;
 				};
 				/**
 				 * @brief set position for the next text writen
 				 * @param[in] _pos Position of the text (in 3D)
 				 */
-				void setPos(const vec3& _pos) {
+				void setPos(const Vector3f& _pos) {
 					m_position = _pos;
 				};
-				inline void setPos(const vec2& _pos) {
-					setPos(vec3(_pos.x(), _pos.y(), 0));
+				inline void setPos(const Vector2f& _pos) {
+					setPos(Vector3f(_pos.x(), _pos.y(), 0));
 				};
 				/**
 				 * @brief set relative position for the next text writen
 				 * @param[in] _pos ofset apply of the text (in 3D)
 				 */
-				void setRelPos(const vec3& _pos) {
+				void setRelPos(const Vector3f& _pos) {
 					m_position += _pos;
 				};
-				inline void setRelPos(const vec2& _pos) {
-					setRelPos(vec3(_pos.x(), _pos.y(), 0));
+				inline void setRelPos(const Vector2f& _pos) {
+					setRelPos(Vector3f(_pos.x(), _pos.y(), 0));
 				};
 				/**
 				 * @brief set the Color of the current foreground font
@@ -144,20 +144,20 @@ namespace ewol {
 				 * @param[in]_ pos Start position of the clipping
 				 * @param[in] _width Width size of the clipping
 				 */
-				void setClippingWidth(const vec3& _pos, const vec3& _width) {
+				void setClippingWidth(const Vector3f& _pos, const Vector3f& _width) {
 					setClipping(_pos, _pos+_width);
 				};
-				inline void setClippingWidth(const vec2& _pos, const vec2& _width) {
-					setClippingWidth(vec3(_pos.x(),_pos.y(),-1), vec3(_width.x(),_width.y(), 2));
+				inline void setClippingWidth(const Vector2f& _pos, const Vector2f& _width) {
+					setClippingWidth(Vector3f(_pos.x(),_pos.y(),-1), Vector3f(_width.x(),_width.y(), 2));
 				};
 				/**
 				 * @brief Request a clipping area for the text (next draw only)
 				 * @param[in] _pos Start position of the clipping
 				 * @param[in] _posEnd End position of the clipping
 				 */
-				void setClipping(const vec3& _pos, const vec3& _posEnd);
-				inline void setClipping(const vec2& _pos, const vec2& _posEnd) {
-					setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(), 1));
+				void setClipping(const Vector3f& _pos, const Vector3f& _posEnd);
+				inline void setClipping(const Vector2f& _pos, const Vector2f& _posEnd) {
+					setClipping(Vector3f(_pos.x(),_pos.y(),-1), Vector3f(_posEnd.x(),_posEnd.y(), 1));
 				};
 				/**
 				 * @brief enable/Disable the clipping (without lose the current clipping position)
@@ -179,43 +179,43 @@ namespace ewol {
 				 * @brief draw a line to a specific position
 				 * @param[in] _dest Position of the end of the line.
 				 */
-				void lineTo(const vec3& _dest);
-				inline void lineTo(const vec2& _dest) {
-					lineTo(vec3(_dest.x(), _dest.y(), 0));
+				void lineTo(const Vector3f& _dest);
+				inline void lineTo(const Vector2f& _dest) {
+					lineTo(Vector3f(_dest.x(), _dest.y(), 0));
 				};
 				/**
 				 * @brief Relative drawing a line (spacial vector)
 				 * @param[in] _vect Vector of the curent line.
 				 */
-				void lineRel(const vec3& _vect) {
+				void lineRel(const Vector3f& _vect) {
 					lineTo(m_position+_vect);
 				};
-				inline void lineRel(const vec2& _vect) {
-					lineRel(vec3(_vect.x(), _vect.y(), 0));
+				inline void lineRel(const Vector2f& _vect) {
+					lineRel(Vector3f(_vect.x(), _vect.y(), 0));
 				};
 				/**
 				 * @brief draw a 2D rectangle to the position requested.
 				 * @param[in] _dest Position the the end of the rectangle
 				 */
-				void rectangle(const vec3& _dest);
-				inline void rectangle(const vec2& _dest) {
-					rectangle(vec3(_dest.x(), _dest.y(), 0));
+				void rectangle(const Vector3f& _dest);
+				inline void rectangle(const Vector2f& _dest) {
+					rectangle(Vector3f(_dest.x(), _dest.y(), 0));
 				};
 				/**
 				 * @brief draw a 2D rectangle to the requested size.
 				 * @param[in] _size size of the rectangle
 				 */
-				void rectangleWidth(const vec3& _size) {
+				void rectangleWidth(const Vector3f& _size) {
 					rectangle(m_position+_size);
 				};
-				inline void rectangleWidth(const vec2& _size) {
-					rectangleWidth(vec3(_size.x(), _size.y(), 0));
+				inline void rectangleWidth(const Vector2f& _size) {
+					rectangleWidth(Vector3f(_size.x(), _size.y(), 0));
 				};
 				/**
 				 * @brief draw a 3D rectangle to the position requested.
 				 * @param[in] _dest Position the the end of the rectangle
 				 */
-				void cube(const vec3& _dest);
+				void cube(const Vector3f& _dest);
 				/**
 				 * @brief draw a 2D circle with the specify rafdius parameter.
 				 * @param[in] _radius Distence to the dorder

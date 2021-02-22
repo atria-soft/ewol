@@ -20,10 +20,10 @@ namespace ewol {
 				//  == > Bold is a little more complicated (maybe with the bordersize)
 				ememory::SharedPtr<ewol::resource::FontBase> m_font;
 			public:
-				etk::Vector<GlyphProperty> m_listElement;
+				List<GlyphProperty> m_listElement;
 			private:
 				// for the texture generation :
-				ivec2 m_lastGlyphPos;
+				Vector2i m_lastGlyphPos;
 				int32_t m_lastRawHeigh;
 			protected:
 				DistanceFieldFont();
@@ -80,12 +80,12 @@ namespace ewol {
 				void generateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
 			private:
 				float m_borderSize; //!< number of pixel added on the border of a glyph
-				vec2 m_textureBorderSize; //!< Transformed the border size in the texture dimention
+				Vector2f m_textureBorderSize; //!< Transformed the border size in the texture dimention
 			public:
 				float getPixelBorderSize() {
 					return m_borderSize;
 				}
-				const vec2& getTextureBorderSize() {
+				const Vector2f& getTextureBorderSize() {
 					return m_textureBorderSize;
 				}
 			public:

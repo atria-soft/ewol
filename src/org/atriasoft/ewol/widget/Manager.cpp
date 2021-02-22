@@ -37,7 +37,7 @@ ewol::widget::Manager::Manager() :
   m_creatorList(0, false),
   m_creatorListXml(0, false),
   m_haveRedraw(true) {
-	EWOL_DEBUG(" == > init Widget-Manager");
+	Log.debug(" == > init Widget-Manager");
 	
 	ewol::widget::Button::createManagerWidget(*this);
 	ewol::widget::ButtonColor::createManagerWidget(*this);
@@ -63,8 +63,8 @@ ewol::widget::Manager::Manager() :
 }
 
 ewol::widget::Manager::~Manager() {
-	EWOL_DEBUG(" == > Un-Init Widget-Manager");
-	EWOL_INFO("Realease all FOCUS");
+	Log.debug(" == > Un-Init Widget-Manager");
+	Log.info("Realease all FOCUS");
 	focusSetDefault(null);
 	focusRelease();
 	
@@ -80,7 +80,7 @@ void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 		// nothing to do ...
 		return;
 	}
-	EWOL_DEBUG("focusKeep=" << _newWidget->getId() );
+	Log.debug("focusKeep=" << _newWidget->getId() );
 	//elog::displayBacktrace();
 	auto focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (_newWidget == focusWidgetCurrent) {
@@ -88,17 +88,17 @@ void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 		return;
 	}
 	if (focusWidgetCurrent != null) {
-		EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
+		Log.debug("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->rmFocus();
 		focusWidgetCurrent.reset();
 	}
 	if (_newWidget->propertyCanFocus.get() == false) {
-		EWOL_DEBUG("Widget can not have focus, id=" << _newWidget->getId() );
+		Log.debug("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
 	m_focusWidgetCurrent = _newWidget;
 	if (_newWidget != null) {
-		EWOL_DEBUG("Set focus on WidgetID=" << _newWidget->getId() );
+		Log.debug("Set focus on WidgetID=" << _newWidget->getId() );
 		_newWidget->setFocus();
 	}
 }
@@ -106,19 +106,19 @@ void ewol::widget::Manager::focusKeep(ewol::WidgetShared _newWidget) {
 void ewol::widget::Manager::focusSetDefault(ewol::WidgetShared _newWidget) {
 	if(    _newWidget != null
 	    && _newWidget->propertyCanFocus.get() == false) {
-		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
+		Log.verbose("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
 	ewol::WidgetShared focusWidgetDefault = m_focusWidgetDefault.lock();
 	ewol::WidgetShared focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (focusWidgetDefault == focusWidgetCurrent) {
 		if (focusWidgetCurrent != null) {
-			EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
+			Log.debug("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
 			focusWidgetCurrent->rmFocus();
 		}
 		m_focusWidgetCurrent = _newWidget;
 		if (_newWidget != null) {
-			EWOL_DEBUG("Set focus on WidgetID=" << _newWidget->getId() );
+			Log.debug("Set focus on WidgetID=" << _newWidget->getId() );
 			_newWidget->setFocus();
 		}
 	}
@@ -133,13 +133,13 @@ void ewol::widget::Manager::focusRelease() {
 		return;
 	}
 	if (focusWidgetCurrent != null) {
-		EWOL_DEBUG("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
+		Log.debug("Rm focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->rmFocus();
 	}
 	m_focusWidgetCurrent = m_focusWidgetDefault;
 	focusWidgetCurrent = m_focusWidgetCurrent.lock();
 	if (focusWidgetCurrent != null) {
-		EWOL_DEBUG("Set focus on WidgetID=" << focusWidgetCurrent->getId() );
+		Log.debug("Set focus on WidgetID=" << focusWidgetCurrent->getId() );
 		focusWidgetCurrent->setFocus();
 	}
 }
@@ -198,7 +198,7 @@ void ewol::widget::Manager::addWidgetCreator(const etk::String& _name,
 	if (find == true) {
 		return;
 	}
-	EWOL_INFO("Add Creator of a specify widget : " << nameLower);
+	Log.info("Add Creator of a specify widget : " << nameLower);
 	m_creatorList.set(nameLower, _pointer);
 	m_creatorListXml.set(nameLower, _pointerXml);
 }

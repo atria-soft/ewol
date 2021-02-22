@@ -30,28 +30,28 @@ namespace ewol {
 				DECLARE_RESOURCE_FACTORY(Colored3DObject);
 				virtual ~Colored3DObject();
 			public:
-				virtual void draw(const etk::Vector<vec3>& _vertices,
+				virtual void draw(const List<Vector3f>& _vertices,
 				                  const etk::Color<float>& _color,
 				                  bool _updateDepthBuffer=true,
 				                  bool _depthtest=true);
-				virtual void draw(const etk::Vector<vec3>& _vertices,
+				virtual void draw(const List<Vector3f>& _vertices,
 				                  const etk::Color<float>& _color,
 				                  mat4& _transformationMatrix,
 				                  bool _updateDepthBuffer=true,
 				                  bool _depthtest=true);
-				virtual void drawLine(etk::Vector<vec3>& _vertices,
+				virtual void drawLine(List<Vector3f>& _vertices,
 				                      const etk::Color<float>& _color,
 				                      mat4& _transformationMatrix,
 				                      bool _updateDepthBuffer=true,
 				                      bool _depthtest=true);
-				virtual void drawCubeLine(const vec3& _min,
-				                          const vec3& _max,
+				virtual void drawCubeLine(const Vector3f& _min,
+				                          const Vector3f& _max,
 				                          const etk::Color<float>& _color,
 				                          mat4& _transformationMatrix,
 				                          bool _updateDepthBuffer=true,
 				                          bool _depthtest=true);
 			public:
-				void drawSquare(const vec3& _size,
+				void drawSquare(const Vector3f& _size,
 				                mat4& _transformationMatrix,
 				                const etk::Color<float>& _tmpColor);
 				void drawSphere(float _radius,
@@ -77,11 +77,11 @@ namespace ewol {
 				              int _longs,
 				              mat4& _transformationMatrix,
 				              const etk::Color<float>& _tmpColor);
-				void drawTriangles(const etk::Vector<vec3>& _vertex,
-				                   const etk::Vector<uint32_t>& _indice,
+				void drawTriangles(const List<Vector3f>& _vertex,
+				                   const List<uint32_t>& _indice,
 				                   mat4& _transformationMatrix,
 				                   const etk::Color<float>& _tmpColor,
-				                   const vec3& _offset=vec3(0,0,0.1));
+				                   const Vector3f& _offset=Vector3f(0,0,0.1));
 		};
 	};
 };

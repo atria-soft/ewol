@@ -37,7 +37,7 @@ ewol::Context& ewol::getContext() {
 	gale::Context& context = gale::getContext();
 	ememory::SharedPtr<gale::Application> appl = context.getApplication();
 	if (appl == null) {
-		EWOL_CRITICAL("[CRITICAL] try acces at an empty GALE application (can not get Context)");
+		Log.critical("[CRITICAL] try acces at an empty GALE application (can not get Context)");
 		// ???
 	}
 	return *(ememory::staticPointerCast<ewol::Context>(appl));
@@ -66,7 +66,7 @@ void ewol::Context::inputEventUnGrabPointer() {
 
 
 void ewol::Context::onCreate(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system create (BEGIN)");
+	Log.info(" == > Ewol system create (BEGIN)");
 	// Add basic ewol translation:
 	etranslate::addPath("ewol", "DATA:///translate/ewol/?lib=ewol");
 	etranslate::autoDetectLanguage();
@@ -77,11 +77,11 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	for(int32_t iii = 0; iii < _context.getCmd().size() ; ++iii) {
 		if (    _context.getCmd().get(iii) == "-h"
 		     || _context.getCmd().get(iii) == "--help") {
-			EWOL_PRINT("ewol - help : ");
-			EWOL_PRINT("    " << etk::getApplicationName() << " [options]");
-			EWOL_PRINT("        -h/--help:    Display this help");
-			EWOL_PRINT("    example:");
-			EWOL_PRINT("        " << etk::getApplicationName() << " --help");
+			Log.print("ewol - help : ");
+			Log.print("    " << etk::getApplicationName() << " [options]");
+			Log.print("        -h/--help:    Display this help");
+			Log.print("    example:");
+			Log.print("        " << etk::getApplicationName() << " --help");
 			// this is a global help system does not remove it
 			continue;
 		} else {
@@ -91,7 +91,7 @@ void ewol::Context::onCreate(gale::Context& _context) {
 		--iii;
 	}
 	
-	EWOL_INFO("EWOL v:" << ewol::getVersion());
+	Log.info("EWOL v:" << ewol::getVersion());
 	// force a recalculation
 	/*
 	requestUpdateSize();
@@ -105,40 +105,40 @@ void ewol::Context::onCreate(gale::Context& _context) {
 	*/
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == null) {
-		EWOL_ERROR(" == > Create without application");
+		Log.error(" == > Create without application");
 		return;
 	}
 	appl->onCreate(*this);
-	EWOL_INFO(" == > Ewol system create (END)");
+	Log.info(" == > Ewol system create (END)");
 }
 
 void ewol::Context::onStart(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system start (BEGIN)");
+	Log.info(" == > Ewol system start (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == null) {
 		// TODO : Request exit of the application .... with error ...
 		return;
 	}
 	appl->onStart(*this);
-	EWOL_INFO(" == > Ewol system start (END)");
+	Log.info(" == > Ewol system start (END)");
 }
 
 void ewol::Context::onResume(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system resume (BEGIN)");
+	Log.info(" == > Ewol system resume (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == null) {
 		return;
 	}
 	appl->onResume(*this);
-	EWOL_INFO(" == > Ewol system resume (END)");
+	Log.info(" == > Ewol system resume (END)");
 }
 
 void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
-	//EWOL_INFO("REGENERATE_DISPLAY");
+	//Log.info("REGENERATE_DISPLAY");
 	// check if the user selected a windows
 	ewol::widget::WindowsShared window = m_windowsCurrent;
 	if (window == null) {
-		EWOL_DEBUG("No windows ...");
+		Log.debug("No windows ...");
 		return;
 	}
 	// Redraw all needed elements
@@ -150,7 +150,7 @@ void ewol::Context::onRegenerateDisplay(gale::Context& _context) {
 }
 
 void ewol::Context::onDraw(gale::Context& _context) {
-	//EWOL_INFO("DRAW");
+	//Log.info("DRAW");
 	// clean internal data...
 	m_objectManager.cleanInternalRemoved();
 	// real draw...
@@ -162,27 +162,27 @@ void ewol::Context::onDraw(gale::Context& _context) {
 }
 
 void ewol::Context::onPause(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system pause (BEGIN)");
+	Log.info(" == > Ewol system pause (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == null) {
 		return;
 	}
 	appl->onPause(*this);
-	EWOL_INFO(" == > Ewol system pause (END)");
+	Log.info(" == > Ewol system pause (END)");
 }
 
 void ewol::Context::onStop(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system stop (BEGIN)");
+	Log.info(" == > Ewol system stop (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == null) {
 		return;
 	}
 	appl->onStop(*this);
-	EWOL_INFO(" == > Ewol system stop (END)");
+	Log.info(" == > Ewol system stop (END)");
 }
 
 void ewol::Context::onDestroy(gale::Context& _context) {
-	EWOL_INFO(" == > Ewol system destroy (BEGIN)");
+	Log.info(" == > Ewol system destroy (BEGIN)");
 	// Remove current windows
 	m_windowsCurrent.reset();
 	// clean all widget and sub widget with their resources:
@@ -195,44 +195,44 @@ void ewol::Context::onDestroy(gale::Context& _context) {
 	}
 	// internal clean elements
 	m_objectManager.cleanInternalRemoved();
-	EWOL_INFO("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
+	Log.info("List of all widget of this context must be equal at 0 ==> otherwise some remove is missing");
 	m_objectManager.displayListObject();
 	// now All must be removed !!!
 	m_objectManager.unInit();
-	EWOL_INFO(" == > Ewol system destroy (END)");
+	Log.info(" == > Ewol system destroy (END)");
 }
 
 void ewol::Context::onKillDemand(gale::Context& _context) {
-	EWOL_INFO(" == > User demand a destroy (BEGIN)");
+	Log.info(" == > User demand a destroy (BEGIN)");
 	ememory::SharedPtr<ewol::context::Application> appl = m_application;
 	if (appl == null) {
 		exit(0);
 		return;
 	}
 	appl->onKillDemand(*this);
-	EWOL_INFO(" == > User demand a destroy (END)");
+	Log.info(" == > User demand a destroy (END)");
 }
 
 void ewol::Context::onPointer(enum gale::key::type _type,
                               int32_t _pointerID,
-                              const vec2& _pos,
+                              const Vector2f& _pos,
                               gale::key::status _state) {
 	switch (_state) {
 		case gale::key::status::move:
-			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
+			//Log.debug("Receive MSG : THREAD_INPUT_MOTION");
 			m_input.motion(_type, _pointerID, _pos);
 			break;
 		case gale::key::status::down:
 		case gale::key::status::downRepeate:
-			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
+			//Log.debug("Receive MSG : THREAD_INPUT_STATE");
 			m_input.state(_type, _pointerID, true, _pos);
 			break;
 		case gale::key::status::up:
-			//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
+			//Log.debug("Receive MSG : THREAD_INPUT_STATE");
 			m_input.state(_type, _pointerID, false, _pos);
 			break;
 		default:
-			EWOL_DEBUG("Unknow state : " << _state);
+			Log.debug("Unknow state : " << _state);
 			break;
 	}
 }
@@ -240,7 +240,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
                                enum gale::key::keyboard _type,
                                char32_t _value,
                                gale::key::status _state) {
-	EWOL_VERBOSE("event {" << _special << "} " << _type << " " << _value << " " << _state);
+	Log.verbose("event {" << _special << "} " << _type << " " << _value << " " << _state);
 	// store the keyboard special key status for mouse event...
 	m_input.setLastKeyboardSpecial(_special);
 	if (m_windowsCurrent == null) {
@@ -264,7 +264,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 		return;
 	}
 	// check if the widget allow repeating key events.
-	//EWOL_INFO("repeating test :" << repeate << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << isDown);
+	//Log.info("repeating test :" << repeate << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << isDown);
 	if(    repeate == false
 	    || (    repeate == true
 	         && tmpWidget->getKeyboardRepeat() == true) ) {
@@ -294,7 +294,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 				tmpWidget->systemEventEntry(tmpEntryEvent);
 			}
 		} else {
-			EWOL_DEBUG("remove Repeate key ...");
+			Log.debug("remove Repeate key ...");
 		}
 	}
 }
@@ -302,7 +302,7 @@ void ewol::Context::onKeyboard(const gale::key::Special& _special,
 /*
 void ewol::Context::processEvents() {
 			case eSystemMessage::msgResize:
-				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
+				//Log.debug("Receive MSG : THREAD_RESIZE");
 				m_windowsSize = data->dimention;
 				ewol::Dimension::setPixelWindowsSize(m_windowsSize);
 				forceRedrawAll();
@@ -325,7 +325,7 @@ ewol::Context::Context(ewol::context::Application* _application) :
   m_windowsCurrent(null),
   m_initStepId(0) {
 	if (m_application == null) {
-		EWOL_CRITICAL("Can not start context with no Application ==> rtfm ...");
+		Log.critical("Can not start context with no Application ==> rtfm ...");
 	}
 }
 
@@ -347,7 +347,7 @@ void ewol::Context::resetIOEvent() {
 }
 
 void ewol::Context::setWindows(const ewol::widget::WindowsShared& _windows) {
-	EWOL_INFO("set New windows");
+	Log.info("set New windows");
 	// remove current focus :
 	m_widgetManager.focusSetDefault(null);
 	m_widgetManager.focusRelease();
@@ -366,8 +366,8 @@ void ewol::Context::setWindows(const ewol::widget::WindowsShared& _windows) {
 ewol::widget::WindowsShared ewol::Context::getWindows() {
 	return m_windowsCurrent;
 };
-void ewol::Context::onResize(const ivec2& _size) {
-	EWOL_VERBOSE("Resize: " << _size);
+void ewol::Context::onResize(const Vector2i& _size) {
+	Log.verbose("Resize: " << _size);
 	forceRedrawAll();
 }
 
@@ -375,8 +375,8 @@ void ewol::Context::forceRedrawAll() {
 	if (m_windowsCurrent == null) {
 		return;
 	}
-	ivec2 size = getSize();
-	m_windowsCurrent->setSize(vec2(size.x(), size.y()));
+	Vector2i size = getSize();
+	m_windowsCurrent->setSize(Vector2f(size.x(), size.y()));
 	m_windowsCurrent->onChangeSize();
 }
 

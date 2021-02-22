@@ -49,7 +49,7 @@ namespace ewol {
 				virtual void setFont(etk::String _fontName, int32_t _fontSize);
 				virtual void setFontMode(enum ewol::font::mode _mode);
 				virtual void printChar(const char32_t& _charcode);
-				virtual vec3 calculateSizeChar(const char32_t& _charcode);
+				virtual Vector3f calculateSizeChar(const char32_t& _charcode);
 		};
 	}
 }

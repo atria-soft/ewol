@@ -62,7 +62,7 @@ namespace ewol {
 				 * @brief Get All color name
 				 * @return list of all color existing
 				 */
-				etk::Vector<etk::String> getColors() const {
+				List<etk::String> getColors() const {
 					return m_list.getKeys();
 				}
 			public: // herited function:

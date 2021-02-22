@@ -36,13 +36,13 @@ namespace ewol {
 				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
 				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
 			protected:
-				vec2 m_originScrooled; //!< pixel distance from the origin of the display (Bottum left)
-				vec2 m_maxSize; //!< Maximum size of the Widget ==> to display scrollbar
-				vec2 m_limitScrolling; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
+				Vector2f m_originScrooled; //!< pixel distance from the origin of the display (Bottum left)
+				Vector2f m_maxSize; //!< Maximum size of the Widget ==> to display scrollbar
+				Vector2f m_limitScrolling; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
 			private: // Mouse section :
 				enum scrollingMode m_scroollingMode; //!< mode of management of the scrooling
 				float m_pixelScrolling;
-				vec2 m_highSpeedStartPos;
+				Vector2f m_highSpeedStartPos;
 				enum Scroll::highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
 				enum gale::key::type m_highSpeedType;
@@ -66,12 +66,12 @@ namespace ewol {
 				 * @brief Reset the scoll of the subWidget
 				 */
 				void resetScrollOrigin() {
-					m_originScrooled = vec2(0,0);
+					m_originScrooled = Vector2f(0,0);
 				}
 			private:
 				bool m_fingerPresent[CALCULATE_SIMULTANEOUS_FINGER];
 				bool m_fingerScoolActivated;
-				vec2 m_fingerMoveStartPos[CALCULATE_SIMULTANEOUS_FINGER];
+				Vector2f m_fingerMoveStartPos[CALCULATE_SIMULTANEOUS_FINGER];
 			protected:
 				/**
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)
@@ -108,7 +108,7 @@ namespace ewol {
 				 * @brief set the specific mawimum size of the widget
 				 * @param[in] _localSize new Maximum size
 				 */
-				void setMaxSize(const vec2& _localSize) {
+				void setMaxSize(const Vector2f& _localSize) {
 					m_maxSize = _localSize;
 				};
 				/**
@@ -117,21 +117,21 @@ namespace ewol {
 				 * @param[in] _currentPosition Position that is requested to view
 				 * @param[in] _center True if the position might be at the center of the widget
 				 */
-				void setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center = false);
+				void setScrollingPositionDynamic(Vector2f _borderWidth, const Vector2f& _currentPosition, bool _center = false);
 				/**
 				 * @brief set the scrolling limit when arriving at he end of the widget
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 				 */
 				void setLimitScrolling(float _poucentageLimit) {
 					_poucentageLimit = etk::avg(0.1f, _poucentageLimit,1.0f);
-					m_limitScrolling = vec2(_poucentageLimit, _poucentageLimit);
+					m_limitScrolling = Vector2f(_poucentageLimit, _poucentageLimit);
 				};
 				/**
 				 * @brief set the scrolling limit when arriving at he end of the widget
 				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end for axis specific...
 				 */
-				void setLimitScrolling(const vec2& _poucentageLimit) {
-					m_limitScrolling = vec2(etk::avg(0.1f, _poucentageLimit.x(),1.0f), etk::avg(0.1f, _poucentageLimit.y(),1.0f));
+				void setLimitScrolling(const Vector2f& _poucentageLimit) {
+					m_limitScrolling = Vector2f(etk::avg(0.1f, _poucentageLimit.x(),1.0f), etk::avg(0.1f, _poucentageLimit.y(),1.0f));
 				};
 			protected:
 				virtual void onChangePropertyShapeVert();

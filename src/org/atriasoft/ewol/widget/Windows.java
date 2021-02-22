@@ -43,7 +43,7 @@ namespace ewol {
 				 */
 				void setSubWidget(ewol::WidgetShared _widget);
 			protected:
-				etk::Vector<ewol::WidgetShared> m_popUpWidgetList; //!< List of pop-up displayed
+				List<ewol::WidgetShared> m_popUpWidgetList; //!< List of pop-up displayed
 			public:
 				/**
 				 * @brief Add a pop-up on the Windows.
@@ -66,7 +66,7 @@ namespace ewol {
 			public:
 				void onRegenerateDisplay() override;
 				void onChangeSize() override;
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
 				void drawWidgetTree(int32_t _level=0) override;

@@ -84,8 +84,8 @@ namespace ewol {
 		public: // properties:
 			eproperty::Value<gale::Dimension> propertyMinSize; //!< user define the minimum size of the widget
 			eproperty::Value<gale::Dimension> propertyMaxSize; //!< user define the maximum size of the widget
-			eproperty::Value<bvec2> propertyExpand; //!< the widget will expand if possible
-			eproperty::Value<bvec2> propertyFill; //!< the widget will fill all the space provided by the parent.
+			eproperty::Value<Vector2b> propertyExpand; //!< the widget will expand if possible
+			eproperty::Value<Vector2b> propertyFill; //!< the widget will fill all the space provided by the parent.
 			eproperty::Value<bool> propertyHide; //!< hide a widget on the display
 			eproperty::List<enum ewol::gravity> propertyGravity; //!< Gravity of the widget
 			eproperty::Value<bool> propertyCanFocus; //!< the focus can be done on this widget
@@ -104,16 +104,16 @@ namespace ewol {
 		// -- Widget size:
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			vec2 m_size; //!< internal: current size of the widget
-			vec2 m_minSize; //!< internal: minimum size of the widget
-			vec2 m_maxSize; //!< internal: maximum size of the widget
+			Vector2f m_size; //!< internal: current size of the widget
+			Vector2f m_minSize; //!< internal: minimum size of the widget
+			Vector2f m_maxSize; //!< internal: maximum size of the widget
 		public:
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] _pos Absolute position that you request conversion.
 			 * @return The relative position.
 			 */
-			virtual vec2 relativePosition(const vec2& _pos);
+			virtual Vector2f relativePosition(const Vector2f& _pos);
 			/**
 			 * @brief Parent have set the size and the origin. The container need to update the child widget property
 			 * @note INTERNAL EWOL SYSTEM
@@ -125,13 +125,13 @@ namespace ewol {
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 getSize();
+			virtual Vector2f getSize();
 			/**
 			 * @brief set the widget size
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM Do not modify the size yourself: calculation is complex and need knowledge of around widget
 			 */
-			virtual void setSize(const vec2& _value) {
+			virtual void setSize(const Vector2f& _value) {
 				m_size = _value;
 			}
 			/**
@@ -144,26 +144,26 @@ namespace ewol {
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 getCalculateMinSize();
+			virtual Vector2f getCalculateMinSize();
 			/**
 			 * @brief get the widget maximum size calculated
 			 * @return Requested size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 getCalculateMaxSize();
+			virtual Vector2f getCalculateMaxSize();
 		protected:
-			vec2 m_offset; //!< Offset of the display in the view-port
+			Vector2f m_offset; //!< Offset of the display in the view-port
 		public:
 			/**
 			 * @brief set the zoom property of the widget.
 			 * @param[in] _newVal offset value.
 			 */
-			virtual void setOffset(const vec2& _newVal);
+			virtual void setOffset(const Vector2f& _newVal);
 			/**
 			 * @brief get the offset property of the widget.
 			 * @return The current offset value.
 			 */
-			virtual const vec2& getOffset() {
+			virtual const Vector2f& getOffset() {
 				return m_offset;
 			};
 		protected:
@@ -186,7 +186,7 @@ namespace ewol {
 			 */
 			virtual void changeZoom(float _range) {};
 		protected:
-			vec2 m_origin; //!< internal ... I do not really known how if can use it ...
+			Vector2f m_origin; //!< internal ... I do not really known how if can use it ...
 		public:
 			/**
 			 * @brief Set origin at the widget (must be an parent widget that set this parameter).
@@ -194,12 +194,12 @@ namespace ewol {
 			 * @param[in] _pos Position of the origin.
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void setOrigin(const vec2& _pos);
+			virtual void setOrigin(const Vector2f& _pos);
 			/**
 			 * @brief Get the origin (absolute position in the windows).
 			 * @return Coordinate of the origin requested.
 			 */
-			virtual vec2 getOrigin();
+			virtual Vector2f getOrigin();
 		public:
 			/**
 			 * @brief User set No minimum size.
@@ -230,14 +230,14 @@ namespace ewol {
 			 * @return 2D boolean represents the capacity to expend
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual bvec2 canExpand();
+			virtual Vector2b canExpand();
 		public:
 			/**
 			 * @brief get the filling capabilities x&y
-			 * @return bvec2 repensent the capacity to x&y filling
+			 * @return Vector2b repensent the capacity to x&y filling
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			const bvec2& canFill();
+			const Vector2b& canFill();
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- focus Area
 		// ----------------------------------------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual ewol::WidgetShared getWidgetAtPos(const vec2& _pos) {
+			virtual ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) {
 				if (propertyHide.get() == false) {
 					return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());
 				}
@@ -396,7 +396,7 @@ namespace ewol {
 		public:
 			esignal::Signal<etk::String> signalShortcut; //!< signal handle of the message
 		private:
-			etk::Vector<EventShortCut> m_localShortcut; //!< list of all shortcut in the widget
+			List<EventShortCut> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
 			/**
 			 * @brief add a specific shortcut with his description

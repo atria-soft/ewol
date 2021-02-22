@@ -10,12 +10,12 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::compositing::Sprite);
 
-ewol::compositing::Sprite::Sprite(const etk::String& _imageName, const ivec2& _nbSprite, int32_t _size) :
+ewol::compositing::Sprite::Sprite(const etk::String& _imageName, const Vector2i& _nbSprite, int32_t _size) :
   ewol::compositing::Image(_imageName, false, _size),
   m_nbSprite(_nbSprite),
   m_unitarySpriteSize(0,0) {
 	/*
-	vec2 imageSize = getRealSize();
+	Vector2f imageSize = getRealSize();
 	m_unitarySpriteSize.setValue(imageSize.x()/(float)m_nbSprite.x(),
 	                             imageSize.y()/(float)m_nbSprite.y());
 	*/
@@ -24,16 +24,16 @@ ewol::compositing::Sprite::Sprite(const etk::String& _imageName, const ivec2& _n
 }
 
 
-void ewol::compositing::Sprite::printSprite(const ivec2& _spriteID, const vec3& _size) {
+void ewol::compositing::Sprite::printSprite(const Vector2i& _spriteID, const Vector3f& _size) {
 	if(    _spriteID.x()<0
 	    || _spriteID.y()<0
 	    || _spriteID.x() >= m_nbSprite.x()
 	    || _spriteID.y() >= m_nbSprite.y()) {
 		return;
 	}
-	printPart(vec2(_size.x(),_size.y()),
-	          vec2((float)(_spriteID.x()  )*m_unitarySpriteSize.x(), (float)(_spriteID.y()  )*m_unitarySpriteSize.y()),
-	          vec2((float)(_spriteID.x()+1)*m_unitarySpriteSize.x(), (float)(_spriteID.y()+1)*m_unitarySpriteSize.y()));
+	printPart(Vector2f(_size.x(),_size.y()),
+	          Vector2f((float)(_spriteID.x()  )*m_unitarySpriteSize.x(), (float)(_spriteID.y()  )*m_unitarySpriteSize.y()),
+	          Vector2f((float)(_spriteID.x()+1)*m_unitarySpriteSize.x(), (float)(_spriteID.y()+1)*m_unitarySpriteSize.y()));
 }
 
 

@@ -23,7 +23,7 @@ ewol::widget::List::List() {
 	#endif
 	m_nbVisibleRaw = 0;
 	propertyCanFocus.setDirectCheck(true);
-	m_limitScrolling = vec2(1, 0.5);
+	m_limitScrolling = Vector2f(1, 0.5);
 }
 
 
@@ -57,7 +57,7 @@ ememory::SharedPtr<ewol::Compositing> ewol::widget::List::getComposeElemnent(con
 }
 /*
 void ewol::widget::List::setRawVisible(int32_t _id) {
-	EWOL_DEBUG("Set Raw visible : " << _id);
+	Log.debug("Set Raw visible : " << _id);
 	if (_id<0) {
 		return;
 	}
@@ -72,14 +72,14 @@ void ewol::widget::List::setRawVisible(int32_t _id) {
 			m_displayStartRaw = _id - m_nbVisibleRaw + 2;
 		}
 	}
-	ivec2 matrixSize = getMatrixSize();
+	Vector2i matrixSize = getMatrixSize();
 	if (m_displayStartRaw > matrixSize.y()) {
 		m_displayStartRaw = matrixSize.y()-2;
 	}
 	if (m_displayStartRaw<0) {
 		m_displayStartRaw = 0;
 	}
-	EWOL_DEBUG("Set start raw : " << m_displayStartRaw);
+	Log.debug("Set start raw : " << m_displayStartRaw);
 	markToRedraw();
 }
 */
@@ -110,15 +110,15 @@ void ewol::widget::List::onRegenerateDisplay() {
 		// -------------------------------------------------------
 		// -- Calculate the size of each element
 		// -------------------------------------------------------
-		ivec2 matrixSize = getMatrixSize();
+		Vector2i matrixSize = getMatrixSize();
 		m_listSizeX.clear();
 		m_listSizeX.resize(matrixSize.x(), 0);
 		m_listSizeY.clear();
 		m_listSizeY.resize(matrixSize.y(), 0);
 		for (int_t yyy=0; yyy<matrixSize.y(); ++yyy) {
 			for (int_t xxx=0; xxx<matrixSize.x(); ++xxx) {
-				ivec2 pos(xxx, yyy);
-				vec2 elementSize = calculateElementSize(pos);
+				Vector2i pos(xxx, yyy);
+				Vector2f elementSize = calculateElementSize(pos);
 				if (elementSize.x() > m_listSizeX[xxx]) {
 					m_listSizeX[xxx] = elementSize.x();
 				}
@@ -165,8 +165,8 @@ void ewol::widget::List::onRegenerateDisplay() {
 		// -------------------------------------------------------
 		// -- Calculate the start position size of each element
 		// -------------------------------------------------------
-		etk::Vector<int32_t> listStartPosX;
-		etk::Vector<int32_t> listStartPosY;
+		List<int32_t> listStartPosX;
+		List<int32_t> listStartPosY;
 		int32_t lastPositionX = 0;
 		for (auto &size: m_listSizeX) {
 			listStartPosX.pushBack(lastPositionX);
@@ -180,7 +180,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 		// -------------------------------------------------------
 		// -- Update the scroolBar
 		// -------------------------------------------------------
-		m_maxSize = ivec2(lastPositionX, lastPositionY);
+		m_maxSize = Vector2i(lastPositionX, lastPositionY);
 		// -------------------------------------------------------
 		// -- Clean the background
 		// -------------------------------------------------------
@@ -200,7 +200,7 @@ void ewol::widget::List::onRegenerateDisplay() {
 			}
 			for (int_t xxx=0; xxx<matrixSize.x(); ++xxx) {
 				float startXposition = -m_originScrooled.x() + listStartPosX[xxx];
-				//EWOL_ERROR("display start: " << startXposition);
+				//Log.error("display start: " << startXposition);
 				if (startXposition + m_listSizeX[xxx] < 0) {
 					// ==> element out of range ==> nothing to display
 					continue;
@@ -209,9 +209,9 @@ void ewol::widget::List::onRegenerateDisplay() {
 					// ==> element out of range ==> nothing to display
 					break;
 				}
-				drawElement(ivec2(xxx, yyy),
-				            vec2(startXposition, startYposition),
-				            vec2(m_listSizeX[xxx], m_listSizeY[yyy]));
+				drawElement(Vector2i(xxx, yyy),
+				            Vector2f(startXposition, startYposition),
+				            Vector2f(m_listSizeX[xxx], m_listSizeY[yyy]));
 			}
 		}
 		// -------------------------------------------------------
@@ -221,16 +221,16 @@ void ewol::widget::List::onRegenerateDisplay() {
 	}
 }
 
-ivec2 ewol::widget::List::getMatrixSize() const {
-	return ivec2(1,0);
+Vector2i ewol::widget::List::getMatrixSize() const {
+	return Vector2i(1,0);
 }
 
-vec2 ewol::widget::List::calculateElementSize(const ivec2& _pos) {
+Vector2f ewol::widget::List::calculateElementSize(const Vector2i& _pos) {
 	auto tmpText = ememory::staticPointerCast<ewol::compositing::Text>(getComposeElemnent("text"));
 	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
-	vec3 textSize = tmpText->calculateSize(myTextToWrite);
-	ivec2 count = getMatrixSize();
-	return vec2(textSize.x(),
+	Vector3f textSize = tmpText->calculateSize(myTextToWrite);
+	Vector2i count = getMatrixSize();
+	return Vector2f(textSize.x(),
 	            textSize.y() + m_paddingSizeY*3
 	            );
 }
@@ -240,12 +240,12 @@ void ewol::widget::List::drawBackground() {
 	if (BGOObjects != null) {
 		etk::Color<> basicBG = getBasicBG();
 		BGOObjects->setColor(basicBG);
-		BGOObjects->setPos(vec3(0, 0, 0) );
+		BGOObjects->setPos(Vector3f(0, 0, 0) );
 		BGOObjects->rectangleWidth(m_size);
 	}
 }
 
-void ewol::widget::List::drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size) {
+void ewol::widget::List::drawElement(const Vector2i& _pos, const Vector2f& _start, const Vector2f& _size) {
 	etk::String myTextToWrite = getData(ListRole::Text, _pos).getSafeString();
 	etk::Color<> fg = getData(ListRole::FgColor, _pos).getSafeColor();
 	auto backgroundVariant = getData(ListRole::BgColor, _pos);
@@ -254,7 +254,7 @@ void ewol::widget::List::drawElement(const ivec2& _pos, const vec2& _start, cons
 		auto BGOObjects = ememory::staticPointerCast<ewol::compositing::Drawing>(getComposeElemnent("drawing"));
 		if (BGOObjects != null) {
 			BGOObjects->setColor(bg);
-			BGOObjects->setPos(vec3(_start.x(), _start.y(), 0) );
+			BGOObjects->setPos(Vector3f(_start.x(), _start.y(), 0) );
 			BGOObjects->rectangleWidth(_size);
 		}
 	}
@@ -263,14 +263,14 @@ void ewol::widget::List::drawElement(const ivec2& _pos, const vec2& _start, cons
 		if (tmpText != null) {
 			int32_t displayPositionY = _start.y() + m_paddingSizeY;
 			tmpText->setColor(fg);
-			tmpText->setPos(vec3(_start.x() + m_paddingSizeX, displayPositionY, 0) );
+			tmpText->setPos(Vector3f(_start.x() + m_paddingSizeX, displayPositionY, 0) );
 			tmpText->print(myTextToWrite);;
 		}
 	}
 }
 
 bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
-	vec2 relativePos = relativePosition(_event.getPos());
+	Vector2f relativePos = relativePosition(_event.getPos());
 	if (WidgetScrolled::onEventInput(_event) == true) {
 		keepFocus();
 		// nothing to do ... done on upper widet ...
@@ -279,9 +279,9 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	if (m_listSizeY.size() == 0) {
 		return false;
 	}
-	relativePos = vec2(relativePos.x(),m_size.y() - relativePos.y()) + m_originScrooled;
+	relativePos = Vector2f(relativePos.x(),m_size.y() - relativePos.y()) + m_originScrooled;
 	// Find the colomn and the row
-	ivec2 pos{0,0};
+	Vector2i pos{0,0};
 	float_t offsetY = 0;
 	for (size_t iii=0; iii<m_listSizeY.size()-1; iii++) {
 		int32_t previous = offsetY;
@@ -314,7 +314,7 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 			break;
 		}
 	}
-	vec2 posInternalMouse = relativePos - vec2(offsetX, offsetY);
+	Vector2f posInternalMouse = relativePos - Vector2f(offsetX, offsetY);
 	bool isUsed = onItemEvent(_event, pos, posInternalMouse);
 	if (isUsed == true) {
 		// TODO : this generate bugs ... I did not understand why ..
@@ -324,9 +324,9 @@ bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 }
 
 void ewol::widget::List::onGetFocus() {
-	EWOL_DEBUG("Ewol::List get focus");
+	Log.debug("Ewol::List get focus");
 }
 
 void ewol::widget::List::onLostFocus() {
-	EWOL_DEBUG("Ewol::List Lost focus");
+	Log.debug("Ewol::List Lost focus");
 }

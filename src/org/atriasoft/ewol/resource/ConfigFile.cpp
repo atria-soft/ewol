@@ -24,7 +24,7 @@ ewol::resource::ConfigFile::ConfigFile() :
 void ewol::resource::ConfigFile::init(const etk::Uri& _uri) {
 	ethread::RecursiveLock lock(m_mutex);
 	gale::Resource::init(_uri.get());
-	EWOL_DEBUG("SFP : load \"" << _uri << "\"");
+	Log.debug("SFP : load \"" << _uri << "\"");
 	reload();
 }
 

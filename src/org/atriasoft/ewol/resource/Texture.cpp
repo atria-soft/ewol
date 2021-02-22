@@ -28,7 +28,7 @@ static int32_t nextP2(int32_t _value) {
 		}
 		val *=2;
 	}
-	EWOL_CRITICAL("impossible CASE....");
+	Log.critical("impossible CASE....");
 	return val;
 }
 
@@ -44,7 +44,7 @@ ewol::resource::Texture::Texture() :
   #ifdef EWOL_USE_FBO
     m_texPboId(0),
   #endif
-  m_data(ivec2(32,32),egami::colorType::RGBA8),
+  m_data(Vector2i(32,32),egami::colorType::RGBA8),
   m_realImageSize(1,1),
   m_lastSize(1,1),
   m_loaded(false),
@@ -71,12 +71,12 @@ void ewol::resource::Texture::setFilterMode(enum ewol::resource::TextureFilter _
 #include <egami/egami.hpp>
 
 bool ewol::resource::Texture::updateContext() {
-	EWOL_VERBOSE("updateContext [START]");
+	Log.verbose("updateContext [START]");
 	if (false) {
 		echrono::Steady tic = echrono::Steady::now();
 		gale::openGL::flush();
 		echrono::Steady toc = echrono::Steady::now();
-		EWOL_VERBOSE("    updateContext [FLUSH] ==> " << (toc - tic));
+		Log.verbose("    updateContext [FLUSH] ==> " << (toc - tic));
 	}
 	ethread::RecursiveLock lock(m_mutex, true);
 	echrono::Steady tic = echrono::Steady::now();
@@ -112,7 +112,7 @@ bool ewol::resource::Texture::updateContext() {
 		case egami::colorType::unsignedInt32:
 		case egami::colorType::float32:
 		case egami::colorType::float64:
-			EWOL_ERROR("Not manage the type " << m_data.getType() << " for texture");
+			Log.error("Not manage the type " << m_data.getType() << " for texture");
 			break;
 	}
 	if (m_loaded == true) {
@@ -129,22 +129,22 @@ bool ewol::resource::Texture::updateContext() {
 		glGenTextures(1, &m_texId);
 		
 		#ifdef EWOL_USE_FBO
-			EWOL_ERROR("CREATE PBO");
+			Log.error("CREATE PBO");
 			glGenBuffers(1, &m_texPboId);
-			EWOL_ERROR("CREATE PBO 1");
+			Log.error("CREATE PBO 1");
 			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_texPboId);
-			EWOL_ERROR("CREATE PBO 2");
+			Log.error("CREATE PBO 2");
 			glBufferData(GL_PIXEL_UNPACK_BUFFER, m_data.getGPUSize().x()*m_data.getGPUSize().y()*sizeByte, 0, GL_STREAM_DRAW);
-			EWOL_ERROR("CREATE PBO 3");
+			Log.error("CREATE PBO 3");
 			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-			EWOL_ERROR("CREATE PBO 4 (done)");
+			Log.error("CREATE PBO 4 (done)");
 		#endif
 		m_lastSize = m_data.getSize();
 		m_lastTypeObject = typeObject;
 		m_lastSizeObject = sizeObject;
-		EWOL_DEBUG("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+		Log.debug("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	} else {
-		EWOL_DEBUG("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
+		Log.debug("TEXTURE: update [" << getId() << "]=" << m_data.getSize() << "=>" << m_data.getGPUSize() << " OGl_Id=" << m_texId << " type=" << m_data.getType());
 	}
 	// in all case we set the texture properties :
 	// TODO : check error ???
@@ -167,7 +167,7 @@ bool ewol::resource::Texture::updateContext() {
 	}
 	//glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 	echrono::Steady toc1 = echrono::Steady::now();
-	EWOL_VERBOSE("    BIND                 ==> " << (toc1 - tic));
+	Log.verbose("    BIND                 ==> " << (toc1 - tic));
 	//egami::store(m_data, etk::String("~/texture_") + etk::toString(getId()) + ".bmp");
 	#if    defined(__TARGET_OS__Android) \
 	    || defined(__TARGET_OS__IOs)
@@ -175,11 +175,11 @@ bool ewol::resource::Texture::updateContext() {
 		if (m_loaded == false) {
 			// 1: Create the square 2 texture:
 			int32_t bufferSize = m_data.getGPUSize().x() * m_data.getGPUSize().y() * 8;
-			static etk::Vector<float> tmpData;
+			static List<float> tmpData;
 			if (tmpData.size() < bufferSize) {
 				tmpData.resize(bufferSize, 0.0f);
 			}
-			EWOL_DEBUG("    CREATE texture ==> " << m_data.getGPUSize());
+			Log.debug("    CREATE texture ==> " << m_data.getGPUSize());
 			// 2 create a new empty texture:
 			#ifdef EWOL_USE_FBO
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_texPboId);
@@ -236,7 +236,7 @@ bool ewol::resource::Texture::updateContext() {
 			                sizeObject, // type
 			                (void*)((char*)m_data.getTextureDataPointer()) );
 			echrono::Steady toc2 = echrono::Steady::now();
-			EWOL_INFO("    updateContext [STOP] ==> " << (toc2 - tic1));
+			Log.info("    updateContext [STOP] ==> " << (toc2 - tic1));
 		#endif
 	#else
 		// This is the normal case ==> set the image and after set just the update of the data
@@ -265,7 +265,7 @@ bool ewol::resource::Texture::updateContext() {
 	// now the data is loaded
 	m_loaded = true;
 	echrono::Steady toc = echrono::Steady::now();
-	//EWOL_ERROR("    updateContext [STOP] ==> " << (toc - toc1));
+	//Log.error("    updateContext [STOP] ==> " << (toc - toc1));
 	return true;
 }
 
@@ -273,7 +273,7 @@ void ewol::resource::Texture::removeContext() {
 	ethread::RecursiveLock lock(m_mutex);
 	if (m_loaded == true) {
 		// Request remove texture ...
-		EWOL_DEBUG("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
+		Log.debug("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
 		// TODO: Check if we are in the correct thread
 		glDeleteTextures(1, &m_texId);
 		m_loaded = false;
@@ -289,31 +289,31 @@ void ewol::resource::Texture::removeContextToLate() {
 void ewol::resource::Texture::flush() {
 	ethread::RecursiveLock lock(m_mutex);
 	// request to the manager to be call at the next update ...
-	EWOL_VERBOSE("Request UPDATE of Element");
+	Log.verbose("Request UPDATE of Element");
 	getManager().update(ememory::dynamicPointerCast<gale::Resource>(sharedFromThis()));
 }
 
-void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
+void ewol::resource::Texture::setImageSize(Vector2i _newSize) {
 	ethread::RecursiveLock lock(m_mutex);
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }
 
 void ewol::resource::Texture::set(egami::Image _image) {
-	EWOL_DEBUG("Set a new image in a texture:");
+	Log.debug("Set a new image in a texture:");
 	ethread::RecursiveLock lock(m_mutex);
 	if (_image.exist() == false) {
-		EWOL_ERROR("ERROR when loading the image : [raw data]");
+		Log.error("ERROR when loading the image : [raw data]");
 		return;
 	}
-	EWOL_DEBUG("    size=" << _image.getSize());
+	Log.debug("    size=" << _image.getSize());
 	etk::swap(m_data, _image);
-	ivec2 tmp = m_data.getSize();
-	m_realImageSize = vec2(tmp.x(), tmp.y());
-	vec2 compatibilityHWSize = vec2(nextP2(tmp.x()), nextP2(tmp.y()));
+	Vector2i tmp = m_data.getSize();
+	m_realImageSize = Vector2f(tmp.x(), tmp.y());
+	Vector2f compatibilityHWSize = Vector2f(nextP2(tmp.x()), nextP2(tmp.y()));
 	if (m_realImageSize != compatibilityHWSize) {
-		EWOL_VERBOSE("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
-		m_data.resize(ivec2(compatibilityHWSize.x(),compatibilityHWSize.y()));
+		Log.verbose("RESIZE Image for HArwareCompatibility:" << m_realImageSize << " => " << compatibilityHWSize);
+		m_data.resize(Vector2i(compatibilityHWSize.x(),compatibilityHWSize.y()));
 	}
 	flush();
 }

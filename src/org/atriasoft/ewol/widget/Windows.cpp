@@ -52,23 +52,23 @@ void ewol::widget::Windows::onChangeSize() {
 		m_subWidget->calculateMinMaxSize();
 		// TODO : do it better ... and manage gravity ...
 		m_subWidget->setSize(m_size);
-		m_subWidget->setOrigin(vec2(0.0f, 0.0f));
+		m_subWidget->setOrigin(Vector2f(0.0f, 0.0f));
 		m_subWidget->onChangeSize();
 	}
 	for (auto &it : m_popUpWidgetList) {
 		if(it != null) {
 			it->calculateMinMaxSize();
 			it->setSize(m_size);
-			it->setOrigin(vec2(0.0f, 0.0f));
+			it->setOrigin(Vector2f(0.0f, 0.0f));
 			it->onChangeSize();
 		}
 	}
 }
 
-ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
-	EWOL_VERBOSE("Get widget at pos : " << _pos);
+ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const Vector2f& _pos) {
+	Log.verbose("Get widget at pos : " << _pos);
 	// calculate relative position
-	vec2 relativePos = relativePosition(_pos);
+	Vector2f relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
 	if (m_popUpWidgetList.size() != 0) {
 		return m_popUpWidgetList.back()->getWidgetAtPos(_pos);
@@ -81,9 +81,9 @@ ewol::WidgetShared ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 }
 
 void ewol::widget::Windows::sysDraw() {
-	EWOL_VERBOSE("Draw on " << m_size);
+	Log.verbose("Draw on " << m_size);
 	// set the size of the open GL system
-	gale::openGL::setViewPort(vec2(0,0), m_size);
+	gale::openGL::setViewPort(Vector2f(0,0), m_size);
 	gale::openGL::disable(gale::openGL::flag_dither);
 	//gale::openGL::disable(gale::openGL::flag_blend);
 	gale::openGL::disable(gale::openGL::flag_stencilTest);
@@ -136,36 +136,36 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	                     | uint32_t(gale::openGL::clearFlag_depthBuffer));
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime0 = (float)(ewol::getTime() - ___startTime0) / 1000.0f;
-	EWOL_ERROR("      Windows000  : " << ___localTime0 << "ms ");
+	Log.error("      Windows000  : " << ___localTime0 << "ms ");
 	int64_t ___startTime1 = ewol::getTime();
 	#endif
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
 	if (m_subWidget != null) {
 		m_subWidget->systemDraw(_displayProp);
-		//EWOL_DEBUG("Draw Windows");
+		//Log.debug("Draw Windows");
 	}
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime1 = (float)(ewol::getTime() - ___startTime1) / 1000.0f;
-	EWOL_ERROR("      Windows111  : " << ___localTime1 << "ms ");
+	Log.error("      Windows111  : " << ___localTime1 << "ms ");
 	int64_t ___startTime2 = ewol::getTime();
 	#endif
 	// second display the pop-up
 	for (auto &it : m_popUpWidgetList) {
 		if (it != null) {
 			it->systemDraw(_displayProp);
-			//EWOL_DEBUG("Draw Pop-up");
+			//Log.debug("Draw Pop-up");
 		}
 	}
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime2 = (float)(ewol::getTime() - ___startTime2) / 1000.0f;
-	EWOL_ERROR("      Windows222  : " << ___localTime2 << "ms ");
+	Log.error("      Windows222  : " << ___localTime2 << "ms ");
 	#endif
 }
 
 void ewol::widget::Windows::setSubWidget(ewol::WidgetShared _widget) {
 	if (m_subWidget != null) {
-		EWOL_INFO("Remove current main windows Widget...");
+		Log.info("Remove current main windows Widget...");
 		m_subWidget->removeParent();
 		m_subWidget.reset();
 	}
@@ -181,7 +181,7 @@ void ewol::widget::Windows::setSubWidget(ewol::WidgetShared _widget) {
 void ewol::widget::Windows::popUpWidgetPush(ewol::WidgetShared _widget) {
 	if (_widget == null) {
 		// nothing to do an error appear :
-		EWOL_ERROR("can not set widget pop-up (null pointer)");
+		Log.error("can not set widget pop-up (null pointer)");
 		return;
 	}
 	m_popUpWidgetList.pushBack(_widget);
@@ -215,16 +215,16 @@ void ewol::widget::Windows::onChangePropertyTitle() {
 	if (context.getWindows() == sharedFromThis()) {
 		context.setTitle(*propertyTitle);
 	} else {
-		EWOL_INFO("Set title is delayed ...");
+		Log.info("Set title is delayed ...");
 	}
 }
 
 void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _child) {
-	EWOL_VERBOSE("A child has been removed");
+	Log.verbose("A child has been removed");
 	auto it = m_popUpWidgetList.begin();
 	while (it != m_popUpWidgetList.end()) {
 		if (*it == _child) {
-			EWOL_VERBOSE("    Find it ...");
+			Log.verbose("    Find it ...");
 			if (*it == null) {
 				m_popUpWidgetList.erase(it);
 				it = m_popUpWidgetList.begin();
@@ -240,7 +240,7 @@ void ewol::widget::Windows::requestDestroyFromChild(const ewol::ObjectShared& _c
 		++it;
 	}
 	if (m_subWidget == _child) {
-		EWOL_VERBOSE("    Find it ... 2");
+		Log.verbose("    Find it ... 2");
 		if (m_subWidget == null) {
 			return;
 		}

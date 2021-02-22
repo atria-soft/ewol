@@ -73,7 +73,7 @@ namespace ewol {
 			void onKillDemand(gale::Context& _context) override;
 			void onPointer(enum gale::key::type _type,
 			               int32_t _pointerID,
-			               const vec2& _pos,
+			               const Vector2f& _pos,
 			               gale::key::status _state) override;
 			void onKeyboard(const gale::key::Special& _special,
 			                enum gale::key::keyboard _type,
@@ -119,7 +119,7 @@ namespace ewol {
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */
 			void inputEventUnGrabPointer();
-			void onResize(const ivec2& _size) override;
+			void onResize(const Vector2i& _size) override;
 		public:
 			/**
 			 * @brief This is the only one things the User might done in his main();

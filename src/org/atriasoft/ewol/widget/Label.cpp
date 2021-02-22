@@ -53,19 +53,19 @@ void ewol::widget::Label::init() {
 
 
 void ewol::widget::Label::calculateMinMaxSize() {
-	vec2 tmpMax = propertyMaxSize->getPixel();
-	vec2 tmpMin = propertyMinSize->getPixel();
-	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
+	Vector2f tmpMax = propertyMaxSize->getPixel();
+	Vector2f tmpMin = propertyMinSize->getPixel();
+	//Log.debug("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::alignLeft);
-		//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
+		//Log.debug("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
 	}
-	vec3 minSize = m_text.calculateSizeDecorated(m_value);
-	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
+	Vector3f minSize = m_text.calculateSizeDecorated(m_value);
+	//Log.debug("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
 	
 	m_minSize.setX(etk::avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
 	m_minSize.setY(etk::avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
+	Log.verbose("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
 }
 
 void ewol::widget::Label::onDraw() {
@@ -79,21 +79,21 @@ void ewol::widget::Label::onRegenerateDisplay() {
 	m_text.clear();
 	int32_t paddingSize = 2;
 	
-	vec2 tmpMax = propertyMaxSize->getPixel();
+	Vector2f tmpMax = propertyMaxSize->getPixel();
 	// to know the size of one line : 
-	vec3 minSize = m_text.calculateSize(char32_t('A'));
+	Vector3f minSize = m_text.calculateSize(char32_t('A'));
 	
 	//minSize.setX(etk::max(minSize.x(), m_minSize.x()));
 	//minSize.setY(etk::max(minSize.y(), m_minSize.y()));
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}
-	vec3 curentTextSize = m_text.calculateSizeDecorated(m_value);
+	Vector3f curentTextSize = m_text.calculateSizeDecorated(m_value);
 	
-	ivec2 localSize = m_minSize;
+	Vector2i localSize = m_minSize;
 	
 	// no change for the text orogin : 
-	vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+	Vector3f tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
@@ -105,15 +105,15 @@ void ewol::widget::Label::onRegenerateDisplay() {
 		localSize.setY(m_size.y());
 		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 	}
-	tmpTextOrigin += vec3(paddingSize, paddingSize, 0);
-	localSize -= vec2(2*paddingSize,2*paddingSize);
+	tmpTextOrigin += Vector3f(paddingSize, paddingSize, 0);
+	localSize -= Vector2f(2*paddingSize,2*paddingSize);
 	
 	tmpTextOrigin.setY( tmpTextOrigin.y() + (m_minSize.y()-2*paddingSize) - minSize.y());
 	
-	vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
+	Vector2f textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
 	
-	vec3 drawClippingPos(paddingSize, paddingSize, -0.5);
-	vec3 drawClippingSize((m_size.x() - paddingSize),
+	Vector3f drawClippingPos(paddingSize, paddingSize, -0.5);
+	Vector3f drawClippingSize((m_size.x() - paddingSize),
 	                      (m_size.y() - paddingSize),
 	                      1);
 	
@@ -127,14 +127,14 @@ void ewol::widget::Label::onRegenerateDisplay() {
 		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
 	}
 	m_text.setPos(tmpTextOrigin);
-	EWOL_VERBOSE("[" << getId() << "] {" << m_value << "} display at pos : " << tmpTextOrigin);
+	Log.verbose("[" << getId() << "] {" << m_value << "} display at pos : " << tmpTextOrigin);
 	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);
 	m_text.setClipping(drawClippingPos, drawClippingSize);
 	m_text.printDecorated(m_value);
 }
 
 bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
-	//EWOL_DEBUG("Event on Label ...");
+	//Log.debug("Event on Label ...");
 	if (_event.getId() == 1) {
 		if (gale::key::status::pressSingle == _event.getStatus()) {
 			// nothing to do ...
@@ -151,7 +151,7 @@ bool ewol::widget::Label::loadXML(const exml::Element& _node) {
 	}
 	ewol::Widget::loadXML(_node);
 	// get internal data : 
-	EWOL_DEBUG("Load label:" << _node.getText());
+	Log.debug("Load label:" << _node.getText());
 	propertyValue.set(_node.getText());
 	return true;
 }

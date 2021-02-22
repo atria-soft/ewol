@@ -17,7 +17,7 @@ ewol::widget::Spacer::Spacer() :
                       "background of the spacer",
                       &ewol::widget::Spacer::onChangePropertyColor) {
 	addObjectType("ewol::widget::Spacer");
-	propertyMinSize.setDirectCheck(gale::Dimension(vec2(10,10)));
+	propertyMinSize.setDirectCheck(gale::Dimension(Vector2f(10,10)));
 	propertyCanFocus.setDirectCheck(true);
 }
 
@@ -40,8 +40,8 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 		return;
 	}
 	m_draw.setColor(propertyColor);
-	m_draw.setPos(vec3(0, 0, 0) );
-	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
+	m_draw.setPos(Vector3f(0, 0, 0) );
+	m_draw.rectangleWidth(Vector3f(m_size.x(), m_size.y(),0) );
 }
 
 void ewol::widget::Spacer::onChangePropertyColor() {

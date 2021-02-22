@@ -49,7 +49,7 @@ ewol::compositing::TextBase::TextBase(const etk::String& _shaderName, bool _load
 	// Create the VBO:
 	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
 	if (m_VBO == null) {
-		EWOL_ERROR("can not instanciate VBO ...");
+		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
@@ -75,23 +75,23 @@ void ewol::compositing::TextBase::loadProgram(const etk::String& _shaderName) {
 		m_GLtextWidth  = m_GLprogram->getUniform("EW_texWidth");
 		m_GLtextHeight = m_GLprogram->getUniform("EW_texHeight");
 	} else {
-		EWOL_ERROR("Can not load the program => create previous one...");
+		Log.error("Can not load the program => create previous one...");
 		m_GLprogram = old;
 		old = null;
 	}
 }
 
-void ewol::compositing::TextBase::translate(const vec3& _vect) {
+void ewol::compositing::TextBase::translate(const Vector3f& _vect) {
 	ewol::Compositing::translate(_vect);
 	m_vectorialDraw.translate(_vect);
 }
 
-void ewol::compositing::TextBase::rotate(const vec3& _vect, float _angle) {
+void ewol::compositing::TextBase::rotate(const Vector3f& _vect, float _angle) {
 	ewol::Compositing::rotate(_vect, _angle);
 	m_vectorialDraw.rotate(_vect, _angle);
 }
 
-void ewol::compositing::TextBase::scale(const vec3& _vect) {
+void ewol::compositing::TextBase::scale(const Vector3f& _vect) {
 	ewol::Compositing::scale(_vect);
 	m_vectorialDraw.scale(_vect);
 }
@@ -108,9 +108,9 @@ void ewol::compositing::TextBase::clear() {
 }
 
 void ewol::compositing::TextBase::reset() {
-	m_position = vec3(0,0,0);
-	m_clippingPosStart = vec3(0,0,0);
-	m_clippingPosStop = vec3(0,0,0);
+	m_position = Vector3f(0,0,0);
+	m_clippingPosStart = Vector3f(0,0,0);
+	m_clippingPosStop = Vector3f(0,0,0);
 	m_sizeDisplayStart = m_position;
 	m_sizeDisplayStop = m_position;
 	m_nbCharDisplayed = 0;
@@ -130,15 +130,15 @@ void ewol::compositing::TextBase::reset() {
 	m_nbCharDisplayed = 0;
 }
 
-void ewol::compositing::TextBase::setPos(const vec3& _pos) {
+void ewol::compositing::TextBase::setPos(const Vector3f& _pos) {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
-		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		Log.verbose("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 		m_sizeDisplayStop.setX(etk::max(m_position.x(), m_sizeDisplayStop.x()));
 		m_sizeDisplayStop.setY(etk::max(m_position.y(), m_sizeDisplayStop.y()));
 		m_sizeDisplayStart.setX(etk::min(m_position.x(), m_sizeDisplayStart.x()));
 		m_sizeDisplayStart.setY(etk::min(m_position.y(), m_sizeDisplayStart.y()));
-		EWOL_VERBOSE("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		Log.verbose("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 	// update position
 	m_position = _pos;
@@ -149,18 +149,18 @@ void ewol::compositing::TextBase::setPos(const vec3& _pos) {
 		m_sizeDisplayStart = m_position;
 		m_sizeDisplayStop = m_position;
 		m_sizeDisplayStop.setY( m_sizeDisplayStop.y()+ getHeight());
-		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		Log.verbose("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	} else {
-		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		Log.verbose("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 		m_sizeDisplayStop.setX(etk::max(m_position.x(), m_sizeDisplayStop.x()));
 		m_sizeDisplayStop.setY(etk::max(m_position.y(), m_sizeDisplayStop.y()));
 		m_sizeDisplayStart.setX(etk::min(m_position.x(), m_sizeDisplayStart.x()));
 		m_sizeDisplayStart.setY(etk::min(m_position.y(), m_sizeDisplayStart.y()));
-		EWOL_VERBOSE("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		Log.verbose("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 }
 
-void ewol::compositing::TextBase::setRelPos(const vec3& _pos) {
+void ewol::compositing::TextBase::setRelPos(const Vector3f& _pos) {
 	m_position += _pos;
 	m_previousCharcode = 0;
 	m_vectorialDraw.setPos(m_position);
@@ -171,7 +171,7 @@ void ewol::compositing::TextBase::setColorBg(const etk::Color<>& _color) {
 	m_vectorialDraw.setColor(_color);
 }
 
-void ewol::compositing::TextBase::setClipping(const vec3& _pos, const vec3& _posEnd) {
+void ewol::compositing::TextBase::setClipping(const Vector3f& _pos, const Vector3f& _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -244,12 +244,12 @@ void ewol::compositing::TextBase::setKerningMode(bool _newMode) {
 }
 
 void ewol::compositing::TextBase::print(const etk::UString& _text) {
-	etk::Vector<TextDecoration> decorationEmpty;
+	List<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
 void ewol::compositing::TextBase::print(const etk::String& _text) {
-	etk::Vector<TextDecoration> decorationEmpty;
+	List<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
@@ -257,7 +257,7 @@ void ewol::compositing::TextBase::print(const etk::String& _text) {
 void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 	// get the static real pointer
 	if (_element.exist() == false) {
-		EWOL_ERROR( "Error Input node does not existed ...");
+		Log.error( "Error Input node does not existed ...");
 		return;
 	}
 	for(auto it : _element.nodes) {
@@ -266,23 +266,23 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 			continue;
 		} else if (it.isText() == true) {
 			htmlAddData(etk::toUString(it.getValue()));
-			EWOL_VERBOSE("XML add : " << it.getValue());
+			Log.verbose("XML add : " << it.getValue());
 			continue;
 		} else if (it.isElement() == false) {
-			EWOL_ERROR("(l "<< it.getPos() << ") node not suported type : " << it.getType() << " val='"<< it.getValue() << "'" );
+			Log.error("(l "<< it.getPos() << ") node not suported type : " << it.getType() << " val='"<< it.getValue() << "'" );
 			continue;
 		}
 		exml::Element elem = it.toElement();
 		if (elem.exist() == false) {
-			EWOL_ERROR("Cast error ...");
+			Log.error("Cast error ...");
 			continue;
 		}
 		if(etk::compare_no_case(elem.getValue(), "br") == true) {
 			htmlFlush();
-			EWOL_VERBOSE("XML flush & newLine");
+			Log.verbose("XML flush & newLine");
 			forceLineReturn();
 		} else if (etk::compare_no_case(elem.getValue(), "font") == true) {
-			EWOL_VERBOSE("XML Font ...");
+			Log.verbose("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			etk::String colorValue = elem.attributes["color"];
 			if (colorValue.size() != 0) {
@@ -296,7 +296,7 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 			m_htmlDecoTmp = tmpDeco;
 		} else if(    etk::compare_no_case(elem.getValue(), "b") == true
 		           || etk::compare_no_case(elem.getValue(), "bold") == true) {
-			EWOL_VERBOSE("XML bold ...");
+			Log.verbose("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
 				m_htmlDecoTmp.m_mode = ewol::font::Bold;
@@ -307,7 +307,7 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 			m_htmlDecoTmp = tmpDeco;
 		} else if(    etk::compare_no_case(elem.getValue(), "i") == true
 		           || etk::compare_no_case(elem.getValue(), "italic") == true) {
-			EWOL_VERBOSE("XML italic ...");
+			Log.verbose("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
 				m_htmlDecoTmp.m_mode = ewol::font::Italic;
@@ -318,38 +318,38 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 			m_htmlDecoTmp = tmpDeco;
 		} else if(    etk::compare_no_case(elem.getValue(), "u") == true
 		           || etk::compare_no_case(elem.getValue(), "underline") == true) {
-			EWOL_VERBOSE("XML underline ...");
+			Log.verbose("XML underline ...");
 			parseHtmlNode(elem);
 		} else if(    etk::compare_no_case(elem.getValue(), "p") == true
 		           || etk::compare_no_case(elem.getValue(), "paragraph") == true) {
-			EWOL_VERBOSE("XML paragraph ...");
+			Log.verbose("XML paragraph ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
 		} else if (etk::compare_no_case(elem.getValue(), "center") == true) {
-			EWOL_VERBOSE("XML center ...");
+			Log.verbose("XML center ...");
 			htmlFlush();
 			m_alignement = alignCenter;
 			parseHtmlNode(elem);
 		} else if (etk::compare_no_case(elem.getValue(), "left") == true) {
-			EWOL_VERBOSE("XML left ...");
+			Log.verbose("XML left ...");
 			htmlFlush();
 			m_alignement = alignLeft;
 			parseHtmlNode(elem);
 		} else if (etk::compare_no_case(elem.getValue(), "right") == true) {
-			EWOL_VERBOSE("XML right ...");
+			Log.verbose("XML right ...");
 			htmlFlush();
 			m_alignement = alignRight;
 			parseHtmlNode(elem);
 		} else if (etk::compare_no_case(elem.getValue(), "justify") == true) {
-			EWOL_VERBOSE("XML justify ...");
+			Log.verbose("XML justify ...");
 			htmlFlush();
 			m_alignement = alignJustify;
 			parseHtmlNode(elem);
 		} else {
-			EWOL_ERROR("(l "<< elem.getPos() << ") node not suported type: " << elem.getType() << " val='"<< elem.getValue() << "'" );
+			Log.error("(l "<< elem.getPos() << ") node not suported type: " << elem.getType() << " val='"<< elem.getValue() << "'" );
 		}
 	}
 }
@@ -358,7 +358,7 @@ void ewol::compositing::TextBase::printDecorated(const etk::String& _text) {
 	etk::String tmpData("<html>\n<body>\n");
 	tmpData += _text;
 	tmpData += "\n</body>\n</html>\n";
-	//EWOL_DEBUG("plop : " << tmpData);
+	//Log.debug("plop : " << tmpData);
 	printHTML(tmpData);
 }
 
@@ -366,7 +366,7 @@ void ewol::compositing::TextBase::printDecorated(const etk::UString& _text) {
 	etk::UString tmpData(U"<html>\n<body>\n");
 	tmpData += _text;
 	tmpData += U"\n</body>\n</html>\n";
-	//EWOL_DEBUG("plop : " << tmpData);
+	//Log.debug("plop : " << tmpData);
 	printHTML(tmpData);
 }
 
@@ -379,19 +379,19 @@ void ewol::compositing::TextBase::printHTML(const etk::String& _text) {
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
 	if (doc.parse(_text) == false) {
-		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
+		Log.error( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
 	
 	exml::Element root = doc.nodes["html"];
 	if (root.exist() == false) {
-		EWOL_ERROR( "can not load XML: main node not find: 'html'");
+		Log.error( "can not load XML: main node not find: 'html'");
 		doc.display();
 		return;
 	}
 	exml::Element bodyNode = root.nodes["body"];
 	if (root.exist() == false) {
-		EWOL_ERROR( "can not load XML: main node not find: 'body'");
+		Log.error( "can not load XML: main node not find: 'body'");
 		return;
 	}
 	parseHtmlNode(bodyNode);
@@ -407,30 +407,30 @@ void ewol::compositing::TextBase::printHTML(const etk::UString& _text) {
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	// TODO : Create an instance of xml parser to manage etk::UString...
 	if (doc.parse(etk::toString(_text)) == false) {
-		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
+		Log.error( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
 	
 	exml::Element root = doc.nodes["html"];
 	if (root.exist() == false) {
-		EWOL_ERROR( "can not load XML: main node not find: 'html'");
+		Log.error( "can not load XML: main node not find: 'html'");
 		doc.display();
 		return;
 	}
 	exml::Element bodyNode = root.nodes["body"];
 	if (root.exist() == false) {
-		EWOL_ERROR( "can not load XML: main node not find: 'body'");
+		Log.error( "can not load XML: main node not find: 'body'");
 		return;
 	}
 	parseHtmlNode(bodyNode);
 	htmlFlush();
 }
 
-void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vector<TextDecoration>& _decoration) {
+void ewol::compositing::TextBase::print(const etk::String& _text, const List<TextDecoration>& _decoration) {
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == alignDisable) {
-		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// display the cursor if needed (if it is at the start position...)
 		if (m_needDisplay == true) {
 			if (0 == m_cursorPos) {
@@ -462,11 +462,11 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 			}
 			if(    m_needDisplay == true
 			    && m_colorBg.a() != 0) {
-				vec3 pos = m_position;
+				Vector3f pos = m_position;
 				m_vectorialDraw.setPos(pos);
 				printChar(_text[iii]);
 				float fontHeigh = getHeight();
-				m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
+				m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
 				m_nbCharDisplayed++;
 			} else {
 				printChar(_text[iii]);
@@ -481,9 +481,9 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 				}
 			}
 		}
-		//EWOL_DEBUG(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	} else {
-		//EWOL_DEBUG(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// special start case at the right of the endpoint :
 		if (m_stopTextPos < m_position.x()) {
 			forceLineReturn();
@@ -509,7 +509,7 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 				case alignRight:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						setPos(vec3(m_position.x() + freeSpace,
+						setPos(Vector3f(m_position.x() + freeSpace,
 						            m_position.y(),
 						            m_position.z()) );
 					}
@@ -517,7 +517,7 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 				case alignCenter:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						setPos(vec3(m_position.x() + freeSpace/2,
+						setPos(Vector3f(m_position.x() + freeSpace/2,
 						            m_position.y(),
 						            m_position.z()) );
 					}
@@ -552,27 +552,27 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 				}
 				// special for the justify mode
 				if ((char32_t)_text[iii] == u32char::Space) {
-					//EWOL_DEBUG(" generateString : \" \"");
+					//Log.debug(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
 						m_vectorialDraw.setPos(m_position);
 					}
 					// Must generate a dynamic space : 
-					setPos(vec3(m_position.x() + interpolation,
+					setPos(Vector3f(m_position.x() + interpolation,
 					            m_position.y(),
 					            m_position.z()) );
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
-						m_vectorialDraw.rectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
+						m_vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
-					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
+					//Log.debug(" generateString : \"" << (char)text[iii] << "\"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
-						vec3 pos = m_position;
+						Vector3f pos = m_position;
 						m_vectorialDraw.setPos(pos);
 						printChar(_text[iii]);
-						m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
+						m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
 						m_nbCharDisplayed++;
 					} else {
 						printChar(_text[iii]);
@@ -592,14 +592,14 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 			} else if((char32_t)_text[stop] == u32char::Space) {
 				currentId = stop+1;
 				// reset position :
-				setPos(vec3(m_startTextpos,
+				setPos(Vector3f(m_startTextpos,
 				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else if((char32_t)_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
-				setPos(vec3(m_startTextpos,
+				setPos(Vector3f(m_startTextpos,
 				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
@@ -607,15 +607,15 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const etk::Vec
 				currentId = stop;
 			}
 		}
-		//EWOL_DEBUG(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	}
 }
 
-void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration) {
+void ewol::compositing::TextBase::print(const etk::UString& _text, const List<TextDecoration>& _decoration) {
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == alignDisable) {
-		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// display the cursor if needed (if it is at the start position...)
 		if (m_needDisplay == true) {
 			if (0 == m_cursorPos) {
@@ -647,11 +647,11 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 			}
 			if(    m_needDisplay == true
 			    && m_colorBg.a() != 0) {
-				vec3 pos = m_position;
+				Vector3f pos = m_position;
 				m_vectorialDraw.setPos(pos);
 				printChar(_text[iii]);
 				float fontHeigh = getHeight();
-				m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
+				m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
 				m_nbCharDisplayed++;
 			} else {
 				printChar(_text[iii]);
@@ -666,9 +666,9 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 				}
 			}
 		}
-		//EWOL_DEBUG(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	} else {
-		//EWOL_DEBUG(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// special start case at the right of the endpoint :
 		if (m_stopTextPos < m_position.x()) {
 			forceLineReturn();
@@ -694,7 +694,7 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 				case alignRight:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						setPos(vec3(m_position.x() + freeSpace,
+						setPos(Vector3f(m_position.x() + freeSpace,
 						            m_position.y(),
 						            m_position.z()) );
 					}
@@ -702,7 +702,7 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 				case alignCenter:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						setPos(vec3(m_position.x() + freeSpace/2,
+						setPos(Vector3f(m_position.x() + freeSpace/2,
 						            m_position.y(),
 						            m_position.z()) );
 					}
@@ -737,27 +737,27 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 				}
 				// special for the justify mode
 				if ((char32_t)_text[iii] == u32char::Space) {
-					//EWOL_DEBUG(" generateString : \" \"");
+					//Log.debug(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
 						m_vectorialDraw.setPos(m_position);
 					}
 					// Must generate a dynamic space : 
-					setPos(vec3(m_position.x() + interpolation,
+					setPos(Vector3f(m_position.x() + interpolation,
 					            m_position.y(),
 					            m_position.z()) );
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
-						m_vectorialDraw.rectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
+						m_vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
-					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
+					//Log.debug(" generateString : \"" << (char)text[iii] << "\"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
-						vec3 pos = m_position;
+						Vector3f pos = m_position;
 						m_vectorialDraw.setPos(pos);
 						printChar(_text[iii]);
-						m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
+						m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
 						m_nbCharDisplayed++;
 					} else {
 						printChar(_text[iii]);
@@ -777,14 +777,14 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 			} else if(_text[stop] == u32char::Space) {
 				currentId = stop+1;
 				// reset position :
-				setPos(vec3(m_startTextpos,
+				setPos(Vector3f(m_startTextpos,
 				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else if(_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
-				setPos(vec3(m_startTextpos,
+				setPos(Vector3f(m_startTextpos,
 				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
@@ -792,7 +792,7 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 				currentId = stop;
 			}
 		}
-		//EWOL_DEBUG(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	}
 }
 
@@ -801,7 +801,7 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const etk::Ve
 
 void ewol::compositing::TextBase::forceLineReturn() {
 	// reset position : 
-	setPos(vec3(m_startTextpos, m_position.y() - getHeight(), 0) );
+	setPos(Vector3f(m_startTextpos, m_position.y() - getHeight(), 0) );
 }
 
 void ewol::compositing::TextBase::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::compositing::aligneMode _alignement) {
@@ -810,7 +810,7 @@ void ewol::compositing::TextBase::setTextAlignement(float _startTextpos, float _
 	m_alignement = _alignement;
 	if (m_startTextpos >= m_stopTextPos) {
 		// TODO: understand why this flush ... 
-		EWOL_VERBOSE("Request allignement with Borne position error : " << _startTextpos << " => " << _stopTextPos);
+		Log.verbose("Request allignement with Borne position error : " << _startTextpos << " => " << _stopTextPos);
 	}
 }
 
@@ -822,18 +822,18 @@ void ewol::compositing::TextBase::disableAlignement() {
 	m_alignement = alignDisable;
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeHTML(const etk::String& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeHTML(const etk::String& _text) {
 	// remove intermediate result 
 	reset();
-	//EWOL_DEBUG("        0 size for=\n" << text);
+	//Log.debug("        0 size for=\n" << text);
 	// disable display system
 	m_needDisplay = false;
 	
-	setPos(vec3(0,0,0) );
+	setPos(Vector3f(0,0,0) );
 	// same as print without the end display ...
 	printHTML(_text);
-	//EWOL_DEBUG("        1 Start pos=" << m_sizeDisplayStart);
-	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        1 Start pos=" << m_sizeDisplayStart);
+	//Log.debug("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
 	m_sizeDisplayStop.setValue(etk::max(m_position.x(), m_sizeDisplayStop.x()) ,
@@ -843,28 +843,28 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const etk::String& _text) {
 	                            etk::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
-	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
-	//EWOL_DEBUG("        2 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        2 Start pos=" << m_sizeDisplayStart);
+	//Log.debug("        2 Stop pos=" << m_sizeDisplayStop);
 	// set back the display system
 	m_needDisplay = true;
 	
-	return vec3( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
+	return Vector3f( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
 	             m_sizeDisplayStop.y()-m_sizeDisplayStart.y(),
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeHTML(const etk::UString& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeHTML(const etk::UString& _text) {
 	// remove intermediate result 
 	reset();
-	//EWOL_DEBUG("        0 size for=\n" << text);
+	//Log.debug("        0 size for=\n" << text);
 	// disable display system
 	m_needDisplay = false;
 	
-	setPos(vec3(0,0,0) );
+	setPos(Vector3f(0,0,0) );
 	// same as print without the end display ...
 	printHTML(_text);
-	//EWOL_DEBUG("        1 Start pos=" << m_sizeDisplayStart);
-	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        1 Start pos=" << m_sizeDisplayStart);
+	//Log.debug("        1 Stop pos=" << m_sizeDisplayStop);
 	
 	// get the last elements
 	m_sizeDisplayStop.setValue(etk::max(m_position.x(), m_sizeDisplayStop.x()) ,
@@ -874,42 +874,42 @@ vec3 ewol::compositing::TextBase::calculateSizeHTML(const etk::UString& _text) {
 	                            etk::min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
-	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
-	//EWOL_DEBUG("        2 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        2 Start pos=" << m_sizeDisplayStart);
+	//Log.debug("        2 Stop pos=" << m_sizeDisplayStop);
 	// set back the display system
 	m_needDisplay = true;
 	
-	return vec3( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
+	return Vector3f( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
 	             m_sizeDisplayStop.y()-m_sizeDisplayStart.y(),
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeDecorated(const etk::String& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeDecorated(const etk::String& _text) {
 	if (_text.size() == 0) {
-		return vec3(0,0,0);
+		return Vector3f(0,0,0);
 	}
 	etk::String tmpData("<html><body>\n");
 	tmpData+=_text;
 	tmpData+="\n</body></html>\n";
-	vec3 tmpVal = calculateSizeHTML(tmpData);
+	Vector3f tmpVal = calculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-vec3 ewol::compositing::TextBase::calculateSizeDecorated(const etk::UString& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeDecorated(const etk::UString& _text) {
 	if (_text.size() == 0) {
-		return vec3(0,0,0);
+		return Vector3f(0,0,0);
 	}
 	etk::UString tmpData(U"<html><body>\n");
 	tmpData += _text;
 	tmpData += U"\n</body></html>\n";
-	vec3 tmpVal = calculateSizeHTML(tmpData);
+	Vector3f tmpVal = calculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-vec3 ewol::compositing::TextBase::calculateSize(const etk::String& _text) {
-	vec3 outputSize(0, 0, 0);
+Vector3f ewol::compositing::TextBase::calculateSize(const etk::String& _text) {
+	Vector3f outputSize(0, 0, 0);
 	for(auto element : _text) {
-		vec3 tmpp = calculateSize(element);
+		Vector3f tmpp = calculateSize(element);
 		if (outputSize.y() == 0) {
 			outputSize.setY(tmpp.y());
 		}
@@ -918,10 +918,10 @@ vec3 ewol::compositing::TextBase::calculateSize(const etk::String& _text) {
 	return outputSize;
 }
 
-vec3 ewol::compositing::TextBase::calculateSize(const etk::UString& _text) {
-	vec3 outputSize(0, 0, 0);
+Vector3f ewol::compositing::TextBase::calculateSize(const etk::UString& _text) {
+	Vector3f outputSize(0, 0, 0);
 	for(auto element : _text) {
-		vec3 tmpp = calculateSize(element);
+		Vector3f tmpp = calculateSize(element);
 		if (outputSize.y() == 0) {
 			outputSize.setY(tmpp.y());
 		}
@@ -933,10 +933,10 @@ vec3 ewol::compositing::TextBase::calculateSize(const etk::UString& _text) {
 void ewol::compositing::TextBase::printCursor(bool _isInsertMode, float _cursorSize) {
 	int32_t fontHeigh = getHeight();
 	if (true == _isInsertMode) {
-		m_vectorialDraw.rectangleWidth(vec3(_cursorSize, fontHeigh, 0) );
+		m_vectorialDraw.rectangleWidth(Vector3f(_cursorSize, fontHeigh, 0) );
 	} else {
 		m_vectorialDraw.setThickness(2);
-		m_vectorialDraw.lineRel( vec3(0, fontHeigh, 0) );
+		m_vectorialDraw.lineRel( Vector3f(0, fontHeigh, 0) );
 		m_vectorialDraw.setThickness(0);
 	}
 }
@@ -965,7 +965,7 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::String& _text,
 	}
 	
 	for (size_t iii=_start; iii<_text.size(); iii++) {
-		vec3 tmpSize = calculateSize(_text[iii]);
+		Vector3f tmpSize = calculateSize(_text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x() > stopPosition) {
 			_stop = iii;
@@ -1028,7 +1028,7 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::UString& _text,
 	}
 	
 	for (size_t iii=_start; iii<_text.size(); iii++) {
-		vec3 tmpSize = calculateSize(_text[iii]);
+		Vector3f tmpSize = calculateSize(_text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x() > stopPosition) {
 			_stop = iii;

@@ -38,10 +38,10 @@ namespace ewol {
 		   (0,0)
 		 */
 		public :
-			ivec2 m_windowsSize; //!< Windows compleate size
-			ivec2 m_origin; //!< Windows clipping upper widget (can not be <0)
-			ivec2 m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
-			void limit(const vec2& _origin, const vec2& _size);
+			Vector2i m_windowsSize; //!< Windows compleate size
+			Vector2i m_origin; //!< Windows clipping upper widget (can not be <0)
+			Vector2i m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
+			void limit(const Vector2f& _origin, const Vector2f& _size);
 	};
 	etk::Stream& operator <<(etk::Stream& _os, const ewol::DrawProperty& _obj);
 	

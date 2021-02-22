@@ -166,7 +166,7 @@ namespace ewol {
 				}
 				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
 				bool loadXML(const exml::Element& _node) override;
-				void setOffset(const vec2& _newVal) override;
+				void setOffset(const Vector2f& _newVal) override;
 				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
 				void drawWidgetTree(int32_t _level=0) override;
 		};

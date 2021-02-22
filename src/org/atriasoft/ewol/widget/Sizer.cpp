@@ -17,7 +17,7 @@ ewol::widget::Sizer::Sizer() :
                      "The display mode",
                      &ewol::widget::Sizer::onChangePropertyMode),
   propertyBorderSize(this, "border",
-                           vec2(0,0),
+                           Vector2f(0,0),
                            "The sizer border size",
                            &ewol::widget::Sizer::onChangePropertyBorderSize),
   propertyAnimation(this, "annimation",
@@ -37,37 +37,37 @@ ewol::widget::Sizer::Sizer() :
 }
 
 ewol::widget::Sizer::~Sizer() {
-	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (propertyMode == ewol::widget::Sizer::modeVert?"Vert":"Hori") << ")");
+	//Log.debug("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (propertyMode == ewol::widget::Sizer::modeVert?"Vert":"Hori") << ")");
 }
 
 
 void ewol::widget::Sizer::onChangeSize() {
 	ewol::Widget::onChangeSize();
-	vec2 tmpBorderSize = propertyBorderSize->getPixel();
-	EWOL_VERBOSE("[" << getId() << "] update size : " << m_size << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << propertyBorderSize);
-	vec2 localWidgetSize = m_size - tmpBorderSize*2.0f;
+	Vector2f tmpBorderSize = propertyBorderSize->getPixel();
+	Log.verbose("[" << getId() << "] update size : " << m_size << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << propertyBorderSize);
+	Vector2f localWidgetSize = m_size - tmpBorderSize*2.0f;
 	// -1- calculate min-size and expand requested:
-	vec2 minSize(0.0f, 0.0f);
-	ivec2 nbWidgetExpand(0,0);
+	Vector2f minSize(0.0f, 0.0f);
+	Vector2i nbWidgetExpand(0,0);
 	for (auto &it : m_subWidget) {
 		if (it == null) {
 			continue;
 		}
-		vec2 tmpSize = it->getCalculateMinSize();
+		Vector2f tmpSize = it->getCalculateMinSize();
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
-			minSize = vec2(etk::max(minSize.x(), tmpSize.x()),
+			minSize = Vector2f(etk::max(minSize.x(), tmpSize.x()),
 			               minSize.y() + tmpSize.y());
 		} else {
-			minSize = vec2(minSize.x() + tmpSize.x(),
+			minSize = Vector2f(minSize.x() + tmpSize.x(),
 			               etk::max(minSize.y(), tmpSize.y()));
 		}
-		bvec2 expand = it->canExpand();
-		nbWidgetExpand += ivec2(expand.x()==true?1:0,
+		Vector2b expand = it->canExpand();
+		nbWidgetExpand += Vector2i(expand.x()==true?1:0,
 		                        expand.y()==true?1:0);
 	}
 	// -2- Calculate the size to add at every elements...
 	float deltaExpandSize = 0.0f;
-	if (nbWidgetExpand != ivec2(0,0)) {
+	if (nbWidgetExpand != Vector2i(0,0)) {
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
 			deltaExpandSize = (localWidgetSize.y() - minSize.y()) / float(nbWidgetExpand.y());
 		} else {
@@ -97,8 +97,8 @@ void ewol::widget::Sizer::onChangeSize() {
 			if (it == null) {
 				continue;
 			}
-			vec2 tmpSizeMin = it->getSize();
-			vec2 tmpSizeMax = it->getCalculateMaxSize();
+			Vector2f tmpSizeMin = it->getSize();
+			Vector2f tmpSizeMax = it->getCalculateMaxSize();
 			// Now update his size  his size in X and the curent sizer size in Y:
 			if (*propertyMode == ewol::widget::Sizer::modeVert) {
 				if (it->canExpand().y() == true) {
@@ -152,14 +152,14 @@ void ewol::widget::Sizer::onChangeSize() {
 			if (it->canExpand().x() == false) {
 				continue;
 			}
-			vec2 tmpSizeMin = it->getSize();
+			Vector2f tmpSizeMin = it->getSize();
 			tmpSizeMin.setX(etk::avg(tmpSizeMin.x(), localWidgetSize.x(), it->getCalculateMaxSize().x()));
 			it->setSize(tmpSizeMin);
 		} else {
 			if (it->canExpand().y() == false) {
 				continue;
 			}
-			vec2 tmpSizeMin = it->getSize();
+			Vector2f tmpSizeMin = it->getSize();
 			tmpSizeMin.setY(etk::avg(tmpSizeMin.y(), localWidgetSize.y(), it->getCalculateMaxSize().y()));
 			it->setSize(tmpSizeMin);
 		}
@@ -169,38 +169,38 @@ void ewol::widget::Sizer::onChangeSize() {
 		if (it == null) {
 			continue;
 		}
-		it->setSize(vec2ClipInt32(it->getSize()));
+		it->setSize(Vector2fClipInt32(it->getSize()));
 	}
 	// -7- get under Size
-	vec2 underSize(0,0);
+	Vector2f underSize(0,0);
 	for (auto &it : m_subWidget) {
 		if (it == null) {
 			continue;
 		}
-		vec2 size = it->getSize();
+		Vector2f size = it->getSize();
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
-			underSize += vec2(0.0f, size.y());
+			underSize += Vector2f(0.0f, size.y());
 			underSize.setX(etk::max(underSize.x(), size.x()));
 		} else {
-			underSize += vec2(size.x(), 0.0f);
+			underSize += Vector2f(size.x(), 0.0f);
 			underSize.setY(etk::max(underSize.y(), size.y()));
 		}
 	}
-	vec2 deltas = localWidgetSize - underSize;
+	Vector2f deltas = localWidgetSize - underSize;
 	
 	// -8- Calculate the local origin, depending of the gravity:
-	vec2 tmpOrigin = m_origin + tmpBorderSize + ewol::gravityGenerateDelta(propertyGravity, deltas);
+	Vector2f tmpOrigin = m_origin + tmpBorderSize + ewol::gravityGenerateDelta(propertyGravity, deltas);
 	// -9- Set sub widget origin:
 	for (auto &it : m_subWidget) {
 		if (it == null) {
 			continue;
 		}
-		vec2 origin;
-		vec2 size = it->getSize();
+		Vector2f origin;
+		Vector2f size = it->getSize();
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
-			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(propertyGravity, vec2(underSize.x()-size.x(),0.0f)));
+			origin = Vector2fClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(propertyGravity, Vector2f(underSize.x()-size.x(),0.0f)));
 		} else {
-			origin = vec2ClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(propertyGravity, vec2(0.0f, underSize.y()-size.y())));
+			origin = Vector2fClipInt32(tmpOrigin+m_offset + ewol::gravityGenerateDelta(propertyGravity, Vector2f(0.0f, underSize.y()-size.y())));
 		}
 		it->setOrigin(origin);
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
@@ -220,11 +220,11 @@ void ewol::widget::Sizer::onChangeSize() {
 }
 
 void ewol::widget::Sizer::calculateMinMaxSize() {
-	EWOL_VERBOSE("[" << getId() << "] update minimum size");
+	Log.verbose("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
 	m_minSize = propertyMinSize->getPixel();
-	vec2 tmpBorderSize = propertyBorderSize->getPixel();
-	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
+	Vector2f tmpBorderSize = propertyBorderSize->getPixel();
+	Log.verbose("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	for (auto &it : m_subWidget) {
 		if (it == null) {
 			continue;
@@ -236,9 +236,9 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 		if (it->canExpand().y() == true) {
 			m_subExpend.setY(true);
 		}
-		vec2 tmpSize = it->getCalculateMinSize();
-		EWOL_VERBOSE("[" << getId() << "] NewMinSize=" << tmpSize);
-		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "}     Get minSize="<< tmpSize);
+		Vector2f tmpSize = it->getCalculateMinSize();
+		Log.verbose("[" << getId() << "] NewMinSize=" << tmpSize);
+		Log.verbose("[" << getId() << "] {" << getObjectType() << "}     Get minSize="<< tmpSize);
 		if (*propertyMode == ewol::widget::Sizer::modeVert) {
 			m_minSize.setY(m_minSize.y() + tmpSize.y());
 			if (tmpSize.x()>m_minSize.x()) {
@@ -252,7 +252,7 @@ void ewol::widget::Sizer::calculateMinMaxSize() {
 		}
 	}
 	m_minSize += tmpBorderSize*2;
-	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
+	//Log.error("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
 int32_t ewol::widget::Sizer::subWidgetAdd(ewol::WidgetShared _newWidget) {

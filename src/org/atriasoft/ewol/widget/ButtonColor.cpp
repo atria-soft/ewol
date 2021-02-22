@@ -47,7 +47,7 @@ ewol::widget::ButtonColor::~ButtonColor() {
 void ewol::widget::ButtonColor::calculateMinMaxSize() {
 	ewol::Padding padding = m_shaper.getPadding();
 	etk::String label = propertyValue.getString();
-	vec3 minSize = m_text.calculateSize(label);
+	Vector3f minSize = m_text.calculateSize(label);
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
 	m_minSize.setY(padding.y()*2 + minSize.y() );
 	markToRedraw();
@@ -65,7 +65,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	EWOL_DEBUG("redraw");
+	Log.debug("redraw");
 	m_text.clear();
 	m_shaper.clear();
 	
@@ -73,13 +73,13 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	
 	etk::String label = propertyValue.getString();
 	
-	ivec2 localSize = m_minSize;
+	Vector2i localSize = m_minSize;
 	
-	vec3 tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
+	Vector3f tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
 	               (m_size.y() - m_minSize.y()) / 2.0,
 	               0);
 	// no change for the text orogin : 
-	vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+	Vector3f tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
 	                   (m_size.y() - m_minSize.y()) / 2.0,
 	                   0);
 	
@@ -91,9 +91,9 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	if (propertyFill->y() == true) {
 		localSize.setY(m_size.y());
 	}
-	tmpOrigin += vec3(padding.xLeft(), padding.yButtom(), 0);
-	tmpTextOrigin += vec3(padding.xLeft(), padding.yButtom(), 0);
-	localSize -= ivec2(padding.x(), padding.y());
+	tmpOrigin += Vector3f(padding.xLeft(), padding.yButtom(), 0);
+	tmpTextOrigin += Vector3f(padding.xLeft(), padding.yButtom(), 0);
+	localSize -= Vector2i(padding.x(), padding.y());
 	
 	// clean the element
 	m_text.reset();
@@ -115,13 +115,13 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	}
 	
 	// selection area :
-	m_selectableAreaPos = vec2(tmpOrigin.x()-padding.xLeft(), tmpOrigin.y()-padding.yButtom());
-	m_selectableAreaSize = localSize + vec2(padding.x(),padding.y());
-	vec3 tmpp = m_text.calculateSize(label);
+	m_selectableAreaPos = Vector2f(tmpOrigin.x()-padding.xLeft(), tmpOrigin.y()-padding.yButtom());
+	m_selectableAreaSize = localSize + Vector2f(padding.x(),padding.y());
+	Vector3f tmpp = m_text.calculateSize(label);
 	m_shaper.setShape(m_selectableAreaPos,
 	                  m_selectableAreaSize,
-	                  vec2(tmpTextOrigin.x(), tmpTextOrigin.y()),
-	                  vec2(tmpp.x(), tmpp.y()));
+	                  Vector2f(tmpTextOrigin.x(), tmpTextOrigin.y()),
+	                  Vector2f(tmpp.x(), tmpp.y()));
 }
 
 
@@ -131,7 +131,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
-		vec2 relativePos = relativePosition(_event.getPos());
+		Vector2f relativePos = relativePosition(_event.getPos());
 		// prevent error from ouside the button
 		if(    relativePos.x() < m_selectableAreaPos.x()
 		    || relativePos.y() < m_selectableAreaPos.y()
@@ -144,7 +144,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 		}
 	}
 	bool previousPressed = m_buttonPressed;
-	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
+	//Log.debug("Event on BT ... mouse position : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(gale::key::status::down == _event.getStatus()) {
@@ -161,10 +161,10 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				// create a context menu : 
 				m_widgetContextMenu = ewol::widget::ContextMenu::create();
 				if (m_widgetContextMenu == null) {
-					EWOL_ERROR("Allocation Error");
+					Log.error("Allocation Error");
 					return true;
 				}
-				vec2 tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
+				Vector2f tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
 				tmpPos.setX( tmpPos.x() - m_minSize.x()/2.0);
 				m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
 				
@@ -175,7 +175,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				myColorChooser->signalChange.connect(sharedFromThis(), &ewol::widget::ButtonColor::onCallbackColorChange);
 				ewol::widget::WindowsShared currentWindows = getWindows();
 				if (currentWindows == null) {
-					EWOL_ERROR("Can not get the curent Windows...");
+					Log.error("Can not get the curent Windows...");
 					m_widgetContextMenu.reset();
 				} else {
 					currentWindows->popUpWidgetPush(m_widgetContextMenu);

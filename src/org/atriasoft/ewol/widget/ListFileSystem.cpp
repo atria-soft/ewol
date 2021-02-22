@@ -87,7 +87,7 @@ void ewol::widget::ListFileSystem::regenerateView() {
 		flags |= etk::path::LIST_FILE;
 	}
 	m_list = etk::path::list(*propertyPath, flags);
-	EWOL_ERROR("Lsit of element: " << m_list.size() );
+	Log.error("Lsit of element: " << m_list.size() );
 	// Sort the list:
 	etk::algorithm::quickSort(m_list, localSort);
 	// request a redraw ...
@@ -117,7 +117,7 @@ void ewol::widget::ListFileSystem::setSelect(const etk::Path& _data) {
 	markToRedraw();
 }
 
-ivec2 ewol::widget::ListFileSystem::getMatrixSize() const {
+Vector2i ewol::widget::ListFileSystem::getMatrixSize() const {
 	int32_t offset = 0;
 	if (*propertyShowFolder == true) {
 		if (propertyPath.get() == "/") {
@@ -126,10 +126,10 @@ ivec2 ewol::widget::ListFileSystem::getMatrixSize() const {
 			offset = 2;
 		}
 	}
-	return ivec2(1, m_list.size() + offset);
+	return Vector2i(1, m_list.size() + offset);
 }
 
-fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ivec2& _pos) {
+fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const Vector2i& _pos) {
 	switch (_role) {
 		case ListRole::Text:
 			{
@@ -149,7 +149,7 @@ fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ive
 				}
 				if(    _pos.y()-offset >= 0
 				    && _pos.y()-offset < (int32_t)m_list.size()) {
-					EWOL_VERBOSE("get filename for : '" << m_list[_pos.y()-offset] << ":'" << m_list[_pos.y()-offset].getFileName() << "'");
+					Log.verbose("get filename for : '" << m_list[_pos.y()-offset] << ":'" << m_list[_pos.y()-offset].getFileName() << "'");
 					return m_list[_pos.y()-offset].getFileName();
 				}
 			}
@@ -169,8 +169,8 @@ fluorine::Variant ewol::widget::ListFileSystem::getData(int32_t _role, const ive
 }
 
 bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
-                                               const ivec2& _pos,
-                                               const vec2& _mousePosition) {
+                                               const Vector2i& _pos,
+                                               const Vector2f& _mousePosition) {
 	int32_t offset = 0;
 	if (*propertyShowFolder == true) {
 		if (*propertyPath == "/") {
@@ -181,7 +181,7 @@ bool ewol::widget::ListFileSystem::onItemEvent(const ewol::event::Input& _event,
 	}
 	if (    _event.getStatus() == gale::key::status::pressSingle
 	     || _event.getStatus() == gale::key::status::pressDouble) {
-		EWOL_VERBOSE("Event on List : IdInput=" << _event.getId() << " _pos=" << _pos );
+		Log.verbose("Event on List : IdInput=" << _event.getId() << " _pos=" << _pos );
 		if (1 == _event.getId()) {
 			if (_pos.y() > (int32_t)m_list.size()+offset ) {
 				m_selectedLine = -1;

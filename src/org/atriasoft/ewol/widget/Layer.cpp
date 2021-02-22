@@ -15,10 +15,10 @@ ewol::widget::Layer::Layer() {
 }
 
 ewol::widget::Layer::~Layer() {
-	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
+	Log.debug("[" << getId() << "] Layer : destroy");
 }
 
-ewol::WidgetShared ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
+ewol::WidgetShared ewol::widget::Layer::getWidgetAtPos(const Vector2f& _pos) {
 	if (*propertyHide == true) {
 		return null;
 	}
@@ -27,8 +27,8 @@ ewol::WidgetShared ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 		if (it == null) {
 			continue;
 		}
-		vec2 tmpSize = it->getSize();
-		vec2 tmpOrigin = it->getOrigin();
+		Vector2f tmpSize = it->getSize();
+		Vector2f tmpOrigin = it->getOrigin();
 		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
 			ewol::WidgetShared tmpWidget = it->getWidgetAtPos(_pos);

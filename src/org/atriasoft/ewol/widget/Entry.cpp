@@ -61,7 +61,7 @@ void ewol::widget::Entry::init() {
 	
 	m_regex.compile(propertyRegex.get());
 	if (m_regex.getStatus() == false) {
-		EWOL_ERROR("can not parse regex for : " << propertyRegex);
+		Log.error("can not parse regex for : " << propertyRegex);
 	}
 	markToRedraw();
 	
@@ -104,9 +104,9 @@ void ewol::widget::Entry::calculateMinMaxSize() {
 	// get generic padding
 	ewol::Padding padding = m_shaper.getPadding();
 	int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
-	vec2 minimumSizeBase(20, minHeight);
+	Vector2f minimumSizeBase(20, minHeight);
 	// add padding :
-	minimumSizeBase += vec2(padding.x(), padding.y());
+	minimumSizeBase += Vector2f(padding.x(), padding.y());
 	m_minSize.setMax(minimumSizeBase);
 	// verify the min max of the min size ...
 	checkMinSize();
@@ -132,7 +132,7 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 		updateTextPosition();
 		ewol::Padding padding = m_shaper.getPadding();
 		
-		vec2 tmpSizeShaper = m_minSize;
+		Vector2f tmpSizeShaper = m_minSize;
 		if (propertyFill->x() == true) {
 			tmpSizeShaper.setX(m_size.x());
 		}
@@ -140,23 +140,23 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 			tmpSizeShaper.setY(m_size.y());
 		}
 		
-		vec2 tmpOriginShaper = (m_size - tmpSizeShaper) / 2.0f;
-		vec2 tmpSizeText = tmpSizeShaper - vec2(padding.x(), padding.y());
-		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
+		Vector2f tmpOriginShaper = (m_size - tmpSizeShaper) / 2.0f;
+		Vector2f tmpSizeText = tmpSizeShaper - Vector2f(padding.x(), padding.y());
+		Vector2f tmpOriginText = (m_size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 		int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
 		if (tmpSizeText.y() > minHeight) {
-			tmpOriginText += vec2(0,(tmpSizeText.y()-minHeight)/2.0f);
+			tmpOriginText += Vector2f(0,(tmpSizeText.y()-minHeight)/2.0f);
 		}
 		// fix all the position in the int32_t class:
-		tmpSizeShaper = vec2ClipInt32(tmpSizeShaper);
-		tmpOriginShaper = vec2ClipInt32(tmpOriginShaper);
-		tmpSizeText = vec2ClipInt32(tmpSizeText);
-		tmpOriginText = vec2ClipInt32(tmpOriginText);
+		tmpSizeShaper = Vector2fClipInt32(tmpSizeShaper);
+		tmpOriginShaper = Vector2fClipInt32(tmpOriginShaper);
+		tmpSizeText = Vector2fClipInt32(tmpSizeText);
+		tmpOriginText = Vector2fClipInt32(tmpOriginText);
 		
 		m_text.reset();
 		m_text.setClippingWidth(tmpOriginText, tmpSizeText);
-		m_text.setPos(tmpOriginText+vec2(m_displayStartPosition,0));
+		m_text.setPos(tmpOriginText+Vector2f(m_displayStartPosition,0));
 		if (m_displayCursorPosSelection != m_displayCursorPos) {
 			m_text.setCursorSelection(m_displayCursorPos, m_displayCursorPosSelection);
 		} else {
@@ -183,15 +183,15 @@ void ewol::widget::Entry::onRegenerateDisplay() {
 }
 
 
-void ewol::widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
+void ewol::widget::Entry::updateCursorPosition(const Vector2f& _pos, bool _selection) {
 	ewol::Padding padding = m_shaper.getPadding();
 	
-	vec2 relPos = relativePosition(_pos);
+	Vector2f relPos = relativePosition(_pos);
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.xLeft());
 	// try to find the new cursor position :
 	etk::String tmpDisplay = etk::String(propertyValue, 0, m_displayStartPosition);
 	int32_t displayHidenSize = m_text.calculateSize(tmpDisplay).x();
-	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
+	//Log.debug("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = padding.xLeft();
 	for (size_t iii=0; iii<propertyValue->size(); iii++) {
@@ -375,9 +375,9 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
-				EWOL_ERROR("get data: '" << _event.getChar() << "' = '" << u32char::convertToUtf8(_event.getChar()) << "'");
+				Log.error("get data: '" << _event.getChar() << "' = '" << u32char::convertToUtf8(_event.getChar()) << "'");
 				if ((int64_t)propertyValue->size() > propertyMaxCharacter) {
-					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
+					Log.info("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
 					etk::String newData = propertyValue;
 					etk::String inputData = u32char::convertToUtf8(_event.getChar());
@@ -427,15 +427,15 @@ void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
 	if (_newData.size()>0) {
 		/*
 		if (m_regex.parse(_newData, 0, _newData.size()) == false) {
-			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "'" );
+			Log.info("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "'" );
 			return;
 		}
 		if (m_regex.start() != 0) {
-			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (start position error)" );
+			Log.info("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (start position error)" );
 			return;
 		}
 		if (m_regex.stop() != _newData.size()) {
-			EWOL_INFO("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (stop position error)" );
+			Log.info("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (stop position error)" );
 			return;
 		}
 		*/
@@ -525,7 +525,7 @@ void ewol::widget::Entry::updateTextPosition() {
 		int32_t pixelCursorPos = m_text.calculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
-		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
+		Log.debug("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
 		if (tmp1<10) {
 			// set the cursor on le left
 			m_displayStartPosition = etk::min(-pixelCursorPos+10, 0);
@@ -582,14 +582,14 @@ void ewol::widget::Entry::onChangePropertyValue() {
 	etk::String newData = propertyValue.get();
 	if ((int64_t)newData.size() > propertyMaxCharacter) {
 		newData = etk::String(newData, 0, propertyMaxCharacter);
-		EWOL_DEBUG("Limit entry set of data... " << etk::String(newData, propertyMaxCharacter));
+		Log.debug("Limit entry set of data... " << etk::String(newData, propertyMaxCharacter));
 	}
 	// set the value with the check of the RegExp ...
 	setInternalValue(newData);
 	if (newData == propertyValue.get()) {
 		m_displayCursorPos = propertyValue->size();
 		m_displayCursorPosSelection = m_displayCursorPos;
-		EWOL_VERBOSE("Set : '" << newData << "'");
+		Log.verbose("Set : '" << newData << "'");
 	}
 	markToRedraw();
 }
@@ -601,7 +601,7 @@ void ewol::widget::Entry::onChangePropertyMaxCharacter() {
 void ewol::widget::Entry::onChangePropertyRegex() {
 	m_regex.compile(propertyRegex.get());
 	if (m_regex.getStatus() == false) {
-		EWOL_ERROR("can not parse regex for : " << propertyRegex);
+		Log.error("can not parse regex for : " << propertyRegex);
 	}
 	markToRedraw();
 }

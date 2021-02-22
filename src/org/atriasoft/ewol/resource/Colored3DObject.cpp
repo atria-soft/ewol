@@ -37,7 +37,7 @@ ewol::resource::Colored3DObject::~Colored3DObject() {
 }
 
 
-void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
                                            const etk::Color<float>& _color,
                                            bool _updateDepthBuffer,
                                            bool _depthtest) {
@@ -45,7 +45,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	if (true == _depthtest) {
@@ -54,7 +54,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
+	//Log.debug("    display " << m_coord.size() << " elements" );
 	m_GLprogram->use();
 	// set Matrix: translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
@@ -79,7 +79,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
                                            const etk::Color<float>& _color,
                                            mat4& _transformationMatrix,
                                            bool _updateDepthBuffer,
@@ -88,7 +88,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	if (true == _depthtest) {
@@ -97,7 +97,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
+	//Log.debug("    display " << m_coord.size() << " elements" );
 	m_GLprogram->use();
 	// set Matrix: translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
@@ -119,7 +119,7 @@ void ewol::resource::Colored3DObject::draw(const etk::Vector<vec3>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
+void ewol::resource::Colored3DObject::drawLine(List<Vector3f>& _vertices,
                                                const etk::Color<float>& _color,
                                                mat4& _transformationMatrix,
                                                bool _updateDepthBuffer,
@@ -128,7 +128,7 @@ void ewol::resource::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
 		return;
 	}
 	if (m_GLprogram == null) {
-		EWOL_ERROR("No shader ...");
+		Log.error("No shader ...");
 		return;
 	}
 	if (true == _depthtest) {
@@ -137,7 +137,7 @@ void ewol::resource::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
+	//Log.debug("    display " << m_coord.size() << " elements" );
 	m_GLprogram->use();
 	// set Matrix: translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
@@ -160,70 +160,70 @@ void ewol::resource::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
 }
 
 
-void ewol::resource::Colored3DObject::drawCubeLine(const vec3& _min,
-                                                   const vec3& _max,
+void ewol::resource::Colored3DObject::drawCubeLine(const Vector3f& _min,
+                                                   const Vector3f& _max,
                                                    const etk::Color<float>& _color,
                                                    mat4& _transformationMatrix,
                                                    bool _updateDepthBuffer,
                                                    bool _depthtest) {
-	etk::Vector<vec3> vertices;
-	vertices.pushBack(vec3(_min.x(), _min.y(),_min.z()));
-	vertices.pushBack(vec3(_max.x(), _min.y(),_min.z()));
+	List<Vector3f> vertices;
+	vertices.pushBack(Vector3f(_min.x(), _min.y(),_min.z()));
+	vertices.pushBack(Vector3f(_max.x(), _min.y(),_min.z()));
 	
-	vertices.pushBack(vec3(_max.x(), _min.y(),_min.z()));
-	vertices.pushBack(vec3(_max.x(), _min.y(),_max.z()));
+	vertices.pushBack(Vector3f(_max.x(), _min.y(),_min.z()));
+	vertices.pushBack(Vector3f(_max.x(), _min.y(),_max.z()));
 	
-	vertices.pushBack(vec3(_max.x(), _min.y(),_max.z()));
-	vertices.pushBack(vec3(_min.x(), _min.y(),_max.z()));
+	vertices.pushBack(Vector3f(_max.x(), _min.y(),_max.z()));
+	vertices.pushBack(Vector3f(_min.x(), _min.y(),_max.z()));
 	
-	vertices.pushBack(vec3(_min.x(), _min.y(),_max.z()));
-	vertices.pushBack(vec3(_min.x(), _min.y(),_min.z()));
-	
-	
-	vertices.pushBack(vec3(_min.x(), _max.y(),_min.z()));
-	vertices.pushBack(vec3(_max.x(), _max.y(),_min.z()));
-	
-	vertices.pushBack(vec3(_max.x(), _max.y(),_min.z()));
-	vertices.pushBack(vec3(_max.x(), _max.y(),_max.z()));
-	
-	vertices.pushBack(vec3(_max.x(), _max.y(),_max.z()));
-	vertices.pushBack(vec3(_min.x(), _max.y(),_max.z()));
-	
-	vertices.pushBack(vec3(_min.x(), _max.y(),_max.z()));
-	vertices.pushBack(vec3(_min.x(), _max.y(),_min.z()));
+	vertices.pushBack(Vector3f(_min.x(), _min.y(),_max.z()));
+	vertices.pushBack(Vector3f(_min.x(), _min.y(),_min.z()));
 	
 	
-	vertices.pushBack(vec3(_min.x(), _min.y(),_min.z()));
-	vertices.pushBack(vec3(_min.x(), _max.y(),_min.z()));
+	vertices.pushBack(Vector3f(_min.x(), _max.y(),_min.z()));
+	vertices.pushBack(Vector3f(_max.x(), _max.y(),_min.z()));
 	
-	vertices.pushBack(vec3(_max.x(), _min.y(),_min.z()));
-	vertices.pushBack(vec3(_max.x(), _max.y(),_min.z()));
+	vertices.pushBack(Vector3f(_max.x(), _max.y(),_min.z()));
+	vertices.pushBack(Vector3f(_max.x(), _max.y(),_max.z()));
 	
-	vertices.pushBack(vec3(_max.x(), _min.y(),_max.z()));
-	vertices.pushBack(vec3(_max.x(), _max.y(),_max.z()));
+	vertices.pushBack(Vector3f(_max.x(), _max.y(),_max.z()));
+	vertices.pushBack(Vector3f(_min.x(), _max.y(),_max.z()));
 	
-	vertices.pushBack(vec3(_min.x(), _min.y(),_max.z()));
-	vertices.pushBack(vec3(_min.x(), _max.y(),_max.z()));
+	vertices.pushBack(Vector3f(_min.x(), _max.y(),_max.z()));
+	vertices.pushBack(Vector3f(_min.x(), _max.y(),_min.z()));
+	
+	
+	vertices.pushBack(Vector3f(_min.x(), _min.y(),_min.z()));
+	vertices.pushBack(Vector3f(_min.x(), _max.y(),_min.z()));
+	
+	vertices.pushBack(Vector3f(_max.x(), _min.y(),_min.z()));
+	vertices.pushBack(Vector3f(_max.x(), _max.y(),_min.z()));
+	
+	vertices.pushBack(Vector3f(_max.x(), _min.y(),_max.z()));
+	vertices.pushBack(Vector3f(_max.x(), _max.y(),_max.z()));
+	
+	vertices.pushBack(Vector3f(_min.x(), _min.y(),_max.z()));
+	vertices.pushBack(Vector3f(_min.x(), _max.y(),_max.z()));
 	
 	drawLine(vertices, _color, _transformationMatrix, _updateDepthBuffer, _depthtest);
 }
 
-void ewol::resource::Colored3DObject::drawSquare(const vec3& _size,
+void ewol::resource::Colored3DObject::drawSquare(const Vector3f& _size,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor) {
-	etk::Vector<vec3> tmpVertices;
+	List<Vector3f> tmpVertices;
 	static int indices[36] = { 0,1,2,	3,2,1,	4,0,6,
 	                           6,0,2,	5,1,4,	4,1,0,
 	                           7,3,1,	7,1,5,	5,4,7,
 	                           7,4,6,	7,2,3,	7,6,2};
-	vec3 vertices[8]={ vec3(_size[0],_size[1],_size[2]),
-	                   vec3(-_size[0],_size[1],_size[2]),
-	                   vec3(_size[0],-_size[1],_size[2]),
-	                   vec3(-_size[0],-_size[1],_size[2]),
-	                   vec3(_size[0],_size[1],-_size[2]),
-	                   vec3(-_size[0],_size[1],-_size[2]),
-	                   vec3(_size[0],-_size[1],-_size[2]),
-	                   vec3(-_size[0],-_size[1],-_size[2])};
+	Vector3f vertices[8]={ Vector3f(_size[0],_size[1],_size[2]),
+	                   Vector3f(-_size[0],_size[1],_size[2]),
+	                   Vector3f(_size[0],-_size[1],_size[2]),
+	                   Vector3f(-_size[0],-_size[1],_size[2]),
+	                   Vector3f(_size[0],_size[1],-_size[2]),
+	                   Vector3f(-_size[0],_size[1],-_size[2]),
+	                   Vector3f(_size[0],-_size[1],-_size[2]),
+	                   Vector3f(-_size[0],-_size[1],-_size[2])};
 	tmpVertices.clear();
 	for (int32_t iii=0 ; iii<36 ; iii+=3) {
 		// normal calculation :
@@ -241,7 +241,7 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
                                                  int _longs,
                                                  mat4& _transformationMatrix,
                                                  const etk::Color<float>& _tmpColor) {
-	etk::Vector<vec3> tmpVertices;
+	List<Vector3f> tmpVertices;
 	for(int32_t iii=0; iii<=_lats; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
 		float z0  = _radius*sin(lat0);
@@ -255,14 +255,14 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
 			float y = sin(lng);
-			vec3 v1 = vec3(x * zr1, y * zr1, z1);
-			vec3 v4 = vec3(x * zr0, y * zr0, z0);
+			Vector3f v1 = Vector3f(x * zr1, y * zr1, z1);
+			Vector3f v4 = Vector3f(x * zr0, y * zr0, z0);
 			
 			lng = 2 * M_PI * float(jjj) / _longs;
 			x = cos(lng);
 			y = sin(lng);
-			vec3 v2 = vec3(x * zr1, y * zr1, z1);
-			vec3 v3 = vec3(x * zr0, y * zr0, z0);
+			Vector3f v2 = Vector3f(x * zr1, y * zr1, z1);
+			Vector3f v3 = Vector3f(x * zr0, y * zr0, z0);
 			
 			tmpVertices.pushBack(v1);
 			tmpVertices.pushBack(v2);
@@ -281,7 +281,7 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
                                                    int _longs,
                                                    mat4& _transformationMatrix,
                                                    const etk::Color<float>& _tmpColor) {
-	etk::Vector<vec3> tmpVertices;
+	List<Vector3f> tmpVertices;
 	// center to border (TOP)
 	
 	// center to border (TOP)
@@ -289,16 +289,16 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		float z = _size*0.5f;
-		vec3 v1 = vec3(0.0f, 0.0f, z);
+		Vector3f v1 = Vector3f(0.0f, 0.0f, z);
 		
 		float x = cos(lng)*_radius;
 		float y = sin(lng)*_radius;
-		vec3 v2 = vec3(x, y, z);
+		Vector3f v2 = Vector3f(x, y, z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
-		vec3 v3 = vec3(x, y, z);
+		Vector3f v3 = Vector3f(x, y, z);
 		tmpVertices.pushBack(v1);
 		tmpVertices.pushBack(v3);
 		tmpVertices.pushBack(v2);
@@ -311,14 +311,14 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		
 		float x = cos(lng)*_radius;
 		float y = sin(lng)*_radius;
-		vec3 v2  = vec3(x, y, z);
-		vec3 v2b = vec3(x, y, -z);
+		Vector3f v2  = Vector3f(x, y, z);
+		Vector3f v2b = Vector3f(x, y, -z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
-		vec3 v3  = vec3(x, y, z);
-		vec3 v3b = vec3(x, y, -z);
+		Vector3f v3  = Vector3f(x, y, z);
+		Vector3f v3b = Vector3f(x, y, -z);
 		
 		tmpVertices.pushBack(v2);
 		tmpVertices.pushBack(v3);
@@ -333,16 +333,16 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		float z = _size*-0.5f;
-		vec3 v1 = vec3(0.0f, 0.0f, z);
+		Vector3f v1 = Vector3f(0.0f, 0.0f, z);
 		
 		float x = cos(lng)*_radius;
 		float y = sin(lng)*_radius;
-		vec3 v2 = vec3(x, y, z);
+		Vector3f v2 = Vector3f(x, y, z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
-		vec3 v3 = vec3(x, y, z);
+		Vector3f v3 = Vector3f(x, y, z);
 		tmpVertices.pushBack(v1);
 		tmpVertices.pushBack(v2);
 		tmpVertices.pushBack(v3);
@@ -355,7 +355,7 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
                                                   int _longs,
                                                   mat4& _transformationMatrix,
                                                   const etk::Color<float>& _tmpColor) {
-	etk::Vector<vec3> tmpVertices;
+	List<Vector3f> tmpVertices;
 	_lats = int32_t(_lats / 2)*2;
 	
 	// center to border (TOP)
@@ -373,14 +373,14 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
 			float y = sin(lng);
-			vec3 v1 = vec3(x * zr1, y * zr1, z1+offset);
-			vec3 v4 = vec3(x * zr0, y * zr0, z0+offset);
+			Vector3f v1 = Vector3f(x * zr1, y * zr1, z1+offset);
+			Vector3f v4 = Vector3f(x * zr0, y * zr0, z0+offset);
 			
 			lng = 2 * M_PI * float(jjj) / _longs;
 			x = cos(lng);
 			y = sin(lng);
-			vec3 v2 = vec3(x * zr1, y * zr1, z1+offset);
-			vec3 v3 = vec3(x * zr0, y * zr0, z0+offset);
+			Vector3f v2 = Vector3f(x * zr1, y * zr1, z1+offset);
+			Vector3f v3 = Vector3f(x * zr0, y * zr0, z0+offset);
 			tmpVertices.pushBack(v1);
 			tmpVertices.pushBack(v2);
 			tmpVertices.pushBack(v3);
@@ -398,14 +398,14 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 		
 		float x = cos(lng)*_radius;
 		float y = sin(lng)*_radius;
-		vec3 v2  = vec3(x, y, z);
-		vec3 v2b = vec3(x, y, -z);
+		Vector3f v2  = Vector3f(x, y, z);
+		Vector3f v2b = Vector3f(x, y, -z);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
-		vec3 v3  = vec3(x, y, z);
-		vec3 v3b = vec3(x, y, -z);
+		Vector3f v3  = Vector3f(x, y, z);
+		Vector3f v3b = Vector3f(x, y, -z);
 		
 		tmpVertices.pushBack(v2);
 		tmpVertices.pushBack(v3);
@@ -430,14 +430,14 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
 			float y = sin(lng);
-			vec3 v1 = vec3(x * zr1, y * zr1, z1+offset);
-			vec3 v4 = vec3(x * zr0, y * zr0, z0+offset);
+			Vector3f v1 = Vector3f(x * zr1, y * zr1, z1+offset);
+			Vector3f v4 = Vector3f(x * zr0, y * zr0, z0+offset);
 			
 			lng = 2 * M_PI * float(jjj) / _longs;
 			x = cos(lng);
 			y = sin(lng);
-			vec3 v2 = vec3(x * zr1, y * zr1, z1+offset);
-			vec3 v3 = vec3(x * zr0, y * zr0, z0+offset);
+			Vector3f v2 = Vector3f(x * zr1, y * zr1, z1+offset);
+			Vector3f v3 = Vector3f(x * zr0, y * zr0, z0+offset);
 			tmpVertices.pushBack(v1);
 			tmpVertices.pushBack(v2);
 			tmpVertices.pushBack(v3);
@@ -456,20 +456,20 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
                                                int _longs,
                                                mat4& _transformationMatrix,
                                                const etk::Color<float>& _tmpColor) {
-	etk::Vector<vec3> tmpVertices;
+	List<Vector3f> tmpVertices;
 	// center to border (TOP)
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
-		vec3 v1 = vec3(0.0f, 0.0f, -_size/2);
+		Vector3f v1 = Vector3f(0.0f, 0.0f, -_size/2);
 		
 		float x = cos(lng)*_radius;
 		float y = sin(lng)*_radius;
-		vec3 v2 = vec3(x, y, _size/2);
+		Vector3f v2 = Vector3f(x, y, _size/2);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
-		vec3 v3 = vec3(x, y, _size/2);
+		Vector3f v3 = Vector3f(x, y, _size/2);
 		tmpVertices.pushBack(v1);
 		tmpVertices.pushBack(v3);
 		tmpVertices.pushBack(v2);
@@ -478,16 +478,16 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 	for(int32_t jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
-		vec3 v1 = vec3(0.0f, 0.0f, _size/2);
+		Vector3f v1 = Vector3f(0.0f, 0.0f, _size/2);
 		
 		float x = cos(lng)*_radius;
 		float y = sin(lng)*_radius;
-		vec3 v2 = vec3(x, y, _size/2);
+		Vector3f v2 = Vector3f(x, y, _size/2);
 		
 		lng = 2.0f * M_PI * float(jjj) / _longs;
 		x = cos(lng)*_radius;
 		y = sin(lng)*_radius;
-		vec3 v3 = vec3(x, y, _size/2);
+		Vector3f v3 = Vector3f(x, y, _size/2);
 		tmpVertices.pushBack(v1);
 		tmpVertices.pushBack(v2);
 		tmpVertices.pushBack(v3);
@@ -495,20 +495,20 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 
-void ewol::resource::Colored3DObject::drawTriangles(const etk::Vector<vec3>& _vertex,
-                                                    const etk::Vector<uint32_t>& _indice,
+void ewol::resource::Colored3DObject::drawTriangles(const List<Vector3f>& _vertex,
+                                                    const List<uint32_t>& _indice,
                                                     mat4& _transformationMatrix,
                                                     const etk::Color<float>& _tmpColor,
-                                                    const vec3& _offset) {
-	etk::Vector<vec3> tmpVertices;
+                                                    const Vector3f& _offset) {
+	List<Vector3f> tmpVertices;
 	for (size_t iii=0; iii<_indice.size()/3; ++iii) {
 		tmpVertices.pushBack(_vertex[_indice[iii*3 + 0]]+_offset);
 		tmpVertices.pushBack(_vertex[_indice[iii*3 + 1]]+_offset);
 		tmpVertices.pushBack(_vertex[_indice[iii*3 + 2]]+_offset);
-		//EWOL_INFO("  indices " << _indice[iii*3 + 0] << " " << _indice[iii*3 + 1] << " " << _indice[iii*3 + 2]);
-		//EWOL_INFO(" triangle " << _vertex[_indice[iii*3 + 0]] << " " << _vertex[_indice[iii*3 + 1]] << " " << _vertex[_indice[iii*3 + 2]]);
+		//Log.info("  indices " << _indice[iii*3 + 0] << " " << _indice[iii*3 + 1] << " " << _indice[iii*3 + 2]);
+		//Log.info(" triangle " << _vertex[_indice[iii*3 + 0]] << " " << _vertex[_indice[iii*3 + 1]] << " " << _vertex[_indice[iii*3 + 2]]);
 	}
-	//EWOL_INFO("display " << tmpVertices.size() << " vertices form " << _indice.size());
+	//Log.info("display " << tmpVertices.size() << " vertices form " << _indice.size());
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 

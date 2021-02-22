@@ -59,9 +59,9 @@ void ewol::widget::CheckBox::onChangeSize() {
 	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	ewol::Padding ret = onChangeSizePadded(padding);
-	EWOL_DEBUG(" configuring : padding=" << padding << " boxSize=" << boxSize << "");
-	m_selectableAreaPos = vec2(ret.xLeft()/*-boxSize*/, ret.yButtom());
-	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
+	Log.debug(" configuring : padding=" << padding << " boxSize=" << boxSize << "");
+	m_selectableAreaPos = Vector2f(ret.xLeft()/*-boxSize*/, ret.yButtom());
+	m_selectableAreaSize = m_size - (m_selectableAreaPos + Vector2f(ret.xRight(), ret.yTop()));
 }
 
 void ewol::widget::CheckBox::calculateMinMaxSize() {
@@ -88,20 +88,20 @@ void ewol::widget::CheckBox::onRegenerateDisplay() {
 	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
 	float boxInside = m_shaper.getConfigNumber(m_shaperIdSizeInsize);
 	m_shaper.clear();
-	EWOL_DEBUG(" configuring : boxSize=" << boxSize << " boxInside=" << boxInside << "");
-	vec2 origin(m_selectableAreaPos + vec2(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
-	vec2 size = vec2(boxSize+padding.x(), boxSize+padding.y());
+	Log.debug(" configuring : boxSize=" << boxSize << " boxInside=" << boxInside << "");
+	Vector2f origin(m_selectableAreaPos + Vector2f(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
+	Vector2f size = Vector2f(boxSize+padding.x(), boxSize+padding.y());
 	
-	vec2 origin2 = m_selectableAreaPos + vec2((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
-	vec2 size2 = vec2(boxInside+padding.x(), boxInside+padding.y());
-	m_shaper.setShape(vec2ClipInt32(origin),
-	                   vec2ClipInt32(size),
-	                   vec2ClipInt32(origin2+vec2(padding.xLeft(),padding.yButtom()) ),
-	                   vec2ClipInt32(size2-vec2(padding.x(),padding.y()) ));
+	Vector2f origin2 = m_selectableAreaPos + Vector2f((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
+	Vector2f size2 = Vector2f(boxInside+padding.x(), boxInside+padding.y());
+	m_shaper.setShape(Vector2fClipInt32(origin),
+	                   Vector2fClipInt32(size),
+	                   Vector2fClipInt32(origin2+Vector2f(padding.xLeft(),padding.yButtom()) ),
+	                   Vector2fClipInt32(size2-Vector2f(padding.x(),padding.y()) ));
 }
 
 bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
-	EWOL_VERBOSE("Event on BT : " << _event);
+	Log.verbose("Event on BT : " << _event);
 	
 	bool previousHoverState = m_mouseHover;
 	if(    gale::key::status::leave == _event.getStatus()
@@ -109,7 +109,7 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
-		vec2 relativePos = relativePosition(_event.getPos());
+		Vector2f relativePos = relativePosition(_event.getPos());
 		// prevent error from ouside the button
 		if(    relativePos.x() < m_selectableAreaPos.x()
 		    || relativePos.y() < m_selectableAreaPos.y()
@@ -122,17 +122,17 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 		}
 	}
 	bool previousPressed = m_buttonPressed;
-	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
+	Log.verbose("Event on BT ... mouse hover : " << m_mouseHover);
 	if (m_mouseHover == true) {
 		if (_event.getId() == 1) {
 			if(gale::key::status::down == _event.getStatus()) {
-				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalDown);
+				Log.verbose(*propertyName << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(gale::key::status::up == _event.getStatus()) {
-				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalUp);
+				Log.verbose(*propertyName << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
@@ -140,9 +140,9 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 			if(gale::key::status::pressSingle == _event.getStatus()) {
 				// inverse value :
 				propertyValue.set((*propertyValue)?false:true);
-				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalPressed);
+				Log.verbose(*propertyName << " : Generate event : " << signalPressed);
 				signalPressed.emit();
-				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalValue << " val=" << propertyValue );
+				Log.verbose(*propertyName << " : Generate event : " << signalValue << " val=" << propertyValue );
 				signalValue.emit(*propertyValue);
 				markToRedraw();
 			}
@@ -157,7 +157,7 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 
 
 bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
-	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
+	//Log.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    _event.getType() == gale::key::keyboard::character
 	    && _event.getStatus() == gale::key::status::down
 	    && _event.getChar() == '\r') {

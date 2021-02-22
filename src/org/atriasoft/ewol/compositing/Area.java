@@ -17,7 +17,7 @@ namespace ewol {
 	namespace compositing {
 		class Area : public ewol::Compositing {
 			private:
-				vec3 m_position; //!< The current position to draw
+				Vector3f m_position; //!< The current position to draw
 				etk::Color<float,4> m_color; //!< The text foreground color
 			private:
 				ememory::SharedPtr<gale::resource::Program> m_GLprogram;  //!< pointer on the opengl display program
@@ -43,7 +43,7 @@ namespace ewol {
 				 * @brief generic constructor
 				 * @param[in] _size Basic size of the area.
 				 */
-				Area(const ivec2& _size);
+				Area(const Vector2i& _size);
 				/**
 				 * @brief generic destructor
 				 */
@@ -61,34 +61,34 @@ namespace ewol {
 				 * @brief get the current display position (sometime needed in the gui control)
 				 * @return the current position.
 				 */
-				const vec3& getPos() {
+				const Vector3f& getPos() {
 					return m_position;
 				};
 				/**
 				 * @brief set position for the next text writen
 				 * @param[in] _pos Position of the text (in 3D)
 				 */
-				void setPos(const vec3& _pos) {
+				void setPos(const Vector3f& _pos) {
 					m_position = _pos;
 				};
-				inline void setPos(const vec2& _pos) {
-					setPos(vec3(_pos.x(),_pos.y(),0));
+				inline void setPos(const Vector2f& _pos) {
+					setPos(Vector3f(_pos.x(),_pos.y(),0));
 				};
 				/**
 				 * @brief set relative position for the next text writen
 				 * @param[in] _pos ofset apply of the text (in 3D)
 				 */
-				void setRelPos(const vec3& _pos) {
+				void setRelPos(const Vector3f& _pos) {
 					m_position += _pos;
 				};
-				inline void setRelPos(const vec2& _pos) {
-					setRelPos(vec3(_pos.x(),_pos.y(),0));
+				inline void setRelPos(const Vector2f& _pos) {
+					setRelPos(Vector3f(_pos.x(),_pos.y(),0));
 				};
 				/**
 				 * @brief add a compleate of the image to display with the requested size
 				 * @param[in] _size size of the output image
 				 */
-				void print(const ivec2& _size);
+				void print(const Vector2i& _size);
 				
 				egami::Image& get() {
 					return m_resource->get();

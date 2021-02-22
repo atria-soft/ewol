@@ -14,11 +14,11 @@ namespace ewol {
 	namespace resource {
 		class ImageDF : public ewol::resource::Texture {
 			protected:
-				vec2 m_realImageSize;
+				Vector2f m_realImageSize;
 			protected:
 				ImageDF();
 				void init();
-				void init(etk::String _genName, const etk::Uri& _uri, const ivec2& _size);
+				void init(etk::String _genName, const etk::Uri& _uri, const Vector2i& _size);
 			public:
 				virtual ~ImageDF() { };
 			protected:
@@ -29,7 +29,7 @@ namespace ewol {
 				 */
 				void generateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
 			public:
-				const vec2& getRealSize() {
+				const Vector2f& getRealSize() {
 					return m_realImageSize;
 				};
 			public:
@@ -40,7 +40,7 @@ namespace ewol {
 				 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
 				 * @return pointer on the resource or null if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::ImageDF> create(const etk::Uri& _uri, ivec2 _size=ivec2(-1,-1));
+				static ememory::SharedPtr<ewol::resource::ImageDF> create(const etk::Uri& _uri, Vector2i _size=Vector2i(-1,-1));
 		};
 	};
 };

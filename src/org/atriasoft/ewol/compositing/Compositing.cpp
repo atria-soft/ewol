@@ -22,17 +22,17 @@ void ewol::Compositing::resetMatrix() {
 }
 
 
-void ewol::Compositing::translate(const vec3& _vect) {
+void ewol::Compositing::translate(const Vector3f& _vect) {
 	m_matrixApply *= etk::matTranslate(_vect);
 }
 
 
-void ewol::Compositing::rotate(const vec3& _vect, float _angle) {
+void ewol::Compositing::rotate(const Vector3f& _vect, float _angle) {
 	m_matrixApply *= etk::matRotate(_vect, _angle);
 }
 
 
-void ewol::Compositing::scale(const vec3& _vect) {
+void ewol::Compositing::scale(const Vector3f& _vect) {
 	m_matrixApply *= etk::matScale(_vect);
 }
 

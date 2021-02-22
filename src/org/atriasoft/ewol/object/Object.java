@@ -38,17 +38,17 @@ template<class TYPE_OBJECT, class TYPE_VAL, class ... TYPE> static void baseInit
 	eproperty::Property* prop(null);
 	eproperty::PropertyType<TYPE_VAL>* propType(null);
 	if (_object == null) {
-		EWOL_ERROR("EMPTY pointer");
+		Log.error("EMPTY pointer");
 		return;
 	}
 	prop = _object->properties.getRaw(_name);
 	if (prop == null) {
-		EWOL_ERROR("property does not exit ... '" << _name << "'");
+		Log.error("property does not exit ... '" << _name << "'");
 		goto exit_on_error;
 	}
 	propType = dynamic_cast<eproperty::PropertyType<TYPE_VAL>*>(prop);
 	if (propType == null) {
-		EWOL_ERROR("property does not cast in requested type ... '" << _name << "' require type : " << /*typeid(_val).name()*/ "?TODO?" << "' instead of '" << prop->getType() << "'");
+		Log.error("property does not cast in requested type ... '" << _name << "' require type : " << /*typeid(_val).name()*/ "?TODO?" << "' instead of '" << prop->getType() << "'");
 		goto exit_on_error;
 	}
 	propType->setDirectCheck(_val);
@@ -64,26 +64,26 @@ exit_on_error:
 	template<class ... EWOL_FACTORY_CREATE_TYPE> static ememory::SharedPtr<className> create(const EWOL_FACTORY_CREATE_TYPE& ... _all) { \
 		ememory::SharedPtr<className> object(ETK_NEW(className)); \
 		if (object == null) { \
-			EWOL_ERROR("Factory error"); \
+			Log.error("Factory error"); \
 			return null; \
 		} \
 		baseInit(object, _all... ); \
 		object->init(); \
 		if (object->objectHasBeenCorectlyInit() == false) { \
-			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+			Log.critical("Object Is not correctly init : " << #className ); \
 		} \
 		return object; \
 	} \
 	static ememory::SharedPtr<className> createXml(const exml::Element& _node) { \
 		ememory::SharedPtr<className> object(ETK_NEW(className)); \
 		if (object == null) { \
-			EWOL_ERROR("Factory error"); \
+			Log.error("Factory error"); \
 			return null; \
 		} \
 		object->loadXMLAttributes(_node); \
 		object->init(); \
 		if (object->objectHasBeenCorectlyInit() == false) { \
-			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+			Log.critical("Object Is not correctly init : " << #className ); \
 		} \
 		return object; \
 	}
@@ -95,7 +95,7 @@ exit_on_error:
 		if (object2 != null) { \
 			object = ememory::dynamicPointerCast<className>(object2); \
 			if (object == null) { \
-				EWOL_CRITICAL("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
+				Log.critical("Request object element: '" << uniqueName << "' With the wrong type (dynamic cast error)"); \
 				return null; \
 			} \
 		} \
@@ -104,13 +104,13 @@ exit_on_error:
 		} \
 		object = ememory::SharedPtr<className>(ETK_NEW(className)); \
 		if (object == null) { \
-			EWOL_ERROR("Factory error"); \
+			Log.error("Factory error"); \
 			return null; \
 		} \
 		baseInit(object, "name", etk::String(uniqueName), _all... ); \
 		object->init(); \
 		if (object->objectHasBeenCorectlyInit() == false) { \
-			EWOL_CRITICAL("Object Is not correctly init : " << #className ); \
+			Log.critical("Object Is not correctly init : " << #className ); \
 		} \
 		return object; \
 	}
@@ -186,7 +186,7 @@ namespace ewol {
 			 */
 			virtual void removeParent();
 		private:
-			etk::Vector<const char*> m_listType;
+			List<const char*> m_listType;
 		public:
 			/**
 			 * @brief get the current Object type of the Object
@@ -306,7 +306,7 @@ namespace ewol {
 				if (myObject != null) { \
 					myObject->_event.connect(_shared_ptr, _func, ##__VA_ARGS__); \
 				} else { \
-					EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+					Log.error("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 				} \
 			} while (false)
 	};
@@ -321,7 +321,7 @@ namespace ewol {
 	if (myObject != null) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
-		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+		Log.error("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
 
@@ -333,7 +333,7 @@ namespace ewol {
 	if (myObject != null) { \
 		myObject->_event.connect(_obj, _func, ##__VA_ARGS__); \
 	} else { \
-		EWOL_ERROR("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
+		Log.error("object named='" << _name << "' not exit or can not be cast in : " << #_type); \
 	} \
 } while (false)
 

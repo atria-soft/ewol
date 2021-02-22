@@ -18,11 +18,11 @@ void ewol::Object::autoDestroy() {
 		EWOL_WARNING("try to auto destroy inside a constructor");
 		return;
 	}
-	EWOL_VERBOSE("Destroy object: [" << getId() << "] type:" << getObjectType());
+	Log.verbose("Destroy object: [" << getId() << "] type:" << getObjectType());
 	ewol::ObjectShared parent = m_parent.lock();
 	// TODO : set a signal to do this ...
 	if (parent != null) {
-		EWOL_VERBOSE("Destroy object: Call parrent");
+		Log.verbose("Destroy object: Call parrent");
 		parent->requestDestroyFromChild(sharedFromThis());
 	}
 	//if no parent ==> noting to do ...
@@ -34,8 +34,8 @@ bool ewol::Object::objectHasBeenCorectlyInit() {
 }
 
 void ewol::Object::requestDestroyFromChild(const ewol::ObjectShared& _child) {
-	EWOL_INFO("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
-	EWOL_CRITICAL("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
+	Log.info("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
+	Log.critical("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
 }
 
 void ewol::Object::destroy() {
@@ -63,11 +63,11 @@ ewol::Object::Object() :
   m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = m_valUID++;
-	EWOL_DEBUG("new Object : [" << m_uniqueId << "]");
+	Log.debug("new Object : [" << m_uniqueId << "]");
 }
 
 ewol::Object::~Object() {
-	EWOL_DEBUG("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
+	Log.debug("delete Object : [" << m_uniqueId << "] : " << getTypeDescription());
 	m_uniqueId = -1;
 }
 
@@ -87,7 +87,7 @@ const char * const ewol::Object::getObjectType() const {
 
 void ewol::Object::addObjectType(const char* _type) {
 	if (_type == null) {
-		EWOL_ERROR(" try to add a type with no value...");
+		Log.error(" try to add a type with no value...");
 		return;
 	}
 	m_listType.pushBack(_type);
@@ -168,7 +168,7 @@ ewol::ObjectShared ewol::Object::getObjectNamed(const etk::String& _objectName) 
 }
 
 ewol::ObjectShared ewol::Object::getSubObjectNamed(const etk::String& _objectName) {
-	EWOL_VERBOSE("check if name : " << _objectName << " ?= " << propertyName.get());
+	Log.verbose("check if name : " << _objectName << " ?= " << propertyName.get());
 	if (_objectName == propertyName.get()) {
 		return sharedFromThis();
 	}

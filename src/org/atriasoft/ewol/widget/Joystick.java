@@ -26,7 +26,7 @@ namespace ewol {
 				// Event list of properties
 				esignal::Signal<> signalEnable;
 				esignal::Signal<> signalDisable;
-				esignal::Signal<vec2> signalMove;
+				esignal::Signal<Vector2f> signalMove;
 			public:
 				enum joystickMode {
 					modeNormal,
@@ -35,7 +35,7 @@ namespace ewol {
 			private:
 				etk::Color<> m_colorFg; //!< Forground  color
 				etk::Color<> m_colorBg; //!< Background color
-				vec2 m_displayPos; //!< direction of the cursor ...
+				Vector2f m_displayPos; //!< direction of the cursor ...
 				float m_distance; //!< dintance from the center
 				float m_angle; //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
 				bool m_lock; //!< flag to mark the lock when the cursor is free when we are outside the circle

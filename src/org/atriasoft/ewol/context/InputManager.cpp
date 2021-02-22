@@ -39,7 +39,7 @@ bool ewol::context::InputManager::localEventInput(enum gale::key::type _type,
                                                   ewol::WidgetShared _destWidget,
                                                   int32_t _IdInput,
                                                   enum gale::key::status _status,
-                                                  vec2 _pos) {
+                                                  Vector2f _pos) {
 	if (_destWidget != null) {
 		if (    _type == gale::key::type::mouse
 		     || _type == gale::key::type::finger) {
@@ -74,7 +74,7 @@ void ewol::context::InputManager::cleanElement(InputPoperty *_eventTable,
 	if (_eventTable == null) {
 		return;
 	}
-	//EWOL_INFO("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
+	//Log.info("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
 	_eventTable[_idInput].isUsed = false;
 	_eventTable[_idInput].destinationInputId = 0;
 	_eventTable[_idInput].lastTimeEvent.reset();
@@ -127,14 +127,14 @@ void ewol::context::InputManager::grabPointer(ewol::WidgetShared _widget) {
 	m_grabWidget = _widget;
 	/* TODO : 
 	m_context.grabPointerEvents(true,   _widget->getOrigin()
-	                                  + ivec2(_widget->getSize().x()/2.0f,
+	                                  + Vector2i(_widget->getSize().x()/2.0f,
 	                                          _widget->getSize().y()/2.0f) );
 	*/
 }
 
 void ewol::context::InputManager::unGrabPointer() {
 	m_grabWidget.reset();
-	// TODO: m_context.grabPointerEvents(false, vec2(0,0));
+	// TODO: m_context.grabPointerEvents(false, Vector2f(0,0));
 }
 
 void ewol::context::InputManager::newLayerSet() {
@@ -151,18 +151,18 @@ ewol::context::InputManager::InputManager(ewol::Context& _context) :
   m_grabWidget(),
   m_context(_context) {
 	setDpi(200);
-	EWOL_INFO("Init (start)");
+	Log.info("Init (start)");
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
 		cleanElement(m_eventInputSaved, iii);
 		cleanElement(m_eventMouseSaved, iii);
 	}
-	EWOL_INFO("Init (end)");
+	Log.info("Init (end)");
 }
 
 ewol::context::InputManager::~InputManager() {
-	EWOL_INFO("Un-Init (start)");
-	EWOL_INFO("Un-Init (end)");
+	Log.info("Un-Init (start)");
+	Log.info("Un-Init (end)");
 }
 
 int32_t ewol::context::InputManager::localGetDestinationId(enum gale::key::type _type,
@@ -188,7 +188,7 @@ int32_t ewol::context::InputManager::localGetDestinationId(enum gale::key::type 
 // note if id<0  == > the it was finger event ...
 void ewol::context::InputManager::motion(enum gale::key::type _type,
                                          int _pointerID,
-                                         vec2 _pos) {
+                                         Vector2f _pos) {
 	EVENT_DEBUG("motion event : " << _type << " " << _pointerID << " " << _pos);
 	if (MAX_MANAGE_INPUT <= _pointerID) {
 		// reject pointer  == > out of IDs...
@@ -200,7 +200,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 	} else if (_type == gale::key::type::finger) {
 		eventTable = m_eventInputSaved;
 	} else {
-		EWOL_ERROR("Unknown type of event");
+		Log.error("Unknown type of event");
 		return;
 	}
 	if(    _pointerID > MAX_MANAGE_INPUT
@@ -318,7 +318,7 @@ void ewol::context::InputManager::motion(enum gale::key::type _type,
 void ewol::context::InputManager::state(enum gale::key::type _type,
                                         int _pointerID,
                                         bool _isDown,
-                                        vec2 _pos) {
+                                        Vector2f _pos) {
 	if (_pointerID >= MAX_MANAGE_INPUT) {
 		// reject pointer  == > out of IDs...
 		return;
@@ -334,7 +334,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 		eventTable = m_eventInputSaved;
 		localLimit = m_eventInputLimit;
 	} else {
-		EWOL_ERROR("Unknown type of event");
+		Log.error("Unknown type of event");
 		return;
 	}
 	if(    _pointerID > MAX_MANAGE_INPUT
@@ -425,7 +425,7 @@ void ewol::context::InputManager::state(enum gale::key::type _type,
 		ewol::WidgetShared tmpWidget = eventTable[_pointerID].curentWidgetEvent.lock();
 		if(eventTable[_pointerID].isUsed == false) {
 			// bad case ... ???
-			EWOL_DEBUG("Up event without previous down ... ");
+			Log.debug("Up event without previous down ... ");
 			// Mark it un-used :
 			eventTable[_pointerID].isUsed = false;
 			// revove the widget ...

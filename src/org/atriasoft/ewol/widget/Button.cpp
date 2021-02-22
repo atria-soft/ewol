@@ -61,9 +61,9 @@ ewol::widget::Button::~Button() {
 void ewol::widget::Button::onChangeSize() {
 	ewol::Padding padding = m_shaper.getPadding();
 	ewol::Padding ret = onChangeSizePadded(padding);
-	//EWOL_DEBUG(" configuring : origin=" << origin << " size=" << subElementSize << "");
-	m_selectableAreaPos = vec2(ret.xLeft(), ret.yButtom());
-	m_selectableAreaSize = m_size - (m_selectableAreaPos + vec2(ret.xRight(), ret.yTop()));
+	//Log.debug(" configuring : origin=" << origin << " size=" << subElementSize << "");
+	m_selectableAreaPos = Vector2f(ret.xLeft(), ret.yButtom());
+	m_selectableAreaSize = m_size - (m_selectableAreaPos + Vector2f(ret.xRight(), ret.yTop()));
 }
 
 
@@ -83,15 +83,15 @@ void ewol::widget::Button::onRegenerateDisplay() {
 		return;
 	}
 	ewol::Padding padding = m_shaper.getPadding();
-	m_shaper.setShape(vec2(0,0),
+	m_shaper.setShape(Vector2f(0,0),
 	                  m_size,
-	                  vec2ClipInt32(m_selectableAreaPos+vec2(padding.xLeft(),padding.yButtom()) ),
-	                  vec2ClipInt32(m_selectableAreaSize-vec2(padding.x(),padding.y()) ) );
-	//EWOL_ERROR("pos=" << m_origin << " size=" << m_size);
+	                  Vector2fClipInt32(m_selectableAreaPos+Vector2f(padding.xLeft(),padding.yButtom()) ),
+	                  Vector2fClipInt32(m_selectableAreaSize-Vector2f(padding.x(),padding.y()) ) );
+	//Log.error("pos=" << m_origin << " size=" << m_size);
 }
 
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
-	EWOL_VERBOSE("Event on BT : " << _event);
+	Log.verbose("Event on BT : " << _event);
 	// disable event in the lock access mode :
 	if(ewol::widget::Button::lockAccess == *propertyLock) {
 		return false;
@@ -101,7 +101,7 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
-		vec2 relativePos = relativePosition(_event.getPos());
+		Vector2f relativePos = relativePosition(_event.getPos());
 		// prevent error from ouside the button
 		if(    relativePos.x() < m_selectableAreaPos.x()
 		    || relativePos.y() < m_selectableAreaPos.y()
@@ -113,17 +113,17 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 			m_mouseHover = true;
 		}
 	}
-	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
+	Log.verbose("Event on BT ... mouse hover : " << m_mouseHover);
 	if (m_mouseHover == true) {
 		if (_event.getId() == 1) {
 			if(_event.getStatus() == gale::key::status::down) {
-				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalDown);
+				Log.verbose(*propertyName << " : Generate event : " << signalDown);
 				signalDown.emit();
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(_event.getStatus() == gale::key::status::up) {
-				EWOL_VERBOSE(*propertyName << " : Generate event : " << signalUp);
+				Log.verbose(*propertyName << " : Generate event : " << signalUp);
 				signalUp.emit();
 				m_buttonPressed = false;
 				markToRedraw();
@@ -138,14 +138,14 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 				} else {
 					// inverse value :
 					propertyValue.set((*propertyValue)?false:true);
-					EWOL_VERBOSE(*propertyName << " : Generate event : " << signalPressed);
+					Log.verbose(*propertyName << " : Generate event : " << signalPressed);
 					signalPressed.emit();
-					EWOL_VERBOSE(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue );
+					Log.verbose(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue );
 					signalValue.emit(*propertyValue);
 					if(    *propertyToggleMode == false
 					    && *propertyValue == true) {
 						propertyValue.set(false);
-						EWOL_VERBOSE(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue);
+						Log.verbose(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue);
 						signalValue.emit(*propertyValue);
 					}
 				}
@@ -159,7 +159,7 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 
 
 bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
-	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
+	//Log.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    _event.getType() == gale::key::keyboard::character
 	    && _event.getStatus() == gale::key::status::down
 	    && _event.getChar() == '\r') {
@@ -171,7 +171,7 @@ bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 
 void ewol::widget::Button::onLostFocus() {
 	m_buttonPressed = false;
-	EWOL_VERBOSE(propertyName.get() << " : Remove Focus ...");
+	Log.verbose(propertyName.get() << " : Remove Focus ...");
 	CheckStatus();
 }
 

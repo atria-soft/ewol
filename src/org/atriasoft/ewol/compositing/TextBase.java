@@ -49,12 +49,12 @@ namespace ewol {
 				};
 			protected:
 				int32_t m_nbCharDisplayed; //!< prevent some error in calculation size.
-				vec3 m_sizeDisplayStart; //!< The start windows of the display.
-				vec3 m_sizeDisplayStop; //!< The end windows of the display.
+				Vector3f m_sizeDisplayStart; //!< The start windows of the display.
+				Vector3f m_sizeDisplayStop; //!< The end windows of the display.
 				bool m_needDisplay; //!< This just need the display and not the size rendering.
-				vec3 m_position; //!< The current position to draw
-				vec3 m_clippingPosStart; //!< Clipping start position
-				vec3 m_clippingPosStop; //!< Clipping stop position
+				Vector3f m_position; //!< The current position to draw
+				Vector3f m_clippingPosStart; //!< Clipping start position
+				Vector3f m_clippingPosStop; //!< Clipping stop position
 				bool m_clippingEnable; //!< true if the clipping must be activated
 			protected:
 				etk::Color<float,4> m_defaultColorFg; //!< The text foreground color
@@ -105,9 +105,9 @@ namespace ewol {
 				 */
 				virtual ~TextBase();
 			public: // Derived function
-				void translate(const vec3& _vect);
-				void rotate(const vec3& _vect, float _angle);
-				void scale(const vec3& _vect);
+				void translate(const Vector3f& _vect);
+				void rotate(const Vector3f& _vect, float _angle);
+				void scale(const Vector3f& _vect);
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL
@@ -137,26 +137,26 @@ namespace ewol {
 				 * @brief get the current display position (sometime needed in the gui control)
 				 * @return the current position.
 				 */
-				const vec3& getPos() {
+				const Vector3f& getPos() {
 					return m_position;
 				};
 				/**
 				 * @brief set position for the next text writen
 				 * @param[in] _pos Position of the text (in 3D)
 				 */
-				void setPos(const vec3& _pos);
+				void setPos(const Vector3f& _pos);
 				//! @previous
-				inline void setPos(const vec2& _pos) {
-					setPos(vec3(_pos.x(),_pos.y(),0));
+				inline void setPos(const Vector2f& _pos) {
+					setPos(Vector3f(_pos.x(),_pos.y(),0));
 				};
 				/**
 				 * @brief set relative position for the next text writen
 				 * @param[in] _pos ofset apply of the text (in 3D)
 				 */
-				void setRelPos(const vec3& _pos);
+				void setRelPos(const Vector3f& _pos);
 				//! @previous
-				inline void setRelPos(const vec2& _pos) {
-					setRelPos(vec3(_pos.x(),_pos.y(),0));
+				inline void setRelPos(const Vector2f& _pos) {
+					setRelPos(Vector3f(_pos.x(),_pos.y(),0));
 				};
 				/**
 				 * @brief set the default background color of the font (when reset, set this value ...)
@@ -189,11 +189,11 @@ namespace ewol {
 				 * @param[in] _pos Start position of the clipping
 				 * @param[in] _width Width size of the clipping
 				 */
-				void setClippingWidth(const vec3& _pos, const vec3& _width) {
+				void setClippingWidth(const Vector3f& _pos, const Vector3f& _width) {
 					setClipping(_pos, _pos+_width);
 				}
 				//! @previous
-				void setClippingWidth(const vec2& _pos, const vec2& _width) {
+				void setClippingWidth(const Vector2f& _pos, const Vector2f& _width) {
 					setClipping(_pos, _pos+_width);
 				};
 				/**
@@ -201,10 +201,10 @@ namespace ewol {
 				 * @param[in] _pos Start position of the clipping
 				 * @param[in] _posEnd End position of the clipping
 				 */
-				void setClipping(const vec3& _pos, const vec3& _posEnd);
+				void setClipping(const Vector3f& _pos, const Vector3f& _posEnd);
 				//! @previous
-				void setClipping(const vec2& _pos, const vec2& _posEnd) {
-					setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) );
+				void setClipping(const Vector2f& _pos, const Vector2f& _posEnd) {
+					setClipping(Vector3f(_pos.x(),_pos.y(),-1), Vector3f(_posEnd.x(),_posEnd.y(),1) );
 				};
 				/**
 				 * @brief enable/Disable the clipping (without lose the current clipping position)
@@ -338,9 +338,9 @@ namespace ewol {
 				 * @param[in] _text The string to display.
 				 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 				 */
-				void print(const etk::String& _text, const etk::Vector<TextDecoration>& _decoration);
+				void print(const etk::String& _text, const List<TextDecoration>& _decoration);
 				//! @previous
-				void print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration);
+				void print(const etk::UString& _text, const List<TextDecoration>& _decoration);
 				/**
 				 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
 				 * @param[in] _charcode Char that might be dispalyed
@@ -379,36 +379,36 @@ namespace ewol {
 				 * @param[in] _text The string to calculate dimention.
 				 * @return The theoric size used.
 				 */
-				vec3 calculateSizeHTML(const etk::String& _text);
+				Vector3f calculateSizeHTML(const etk::String& _text);
 				//! @previous
-				vec3 calculateSizeHTML(const etk::UString& _text);
+				Vector3f calculateSizeHTML(const etk::UString& _text);
 				/**
 				 * @brief calculate a theoric text size
 				 * @param[in] _text The string to calculate dimention.
 				 * @return The theoric size used.
 				 */
-				vec3 calculateSizeDecorated(const etk::String& _text);
+				Vector3f calculateSizeDecorated(const etk::String& _text);
 				//! @previous
-				vec3 calculateSizeDecorated(const etk::UString& _text);
+				Vector3f calculateSizeDecorated(const etk::UString& _text);
 				/**
 				 * @brief calculate a theoric text size
 				 * @param[in] _text The string to calculate dimention.
 				 * @return The theoric size used.
 				 */
-				vec3 calculateSize(const etk::String& _text);
+				Vector3f calculateSize(const etk::String& _text);
 				//! @previous
-				vec3 calculateSize(const etk::UString& _text);
+				Vector3f calculateSize(const etk::UString& _text);
 				/**
 				 * @brief calculate a theoric charcode size
 				 * @param[in] _charcode The Unicode value to calculate dimention.
 				 * @return The theoric size used.
 				 */
-				inline vec3 calculateSize(const char32_t& _charcode) {
+				inline Vector3f calculateSize(const char32_t& _charcode) {
 					return calculateSizeChar(_charcode);
 				};
 			protected:
 				//! @previous
-				virtual vec3 calculateSizeChar(const char32_t& _charcode) = 0;
+				virtual Vector3f calculateSizeChar(const char32_t& _charcode) = 0;
 			public:
 				/**
 				 * @brief draw a cursor at the specify position
@@ -434,7 +434,7 @@ namespace ewol {
 			protected:
 				// this section is reserved for HTML parsing and display:
 				etk::UString m_htmlCurrrentLine; //!< current line for HTML display
-				etk::Vector<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
+				List<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
 				TextDecoration m_htmlDecoTmp; //!< current decoration
 				/**
 				 * @brief add a line with the current m_htmlDecoTmp decoration

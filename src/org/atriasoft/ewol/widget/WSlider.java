@@ -69,7 +69,7 @@ namespace ewol {
 				void onChangeSize() override;
 				void systemDraw(const ewol::DrawProperty& _displayProp) override;
 				void onRegenerateDisplay() override;
-				ewol::WidgetShared getWidgetAtPos(const vec2& _pos) override;
+				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
 			protected:
 				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
 				/**

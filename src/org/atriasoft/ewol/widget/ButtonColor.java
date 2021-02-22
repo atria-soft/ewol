@@ -33,8 +33,8 @@ namespace ewol {
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
-				vec2 m_selectableAreaPos; //!< Start position of the events
-				vec2 m_selectableAreaSize; //!< size of the event positions
+				Vector2f m_selectableAreaPos; //!< Start position of the events
+				Vector2f m_selectableAreaSize; //!< size of the event positions
 			protected:
 				/**
 				 * @brief Main constructor.

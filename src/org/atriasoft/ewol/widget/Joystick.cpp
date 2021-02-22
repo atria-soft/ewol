@@ -105,7 +105,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 		if(    gale::key::status::down == typeEvent
 		    || gale::key::status::move == typeEvent) {
 			// get local relative position
-			vec2 relativePos = relativePosition(pos);
+			Vector2f relativePos = relativePosition(pos);
 			float sizeElement = m_size.x*m_ratio;
 			// calculate the position of the cursor...
 			m_displayPos.x = (relativePos.x-sizeElement)/(m_size.x-sizeElement*2)*2.0 - 1.0;
@@ -135,7 +135,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 				signalMove.emit(m_angle+M_PI/2);
 			}
 			//teta += M_PI/2;
-			//EWOL_DEBUG("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
+			//Log.debug("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
 			return true;
 		} else if( gale::key::status::up == typeEvent) {
 			if(    true == m_lock
@@ -163,7 +163,7 @@ void ewol::widget::Joystick::ratio(float _newRatio) {
 		_newRatio = 1;
 	}
 	m_ratio = _newRatio;
-	EWOL_INFO("Set default Joystick ratio at " << m_ratio);
+	Log.info("Set default Joystick ratio at " << m_ratio);
 }
 
 
@@ -171,14 +171,14 @@ void ewol::widget::Joystick::background(etk::String _imageNameInData, bool _disp
 	// TODO : check if it existed
 	m_background = _imageNameInData;
 	m_displayBackground = _display;
-	EWOL_INFO("Set default Joystick background at " << m_background << " display it=" << m_displayBackground);
+	Log.info("Set default Joystick background at " << m_background << " display it=" << m_displayBackground);
 }
 
 
 void ewol::widget::Joystick::foreground(etk::String imageNameInData) {
 	// TODO : check if it existed
 	m_foreground = imageNameInData;
-	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);
+	Log.info("Set default Joystick Foreground at " << m_foreground);
 }
 
 

@@ -29,8 +29,8 @@ namespace ewol {
 				};
 				int32_t m_sizeRow; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
 				int32_t m_uniformSizeRow;
-				etk::Vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
-				etk::Vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
+				List<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
+				List<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
 				ewol::WidgetShared m_tmpWidget; //!< use when replace a widget ...
 				bool m_gavityButtom;
 			protected:
@@ -121,24 +121,24 @@ namespace ewol {
 				virtual void subWidgetUnLink(int32_t _colId, int32_t _rowId);
 			private:
 				// TODO : property
-				ivec2 m_borderSize; //!< Border size needed for all the display
+				Vector2i m_borderSize; //!< Border size needed for all the display
 			public:
 				/**
 				 * @brief set the current border size of the current element:
 				 * @param[in] _newBorderSize The border size to set (0 if not used)
 				 */
-				void setBorderSize(const ivec2& _newBorderSize);
+				void setBorderSize(const Vector2i& _newBorderSize);
 				/**
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const ivec2& getBorderSize() {
+				const Vector2i& getBorderSize() {
 					return m_borderSize;
 				};
 			public:
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp) override;
 				virtual void onRegenerateDisplay() override;
-				virtual ewol::WidgetShared getWidgetAtPos(const vec2& pos) override;
+				virtual ewol::WidgetShared getWidgetAtPos(const Vector2f& pos) override;
 				virtual void onChangeSize() override;
 				virtual void calculateMinMaxSize() override;
 		};

@@ -52,7 +52,7 @@ void ewol::widget::ParameterList::calculateMinMaxSize() {
 
 void ewol::widget::ParameterList::addOObject(const ememory::SharedPtr<ewol::Compositing>& _newObject, int32_t _pos) {
 	if (_newObject == null) {
-		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
+		Log.error("Try to add an empty object in the Widget generic display system");
 		return;
 	}
 	if (_pos < 0 || (size_t)_pos >= m_listOObject.size() ) {
@@ -79,7 +79,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 	if (needRedraw() == true) {
 		// clean the object list ...
 		clearOObjectList();
-		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
+		//Log.debug("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
 		
 		int32_t tmpOriginX = 0;
 		int32_t tmpOriginY = 0;
@@ -108,7 +108,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 		                   (minHeight + 2*m_paddingSizeY) * nbRaw );
 		
 		
-		etk::Vector<int32_t> listSizeColomn;
+		List<int32_t> listSizeColomn;
 		
 		// set background color :
 		ememory::SharedPtr<ewol::compositing::Drawing> tmpDraw = ememory::makeShared<ewol::compositing::Drawing>();
@@ -116,8 +116,8 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 			return;
 		}
 		tmpDraw->setColor(etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF));
-		tmpDraw->setPos(vec3(0,0,0) );
-		tmpDraw->rectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
+		tmpDraw->setPos(Vector3f(0,0,0) );
+		tmpDraw->rectangleWidth(Vector3f(m_size.x(), m_size.y(), 0) );
 		
 		uint32_t displayableRaw = m_size.y() / (minHeight + 2*m_paddingSizeY) +2;
 		
@@ -141,7 +141,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 			
 			ememory::SharedPtr<ewol::compositing::Text> tmpText = ememory::makeShared<ewol::compositing::Text>();
 			
-			vec3 textPos;
+			Vector3f textPos;
 			textPos.setX((int32_t)tmpOriginX);
 			if (m_list[iii]->m_group == false) {
 				textPos.setX(textPos.x() + minHeight);
@@ -168,7 +168,7 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 		return true;
 	}
 	if (_event.getId() == 1 && _event.getStatus() == gale::key::status::pressSingle) {
-		vec2 relativePos = relativePosition(_event.getPos());
+		Vector2f relativePos = relativePosition(_event.getPos());
 		// corection for the openGl abstraction
 		relativePos.setY(m_size.y() - relativePos.y());
 		// TODO : Rework this ...
@@ -195,17 +195,17 @@ bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event)
 }
 
 void ewol::widget::ParameterList::onGetFocus() {
-	EWOL_DEBUG("Ewol::List get focus");
+	Log.debug("Ewol::List get focus");
 }
 
 void ewol::widget::ParameterList::onLostFocus() {
-	EWOL_DEBUG("Ewol::List Lost focus");
+	Log.debug("Ewol::List Lost focus");
 }
 
 void ewol::widget::ParameterList::menuAdd(etk::String& _label, int32_t _refId, etk::String& _image) {
 	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, _refId, _image, false);
 	if (tmpEmement == null) {
-		EWOL_ERROR("Can not allocacte menu parameter");
+		Log.error("Can not allocacte menu parameter");
 		return;
 	}
 	m_list.pushBack(tmpEmement);
@@ -219,7 +219,7 @@ void ewol::widget::ParameterList::menuAddGroup(etk::String& _label) {
 	etk::String image = "";
 	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, -1, image, true);
 	if (tmpEmement == null) {
-		EWOL_ERROR("Can not allocacte menu parameter");
+		Log.error("Can not allocacte menu parameter");
 		return;
 	}
 	m_list.pushBack(tmpEmement);

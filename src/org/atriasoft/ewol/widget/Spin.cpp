@@ -48,7 +48,7 @@ ewol::widget::Spin::~Spin() {
 void ewol::widget::Spin::onChangePropertyValue() {
 	markToRedraw();
 	if (m_widgetEntry == null) {
-		EWOL_ERROR("Can not acces at entry ...");
+		Log.error("Can not acces at entry ...");
 		return;
 	}
 	checkValue(*propertyValue);

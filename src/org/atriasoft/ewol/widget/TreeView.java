@@ -39,7 +39,7 @@ namespace ewol {
 				 * @param[in] _pos Position of colomn and Raw of the element.
 				 * @return The estimate size of the element.
 				 */
-				vec2 calculateElementSize(const ivec2& _pos) override;
+				Vector2f calculateElementSize(const Vector2i& _pos) override;
 				/**
 				 * @brief Draw an element in the specific size and position.
 				 * @param[in] _pos Position of colomn and Raw of the element.
@@ -47,13 +47,13 @@ namespace ewol {
 				 * @param[in] _size Render raw size
 				 * @return The estimate size of the element.
 				 */
-				void drawElement(const ivec2& _pos, const vec2& _start, const vec2& _size) override;
+				void drawElement(const Vector2i& _pos, const Vector2f& _start, const Vector2f& _size) override;
 			protected:
 				virtual void onChangePropertyOffsetTreeView();
 				virtual void onChangePropertyTextDecorated();
 				
-				bool onItemEvent(const ewol::event::Input& _event, const ivec2& _pos, const vec2& _mousePosition) override;
-				virtual void onItemExpandEvent(const ivec2& _pos) { };
+				bool onItemEvent(const ewol::event::Input& _event, const Vector2i& _pos, const Vector2f& _mousePosition) override;
+				virtual void onItemExpandEvent(const Vector2i& _pos) { };
 		};
 	};
 };
