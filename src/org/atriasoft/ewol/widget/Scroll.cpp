@@ -16,23 +16,23 @@ ewol::widget::Scroll::Scroll() :
   propertyLimit(this, "limit",
                       Vector2f(0.15,0.5), Vector2f(0.0,0.0), Vector2f(1.0,1.0),
                       "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end",
-                      &ewol::widget::Scroll::onChangePropertyLimit),
+                      ewol::widget::Scroll::onChangePropertyLimit),
   propertyShapeVert(this, "shape-vert",
                           etk::Uri("THEME_GUI:///WidgetScrolled.json?lib=ewol"),
                           "shape for the vertical display",
-                          &ewol::widget::Scroll::onChangePropertyShapeVert),
+                          ewol::widget::Scroll::onChangePropertyShapeVert),
   propertyShapeHori(this, "shape-hori",
                           etk::Uri("THEME_GUI:///WidgetScrolled.json?lib=ewol"),
                           "shape for the horizonal display",
-                          &ewol::widget::Scroll::onChangePropertyShapeHori),
+                          ewol::widget::Scroll::onChangePropertyShapeHori),
   propertyHover(this, "hover",
                       true,
                       "the display bar are hover the subWidget"),
-  m_pixelScrolling(20),
-  m_highSpeedStartPos(0,0),
-  m_highSpeedMode(speedModeDisable),
-  m_highSpeedButton(-1),
-  m_highSpeedType(gale::key::type::unknow) {
+  this.pixelScrolling(20),
+  this.highSpeedStartPos(0,0),
+  this.highSpeedMode(speedModeDisable),
+  this.highSpeedButton(-1),
+  this.highSpeedType(KeyType::unknow) {
 	addObjectType("ewol::widget::Scroll");
 	// Remove gravity property: (only keep top/buttom)
 	propertyGravity.remove("center");
@@ -62,34 +62,34 @@ ewol::widget::Scroll::~Scroll() {
 // note: The widget will expand has possible and will control itself the display property
 void ewol::widget::Scroll::onChangeSize() {
 	// Note: No call of container ==> normal case ...
-	ewol::Widget::onChangeSize();
+	Widget::onChangeSize();
 	if (*propertyHide == true) {
 		return;
 	}
-	if (m_subWidget == null) {
+	if (this.subWidget == null) {
 		return;
 	}
 	// remove the bar if hover
-	Vector2f basicSize = m_size;
+	Vector2f basicSize = this.size;
 	if (*propertyHover == false) {
 		basicSize -= Vector2f(SCROLL_BAR_SPACE,SCROLL_BAR_SPACE);
 	}
 	
 	
-	Vector2f origin = m_origin+m_offset;
-	Vector2f minSize = m_subWidget->getCalculateMinSize();
-	Vector2b expand = m_subWidget->propertyExpand.get();
+	Vector2f origin = this.origin+this.offset;
+	Vector2f minSize = this.subWidget.getCalculateMinSize();
+	Vector2b expand = this.subWidget.propertyExpand.get();
 	//The gravity is not set on the sub element ==> special use of the widget
-	//origin += ewol::gravityGenerateDelta(propertyGravity.get(), minSize - m_size);
+	//origin += ewol::gravityGenerateDelta(propertyGravity.get(), minSize - this.size);
 	if (    expand.x() == true
-	     && minSize.x() < basicSize.x()) {
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM minSize.x() < basicSize.x()) {
 		minSize.setX(basicSize.x());
 	}
 	if (    expand.y() == true
-	     && minSize.y() < basicSize.y()) {
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM minSize.y() < basicSize.y()) {
 		minSize.setY(basicSize.y());
 	}
-	m_subWidget->setSize(minSize);
+	this.subWidget.setSize(minSize);
 	if (*propertyGravity == ewol::gravity_top) {
 		origin += Vector2f(0.0f, basicSize.y()-minSize.y());
 		if (*propertyHover == false) {
@@ -100,40 +100,40 @@ void ewol::widget::Scroll::onChangeSize() {
 	} else {
 		Log.error(" Not manage other gravity ...");
 	}
-	m_subWidget->setOrigin(origin);
-	m_subWidget->onChangeSize();
+	this.subWidget.setOrigin(origin);
+	this.subWidget.onChangeSize();
 }
 
 void ewol::widget::Scroll::calculateMinMaxSize() {
 	// Note: No call of container ==> normal case ...
-	ewol::Widget::calculateMinMaxSize();
+	Widget::calculateMinMaxSize();
 	// call sub classes
-	if (m_subWidget != null) {
-		m_subWidget->calculateMinMaxSize();
+	if (this.subWidget != null) {
+		this.subWidget.calculateMinMaxSize();
 	}
 }
 
-void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::Scroll::systemDraw( ewol::DrawProperty _displayProp) {
 	if (*propertyHide == true) {
 		return;
 	}
-	if (m_subWidget != null) {
+	if (this.subWidget != null) {
 		ewol::DrawProperty prop = _displayProp;
-		prop.limit(m_origin, m_size);
-		m_subWidget->systemDraw(prop);
+		prop.limit(this.origin, this.size);
+		this.subWidget.systemDraw(prop);
 	}
-	ewol::Widget::systemDraw(_displayProp);
+	Widget::systemDraw(_displayProp);
 }
 
 void ewol::widget::Scroll::onDraw() {
-	m_shaperH.draw();
-	m_shaperV.draw();
+	this.shaperH.draw();
+	this.shaperV.draw();
 	/*
 	ewol::compositing::Drawing draw;
 	draw.setPos(Vector2f(10,10));
 	draw.setColor(etk::color::orange);
 	draw.rectangleWidth(Vector2f(25,25));
-	draw.setPos(m_size - Vector2f(35,35));
+	draw.setPos(this.size - Vector2f(35,35));
 	draw.setColor(etk::color::green);
 	draw.rectangleWidth(Vector2f(25,25));
 	draw.draw();
@@ -150,268 +150,268 @@ void ewol::widget::Scroll::onRegenerateDisplay() {
 		return;
 	}
 	// clear all previous display
-	m_shaperH.clear();
-	m_shaperV.clear();
-	ewol::Padding paddingVert = m_shaperV.getPadding();
-	ewol::Padding paddingHori = m_shaperH.getPadding();
+	this.shaperH.clear();
+	this.shaperV.clear();
+	ewol::Padding paddingVert = this.shaperV.getPadding();
+	ewol::Padding paddingHori = this.shaperH.getPadding();
 	Vector2f scrollOffset(0,0);
 	Vector2f scrollSize(0,0);
-	if (m_subWidget != null) {
-		scrollOffset = m_subWidget->getOffset();
-		scrollSize = m_subWidget->getSize();
+	if (this.subWidget != null) {
+		scrollOffset = this.subWidget.getOffset();
+		scrollSize = this.subWidget.getSize();
 	}
-	if(    m_size.y() < scrollSize.y()
+	if(    this.size.y() < scrollSize.y()
 	    || scrollOffset.y() != 0) {
-		float lenScrollBar = m_size.y()*m_size.y() / scrollSize.y();
-		lenScrollBar = etk::avg(10.0f, lenScrollBar, m_size.y());
-		float originScrollBar = scrollOffset.y() / (scrollSize.y()-m_size.y()*propertyLimit->y());
+		float lenScrollBar = this.size.y()*this.size.y() / scrollSize.y();
+		lenScrollBar = etk::avg(10.0f, lenScrollBar, this.size.y());
+		float originScrollBar = scrollOffset.y() / (scrollSize.y()-this.size.y()*propertyLimit.y());
 		originScrollBar = etk::avg(0.0f, originScrollBar, 1.0f);
-		originScrollBar *= (m_size.y()-lenScrollBar);
-		m_shaperV.setShape(Vector2f(m_size.x() - paddingVert.x(), 0),
-		                   Vector2f(paddingVert.x(), m_size.y()),
-		                   Vector2f(m_size.x() - paddingVert.xRight(), m_size.y() - originScrollBar - lenScrollBar),
+		originScrollBar *= (this.size.y()-lenScrollBar);
+		this.shaperV.setShape(Vector2f(this.size.x() - paddingVert.x(), 0),
+		                   Vector2f(paddingVert.x(), this.size.y()),
+		                   Vector2f(this.size.x() - paddingVert.xRight(), this.size.y() - originScrollBar - lenScrollBar),
 		                   Vector2f(0, lenScrollBar));
 	}
-	if(    m_size.x() < scrollSize.x()
+	if(    this.size.x() < scrollSize.x()
 	    || scrollOffset.x() != 0) {
-		float lenScrollBar = (m_size.x()-paddingHori.xLeft())*(m_size.x()-paddingVert.x()) / scrollSize.x();
-		lenScrollBar = etk::avg(10.0f, lenScrollBar, (m_size.x()-paddingVert.x()));
-		float originScrollBar = scrollOffset.x() / (scrollSize.x()-m_size.x()*propertyLimit->x());
+		float lenScrollBar = (this.size.x()-paddingHori.xLeft())*(this.size.x()-paddingVert.x()) / scrollSize.x();
+		lenScrollBar = etk::avg(10.0f, lenScrollBar, (this.size.x()-paddingVert.x()));
+		float originScrollBar = scrollOffset.x() / (scrollSize.x()-this.size.x()*propertyLimit.x());
 		originScrollBar = etk::avg(0.0f, originScrollBar, 1.0f);
-		originScrollBar *= (m_size.x()-paddingHori.xRight()-lenScrollBar);
-		m_shaperH.setShape(Vector2f(0, 0),
-		                   Vector2f(m_size.x()-paddingVert.x(), paddingHori.y()),
+		originScrollBar *= (this.size.x()-paddingHori.xRight()-lenScrollBar);
+		this.shaperH.setShape(Vector2f(0, 0),
+		                   Vector2f(this.size.x()-paddingVert.x(), paddingHori.y()),
 		                   Vector2f(originScrollBar, paddingHori.yButtom()),
 		                   Vector2f(lenScrollBar, 0));
 	}
 }
 
-bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
+boolean ewol::widget::Scroll::onEventInput( ewol::event::Input _event) {
 	//ewol::event::Input _event = event;
-	//_event.setType(gale::key::type::finger);
+	//_event.setType(KeyType::finger);
 	Vector2f relativePos = relativePosition(_event.getPos());
 	Vector2f scrollOffset(0,0);
 	Vector2f scrollSize(0,0);
-	if (m_subWidget != null) {
-		scrollOffset = m_subWidget->getOffset();
-		scrollSize = m_subWidget->getSize();
+	if (this.subWidget != null) {
+		scrollOffset = this.subWidget.getOffset();
+		scrollSize = this.subWidget.getSize();
 	}
-	Log.verbose("Get Event on scroll : " << _event);
-	relativePos.setY(m_size.y() - relativePos.y());
-	if(    _event.getType() == gale::key::type::mouse
-	    && (    m_highSpeedType == gale::key::type::unknow
-	         || m_highSpeedType == gale::key::type::mouse) ) {
+	Log.verbose("Get Event on scroll : " + _event);
+	relativePos.setY(this.size.y() - relativePos.y());
+	if(    _event.getType() == KeyType::mouse
+	    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (    this.highSpeedType == KeyType::unknow
+	         || this.highSpeedType == KeyType::mouse) ) {
 		if(    _event.getId() == 1
-		    && _event.getStatus() == gale::key::status::down) {
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::down) {
 			// check if selected the scrolling position whth the scrolling bar ...
-			if (relativePos.x() >= (m_size.x()-SCROLL_BAR_SPACE)) {
-				if(    m_size.y() < scrollSize.y()
+			if (relativePos.x() >= (this.size.x()-SCROLL_BAR_SPACE)) {
+				if(    this.size.y() < scrollSize.y()
 				    || scrollOffset.y() != 0) {
-					m_highSpeedMode = speedModeEnableVertical;
-					m_highSpeedType = gale::key::type::mouse;
-					m_highSpeedStartPos.setX(relativePos.x());
-					m_highSpeedStartPos.setY(scrollOffset.y() / scrollSize.y() * (m_size.y()-SCROLL_BAR_SPACE*2));
-					m_highSpeedButton = 1;
+					this.highSpeedMode = speedModeEnableVertical;
+					this.highSpeedType = KeyType::mouse;
+					this.highSpeedStartPos.setX(relativePos.x());
+					this.highSpeedStartPos.setY(scrollOffset.y() / scrollSize.y() * (this.size.y()-SCROLL_BAR_SPACE*2));
+					this.highSpeedButton = 1;
 					// force direct scrolling in this case
-					scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
-					scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
+					scrollOffset.setY((int)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (this.size.y()-SCROLL_BAR_SPACE*2)));
+					scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - this.size.y()*propertyLimit.y())));
 					markToRedraw();
-					if (m_subWidget != null) {
-						m_subWidget->setOffset(scrollOffset);
+					if (this.subWidget != null) {
+						this.subWidget.setOffset(scrollOffset);
 					}
 					return true;
 				}
-			} else if (relativePos.y() >= (m_size.y()-SCROLL_BAR_SPACE)) {
-				if(    m_size.x() < scrollSize.x()
+			} else if (relativePos.y() >= (this.size.y()-SCROLL_BAR_SPACE)) {
+				if(    this.size.x() < scrollSize.x()
 				    || scrollOffset.x()!=0) {
-					m_highSpeedMode = speedModeEnableHorizontal;
-					m_highSpeedType = gale::key::type::mouse;
-					m_highSpeedStartPos.setX(scrollOffset.x() / scrollSize.x() * (m_size.x()-SCROLL_BAR_SPACE*2));
-					m_highSpeedStartPos.setY(relativePos.y());
-					m_highSpeedButton = 1;
+					this.highSpeedMode = speedModeEnableHorizontal;
+					this.highSpeedType = KeyType::mouse;
+					this.highSpeedStartPos.setX(scrollOffset.x() / scrollSize.x() * (this.size.x()-SCROLL_BAR_SPACE*2));
+					this.highSpeedStartPos.setY(relativePos.y());
+					this.highSpeedButton = 1;
 					// force direct scrolling in this case
-					scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
-					scrollOffset.setY(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x())));
+					scrollOffset.setX((int)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (this.size.x()-SCROLL_BAR_SPACE*2)));
+					scrollOffset.setY(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - this.size.x()*propertyLimit.x())));
 					markToRedraw();
-					if (m_subWidget != null) {
-						m_subWidget->setOffset(scrollOffset);
+					if (this.subWidget != null) {
+						this.subWidget.setOffset(scrollOffset);
 					}
 					return true;
 				}
 			}
 			return false;
 		} else if(    _event.getId() == 4
-		           && _event.getStatus() == gale::key::status::up) {
-			Log.verbose("    mode UP " << m_size.y() << "<" << scrollSize.y());
-			if(m_size.y() < scrollSize.y()) {
-				scrollOffset.setY(scrollOffset.y()-m_pixelScrolling);
-				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
+		           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::up) {
+			Log.verbose("    mode UP " + this.size.y() + "<" + scrollSize.y());
+			if(this.size.y() < scrollSize.y()) {
+				scrollOffset.setY(scrollOffset.y()-this.pixelScrolling);
+				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - this.size.y()*propertyLimit.y())));
 				markToRedraw();
-				if (m_subWidget != null) {
-					m_subWidget->setOffset(scrollOffset);
+				if (this.subWidget != null) {
+					this.subWidget.setOffset(scrollOffset);
 				}
 				return true;
 			}
 		} else if(    _event.getId() == 5
-		           && _event.getStatus() == gale::key::status::up) {
-			Log.verbose("    mode DOWN " << m_size.y() << "<" << scrollSize.y());
-			if(m_size.y() < scrollSize.y()) {
-				scrollOffset.setY(scrollOffset.y()+m_pixelScrolling);
-				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
+		           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::up) {
+			Log.verbose("    mode DOWN " + this.size.y() + "<" + scrollSize.y());
+			if(this.size.y() < scrollSize.y()) {
+				scrollOffset.setY(scrollOffset.y()+this.pixelScrolling);
+				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - this.size.y()*propertyLimit.y())));
 				markToRedraw();
-				if (m_subWidget != null) {
-					m_subWidget->setOffset(scrollOffset);
+				if (this.subWidget != null) {
+					this.subWidget.setOffset(scrollOffset);
 				}
 				return true;
 			}
 		}else if (_event.getId() == 2) {
-			if (_event.getStatus() == gale::key::status::down) {
-				m_highSpeedMode = speedModeInit;
-				m_highSpeedType = gale::key::type::mouse;
-				m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
-				m_highSpeedButton = 2;
+			if (_event.getStatus() == KeyStatus::down) {
+				this.highSpeedMode = speedModeInit;
+				this.highSpeedType = KeyType::mouse;
+				this.highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
+				this.highSpeedButton = 2;
 				// not really use...  == > just keep some informations
 				return false;
 			}
-		} else if(    m_highSpeedMode != speedModeDisable
-		           && _event.getStatus() == gale::key::status::leave) {
-			m_highSpeedMode = speedModeDisable;
-			m_highSpeedType = gale::key::type::unknow;
+		} else if(    this.highSpeedMode != speedModeDisable
+		           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::leave) {
+			this.highSpeedMode = speedModeDisable;
+			this.highSpeedType = KeyType::unknow;
 			markToRedraw();
 			return true;
 		}
-		if (    _event.getId() == m_highSpeedButton
-		     && m_highSpeedMode != speedModeDisable) {
-			if (_event.getStatus() == gale::key::status::up) {
-				if (m_highSpeedMode == speedModeInit) {
+		if (    _event.getId() == this.highSpeedButton
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.highSpeedMode != speedModeDisable) {
+			if (_event.getStatus() == KeyStatus::up) {
+				if (this.highSpeedMode == speedModeInit) {
 					// TODO : generate back the down event ...
-					m_highSpeedMode = speedModeDisable;
-					m_highSpeedType = gale::key::type::unknow;
+					this.highSpeedMode = speedModeDisable;
+					this.highSpeedType = KeyType::unknow;
 					return false;
 				} else {
-					m_highSpeedMode = speedModeGrepEndEvent;
+					this.highSpeedMode = speedModeGrepEndEvent;
 					markToRedraw();
 					return true;
 				}
-			} else if (m_highSpeedMode == speedModeGrepEndEvent) {
-				if (_event.getStatus() == gale::key::status::pressSingle) {
-					m_highSpeedMode = speedModeDisable;
-					m_highSpeedType = gale::key::type::unknow;
-					m_highSpeedButton = -1;
+			} else if (this.highSpeedMode == speedModeGrepEndEvent) {
+				if (_event.getStatus() == KeyStatus::pressSingle) {
+					this.highSpeedMode = speedModeDisable;
+					this.highSpeedType = KeyType::unknow;
+					this.highSpeedButton = -1;
 					markToRedraw();
 				}
 				return true;
-			} else if(    m_highSpeedMode == speedModeInit
-			           && _event.getStatus() == gale::key::status::move) {
+			} else if(    this.highSpeedMode == speedModeInit
+			           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::move) {
 				// wait that the cursor move more than 10 px to enable it :
-				if(    etk::abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
-				    || etk::abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
+				if(    etk::abs(relativePos.x() - this.highSpeedStartPos.x()) > 10 
+				    || etk::abs(relativePos.y() - this.highSpeedStartPos.y()) > 10 ) {
 					// the scrooling can start : 
 					// select the direction :
-					if (relativePos.x() == m_highSpeedStartPos.x()) {
-						m_highSpeedMode = speedModeEnableVertical;
-					} else if (relativePos.y() == m_highSpeedStartPos.y()) {
-						m_highSpeedMode = speedModeEnableHorizontal;
+					if (relativePos.x() == this.highSpeedStartPos.x()) {
+						this.highSpeedMode = speedModeEnableVertical;
+					} else if (relativePos.y() == this.highSpeedStartPos.y()) {
+						this.highSpeedMode = speedModeEnableHorizontal;
 					} else {
-						float coef = (relativePos.y() - m_highSpeedStartPos.y()) / (relativePos.x() - m_highSpeedStartPos.x());
+						float coef = (relativePos.y() - this.highSpeedStartPos.y()) / (relativePos.x() - this.highSpeedStartPos.x());
 						if (etk::abs(coef) <= 1 ) {
-							m_highSpeedMode = speedModeEnableHorizontal;
+							this.highSpeedMode = speedModeEnableHorizontal;
 						} else {
-							m_highSpeedMode = speedModeEnableVertical;
+							this.highSpeedMode = speedModeEnableVertical;
 						}
 					}
-					if (m_highSpeedMode == speedModeEnableHorizontal) {
-						m_highSpeedStartPos.setX(scrollOffset.x() / scrollSize.x() * (m_size.x()-SCROLL_BAR_SPACE*2));
+					if (this.highSpeedMode == speedModeEnableHorizontal) {
+						this.highSpeedStartPos.setX(scrollOffset.x() / scrollSize.x() * (this.size.x()-SCROLL_BAR_SPACE*2));
 					} else {
-						m_highSpeedStartPos.setY(scrollOffset.y() / scrollSize.y() * (m_size.y()-SCROLL_BAR_SPACE*2));
+						this.highSpeedStartPos.setY(scrollOffset.y() / scrollSize.y() * (this.size.y()-SCROLL_BAR_SPACE*2));
 					}
 					markToRedraw();
 				}
-				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
-				if (m_subWidget != null) {
-					m_subWidget->setOffset(scrollOffset);
+				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - this.size.y()*propertyLimit.y())));
+				if (this.subWidget != null) {
+					this.subWidget.setOffset(scrollOffset);
 				}
 				return true;
 			}
-			if(    m_highSpeedMode == speedModeEnableHorizontal
-			    && _event.getStatus() == gale::key::status::move) {
-				scrollOffset.setX((int32_t)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (m_size.x()-SCROLL_BAR_SPACE*2)));
-				scrollOffset.setX(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x() )));
+			if(    this.highSpeedMode == speedModeEnableHorizontal
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::move) {
+				scrollOffset.setX((int)(scrollSize.x() * (relativePos.x()-SCROLL_BAR_SPACE) / (this.size.x()-SCROLL_BAR_SPACE*2)));
+				scrollOffset.setX(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - this.size.x()*propertyLimit.x() )));
 				markToRedraw();
-				if (m_subWidget != null) {
-					m_subWidget->setOffset(scrollOffset);
+				if (this.subWidget != null) {
+					this.subWidget.setOffset(scrollOffset);
 				}
 				return true;
 			}
-			if(    m_highSpeedMode == speedModeEnableVertical
-			    && _event.getStatus() == gale::key::status::move) {
-				scrollOffset.setY((int32_t)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (m_size.y()-SCROLL_BAR_SPACE*2)));
-				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->x())));
+			if(    this.highSpeedMode == speedModeEnableVertical
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::move) {
+				scrollOffset.setY((int)(scrollSize.y() * (relativePos.y()-SCROLL_BAR_SPACE) / (this.size.y()-SCROLL_BAR_SPACE*2)));
+				scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - this.size.y()*propertyLimit.x())));
 				markToRedraw();
-				if (m_subWidget != null) {
-					m_subWidget->setOffset(scrollOffset);
+				if (this.subWidget != null) {
+					this.subWidget.setOffset(scrollOffset);
 				}
 				return true;
 			}
 		}
-	} else if(    gale::key::type::finger == _event.getType()
-	           && (    gale::key::type::unknow == m_highSpeedType
-	                || gale::key::type::finger == m_highSpeedType ) ) {
+	} else if(    KeyType::finger == _event.getType()
+	           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (    KeyType::unknow == this.highSpeedType
+	                || KeyType::finger == this.highSpeedType ) ) {
 		if (1 == _event.getId()) {
-			Log.verbose("event: " << _event);
-			if (gale::key::status::down == _event.getStatus()) {
-				m_highSpeedMode = speedModeInit;
-				m_highSpeedType = gale::key::type::finger;
-				m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
-				Log.verbose("SCROOL  == > INIT pos=" << m_highSpeedStartPos << " && curent scrollOffset=" << scrollOffset);
+			Log.verbose("event: " + _event);
+			if (KeyStatus::down == _event.getStatus()) {
+				this.highSpeedMode = speedModeInit;
+				this.highSpeedType = KeyType::finger;
+				this.highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
+				Log.verbose("SCROOL  == > INIT pos=" + this.highSpeedStartPos + " LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM curent scrollOffset=" + scrollOffset);
 				return true;
-			} else if (gale::key::status::upAfter == _event.getStatus()) {
-				m_highSpeedMode = speedModeDisable;
-				m_highSpeedType = gale::key::type::unknow;
+			} else if (KeyStatus::upAfter == _event.getStatus()) {
+				this.highSpeedMode = speedModeDisable;
+				this.highSpeedType = KeyType::unknow;
 				Log.verbose("SCROOL  == > DISABLE");
 				markToRedraw();
 				return true;
-			} else if (    m_highSpeedMode == speedModeInit
-			            && gale::key::status::move == _event.getStatus()) {
+			} else if (    this.highSpeedMode == speedModeInit
+			            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM KeyStatus::move == _event.getStatus()) {
 				// wait that the cursor move more than 10 px to enable it :
-				if(    etk::abs(relativePos.x() - m_highSpeedStartPos.x()) > 10 
-				    || etk::abs(relativePos.y() - m_highSpeedStartPos.y()) > 10 ) {
+				if(    etk::abs(relativePos.x() - this.highSpeedStartPos.x()) > 10 
+				    || etk::abs(relativePos.y() - this.highSpeedStartPos.y()) > 10 ) {
 					// the scrooling can start : 
 					// select the direction :
-					m_highSpeedMode = speedModeEnableFinger;
+					this.highSpeedMode = speedModeEnableFinger;
 					Log.verbose("SCROOL  == > ENABLE");
 					markToRedraw();
 				}
 				return true;
 			}
-			if (    m_highSpeedMode == speedModeEnableFinger
-			     && gale::key::status::move == _event.getStatus()) {
-				Log.verbose("SCROOL  == > INIT scrollOffset=" << scrollOffset.y() << " relativePos=" << relativePos.y() << " m_highSpeedStartPos=" << m_highSpeedStartPos.y());
-				//scrollOffset.x = (int32_t)(scrollSize.x * x / m_size.x);
-				if (propertyLimit->x() != 0.0f) {
-					scrollOffset.setX(scrollOffset.x() + (relativePos.x() - m_highSpeedStartPos.x()));
-					scrollOffset.setX(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - m_size.x()*propertyLimit->x())));
+			if (    this.highSpeedMode == speedModeEnableFinger
+			     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM KeyStatus::move == _event.getStatus()) {
+				Log.verbose("SCROOL  == > INIT scrollOffset=" + scrollOffset.y() + " relativePos=" + relativePos.y() + " this.highSpeedStartPos=" + this.highSpeedStartPos.y());
+				//scrollOffset.x = (int)(scrollSize.x * x / this.size.x);
+				if (propertyLimit.x() != 0.0f) {
+					scrollOffset.setX(scrollOffset.x() + (relativePos.x() - this.highSpeedStartPos.x()));
+					scrollOffset.setX(etk::avg(0.0f, scrollOffset.x(), (scrollSize.x() - this.size.x()*propertyLimit.x())));
 				}
-				if (propertyLimit->y() != 0.0f) {
-					scrollOffset.setY(scrollOffset.y() - (relativePos.y() - m_highSpeedStartPos.y()));
-					scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - m_size.y()*propertyLimit->y())));
+				if (propertyLimit.y() != 0.0f) {
+					scrollOffset.setY(scrollOffset.y() - (relativePos.y() - this.highSpeedStartPos.y()));
+					scrollOffset.setY(etk::avg(0.0f, scrollOffset.y(), (scrollSize.y() - this.size.y()*propertyLimit.y())));
 				}
 				// update current position:
-				m_highSpeedStartPos = relativePos;
-				Log.verbose("SCROOL  == > MOVE " << scrollOffset);
+				this.highSpeedStartPos = relativePos;
+				Log.verbose("SCROOL  == > MOVE " + scrollOffset);
 				markToRedraw();
-				if (m_subWidget != null) {
-					m_subWidget->setOffset(scrollOffset);
+				if (this.subWidget != null) {
+					this.subWidget.setOffset(scrollOffset);
 				}
 				return true;
 			}
-			if (m_highSpeedMode == speedModeEnableFinger) {
+			if (this.highSpeedMode == speedModeEnableFinger) {
 				return true;
 			}
-		} else if (    m_highSpeedMode != speedModeDisable
-		            && gale::key::status::leave == _event.getStatus()) {
-			m_highSpeedMode = speedModeDisable;
-			m_highSpeedType = gale::key::type::unknow;
+		} else if (    this.highSpeedMode != speedModeDisable
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM KeyStatus::leave == _event.getStatus()) {
+			this.highSpeedMode = speedModeDisable;
+			this.highSpeedType = KeyType::unknow;
 			Log.verbose("SCROOL  == > DISABLE");
 			markToRedraw();
 			return true;
@@ -420,12 +420,12 @@ bool ewol::widget::Scroll::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-ewol::WidgetShared ewol::widget::Scroll::getWidgetAtPos(const Vector2f& _pos) {
-	ewol::WidgetShared tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
+Widget ewol::widget::Scroll::getWidgetAtPos( Vector2f _pos) {
+	Widget tmpWidget = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (tmpWidget != null) {
 		return tmpWidget;
 	}
-	return ememory::dynamicPointerCast<ewol::Widget>(sharedFromThis());;
+	return ememory::dynamicPointerCast<Widget>(sharedFromThis());;
 }
 
 void ewol::widget::Scroll::onChangePropertyLimit() {
@@ -433,12 +433,12 @@ void ewol::widget::Scroll::onChangePropertyLimit() {
 }
 
 void ewol::widget::Scroll::onChangePropertyShapeVert() {
-	m_shaperV.setSource(propertyShapeVert);
+	this.shaperV.setSource(propertyShapeVert);
 	markToRedraw();
 }
 
 void ewol::widget::Scroll::onChangePropertyShapeHori() {
-	m_shaperH.setSource(propertyShapeHori);
+	this.shaperH.setSource(propertyShapeHori);
 	markToRedraw();
 }
 

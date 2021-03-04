@@ -12,28 +12,28 @@
 ETK_DECLARE_TYPE(ewol::widget::Gird);
 
 ewol::widget::Gird::Gird() :
-  m_sizeRow(0),
-  m_tmpWidget(null),
-  m_gavityButtom(true),
-  m_borderSize(0,0) {
+  this.sizeRow(0),
+  this.tmpWidget(null),
+  this.gavityButtom(true),
+  this.borderSize(0,0) {
 	addObjectType("ewol::widget::Gird");
 	requestUpdateSize();
 }
 
 ewol::widget::Gird::~Gird() {
-	Log.debug("[" << getId() << "]={" << getObjectType() << "} Gird : destroy");
+	Log.debug("[" + getId() + "]={" + getObjectType() + "} Gird : destroy");
 	subWidgetRemoveAll();
 }
 
-void ewol::widget::Gird::setBorderSize(const Vector2i& _newBorderSize) {
-	m_borderSize = _newBorderSize;
-	if (m_borderSize.x() < 0) {
-		Log.error("Try to set a border size <0 on x : " << m_borderSize.x() << "  == > restore to 0");
-		m_borderSize.setX(0);
+void ewol::widget::Gird::setBorderSize( Vector2i _newBorderSize) {
+	this.borderSize = _newBorderSize;
+	if (this.borderSize.x() < 0) {
+		Log.error("Try to set a border size <0 on x : " + this.borderSize.x() + "  == > restore to 0");
+		this.borderSize.setX(0);
 	}
-	if (m_borderSize.y() < 0) {
-		Log.error("Try to set a border size <0 on y : " << m_borderSize.y() << "  == > restore to 0");
-		m_borderSize.setY(0);
+	if (this.borderSize.y() < 0) {
+		Log.error("Try to set a border size <0 on y : " + this.borderSize.y() + "  == > restore to 0");
+		this.borderSize.setY(0);
 	}
 	markToRedraw();
 	requestUpdateSize();
@@ -41,154 +41,154 @@ void ewol::widget::Gird::setBorderSize(const Vector2i& _newBorderSize) {
 
 void ewol::widget::Gird::onChangeSize() {
 	//Log.debug("Update size");
-	m_size -= m_borderSize*2;
+	this.size -= this.borderSize*2;
 	
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (m_subWidget[iii].widget != null) {
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if (this.subWidget[iii].widget != null) {
 			//calculate the origin :
-			Vector2f tmpOrigin = m_origin + m_borderSize;
-			if (false == m_gavityButtom) {
-				tmpOrigin += Vector2f(0, m_size.y()-m_borderSize.y());
+			Vector2f tmpOrigin = this.origin + this.borderSize;
+			if (false == this.gavityButtom) {
+				tmpOrigin += Vector2f(0, this.size.y()-this.borderSize.y());
 			}
 			
-			int32_t tmpSizeWidth = 0;
-			for (int32_t jjj=0; jjj<m_subWidget[iii].col; jjj++ ){
-				tmpSizeWidth += abs(m_sizeCol[jjj]);
+			int tmpSizeWidth = 0;
+			for (int jjj=0; jjj<this.subWidget[iii].col; jjj++ ){
+				tmpSizeWidth += abs(this.sizeCol[jjj]);
 			}
 			// adding Y origin : 
-			int32_t addingPos = 0;
-			if (true == m_gavityButtom) {
-				addingPos = (m_subWidget[iii].row)*m_uniformSizeRow;
+			int addingPos = 0;
+			if (true == this.gavityButtom) {
+				addingPos = (this.subWidget[iii].row)*this.uniformSizeRow;
 			} else {
-				addingPos = -(m_subWidget[iii].row+1)*m_uniformSizeRow;
+				addingPos = -(this.subWidget[iii].row+1)*this.uniformSizeRow;
 			}
 			tmpOrigin += Vector2f(tmpSizeWidth, addingPos);
 			
-			Log.debug("     [" << iii << "] set subwidget origin=" <<tmpOrigin << " size=" << Vector2i(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow) );
+			Log.debug("     [" + iii + "] set subwidget origin=" +tmpOrigin + " size=" + Vector2i(abs(this.sizeCol[this.subWidget[iii].col]), this.uniformSizeRow) );
 			// set the origin :
-			m_subWidget[iii].widget->setOrigin(Vector2fClipInt32(tmpOrigin));
+			this.subWidget[iii].widget.setOrigin(Vector2fClipInt32(tmpOrigin));
 			// all time set oll the space .
-			m_subWidget[iii].widget->setSize(Vector2fClipInt32(Vector2f(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow)));
-			m_subWidget[iii].widget->onChangeSize();
+			this.subWidget[iii].widget.setSize(Vector2fClipInt32(Vector2f(abs(this.sizeCol[this.subWidget[iii].col]), this.uniformSizeRow)));
+			this.subWidget[iii].widget.onChangeSize();
 		}
 	}
-	m_size += m_borderSize*2;
-	Log.debug("Calculate size : " << m_size);
+	this.size += this.borderSize*2;
+	Log.debug("Calculate size : " + this.size);
 	markToRedraw();
 }
 
 void ewol::widget::Gird::calculateMinMaxSize() {
-	for (size_t iii=0; iii<m_sizeCol.size(); iii++ ){
-		if (m_sizeCol[iii] <= 0) {
-			m_sizeCol[iii] = 0;
+	for (int iii=0; iii<this.sizeCol.size(); iii++ ){
+		if (this.sizeCol[iii] <= 0) {
+			this.sizeCol[iii] = 0;
 		}
 	}
 	//Log.debug("Update minimum size");
-	m_minSize = propertyMinSize->getPixel();
-	m_maxSize = propertyMaxSize->getPixel();
-	m_uniformSizeRow = 0;
-	m_minSize += m_borderSize*2;
-	int32_t lastLineID = 0;
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (m_subWidget[iii].row > lastLineID) {
+	this.minSize = propertyMinSize.getPixel();
+	this.maxSize = propertyMaxSize.getPixel();
+	this.uniformSizeRow = 0;
+	this.minSize += this.borderSize*2;
+	int lastLineID = 0;
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if (this.subWidget[iii].row > lastLineID) {
 			// change of line : 
-			lastLineID = m_subWidget[iii].row;
+			lastLineID = this.subWidget[iii].row;
 		}
-		if (m_subWidget[iii].widget != null) {
-			m_subWidget[iii].widget->calculateMinMaxSize();
-			Vector2f tmpSize = m_subWidget[iii].widget->getCalculateMinSize();
-			Log.debug("     [" << iii << "] subWidgetMinSize=" << tmpSize);
+		if (this.subWidget[iii].widget != null) {
+			this.subWidget[iii].widget.calculateMinMaxSize();
+			Vector2f tmpSize = this.subWidget[iii].widget.getCalculateMinSize();
+			Log.debug("     [" + iii + "] subWidgetMinSize=" + tmpSize);
 			// for all we get the max size :
-			m_uniformSizeRow = etk::max((int32_t)tmpSize.y(), m_uniformSizeRow);
+			this.uniformSizeRow = etk::max((int)tmpSize.y(), this.uniformSizeRow);
 			// for the colomn size : We set the autamatic value in negative : 
-			if (m_sizeCol[m_subWidget[iii].col] <= 0) {
-				m_sizeCol[m_subWidget[iii].col] = etk::min(m_sizeCol[m_subWidget[iii].col], (int32_t)-tmpSize.x() );
+			if (this.sizeCol[this.subWidget[iii].col] <= 0) {
+				this.sizeCol[this.subWidget[iii].col] = etk::min(this.sizeCol[this.subWidget[iii].col], (int)-tmpSize.x() );
 			}
 		}
 	}
 	
-	if (m_sizeRow > 0) {
-		m_uniformSizeRow = m_sizeRow;
+	if (this.sizeRow > 0) {
+		this.uniformSizeRow = this.sizeRow;
 	}
-	int32_t tmpSizeWidth = 0;
-	for (size_t iii=0; iii<m_sizeCol.size(); iii++ ){
-		tmpSizeWidth += abs(m_sizeCol[iii]);
+	int tmpSizeWidth = 0;
+	for (int iii=0; iii<this.sizeCol.size(); iii++ ){
+		tmpSizeWidth += abs(this.sizeCol[iii]);
 	}
-	Log.debug("     tmpSizeWidth=" << tmpSizeWidth);
-	Log.debug("     m_uniformSizeRow=" << m_uniformSizeRow);
-	m_minSize += Vector2i(tmpSizeWidth, (lastLineID+1)*m_uniformSizeRow);
+	Log.debug("     tmpSizeWidth=" + tmpSizeWidth);
+	Log.debug("     this.uniformSizeRow=" + this.uniformSizeRow);
+	this.minSize += Vector2i(tmpSizeWidth, (lastLineID+1)*this.uniformSizeRow);
 	
-	Log.debug("Calculate min size : " << m_minSize);
+	Log.debug("Calculate min size : " + this.minSize);
 	
-	//Log.debug("Vert Result : expand="<< m_userExpand << "  minSize="<< m_minSize);
+	//Log.debug("Vert Result : expand="+ this.userExpand + "  minSize="+ this.minSize);
 }
 
-void ewol::widget::Gird::setColNumber(int32_t _colNumber) {
-	if ((int64_t)m_sizeCol.size() > _colNumber) {
-		size_t errorControl = m_subWidget.size();
+void ewol::widget::Gird::setColNumber(int _colNumber) {
+	if ((long)this.sizeCol.size() > _colNumber) {
+		int errorControl = this.subWidget.size();
 		// remove subWidget :
-		for (int64_t iii=m_subWidget.size(); iii >= 0; iii--) {
-			if (m_subWidget[iii].col > (_colNumber-1)) {
+		for (long iii=this.subWidget.size(); iii >= 0; iii--) {
+			if (this.subWidget[iii].col > (_colNumber-1)) {
 				// out of bounds : must remove it ...
-				if (m_subWidget[iii].widget != null) {
-					m_subWidget[iii].widget.reset();
+				if (this.subWidget[iii].widget != null) {
+					this.subWidget[iii].widget.reset();
 					// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
-					if (errorControl == m_subWidget.size()) {
-						Log.critical("[" << getId() << "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+					if (errorControl == this.subWidget.size()) {
+						Log.critical("[" + getId() + "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
 					}
 				} else {
-					EWOL_WARNING("[" << getId() << "] Must not have null pointer on the subWidget list ...");
-					m_subWidget.erase(m_subWidget.begin()+iii);
+					Log.warning("[" + getId() + "] Must not have null pointer on the subWidget list ...");
+					this.subWidget.erase(this.subWidget.begin()+iii);
 				}
-				errorControl = m_subWidget.size();
+				errorControl = this.subWidget.size();
 			}
 		}
 		// just add the col size:
-		m_sizeCol.erase(m_sizeCol.end());
+		this.sizeCol.erase(this.sizeCol.end());
 	} else {
 		// just add the col size:
-		for (int32_t iii=m_sizeCol.size()-1; iii<_colNumber-1 ; iii++) {
-			m_sizeCol.pushBack(0);
+		for (int iii=this.sizeCol.size()-1; iii<_colNumber-1 ; iii++) {
+			this.sizeCol.pushBack(0);
 		}
 	}
 }
 
-void ewol::widget::Gird::setColSize(int32_t _colId, int32_t _size) {
-	if ((int64_t)m_sizeCol.size() > _colId) {
-		m_sizeCol[_colId] = _size;
+void ewol::widget::Gird::setColSize(int _colId, int _size) {
+	if ((long)this.sizeCol.size() > _colId) {
+		this.sizeCol[_colId] = _size;
 	} else {
-		Log.error("Can not set the Colomn size : " << _colId+1
-		           << " at " << _size << "px  we have "
-		           << m_sizeCol.size() << " colomn");
+		Log.error("Can not set the Colomn size : " + _colId+1
+		           + " at " + _size + "px  we have "
+		           + this.sizeCol.size() + " colomn");
 	}
 }
 
-void ewol::widget::Gird::setRowSize(int32_t _size) {
-	m_sizeRow = _size;
+void ewol::widget::Gird::setRowSize(int _size) {
+	this.sizeRow = _size;
 }
 
-int32_t ewol::widget::Gird::getColSize(int32_t _colId) {
-	if ((int64_t)m_sizeCol.size() > _colId) {
-		if (m_sizeCol[_colId] <= 0) {
+int ewol::widget::Gird::getColSize(int _colId) {
+	if ((long)this.sizeCol.size() > _colId) {
+		if (this.sizeCol[_colId] <= 0) {
 			return 0;
 		}
-		return m_sizeCol[_colId];
+		return this.sizeCol[_colId];
 	}
-	Log.error("Can not get the Colomn size : " << _colId+1 << "  we have "<< m_sizeCol.size() << " colomn");
+	Log.error("Can not get the Colomn size : " + _colId+1 + "  we have "+ this.sizeCol.size() + " colomn");
 	return 0;
 }
 
-int32_t ewol::widget::Gird::getRowSize() {
-	return m_sizeRow;
+int ewol::widget::Gird::getRowSize() {
+	return this.sizeRow;
 }
 
 void ewol::widget::Gird::subWidgetRemoveAll() {
-	size_t errorControl = m_subWidget.size();
-	m_subWidget.clear();
+	int errorControl = this.subWidget.size();
+	this.subWidget.clear();
 }
 
 
-void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::WidgetShared _newWidget) {
+void ewol::widget::Gird::subWidgetAdd(int _colId, int _rowId, Widget _newWidget) {
 	if (_newWidget == null) {
 		return;
 	}
@@ -198,126 +198,126 @@ void ewol::widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widg
 	prop.widget = _newWidget;
 	
 	// need to find the correct position : 
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (m_subWidget[iii].row < prop.row) {
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if (this.subWidget[iii].row < prop.row) {
 			continue;
-		} else if (m_subWidget[iii].row > prop.row) {
+		} else if (this.subWidget[iii].row > prop.row) {
 			// find a new position;
-			m_subWidget.insert(m_subWidget.begin()+iii, prop);
+			this.subWidget.insert(this.subWidget.begin()+iii, prop);
 			return;
 		} else {
-			if (m_subWidget[iii].col < prop.col) {
+			if (this.subWidget[iii].col < prop.col) {
 				continue;
-			} else if (m_subWidget[iii].col > prop.col) {
+			} else if (this.subWidget[iii].col > prop.col) {
 				// find a new position;
-				m_subWidget.insert(m_subWidget.begin()+iii, prop);
+				this.subWidget.insert(this.subWidget.begin()+iii, prop);
 				return;
 			} else {
 				// The element already exist  == > replace it ...
-				m_tmpWidget = m_subWidget[iii].widget;
-				m_subWidget[iii].widget = _newWidget;
-				if (m_tmpWidget != null) {
-					m_tmpWidget.reset();
-					if (m_tmpWidget != null) {
-						Log.critical("[" << getId() << "] Error while replacing a widget ...  == > never call when free");
-						m_tmpWidget = null;
+				this.tmpWidget = this.subWidget[iii].widget;
+				this.subWidget[iii].widget = _newWidget;
+				if (this.tmpWidget != null) {
+					this.tmpWidget.reset();
+					if (this.tmpWidget != null) {
+						Log.critical("[" + getId() + "] Error while replacing a widget ...  == > never call when free");
+						this.tmpWidget = null;
 					}
 				}
 			}
 		}
 	}
 	// not find  == > just adding it ...
-	m_subWidget.pushBack(prop);
+	this.subWidget.pushBack(prop);
 }
 
-void ewol::widget::Gird::subWidgetRemove(ewol::WidgetShared _newWidget) {
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (_newWidget == m_subWidget[iii].widget) {
-			m_subWidget.erase(m_subWidget.begin()+iii);
+void ewol::widget::Gird::subWidgetRemove(Widget _newWidget) {
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if (_newWidget == this.subWidget[iii].widget) {
+			this.subWidget.erase(this.subWidget.begin()+iii);
 			return;
 		}
 	}
-	EWOL_WARNING("[" << getId() << "] Can not remove unExistant widget");
+	Log.warning("[" + getId() + "] Can not remove unExistant widget");
 }
 
-void ewol::widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
+void ewol::widget::Gird::subWidgetRemove(int _colId, int _rowId) {
 	if (    _colId < 0
 	     || _rowId < 0) {
-		EWOL_WARNING("[" << getId() << "] try to remove widget with id < 0 col=" << _colId << " row=" << _rowId);
+		Log.warning("[" + getId() + "] try to remove widget with id < 0 col=" + _colId + " row=" + _rowId);
 		return;
 	}
-	size_t errorControl = m_subWidget.size();
+	int errorControl = this.subWidget.size();
 	// try to find it ...
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if(    m_subWidget[iii].row == _rowId
-		    && m_subWidget[iii].col == _colId) {
-			m_subWidget.erase(m_subWidget.begin()+iii);
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if(    this.subWidget[iii].row == _rowId
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[iii].col == _colId) {
+			this.subWidget.erase(this.subWidget.begin()+iii);
 			return;
 		}
 	}
-	EWOL_WARNING("[" << getId() << "] Can not remove unExistant widget");
+	Log.warning("[" + getId() + "] Can not remove unExistant widget");
 }
 
-void ewol::widget::Gird::subWidgetUnLink(ewol::WidgetShared _newWidget) {
+void ewol::widget::Gird::subWidgetUnLink(Widget _newWidget) {
 	if (_newWidget == null) {
 		return;
 	}
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if (_newWidget == m_subWidget[iii].widget) {
-			m_subWidget.erase(m_subWidget.begin()+iii);
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if (_newWidget == this.subWidget[iii].widget) {
+			this.subWidget.erase(this.subWidget.begin()+iii);
 			return;
 		}
 	}
 }
 
-void ewol::widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
+void ewol::widget::Gird::subWidgetUnLink(int _colId, int _rowId) {
 	if (    _colId < 0
 	     || _rowId < 0) {
-		EWOL_WARNING("[" << getId() << "] try to Unlink widget with id < 0 col=" << _colId << " row=" << _rowId);
+		Log.warning("[" + getId() + "] try to Unlink widget with id < 0 col=" + _colId + " row=" + _rowId);
 		return;
 	}
 	// try to find it ...
-	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
-		if(    m_subWidget[iii].row == _rowId
-		    && m_subWidget[iii].col == _colId) {
-			m_subWidget.erase(m_subWidget.begin()+iii);
+	for (int iii=0; iii<this.subWidget.size(); iii++) {
+		if(    this.subWidget[iii].row == _rowId
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[iii].col == _colId) {
+			this.subWidget.erase(this.subWidget.begin()+iii);
 			return;
 		}
 	}
-	EWOL_WARNING("[" << getId() << "] Can not unLink unExistant widget");
+	Log.warning("[" + getId() + "] Can not unLink unExistant widget");
 }
 
-void ewol::widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
-	ewol::Widget::systemDraw(_displayProp);
-	for (auto &it : m_subWidget) {
+void ewol::widget::Gird::systemDraw( ewol::DrawProperty _displayProp) {
+	Widget::systemDraw(_displayProp);
+	for (auto it : this.subWidget) {
 		if (it.widget != null) {
-			it.widget->systemDraw(_displayProp);
+			it.widget.systemDraw(_displayProp);
 		}
 	}
 }
 
 void ewol::widget::Gird::onRegenerateDisplay() {
-	for (auto &it : m_subWidget) {
+	for (auto it : this.subWidget) {
 		if (it.widget != null) {
-			it.widget->onRegenerateDisplay();
+			it.widget.onRegenerateDisplay();
 		}
 	}
 }
 
-ewol::WidgetShared ewol::widget::Gird::getWidgetAtPos(const Vector2f& _pos) {
+Widget ewol::widget::Gird::getWidgetAtPos( Vector2f _pos) {
 	if (*propertyHide == true) {
 		return null;
 	}
 	// for all element in the sizer ...
-	for (auto &it : m_subWidget) {
+	for (auto it : this.subWidget) {
 		if (it.widget == null) {
 			continue;
 		}
-		Vector2f tmpSize = it.widget->getSize();
-		Vector2f tmpOrigin = it.widget->getOrigin();
-		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
-		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
-			ewol::WidgetShared tmpWidget = it.widget->getWidgetAtPos(_pos);
+		Vector2f tmpSize = it.widget.getSize();
+		Vector2f tmpOrigin = it.widget.getOrigin();
+		if(    (tmpOrigin.x() <= _pos.x() LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM tmpOrigin.x() + tmpSize.x() >= _pos.x())
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (tmpOrigin.y() <= _pos.y() LOMLOMLOMLOMLOM tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
+			Widget tmpWidget = it.widget.getWidgetAtPos(_pos);
 			if (tmpWidget != null) {
 				return tmpWidget;
 			}

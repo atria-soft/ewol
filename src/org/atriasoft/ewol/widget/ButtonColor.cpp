@@ -24,9 +24,9 @@ ETK_DECLARE_TYPE(ewol::widget::ButtonColor);
 
 ewol::widget::ButtonColor::ButtonColor() :
   signalChange(this, "change", "Button color change value"),
-  propertyValue(this, "color", etk::color::black, "Current color", &ewol::widget::ButtonColor::onChangePropertyValue),
-  propertyShape(this, "shape", etk::Uri("THEME_GUI:///Button.json?lib=ewol"), "shape of the widget", &ewol::widget::ButtonColor::onChangePropertyShape),
-  m_widgetContextMenu(null) {
+  propertyValue(this, "color", etk::color::black, "Current color", ewol::widget::ButtonColor::onChangePropertyValue),
+  propertyShape(this, "shape", etk::Uri("THEME_GUI:///Button.json?lib=ewol"), "shape of the widget", ewol::widget::ButtonColor::onChangePropertyShape),
+  this.widgetContextMenu(null) {
 	addObjectType("ewol::widget::ButtonColor");
 	changeStatusIn(STATUS_UP);
 	// Limit event at 1:
@@ -35,7 +35,7 @@ ewol::widget::ButtonColor::ButtonColor() :
 }
 
 void ewol::widget::ButtonColor::init() {
-	ewol::Widget::init();
+	Widget::init();
 	propertyShape.notifyChange();
 	propertyValue.notifyChange();
 }
@@ -45,19 +45,19 @@ ewol::widget::ButtonColor::~ButtonColor() {
 }
 
 void ewol::widget::ButtonColor::calculateMinMaxSize() {
-	ewol::Padding padding = m_shaper.getPadding();
-	etk::String label = propertyValue.getString();
-	Vector3f minSize = m_text.calculateSize(label);
-	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
-	m_minSize.setY(padding.y()*2 + minSize.y() );
+	ewol::Padding padding = this.shaper.getPadding();
+	String label = propertyValue.getString();
+	Vector3f minSize = this.text.calculateSize(label);
+	this.minSize.setX(padding.x()*2 + minSize.x() + 7);
+	this.minSize.setY(padding.y()*2 + minSize.y() );
 	markToRedraw();
 }
 
 
 
 void ewol::widget::ButtonColor::onDraw() {
-	m_shaper.draw();
-	m_text.draw();
+	this.shaper.draw();
+	this.text.draw();
 }
 
 
@@ -66,153 +66,153 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 		return;
 	}
 	Log.debug("redraw");
-	m_text.clear();
-	m_shaper.clear();
+	this.text.clear();
+	this.shaper.clear();
 	
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = this.shaper.getPadding();
 	
-	etk::String label = propertyValue.getString();
+	String label = propertyValue.getString();
 	
-	Vector2i localSize = m_minSize;
+	Vector2i localSize = this.minSize;
 	
-	Vector3f tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
-	               (m_size.y() - m_minSize.y()) / 2.0,
+	Vector3f tmpOrigin((this.size.x() - this.minSize.x()) / 2.0,
+	               (this.size.y() - this.minSize.y()) / 2.0,
 	               0);
 	// no change for the text orogin : 
-	Vector3f tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
-	                   (m_size.y() - m_minSize.y()) / 2.0,
+	Vector3f tmpTextOrigin((this.size.x() - this.minSize.x()) / 2.0,
+	                   (this.size.y() - this.minSize.y()) / 2.0,
 	                   0);
 	
-	if (propertyFill->x() == true) {
-		localSize.setX(m_size.x());
+	if (propertyFill.x() == true) {
+		localSize.setX(this.size.x());
 		tmpOrigin.setX(0);
 		tmpTextOrigin.setX(0);
 	}
-	if (propertyFill->y() == true) {
-		localSize.setY(m_size.y());
+	if (propertyFill.y() == true) {
+		localSize.setY(this.size.y());
 	}
 	tmpOrigin += Vector3f(padding.xLeft(), padding.yButtom(), 0);
 	tmpTextOrigin += Vector3f(padding.xLeft(), padding.yButtom(), 0);
 	localSize -= Vector2i(padding.x(), padding.y());
 	
 	// clean the element
-	m_text.reset();
+	this.text.reset();
 	if(    propertyValue.get().r() < 100
 	    || propertyValue.get().g() < 100
 	    || propertyValue.get().b() < 100) {
-		m_text.setColor(etk::color::white);
+		this.text.setColor(etk::color::white);
 	} else {
-		m_text.setColor(etk::color::black);
+		this.text.setColor(etk::color::black);
 	}
-	m_text.setPos(tmpTextOrigin);
-	m_text.setColorBg(propertyValue.get());
-	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignCenter);
-	m_text.print(label);
+	this.text.setPos(tmpTextOrigin);
+	this.text.setColorBg(propertyValue.get());
+	this.text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignCenter);
+	this.text.print(label);
 	
 	
-	if (propertyFill->y() == true) {
+	if (propertyFill.y() == true) {
 		tmpOrigin.setY(padding.yButtom());
 	}
 	
 	// selection area :
-	m_selectableAreaPos = Vector2f(tmpOrigin.x()-padding.xLeft(), tmpOrigin.y()-padding.yButtom());
-	m_selectableAreaSize = localSize + Vector2f(padding.x(),padding.y());
-	Vector3f tmpp = m_text.calculateSize(label);
-	m_shaper.setShape(m_selectableAreaPos,
-	                  m_selectableAreaSize,
+	this.selectableAreaPos = Vector2f(tmpOrigin.x()-padding.xLeft(), tmpOrigin.y()-padding.yButtom());
+	this.selectableAreaSize = localSize + Vector2f(padding.x(),padding.y());
+	Vector3f tmpp = this.text.calculateSize(label);
+	this.shaper.setShape(this.selectableAreaPos,
+	                  this.selectableAreaSize,
 	                  Vector2f(tmpTextOrigin.x(), tmpTextOrigin.y()),
 	                  Vector2f(tmpp.x(), tmpp.y()));
 }
 
 
-bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
-	bool previousHoverState = m_mouseHover;
-	if(gale::key::status::leave == _event.getStatus()) {
-		m_mouseHover = false;
-		m_buttonPressed = false;
+boolean ewol::widget::ButtonColor::onEventInput( ewol::event::Input _event) {
+	boolean previousHoverState = this.mouseHover;
+	if(KeyStatus::leave == _event.getStatus()) {
+		this.mouseHover = false;
+		this.buttonPressed = false;
 	} else {
 		Vector2f relativePos = relativePosition(_event.getPos());
 		// prevent error from ouside the button
-		if(    relativePos.x() < m_selectableAreaPos.x()
-		    || relativePos.y() < m_selectableAreaPos.y()
-		    || relativePos.x() > m_selectableAreaPos.x() + m_selectableAreaSize.x()
-		    || relativePos.y() > m_selectableAreaPos.y() + m_selectableAreaSize.y() ) {
-			m_mouseHover = false;
-			m_buttonPressed = false;
+		if(    relativePos.x() < this.selectableAreaPos.x()
+		    || relativePos.y() < this.selectableAreaPos.y()
+		    || relativePos.x() > this.selectableAreaPos.x() + this.selectableAreaSize.x()
+		    || relativePos.y() > this.selectableAreaPos.y() + this.selectableAreaSize.y() ) {
+			this.mouseHover = false;
+			this.buttonPressed = false;
 		} else {
-			m_mouseHover = true;
+			this.mouseHover = true;
 		}
 	}
-	bool previousPressed = m_buttonPressed;
-	//Log.debug("Event on BT ... mouse position : " << m_mouseHover);
-	if (true == m_mouseHover) {
+	boolean previousPressed = this.buttonPressed;
+	//Log.debug("Event on BT ... mouse position : " + this.mouseHover);
+	if (true == this.mouseHover) {
 		if (1 == _event.getId()) {
-			if(gale::key::status::down == _event.getStatus()) {
-				m_buttonPressed = true;
+			if(KeyStatus::down == _event.getStatus()) {
+				this.buttonPressed = true;
 				markToRedraw();
 			}
-			if(gale::key::status::up == _event.getStatus()) {
-				m_buttonPressed = false;
+			if(KeyStatus::up == _event.getStatus()) {
+				this.buttonPressed = false;
 				markToRedraw();
 			}
-			if(gale::key::status::pressSingle == _event.getStatus()) {
-				m_buttonPressed = false;
-				m_mouseHover = false;
+			if(KeyStatus::pressSingle == _event.getStatus()) {
+				this.buttonPressed = false;
+				this.mouseHover = false;
 				// create a context menu : 
-				m_widgetContextMenu = ewol::widget::ContextMenu::create();
-				if (m_widgetContextMenu == null) {
+				this.widgetContextMenu = ewol::widget::ContextMenu::create();
+				if (this.widgetContextMenu == null) {
 					Log.error("Allocation Error");
 					return true;
 				}
-				Vector2f tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
-				tmpPos.setX( tmpPos.x() - m_minSize.x()/2.0);
-				m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
+				Vector2f tmpPos = this.origin + this.selectableAreaPos + this.selectableAreaSize;
+				tmpPos.setX( tmpPos.x() - this.minSize.x()/2.0);
+				this.widgetContextMenu.setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
 				
-				ewol::widget::ColorChooserShared myColorChooser = widget::ColorChooser::create();
-				myColorChooser->propertyValue.set(propertyValue.get());
+				ewol::widget::ColorChooser myColorChooser = widget::ColorChooser::create();
+				myColorChooser.propertyValue.set(propertyValue.get());
 				// set it in the pop-up-system : 
-				m_widgetContextMenu->setSubWidget(myColorChooser);
-				myColorChooser->signalChange.connect(sharedFromThis(), &ewol::widget::ButtonColor::onCallbackColorChange);
-				ewol::widget::WindowsShared currentWindows = getWindows();
+				this.widgetContextMenu.setSubWidget(myColorChooser);
+				myColorChooser.signalChange.connect(sharedFromThis(), ewol::widget::ButtonColor::onCallbackColorChange);
+				ewol::widget::Windows currentWindows = getWindows();
 				if (currentWindows == null) {
 					Log.error("Can not get the curent Windows...");
-					m_widgetContextMenu.reset();
+					this.widgetContextMenu.reset();
 				} else {
-					currentWindows->popUpWidgetPush(m_widgetContextMenu);
+					currentWindows.popUpWidgetPush(this.widgetContextMenu);
 				}
 				markToRedraw();
 			}
 		}
 	}
-	if(    m_mouseHover != previousHoverState
-	    || m_buttonPressed != previousPressed) {
-		if (m_buttonPressed == true) {
+	if(    this.mouseHover != previousHoverState
+	    || this.buttonPressed != previousPressed) {
+		if (this.buttonPressed == true) {
 			changeStatusIn(STATUS_PRESSED);
 		} else {
-			if (m_mouseHover == true) {
+			if (this.mouseHover == true) {
 				changeStatusIn(STATUS_HOVER);
 			} else {
 				changeStatusIn(STATUS_UP);
 			}
 		}
 	}
-	return m_mouseHover;
+	return this.mouseHover;
 }
 
-void ewol::widget::ButtonColor::onCallbackColorChange(const etk::Color<>& _color) {
+void ewol::widget::ButtonColor::onCallbackColorChange( etk::Color<> _color) {
 	propertyValue.set(_color);
 }
 
-void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
-	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::ButtonColor::periodicCall);
+void ewol::widget::ButtonColor::changeStatusIn(int _newStatusId) {
+	if (this.shaper.changeStatusIn(_newStatusId) == true) {
+		this.PCH = getObjectManager().periodicCall.connect(this, ewol::widget::ButtonColor::periodicCall);
 		markToRedraw();
 	}
 }
 
-void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper.periodicCall(_event) == false) {
-		m_PCH.disconnect();
+void ewol::widget::ButtonColor::periodicCall( ewol::event::Time _event) {
+	if (this.shaper.periodicCall(_event) == false) {
+		this.PCH.disconnect();
 	}
 	markToRedraw();
 }
@@ -222,7 +222,7 @@ void ewol::widget::ButtonColor::onChangePropertyValue() {
 }
 
 void ewol::widget::ButtonColor::onChangePropertyShape() {
-	m_shaper.setSource(propertyShape.get());
+	this.shaper.setSource(propertyShape.get());
 	markToRedraw();
 }
 

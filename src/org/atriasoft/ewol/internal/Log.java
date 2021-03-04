@@ -3,7 +3,7 @@ package org.atriasoft.ewol.internal;
 import io.scenarium.logger.LogLevel;
 import io.scenarium.logger.Logger;
 
-class Log {
+public class Log {
 	private static final String LIB_NAME = "ewol";
 	private static final String LIB_NAME_DRAW = Logger.getDrawableName(LIB_NAME);
 	private static final boolean PRINT_CRITICAL = Logger.getNeedPrint(LIB_NAME, LogLevel.CRITICAL);

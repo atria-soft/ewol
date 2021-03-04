@@ -1,14 +1,18 @@
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
+import org.atriasoft.ewol.context.EwolApplication;
+import org.atriasoft.ewol.context.EwolContext;
 
-#include <etk/types.hpp>
-#include <ewol/context/Application.hpp>
-
-namespace ewol {
+class Ewol {
+	public static EwolContext getContext() {
+		// TODO Auto-generated method stub
+		return EwolContext.getContext();
+	}
+	
 	/**
 	 * @brief This is the only one things the User might done in his main();
 	 * @note To answare you before you ask the question, this is really simple:
@@ -21,10 +25,5 @@ namespace ewol {
 	 * @param[in] _argv Standard argv
 	 * @return normal error int for the application error management
 	 */
-	int32_t run(ewol::context::Application* _application, int32_t _argc = 0, const char* _argv[] = null);
-	/**
-	 * @brief get EWOL version
-	 * @return The string that describe ewol version
-	 */
-	etk::String getVersion();
-};
+	public static int run(final EwolApplication _application, String[] _argv);
+}

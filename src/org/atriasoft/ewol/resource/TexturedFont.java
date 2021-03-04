@@ -20,47 +20,47 @@ namespace ewol {
 			BoldItalic,
 		};
 	}
-	etk::Stream& operator <<(etk::Stream& _os, enum ewol::font::mode _obj);
+	etk::Stream operator +(etk::Stream _os, enum ewol::font::mode _obj);
 	
 	namespace resource {
 		class TexturedFont : public ewol::resource::Texture {
 			private:
-				etk::Uri m_fileName[4];
-				int32_t m_size;
-				int32_t m_height[4];
+				etk::Uri this.fileName[4];
+				int this.size;
+				int this.height[4];
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				ememory::SharedPtr<ewol::resource::FontBase> m_font[4];
-				enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
+				ememory::Ptr<ewol::resource::FontBase> this.font[4];
+				enum ewol::font::mode this.modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 			public:
-				GlyphProperty m_emptyGlyph;
-				List<GlyphProperty> m_listElement[4];
+				GlyphProperty this.emptyGlyph;
+				List<GlyphProperty> this.listElement[4];
 			private:
 				// for the texture generation :
-				Vector2i m_lastGlyphPos[4];
-				int32_t m_lastRawHeigh[4];
+				Vector2i this.lastGlyphPos[4];
+				int this.lastRawHeigh[4];
 			protected:
 				TexturedFont();
-				void init(const etk::String& _fontName);
+				void init( String _fontName);
 			public:
 				DECLARE_RESOURCE_NAMED_FACTORY(TexturedFont);
-				virtual ~TexturedFont();
+				 ~TexturedFont();
 			public:
 				/**
 				 * @brief get the display height of this font
 				 * @param[in] _displayMode Mode to display the currrent font
 				 * @return Dimention of the font need between 2 lines
 				 */
-				int32_t getHeight(const enum ewol::font::mode _displayMode = ewol::font::Regular) {
-					return m_height[_displayMode];
+				int getHeight( enum ewol::font::mode _displayMode = ewol::font::Regular) {
+					return this.height[_displayMode];
 				};
 				/**
 				 * @brief get the font height (user friendly)
 				 * @return Dimention of the font the user requested
 				 */
-				int32_t getFontSize() {
-					return m_size;
+				int getFontSize() {
+					return this.size;
 				};
 				/**
 				 * @brief get the ID of a unicode charcode
@@ -68,22 +68,22 @@ namespace ewol {
 				 * @param[in] _displayMode Mode to display the currrent font
 				 * @return The ID in the table (if it does not exist : return 0)
 				 */
-				int32_t getIndex(char32_t _charcode, const enum ewol::font::mode _displayMode);
+				int getIndex(Character _charcode,  enum ewol::font::mode _displayMode);
 				/**
 				 * @brief get the pointer on the coresponding glyph
 				 * @param[in] _charcode The unicodeValue
 				 * @param[in] _displayMode Mode to display the currrent font
 				 * @return The pointer on the glyph  == > never null
 				 */
-				ewol::GlyphProperty* getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode);
+				ewol::GlyphProperty* getGlyphPointer( Character _charcode,  enum ewol::font::mode _displayMode);
 				/**
 				 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
 				 *        For exemple when a blod mode does not exist, this resend a regular mode.
 				 * @param[in] _source The requested mode.
 				 * @return the best mode we have in stock.
 				 */
-				enum ewol::font::mode getWrappingMode(const enum ewol::font::mode _source) {
-					return m_modeWraping[_source];
+				enum ewol::font::mode getWrappingMode( enum ewol::font::mode _source) {
+					return this.modeWraping[_source];
 				};
 			private:
 				/**
@@ -91,7 +91,7 @@ namespace ewol {
 				 * @param[in] _val Char value to add.
 				 * @return true if the image size have change, false otherwise
 				 */
-				bool addGlyph(const char32_t& _val);
+				boolean addGlyph( Character _val);
 		};
 	}
 }

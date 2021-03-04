@@ -12,7 +12,7 @@
 namespace ewol {
 	namespace widget {
 		class Spin;
-		using SpinShared = ememory::SharedPtr<ewol::widget::Spin>;
+		using Spin = ememory::Ptr<ewol::widget::Spin>;
 		using SpinWeak = ememory::WeakPtr<ewol::widget::Spin>;
 		/**
 		 * @brief a composed Spin is a Spin with an inside composed with the specify XML element 
@@ -21,13 +21,13 @@ namespace ewol {
 		class Spin : public ewol::widget::SpinBase {
 			public:
 				// Event list of properties
-				esignal::Signal<int64_t> signalValue;
+				esignal::Signal<long> signalValue;
 				esignal::Signal<double> signalValueDouble;
 			public:
-				eproperty::Value<int64_t> propertyValue; //!< Current value of the Spin.
-				eproperty::Value<int64_t> propertyMin; //!< Minimum value
-				eproperty::Value<int64_t> propertyMax; //!< Maximum value
-				eproperty::Value<int64_t> propertyIncrement; //!< Increment value
+				eproperty::Value<long> propertyValue; //!< Current value of the Spin.
+				eproperty::Value<long> propertyMin; //!< Minimum value
+				eproperty::Value<long> propertyMax; //!< Maximum value
+				eproperty::Value<long> propertyIncrement; //!< Increment value
 				eproperty::Value<int8_t> propertyMantis; //!< number of value under '.' value
 			protected:
 				/**
@@ -41,23 +41,23 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~Spin();
+				 ~Spin();
 			protected:
-				virtual void checkValue(int64_t _value);
-				virtual void updateGui();
+				 void checkValue(long _value);
+				 void updateGui();
 			protected:
 				void onCallbackUp();
 				void onCallbackDown();
 			protected:
-				esignal::Connection m_connectionEntry;
-				esignal::Connection m_connectionButtonUp;
-				esignal::Connection m_connectionButtonDown;
+				esignal::Connection this.connectionEntry;
+				esignal::Connection this.connectionButtonUp;
+				esignal::Connection this.connectionButtonDown;
 			protected:
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyMin();
-				virtual void onChangePropertyMax();
-				virtual void onChangePropertyIncrement();
-				virtual void onChangePropertyMantis();
+				 void onChangePropertyValue();
+				 void onChangePropertyMin();
+				 void onChangePropertyMax();
+				 void onChangePropertyIncrement();
+				 void onChangePropertyMantis();
 		};
 	};
 };

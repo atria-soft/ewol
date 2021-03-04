@@ -13,7 +13,7 @@
 ETK_DECLARE_TYPE(ewol::widget::Container2);
 
 ewol::widget::Container2::Container2() :
-  m_idWidgetDisplayed(0) {
+  this.idWidgetDisplayed(0) {
 	addObjectType("ewol::widget::Container2");
 }
 
@@ -22,34 +22,34 @@ ewol::widget::Container2::~Container2() {
 	subWidgetRemoveToggle();
 }
 
-void ewol::widget::Container2::setSubWidget(ewol::WidgetShared _newWidget, int32_t _idWidget) {
+void ewol::widget::Container2::setSubWidget(Widget _newWidget, int _idWidget) {
 	subWidgetRemove(_idWidget);
-	m_subWidget[_idWidget] = _newWidget;
-	if (m_subWidget[_idWidget] != null) {
-		Log.verbose("Add widget : " << _idWidget);
-		m_subWidget[_idWidget]->setParent(sharedFromThis());
+	this.subWidget[_idWidget] = _newWidget;
+	if (this.subWidget[_idWidget] != null) {
+		Log.verbose("Add widget : " + _idWidget);
+		this.subWidget[_idWidget].setParent(sharedFromThis());
 	}
 	markToRedraw();
 	requestUpdateSize();
 }
 
-void ewol::widget::Container2::subWidgetReplace(const ewol::WidgetShared& _oldWidget,
-                                                const ewol::WidgetShared& _newWidget) {
-	bool haveChange = false;
-	for (size_t iii=0; iii<2; ++iii) {
-		if (m_subWidget[iii] != _oldWidget) {
+void ewol::widget::Container2::subWidgetReplace( Widget _oldWidget,
+                                                 Widget _newWidget) {
+	boolean haveChange = false;
+	for (int iii=0; iii<2; ++iii) {
+		if (this.subWidget[iii] != _oldWidget) {
 			continue;
 		}
-		m_subWidget[iii]->removeParent();
-		m_subWidget[iii].reset();
-		m_subWidget[iii] = _newWidget;
-		if (m_subWidget[iii] != null) {
-			m_subWidget[iii]->setParent(sharedFromThis());
+		this.subWidget[iii].removeParent();
+		this.subWidget[iii].reset();
+		this.subWidget[iii] = _newWidget;
+		if (this.subWidget[iii] != null) {
+			this.subWidget[iii].setParent(sharedFromThis());
 		}
 		haveChange = true;
 	}
 	if (haveChange == false) {
-		EWOL_WARNING("Request replace with a wrong old widget");
+		Log.warning("Request replace with a wrong old widget");
 		return;
 	}
 	markToRedraw();
@@ -57,80 +57,80 @@ void ewol::widget::Container2::subWidgetReplace(const ewol::WidgetShared& _oldWi
 }
 
 
-void ewol::widget::Container2::subWidgetRemove(int32_t _idWidget) {
-	if (m_subWidget[_idWidget] != null) {
-		Log.verbose("Remove widget : " << _idWidget);
-		m_subWidget[_idWidget]->removeParent();
-		m_subWidget[_idWidget].reset();
+void ewol::widget::Container2::subWidgetRemove(int _idWidget) {
+	if (this.subWidget[_idWidget] != null) {
+		Log.verbose("Remove widget : " + _idWidget);
+		this.subWidget[_idWidget].removeParent();
+		this.subWidget[_idWidget].reset();
 		markToRedraw();
 		requestUpdateSize();
 	}
 }
 
-void ewol::widget::Container2::subWidgetUnLink(int32_t _idWidget) {
-	if (m_subWidget[_idWidget] != null) {
-		m_subWidget[_idWidget]->removeParent();
-		Log.verbose("Unlink widget : " << _idWidget);
+void ewol::widget::Container2::subWidgetUnLink(int _idWidget) {
+	if (this.subWidget[_idWidget] != null) {
+		this.subWidget[_idWidget].removeParent();
+		Log.verbose("Unlink widget : " + _idWidget);
 	}
-	m_subWidget[_idWidget].reset();
+	this.subWidget[_idWidget].reset();
 }
 
-ewol::ObjectShared ewol::widget::Container2::getSubObjectNamed(const etk::String& _widgetName) {
-	ewol::ObjectShared tmpObject = ewol::Widget::getSubObjectNamed(_widgetName);
+EwolObject ewol::widget::Container2::getSubObjectNamed( String _widgetName) {
+	EwolObject tmpObject = Widget::getSubObjectNamed(_widgetName);
 	if (tmpObject != null) {
 		return tmpObject;
 	}
-	if (m_subWidget[0] != null) {
-		tmpObject = m_subWidget[0]->getSubObjectNamed(_widgetName);
+	if (this.subWidget[0] != null) {
+		tmpObject = this.subWidget[0].getSubObjectNamed(_widgetName);
 		if (tmpObject != null) {
 			return tmpObject;
 		}
 	}
-	if (m_subWidget[1] != null) {
-		return m_subWidget[1]->getSubObjectNamed(_widgetName);
+	if (this.subWidget[1] != null) {
+		return this.subWidget[1].getSubObjectNamed(_widgetName);
 	}
 	return null;
 }
 
-void ewol::widget::Container2::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::Container2::systemDraw( ewol::DrawProperty _displayProp) {
 	if (propertyHide.get() == true){
 		// widget is hidden ...
 		return;
 	}
-	ewol::Widget::systemDraw(_displayProp);
-	if (m_subWidget[m_idWidgetDisplayed] != null) {
-		//Log.info("Draw : [" << propertyName << "] t=" << getObjectType() << " o=" << m_origin << "  s=" << m_size);
-		m_subWidget[m_idWidgetDisplayed]->systemDraw(_displayProp);
+	Widget::systemDraw(_displayProp);
+	if (this.subWidget[this.idWidgetDisplayed] != null) {
+		//Log.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
+		this.subWidget[this.idWidgetDisplayed].systemDraw(_displayProp);
 	}
 }
 
-ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& _padding) {
-	ewol::Widget::onChangeSize();
-	Vector2f localAvaillable = m_size - Vector2f(_padding.x(), _padding.y());
+ewol::Padding ewol::widget::Container2::onChangeSizePadded( ewol::Padding _padding) {
+	Widget::onChangeSize();
+	Vector2f localAvaillable = this.size - Vector2f(_padding.x(), _padding.y());
 	// Checkin the filling properties  == > for the subElements:
-	Vector2f subElementSize = m_minSize;
-	if (propertyFill->x() == true) {
-		subElementSize.setX(m_size.x());
+	Vector2f subElementSize = this.minSize;
+	if (propertyFill.x() == true) {
+		subElementSize.setX(this.size.x());
 	}
-	if (propertyFill->y() == true) {
-		subElementSize.setY(m_size.y());
+	if (propertyFill.y() == true) {
+		subElementSize.setY(this.size.y());
 	}
-	Vector2f delta = ewol::gravityGenerateDelta(propertyGravity, m_size - subElementSize);
+	Vector2f delta = ewol::gravityGenerateDelta(propertyGravity, this.size - subElementSize);
 	Vector2f origin = delta + Vector2f(_padding.xLeft(), _padding.yButtom());
 	subElementSize -= Vector2f(_padding.x(), _padding.y());
-	for (size_t iii = 0; iii < 2; ++iii) {
-		if (m_subWidget[iii] != null) {
-			Vector2f origin2 = origin+m_offset;
-			Vector2f minSize = m_subWidget[iii]->getCalculateMinSize();
-			//Vector2b expand = m_subWidget[iii]->propertyExpand.get();
+	for (int iii = 0; iii < 2; ++iii) {
+		if (this.subWidget[iii] != null) {
+			Vector2f origin2 = origin+this.offset;
+			Vector2f minSize = this.subWidget[iii].getCalculateMinSize();
+			//Vector2b expand = this.subWidget[iii].propertyExpand.get();
 			origin2 += ewol::gravityGenerateDelta(propertyGravity, minSize - localAvaillable);
-			m_subWidget[iii]->setOrigin(m_origin + origin);
-			m_subWidget[iii]->setSize(subElementSize);
-			m_subWidget[iii]->onChangeSize();
+			this.subWidget[iii].setOrigin(this.origin + origin);
+			this.subWidget[iii].setSize(subElementSize);
+			this.subWidget[iii].onChangeSize();
 		}
 	}
 	Vector2f selectableAreaPos = origin-Vector2f(_padding.xLeft(), _padding.yButtom());
-	Vector2f selectableAreaEndPos = m_size - (selectableAreaPos + subElementSize + Vector2f(_padding.x(), _padding.y()));
+	Vector2f selectableAreaEndPos = this.size - (selectableAreaPos + subElementSize + Vector2f(_padding.x(), _padding.y()));
 	markToRedraw();
 	return ewol::Padding(selectableAreaPos.x(),
 	                     selectableAreaEndPos.y(),
@@ -138,74 +138,74 @@ ewol::Padding ewol::widget::Container2::onChangeSizePadded(const ewol::Padding& 
 	                     selectableAreaPos.y());
 }
 
-void ewol::widget::Container2::calculateMinMaxSizePadded(const ewol::Padding& _padding) {
+void ewol::widget::Container2::calculateMinMaxSizePadded( ewol::Padding _padding) {
 	// call main class
-	m_minSize = Vector2f(0,0);
+	this.minSize = Vector2f(0,0);
 	// call sub classes
-	for (size_t iii = 0; iii < 2; ++iii) {
-		if (m_subWidget[iii] != null) {
-			m_subWidget[iii]->calculateMinMaxSize();
-			Vector2f min = m_subWidget[iii]->getCalculateMinSize();
-			m_minSize.setMax(min);
+	for (int iii = 0; iii < 2; ++iii) {
+		if (this.subWidget[iii] != null) {
+			this.subWidget[iii].calculateMinMaxSize();
+			Vector2f min = this.subWidget[iii].getCalculateMinSize();
+			this.minSize.setMax(min);
 		}
 	}
 	// add padding :
-	m_minSize += Vector2f(_padding.x(), _padding.y());
+	this.minSize += Vector2f(_padding.x(), _padding.y());
 	// verify the min max of the min size ...
 	checkMinSize();
 	markToRedraw();
 }
 
 void ewol::widget::Container2::onRegenerateDisplay() {
-	if (m_subWidget[m_idWidgetDisplayed] != null) {
-		m_subWidget[m_idWidgetDisplayed]->onRegenerateDisplay();
+	if (this.subWidget[this.idWidgetDisplayed] != null) {
+		this.subWidget[this.idWidgetDisplayed].onRegenerateDisplay();
 	}
 }
 /*
-ewol::WidgetShared ewol::widget::Container2::getWidgetAtPos(const Vector2f& _pos) {
+Widget ewol::widget::Container2::getWidgetAtPos( Vector2f _pos) {
 	if (isHide() == false) {
-		if (m_subWidget[m_idWidgetDisplayed] != null) {
-			return m_subWidget[m_idWidgetDisplayed]->getWidgetAtPos(_pos);
+		if (this.subWidget[this.idWidgetDisplayed] != null) {
+			return this.subWidget[this.idWidgetDisplayed].getWidgetAtPos(_pos);
 		}
 	}
 	return null;
 }
 */
 
-bool ewol::widget::Container2::loadXML(const exml::Element& _node) {
+boolean ewol::widget::Container2::loadXML( exml::Element _node) {
 	if (_node.exist() == false) {
 		return false;
 	}
 	// parse generic properties :
-	ewol::Widget::loadXML(_node);
+	Widget::loadXML(_node);
 	// remove previous element :
 	subWidgetRemove();
-	Log.verbose("Create en element 2 ... with nodes.size()=" << _node.nodes.size());
+	Log.verbose("Create en element 2 ... with nodes.size()=" + _node.nodes.size());
 	// parse all the elements:
-	for(const auto it : _node.nodes) {
-		Log.verbose("    node: " << it);
+	for( auto it : _node.nodes) {
+		Log.verbose("    node: " + it);
 		exml::Element pNode = it.toElement();
 		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
-		etk::String widgetName = pNode.getValue();
+		String widgetName = pNode.getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
-			Log.error("(l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in: [" << getWidgetManager().list() << "]" );
+			Log.error("(l " + pNode.getPos() + ") Unknown basic node='" + widgetName + "' not in: [" + getWidgetManager().list() + "]" );
 			continue;
 		}
-		bool toogleMode=false;
+		boolean toogleMode=false;
 		if (getSubWidget() != null) {
 			toogleMode=true;
 			if (getSubWidgetToggle() != null) {
-				Log.error("(l " << pNode.getPos() << ") Can only have one subWidget ??? node='" << widgetName << "'" );
+				Log.error("(l " + pNode.getPos() + ") Can only have one subWidget ??? node='" + widgetName + "'" );
 				continue;
 			}
 		}
-		Log.debug("try to create subwidget : '" << widgetName << "'");
-		ewol::WidgetShared tmpWidget = getWidgetManager().create(widgetName, pNode);
+		Log.debug("try to create subwidget : '" + widgetName + "'");
+		Widget tmpWidget = getWidgetManager().create(widgetName, pNode);
 		if (tmpWidget == null) {
-			EWOL_ERROR ("(l " << pNode.getPos() << ") Can not create the widget: '" << widgetName << "'");
+			EWOL_ERROR ("(l " + pNode.getPos() + ") Can not create the widget: '" + widgetName + "'");
 			continue;
 		}
 		// add widget :
@@ -214,48 +214,48 @@ bool ewol::widget::Container2::loadXML(const exml::Element& _node) {
 		} else {
 			setSubWidgetToggle(tmpWidget);
 		}
-		if (tmpWidget->loadXML(pNode) == false) {
-			EWOL_ERROR ("(l "<<pNode.getPos()<<") can not load widget properties: '" << widgetName << "'");
+		if (tmpWidget.loadXML(pNode) == false) {
+			EWOL_ERROR ("(l "+pNode.getPos()+") can not load widget properties: '" + widgetName + "'");
 			return false;
 		}
 	}
 	return true;
 }
 
-void ewol::widget::Container2::setOffset(const Vector2f& _newVal) {
-	if (m_offset != _newVal) {
-		ewol::Widget::setOffset(_newVal);
+void ewol::widget::Container2::setOffset( Vector2f _newVal) {
+	if (this.offset != _newVal) {
+		Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...
 		calculateSize();
 	}
 }
 
-void ewol::widget::Container2::requestDestroyFromChild(const ewol::ObjectShared& _child) {
-	if (m_subWidget[0] == _child) {
-		if (m_subWidget[0] == null) {
+void ewol::widget::Container2::requestDestroyFromChild( EwolObject _child) {
+	if (this.subWidget[0] == _child) {
+		if (this.subWidget[0] == null) {
 			return;
 		}
-		m_subWidget[0]->removeParent();
-		m_subWidget[0].reset();
+		this.subWidget[0].removeParent();
+		this.subWidget[0].reset();
 		markToRedraw();
 	}
-	if (m_subWidget[1] == _child) {
-		if (m_subWidget[1] == null) {
+	if (this.subWidget[1] == _child) {
+		if (this.subWidget[1] == null) {
 			return;
 		}
-		m_subWidget[1]->removeParent();
-		m_subWidget[1].reset();
+		this.subWidget[1].removeParent();
+		this.subWidget[1].reset();
 		markToRedraw();
 	}
 }
 
-void ewol::widget::Container2::drawWidgetTree(int32_t _level) {
-	ewol::Widget::drawWidgetTree(_level);
+void ewol::widget::Container2::drawWidgetTree(int _level) {
+	Widget::drawWidgetTree(_level);
 	_level++;
-	if (m_subWidget[0] != null) {
-		m_subWidget[0]->drawWidgetTree(_level);
+	if (this.subWidget[0] != null) {
+		this.subWidget[0].drawWidgetTree(_level);
 	}
-	if (m_subWidget[1] != null) {
-		m_subWidget[1]->drawWidgetTree(_level);
+	if (this.subWidget[1] != null) {
+		this.subWidget[1].drawWidgetTree(_level);
 	}
 }

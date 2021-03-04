@@ -21,34 +21,34 @@ namespace ewol {
 				FontBase() {
 					addResourceType("ewol::FontFreeType");
 				}
-				void init(const etk::Uri& _uri) {
+				void init( etk::Uri _uri) {
 					gale::Resource::init(_uri);
 				};
 				
-				virtual ~FontBase() { };
+				 ~FontBase() { };
 				
-				virtual bool getGlyphProperty(int32_t _fontSize,
-				                              ewol::GlyphProperty& _property) = 0;
+				 boolean getGlyphProperty(int _fontSize,
+				                              ewol::GlyphProperty _property) = 0;
 				
-				virtual bool drawGlyph(egami::Image& _imageOut,
-				                       int32_t _fontSize,
+				 boolean drawGlyph(egami::Image _imageOut,
+				                       int _fontSize,
 				                       Vector2i _glyphPosition,
-				                       ewol::GlyphProperty& _property,
+				                       ewol::GlyphProperty _property,
 				                       int8_t _posInImage) = 0;
 				
-				virtual bool drawGlyph(egami::ImageMono& _imageOut,
-				                       int32_t _fontSize,
-				                       ewol::GlyphProperty& _property,
-				                       int32_t _borderSize = 0) = 0;
+				 boolean drawGlyph(egami::ImageMono _imageOut,
+				                       int _fontSize,
+				                       ewol::GlyphProperty _property,
+				                       int _borderSize = 0) = 0;
 				
-				virtual Vector2f getSize(int32_t _fontSize, const etk::String& _unicodeString) = 0;
-				virtual float getSizeWithHeight(float _fontHeight) = 0;
+				 Vector2f getSize(int _fontSize,  String _unicodeString) = 0;
+				 float getSizeWithHeight(float _fontHeight) = 0;
 				
-				virtual int32_t getHeight(int32_t _fontSize) = 0;
+				 int getHeight(int _fontSize) = 0;
 				
-				virtual void generateKerning(int32_t _fontSize, List<ewol::GlyphProperty>& _listGlyph) { };
+				 void generateKerning(int _fontSize, List<ewol::GlyphProperty> _listGlyph) { };
 				
-				virtual void display() {};
+				 void display() {};
 		};
 	};
 };

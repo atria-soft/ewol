@@ -25,27 +25,27 @@ namespace ewol {
 			 * @param[in] _type Type of the error.
 			 * @param[in] _message message to display (decorated text)
 			 */
-			void create(enum ewol::tools::message::type _type, const etk::String& _message);
+			void create(enum ewol::tools::message::type _type,  String _message);
 			/**
 			 * @brief Create a simple information message
 			 * @param[in] _message message to display (decorated text)
 			 */
-			void displayInfo(const etk::String& _message);
+			void displayInfo( String _message);
 			/**
 			 * @brief Create a simple warning message
 			 * @param[in] _message message to display (decorated text)
 			 */
-			void displayWarning(const etk::String& _message);
+			void displayWarning( String _message);
 			/**
 			 * @brief Create a simple error message
 			 * @param[in] _message message to display (decorated text)
 			 */
-			void displayError(const etk::String& _message);
+			void displayError( String _message);
 			/**
 			 * @brief Create a simple critical message
 			 * @param[in] _message message to display (decorated text)
 			 */
-			void displayCritical(const etk::String& _message);
+			void displayCritical( String _message);
 		}
 	}
 }

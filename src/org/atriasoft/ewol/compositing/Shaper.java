@@ -38,48 +38,48 @@ namespace ewol {
 		// TODO : Abstaraction between states (call by name and the system greate IDs
 		class Shaper : public ewol::Compositing {
 			private:
-				etk::Uri m_uri; //!< Name of the configuration of the shaper.
+				etk::Uri this.uri; //!< Name of the configuration of the shaper.
 				// External theme config:
-				ememory::SharedPtr<ewol::resource::ConfigFile> m_config; //!< pointer on the config file resources
-				int32_t m_confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
-				int32_t m_confIdBorder[shaperPosCount]; //!< border property : X-left X-right Y-top Y-buttom
-				int32_t m_confIdPaddingIn[shaperPosCount]; //!< Padding in property : X-left X-right Y-top Y-buttom
-				int32_t m_confIdMode; //!< Display mode
-				int32_t m_confIdDisplayOutside; //!< Display outside of the shape...
-				int32_t m_confIdChangeTime;    //!< ConfigFile padding transition time property
-				int32_t m_confProgramFile;     //!< ConfigFile opengGl program Name
-				int32_t m_confColorFile;       //!< ConfigFile opengGl color file Name
-				int32_t m_confImageFile;       //!< ConfigFile opengGl program Name
+				ememory::Ptr<ewol::resource::ConfigFile> this.config; //!< pointer on the config file resources
+				int this.confIdPaddingOut[shaperPosCount]; //!< Padding out property : X-left X-right Y-top Y-buttom
+				int this.confIdBorder[shaperPosCount]; //!< border property : X-left X-right Y-top Y-buttom
+				int this.confIdPaddingIn[shaperPosCount]; //!< Padding in property : X-left X-right Y-top Y-buttom
+				int this.confIdMode; //!< Display mode
+				int this.confIdDisplayOutside; //!< Display outside of the shape...
+				int this.confIdChangeTime;    //!< ConfigFile padding transition time property
+				int this.confProgramFile;     //!< ConfigFile opengGl program Name
+				int this.confColorFile;       //!< ConfigFile opengGl color file Name
+				int this.confImageFile;       //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
-				ememory::SharedPtr<gale::resource::Program> m_GLprogram; //!< pointer on the opengl display program
-				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
-				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
-				int32_t m_GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on Vector2f(X,Y))
-				int32_t m_GLStateActivate;      //!< openGL id on the element (activate state displayed)
-				int32_t m_GLStateOld;           //!< openGL id on the element (old state displayed)
-				int32_t m_GLStateNew;           //!< openGL id on the element (new state displayed)
-				int32_t m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
-				int32_t m_GLtexID;              //!< openGL id on the element (texture image)
+				ememory::Ptr<gale::resource::Program> this.GLprogram; //!< pointer on the opengl display program
+				int this.GLPosition;           //!< openGL id on the element (vertex buffer)
+				int this.GLMatrix;             //!< openGL id on the element (transformation matrix)
+				int this.GLPropertyPos;       //!< openGL id on the element (simple ratio position in the widget : ____/-----\_____ on Vector2f(X,Y))
+				int this.GLStateActivate;      //!< openGL id on the element (activate state displayed)
+				int this.GLStateOld;           //!< openGL id on the element (old state displayed)
+				int this.GLStateNew;           //!< openGL id on the element (new state displayed)
+				int this.GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
+				int this.GLtexID;              //!< openGL id on the element (texture image)
 				// For the Image :
-				ememory::SharedPtr<ewol::resource::TextureFile> m_resourceTexture; //!< texture resources (for the image)
+				ememory::Ptr<ewol::resource::TextureFile> this.resourceTexture; //!< texture resources (for the image)
 				// internal needed data :
-				int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
-				Vector2f    m_propertyOrigin;         //!< widget origin
-				Vector2f    m_propertySize;           //!< widget size
-				Vector2f    m_propertyInsidePosition; //!< internal subwidget position
-				Vector2f    m_propertyInsideSize;     //!< internal subwidget size
-				int32_t m_stateActivate;          //!< Activate state of the element
-				int32_t m_stateOld;               //!< previous state
-				int32_t m_stateNew;               //!< destination state
-				float   m_stateTransition;        //!< working state between 2 states
-				int32_t m_nbVertexToDisplay;
+				int this.nextStatusRequested;    //!< when status is changing, this represent the next step of it
+				Vector2f    this.propertyOrigin;         //!< widget origin
+				Vector2f    this.propertySize;           //!< widget size
+				Vector2f    this.propertyInsidePosition; //!< internal subwidget position
+				Vector2f    this.propertyInsideSize;     //!< internal subwidget size
+				int this.stateActivate;          //!< Activate state of the element
+				int this.stateOld;               //!< previous state
+				int this.stateNew;               //!< destination state
+				float   this.stateTransition;        //!< working state between 2 states
+				int this.nbVertexToDisplay;
 				// color management theme:
-				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< input resource for color management
-				List<Vector2i> m_listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
+				ememory::Ptr<ewol::resource::ColorFile> this.colorProperty; //!< input resource for color management
+				List<Vector2i> this.listAssiciatedId; //!< Corellation ID between ColorProperty (Y) and OpenGL Program (X)
 			protected:
-				static const int32_t m_vboIdCoord;
-				static const int32_t m_vboIdPos;
-				ememory::SharedPtr<gale::resource::VirtualBufferObject> m_VBO;
+				static  int this.vboIdCoord;
+				static  int this.vboIdPos;
+				ememory::Ptr<gale::resource::VirtualBufferObject> this.VBO;
 			private:
 				/**
 				 * @brief load the openGL program and get all the ID needed
@@ -91,19 +91,19 @@ namespace ewol {
 				void unLoadProgram();
 			public:
 				/**
-				 * @brief generic constructor
+				 * @brief generic ructor
 				 * @param[in] _uri URI of the file that might be loaded
 				 */
-				Shaper(const etk::Uri& _uri="");
+				Shaper( etk::Uri _uri="");
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~Shaper();
+				 ~Shaper();
 			public:
 				/**
 				 * @brief draw All the refistered text in the current element on openGL
 				 */
-				void draw(bool _disableDepthTest=true);
+				void draw(boolean _disableDepthTest=true);
 				/**
 				 * @brief clear alll tre registered element in the current element
 				 */
@@ -114,34 +114,34 @@ namespace ewol {
 				 * @return true Need redraw.
 				 * @return false No need redraw.
 				 */
-				bool setState(int32_t _newState);
+				boolean setState(int _newState);
 				/**
 				 * @brief change the current status in an other
 				 * @param[in] _newStatusId the next new status requested
 				 * @return true The widget must call this fuction periodicly (and redraw itself)
 				 * @return false No need to request the periodic call.
 				 */
-				bool changeStatusIn(int32_t _newStatusId);
+				boolean changeStatusIn(int _newStatusId);
 				/**
 				 * @brief get the current displayed status of the shaper
 				 * @return The Status Id
 				 */
-				int32_t getCurrentDisplayedStatus() {
-					return m_stateNew;
+				int getCurrentDisplayedStatus() {
+					return this.stateNew;
 				};
 				/**
 				 * @brief get the next displayed status of the shaper
 				 * @return The next status Id (-1 if no status in next)
 				 */
-				int32_t getNextDisplayedStatus() {
-					return m_nextStatusRequested;
+				int getNextDisplayedStatus() {
+					return this.nextStatusRequested;
 				};
 				/**
 				 * @brief get the current trasion status
 				 * @return value of the transition status (0.0f when no activity)
 				 */
 				float getTransitionStatus() {
-					return m_stateTransition;
+					return this.stateTransition;
 				};
 				/**
 				 * @brief Same as the widfget periodic call (this is for change display)
@@ -149,7 +149,7 @@ namespace ewol {
 				 * @return true The widget must call this fuction periodicly (and redraw itself)
 				 * @return false No need to request the periodic call.
 				 */
-				bool periodicCall(const ewol::event::Time& _event);
+				boolean periodicCall( ewol::event::Time _event);
 				/**
 				 * @brief get the padding declared by the user in the config file
 				 * @return the padding property
@@ -166,19 +166,19 @@ namespace ewol {
 				 * @brief change the shaper Source
 				 * @param[in] _uri New file of the shaper
 				 */
-				void setSource(const etk::Uri& _uri);
+				void setSource( etk::Uri _uri);
 				/**
 				 * @brief get the shaper file Source
 				 * @return the shapper file name
 				 */
-				const etk::Uri& getSource() const {
-					return m_uri;
+				 etk::Uri getSource()  {
+					return this.uri;
 				};
 				/**
 				 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 				 * @return the validity od the resources.
 				 */
-				bool hasSources();
+				boolean hasSources();
 			public:
 				/**
 				 * @brief set the shape property:
@@ -224,9 +224,9 @@ namespace ewol {
 				 * @param[in] _insidePos Positin of the internal data
 				 * @param[in] _insideSize Size of the internal data
 				 */
-				void setShape(const Vector2f& _origin, const Vector2f& _size, const Vector2f& _insidePos, const Vector2f& _insideSize);
+				void setShape( Vector2f _origin,  Vector2f _size,  Vector2f _insidePos,  Vector2f _insideSize);
 				// @previous
-				void setShape(const Vector2f& _origin, const Vector2f& _size) {
+				void setShape( Vector2f _origin,  Vector2f _size) {
 					ewol::Padding tmp = getPadding();
 					setShape(_origin, _size, _origin+Vector2f(tmp.xLeft(), tmp.yButtom()), _size - Vector2f(tmp.x(), tmp.y()));
 				}
@@ -236,33 +236,33 @@ namespace ewol {
 				 * @param[in] _name Name of the element requested
 				 * @return The Id of the color
 				 */
-				int32_t requestColor(const etk::String& _name);
+				int requestColor( String _name);
 				/**
 				 * @brief Get The color associated at an ID.
 				 * @param[in] _id Id of the color
 				 * @return the reference on the color
 				 */
-				const etk::Color<float>& getColor(int32_t _id);
+				 etk::Color<float> getColor(int _id);
 			public:
 				/**
 				 * @brief Get an ID on the configuration instance element
 				 * @param[in] _name Name of the element requested
 				 * @return The Id of the element
 				 */
-				int32_t requestConfig(const etk::String& _name);
+				int requestConfig( String _name);
 				/**
 				 * @brief Get The number associated at an ID.
 				 * @param[in] _id Id of the parameter
 				 * @return the requested number.
 				 */
-				double getConfigNumber(int32_t _id);
+				double getConfigNumber(int _id);
 			public:
 				/**
 				 * @brief Set activate state of the element
 				 * @param[in] _status New activate status
 				 */
-				void setActivateState(int32_t _status) {
-					m_stateActivate = _status;
+				void setActivateState(int _status) {
+					this.stateActivate = _status;
 				}
 			private:
 				void addVertexLine(float _yTop,
@@ -277,17 +277,17 @@ namespace ewol {
 				                   float _x8,
 				                   float _yValTop,
 				                   float _yValButtom,
-				                   const float* _table,
-				                   bool _displayOutside);
+				                    float* _table,
+				                   boolean _displayOutside);
 			public:
 				/* ****************************************************
 				 *    == operator
 				 *****************************************************/
-				bool operator== (const Shaper& _obj) const {
-					return _obj.m_uri == m_uri;
+				boolean operator== ( Shaper _obj)  {
+					return _obj.this.uri == this.uri;
 				}
-				bool operator!= (const Shaper& _obj) const {
-					return _obj.m_uri != m_uri;
+				boolean operator!= ( Shaper _obj)  {
+					return _obj.this.uri != this.uri;
 				}
 		};
 	}

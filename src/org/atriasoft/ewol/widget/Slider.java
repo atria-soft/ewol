@@ -15,16 +15,16 @@
 namespace ewol {
 	namespace widget {
 		class Slider;
-		using SliderShared = ememory::SharedPtr<ewol::widget::Slider>;
+		using Slider = ememory::Ptr<ewol::widget::Slider>;
 		using SliderWeak = ememory::WeakPtr<ewol::widget::Slider>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Slider : public ewol::Widget {
+		class Slider : public Widget {
 			public: // signals
 				esignal::Signal<float> signalChange;
 			public:
-				//eproperty::Value<etk::String> propertyShape; //!< name of the shape used
+				//eproperty::Value<String> propertyShape; //!< name of the shape used
 				eproperty::Value<float> propertyValue; //!< current value of the Slider
 				eproperty::Value<float> propertyMinimum; //!< minimum value of the slider
 				eproperty::Value<float> propertyMaximum; //!< maximum value of the slider
@@ -33,27 +33,27 @@ namespace ewol {
 				Slider();
 			public:
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
-				virtual ~Slider();
+				 ~Slider();
 			public:
 				// TODO : Rewoek the color in the theme ...
 				void setColor(etk::Color<> _newColor) {
-					m_textColorFg = _newColor;
+					this.textColorFg = _newColor;
 				};
 			protected:
-				ewol::compositing::Drawing m_draw; //!< drawing tool.
-				etk::Color<> m_textColorFg; //!< Text color
-				etk::Color<> m_textColorBg; //!< Background color
+				ewol::compositing::Drawing this.draw; //!< drawing tool.
+				etk::Color<> this.textColorFg; //!< Text color
+				etk::Color<> this.textColorBg; //!< Background color
 				void updateValue(float _newValue);
 			public: // Derived function
-				void onDraw() override;
-				void calculateMinMaxSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
+				void onDraw() ;
+				void calculateMinMaxSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
 			protected:
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyMinimum();
-				virtual void onChangePropertyMaximum();
-				virtual void onChangePropertyStep();
+				 void onChangePropertyValue();
+				 void onChangePropertyMinimum();
+				 void onChangePropertyMaximum();
+				 void onChangePropertyStep();
 		};
 	}
 }

@@ -17,16 +17,16 @@ ewol::widget::SpinBase::SpinBase() :
   propertyShape(this, "shape",
                       "",
                       "shape for the display",
-                      &ewol::widget::SpinBase::onChangePropertyShape),
+                      ewol::widget::SpinBase::onChangePropertyShape),
   propertySpinMode(this, "spin-mode",
                          ewol::widget::spinPosition_RightRight,
                          "The display spin mode",
-                         &ewol::widget::SpinBase::onChangePropertySpinMode),
-  m_confIdEntryShaper(-1),
-  m_confIdUpShaper(-1),
-  m_confIdDownShaper(-1),
-  m_confIdUpData(-1),
-  m_confIdDownData(-1) {
+                         ewol::widget::SpinBase::onChangePropertySpinMode),
+  this.confIdEntryShaper(-1),
+  this.confIdUpShaper(-1),
+  this.confIdDownShaper(-1),
+  this.confIdUpData(-1),
+  this.confIdDownData(-1) {
 	
 	addObjectType("ewol::widget::SpinBase");
 	propertySpinMode.add(ewol::widget::spinPosition_noneNone, "none-none");
@@ -54,13 +54,13 @@ void ewol::widget::SpinBase::onChangePropertySpinMode() {
 }
 
 void ewol::widget::SpinBase::onChangePropertyShape() {
-	m_config = ewol::resource::ConfigFile::create(propertyShape);
-	if (m_config != null) {
-		m_confIdEntryShaper = m_config->request("entry-shaper");
-		m_confIdUpShaper = m_config->request("up-shaper");
-		m_confIdDownShaper = m_config->request("down-shaper");
-		m_confIdUpData = m_config->request("up-data");
-		m_confIdDownData = m_config->request("down-data");
+	this.config = ewol::resource::ConfigFile::create(propertyShape);
+	if (this.config != null) {
+		this.confIdEntryShaper = this.config.request("entry-shaper");
+		this.confIdUpShaper = this.config.request("up-shaper");
+		this.confIdDownShaper = this.config.request("down-shaper");
+		this.confIdUpData = this.config.request("up-data");
+		this.confIdDownData = this.config.request("down-data");
 	}
 	markToRedraw();
 }
@@ -71,82 +71,82 @@ void ewol::widget::SpinBase::updateGui() {
 	subWidgetRemoveAll();
 	markToRedraw();
 	requestUpdateSize();
-	if (m_widgetEntry == null) {
-		etk::String shaper;
-		if (m_config != null) {
-			shaper = m_config->getString(m_confIdEntryShaper);
-			Log.verbose("shaper entry : " << shaper);
+	if (this.widgetEntry == null) {
+		String shaper;
+		if (this.config != null) {
+			shaper = this.config.getString(this.confIdEntryShaper);
+			Log.verbose("shaper entry : " + shaper);
 		}
-		m_widgetEntry = ewol::widget::Entry::create("shape", shaper);
-		if (m_widgetEntry != null) {
-			m_widgetEntry->propertyExpand.set(Vector2b(true,false));
-			m_widgetEntry->propertyFill.set(Vector2b(true,true));
-		}
-	}
-	if (m_widgetButtonDown == null) {
-		etk::String shaper;
-		if (m_config != null) {
-			shaper = m_config->getString(m_confIdDownShaper);
-			Log.verbose("shaper button DOWN : " << shaper);
-		}
-		m_widgetButtonDown = ewol::widget::Button::create("shape", shaper);
-		if (m_widgetButtonDown != null) {
-			m_widgetButtonDown->propertyExpand.set(Vector2b(false,false));
-			m_widgetButtonDown->propertyFill.set(Vector2b(true,true));
-			etk::String data = m_config->getString(m_confIdDownData);
-			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
-			m_widgetButtonDown->setSubWidget(widget);
+		this.widgetEntry = ewol::widget::Entry::create("shape", shaper);
+		if (this.widgetEntry != null) {
+			this.widgetEntry.propertyExpand.set(Vector2b(true,false));
+			this.widgetEntry.propertyFill.set(Vector2b(true,true));
 		}
 	}
-	if (m_widgetButtonUp == null) {
-		etk::String shaper;
-		if (m_config != null) {
-			shaper = m_config->getString(m_confIdUpShaper);
-			Log.verbose("shaper button UP : " << shaper);
+	if (this.widgetButtonDown == null) {
+		String shaper;
+		if (this.config != null) {
+			shaper = this.config.getString(this.confIdDownShaper);
+			Log.verbose("shaper button DOWN : " + shaper);
 		}
-		m_widgetButtonUp = ewol::widget::Button::create("shape", shaper);
-		if (m_widgetButtonUp != null) {
-			m_widgetButtonUp->propertyExpand.set(Vector2b(false,false));
-			m_widgetButtonUp->propertyFill.set(Vector2b(true,true));
-			etk::String data = m_config->getString(m_confIdUpData);
-			ewol::WidgetShared widget = ewol::widget::composerGenerateString(data);
-			m_widgetButtonUp->setSubWidget(widget);
+		this.widgetButtonDown = ewol::widget::Button::create("shape", shaper);
+		if (this.widgetButtonDown != null) {
+			this.widgetButtonDown.propertyExpand.set(Vector2b(false,false));
+			this.widgetButtonDown.propertyFill.set(Vector2b(true,true));
+			String data = this.config.getString(this.confIdDownData);
+			Widget widget = ewol::widget::composerGenerateString(data);
+			this.widgetButtonDown.setSubWidget(widget);
+		}
+	}
+	if (this.widgetButtonUp == null) {
+		String shaper;
+		if (this.config != null) {
+			shaper = this.config.getString(this.confIdUpShaper);
+			Log.verbose("shaper button UP : " + shaper);
+		}
+		this.widgetButtonUp = ewol::widget::Button::create("shape", shaper);
+		if (this.widgetButtonUp != null) {
+			this.widgetButtonUp.propertyExpand.set(Vector2b(false,false));
+			this.widgetButtonUp.propertyFill.set(Vector2b(true,true));
+			String data = this.config.getString(this.confIdUpData);
+			Widget widget = ewol::widget::composerGenerateString(data);
+			this.widgetButtonUp.setSubWidget(widget);
 		}
 	}
 	switch (propertySpinMode) {
 		case ewol::widget::spinPosition_noneNone:
-			subWidgetAdd(m_widgetEntry);
+			subWidgetAdd(this.widgetEntry);
 			break;
 		case ewol::widget::spinPosition_noneRight:
-			subWidgetAdd(m_widgetEntry);
-			subWidgetAdd(m_widgetButtonUp);
+			subWidgetAdd(this.widgetEntry);
+			subWidgetAdd(this.widgetButtonUp);
 			break;
 		case ewol::widget::spinPosition_leftNone:
-			subWidgetAdd(m_widgetButtonDown);
-			subWidgetAdd(m_widgetEntry);
+			subWidgetAdd(this.widgetButtonDown);
+			subWidgetAdd(this.widgetEntry);
 			break;
 		case ewol::widget::spinPosition_leftRight:
-			subWidgetAdd(m_widgetButtonDown);
-			subWidgetAdd(m_widgetEntry);
-			subWidgetAdd(m_widgetButtonUp);
+			subWidgetAdd(this.widgetButtonDown);
+			subWidgetAdd(this.widgetEntry);
+			subWidgetAdd(this.widgetButtonUp);
 			break;
 		case ewol::widget::spinPosition_leftLeft:
-			subWidgetAdd(m_widgetButtonDown);
-			subWidgetAdd(m_widgetButtonUp);
-			subWidgetAdd(m_widgetEntry);
+			subWidgetAdd(this.widgetButtonDown);
+			subWidgetAdd(this.widgetButtonUp);
+			subWidgetAdd(this.widgetEntry);
 			break;
 		case ewol::widget::spinPosition_RightRight:
-			subWidgetAdd(m_widgetEntry);
-			subWidgetAdd(m_widgetButtonDown);
-			subWidgetAdd(m_widgetButtonUp);
+			subWidgetAdd(this.widgetEntry);
+			subWidgetAdd(this.widgetButtonDown);
+			subWidgetAdd(this.widgetButtonUp);
 			break;
 	}
 }
 
-bool ewol::widget::SpinBase::loadXML(const exml::Element& _node) {
+boolean ewol::widget::SpinBase::loadXML( exml::Element _node) {
 	if (_node.exist() == false) {
 		return false;
 	}
 	// parse generic properties: (we not parse the sizer property, it remove all subwidget)
-	return ewol::Widget::loadXML(_node);
+	return Widget::loadXML(_node);
 }

@@ -13,52 +13,52 @@
 #include <ewol/widget/Manager.hpp>
 #include <ewol/widget/meta/StdPopUp.hpp>
 
-void ewol::tools::message::create(enum ewol::tools::message::type _type, const etk::String& _message) {
-	ewol::widget::StdPopUpShared tmpPopUp = widget::StdPopUp::create();
+void ewol::tools::message::create(enum ewol::tools::message::type _type,  String _message) {
+	ewol::widget::StdPopUp tmpPopUp = widget::StdPopUp::create();
 	if (tmpPopUp == null) {
 		Log.error("Can not create a simple pop-up");
 		return;
 	}
 	switch(_type) {
 		case ewol::tools::message::type::info:
-			tmpPopUp->propertyTitle.set("<bold>_T{Info}</bold>");
+			tmpPopUp.propertyTitle.set("<bold>_T{Info}</bold>");
 			break;
 		case ewol::tools::message::type::warning:
-			tmpPopUp->propertyTitle.set("<bold><font color='orange'>_T{Warning}</font></bold>");
+			tmpPopUp.propertyTitle.set("<bold><font color='orange'>_T{Warning}</font></bold>");
 			break;
 		case ewol::tools::message::type::error:
-			tmpPopUp->propertyTitle.set("<bold><font color='red'>_T{Error}</font></bold>");
+			tmpPopUp.propertyTitle.set("<bold><font color='red'>_T{Error}</font></bold>");
 			break;
 		case ewol::tools::message::type::critical:
-			tmpPopUp->propertyTitle.set("<bold><font colorBg='red'>_T{Critical}</font></bold>");
+			tmpPopUp.propertyTitle.set("<bold><font colorBg='red'>_T{Critical}</font></bold>");
 			break;
 	}
-	tmpPopUp->propertyComment.set(_message);
-	tmpPopUp->addButton("_T{close}", true);
-	tmpPopUp->propertyCloseOutEvent.set(true);
+	tmpPopUp.propertyComment.set(_message);
+	tmpPopUp.addButton("_T{close}", true);
+	tmpPopUp.propertyCloseOutEvent.set(true);
 	// get windows:
-	ewol::Context& context = ewol::getContext();
-	ewol::widget::WindowsShared windows = context.getWindows();
+	EwolContext context = ewol::getContext();
+	ewol::widget::Windows windows = context.getWindows();
 	if (windows == null) {
-		Log.error("can not get the current windows ... ==> can not display message : " << _message);
+		Log.error("can not get the current windows ... ==> can not display message : " + _message);
 		return;
 	}
-	windows->popUpWidgetPush(tmpPopUp);
+	windows.popUpWidgetPush(tmpPopUp);
 }
 
-void ewol::tools::message::displayInfo(const etk::String& _message) {
+void ewol::tools::message::displayInfo( String _message) {
 	ewol::tools::message::create(ewol::tools::message::type::info, _message);
 }
 
-void ewol::tools::message::displayWarning(const etk::String& _message) {
+void ewol::tools::message::displayWarning( String _message) {
 	ewol::tools::message::create(ewol::tools::message::type::warning, _message);
 }
 
-void ewol::tools::message::displayError(const etk::String& _message) {
+void ewol::tools::message::displayError( String _message) {
 	ewol::tools::message::create(ewol::tools::message::type::error, _message);
 }
 
-void ewol::tools::message::displayCritical(const etk::String& _message) {
+void ewol::tools::message::displayCritical( String _message) {
 	ewol::tools::message::create(ewol::tools::message::type::critical, _message);
 }
 

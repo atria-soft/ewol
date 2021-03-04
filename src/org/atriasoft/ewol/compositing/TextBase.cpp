@@ -12,48 +12,48 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::compositing::TextBase);
 
-const int32_t ewol::compositing::TextBase::m_vboIdCoord(0);
-const int32_t ewol::compositing::TextBase::m_vboIdCoordText(1);
-const int32_t ewol::compositing::TextBase::m_vboIdColor(2);
-const int32_t ewol::compositing::TextBase::m_vboIdGlyphLevel(3);
+ int ewol::compositing::TextBase::this.vboIdCoord(0);
+ int ewol::compositing::TextBase::this.vboIdCoordText(1);
+ int ewol::compositing::TextBase::this.vboIdColor(2);
+ int ewol::compositing::TextBase::this.vboIdGlyphLevel(3);
 #define NB_VBO (4)
 
-ewol::compositing::TextBase::TextBase(const etk::String& _shaderName, bool _loadProgram) :
-  m_position(0.0, 0.0, 0.0),
-  m_clippingPosStart(0.0, 0.0, 0.0),
-  m_clippingPosStop(0.0, 0.0, 0.0),
-  m_clippingEnable(false),
-  m_defaultColorFg(etk::color::black),
-  m_defaultColorBg(etk::color::none),
-  m_color(etk::color::black),
-  m_colorBg(etk::color::none),
-  m_colorCursor(etk::color::black),
-  m_colorSelection(etk::color::olive),
-  m_mode(ewol::font::Regular),
-  m_kerning(true),
-  m_previousCharcode(0),
-  m_startTextpos(0),
-  m_stopTextPos(0),
-  m_alignement(alignDisable),
-  m_GLprogram(null),
-  m_GLPosition(-1),
-  m_GLMatrix(-1),
-  m_GLColor(-1),
-  m_GLtexture(-1),
-  m_GLtexID(-1),
-  m_selectionStartPos(-100),
-  m_cursorPos(-100) {
+ewol::compositing::TextBase::TextBase( String _shaderName, boolean _loadProgram) :
+  this.position(0.0, 0.0, 0.0),
+  this.clippingPosStart(0.0, 0.0, 0.0),
+  this.clippingPosStop(0.0, 0.0, 0.0),
+  this.clippingEnable(false),
+  this.defaultColorFg(etk::color::black),
+  this.defaultColorBg(etk::color::none),
+  this.color(etk::color::black),
+  this.colorBg(etk::color::none),
+  this.colorCursor(etk::color::black),
+  this.colorSelection(etk::color::olive),
+  this.mode(ewol::font::Regular),
+  this.kerning(true),
+  this.previousCharcode(0),
+  this.startTextpos(0),
+  this.stopTextPos(0),
+  this.alignement(alignDisable),
+  this.GLprogram(null),
+  this.GLPosition(-1),
+  this.GLMatrix(-1),
+  this.GLColor(-1),
+  this.GLtexture(-1),
+  this.GLtexID(-1),
+  this.selectionStartPos(-100),
+  this.cursorPos(-100) {
 	if (_loadProgram == true) {
 		loadProgram(_shaderName);
 	}
 	// Create the VBO:
-	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == null) {
+	this.VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (this.VBO == null) {
 		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
-	m_VBO->setName("[VBO] of ewol::compositing::TextBase");
+	this.VBO.setName("[VBO] of ewol::compositing::TextBase");
 }
 
 
@@ -61,200 +61,200 @@ ewol::compositing::TextBase::~TextBase() {
 	
 }
 
-void ewol::compositing::TextBase::loadProgram(const etk::String& _shaderName) {
+void ewol::compositing::TextBase::loadProgram( String _shaderName) {
 	// get the shader resource:
-	m_GLPosition = 0;
-	ememory::SharedPtr<gale::resource::Program> old = m_GLprogram;
-	m_GLprogram = gale::resource::Program::create(_shaderName);
-	if (m_GLprogram != null) {
-		m_GLPosition   = m_GLprogram->getAttribute("EW_coord3d");
-		m_GLColor      = m_GLprogram->getAttribute("EW_color");
-		m_GLtexture    = m_GLprogram->getAttribute("EW_texture2d");
-		m_GLMatrix     = m_GLprogram->getUniform("EW_MatrixTransformation");
-		m_GLtexID      = m_GLprogram->getUniform("EW_texID");
-		m_GLtextWidth  = m_GLprogram->getUniform("EW_texWidth");
-		m_GLtextHeight = m_GLprogram->getUniform("EW_texHeight");
+	this.GLPosition = 0;
+	ememory::Ptr<gale::resource::Program> old = this.GLprogram;
+	this.GLprogram = gale::resource::Program::create(_shaderName);
+	if (this.GLprogram != null) {
+		this.GLPosition   = this.GLprogram.getAttribute("EW_coord3d");
+		this.GLColor      = this.GLprogram.getAttribute("EW_color");
+		this.GLtexture    = this.GLprogram.getAttribute("EW_texture2d");
+		this.GLMatrix     = this.GLprogram.getUniform("EW_MatrixTransformation");
+		this.GLtexID      = this.GLprogram.getUniform("EW_texID");
+		this.GLtextWidth  = this.GLprogram.getUniform("EW_texWidth");
+		this.GLtextHeight = this.GLprogram.getUniform("EW_texHeight");
 	} else {
 		Log.error("Can not load the program => create previous one...");
-		m_GLprogram = old;
+		this.GLprogram = old;
 		old = null;
 	}
 }
 
-void ewol::compositing::TextBase::translate(const Vector3f& _vect) {
+void ewol::compositing::TextBase::translate( Vector3f _vect) {
 	ewol::Compositing::translate(_vect);
-	m_vectorialDraw.translate(_vect);
+	this.vectorialDraw.translate(_vect);
 }
 
-void ewol::compositing::TextBase::rotate(const Vector3f& _vect, float _angle) {
+void ewol::compositing::TextBase::rotate( Vector3f _vect, float _angle) {
 	ewol::Compositing::rotate(_vect, _angle);
-	m_vectorialDraw.rotate(_vect, _angle);
+	this.vectorialDraw.rotate(_vect, _angle);
 }
 
-void ewol::compositing::TextBase::scale(const Vector3f& _vect) {
+void ewol::compositing::TextBase::scale( Vector3f _vect) {
 	ewol::Compositing::scale(_vect);
-	m_vectorialDraw.scale(_vect);
+	this.vectorialDraw.scale(_vect);
 }
 
 void ewol::compositing::TextBase::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// remove sub draw system
-	m_vectorialDraw.clear();
+	this.vectorialDraw.clear();
 	// reset Buffer:
-	m_VBO->clear();
+	this.VBO.clear();
 	// reset temporal variables:
 	reset();
 }
 
 void ewol::compositing::TextBase::reset() {
-	m_position = Vector3f(0,0,0);
-	m_clippingPosStart = Vector3f(0,0,0);
-	m_clippingPosStop = Vector3f(0,0,0);
-	m_sizeDisplayStart = m_position;
-	m_sizeDisplayStop = m_position;
-	m_nbCharDisplayed = 0;
-	m_clippingEnable = false;
-	m_color = m_defaultColorFg;
-	m_colorBg = m_defaultColorBg;
-	m_mode = ewol::font::Regular;
-	m_previousCharcode = 0;
-	m_startTextpos = 0;
-	m_stopTextPos = 0;
-	m_alignement = alignDisable;
-	m_htmlCurrrentLine = U"";
-	m_selectionStartPos = -100;
-	m_cursorPos = -100;
-	m_htmlDecoration.clear();
-	m_needDisplay = true;
-	m_nbCharDisplayed = 0;
+	this.position = Vector3f(0,0,0);
+	this.clippingPosStart = Vector3f(0,0,0);
+	this.clippingPosStop = Vector3f(0,0,0);
+	this.sizeDisplayStart = this.position;
+	this.sizeDisplayStop = this.position;
+	this.nbCharDisplayed = 0;
+	this.clippingEnable = false;
+	this.color = this.defaultColorFg;
+	this.colorBg = this.defaultColorBg;
+	this.mode = ewol::font::Regular;
+	this.previousCharcode = 0;
+	this.startTextpos = 0;
+	this.stopTextPos = 0;
+	this.alignement = alignDisable;
+	this.htmlCurrrentLine = U"";
+	this.selectionStartPos = -100;
+	this.cursorPos = -100;
+	this.htmlDecoration.clear();
+	this.needDisplay = true;
+	this.nbCharDisplayed = 0;
 }
 
-void ewol::compositing::TextBase::setPos(const Vector3f& _pos) {
+void ewol::compositing::TextBase::setPos( Vector3f _pos) {
 	// check min max for display area
-	if (m_nbCharDisplayed != 0) {
-		Log.verbose("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(etk::max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(etk::max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(etk::min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(etk::min(m_position.y(), m_sizeDisplayStart.y()));
-		Log.verbose("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+	if (this.nbCharDisplayed != 0) {
+		Log.verbose("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+		this.sizeDisplayStop.setX(etk::max(this.position.x(), this.sizeDisplayStop.x()));
+		this.sizeDisplayStop.setY(etk::max(this.position.y(), this.sizeDisplayStop.y()));
+		this.sizeDisplayStart.setX(etk::min(this.position.x(), this.sizeDisplayStart.x()));
+		this.sizeDisplayStart.setY(etk::min(this.position.y(), this.sizeDisplayStart.y()));
+		Log.verbose("update size 2 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 	}
 	// update position
-	m_position = _pos;
-	m_previousCharcode = 0;
-	m_vectorialDraw.setPos(m_position);
+	this.position = _pos;
+	this.previousCharcode = 0;
+	this.vectorialDraw.setPos(this.position);
 	// update min max of the display area:
-	if (m_nbCharDisplayed == 0) {
-		m_sizeDisplayStart = m_position;
-		m_sizeDisplayStop = m_position;
-		m_sizeDisplayStop.setY( m_sizeDisplayStop.y()+ getHeight());
-		Log.verbose("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+	if (this.nbCharDisplayed == 0) {
+		this.sizeDisplayStart = this.position;
+		this.sizeDisplayStop = this.position;
+		this.sizeDisplayStop.setY( this.sizeDisplayStop.y()+ getHeight());
+		Log.verbose("update size 0 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 	} else {
-		Log.verbose("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.setX(etk::max(m_position.x(), m_sizeDisplayStop.x()));
-		m_sizeDisplayStop.setY(etk::max(m_position.y(), m_sizeDisplayStop.y()));
-		m_sizeDisplayStart.setX(etk::min(m_position.x(), m_sizeDisplayStart.x()));
-		m_sizeDisplayStart.setY(etk::min(m_position.y(), m_sizeDisplayStart.y()));
-		Log.verbose("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		Log.verbose("update size 3 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+		this.sizeDisplayStop.setX(etk::max(this.position.x(), this.sizeDisplayStop.x()));
+		this.sizeDisplayStop.setY(etk::max(this.position.y(), this.sizeDisplayStop.y()));
+		this.sizeDisplayStart.setX(etk::min(this.position.x(), this.sizeDisplayStart.x()));
+		this.sizeDisplayStart.setY(etk::min(this.position.y(), this.sizeDisplayStart.y()));
+		Log.verbose("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 	}
 }
 
-void ewol::compositing::TextBase::setRelPos(const Vector3f& _pos) {
-	m_position += _pos;
-	m_previousCharcode = 0;
-	m_vectorialDraw.setPos(m_position);
+void ewol::compositing::TextBase::setRelPos( Vector3f _pos) {
+	this.position += _pos;
+	this.previousCharcode = 0;
+	this.vectorialDraw.setPos(this.position);
 }
 
-void ewol::compositing::TextBase::setColorBg(const etk::Color<>& _color) {
-	m_colorBg = _color;
-	m_vectorialDraw.setColor(_color);
+void ewol::compositing::TextBase::setColorBg( etk::Color<> _color) {
+	this.colorBg = _color;
+	this.vectorialDraw.setColor(_color);
 }
 
-void ewol::compositing::TextBase::setClipping(const Vector3f& _pos, const Vector3f& _posEnd) {
+void ewol::compositing::TextBase::setClipping( Vector3f _pos,  Vector3f _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
-		m_clippingPosStart.setX(_pos.x());
-		m_clippingPosStop.setX(_posEnd.x());
+		this.clippingPosStart.setX(_pos.x());
+		this.clippingPosStop.setX(_posEnd.x());
 	} else {
-		m_clippingPosStart.setX(_posEnd.x());
-		m_clippingPosStop.setX(_pos.x());
+		this.clippingPosStart.setX(_posEnd.x());
+		this.clippingPosStop.setX(_pos.x());
 	}
 	if (_pos.y() <= _posEnd.y()) {
-		m_clippingPosStart.setY(_pos.y());
-		m_clippingPosStop.setY(_posEnd.y());
+		this.clippingPosStart.setY(_pos.y());
+		this.clippingPosStop.setY(_posEnd.y());
 	} else {
-		m_clippingPosStart.setY(_posEnd.y());
-		m_clippingPosStop.setY(_pos.y());
+		this.clippingPosStart.setY(_posEnd.y());
+		this.clippingPosStop.setY(_pos.y());
 	}
 	if (_pos.z() <= _posEnd.z()) {
-		m_clippingPosStart.setZ(_pos.z());
-		m_clippingPosStop.setZ(_posEnd.z());
+		this.clippingPosStart.setZ(_pos.z());
+		this.clippingPosStop.setZ(_posEnd.z());
 	} else {
-		m_clippingPosStart.setZ(_posEnd.z());
-		m_clippingPosStop.setZ(_pos.z());
+		this.clippingPosStart.setZ(_posEnd.z());
+		this.clippingPosStop.setZ(_pos.z());
 	}
-	m_clippingEnable = true;
-	//m_vectorialDraw.setClipping(m_clippingPosStart, m_clippingPosStop);
+	this.clippingEnable = true;
+	//this.vectorialDraw.setClipping(this.clippingPosStart, this.clippingPosStop);
 }
 
-void ewol::compositing::TextBase::setClippingMode(bool _newMode) {
-	m_clippingEnable = _newMode;
-	//m_vectorialDraw.setClippingMode(m_clippingEnable);
+void ewol::compositing::TextBase::setClippingMode(boolean _newMode) {
+	this.clippingEnable = _newMode;
+	//this.vectorialDraw.setClippingMode(this.clippingEnable);
 }
 
-void ewol::compositing::TextBase::setFontBold(bool _status) {
+void ewol::compositing::TextBase::setFontBold(boolean _status) {
 	if (_status == true) {
 		// enable
-		if (m_mode == ewol::font::Regular) {
+		if (this.mode == ewol::font::Regular) {
 			setFontMode(ewol::font::Bold);
-		} else if (m_mode == ewol::font::Italic) {
+		} else if (this.mode == ewol::font::Italic) {
 			setFontMode(ewol::font::BoldItalic);
 		}
 	} else {
 		// disable
-		if (m_mode == ewol::font::Bold) {
+		if (this.mode == ewol::font::Bold) {
 			setFontMode(ewol::font::Regular);
-		} else if (m_mode == ewol::font::BoldItalic) {
+		} else if (this.mode == ewol::font::BoldItalic) {
 			setFontMode(ewol::font::Italic);
 		}
 	}
 }
 
-void ewol::compositing::TextBase::setFontItalic(bool _status) {
+void ewol::compositing::TextBase::setFontItalic(boolean _status) {
 	if (_status == true) {
 		// enable
-		if (m_mode == ewol::font::Regular) {
+		if (this.mode == ewol::font::Regular) {
 			setFontMode(ewol::font::Italic);
-		} else if (m_mode == ewol::font::Bold) {
+		} else if (this.mode == ewol::font::Bold) {
 			setFontMode(ewol::font::BoldItalic);
 		}
 	} else {
 		// disable
-		if (m_mode == ewol::font::Italic) {
+		if (this.mode == ewol::font::Italic) {
 			setFontMode(ewol::font::Regular);
-		} else if (m_mode == ewol::font::BoldItalic) {
+		} else if (this.mode == ewol::font::BoldItalic) {
 			setFontMode(ewol::font::Bold);
 		}
 	}
 }
 
-void ewol::compositing::TextBase::setKerningMode(bool _newMode) {
-	m_kerning = _newMode;
+void ewol::compositing::TextBase::setKerningMode(boolean _newMode) {
+	this.kerning = _newMode;
 }
 
-void ewol::compositing::TextBase::print(const etk::UString& _text) {
+void ewol::compositing::TextBase::print( etk::UString _text) {
 	List<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
-void ewol::compositing::TextBase::print(const etk::String& _text) {
+void ewol::compositing::TextBase::print( String _text) {
 	List<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
 
-void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
+void ewol::compositing::TextBase::parseHtmlNode( exml::Element _element) {
 	// get the static real pointer
 	if (_element.exist() == false) {
 		Log.error( "Error Input node does not existed ...");
@@ -266,10 +266,10 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 			continue;
 		} else if (it.isText() == true) {
 			htmlAddData(etk::toUString(it.getValue()));
-			Log.verbose("XML add : " << it.getValue());
+			Log.verbose("XML add : " + it.getValue());
 			continue;
 		} else if (it.isElement() == false) {
-			Log.error("(l "<< it.getPos() << ") node not suported type : " << it.getType() << " val='"<< it.getValue() << "'" );
+			Log.error("(l "+ it.getPos() + ") node not suported type : " + it.getType() + " val='"+ it.getValue() + "'" );
 			continue;
 		}
 		exml::Element elem = it.toElement();
@@ -279,43 +279,43 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 		}
 		if(etk::compare_no_case(elem.getValue(), "br") == true) {
 			htmlFlush();
-			Log.verbose("XML flush & newLine");
+			Log.verbose("XML flush  newLine");
 			forceLineReturn();
 		} else if (etk::compare_no_case(elem.getValue(), "font") == true) {
 			Log.verbose("XML Font ...");
-			TextDecoration tmpDeco = m_htmlDecoTmp;
-			etk::String colorValue = elem.attributes["color"];
+			TextDecoration tmpDeco = this.htmlDecoTmp;
+			String colorValue = elem.attributes["color"];
 			if (colorValue.size() != 0) {
-				m_htmlDecoTmp.m_colorFg = colorValue;
+				this.htmlDecoTmp.this.colorFg = colorValue;
 			}
 			colorValue = elem.attributes["colorBg"];
 			if (colorValue.size() != 0) {
-				m_htmlDecoTmp.m_colorBg = colorValue;
+				this.htmlDecoTmp.this.colorBg = colorValue;
 			}
 			parseHtmlNode(elem);
-			m_htmlDecoTmp = tmpDeco;
+			this.htmlDecoTmp = tmpDeco;
 		} else if(    etk::compare_no_case(elem.getValue(), "b") == true
 		           || etk::compare_no_case(elem.getValue(), "bold") == true) {
 			Log.verbose("XML bold ...");
-			TextDecoration tmpDeco = m_htmlDecoTmp;
-			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
-				m_htmlDecoTmp.m_mode = ewol::font::Bold;
-			} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
-				m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+			TextDecoration tmpDeco = this.htmlDecoTmp;
+			if (this.htmlDecoTmp.this.mode == ewol::font::Regular) {
+				this.htmlDecoTmp.this.mode = ewol::font::Bold;
+			} else if (this.htmlDecoTmp.this.mode == ewol::font::Italic) {
+				this.htmlDecoTmp.this.mode = ewol::font::BoldItalic;
 			} 
 			parseHtmlNode(elem);
-			m_htmlDecoTmp = tmpDeco;
+			this.htmlDecoTmp = tmpDeco;
 		} else if(    etk::compare_no_case(elem.getValue(), "i") == true
 		           || etk::compare_no_case(elem.getValue(), "italic") == true) {
 			Log.verbose("XML italic ...");
-			TextDecoration tmpDeco = m_htmlDecoTmp;
-			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
-				m_htmlDecoTmp.m_mode = ewol::font::Italic;
-			} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
-				m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+			TextDecoration tmpDeco = this.htmlDecoTmp;
+			if (this.htmlDecoTmp.this.mode == ewol::font::Regular) {
+				this.htmlDecoTmp.this.mode = ewol::font::Italic;
+			} else if (this.htmlDecoTmp.this.mode == ewol::font::Bold) {
+				this.htmlDecoTmp.this.mode = ewol::font::BoldItalic;
 			} 
 			parseHtmlNode(elem);
-			m_htmlDecoTmp = tmpDeco;
+			this.htmlDecoTmp = tmpDeco;
 		} else if(    etk::compare_no_case(elem.getValue(), "u") == true
 		           || etk::compare_no_case(elem.getValue(), "underline") == true) {
 			Log.verbose("XML underline ...");
@@ -324,59 +324,59 @@ void ewol::compositing::TextBase::parseHtmlNode(const exml::Element& _element) {
 		           || etk::compare_no_case(elem.getValue(), "paragraph") == true) {
 			Log.verbose("XML paragraph ...");
 			htmlFlush();
-			m_alignement = alignLeft;
+			this.alignement = alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
 		} else if (etk::compare_no_case(elem.getValue(), "center") == true) {
 			Log.verbose("XML center ...");
 			htmlFlush();
-			m_alignement = alignCenter;
+			this.alignement = alignCenter;
 			parseHtmlNode(elem);
 		} else if (etk::compare_no_case(elem.getValue(), "left") == true) {
 			Log.verbose("XML left ...");
 			htmlFlush();
-			m_alignement = alignLeft;
+			this.alignement = alignLeft;
 			parseHtmlNode(elem);
 		} else if (etk::compare_no_case(elem.getValue(), "right") == true) {
 			Log.verbose("XML right ...");
 			htmlFlush();
-			m_alignement = alignRight;
+			this.alignement = alignRight;
 			parseHtmlNode(elem);
 		} else if (etk::compare_no_case(elem.getValue(), "justify") == true) {
 			Log.verbose("XML justify ...");
 			htmlFlush();
-			m_alignement = alignJustify;
+			this.alignement = alignJustify;
 			parseHtmlNode(elem);
 		} else {
-			Log.error("(l "<< elem.getPos() << ") node not suported type: " << elem.getType() << " val='"<< elem.getValue() << "'" );
+			Log.error("(l "+ elem.getPos() + ") node not suported type: " + elem.getType() + " val='"+ elem.getValue() + "'" );
 		}
 	}
 }
 
-void ewol::compositing::TextBase::printDecorated(const etk::String& _text) {
-	etk::String tmpData("<html>\n<body>\n");
+void ewol::compositing::TextBase::printDecorated( String _text) {
+	String tmpData("<html>\n<body>\n");
 	tmpData += _text;
 	tmpData += "\n</body>\n</html>\n";
-	//Log.debug("plop : " << tmpData);
+	//Log.debug("plop : " + tmpData);
 	printHTML(tmpData);
 }
 
-void ewol::compositing::TextBase::printDecorated(const etk::UString& _text) {
+void ewol::compositing::TextBase::printDecorated( etk::UString _text) {
 	etk::UString tmpData(U"<html>\n<body>\n");
 	tmpData += _text;
 	tmpData += U"\n</body>\n</html>\n";
-	//Log.debug("plop : " << tmpData);
+	//Log.debug("plop : " + tmpData);
 	printHTML(tmpData);
 }
 
-void ewol::compositing::TextBase::printHTML(const etk::String& _text) {
+void ewol::compositing::TextBase::printHTML( String _text) {
 	exml::Document doc;
 	
 	// reset parameter :
-	m_htmlDecoTmp.m_colorBg = m_defaultColorBg;
-	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
-	m_htmlDecoTmp.m_mode = ewol::font::Regular;
+	this.htmlDecoTmp.this.colorBg = this.defaultColorBg;
+	this.htmlDecoTmp.this.colorFg = this.defaultColorFg;
+	this.htmlDecoTmp.this.mode = ewol::font::Regular;
 	
 	if (doc.parse(_text) == false) {
 		Log.error( "can not load XML: PARSING error: Decorated text ");
@@ -398,13 +398,13 @@ void ewol::compositing::TextBase::printHTML(const etk::String& _text) {
 	htmlFlush();
 }
 
-void ewol::compositing::TextBase::printHTML(const etk::UString& _text) {
+void ewol::compositing::TextBase::printHTML( etk::UString _text) {
 	exml::Document doc;
 	
 	// reset parameter :
-	m_htmlDecoTmp.m_colorBg = m_defaultColorBg;
-	m_htmlDecoTmp.m_colorFg = m_defaultColorFg;
-	m_htmlDecoTmp.m_mode = ewol::font::Regular;
+	this.htmlDecoTmp.this.colorBg = this.defaultColorBg;
+	this.htmlDecoTmp.this.colorFg = this.defaultColorFg;
+	this.htmlDecoTmp.this.mode = ewol::font::Regular;
 	// TODO : Create an instance of xml parser to manage etk::UString...
 	if (doc.parse(etk::toString(_text)) == false) {
 		Log.error( "can not load XML: PARSING error: Decorated text ");
@@ -426,77 +426,77 @@ void ewol::compositing::TextBase::printHTML(const etk::UString& _text) {
 	htmlFlush();
 }
 
-void ewol::compositing::TextBase::print(const etk::String& _text, const List<TextDecoration>& _decoration) {
-	etk::Color<> tmpFg(m_color);
-	etk::Color<> tmpBg(m_colorBg);
-	if (m_alignement == alignDisable) {
-		//Log.debug(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+void ewol::compositing::TextBase::print( String _text,  List<TextDecoration> _decoration) {
+	etk::Color<> tmpFg(this.color);
+	etk::Color<> tmpBg(this.colorBg);
+	if (this.alignement == alignDisable) {
+		//Log.debug(" 1 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// display the cursor if needed (if it is at the start position...)
-		if (m_needDisplay == true) {
-			if (0 == m_cursorPos) {
-				m_vectorialDraw.setPos(m_position);
-				setColorBg(m_colorCursor);
+		if (this.needDisplay == true) {
+			if (0 == this.cursorPos) {
+				this.vectorialDraw.setPos(this.position);
+				setColorBg(this.colorCursor);
 				printCursor(false);
 			}
 		}
 		// note this is faster when nothing is requested ...
-		for(size_t iii=0; iii<_text.size(); iii++) {
+		for(int iii=0; iii<_text.size(); iii++) {
 			// check if ve have decoration
 			if (iii<_decoration.size()) {
-				tmpFg = _decoration[iii].m_colorFg;
-				tmpBg = _decoration[iii].m_colorBg;
-				setFontMode(_decoration[iii].m_mode);
+				tmpFg = _decoration[iii].this.colorFg;
+				tmpBg = _decoration[iii].this.colorBg;
+				setFontMode(_decoration[iii].this.mode);
 			}
 			// if real display : ( not display is for size calculation)
-			if (m_needDisplay == true) {
-				if(    (    m_selectionStartPos-1 < (int64_t)iii
-				         && (int64_t)iii  <= m_cursorPos-1)
-				    || (    m_selectionStartPos-1 >= (int64_t)iii
-				         && (int64_t)iii > m_cursorPos-1) ) {
+			if (this.needDisplay == true) {
+				if(    (    this.selectionStartPos-1 < (long)iii
+				         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii  <= this.cursorPos-1)
+				    || (    this.selectionStartPos-1 >= (long)iii
+				         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii > this.cursorPos-1) ) {
 					setColor(  0x000000FF);
-					setColorBg(m_colorSelection);
+					setColorBg(this.colorSelection);
 				} else {
 					setColor(  tmpFg);
 					setColorBg(tmpBg);
 				}
 			}
-			if(    m_needDisplay == true
-			    && m_colorBg.a() != 0) {
-				Vector3f pos = m_position;
-				m_vectorialDraw.setPos(pos);
+			if(    this.needDisplay == true
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+				Vector3f pos = this.position;
+				this.vectorialDraw.setPos(pos);
 				printChar(_text[iii]);
 				float fontHeigh = getHeight();
-				m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
-				m_nbCharDisplayed++;
+				this.vectorialDraw.rectangleWidth(Vector3f(this.position.x()-pos.x(),fontHeigh,0.0f) );
+				this.nbCharDisplayed++;
 			} else {
 				printChar(_text[iii]);
-				m_nbCharDisplayed++;
+				this.nbCharDisplayed++;
 			}
 			// display the cursor if needed (if it is at the other position...)
-			if (m_needDisplay == true) {
-				if ((int64_t)iii == m_cursorPos-1) {
-					m_vectorialDraw.setPos(m_position);
-					setColorBg(m_colorCursor);
+			if (this.needDisplay == true) {
+				if ((long)iii == this.cursorPos-1) {
+					this.vectorialDraw.setPos(this.position);
+					setColorBg(this.colorCursor);
 					printCursor(false);
 				}
 			}
 		}
-		//Log.debug(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 2 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 	} else {
-		//Log.debug(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 3 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// special start case at the right of the endpoint :
-		if (m_stopTextPos < m_position.x()) {
+		if (this.stopTextPos < this.position.x()) {
 			forceLineReturn();
 		}
-		float basicSpaceWidth = calculateSize(char32_t(' ')).x();
-		int32_t currentId = 0;
-		int32_t stop;
-		int32_t space;
-		int32_t freeSpace;
-		while (currentId < (int64_t)_text.size()) {
-			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
+		float basicSpaceWidth = calculateSize(Character(' ')).x();
+		int currentId = 0;
+		int stop;
+		int space;
+		int freeSpace;
+		while (currentId < (long)_text.size()) {
+			boolean needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
 			float interpolation = basicSpaceWidth;
-			switch (m_alignement) {
+			switch (this.alignement) {
 				case alignJustify:
 					if (needNoJustify == false) {
 						interpolation += (float)freeSpace / (float)(space-1);
@@ -507,181 +507,181 @@ void ewol::compositing::TextBase::print(const etk::String& _text, const List<Tex
 					// nothing to do ...
 					break;
 				case alignRight:
-					if (m_needDisplay == true) {
+					if (this.needDisplay == true) {
 						// Move the first char at the right :
-						setPos(Vector3f(m_position.x() + freeSpace,
-						            m_position.y(),
-						            m_position.z()) );
+						setPos(Vector3f(this.position.x() + freeSpace,
+						            this.position.y(),
+						            this.position.z()) );
 					}
 					break;
 				case alignCenter:
-					if (m_needDisplay == true) {
+					if (this.needDisplay == true) {
 						// Move the first char at the right :
-						setPos(Vector3f(m_position.x() + freeSpace/2,
-						            m_position.y(),
-						            m_position.z()) );
+						setPos(Vector3f(this.position.x() + freeSpace/2,
+						            this.position.y(),
+						            this.position.z()) );
 					}
 					break;
 			}
 			// display all the elements
-			if(    m_needDisplay == true
-			    && m_cursorPos == 0) {
-				m_vectorialDraw.setPos(m_position);
-				setColorBg(m_colorCursor);
+			if(    this.needDisplay == true
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.cursorPos == 0) {
+				this.vectorialDraw.setPos(this.position);
+				setColorBg(this.colorCursor);
 				printCursor(false);
 			}
-			for(size_t iii=currentId; (int64_t)iii<stop && iii<_text.size(); iii++) {
+			for(int iii=currentId; (long)iii<stop LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM iii<_text.size(); iii++) {
 				float fontHeigh = getHeight();
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
-					tmpFg = _decoration[iii].m_colorFg;
-					tmpBg = _decoration[iii].m_colorBg;
-					setFontMode(_decoration[iii].m_mode);
+					tmpFg = _decoration[iii].this.colorFg;
+					tmpBg = _decoration[iii].this.colorBg;
+					setFontMode(_decoration[iii].this.mode);
 				}
-				if (m_needDisplay == true) {
-					if(    (    m_selectionStartPos-1<(int64_t)iii
-					         && (int64_t)iii  <= m_cursorPos-1)
-					    || (    m_selectionStartPos-1 >= (int64_t)iii
-					         && (int64_t)iii > m_cursorPos-1) ) {
+				if (this.needDisplay == true) {
+					if(    (    this.selectionStartPos-1<(long)iii
+					         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii  <= this.cursorPos-1)
+					    || (    this.selectionStartPos-1 >= (long)iii
+					         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii > this.cursorPos-1) ) {
 						setColor(  0x000000FF);
-						setColorBg(m_colorSelection);
+						setColorBg(this.colorSelection);
 					} else {
 						setColor(  tmpFg);
 						setColorBg(tmpBg);
 					}
 				}
 				// special for the justify mode
-				if ((char32_t)_text[iii] == u32char::Space) {
+				if ((Character)_text[iii] == u32char::Space) {
 					//Log.debug(" generateString : \" \"");
-					if(    m_needDisplay == true
-					    && m_colorBg.a() != 0) {
-						m_vectorialDraw.setPos(m_position);
+					if(    this.needDisplay == true
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+						this.vectorialDraw.setPos(this.position);
 					}
 					// Must generate a dynamic space : 
-					setPos(Vector3f(m_position.x() + interpolation,
-					            m_position.y(),
-					            m_position.z()) );
-					if(    m_needDisplay == true
-					    && m_colorBg.a() != 0) {
-						m_vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f) );
+					setPos(Vector3f(this.position.x() + interpolation,
+					            this.position.y(),
+					            this.position.z()) );
+					if(    this.needDisplay == true
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+						this.vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
-					//Log.debug(" generateString : \"" << (char)text[iii] << "\"");
-					if(    m_needDisplay == true
-					    && m_colorBg.a() != 0) {
-						Vector3f pos = m_position;
-						m_vectorialDraw.setPos(pos);
+					//Log.debug(" generateString : \"" + (char)text[iii] + "\"");
+					if(    this.needDisplay == true
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+						Vector3f pos = this.position;
+						this.vectorialDraw.setPos(pos);
 						printChar(_text[iii]);
-						m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
-						m_nbCharDisplayed++;
+						this.vectorialDraw.rectangleWidth(Vector3f(this.position.x()-pos.x(),fontHeigh,0.0f) );
+						this.nbCharDisplayed++;
 					} else {
 						printChar(_text[iii]);
-						m_nbCharDisplayed++;
+						this.nbCharDisplayed++;
 					}
 				}
-				if (m_needDisplay == true) {
-					if ((int64_t)iii == m_cursorPos-1) {
-						m_vectorialDraw.setPos(m_position);
-						setColorBg(m_colorCursor);
+				if (this.needDisplay == true) {
+					if ((long)iii == this.cursorPos-1) {
+						this.vectorialDraw.setPos(this.position);
+						setColorBg(this.colorCursor);
 						printCursor(false);
 					}
 				}
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if((char32_t)_text[stop] == u32char::Space) {
+			} else if((Character)_text[stop] == u32char::Space) {
 				currentId = stop+1;
 				// reset position :
-				setPos(Vector3f(m_startTextpos,
-				            (float)(m_position.y() - getHeight()),
-				            m_position.z()) );
-				m_nbCharDisplayed++;
-			} else if((char32_t)_text[stop] == u32char::Return) {
+				setPos(Vector3f(this.startTextpos,
+				            (float)(this.position.y() - getHeight()),
+				            this.position.z()) );
+				this.nbCharDisplayed++;
+			} else if((Character)_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
-				setPos(Vector3f(m_startTextpos,
-				            (float)(m_position.y() - getHeight()),
-				            m_position.z()) );
-				m_nbCharDisplayed++;
+				setPos(Vector3f(this.startTextpos,
+				            (float)(this.position.y() - getHeight()),
+				            this.position.z()) );
+				this.nbCharDisplayed++;
 			} else {
 				currentId = stop;
 			}
 		}
-		//Log.debug(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 4 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 	}
 }
 
-void ewol::compositing::TextBase::print(const etk::UString& _text, const List<TextDecoration>& _decoration) {
-	etk::Color<> tmpFg(m_color);
-	etk::Color<> tmpBg(m_colorBg);
-	if (m_alignement == alignDisable) {
-		//Log.debug(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+void ewol::compositing::TextBase::print( etk::UString _text,  List<TextDecoration> _decoration) {
+	etk::Color<> tmpFg(this.color);
+	etk::Color<> tmpBg(this.colorBg);
+	if (this.alignement == alignDisable) {
+		//Log.debug(" 1 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// display the cursor if needed (if it is at the start position...)
-		if (m_needDisplay == true) {
-			if (0 == m_cursorPos) {
-				m_vectorialDraw.setPos(m_position);
-				setColorBg(m_colorCursor);
+		if (this.needDisplay == true) {
+			if (0 == this.cursorPos) {
+				this.vectorialDraw.setPos(this.position);
+				setColorBg(this.colorCursor);
 				printCursor(false);
 			}
 		}
 		// note this is faster when nothing is requested ...
-		for(size_t iii=0; iii<_text.size(); iii++) {
+		for(int iii=0; iii<_text.size(); iii++) {
 			// check if ve have decoration
 			if (iii<_decoration.size()) {
-				tmpFg = _decoration[iii].m_colorFg;
-				tmpBg = _decoration[iii].m_colorBg;
-				setFontMode(_decoration[iii].m_mode);
+				tmpFg = _decoration[iii].this.colorFg;
+				tmpBg = _decoration[iii].this.colorBg;
+				setFontMode(_decoration[iii].this.mode);
 			}
 			// if real display : ( not display is for size calculation)
-			if (m_needDisplay == true) {
-				if(    (    m_selectionStartPos-1<(int64_t)iii
-				         && (int64_t)iii  <= m_cursorPos-1)
-				    || (    m_selectionStartPos-1 >= (int64_t)iii
-				         && (int64_t)iii > m_cursorPos-1) ) {
+			if (this.needDisplay == true) {
+				if(    (    this.selectionStartPos-1<(long)iii
+				         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii  <= this.cursorPos-1)
+				    || (    this.selectionStartPos-1 >= (long)iii
+				         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii > this.cursorPos-1) ) {
 					setColor(  0x000000FF);
-					setColorBg(m_colorSelection);
+					setColorBg(this.colorSelection);
 				} else {
 					setColor(  tmpFg);
 					setColorBg(tmpBg);
 				}
 			}
-			if(    m_needDisplay == true
-			    && m_colorBg.a() != 0) {
-				Vector3f pos = m_position;
-				m_vectorialDraw.setPos(pos);
+			if(    this.needDisplay == true
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+				Vector3f pos = this.position;
+				this.vectorialDraw.setPos(pos);
 				printChar(_text[iii]);
 				float fontHeigh = getHeight();
-				m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
-				m_nbCharDisplayed++;
+				this.vectorialDraw.rectangleWidth(Vector3f(this.position.x()-pos.x(),fontHeigh,0.0f) );
+				this.nbCharDisplayed++;
 			} else {
 				printChar(_text[iii]);
-				m_nbCharDisplayed++;
+				this.nbCharDisplayed++;
 			}
 			// display the cursor if needed (if it is at the other position...)
-			if (m_needDisplay == true) {
-				if ((int64_t)iii == m_cursorPos-1) {
-					m_vectorialDraw.setPos(m_position);
-					setColorBg(m_colorCursor);
+			if (this.needDisplay == true) {
+				if ((long)iii == this.cursorPos-1) {
+					this.vectorialDraw.setPos(this.position);
+					setColorBg(this.colorCursor);
 					printCursor(false);
 				}
 			}
 		}
-		//Log.debug(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 2 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 	} else {
-		//Log.debug(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 3 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// special start case at the right of the endpoint :
-		if (m_stopTextPos < m_position.x()) {
+		if (this.stopTextPos < this.position.x()) {
 			forceLineReturn();
 		}
-		float basicSpaceWidth = calculateSize(char32_t(' ')).x();
-		int32_t currentId = 0;
-		int32_t stop;
-		int32_t space;
-		int32_t freeSpace;
-		while (currentId < (int64_t)_text.size()) {
-			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
+		float basicSpaceWidth = calculateSize(Character(' ')).x();
+		int currentId = 0;
+		int stop;
+		int space;
+		int freeSpace;
+		while (currentId < (long)_text.size()) {
+			boolean needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
 			float interpolation = basicSpaceWidth;
-			switch (m_alignement) {
+			switch (this.alignement) {
 				case alignJustify:
 					if (needNoJustify == false) {
 						interpolation += (float)freeSpace / (float)(space-1);
@@ -692,82 +692,82 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const List<Te
 					// nothing to do ...
 					break;
 				case alignRight:
-					if (m_needDisplay == true) {
+					if (this.needDisplay == true) {
 						// Move the first char at the right :
-						setPos(Vector3f(m_position.x() + freeSpace,
-						            m_position.y(),
-						            m_position.z()) );
+						setPos(Vector3f(this.position.x() + freeSpace,
+						            this.position.y(),
+						            this.position.z()) );
 					}
 					break;
 				case alignCenter:
-					if (m_needDisplay == true) {
+					if (this.needDisplay == true) {
 						// Move the first char at the right :
-						setPos(Vector3f(m_position.x() + freeSpace/2,
-						            m_position.y(),
-						            m_position.z()) );
+						setPos(Vector3f(this.position.x() + freeSpace/2,
+						            this.position.y(),
+						            this.position.z()) );
 					}
 					break;
 			}
 			// display all the elements
-			if(    m_needDisplay == true
-			    && m_cursorPos == 0) {
-				m_vectorialDraw.setPos(m_position);
-				setColorBg(m_colorCursor);
+			if(    this.needDisplay == true
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.cursorPos == 0) {
+				this.vectorialDraw.setPos(this.position);
+				setColorBg(this.colorCursor);
 				printCursor(false);
 			}
-			for(size_t iii=currentId; (int64_t)iii<stop && iii<_text.size(); iii++) {
+			for(int iii=currentId; (long)iii<stop LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM iii<_text.size(); iii++) {
 				float fontHeigh = getHeight();
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
-					tmpFg = _decoration[iii].m_colorFg;
-					tmpBg = _decoration[iii].m_colorBg;
-					setFontMode(_decoration[iii].m_mode);
+					tmpFg = _decoration[iii].this.colorFg;
+					tmpBg = _decoration[iii].this.colorBg;
+					setFontMode(_decoration[iii].this.mode);
 				}
-				if (m_needDisplay == true) {
-					if(    (    m_selectionStartPos-1<(int64_t)iii
-					         && (int64_t)iii  <= m_cursorPos-1)
-					    || (    m_selectionStartPos-1 >= (int64_t)iii
-					         && (int64_t)iii > m_cursorPos-1) ) {
+				if (this.needDisplay == true) {
+					if(    (    this.selectionStartPos-1<(long)iii
+					         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii  <= this.cursorPos-1)
+					    || (    this.selectionStartPos-1 >= (long)iii
+					         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (long)iii > this.cursorPos-1) ) {
 						setColor(  0x000000FF);
-						setColorBg(m_colorSelection);
+						setColorBg(this.colorSelection);
 					} else {
 						setColor(  tmpFg);
 						setColorBg(tmpBg);
 					}
 				}
 				// special for the justify mode
-				if ((char32_t)_text[iii] == u32char::Space) {
+				if ((Character)_text[iii] == u32char::Space) {
 					//Log.debug(" generateString : \" \"");
-					if(    m_needDisplay == true
-					    && m_colorBg.a() != 0) {
-						m_vectorialDraw.setPos(m_position);
+					if(    this.needDisplay == true
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+						this.vectorialDraw.setPos(this.position);
 					}
 					// Must generate a dynamic space : 
-					setPos(Vector3f(m_position.x() + interpolation,
-					            m_position.y(),
-					            m_position.z()) );
-					if(    m_needDisplay == true
-					    && m_colorBg.a() != 0) {
-						m_vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f) );
+					setPos(Vector3f(this.position.x() + interpolation,
+					            this.position.y(),
+					            this.position.z()) );
+					if(    this.needDisplay == true
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+						this.vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
-					//Log.debug(" generateString : \"" << (char)text[iii] << "\"");
-					if(    m_needDisplay == true
-					    && m_colorBg.a() != 0) {
-						Vector3f pos = m_position;
-						m_vectorialDraw.setPos(pos);
+					//Log.debug(" generateString : \"" + (char)text[iii] + "\"");
+					if(    this.needDisplay == true
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorBg.a() != 0) {
+						Vector3f pos = this.position;
+						this.vectorialDraw.setPos(pos);
 						printChar(_text[iii]);
-						m_vectorialDraw.rectangleWidth(Vector3f(m_position.x()-pos.x(),fontHeigh,0.0f) );
-						m_nbCharDisplayed++;
+						this.vectorialDraw.rectangleWidth(Vector3f(this.position.x()-pos.x(),fontHeigh,0.0f) );
+						this.nbCharDisplayed++;
 					} else {
 						printChar(_text[iii]);
-						m_nbCharDisplayed++;
+						this.nbCharDisplayed++;
 					}
 				}
-				if (m_needDisplay == true) {
-					if ((int64_t)iii == m_cursorPos-1) {
-						m_vectorialDraw.setPos(m_position);
-						setColorBg(m_colorCursor);
+				if (this.needDisplay == true) {
+					if ((long)iii == this.cursorPos-1) {
+						this.vectorialDraw.setPos(this.position);
+						setColorBg(this.colorCursor);
 						printCursor(false);
 					}
 				}
@@ -777,22 +777,22 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const List<Te
 			} else if(_text[stop] == u32char::Space) {
 				currentId = stop+1;
 				// reset position :
-				setPos(Vector3f(m_startTextpos,
-				            (float)(m_position.y() - getHeight()),
-				            m_position.z()) );
-				m_nbCharDisplayed++;
+				setPos(Vector3f(this.startTextpos,
+				            (float)(this.position.y() - getHeight()),
+				            this.position.z()) );
+				this.nbCharDisplayed++;
 			} else if(_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
-				setPos(Vector3f(m_startTextpos,
-				            (float)(m_position.y() - getHeight()),
-				            m_position.z()) );
-				m_nbCharDisplayed++;
+				setPos(Vector3f(this.startTextpos,
+				            (float)(this.position.y() - getHeight()),
+				            this.position.z()) );
+				this.nbCharDisplayed++;
 			} else {
 				currentId = stop;
 			}
 		}
-		//Log.debug(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		//Log.debug(" 4 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 	}
 }
 
@@ -801,101 +801,101 @@ void ewol::compositing::TextBase::print(const etk::UString& _text, const List<Te
 
 void ewol::compositing::TextBase::forceLineReturn() {
 	// reset position : 
-	setPos(Vector3f(m_startTextpos, m_position.y() - getHeight(), 0) );
+	setPos(Vector3f(this.startTextpos, this.position.y() - getHeight(), 0) );
 }
 
 void ewol::compositing::TextBase::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::compositing::aligneMode _alignement) {
-	m_startTextpos = _startTextpos;
-	m_stopTextPos = _stopTextPos+1;
-	m_alignement = _alignement;
-	if (m_startTextpos >= m_stopTextPos) {
+	this.startTextpos = _startTextpos;
+	this.stopTextPos = _stopTextPos+1;
+	this.alignement = _alignement;
+	if (this.startTextpos >= this.stopTextPos) {
 		// TODO: understand why this flush ... 
-		Log.verbose("Request allignement with Borne position error : " << _startTextpos << " => " << _stopTextPos);
+		Log.verbose("Request allignement with Borne position error : " + _startTextpos + " => " + _stopTextPos);
 	}
 }
 
 enum ewol::compositing::aligneMode ewol::compositing::TextBase::getAlignement() {
-	return m_alignement;
+	return this.alignement;
 }
 
 void ewol::compositing::TextBase::disableAlignement() {
-	m_alignement = alignDisable;
+	this.alignement = alignDisable;
 }
 
-Vector3f ewol::compositing::TextBase::calculateSizeHTML(const etk::String& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeHTML( String _text) {
 	// remove intermediate result 
 	reset();
-	//Log.debug("        0 size for=\n" << text);
+	//Log.debug("        0 size for=\n" + text);
 	// disable display system
-	m_needDisplay = false;
+	this.needDisplay = false;
 	
 	setPos(Vector3f(0,0,0) );
 	// same as print without the end display ...
 	printHTML(_text);
-	//Log.debug("        1 Start pos=" << m_sizeDisplayStart);
-	//Log.debug("        1 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        1 Start pos=" + this.sizeDisplayStart);
+	//Log.debug("        1 Stop pos=" + this.sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(etk::max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           etk::max(m_position.y(), m_sizeDisplayStop.y()) ,
+	this.sizeDisplayStop.setValue(etk::max(this.position.x(), this.sizeDisplayStop.x()) ,
+	                           etk::max(this.position.y(), this.sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(etk::min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            etk::min(m_position.y(), m_sizeDisplayStart.y()) ,
+	this.sizeDisplayStart.setValue(etk::min(this.position.x(), this.sizeDisplayStart.x()) ,
+	                            etk::min(this.position.y(), this.sizeDisplayStart.y()) ,
 	                            0);
 	
-	//Log.debug("        2 Start pos=" << m_sizeDisplayStart);
-	//Log.debug("        2 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        2 Start pos=" + this.sizeDisplayStart);
+	//Log.debug("        2 Stop pos=" + this.sizeDisplayStop);
 	// set back the display system
-	m_needDisplay = true;
+	this.needDisplay = true;
 	
-	return Vector3f( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
-	             m_sizeDisplayStop.y()-m_sizeDisplayStart.y(),
-	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
+	return Vector3f( this.sizeDisplayStop.x()-this.sizeDisplayStart.x(),
+	             this.sizeDisplayStop.y()-this.sizeDisplayStart.y(),
+	             this.sizeDisplayStop.z()-this.sizeDisplayStart.z());
 }
 
-Vector3f ewol::compositing::TextBase::calculateSizeHTML(const etk::UString& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeHTML( etk::UString _text) {
 	// remove intermediate result 
 	reset();
-	//Log.debug("        0 size for=\n" << text);
+	//Log.debug("        0 size for=\n" + text);
 	// disable display system
-	m_needDisplay = false;
+	this.needDisplay = false;
 	
 	setPos(Vector3f(0,0,0) );
 	// same as print without the end display ...
 	printHTML(_text);
-	//Log.debug("        1 Start pos=" << m_sizeDisplayStart);
-	//Log.debug("        1 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        1 Start pos=" + this.sizeDisplayStart);
+	//Log.debug("        1 Stop pos=" + this.sizeDisplayStop);
 	
 	// get the last elements
-	m_sizeDisplayStop.setValue(etk::max(m_position.x(), m_sizeDisplayStop.x()) ,
-	                           etk::max(m_position.y(), m_sizeDisplayStop.y()) ,
+	this.sizeDisplayStop.setValue(etk::max(this.position.x(), this.sizeDisplayStop.x()) ,
+	                           etk::max(this.position.y(), this.sizeDisplayStop.y()) ,
 	                           0);
-	m_sizeDisplayStart.setValue(etk::min(m_position.x(), m_sizeDisplayStart.x()) ,
-	                            etk::min(m_position.y(), m_sizeDisplayStart.y()) ,
+	this.sizeDisplayStart.setValue(etk::min(this.position.x(), this.sizeDisplayStart.x()) ,
+	                            etk::min(this.position.y(), this.sizeDisplayStart.y()) ,
 	                            0);
 	
-	//Log.debug("        2 Start pos=" << m_sizeDisplayStart);
-	//Log.debug("        2 Stop pos=" << m_sizeDisplayStop);
+	//Log.debug("        2 Start pos=" + this.sizeDisplayStart);
+	//Log.debug("        2 Stop pos=" + this.sizeDisplayStop);
 	// set back the display system
-	m_needDisplay = true;
+	this.needDisplay = true;
 	
-	return Vector3f( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
-	             m_sizeDisplayStop.y()-m_sizeDisplayStart.y(),
-	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
+	return Vector3f( this.sizeDisplayStop.x()-this.sizeDisplayStart.x(),
+	             this.sizeDisplayStop.y()-this.sizeDisplayStart.y(),
+	             this.sizeDisplayStop.z()-this.sizeDisplayStart.z());
 }
 
-Vector3f ewol::compositing::TextBase::calculateSizeDecorated(const etk::String& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeDecorated( String _text) {
 	if (_text.size() == 0) {
 		return Vector3f(0,0,0);
 	}
-	etk::String tmpData("<html><body>\n");
+	String tmpData("<html><body>\n");
 	tmpData+=_text;
 	tmpData+="\n</body></html>\n";
 	Vector3f tmpVal = calculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-Vector3f ewol::compositing::TextBase::calculateSizeDecorated(const etk::UString& _text) {
+Vector3f ewol::compositing::TextBase::calculateSizeDecorated( etk::UString _text) {
 	if (_text.size() == 0) {
 		return Vector3f(0,0,0);
 	}
@@ -906,7 +906,7 @@ Vector3f ewol::compositing::TextBase::calculateSizeDecorated(const etk::UString&
 	return tmpVal;
 }
 
-Vector3f ewol::compositing::TextBase::calculateSize(const etk::String& _text) {
+Vector3f ewol::compositing::TextBase::calculateSize( String _text) {
 	Vector3f outputSize(0, 0, 0);
 	for(auto element : _text) {
 		Vector3f tmpp = calculateSize(element);
@@ -918,7 +918,7 @@ Vector3f ewol::compositing::TextBase::calculateSize(const etk::String& _text) {
 	return outputSize;
 }
 
-Vector3f ewol::compositing::TextBase::calculateSize(const etk::UString& _text) {
+Vector3f ewol::compositing::TextBase::calculateSize( etk::UString _text) {
 	Vector3f outputSize(0, 0, 0);
 	for(auto element : _text) {
 		Vector3f tmpp = calculateSize(element);
@@ -930,41 +930,41 @@ Vector3f ewol::compositing::TextBase::calculateSize(const etk::UString& _text) {
 	return outputSize;
 }
 
-void ewol::compositing::TextBase::printCursor(bool _isInsertMode, float _cursorSize) {
-	int32_t fontHeigh = getHeight();
+void ewol::compositing::TextBase::printCursor(boolean _isInsertMode, float _cursorSize) {
+	int fontHeigh = getHeight();
 	if (true == _isInsertMode) {
-		m_vectorialDraw.rectangleWidth(Vector3f(_cursorSize, fontHeigh, 0) );
+		this.vectorialDraw.rectangleWidth(Vector3f(_cursorSize, fontHeigh, 0) );
 	} else {
-		m_vectorialDraw.setThickness(2);
-		m_vectorialDraw.lineRel( Vector3f(0, fontHeigh, 0) );
-		m_vectorialDraw.setThickness(0);
+		this.vectorialDraw.setThickness(2);
+		this.vectorialDraw.lineRel( Vector3f(0, fontHeigh, 0) );
+		this.vectorialDraw.setThickness(0);
 	}
 }
 
-bool ewol::compositing::TextBase::extrapolateLastId(const etk::String& _text,
-                                                const int32_t _start,
-                                                int32_t& _stop,
-                                                int32_t& _space,
-                                                int32_t& _freeSpace) {
+boolean ewol::compositing::TextBase::extrapolateLastId( String _text,
+                                                 int _start,
+                                                int _stop,
+                                                int _space,
+                                                int _freeSpace) {
 	// store previous :
-	char32_t storePrevious = m_previousCharcode;
+	Character storePrevious = this.previousCharcode;
 	
 	_stop = _text.size();
 	_space = 0;
 	
-	int32_t lastSpacePosition = _start;
-	int32_t lastSpacefreeSize = 0;
+	int lastSpacePosition = _start;
+	int lastSpacefreeSize = 0;
 	
-	float endPos = m_position.x();
-	bool endOfLine = false;
+	float endPos = this.position.x();
+	boolean endOfLine = false;
 	
-	float stopPosition = m_stopTextPos;
-	if(    m_needDisplay == false
-	    || m_stopTextPos == m_startTextpos) {
-		stopPosition = m_startTextpos + 3999999999.0;
+	float stopPosition = this.stopTextPos;
+	if(    this.needDisplay == false
+	    || this.stopTextPos == this.startTextpos) {
+		stopPosition = this.startTextpos + 3999999999.0;
 	}
 	
-	for (size_t iii=_start; iii<_text.size(); iii++) {
+	for (int iii=_start; iii<_text.size(); iii++) {
 		Vector3f tmpSize = calculateSize(_text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x() > stopPosition) {
@@ -972,11 +972,11 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::String& _text,
 			break;
 		}
 		// save number of space :
-		if ((char32_t)_text[iii] == u32char::Space) {
+		if ((Character)_text[iii] == u32char::Space) {
 			_space++;
 			lastSpacePosition = iii;
 			lastSpacefreeSize = stopPosition - endPos;
-		} else if ((char32_t)_text[iii] == u32char::Return) {
+		} else if ((Character)_text[iii] == u32char::Return) {
 			_stop = iii;
 			endOfLine = true;
 			break;
@@ -986,9 +986,9 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::String& _text,
 	}
 	_freeSpace = stopPosition - endPos;
 	// retore previous :
-	m_previousCharcode = storePrevious;
+	this.previousCharcode = storePrevious;
 	// need to align left or right ...
-	if(_stop == (int64_t)_text.size()) {
+	if(_stop == (long)_text.size()) {
 		return true;
 	} else {
 		if (endOfLine) {
@@ -1004,30 +1004,30 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::String& _text,
 	}
 }
 
-bool ewol::compositing::TextBase::extrapolateLastId(const etk::UString& _text,
-                                                const int32_t _start,
-                                                int32_t& _stop,
-                                                int32_t& _space,
-                                                int32_t& _freeSpace) {
+boolean ewol::compositing::TextBase::extrapolateLastId( etk::UString _text,
+                                                 int _start,
+                                                int _stop,
+                                                int _space,
+                                                int _freeSpace) {
 	// store previous :
-	char32_t storePrevious = m_previousCharcode;
+	Character storePrevious = this.previousCharcode;
 	
 	_stop = _text.size();
 	_space = 0;
 	
-	int32_t lastSpacePosition = _start;
-	int32_t lastSpacefreeSize = 0;
+	int lastSpacePosition = _start;
+	int lastSpacefreeSize = 0;
 	
-	float endPos = m_position.x();
-	bool endOfLine = false;
+	float endPos = this.position.x();
+	boolean endOfLine = false;
 	
-	float stopPosition = m_stopTextPos;
-	if(    m_needDisplay == false
-	    || m_stopTextPos == m_startTextpos) {
-		stopPosition = m_startTextpos + 3999999999.0;
+	float stopPosition = this.stopTextPos;
+	if(    this.needDisplay == false
+	    || this.stopTextPos == this.startTextpos) {
+		stopPosition = this.startTextpos + 3999999999.0;
 	}
 	
-	for (size_t iii=_start; iii<_text.size(); iii++) {
+	for (int iii=_start; iii<_text.size(); iii++) {
 		Vector3f tmpSize = calculateSize(_text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x() > stopPosition) {
@@ -1049,9 +1049,9 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::UString& _text,
 	}
 	_freeSpace = stopPosition - endPos;
 	// retore previous :
-	m_previousCharcode = storePrevious;
+	this.previousCharcode = storePrevious;
 	// need to align left or right ...
-	if(_stop == (int64_t)_text.size()) {
+	if(_stop == (long)_text.size()) {
 		return true;
 	} else {
 		if (endOfLine) {
@@ -1067,50 +1067,50 @@ bool ewol::compositing::TextBase::extrapolateLastId(const etk::UString& _text,
 	}
 }
 
-void ewol::compositing::TextBase::htmlAddData(const etk::UString& _data) {
-	if(    m_htmlCurrrentLine.size()>0
-	    && m_htmlCurrrentLine[m_htmlCurrrentLine.size()-1] != ' ') {
-		m_htmlCurrrentLine += U" ";
-		if(m_htmlDecoration.size()>0) {
-			TextDecoration tmp = m_htmlDecoration[m_htmlDecoration.size()-1];
-			m_htmlDecoration.pushBack(tmp);
+void ewol::compositing::TextBase::htmlAddData( etk::UString _data) {
+	if(    this.htmlCurrrentLine.size()>0
+	    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.htmlCurrrentLine[this.htmlCurrrentLine.size()-1] != ' ') {
+		this.htmlCurrrentLine += U" ";
+		if(this.htmlDecoration.size()>0) {
+			TextDecoration tmp = this.htmlDecoration[this.htmlDecoration.size()-1];
+			this.htmlDecoration.pushBack(tmp);
 		} else {
-			m_htmlDecoration.pushBack(m_htmlDecoTmp);
+			this.htmlDecoration.pushBack(this.htmlDecoTmp);
 		}
 	}
-	m_htmlCurrrentLine += _data;
-	for(size_t iii=0; iii<_data.size() ; iii++) {
-		m_htmlDecoration.pushBack(m_htmlDecoTmp);
+	this.htmlCurrrentLine += _data;
+	for(int iii=0; iii<_data.size() ; iii++) {
+		this.htmlDecoration.pushBack(this.htmlDecoTmp);
 	}
 }
 
 void ewol::compositing::TextBase::htmlFlush() {
-	if (m_htmlCurrrentLine.size()>0) {
-		print(m_htmlCurrrentLine, m_htmlDecoration);
+	if (this.htmlCurrrentLine.size()>0) {
+		print(this.htmlCurrrentLine, this.htmlDecoration);
 	}
-	m_htmlCurrrentLine = U"";
-	m_htmlDecoration.clear();
+	this.htmlCurrrentLine = U"";
+	this.htmlDecoration.clear();
 }
 
 void ewol::compositing::TextBase::disableCursor() {
-	m_selectionStartPos = -100;
-	m_cursorPos = -100;
+	this.selectionStartPos = -100;
+	this.cursorPos = -100;
 }
 
-void ewol::compositing::TextBase::setCursorPos(int32_t _cursorPos) {
-	m_selectionStartPos = _cursorPos;
-	m_cursorPos = _cursorPos;
+void ewol::compositing::TextBase::setCursorPos(int _cursorPos) {
+	this.selectionStartPos = _cursorPos;
+	this.cursorPos = _cursorPos;
 }
 
-void ewol::compositing::TextBase::setCursorSelection(int32_t _cursorPos, int32_t _selectionStartPos) {
-	m_selectionStartPos = _selectionStartPos;
-	m_cursorPos = _cursorPos;
+void ewol::compositing::TextBase::setCursorSelection(int _cursorPos, int _selectionStartPos) {
+	this.selectionStartPos = _selectionStartPos;
+	this.cursorPos = _cursorPos;
 }
 
-void ewol::compositing::TextBase::setSelectionColor(const etk::Color<>& _color) {
-	m_colorSelection = _color;
+void ewol::compositing::TextBase::setSelectionColor( etk::Color<> _color) {
+	this.colorSelection = _color;
 }
 
-void ewol::compositing::TextBase::setCursorColor(const etk::Color<>& _color) {
-	m_colorCursor = _color;
+void ewol::compositing::TextBase::setCursorColor( etk::Color<> _color) {
+	this.colorCursor = _color;
 }

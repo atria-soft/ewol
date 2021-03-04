@@ -13,10 +13,10 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::widget::Select);
 
-ewol::widget::Select::Element::Element(int32_t _value, etk::String _name, bool _selected):
-  m_value(_value),
-  m_name(_name),
-  m_selected(_selected) {
+ewol::widget::Select::Element::Element(int _value, String _name, boolean _selected):
+  this.value(_value),
+  this.name(_name),
+  this.selected(_selected) {
 	
 }
 
@@ -25,9 +25,9 @@ ewol::widget::Select::Select() :
   propertyValue(this, "value",
                       -1,
                       "Value of the Select",
-                      &ewol::widget::Select::onChangePropertyValue) {
+                      ewol::widget::Select::onChangePropertyValue) {
 	addObjectType("ewol::widget::Select");
-	// override the basic parameter:
+	//  the basic parameter:
 	propertyShape.setDirectCheck(etk::Uri("THEME_GUI:///Select.json?lib=ewol"));
 	propertySpinMode.setDirect(ewol::widget::spinPosition_noneRight);
 	propertySpinMode.changeDefault(ewol::widget::spinPosition_noneRight);
@@ -45,44 +45,44 @@ ewol::widget::Select::~Select() {
 
 void ewol::widget::Select::onChangePropertyValue() {
 	markToRedraw();
-	if (m_widgetEntry == null) {
+	if (this.widgetEntry == null) {
 		Log.error("Can not acces at entry ...");
 		return;
 	}
-	for (auto &it : m_listElement) {
-		if (it.m_value == propertyValue.get()) {
-			if (it.m_selected == false) {
-				it.m_selected = true;
-				m_widgetEntry->propertyValue.set(it.m_name);
+	for (auto it : this.listElement) {
+		if (it.this.value == propertyValue.get()) {
+			if (it.this.selected == false) {
+				it.this.selected = true;
+				this.widgetEntry.propertyValue.set(it.this.name);
 				signalValue.emit(propertyValue.get());
 			}
 		} else {
-			it.m_selected = false;
+			it.this.selected = false;
 		}
 	}
 }
 
 void ewol::widget::Select::optionSelectDefault() {
-	if (m_widgetEntry == null) {
+	if (this.widgetEntry == null) {
 		Log.error("Can not acces at entry ...");
 		return;
 	}
-	for (auto &it : m_listElement) {
-		if (it.m_selected == true) {
+	for (auto it : this.listElement) {
+		if (it.this.selected == true) {
 			return;
 		}
 	}
-	if (m_listElement.size() == 0) {
-		m_widgetEntry->propertyValue.set("");
+	if (this.listElement.size() == 0) {
+		this.widgetEntry.propertyValue.set("");
 	}
-	m_widgetEntry->propertyValue.set(m_listElement[0].m_name);
+	this.widgetEntry.propertyValue.set(this.listElement[0].this.name);
 }
 
-void ewol::widget::Select::optionRemove(int32_t _value) {
-	for (auto it=m_listElement.begin(); it != m_listElement.end(); ++it) {
-		if (_value == it->m_value) {
-			Log.debug("remove element: " << _value);
-			m_listElement.erase(it);
+void ewol::widget::Select::optionRemove(int _value) {
+	for (auto it=this.listElement.begin(); it != this.listElement.end(); ++it) {
+		if (_value == it.this.value) {
+			Log.debug("remove element: " + _value);
+			this.listElement.erase(it);
 			break;
 		}
 	}
@@ -90,21 +90,21 @@ void ewol::widget::Select::optionRemove(int32_t _value) {
 }
 
 void ewol::widget::Select::optionClear() {
-	m_listElement.clear();
+	this.listElement.clear();
 	optionSelectDefault();
 }
 
-void ewol::widget::Select::optionAdd(int32_t _value, etk::String _data) {
-	for (auto &it : m_listElement) {
-		if (_value == it.m_value) {
-			Log.debug("replace element: " << _value << " with: '" << _data << "'");
-			it.m_name = _data;
+void ewol::widget::Select::optionAdd(int _value, String _data) {
+	for (auto it : this.listElement) {
+		if (_value == it.this.value) {
+			Log.debug("replace element: " + _value + " with: '" + _data + "'");
+			it.this.name = _data;
 		}
 	}
-	m_listElement.pushBack(ewol::widget::Select::Element(_value, _data, false));
+	this.listElement.pushBack(ewol::widget::Select::Element(_value, _data, false));
 }
 
-bool ewol::widget::Select::loadXML(const exml::Element& _node) {
+boolean ewol::widget::Select::loadXML( exml::Element _node) {
 	if (_node.exist() == false) {
 		return false;
 	}
@@ -113,26 +113,26 @@ bool ewol::widget::Select::loadXML(const exml::Element& _node) {
 	// remove previous element:
 	//subWidgetRemove();
 	// parse all the elements:
-	for(const auto it : _node.nodes) {
+	for( auto it : _node.nodes) {
 		exml::Element pNode = it.toElement();
 		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
 		if (pNode.getValue() != "option") {
-			Log.error("(l " << pNode.getPos() << ") Unknown basic node='" << pNode.getValue() << "' not in : [option]" );
+			Log.error("(l " + pNode.getPos() + ") Unknown basic node='" + pNode.getValue() + "' not in : [option]" );
 			continue;
 		}
-		etk::String valId = pNode.attributes["id"];
-		etk::String valIsSelected = pNode.attributes["select"];
-		etk::String valText = pNode.getText();
-		int32_t id = etk::string_to_int32_t(valId);
-		bool select = etk::string_to_bool(valIsSelected);
+		String valId = pNode.attributes["id"];
+		String valIsSelected = pNode.attributes["select"];
+		String valText = pNode.getText();
+		int id = etk::string_to_int(valId);
+		boolean select = etk::string_to_bool(valIsSelected);
 		optionAdd(id, valText);
 		if (select == true) {
 			propertyValue.set(id);
 		}
-		EWOL_WARNING("Add option : id='" << valId << "' select='" << valIsSelected << "' text='" << valText << "'");
+		Log.warning("Add option : id='" + valId + "' select='" + valIsSelected + "' text='" + valText + "'");
 	}
 	return true;
 }
@@ -140,66 +140,66 @@ bool ewol::widget::Select::loadXML(const exml::Element& _node) {
 void ewol::widget::Select::updateGui() {
 	ewol::widget::SpinBase::updateGui();
 	
-	if (    m_widgetEntry != null
-	     && m_connectionEntry.isConnected() == false) {
+	if (    this.widgetEntry != null
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionEntry.isConnected() == false) {
 		
 	}
-	if (    m_widgetButtonUp != null
-	     && m_connectionButton.isConnected() == false) {
-		m_connectionButton = m_widgetButtonUp->signalPressed.connect(this, &ewol::widget::Select::onCallbackOpenMenu);
+	if (    this.widgetButtonUp != null
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionButton.isConnected() == false) {
+		this.connectionButton = this.widgetButtonUp.signalPressed.connect(this, ewol::widget::Select::onCallbackOpenMenu);
 	}
 	
 }
 
-void ewol::widget::Select::onCallbackLabelPressed(int32_t _value) {
-	Log.verbose("User select:" << _value);
+void ewol::widget::Select::onCallbackLabelPressed(int _value) {
+	Log.verbose("User select:" + _value);
 	propertyValue.set(_value);
 }
 
 void ewol::widget::Select::onCallbackOpenMenu() {
 	// create a context menu:
-	ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
+	ewol::widget::ContextMenu tmpContext = ewol::widget::ContextMenu::create();
 	if (tmpContext == null) {
 		Log.error("Allocation Error");
 		return;
 	}
 	// auto-select mark position:
-	tmpContext->setPositionMarkAuto(m_origin, m_size);
-	ewol::widget::SizerShared mySizer;
+	tmpContext.setPositionMarkAuto(this.origin, this.size);
+	ewol::widget::Sizer mySizer;
 	mySizer = ewol::widget::Sizer::create();
 	if (mySizer == null) {
 		Log.error("Allocation Error or sizer");
 		return;
 	}
-	mySizer->propertyMode.set(widget::Sizer::modeVert);
-	mySizer->propertyLockExpand.set(Vector2f(true,true));
-	mySizer->propertyFill.set(Vector2f(true,true));
+	mySizer.propertyMode.set(widget::Sizer::modeVert);
+	mySizer.propertyLockExpand.set(Vector2f(true,true));
+	mySizer.propertyFill.set(Vector2f(true,true));
 	// set it in the pop-up-system:
-	tmpContext->setSubWidget(mySizer);
-	for (auto &it : m_listElement) {
-		ewol::widget::LabelShared myLabel = ewol::widget::Label::create();
+	tmpContext.setSubWidget(mySizer);
+	for (auto it : this.listElement) {
+		ewol::widget::Label myLabel = ewol::widget::Label::create();
 		if (myLabel == null) {
 			Log.error("Allocation Error");
 			continue;
 		}
-		if (it.m_selected == true) {
-			myLabel->propertyValue.set(etk::String("<b>") + it.m_name + "</b>");
+		if (it.this.selected == true) {
+			myLabel.propertyValue.set(String("<b>") + it.this.name + "</b>");
 		} else {
-			myLabel->propertyValue.set(it.m_name);
+			myLabel.propertyValue.set(it.this.name);
 		}
-		myLabel->propertyExpand.set(Vector2b(true,true));
-		myLabel->propertyFill.set(Vector2b(true,true));
+		myLabel.propertyExpand.set(Vector2b(true,true));
+		myLabel.propertyFill.set(Vector2b(true,true));
 		// set callback
-		myLabel->signalPressed.connect(sharedFromThis(), &ewol::widget::Select::onCallbackLabelPressed, it.m_value);
-		myLabel->signalPressed.connect(tmpContext, &ewol::widget::ContextMenu::destroy);
+		myLabel.signalPressed.connect(sharedFromThis(), ewol::widget::Select::onCallbackLabelPressed, it.this.value);
+		myLabel.signalPressed.connect(tmpContext, ewol::widget::ContextMenu::destroy);
 		// add it in the widget list
-		mySizer->subWidgetAddStart(myLabel);
+		mySizer.subWidgetAddStart(myLabel);
 	}
-	ewol::widget::WindowsShared currentWindows = getWindows();
+	ewol::widget::Windows currentWindows = getWindows();
 	if (currentWindows == null) {
 		Log.error("Can not get the curent Windows...");
 	} else {
-		currentWindows->popUpWidgetPush(tmpContext);
+		currentWindows.popUpWidgetPush(tmpContext);
 	}
 }
 

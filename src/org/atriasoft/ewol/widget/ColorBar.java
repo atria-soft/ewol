@@ -16,9 +16,9 @@
 namespace ewol {
 	namespace widget {
 		class ColorBar;
-		using ColorBarShared = ememory::SharedPtr<ewol::widget::ColorBar>;
+		using ColorBar = ememory::Ptr<ewol::widget::ColorBar>;
 		using ColorBarWeak = ememory::WeakPtr<ewol::widget::ColorBar>;
-		class ColorBar : public ewol::Widget {
+		class ColorBar : public Widget {
 			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
 			public:
@@ -27,18 +27,18 @@ namespace ewol {
 				ColorBar();
 			public:
 				DECLARE_WIDGET_FACTORY(ColorBar, "ColorBar");
-				virtual ~ColorBar();
+				 ~ColorBar();
 			private:
-				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
-				Vector2f m_currentUserPos;
+				ewol::compositing::Drawing this.draw; //!< Compositing drawing element
+				Vector2f this.currentUserPos;
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void calculateMinMaxSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
+				void calculateMinMaxSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
 			protected:
-				virtual void onChangePropertyValue();
+				 void onChangePropertyValue();
 		};
 	};
 };

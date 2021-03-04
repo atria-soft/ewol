@@ -56,7 +56,7 @@ namespace ewol {
 			spinPosition_RightRight
 		};
 		class SpinBase;
-		using SpinBaseShared = ememory::SharedPtr<ewol::widget::SpinBase>;
+		using SpinBase = ememory::Ptr<ewol::widget::SpinBase>;
 		using SpinBaseWeak = ememory::WeakPtr<ewol::widget::SpinBase>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -68,34 +68,34 @@ namespace ewol {
 			public:
 				UN_DECLARE_FACTORY(SpinBase);
 			protected:
-				ememory::SharedPtr<ewol::resource::ConfigFile> m_config;
-				int32_t m_confIdEntryShaper;
-				int32_t m_confIdUpShaper;
-				int32_t m_confIdDownShaper;
-				int32_t m_confIdUpData;
-				int32_t m_confIdDownData;
+				ememory::Ptr<ewol::resource::ConfigFile> this.config;
+				int this.confIdEntryShaper;
+				int this.confIdUpShaper;
+				int this.confIdDownShaper;
+				int this.confIdUpData;
+				int this.confIdDownData;
 			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
 				SpinBase();
-				void init() override;
+				void init() ;
 			public:
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~SpinBase();
+				 ~SpinBase();
 			protected:
-				ewol::widget::EntryShared m_widgetEntry;
-				ewol::widget::ButtonShared m_widgetButtonDown;
-				ewol::widget::ButtonShared m_widgetButtonUp;
-				virtual void updateGui();
+				ewol::widget::Entry this.widgetEntry;
+				ewol::widget::Button this.widgetButtonDown;
+				ewol::widget::Button this.widgetButtonUp;
+				 void updateGui();
 			public:
-				virtual bool loadXML(const exml::Element& _node) override;
+				 boolean loadXML( exml::Element _node) ;
 			protected:
-				virtual void onChangePropertySpinMode();
-				virtual void onChangePropertyShape();
+				 void onChangePropertySpinMode();
+				 void onChangePropertyShape();
 		};
 	}
 }

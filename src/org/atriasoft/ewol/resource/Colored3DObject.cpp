@@ -16,19 +16,19 @@
 ETK_DECLARE_TYPE(ewol::resource::Colored3DObject);
 
 ewol::resource::Colored3DObject::Colored3DObject() :
-  m_GLprogram(null) {
+  this.GLprogram(null) {
 	addResourceType("ewol::Colored3DObject");
 }
 
 void ewol::resource::Colored3DObject::init() {
 	gale::Resource::init();
 	// get the shader resource :
-	m_GLPosition = 0;
-	m_GLprogram = gale::resource::Program::create("DATA:///simple3D.prog?lib=ewol");
-	if (m_GLprogram != null) {
-		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->getUniform("EW_color");
-		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
+	this.GLPosition = 0;
+	this.GLprogram = gale::resource::Program::create("DATA:///simple3D.prog?lib=ewol");
+	if (this.GLprogram != null) {
+		this.GLPosition = this.GLprogram.getAttribute("EW_coord3d");
+		this.GLColor    = this.GLprogram.getUniform("EW_color");
+		this.GLMatrix   = this.GLprogram.getUniform("EW_MatrixTransformation");
 	}
 }
 
@@ -37,14 +37,14 @@ ewol::resource::Colored3DObject::~Colored3DObject() {
 }
 
 
-void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
-                                           const etk::Color<float>& _color,
-                                           bool _updateDepthBuffer,
-                                           bool _depthtest) {
+void ewol::resource::Colored3DObject::draw( List<Vector3f> _vertices,
+                                            etk::Color<float> _color,
+                                           boolean _updateDepthBuffer,
+                                           boolean _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
@@ -54,23 +54,23 @@ void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//Log.debug("    display " << m_coord.size() << " elements" );
-	m_GLprogram->use();
+	//Log.debug("    display " + this.coord.size() + " elements" );
+	this.GLprogram.use();
 	// set Matrix: translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
 	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix;
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &_vertices[0], 4*sizeof(float));
+	this.GLprogram.sendAttribute(this.GLPosition, 3/*x,y,z,unused*/, _vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
+	this.GLprogram.uniform4fv(this.GLColor, 1/*r,g,b,a*/, (float*)_color);
 	// Request the draw od the elements: 
 	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, _vertices.size());
-	m_GLprogram->unUse();
+	this.GLprogram.unUse();
 	// Request the draw od the elements: 
 	//glDrawArrays(GL_LINES, 0, vertices.size());
-	//m_GLprogram->UnUse();
+	//this.GLprogram.UnUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
@@ -79,15 +79,15 @@ void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
-                                           const etk::Color<float>& _color,
-                                           mat4& _transformationMatrix,
-                                           bool _updateDepthBuffer,
-                                           bool _depthtest) {
+void ewol::resource::Colored3DObject::draw( List<Vector3f> _vertices,
+                                            etk::Color<float> _color,
+                                           mat4 _transformationMatrix,
+                                           boolean _updateDepthBuffer,
+                                           boolean _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
@@ -97,20 +97,20 @@ void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//Log.debug("    display " << m_coord.size() << " elements" );
-	m_GLprogram->use();
+	//Log.debug("    display " + this.coord.size() + " elements" );
+	this.GLprogram.use();
 	// set Matrix: translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
 	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
+	this.GLprogram.sendAttribute(this.GLPosition, 3/*x,y,z*/, _vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
+	this.GLprogram.uniform4fv(this.GLColor, 1/*r,g,b,a*/, (float*)_color);
 	// Request the draw od the elements: 
 	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, _vertices.size());
-	m_GLprogram->unUse();
+	this.GLprogram.unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
@@ -119,15 +119,15 @@ void ewol::resource::Colored3DObject::draw(const List<Vector3f>& _vertices,
 	}
 }
 
-void ewol::resource::Colored3DObject::drawLine(List<Vector3f>& _vertices,
-                                               const etk::Color<float>& _color,
-                                               mat4& _transformationMatrix,
-                                               bool _updateDepthBuffer,
-                                               bool _depthtest) {
+void ewol::resource::Colored3DObject::drawLine(List<Vector3f> _vertices,
+                                                etk::Color<float> _color,
+                                               mat4 _transformationMatrix,
+                                               boolean _updateDepthBuffer,
+                                               boolean _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
@@ -137,20 +137,20 @@ void ewol::resource::Colored3DObject::drawLine(List<Vector3f>& _vertices,
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//Log.debug("    display " << m_coord.size() << " elements" );
-	m_GLprogram->use();
+	//Log.debug("    display " + this.coord.size() + " elements" );
+	this.GLprogram.use();
 	// set Matrix: translation/positionMatrix
 	mat4 projMatrix = gale::openGL::getMatrix();
 	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
+	this.GLprogram.sendAttribute(this.GLPosition, 3/*x,y,z*/, _vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
+	this.GLprogram.uniform4fv(this.GLColor, 1/*r,g,b,a*/, (float*)_color);
 	// Request the draw od the elements: 
 	gale::openGL::drawArrays(gale::openGL::renderMode::line, 0, _vertices.size());
-	m_GLprogram->unUse();
+	this.GLprogram.unUse();
 	if (true == _depthtest) {
 		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
@@ -160,12 +160,12 @@ void ewol::resource::Colored3DObject::drawLine(List<Vector3f>& _vertices,
 }
 
 
-void ewol::resource::Colored3DObject::drawCubeLine(const Vector3f& _min,
-                                                   const Vector3f& _max,
-                                                   const etk::Color<float>& _color,
-                                                   mat4& _transformationMatrix,
-                                                   bool _updateDepthBuffer,
-                                                   bool _depthtest) {
+void ewol::resource::Colored3DObject::drawCubeLine( Vector3f _min,
+                                                    Vector3f _max,
+                                                    etk::Color<float> _color,
+                                                   mat4 _transformationMatrix,
+                                                   boolean _updateDepthBuffer,
+                                                   boolean _depthtest) {
 	List<Vector3f> vertices;
 	vertices.pushBack(Vector3f(_min.x(), _min.y(),_min.z()));
 	vertices.pushBack(Vector3f(_max.x(), _min.y(),_min.z()));
@@ -208,9 +208,9 @@ void ewol::resource::Colored3DObject::drawCubeLine(const Vector3f& _min,
 	drawLine(vertices, _color, _transformationMatrix, _updateDepthBuffer, _depthtest);
 }
 
-void ewol::resource::Colored3DObject::drawSquare(const Vector3f& _size,
-                                                 mat4& _transformationMatrix,
-                                                 const etk::Color<float>& _tmpColor) {
+void ewol::resource::Colored3DObject::drawSquare( Vector3f _size,
+                                                 mat4 _transformationMatrix,
+                                                  etk::Color<float> _tmpColor) {
 	List<Vector3f> tmpVertices;
 	static int indices[36] = { 0,1,2,	3,2,1,	4,0,6,
 	                           6,0,2,	5,1,4,	4,1,0,
@@ -225,7 +225,7 @@ void ewol::resource::Colored3DObject::drawSquare(const Vector3f& _size,
 	                   Vector3f(_size[0],-_size[1],-_size[2]),
 	                   Vector3f(-_size[0],-_size[1],-_size[2])};
 	tmpVertices.clear();
-	for (int32_t iii=0 ; iii<36 ; iii+=3) {
+	for (int iii=0 ; iii<36 ; iii+=3) {
 		// normal calculation :
 		//btVector3 normal = (vertices[indices[iii+2]]-vertices[indices[iii]]).cross(vertices[indices[iii+1]]-vertices[indices[iii]]);
 		//normal.normalize ();
@@ -239,10 +239,10 @@ void ewol::resource::Colored3DObject::drawSquare(const Vector3f& _size,
 void ewol::resource::Colored3DObject::drawSphere(float _radius,
                                                  int _lats,
                                                  int _longs,
-                                                 mat4& _transformationMatrix,
-                                                 const etk::Color<float>& _tmpColor) {
+                                                 mat4 _transformationMatrix,
+                                                  etk::Color<float> _tmpColor) {
 	List<Vector3f> tmpVertices;
-	for(int32_t iii=0; iii<=_lats; ++iii) {
+	for(int iii=0; iii<=_lats; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
 		float z0  = _radius*sin(lat0);
 		float zr0 = _radius*cos(lat0);
@@ -251,7 +251,7 @@ void ewol::resource::Colored3DObject::drawSphere(float _radius,
 		float z1 = _radius*sin(lat1);
 		float zr1 = _radius*cos(lat1);
 		
-		for(int32_t jjj=0; jjj<_longs; ++jjj) {
+		for(int jjj=0; jjj<_longs; ++jjj) {
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
 			float y = sin(lng);
@@ -279,13 +279,13 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
                                                    float _size,
                                                    int _lats,
                                                    int _longs,
-                                                   mat4& _transformationMatrix,
-                                                   const etk::Color<float>& _tmpColor) {
+                                                   mat4 _transformationMatrix,
+                                                    etk::Color<float> _tmpColor) {
 	List<Vector3f> tmpVertices;
 	// center to border (TOP)
 	
 	// center to border (TOP)
-	for(int32_t jjj=0; jjj<_longs; ++jjj) {
+	for(int jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		float z = _size*0.5f;
@@ -304,7 +304,7 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		tmpVertices.pushBack(v2);
 	}
 	// Cylinder
-	for(int32_t jjj=0; jjj<_longs; ++jjj) {
+	for(int jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		float z = _size*0.5f;
@@ -329,7 +329,7 @@ void ewol::resource::Colored3DObject::drawCylinder(float _radius,
 		tmpVertices.pushBack(v2b);
 	}
 	// center to border (BUTTOM)
-	for(int32_t jjj=0; jjj<_longs; ++jjj) {
+	for(int jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		float z = _size*-0.5f;
@@ -353,14 +353,14 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
                                                   float _size,
                                                   int _lats,
                                                   int _longs,
-                                                  mat4& _transformationMatrix,
-                                                  const etk::Color<float>& _tmpColor) {
+                                                  mat4 _transformationMatrix,
+                                                   etk::Color<float> _tmpColor) {
 	List<Vector3f> tmpVertices;
-	_lats = int32_t(_lats / 2)*2;
+	_lats = int(_lats / 2)*2;
 	
 	// center to border (TOP)
 	float offset = _size*0.5f;
-	for(int32_t iii=_lats/2+1; iii<=_lats; ++iii) {
+	for(int iii=_lats/2+1; iii<=_lats; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
 		float z0  = _radius*sin(lat0);
 		float zr0 = _radius*cos(lat0);
@@ -369,7 +369,7 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 		float z1 = _radius*sin(lat1);
 		float zr1 = _radius*cos(lat1);
 		
-		for(int32_t jjj=0; jjj<_longs; ++jjj) {
+		for(int jjj=0; jjj<_longs; ++jjj) {
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
 			float y = sin(lng);
@@ -391,7 +391,7 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 		}
 	}
 	// Cylinder
-	for(int32_t jjj=0; jjj<_longs; ++jjj) {
+	for(int jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		float z = _size*0.5f;
@@ -417,7 +417,7 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 	}
 	// center to border (BUTTOM)
 	offset = -_size*0.5f;
-	for(int32_t iii=0; iii<=_lats/2; ++iii) {
+	for(int iii=0; iii<=_lats/2; ++iii) {
 		float lat0 = M_PI * (-0.5f + float(iii - 1) / _lats);
 		float z0  = _radius*sin(lat0);
 		float zr0 = _radius*cos(lat0);
@@ -426,7 +426,7 @@ void ewol::resource::Colored3DObject::drawCapsule(float _radius,
 		float z1 = _radius*sin(lat1);
 		float zr1 = _radius*cos(lat1);
 		
-		for(int32_t jjj=0; jjj<_longs; ++jjj) {
+		for(int jjj=0; jjj<_longs; ++jjj) {
 			float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 			float x = cos(lng);
 			float y = sin(lng);
@@ -454,11 +454,11 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
                                                float _size,
                                                int _lats,
                                                int _longs,
-                                               mat4& _transformationMatrix,
-                                               const etk::Color<float>& _tmpColor) {
+                                               mat4 _transformationMatrix,
+                                                etk::Color<float> _tmpColor) {
 	List<Vector3f> tmpVertices;
 	// center to border (TOP)
-	for(int32_t jjj=0; jjj<_longs; ++jjj) {
+	for(int jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		Vector3f v1 = Vector3f(0.0f, 0.0f, -_size/2);
 		
@@ -475,7 +475,7 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 		tmpVertices.pushBack(v2);
 	}
 	// center to border (BUTTOM)
-	for(int32_t jjj=0; jjj<_longs; ++jjj) {
+	for(int jjj=0; jjj<_longs; ++jjj) {
 		float lng = 2.0f * M_PI * float(jjj - 1) / _longs;
 		
 		Vector3f v1 = Vector3f(0.0f, 0.0f, _size/2);
@@ -495,25 +495,25 @@ void ewol::resource::Colored3DObject::drawCone(float _radius,
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 
-void ewol::resource::Colored3DObject::drawTriangles(const List<Vector3f>& _vertex,
-                                                    const List<uint32_t>& _indice,
-                                                    mat4& _transformationMatrix,
-                                                    const etk::Color<float>& _tmpColor,
-                                                    const Vector3f& _offset) {
+void ewol::resource::Colored3DObject::drawTriangles( List<Vector3f> _vertex,
+                                                     List<uint> _indice,
+                                                    mat4 _transformationMatrix,
+                                                     etk::Color<float> _tmpColor,
+                                                     Vector3f _offset) {
 	List<Vector3f> tmpVertices;
-	for (size_t iii=0; iii<_indice.size()/3; ++iii) {
+	for (int iii=0; iii<_indice.size()/3; ++iii) {
 		tmpVertices.pushBack(_vertex[_indice[iii*3 + 0]]+_offset);
 		tmpVertices.pushBack(_vertex[_indice[iii*3 + 1]]+_offset);
 		tmpVertices.pushBack(_vertex[_indice[iii*3 + 2]]+_offset);
-		//Log.info("  indices " << _indice[iii*3 + 0] << " " << _indice[iii*3 + 1] << " " << _indice[iii*3 + 2]);
-		//Log.info(" triangle " << _vertex[_indice[iii*3 + 0]] << " " << _vertex[_indice[iii*3 + 1]] << " " << _vertex[_indice[iii*3 + 2]]);
+		//Log.info("  indices " + _indice[iii*3 + 0] + " " + _indice[iii*3 + 1] + " " + _indice[iii*3 + 2]);
+		//Log.info(" triangle " + _vertex[_indice[iii*3 + 0]] + " " + _vertex[_indice[iii*3 + 1]] + " " + _vertex[_indice[iii*3 + 2]]);
 	}
-	//Log.info("display " << tmpVertices.size() << " vertices form " << _indice.size());
+	//Log.info("display " + tmpVertices.size() + " vertices form " + _indice.size());
 	draw(tmpVertices, _tmpColor, _transformationMatrix);
 }
 
 namespace etk {
-	template<> etk::String toString(ewol::resource::Colored3DObject const&) {
+	template<> String toString(ewol::resource::Colored3DObject ) {
 		return "!!ewol::resource::Colored3DObject!ERROR!CAN_NOT_BE_CONVERT!!";
 	}
 }
@@ -521,7 +521,7 @@ namespace etk {
 
 // declare for signal event
 ESIGNAL_DECLARE_SIGNAL(ewol::resource::Colored3DObject);
-ESIGNAL_DECLARE_SIGNAL(ememory::SharedPtr<ewol::resource::Colored3DObject>);
+ESIGNAL_DECLARE_SIGNAL(ememory::Ptr<ewol::resource::Colored3DObject>);
 
 #endif
 

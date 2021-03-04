@@ -13,24 +13,24 @@ namespace ewol {
 	namespace resource {
 		class DistanceFieldFont : public ewol::resource::Texture {
 			private:
-				etk::Uri m_fileName;
-				float m_sizeRatio;
+				etk::Uri this.fileName;
+				float this.sizeRatio;
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
-				ememory::SharedPtr<ewol::resource::FontBase> m_font;
+				ememory::Ptr<ewol::resource::FontBase> this.font;
 			public:
-				List<GlyphProperty> m_listElement;
+				List<GlyphProperty> this.listElement;
 			private:
 				// for the texture generation :
-				Vector2i m_lastGlyphPos;
-				int32_t m_lastRawHeigh;
+				Vector2i this.lastGlyphPos;
+				int this.lastRawHeigh;
 			protected:
 				DistanceFieldFont();
-				void init(const etk::String& _fontName);
+				void init( String _fontName);
 			public:
 				DECLARE_RESOURCE_NAMED_FACTORY(DistanceFieldFont);
-				virtual ~DistanceFieldFont();
+				 ~DistanceFieldFont();
 			public:
 				float getDisplayRatio(float _size);
 				/**
@@ -39,7 +39,7 @@ namespace ewol {
 				 * @return Dimention of the font need between 2 lines
 				 */
 				float getHeight(float _size) {
-					return ((float)m_font->getHeight(_size));
+					return ((float)this.font.getHeight(_size));
 				};
 				/**
 				 * @brief get the font size with a specific display size
@@ -47,20 +47,20 @@ namespace ewol {
 				 * @return Dimention of the font for this compleate line size.
 				 */
 				float getSize(float _fontHeight) {
-					return m_font->getSizeWithHeight(_fontHeight);
+					return this.font.getSizeWithHeight(_fontHeight);
 				}
 				/**
 				 * @brief get the ID of a unicode charcode
 				 * @param[in] _charcode The unicodeValue
 				 * @return The ID in the table (if it does not exist : return 0)
 				 */
-				int32_t getIndex(char32_t _charcode);
+				int getIndex(Character _charcode);
 				/**
 				 * @brief get the pointer on the coresponding glyph
 				 * @param[in] _charcode The unicodeValue
 				 * @return The pointer on the glyph  == > never null
 				 */
-				ewol::GlyphProperty* getGlyphPointer(const char32_t& _charcode);
+				ewol::GlyphProperty* getGlyphPointer( Character _charcode);
 			public:
 				/**
 				 * @brief keep the resource pointer.
@@ -68,29 +68,29 @@ namespace ewol {
 				 * @param[in] _filename Name of the texture font.
 				 * @return pointer on the resource or null if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::DistanceFieldFont> keep(const etk::String& _filename);
+				static ememory::Ptr<ewol::resource::DistanceFieldFont> keep( String _filename);
 			private:
 				/**
 				 * @brief add a glyph in a texture font.
 				 * @param[in] _val Char value to add.
 				 * @return true if the image size have change, false otherwise
 				 */
-				bool addGlyph(const char32_t& _val);
+				boolean addGlyph( Character _val);
 				
-				void generateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
+				void generateDistanceField( egami::ImageMono _input, egami::Image _output);
 			private:
-				float m_borderSize; //!< number of pixel added on the border of a glyph
-				Vector2f m_textureBorderSize; //!< Transformed the border size in the texture dimention
+				float this.borderSize; //!< number of pixel added on the border of a glyph
+				Vector2f this.textureBorderSize; //!< Transformed the border size in the texture dimention
 			public:
 				float getPixelBorderSize() {
-					return m_borderSize;
+					return this.borderSize;
 				}
-				const Vector2f& getTextureBorderSize() {
-					return m_textureBorderSize;
+				 Vector2f getTextureBorderSize() {
+					return this.textureBorderSize;
 				}
 			public:
 				void exportOnFile();
-				bool importFromFile();
+				boolean importFromFile();
 		};
 	};
 };

@@ -16,7 +16,7 @@
 namespace ewol {
 	namespace widget {
 		class ContextMenu;
-		using ContextMenuShared = ememory::SharedPtr<ewol::widget::ContextMenu>;
+		using ContextMenu = ememory::Ptr<ewol::widget::ContextMenu>;
 		using ContextMenuWeak = ememory::WeakPtr<ewol::widget::ContextMenu>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -36,34 +36,34 @@ namespace ewol {
 				eproperty::List<enum markPosition> propertyArrawBorder;
 			protected:
 				ContextMenu();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(ContextMenu, "ContextMenu");
-				virtual ~ContextMenu();
+				 ~ContextMenu();
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::compositing::Shaper this.shaper; //!< Compositing theme.
 				
 				// TODO : Use shaper for the arraw ...
-				ewol::compositing::Drawing m_compositing;
-				etk::Color<> m_colorBorder; // use shaper ID
+				ewol::compositing::Drawing this.compositing;
+				etk::Color<> this.colorBorder; // use shaper ID
 				
 				
-				float m_offset;
+				float this.offset;
 			public:
-				void setPositionMarkAuto(const Vector2f& _origin, const Vector2f& _size);
-				void setPositionMark(enum markPosition _position, const Vector2f& _arrowPos);
+				void setPositionMarkAuto( Vector2f _origin,  Vector2f _size);
+				void setPositionMark(enum markPosition _position,  Vector2f _arrowPos);
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				void onChangeSize() override;
-				void calculateMinMaxSize() override;
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				void onChangeSize() ;
+				void calculateMinMaxSize() ;
+				Widget getWidgetAtPos( Vector2f _pos) ;
 			protected:
-				virtual void onChangePropertyArrowPos();
-				virtual void onChangePropertyArrawBorder();
-				virtual void onChangePropertyShape();
+				 void onChangePropertyArrowPos();
+				 void onChangePropertyArrawBorder();
+				 void onChangePropertyShape();
 		};
 	};
 };

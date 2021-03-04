@@ -12,30 +12,30 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::widget::Label);
 
-// TODO : Remove the label name in the constructor ...
+// TODO : Remove the label name in the ructor ...
 ewol::widget::Label::Label() :
   signalPressed(this, "pressed", ""),
   propertyAutoTranslate(this, "auto-translate",
                               true,
                               "Translate the String with the marker _{T:xxxxxx}",
-                              &ewol::widget::Label::onChangePropertyAutoTranslate),
+                              ewol::widget::Label::onChangePropertyAutoTranslate),
   propertyValue(this, "value",
                       "",
                       "displayed value string",
-                      &ewol::widget::Label::onChangePropertyValue),
+                      ewol::widget::Label::onChangePropertyValue),
   propertyFontSize(this, "font-size",
                       0,
                       "default font size (0=> system default)",
-                      &ewol::widget::Label::onChangePropertyFontSize),
-  m_value(U""),
-  m_colorProperty(null),
-  m_colorDefaultFgText(-1),
-  m_colorDefaultBgText(-1){
+                      ewol::widget::Label::onChangePropertyFontSize),
+  this.value(U""),
+  this.colorProperty(null),
+  this.colorDefaultFgText(-1),
+  this.colorDefaultBgText(-1){
 	addObjectType("ewol::widget::Label");
-	m_colorProperty = ewol::resource::ColorFile::create(etk::Uri("THEME_COLOR:///Label.json?lib=ewol"));
-	if (m_colorProperty != null) {
-		m_colorDefaultFgText = m_colorProperty->request("foreground");
-		m_colorDefaultBgText = m_colorProperty->request("background");
+	this.colorProperty = ewol::resource::ColorFile::create(etk::Uri("THEME_COLOR:///Label.json?lib=ewol"));
+	if (this.colorProperty != null) {
+		this.colorDefaultFgText = this.colorProperty.request("foreground");
+		this.colorDefaultBgText = this.colorProperty.request("background");
 	}
 	setMouseLimit(1);
 	propertyCanFocus.setDirectCheck(false);
@@ -46,97 +46,97 @@ ewol::widget::Label::~Label() {
 }
 
 void ewol::widget::Label::init() {
-	ewol::Widget::init();
+	Widget::init();
 	// Force update the value of internal display
 	onChangePropertyValue();
 }
 
 
 void ewol::widget::Label::calculateMinMaxSize() {
-	Vector2f tmpMax = propertyMaxSize->getPixel();
-	Vector2f tmpMin = propertyMinSize->getPixel();
-	//Log.debug("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
+	Vector2f tmpMax = propertyMaxSize.getPixel();
+	Vector2f tmpMin = propertyMinSize.getPixel();
+	//Log.debug("[" + getId() + "] {" + getObjectType() + "} tmpMax : " + tmpMax);
 	if (tmpMax.x() <= 999999) {
-		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::alignLeft);
-		//Log.debug("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
+		this.text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::alignLeft);
+		//Log.debug("[" + getId() + "] {" + getObjectType() + "}     forcez Alignement ");
 	}
-	Vector3f minSize = m_text.calculateSizeDecorated(m_value);
-	//Log.debug("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
+	Vector3f minSize = this.text.calculateSizeDecorated(this.value);
+	//Log.debug("[" + getId() + "] {" + getObjectType() + "} minSize : " + minSize);
 	
-	m_minSize.setX(etk::avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
-	m_minSize.setY(etk::avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
-	Log.verbose("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
+	this.minSize.setX(etk::avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
+	this.minSize.setY(etk::avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
+	Log.verbose("[" + getId() + "] {" + getObjectType() + "} Result min size : " + tmpMin + " < " + this.minSize + " < " << tmpMax);
 }
 
 void ewol::widget::Label::onDraw() {
-	m_text.draw();
+	this.text.draw();
 }
 
 void ewol::widget::Label::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	m_text.clear();
-	int32_t paddingSize = 2;
+	this.text.clear();
+	int paddingSize = 2;
 	
-	Vector2f tmpMax = propertyMaxSize->getPixel();
+	Vector2f tmpMax = propertyMaxSize.getPixel();
 	// to know the size of one line : 
-	Vector3f minSize = m_text.calculateSize(char32_t('A'));
+	Vector3f minSize = this.text.calculateSize(Character('A'));
 	
-	//minSize.setX(etk::max(minSize.x(), m_minSize.x()));
-	//minSize.setY(etk::max(minSize.y(), m_minSize.y()));
+	//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
+	//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 	if (tmpMax.x() <= 999999) {
-		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
+		this.text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}
-	Vector3f curentTextSize = m_text.calculateSizeDecorated(m_value);
+	Vector3f curentTextSize = this.text.calculateSizeDecorated(this.value);
 	
-	Vector2i localSize = m_minSize;
+	Vector2i localSize = this.minSize;
 	
 	// no change for the text orogin : 
-	Vector3f tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
-	                   (m_size.y() - m_minSize.y()) / 2.0,
+	Vector3f tmpTextOrigin((this.size.x() - this.minSize.x()) / 2.0,
+	                   (this.size.y() - this.minSize.y()) / 2.0,
 	                   0);
 	
-	if (propertyFill->x() == true) {
-		localSize.setX(m_size.x());
+	if (propertyFill.x() == true) {
+		localSize.setX(this.size.x());
 		tmpTextOrigin.setX(0);
 	}
-	if (propertyFill->y() == true) {
-		localSize.setY(m_size.y());
-		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
+	if (propertyFill.y() == true) {
+		localSize.setY(this.size.y());
+		tmpTextOrigin.setY(this.size.y() - 2*paddingSize - curentTextSize.y());
 	}
 	tmpTextOrigin += Vector3f(paddingSize, paddingSize, 0);
 	localSize -= Vector2f(2*paddingSize,2*paddingSize);
 	
-	tmpTextOrigin.setY( tmpTextOrigin.y() + (m_minSize.y()-2*paddingSize) - minSize.y());
+	tmpTextOrigin.setY( tmpTextOrigin.y() + (this.minSize.y()-2*paddingSize) - minSize.y());
 	
 	Vector2f textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
 	
 	Vector3f drawClippingPos(paddingSize, paddingSize, -0.5);
-	Vector3f drawClippingSize((m_size.x() - paddingSize),
-	                      (m_size.y() - paddingSize),
+	Vector3f drawClippingSize((this.size.x() - paddingSize),
+	                      (this.size.y() - paddingSize),
 	                      1);
 	
 	// clean the element
-	m_text.reset();
+	this.text.reset();
 	if (propertyFontSize.get() != 0) {
-		m_text.setFontSize(propertyFontSize.get());
+		this.text.setFontSize(propertyFontSize.get());
 	}
-	if (m_colorProperty != null) {
-		m_text.setDefaultColorFg(m_colorProperty->get(m_colorDefaultFgText));
-		m_text.setDefaultColorBg(m_colorProperty->get(m_colorDefaultBgText));
+	if (this.colorProperty != null) {
+		this.text.setDefaultColorFg(this.colorProperty.get(this.colorDefaultFgText));
+		this.text.setDefaultColorBg(this.colorProperty.get(this.colorDefaultBgText));
 	}
-	m_text.setPos(tmpTextOrigin);
-	Log.verbose("[" << getId() << "] {" << m_value << "} display at pos : " << tmpTextOrigin);
-	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);
-	m_text.setClipping(drawClippingPos, drawClippingSize);
-	m_text.printDecorated(m_value);
+	this.text.setPos(tmpTextOrigin);
+	Log.verbose("[" + getId() + "] {" + this.value + "} display at pos : " + tmpTextOrigin);
+	this.text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);
+	this.text.setClipping(drawClippingPos, drawClippingSize);
+	this.text.printDecorated(this.value);
 }
 
-bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
+boolean ewol::widget::Label::onEventInput( ewol::event::Input _event) {
 	//Log.debug("Event on Label ...");
 	if (_event.getId() == 1) {
-		if (gale::key::status::pressSingle == _event.getStatus()) {
+		if (KeyStatus::pressSingle == _event.getStatus()) {
 			// nothing to do ...
 			signalPressed.emit();
 			return true;
@@ -145,22 +145,22 @@ bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	return false;
 }
 
-bool ewol::widget::Label::loadXML(const exml::Element& _node) {
+boolean ewol::widget::Label::loadXML( exml::Element _node) {
 	if (_node.exist() == false) {
 		return false;
 	}
-	ewol::Widget::loadXML(_node);
+	Widget::loadXML(_node);
 	// get internal data : 
-	Log.debug("Load label:" << _node.getText());
+	Log.debug("Load label:" + _node.getText());
 	propertyValue.set(_node.getText());
 	return true;
 }
 
 void ewol::widget::Label::onChangePropertyValue() {
 	if (*propertyAutoTranslate == true) {
-		m_value = etk::toUString(etranslate::get(*propertyValue));
+		this.value = etk::toUString(etranslate::get(*propertyValue));
 	} else {
-		m_value = etk::toUString(*propertyValue);
+		this.value = etk::toUString(*propertyValue);
 	}
 	markToRedraw();
 	requestUpdateSize();

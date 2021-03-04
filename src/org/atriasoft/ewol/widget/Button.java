@@ -19,7 +19,7 @@
 namespace ewol {
 	namespace widget {
 		class Button;
-		using ButtonShared = ememory::SharedPtr<ewol::widget::Button>;
+		using Button = ememory::Ptr<ewol::widget::Button>;
 		using ButtonWeak = ememory::WeakPtr<ewol::widget::Button>;
 		/**
 		 * @brief a composed button is a button with an inside composed with the specify XML element 
@@ -47,61 +47,61 @@ namespace ewol {
 				eproperty::Value<bool> propertyToggleMode; //!< The button is able to toggle.
 				eproperty::Value<bool> propertyEnableSingle; //!< When a single subwidget is set display all time it.
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::compositing::Shaper this.shaper; //!< Compositing theme.
 			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				Button();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Button, "Button");
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~Button();
+				 ~Button();
 			private:
-				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
-				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
+				boolean this.mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+				boolean this.buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
-				Vector2f m_selectableAreaPos; //!< Start position of the events
-				Vector2f m_selectableAreaSize; //!< size of the event positions
+				Vector2f this.selectableAreaPos; //!< Start position of the events
+				Vector2f this.selectableAreaSize; //!< size of the event positions
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
 				 * @param[in] _newStatusId new state
 				 */
-				void changeStatusIn(int32_t _newStatusId);
+				void changeStatusIn(int _newStatusId);
 				/**
 				 * @brief update the status with the internal satte of the button ...
 				 */
 				void CheckStatus();
 			protected: // Derived function
-				virtual void onDraw() override;
+				 void onDraw() ;
 			public:
-				void calculateMinMaxSize() override;
-				void onChangeSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				bool onEventEntry(const ewol::event::Entry& _event) override;
-				void onDetectPresenceToggleWidget() override {
+				void calculateMinMaxSize() ;
+				void onChangeSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				boolean onEventEntry( ewol::event::Entry _event) ;
+				void onDetectPresenceToggleWidget()  {
 					propertyToggleMode.set(true);
 				}
 			protected:
-				esignal::Connection m_PCH; //!< Periodic Call Handle to remove it when needed
+				esignal::Connection this.PCH; //!< Periodic Call Handle to remove it when needed
 				/**
 				 * @brief Periodic call to update grapgic display
 				 * @param[in] _event Time generic event
 				 */
-				void periodicCall(const ewol::event::Time& _event);
-				void onLostFocus() override;
+				void periodicCall( ewol::event::Time _event);
+				void onLostFocus() ;
 			protected:
-				virtual void onChangePropertyShape();
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyLock();
-				virtual void onChangePropertyToggleMode();
-				virtual void onChangePropertyEnableSingle();
+				 void onChangePropertyShape();
+				 void onChangePropertyValue();
+				 void onChangePropertyLock();
+				 void onChangePropertyToggleMode();
+				 void onChangePropertyEnableSingle();
 		};
 	};
 };

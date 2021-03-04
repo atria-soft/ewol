@@ -15,7 +15,7 @@ ewol::widget::Spacer::Spacer() :
   propertyColor(this, "color",
                       etk::color::none,
                       "background of the spacer",
-                      &ewol::widget::Spacer::onChangePropertyColor) {
+                      ewol::widget::Spacer::onChangePropertyColor) {
 	addObjectType("ewol::widget::Spacer");
 	propertyMinSize.setDirectCheck(gale::Dimension(Vector2f(10,10)));
 	propertyCanFocus.setDirectCheck(true);
@@ -26,7 +26,7 @@ ewol::widget::Spacer::~Spacer() {
 }
 
 void ewol::widget::Spacer::onDraw() {
-	m_draw.draw();
+	this.draw.draw();
 }
 
 #define BORDER_SIZE_TMP  (4)
@@ -34,14 +34,14 @@ void ewol::widget::Spacer::onRegenerateDisplay() {
 	if (false == needRedraw()) {
 		return;
 	}
-	m_draw.clear();
+	this.draw.clear();
 	
-	if (propertyColor->a() == 0) {
+	if (propertyColor.a() == 0) {
 		return;
 	}
-	m_draw.setColor(propertyColor);
-	m_draw.setPos(Vector3f(0, 0, 0) );
-	m_draw.rectangleWidth(Vector3f(m_size.x(), m_size.y(),0) );
+	this.draw.setColor(propertyColor);
+	this.draw.setPos(Vector3f(0, 0, 0) );
+	this.draw.rectangleWidth(Vector3f(this.size.x(), this.size.y(),0) );
 }
 
 void ewol::widget::Spacer::onChangePropertyColor() {

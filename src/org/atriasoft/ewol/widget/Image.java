@@ -16,12 +16,12 @@
 namespace ewol {
 	namespace widget {
 		class Image;
-		using ImageShared = ememory::SharedPtr<ewol::widget::Image>;
+		using Image = ememory::Ptr<ewol::widget::Image>;
 		using ImageWeak = ememory::WeakPtr<ewol::widget::Image>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Image :public ewol::Widget {
+		class Image :public Widget {
 			public: // signals
 				esignal::Signal<> signalPressed;
 			public: // properties
@@ -35,48 +35,48 @@ namespace ewol {
 				eproperty::Value<bool> propertySmooth; //!< display is done in the pixed approximation if false
 				eproperty::Value<bool> propertyUseThemeColor; //!< Use the themo color management ("THEME_COLOR:///Image.json?lib=ewol") default false
 			protected:
-				ewol::compositing::Image m_compositing; //!< compositing element of the image.
-				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
-				int32_t m_colorId; //!< Color of the image.
+				ewol::compositing::Image this.compositing; //!< compositing element of the image.
+				ememory::Ptr<ewol::resource::ColorFile> this.colorProperty; //!< theme color property
+				int this.colorId; //!< Color of the image.
 			public:
 				/**
 				 * @brief 
 				 */
 				Image();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**
 				 * @brief 
 				 */
-				virtual ~Image();
+				 ~Image();
 				/**
 				 * @brief set All the configuration of the current image
 				 * @param[in] _uri URI of the new image
 				 * @param[in] _border New border size to set
 				 */
-				void set(const etk::Uri& _uri, const gale::Dimension& _border);
+				void set( etk::Uri _uri,  gale::Dimension _border);
 				/**
 				 * @brief Set an image with direct elements
 				 * @param[in] _image Image to set in the display
 				 */
-				void setCustumSource(const egami::Image& _image);
+				void setCustumSource( egami::Image _image);
 			protected:
-				Vector2f m_imageRenderSize; //!< size of the image when we render it
+				Vector2f this.imageRenderSize; //!< size of the image when we render it
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void calculateMinMaxSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				bool loadXML(const exml::Element& _node) override;
+				void calculateMinMaxSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				boolean loadXML( exml::Element _node) ;
 			protected:
-				virtual void onChangePropertySource();
-				virtual void onChangePropertyImageSize();
-				virtual void onChangePropertyGlobalSize();
-				virtual void onChangePropertySmooth();
-				virtual void onChangePropertyDistanceFieldMode();
-				virtual void onChangePropertyUseThemeColor();
+				 void onChangePropertySource();
+				 void onChangePropertyImageSize();
+				 void onChangePropertyGlobalSize();
+				 void onChangePropertySmooth();
+				 void onChangePropertyDistanceFieldMode();
+				 void onChangePropertyUseThemeColor();
 		};
 	};
 };

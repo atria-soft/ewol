@@ -17,76 +17,76 @@ ETK_DECLARE_TYPE(ewol::resource::ConfigFile);
 ewol::resource::ConfigFile::ConfigFile() :
   gale::Resource(),
   // set map unorderred
-  m_list(0, false) {
+  this.list(0, false) {
 	addResourceType("ewol::ConfigFile");
 }
 
-void ewol::resource::ConfigFile::init(const etk::Uri& _uri) {
-	ethread::RecursiveLock lock(m_mutex);
+void ewol::resource::ConfigFile::init( etk::Uri _uri) {
+	ethread::RecursiveLock lock(this.mutex);
 	gale::Resource::init(_uri.get());
-	Log.debug("SFP : load \"" << _uri << "\"");
+	Log.debug("SFP : load \"" + _uri + "\"");
 	reload();
 }
 
 
 ewol::resource::ConfigFile::~ConfigFile() {
-	m_list.clear();
+	this.list.clear();
 }
 
 void ewol::resource::ConfigFile::reload() {
-	ethread::RecursiveLock lock(m_mutex);
+	ethread::RecursiveLock lock(this.mutex);
 	// reset all parameters
-	for (size_t iii=0; iii<m_list.size(); ++iii){
-		if (m_list.getValue(iii).exist() == true) {
-			m_list.getValue(iii) = ejson::empty();
+	for (int iii=0; iii<this.list.size(); ++iii){
+		if (this.list.getValue(iii).exist() == true) {
+			this.list.getValue(iii) = ejson::empty();
 		}
 	}
-	m_doc.load(etk::Uri(m_name));
+	this.doc.load(etk::Uri(this.name));
 	
-	for (auto elementName : m_list.getKeys()) {
-		if (m_doc[elementName].exist() == true) {
-			m_list[elementName] = m_doc[elementName];
+	for (auto elementName : this.list.getKeys()) {
+		if (this.doc[elementName].exist() == true) {
+			this.list[elementName] = this.doc[elementName];
 		}
 	}
 }
 
 
-int32_t ewol::resource::ConfigFile::request(const etk::String& _paramName) {
-	ethread::RecursiveLock lock(m_mutex);
+int ewol::resource::ConfigFile::request( String _paramName) {
+	ethread::RecursiveLock lock(this.mutex);
 	// check if the parameters existed :
-	if (m_list.exist(_paramName) == false) {
-		m_list.add(_paramName, ejson::empty());
+	if (this.list.exist(_paramName) == false) {
+		this.list.add(_paramName, ejson::empty());
 	}
-	if (m_doc[_paramName].exist() == true) {
-		m_list[_paramName] = m_doc[_paramName];
+	if (this.doc[_paramName].exist() == true) {
+		this.list[_paramName] = this.doc[_paramName];
 	}
-	return m_list.getId(_paramName);
+	return this.list.getId(_paramName);
 }
 
 
-double ewol::resource::ConfigFile::getNumber(int32_t _id) {
-	ethread::RecursiveLock lock(m_mutex);
+double ewol::resource::ConfigFile::getNumber(int _id) {
+	ethread::RecursiveLock lock(this.mutex);
 	if (    _id < 0
-	     || m_list.getValue(_id).exist() == false) {
+	     || this.list.getValue(_id).exist() == false) {
 		return 0.0;
 	}
-	return m_list.getValue(_id).toNumber().get();
+	return this.list.getValue(_id).toNumber().get();
 }
 
-etk::String ewol::resource::ConfigFile::getString(int32_t _id) {
-	ethread::RecursiveLock lock(m_mutex);
+String ewol::resource::ConfigFile::getString(int _id) {
+	ethread::RecursiveLock lock(this.mutex);
 	if (    _id < 0
-	     || m_list.getValue(_id).exist() == false) {
+	     || this.list.getValue(_id).exist() == false) {
 		return "";
 	}
-	return m_list.getValue(_id).toString().get();
+	return this.list.getValue(_id).toString().get();
 }
 
-bool ewol::resource::ConfigFile::getBoolean(int32_t _id) {
-	ethread::RecursiveLock lock(m_mutex);
+boolean ewol::resource::ConfigFile::getBoolean(int _id) {
+	ethread::RecursiveLock lock(this.mutex);
 	if (    _id < 0
-	     || m_list.getValue(_id).exist() == false) {
+	     || this.list.getValue(_id).exist() == false) {
 		return false;
 	}
-	return m_list.getValue(_id).toBoolean().get();
+	return this.list.getValue(_id).toBoolean().get();
 }

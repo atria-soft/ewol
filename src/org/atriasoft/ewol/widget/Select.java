@@ -12,7 +12,7 @@
 namespace ewol {
 	namespace widget {
 		class Select;
-		using SelectShared = ememory::SharedPtr<ewol::widget::Select>;
+		using Select = ememory::Ptr<ewol::widget::Select>;
 		using SelectWeak = ememory::WeakPtr<ewol::widget::Select>;
 		/**
 		 * @brief a composed Select is a Select with an inside composed with the specify XML element 
@@ -20,9 +20,9 @@ namespace ewol {
 		 */
 		class Select : public ewol::widget::SpinBase {
 			public: // signals
-				esignal::Signal<int32_t> signalValue;
+				esignal::Signal<int> signalValue;
 			public: // properties
-				eproperty::Value<int32_t> propertyValue; //!< Current state of the Select.
+				eproperty::Value<int> propertyValue; //!< Current state of the Select.
 			protected:
 				/**
 				 * @brief Constructor
@@ -34,35 +34,35 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~Select();
+				 ~Select();
 			protected:
 				class Element {
 					public:
-						int32_t m_value;
-						etk::String m_name;
-						bool m_selected;
+						int this.value;
+						String this.name;
+						boolean this.selected;
 					public:
 						// TODO: Remove this: due to the fact my List is not full implemented
 						Element() {}
-						Element(int32_t _value, etk::String _name, bool _selected=false);
+						Element(int _value, String _name, boolean _selected=false);
 				};
-				List<ewol::widget::Select::Element> m_listElement;
+				List<ewol::widget::Select::Element> this.listElement;
 			public:
 				void optionSelectDefault();
-				void optionRemove(int32_t _value);
+				void optionRemove(int _value);
 				void optionClear();
-				void optionAdd(int32_t _value, etk::String _name);
+				void optionAdd(int _value, String _name);
 			protected:
-				bool loadXML(const exml::Element& _node) override;
-				void updateGui() override;
+				boolean loadXML( exml::Element _node) ;
+				void updateGui() ;
 			protected:
 				void onCallbackOpenMenu();
-				void onCallbackLabelPressed(int32_t _value);
+				void onCallbackLabelPressed(int _value);
 			protected:
-				esignal::Connection m_connectionEntry;
-				esignal::Connection m_connectionButton;
+				esignal::Connection this.connectionEntry;
+				esignal::Connection this.connectionButton;
 			protected:
-				virtual void onChangePropertyValue();
+				 void onChangePropertyValue();
 		};
 	};
 };

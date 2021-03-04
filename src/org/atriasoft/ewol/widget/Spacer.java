@@ -15,17 +15,17 @@
 namespace ewol {
 	namespace widget {
 		class Spacer;
-		using SpacerShared = ememory::SharedPtr<ewol::widget::Spacer>;
+		using Spacer = ememory::Ptr<ewol::widget::Spacer>;
 		using SpacerWeak = ememory::WeakPtr<ewol::widget::Spacer>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Spacer : public ewol::Widget {
+		class Spacer : public Widget {
 			public: // properties:
 				eproperty::Value<etk::Color<>> propertyColor; //!< Background color
 			protected:
 				/**
-				 * @brief Main constructer
+				 * @brief Main ructer
 				 */
 				Spacer();
 			public:
@@ -33,17 +33,17 @@ namespace ewol {
 				/**
 				 * @brief Main destructer
 				 */
-				virtual ~Spacer();
+				 ~Spacer();
 			private:
-				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
+				ewol::compositing::Drawing this.draw; //!< Compositing drawing element
 			public:
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override {
+				Widget getWidgetAtPos( Vector2f _pos)  {
 					return null;
 				};
-				void onRegenerateDisplay() override;
-				void onDraw() override;
+				void onRegenerateDisplay() ;
+				void onDraw() ;
 			protected:
-				virtual void onChangePropertyColor();
+				 void onChangePropertyColor();
 		};
 	}
 }

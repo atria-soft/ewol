@@ -10,32 +10,32 @@
 ETK_DECLARE_TYPE(ewol::compositing::Area);
 
 // VBO table property:
-const int32_t ewol::compositing::Area::m_vboIdCoord(0);
-const int32_t ewol::compositing::Area::m_vboIdCoordText(1);
-const int32_t ewol::compositing::Area::m_vboIdColor(2);
+ int ewol::compositing::Area::this.vboIdCoord(0);
+ int ewol::compositing::Area::this.vboIdCoordText(1);
+ int ewol::compositing::Area::this.vboIdColor(2);
 #define NB_VBO (3)
 
-ewol::compositing::Area::Area(const Vector2i& _size) :
-  m_position(0.0, 0.0, 0.0),
-  m_color(etk::color::white),
-  m_GLprogram(null),
-  m_GLPosition(-1),
-  m_GLMatrix(-1),
-  m_GLColor(-1),
-  m_GLtexture(-1),
-  m_GLtexID(-1),
-  m_resource(null) {
-	m_resource = ewol::resource::Texture::create();
-	m_resource->setImageSize(_size);
-	m_resource->flush();
+ewol::compositing::Area::Area( Vector2i _size) :
+  this.position(0.0, 0.0, 0.0),
+  this.color(etk::color::white),
+  this.GLprogram(null),
+  this.GLPosition(-1),
+  this.GLMatrix(-1),
+  this.GLColor(-1),
+  this.GLtexture(-1),
+  this.GLtexID(-1),
+  this.resource(null) {
+	this.resource = ewol::resource::Texture::create();
+	this.resource.setImageSize(_size);
+	this.resource.flush();
 	// Create the VBO:
-	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == null) {
+	this.VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (this.VBO == null) {
 		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
-	m_VBO->setName("[VBO] of ewol::compositing::Area");
+	this.VBO.setName("[VBO] of ewol::compositing::Area");
 	loadProgram();
 }
 
@@ -45,98 +45,98 @@ ewol::compositing::Area::~Area() {
 
 void ewol::compositing::Area::loadProgram() {
 	// get the shader resource :
-	m_GLPosition = 0;
-	m_GLprogram = gale::resource::Program::create(etk::String("DATA:///textured3D.prog?lib=ewol"));
-	if (m_GLprogram != null) {
-		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->getAttribute("EW_color");
-		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
-		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
-		m_GLtexID    = m_GLprogram->getUniform("EW_texID");
+	this.GLPosition = 0;
+	this.GLprogram = gale::resource::Program::create(String("DATA:///textured3D.prog?lib=ewol"));
+	if (this.GLprogram != null) {
+		this.GLPosition = this.GLprogram.getAttribute("EW_coord3d");
+		this.GLColor    = this.GLprogram.getAttribute("EW_color");
+		this.GLtexture  = this.GLprogram.getAttribute("EW_texture2d");
+		this.GLMatrix   = this.GLprogram.getUniform("EW_MatrixTransformation");
+		this.GLtexID    = this.GLprogram.getUniform("EW_texID");
 	}
 }
 
-void ewol::compositing::Area::draw(bool _disableDepthTest) {
-	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
-		//EWOL_WARNING("Nothink to draw...");
+void ewol::compositing::Area::draw(boolean _disableDepthTest) {
+	if (this.VBO.bufferSize(this.vboIdCoord) <= 0) {
+		//Log.warning("Nothink to draw...");
 		return;
 	}
-	if (m_resource == null) {
+	if (this.resource == null) {
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
-	m_GLprogram->use(); 
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	mat4 tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
+	this.GLprogram.use(); 
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// TextureID
-	m_GLprogram->setTexture0(m_GLtexID, m_resource->getRendererId());
+	this.GLprogram.setTexture0(this.GLtexID, this.resource.getRendererId());
 	// position:
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);
 	// Texture:
-	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdColor);
+	this.GLprogram.sendAttributePointer(this.GLtexture, this.VBO, this.vboIdColor);
 	// color:
-	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdCoordText);
+	this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, this.vboIdCoordText);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
-	m_GLprogram->unUse();
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, this.VBO.bufferSize(this.vboIdCoord));
+	this.GLprogram.unUse();
 }
 
 void ewol::compositing::Area::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset all VBOs:
-	m_VBO->clear();
+	this.VBO.clear();
 	// reset temporal variables :
-	m_position = Vector3f(0.0, 0.0, 0.0);
+	this.position = Vector3f(0.0, 0.0, 0.0);
 }
 
-void ewol::compositing::Area::print(const Vector2i& _size) {
+void ewol::compositing::Area::print( Vector2i _size) {
 	Vector3f point(0,0,0);
 	Vector2f tex(0,1);
-	point.setX(m_position.x());
-	point.setY(m_position.y());
-	m_VBO->pushOnBuffer(m_vboIdCoord, point);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
+	point.setX(this.position.x());
+	point.setY(this.position.y());
+	this.VBO.pushOnBuffer(this.vboIdCoord, point);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+	this.VBO.pushOnBuffer(this.vboIdCoordText, tex);
 	
 	tex.setValue(1,1);
-	point.setX(m_position.x() + _size.x());
-	point.setY(m_position.y());
-	m_VBO->pushOnBuffer(m_vboIdCoord, point);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
+	point.setX(this.position.x() + _size.x());
+	point.setY(this.position.y());
+	this.VBO.pushOnBuffer(this.vboIdCoord, point);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+	this.VBO.pushOnBuffer(this.vboIdCoordText, tex);
 	
 	tex.setValue(1,0);
-	point.setX(m_position.x() + _size.x());
-	point.setY(m_position.y() + _size.y());
-	m_VBO->pushOnBuffer(m_vboIdCoord, point);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
+	point.setX(this.position.x() + _size.x());
+	point.setY(this.position.y() + _size.y());
+	this.VBO.pushOnBuffer(this.vboIdCoord, point);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+	this.VBO.pushOnBuffer(this.vboIdCoordText, tex);
 	
-	m_VBO->pushOnBuffer(m_vboIdCoord, point);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
+	this.VBO.pushOnBuffer(this.vboIdCoord, point);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+	this.VBO.pushOnBuffer(this.vboIdCoordText, tex);
 	
 	tex.setValue(0,0);
-	point.setX(m_position.x());
-	point.setY(m_position.y() + _size.y());
-	m_VBO->pushOnBuffer(m_vboIdCoord, point);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
+	point.setX(this.position.x());
+	point.setY(this.position.y() + _size.y());
+	this.VBO.pushOnBuffer(this.vboIdCoord, point);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+	this.VBO.pushOnBuffer(this.vboIdCoordText, tex);
 	
 	tex.setValue(0,1);
-	point.setX(m_position.x());
-	point.setY(m_position.y());
-	m_VBO->pushOnBuffer(m_vboIdCoord, point);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-	m_VBO->pushOnBuffer(m_vboIdCoordText, tex);
+	point.setX(this.position.x());
+	point.setY(this.position.y());
+	this.VBO.pushOnBuffer(this.vboIdCoord, point);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+	this.VBO.pushOnBuffer(this.vboIdCoordText, tex);
 	
-	m_VBO->flush();
+	this.VBO.flush();
 }
 
 

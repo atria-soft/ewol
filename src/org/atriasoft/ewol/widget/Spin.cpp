@@ -20,23 +20,23 @@ ewol::widget::Spin::Spin() :
   propertyValue(this, "value",
                       0,
                       "Value of the Spin",
-                      &ewol::widget::Spin::onChangePropertyValue),
+                      ewol::widget::Spin::onChangePropertyValue),
   propertyMin(this, "min",
                     -9999999999,
                     "Minimum value of the spin",
-                    &ewol::widget::Spin::onChangePropertyMin),
+                    ewol::widget::Spin::onChangePropertyMin),
   propertyMax(this, "max",
                     9999999999,
                     "Maximum value of the spin",
-                    &ewol::widget::Spin::onChangePropertyMax),
+                    ewol::widget::Spin::onChangePropertyMax),
   propertyIncrement(this, "increment",
                           1,
                           "Increment value at each button event or keybord event",
-                          &ewol::widget::Spin::onChangePropertyIncrement),
+                          ewol::widget::Spin::onChangePropertyIncrement),
   propertyMantis(this, "mantis",
                        0,
                        "fix-point mantis",
-                       &ewol::widget::Spin::onChangePropertyMantis) {
+                       ewol::widget::Spin::onChangePropertyMantis) {
 	addObjectType("ewol::widget::Spin");
 	propertyShape.setDirectCheck(etk::Uri("THEME_GUI:///Spin.json?lib=ewol"));
 }
@@ -47,7 +47,7 @@ ewol::widget::Spin::~Spin() {
 
 void ewol::widget::Spin::onChangePropertyValue() {
 	markToRedraw();
-	if (m_widgetEntry == null) {
+	if (this.widgetEntry == null) {
 		Log.error("Can not acces at entry ...");
 		return;
 	}
@@ -71,36 +71,36 @@ void ewol::widget::Spin::onChangePropertyMantis() {
 }
 
 void ewol::widget::Spin::updateGui() {
-	EWOL_WARNING("updateGui [START]");
+	Log.warning("updateGui [START]");
 	ewol::widget::SpinBase::updateGui();
 	
-	if (    m_widgetEntry != null
-	     && m_connectionEntry.isConnected() == false) {
+	if (    this.widgetEntry != null
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionEntry.isConnected() == false) {
 		
 	}
-	if (    m_widgetButtonUp != null
-	     && m_connectionButtonUp.isConnected() == false) {
-		m_connectionButtonUp = m_widgetButtonUp->signalPressed.connect(this, &ewol::widget::Spin::onCallbackUp);
+	if (    this.widgetButtonUp != null
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionButtonUp.isConnected() == false) {
+		this.connectionButtonUp = this.widgetButtonUp.signalPressed.connect(this, ewol::widget::Spin::onCallbackUp);
 	}
-	if (    m_widgetButtonDown != null
-	     && m_connectionButtonDown.isConnected() == false) {
-		m_connectionButtonDown = m_widgetButtonDown->signalPressed.connect(this, &ewol::widget::Spin::onCallbackDown);
+	if (    this.widgetButtonDown != null
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionButtonDown.isConnected() == false) {
+		this.connectionButtonDown = this.widgetButtonDown.signalPressed.connect(this, ewol::widget::Spin::onCallbackDown);
 	}
-	EWOL_WARNING("updateGui [STOP]");
+	Log.warning("updateGui [STOP]");
 }
 
-void ewol::widget::Spin::checkValue(int64_t _value) {
+void ewol::widget::Spin::checkValue(long _value) {
 	_value = etk::avg(propertyMin.get(), _value, propertyMax.get());
 	propertyValue.setDirect(_value);
-	m_widgetEntry->propertyValue.set(etk::toString(_value));
+	this.widgetEntry.propertyValue.set(etk::toString(_value));
 }
 
 void ewol::widget::Spin::onCallbackUp() {
-	int64_t value = propertyValue.get() + propertyIncrement.get();
+	long value = propertyValue.get() + propertyIncrement.get();
 	checkValue(value);
 }
 
 void ewol::widget::Spin::onCallbackDown() {
-	int64_t value = propertyValue.get() - propertyIncrement.get();
+	long value = propertyValue.get() - propertyIncrement.get();
 	checkValue(value);
 }

@@ -19,7 +19,7 @@
 namespace ewol {
 	namespace widget {
 		class Entry;
-		using EntryShared = ememory::SharedPtr<ewol::widget::Entry>;
+		using Entry = ememory::Ptr<ewol::widget::Entry>;
 		using EntryWeak = ememory::WeakPtr<ewol::widget::Entry>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -31,111 +31,111 @@ namespace ewol {
 		 * 	----------------------------------------------
 		 * ~~~~~~~~~~~~~~~~~~~~~~
 		 */
-		class Entry : public ewol::Widget {
+		class Entry : public Widget {
 			public: // Event list
 				esignal::Signal<> signalClick; //!< bang on click the entry box
-				esignal::Signal<etk::String> signalEnter; //!< Enter key is pressed
-				esignal::Signal<etk::String> signalModify; //!< data change
+				esignal::Signal<String> signalEnter; //!< Enter key is pressed
+				esignal::Signal<String> signalModify; //!< data change
 			public: // propertie list
 				eproperty::Value<bool> propertyPassword; //!< Disable display of the content of the entry
 				eproperty::Value<etk::Uri> propertyShape;
-				eproperty::Value<etk::String> propertyValue; //!< string that must be displayed
-				eproperty::Range<int32_t> propertyMaxCharacter; //!< number max of xharacter in the list
-				eproperty::Value<etk::String> propertyRegex; //!< regular expression value
-				eproperty::Value<etk::String> propertyTextWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
+				eproperty::Value<String> propertyValue; //!< string that must be displayed
+				eproperty::Range<int> propertyMaxCharacter; //!< number max of xharacter in the list
+				eproperty::Value<String> propertyRegex; //!< regular expression value
+				eproperty::Value<String> propertyTextWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 			private:
-				ewol::compositing::Shaper m_shaper;
-				int32_t m_colorIdTextFg; //!< color property of the text foreground
-				int32_t m_colorIdTextBg; //!< color property of the text background
-				int32_t m_colorIdCursor; //!< color property of the text cursor
-				int32_t m_colorIdSelection; //!< color property of the text selection
-				ewol::compositing::Text m_text; //!< text display m_text
+				ewol::compositing::Shaper this.shaper;
+				int this.colorIdTextFg; //!< color property of the text foreground
+				int this.colorIdTextBg; //!< color property of the text background
+				int this.colorIdCursor; //!< color property of the text cursor
+				int this.colorIdSelection; //!< color property of the text selection
+				ewol::compositing::Text this.text; //!< text display this.text
 			protected:
 				/**
 				 * @brief Contuctor
 				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
 				Entry();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**
 				 * @brief Destuctor
 				 */
-				virtual ~Entry();
+				 ~Entry();
 			protected:
 				/**
 				 * @brief internal check the value with RegExp checking
 				 * @param[in] _newData The new string to display
 				 */
-				void setInternalValue(const etk::String& _newData);
+				void setInternalValue( String _newData);
 			private:
-				etk::RegEx<etk::String> m_regex; //!< regular expression to check content
+				etk::RegEx<String> this.regex; //!< regular expression to check content
 			private:
-				bool m_needUpdateTextPos; //!< text position can have change
-				int32_t m_displayStartPosition; //!< ofset in pixel of the display of the UString
-				bool m_displayCursor; //!< Cursor must be display only when the widget has the focus
-				int32_t m_displayCursorPos; //!< Cursor position in number of Char
-				int32_t m_displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == m_displayCursorPos chan no selection availlable
+				boolean this.needUpdateTextPos; //!< text position can have change
+				int this.displayStartPosition; //!< ofset in pixel of the display of the UString
+				boolean this.displayCursor; //!< Cursor must be display only when the widget has the focus
+				int this.displayCursorPos; //!< Cursor position in number of Char
+				int this.displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == this.displayCursorPos chan no selection availlable
 			protected:
 				/**
 				 * @brief informe the system thet the text change and the start position change
 				 */
-				virtual void markToUpdateTextPosition();
+				 void markToUpdateTextPosition();
 				/**
 				 * @brief update the display position start  == > depending of the position of the Cursor and the size of the Data inside
-				 * @change m_displayStartPosition < ==  updated
+				 * @change this.displayStartPosition < ==  updated
 				 */
-				virtual void updateTextPosition();
+				 void updateTextPosition();
 				/**
 				 * @brief change the cursor position with the curent position requested on the display
 				 * @param[in] _pos Absolute position of the event
 				 * @note The display is automaticly requested when change apear.
 				 */
-				virtual void updateCursorPosition(const Vector2f& _pos, bool _Selection=false);
+				 void updateCursorPosition( Vector2f _pos, boolean _Selection=false);
 			public:
 				/**
 				 * @brief Copy the selected data on the specify clipboard
 				 * @param[in] _clipboardID Selected clipboard
 				 */
-				virtual void copySelectionToClipBoard(enum gale::context::clipBoard::clipboardListe _clipboardID);
+				 void copySelectionToClipBoard(enum gale::context::clipBoard::clipboardListe _clipboardID);
 				/**
 				 * @brief remove the selected area
 				 * @note This request a regeneration of the display
 				 */
-				virtual void removeSelected();
+				 void removeSelected();
 			public:
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				bool onEventEntry(const ewol::event::Entry& _event) override;
-				void onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID) override;
-				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				boolean onEventEntry( ewol::event::Entry _event) ;
+				void onEventClipboard(enum gale::context::clipBoard::clipboardListe _clipboardID) ;
+				void calculateMinMaxSize() ;
 			protected:
-				void onDraw() override;
-				void onGetFocus() override;
-				void onLostFocus() override;
-				virtual void changeStatusIn(int32_t _newStatusId);
+				void onDraw() ;
+				void onGetFocus() ;
+				void onLostFocus() ;
+				 void changeStatusIn(int _newStatusId);
 			protected:
-				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
 				 * @brief Periodic call to update grapgic display
 				 * @param[in] _event Time generic event
 				 */
-				void periodicCall(const ewol::event::Time& _event);
+				void periodicCall( ewol::event::Time _event);
 			private: // callback functions
-				void onCallbackShortCut(const etk::String& _value);
+				void onCallbackShortCut( String _value);
 				void onCallbackEntryClean();
 				void onCallbackCut();
 				void onCallbackCopy();
 				void onCallbackPaste();
-				void onCallbackSelect(bool _all);
+				void onCallbackSelect(boolean _all);
 			protected:
-				virtual void onChangePropertyPassword();
-				virtual void onChangePropertyShaper();
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyMaxCharacter();
-				virtual void onChangePropertyRegex();
-				virtual void onChangePropertyTextWhenNothing();
+				 void onChangePropertyPassword();
+				 void onChangePropertyShaper();
+				 void onChangePropertyValue();
+				 void onChangePropertyMaxCharacter();
+				 void onChangePropertyRegex();
+				 void onChangePropertyTextWhenNothing();
 		};
 	};
 };

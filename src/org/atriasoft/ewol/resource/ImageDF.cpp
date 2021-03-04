@@ -21,39 +21,39 @@ ewol::resource::ImageDF::ImageDF() {
 
 
 void ewol::resource::ImageDF::init() {
-	ethread::RecursiveLock lock(m_mutex);
+	ethread::RecursiveLock lock(this.mutex);
 	ewol::resource::Texture::init();
 }
 
-void ewol::resource::ImageDF::init(etk::String _genName, const etk::Uri& _uri, const Vector2i& _size) {
-	ethread::RecursiveLock lock(m_mutex);
+void ewol::resource::ImageDF::init(String _genName,  etk::Uri _uri,  Vector2i _size) {
+	ethread::RecursiveLock lock(this.mutex);
 	ewol::resource::Texture::init(_genName);
-	Log.debug("create a new resource::Image : _genName=" << _genName << " _uri=" << _uri << " size=" << _size);
-	m_data = egami::load(_uri, _size);
-	if (m_data.exist() == false) {
-		Log.error("ERROR when loading the image : " << _uri);
+	Log.debug("create a new resource::Image : _genName=" + _genName + " _uri=" + _uri + " size=" + _size);
+	this.data = egami::load(_uri, _size);
+	if (this.data.exist() == false) {
+		Log.error("ERROR when loading the image : " + _uri);
 	}
-	Vector2i tmp = m_data.getSize();
-	m_realImageSize = Vector2f(tmp.x(), tmp.y());
+	Vector2i tmp = this.data.getSize();
+	this.realImageSize = Vector2f(tmp.x(), tmp.y());
 	// distance field Generation
 	// TODO : if it is not a .edf ==> generate dynamicly ...
 	/*
 	egami::ImageMono input;
 	input.resize(tmp);
-	for (size_t yyy = 0; yyy < tmp.y(); ++yyy) {
-		for (size_t xxx = 0; xxx < tmp.x(); ++xxx) {
-			input.set(Vector2i(xxx, yyy), m_data.get(Vector2i(xxx, yyy)).a() );
+	for (int yyy = 0; yyy < tmp.y(); ++yyy) {
+		for (int xxx = 0; xxx < tmp.x(); ++xxx) {
+			input.set(Vector2i(xxx, yyy), this.data.get(Vector2i(xxx, yyy)).a() );
 		}
 	}
-	generateDistanceField(input, m_data);
+	generateDistanceField(input, this.data);
 	*/
 	flush();
 }
 
 
-void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
-	ethread::RecursiveLock lock(m_mutex);
-	int32_t size = _input.getSize().x() * _input.getSize().y();
+void ewol::resource::ImageDF::generateDistanceField( egami::ImageMono _input, egami::Image _output) {
+	ethread::RecursiveLock lock(this.mutex);
+	int size = _input.getSize().x() * _input.getSize().y();
 	List<short> xdist;
 	List<short> ydist;
 	List<double> gx;
@@ -70,9 +70,9 @@ void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _inp
 	inside.resize(size, 0.0);
 	// Convert img into double (data)
 	double img_min = 255, img_max = -255;
-	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
-		for (int32_t xxx = 0; xxx < _input.getSize().x(); ++xxx) {
-			int32_t iii = yyy * _input.getSize().x() + xxx;
+	for (int yyy = 0; yyy < _input.getSize().y(); ++yyy) {
+		for (int xxx = 0; xxx < _input.getSize().x(); ++xxx) {
+			int iii = yyy * _input.getSize().x() + xxx;
 			double v = _input.get(Vector2i(xxx, yyy));
 			data[iii] = v;
 			if (v > img_max) {
@@ -84,35 +84,35 @@ void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _inp
 		}
 	}
 	// Rescale image levels between 0 and 1
-	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
-		for (int32_t xxx = 0; xxx < _input.getSize().x(); ++xxx) {
-			int32_t iii = yyy * _input.getSize().x() + xxx;
+	for (int yyy = 0; yyy < _input.getSize().y(); ++yyy) {
+		for (int xxx = 0; xxx < _input.getSize().x(); ++xxx) {
+			int iii = yyy * _input.getSize().x() + xxx;
 			data[iii] = (_input.get(Vector2i(xxx, yyy))-img_min)/img_max;
 		}
 	}
 	
 	// Compute outside = edtaa3(bitmap); % Transform background (0's)
-	computegradient(&data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
-	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().x(), _input.getSize().y(), &xdist[0], &ydist[0], &outside[0]);
-	for(size_t iii = 0; iii < outside.size(); ++iii) {
+	computegradient(data[0], _input.getSize().x(), _input.getSize().y(), gx[0], gy[0]);
+	edtaa3(data[0], gx[0], gy[0], _input.getSize().x(), _input.getSize().y(), xdist[0], &ydist[0], &outside[0]);
+	for(int iii = 0; iii < outside.size(); ++iii) {
 		if( outside[iii] < 0 ) {
 			outside[iii] = 0.0;
 		}
 	}
 	
 	// Compute inside = edtaa3(1-bitmap); % Transform foreground (1's)
-	for(size_t iii = 0; iii < gx.size(); ++iii) {
+	for(int iii = 0; iii < gx.size(); ++iii) {
 		gx[iii] = 0;
 	}
-	for(size_t iii = 0; iii < gy.size(); ++iii) {
+	for(int iii = 0; iii < gy.size(); ++iii) {
 		gy[iii] = 0;
 	}
-	for(size_t iii = 0; iii < data.size(); ++iii) {
+	for(int iii = 0; iii < data.size(); ++iii) {
 		data[iii] = 1 - data[iii];
 	}
-	computegradient( &data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
-	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().x(), _input.getSize().y(), &xdist[0], &ydist[0], &inside[0]);
-	for(size_t iii = 0; iii < inside.size(); ++iii) {
+	computegradient( data[0], _input.getSize().x(), _input.getSize().y(), gx[0], gy[0]);
+	edtaa3(data[0], gx[0], gy[0], _input.getSize().x(), _input.getSize().y(), xdist[0], &ydist[0], &inside[0]);
+	for(int iii = 0; iii < inside.size(); ++iii) {
 		if( inside[iii] < 0 ) {
 			inside[iii] = 0.0;
 		}
@@ -120,9 +120,9 @@ void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _inp
 	
 	_output.resize(_input.getSize(), etk::Color<>(0));
 	_output.clear(etk::Color<>(0));
-	for (int32_t xxx = 0; xxx < _output.getSize().x(); ++xxx) {
-		for (int32_t yyy = 0; yyy < _output.getSize().y(); ++yyy) {
-			int32_t iii = yyy * _output.getSize().x() + xxx;
+	for (int xxx = 0; xxx < _output.getSize().x(); ++xxx) {
+		for (int yyy = 0; yyy < _output.getSize().y(); ++yyy) {
+			int iii = yyy * _output.getSize().x() + xxx;
 			outside[iii] -= inside[iii];
 			outside[iii] = 128+outside[iii]*16;
 			if( outside[iii] < 0 ) {
@@ -131,9 +131,9 @@ void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _inp
 			if( outside[iii] > 255 ) {
 				outside[iii] = 255;
 			}
-			uint8_t val = 255 - (unsigned char) outside[iii];
+			int val = 255 - (unsigned char) outside[iii];
 			// TODO : Remove multiple size of the map ...
-			_output.set(Vector2i(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,255));
+			_output.set(Vector2i(xxx, yyy), etk::Color<>((int)val,(int)val,(int)val,255));
 		}
 	}
 }
@@ -145,30 +145,30 @@ void ewol::resource::ImageDF::generateDistanceField(const egami::ImageMono& _inp
  * @param[in] _value Value that we want the next power of 2
  * @return result value
  */
-static int32_t nextP2(int32_t _value) {
-	int32_t val=1;
-	for (int32_t iii=1; iii<31; iii++) {
+static int nextP2(int _value) {
+	int val=1;
+	for (int iii=1; iii<31; iii++) {
 		if (_value <= val) {
 			return val;
 		}
 		val *=2;
 	}
-	Log.critical("impossible CASE.... request P2 of " << _value);
+	Log.critical("impossible CASE.... request P2 of " + _value);
 	return val;
 }
 #endif
 
 
 
-ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(const etk::Uri& _uri, Vector2i _size) {
-	Log.verbose("KEEP: TextureFile: '" << _uri << "' size=" << _size);
+ememory::Ptr<ewol::resource::ImageDF> ewol::resource::ImageDF::create( etk::Uri _uri, Vector2i _size) {
+	Log.verbose("KEEP: TextureFile: '" + _uri + "' size=" + _size);
 	if (_uri.isEmpty() == true) {
-		ememory::SharedPtr<ewol::resource::ImageDF> object(ETK_NEW(ewol::resource::ImageDF));
+		ememory::Ptr<ewol::resource::ImageDF> object(ETK_NEW(ewol::resource::ImageDF));
 		if (object == null) {
 			Log.error("allocation error of a resource : ??TEX??");
 			return null;
 		}
-		object->init();
+		object.init();
 		getManager().localAdd(object);
 		return object;
 	}
@@ -189,8 +189,8 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 		_size = Vector2i(64,64);
 	#endif
 	if (    _size.x() > 0
-	     && _size.y() > 0) {
-		Log.verbose("     == > specific size : " << _size);
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _size.y() > 0) {
+		Log.verbose("     == > specific size : " + _size);
 		#ifdef __TARGET_OS__Android
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
@@ -198,27 +198,27 @@ ememory::SharedPtr<ewol::resource::ImageDF> ewol::resource::ImageDF::create(cons
 		tmpFilename.getQuery().set("y", etk::toString(_size.y()));
 	}
 	
-	Log.verbose("KEEP: TextureFile: '" << tmpFilename << "' new size=" << _size);
-	ememory::SharedPtr<ewol::resource::ImageDF> object = null;
-	ememory::SharedPtr<gale::Resource> object2 = getManager().localKeep("DF__" + tmpFilename.getString());
+	Log.verbose("KEEP: TextureFile: '" + tmpFilename + "' new size=" + _size);
+	ememory::Ptr<ewol::resource::ImageDF> object = null;
+	ememory::Ptr<gale::Resource> object2 = getManager().localKeep("DF__" + tmpFilename.getString());
 	if (object2 != null) {
 		object = ememory::dynamicPointerCast<ewol::resource::ImageDF>(object2);
 		if (object == null) {
-			Log.critical("Request resource file : '" << tmpFilename << "' With the wrong type (dynamic cast error)");
+			Log.critical("Request resource file : '" + tmpFilename + "' With the wrong type (dynamic cast error)");
 			return null;
 		}
 	}
 	if (object != null) {
 		return object;
 	}
-	Log.info("CREATE: ImageDF: '" << tmpFilename << "' size=" << _size);
+	Log.info("CREATE: ImageDF: '" + tmpFilename + "' size=" + _size);
 	// need to crate a new one ...
-	object = ememory::SharedPtr<ewol::resource::ImageDF>(ETK_NEW(ewol::resource::ImageDF));
+	object = ememory::Ptr<ewol::resource::ImageDF>(ETK_NEW(ewol::resource::ImageDF));
 	if (object == null) {
-		Log.error("allocation error of a resource : " << _uri);
+		Log.error("allocation error of a resource : " + _uri);
 		return null;
 	}
-	object->init("DF__" + tmpFilename.getString(), _uri, _size);
+	object.init("DF__" + tmpFilename.getString(), _uri, _size);
 	getManager().localAdd(object);
 	return object;
 }

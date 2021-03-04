@@ -12,7 +12,7 @@
 namespace ewol {
 	namespace widget {
 		class StdPopUp;
-		using StdPopUpShared = ememory::SharedPtr<ewol::widget::StdPopUp>;
+		using StdPopUp = ememory::Ptr<ewol::widget::StdPopUp>;
 		using StdPopUpWeak = ememory::WeakPtr<ewol::widget::StdPopUp>;
 		/**
 		 * @brief The std pop up widget is a siple message widget to notify user of some simple things, like:
@@ -40,11 +40,11 @@ namespace ewol {
 		 */
 		class StdPopUp : public ewol::widget::PopUp {
 			public: // properties:
-				eproperty::Value<etk::String> propertyTitle; //!< Title of the pop-up
-				eproperty::Value<etk::String> propertyComment; //!< comment in the pop-up (can be decorated text)
+				eproperty::Value<String> propertyTitle; //!< Title of the pop-up
+				eproperty::Value<String> propertyComment; //!< comment in the pop-up (can be decorated text)
 			protected:
 				/**
-				 * @brief std-pop-up constructor.
+				 * @brief std-pop-up ructor.
 				 */
 				StdPopUp();
 				void init();
@@ -53,28 +53,28 @@ namespace ewol {
 				/**
 				 * @brief std-pop-up destructor.
 				 */
-				virtual ~StdPopUp();
+				 ~StdPopUp();
 			protected:
-				ewol::widget::LabelShared m_title; //!< Title Label widget
+				ewol::widget::Label this.title; //!< Title Label widget
 				/**
 				 * @brief property callback when request a change of the title.
 				 */
 				void onChangePropertyTitle();
-				ewol::widget::LabelShared m_comment; //!< Comment label widget
+				ewol::widget::Label this.comment; //!< Comment label widget
 				/**
 				 * @brief property callback when request a change of the Comment.
 				 */
 				void onChangePropertyComment();
 			protected:
-				ewol::widget::SizerShared m_subBar; //!< subwidget bar containing all the button.
+				ewol::widget::Sizer this.subBar; //!< subwidget bar containing all the button.
 			public:
 				/**
 				 * @brief Add a buttom button.
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
-				ewol::widget::ButtonShared addButton(const etk::String& _text, bool _autoExit=false);
+				ewol::widget::Button addButton( String _text, boolean _autoExit=false);
 			public:
-				virtual void onCallBackButtonExit();
+				 void onCallBackButtonExit();
 		};
 	}
 }

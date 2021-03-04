@@ -19,69 +19,69 @@ namespace ewol {
 		 */
 		class Colored3DObject : public gale::Resource {
 			protected:
-				ememory::SharedPtr<gale::resource::Program> m_GLprogram;
-				int32_t m_GLPosition;
-				int32_t m_GLMatrix;
-				int32_t m_GLColor;
+				ememory::Ptr<gale::resource::Program> this.GLprogram;
+				int this.GLPosition;
+				int this.GLMatrix;
+				int this.GLColor;
 			protected:
 				Colored3DObject();
 				void init();
 			public:
 				DECLARE_RESOURCE_FACTORY(Colored3DObject);
-				virtual ~Colored3DObject();
+				 ~Colored3DObject();
 			public:
-				virtual void draw(const List<Vector3f>& _vertices,
-				                  const etk::Color<float>& _color,
-				                  bool _updateDepthBuffer=true,
-				                  bool _depthtest=true);
-				virtual void draw(const List<Vector3f>& _vertices,
-				                  const etk::Color<float>& _color,
-				                  mat4& _transformationMatrix,
-				                  bool _updateDepthBuffer=true,
-				                  bool _depthtest=true);
-				virtual void drawLine(List<Vector3f>& _vertices,
-				                      const etk::Color<float>& _color,
-				                      mat4& _transformationMatrix,
-				                      bool _updateDepthBuffer=true,
-				                      bool _depthtest=true);
-				virtual void drawCubeLine(const Vector3f& _min,
-				                          const Vector3f& _max,
-				                          const etk::Color<float>& _color,
-				                          mat4& _transformationMatrix,
-				                          bool _updateDepthBuffer=true,
-				                          bool _depthtest=true);
+				 void draw( List<Vector3f> _vertices,
+				                   etk::Color<float> _color,
+				                  boolean _updateDepthBuffer=true,
+				                  boolean _depthtest=true);
+				 void draw( List<Vector3f> _vertices,
+				                   etk::Color<float> _color,
+				                  mat4 _transformationMatrix,
+				                  boolean _updateDepthBuffer=true,
+				                  boolean _depthtest=true);
+				 void drawLine(List<Vector3f> _vertices,
+				                       etk::Color<float> _color,
+				                      mat4 _transformationMatrix,
+				                      boolean _updateDepthBuffer=true,
+				                      boolean _depthtest=true);
+				 void drawCubeLine( Vector3f _min,
+				                           Vector3f _max,
+				                           etk::Color<float> _color,
+				                          mat4 _transformationMatrix,
+				                          boolean _updateDepthBuffer=true,
+				                          boolean _depthtest=true);
 			public:
-				void drawSquare(const Vector3f& _size,
-				                mat4& _transformationMatrix,
-				                const etk::Color<float>& _tmpColor);
+				void drawSquare( Vector3f _size,
+				                mat4 _transformationMatrix,
+				                 etk::Color<float> _tmpColor);
 				void drawSphere(float _radius,
 				                int _lats,
 				                int _longs,
-				                mat4& _transformationMatrix,
-				                const etk::Color<float>& _tmpColor);
+				                mat4 _transformationMatrix,
+				                 etk::Color<float> _tmpColor);
 				void drawCylinder(float _radius,
 				                  float _size,
 				                  int _lats,
 				                  int _longs,
-				                  mat4& _transformationMatrix,
-				                  const etk::Color<float>& _tmpColor);
+				                  mat4 _transformationMatrix,
+				                   etk::Color<float> _tmpColor);
 				void drawCapsule(float _radius,
 				                 float _size,
 				                 int _lats,
 				                 int _longs,
-				                 mat4& _transformationMatrix,
-				                 const etk::Color<float>& _tmpColor);
+				                 mat4 _transformationMatrix,
+				                  etk::Color<float> _tmpColor);
 				void drawCone(float _radius,
 				              float _size,
 				              int _lats,
 				              int _longs,
-				              mat4& _transformationMatrix,
-				              const etk::Color<float>& _tmpColor);
-				void drawTriangles(const List<Vector3f>& _vertex,
-				                   const List<uint32_t>& _indice,
-				                   mat4& _transformationMatrix,
-				                   const etk::Color<float>& _tmpColor,
-				                   const Vector3f& _offset=Vector3f(0,0,0.1));
+				              mat4 _transformationMatrix,
+				               etk::Color<float> _tmpColor);
+				void drawTriangles( List<Vector3f> _vertex,
+				                    List<uint> _indice,
+				                   mat4 _transformationMatrix,
+				                    etk::Color<float> _tmpColor,
+				                    Vector3f _offset=Vector3f(0,0,0.1));
 		};
 	};
 };

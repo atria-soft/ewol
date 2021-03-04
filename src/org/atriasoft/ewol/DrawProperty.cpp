@@ -10,15 +10,15 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::DrawProperty);
 
-etk::Stream& ewol::operator <<(etk::Stream& _os, const ewol::DrawProperty& _obj) {
-	_os << "{ windowsSize=" << _obj.m_windowsSize << " start=" << _obj.m_origin << " stop=" << (_obj.m_origin+_obj.m_size) << "}";
+etk::Stream ewol::operator +(etk::Stream _os,  ewol::DrawProperty _obj) {
+	_os + "{ windowsSize=" + _obj.this.windowsSize + " start=" + _obj.this.origin + " stop=" + (_obj.this.origin+_obj.this.size) + "}";
 	return _os;
 }
 
-void ewol::DrawProperty::limit(const Vector2f& _origin, const Vector2f& _size) {
-	m_size += m_origin;
-	m_origin.setMax(_origin);
-	m_size.setMin(_origin+_size);
-	m_size -= m_origin;
+void ewol::DrawProperty::limit( Vector2f _origin,  Vector2f _size) {
+	this.size += this.origin;
+	this.origin.setMax(_origin);
+	this.size.setMin(_origin+_size);
+	this.size -= this.origin;
 }
 

@@ -16,12 +16,12 @@
 namespace ewol {
 	namespace widget {
 		class Joystick;
-		using JoystickShared = ememory::SharedPtr<ewol::widget::Joystick>;
+		using Joystick = ememory::Ptr<ewol::widget::Joystick>;
 		using JoystickWeak = ememory::WeakPtr<ewol::widget::Joystick>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Joystick :public ewol::Widget {
+		class Joystick :public Widget {
 			public:
 				// Event list of properties
 				esignal::Signal<> signalEnable;
@@ -33,30 +33,30 @@ namespace ewol {
 					modeArrow,
 				};
 			private:
-				etk::Color<> m_colorFg; //!< Forground  color
-				etk::Color<> m_colorBg; //!< Background color
-				Vector2f m_displayPos; //!< direction of the cursor ...
-				float m_distance; //!< dintance from the center
-				float m_angle; //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
-				bool m_lock; //!< flag to mark the lock when the cursor is free when we are outside the circle
-				enum joystickMode m_displayMode; //!< Type of fonctionnal mode of the joystick
+				etk::Color<> this.colorFg; //!< Forground  color
+				etk::Color<> this.colorBg; //!< Background color
+				Vector2f this.displayPos; //!< direction of the cursor ...
+				float this.distance; //!< dintance from the center
+				float this.angle; //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
+				boolean this.lock; //!< flag to mark the lock when the cursor is free when we are outside the circle
+				enum joystickMode this.displayMode; //!< Type of fonctionnal mode of the joystick
 			private:
 				// generic property of the joystick:
-				bool m_displayBackground;
-				etk::String m_background;
-				etk::String m_foreground;
-				float m_ratio;
+				boolean this.displayBackground;
+				String this.background;
+				String this.foreground;
+				float this.ratio;
 			protected:
 				Joystick();
 			public:
 				DECLARE_WIDGET_FACTORY(Joystick, "Joystick");
-				virtual ~Joystick();
+				 ~Joystick();
 			public:
-				void setLockMode(bool _lockWhenOut) {
-					m_lock = _lockWhenOut;
+				void setLockMode(boolean _lockWhenOut) {
+					this.lock = _lockWhenOut;
 				};
 				void setDisplayMode(enum joystickMode _newMode) {
-					m_displayMode = _newMode;
+					this.displayMode = _newMode;
 				};
 				/**
 				 * @brief set the ratio of the widget joystick
@@ -68,22 +68,22 @@ namespace ewol {
 				 * @param[in] _imageNameInData the new rbackground that might be set
 				 * @param[in] _display
 				 */
-				void background(etk::String _imageNameInData, bool _display=true);
+				void background(String _imageNameInData, boolean _display=true);
 				/**
 				 * @brief set the Foreground of the widget joystick
 				 * @param[in] _imageNameInData the new Foreground that might be set
 				 */
-				void foreground(etk::String _imageNameInData);
+				void foreground(String _imageNameInData);
 				/**
 				 * @brief get the property of the joystick
 				 * @param[out] _distance distance to the center
 				 * @param[out] _angle angle of the joy
 				 */
-				void getProperty(float& _distance, float& _angle);
+				void getProperty(float _distance, float _angle);
 				
 			public:
-				virtual void onRegenerateDisplay() override;
-				virtual bool onEventInput(const ewol::event::Input& _event) override;
+				 void onRegenerateDisplay() ;
+				 boolean onEventInput( ewol::event::Input _event) ;
 		};
 	};
 };

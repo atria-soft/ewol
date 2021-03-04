@@ -15,12 +15,12 @@
 namespace ewol {
 	namespace widget {
 		class ProgressBar;
-		using ProgressBarShared = ememory::SharedPtr<ewol::widget::ProgressBar>;
+		using ProgressBar = ememory::Ptr<ewol::widget::ProgressBar>;
 		using ProgressBarWeak = ememory::WeakPtr<ewol::widget::ProgressBar>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ProgressBar : public ewol::Widget {
+		class ProgressBar : public Widget {
 			public: // properties
 				eproperty::Range<float> propertyValue; //!< % used
 				eproperty::Value<etk::Color<>> propertyTextColorFg; //!< forder bar color
@@ -28,22 +28,22 @@ namespace ewol {
 				eproperty::Value<etk::Color<>> propertyTextColorBgOff; //!< bar color disable
 			protected:
 				ProgressBar();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(ProgressBar, "ProgressBar");
-				virtual ~ProgressBar();
+				 ~ProgressBar();
 			private:
-				ewol::compositing::Drawing m_draw; // basic drawing element
+				ewol::compositing::Drawing this.draw; // basic drawing element
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void onRegenerateDisplay() override;
-				void calculateMinMaxSize() override;
+				void onRegenerateDisplay() ;
+				void calculateMinMaxSize() ;
 			protected:
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyTextColorFg();
-				virtual void onChangePropertyTextColorBgOn();
-				virtual void onChangePropertyTextColorBgOff();
+				 void onChangePropertyValue();
+				 void onChangePropertyTextColorFg();
+				 void onChangePropertyTextColorBgOn();
+				 void onChangePropertyTextColorBgOff();
 		};
 	};
 };

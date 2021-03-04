@@ -18,9 +18,9 @@ ewol::widget::ColorBar::ColorBar() :
   propertyValue(this, "color",
                       etk::color::black,
                       "Current color",
-                      &ewol::widget::ColorBar::onChangePropertyValue) {
+                      ewol::widget::ColorBar::onChangePropertyValue) {
 	addObjectType("ewol::widget::ColorBar");
-	m_currentUserPos.setValue(0,0);
+	this.currentUserPos.setValue(0,0);
 	propertyCanFocus.setDirectCheck(true);
 	setMouseLimit(1);
 }
@@ -31,7 +31,7 @@ ewol::widget::ColorBar::~ColorBar() {
 
 
 void ewol::widget::ColorBar::calculateMinMaxSize() {
-	m_minSize.setValue(160, 80);
+	this.minSize.setValue(160, 80);
 	markToRedraw();
 }
 
@@ -55,7 +55,7 @@ void ewol::widget::ColorBar::onChangePropertyValue() {
 }
 
 void ewol::widget::ColorBar::onDraw() {
-	m_draw.draw();
+	this.draw.draw();
 }
 
 
@@ -64,23 +64,23 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		return;
 	}
 	// clean the object list ...
-	m_draw.clear();
+	this.draw.clear();
 	
-	int32_t tmpSizeX = m_minSize.x();
-	int32_t tmpSizeY = m_minSize.y();
-	int32_t tmpOriginX = (m_size.x() - m_minSize.x()) / 2;
-	int32_t tmpOriginY = (m_size.y() - m_minSize.y()) / 2;
+	int tmpSizeX = this.minSize.x();
+	int tmpSizeY = this.minSize.y();
+	int tmpOriginX = (this.size.x() - this.minSize.x()) / 2;
+	int tmpOriginY = (this.size.y() - this.minSize.y()) / 2;
 	
-	if (propertyFill->x() == true) {
-		tmpSizeX = m_size.x();
+	if (propertyFill.x() == true) {
+		tmpSizeX = this.size.x();
 		tmpOriginX = 0;
 	}
-	if (propertyFill->y() == true) {
-		tmpSizeY = m_size.y();
+	if (propertyFill.y() == true) {
+		tmpSizeY = this.size.y();
 		tmpOriginY = 0;
 	}
 	
-	for(int32_t iii=0; iii<NB_BAND_COLOR ; iii++) {
+	for(int iii=0; iii<NB_BAND_COLOR ; iii++) {
 		/* Step 1 : 
 		 *              
 		 *   **         
@@ -88,15 +88,15 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *   ******     
 		 *   ********   
 		 */
-		m_draw.setColor(s_listColorWhite);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
-		m_draw.addVertex();
-		m_draw.setColor(s_listColor[iii+1]);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
-		m_draw.addVertex();
-		m_draw.setColor(s_listColor[iii]);
-		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
-		m_draw.addVertex();
+		this.draw.setColor(s_listColorWhite);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+		this.draw.addVertex();
+		this.draw.setColor(s_listColor[iii+1]);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+		this.draw.addVertex();
+		this.draw.setColor(s_listColor[iii]);
+		this.draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+		this.draw.addVertex();
 		/* Step 2 : 
 		 *   ********     
 		 *     ******     
@@ -104,15 +104,15 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *         **     
 		 *                
 		 */
-		m_draw.setColor(s_listColorWhite);
-		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
-		m_draw.addVertex();
-		m_draw.setColor(s_listColorWhite);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
-		m_draw.addVertex();
-		m_draw.setColor(s_listColor[iii+1]);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
-		m_draw.addVertex();
+		this.draw.setColor(s_listColorWhite);
+		this.draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+		this.draw.addVertex();
+		this.draw.setColor(s_listColorWhite);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+		this.draw.addVertex();
+		this.draw.setColor(s_listColor[iii+1]);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+		this.draw.addVertex();
 		/* Step 3 : 
 		 *              
 		 *   **         
@@ -120,15 +120,15 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *   ******     
 		 *   ********   
 		 */
-		m_draw.setColor(s_listColor[iii]);
-		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
-		m_draw.addVertex();
-		m_draw.setColor(s_listColorBlack);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
-		m_draw.addVertex();
-		m_draw.setColor(s_listColorBlack);
-		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
-		m_draw.addVertex();
+		this.draw.setColor(s_listColor[iii]);
+		this.draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+		this.draw.addVertex();
+		this.draw.setColor(s_listColorBlack);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+		this.draw.addVertex();
+		this.draw.setColor(s_listColorBlack);
+		this.draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+		this.draw.addVertex();
 		/* Step 4 : 
 		 *   ********     
 		 *     ******     
@@ -136,45 +136,45 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 		 *         **     
 		 *                
 		 */
-		m_draw.setColor(s_listColor[iii]);
-		m_draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
-		m_draw.addVertex();
-		m_draw.setColor(s_listColor[iii+1]);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
-		m_draw.addVertex();
-		m_draw.setColor(s_listColorBlack);
-		m_draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
-		m_draw.addVertex();
+		this.draw.setColor(s_listColor[iii]);
+		this.draw.setPos(Vector3f(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+		this.draw.addVertex();
+		this.draw.setColor(s_listColor[iii+1]);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+		this.draw.addVertex();
+		this.draw.setColor(s_listColorBlack);
+		this.draw.setPos(Vector3f(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+		this.draw.addVertex();
 	}
-	if (m_currentUserPos.y() > 0.5) {
-		m_draw.setColor(etk::color::white);
+	if (this.currentUserPos.y() > 0.5) {
+		this.draw.setColor(etk::color::white);
 	} else {
-		m_draw.setColor(etk::color::black);
+		this.draw.setColor(etk::color::black);
 	}
-	m_draw.setPos(Vector3f(m_currentUserPos.x()*m_size.x(), m_currentUserPos.y()*m_size.y(), 0) );
-	m_draw.setThickness(1);
-	m_draw.circle(3.0);
+	this.draw.setPos(Vector3f(this.currentUserPos.x()*this.size.x(), this.currentUserPos.y()*this.size.y(), 0) );
+	this.draw.setThickness(1);
+	this.draw.circle(3.0);
 }
 
 
-bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
+boolean ewol::widget::ColorBar::onEventInput( ewol::event::Input _event) {
 	Vector2f relativePos = relativePosition(_event.getPos());
 	//Log.debug("Event on BT ...");
 	if (1 == _event.getId()) {
-		relativePos.setValue( etk::avg(0.0f, m_size.x(),relativePos.x()),
-		                      etk::avg(0.0f, m_size.y(),relativePos.y()) );
-		if(    gale::key::status::pressSingle == _event.getStatus()
-		    || gale::key::status::move   == _event.getStatus()) {
+		relativePos.setValue( etk::avg(0.0f, this.size.x(),relativePos.x()),
+		                      etk::avg(0.0f, this.size.y(),relativePos.y()) );
+		if(    KeyStatus::pressSingle == _event.getStatus()
+		    || KeyStatus::move   == _event.getStatus()) {
 			// nothing to do ...
-			m_currentUserPos.setValue( relativePos.x()/m_size.x(),
-			                           relativePos.y()/m_size.y() );
+			this.currentUserPos.setValue( relativePos.x()/this.size.x(),
+			                           relativePos.y()/this.size.y() );
 			markToRedraw();
 			// == > try to estimate color
-			Log.verbose("event on (" << relativePos.x() << "," << relativePos.y() << ")");
-			int32_t bandID = (int32_t)(relativePos.x()/(m_size.x()/6));
-			float localPos = relativePos.x() - (m_size.x()/6) * bandID;
-			float poroportionnalPos = localPos/(m_size.x()/6);
-			Log.verbose("bandId=" << bandID << "  relative pos=" << localPos);
+			Log.verbose("event on (" + relativePos.x() + "," + relativePos.y() + ")");
+			int bandID = (int)(relativePos.x()/(this.size.x()/6));
+			float localPos = relativePos.x() - (this.size.x()/6) * bandID;
+			float poroportionnalPos = localPos/(this.size.x()/6);
+			Log.verbose("bandId=" + bandID + "  relative pos=" + localPos);
 			etk::Color<> estimateColor = etk::color::white;
 			if (s_listColor[bandID].r() == s_listColor[bandID+1].r()) {
 				estimateColor.setR(s_listColor[bandID].r());
@@ -198,15 +198,15 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 				estimateColor.setB(s_listColor[bandID+1].b() + (s_listColor[bandID].b()-s_listColor[bandID+1].b())*(1-poroportionnalPos));
 			}
 			// step 2 generate the white and black ...
-			if (m_currentUserPos.y() == 0.5) {
+			if (this.currentUserPos.y() == 0.5) {
 				// nothing to do ... just get the current color ...
-			} else if (m_currentUserPos.y() < 0.5) {
-				float poroportionnalWhite = (0.5-m_currentUserPos.y())*2.0;
+			} else if (this.currentUserPos.y() < 0.5) {
+				float poroportionnalWhite = (0.5-this.currentUserPos.y())*2.0;
 				estimateColor.setR(estimateColor.r() + (0xFF-estimateColor.r())*poroportionnalWhite);
 				estimateColor.setG(estimateColor.g() + (0xFF-estimateColor.g())*poroportionnalWhite);
 				estimateColor.setB(estimateColor.b() + (0xFF-estimateColor.b())*poroportionnalWhite);
 			} else {
-				float poroportionnalBlack = (m_currentUserPos.y()-0.5)*2.0;
+				float poroportionnalBlack = (this.currentUserPos.y()-0.5)*2.0;
 				estimateColor.setR(estimateColor.r() - estimateColor.r()*poroportionnalBlack);
 				estimateColor.setG(estimateColor.g() - estimateColor.g()*poroportionnalBlack);
 				estimateColor.setB(estimateColor.b() - estimateColor.b()*poroportionnalBlack);

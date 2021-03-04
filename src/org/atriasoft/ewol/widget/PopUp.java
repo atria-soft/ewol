@@ -16,7 +16,7 @@
 namespace ewol {
 	namespace widget {
 		class PopUp;
-		using PopUpShared = ememory::SharedPtr<ewol::widget::PopUp>;
+		using PopUp = ememory::Ptr<ewol::widget::PopUp>;
 		using PopUpWeak = ememory::WeakPtr<ewol::widget::PopUp>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -32,26 +32,26 @@ namespace ewol {
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				PopUp();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(PopUp, "PopUp");
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~PopUp();
+				 ~PopUp();
 			protected:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::compositing::Shaper this.shaper; //!< Compositing theme.
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				void onRegenerateDisplay() override;
-				void onChangeSize() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
+				void systemDraw( ewol::DrawProperty _displayProp) ;
+				void onRegenerateDisplay() ;
+				void onChangeSize() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				Widget getWidgetAtPos( Vector2f _pos) ;
 			protected:
-				virtual void onChangePropertyShape();
-				virtual void onChangePropertyLockExpand();
+				 void onChangePropertyShape();
+				 void onChangePropertyLockExpand();
 		};
 	};
 };

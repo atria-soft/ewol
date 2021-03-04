@@ -14,73 +14,73 @@ ETK_DECLARE_TYPE(ewol::resource::ColorFile);
 ewol::resource::ColorFile::ColorFile() :
   gale::Resource(),
   // Set the list unodered
-  m_list(0, false),
-  m_errorColor(etk::color::orange) {
+  this.list(0, false),
+  this.errorColor(etk::color::orange) {
 	addResourceType("ewol::ColorFile");
 }
 
-void ewol::resource::ColorFile::init(const etk::Uri& _uri) {
-	ethread::RecursiveLock lock(m_mutex);
+void ewol::resource::ColorFile::init( etk::Uri _uri) {
+	ethread::RecursiveLock lock(this.mutex);
 	gale::Resource::init(_uri.get());
-	Log.debug("CF : load \"" << _uri << "\"");
+	Log.debug("CF : load \"" + _uri + "\"");
 	reload();
-	Log.debug("List of all color : " << m_list.getKeys());
+	Log.debug("List of all color : " + this.list.getKeys());
 }
 
 ewol::resource::ColorFile::~ColorFile() {
 	// remove all element
-	m_list.clear();
+	this.list.clear();
 }
 
 
 void ewol::resource::ColorFile::reload() {
-	ethread::RecursiveLock lock(m_mutex);
+	ethread::RecursiveLock lock(this.mutex);
 	// remove all previous set of value :
-	for (size_t iii = 0; iii < m_list.size() ; ++iii) {
-		m_list.getValue(iii) = m_errorColor;
+	for (int iii = 0; iii < this.list.size() ; ++iii) {
+		this.list.getValue(iii) = this.errorColor;
 	}
 	// open and read all json elements:
 	ejson::Document doc;
-	if (doc.load(etk::Uri(m_name)) == false) {
-		Log.error("Can not load file : '" << m_name << "'");
+	if (doc.load(etk::Uri(this.name)) == false) {
+		Log.error("Can not load file : '" + this.name + "'");
 		return;
 	}
 	ejson::Array baseArray = doc["color"].toArray();
 	if (baseArray.exist() == false) {
-		Log.error("Can not get basic array : 'color' in file:" << m_name);
+		Log.error("Can not get basic array : 'color' in file:" + this.name);
 		doc.display();
 		return;
 	}
-	bool findError = false;
-	for (const auto it : baseArray) {
+	boolean findError = false;
+	for ( auto it : baseArray) {
 		ejson::Object tmpObj = it.toObject();
 		if (tmpObj.exist() == false) {
-			Log.error(" can not get object in 'color' : " << it);
+			Log.error(" can not get object in 'color' : " + it);
 			findError = true;
 			continue;
 		}
-		etk::String name = tmpObj["name"].toString().get();
-		etk::String color = tmpObj["color"].toString().get(m_errorColor.getHexString());
-		Log.debug("find new color : '" << name << "' color='" << color << "'");
+		String name = tmpObj["name"].toString().get();
+		String color = tmpObj["color"].toString().get(this.errorColor.getHexString());
+		Log.debug("find new color : '" + name + "' color='" + color + "'");
 		if (name.size() == 0) {
 			Log.error("Drop an empty name");
 			findError = true;
 			continue;
 		}
-		m_list.add(name, etk::Color<float>(color));
+		this.list.add(name, etk::Color<float>(color));
 	}
 	if (findError == true) {
-		Log.error("pb in parsing file:" << m_name);
+		Log.error("pb in parsing file:" + this.name);
 		doc.display();
 	}
 }
 
 
-int32_t ewol::resource::ColorFile::request(const etk::String& _paramName) {
-	ethread::RecursiveLock lock(m_mutex);
+int ewol::resource::ColorFile::request( String _paramName) {
+	ethread::RecursiveLock lock(this.mutex);
 	// check if the parameters existed :
-	if (m_list.exist(_paramName) == false) {
-		m_list.add(_paramName, m_errorColor);
+	if (this.list.exist(_paramName) == false) {
+		this.list.add(_paramName, this.errorColor);
 	}
-	return m_list.getId(_paramName);
+	return this.list.getId(_paramName);
 }

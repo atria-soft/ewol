@@ -10,25 +10,25 @@
 #include <etk/stdTools.hpp>
 
 #include <etk/typeInfo.hpp>
-ETK_DECLARE_TYPE(ewol::object::Manager);
+ETK_DECLARE_TYPE(ObjectManager);
 
-ewol::object::Manager::Manager(ewol::Context& _context) :
-  m_context(_context),
+ObjectManager::Manager(EwolContext _context) :
+  this.context(_context),
   periodicCall(this, "periodic", "Call every time system render"),
-  m_applWakeUpTime(0),
-  m_lastPeriodicCallTime(0) {
+  this.applWakeUpTime(0),
+  this.lastPeriodicCallTime(0) {
 	Log.debug(" == > init Object-Manager");
 	periodicCall.setPeriodic(true);
 	// set the basic time properties :
-	m_applWakeUpTime = echrono::Clock::now();
-	m_lastPeriodicCallTime = m_applWakeUpTime;
+	this.applWakeUpTime = echrono::Clock::now();
+	this.lastPeriodicCallTime = this.applWakeUpTime;
 }
 
-ewol::object::Manager::~Manager() {
-	ethread::RecursiveLock lock(m_mutex);
-	m_workerList.clear();
-	bool hasError = false;
-	if (m_eObjectList.size()!=0) {
+ObjectManager::~Manager() {
+	ethread::RecursiveLock lock(this.mutex);
+	this.workerList.clear();
+	boolean hasError = false;
+	if (this.eObjectList.size()!=0) {
 		Log.error("Must not have anymore eObject !!!");
 		hasError = true;
 	}
@@ -38,76 +38,76 @@ ewol::object::Manager::~Manager() {
 	displayListObject();
 }
 
-void ewol::object::Manager::displayListObject() {
-	ethread::RecursiveLock lock(m_mutex);
+void ObjectManager::displayListObject() {
+	ethread::RecursiveLock lock(this.mutex);
 	Log.info("List loaded object : ");
-	for (auto &it : m_eObjectList) {
-		ewol::ObjectShared element = it.lock();
+	for (auto it : this.eObjectList) {
+		EwolObject element = it.lock();
 		if (element != null) {
-			Log.info("  [" << element->getId() << "] ref=" << element.useCount()-1 << " name='" << element->propertyName.get() << "' type=" << element->getObjectType());
+			Log.info("  [" + element.getId() + "] ref=" + element.useCount()-1 + " name='" + element.propertyName.get() + "' type=" + element.getObjectType());
 		}
 	}
 }
 
-void ewol::object::Manager::unInit() {
-	ethread::RecursiveLock lock(m_mutex);
+void ObjectManager::unInit() {
+	ethread::RecursiveLock lock(this.mutex);
 	Log.debug(" == > Un-Init Object-Manager");
-	if (m_workerList.size() > 0) {
+	if (this.workerList.size() > 0) {
 		Log.debug(" == > Remove all workers");
-		m_workerList.clear();
+		this.workerList.clear();
 	}
-	for (auto &it : m_eObjectList) {
-		ewol::ObjectShared element = it.lock();
+	for (auto it : this.eObjectList) {
+		EwolObject element = it.lock();
 		if (element != null) {
-			//it->removeObject();
+			//it.removeObject();
 		}
 	}
-	if (m_eObjectList.size() != 0) {
-		Log.error("Have " << m_eObjectList.size() << " active Object");
+	if (this.eObjectList.size() != 0) {
+		Log.error("Have " + this.eObjectList.size() + " active Object");
 	}
-	m_eObjectList.clear();
+	this.eObjectList.clear();
 }
 
-void ewol::object::Manager::add(const ewol::ObjectShared& _object) {
-	ethread::RecursiveLock lock(m_mutex);
+void ObjectManager::add( EwolObject _object) {
+	ethread::RecursiveLock lock(this.mutex);
 	if (_object == null) {
 		Log.error("try to add an inexistant Object in manager");
 	}
-	m_eObjectList.pushBack(_object);
+	this.eObjectList.pushBack(_object);
 }
 
-int32_t ewol::object::Manager::getNumberObject() {
-	ethread::RecursiveLock lock(m_mutex);
-	return m_eObjectList.size();
+int ObjectManager::getNumberObject() {
+	ethread::RecursiveLock lock(this.mutex);
+	return this.eObjectList.size();
 }
 
 // clean all Object that request an autoRemove ...
-void ewol::object::Manager::cleanInternalRemoved() {
-	ethread::RecursiveLock lock(m_mutex);
-	size_t nbObject = m_eObjectList.size();
-	Log.verbose("Clean Object List (if needed) : " << m_eObjectList.size() << " elements");
-	auto it(m_eObjectList.begin());
-	while (it != m_eObjectList.end()) {
-		if (it->expired() == true) {
-			it = m_eObjectList.erase(it);
+void ObjectManager::cleanInternalRemoved() {
+	ethread::RecursiveLock lock(this.mutex);
+	int nbObject = this.eObjectList.size();
+	Log.verbose("Clean Object List (if needed) : " + this.eObjectList.size() + " elements");
+	auto it(this.eObjectList.begin());
+	while (it != this.eObjectList.end()) {
+		if (it.expired() == true) {
+			it = this.eObjectList.erase(it);
 		} else {
 			++it;
 		}
 	}
-	if (m_eObjectList.size() != nbObject) {
-		Log.verbose(" remove " << nbObject - m_eObjectList.size() << " deprecated objects");
+	if (this.eObjectList.size() != nbObject) {
+		Log.verbose(" remove " + nbObject - this.eObjectList.size() + " deprecated objects");
 	}
 }
 
-ewol::ObjectShared ewol::object::Manager::get(const etk::String& _name) {
-	ethread::RecursiveLock lock(m_mutex);
+EwolObject ObjectManager::get( String _name) {
+	ethread::RecursiveLock lock(this.mutex);
 	if (_name == "") {
 		return null;
 	}
-	for (auto &it : m_eObjectList) {
-		ewol::ObjectShared element = it.lock();
+	for (auto it : this.eObjectList) {
+		EwolObject element = it.lock();
 		if (    element != null
-		     && element->propertyName.get() == _name) {
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM element.propertyName.get() == _name) {
 			return element;
 		}
 	}
@@ -115,47 +115,47 @@ ewol::ObjectShared ewol::object::Manager::get(const etk::String& _name) {
 }
 
 
-ewol::ObjectShared ewol::object::Manager::getObjectNamed(const etk::String& _name) {
-	ethread::RecursiveLock lock(m_mutex);
-	return ewol::object::Manager::get(_name);
+EwolObject ObjectManager::getObjectNamed( String _name) {
+	ethread::RecursiveLock lock(this.mutex);
+	return ObjectManager::get(_name);
 }
 
 
-void ewol::object::Manager::workerAdd(const ewol::ObjectShared& _worker) {
-	ethread::RecursiveLock lock(m_mutex);
-	m_workerList.pushBack(_worker);
+void ObjectManager::workerAdd( EwolObject _worker) {
+	ethread::RecursiveLock lock(this.mutex);
+	this.workerList.pushBack(_worker);
 }
 
-void ewol::object::Manager::workerRemove(const ewol::ObjectShared& _worker) {
-	ethread::RecursiveLock lock(m_mutex);
-	auto it(m_workerList.begin());
-	while (it != m_workerList.end()) {
+void ObjectManager::workerRemove( EwolObject _worker) {
+	ethread::RecursiveLock lock(this.mutex);
+	auto it(this.workerList.begin());
+	while (it != this.workerList.end()) {
 		if (*it == _worker) {
-			it = m_workerList.erase(it);
+			it = this.workerList.erase(it);
 		} else {
 			++it;
 		}
 	}
 }
 
-void ewol::object::Manager::timeCall(const echrono::Clock& _localTime) {
-	ethread::RecursiveLock lock(m_mutex);
-	echrono::Clock previousTime = m_lastPeriodicCallTime;
-	m_lastPeriodicCallTime = _localTime;
+void ObjectManager::timeCall( echrono::Clock _localTime) {
+	ethread::RecursiveLock lock(this.mutex);
+	echrono::Clock previousTime = this.lastPeriodicCallTime;
+	this.lastPeriodicCallTime = _localTime;
 	if (periodicCall.size() <= 0) {
 		return;
 	}
 	echrono::Duration deltaTime = _localTime - previousTime;
-	ewol::event::Time myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
+	ewol::event::Time myTime(_localTime, this.applWakeUpTime, deltaTime, deltaTime);
 	periodicCall.emit(myTime);
 }
 
-void ewol::object::Manager::timeCallResume(const echrono::Clock& _localTime) {
-	ethread::RecursiveLock lock(m_mutex);
-	m_lastPeriodicCallTime = _localTime;
+void ObjectManager::timeCallResume( echrono::Clock _localTime) {
+	ethread::RecursiveLock lock(this.mutex);
+	this.lastPeriodicCallTime = _localTime;
 }
 
-bool ewol::object::Manager::timeCallHave() {
-	ethread::RecursiveLock lock(m_mutex);
+boolean ObjectManager::timeCallHave() {
+	ethread::RecursiveLock lock(this.mutex);
 	return periodicCall.size() > 0;
 }

@@ -18,60 +18,60 @@
 namespace ewol {
 	namespace widget {
 		class ButtonColor;
-		using ButtonColorShared = ememory::SharedPtr<ewol::widget::ButtonColor>;
+		using ButtonColor = ememory::Ptr<ewol::widget::ButtonColor>;
 		using ButtonColorWeak = ememory::WeakPtr<ewol::widget::ButtonColor>;
-		class ButtonColor : public ewol::Widget {
+		class ButtonColor : public Widget {
 			public: // signals
 				esignal::Signal<etk::Color<>> signalChange;
 			public: // properties
 				eproperty::Value<etk::Color<>> propertyValue; //!< Current color.
 				eproperty::Value<etk::Uri> propertyShape; //!< Current color.
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
-				ewol::compositing::Text m_text; //!< Compositing Test display.
-				ewol::widget::ContextMenuShared m_widgetContextMenu; //!< Specific context menu.
-				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
-				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
+				ewol::compositing::Shaper this.shaper; //!< Compositing theme.
+				ewol::compositing::Text this.text; //!< Compositing Test display.
+				ewol::widget::ContextMenu this.widgetContextMenu; //!< Specific context menu.
+				boolean this.mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+				boolean this.buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
-				Vector2f m_selectableAreaPos; //!< Start position of the events
-				Vector2f m_selectableAreaSize; //!< size of the event positions
+				Vector2f this.selectableAreaPos; //!< Start position of the events
+				Vector2f this.selectableAreaSize; //!< size of the event positions
 			protected:
 				/**
-				 * @brief Main constructor.
+				 * @brief Main ructor.
 				 * @param[in] _baseColor basic displayed color.
 				 * @param[in] _shaperName The new shaper filename.
 				 */
 				ButtonColor();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(ButtonColor, "ButtonColor");
 				/**
 				 * @brief Main destructor.
 				 */
-				virtual ~ButtonColor();
+				 ~ButtonColor();
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void calculateMinMaxSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
+				void calculateMinMaxSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
 				 * @param[in] _newStatusId new state
 				 */
-				void changeStatusIn(int32_t _newStatusId);
-				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				void changeStatusIn(int _newStatusId);
+				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
 				 * @brief Periodic call to update grapgic display
 				 * @param[in] _event Time generic event
 				 */
-				void periodicCall(const ewol::event::Time& _event);
+				void periodicCall( ewol::event::Time _event);
 				// Callback function:
-				void onCallbackColorChange(const etk::Color<>& _color);
+				void onCallbackColorChange( etk::Color<> _color);
 			protected:
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyShape();
+				 void onChangePropertyValue();
+				 void onChangePropertyShape();
 		};
 	};
 };

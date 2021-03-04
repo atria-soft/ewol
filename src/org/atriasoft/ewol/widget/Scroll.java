@@ -15,7 +15,7 @@
 namespace ewol {
 	namespace widget {
 		class Scroll;
-		using ScrollShared = ememory::SharedPtr<ewol::widget::Scroll>;
+		using Scroll = ememory::Ptr<ewol::widget::Scroll>;
 		using ScrollWeak = ememory::WeakPtr<ewol::widget::Scroll>;
 		class Scroll : public ewol::widget::Container {
 			public: // properties
@@ -33,33 +33,33 @@ namespace ewol {
 					speedModeGrepEndEvent
 				};
 			private:
-				ewol::compositing::Shaper m_shaperH; //!< Compositing theme Horizontal.
-				ewol::compositing::Shaper m_shaperV; //!< Compositing theme Vertical.
+				ewol::compositing::Shaper this.shaperH; //!< Compositing theme Horizontal.
+				ewol::compositing::Shaper this.shaperV; //!< Compositing theme Vertical.
 			private:
-				float m_pixelScrolling;
-				Vector2f m_highSpeedStartPos;
-				enum highSpeedMode m_highSpeedMode;
-				int32_t m_highSpeedButton;
-				enum gale::key::type m_highSpeedType;
+				float this.pixelScrolling;
+				Vector2f this.highSpeedStartPos;
+				enum highSpeedMode this.highSpeedMode;
+				int this.highSpeedButton;
+				KeyType this.highSpeedType;
 			protected:
 				Scroll();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Scroll, "Scroll");
-				virtual ~Scroll();
+				 ~Scroll();
 			public:
-				void onChangeSize() override;
-				void calculateMinMaxSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
+				void onChangeSize() ;
+				void calculateMinMaxSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				void systemDraw( ewol::DrawProperty _displayProp) ;
+				Widget getWidgetAtPos( Vector2f _pos) ;
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			protected:
-				virtual void onChangePropertyLimit();
-				virtual void onChangePropertyShapeVert();
-				virtual void onChangePropertyShapeHori();
+				 void onChangePropertyLimit();
+				 void onChangePropertyShapeVert();
+				 void onChangePropertyShapeHori();
 		};
 	}
 }

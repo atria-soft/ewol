@@ -18,30 +18,30 @@ ewol::Compositing::Compositing() {
 
 
 void ewol::Compositing::resetMatrix() {
-	m_matrixApply.identity();
+	this.matrixApply.identity();
 }
 
 
-void ewol::Compositing::translate(const Vector3f& _vect) {
-	m_matrixApply *= etk::matTranslate(_vect);
+void ewol::Compositing::translate( Vector3f _vect) {
+	this.matrixApply *= etk::matTranslate(_vect);
 }
 
 
-void ewol::Compositing::rotate(const Vector3f& _vect, float _angle) {
-	m_matrixApply *= etk::matRotate(_vect, _angle);
+void ewol::Compositing::rotate( Vector3f _vect, float _angle) {
+	this.matrixApply *= etk::matRotate(_vect, _angle);
 }
 
 
-void ewol::Compositing::scale(const Vector3f& _vect) {
-	m_matrixApply *= etk::matScale(_vect);
+void ewol::Compositing::scale( Vector3f _vect) {
+	this.matrixApply *= etk::matScale(_vect);
 }
 
 
 void ewol::Compositing::clear() {
-	m_matrixApply.identity();
+	this.matrixApply.identity();
 }
 
 
-void ewol::Compositing::setMatrix(const mat4& _mat) {
-	m_matrixApply = _mat;
+void ewol::Compositing::setMatrix( mat4 _mat) {
+	this.matrixApply = _mat;
 }

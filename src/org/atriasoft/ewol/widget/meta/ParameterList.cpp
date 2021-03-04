@@ -20,12 +20,12 @@ ewol::widget::ParameterList::ParameterList() :
   signalSelect(this, "select", "") {
 	addObjectType("ewol::widget::ParameterList");
 	
-	m_idSelected = -1;
-	m_paddingSizeX = 2;
+	this.idSelected = -1;
+	this.paddingSizeX = 2;
 	#ifdef __TARGET_OS__Android
-		m_paddingSizeY = 10;
+		this.paddingSizeY = 10;
 	#else
-		m_paddingSizeY = 2;
+		this.paddingSizeY = 2;
 	#endif
 }
 
@@ -36,40 +36,40 @@ void ewol::widget::ParameterList::init() {
 
 ewol::widget::ParameterList::~ParameterList() {
 	//clean all the object
-	m_listOObject.clear();
+	this.listOObject.clear();
 	menuClear();
 }
 
 void ewol::widget::ParameterList::calculateMinMaxSize() {
-	/*int32_t fontId = getDefaultFontId();
-	int32_t minWidth = ewol::getWidth(fontId, m_label);
-	int32_t minHeight = ewol::getHeight(fontId);
-	m_minSize.x = 3+minWidth;
-	m_minSize.y = 3+minHeight;
+	/*int fontId = getDefaultFontId();
+	int minWidth = ewol::getWidth(fontId, this.label);
+	int minHeight = ewol::getHeight(fontId);
+	this.minSize.x = 3+minWidth;
+	this.minSize.y = 3+minHeight;
 	*/
-	m_minSize.setValue(150, 150);
+	this.minSize.setValue(150, 150);
 }
 
-void ewol::widget::ParameterList::addOObject(const ememory::SharedPtr<ewol::Compositing>& _newObject, int32_t _pos) {
+void ewol::widget::ParameterList::addOObject( ememory::Ptr<ewol::Compositing> _newObject, int _pos) {
 	if (_newObject == null) {
 		Log.error("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (_pos < 0 || (size_t)_pos >= m_listOObject.size() ) {
-		m_listOObject.pushBack(_newObject);
+	if (_pos < 0 || (int)_pos >= this.listOObject.size() ) {
+		this.listOObject.pushBack(_newObject);
 	} else {
-		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
+		this.listOObject.insert(this.listOObject.begin()+_pos, _newObject);
 	}
 }
 
 void ewol::widget::ParameterList::clearOObjectList() {
-	m_listOObject.clear();
+	this.listOObject.clear();
 }
 
 void ewol::widget::ParameterList::onDraw() {
-	for (auto &it : m_listOObject) {
+	for (auto it : this.listOObject) {
 		if (it != null) {
-			it->draw();
+			it.draw();
 		}
 	}
 	WidgetScrolled::onDraw();
@@ -79,49 +79,49 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 	if (needRedraw() == true) {
 		// clean the object list ...
 		clearOObjectList();
-		//Log.debug("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
+		//Log.debug("OnRegenerateDisplay(" + this.size.x + "," + this.size.y + ")");
 		
-		int32_t tmpOriginX = 0;
-		int32_t tmpOriginY = 0;
+		int tmpOriginX = 0;
+		int tmpOriginY = 0;
 		/*
-		if (true == m_userFill.x) {
+		if (true == this.userFill.x) {
 			tmpOriginX = 0;
 		}
-		if (true == m_userFill.y) {
+		if (true == this.userFill.y) {
 			tmpOriginY = 0;
 		}*/
-		tmpOriginX += m_paddingSizeX;
-		tmpOriginY += m_paddingSizeY;
+		tmpOriginX += this.paddingSizeX;
+		tmpOriginY += this.paddingSizeY;
 	
 		/*
-		int32_t fontId = getDefaultFontId();
-		//int32_t minWidth = ewol::getWidth(fontId, m_label);
-		int32_t minHeight = ewol::getHeight(fontId);
+		int fontId = getDefaultFontId();
+		//int minWidth = ewol::getWidth(fontId, this.label);
+		int minHeight = ewol::getHeight(fontId);
 		*/
 		// TODO : Rework this ...
-		int32_t minHeight=20;
+		int minHeight=20;
 	
-		//uint32_t nbColomn = getNuberOfColomn();
-		int32_t nbRaw    = m_list.size();
+		//uint nbColomn = getNuberOfColomn();
+		int nbRaw    = this.list.size();
 		// For the scrooling windows
-		m_maxSize.setValue(m_size.x(),
-		                   (minHeight + 2*m_paddingSizeY) * nbRaw );
+		this.maxSize.setValue(this.size.x(),
+		                   (minHeight + 2*this.paddingSizeY) * nbRaw );
 		
 		
-		List<int32_t> listSizeColomn;
+		List<int> listSizeColomn;
 		
 		// set background color :
-		ememory::SharedPtr<ewol::compositing::Drawing> tmpDraw = ememory::makeShared<ewol::compositing::Drawing>();
+		ememory::Ptr<ewol::compositing::Drawing> tmpDraw = ememory::make<ewol::compositing::Drawing>();
 		if (tmpDraw == null) {
 			return;
 		}
-		tmpDraw->setColor(etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF));
-		tmpDraw->setPos(Vector3f(0,0,0) );
-		tmpDraw->rectangleWidth(Vector3f(m_size.x(), m_size.y(), 0) );
+		tmpDraw.setColor(etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF));
+		tmpDraw.setPos(Vector3f(0,0,0) );
+		tmpDraw.rectangleWidth(Vector3f(this.size.x(), this.size.y(), 0) );
 		
-		uint32_t displayableRaw = m_size.y() / (minHeight + 2*m_paddingSizeY) +2;
+		uint displayableRaw = this.size.y() / (minHeight + 2*this.paddingSizeY) +2;
 		
-		int32_t startRaw = m_originScrooled.y() / (minHeight + 2*m_paddingSizeY);
+		int startRaw = this.originScrooled.y() / (minHeight + 2*this.paddingSizeY);
 		
 		if (startRaw >= nbRaw-1 ) {
 			startRaw = nbRaw - 1;
@@ -130,28 +130,28 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 			startRaw = 0;
 		}
 		// calculate the real position ...
-		tmpOriginY = m_size.y() - (-m_originScrooled.y() + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
+		tmpOriginY = this.size.y() - (-this.originScrooled.y() + (startRaw+1)*(minHeight + 2*this.paddingSizeY));
 		
-		for (int32_t iii=startRaw; iii<nbRaw && iii<(int32_t)(startRaw+displayableRaw); iii++) {
-			etk::String myTextToWrite = "???";
+		for (int iii=startRaw; iii<nbRaw LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM iii<(int)(startRaw+displayableRaw); iii++) {
+			String myTextToWrite = "???";
 			etk::Color<> fg(0x00, 0x00, 0x00, 0xFF);
-			if (m_list[iii] != null) {
-				myTextToWrite = TRANSLATE(m_list[iii]->m_label);
+			if (this.list[iii] != null) {
+				myTextToWrite = TRANSLATE(this.list[iii].this.label);
 			}
 			
-			ememory::SharedPtr<ewol::compositing::Text> tmpText = ememory::makeShared<ewol::compositing::Text>();
+			ememory::Ptr<ewol::compositing::Text> tmpText = ememory::make<ewol::compositing::Text>();
 			
 			Vector3f textPos;
-			textPos.setX((int32_t)tmpOriginX);
-			if (m_list[iii]->m_group == false) {
+			textPos.setX((int)tmpOriginX);
+			if (this.list[iii].this.group == false) {
 				textPos.setX(textPos.x() + minHeight);
 			}
-			textPos.setY((int32_t)(tmpOriginY + m_paddingSizeY));
-			tmpText->setPos(textPos);
-			tmpText->print(myTextToWrite);
+			textPos.setY((int)(tmpOriginY + this.paddingSizeY));
+			tmpText.setPos(textPos);
+			tmpText.print(myTextToWrite);
 			
 			addOObject(tmpText);
-			tmpOriginY -= minHeight + 2* m_paddingSizeY;
+			tmpOriginY -= minHeight + 2* this.paddingSizeY;
 		}
 		addOObject(tmpDraw, 0);
 		
@@ -161,30 +161,30 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 }
 
 
-bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event) {
+boolean ewol::widget::ParameterList::onEventInput( ewol::event::Input _event) {
 	if (true == WidgetScrolled::onEventInput(_event)) {
 		keepFocus();
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	if (_event.getId() == 1 && _event.getStatus() == gale::key::status::pressSingle) {
+	if (_event.getId() == 1 LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::pressSingle) {
 		Vector2f relativePos = relativePosition(_event.getPos());
 		// corection for the openGl abstraction
-		relativePos.setY(m_size.y() - relativePos.y());
+		relativePos.setY(this.size.y() - relativePos.y());
 		// TODO : Rework this ...
 		/*
-		int32_t fontId = getDefaultFontId();
-		//int32_t minWidth = ewol::getWidth(fontId, m_label.c_str());
-		int32_t minHeight = ewol::getHeight(fontId);
+		int fontId = getDefaultFontId();
+		//int minWidth = ewol::getWidth(fontId, this.label.c_str());
+		int minHeight = ewol::getHeight(fontId);
 		*/
-		int32_t minHeight = 20;
-		int32_t rawID = (relativePos.y()+m_originScrooled.y()) / (minHeight + 2*m_paddingSizeY);
+		int minHeight = 20;
+		int rawID = (relativePos.y()+this.originScrooled.y()) / (minHeight + 2*this.paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
-		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
-			if (m_list[rawID]!=null) {
-				if (m_list[rawID]->m_refId >= 0) {
-					signalSelect.emit(m_list[rawID]->m_refId);
-					m_idSelected = rawID;
+		if (rawID >= 0 LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (int)rawID < this.list.size()) {
+			if (this.list[rawID]!=null) {
+				if (this.list[rawID].this.refId >= 0) {
+					signalSelect.emit(this.list[rawID].this.refId);
+					this.idSelected = rawID;
 					markToRedraw();
 					return true;
 				}
@@ -202,39 +202,39 @@ void ewol::widget::ParameterList::onLostFocus() {
 	Log.debug("Ewol::List Lost focus");
 }
 
-void ewol::widget::ParameterList::menuAdd(etk::String& _label, int32_t _refId, etk::String& _image) {
-	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, _refId, _image, false);
+void ewol::widget::ParameterList::menuAdd(String _label, int _refId, String _image) {
+	ememory::Ptr<ewol::widget::elementPL> tmpEmement = ememory::make<widget::elementPL>(_label, _refId, _image, false);
 	if (tmpEmement == null) {
 		Log.error("Can not allocacte menu parameter");
 		return;
 	}
-	m_list.pushBack(tmpEmement);
-	if (m_idSelected == -1 && _label != "---" && _refId>0) {
-		m_idSelected = m_list.size()-1;
+	this.list.pushBack(tmpEmement);
+	if (this.idSelected == -1 LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _label != "---" LOMLOMLOMLOMLOM _refId>0) {
+		this.idSelected = this.list.size()-1;
 	}
 	markToRedraw();
 }
 
-void ewol::widget::ParameterList::menuAddGroup(etk::String& _label) {
-	etk::String image = "";
-	ememory::SharedPtr<ewol::widget::elementPL> tmpEmement = ememory::makeShared<widget::elementPL>(_label, -1, image, true);
+void ewol::widget::ParameterList::menuAddGroup(String _label) {
+	String image = "";
+	ememory::Ptr<ewol::widget::elementPL> tmpEmement = ememory::make<widget::elementPL>(_label, -1, image, true);
 	if (tmpEmement == null) {
 		Log.error("Can not allocacte menu parameter");
 		return;
 	}
-	m_list.pushBack(tmpEmement);
+	this.list.pushBack(tmpEmement);
 	markToRedraw();
 }
 
 void ewol::widget::ParameterList::menuClear() {
-	m_idSelected = -1;
-	m_list.clear();
+	this.idSelected = -1;
+	this.list.clear();
 }
 
 void ewol::widget::ParameterList::menuSeparator() {
-	if (m_list.size()>0) {
-		etk::String label = "";
-		etk::String image = "";
+	if (this.list.size()>0) {
+		String label = "";
+		String image = "";
 		menuAdd(label, -1, image);
 	}
 }

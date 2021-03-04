@@ -16,7 +16,7 @@
 namespace ewol {
 	namespace widget {
 		class CheckBox;
-		using CheckBoxShared = ememory::SharedPtr<ewol::widget::CheckBox>;
+		using CheckBox = ememory::Ptr<ewol::widget::CheckBox>;
 		using CheckBoxWeak = ememory::WeakPtr<ewol::widget::CheckBox>;
 		class CheckBox : public ewol::widget::Container2 {
 			public: // Event list
@@ -29,56 +29,56 @@ namespace ewol {
 				eproperty::Value<bool> propertyValue; //!< Current state of the checkbox.
 				eproperty::Value<etk::Uri> propertyShape; //!< shape of the widget
 			private:
-				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
-				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
-				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
+				ewol::compositing::Shaper this.shaper; //!< Compositing theme.
+				boolean this.mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+				boolean this.buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
-				Vector2f m_selectableAreaPos; //!< Start position of the events
-				Vector2f m_selectableAreaSize; //!< size of the event positions
+				Vector2f this.selectableAreaPos; //!< Start position of the events
+				Vector2f this.selectableAreaSize; //!< size of the event positions
 				// shaper ids:
-				int32_t m_shaperIdSize;
-				int32_t m_shaperIdSizeInsize;
+				int this.shaperIdSize;
+				int this.shaperIdSizeInsize;
 			protected:
 				/**
-				 * @brief Main checkbox constructor
+				 * @brief Main checkbox ructor
 				 * @param[in] _shaperName Shaper file properties
 				 */
 				CheckBox();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(CheckBox, "CheckBox");
 				/**
 				 * @brief main destructor.
 				 */
-				virtual ~CheckBox();
+				 ~CheckBox();
 			protected:
 				/**
 				 * @brief internal system to change the property of the current status
 				 * @param[in] _newStatusId new state
 				 */
-				void changeStatusIn(int32_t _newStatusId);
+				void changeStatusIn(int _newStatusId);
 				/**
 				 * @brief update the status with the internal satte of the button ...
 				 */
 				void CheckStatus();
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void calculateMinMaxSize() override;
-				void onChangeSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				bool onEventEntry(const ewol::event::Entry& _event) override;
+				void calculateMinMaxSize() ;
+				void onChangeSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				boolean onEventEntry( ewol::event::Entry _event) ;
 			protected:
-				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
 				 * @brief Periodic call to update grapgic display
 				 * @param[in] _event Time generic event
 				 */
-				void periodicCall(const ewol::event::Time& _event);
+				void periodicCall( ewol::event::Time _event);
 			protected:
-				virtual void onChangePropertyShape();
-				virtual void onChangePropertyValue();
+				 void onChangePropertyShape();
+				 void onChangePropertyValue();
 		};
 	};
 };

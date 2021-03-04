@@ -11,42 +11,42 @@
 ETK_DECLARE_TYPE(ewol::compositing::Drawing);
 
 // VBO table property:
-const int32_t ewol::compositing::Drawing::m_vboIdCoord(0);
-const int32_t ewol::compositing::Drawing::m_vboIdColor(1);
+ int ewol::compositing::Drawing::this.vboIdCoord(0);
+ int ewol::compositing::Drawing::this.vboIdColor(1);
 #define NB_VBO (2)
 
 #if 0
 
-static void generatePolyGone(List<Vector2f > & input, List<Vector2f > & output )
+static void generatePolyGone(List<Vector2f >  input, List<Vector2f >  output )
 {
 	if (input.size()<3) {
 		return;
 	}
 	// TODO : Regenerate a linear poligone generation
-	for (int32_t iii=1; iii<input.size()-1; iii++) {
+	for (int iii=1; iii<input.size()-1; iii++) {
 		output.pushBack(input[0]);
 		output.pushBack(input[iii]);
 		output.pushBack(input[iii+1]);
 	}
-	//Log.debug("generate Plygone : " << input.size() << "  == > " << output.size() );
+	//Log.debug("generate Plygone : " + input.size() + "  == > " + output.size() );
 }
 
-static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output, float sx, float sy, float ex, float ey)
+static void SutherlandHodgman(List<Vector2f >  input, List<Vector2f >  output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.size() <0) {
 		return;
 	}
-	//int32_t sizeInit=input.size();
+	//int sizeInit=input.size();
 	// last element :
 	Vector2f destPoint;
 	Vector2f lastElement = input[input.size()-1];
-	bool inside = true;
+	boolean inside = true;
 	if (lastElement.x < sx) {
 		inside = false;
 	}
 	//Log.debug("generate an crop : ");
-	for(int32_t iii=0; iii<input.size(); iii++) {
+	for(int iii=0; iii<input.size(); iii++) {
 		if(input[iii].x < sx) {
 			if(true == inside) {
 				//Log.debug("element IN  == > OUT ");
@@ -83,7 +83,7 @@ static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output,
 		lastElement.y = input[iii].y;
 	}
 	
-	//Log.debug("generate an crop on element : " << sizeInit << "  == > " << output.size() << "intermediate (1)");
+	//Log.debug("generate an crop on element : " + sizeInit + "  == > " + output.size() + "intermediate (1)");
 	input = output;
 	output.clear();
 	lastElement = input[input.size()-1];
@@ -91,7 +91,7 @@ static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output,
 	if (lastElement.y < sy) {
 		inside = false;
 	}
-	for(int32_t iii=0; iii<input.size(); iii++) {
+	for(int iii=0; iii<input.size(); iii++) {
 		if(input[iii].y < sy) {
 			if(true == inside) {
 				//Log.debug("element IN  == > OUT ");
@@ -136,7 +136,7 @@ static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output,
 		inside = false;
 	}
 	//Log.debug("generate an crop : ");
-	for(int32_t iii=0; iii<input.size(); iii++) {
+	for(int iii=0; iii<input.size(); iii++) {
 		if(input[iii].x > ex) {
 			if(true == inside) {
 				//Log.debug("element IN  == > OUT ");
@@ -180,7 +180,7 @@ static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output,
 	if (lastElement.y > ey) {
 		inside = false;
 	}
-	for(int32_t iii=0; iii<input.size(); iii++) {
+	for(int iii=0; iii<input.size(); iii++) {
 		if(input[iii].y > ey) {
 			if(true == inside) {
 				//Log.debug("element IN  == > OUT ");
@@ -218,37 +218,37 @@ static void SutherlandHodgman(List<Vector2f > & input, List<Vector2f > & output,
 	}
 	
 	
-	//Log.debug("generate an crop on element : " << sizeInit << "  == > " << output.size() );
+	//Log.debug("generate an crop on element : " + sizeInit + "  == > " + output.size() );
 }
 #endif
 
 ewol::compositing::Drawing::Drawing() :
-  m_position(0.0, 0.0, 0.0),
-  m_clippingPosStart(0.0, 0.0, 0.0),
-  m_clippingPosStop(0.0, 0.0, 0.0),
-  m_clippingEnable(false),
-  m_color(etk::color::black),
-  m_colorBg(etk::color::none),
-  m_GLprogram(null),
-  m_GLPosition(-1),
-  m_GLMatrix(-1),
-  m_GLMatrixPosition(-1),
-  m_GLColor(-1),
-  m_thickness(0.0),
-  m_triElement(0) {
+  this.position(0.0, 0.0, 0.0),
+  this.clippingPosStart(0.0, 0.0, 0.0),
+  this.clippingPosStop(0.0, 0.0, 0.0),
+  this.clippingEnable(false),
+  this.color(etk::color::black),
+  this.colorBg(etk::color::none),
+  this.GLprogram(null),
+  this.GLPosition(-1),
+  this.GLMatrix(-1),
+  this.GLMatrixPosition(-1),
+  this.GLColor(-1),
+  this.thickness(0.0),
+  this.triElement(0) {
 	loadProgram();
-	for (int32_t iii=0; iii<3; iii++) {
-		m_triangle[iii] = m_position;
-		m_tricolor[iii] = m_color;
+	for (int iii=0; iii<3; iii++) {
+		this.triangle[iii] = this.position;
+		this.tricolor[iii] = this.color;
 	}
 	// Create the VBO:
-	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == null) {
+	this.VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (this.VBO == null) {
 		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
-	m_VBO->setName("[VBO] of ewol::compositing::Area");
+	this.VBO.setName("[VBO] of ewol::compositing::Area");
 }
 
 ewol::compositing::Drawing::~Drawing() {
@@ -256,181 +256,181 @@ ewol::compositing::Drawing::~Drawing() {
 }
 
 void ewol::compositing::Drawing::generateTriangle() {
-	m_triElement = 0;
+	this.triElement = 0;
 	
-	m_VBO->pushOnBuffer(m_vboIdCoord, m_triangle[0]);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_tricolor[0]);
-	m_VBO->pushOnBuffer(m_vboIdCoord, m_triangle[1]);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_tricolor[1]);
-	m_VBO->pushOnBuffer(m_vboIdCoord, m_triangle[2]);
-	m_VBO->pushOnBuffer(m_vboIdColor, m_tricolor[2]);
+	this.VBO.pushOnBuffer(this.vboIdCoord, this.triangle[0]);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.tricolor[0]);
+	this.VBO.pushOnBuffer(this.vboIdCoord, this.triangle[1]);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.tricolor[1]);
+	this.VBO.pushOnBuffer(this.vboIdCoord, this.triangle[2]);
+	this.VBO.pushOnBuffer(this.vboIdColor, this.tricolor[2]);
 }
 
-void ewol::compositing::Drawing::internalSetColor(const etk::Color<>& _color) {
-	if (m_triElement < 1) {
-		m_tricolor[0] = _color;
+void ewol::compositing::Drawing::internalSetColor( etk::Color<> _color) {
+	if (this.triElement < 1) {
+		this.tricolor[0] = _color;
 	}
-	if (m_triElement < 2) {
-		m_tricolor[1] = _color;
+	if (this.triElement < 2) {
+		this.tricolor[1] = _color;
 	}
-	if (m_triElement < 3) {
-		m_tricolor[2] = _color;
+	if (this.triElement < 3) {
+		this.tricolor[2] = _color;
 	}
 }
 
-void ewol::compositing::Drawing::setPoint(const Vector3f& _point) {
-	m_triangle[m_triElement] = _point;
-	m_triElement++;
-	if (m_triElement >= 3) {
+void ewol::compositing::Drawing::setPoint( Vector3f _point) {
+	this.triangle[this.triElement] = _point;
+	this.triElement++;
+	if (this.triElement >= 3) {
 		generateTriangle();
 	}
-	m_VBO->flush();
+	this.VBO.flush();
 }
 
 void ewol::compositing::Drawing::resetCount() {
-	m_triElement = 0;
+	this.triElement = 0;
 }
 
 void ewol::compositing::Drawing::unLoadProgram() {
-	m_GLprogram.reset();
+	this.GLprogram.reset();
 }
 
 void ewol::compositing::Drawing::loadProgram() {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
-	m_GLprogram = gale::resource::Program::create("DATA:///color3.prog?lib=ewol");
+	this.GLprogram = gale::resource::Program::create("DATA:///color3.prog?lib=ewol");
 	// get the shader resource :
-	if (m_GLprogram != null) {
-		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
-		m_GLColor = m_GLprogram->getAttribute("EW_color");
-		m_GLMatrix = m_GLprogram->getUniform("EW_MatrixTransformation");
-		m_GLMatrixPosition = m_GLprogram->getUniform("EW_MatrixPosition");
+	if (this.GLprogram != null) {
+		this.GLPosition = this.GLprogram.getAttribute("EW_coord3d");
+		this.GLColor = this.GLprogram.getAttribute("EW_color");
+		this.GLMatrix = this.GLprogram.getUniform("EW_MatrixTransformation");
+		this.GLMatrixPosition = this.GLprogram.getUniform("EW_MatrixPosition");
 	}
 }
 
-void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
-	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
+void ewol::compositing::Drawing::draw(boolean _disableDepthTest) {
+	if (this.VBO.bufferSize(this.vboIdCoord) <= 0) {
 		// TODO : set it back ...
-		//EWOL_WARNING("Nothink to draw...");
+		//Log.warning("Nothink to draw...");
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
-	m_GLprogram->use();
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	mat4 tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
+	this.GLprogram.use();
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	mat4 tmpMatrix2;
-	m_GLprogram->uniformMatrix(m_GLMatrixPosition, tmpMatrix2);
+	this.GLprogram.uniformMatrix(this.GLMatrixPosition, tmpMatrix2);
 	// position:
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);
 	// color:
-	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
+	this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, this.vboIdColor);
 	// Request the draw od the elements : 
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
-	m_GLprogram->unUse();
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, this.VBO.bufferSize(this.vboIdCoord));
+	this.GLprogram.unUse();
 }
 
 void ewol::compositing::Drawing::clear() {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
-	m_VBO->clear();
+	this.VBO.clear();
 	// reset temporal variables :
-	m_position = Vector3f(0.0, 0.0, 0.0);
+	this.position = Vector3f(0.0, 0.0, 0.0);
 	
-	m_clippingPosStart = Vector3f(0.0, 0.0, 0.0);
-	m_clippingPosStop = Vector3f(0.0, 0.0, 0.0);
-	m_clippingEnable = false;
+	this.clippingPosStart = Vector3f(0.0, 0.0, 0.0);
+	this.clippingPosStop = Vector3f(0.0, 0.0, 0.0);
+	this.clippingEnable = false;
 	
-	m_color = etk::color::black;
-	m_colorBg = etk::color::none;
+	this.color = etk::color::black;
+	this.colorBg = etk::color::none;
 	
-	for (int32_t iii=0; iii<3; iii++) {
-		m_triangle[iii] = m_position;
-		m_tricolor[iii] = m_color;
+	for (int iii=0; iii<3; iii++) {
+		this.triangle[iii] = this.position;
+		this.tricolor[iii] = this.color;
 	}
 }
 
-void ewol::compositing::Drawing::setClipping(const Vector3f& _pos, const Vector3f& _posEnd) {
+void ewol::compositing::Drawing::setClipping( Vector3f _pos,  Vector3f _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
-		m_clippingPosStart.setX(_pos.x());
-		m_clippingPosStop.setX(_posEnd.x());
+		this.clippingPosStart.setX(_pos.x());
+		this.clippingPosStop.setX(_posEnd.x());
 	} else {
-		m_clippingPosStart.setX(_posEnd.x());
-		m_clippingPosStop.setX(_pos.x());
+		this.clippingPosStart.setX(_posEnd.x());
+		this.clippingPosStop.setX(_pos.x());
 	}
 	if (_pos.y() <= _posEnd.y()) {
-		m_clippingPosStart.setY(_pos.y());
-		m_clippingPosStop.setY(_posEnd.y());
+		this.clippingPosStart.setY(_pos.y());
+		this.clippingPosStop.setY(_posEnd.y());
 	} else {
-		m_clippingPosStart.setY(_posEnd.y());
-		m_clippingPosStop.setY(_pos.y());
+		this.clippingPosStart.setY(_posEnd.y());
+		this.clippingPosStop.setY(_pos.y());
 	}
 	if (_pos.z() <= _posEnd.z()) {
-		m_clippingPosStart.setZ(_pos.z());
-		m_clippingPosStop.setZ(_posEnd.z());
+		this.clippingPosStart.setZ(_pos.z());
+		this.clippingPosStop.setZ(_posEnd.z());
 	} else {
-		m_clippingPosStart.setZ(_posEnd.z());
-		m_clippingPosStop.setZ(_pos.z());
+		this.clippingPosStart.setZ(_posEnd.z());
+		this.clippingPosStop.setZ(_pos.z());
 	}
-	m_clippingEnable = true;
+	this.clippingEnable = true;
 }
 
 void ewol::compositing::Drawing::setThickness(float _thickness) {
-	m_thickness = _thickness;
+	this.thickness = _thickness;
 	// thickness must be positive
-	if (m_thickness < 0) {
-		m_thickness *= -1;
+	if (this.thickness < 0) {
+		this.thickness *= -1;
 	}
 }
 
 void ewol::compositing::Drawing::addVertex() {
-	internalSetColor(m_color);
-	setPoint(m_position);
+	internalSetColor(this.color);
+	setPoint(this.position);
 }
 
-void ewol::compositing::Drawing::lineTo(const Vector3f& _dest) {
+void ewol::compositing::Drawing::lineTo( Vector3f _dest) {
 	resetCount();
-	internalSetColor(m_color);
-	//Log.verbose("DrawLine : " << m_position << " to " << _dest);
-	if (m_position.x() == _dest.x() && m_position.y() == _dest.y() && m_position.z() == _dest.z()) {
-		//EWOL_WARNING("Try to draw a line width 0");
+	internalSetColor(this.color);
+	//Log.verbose("DrawLine : " + this.position + " to " + _dest);
+	if (this.position.x() == _dest.x() LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.position.y() == _dest.y() LOMLOMLOMLOMLOM this.position.z() == _dest.z()) {
+		//Log.warning("Try to draw a line width 0");
 		return;
 	}
 	//teta = tan-1(oposer/adjacent)
 	float teta = 0;
-	if (m_position.x() <= _dest.x()) {
-		teta = atan((_dest.y()-m_position.y())/(_dest.x()-m_position.x()));
+	if (this.position.x() <= _dest.x()) {
+		teta = atan((_dest.y()-this.position.y())/(_dest.x()-this.position.x()));
 	} else {
-		teta = M_PI + atan((_dest.y()-m_position.y())/(_dest.x()-m_position.x()));
+		teta = M_PI + atan((_dest.y()-this.position.y())/(_dest.x()-this.position.x()));
 	}
 	if (teta < 0) {
 		teta += 2*M_PI;
 	} else if (teta > 2*M_PI) {
 		teta -= 2*M_PI;
 	}
-	//Log.debug("teta = " << (teta*180/(M_PI)) << " deg." );
-	float offsety = sin(teta-M_PI/2) * (m_thickness/2);
-	float offsetx = cos(teta-M_PI/2) * (m_thickness/2);
-	setPoint(Vector3f(m_position.x() - offsetx, m_position.y() - offsety, m_position.z()) );
-	setPoint(Vector3f(m_position.x() + offsetx, m_position.y() + offsety, m_position.z()) );
-	setPoint(Vector3f(_dest.x()      + offsetx, _dest.y()      + offsety, m_position.z()) );
+	//Log.debug("teta = " + (teta*180/(M_PI)) + " deg." );
+	float offsety = sin(teta-M_PI/2) * (this.thickness/2);
+	float offsetx = cos(teta-M_PI/2) * (this.thickness/2);
+	setPoint(Vector3f(this.position.x() - offsetx, this.position.y() - offsety, this.position.z()) );
+	setPoint(Vector3f(this.position.x() + offsetx, this.position.y() + offsety, this.position.z()) );
+	setPoint(Vector3f(_dest.x()      + offsetx, _dest.y()      + offsety, this.position.z()) );
 	
 	setPoint(Vector3f(_dest.x()      + offsetx, _dest.y()      + offsety, _dest.z()) );
 	setPoint(Vector3f(_dest.x()      - offsetx, _dest.y()      - offsety, _dest.z()) );
-	setPoint(Vector3f(m_position.x() - offsetx, m_position.y() - offsety, _dest.z()) );
+	setPoint(Vector3f(this.position.x() - offsetx, this.position.y() - offsety, _dest.z()) );
 	// update the system position :
-	m_position = _dest;
+	this.position = _dest;
 }
 
-void ewol::compositing::Drawing::rectangle(const Vector3f& _dest) {
+void ewol::compositing::Drawing::rectangle( Vector3f _dest) {
 	resetCount();
-	internalSetColor(m_color);
+	internalSetColor(this.color);
 	/* Bitmap position
 	 *      xA     xB
 	 *   yC *------*
@@ -438,7 +438,7 @@ void ewol::compositing::Drawing::rectangle(const Vector3f& _dest) {
 	 *      |      |
 	 *   yD *------*
 	 */
-	float dxA = m_position.x();
+	float dxA = this.position.x();
 	float dxB = _dest.x();
 	if (dxA > dxB) {
 		// inverse order : 
@@ -446,7 +446,7 @@ void ewol::compositing::Drawing::rectangle(const Vector3f& _dest) {
 		dxA = dxB;
 		dxB = tmp;
 	}
-	float dyC = m_position.y();
+	float dyC = this.position.y();
 	float dyD = _dest.y();
 	if (dyC > dyD) {
 		// inverse order : 
@@ -454,18 +454,18 @@ void ewol::compositing::Drawing::rectangle(const Vector3f& _dest) {
 		dyC = dyD;
 		dyD = tmp;
 	}
-	if (true == m_clippingEnable) {
-		if (dxA < m_clippingPosStart.x()) {
-			dxA = m_clippingPosStart.x();
+	if (true == this.clippingEnable) {
+		if (dxA < this.clippingPosStart.x()) {
+			dxA = this.clippingPosStart.x();
 		}
-		if (dxB > m_clippingPosStop.x()) {
-			dxB = m_clippingPosStop.x();
+		if (dxB > this.clippingPosStop.x()) {
+			dxB = this.clippingPosStop.x();
 		}
-		if (dyC < m_clippingPosStart.y()) {
-			dyC = m_clippingPosStart.y();
+		if (dyC < this.clippingPosStart.y()) {
+			dyC = this.clippingPosStart.y();
 		}
-		if (dyD > m_clippingPosStop.y()) {
-			dyD = m_clippingPosStop.y();
+		if (dyD > this.clippingPosStop.y()) {
+			dyD = this.clippingPosStop.y();
 		}
 	}
 	if(    dyC >= dyD
@@ -481,7 +481,7 @@ void ewol::compositing::Drawing::rectangle(const Vector3f& _dest) {
 	setPoint(Vector3f(dxA, dyD, 0) );
 }
 
-void ewol::compositing::Drawing::cube(const Vector3f& _dest) {
+void ewol::compositing::Drawing::cube( Vector3f _dest) {
 	
 }
 
@@ -494,65 +494,65 @@ void ewol::compositing::Drawing::circle(float _radius, float _angleStart, float 
 	_angleStop = _angleStop-_angleStart;
 	
 	
-	int32_t nbOcurence = _radius;
+	int nbOcurence = _radius;
 	if (nbOcurence < 10)
 	{
 		nbOcurence = 10;
 	}
 	
 	// display background :
-	if (m_colorBg.a()!=0) {
-		internalSetColor(m_colorBg);
-		for (int32_t iii=0; iii<nbOcurence; iii++) {
-			setPoint(Vector3f(m_position.x(),
-			              m_position.y(),
+	if (this.colorBg.a()!=0) {
+		internalSetColor(this.colorBg);
+		for (int iii=0; iii<nbOcurence; iii++) {
+			setPoint(Vector3f(this.position.x(),
+			              this.position.y(),
 			              0) );
 			
 			float angleOne = _angleStart + (_angleStop* iii / nbOcurence) ;
 			float offsety = sin(angleOne) * _radius;
 			float offsetx = cos(angleOne) * _radius;
 			
-			setPoint(Vector3f(m_position.x() + offsetx,
-			              m_position.y() + offsety,
+			setPoint(Vector3f(this.position.x() + offsetx,
+			              this.position.y() + offsety,
 			              0) );
 			
 			float angleTwo = _angleStart + (_angleStop* (iii+1) / nbOcurence) ;
 			offsety = sin(angleTwo) * _radius;
 			offsetx = cos(angleTwo) * _radius;
 			
-			setPoint(Vector3f(m_position.x() + offsetx,
-			              m_position.y() + offsety,
+			setPoint(Vector3f(this.position.x() + offsetx,
+			              this.position.y() + offsety,
 			              0) );
 		}
 	}
 	
 	// show if we have a border :
-	if(    m_thickness == 0
-	    || m_color.a() == 0) {
+	if(    this.thickness == 0
+	    || this.color.a() == 0) {
 		return;
 	}
-	internalSetColor(m_color);
-	for (int32_t iii=0; iii<nbOcurence; iii++) {
+	internalSetColor(this.color);
+	for (int iii=0; iii<nbOcurence; iii++) {
 		
 		float angleOne =  _angleStart + (_angleStop* iii     / nbOcurence) ;
-		float offsetExty = sin(angleOne) * (_radius+m_thickness/2);
-		float offsetExtx = cos(angleOne) * (_radius+m_thickness/2);
-		float offsetInty = sin(angleOne) * (_radius-m_thickness/2);
-		float offsetIntx = cos(angleOne) * (_radius-m_thickness/2);
+		float offsetExty = sin(angleOne) * (_radius+this.thickness/2);
+		float offsetExtx = cos(angleOne) * (_radius+this.thickness/2);
+		float offsetInty = sin(angleOne) * (_radius-this.thickness/2);
+		float offsetIntx = cos(angleOne) * (_radius-this.thickness/2);
 		
 		float angleTwo =  _angleStart + (_angleStop*  (iii+1) / nbOcurence );
-		float offsetExt2y = sin(angleTwo) * (_radius+m_thickness/2);
-		float offsetExt2x = cos(angleTwo) * (_radius+m_thickness/2);
-		float offsetInt2y = sin(angleTwo) * (_radius-m_thickness/2);
-		float offsetInt2x = cos(angleTwo) * (_radius-m_thickness/2);
+		float offsetExt2y = sin(angleTwo) * (_radius+this.thickness/2);
+		float offsetExt2x = cos(angleTwo) * (_radius+this.thickness/2);
+		float offsetInt2y = sin(angleTwo) * (_radius-this.thickness/2);
+		float offsetInt2x = cos(angleTwo) * (_radius-this.thickness/2);
 		
-		setPoint(Vector3f(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
-		setPoint(Vector3f(m_position.x() + offsetExtx,  m_position.y() + offsetExty,  0));
-		setPoint(Vector3f(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
+		setPoint(Vector3f(this.position.x() + offsetIntx,  this.position.y() + offsetInty,  0));
+		setPoint(Vector3f(this.position.x() + offsetExtx,  this.position.y() + offsetExty,  0));
+		setPoint(Vector3f(this.position.x() + offsetExt2x, this.position.y() + offsetExt2y, 0));
 		
-		setPoint(Vector3f(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
-		setPoint(Vector3f(m_position.x() + offsetInt2x, m_position.y() + offsetInt2y, 0));
-		setPoint(Vector3f(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
+		setPoint(Vector3f(this.position.x() + offsetExt2x, this.position.y() + offsetExt2y, 0));
+		setPoint(Vector3f(this.position.x() + offsetInt2x, this.position.y() + offsetInt2y, 0));
+		setPoint(Vector3f(this.position.x() + offsetIntx,  this.position.y() + offsetInty,  0));
 	}
 }
 

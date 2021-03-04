@@ -13,7 +13,7 @@
 namespace ewol {
 	namespace widget {
 		class Layer;
-		using LayerShared = ememory::SharedPtr<ewol::widget::Layer>;
+		using Layer = ememory::Ptr<ewol::widget::Layer>;
 		using LayerWeak = ememory::WeakPtr<ewol::widget::Layer>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -29,9 +29,9 @@ namespace ewol {
 				/**
 				 * @brief Desstructor
 				 */
-				virtual ~Layer();
+				 ~Layer();
 			public:
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
+				Widget getWidgetAtPos( Vector2f _pos) ;
 		};
 	};
 };

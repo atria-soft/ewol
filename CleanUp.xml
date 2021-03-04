@@ -41,7 +41,7 @@
         <setting id="cleanup.make_local_variable_final" value="false"/>
         <setting id="cleanup.add_missing_methods" value="false"/>
         <setting id="cleanup.qualify_static_member_accesses_with_declaring_class" value="true"/>
-        <setting id="cleanup.add_missing_override_annotations" value="true"/>
+        <setting id="cleanup.add_missing__annotations" value="true"/>
         <setting id="cleanup.use_blocks" value="true"/>
         <setting id="cleanup.collection_cloning" value="false"/>
         <setting id="cleanup.convert_to_enhanced_for_loop_if_loop_var_used" value="false"/>
@@ -63,7 +63,7 @@
         <setting id="cleanup.use_this_for_non_static_field_access_only_if_necessary" value="false"/>
         <setting id="cleanup.remove_trailing_whitespaces_all" value="true"/>
         <setting id="cleanup.remove_unnecessary_array_creation" value="false"/>
-        <setting id="cleanup.remove_private_constructors" value="true"/>
+        <setting id="cleanup.remove_private_ructors" value="true"/>
         <setting id="cleanup.make_parameters_final" value="false"/>
         <setting id="cleanup.ternary_operator" value="false"/>
         <setting id="cleanup.merge_conditional_blocks" value="false"/>
@@ -90,7 +90,7 @@
         <setting id="cleanup.join" value="false"/>
         <setting id="cleanup.embedded_if" value="false"/>
         <setting id="cleanup.use_anonymous_class_creation" value="false"/>
-        <setting id="cleanup.add_missing_override_annotations_interface_methods" value="true"/>
+        <setting id="cleanup.add_missing__annotations_interface_methods" value="true"/>
         <setting id="cleanup.remove_unused_private_members" value="false"/>
         <setting id="cleanup.strictly_equal_or_different" value="false"/>
         <setting id="cleanup.never_use_parentheses_in_expressions" value="true"/>

@@ -13,16 +13,16 @@
 namespace ewol {
 	namespace widget {
 		class Container2;
-		using Container2Shared = ememory::SharedPtr<ewol::widget::Container2>;
+		using Container2 = ememory::Ptr<ewol::widget::Container2>;
 		using Container2Weak = ememory::WeakPtr<ewol::widget::Container2>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
-		class Container2 : public ewol::Widget {
+		class Container2 : public Widget {
 			protected:
-				ewol::WidgetShared m_subWidget[2]; //!< 2 subwidget possible
-				int32_t m_idWidgetDisplayed; //!< current widget displayed
+				Widget this.subWidget[2]; //!< 2 subwidget possible
+				int this.idWidgetDisplayed; //!< current widget displayed
 			protected:
 				/**
 				 * @brief Constructor
@@ -34,27 +34,27 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~Container2();
+				 ~Container2();
 			private:
 				/**
 				 * @brief Specify the current widget
 				 * @param[in] _subWidget Widget to add normal
 				 * @param[in] _idWidget Id of the widget to set
 				 */
-				void setSubWidget(ewol::WidgetShared _subWidget, int32_t _idWidget);
+				void setSubWidget(Widget _subWidget, int _idWidget);
 			public:
 				/**
 				 * @brief Specify the current widget
 				 * @param[in] _subWidget Widget to add normal
 				 */
-				void setSubWidget(ewol::WidgetShared _subWidget) {
+				void setSubWidget(Widget _subWidget) {
 					setSubWidget(_subWidget, 0);
 				}
 				/**
 				 * @brief Specify the current toggle widget
 				 * @param[in] _subWidget Widget to add Toggle
 				 */
-				void setSubWidgetToggle(ewol::WidgetShared _subWidget) {
+				void setSubWidgetToggle(Widget _subWidget) {
 					setSubWidget(_subWidget, 1);
 				}
 			private:
@@ -63,22 +63,22 @@ namespace ewol {
 				 * @param[in] _idWidget Id of the widget to set
 				 * @return The base widget
 				 */
-				ewol::WidgetShared getSubWidget(int32_t _idWidget) const {
-					return m_subWidget[_idWidget];
+				Widget getSubWidget(int _idWidget)  {
+					return this.subWidget[_idWidget];
 				};
 			public:
 				/**
 				 * @brief get the current displayed composition
 				 * @return The base widget
 				 */
-				ewol::WidgetShared getSubWidget() const {
+				Widget getSubWidget()  {
 					return getSubWidget(0);
 				};
 				/**
 				 * @brief get the current displayed composition
 				 * @return The toggle widget
 				 */
-				ewol::WidgetShared getSubWidgetToggle() const {
+				Widget getSubWidgetToggle()  {
 					return getSubWidget(1);
 				};
 			private:
@@ -86,7 +86,7 @@ namespace ewol {
 				 * @brief remove the subWidget node (async).
 				 * @param[in] _idWidget Id of the widget to set
 				 */
-				void subWidgetRemove(int32_t _idWidget);
+				void subWidgetRemove(int _idWidget);
 			public:
 				/**
 				 * @brief remove the subWidget node (async).
@@ -105,7 +105,7 @@ namespace ewol {
 				 * @brief Unlink the subwidget Node.
 				 * @param[in] _idWidget Id of the widget to set
 				 */
-				void subWidgetUnLink(int32_t _idWidget);
+				void subWidgetUnLink(int _idWidget);
 			public:
 				/**
 				 * @brief Unlink the subwidget Node.
@@ -126,24 +126,24 @@ namespace ewol {
 				 * @param[in] _padding Padding of the widget.
 				 * @note : INTERNAL EWOL SYSTEM
 				 */
-				virtual ewol::Padding onChangeSizePadded(const ewol::Padding& _padding = ewol::Padding(0,0,0,0));
+				 ewol::Padding onChangeSizePadded( ewol::Padding _padding = ewol::Padding(0,0,0,0));
 				/**
 				 * @brief calculate the minimum and maximum size (need to estimate expend properties of the widget)
 				 * @param[in] _padding Padding of the widget.
 				 * @note : INTERNAL EWOL SYSTEM
 				 */
-				virtual void calculateMinMaxSizePadded(const ewol::Padding& _padding = ewol::Padding(0,0,0,0));
+				 void calculateMinMaxSizePadded( ewol::Padding _padding = ewol::Padding(0,0,0,0));
 				/**
 				 * @brief Called when parsing a XML and detect the presence of a second Widget
 				 */
-				virtual void onDetectPresenceToggleWidget() {}
+				 void onDetectPresenceToggleWidget() {}
 				/**
 				 * @brief convert ID of the widget if not existed
 				 * @param[in] _id Id of the widget to display.
 				 * @return the id of the widget displayable
 				 */
-				int32_t convertId(int32_t _id) {
-					if (m_subWidget[_id] == null) {
+				int convertId(int _id) {
+					if (this.subWidget[_id] == null) {
 						return (_id+1)%2;
 					}
 					return _id;
@@ -153,22 +153,22 @@ namespace ewol {
 				 * @param[in] _oldWidget The widget to replace.
 				 * @param[in] _newWidget The widget to set.
 				 */
-				virtual void subWidgetReplace(const ewol::WidgetShared& _oldWidget,
-				                              const ewol::WidgetShared& _newWidget);
+				 void subWidgetReplace( Widget _oldWidget,
+				                               Widget _newWidget);
 			public:
-				void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				void onRegenerateDisplay() override;
-				void onChangeSize() override {
+				void systemDraw( ewol::DrawProperty _displayProp) ;
+				void onRegenerateDisplay() ;
+				void onChangeSize()  {
 					onChangeSizePadded();
 				}
-				void calculateMinMaxSize() override {
+				void calculateMinMaxSize()  {
 					calculateMinMaxSizePadded();
 				}
-				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
-				bool loadXML(const exml::Element& _node) override;
-				void setOffset(const Vector2f& _newVal) override;
-				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
-				void drawWidgetTree(int32_t _level=0) override;
+				EwolObject getSubObjectNamed( String _objectName) ;
+				boolean loadXML( exml::Element _node) ;
+				void setOffset( Vector2f _newVal) ;
+				void requestDestroyFromChild( EwolObject _child) ;
+				void drawWidgetTree(int _level=0) ;
 		};
 	};
 };

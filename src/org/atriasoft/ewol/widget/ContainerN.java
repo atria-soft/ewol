@@ -12,17 +12,17 @@
 namespace ewol {
 	namespace widget {
 		class ContainerN;
-		using ContainerNShared = ememory::SharedPtr<ewol::widget::ContainerN>;
+		using ContainerN = ememory::Ptr<ewol::widget::ContainerN>;
 		using ContainerNWeak = ememory::WeakPtr<ewol::widget::ContainerN>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 * @brief the Cotainer widget is a widget that have an only one subWidget
 		 */
-		class ContainerN : public ewol::Widget {
+		class ContainerN : public Widget {
 			public: // properties:
 				eproperty::Value<Vector2b> propertyLockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			protected:
-				List<ewol::WidgetShared> m_subWidget;
+				List<Widget> this.subWidget;
 			protected:
 				/**
 				 * @brief Constructor
@@ -32,39 +32,39 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~ContainerN();
+				 ~ContainerN();
 			protected:
-				Vector2b m_subExpend; //!< reference of the sub element expention requested.
+				Vector2b this.subExpend; //!< reference of the sub element expention requested.
 				// herited function
-				virtual Vector2b canExpand() override;
+				 Vector2b canExpand() ;
 			public:
 				/**
 				 * @brief remove all sub element from the widget.
 				 */
-				virtual void subWidgetRemoveAll();
+				 void subWidgetRemoveAll();
 				/**
 				 * @brief remove all sub element from the widget (delayed to prevent remove in the callbback).
 				 */
-				virtual void subWidgetRemoveAllDelayed();
+				 void subWidgetRemoveAllDelayed();
 				/**
 				 * @brief Replace a old subwidget with a new one.
 				 * @param[in] _oldWidget The widget to replace.
 				 * @param[in] _newWidget The widget to set.
 				 */
-				virtual void subWidgetReplace(ewol::WidgetShared _oldWidget,
-				                              ewol::WidgetShared _newWidget);
+				 void subWidgetReplace(Widget _oldWidget,
+				                              Widget _newWidget);
 				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element
 				 */
-				virtual int32_t subWidgetAdd(ewol::WidgetShared _newWidget);
+				 int subWidgetAdd(Widget _newWidget);
 				//! @previous
-				inline  int32_t subWidgetAddBack(ewol::WidgetShared _newWidget) {
+				  int subWidgetAddBack(Widget _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
 				//! @previous
-				inline  int32_t subWidgetAddEnd(ewol::WidgetShared _newWidget) {
+				  int subWidgetAddEnd(Widget _newWidget) {
 					return subWidgetAdd(_newWidget);
 				};
 				/**
@@ -72,34 +72,34 @@ namespace ewol {
 				 * @param[in] _newWidget the element pointer
 				 * @return the ID of the set element
 				 */
-				virtual int32_t subWidgetAddStart(ewol::WidgetShared _newWidget);
+				 int subWidgetAddStart(Widget _newWidget);
 				//! @previous
-				inline  int32_t subWidgetAddFront(ewol::WidgetShared _newWidget) {
+				  int subWidgetAddFront(Widget _newWidget) {
 					return subWidgetAddStart(_newWidget);
 				};
 				/**
 				 * @brief remove definitly a widget from the system and this layer.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
+				 void subWidgetRemove(Widget _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
+				 void subWidgetUnLink(Widget _newWidget);
 			public:
-				void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				void onRegenerateDisplay() override;
-				void onChangeSize() override;
-				void calculateMinMaxSize() override;
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
-				ewol::ObjectShared getSubObjectNamed(const etk::String& _objectName) override;
-				bool loadXML(const exml::Element& _node) override;
-				void setOffset(const Vector2f& _newVal) override;
-				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
-				void drawWidgetTree(int32_t _level=0) override;
+				void systemDraw( ewol::DrawProperty _displayProp) ;
+				void onRegenerateDisplay() ;
+				void onChangeSize() ;
+				void calculateMinMaxSize() ;
+				Widget getWidgetAtPos( Vector2f _pos) ;
+				EwolObject getSubObjectNamed( String _objectName) ;
+				boolean loadXML( exml::Element _node) ;
+				void setOffset( Vector2f _newVal) ;
+				void requestDestroyFromChild( EwolObject _child) ;
+				void drawWidgetTree(int _level=0) ;
 			protected:
-				virtual void onChangePropertyLockExpand();
+				 void onChangePropertyLockExpand();
 		};
 	};
 };

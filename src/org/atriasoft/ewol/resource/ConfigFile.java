@@ -15,22 +15,22 @@ namespace ewol {
 	namespace resource {
 		class ConfigFile : public gale::Resource {
 			private:
-				ejson::Document m_doc;
-				etk::Map<etk::String, ejson::Value> m_list;
+				ejson::Document this.doc;
+				etk::Map<String, ejson::Value> this.list;
 			protected:
 				ConfigFile();
-				void init(const etk::Uri& _filename);
+				void init( etk::Uri _filename);
 			public:
-				virtual ~ConfigFile();
+				 ~ConfigFile();
 				DECLARE_RESOURCE_URI_FACTORY(ConfigFile);
 			public:
 				void reload();
 				
-				int32_t request(const etk::String& _paramName);
+				int request( String _paramName);
 				
-				double getNumber(int32_t _id);
-				etk::String getString(int32_t _id);
-				bool getBoolean(int32_t _id);
+				double getNumber(int _id);
+				String getString(int _id);
+				boolean getBoolean(int _id);
 			public:
 				/**
 				 * @brief keep the resource pointer.
@@ -38,7 +38,7 @@ namespace ewol {
 				 * @param[in] _filename Name of the configuration file.
 				 * @return pointer on the resource or null if an error occured.
 				 */
-				static ememory::SharedPtr<ewol::resource::ConfigFile> keep(const etk::String& _filename);
+				static ememory::Ptr<ewol::resource::ConfigFile> keep( String _filename);
 		};
 	};
 };

@@ -20,7 +20,7 @@
 namespace ewol {
 	namespace widget {
 		class Parameter;
-		using ParameterShared = ememory::SharedPtr<ewol::widget::Parameter>;
+		using Parameter = ememory::Ptr<ewol::widget::Parameter>;
 		using ParameterWeak = ememory::WeakPtr<ewol::widget::Parameter>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -29,29 +29,29 @@ namespace ewol {
 			public: // signals
 				esignal::Signal<> signalClose;
 			public: // properties
-				eproperty::Value<etk::String> propertyLabelTitle;
+				eproperty::Value<String> propertyLabelTitle;
 			protected:
 				Parameter();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(Parameter, "Parameter");
-				virtual ~Parameter();
+				 ~Parameter();
 			public:
-				void menuAdd(etk::String _label, etk::String _image, ewol::WidgetShared _associateWidget);
-				void menuAddGroup(etk::String _label);
+				void menuAdd(String _label, String _image, Widget _associateWidget);
+				void menuAddGroup(String _label);
 				void menuClear();
 				void menuSeparator();
 			private:
-				int32_t m_currentIdList;
-				ewol::widget::LabelShared m_widgetTitle;
-				ewol::widget::ParameterListShared m_paramList;
-				ewol::widget::WSliderShared m_wSlider;
+				int this.currentIdList;
+				ewol::widget::Label this.widgetTitle;
+				ewol::widget::ParameterList this.paramList;
+				ewol::widget::WSlider this.wSlider;
 			private:
 				void onCallbackMenuclosed();
 				void onCallbackParameterSave();
-				void onCallbackMenuSelected(const int32_t& _value);
+				void onCallbackMenuSelected( int _value);
 			protected:
-				virtual void onChangePropertyLabelTitle();
+				 void onChangePropertyLabelTitle();
 		};
 	};
 };

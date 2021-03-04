@@ -19,50 +19,50 @@ namespace ewol {
 	namespace compositing {
 		class TextDF : public ewol::compositing::TextBase {
 			protected:
-				ememory::SharedPtr<ewol::resource::DistanceFieldFont> m_fontDF; //!< Font resources
+				ememory::Ptr<ewol::resource::DistanceFieldFont> this.fontDF; //!< Font resources
 			protected:
-				int32_t m_GLglyphLevel; //!< openGL Id on the glyph level display
+				int this.GLglyphLevel; //!< openGL Id on the glyph level display
 			public:
 				/**
-				 * @brief generic constructor
+				 * @brief generic ructor
 				 * @param[in] _fontName Name of the font that might be loaded
 				 * @param[in] _fontSize size of the font that might be loaded
 				 */
-				TextDF(const etk::String& _fontName="", int32_t _fontSize=-1);
+				TextDF( String _fontName="", int _fontSize=-1);
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~TextDF();
+				 ~TextDF();
 			public:
 				/**
 				 * @brief Calculate size to be at the best size for a render in this special size.
 				 * @note special for Distance field mode.
 				 * @param[in] _size request dimention.
 				 */
-				void updateSizeToRender(const Vector2f& _size);
+				void updateSizeToRender( Vector2f _size);
 			public:
-				virtual void drawD(bool _disableDepthTest);
-				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);
+				 void drawD(boolean _disableDepthTest);
+				 void drawMT( mat4 _transformationMatrix, boolean _enableDepthTest);
 			protected:
-				float m_size;
+				float this.size;
 			public:
-				virtual float getHeight();
-				virtual float getSize() {
-					return m_size;
+				 float getHeight();
+				 float getSize() {
+					return this.size;
 				}
-				virtual void setSize(float _size) {
-					m_size = _size;
+				 void setSize(float _size) {
+					this.size = _size;
 				}
-				virtual ewol::GlyphProperty * getGlyphPointer(char32_t _charcode);
+				 ewol::GlyphProperty * getGlyphPointer(Character _charcode);
 				
 			public:
-				virtual void loadProgram(const etk::String& _shaderName);
-				virtual void setFontSize(int32_t _fontSize);
-				virtual void setFontName(const etk::String& _fontName);
-				virtual void setFont(etk::String _fontName, int32_t _fontSize);
-				virtual void setFontMode(enum ewol::font::mode _mode);
-				virtual void printChar(const char32_t& _charcode);
-				virtual Vector3f calculateSizeChar(const char32_t& _charcode);
+				 void loadProgram( String _shaderName);
+				 void setFontSize(int _fontSize);
+				 void setFontName( String _fontName);
+				 void setFont(String _fontName, int _fontSize);
+				 void setFontMode(enum ewol::font::mode _mode);
+				 void printChar( Character _charcode);
+				 Vector3f calculateSizeChar( Character _charcode);
 		};
 	}
 }

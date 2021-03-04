@@ -16,48 +16,48 @@
 namespace ewol {
 	namespace widget {
 		class Label;
-		using LabelShared = ememory::SharedPtr<ewol::widget::Label>;
+		using Label = ememory::Ptr<ewol::widget::Label>;
 		using LabelWeak = ememory::WeakPtr<ewol::widget::Label>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Label : public ewol::Widget {
+		class Label : public Widget {
 			public: // signals
 				esignal::Signal<> signalPressed;
 			public: // properties
 				eproperty::Value<bool> propertyAutoTranslate; //!< if at true the data is translate automaticaly translate.
-				eproperty::Value<etk::String> propertyValue; //!< decorated text to display.
-				eproperty::Value<int32_t> propertyFontSize; //!< default size of the font.
+				eproperty::Value<String> propertyValue; //!< decorated text to display.
+				eproperty::Value<int> propertyFontSize; //!< default size of the font.
 			private:
-				ewol::compositing::Text m_text; //!< Compositing text element.
-				etk::UString m_value;
-				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property
-				int32_t m_colorDefaultFgText; //!< Default color of the text
-				int32_t m_colorDefaultBgText; //!< Default Background color of the text
+				ewol::compositing::Text this.text; //!< Compositing text element.
+				etk::UString this.value;
+				ememory::Ptr<ewol::resource::ColorFile> this.colorProperty; //!< theme color property
+				int this.colorDefaultFgText; //!< Default color of the text
+				int this.colorDefaultBgText; //!< Default Background color of the text
 			protected:
 				/**
 				 * @brief Constructor
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
 				Label();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Label, "Label");
 				/**
 				 * @brief destructor
 				 */
-				virtual ~Label();
+				 ~Label();
 			protected:
-				void onDraw() override;
+				void onDraw() ;
 			public:
-				void calculateMinMaxSize() override;
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
-				bool loadXML(const exml::Element& _node) override;
+				void calculateMinMaxSize() ;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
+				boolean loadXML( exml::Element _node) ;
 			protected:
-				virtual void onChangePropertyValue();
-				virtual void onChangePropertyAutoTranslate();
-				virtual void onChangePropertyFontSize();
+				 void onChangePropertyValue();
+				 void onChangePropertyAutoTranslate();
+				 void onChangePropertyFontSize();
 		};
 	};
 };

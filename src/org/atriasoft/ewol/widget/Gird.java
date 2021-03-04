@@ -14,25 +14,25 @@
 namespace ewol {
 	namespace widget {
 		class Gird;
-		using GirdShared = ememory::SharedPtr<ewol::widget::Gird>;
+		using Gird = ememory::Ptr<ewol::widget::Gird>;
 		using GirdWeak = ememory::WeakPtr<ewol::widget::Gird>;
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Gird :public ewol::Widget {
+		class Gird :public Widget {
 			private:
 				class GirdProperties {
 					public:
-						ewol::WidgetShared widget;
-						int32_t row;
-						int32_t col;
+						Widget widget;
+						int row;
+						int col;
 				};
-				int32_t m_sizeRow; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
-				int32_t m_uniformSizeRow;
-				List<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
-				List<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
-				ewol::WidgetShared m_tmpWidget; //!< use when replace a widget ...
-				bool m_gavityButtom;
+				int this.sizeRow; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
+				int this.uniformSizeRow;
+				List<int> this.sizeCol; //!< size of all colomn (if set (otherwise 0))
+				List<GirdProperties> this.subWidget; //!< all sub widget are contained in this element
+				Widget this.tmpWidget; //!< use when replace a widget ...
+				boolean this.gavityButtom;
 			protected:
 				/**
 				 * @brief Constructor
@@ -43,104 +43,104 @@ namespace ewol {
 				/**
 				 * @brief Desstructor
 				 */
-				virtual ~Gird();
+				 ~Gird();
 				/**
 				 * @brief set the number of colomn
 				 * @param[in] colNumber Nuber of colomn
 				 */
-				void setColNumber(int32_t _colNumber);
+				void setColNumber(int _colNumber);
 				/**
 				 * @brief change a size view of a colomn.
 				 * @param[in] colId Id of the colomn [0..x].
 				 * @param[in] size size of the colomn.
 				 */
-				void setColSize(int32_t _colId, int32_t _size);
+				void setColSize(int _colId, int _size);
 				/**
 				 * @brief change a size view of a line.
 				 * @param[in] size size of the line.
 				 */
-				void setRowSize(int32_t _size);
+				void setRowSize(int _size);
 				/**
 				 * @brief get the size view of a colomn.
 				 * @param[in] colId Id of the colomn [0..x].
 				 * @return The size of the colomn.
 				 */
-				int32_t getColSize(int32_t _colId);
+				int getColSize(int _colId);
 				/**
 				 * @brief get the size view of the lines.
 				 * @return The size of the lines.
 				 */
-				int32_t getRowSize();
+				int getRowSize();
 				/**
 				 * @brief set the gravity of the widget on the Button (index 0 is on buttom)
 				 */
 				void setGravityButtom() {
-					m_gavityButtom = true;
+					this.gavityButtom = true;
 					markToRedraw();
 				}
 				/**
 				 * @brief set the gravity of the widget on the Top (index 0 is on top)
 				 */
 				void setGravityTop() {
-					m_gavityButtom = false;
+					this.gavityButtom = false;
 					markToRedraw();
 				}
 			public:
 				/**
 				 * @brief remove all sub element from the widget.
 				 */
-				virtual void subWidgetRemoveAll();
+				 void subWidgetRemoveAll();
 				/**
 				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 				 * @param[in] _colId Id of the colomn [0..x].
 				 * @param[in] _rowId Id of the row [0..y].
 				 * @param[in] _newWidget the element pointer
 				 */
-				virtual void subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::WidgetShared _newWidget);
+				 void subWidgetAdd(int _colId, int _rowId, Widget _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetRemove(ewol::WidgetShared _newWidget);
+				 void subWidgetRemove(Widget _newWidget);
 				/**
 				 * @brief remove definitly a widget from the system and this Gird.
 				 * @param[in] _colId Id of the colomn [0..x].
 				 * @param[in] _rowId Id of the row [0..y].
 				 */
-				virtual void subWidgetRemove(int32_t _colId, int32_t _rowId);
+				 void subWidgetRemove(int _colId, int _rowId);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _newWidget the element pointer.
 				 */
-				virtual void subWidgetUnLink(ewol::WidgetShared _newWidget);
+				 void subWidgetUnLink(Widget _newWidget);
 				/**
 				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 				 * @param[in] _colId Id of the colomn [0..x].
 				 * @param[in] _rowId Id of the row [0..y].
 				 */
-				virtual void subWidgetUnLink(int32_t _colId, int32_t _rowId);
+				 void subWidgetUnLink(int _colId, int _rowId);
 			private:
 				// TODO : property
-				Vector2i m_borderSize; //!< Border size needed for all the display
+				Vector2i this.borderSize; //!< Border size needed for all the display
 			public:
 				/**
 				 * @brief set the current border size of the current element:
 				 * @param[in] _newBorderSize The border size to set (0 if not used)
 				 */
-				void setBorderSize(const Vector2i& _newBorderSize);
+				void setBorderSize( Vector2i _newBorderSize);
 				/**
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const Vector2i& getBorderSize() {
-					return m_borderSize;
+				 Vector2i getBorderSize() {
+					return this.borderSize;
 				};
 			public:
-				virtual void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				virtual void onRegenerateDisplay() override;
-				virtual ewol::WidgetShared getWidgetAtPos(const Vector2f& pos) override;
-				virtual void onChangeSize() override;
-				virtual void calculateMinMaxSize() override;
+				 void systemDraw( ewol::DrawProperty _displayProp) ;
+				 void onRegenerateDisplay() ;
+				 Widget getWidgetAtPos( Vector2f pos) ;
+				 void onChangeSize() ;
+				 void calculateMinMaxSize() ;
 		};
 	};
 };

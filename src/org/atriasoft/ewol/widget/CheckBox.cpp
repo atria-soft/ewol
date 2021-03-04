@@ -25,17 +25,17 @@ ewol::widget::CheckBox::CheckBox() :
   propertyValue(this, "value",
                       false,
                       "Basic value of the widget",
-                      &ewol::widget::CheckBox::onChangePropertyValue),
+                      ewol::widget::CheckBox::onChangePropertyValue),
   propertyShape(this, "shape",
                       etk::Uri("THEME_GUI:///CheckBox.json?lib=ewol"),
                       "The display name for config file",
-                      &ewol::widget::CheckBox::onChangePropertyShape),
-  m_mouseHover(false),
-  m_buttonPressed(false),
-  m_selectableAreaPos(0,0),
-  m_selectableAreaSize(0,0),
-  m_shaperIdSize(-1),
-  m_shaperIdSizeInsize(-1) {
+                      ewol::widget::CheckBox::onChangePropertyShape),
+  this.mouseHover(false),
+  this.buttonPressed(false),
+  this.selectableAreaPos(0,0),
+  this.selectableAreaSize(0,0),
+  this.shaperIdSize(-1),
+  this.shaperIdSizeInsize(-1) {
 	addObjectType("ewol::widget::CheckBox");
 	// shaper satatus update:
 	CheckStatus();
@@ -55,28 +55,28 @@ ewol::widget::CheckBox::~CheckBox() {
 }
 
 void ewol::widget::CheckBox::onChangeSize() {
-	ewol::Padding padding = m_shaper.getPadding();
-	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
+	ewol::Padding padding = this.shaper.getPadding();
+	float boxSize = this.shaper.getConfigNumber(this.shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	ewol::Padding ret = onChangeSizePadded(padding);
-	Log.debug(" configuring : padding=" << padding << " boxSize=" << boxSize << "");
-	m_selectableAreaPos = Vector2f(ret.xLeft()/*-boxSize*/, ret.yButtom());
-	m_selectableAreaSize = m_size - (m_selectableAreaPos + Vector2f(ret.xRight(), ret.yTop()));
+	Log.debug(" configuring : padding=" + padding + " boxSize=" + boxSize + "");
+	this.selectableAreaPos = Vector2f(ret.xLeft()/*-boxSize*/, ret.yButtom());
+	this.selectableAreaSize = this.size - (this.selectableAreaPos + Vector2f(ret.xRight(), ret.yTop()));
 }
 
 void ewol::widget::CheckBox::calculateMinMaxSize() {
-	ewol::Padding padding = m_shaper.getPadding();
-	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
+	ewol::Padding padding = this.shaper.getPadding();
+	float boxSize = this.shaper.getConfigNumber(this.shaperIdSize);
 	padding.setXLeft(padding.xLeft()*2.0f + boxSize);
 	calculateMinMaxSizePadded(padding);
-	if (m_minSize.y() < padding.y()+boxSize) {
-		m_minSize.setY(padding.y()+boxSize);
+	if (this.minSize.y() < padding.y()+boxSize) {
+		this.minSize.setY(padding.y()+boxSize);
 	}
 }
 
 void ewol::widget::CheckBox::onDraw() {
 	// draw the shaaper (if needed indeed)
-	m_shaper.draw();
+	this.shaper.draw();
 }
 
 void ewol::widget::CheckBox::onRegenerateDisplay() {
@@ -84,83 +84,83 @@ void ewol::widget::CheckBox::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	ewol::Padding padding = m_shaper.getPadding();
-	float boxSize = m_shaper.getConfigNumber(m_shaperIdSize);
-	float boxInside = m_shaper.getConfigNumber(m_shaperIdSizeInsize);
-	m_shaper.clear();
-	Log.debug(" configuring : boxSize=" << boxSize << " boxInside=" << boxInside << "");
-	Vector2f origin(m_selectableAreaPos + Vector2f(0, (m_selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
+	ewol::Padding padding = this.shaper.getPadding();
+	float boxSize = this.shaper.getConfigNumber(this.shaperIdSize);
+	float boxInside = this.shaper.getConfigNumber(this.shaperIdSizeInsize);
+	this.shaper.clear();
+	Log.debug(" configuring : boxSize=" + boxSize + " boxInside=" + boxInside + "");
+	Vector2f origin(this.selectableAreaPos + Vector2f(0, (this.selectableAreaSize.y() - (boxSize+padding.y()))*0.5f));
 	Vector2f size = Vector2f(boxSize+padding.x(), boxSize+padding.y());
 	
-	Vector2f origin2 = m_selectableAreaPos + Vector2f((boxSize-boxInside)*0.5f, (m_selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
+	Vector2f origin2 = this.selectableAreaPos + Vector2f((boxSize-boxInside)*0.5f, (this.selectableAreaSize.y() - (boxInside+padding.y()))*0.5f);
 	Vector2f size2 = Vector2f(boxInside+padding.x(), boxInside+padding.y());
-	m_shaper.setShape(Vector2fClipInt32(origin),
+	this.shaper.setShape(Vector2fClipInt32(origin),
 	                   Vector2fClipInt32(size),
 	                   Vector2fClipInt32(origin2+Vector2f(padding.xLeft(),padding.yButtom()) ),
 	                   Vector2fClipInt32(size2-Vector2f(padding.x(),padding.y()) ));
 }
 
-bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
-	Log.verbose("Event on BT : " << _event);
+boolean ewol::widget::CheckBox::onEventInput( ewol::event::Input _event) {
+	Log.verbose("Event on BT : " + _event);
 	
-	bool previousHoverState = m_mouseHover;
-	if(    gale::key::status::leave == _event.getStatus()
-	    || gale::key::status::abort == _event.getStatus()) {
-		m_mouseHover = false;
-		m_buttonPressed = false;
+	boolean previousHoverState = this.mouseHover;
+	if(    KeyStatus::leave == _event.getStatus()
+	    || KeyStatus::abort == _event.getStatus()) {
+		this.mouseHover = false;
+		this.buttonPressed = false;
 	} else {
 		Vector2f relativePos = relativePosition(_event.getPos());
 		// prevent error from ouside the button
-		if(    relativePos.x() < m_selectableAreaPos.x()
-		    || relativePos.y() < m_selectableAreaPos.y()
-		    || relativePos.x() > m_selectableAreaPos.x() + m_selectableAreaSize.x()
-		    || relativePos.y() > m_selectableAreaPos.y() + m_selectableAreaSize.y() ) {
-			m_mouseHover = false;
-			m_buttonPressed = false;
+		if(    relativePos.x() < this.selectableAreaPos.x()
+		    || relativePos.y() < this.selectableAreaPos.y()
+		    || relativePos.x() > this.selectableAreaPos.x() + this.selectableAreaSize.x()
+		    || relativePos.y() > this.selectableAreaPos.y() + this.selectableAreaSize.y() ) {
+			this.mouseHover = false;
+			this.buttonPressed = false;
 		} else {
-			m_mouseHover = true;
+			this.mouseHover = true;
 		}
 	}
-	bool previousPressed = m_buttonPressed;
-	Log.verbose("Event on BT ... mouse hover : " << m_mouseHover);
-	if (m_mouseHover == true) {
+	boolean previousPressed = this.buttonPressed;
+	Log.verbose("Event on BT ... mouse hover : " + this.mouseHover);
+	if (this.mouseHover == true) {
 		if (_event.getId() == 1) {
-			if(gale::key::status::down == _event.getStatus()) {
-				Log.verbose(*propertyName << " : Generate event : " << signalDown);
+			if(KeyStatus::down == _event.getStatus()) {
+				Log.verbose(*propertyName + " : Generate event : " + signalDown);
 				signalDown.emit();
-				m_buttonPressed = true;
+				this.buttonPressed = true;
 				markToRedraw();
 			}
-			if(gale::key::status::up == _event.getStatus()) {
-				Log.verbose(*propertyName << " : Generate event : " << signalUp);
+			if(KeyStatus::up == _event.getStatus()) {
+				Log.verbose(*propertyName + " : Generate event : " + signalUp);
 				signalUp.emit();
-				m_buttonPressed = false;
+				this.buttonPressed = false;
 				markToRedraw();
 			}
-			if(gale::key::status::pressSingle == _event.getStatus()) {
+			if(KeyStatus::pressSingle == _event.getStatus()) {
 				// inverse value :
 				propertyValue.set((*propertyValue)?false:true);
-				Log.verbose(*propertyName << " : Generate event : " << signalPressed);
+				Log.verbose(*propertyName + " : Generate event : " + signalPressed);
 				signalPressed.emit();
-				Log.verbose(*propertyName << " : Generate event : " << signalValue << " val=" << propertyValue );
+				Log.verbose(*propertyName + " : Generate event : " + signalValue + " val=" + propertyValue );
 				signalValue.emit(*propertyValue);
 				markToRedraw();
 			}
 		}
 	}
-	if(    m_mouseHover != previousHoverState
-	    || m_buttonPressed != previousPressed) {
+	if(    this.mouseHover != previousHoverState
+	    || this.buttonPressed != previousPressed) {
 		CheckStatus();
 	}
-	return m_mouseHover;
+	return this.mouseHover;
 }
 
 
-bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
-	//Log.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    _event.getType() == gale::key::keyboard::character
-	    && _event.getStatus() == gale::key::status::down
-	    && _event.getChar() == '\r') {
+boolean ewol::widget::CheckBox::onEventEntry( ewol::event::Entry _event) {
+	//Log.debug("BT PRESSED : \"" + UTF8_data + "\" size=" + strlen(UTF8_data));
+	if(    _event.getType() == KeyKeyboard::character
+	    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::down
+	    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getChar() == '\r') {
 		signalEnter.emit();
 		return true;
 	}
@@ -168,49 +168,49 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 }
 
 void ewol::widget::CheckBox::CheckStatus() {
-	if (m_shaper.setState(*propertyValue==true?1:0) == true) {
+	if (this.shaper.setState(*propertyValue==true?1:0) == true) {
 		markToRedraw();
 	}
-	if (m_buttonPressed == true) {
+	if (this.buttonPressed == true) {
 		changeStatusIn(STATUS_PRESSED);
 		return;
 	}
-	if (m_mouseHover == true) {
+	if (this.mouseHover == true) {
 		changeStatusIn(STATUS_HOVER);
 		return;
 	}
 	changeStatusIn(STATUS_UP);
 }
 
-void ewol::widget::CheckBox::changeStatusIn(int32_t _newStatusId) {
-	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::CheckBox::periodicCall);
+void ewol::widget::CheckBox::changeStatusIn(int _newStatusId) {
+	if (this.shaper.changeStatusIn(_newStatusId) == true) {
+		this.PCH = getObjectManager().periodicCall.connect(this, ewol::widget::CheckBox::periodicCall);
 		markToRedraw();
 	}
 }
 
 
-void ewol::widget::CheckBox::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper.periodicCall(_event) == false) {
-		m_PCH.disconnect();
+void ewol::widget::CheckBox::periodicCall( ewol::event::Time _event) {
+	if (this.shaper.periodicCall(_event) == false) {
+		this.PCH.disconnect();
 	}
 	markToRedraw();
 }
 
 void ewol::widget::CheckBox::onChangePropertyShape() {
-	m_shaper.setSource(*propertyShape);
-	m_shaperIdSize = m_shaper.requestConfig("box-size");
-	m_shaperIdSizeInsize = m_shaper.requestConfig("box-inside");
+	this.shaper.setSource(*propertyShape);
+	this.shaperIdSize = this.shaper.requestConfig("box-size");
+	this.shaperIdSizeInsize = this.shaper.requestConfig("box-inside");
 	markToRedraw();
 }
 
 void ewol::widget::CheckBox::onChangePropertyValue() {
 	if (*propertyValue == false) {
-		m_idWidgetDisplayed = convertId(0);
+		this.idWidgetDisplayed = convertId(0);
 	} else {
-		m_idWidgetDisplayed = convertId(1);
+		this.idWidgetDisplayed = convertId(1);
 	}
 	CheckStatus();
 	markToRedraw();
-	m_shaper.setActivateState(*propertyValue==true?1:0);
+	this.shaper.setActivateState(*propertyValue==true?1:0);
 }

@@ -7,37 +7,37 @@
 #include <ewol/context/ConfigFont.hpp>
 #include <ewol/resource/FontFreeType.hpp>
 #include <etk/typeInfo.hpp>
-ETK_DECLARE_TYPE(ewol::context::ConfigFont);
+ETK_DECLARE_TYPE(ConfigFont);
 
-ewol::context::ConfigFont::ConfigFont() :
-  m_folder("DATA:///fonts?lib=ewol"),
-  m_name("Arial;Helvetica"),
-  m_size(10),
-  m_useExternal(false) {
+ConfigFont::ConfigFont() :
+  this.folder("DATA:///fonts?lib=ewol"),
+  this.name("Arial;Helvetica"),
+  this.size(10),
+  this.useExternal(false) {
 	#ifdef __TARGET_OS__Android
-		m_name = "Roboto;DroidSans";
+		this.name = "Roboto;DroidSans";
 	#endif
 	ewol::resource::freeTypeInit();
 }
 
-ewol::context::ConfigFont::~ConfigFont() {
+ConfigFont::~ConfigFont() {
 	// UnInit FreeTypes
 	ewol::resource::freeTypeUnInit();
 }
 
-void ewol::context::ConfigFont::set(const etk::String& _fontName, int32_t _size) {
-	m_name = _fontName;
-	m_size = _size;
-	Log.debug("Set default Font : '" << m_name << "' size=" << m_size);
+void ConfigFont::set( String _fontName, int _size) {
+	this.name = _fontName;
+	this.size = _size;
+	Log.debug("Set default Font : '" + this.name + "' size=" + this.size);
 }
 
-void ewol::context::ConfigFont::setSize(int32_t _size) {
-	m_size = _size;
-	Log.debug("Set default Font : '" << m_name << "' size=" << m_size << " (change size only)");
+void ConfigFont::setSize(int _size) {
+	this.size = _size;
+	Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
 }
 
-void ewol::context::ConfigFont::setName(const etk::String& _fontName) {
-	m_name = _fontName;
-	Log.debug("Set default Font : '" << m_name << "' size=" << m_size << " (change name only)");
+void ConfigFont::setName( String _fontName) {
+	this.name = _fontName;
+	Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change name only)");
 }
 

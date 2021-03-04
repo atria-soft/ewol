@@ -12,7 +12,7 @@
 namespace ewol {
 	namespace widget {
 		class ListFileSystem;
-		using ListFileSystemShared = ememory::SharedPtr<ewol::widget::ListFileSystem>;
+		using ListFileSystem = ememory::Ptr<ewol::widget::ListFileSystem>;
 		using ListFileSystemWeak = ememory::WeakPtr<ewol::widget::ListFileSystem>;
 		/**
 		 * @brief Generic display folder class. This widget display the content of a single folder :
@@ -29,25 +29,25 @@ namespace ewol {
 				eproperty::Value<bool> propertyShowFile; //!< Show files elements
 				eproperty::Value<bool> propertyShowFolder; //!< Display the folders elements
 				eproperty::Value<bool> propertyShowHidden; //!< Display hidden elements
-				eproperty::Value<etk::String> propertyFilter; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
+				eproperty::Value<String> propertyFilter; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
 			protected:
 				ListFileSystem();
 			public:
 				DECLARE_WIDGET_FACTORY(ListFileSystem, "ListFileSystem");
-				virtual ~ListFileSystem();
+				 ~ListFileSystem();
 			protected:
-				ememory::SharedPtr<ewol::resource::ColorFile> m_colorProperty; //!< theme color property.
-				int32_t m_colorIdText; //!< Color of the text.
-				int32_t m_colorIdBackground1; //!< Color of the Background.
-				int32_t m_colorIdBackground2; //!< Color of the Background 2.
-				int32_t m_colorIdBackgroundSelected; //!< Color of line selected.
+				ememory::Ptr<ewol::resource::ColorFile> this.colorProperty; //!< theme color property.
+				int this.colorIdText; //!< Color of the text.
+				int this.colorIdBackground1; //!< Color of the Background.
+				int this.colorIdBackground2; //!< Color of the Background 2.
+				int this.colorIdBackgroundSelected; //!< Color of line selected.
 			protected:
-				etk::Color<> getBasicBG() override;
-				Vector2i getMatrixSize() const override;
-				fluorine::Variant getData(int32_t _role, const Vector2i& _pos) override;
-				bool onItemEvent(const ewol::event::Input& _event, const Vector2i& _pos, const Vector2f& _mousePosition) override;
+				etk::Color<> getBasicBG() ;
+				Vector2i getMatrixSize()  ;
+				fluorine::Variant getData(int _role,  Vector2i _pos) ;
+				boolean onItemEvent( ewol::event::Input _event,  Vector2i _pos,  Vector2f _mousePosition) ;
 			protected:
-				List<etk::Path> m_list; //!< List of all element in the path. (they are filtered)
+				List<etk::Path> this.list; //!< List of all element in the path. (they are filtered)
 				/**
 				 * @brief Clean the list of element.
 				 */
@@ -55,27 +55,27 @@ namespace ewol {
 				/**
 				 * @brief Regenerate the content of the view. this is actually not automation on the system update.
 				 */
-				virtual void regenerateView();
+				 void regenerateView();
 			protected:
-				int32_t m_selectedLine; //!< Current Line ID that is selected
+				int this.selectedLine; //!< Current Line ID that is selected
 			public:
 				/**
 				 * @brief Select a specific file in the path
 				 * @param[in] _data File to selested.
 				 */
-				virtual void setSelect(const etk::Path& _data);
+				 void setSelect( etk::Path _data);
 				/**
 				 * @brief Get the current selected file/folder/... in the list
 				 * @return the String of the element selected.
 				 */
-				etk::Path getSelect() const ;
+				etk::Path getSelect()  ;
 			protected:
-				virtual void onChangePropertyPath();
-				virtual void onChangePropertyFile();
-				virtual void onChangePropertyShowFile();
-				virtual void onChangePropertyShowFolder();
-				virtual void onChangePropertyShowHidden();
-				virtual void onChangePropertyFilter();
+				 void onChangePropertyPath();
+				 void onChangePropertyFile();
+				 void onChangePropertyShowFile();
+				 void onChangePropertyShowFolder();
+				 void onChangePropertyShowHidden();
+				 void onChangePropertyFilter();
 		};
 	};
 };

@@ -19,7 +19,7 @@
 namespace ewol {
 	namespace widget {
 		class ColorChooser;
-		using ColorChooserShared = ememory::SharedPtr<ewol::widget::ColorChooser>;
+		using ColorChooser = ememory::Ptr<ewol::widget::ColorChooser>;
 		using ColorChooserWeak = ememory::WeakPtr<ewol::widget::ColorChooser>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -31,23 +31,23 @@ namespace ewol {
 				eproperty::Value<etk::Color<>> propertyValue;
 			protected:
 				ColorChooser();
-				void init() override;
+				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(ColorChooser, "ColorChooser");
-				virtual ~ColorChooser();
+				 ~ColorChooser();
 			private:
-				ewol::widget::ColorBarShared m_widgetColorBar;
-				ewol::widget::SliderShared m_widgetRed;
-				ewol::widget::SliderShared m_widgetGreen;
-				ewol::widget::SliderShared m_widgetBlue;
-				ewol::widget::SliderShared m_widgetAlpha;
-				void onCallbackColorChangeRed(const float& _newColor);
-				void onCallbackColorChangeGreen(const float& _newColor);
-				void onCallbackColorChangeBlue(const float& _newColor);
-				void onCallbackColorChangeAlpha(const float& _newColor);
-				void onCallbackColorChange(const etk::Color<>& _newColor);
+				ewol::widget::ColorBar this.widgetColorBar;
+				ewol::widget::Slider this.widgetRed;
+				ewol::widget::Slider this.widgetGreen;
+				ewol::widget::Slider this.widgetBlue;
+				ewol::widget::Slider this.widgetAlpha;
+				void onCallbackColorChangeRed( float _newColor);
+				void onCallbackColorChangeGreen( float _newColor);
+				void onCallbackColorChangeBlue( float _newColor);
+				void onCallbackColorChangeAlpha( float _newColor);
+				void onCallbackColorChange( etk::Color<> _newColor);
 			protected:
-				virtual void onChangePropertyValue();
+				 void onChangePropertyValue();
 		};
 	};
 };

@@ -15,10 +15,10 @@ namespace ewol {
 	                      Y      |            |          |            |            
 	                      ^      |------------|          |------------|            
 	                      |                                                        
-	     m_advance.y:/->  |                                                        
+	     this.advance.y:/.  |                                                        
 	                 |    |                                                        
 	                 |    |                                                        
-	m_sizeTex.x/->   |    |         |------------|          |------------|         
+	this.sizeTex.x/.   |    |         |------------|          |------------|         
 	           |     |    |         |            |          |            |         
 	           |     |    |         |            |          |            |         
 	           |     |    |         |            |          |            |         
@@ -28,18 +28,18 @@ namespace ewol {
 	           |     |    |         |            |          |            |         
 	           |     |    |         |            |          |            |         
 	           |     |    |         |            |          |            |         
-	           \->   |    |         |------------|          |------------|         
-	        /-->     |    |                                                        
-	        \-->     \->  |                                                        
-	m_bearing.y           |                                                        
+	           \.   |    |         |------------|          |------------|         
+	        /-.     |    |                                                        
+	        \-.     \.  |                                                        
+	this.bearing.y           |                                                        
 	                      |____*________________________*____________>>   X        
 	                                                                               
 	                                                                               
-	                           <------------------------> : m_advance.x            
+	                           <-----------------------. : this.advance.x            
 	                                                                               
-	                                <------------> : m_sizeTexture.x               
+	                                <-----------. : this.sizeTexture.x               
 	                                                                               
-	                           <---> : m_bearing.x                                 
+	                           <--. : this.bearing.x                                 
 	                       
 	*/
 	/**
@@ -47,56 +47,56 @@ namespace ewol {
 	 */
 	class GlyphProperty {
 		public:
-			char32_t m_UVal; //!< Unicode value
+			Character this.UVal; //!< Unicode value
 		public:
-			bool m_exist;
+			boolean this.exist;
 		public:
-			int32_t m_glyphIndex; //!< Glyph index in the system
-			Vector2i m_sizeTexture; //!< size of the element to display
-			Vector2i m_bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
-			Vector2i m_advance; //!< space use in the display for this specific char
-			Vector2f m_texturePosStart; //!< Texture normalized position (START)
-			Vector2f m_texturePosSize; //!< Texture normalized position (SIZE)
+			int this.glyphIndex; //!< Glyph index in the system
+			Vector2i this.sizeTexture; //!< size of the element to display
+			Vector2i this.bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
+			Vector2i this.advance; //!< space use in the display for this specific char
+			Vector2f this.texturePosStart; //!< Texture normalized position (START)
+			Vector2f this.texturePosSize; //!< Texture normalized position (SIZE)
 		private:
-			List<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
+			List<ewol::Kerning> this.kerning; //!< kerning values of link of all elements
 		public:
 			GlyphProperty() :
-			  m_UVal(0),
-			  m_exist(true),
-			  m_glyphIndex(0),
-			  m_sizeTexture(10,10),
-			  m_bearing(2,2),
-			  m_advance(10,10),
-			  m_texturePosStart(0,0),
-			  m_texturePosSize(0,0) {
+			  this.UVal(0),
+			  this.exist(true),
+			  this.glyphIndex(0),
+			  this.sizeTexture(10,10),
+			  this.bearing(2,2),
+			  this.advance(10,10),
+			  this.texturePosStart(0,0),
+			  this.texturePosSize(0,0) {
 				
 			};
-			float kerningGet(const char32_t _charcode) {
-				for(size_t iii=0; iii<m_kerning.size(); iii++ ) {
-					if (m_kerning[iii].m_UVal == _charcode) {
-						return m_kerning[iii].m_value;
+			float kerningGet( Character _charcode) {
+				for(int iii=0; iii<this.kerning.size(); iii++ ) {
+					if (this.kerning[iii].this.UVal == _charcode) {
+						return this.kerning[iii].this.value;
 					}
 				}
 				return 0;
 			};
-			void kerningAdd(const char32_t _charcode, float _value) {
-				m_kerning.pushBack(ewol::Kerning(_charcode, _value));
+			void kerningAdd( Character _charcode, float _value) {
+				this.kerning.pushBack(ewol::Kerning(_charcode, _value));
 			};
 			void kerningClear() {
-				m_kerning.clear();
+				this.kerning.clear();
 			};
 			/**
 			 * @brief get the status of the char, if it exist or not in the FONT
 			 * @return true if the char is availlable, false otherwise
 			 */
-			bool exist() const {
-				return m_exist;
+			boolean exist()  {
+				return this.exist;
 			};
 			/**
 			 * @brief set the element doen not exist !!!
 			 */
 			void setNotExist() {
-				m_exist = false;
+				this.exist = false;
 			};
 	};
 };

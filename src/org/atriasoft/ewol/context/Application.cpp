@@ -9,41 +9,41 @@
 #include <ewol/context/Context.hpp>
 
 #include <etk/typeInfo.hpp>
-ETK_DECLARE_TYPE(ewol::context::Application);
+ETK_DECLARE_TYPE(EwolApplication);
 
-ewol::context::Application::Application() {
+EwolApplication::Application() {
 	
 }
 
-ewol::context::Application::~Application() {
+EwolApplication::~Application() {
 	
 }
 
-void ewol::context::Application::onCreate(ewol::Context& _context) {
+void EwolApplication::onCreate(EwolContext _context) {
 	
 }
 
-void ewol::context::Application::onStart(ewol::Context& _context) {
+void EwolApplication::onStart(EwolContext _context) {
 	
 }
 
-void ewol::context::Application::onResume(ewol::Context& _context) {
+void EwolApplication::onResume(EwolContext _context) {
 	
 }
 
-void ewol::context::Application::onPause(ewol::Context& _context) {
+void EwolApplication::onPause(EwolContext _context) {
 	
 }
 
-void ewol::context::Application::onStop(ewol::Context& _context) {
+void EwolApplication::onStop(EwolContext _context) {
 	
 }
 
-void ewol::context::Application::onDestroy(ewol::Context& _context) {
+void EwolApplication::onDestroy(EwolContext _context) {
 	
 }
 
-void ewol::context::Application::onKillDemand(ewol::Context& _context) {
+void EwolApplication::onKillDemand(EwolContext _context) {
 	_context.exit(0);
 }
 

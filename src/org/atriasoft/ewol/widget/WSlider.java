@@ -14,7 +14,7 @@
 namespace ewol {
 	namespace widget {
 		class WSlider;
-		using WSliderShared = ememory::SharedPtr<ewol::widget::WSlider>;
+		using WSlider = ememory::Ptr<ewol::widget::WSlider>;
 		using WSliderWeak = ememory::WeakPtr<ewol::widget::WSlider>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -32,56 +32,56 @@ namespace ewol {
 			public: // properties:
 				eproperty::Range<float> propertyTransitionSpeed; //!< speed of the transition (default 1  == > 1s)
 				eproperty::List<enum sladingMode> propertyTransitionMode; //!< mode to slide the widgets
-				eproperty::Value<etk::String> propertySelectWidget; //!< current select configuration
+				eproperty::Value<String> propertySelectWidget; //!< current select configuration
 			protected:
 				WSlider();
 			public:
 				DECLARE_WIDGET_FACTORY(WSlider, "WSlider");
-				virtual ~WSlider();
+				 ~WSlider();
 			private:
-				int32_t m_windowsSources; //!< widget source viewed
-				int32_t m_windowsDestination; //!< widget destinated viewed
-				int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
-				float m_slidingProgress; //!< ratio progression of a sliding
+				int this.windowsSources; //!< widget source viewed
+				int this.windowsDestination; //!< widget destinated viewed
+				int this.windowsRequested; //!< widget destination requested when change in modification in progress
+				float this.slidingProgress; //!< ratio progression of a sliding
 			protected:
 				/**
 				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
 				 * @param[in] _id Id in the vector
 				 */
-				void subWidgetSelectSetVectorId(int32_t _id);
+				void subWidgetSelectSetVectorId(int _id);
 			public:
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _id Id of the subwidget requested
 				 */
-				void subWidgetSelectSet(int32_t _id);
+				void subWidgetSelectSet(int _id);
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
 				 */
-				void subWidgetSelectSet(const ewol::WidgetShared& _widgetPointer);
+				void subWidgetSelectSet( Widget _widgetPointer);
 				/** 
 				 * @brief Select a new subwidget to display
 				 * @param[in] _widgetName Name of the subwidget name
 				 */
-				void subWidgetSelectSet(const etk::String& _widgetName);
+				void subWidgetSelectSet( String _widgetName);
 			public:
-				void onChangeSize() override;
-				void systemDraw(const ewol::DrawProperty& _displayProp) override;
-				void onRegenerateDisplay() override;
-				ewol::WidgetShared getWidgetAtPos(const Vector2f& _pos) override;
+				void onChangeSize() ;
+				void systemDraw( ewol::DrawProperty _displayProp) ;
+				void onRegenerateDisplay() ;
+				Widget getWidgetAtPos( Vector2f _pos) ;
 			protected:
-				esignal::Connection m_PCH; //!< Periodic call handle to remove it when needed
+				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
 				 * @brief Periodic call to update grapgic display
 				 * @param[in] _event Time generic event
 				 */
-				void periodicCall(const ewol::event::Time& _event);
+				void periodicCall( ewol::event::Time _event);
 			protected:
-				virtual void onChangePropertySelectWidget();
-				virtual void onChangePropertyTransitionMode();
+				 void onChangePropertySelectWidget();
+				 void onChangePropertyTransitionMode();
 		};
 	}
-	etk::Stream& operator <<(etk::Stream& _os, const enum ewol::widget::WSlider::sladingMode _obj);
+	etk::Stream operator +(etk::Stream _os,  enum ewol::widget::WSlider::sladingMode _obj);
 }
 

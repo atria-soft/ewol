@@ -25,43 +25,43 @@ ewol::widget::Entry::Entry() :
   propertyPassword(this, "password",
                          false,
                          "Not display content in password mode",
-                         &ewol::widget::Entry::onChangePropertyPassword),
+                         ewol::widget::Entry::onChangePropertyPassword),
   propertyShape(this, "shape",
                       etk::Uri("THEME_GUI:///Entry.json?lib=ewol"),
                       "Shaper to display the background",
-                      &ewol::widget::Entry::onChangePropertyShaper),
+                      ewol::widget::Entry::onChangePropertyShaper),
   propertyValue(this, "value",
                       "",
                       "Value display in the entry (decorated text)",
-                      &ewol::widget::Entry::onChangePropertyValue),
+                      ewol::widget::Entry::onChangePropertyValue),
   propertyMaxCharacter(this, "max",
                              0x7FFFFFFF, 0, 0x7FFFFFFF,
                              "Maximum char that can be set on the Entry",
-                             &ewol::widget::Entry::onChangePropertyMaxCharacter),
+                             ewol::widget::Entry::onChangePropertyMaxCharacter),
   propertyRegex(this, "regex",
                       ".*",
                       "Control what it is write with a regular expression",
-                      &ewol::widget::Entry::onChangePropertyRegex),
+                      ewol::widget::Entry::onChangePropertyRegex),
   propertyTextWhenNothing(this, "empty-text",
                                 "",
                                 "Text when nothing is written",
-                                &ewol::widget::Entry::onChangePropertyTextWhenNothing),
-  m_needUpdateTextPos(true),
-  m_displayStartPosition(0),
-  m_displayCursor(false),
-  m_displayCursorPos(0),
-  m_displayCursorPosSelection(0) {
+                                ewol::widget::Entry::onChangePropertyTextWhenNothing),
+  this.needUpdateTextPos(true),
+  this.displayStartPosition(0),
+  this.displayCursor(false),
+  this.displayCursorPos(0),
+  this.displayCursorPosSelection(0) {
 	addObjectType("ewol::widget::Entry");
 	propertyCanFocus.setDirectCheck(true);
 }
 
 void ewol::widget::Entry::init() {
-	ewol::Widget::init();
+	Widget::init();
 	propertyShape.notifyChange();
 	
-	m_regex.compile(propertyRegex.get());
-	if (m_regex.getStatus() == false) {
-		Log.error("can not parse regex for : " << propertyRegex);
+	this.regex.compile(propertyRegex.get());
+	if (this.regex.getStatus() == false) {
+		Log.error("can not parse regex for : " + propertyRegex);
 	}
 	markToRedraw();
 	
@@ -71,7 +71,7 @@ void ewol::widget::Entry::init() {
 	shortCutAdd("ctrl+v", "paste");
 	shortCutAdd("ctrl+a", "select:all");
 	shortCutAdd("ctrl+shift+a", "select:none");
-	signalShortcut.connect(sharedFromThis(), &ewol::widget::Entry::onCallbackShortCut);
+	signalShortcut.connect(sharedFromThis(), ewol::widget::Entry::onCallbackShortCut);
 }
 
 
@@ -79,7 +79,7 @@ ewol::widget::Entry::~Entry() {
 	
 }
 
-void ewol::widget::Entry::onCallbackShortCut(const etk::String& _value) {
+void ewol::widget::Entry::onCallbackShortCut( String _value) {
 	if (_value == "clean") {
 		onCallbackEntryClean();
 	} else if (_value == "cut") {
@@ -87,133 +87,133 @@ void ewol::widget::Entry::onCallbackShortCut(const etk::String& _value) {
 	} else if (_value == "copy") {
 		onCallbackCopy();
 	} else if (_value == "paste") {
-		EWOL_WARNING("Request past ...");
+		Log.warning("Request past ...");
 		onCallbackPaste();
 	} else if (_value == "select:all") {
 		onCallbackSelect(true);
 	} else if (_value == "select:none") {
 		onCallbackSelect(false);
 	} else {
-		EWOL_WARNING("Unknow event from ShortCut : " << _value);
+		Log.warning("Unknow event from ShortCut : " + _value);
 	}
 }
 
 void ewol::widget::Entry::calculateMinMaxSize() {
 	// call main class
-	ewol::Widget::calculateMinMaxSize();
+	Widget::calculateMinMaxSize();
 	// get generic padding
-	ewol::Padding padding = m_shaper.getPadding();
-	int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
+	ewol::Padding padding = this.shaper.getPadding();
+	int minHeight = this.text.calculateSize(Character('A')).y();
 	Vector2f minimumSizeBase(20, minHeight);
 	// add padding :
 	minimumSizeBase += Vector2f(padding.x(), padding.y());
-	m_minSize.setMax(minimumSizeBase);
+	this.minSize.setMax(minimumSizeBase);
 	// verify the min max of the min size ...
 	checkMinSize();
 }
 
 
 void ewol::widget::Entry::onDraw() {
-	m_shaper.draw();
-	m_text.draw();
+	this.shaper.draw();
+	this.text.draw();
 }
 
 
 void ewol::widget::Entry::onRegenerateDisplay() {
 	if (needRedraw() == true) {
-		m_shaper.clear();
-		m_text.clear();
-		if (m_colorIdTextFg >= 0) {
-			m_text.setDefaultColorFg(m_shaper.getColor(m_colorIdTextFg));
-			m_text.setDefaultColorBg(m_shaper.getColor(m_colorIdTextBg));
-			m_text.setCursorColor(m_shaper.getColor(m_colorIdCursor));
-			m_text.setSelectionColor(m_shaper.getColor(m_colorIdSelection));
+		this.shaper.clear();
+		this.text.clear();
+		if (this.colorIdTextFg >= 0) {
+			this.text.setDefaultColorFg(this.shaper.getColor(this.colorIdTextFg));
+			this.text.setDefaultColorBg(this.shaper.getColor(this.colorIdTextBg));
+			this.text.setCursorColor(this.shaper.getColor(this.colorIdCursor));
+			this.text.setSelectionColor(this.shaper.getColor(this.colorIdSelection));
 		}
 		updateTextPosition();
-		ewol::Padding padding = m_shaper.getPadding();
+		ewol::Padding padding = this.shaper.getPadding();
 		
-		Vector2f tmpSizeShaper = m_minSize;
-		if (propertyFill->x() == true) {
-			tmpSizeShaper.setX(m_size.x());
+		Vector2f tmpSizeShaper = this.minSize;
+		if (propertyFill.x() == true) {
+			tmpSizeShaper.setX(this.size.x());
 		}
-		if (propertyFill->y() == true) {
-			tmpSizeShaper.setY(m_size.y());
+		if (propertyFill.y() == true) {
+			tmpSizeShaper.setY(this.size.y());
 		}
 		
-		Vector2f tmpOriginShaper = (m_size - tmpSizeShaper) / 2.0f;
+		Vector2f tmpOriginShaper = (this.size - tmpSizeShaper) / 2.0f;
 		Vector2f tmpSizeText = tmpSizeShaper - Vector2f(padding.x(), padding.y());
-		Vector2f tmpOriginText = (m_size - tmpSizeText) / 2.0f;
+		Vector2f tmpOriginText = (this.size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		int32_t minHeight = m_text.calculateSize(char32_t('A')).y();
+		int minHeight = this.text.calculateSize(Character('A')).y();
 		if (tmpSizeText.y() > minHeight) {
 			tmpOriginText += Vector2f(0,(tmpSizeText.y()-minHeight)/2.0f);
 		}
-		// fix all the position in the int32_t class:
+		// fix all the position in the int class:
 		tmpSizeShaper = Vector2fClipInt32(tmpSizeShaper);
 		tmpOriginShaper = Vector2fClipInt32(tmpOriginShaper);
 		tmpSizeText = Vector2fClipInt32(tmpSizeText);
 		tmpOriginText = Vector2fClipInt32(tmpOriginText);
 		
-		m_text.reset();
-		m_text.setClippingWidth(tmpOriginText, tmpSizeText);
-		m_text.setPos(tmpOriginText+Vector2f(m_displayStartPosition,0));
-		if (m_displayCursorPosSelection != m_displayCursorPos) {
-			m_text.setCursorSelection(m_displayCursorPos, m_displayCursorPosSelection);
+		this.text.reset();
+		this.text.setClippingWidth(tmpOriginText, tmpSizeText);
+		this.text.setPos(tmpOriginText+Vector2f(this.displayStartPosition,0));
+		if (this.displayCursorPosSelection != this.displayCursorPos) {
+			this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
 		} else {
-			m_text.setCursorPos(m_displayCursorPos);
+			this.text.setCursorPos(this.displayCursorPos);
 		}
 		etk::UString valueToDisplay = etk::toUString(*propertyValue);
 		if (*propertyPassword == true) {
-			for (auto &it: valueToDisplay) {
+			for (auto it: valueToDisplay) {
 				it = '*';
 			}
 		}
 		
 		if (valueToDisplay.size() != 0) {
-			m_text.print(valueToDisplay);
+			this.text.print(valueToDisplay);
 		} else {
-			if (propertyTextWhenNothing->size() != 0) {
-				m_text.printDecorated(propertyTextWhenNothing);
+			if (propertyTextWhenNothing.size() != 0) {
+				this.text.printDecorated(propertyTextWhenNothing);
 			}
 		}
-		m_text.setClippingMode(false);
+		this.text.setClippingMode(false);
 		
-		m_shaper.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
+		this.shaper.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 	}
 }
 
 
-void ewol::widget::Entry::updateCursorPosition(const Vector2f& _pos, bool _selection) {
-	ewol::Padding padding = m_shaper.getPadding();
+void ewol::widget::Entry::updateCursorPosition( Vector2f _pos, boolean _selection) {
+	ewol::Padding padding = this.shaper.getPadding();
 	
 	Vector2f relPos = relativePosition(_pos);
-	relPos.setX(relPos.x()-m_displayStartPosition - padding.xLeft());
+	relPos.setX(relPos.x()-this.displayStartPosition - padding.xLeft());
 	// try to find the new cursor position :
-	etk::String tmpDisplay = etk::String(propertyValue, 0, m_displayStartPosition);
-	int32_t displayHidenSize = m_text.calculateSize(tmpDisplay).x();
-	//Log.debug("hidenSize : " << displayHidenSize);
-	int32_t newCursorPosition = -1;
-	int32_t tmpTextOriginX = padding.xLeft();
-	for (size_t iii=0; iii<propertyValue->size(); iii++) {
-		tmpDisplay = etk::String(propertyValue, 0, iii);
-		int32_t tmpWidth = m_text.calculateSize(tmpDisplay).x() - displayHidenSize;
+	String tmpDisplay = String(propertyValue, 0, this.displayStartPosition);
+	int displayHidenSize = this.text.calculateSize(tmpDisplay).x();
+	//Log.debug("hidenSize : " + displayHidenSize);
+	int newCursorPosition = -1;
+	int tmpTextOriginX = padding.xLeft();
+	for (int iii=0; iii<propertyValue.size(); iii++) {
+		tmpDisplay = String(propertyValue, 0, iii);
+		int tmpWidth = this.text.calculateSize(tmpDisplay).x() - displayHidenSize;
 		if (tmpWidth >= relPos.x()-tmpTextOriginX) {
 			newCursorPosition = iii;
 			break;
 		}
 	}
 	if (newCursorPosition == -1) {
-		newCursorPosition = propertyValue->size();
+		newCursorPosition = propertyValue.size();
 	}
 	if (_selection == false) {
-		m_displayCursorPos = newCursorPosition;
-		m_displayCursorPosSelection = m_displayCursorPos;
+		this.displayCursorPos = newCursorPosition;
+		this.displayCursorPosSelection = this.displayCursorPos;
 		markToRedraw();
 	} else {
-		if (m_displayCursorPos == m_displayCursorPosSelection) {
-			m_displayCursorPosSelection = m_displayCursorPos;
+		if (this.displayCursorPos == this.displayCursorPosSelection) {
+			this.displayCursorPosSelection = this.displayCursorPos;
 		}
-		m_displayCursorPos = newCursorPosition;
+		this.displayCursorPos = newCursorPosition;
 		markToRedraw();
 	}
 	markToUpdateTextPosition();
@@ -221,107 +221,107 @@ void ewol::widget::Entry::updateCursorPosition(const Vector2f& _pos, bool _selec
 
 
 void ewol::widget::Entry::removeSelected() {
-	if (m_displayCursorPosSelection == m_displayCursorPos) {
+	if (this.displayCursorPosSelection == this.displayCursorPos) {
 		// nothing to cut ...
 		return;
 	}
-	int32_t pos1 = m_displayCursorPosSelection;
-	int32_t pos2 = m_displayCursorPos;
-	if(m_displayCursorPosSelection>m_displayCursorPos) {
-		pos2 = m_displayCursorPosSelection;
-		pos1 = m_displayCursorPos;
+	int pos1 = this.displayCursorPosSelection;
+	int pos2 = this.displayCursorPos;
+	if(this.displayCursorPosSelection>this.displayCursorPos) {
+		pos2 = this.displayCursorPosSelection;
+		pos1 = this.displayCursorPos;
 	}
 	// remove data ...
-	m_displayCursorPos = pos1;
-	m_displayCursorPosSelection = pos1;
+	this.displayCursorPos = pos1;
+	this.displayCursorPosSelection = pos1;
 	propertyValue.getDirect().erase(pos1, pos2-pos1);
 	markToRedraw();
 }
 
 
 void ewol::widget::Entry::copySelectionToClipBoard(enum gale::context::clipBoard::clipboardListe _clipboardID) {
-	if (m_displayCursorPosSelection == m_displayCursorPos) {
+	if (this.displayCursorPosSelection == this.displayCursorPos) {
 		// nothing to cut ...
 		return;
 	}
-	int32_t pos1 = m_displayCursorPosSelection;
-	int32_t pos2 = m_displayCursorPos;
-	if(m_displayCursorPosSelection>m_displayCursorPos) {
-		pos2 = m_displayCursorPosSelection;
-		pos1 = m_displayCursorPos;
+	int pos1 = this.displayCursorPosSelection;
+	int pos2 = this.displayCursorPos;
+	if(this.displayCursorPosSelection>this.displayCursorPos) {
+		pos2 = this.displayCursorPosSelection;
+		pos1 = this.displayCursorPos;
 	}
 	// Copy
-	etk::String tmpData = etk::String(propertyValue, pos1, pos2);
+	String tmpData = String(propertyValue, pos1, pos2);
 	gale::context::clipBoard::set(_clipboardID, tmpData);
 }
 
 
-bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
-	EWOL_WARNING("Event on Input ... " << _event);
+boolean ewol::widget::Entry::onEventInput( ewol::event::Input _event) {
+	Log.warning("Event on Input ... " + _event);
 	if (_event.getId() == 1) {
-		if (gale::key::status::pressSingle == _event.getStatus()) {
+		if (KeyStatus::pressSingle == _event.getStatus()) {
 			keepFocus();
 			signalClick.emit();
 			//nothing to do ...
 			return true;
-		} else if (gale::key::status::pressDouble == _event.getStatus()) {
+		} else if (KeyStatus::pressDouble == _event.getStatus()) {
 			keepFocus();
 			// select word
-			m_displayCursorPosSelection = m_displayCursorPos-1;
+			this.displayCursorPosSelection = this.displayCursorPos-1;
 			// search forward
-			for (size_t iii=m_displayCursorPos; iii <= propertyValue->size(); iii++) {
-				if(iii == propertyValue->size()) {
-					m_displayCursorPos = iii;
+			for (int iii=this.displayCursorPos; iii <= propertyValue.size(); iii++) {
+				if(iii == propertyValue.size()) {
+					this.displayCursorPos = iii;
 					break;
 				}
 				if(!(    (    propertyValue.get()[iii] >= 'a'
-				           && propertyValue.get()[iii] <= 'z')
+				           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM propertyValue.get()[iii] <= 'z')
 				      || (    propertyValue.get()[iii] >= 'A'
-				           && propertyValue.get()[iii] <= 'Z')
+				           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM propertyValue.get()[iii] <= 'Z')
 				      || (    propertyValue.get()[iii] >= '0'
-				           && propertyValue.get()[iii] <= '9')
+				           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM propertyValue.get()[iii] <= '9')
 				      || propertyValue.get()[iii] == '_'
 				      || propertyValue.get()[iii] == '-'
 				  ) ) {
-					m_displayCursorPos = iii;
+					this.displayCursorPos = iii;
 					break;
 				}
 			}
 			// search backward
-			for (int64_t iii=m_displayCursorPosSelection; iii >= -1; iii--) {
+			for (long iii=this.displayCursorPosSelection; iii >= -1; iii--) {
 				if(iii == -1) {
-					m_displayCursorPosSelection = 0;
+					this.displayCursorPosSelection = 0;
 					break;
 				}
 				if(!(    (    propertyValue.get()[iii] >= 'a'
-				           && propertyValue.get()[iii] <= 'z')
+				           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM propertyValue.get()[iii] <= 'z')
 				      || (    propertyValue.get()[iii] >= 'A'
-				           && propertyValue.get()[iii] <= 'Z')
+				           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM propertyValue.get()[iii] <= 'Z')
 				      || (    propertyValue.get()[iii] >= '0'
-				           && propertyValue.get()[iii] <= '9')
+				           LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM propertyValue.get()[iii] <= '9')
 				      || propertyValue.get()[iii] == '_'
 				      || propertyValue.get()[iii] == '-'
 				  ) ) {
-					m_displayCursorPosSelection = iii+1;
+					this.displayCursorPosSelection = iii+1;
 					break;
 				}
 			}
 			// Copy to clipboard Middle ...
 			copySelectionToClipBoard(gale::context::clipBoard::clipboardSelection);
 			markToRedraw();
-		} else if (gale::key::status::pressTriple == _event.getStatus()) {
+		} else if (KeyStatus::pressTriple == _event.getStatus()) {
 			keepFocus();
-			m_displayCursorPosSelection = 0;
-			m_displayCursorPos = propertyValue->size();
-		} else if (gale::key::status::down == _event.getStatus()) {
+			this.displayCursorPosSelection = 0;
+			this.displayCursorPos = propertyValue.size();
+		} else if (KeyStatus::down == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos());
 			markToRedraw();
-		} else if (gale::key::status::move == _event.getStatus()) {
+		} else if (KeyStatus::move == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos(), true);
 			markToRedraw();
-		} else if (gale::key::status::up == _event.getStatus()) {
+		} else if (KeyStatus::up == _event.getStatus()) {
 			keepFocus();
 			updateCursorPosition(_event.getPos(), true);
 			// Copy to clipboard Middle ...
@@ -329,17 +329,17 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 			markToRedraw();
 		}
 	}
-	else if(    gale::key::type::mouse == _event.getType()
-	         && _event.getId() == 2) {
-		if(    _event.getStatus() == gale::key::status::down
-		    || _event.getStatus() == gale::key::status::move
-		    || _event.getStatus() == gale::key::status::up) {
+	else if(    KeyType::mouse == _event.getType()
+	         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getId() == 2) {
+		if(    _event.getStatus() == KeyStatus::down
+		    || _event.getStatus() == KeyStatus::move
+		    || _event.getStatus() == KeyStatus::up) {
 			keepFocus();
 			// updatethe cursor position : 
 			updateCursorPosition(_event.getPos());
 		}
 		// Paste current selection only when up button
-		if (_event.getStatus() == gale::key::status::up) {
+		if (_event.getStatus() == KeyStatus::up) {
 			keepFocus();
 			// middle button => past data...
 			gale::context::clipBoard::request(gale::context::clipBoard::clipboardSelection);
@@ -349,10 +349,10 @@ bool ewol::widget::Entry::onEventInput(const ewol::event::Input& _event) {
 }
 
 
-bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
-	EWOL_WARNING("Event on Entry ... " << _event);
-	if (_event.getType() == gale::key::keyboard::character) {
-		if(_event.getStatus() == gale::key::status::down) {
+boolean ewol::widget::Entry::onEventEntry( ewol::event::Entry _event) {
+	Log.warning("Event on Entry ... " + _event);
+	if (_event.getType() == KeyKeyboard::character) {
+		if(_event.getStatus() == KeyStatus::down) {
 			// remove curent selected data ...
 			removeSelected();
 			if(    _event.getChar() == '\n'
@@ -361,31 +361,31 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 				return true;
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
-				if (propertyValue->size() > 0 && m_displayCursorPos < (int64_t)propertyValue->size()) {
-					propertyValue.getDirect().erase(m_displayCursorPos, 1);
-					m_displayCursorPos = etk::max(m_displayCursorPos, 0);
-					m_displayCursorPosSelection = m_displayCursorPos;
+				if (propertyValue.size() > 0 LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.displayCursorPos < (long)propertyValue.size()) {
+					propertyValue.getDirect().erase(this.displayCursorPos, 1);
+					this.displayCursorPos = etk::max(this.displayCursorPos, 0);
+					this.displayCursorPosSelection = this.displayCursorPos;
 				}
 			} else if (_event.getChar() == 0x08) {
 				// DEL :
-				if (propertyValue->size() > 0 && m_displayCursorPos != 0) {
-					propertyValue.getDirect().erase(m_displayCursorPos-1, 1);
-					m_displayCursorPos--;
-					m_displayCursorPos = etk::max(m_displayCursorPos, 0);
-					m_displayCursorPosSelection = m_displayCursorPos;
+				if (propertyValue.size() > 0 LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.displayCursorPos != 0) {
+					propertyValue.getDirect().erase(this.displayCursorPos-1, 1);
+					this.displayCursorPos--;
+					this.displayCursorPos = etk::max(this.displayCursorPos, 0);
+					this.displayCursorPosSelection = this.displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
-				Log.error("get data: '" << _event.getChar() << "' = '" << u32char::convertToUtf8(_event.getChar()) << "'");
-				if ((int64_t)propertyValue->size() > propertyMaxCharacter) {
-					Log.info("Reject data for entry : '" << _event.getChar() << "'");
+				Log.error("get data: '" + _event.getChar() + "' = '" + u32char::convertToUtf8(_event.getChar()) + "'");
+				if ((long)propertyValue.size() > propertyMaxCharacter) {
+					Log.info("Reject data for entry : '" + _event.getChar() + "'");
 				} else {
-					etk::String newData = propertyValue;
-					etk::String inputData = u32char::convertToUtf8(_event.getChar());
-					newData.insert(newData.begin()+m_displayCursorPos, inputData);
+					String newData = propertyValue;
+					String inputData = u32char::convertToUtf8(_event.getChar());
+					newData.insert(newData.begin()+this.displayCursorPos, inputData);
 					setInternalValue(newData);
 					if (propertyValue.get() == newData) {
-						m_displayCursorPos += inputData.size();
-						m_displayCursorPosSelection = m_displayCursorPos;
+						this.displayCursorPos += inputData.size();
+						this.displayCursorPosSelection = this.displayCursorPos;
 					}
 				}
 			}
@@ -395,25 +395,25 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 		}
 		return false;
 	} else {
-		if(_event.getStatus() == gale::key::status::down) {
+		if(_event.getStatus() == KeyStatus::down) {
 			switch (_event.getType()) {
-				case gale::key::keyboard::left:
-					m_displayCursorPos--;
+				case KeyKeyboard::left:
+					this.displayCursorPos--;
 					break;
-				case gale::key::keyboard::right:
-					m_displayCursorPos++;
+				case KeyKeyboard::right:
+					this.displayCursorPos++;
 					break;
-				case gale::key::keyboard::start:
-					m_displayCursorPos = 0;
+				case KeyKeyboard::start:
+					this.displayCursorPos = 0;
 					break;
-				case gale::key::keyboard::end:
-					m_displayCursorPos = propertyValue->size();
+				case KeyKeyboard::end:
+					this.displayCursorPos = propertyValue.size();
 					break;
 				default:
 					return false;
 			}
-			m_displayCursorPos = etk::avg(0, m_displayCursorPos, (int32_t)propertyValue->size());
-			m_displayCursorPosSelection = m_displayCursorPos;
+			this.displayCursorPos = etk::avg(0, this.displayCursorPos, (int)propertyValue.size());
+			this.displayCursorPosSelection = this.displayCursorPos;
 			markToRedraw();
 			return true;
 		}
@@ -421,21 +421,21 @@ bool ewol::widget::Entry::onEventEntry(const ewol::event::Entry& _event) {
 	return false;
 }
 
-void ewol::widget::Entry::setInternalValue(const etk::String& _newData) {
-	etk::String previous = propertyValue;
+void ewol::widget::Entry::setInternalValue( String _newData) {
+	String previous = propertyValue;
 	// check the RegExp :
 	if (_newData.size()>0) {
 		/*
-		if (m_regex.parse(_newData, 0, _newData.size()) == false) {
-			Log.info("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "'" );
+		if (this.regex.parse(_newData, 0, _newData.size()) == false) {
+			Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "'" );
 			return;
 		}
-		if (m_regex.start() != 0) {
-			Log.info("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (start position error)" );
+		if (this.regex.start() != 0) {
+			Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (start position error)" );
 			return;
 		}
-		if (m_regex.stop() != _newData.size()) {
-			Log.info("The input data does not match with the regExp '" << _newData << "' Regex='" << propertyRegex << "' (stop position error)" );
+		if (this.regex.stop() != _newData.size()) {
+			Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (stop position error)" );
 			return;
 		}
 		*/
@@ -448,19 +448,19 @@ void ewol::widget::Entry::onEventClipboard(enum gale::context::clipBoard::clipbo
 	// remove curent selected data ...
 	removeSelected();
 	// get current selection / Copy :
-	etk::String tmpData = get(_clipboardID);
+	String tmpData = get(_clipboardID);
 	// add it on the current display :
 	if (tmpData.size() != 0) {
-		etk::String newData = propertyValue;
-		newData.insert(m_displayCursorPos, &tmpData[0]);
+		String newData = propertyValue;
+		newData.insert(this.displayCursorPos, tmpData[0]);
 		setInternalValue(newData);
 		if (propertyValue.get() == newData) {
-			if (propertyValue->size() == tmpData.size()) {
-				m_displayCursorPos = tmpData.size();
+			if (propertyValue.size() == tmpData.size()) {
+				this.displayCursorPos = tmpData.size();
 			} else {
-				m_displayCursorPos += tmpData.size();
+				this.displayCursorPos += tmpData.size();
 			}
-			m_displayCursorPosSelection = m_displayCursorPos;
+			this.displayCursorPosSelection = this.displayCursorPos;
 			markToRedraw();
 		}
 	}
@@ -469,9 +469,9 @@ void ewol::widget::Entry::onEventClipboard(enum gale::context::clipBoard::clipbo
 
 void ewol::widget::Entry::onCallbackEntryClean() {
 	propertyValue.setDirect("");
-	m_displayStartPosition = 0;
-	m_displayCursorPos = 0;
-	m_displayCursorPosSelection = m_displayCursorPos;
+	this.displayStartPosition = 0;
+	this.displayCursorPos = 0;
+	this.displayCursorPosSelection = this.displayCursorPos;
 	markToRedraw();
 }
 
@@ -489,79 +489,79 @@ void ewol::widget::Entry::onCallbackPaste() {
 	gale::context::clipBoard::request(gale::context::clipBoard::clipboardStd);
 }
 
-void ewol::widget::Entry::onCallbackSelect(bool _all) {
+void ewol::widget::Entry::onCallbackSelect(boolean _all) {
 	if(_all == true) {
-		m_displayCursorPosSelection = 0;
-		m_displayCursorPos = propertyValue->size();
+		this.displayCursorPosSelection = 0;
+		this.displayCursorPos = propertyValue.size();
 	} else {
-		m_displayCursorPosSelection = m_displayCursorPos;
+		this.displayCursorPosSelection = this.displayCursorPos;
 	}
 	markToRedraw();
 }
 
 void ewol::widget::Entry::markToUpdateTextPosition() {
-	m_needUpdateTextPos = true;
+	this.needUpdateTextPos = true;
 }
 
 void ewol::widget::Entry::updateTextPosition() {
-	if (m_needUpdateTextPos == false) {
+	if (this.needUpdateTextPos == false) {
 		return;
 	}
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = this.shaper.getPadding();
 	
-	int32_t tmpSizeX = m_minSize.x();
-	if (propertyFill->x() == true) {
-		tmpSizeX = m_size.x();
+	int tmpSizeX = this.minSize.x();
+	if (propertyFill.x() == true) {
+		tmpSizeX = this.size.x();
 	}
-	int32_t tmpUserSize = tmpSizeX - padding.x();
-	int32_t totalWidth = m_text.calculateSize(propertyValue).x();
+	int tmpUserSize = tmpSizeX - padding.x();
+	int totalWidth = this.text.calculateSize(propertyValue).x();
 	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {
 		// all can be display :
-		m_displayStartPosition = 0;
+		this.displayStartPosition = 0;
 	} else {
 		// all can not be set :
-		etk::String tmpDisplay = etk::String(propertyValue, 0, m_displayCursorPos);
-		int32_t pixelCursorPos = m_text.calculateSize(tmpDisplay).x();
+		String tmpDisplay = String(propertyValue, 0, this.displayCursorPos);
+		int pixelCursorPos = this.text.calculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
-		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
-		Log.debug("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
+		int tmp1 = pixelCursorPos+this.displayStartPosition;
+		Log.debug("cursorPos=" + pixelCursorPos + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
 		if (tmp1<10) {
 			// set the cursor on le left
-			m_displayStartPosition = etk::min(-pixelCursorPos+10, 0);
+			this.displayStartPosition = etk::min(-pixelCursorPos+10, 0);
 		} else if (tmp1>tmpUserSize-10) {
 			// set the cursor of the Right
-			m_displayStartPosition = etk::min(-pixelCursorPos + tmpUserSize - 10, 0);
+			this.displayStartPosition = etk::min(-pixelCursorPos + tmpUserSize - 10, 0);
 		}
 		// else : the cursor is inside the display
-		//m_displayStartPosition = -totalWidth + tmpUserSize;
+		//this.displayStartPosition = -totalWidth + tmpUserSize;
 	}
 }
 
 void ewol::widget::Entry::onGetFocus() {
-	m_displayCursor = true;
+	this.displayCursor = true;
 	changeStatusIn(STATUS_SELECTED);
 	showKeyboard();
 	markToRedraw();
 }
 
 void ewol::widget::Entry::onLostFocus() {
-	m_displayCursor = false;
+	this.displayCursor = false;
 	changeStatusIn(STATUS_NORMAL);
 	hideKeyboard();
 	markToRedraw();
 }
 
-void ewol::widget::Entry::changeStatusIn(int32_t _newStatusId) {
-	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::Entry::periodicCall);
+void ewol::widget::Entry::changeStatusIn(int _newStatusId) {
+	if (this.shaper.changeStatusIn(_newStatusId) == true) {
+		this.PCH = getObjectManager().periodicCall.connect(this, ewol::widget::Entry::periodicCall);
 		markToRedraw();
 	}
 }
 
-void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper.periodicCall(_event) == false) {
-		m_PCH.disconnect();
+void ewol::widget::Entry::periodicCall( ewol::event::Time _event) {
+	if (this.shaper.periodicCall(_event) == false) {
+		this.PCH.disconnect();
 	}
 	markToRedraw();
 }
@@ -571,25 +571,25 @@ void ewol::widget::Entry::onChangePropertyPassword() {
 }
 
 void ewol::widget::Entry::onChangePropertyShaper() {
-	m_shaper.setSource(propertyShape.get());
-	m_colorIdTextFg = m_shaper.requestColor("text-foreground");
-	m_colorIdTextBg = m_shaper.requestColor("text-background");
-	m_colorIdCursor = m_shaper.requestColor("text-cursor");
-	m_colorIdSelection = m_shaper.requestColor("text-selection");
+	this.shaper.setSource(propertyShape.get());
+	this.colorIdTextFg = this.shaper.requestColor("text-foreground");
+	this.colorIdTextBg = this.shaper.requestColor("text-background");
+	this.colorIdCursor = this.shaper.requestColor("text-cursor");
+	this.colorIdSelection = this.shaper.requestColor("text-selection");
 }
 
 void ewol::widget::Entry::onChangePropertyValue() {
-	etk::String newData = propertyValue.get();
-	if ((int64_t)newData.size() > propertyMaxCharacter) {
-		newData = etk::String(newData, 0, propertyMaxCharacter);
-		Log.debug("Limit entry set of data... " << etk::String(newData, propertyMaxCharacter));
+	String newData = propertyValue.get();
+	if ((long)newData.size() > propertyMaxCharacter) {
+		newData = String(newData, 0, propertyMaxCharacter);
+		Log.debug("Limit entry set of data... " + String(newData, propertyMaxCharacter));
 	}
 	// set the value with the check of the RegExp ...
 	setInternalValue(newData);
 	if (newData == propertyValue.get()) {
-		m_displayCursorPos = propertyValue->size();
-		m_displayCursorPosSelection = m_displayCursorPos;
-		Log.verbose("Set : '" << newData << "'");
+		this.displayCursorPos = propertyValue.size();
+		this.displayCursorPosSelection = this.displayCursorPos;
+		Log.verbose("Set : '" + newData + "'");
 	}
 	markToRedraw();
 }
@@ -599,9 +599,9 @@ void ewol::widget::Entry::onChangePropertyMaxCharacter() {
 }
 
 void ewol::widget::Entry::onChangePropertyRegex() {
-	m_regex.compile(propertyRegex.get());
-	if (m_regex.getStatus() == false) {
-		Log.error("can not parse regex for : " << propertyRegex);
+	this.regex.compile(propertyRegex.get());
+	if (this.regex.getStatus() == false) {
+		Log.error("can not parse regex for : " + propertyRegex);
 	}
 	markToRedraw();
 }

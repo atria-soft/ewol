@@ -11,50 +11,50 @@
 ETK_DECLARE_TYPE(ewol::compositing::Shaper);
 
 // VBO table property:
-const int32_t ewol::compositing::Shaper::m_vboIdCoord(0);
-const int32_t ewol::compositing::Shaper::m_vboIdPos(1);
+ int ewol::compositing::Shaper::this.vboIdCoord(0);
+ int ewol::compositing::Shaper::this.vboIdPos(1);
 #define NB_VBO (2)
 
-ewol::compositing::Shaper::Shaper(const etk::Uri& _uri) :
-  m_uri(_uri),
-  m_config(null),
-  m_confIdMode(-1),
-  m_confIdDisplayOutside(-1),
-  m_confIdChangeTime(-1),
-  m_confProgramFile(-1),
-  m_confColorFile(-1),
-  m_confImageFile(-1),
-  m_GLprogram(null),
-  m_GLPosition(-1),
-  m_GLMatrix(-1),
-  m_GLStateActivate(-1),
-  m_GLStateOld(-1),
-  m_GLStateNew(-1),
-  m_GLStateTransition(-1),
-  m_resourceTexture(null),
-  m_nextStatusRequested(-1),
-  m_propertyOrigin(0,0),
-  m_propertySize(0,0),
-  m_propertyInsidePosition(0,0),
-  m_propertyInsideSize(0,0),
-  m_stateActivate(0),
-  m_stateOld(0),
-  m_stateNew(0),
-  m_stateTransition(1.0),
-  m_nbVertexToDisplay(0) {
-	for (size_t iii=0; iii<shaperPosCount; ++iii) {
-		m_confIdPaddingOut[iii] = -1;
-		m_confIdBorder[iii] = -1;
-		m_confIdPaddingIn[iii] = -1;
+ewol::compositing::Shaper::Shaper( etk::Uri _uri) :
+  this.uri(_uri),
+  this.config(null),
+  this.confIdMode(-1),
+  this.confIdDisplayOutside(-1),
+  this.confIdChangeTime(-1),
+  this.confProgramFile(-1),
+  this.confColorFile(-1),
+  this.confImageFile(-1),
+  this.GLprogram(null),
+  this.GLPosition(-1),
+  this.GLMatrix(-1),
+  this.GLStateActivate(-1),
+  this.GLStateOld(-1),
+  this.GLStateNew(-1),
+  this.GLStateTransition(-1),
+  this.resourceTexture(null),
+  this.nextStatusRequested(-1),
+  this.propertyOrigin(0,0),
+  this.propertySize(0,0),
+  this.propertyInsidePosition(0,0),
+  this.propertyInsideSize(0,0),
+  this.stateActivate(0),
+  this.stateOld(0),
+  this.stateNew(0),
+  this.stateTransition(1.0),
+  this.nbVertexToDisplay(0) {
+	for (int iii=0; iii<shaperPosCount; ++iii) {
+		this.confIdPaddingOut[iii] = -1;
+		this.confIdBorder[iii] = -1;
+		this.confIdPaddingIn[iii] = -1;
 	}
 	// Create the VBO:
-	m_VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
-	if (m_VBO == null) {
+	this.VBO = gale::resource::VirtualBufferObject::create(NB_VBO);
+	if (this.VBO == null) {
 		Log.error("can not instanciate VBO ...");
 		return;
 	}
 	// TO facilitate some debugs we add a name of the VBO:
-	m_VBO->setName("[VBO] of ewol::compositing::Shaper");
+	this.VBO.setName("[VBO] of ewol::compositing::Shaper");
 	loadProgram();
 }
 
@@ -63,225 +63,225 @@ ewol::compositing::Shaper::~Shaper() {
 }
 
 void ewol::compositing::Shaper::unLoadProgram() {
-	m_GLprogram.reset();
-	m_resourceTexture.reset();
-	m_config.reset();
-	m_colorProperty.reset();
-	for (size_t iii=0; iii<shaperPosCount; ++iii) {
-		m_confIdPaddingOut[iii] = -1;
-		m_confIdBorder[iii] = -1;
-		m_confIdPaddingIn[iii] = -1;
+	this.GLprogram.reset();
+	this.resourceTexture.reset();
+	this.config.reset();
+	this.colorProperty.reset();
+	for (int iii=0; iii<shaperPosCount; ++iii) {
+		this.confIdPaddingOut[iii] = -1;
+		this.confIdBorder[iii] = -1;
+		this.confIdPaddingIn[iii] = -1;
 	}
-	m_VBO->clear();
-	m_confIdMode = -1;
-	m_confIdDisplayOutside = -1;
-	m_nbVertexToDisplay = 0;
-	m_confIdChangeTime = -1;
-	m_confProgramFile = -1;
-	m_confImageFile = -1;
-	m_listAssiciatedId.clear();
+	this.VBO.clear();
+	this.confIdMode = -1;
+	this.confIdDisplayOutside = -1;
+	this.nbVertexToDisplay = 0;
+	this.confIdChangeTime = -1;
+	this.confProgramFile = -1;
+	this.confImageFile = -1;
+	this.listAssiciatedId.clear();
 }
 
 void ewol::compositing::Shaper::loadProgram() {
-	if (m_uri.isEmpty() == true) {
+	if (this.uri.isEmpty() == true) {
 		Log.debug("no Shaper set for loading resources ...");
 		return;
 	}
-	m_config = ewol::resource::ConfigFile::create(m_uri.get());
-	if (m_config != null) {
-		m_confIdMode = m_config->request("mode");
-		m_confIdDisplayOutside = m_config->request("display-outside");
-		m_confIdPaddingOut[shaperPosLeft]   = m_config->request("padding-out-left");
-		m_confIdPaddingOut[shaperPosRight]  = m_config->request("padding-out-right");
-		m_confIdPaddingOut[shaperPosTop]    = m_config->request("padding-out-top");
-		m_confIdPaddingOut[shaperPosButtom] = m_config->request("padding-out-buttom");
-		m_confIdBorder[shaperPosLeft]   = m_config->request("border-left");
-		m_confIdBorder[shaperPosRight]  = m_config->request("border-right");
-		m_confIdBorder[shaperPosTop]    = m_config->request("border-top");
-		m_confIdBorder[shaperPosButtom] = m_config->request("border-buttom");
-		m_confIdPaddingIn[shaperPosLeft]   = m_config->request("padding-in-left");
-		m_confIdPaddingIn[shaperPosRight]  = m_config->request("padding-in-right");
-		m_confIdPaddingIn[shaperPosTop]    = m_config->request("padding-in-top");
-		m_confIdPaddingIn[shaperPosButtom] = m_config->request("padding-in-buttom");
-		m_confIdChangeTime = m_config->request("change-time");
-		m_confProgramFile  = m_config->request("program");
-		m_confImageFile    = m_config->request("image");
-		m_confColorFile    = m_config->request("color");
+	this.config = ewol::resource::ConfigFile::create(this.uri.get());
+	if (this.config != null) {
+		this.confIdMode = this.config.request("mode");
+		this.confIdDisplayOutside = this.config.request("display-outside");
+		this.confIdPaddingOut[shaperPosLeft]   = this.config.request("padding-out-left");
+		this.confIdPaddingOut[shaperPosRight]  = this.config.request("padding-out-right");
+		this.confIdPaddingOut[shaperPosTop]    = this.config.request("padding-out-top");
+		this.confIdPaddingOut[shaperPosButtom] = this.config.request("padding-out-buttom");
+		this.confIdBorder[shaperPosLeft]   = this.config.request("border-left");
+		this.confIdBorder[shaperPosRight]  = this.config.request("border-right");
+		this.confIdBorder[shaperPosTop]    = this.config.request("border-top");
+		this.confIdBorder[shaperPosButtom] = this.config.request("border-buttom");
+		this.confIdPaddingIn[shaperPosLeft]   = this.config.request("padding-in-left");
+		this.confIdPaddingIn[shaperPosRight]  = this.config.request("padding-in-right");
+		this.confIdPaddingIn[shaperPosTop]    = this.config.request("padding-in-top");
+		this.confIdPaddingIn[shaperPosButtom] = this.config.request("padding-in-buttom");
+		this.confIdChangeTime = this.config.request("change-time");
+		this.confProgramFile  = this.config.request("program");
+		this.confImageFile    = this.config.request("image");
+		this.confColorFile    = this.config.request("color");
 	}
-	etk::String basicShaderFile = m_config->getString(m_confProgramFile);
+	String basicShaderFile = this.config.getString(this.confProgramFile);
 	if (basicShaderFile != "") {
-		etk::String tmpFilename(basicShaderFile);
-		if (tmpFilename.find(':') == etk::String::npos) {
+		String tmpFilename(basicShaderFile);
+		if (tmpFilename.find(':') == String::npos) {
 			// get the relative position of the current file ...
-			etk::Uri tmpUri = m_uri;
-			tmpUri.setPath(m_uri.getPath().getParent() / basicShaderFile);
+			etk::Uri tmpUri = this.uri;
+			tmpUri.setPath(this.uri.getPath().getParent() / basicShaderFile);
 			tmpFilename = tmpUri.get();
-			Log.debug("Shaper try load shader : '" << tmpFilename << "' with base : '" << basicShaderFile << "'");
+			Log.debug("Shaper try load shader : '" + tmpFilename + "' with base : '" + basicShaderFile + "'");
 		} else {
-			Log.debug("Shaper try load shader : '" << tmpFilename << "'");
+			Log.debug("Shaper try load shader : '" + tmpFilename + "'");
 		}
 		// get the shader resource :
-		m_GLPosition = 0;
-		m_GLprogram = gale::resource::Program::create(tmpFilename);
-		if (m_GLprogram != null) {
-			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
-			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
+		this.GLPosition = 0;
+		this.GLprogram = gale::resource::Program::create(tmpFilename);
+		if (this.GLprogram != null) {
+			this.GLPosition        = this.GLprogram.getAttribute("EW_coord2d");
+			this.GLMatrix          = this.GLprogram.getUniform("EW_MatrixTransformation");
 			// Widget property  == > for the Vertex shader
-			m_GLPropertyPos = m_GLprogram->getAttribute("EW_widgetPropertyPos");
+			this.GLPropertyPos = this.GLprogram.getAttribute("EW_widgetPropertyPos");
 			// status property  == > for the fragment shader
-			m_GLStateActivate   = m_GLprogram->getUniform("EW_status.activate");
-			m_GLStateOld        = m_GLprogram->getUniform("EW_status.stateOld");
-			m_GLStateNew        = m_GLprogram->getUniform("EW_status.stateNew");
-			m_GLStateTransition = m_GLprogram->getUniform("EW_status.transition");
+			this.GLStateActivate   = this.GLprogram.getUniform("EW_status.activate");
+			this.GLStateOld        = this.GLprogram.getUniform("EW_status.stateOld");
+			this.GLStateNew        = this.GLprogram.getUniform("EW_status.stateNew");
+			this.GLStateTransition = this.GLprogram.getUniform("EW_status.transition");
 			// for the texture ID : 
-			m_GLtexID = m_GLprogram->getUniform("EW_texID");
+			this.GLtexID = this.GLprogram.getUniform("EW_texID");
 		}
-		etk::String basicImageFile = m_config->getString(m_confImageFile);
+		String basicImageFile = this.config.getString(this.confImageFile);
 		if (basicImageFile != "") {
-			etk::String tmpFilename(basicImageFile);
-			if (tmpFilename.find(':') == etk::String::npos) {
+			String tmpFilename(basicImageFile);
+			if (tmpFilename.find(':') == String::npos) {
 				// get the relative position of the current file ...
-				etk::Uri tmpUri = m_uri;
-				tmpUri.setPath(m_uri.getPath().getParent() / basicImageFile);
+				etk::Uri tmpUri = this.uri;
+				tmpUri.setPath(this.uri.getPath().getParent() / basicImageFile);
 				tmpFilename = tmpUri.get();
-				Log.debug("Shaper try load shaper image : '" << tmpFilename << "' with base : '" << basicImageFile << "'");
+				Log.debug("Shaper try load shaper image : '" + tmpFilename + "' with base : '" + basicImageFile + "'");
 			} else {
-				Log.debug("Shaper try load shaper image : '" << tmpFilename << "'");
+				Log.debug("Shaper try load shaper image : '" + tmpFilename + "'");
 			}
 			Vector2i size(64,64);
-			m_resourceTexture = ewol::resource::TextureFile::create(tmpFilename, size);
+			this.resourceTexture = ewol::resource::TextureFile::create(tmpFilename, size);
 		}
 	}
-	etk::String basicColorFile = m_config->getString(m_confColorFile);
+	String basicColorFile = this.config.getString(this.confColorFile);
 	if (basicColorFile != "") {
-		etk::String tmpFilename(basicColorFile);
-		if (tmpFilename.find(':') == etk::String::npos) {
+		String tmpFilename(basicColorFile);
+		if (tmpFilename.find(':') == String::npos) {
 			// get the relative position of the current file ...
-			etk::Uri tmpUri = m_uri;
-			tmpUri.setPath(m_uri.getPath().getParent() / basicColorFile);
+			etk::Uri tmpUri = this.uri;
+			tmpUri.setPath(this.uri.getPath().getParent() / basicColorFile);
 			tmpFilename = tmpUri.get();
-			Log.debug("Shaper try load colorFile : '" << tmpFilename << "' with base : '" << basicColorFile << "'");
+			Log.debug("Shaper try load colorFile : '" + tmpFilename + "' with base : '" + basicColorFile + "'");
 		} else {
-			Log.debug("Shaper try load colorFile : '" << tmpFilename << "'");
+			Log.debug("Shaper try load colorFile : '" + tmpFilename + "'");
 		}
-		m_colorProperty = ewol::resource::ColorFile::create(tmpFilename);
-		if (    m_GLprogram != null
-		     && m_colorProperty != null) {
-			List<etk::String> listColor = m_colorProperty->getColors();
+		this.colorProperty = ewol::resource::ColorFile::create(tmpFilename);
+		if (    this.GLprogram != null
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.colorProperty != null) {
+			List<String> listColor = this.colorProperty.getColors();
 			for (auto tmpColor : listColor) {
-				int32_t glId = m_GLprogram->getUniform(tmpColor);
-				int32_t colorID = m_colorProperty->request(tmpColor);
-				m_listAssiciatedId.pushBack(Vector2i(glId, colorID));
+				int glId = this.GLprogram.getUniform(tmpColor);
+				int colorID = this.colorProperty.request(tmpColor);
+				this.listAssiciatedId.pushBack(Vector2i(glId, colorID));
 			}
 		}
 	}
 }
 
-void ewol::compositing::Shaper::draw(bool _disableDepthTest) {
-	if (m_config == null) {
+void ewol::compositing::Shaper::draw(boolean _disableDepthTest) {
+	if (this.config == null) {
 		// this is a normale case ... the user can choice to have no config basic file ...
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
-	if (m_VBO->bufferSize(m_vboIdCoord) <= 0) {
+	if (this.VBO.bufferSize(this.vboIdCoord) <= 0) {
 		return;
 	}
-	//glScalef(m_scaling.x, m_scaling.y, 1.0);
-	m_GLprogram->use();
+	//glScalef(this.scaling.x, this.scaling.y, 1.0);
+	this.GLprogram.use();
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = gale::openGL::getMatrix();
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// position:
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
+	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);
 	// property
-	m_GLprogram->sendAttributePointer(m_GLPropertyPos, m_VBO, m_vboIdPos);
+	this.GLprogram.sendAttributePointer(this.GLPropertyPos, this.VBO, this.vboIdPos);
 	// all entry parameters :
-	m_GLprogram->uniform1i(m_GLStateActivate,   m_stateActivate);
-	m_GLprogram->uniform1i(m_GLStateOld,        m_stateOld);
-	m_GLprogram->uniform1i(m_GLStateNew,        m_stateNew);
-	m_GLprogram->uniform1f(m_GLStateTransition, m_stateTransition);
-	for (auto element : m_listAssiciatedId) {
-		m_GLprogram->uniform(element.x(), m_colorProperty->get(element.y()));
+	this.GLprogram.uniform1i(this.GLStateActivate,   this.stateActivate);
+	this.GLprogram.uniform1i(this.GLStateOld,        this.stateOld);
+	this.GLprogram.uniform1i(this.GLStateNew,        this.stateNew);
+	this.GLprogram.uniform1f(this.GLStateTransition, this.stateTransition);
+	for (auto element : this.listAssiciatedId) {
+		this.GLprogram.uniform(element.x(), this.colorProperty.get(element.y()));
 	}
-	if (m_resourceTexture != null) {
+	if (this.resourceTexture != null) {
 		// TextureID
-		m_GLprogram->setTexture0(m_GLtexID, m_resourceTexture->getRendererId());
+		this.GLprogram.setTexture0(this.GLtexID, this.resourceTexture.getRendererId());
 	}
 	// Request the draw of the elements : 
 	//gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, SHAPER_NB_MAX_VERTEX);
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangleStrip, 0, m_nbVertexToDisplay);
-	m_GLprogram->unUse();
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangleStrip, 0, this.nbVertexToDisplay);
+	this.GLprogram.unUse();
 }
 
 void ewol::compositing::Shaper::clear() {
 	// nothing to do ...
-	m_propertySize = Vector2f(0,0);
-	m_propertyOrigin = Vector2f(0,0);
-	m_propertyInsidePosition = Vector2f(0,0);
-	m_propertyInsideSize = Vector2f(0,0);
-	m_VBO->clear();
+	this.propertySize = Vector2f(0,0);
+	this.propertyOrigin = Vector2f(0,0);
+	this.propertyInsidePosition = Vector2f(0,0);
+	this.propertyInsideSize = Vector2f(0,0);
+	this.VBO.clear();
 }
 
-bool ewol::compositing::Shaper::setState(int32_t _newState) {
-	if (m_stateActivate == _newState) {
+boolean ewol::compositing::Shaper::setState(int _newState) {
+	if (this.stateActivate == _newState) {
 		return false;
 	}
-	m_stateActivate = _newState;
+	this.stateActivate = _newState;
 	return true;
 }
 
-bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {
-	if (_newStatusId != m_stateNew) {
-		m_nextStatusRequested = _newStatusId;
+boolean ewol::compositing::Shaper::changeStatusIn(int _newStatusId) {
+	if (_newStatusId != this.stateNew) {
+		this.nextStatusRequested = _newStatusId;
 		return true;
 	}
-	if(    m_nextStatusRequested != -1
-	    || m_stateNew != m_stateOld) {
+	if(    this.nextStatusRequested != -1
+	    || this.stateNew != this.stateOld) {
 		return true;
 	}
 	return false;
 }
 
-bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
-	Log.verbose("call=" << _event << "state transition=" << m_stateTransition << " speedTime=" << m_config->getNumber(m_confIdChangeTime));
+boolean ewol::compositing::Shaper::periodicCall( ewol::event::Time _event) {
+	Log.verbose("call=" + _event + "state transition=" + this.stateTransition + " speedTime=" + this.config.getNumber(this.confIdChangeTime));
 	// start :
-	if (m_stateTransition >= 1.0) {
-		m_stateOld = m_stateNew;
-		if(    m_nextStatusRequested != -1
-		    && m_nextStatusRequested != m_stateOld) {
-			m_stateNew = m_nextStatusRequested;
-			m_nextStatusRequested = -1;
-			m_stateTransition = 0.0;
+	if (this.stateTransition >= 1.0) {
+		this.stateOld = this.stateNew;
+		if(    this.nextStatusRequested != -1
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.nextStatusRequested != this.stateOld) {
+			this.stateNew = this.nextStatusRequested;
+			this.nextStatusRequested = -1;
+			this.stateTransition = 0.0;
 			Log.verbose("     ##### START #####  ");
 		} else {
-			m_nextStatusRequested = -1;
+			this.nextStatusRequested = -1;
 			// disable periodic call ...
 			return false;
 		}
 	}
-	if (m_stateTransition<1.0) {
+	if (this.stateTransition<1.0) {
 		// check if no new state requested:
-		if (m_nextStatusRequested != -1 && m_stateTransition<0.5) {
+		if (this.nextStatusRequested != -1 LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.stateTransition<0.5) {
 			// invert sources with destination
-			int32_t tmppp = m_stateOld;
-			m_stateOld = m_stateNew;
-			m_stateNew = tmppp;
-			m_stateTransition = 1.0 - m_stateTransition;
-			if (m_nextStatusRequested == m_stateNew) {
-				m_nextStatusRequested = -1;
+			int tmppp = this.stateOld;
+			this.stateOld = this.stateNew;
+			this.stateNew = tmppp;
+			this.stateTransition = 1.0 - this.stateTransition;
+			if (this.nextStatusRequested == this.stateNew) {
+				this.nextStatusRequested = -1;
 			}
 		}
 		float timeRelativity = 0.0f;
-		if (m_config != null) {
-			timeRelativity = m_config->getNumber(m_confIdChangeTime) / 1000.0;
+		if (this.config != null) {
+			timeRelativity = this.config.getNumber(this.confIdChangeTime) / 1000.0;
 		}
-		m_stateTransition += _event.getDeltaCall() / timeRelativity;
-		//m_stateTransition += _event.getDeltaCall();
-		m_stateTransition = etk::avg(0.0f, m_stateTransition, 1.0f);
-		Log.verbose("relative=" << timeRelativity << " Transition : " << m_stateTransition);
+		this.stateTransition += _event.getDeltaCall() / timeRelativity;
+		//this.stateTransition += _event.getDeltaCall();
+		this.stateTransition = etk::avg(0.0f, this.stateTransition, 1.0f);
+		Log.verbose("relative=" + timeRelativity + " Transition : " + this.stateTransition);
 	}
 	return true;
 }
@@ -299,112 +299,112 @@ void ewol::compositing::Shaper::addVertexLine(float _yTop,
                                               float _x8,
                                               float _yValTop,
                                               float _yValButtom,
-                                              const float* _table,
-                                              bool _displayOutside) {
-	if (m_nbVertexToDisplay != 0) {
+                                               float* _table,
+                                              boolean _displayOutside) {
+	if (this.nbVertexToDisplay != 0) {
 		// change line ...
-		m_VBO->pushOnBuffer(m_vboIdCoord,
-		                    m_VBO->getOnBufferVec2(m_vboIdCoord, m_nbVertexToDisplay-1));
-		m_VBO->pushOnBuffer(m_vboIdPos,
-		                    m_VBO->getOnBufferVec2(m_vboIdPos, m_nbVertexToDisplay-1));
+		this.VBO.pushOnBuffer(this.vboIdCoord,
+		                    this.VBO.getOnBufferVec2(this.vboIdCoord, this.nbVertexToDisplay-1));
+		this.VBO.pushOnBuffer(this.vboIdPos,
+		                    this.VBO.getOnBufferVec2(this.vboIdPos, this.nbVertexToDisplay-1));
 		
-		m_nbVertexToDisplay++;
+		this.nbVertexToDisplay++;
 		if (_displayOutside == true) {
-			m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x1, _yButtom));
-			m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[0],_yValButtom));
-			m_nbVertexToDisplay++;
+			this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x1, _yButtom));
+			this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[0],_yValButtom));
+			this.nbVertexToDisplay++;
 		} else {
-			m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yButtom));
-			m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValButtom));
-			m_nbVertexToDisplay++;
+			this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x2, _yButtom));
+			this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[1],_yValButtom));
+			this.nbVertexToDisplay++;
 		}
 	}
 	
 	if (_displayOutside == true) {
 		// A
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x1, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[0],_yValButtom));
-		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x1, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[0],_yValTop));
-		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValButtom));
-		m_nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x1, _yButtom));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[0],_yValButtom));
+		this.nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x1, _yTop));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[0],_yValTop));
+		this.nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x2, _yButtom));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[1],_yValButtom));
+		this.nbVertexToDisplay++;
 		// B
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValTop));
-		m_nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x2, _yTop));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[1],_yValTop));
+		this.nbVertexToDisplay++;
 		
 		// C
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x3, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[2],_yValButtom));
-		m_nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x3, _yButtom));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[2],_yValButtom));
+		this.nbVertexToDisplay++;
 	} else {
 		// C
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValButtom));
-		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x2, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[1],_yValTop));
-		m_nbVertexToDisplay++;
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x3, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[2],_yValButtom));
-		m_nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x2, _yButtom));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[1],_yValButtom));
+		this.nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x2, _yTop));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[1],_yValTop));
+		this.nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x3, _yButtom));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[2],_yValButtom));
+		this.nbVertexToDisplay++;
 	}
 	// D
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x3, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[2],_yValTop));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x3, _yTop));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[2],_yValTop));
+	this.nbVertexToDisplay++;
 	
 	// E
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x4, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[3],_yValButtom));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x4, _yButtom));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[3],_yValButtom));
+	this.nbVertexToDisplay++;
 	// F
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x4, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[3],_yValTop));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x4, _yTop));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[3],_yValTop));
+	this.nbVertexToDisplay++;
 	
 	// G
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x5, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[4],_yValButtom));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x5, _yButtom));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[4],_yValButtom));
+	this.nbVertexToDisplay++;
 	// H
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x5, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[4],_yValTop));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x5, _yTop));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[4],_yValTop));
+	this.nbVertexToDisplay++;
 	
 	// I
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x6, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[5],_yValButtom));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x6, _yButtom));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[5],_yValButtom));
+	this.nbVertexToDisplay++;
 	// J
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x6, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[5],_yValTop));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x6, _yTop));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[5],_yValTop));
+	this.nbVertexToDisplay++;
 	
 	// K
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x7, _yButtom));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[6],_yValButtom));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x7, _yButtom));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[6],_yValButtom));
+	this.nbVertexToDisplay++;
 	// L
-	m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x7, _yTop));
-	m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[6],_yValTop));
-	m_nbVertexToDisplay++;
+	this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x7, _yTop));
+	this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[6],_yValTop));
+	this.nbVertexToDisplay++;
 	
 	if (_displayOutside == true) {
 		// M
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x8, _yButtom));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[7],_yValButtom));
-		m_nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x8, _yButtom));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[7],_yValButtom));
+		this.nbVertexToDisplay++;
 		// N
-		m_VBO->pushOnBuffer(m_vboIdCoord, Vector2f(_x8, _yTop));
-		m_VBO->pushOnBuffer(m_vboIdPos,        Vector2f(_table[7],_yValTop));
-		m_nbVertexToDisplay++;
+		this.VBO.pushOnBuffer(this.vboIdCoord, Vector2f(_x8, _yTop));
+		this.VBO.pushOnBuffer(this.vboIdPos,        Vector2f(_table[7],_yValTop));
+		this.nbVertexToDisplay++;
 	}
 }
-const float modeDisplay[][8] = {
+ float modeDisplay[][8] = {
 	/* !! 0 !!
 	 *                    / *******
 	 *          / ****** /
@@ -451,8 +451,8 @@ const float modeDisplay[][8] = {
 	{ 1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f }
 };
 
-void ewol::compositing::Shaper::setShape(const Vector2f& _origin, const Vector2f& _size, const Vector2f& _insidePos, const Vector2f& _insideSize) {
-	m_VBO->clear();
+void ewol::compositing::Shaper::setShape( Vector2f _origin,  Vector2f _size,  Vector2f _insidePos,  Vector2f _insideSize) {
+	this.VBO.clear();
 	ewol::Padding borderTmp = getBorder();
 	ewol::Padding paddingIn = getPaddingIn();
 	ewol::Padding paddingOut = getPaddingOut();
@@ -490,17 +490,17 @@ void ewol::compositing::Shaper::setShape(const Vector2f& _origin, const Vector2f
 		
 	#endif
 	/*
-	Log.error(" enveloppe = " << enveloppe);
-	Log.error(" border = " << border);
-	Log.error(" inside = " << inside);
+	Log.error(" enveloppe = " + enveloppe);
+	Log.error(" border = " + border);
+	Log.error(" inside = " + inside);
 	*/
-	int32_t mode = 0;
-	bool displayOutside = false;
-	if (m_config != null) {
-		mode = m_config->getNumber(m_confIdMode);
-		displayOutside = m_config->getBoolean(m_confIdDisplayOutside);
+	int mode = 0;
+	boolean displayOutside = false;
+	if (this.config != null) {
+		mode = this.config.getNumber(this.confIdMode);
+		displayOutside = this.config.getBoolean(this.confIdDisplayOutside);
 	}
-	m_nbVertexToDisplay = 0;
+	this.nbVertexToDisplay = 0;
 	if (displayOutside == true) {
 		addVertexLine(enveloppe.yTop(), border.yTop(),
 		              enveloppe.xLeft(),
@@ -589,7 +589,7 @@ void ewol::compositing::Shaper::setShape(const Vector2f& _origin, const Vector2f
 		              modeDisplay[mode],
 		              displayOutside);
 	}
-	m_VBO->flush();
+	this.VBO.flush();
 }
 
 ewol::Padding ewol::compositing::Shaper::getPadding() {
@@ -598,96 +598,96 @@ ewol::Padding ewol::compositing::Shaper::getPadding() {
 
 ewol::Padding ewol::compositing::Shaper::getPaddingIn() {
 	ewol::Padding padding(0,0,0,0);
-	if (m_config != null) {
-		padding.setValue(m_config->getNumber(m_confIdPaddingIn[shaperPosLeft]),
-		                 m_config->getNumber(m_confIdPaddingIn[shaperPosTop]),
-		                 m_config->getNumber(m_confIdPaddingIn[shaperPosRight]),
-		                 m_config->getNumber(m_confIdPaddingIn[shaperPosButtom]));
+	if (this.config != null) {
+		padding.setValue(this.config.getNumber(this.confIdPaddingIn[shaperPosLeft]),
+		                 this.config.getNumber(this.confIdPaddingIn[shaperPosTop]),
+		                 this.config.getNumber(this.confIdPaddingIn[shaperPosRight]),
+		                 this.config.getNumber(this.confIdPaddingIn[shaperPosButtom]));
 	}
 	return padding;
 }
 
 ewol::Padding ewol::compositing::Shaper::getPaddingOut() {
 	ewol::Padding padding(0,0,0,0);
-	if (m_config != null) {
-		padding.setValue(m_config->getNumber(m_confIdPaddingOut[shaperPosLeft]),
-		                 m_config->getNumber(m_confIdPaddingOut[shaperPosTop]),
-		                 m_config->getNumber(m_confIdPaddingOut[shaperPosRight]),
-		                 m_config->getNumber(m_confIdPaddingOut[shaperPosButtom]));
+	if (this.config != null) {
+		padding.setValue(this.config.getNumber(this.confIdPaddingOut[shaperPosLeft]),
+		                 this.config.getNumber(this.confIdPaddingOut[shaperPosTop]),
+		                 this.config.getNumber(this.confIdPaddingOut[shaperPosRight]),
+		                 this.config.getNumber(this.confIdPaddingOut[shaperPosButtom]));
 	}
 	return padding;
 }
 
 ewol::Padding ewol::compositing::Shaper::getBorder() {
 	ewol::Padding padding(0,0,0,0);
-	if (m_config != null) {
-		padding.setValue(m_config->getNumber(m_confIdBorder[shaperPosLeft]),
-		                 m_config->getNumber(m_confIdBorder[shaperPosTop]),
-		                 m_config->getNumber(m_confIdBorder[shaperPosRight]),
-		                 m_config->getNumber(m_confIdBorder[shaperPosButtom]));
+	if (this.config != null) {
+		padding.setValue(this.config.getNumber(this.confIdBorder[shaperPosLeft]),
+		                 this.config.getNumber(this.confIdBorder[shaperPosTop]),
+		                 this.config.getNumber(this.confIdBorder[shaperPosRight]),
+		                 this.config.getNumber(this.confIdBorder[shaperPosButtom]));
 	}
 	return padding;
 }
 
-void ewol::compositing::Shaper::setSource(const etk::Uri& _uri) {
+void ewol::compositing::Shaper::setSource( etk::Uri _uri) {
 	clear();
 	unLoadProgram();
-	m_uri = _uri;
+	this.uri = _uri;
 	loadProgram();
 }
 
-bool ewol::compositing::Shaper::hasSources() {
-	return m_GLprogram != null;
+boolean ewol::compositing::Shaper::hasSources() {
+	return this.GLprogram != null;
 }
 
 
-const etk::Color<float>& ewol::compositing::Shaper::getColor(int32_t _id) {
-	static const etk::Color<float> errorValue(0,0,0,0);
-	if (m_colorProperty == null) {
-		EWOL_WARNING("null of m_colorProperty ==> return #0000 for id " << _id);
+ etk::Color<float> ewol::compositing::Shaper::getColor(int _id) {
+	static  etk::Color<float> errorValue(0,0,0,0);
+	if (this.colorProperty == null) {
+		Log.warning("null of this.colorProperty ==> return #0000 for id " + _id);
 		return errorValue;
 	}
-	return m_colorProperty->get(_id);
+	return this.colorProperty.get(_id);
 }
 
-int32_t ewol::compositing::Shaper::requestColor(const etk::String& _name) {
-	if (m_colorProperty == null) {
-		EWOL_WARNING("null of m_colorProperty ==> return -1 for name " << _name);
+int ewol::compositing::Shaper::requestColor( String _name) {
+	if (this.colorProperty == null) {
+		Log.warning("null of this.colorProperty ==> return -1 for name " + _name);
 		return -1;
 	}
-	return m_colorProperty->request(_name);
+	return this.colorProperty.request(_name);
 }
 
-int32_t ewol::compositing::Shaper::requestConfig(const etk::String& _name) {
-	if (m_config == null) {
-		EWOL_WARNING("null of m_config ==> return -1 for name " << _name);
+int ewol::compositing::Shaper::requestConfig( String _name) {
+	if (this.config == null) {
+		Log.warning("null of this.config ==> return -1 for name " + _name);
 		return -1;
 	}
-	return m_config->request(_name);
+	return this.config.request(_name);
 }
 
-double ewol::compositing::Shaper::getConfigNumber(int32_t _id) {
+double ewol::compositing::Shaper::getConfigNumber(int _id) {
 	if (    _id == -1
-	     || m_config == null) {
-		EWOL_WARNING("null of m_config ==> return 0.0 for id " << _id);
+	     || this.config == null) {
+		Log.warning("null of this.config ==> return 0.0 for id " + _id);
 		return 0.0;
 	}
-	return m_config->getNumber(_id);
+	return this.config.getNumber(_id);
 }
 
 
 namespace etk {
-	template<> etk::String toString<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+	template<> String toString<ewol::compositing::Shaper>( ewol::compositing::Shaper _obj) {
 		return _obj.getSource().get();
 	}
-	template<> etk::UString toUString<ewol::compositing::Shaper>(const ewol::compositing::Shaper& _obj) {
+	template<> etk::UString toUString<ewol::compositing::Shaper>( ewol::compositing::Shaper _obj) {
 		return etk::toUString(etk::toString(_obj));
 	}
-	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const etk::String& _value) {
+	template<> boolean frothis.string<ewol::compositing::Shaper>(ewol::compositing::Shaper _variableRet,  String _value) {
 		_variableRet.setSource(_value);
 		return true;
 	}
-	template<> bool from_string<ewol::compositing::Shaper>(ewol::compositing::Shaper& _variableRet, const etk::UString& _value) {
-		return from_string(_variableRet,  etk::toString(_value));
+	template<> boolean frothis.string<ewol::compositing::Shaper>(ewol::compositing::Shaper _variableRet,  etk::UString _value) {
+		return frothis.string(_variableRet,  etk::toString(_value));
 	}
 };

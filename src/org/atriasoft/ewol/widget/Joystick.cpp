@@ -12,9 +12,9 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::widget::Joystick);
 
-static bool l_displayBackground(true);
-static etk::String l_background("");
-static etk::String l_foreground("");
+static boolean l_displayBackground(true);
+static String l_background("");
+static String l_foreground("");
 static float l_ratio(1.0/7.0);
 
 ewol::widget::Joystick::Joystick() :
@@ -23,23 +23,23 @@ ewol::widget::Joystick::Joystick() :
   signalMove(this, "move", "") {
 	addObjectType("ewol::widget::Joystick");
 	// by default the joy does not lock when free out
-	m_lock = false;
-	m_displayMode = modeNormal;
+	this.lock = false;
+	this.displayMode = modeNormal;
 	
-	m_colorFg = etk::color::blue;
+	this.colorFg = etk::color::blue;
 	
-	m_colorBg = etk::color::black;
-	m_colorBg.setA(0x3F);
+	this.colorBg = etk::color::black;
+	this.colorBg.setA(0x3F);
 	
-	m_displayPos.setValue(0,0);
-	m_distance = 0.0;
-	m_angle = -0.1;
+	this.displayPos.setValue(0,0);
+	this.distance = 0.0;
+	this.angle = -0.1;
 	
 	// set the generic parameters:
-	m_displayBackground = l_displayBackground;
-	m_background = l_background;
-	m_foreground = l_foreground;
-	m_ratio = l_ratio;
+	this.displayBackground = l_displayBackground;
+	this.background = l_background;
+	this.foreground = l_foreground;
+	this.ratio = l_ratio;
 	propertyCanFocus.setDirectCheck(true);
 }
 
@@ -56,29 +56,29 @@ void ewol::widget::Joystick::onRegenerateDisplay() {
 		ewol::OObject2DTextured * tmpOOtexBg = null;
 		ewol::OObject2DTextured * tmpOOtexFg = null;
 		// set background
-		if (true == m_displayBackground) {
-			if (m_background == "") {
+		if (true == this.displayBackground) {
+			if (this.background == "") {
 				tmpOObjects = ne w ewol::OObject2DColored;
-				tmpOObjects->setColor(m_colorBg);
-				tmpOObjects->Disc( m_size.x/2, m_size.y/2, m_size.x/2-1);
+				tmpOObjects.setColor(this.colorBg);
+				tmpOObjects.Disc( this.size.x/2, this.size.y/2, this.size.x/2-1);
 			} else {
-				tmpOOtexBg = n ew ewol::OObject2DTextured(m_background, m_size.x, m_size.y);
-				tmpOOtexBg->rectangle(0, 0, m_size.x, m_size.y);
+				tmpOOtexBg = n ew ewol::OObject2DTextured(this.background, this.size.x, this.size.y);
+				tmpOOtexBg.rectangle(0, 0, this.size.x, this.size.y);
 			}
 		}
 		// set cursor point
-		float sizeElement = m_size.x*m_ratio;
-		if (m_foreground == "") {
+		float sizeElement = this.size.x*this.ratio;
+		if (this.foreground == "") {
 			if (null == tmpOObjects) {
 				tmpOObjects = ne w ewol::OObject2DColored;
 			}
-			tmpOObjects->setColor(m_colorFg);
-			tmpOObjects->Disc( ((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement) + sizeElement,
-			                   ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement) + sizeElement, sizeElement);
+			tmpOObjects.setColor(this.colorFg);
+			tmpOObjects.Disc( ((this.displayPos.x+1.0)/2.0)*(this.size.x-2*sizeElement) + sizeElement,
+			                   ((this.displayPos.y+1.0)/2.0)*(this.size.y-2*sizeElement) + sizeElement, sizeElement);
 		} else {
-			tmpOOtexFg = ne w ewol::OObject2DTextured(m_foreground,sizeElement*2, sizeElement*2);
-			tmpOOtexFg->rectangle(((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement),
-			                      ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement), sizeElement*2, sizeElement*2);
+			tmpOOtexFg = ne w ewol::OObject2DTextured(this.foreground,sizeElement*2, sizeElement*2);
+			tmpOOtexFg.rectangle(((this.displayPos.x+1.0)/2.0)*(this.size.x-2*sizeElement),
+			                      ((this.displayPos.y+1.0)/2.0)*(this.size.y-2*sizeElement), sizeElement*2, sizeElement*2);
 		}
 		// add all needed objects ...
 		if (null != tmpOObjects) {
@@ -99,53 +99,53 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
+boolean ewol::widget::Joystick::onEventInput( ewol::event::Input _event) {
 /*
 	if (1 == IdInput) {
-		if(    gale::key::status::down == typeEvent
-		    || gale::key::status::move == typeEvent) {
+		if(    KeyStatus::down == typeEvent
+		    || KeyStatus::move == typeEvent) {
 			// get local relative position
 			Vector2f relativePos = relativePosition(pos);
-			float sizeElement = m_size.x*m_ratio;
+			float sizeElement = this.size.x*this.ratio;
 			// calculate the position of the cursor...
-			m_displayPos.x = (relativePos.x-sizeElement)/(m_size.x-sizeElement*2)*2.0 - 1.0;
-			m_displayPos.y = (relativePos.y-sizeElement)/(m_size.y-sizeElement*2)*2.0 - 1.0;
+			this.displayPos.x = (relativePos.x-sizeElement)/(this.size.x-sizeElement*2)*2.0 - 1.0;
+			this.displayPos.y = (relativePos.y-sizeElement)/(this.size.y-sizeElement*2)*2.0 - 1.0;
 			
 			// distance :
-			m_distance = m_displayPos.y*m_displayPos.y + m_displayPos.x * m_displayPos.x;
-			m_distance = sqrt(m_distance);
+			this.distance = this.displayPos.y*this.displayPos.y + this.displayPos.x * this.displayPos.x;
+			this.distance = sqrt(this.distance);
 			// angle : 
-			m_angle = atan(m_displayPos.y/m_displayPos.x);
-			if (m_displayPos.x < 0) {
-				m_angle += M_PI;
+			this.angle = atan(this.displayPos.y/this.displayPos.x);
+			if (this.displayPos.x < 0) {
+				this.angle += M_PI;
 			}
 			
 			// clip if needed ...
-			if (m_distance > 1.0) {
-				m_distance = 1.0;
+			if (this.distance > 1.0) {
+				this.distance = 1.0;
 				// regenerate n ew display position : 
-				m_displayPos.x = cos(m_angle)*m_distance;
-				m_displayPos.y = sin(m_angle)*m_distance;
+				this.displayPos.x = cos(this.angle)*this.distance;
+				this.displayPos.y = sin(this.angle)*this.distance;
 			}
 			markToRedraw();
-			if(gale::key::status::down == typeEvent) {
+			if(KeyStatus::down == typeEvent) {
 				signalEnable.emit();
 			} else {
-				etk::String tmp = etk::String("distance=") + etk::String(m_distance) + etk::String("angle=") + etk::String(m_angle+M_PI/2);
-				signalMove.emit(m_angle+M_PI/2);
+				String tmp = String("distance=") + String(this.distance) + String("angle=") + String(this.angle+M_PI/2);
+				signalMove.emit(this.angle+M_PI/2);
 			}
 			//teta += M_PI/2;
-			//Log.debug("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
+			//Log.debug("TETA = " + (this.angle*180/M_PI) + " deg distance = " + this.distance);
 			return true;
-		} else if( gale::key::status::up == typeEvent) {
-			if(    true == m_lock
-			    && m_distance == 1) {
+		} else if( KeyStatus::up == typeEvent) {
+			if(    true == this.lock
+			    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.distance == 1) {
 				// nothing to do ...
 			} else {
-				m_displayPos.x = 0.0;
-				m_displayPos.y = 0.0;
-				m_angle = -0.1;
-				m_distance = 0;
+				this.displayPos.x = 0.0;
+				this.displayPos.y = 0.0;
+				this.angle = -0.1;
+				this.distance = 0;
 			}
 			markToRedraw();
 			signalDisable.emit();
@@ -162,29 +162,29 @@ void ewol::widget::Joystick::ratio(float _newRatio) {
 	if (_newRatio > 1) {
 		_newRatio = 1;
 	}
-	m_ratio = _newRatio;
-	Log.info("Set default Joystick ratio at " << m_ratio);
+	this.ratio = _newRatio;
+	Log.info("Set default Joystick ratio at " + this.ratio);
 }
 
 
-void ewol::widget::Joystick::background(etk::String _imageNameInData, bool _display) {
+void ewol::widget::Joystick::background(String _imageNameInData, boolean _display) {
 	// TODO : check if it existed
-	m_background = _imageNameInData;
-	m_displayBackground = _display;
-	Log.info("Set default Joystick background at " << m_background << " display it=" << m_displayBackground);
+	this.background = _imageNameInData;
+	this.displayBackground = _display;
+	Log.info("Set default Joystick background at " + this.background + " display it=" + this.displayBackground);
 }
 
 
-void ewol::widget::Joystick::foreground(etk::String imageNameInData) {
+void ewol::widget::Joystick::foreground(String imageNameInData) {
 	// TODO : check if it existed
-	m_foreground = imageNameInData;
-	Log.info("Set default Joystick Foreground at " << m_foreground);
+	this.foreground = imageNameInData;
+	Log.info("Set default Joystick Foreground at " + this.foreground);
 }
 
 
-void ewol::widget::Joystick::getProperty(float& distance, float& angle) {
-	distance = m_distance;
-	angle = m_angle+M_PI/2;
+void ewol::widget::Joystick::getProperty(float distance, float angle) {
+	distance = this.distance;
+	angle = this.angle+M_PI/2;
 }
 
 

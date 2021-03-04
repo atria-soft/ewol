@@ -17,16 +17,16 @@
 #define EWOL_VERSION "0.0.0"
 #endif
 
-etk::String ewol::getVersion() {
+String ewol::getVersion() {
 	return EWOL_VERSION;
 }
 
 
-int32_t ewol::run(ewol::context::Application* _application,
-                  int32_t _argc,
-                  const char* _argv[]) {
+int ewol::run(EwolApplication* _application,
+                  int _argc,
+                   char* _argv[]) {
 	etranslate::init(_argc, _argv);
-	return gale::run(ETK_NEW(ewol::Context, _application), _argc, _argv);
+	return gale::run(ETK_NEW(EwolContext, _application), _argc, _argv);
 }
 
 

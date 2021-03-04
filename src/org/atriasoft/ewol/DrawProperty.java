@@ -14,11 +14,11 @@ namespace ewol {
 	 */
 	class DrawProperty{
 		/*
-		                                                          /--> m_windowsSize
+		                                                          /-. this.windowsSize
 		      *--------------------------------------------------*
 		      |                                           g       |
 		      |                                                  |
-		      |                                    m_size        |
+		      |                                    this.size        |
 		      |                                   /              |
 		      |              o-------------------o               |
 		      |              |                   |               |
@@ -31,18 +31,18 @@ namespace ewol {
 		      |              |                   |               |
 		      |              o-------------------o               |
 		      |             /                                    |
-		      |     m_origin                                     |
+		      |     this.origin                                     |
 		      |                                                  |
 		      *--------------------------------------------------*
 		     /
 		   (0,0)
 		 */
 		public :
-			Vector2i m_windowsSize; //!< Windows compleate size
-			Vector2i m_origin; //!< Windows clipping upper widget (can not be <0)
-			Vector2i m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
-			void limit(const Vector2f& _origin, const Vector2f& _size);
+			Vector2i this.windowsSize; //!< Windows compleate size
+			Vector2i this.origin; //!< Windows clipping upper widget (can not be <0)
+			Vector2i this.size; //!< Windows clipping upper widget (can not be <0 and >this.windowsSize)
+			void limit( Vector2f _origin,  Vector2f _size);
 	};
-	etk::Stream& operator <<(etk::Stream& _os, const ewol::DrawProperty& _obj);
+	etk::Stream operator +(etk::Stream _os,  ewol::DrawProperty _obj);
 	
 }

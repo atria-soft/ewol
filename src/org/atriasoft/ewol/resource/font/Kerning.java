@@ -39,25 +39,25 @@ namespace ewol {
 	 */
 	class Kerning {
 		public:
-			char32_t m_UVal;  //!< unicode value (the previous character that must be before)
-			float     m_value; //!< kerning real offset
+			Character this.UVal;  //!< unicode value (the previous character that must be before)
+			float     this.value; //!< kerning real offset
 		public:
 			/**
-			 * @brief Simple constructor that allow to allocate the List element
+			 * @brief Simple ructor that allow to allocate the List element
 			 */
 			Kerning() :
-			  m_UVal(0),
-			  m_value(0) {
+			  this.UVal(0),
+			  this.value(0) {
 				
 			};
 			/**
-			 * @brief Normal constructor
+			 * @brief Normal ructor
 			 * @param[in] _charcode The Unicode value of the coresponding character that might be before
 			 * @param[in] _value The Kerning value of the offset (nb pixel number)
 			 */
-			Kerning(const char32_t _charcode, const float _value) :
-			  m_UVal(_charcode),
-			  m_value(_value) {
+			Kerning( Character _charcode,  float _value) :
+			  this.UVal(_charcode),
+			  this.value(_value) {
 				
 			};
 			/**

@@ -11,11 +11,11 @@
 #include <etk/typeInfo.hpp>
 ETK_DECLARE_TYPE(ewol::compositing::TextDF);
 
-ewol::compositing::TextDF::TextDF(const etk::String& _fontName, int32_t _fontSize) :
+ewol::compositing::TextDF::TextDF( String _fontName, int _fontSize) :
   ewol::compositing::TextBase("", false),
-  m_fontDF(null),
-  m_GLglyphLevel(-1),
-  m_size(12.0) {
+  this.fontDF(null),
+  this.GLglyphLevel(-1),
+  this.size(12.0) {
 	setFont(_fontName, _fontSize);
 	loadProgram("DATA:///fontDistanceField/font1.prog?lib=ewol");
 }
@@ -24,26 +24,26 @@ ewol::compositing::TextDF::~TextDF() {
 	
 }
 
-void ewol::compositing::TextDF::updateSizeToRender(const Vector2f& _size) {
+void ewol::compositing::TextDF::updateSizeToRender( Vector2f _size) {
 	float minSize = etk::min(_size.x(), _size.y());
-	if (m_fontDF != null) {
-		setFontSize(m_fontDF->getSize(minSize));
+	if (this.fontDF != null) {
+		setFontSize(this.fontDF.getSize(minSize));
 	}
 }
 
-void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _enableDepthTest) {
+void ewol::compositing::TextDF::drawMT( mat4 _transformationMatrix, boolean _enableDepthTest) {
 	// draw BG in any case:
-	m_vectorialDraw.draw();
-	if (    m_VBO->bufferSize(m_vboIdCoord) <= 0
-	     || m_fontDF == null) {
-		//EWOL_WARNING("Nothink to draw...");
+	this.vectorialDraw.draw();
+	if (    this.VBO.bufferSize(this.vboIdCoord) <= 0
+	     || this.fontDF == null) {
+		//Log.warning("Nothink to draw...");
 		return;
 	}
-	if (m_fontDF == null) {
-		EWOL_WARNING("no font...");
+	if (this.fontDF == null) {
+		Log.warning("no font...");
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
@@ -54,127 +54,127 @@ void ewol::compositing::TextDF::drawMT(const mat4& _transformationMatrix, bool _
 	mat4 projMatrix = gale::openGL::getMatrix();
 	mat4 camMatrix = gale::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->use(); 
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	this.GLprogram.use(); 
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// Texture:
-	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getRendererId());
-	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
-	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
-	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdCoordText);
-	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
-	m_GLprogram->sendAttributePointer(m_GLglyphLevel, m_VBO, m_vboIdGlyphLevel);
+	this.GLprogram.setTexture0(this.GLtexID, this.fontDF.getRendererId());
+	this.GLprogram.uniform1i(this.GLtextWidth, this.fontDF.getOpenGlSize().x());
+	this.GLprogram.uniform1i(this.GLtextHeight, this.fontDF.getOpenGlSize().x());
+	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);
+	this.GLprogram.sendAttributePointer(this.GLtexture, this.VBO, this.vboIdCoordText);
+	this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, this.vboIdColor);
+	this.GLprogram.sendAttributePointer(this.GLglyphLevel, this.VBO, this.vboIdGlyphLevel);
 	// Request the draw od the elements:
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
-	m_GLprogram->unUse();
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, this.VBO.bufferSize(this.vboIdCoord));
+	this.GLprogram.unUse();
 	if (_enableDepthTest == true) {
 		gale::openGL::disable(gale::openGL::flag_depthTest);
 	}
 }
 
 
-void ewol::compositing::TextDF::drawD(bool _disableDepthTest) {
+void ewol::compositing::TextDF::drawD(boolean _disableDepthTest) {
 	// draw BG in any case:
-	m_vectorialDraw.draw();
+	this.vectorialDraw.draw();
 	
-	if (    m_VBO->bufferSize(m_vboIdCoord) <= 0
-	     || m_fontDF == null) {
+	if (    this.VBO.bufferSize(this.vboIdCoord) <= 0
+	     || this.fontDF == null) {
 		// TODO : Set it back
-		//EWOL_WARNING("Nothink to draw...");
+		//Log.warning("Nothink to draw...");
 		return;
 	}
-	if (m_fontDF == null) {
-		EWOL_WARNING("no font...");
+	if (this.fontDF == null) {
+		Log.warning("no font...");
 		return;
 	}
-	if (m_GLprogram == null) {
+	if (this.GLprogram == null) {
 		Log.error("No shader ...");
 		return;
 	}
 	// set Matrix: translation/positionMatrix
-	mat4 tmpMatrix = gale::openGL::getMatrix()*m_matrixApply;
-	m_GLprogram->use(); 
-	m_GLprogram->uniformMatrix(m_GLMatrix, tmpMatrix);
+	mat4 tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
+	this.GLprogram.use(); 
+	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// Texture:
-	m_GLprogram->setTexture0(m_GLtexID, m_fontDF->getRendererId());
-	m_GLprogram->uniform1i(m_GLtextWidth, m_fontDF->getOpenGlSize().x());
-	m_GLprogram->uniform1i(m_GLtextHeight, m_fontDF->getOpenGlSize().x());
-	m_GLprogram->sendAttributePointer(m_GLPosition, m_VBO, m_vboIdCoord);
-	m_GLprogram->sendAttributePointer(m_GLtexture, m_VBO, m_vboIdCoordText);
-	m_GLprogram->sendAttributePointer(m_GLColor, m_VBO, m_vboIdColor);
-	m_GLprogram->sendAttributePointer(m_GLglyphLevel, m_VBO, m_vboIdGlyphLevel);
+	this.GLprogram.setTexture0(this.GLtexID, this.fontDF.getRendererId());
+	this.GLprogram.uniform1i(this.GLtextWidth, this.fontDF.getOpenGlSize().x());
+	this.GLprogram.uniform1i(this.GLtextHeight, this.fontDF.getOpenGlSize().x());
+	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);
+	this.GLprogram.sendAttributePointer(this.GLtexture, this.VBO, this.vboIdCoordText);
+	this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, this.vboIdColor);
+	this.GLprogram.sendAttributePointer(this.GLglyphLevel, this.VBO, this.vboIdGlyphLevel);
 	// Request the draw od the elements:
-	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, m_VBO->bufferSize(m_vboIdCoord));
-	m_GLprogram->unUse();
+	gale::openGL::drawArrays(gale::openGL::renderMode::triangle, 0, this.VBO.bufferSize(this.vboIdCoord));
+	this.GLprogram.unUse();
 }
 
-void ewol::compositing::TextDF::loadProgram(const etk::String& _shaderName) {
+void ewol::compositing::TextDF::loadProgram( String _shaderName) {
 	ewol::compositing::TextBase::loadProgram(_shaderName);
-	if (m_GLprogram != null) {
-		m_GLglyphLevel = m_GLprogram->getAttribute("EW_glyphLevel");
+	if (this.GLprogram != null) {
+		this.GLglyphLevel = this.GLprogram.getAttribute("EW_glyphLevel");
 	}
 }
 
 
 float ewol::compositing::TextDF::getHeight() {
-	if (m_fontDF == null) {
-		EWOL_WARNING("no font...");
+	if (this.fontDF == null) {
+		Log.warning("no font...");
 		return 1;
 	}
-	return m_fontDF->getHeight(m_size);
+	return this.fontDF.getHeight(this.size);
 }
 
-ewol::GlyphProperty * ewol::compositing::TextDF::getGlyphPointer(char32_t _charcode) {
-	if (m_fontDF == null) {
-		EWOL_WARNING("no font...");
+ewol::GlyphProperty * ewol::compositing::TextDF::getGlyphPointer(Character _charcode) {
+	if (this.fontDF == null) {
+		Log.warning("no font...");
 		return null;
 	}
-	return m_fontDF->getGlyphPointer(_charcode);
+	return this.fontDF.getGlyphPointer(_charcode);
 }
 
-void ewol::compositing::TextDF::setFontSize(int32_t _fontSize) {
+void ewol::compositing::TextDF::setFontSize(int _fontSize) {
 	clear();
-	Log.verbose("Set font Size: " << _fontSize);
+	Log.verbose("Set font Size: " + _fontSize);
 	if (_fontSize <= 1) {
-		m_size = ewol::getContext().getFontDefault().getSize();
+		this.size = ewol::getContext().getFontDefault().getSize();
 	} else {
-		m_size = _fontSize;
+		this.size = _fontSize;
 	}
 }
 
-void ewol::compositing::TextDF::setFontName(const etk::String& _fontName) {
+void ewol::compositing::TextDF::setFontName( String _fontName) {
 	clear();
 	// remove old one
-	ememory::SharedPtr<ewol::resource::DistanceFieldFont> previousFont = m_fontDF;
-	etk::String fontName;
+	ememory::Ptr<ewol::resource::DistanceFieldFont> previousFont = this.fontDF;
+	String fontName;
 	if (_fontName == "") {
 		fontName = ewol::getContext().getFontDefault().getName();
 	} else {
 		fontName = _fontName;
 	}
-	Log.verbose("Set font name: '" << fontName << "'");
+	Log.verbose("Set font name: '" + fontName + "'");
 	// link to new one
-	m_fontDF = ewol::resource::DistanceFieldFont::create(fontName);
-	if (m_fontDF == null) {
+	this.fontDF = ewol::resource::DistanceFieldFont::create(fontName);
+	if (this.fontDF == null) {
 		Log.error("Can not get find resource");
-		m_fontDF = previousFont;
+		this.fontDF = previousFont;
 	}
 }
 
-void ewol::compositing::TextDF::setFont(etk::String _fontName, int32_t _fontSize) {
+void ewol::compositing::TextDF::setFont(String _fontName, int _fontSize) {
 	setFontSize(_fontSize);
 	setFontName(_fontName);
 }
 
 void ewol::compositing::TextDF::setFontMode(enum ewol::font::mode _mode) {
-	m_mode = _mode;
+	this.mode = _mode;
 }
 
 //#define ANGLE_OF_ITALIC (tan(0.4))
 #define ANGLE_OF_ITALIC (0.00698143f)
 
 
-void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
+void ewol::compositing::TextDF::printChar( Character _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty* myGlyph = getGlyphPointer(_charcode);
 	if (null == myGlyph) {
@@ -184,29 +184,29 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 	float fontSize = getSize();
 	float fontHeigh = getHeight();
 	
-	float factorDisplay = m_fontDF->getDisplayRatio(fontSize);
+	float factorDisplay = this.fontDF.getDisplayRatio(fontSize);
 	
 	// get the kerning ofset :
 	float kerningOffset = 0;
-	if (true == m_kerning) {
-		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
+	if (true == this.kerning) {
+		kerningOffset = myGlyph.kerningGet(this.previousCharcode);
 		if (kerningOffset != 0) {
-			//Log.debug("Kerning between : '" << m_previousCharcode << "'&'" << myGlyph->m_UVal << "' value : " << kerningOffset);
+			//Log.debug("Kerning between : '" + this.previousCharcode + "''" + myGlyph.this.UVal + "' value : " + kerningOffset);
 		}
 	}
 	// 0x01 == 0x20 == ' ';
 	if (    _charcode != 0x01
-	     && _charcode != 0x20) {
+	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _charcode != 0x20) {
 		float glyphLevel = 0.5f;
-		if (    m_mode == ewol::font::BoldItalic
-		     || m_mode == ewol::font::Bold) {
+		if (    this.mode == ewol::font::BoldItalic
+		     || this.mode == ewol::font::Bold) {
 			glyphLevel = 0.41f;
 		}
 		float italicMove = 0.0f;
-		if (    m_mode == ewol::font::BoldItalic
-		     || m_mode == ewol::font::Italic) {
+		if (    this.mode == ewol::font::BoldItalic
+		     || this.mode == ewol::font::Italic) {
 			// This is a simple version of Italic mode, in theory we need to move the up and the down...
-			italicMove = (float)myGlyph->m_sizeTexture.y() * factorDisplay * ANGLE_OF_ITALIC;
+			italicMove = (float)myGlyph.this.sizeTexture.y() * factorDisplay * ANGLE_OF_ITALIC;
 			// TODO : pb on the clipper...
 		}
 		
@@ -218,79 +218,79 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 		 *   yD *------*
 		 */
 		#if 0
-		float dxA = m_position.x() + (myGlyph->m_bearing.x() + kerningOffset) * factorDisplay;
-		float dxB = dxA + myGlyph->m_sizeTexture.x() * factorDisplay;
-		float dyC = m_position.y() + (myGlyph->m_bearing.y() + fontHeigh - fontSize) * factorDisplay;
-		float dyD = dyC - myGlyph->m_sizeTexture.y() * factorDisplay;
+		float dxA = this.position.x() + (myGlyph.this.bearing.x() + kerningOffset) * factorDisplay;
+		float dxB = dxA + myGlyph.this.sizeTexture.x() * factorDisplay;
+		float dyC = this.position.y() + (myGlyph.this.bearing.y() + fontHeigh - fontSize) * factorDisplay;
+		float dyD = dyC - myGlyph.this.sizeTexture.y() * factorDisplay;
 		#else
-		//Log.debug(" plop : fontHeigh" << fontHeigh << " fontSize=" << fontSize);
-		float dxA = m_position.x() + ((float)myGlyph->m_bearing.x() + kerningOffset - (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay;
-		float dxB = dxA + ((float)myGlyph->m_sizeTexture.x() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
-		float dyC = m_position.y() + (fontHeigh - fontSize + ((float)myGlyph->m_bearing.y() + (float)m_fontDF->getPixelBorderSize()*0.5f) * factorDisplay);
-		float dyD = dyC - ((float)myGlyph->m_sizeTexture.y() + (float)m_fontDF->getPixelBorderSize()) * factorDisplay;
+		//Log.debug(" plop : fontHeigh" + fontHeigh + " fontSize=" + fontSize);
+		float dxA = this.position.x() + ((float)myGlyph.this.bearing.x() + kerningOffset - (float)this.fontDF.getPixelBorderSize()*0.5f) * factorDisplay;
+		float dxB = dxA + ((float)myGlyph.this.sizeTexture.x() + (float)this.fontDF.getPixelBorderSize()) * factorDisplay;
+		float dyC = this.position.y() + (fontHeigh - fontSize + ((float)myGlyph.this.bearing.y() + (float)this.fontDF.getPixelBorderSize()*0.5f) * factorDisplay);
+		float dyD = dyC - ((float)myGlyph.this.sizeTexture.y() + (float)this.fontDF.getPixelBorderSize()) * factorDisplay;
 		#endif
 		
-		float tuA = myGlyph->m_texturePosStart.x();
-		float tuB = tuA + myGlyph->m_texturePosSize.x();
-		float tvC = myGlyph->m_texturePosStart.y();
-		float tvD = tvC + myGlyph->m_texturePosSize.y();
+		float tuA = myGlyph.this.texturePosStart.x();
+		float tuB = tuA + myGlyph.this.texturePosSize.x();
+		float tvC = myGlyph.this.texturePosStart.y();
+		float tvD = tvC + myGlyph.this.texturePosSize.y();
 		/*
-		Vector3f drawingPos = m_vectorialDraw.getPos();
-		etk::Color<> backColor = m_vectorialDraw.getColor();
+		Vector3f drawingPos = this.vectorialDraw.getPos();
+		etk::Color<> backColor = this.vectorialDraw.getColor();
 		
-		m_vectorialDraw.setPos(Vector2f(dxA, dyC));
+		this.vectorialDraw.setPos(Vector2f(dxA, dyC));
 		
-		m_vectorialDraw.setColor(etk::Color<>(0.0,1.0,0.0,1.0));
-		m_vectorialDraw.rectangle(Vector2f(dxB, dyD));
+		this.vectorialDraw.setColor(etk::Color<>(0.0,1.0,0.0,1.0));
+		this.vectorialDraw.rectangle(Vector2f(dxB, dyD));
 		
-		m_vectorialDraw.setPos(drawingPos);
-		m_vectorialDraw.setColor(backColor);
+		this.vectorialDraw.setPos(drawingPos);
+		this.vectorialDraw.setColor(backColor);
 		*/
 		// Clipping and drawing area
-		if(    m_clippingEnable == true
-		    && (    dxB < m_clippingPosStart.x()
-		         || dxA > m_clippingPosStop.x()
-		         || dyC < m_clippingPosStart.y()
-		         || dyD > m_clippingPosStop.y() ) ) {
+		if(    this.clippingEnable == true
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (    dxB < this.clippingPosStart.x()
+		         || dxA > this.clippingPosStop.x()
+		         || dyC < this.clippingPosStart.y()
+		         || dyD > this.clippingPosStop.y() ) ) {
 			// Nothing to diplay ...
 		} else {
-			if (m_clippingEnable == true) {
+			if (this.clippingEnable == true) {
 				// generata positions...
 				float TexSizeX = tuB - tuA;
-				if (dxA < m_clippingPosStart.x()) {
+				if (dxA < this.clippingPosStart.x()) {
 					// clip display
-					float drawSize = m_clippingPosStart.x() - dxA;
+					float drawSize = this.clippingPosStart.x() - dxA;
 					// update element start display
-					dxA = m_clippingPosStart.x();
-					float addElement = TexSizeX * drawSize / ((float)myGlyph->m_sizeTexture.x() * factorDisplay);
+					dxA = this.clippingPosStart.x();
+					float addElement = TexSizeX * drawSize / ((float)myGlyph.this.sizeTexture.x() * factorDisplay);
 					// update texture start X Pos
 					tuA += addElement;
 				}
-				if (dxB > m_clippingPosStop.x()) {
+				if (dxB > this.clippingPosStop.x()) {
 					// clip display
-					float drawSize = dxB - m_clippingPosStop.x();
+					float drawSize = dxB - this.clippingPosStop.x();
 					// update element start display
-					dxB = m_clippingPosStop.x();
-					float addElement = TexSizeX * drawSize / ((float)myGlyph->m_sizeTexture.x() * factorDisplay);
+					dxB = this.clippingPosStop.x();
+					float addElement = TexSizeX * drawSize / ((float)myGlyph.this.sizeTexture.x() * factorDisplay);
 					// update texture start X Pos
 					tuB -= addElement;
 				}
 				float TexSizeY = tvC - tvD;
-				if (dyC > m_clippingPosStop.y()) {
+				if (dyC > this.clippingPosStop.y()) {
 					// clip display
-					float drawSize = dyC - m_clippingPosStop.y();
+					float drawSize = dyC - this.clippingPosStop.y();
 					// update element start display
-					dyC = m_clippingPosStop.y();
-					float addElement = TexSizeY * drawSize / ((float)myGlyph->m_sizeTexture.y() * factorDisplay);
+					dyC = this.clippingPosStop.y();
+					float addElement = TexSizeY * drawSize / ((float)myGlyph.this.sizeTexture.y() * factorDisplay);
 					// update texture start X Pos
 					tvC -= addElement;
 				}
-				if (dyD < m_clippingPosStart.y()) {
+				if (dyD < this.clippingPosStart.y()) {
 					// clip display
-					float drawSize = m_clippingPosStart.y() - dyD;
+					float drawSize = this.clippingPosStart.y() - dyD;
 					// update element start display
-					dyD = m_clippingPosStart.y();
-					float addElement = TexSizeY * drawSize / ((float)myGlyph->m_sizeTexture.y() * factorDisplay);
+					dyD = this.clippingPosStart.y();
+					float addElement = TexSizeY * drawSize / ((float)myGlyph.this.sizeTexture.y() * factorDisplay);
 					// update texture start X Pos
 					tvD += addElement;
 				}
@@ -305,7 +305,7 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 				 *   |      |
 				 *   3------2
 				 */
-				if (m_needDisplay == true) {
+				if (this.needDisplay == true) {
 					Vector3f bitmapDrawPos[4];
 					bitmapDrawPos[0].setValue(dxA+italicMove, dyC, 0);
 					bitmapDrawPos[1].setValue(dxB+italicMove, dyC, 0);
@@ -318,10 +318,10 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 					 *   3------2
 					 */
 					Vector2f texturePos[4];
-					texturePos[0].setValue(tuA+m_mode, tvC);
-					texturePos[1].setValue(tuB+m_mode, tvC);
-					texturePos[2].setValue(tuB+m_mode, tvD);
-					texturePos[3].setValue(tuA+m_mode, tvD);
+					texturePos[0].setValue(tuA+this.mode, tvC);
+					texturePos[1].setValue(tuB+this.mode, tvC);
+					texturePos[2].setValue(tuB+this.mode, tvD);
+					texturePos[3].setValue(tuA+this.mode, tvD);
 					
 					// NOTE : Android does not support the Quads elements ...
 					/* Step 1 : 
@@ -332,21 +332,21 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 					 *                
 					 */
 					// set texture coordonates :
-					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[0]);
-					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[1]);
-					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[2]);
+					this.VBO.pushOnBuffer(this.vboIdCoordText, texturePos[0]);
+					this.VBO.pushOnBuffer(this.vboIdCoordText, texturePos[1]);
+					this.VBO.pushOnBuffer(this.vboIdCoordText, texturePos[2]);
 					// set display positions :
-					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[0]);
-					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[1]);
-					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[2]);
+					this.VBO.pushOnBuffer(this.vboIdCoord, bitmapDrawPos[0]);
+					this.VBO.pushOnBuffer(this.vboIdCoord, bitmapDrawPos[1]);
+					this.VBO.pushOnBuffer(this.vboIdCoord, bitmapDrawPos[2]);
 					// set the color
-					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+					this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+					this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+					this.VBO.pushOnBuffer(this.vboIdColor, this.color);
 					// set the bliph level
-					m_VBO->pushOnBuffer(m_vboIdGlyphLevel, glyphLevel);
-					m_VBO->pushOnBuffer(m_vboIdGlyphLevel, glyphLevel);
-					m_VBO->pushOnBuffer(m_vboIdGlyphLevel, glyphLevel);
+					this.VBO.pushOnBuffer(this.vboIdGlyphLevel, glyphLevel);
+					this.VBO.pushOnBuffer(this.vboIdGlyphLevel, glyphLevel);
+					this.VBO.pushOnBuffer(this.vboIdGlyphLevel, glyphLevel);
 					/* Step 2 : 
 					 *              
 					 *   **         
@@ -355,52 +355,52 @@ void ewol::compositing::TextDF::printChar(const char32_t& _charcode) {
 					 *   ********   
 					 */
 					// set texture coordonates :
-					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[0]);
-					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[2]);
-					m_VBO->pushOnBuffer(m_vboIdCoordText, texturePos[3]);
+					this.VBO.pushOnBuffer(this.vboIdCoordText, texturePos[0]);
+					this.VBO.pushOnBuffer(this.vboIdCoordText, texturePos[2]);
+					this.VBO.pushOnBuffer(this.vboIdCoordText, texturePos[3]);
 					// set display positions :
-					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[0]);
-					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[2]);
-					m_VBO->pushOnBuffer(m_vboIdCoord, bitmapDrawPos[3]);
+					this.VBO.pushOnBuffer(this.vboIdCoord, bitmapDrawPos[0]);
+					this.VBO.pushOnBuffer(this.vboIdCoord, bitmapDrawPos[2]);
+					this.VBO.pushOnBuffer(this.vboIdCoord, bitmapDrawPos[3]);
 					// set the color
-					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
-					m_VBO->pushOnBuffer(m_vboIdColor, m_color);
+					this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+					this.VBO.pushOnBuffer(this.vboIdColor, this.color);
+					this.VBO.pushOnBuffer(this.vboIdColor, this.color);
 					// set the bliph level
-					m_VBO->pushOnBuffer(m_vboIdGlyphLevel, glyphLevel);
-					m_VBO->pushOnBuffer(m_vboIdGlyphLevel, glyphLevel);
-					m_VBO->pushOnBuffer(m_vboIdGlyphLevel, glyphLevel);
+					this.VBO.pushOnBuffer(this.vboIdGlyphLevel, glyphLevel);
+					this.VBO.pushOnBuffer(this.vboIdGlyphLevel, glyphLevel);
+					this.VBO.pushOnBuffer(this.vboIdGlyphLevel, glyphLevel);
 				}
 			}
 		}
 	}
 	// move the position :
-	//Log.debug(" 5 pos=" << m_position << " advance=" << myGlyph->m_advance.x() << " kerningOffset=" << kerningOffset);
-	m_position.setX(m_position.x() + (myGlyph->m_advance.x() + kerningOffset) * factorDisplay);
-	//Log.debug(" 6 print '" << charcode << "' : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+	//Log.debug(" 5 pos=" + this.position + " advance=" + myGlyph.this.advance.x() + " kerningOffset=" + kerningOffset);
+	this.position.setX(this.position.x() + (myGlyph.this.advance.x() + kerningOffset) * factorDisplay);
+	//Log.debug(" 6 print '" + charcode + "' : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 	// Register the previous character
-	m_previousCharcode = _charcode;
-	m_VBO->flush();
+	this.previousCharcode = _charcode;
+	this.VBO.flush();
 	return;
 }
 
 
-Vector3f ewol::compositing::TextDF::calculateSizeChar(const char32_t& _charcode) {
+Vector3f ewol::compositing::TextDF::calculateSizeChar( Character _charcode) {
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
-	int32_t fontHeigh = getHeight();
+	int fontHeigh = getHeight();
 	
 	// get the kerning ofset :
 	float kerningOffset = 0.0;
-	if (true == m_kerning) {
-		kerningOffset = myGlyph->kerningGet(m_previousCharcode);
+	if (true == this.kerning) {
+		kerningOffset = myGlyph.kerningGet(this.previousCharcode);
 	}
 	
-	Vector3f outputSize((float)(myGlyph->m_advance.x() + kerningOffset)*m_fontDF->getDisplayRatio(getSize()),
+	Vector3f outputSize((float)(myGlyph.this.advance.x() + kerningOffset)*this.fontDF.getDisplayRatio(getSize()),
 	                (float)(fontHeigh),
 	                (float)(0.0));
 	// Register the previous character
-	m_previousCharcode = _charcode;
+	this.previousCharcode = _charcode;
 	return outputSize;
 }
 

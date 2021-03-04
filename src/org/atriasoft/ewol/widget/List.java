@@ -15,7 +15,7 @@
 namespace ewol {
 	namespace widget {
 		class List;
-		using ListShared = ememory::SharedPtr<ewol::widget::List>;
+		using List = ememory::Ptr<ewol::widget::List>;
 		using ListWeak = ememory::WeakPtr<ewol::widget::List>;
 		
 		enum ListRole {
@@ -39,33 +39,33 @@ namespace ewol {
 		class List : public ewol::widget::WidgetScrolled {
 			protected:
 				List();
-				void init() override;
+				void init() ;
 			public:
-				virtual ~List();
-				void calculateMinMaxSize() override;
+				 ~List();
+				void calculateMinMaxSize() ;
 			// drawing capabilities ....
 			protected:
-				List<ememory::SharedPtr<ewol::Compositing>> m_listOObject; //!< generic element to display...
-				List<int32_t> m_listSizeX; //!< size of every colomns
-				List<int32_t> m_listSizeY; //!< size of every rows
+				List<ememory::Ptr<ewol::Compositing>> this.listOObject; //!< generic element to display...
+				List<int> this.listSizeX; //!< size of every colomns
+				List<int> this.listSizeY; //!< size of every rows
 			protected:
-				etk::Map<etk::String, ememory::SharedPtr<ewol::Compositing>> m_compositingElements;
-				void addComposeElemnent(const etk::String& _name, const ememory::SharedPtr<ewol::Compositing>& _element);
+				etk::Map<String, ememory::Ptr<ewol::Compositing>> this.compositingElements;
+				void addComposeElemnent( String _name,  ememory::Ptr<ewol::Compositing> _element);
 				void clearComposeElemnent();
 				void removeComposeElemnent();
-				ememory::SharedPtr<ewol::Compositing> getComposeElemnent(const etk::String& _name);
+				ememory::Ptr<ewol::Compositing> getComposeElemnent( String _name);
 			public:
 				void clearOObjectList();
 			// list properties ...
 			protected:
-				int32_t m_paddingSizeX;
-				int32_t m_paddingSizeY;
-				int32_t m_displayStartRaw; //!< Current starting diaplayed raw
-				int32_t m_displayCurrentNbLine; //!< Number of line in the display
-				int32_t m_nbVisibleRaw; // set the number of visible raw (calculate don display)
+				int this.paddingSizeX;
+				int this.paddingSizeY;
+				int this.displayStartRaw; //!< Current starting diaplayed raw
+				int this.displayCurrentNbLine; //!< Number of line in the display
+				int this.nbVisibleRaw; // set the number of visible raw (calculate don display)
 			protected:
 				// function call to display the list :
-				virtual etk::Color<> getBasicBG() {
+				 etk::Color<> getBasicBG() {
 					return etk::Color<>(0xFF, 0xFF, 0xFF, 0xFF);
 				}
 				
@@ -73,9 +73,9 @@ namespace ewol {
 				 * @brief Get the number of colomn and row availlable in the list
 				 * @return Number of colomn and row
 				 */
-				virtual Vector2i getMatrixSize() const;
+				 Vector2i getMatrixSize() ;
 				
-				virtual fluorine::Variant getData(int32_t _role, const Vector2i& _pos) {
+				 fluorine::Variant getData(int _role,  Vector2i _pos) {
 					switch (_role) {
 						case ListRole::Text:
 							return "";
@@ -95,7 +95,7 @@ namespace ewol {
 				 * @param[in] _pos Position of colomn and Raw of the element.
 				 * @return The estimate size of the element.
 				 */
-				virtual Vector2f calculateElementSize(const Vector2i& _pos);
+				 Vector2f calculateElementSize( Vector2i _pos);
 				/**
 				 * @brief Draw an element in the specific size and position.
 				 * @param[in] _pos Position of colomn and Raw of the element.
@@ -103,27 +103,27 @@ namespace ewol {
 				 * @param[in] _size Render raw size
 				 * @return The estimate size of the element.
 				 */
-				virtual void drawElement(const Vector2i& _pos, const Vector2f& _start, const Vector2f& _size);
+				 void drawElement( Vector2i _pos,  Vector2f _start,  Vector2f _size);
 				/**
 				 * @brief Draw the background
 				 */
-				virtual void drawBackground();
+				 void drawBackground();
 				
-				virtual bool onItemEvent(const ewol::event::Input& _event, const Vector2i& _pos, const Vector2f& _mousePosition) {
+				 boolean onItemEvent( ewol::event::Input _event,  Vector2i _pos,  Vector2f _mousePosition) {
 					return false;
 				}
 				/**
 				 * @brief set a raw visible in the main display
 				 * @param[in] _id Id of the raw that might be visible.
 				 */
-				//void setRawVisible(int32_t _id);
+				//void setRawVisible(int _id);
 			protected:
-				void onGetFocus() override;
-				void onLostFocus() override;
-				void onDraw() override;
+				void onGetFocus() ;
+				void onLostFocus() ;
+				void onDraw() ;
 			public:
-				void onRegenerateDisplay() override;
-				bool onEventInput(const ewol::event::Input& _event) override;
+				void onRegenerateDisplay() ;
+				boolean onEventInput( ewol::event::Input _event) ;
 		};
 	};
 };

@@ -15,7 +15,7 @@ ewol::object::Worker::Worker() {
 }
 
 void ewol::object::Worker::init() {
-	ewol::Object::init();
+	EwolObject::init();
 	getObjectManager().workerAdd(sharedFromThis());
 }
 
@@ -24,6 +24,6 @@ ewol::object::Worker::~Worker() {
 }
 
 void ewol::object::Worker::destroy() {
-	ewol::Object::destroy();
+	EwolObject::destroy();
 	getObjectManager().workerRemove(sharedFromThis());
 }

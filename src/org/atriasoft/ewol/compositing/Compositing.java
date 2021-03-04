@@ -12,47 +12,47 @@
 namespace ewol {
 	class Compositing {
 		protected:
-			mat4 m_matrixApply;
+			mat4 this.matrixApply;
 		public:
 			/**
-			 * @brief generic constructor
+			 * @brief generic ructor
 			 */
 			Compositing();
 			/**
 			 * @brief Generic destructor
 			 */
-			virtual ~Compositing() = default;
+			 ~Compositing() = default;
 			/**
 			 * @brief Virtal pure function that request the draw of all openGl elements
 			 */
-			virtual void draw(bool _disableDepthTest = true) = 0;
+			 void draw(boolean _disableDepthTest = true) = 0;
 			/**
 			 * @brief clear alll tre registered element in the current element
 			 */
-			virtual void clear();
+			 void clear();
 			/**
 			 * @brief reset to the eye matrix the openGL mouving system
 			 */
-			virtual void resetMatrix();
+			 void resetMatrix();
 			/**
 			 * @brief translate the current display of this element
 			 * @param[in] _vect The translation vector to apply at the transformation matrix
 			 */
-			virtual void translate(const Vector3f& _vect);
+			 void translate( Vector3f _vect);
 			/**
 			 * @brief rotate the curent display of this element
 			 * @param[in] _vect The rotation vector to apply at the transformation matrix
 			 */
-			virtual void rotate(const Vector3f& _vect, float _angle);
+			 void rotate( Vector3f _vect, float _angle);
 			/**
 			 * @brief scale the current diaplsy of this element
 			 * @param[in] _vect The scaling vector to apply at the transformation matrix
 			 */
-			virtual void scale(const Vector3f& _vect);
+			 void scale( Vector3f _vect);
 			/**
 			 * @brief set the transformation matrix
 			 * @param[in] _mat The new matrix.
 			 */
-			virtual void setMatrix(const mat4& _mat);
+			 void setMatrix( mat4 _mat);
 	};
 };

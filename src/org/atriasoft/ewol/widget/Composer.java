@@ -13,7 +13,7 @@
 namespace ewol {
 	namespace widget {
 		class Composer;
-		using ComposerShared = ememory::SharedPtr<ewol::widget::Composer>;
+		using Composer = ememory::Ptr<ewol::widget::Composer>;
 		using ComposerWeak = ememory::WeakPtr<ewol::widget::Composer>;
 		/**
 		 * @ingroup ewolWidgetGroup
@@ -33,7 +33,7 @@ namespace ewol {
 				/**
 				 * @brief Destructor
 				 */
-				virtual ~Composer();
+				 ~Composer();
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _uri Name of the file
@@ -41,7 +41,7 @@ namespace ewol {
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */
-				bool loadFromFile(const etk::Uri& _uri, uint64_t _id=0);
+				boolean loadFromFile( etk::Uri _uri, ulong _id=0);
 				/**
 				 * @brief load a composition with a file
 				 * @param[in] _composerXmlString xml to parse directly
@@ -49,15 +49,15 @@ namespace ewol {
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */
-				bool loadFromString(const etk::String& _composerXmlString, uint64_t _id=0);
+				boolean loadFromString( String _composerXmlString, ulong _id=0);
 			private:
-				void requestDestroyFromChild(const ewol::ObjectShared& _child) override;
+				void requestDestroyFromChild( EwolObject _child) ;
 			public:
-				bool loadXML(const exml::Element& _node) override;
+				boolean loadXML( exml::Element _node) ;
 			protected:
-				virtual void onChangePropertySubFile();
+				 void onChangePropertySubFile();
 		};
-		ewol::WidgetShared composerGenerateString(const etk::String& _data = "", uint64_t _id=0);
-		ewol::WidgetShared composerGenerateFile(const etk::Uri& _uri = "", uint64_t _id=0);
+		Widget composerGenerateString( String _data = "", ulong _id=0);
+		Widget composerGenerateFile( etk::Uri _uri = "", ulong _id=0);
 	};
 };

@@ -21,35 +21,35 @@ namespace ewol {
 	namespace compositing {
 		class Text : public ewol::compositing::TextBase {
 			protected:
-				ememory::SharedPtr<ewol::resource::TexturedFont> m_font; //!< Font resources
+				ememory::Ptr<ewol::resource::TexturedFont> this.font; //!< Font resources
 			public:
 				/**
-				 * @brief generic constructor
+				 * @brief generic ructor
 				 * @param[in] _fontName Name of the font that might be loaded
 				 * @param[in] _fontSize size of the font that might be loaded
 				 */
-				Text(const etk::String& _fontName="", int32_t _fontSize=-1);
+				Text( String _fontName="", int _fontSize=-1);
 				/**
 				 * @brief generic destructor
 				 */
-				virtual ~Text();
+				 ~Text();
 			public:
-				virtual void drawD(bool _disableDepthTest);
-				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);
+				 void drawD(boolean _disableDepthTest);
+				 void drawMT( mat4 _transformationMatrix, boolean _enableDepthTest);
 			protected:
-				float m_size;
+				float this.size;
 			public:
-				virtual float getHeight();
-				virtual float getSize();
-				virtual ewol::GlyphProperty * getGlyphPointer(char32_t _charcode);
+				 float getHeight();
+				 float getSize();
+				 ewol::GlyphProperty * getGlyphPointer(Character _charcode);
 				
 			public:
-				virtual void setFontSize(int32_t _fontSize);
-				virtual void setFontName(const etk::String& _fontName);
-				virtual void setFont(etk::String _fontName, int32_t _fontSize);
-				virtual void setFontMode(enum ewol::font::mode _mode);
-				virtual void printChar(const char32_t& _charcode);
-				virtual Vector3f calculateSizeChar(const char32_t& _charcode);
+				 void setFontSize(int _fontSize);
+				 void setFontName( String _fontName);
+				 void setFont(String _fontName, int _fontSize);
+				 void setFontMode(enum ewol::font::mode _mode);
+				 void printChar( Character _charcode);
+				 Vector3f calculateSizeChar( Character _charcode);
 		};
 	}
 }

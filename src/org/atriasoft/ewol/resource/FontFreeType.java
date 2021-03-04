@@ -20,39 +20,39 @@ namespace ewol {
 		// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
 		class FontFreeType : public ewol::resource::FontBase {
 			private:
-				List<FT_Byte> m_FileBuffer;
-				int32_t m_FileSize;
-				FT_Face m_fftFace;
-				bool m_init;
+				List<FT_Byte> this.FileBuffer;
+				int this.FileSize;
+				FT_Face this.fftFace;
+				boolean this.init;
 				void display();
 			protected:
 				FontFreeType();
-				void init(const etk::Uri& _uri);
+				void init( etk::Uri _uri);
 			public:
 				DECLARE_RESOURCE_URI_FACTORY(FontFreeType);
-				virtual ~FontFreeType();
+				 ~FontFreeType();
 			public:
 				
-				bool getGlyphProperty(int32_t _fontSize,
-				                      ewol::GlyphProperty& _property);
+				boolean getGlyphProperty(int _fontSize,
+				                      ewol::GlyphProperty _property);
 				
-				bool drawGlyph(egami::Image& _imageOut,
-				               int32_t _fontSize,
+				boolean drawGlyph(egami::Image _imageOut,
+				               int _fontSize,
 				               Vector2i _glyphPosition,
-				               ewol::GlyphProperty& _property,
+				               ewol::GlyphProperty _property,
 				               int8_t _posInImage);
 				
-				bool drawGlyph(egami::ImageMono& _imageOut,
-				               int32_t _fontSize,
-				               ewol::GlyphProperty& _property,
-				               int32_t _borderSize = 0);
+				boolean drawGlyph(egami::ImageMono _imageOut,
+				               int _fontSize,
+				               ewol::GlyphProperty _property,
+				               int _borderSize = 0);
 				
-				Vector2f getSize(int32_t _fontSize, const etk::String& _unicodeString);
+				Vector2f getSize(int _fontSize,  String _unicodeString);
 				
-				int32_t getHeight(int32_t _fontSize);
+				int getHeight(int _fontSize);
 				float getSizeWithHeight(float _fontHeight);
 				
-				void generateKerning(int32_t _fontSize, List<ewol::GlyphProperty>& _listGlyph);
+				void generateKerning(int _fontSize, List<ewol::GlyphProperty> _listGlyph);
 		};
 		void freeTypeInit();
 		void freeTypeUnInit();

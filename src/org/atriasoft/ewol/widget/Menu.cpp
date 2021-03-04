@@ -19,7 +19,7 @@ ETK_DECLARE_TYPE(ewol::widget::Menu);
 ewol::widget::Menu::Menu() :
   signalSelect(this, "select", "") {
 	addObjectType("ewol::widget::Menu");
-	m_staticId = 666;
+	this.staticObjectId = 666;
 	propertyLockExpand.setDirect(Vector2b(true,true));
 }
 
@@ -32,298 +32,298 @@ void ewol::widget::Menu::subWidgetRemoveAll() {
 	ewol::widget::Sizer::subWidgetRemoveAll();
 }
 
-int32_t ewol::widget::Menu::subWidgetAdd(ewol::WidgetShared _newWidget) {
+int ewol::widget::Menu::subWidgetAdd(Widget _newWidget) {
 	Log.error("Not availlable");
 	return -1;
 }
 
-void ewol::widget::Menu::subWidgetRemove(ewol::WidgetShared _newWidget) {
+void ewol::widget::Menu::subWidgetRemove(Widget _newWidget) {
 	Log.error("Not availlable");
 }
 
-void ewol::widget::Menu::subWidgetUnLink(ewol::WidgetShared _newWidget) {
+void ewol::widget::Menu::subWidgetUnLink(Widget _newWidget) {
 	Log.error("Not availlable");
 }
 
 void ewol::widget::Menu::clear() {
-	m_listElement.clear();
+	this.listElement.clear();
 }
 
-int32_t ewol::widget::Menu::addTitle(const etk::String& _label,
-                                     const etk::String& _image,
-                                     const etk::String& _message) {
+int ewol::widget::Menu::addTitle( String _label,
+                                      String _image,
+                                      String _message) {
 	return add(-1, _label, _image, _message);
 }
 
-static const char* eventButtonPressed = "menu-local-pressed";
+static  char* eventButtonPressed = "menu-local-pressed";
 
-int32_t ewol::widget::Menu::get(const etk::String& _label) {
-	for (auto &it : m_listElement) {
-		if (it.m_label == _label) {
-			return it.m_localId;
+int ewol::widget::Menu::get( String _label) {
+	for (auto it : this.listElement) {
+		if (it.this.label == _label) {
+			return it.this.localId;
 		}
 	}
 	return -1;
 }
 
-int32_t ewol::widget::Menu::add(int32_t _parent,
-                                const etk::String& _label,
-                                const etk::String& _image,
-                                const etk::String& _message) {
+int ewol::widget::Menu::add(int _parent,
+                                 String _label,
+                                 String _image,
+                                 String _message) {
 	// try to find one already created:
-	int32_t previous = get(_label);
+	int previous = get(_label);
 	if (previous != -1) {
 		return previous;
 	}
 	ewol::widget::MenuElement tmpObject;
-	tmpObject.m_localId = m_staticId++;
-	tmpObject.m_parentId = _parent;
-	tmpObject.m_label = _label;
-	tmpObject.m_image = _image;
-	tmpObject.m_message = _message;
-	if (tmpObject.m_parentId == -1) {
-		ewol::widget::ButtonShared myButton = ewol::widget::Button::create();
+	tmpObject.this.localId = this.staticObjectId++;
+	tmpObject.this.parentId = _parent;
+	tmpObject.this.label = _label;
+	tmpObject.this.image = _image;
+	tmpObject.this.message = _message;
+	if (tmpObject.this.parentId == -1) {
+		ewol::widget::Button myButton = ewol::widget::Button::create();
 		if (myButton == null) {
 			Log.error("Allocation button error");
-			return tmpObject.m_localId;
+			return tmpObject.this.localId;
 		}
-		if (tmpObject.m_image.size()!=0) {
-			etk::String composeString ="<sizer mode='hori' expand='true,false' fill='true,true'>\n";
-			if (etk::end_with(tmpObject.m_image, ".edf") == true) {
-				composeString+="    <image src='" + tmpObject.m_image + "' size='8,8mm' distance-field='true'/>\n";
+		if (tmpObject.this.image.size()!=0) {
+			String composeString ="<sizer mode='hori' expand='true,false' fill='true,true'>\n";
+			if (etk::end_with(tmpObject.this.image, ".edf") == true) {
+				composeString+="    <image src='" + tmpObject.this.image + "' size='8,8mm' distance-field='true'/>\n";
 			} else {
-				composeString+="    <image src='" + tmpObject.m_image + "' size='8,8mm'/>\n";
+				composeString+="    <image src='" + tmpObject.this.image + "' size='8,8mm'/>\n";
 			}
-			composeString+="    <label><left>" + tmpObject.m_label + "</left></label>\n";
+			composeString+="    <label><left>" + tmpObject.this.label + "</left></label>\n";
 			composeString+="</sizer>\n";
-			myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
+			myButton.setSubWidget(ewol::widget::composerGenerateString(composeString));
 		} else {
-			ewol::widget::LabelShared label = ewol::widget::Label::create();
-			label->propertyValue.set("<left>" + tmpObject.m_label + "</left>");
-			myButton->setSubWidget(label);
+			ewol::widget::Label label = ewol::widget::Label::create();
+			label.propertyValue.set("<left>" + tmpObject.this.label + "</left>");
+			myButton.setSubWidget(label);
 		}
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(myButton);
 		// keep the specific event ...
-		myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
-		tmpObject.m_widgetPointer = myButton;
+		myButton.signalPressed.connect(sharedFromThis(), ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
+		tmpObject.this.widgetPointer = myButton;
 	}
-	m_listElement.pushBack(tmpObject);
-	return tmpObject.m_localId;
+	this.listElement.pushBack(tmpObject);
+	return tmpObject.this.localId;
 }
 
-void ewol::widget::Menu::remove(int32_t _id) {
+void ewol::widget::Menu::remove(int _id) {
 	Log.todo("NOT remove...");
 }
 
 
-int32_t ewol::widget::Menu::addSpacer(int32_t _parent) {
+int ewol::widget::Menu::addSpacer(int _parent) {
 	ewol::widget::MenuElement tmpObject;
-	tmpObject.m_localId = m_staticId++;
-	tmpObject.m_parentId = _parent;
-	tmpObject.m_label = "";
-	tmpObject.m_image = "";
-	tmpObject.m_message = "";
-	if (tmpObject.m_parentId == -1) {
-		ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
+	tmpObject.this.localId = this.staticObjectId++;
+	tmpObject.this.parentId = _parent;
+	tmpObject.this.label = "";
+	tmpObject.this.image = "";
+	tmpObject.this.message = "";
+	if (tmpObject.this.parentId == -1) {
+		ewol::widget::Spacer mySpacer = ewol::widget::Spacer::create();
 		if (mySpacer == null) {
 			Log.error("Allocation spacer error");
-			return tmpObject.m_localId;
+			return tmpObject.this.localId;
 		}
-		mySpacer->propertyExpand.set(Vector2b(true,true));
-		mySpacer->propertyFill.set(Vector2b(true,true));
-		mySpacer->propertyMinSize.set(gale::Dimension(Vector2f(2,0), gale::distance::pixel));
-		mySpacer->propertyMaxSize.set(gale::Dimension(Vector2f(2,10000), gale::distance::pixel));
-		mySpacer->propertyColor.set(etk::Color<>(0,0,0,0xFF));
+		mySpacer.propertyExpand.set(Vector2b(true,true));
+		mySpacer.propertyFill.set(Vector2b(true,true));
+		mySpacer.propertyMinSize.set(gale::Dimension(Vector2f(2,0), gale::distance::pixel));
+		mySpacer.propertyMaxSize.set(gale::Dimension(Vector2f(2,10000), gale::distance::pixel));
+		mySpacer.propertyColor.set(etk::Color<>(0,0,0,0xFF));
 		// add it in the widget list
 		ewol::widget::Sizer::subWidgetAdd(mySpacer);
 	}
-	m_listElement.pushBack(tmpObject);
-	return tmpObject.m_localId;
+	this.listElement.pushBack(tmpObject);
+	return tmpObject.this.localId;
 }
 
 void ewol::widget::Menu::onButtonPressed(ewol::widget::ButtonWeak _button) {
-	ewol::widget::ButtonShared caller = _button.lock();
+	ewol::widget::Button caller = _button.lock();
 	if (caller == null) {
 		return;
 	}
-	for (auto &it : m_listElement) {
-		if (caller != it.m_widgetPointer.lock()) {
+	for (auto it : this.listElement) {
+		if (caller != it.this.widgetPointer.lock()) {
 			continue;
 		}
 		// 2 posible case (have a message or have a child ...
-		if (it.m_message.size() > 0) {
+		if (it.this.message.size() > 0) {
 			Log.debug("Menu  == > generate Event");
 			// Send a multicast event ...
-			signalSelect.emit(it.m_message);
-			ewol::widget::ContextMenuShared tmpContext = m_widgetContextMenu.lock();
+			signalSelect.emit(it.this.message);
+			ewol::widget::ContextMenu tmpContext = this.widgetContextMenu.lock();
 			if (tmpContext != null) {
 				Log.debug("Mark the menu to remove ...");
-				tmpContext->destroy();
+				tmpContext.destroy();
 			}
 			return;
 		}
 		Log.debug("Menu  == > load Sub Menu");
-		bool findChild = false;
-		for (auto &it2 : m_listElement) {
-			if (it.m_localId == it2.m_parentId) {
+		boolean findChild = false;
+		for (auto it2 : this.listElement) {
+			if (it.this.localId == it2.this.parentId) {
 				findChild = true;
 				break;
 			}
 		}
 		if (false == findChild) {
-			EWOL_WARNING("Event on menu element with no child an no event... label=" << it.m_label);
+			Log.warning("Event on menu element with no child an no event... label=" + it.this.label);
 			return;
 		}
 		// create a context menu:
-		ewol::widget::ContextMenuShared tmpContext = ewol::widget::ContextMenu::create();
-		m_widgetContextMenu = tmpContext;
+		ewol::widget::ContextMenu tmpContext = ewol::widget::ContextMenu::create();
+		this.widgetContextMenu = tmpContext;
 		if (tmpContext == null) {
 			Log.error("Allocation Error");
 			return;
 		}
 		// get the button widget:
 		Vector2f newPosition;
-		ewol::WidgetShared eventFromWidget = ememory::dynamicPointerCast<ewol::Widget>(caller);
+		Widget eventFromWidget = ememory::dynamicPointerCast<Widget>(caller);
 		if (eventFromWidget != null) {
-			Vector2f tmpOri  = eventFromWidget->getOrigin();
-			Vector2f tmpSize = eventFromWidget->getSize();
+			Vector2f tmpOri  = eventFromWidget.getOrigin();
+			Vector2f tmpSize = eventFromWidget.getSize();
 			// calculate the correct position
 			newPosition.setValue(tmpOri.x() + tmpSize.x()/2,
 			                     tmpOri.y() );
 		}
-		tmpContext->setPositionMark(ewol::widget::ContextMenu::markTop, newPosition);
-		ewol::widget::SizerShared mySizer;
-		ewol::widget::ButtonShared myButton;
+		tmpContext.setPositionMark(ewol::widget::ContextMenu::markTop, newPosition);
+		ewol::widget::Sizer mySizer;
+		ewol::widget::Button myButton;
 		mySizer = ewol::widget::Sizer::create();
 		if (mySizer != null) {
-			mySizer->propertyMode.set(widget::Sizer::modeVert);
-			mySizer->propertyLockExpand.set(Vector2f(true,true));
-			mySizer->propertyFill.set(Vector2f(true,true));
+			mySizer.propertyMode.set(widget::Sizer::modeVert);
+			mySizer.propertyLockExpand.set(Vector2f(true,true));
+			mySizer.propertyFill.set(Vector2f(true,true));
 			// set it in the pop-up-system:
-			tmpContext->setSubWidget(mySizer);
-			bool menuHaveImage = false;
-			for (auto &it2 : m_listElement) {
-				if (it.m_localId != it2.m_parentId) {
+			tmpContext.setSubWidget(mySizer);
+			boolean menuHaveImage = false;
+			for (auto it2 : this.listElement) {
+				if (it.this.localId != it2.this.parentId) {
 					continue;
 				}
-				if (it2.m_image.size()!=0) {
+				if (it2.this.image.size()!=0) {
 					menuHaveImage = true;
 					break;
 				}
 			}
-			for (int64_t iii=m_listElement.size()-1; iii>=0; --iii) {
-				if (it.m_localId != m_listElement[iii].m_parentId) {
+			for (long iii=this.listElement.size()-1; iii>=0; --iii) {
+				if (it.this.localId != this.listElement[iii].this.parentId) {
 					continue;
 				}
-				if (m_listElement[iii].m_message == "" && m_listElement[iii].m_label == "") {
-					ewol::widget::SpacerShared mySpacer = ewol::widget::Spacer::create();
+				if (this.listElement[iii].this.message == "" LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.listElement[iii].this.label == "") {
+					ewol::widget::Spacer mySpacer = ewol::widget::Spacer::create();
 					if (mySpacer == null) {
 						Log.error("Allocation spacer error");
 						continue;
 					}
-					mySpacer->propertyExpand.set(Vector2b(true,true));
-					mySpacer->propertyFill.set(Vector2b(true,true));
-					mySpacer->propertyMinSize.set(gale::Dimension(Vector2f(0,2), gale::distance::pixel));
-					mySpacer->propertyMaxSize.set(gale::Dimension(Vector2f(10000,2), gale::distance::pixel));
-					mySpacer->propertyColor.set(etk::Color<>(0,0,0,0xFF));
+					mySpacer.propertyExpand.set(Vector2b(true,true));
+					mySpacer.propertyFill.set(Vector2b(true,true));
+					mySpacer.propertyMinSize.set(gale::Dimension(Vector2f(0,2), gale::distance::pixel));
+					mySpacer.propertyMaxSize.set(gale::Dimension(Vector2f(10000,2), gale::distance::pixel));
+					mySpacer.propertyColor.set(etk::Color<>(0,0,0,0xFF));
 					// add it in the widget list
-					mySizer->subWidgetAdd(mySpacer);
+					mySizer.subWidgetAdd(mySpacer);
 				} else {
 					myButton = ewol::widget::Button::create();
 					if (myButton == null) {
 						Log.error("Allocation Error");
 						continue;
 					}
-					myButton->propertyExpand.set(Vector2b(true,true));
-					myButton->propertyFill.set(Vector2b(true,true));
+					myButton.propertyExpand.set(Vector2b(true,true));
+					myButton.propertyFill.set(Vector2b(true,true));
 					// set callback
-					myButton->signalPressed.connect(sharedFromThis(), &ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
+					myButton.signalPressed.connect(sharedFromThis(), ewol::widget::Menu::onButtonPressed, ewol::widget::ButtonWeak(myButton));
 					// add it in the widget list
-					mySizer->subWidgetAdd(myButton);
-					if (m_listElement[iii].m_image.size() != 0) {
-						etk::String composeString;
+					mySizer.subWidgetAdd(myButton);
+					if (this.listElement[iii].this.image.size() != 0) {
+						String composeString;
 						composeString+= "    <sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n";
-						if (etk::end_with(m_listElement[iii].m_image, ".edf") == true) {
-							composeString+="        <image src='" + m_listElement[iii].m_image + "' size='8,8mm' distance-field='true'/>\n";
+						if (etk::end_with(this.listElement[iii].this.image, ".edf") == true) {
+							composeString+="        <image src='" + this.listElement[iii].this.image + "' size='8,8mm' distance-field='true'/>\n";
 						} else {
-							composeString+="        <image src='" + m_listElement[iii].m_image + "' size='8,8mm'/>\n";
+							composeString+="        <image src='" + this.listElement[iii].this.image + "' size='8,8mm'/>\n";
 						}
-						composeString+="        <label exand='true,true' fill='true,true'><left>" + m_listElement[iii].m_label + "</left></label>\n";
+						composeString+="        <label exand='true,true' fill='true,true'><left>" + this.listElement[iii].this.label + "</left></label>\n";
 						composeString+="    </sizer>\n";
-						myButton->setSubWidget(ewol::widget::composerGenerateString(composeString));
+						myButton.setSubWidget(ewol::widget::composerGenerateString(composeString));
 					} else {
 						if (menuHaveImage == true) {
-							myButton->setSubWidget(ewol::widget::composerGenerateString(
-							        etk::String() +
+							myButton.setSubWidget(ewol::widget::composerGenerateString(
+							        String() +
 							        "	<sizer mode='hori' expand='true,false' fill='true,true' lock='true'>\n"
 							        "		<spacer min-size='8,0mm'/>\n"
-							        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + m_listElement[iii].m_label + "</left>]]></label>\n"
+							        "		<label exand='true,true' fill='true,true'><![CDATA[<left>" + this.listElement[iii].this.label + "</left>]]></label>\n"
 							        "	</sizer>\n")
 							    );
 						} else {
-							ewol::widget::LabelShared tmpLabel = widget::Label::create();
+							ewol::widget::Label tmpLabel = widget::Label::create();
 							if (tmpLabel != null) {
-								tmpLabel->propertyValue.set(etk::String("<left>") + m_listElement[iii].m_label + "</left>\n");
-								tmpLabel->propertyExpand.set(Vector2b(true,false));
-								tmpLabel->propertyFill.set(Vector2b(true,true));
-								myButton->setSubWidget(tmpLabel);
+								tmpLabel.propertyValue.set(String("<left>") + this.listElement[iii].this.label + "</left>\n");
+								tmpLabel.propertyExpand.set(Vector2b(true,false));
+								tmpLabel.propertyFill.set(Vector2b(true,true));
+								myButton.setSubWidget(tmpLabel);
 							}
 						}
 					}
-					m_listElement[iii].m_widgetPointer = myButton;
+					this.listElement[iii].this.widgetPointer = myButton;
 				}
 			}
 		}
-		ewol::widget::WindowsShared currentWindows = getWindows();
+		ewol::widget::Windows currentWindows = getWindows();
 		if (currentWindows == null) {
 			Log.error("Can not get the curent Windows...");
 		} else {
-			currentWindows->popUpWidgetPush(tmpContext);
+			currentWindows.popUpWidgetPush(tmpContext);
 		}
 		return;
 	}
 }
 
-bool ewol::widget::Menu::loadXML(const exml::Element& _node) {
+boolean ewol::widget::Menu::loadXML( exml::Element _node) {
 	if (_node.exist() == false) {
 		return false;
 	}
 	// parse generic properties:
-	ewol::Widget::loadXML(_node);
+	Widget::loadXML(_node);
 	// parse all the elements :
-	for (const auto nodeIt : _node.nodes) {
-		const exml::Element pNode = nodeIt.toElement();
+	for ( auto nodeIt : _node.nodes) {
+		 exml::Element pNode = nodeIt.toElement();
 		if (pNode.exist() == false) {
 			// trash here all that is not element
 			continue;
 		}
-		etk::String widgetName = pNode.getValue();
-		Log.info("Get node : " << pNode);
+		String widgetName = pNode.getValue();
+		Log.info("Get node : " + pNode);
 		if (widgetName == "elem") {
 			// <elem title="_T{Title of the button}" image="DATA:///List.svg" event="menu:exit">
-			int32_t idMenu = addTitle(pNode.attributes["title"], pNode.attributes["image"], pNode.attributes["event"]);
-			for (const auto nodeIt2 : pNode.nodes) {
+			int idMenu = addTitle(pNode.attributes["title"], pNode.attributes["image"], pNode.attributes["event"]);
+			for ( auto nodeIt2 : pNode.nodes) {
 				
-				const exml::Element pNode2 = nodeIt2.toElement();
+				 exml::Element pNode2 = nodeIt2.toElement();
 				if (pNode2.exist() == false) {
 					// trash here all that is not element
 					continue;
 				}
-				etk::String widgetName2 = pNode2.getValue();
+				String widgetName2 = pNode2.getValue();
 				if (widgetName2 == "elem") {
 					// <elem title="_T{Title of the button}" image="DATA:///List.svg" event="menu:exit">
 					add(idMenu, pNode2.attributes["title"], pNode2.attributes["image"], pNode2.attributes["event"]);
 				} else if (widgetName2 == "separator") {
 					addSpacer(idMenu);
 				} else {
-					Log.error("[" << getId() << "] {" << getObjectType() << "} (l " << pNode2.getPos() << ") Unknown basic node='" << widgetName2 << "' not in : [elem,separator]" );
+					Log.error("[" + getId() + "] {" + getObjectType() + "} (l " + pNode2.getPos() + ") Unknown basic node='" + widgetName2 + "' not in : [elem,separator]" );
 				}
 			}
 		} else if (widgetName == "separator") {
 			addSpacer();
 		} else {
-			Log.error("[" << getId() << "] {" << getObjectType() << "} (l " << pNode.getPos() << ") Unknown basic node='" << widgetName << "' not in : [elem,separator]" );
+			Log.error("[" + getId() + "] {" + getObjectType() + "} (l " + pNode.getPos() + ") Unknown basic node='" + widgetName + "' not in : [elem,separator]" );
 		}
 	}
 	return true;

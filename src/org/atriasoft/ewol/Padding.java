@@ -14,30 +14,30 @@ namespace ewol {
 	 */
 	class Padding {
 		private:
-			float m_value[4]; //!< this represent the 4 padding value Left top right buttom (like css)
+			float this.value[4]; //!< this represent the 4 padding value Left top right buttom (like css)
 		public:
 			Padding();
 			Padding(float _xl, float _yt=0.0f, float _xr=0.0f, float _yb=0.0f);
 			void setValue(float _xl, float _yt=0.0f, float _xr=0.0f, float _yb=0.0f);
-			float x() const;
-			float y() const;
-			float xLeft() const;
+			float x() ;
+			float y() ;
+			float xLeft() ;
 			void setXLeft(float _val);
-			float xRight() const;
+			float xRight() ;
 			void setXRight(float _val);
-			float yTop() const;
+			float yTop() ;
 			void setYTop(float _val);
-			float yButtom() const;
+			float yButtom() ;
 			void setYButtom(float _val);
 			/**
 			 * @brief Add a vector to this one 
 			 * @param _v The vector to add to this one
 			 */
-			Padding& operator+=(const Padding& _v);
+			Padding operator+=( Padding _v);
 			//! @previous
-			Padding operator+(const Padding& _v);
+			Padding operator+( Padding _v);
 			
 	};
-	etk::Stream& operator <<(etk::Stream& _os, const ewol::Padding& _obj);
+	etk::Stream operator +(etk::Stream _os,  ewol::Padding _obj);
 };
 

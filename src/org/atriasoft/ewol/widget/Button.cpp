@@ -12,10 +12,10 @@
 ETK_DECLARE_TYPE(ewol::widget::Button);
 ETK_DECLARE_TYPE(ewol::widget::Button::buttonLock);
 // DEFINE for the shader display system:
-const static int32_t STATUS_UP(0);
-const static int32_t STATUS_HOVER(2);
-const static int32_t STATUS_PRESSED(1);
-const static int32_t STATUS_DOWN(3);
+ static int STATUS_UP(0);
+ static int STATUS_HOVER(2);
+ static int STATUS_PRESSED(1);
+ static int STATUS_DOWN(3);
 
 ewol::widget::Button::Button() :
   signalPressed(this, "pressed", "Button is pressed"),
@@ -24,15 +24,15 @@ ewol::widget::Button::Button() :
   signalEnter(this, "enter", "The cursor enter inside the button"),
   signalLeave(this, "leave", "the cursor leave the button"),
   signalValue(this, "value", "button value change"),
-  propertyShape(this, "shape", etk::Uri("THEME_GUI:///Button.json?lib=ewol"), "The display name for config file", &ewol::widget::Button::onChangePropertyShape),
-  propertyValue(this, "value", false, "Value of the Button", &ewol::widget::Button::onChangePropertyValue),
-  propertyLock(this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder", &ewol::widget::Button::onChangePropertyLock),
-  propertyToggleMode(this, "toggle", false, "The Button can toogle", &ewol::widget::Button::onChangePropertyToggleMode),
-  propertyEnableSingle(this, "enable-single", false, "If one element set in the Button ==> display only set", &ewol::widget::Button::onChangePropertyEnableSingle),
-  m_mouseHover(false),
-  m_buttonPressed(false),
-  m_selectableAreaPos(0,0),
-  m_selectableAreaSize(0,0) {
+  propertyShape(this, "shape", etk::Uri("THEME_GUI:///Button.json?lib=ewol"), "The display name for config file", ewol::widget::Button::onChangePropertyShape),
+  propertyValue(this, "value", false, "Value of the Button", ewol::widget::Button::onChangePropertyValue),
+  propertyLock(this, "lock", lockNone, "Lock the button in a special state to permit changing state only by the coder", ewol::widget::Button::onChangePropertyLock),
+  propertyToggleMode(this, "toggle", false, "The Button can toogle", ewol::widget::Button::onChangePropertyToggleMode),
+  propertyEnableSingle(this, "enable-single", false, "If one element set in the Button ==> display only set", ewol::widget::Button::onChangePropertyEnableSingle),
+  this.mouseHover(false),
+  this.buttonPressed(false),
+  this.selectableAreaPos(0,0),
+  this.selectableAreaSize(0,0) {
 	addObjectType("ewol::widget::Button");
 	
 	// set property list:
@@ -59,22 +59,22 @@ ewol::widget::Button::~Button() {
 }
 
 void ewol::widget::Button::onChangeSize() {
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = this.shaper.getPadding();
 	ewol::Padding ret = onChangeSizePadded(padding);
-	//Log.debug(" configuring : origin=" << origin << " size=" << subElementSize << "");
-	m_selectableAreaPos = Vector2f(ret.xLeft(), ret.yButtom());
-	m_selectableAreaSize = m_size - (m_selectableAreaPos + Vector2f(ret.xRight(), ret.yTop()));
+	//Log.debug(" configuring : origin=" + origin + " size=" + subElementSize + "");
+	this.selectableAreaPos = Vector2f(ret.xLeft(), ret.yButtom());
+	this.selectableAreaSize = this.size - (this.selectableAreaPos + Vector2f(ret.xRight(), ret.yTop()));
 }
 
 
 void ewol::widget::Button::calculateMinMaxSize() {
-	ewol::Padding padding = m_shaper.getPadding();
+	ewol::Padding padding = this.shaper.getPadding();
 	calculateMinMaxSizePadded(padding);
 }
 
 void ewol::widget::Button::onDraw() {
 	// draw the shaaper (if needed indeed)
-	m_shaper.draw();
+	this.shaper.draw();
 }
 
 void ewol::widget::Button::onRegenerateDisplay() {
@@ -82,70 +82,70 @@ void ewol::widget::Button::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	ewol::Padding padding = m_shaper.getPadding();
-	m_shaper.setShape(Vector2f(0,0),
-	                  m_size,
-	                  Vector2fClipInt32(m_selectableAreaPos+Vector2f(padding.xLeft(),padding.yButtom()) ),
-	                  Vector2fClipInt32(m_selectableAreaSize-Vector2f(padding.x(),padding.y()) ) );
-	//Log.error("pos=" << m_origin << " size=" << m_size);
+	ewol::Padding padding = this.shaper.getPadding();
+	this.shaper.setShape(Vector2f(0,0),
+	                  this.size,
+	                  Vector2fClipInt32(this.selectableAreaPos+Vector2f(padding.xLeft(),padding.yButtom()) ),
+	                  Vector2fClipInt32(this.selectableAreaSize-Vector2f(padding.x(),padding.y()) ) );
+	//Log.error("pos=" + this.origin + " size=" + this.size);
 }
 
-bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
-	Log.verbose("Event on BT : " << _event);
+boolean ewol::widget::Button::onEventInput( ewol::event::Input _event) {
+	Log.verbose("Event on BT : " + _event);
 	// disable event in the lock access mode :
 	if(ewol::widget::Button::lockAccess == *propertyLock) {
 		return false;
 	}
-	if(    _event.getStatus() == gale::key::status::leave
-	    || _event.getStatus() == gale::key::status::abort) {
-		m_mouseHover = false;
-		m_buttonPressed = false;
+	if(    _event.getStatus() == KeyStatus::leave
+	    || _event.getStatus() == KeyStatus::abort) {
+		this.mouseHover = false;
+		this.buttonPressed = false;
 	} else {
 		Vector2f relativePos = relativePosition(_event.getPos());
 		// prevent error from ouside the button
-		if(    relativePos.x() < m_selectableAreaPos.x()
-		    || relativePos.y() < m_selectableAreaPos.y()
-		    || relativePos.x() > m_selectableAreaPos.x() + m_selectableAreaSize.x()
-		    || relativePos.y() > m_selectableAreaPos.y() + m_selectableAreaSize.y() ) {
-			m_mouseHover = false;
-			m_buttonPressed = false;
+		if(    relativePos.x() < this.selectableAreaPos.x()
+		    || relativePos.y() < this.selectableAreaPos.y()
+		    || relativePos.x() > this.selectableAreaPos.x() + this.selectableAreaSize.x()
+		    || relativePos.y() > this.selectableAreaPos.y() + this.selectableAreaSize.y() ) {
+			this.mouseHover = false;
+			this.buttonPressed = false;
 		} else {
-			m_mouseHover = true;
+			this.mouseHover = true;
 		}
 	}
-	Log.verbose("Event on BT ... mouse hover : " << m_mouseHover);
-	if (m_mouseHover == true) {
+	Log.verbose("Event on BT ... mouse hover : " + this.mouseHover);
+	if (this.mouseHover == true) {
 		if (_event.getId() == 1) {
-			if(_event.getStatus() == gale::key::status::down) {
-				Log.verbose(*propertyName << " : Generate event : " << signalDown);
+			if(_event.getStatus() == KeyStatus::down) {
+				Log.verbose(*propertyName + " : Generate event : " + signalDown);
 				signalDown.emit();
-				m_buttonPressed = true;
+				this.buttonPressed = true;
 				markToRedraw();
 			}
-			if(_event.getStatus() == gale::key::status::up) {
-				Log.verbose(*propertyName << " : Generate event : " << signalUp);
+			if(_event.getStatus() == KeyStatus::up) {
+				Log.verbose(*propertyName + " : Generate event : " + signalUp);
 				signalUp.emit();
-				m_buttonPressed = false;
+				this.buttonPressed = false;
 				markToRedraw();
 			}
-			if(_event.getStatus() == gale::key::status::pressSingle) {
+			if(_event.getStatus() == KeyStatus::pressSingle) {
 				if (    (    *propertyValue == true
-				          && *propertyLock == ewol::widget::Button::lockWhenPressed)
+				          LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM *propertyLock == ewol::widget::Button::lockWhenPressed)
 				     || (    *propertyValue == false
-				          && *propertyLock == ewol::widget::Button::lockWhenReleased) ) {
+				          LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM *propertyLock == ewol::widget::Button::lockWhenReleased) ) {
 					// nothing to do : Lock mode ...
 					// user might set himself the new correct value with @ref setValue(xxx)
 				} else {
 					// inverse value :
 					propertyValue.set((*propertyValue)?false:true);
-					Log.verbose(*propertyName << " : Generate event : " << signalPressed);
+					Log.verbose(*propertyName + " : Generate event : " + signalPressed);
 					signalPressed.emit();
-					Log.verbose(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue );
+					Log.verbose(*propertyName + " : Generate event : " + signalValue + " val=" + *propertyValue );
 					signalValue.emit(*propertyValue);
 					if(    *propertyToggleMode == false
-					    && *propertyValue == true) {
+					    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM *propertyValue == true) {
 						propertyValue.set(false);
-						Log.verbose(*propertyName << " : Generate event : " << signalValue << " val=" << *propertyValue);
+						Log.verbose(*propertyName + " : Generate event : " + signalValue + " val=" + *propertyValue);
 						signalValue.emit(*propertyValue);
 					}
 				}
@@ -154,15 +154,15 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 		}
 	}
 	CheckStatus();
-	return m_mouseHover;
+	return this.mouseHover;
 }
 
 
-bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
-	//Log.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    _event.getType() == gale::key::keyboard::character
-	    && _event.getStatus() == gale::key::status::down
-	    && _event.getChar() == '\r') {
+boolean ewol::widget::Button::onEventEntry( ewol::event::Entry _event) {
+	//Log.debug("BT PRESSED : \"" + UTF8_data + "\" size=" + strlen(UTF8_data));
+	if(    _event.getType() == KeyKeyboard::character
+	    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getStatus() == KeyStatus::down
+	    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _event.getChar() == '\r') {
 		signalEnter.emit();
 		return true;
 	}
@@ -170,17 +170,17 @@ bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 }
 
 void ewol::widget::Button::onLostFocus() {
-	m_buttonPressed = false;
-	Log.verbose(propertyName.get() << " : Remove Focus ...");
+	this.buttonPressed = false;
+	Log.verbose(propertyName.get() + " : Remove Focus ...");
 	CheckStatus();
 }
 
 void ewol::widget::Button::CheckStatus() {
-	if (m_buttonPressed == true) {
+	if (this.buttonPressed == true) {
 		changeStatusIn(STATUS_PRESSED);
 		return;
 	}
-	if (m_mouseHover == true) {
+	if (this.mouseHover == true) {
 		changeStatusIn(STATUS_HOVER);
 		return;
 	}
@@ -190,42 +190,42 @@ void ewol::widget::Button::CheckStatus() {
 	changeStatusIn(STATUS_UP);
 }
 
-void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
-	if (m_shaper.changeStatusIn(_newStatusId) == true) {
-		m_PCH = getObjectManager().periodicCall.connect(this, &ewol::widget::Button::periodicCall);
+void ewol::widget::Button::changeStatusIn(int _newStatusId) {
+	if (this.shaper.changeStatusIn(_newStatusId) == true) {
+		this.PCH = getObjectManager().periodicCall.connect(this, ewol::widget::Button::periodicCall);
 		markToRedraw();
 	}
 }
 
 
-void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
-	if (m_shaper.periodicCall(_event) == false) {
-		m_PCH.disconnect();
+void ewol::widget::Button::periodicCall( ewol::event::Time _event) {
+	if (this.shaper.periodicCall(_event) == false) {
+		this.PCH.disconnect();
 	}
 	markToRedraw();
 }
 
 void ewol::widget::Button::onChangePropertyShape() {
-	m_shaper.setSource(*propertyShape);
+	this.shaper.setSource(*propertyShape);
 	markToRedraw();
 }
 void ewol::widget::Button::onChangePropertyValue() {
 	if (*propertyToggleMode == true) {
 		if (*propertyValue == false) {
-			m_idWidgetDisplayed = 0;
+			this.idWidgetDisplayed = 0;
 		} else {
-			m_idWidgetDisplayed = 1;
+			this.idWidgetDisplayed = 1;
 		}
 	}
 	if (*propertyEnableSingle == true) {
-		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == null
-		     && m_subWidget[1] != null) {
-			m_idWidgetDisplayed = 1;
-		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == null
-		            && m_subWidget[0] != null) {
-			m_idWidgetDisplayed = 0;
+		if (    this.idWidgetDisplayed == 0
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[0] == null
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] != null) {
+			this.idWidgetDisplayed = 1;
+		} else if (    this.idWidgetDisplayed == 1
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] == null
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[0] != null) {
+			this.idWidgetDisplayed = 0;
 		}
 	}
 	CheckStatus();
@@ -234,8 +234,8 @@ void ewol::widget::Button::onChangePropertyValue() {
 
 void ewol::widget::Button::onChangePropertyLock() {
 	if(ewol::widget::Button::lockAccess == *propertyLock) {
-		m_buttonPressed = false;
-		m_mouseHover = false;
+		this.buttonPressed = false;
+		this.mouseHover = false;
 	}
 	CheckStatus();
 	markToRedraw();
@@ -247,23 +247,23 @@ void ewol::widget::Button::onChangePropertyToggleMode() {
 		// TODO : change display and send event ...
 	}
 	if (*propertyToggleMode == false) {
-		m_idWidgetDisplayed = 0;
+		this.idWidgetDisplayed = 0;
 	} else {
 		if (*propertyValue == false) {
-			m_idWidgetDisplayed = 0;
+			this.idWidgetDisplayed = 0;
 		} else {
-			m_idWidgetDisplayed = 1;
+			this.idWidgetDisplayed = 1;
 		}
 	}
 	if (*propertyEnableSingle == true) {
-		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == null
-		     && m_subWidget[1] != null) {
-			m_idWidgetDisplayed = 1;
-		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == null
-		            && m_subWidget[0] != null) {
-			m_idWidgetDisplayed = 0;
+		if (    this.idWidgetDisplayed == 0
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[0] == null
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] != null) {
+			this.idWidgetDisplayed = 1;
+		} else if (    this.idWidgetDisplayed == 1
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] == null
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[0] != null) {
+			this.idWidgetDisplayed = 0;
 		}
 	}
 	CheckStatus();
@@ -272,17 +272,17 @@ void ewol::widget::Button::onChangePropertyToggleMode() {
 
 void ewol::widget::Button::onChangePropertyEnableSingle() {
 	if (*propertyEnableSingle == true) {
-		if (    m_idWidgetDisplayed == 0
-		     && m_subWidget[0] == null
-		     && m_subWidget[1] != null) {
-			m_idWidgetDisplayed = 1;
-		} else if (    m_idWidgetDisplayed == 1
-		            && m_subWidget[1] == null
-		            && m_subWidget[0] != null) {
-			m_idWidgetDisplayed = 0;
-		} else if (    m_subWidget[0] == null
-		            && m_subWidget[1] == null) {
-			m_idWidgetDisplayed = 0;
+		if (    this.idWidgetDisplayed == 0
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[0] == null
+		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] != null) {
+			this.idWidgetDisplayed = 1;
+		} else if (    this.idWidgetDisplayed == 1
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] == null
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[0] != null) {
+			this.idWidgetDisplayed = 0;
+		} else if (    this.subWidget[0] == null
+		            LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[1] == null) {
+			this.idWidgetDisplayed = 0;
 		}
 	}
 }

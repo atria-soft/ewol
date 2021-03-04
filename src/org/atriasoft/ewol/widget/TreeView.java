@@ -15,7 +15,7 @@
 namespace ewol {
 	namespace widget {
 		class TreeView;
-		using TreeViewShared = ememory::SharedPtr<ewol::widget::TreeView>;
+		using TreeView = ememory::Ptr<ewol::widget::TreeView>;
 		using TreeViewWeak = ememory::WeakPtr<ewol::widget::TreeView>;
 		
 		/**
@@ -29,9 +29,9 @@ namespace ewol {
 				eproperty::Value<bool> propertyTextIsDecorated; //!< Size of the icon.
 			protected:
 				TreeView();
-				void init() override;
+				void init() ;
 			public:
-				virtual ~TreeView();
+				 ~TreeView();
 			protected:
 				/**
 				 * @brief Calculate an element size to extimate the render size.
@@ -39,7 +39,7 @@ namespace ewol {
 				 * @param[in] _pos Position of colomn and Raw of the element.
 				 * @return The estimate size of the element.
 				 */
-				Vector2f calculateElementSize(const Vector2i& _pos) override;
+				Vector2f calculateElementSize( Vector2i _pos) ;
 				/**
 				 * @brief Draw an element in the specific size and position.
 				 * @param[in] _pos Position of colomn and Raw of the element.
@@ -47,13 +47,13 @@ namespace ewol {
 				 * @param[in] _size Render raw size
 				 * @return The estimate size of the element.
 				 */
-				void drawElement(const Vector2i& _pos, const Vector2f& _start, const Vector2f& _size) override;
+				void drawElement( Vector2i _pos,  Vector2f _start,  Vector2f _size) ;
 			protected:
-				virtual void onChangePropertyOffsetTreeView();
-				virtual void onChangePropertyTextDecorated();
+				 void onChangePropertyOffsetTreeView();
+				 void onChangePropertyTextDecorated();
 				
-				bool onItemEvent(const ewol::event::Input& _event, const Vector2i& _pos, const Vector2f& _mousePosition) override;
-				virtual void onItemExpandEvent(const Vector2i& _pos) { };
+				boolean onItemEvent( ewol::event::Input _event,  Vector2i _pos,  Vector2f _mousePosition) ;
+				 void onItemExpandEvent( Vector2i _pos) { };
 		};
 	};
 };

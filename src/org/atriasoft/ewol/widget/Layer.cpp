@@ -15,23 +15,23 @@ ewol::widget::Layer::Layer() {
 }
 
 ewol::widget::Layer::~Layer() {
-	Log.debug("[" << getId() << "] Layer : destroy");
+	Log.debug("[" + getId() + "] Layer : destroy");
 }
 
-ewol::WidgetShared ewol::widget::Layer::getWidgetAtPos(const Vector2f& _pos) {
+Widget ewol::widget::Layer::getWidgetAtPos( Vector2f _pos) {
 	if (*propertyHide == true) {
 		return null;
 	}
 	// for all element in the sizer ...
-	for (auto &it : m_subWidget) {
+	for (auto it : this.subWidget) {
 		if (it == null) {
 			continue;
 		}
-		Vector2f tmpSize = it->getSize();
-		Vector2f tmpOrigin = it->getOrigin();
-		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
-		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
-			ewol::WidgetShared tmpWidget = it->getWidgetAtPos(_pos);
+		Vector2f tmpSize = it.getSize();
+		Vector2f tmpOrigin = it.getOrigin();
+		if(    (tmpOrigin.x() <= _pos.x() LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM tmpOrigin.x() + tmpSize.x() >= _pos.x())
+		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (tmpOrigin.y() <= _pos.y() LOMLOMLOMLOMLOM tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
+			Widget tmpWidget = it.getWidgetAtPos(_pos);
 			if (tmpWidget != null) {
 				return tmpWidget;
 			}
