@@ -3,101 +3,95 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
+package org.atriasoft.ewol.resource.font;
 
-#include <ewol/resource/font/Kerning.hpp>
+import java.util.ArrayList;
+import java.util.List;
 
-namespace ewol {
-	/*
-	                             |            |          |            |            
-	                             |            |          |            |            
-	                             |            |          |            |            
-	                      Y      |            |          |            |            
-	                      ^      |------------|          |------------|            
-	                      |                                                        
-	     this.advance.y:/.  |                                                        
-	                 |    |                                                        
-	                 |    |                                                        
-	this.sizeTex.x/.   |    |         |------------|          |------------|         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |     A      |          |     G      |         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |            |          |            |         
-	           |     |    |         |            |          |            |         
-	           \.   |    |         |------------|          |------------|         
-	        /-.     |    |                                                        
-	        \-.     \.  |                                                        
-	this.bearing.y           |                                                        
-	                      |____*________________________*____________>>   X        
-	                                                                               
-	                                                                               
-	                           <-----------------------. : this.advance.x            
-	                                                                               
-	                                <-----------. : this.sizeTexture.x               
-	                                                                               
-	                           <--. : this.bearing.x                                 
-	                       
-	*/
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
+
+/*
+                             |            |          |            |            
+                             |            |          |            |            
+                             |            |          |            |            
+                      Y      |            |          |            |            
+                      ^      |------------|          |------------|            
+                      |                                                        
+        advance.y:/.  |                                                        
+                 |    |                                                        
+                 |    |                                                        
+   sizeTex.x/.   |    |         |------------|          |------------|         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |     A      |          |     G      |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+            \.   |    |         |------------|          |------------|         
+         /-.     |    |                                                        
+          \-.     \.  |                                                        
+  bearing.y           |                                                        
+                      |____*________________________*____________>>   X        
+                                                                               
+                                                                               
+                           <-----------------------. : advance.x            
+                                                                               
+                                <-----------. : sizeTexture.x               
+                                                                               
+                           <--. : bearing.x                                 
+                       
+*/
+/**
+ * @not_in_doc
+ */
+public class GlyphProperty {
+	public Character UVal = 0; //!< Unicode value
+	public boolean exist = true;
+	public int glyphIndex = 0; //!< Glyph index in the system
+	public Vector2i sizeTexture = new Vector2i(10, 10); //!< size of the element to display
+	public Vector2i bearing = new Vector2i(2, 2); //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
+	public Vector2i advance = new Vector2i(10, 10); //!< space use in the display for this specific char
+	public Vector2f texturePosStart = new Vector2f(0, 0); //!< Texture normalized position (START)
+	public Vector2f texturePosSize = new Vector2f(0, 0); //!< Texture normalized position (SIZE)
+	private final List<Kerning> kerning = new ArrayList<>(); //!< kerning values of link of all elements
+	
+	public GlyphProperty() {
+		
+	}
+	
 	/**
-	 * @not_in_doc
+	 * @brief get the status of the char, if it exist or not in the FONT
+	 * @return true if the char is availlable, false otherwise
 	 */
-	class GlyphProperty {
-		public:
-			Character this.UVal; //!< Unicode value
-		public:
-			boolean this.exist;
-		public:
-			int this.glyphIndex; //!< Glyph index in the system
-			Vector2i this.sizeTexture; //!< size of the element to display
-			Vector2i this.bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
-			Vector2i this.advance; //!< space use in the display for this specific char
-			Vector2f this.texturePosStart; //!< Texture normalized position (START)
-			Vector2f this.texturePosSize; //!< Texture normalized position (SIZE)
-		private:
-			List<ewol::Kerning> this.kerning; //!< kerning values of link of all elements
-		public:
-			GlyphProperty() :
-			  this.UVal(0),
-			  this.exist(true),
-			  this.glyphIndex(0),
-			  this.sizeTexture(10,10),
-			  this.bearing(2,2),
-			  this.advance(10,10),
-			  this.texturePosStart(0,0),
-			  this.texturePosSize(0,0) {
-				
-			};
-			float kerningGet( Character _charcode) {
-				for(int iii=0; iii<this.kerning.size(); iii++ ) {
-					if (this.kerning[iii].this.UVal == _charcode) {
-						return this.kerning[iii].this.value;
-					}
-				}
-				return 0;
-			};
-			void kerningAdd( Character _charcode, float _value) {
-				this.kerning.pushBack(ewol::Kerning(_charcode, _value));
-			};
-			void kerningClear() {
-				this.kerning.clear();
-			};
-			/**
-			 * @brief get the status of the char, if it exist or not in the FONT
-			 * @return true if the char is availlable, false otherwise
-			 */
-			boolean exist()  {
-				return this.exist;
-			};
-			/**
-			 * @brief set the element doen not exist !!!
-			 */
-			void setNotExist() {
-				this.exist = false;
-			};
-	};
-};
-
+	public boolean exist() {
+		return this.exist;
+	}
+	
+	public void kerningAdd(final Character _charcode, final float _value) {
+		this.kerning.add(new Kerning(_charcode, _value));
+	}
+	
+	public void kerningClear() {
+		this.kerning.clear();
+	}
+	
+	public float kerningGet(final Character _charcode) {
+		for (int iii = 0; iii < this.kerning.size(); iii++) {
+			if (this.kerning.get(iii).UVal == _charcode) {
+				return this.kerning.get(iii).value;
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * @brief set the element doen not exist !!!
+	 */
+	public void setNotExist() {
+		this.exist = false;
+	}
+}

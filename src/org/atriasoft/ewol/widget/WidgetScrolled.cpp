@@ -426,10 +426,10 @@ void ewol::widget::WidgetScrolled::systemDraw( ewol::DrawProperty _displayProp) 
 	if (this.scroollingMode == scroolModeCenter) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 		gale::openGL::setViewPort(this.origin, this.size);
-		mat4 tmpProjection = etk::matOrtho(-this.size.x()/2, this.size.x()/2, -this.size.y()/2, this.size.y()/2, -1, 1);
-		mat4 tmpScale = etk::matScale(Vector3f(this.zoom, this.zoom, 1.0) );
-		mat4 tmpTranslate = etk::matTranslate(Vector3f(-this.maxSize.x()/2, -this.maxSize.y()/2, -1.0) );
-		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+		Matrix4f tmpProjection = etk::matOrtho(-this.size.x()/2, this.size.x()/2, -this.size.y()/2, this.size.y()/2, -1, 1);
+		Matrix4f tmpScale = etk::matScale(Vector3f(this.zoom, this.zoom, 1.0) );
+		Matrix4f tmpTranslate = etk::matTranslate(Vector3f(-this.maxSize.x()/2, -this.maxSize.y()/2, -1.0) );
+		Matrix4f tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		gale::openGL::setMatrix(tmpMat);
 		// Call the widget drawing methode
@@ -437,9 +437,9 @@ void ewol::widget::WidgetScrolled::systemDraw( ewol::DrawProperty _displayProp) 
 	} if (this.scroollingMode == scroolModeGame) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 		gale::openGL::setViewPort(this.origin, this.size);
-		mat4 tmpProjection = etk::matOrtho(-this.size.x()/2, this.size.x()/2, -this.size.y()/2, this.size.y()/2, -1, 1);
-		mat4 tmpTranslate = etk::matTranslate(Vector3f( -this.maxSize.x()/2, -this.maxSize.y()/2, -1.0) );
-		mat4 tmpMat = tmpProjection * tmpTranslate;
+		Matrix4f tmpProjection = etk::matOrtho(-this.size.x()/2, this.size.x()/2, -this.size.y()/2, this.size.y()/2, -1, 1);
+		Matrix4f tmpTranslate = etk::matTranslate(Vector3f( -this.maxSize.x()/2, -this.maxSize.y()/2, -1.0) );
+		Matrix4f tmpMat = tmpProjection * tmpTranslate;
 		// set internal matrix system :
 		gale::openGL::setMatrix(tmpMat);
 		// Call the widget drawing methode

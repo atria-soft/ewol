@@ -1,0 +1,5 @@
+{
+	entry-shaper:"THEME_GUI:///SelectEntry.json?lib=ewol",
+	up-shaper:"THEME_GUI:///SelectBt.json?lib=ewol",
+	up-data:"<label>*</label>",
+}

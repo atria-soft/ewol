@@ -1,0 +1,6 @@
+{
+	"color": [
+		{ name:"background", color:"#0000" },
+		{ name:"foreground", color:"#000F" }
+	]
+}

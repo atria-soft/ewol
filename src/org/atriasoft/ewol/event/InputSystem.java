@@ -1,11 +1,10 @@
 package org.atriasoft.ewol.event;
 
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
-
-import jdk.internal.org.jline.reader.Widget;
 
 public class InputSystem {
 	public EventInput event;

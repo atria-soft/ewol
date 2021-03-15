@@ -135,7 +135,7 @@ public class WidgetManager {
 	 * @brief Get the current Focused widget.
 	 * @return The pointer on the current focused element.
 	 */
-	public public Widget focusGet() {
+	public Widget focusGet() {
 		return this.focusWidgetCurrent.get();
 	}
 	
@@ -160,11 +160,11 @@ public class WidgetManager {
 			focusWidgetCurrent.rmFocus();
 			focusWidgetCurrent = null;
 		}
-		if (_newWidget.propertyCanFocus.get() == false) {
+		if (_newWidget.propertyCanFocus == false) {
 			Log.debug("Widget can not have focus, id=" + _newWidget.getId());
 			return;
 		}
-		this.focusWidgetCurrent = _newWidget;
+		this.focusWidgetCurrent = new WeakReference<>(_newWidget);
 		if (_newWidget != null) {
 			Log.debug("Set focus on WidgetID=" + _newWidget.getId());
 			_newWidget.setFocus();
@@ -176,7 +176,7 @@ public class WidgetManager {
 	 */
 	public void focusRelease() {
 		final Widget focusWidgetDefault = this.focusWidgetDefault.get();
-		final Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
+		Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (focusWidgetDefault == focusWidgetCurrent) {
 			// nothink to do ...
 			return;
@@ -198,24 +198,24 @@ public class WidgetManager {
 	 * @param[in] _newWidget Widget that might get the focus (when nothing else).
 	 */
 	public void focusSetDefault(final Widget _newWidget) {
-		if (_newWidget != null && _newWidget.propertyCanFocus.get() == false) {
+		if (_newWidget != null && _newWidget.propertyCanFocus == false) {
 			Log.verbose("Widget can not have focus, id=" + _newWidget.getId());
 			return;
 		}
-		final EwolWidget focusWidgetDefault = this.focusWidgetDefault.lock();
-		final EwolWidget focusWidgetCurrent = this.focusWidgetCurrent.lock();
+		final Widget focusWidgetDefault = this.focusWidgetDefault.get();
+		final Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (focusWidgetDefault == focusWidgetCurrent) {
 			if (focusWidgetCurrent != null) {
 				Log.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
 				focusWidgetCurrent.rmFocus();
 			}
-			this.focusWidgetCurrent = _newWidget;
+			this.focusWidgetCurrent = new WeakReference<>(_newWidget);
 			if (_newWidget != null) {
 				Log.debug("Set focus on WidgetID=" + _newWidget.getId());
 				_newWidget.setFocus();
 			}
 		}
-		this.focusWidgetDefault = _newWidget;
+		this.focusWidgetDefault = new WeakReference<>(_newWidget);
 	}
 	
 	/**
@@ -253,7 +253,7 @@ public class WidgetManager {
 	 * @brief Set a callback when we need redraw the display (need by MacOs)
 	 * @param[in] _func function to call
 	 */
-	private void setCallbackonRedrawNeeded(final Runnable _func) {
+	public void setCallbackonRedrawNeeded(final Runnable _func) {
 		this.funcRedrawNeeded = _func;
 	}
 	

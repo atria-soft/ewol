@@ -35,7 +35,7 @@ namespace ewol {
 				 ~Text();
 			public:
 				 void drawD(boolean _disableDepthTest);
-				 void drawMT( mat4 _transformationMatrix, boolean _enableDepthTest);
+				 void drawMT( Matrix4f _transformationMatrix, boolean _enableDepthTest);
 			protected:
 				float this.size;
 			public:

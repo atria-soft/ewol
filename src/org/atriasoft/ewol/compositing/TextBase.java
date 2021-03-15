@@ -116,7 +116,7 @@ namespace ewol {
 					drawD(_disableDepthTest);
 				}
 				//! @previous
-				void draw( mat4 _transformationMatrix, boolean _enableDepthTest=false) {
+				void draw( Matrix4f _transformationMatrix, boolean _enableDepthTest=false) {
 					drawMT(_transformationMatrix, _enableDepthTest);
 				}
 				/**
@@ -124,7 +124,7 @@ namespace ewol {
 				 */
 				 void drawD(boolean _disableDepthTest) = 0;
 				//! @previous
-				 void drawMT( mat4 _transformationMatrix, boolean _enableDepthTest) = 0;
+				 void drawMT( Matrix4f _transformationMatrix, boolean _enableDepthTest) = 0;
 				/**
 				 * @brief clear all the registered element in the current element
 				 */

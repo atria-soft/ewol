@@ -1,0 +1,11 @@
+
+	box-size:20,
+	box-inside:12,
+	padding-left:10,
+	padding-right:10,
+	padding-top:10,
+	padding-buttom:10,
+	change-time:356,
+	program:"THEME_GUI:///CheckBox.prog?lib=ewol",
+	color:"THEME_COLOR:///CheckBox.json?lib=ewol"
+}

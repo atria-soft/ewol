@@ -192,7 +192,7 @@ void ewol::compositing::Shaper::draw(boolean _disableDepthTest) {
 	//glScalef(this.scaling.x, this.scaling.y, 1.0);
 	this.GLprogram.use();
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = gale::openGL::getMatrix();
+	Matrix4f tmpMatrix = gale::openGL::getMatrix();
 	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// position:
 	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);
@@ -641,8 +641,8 @@ boolean ewol::compositing::Shaper::hasSources() {
 }
 
 
- etk::Color<float> ewol::compositing::Shaper::getColor(int _id) {
-	static  etk::Color<float> errorValue(0,0,0,0);
+ Color ewol::compositing::Shaper::getColor(int _id) {
+	static  Color errorValue(0,0,0,0);
 	if (this.colorProperty == null) {
 		Log.warning("null of this.colorProperty ==> return #0000 for id " + _id);
 		return errorValue;

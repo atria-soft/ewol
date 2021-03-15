@@ -5,14 +5,21 @@
  */
 package org.atriasoft.ewol.context;
 
+import org.atriasoft.echrono.Clock;
+import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.ewol.event.EntrySystem;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.ObjectManager;
+import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.WidgetManager;
+import org.atriasoft.ewol.widget.Windows;
 import org.atriasoft.gale.Application;
 import org.atriasoft.gale.Gale;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.CommandLine;
+import org.atriasoft.gale.context.Context;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
@@ -27,11 +34,11 @@ public abstract class EwolContext extends Application {
 	 * @brief From everyware in the program, we can get the context inteface.
 	 * @return current reference on the instance.
 	 */
-	static EwolContext getContext() {
+	public static EwolContext getContext() {
 		return curentInterface;
 	}
 	
-	private final EwolApplication application; //!< Application handle
+	private EwolApplication application; //!< Application handle
 	
 	public EwolApplication getApplication() {
 		return this.application;
@@ -74,11 +81,12 @@ public abstract class EwolContext extends Application {
 	
 	private final InputManager input;
 	
+	@Override
 	public void onCreate(final Context _context) {
 		Log.info(" == > Ewol system create (BEGIN)");
 		// Add basic ewol translation:
-		etranslate::addPath("ewol", "DATA:///translate/ewol/?lib=ewol");
-		etranslate::autoDetectLanguage();
+		//etranslate::addPath("ewol", "DATA:///translate/ewol/?lib=ewol");
+		//etranslate::autoDetectLanguage();
 		// By default we set 2 themes (1 color and 1 shape ...) :
 		etk::theme::setNameDefault("GUI", "shape/square/");
 		etk::theme::setNameDefault("COLOR", "color/black/");
@@ -87,10 +95,10 @@ public abstract class EwolContext extends Application {
 			if (    _context.getCmd().get(iii) == "-h"
 			     || _context.getCmd().get(iii) == "--help") {
 				Log.print("ewol - help : ");
-				Log.print("    " + etk::getApplicationName() + " [options]");
+				Log.print("    xxxxxxxxxxxxx [options]");
 				Log.print("        -h/--help:    Display this help");
 				Log.print("    example:");
-				Log.print("        " + etk::getApplicationName() + " --help");
+				Log.print("        xxxxxxxxxxxxx --help");
 				// this is a global help system does not remove it
 				continue;
 			} else {
@@ -100,10 +108,13 @@ public abstract class EwolContext extends Application {
 			--iii;
 		}
 		
-		Log.info("EWOL v:" + ewol::getVersion());
+		//Log.info("EWOL v:" + ewol::getVersion());
 		// force a recalculation
 		/*
-		requestUpdateSize();
+		requestUpdateSize(){
+			Context context = gale::getContext();
+			context.requestUpdateSize();
+		}
 		#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
 			forceOrientation(ewol::screenLandscape);
 		#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
@@ -112,40 +123,43 @@ public abstract class EwolContext extends Application {
 			forceOrientation(ewol::screenAuto);
 		#endif
 		*/
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl == null) {
 			Log.error(" == > Create without application");
 			return;
 		}
-		appl.onCreate(*this);
+		appl.onCreate(this);
 		Log.info(" == > Ewol system create (END)");
 	}
 	
-	public abstract void onStart(final Context _context) {
+	@Override
+	public void onStart(final Context _context) {
 		Log.info(" == > Ewol system start (BEGIN)");
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl == null) {
 			// TODO : Request exit of the application .... with error ...
 			return;
 		}
-		appl.onStart(*this);
+		appl.onStart(this);
 		Log.info(" == > Ewol system start (END)");
 	}
 	
-	public abstract void onResume(final Context _context){
+	@Override
+	public void onResume(final Context _context) {
 		Log.info(" == > Ewol system resume (BEGIN)");
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl == null) {
 			return;
 		}
-		appl.onResume(*this);
+		appl.onResume(this);
 		Log.info(" == > Ewol system resume (END)");
 	}
 	
-	public abstract void onRegenerateDisplay(final Context _context) {
+	@Override
+	public void onRegenerateDisplay(final Context _context) {
 		//Log.info("REGENERATE_DISPLAY");
 		// check if the user selected a windows
-		ewol::widget::WindowsShared window = this.windowsCurrent;
+		final Windows window = this.windowsCurrent;
 		if (window == null) {
 			Log.debug("No windows ...");
 			return;
@@ -158,49 +172,53 @@ public abstract class EwolContext extends Application {
 		//markDrawingIsNeeded();
 	}
 	
-	public abstract void onDraw(final Context _context) {
+	@Override
+	public void onDraw(final Context _context) {
 		//Log.info("DRAW");
 		// clean internal data...
 		this.objectManager.cleanInternalRemoved();
 		// real draw...
-		ewol::widget::WindowsShared window = this.windowsCurrent;
+		final Windows window = this.windowsCurrent;
 		if (window == null) {
 			return;
 		}
 		window.sysDraw();
 	}
 	
-	public abstract void onPause(final Context _context){
+	@Override
+	public void onPause(final Context _context) {
 		Log.info(" == > Ewol system pause (BEGIN)");
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl == null) {
 			return;
 		}
-		appl.onPause(*this);
+		appl.onPause(this);
 		Log.info(" == > Ewol system pause (END)");
 	}
 	
-	public abstract void onStop(final Context _context){
+	@Override
+	public void onStop(final Context _context) {
 		Log.info(" == > Ewol system stop (BEGIN)");
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl == null) {
 			return;
 		}
-		appl.onStop(*this);
+		appl.onStop(this);
 		Log.info(" == > Ewol system stop (END)");
 	}
 	
-	public abstract void onDestroy(final Context _context){
+	@Override
+	public void onDestroy(final Context _context) {
 		Log.info(" == > Ewol system destroy (BEGIN)");
 		// Remove current windows
-		this.windowsCurrent.reset();
+		this.windowsCurrent = null;
 		// clean all widget and sub widget with their resources:
 		this.objectManager.cleanInternalRemoved();
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl != null) {
 			// call application to uninit
-			appl.onDestroy(*this);
-			this.application.reset();
+			appl.onDestroy(this);
+			this.application = null;
 		}
 		// internal clean elements
 		this.objectManager.cleanInternalRemoved();
@@ -211,29 +229,30 @@ public abstract class EwolContext extends Application {
 		Log.info(" == > Ewol system destroy (END)");
 	}
 	
-	public abstract void onKillDemand(final Context _context){
+	@Override
+	public void onKillDemand(final Context _context) {
 		Log.info(" == > User demand a destroy (BEGIN)");
-		EwolApplication appl = this.application;
+		final EwolApplication appl = this.application;
 		if (appl == null) {
 			exit(0);
 			return;
 		}
-		appl.onKillDemand(*this);
+		appl.onKillDemand(this);
 		Log.info(" == > User demand a destroy (END)");
 	}
 	
-	public abstract void onPointer(final KeyType _type, final int _pointerID, final Vector2f _pos, final KeyStatus _state) {
+	public void onPointer(final KeyType _type, final int _pointerID, final Vector2f _pos, final KeyStatus _state) {
 		switch (_state) {
-			case KeyStatus::move:
+			case move:
 				//Log.debug("Receive MSG : THREAD_INPUT_MOTION");
 				this.input.motion(_type, _pointerID, _pos);
 				break;
-			case KeyStatus::down:
-			case KeyStatus::downRepeate:
+			case down:
+			case downRepeate:
 				//Log.debug("Receive MSG : THREAD_INPUT_STATE");
 				this.input.state(_type, _pointerID, true, _pos);
 				break;
-			case KeyStatus::up:
+			case up:
 				//Log.debug("Receive MSG : THREAD_INPUT_STATE");
 				this.input.state(_type, _pointerID, false, _pos);
 				break;
@@ -244,7 +263,7 @@ public abstract class EwolContext extends Application {
 	}
 	
 	@Override
-	public abstract void onKeyboard(final KeySpecial _special, final KeyKeyboard _type, final Character _value, final KeyStatus _state) {
+	public void onKeyboard(final KeySpecial _special, final KeyKeyboard _type, final Character _value, final KeyStatus _state) {
 		Log.verbose("event {" + _special + "} " + _type + " " + _value + " " + _state);
 		// store the keyboard special key status for mouse event...
 		this.input.setLastKeyboardSpecial(_special);
@@ -252,49 +271,38 @@ public abstract class EwolContext extends Application {
 			// No windows ...
 			return;
 		}
-		boolean repeate = (_state == KeyStatus::downRepeate);
-		boolean isDown =    (_state == KeyStatus::downRepeate)
-		              || (_state == KeyStatus::down);
-		if (this.windowsCurrent.onEventShortCut(_special,
-		                                      _value,
-		                                      _type,
-		                                      isDown) == true) {
+		final boolean repeate = (_state == KeyStatus.downRepeate);
+		final boolean isDown = (_state == KeyStatus.downRepeate) || (_state == KeyStatus.down);
+		if (this.windowsCurrent.onEventShortCut(_special, _value, _type, isDown) == true) {
 			// Keep a shortcut ...
 			return;
 		}
 		// get the current focused Widget :
-		Widget tmpWidget = this.widgetManager.focusGet();
+		final Widget tmpWidget = this.widgetManager.focusGet();
 		if (tmpWidget == null) {
 			// no Widget ...
 			return;
 		}
 		// check if the widget allow repeating key events.
 		//Log.info("repeating test :" + repeate + " widget=" + tmpWidget.getKeyboardRepeate() + " state=" + isDown);
-		if(    repeate == false
-		    || (    repeate == true
-		         LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM tmpWidget.getKeyboardRepeat() == true) ) {
+		if (repeate == false || (repeate == true && tmpWidget.getKeyboardRepeat() == true)) {
 			// check Widget shortcut
-			if (tmpWidget.onEventShortCut(_special,
-			                               _value,
-			                               _type,
-			                               isDown) == false) {
+			if (tmpWidget.onEventShortCut(_special, _value, _type, isDown) == false) {
 				// generate the direct event ...
-				if (_type == KeyKeyboard::character) {
-					ewol::event::EntrySystem tmpEntryEvent(KeyKeyboard::character,
-					                                       KeyStatus::up,
-					                                       _special,
-					                                       _value);
-					if(isDown == true) {
-						tmpEntryEvent.this.event.setStatus(KeyStatus::down);
+				if (_type == KeyKeyboard.character) {
+					final EntrySystem tmpEntryEvent;
+					if (isDown == true) {
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.down, _special, _value);
+					} else {
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.up, _special, _value);
 					}
 					tmpWidget.systemEventEntry(tmpEntryEvent);
 				} else { // THREAD_KEYBORAD_MOVE
-					ewol::event::EntrySystem tmpEntryEvent(_type,
-					                                       KeyStatus::up,
-					                                       _special,
-					                                       0);
-					if(isDown == true) {
-						tmpEntryEvent.this.event.setStatus(KeyStatus::down);
+					final EntrySystem tmpEntryEvent;
+					if (isDown == true) {
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.down, _special, null);
+					} else {
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.up, _special, null);
 					}
 					tmpWidget.systemEventEntry(tmpEntryEvent);
 				}
@@ -319,7 +327,7 @@ public abstract class EwolContext extends Application {
 		this.input.newLayerSet();
 	}
 	
-	private final Windows windowsCurrent = null; //!< current displayed windows
+	private Windows windowsCurrent = null; //!< current displayed windows
 	
 	/**
 	 * @brief set the current windows to display :
@@ -336,7 +344,7 @@ public abstract class EwolContext extends Application {
 		this.widgetManager.focusSetDefault(_windows);
 		// display the title of the Windows:
 		if (this.windowsCurrent != null) {
-			setTitle(this.windowsCurrent.propertyTitle.get());
+			setTitle(this.windowsCurrent.propertyTitle);
 		}
 		// request all the widget redrawing
 		forceRedrawAll();
@@ -357,8 +365,8 @@ public abstract class EwolContext extends Application {
 		if (this.windowsCurrent == null) {
 			return;
 		}
-		final Vector2i size = getSize();
-		this.windowsCurrent.setSize(Vector2f(size.x(), size.y()));
+		final Vector2f size = getSize();
+		this.windowsCurrent.setSize(new Vector2f((int) size.x, (int) size.y));
 		this.windowsCurrent.onChangeSize();
 	}
 	
@@ -420,7 +428,7 @@ public abstract class EwolContext extends Application {
 	 * @brief Request a display after call a resize
 	 */
 	public void requestUpdateSize() {
-		final Context context = gale::getContext();
+		final Context context = Gale.getContext();
 		context.requestUpdateSize();
 	}
 	

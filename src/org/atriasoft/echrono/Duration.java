@@ -1,6 +1,10 @@
 package org.atriasoft.echrono;
 
 public class Duration {
+	public static Duration milliseconds(final long milli) {
+		return new Duration(milli / 1000.0);
+	}
+	
 	private final long data; // stored in ns
 	
 	public Duration() {
@@ -25,6 +29,11 @@ public class Duration {
 	
 	public long get() {
 		return this.data;
+	}
+	
+	public boolean isGreaterThan(final Duration sepatateTime) {
+		// TODO Auto-generated method stub
+		return this.data - sepatateTime.data > 0;
 	}
 	
 	public float toSeconds() {

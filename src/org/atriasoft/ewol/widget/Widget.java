@@ -6,13 +6,19 @@
  */
 package org.atriasoft.ewol.widget;
 
+import java.util.Iterator;
+import java.util.List;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
+import org.atriasoft.ewol.event.EntrySystem;
+import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.InputSystem;
 import org.atriasoft.ewol.internal.Log;
@@ -23,11 +29,11 @@ import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.gale.Dimension;
 import org.atriasoft.gale.Distance;
+import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
-import org.atriasoft.gale.event.EventEntry;
 
 // TODO: change position of this ...
 class EventShortCut {
@@ -35,7 +41,7 @@ class EventShortCut {
 	public final KeySpecial specialKey; //!< special board key
 	public final Character unicodeValue; //!< 0 if not used
 	public final KeyKeyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
-	public final boolean isActive; //!< If true, we need to filter the up key of ascii element (not control)
+	public boolean isActive; //!< If true, we need to filter the up key of ascii element (not control)
 	
 	public EventShortCut(final String message, final KeySpecial specialKey, final Character unicodeValue, final KeyKeyboard keyboardMoveValue, final boolean isActive) {
 		super();
@@ -56,7 +62,7 @@ class EventShortCut {
  * 
  */
 @XmlDefaultManaged(value = false)
-class Widget extends EwolObject {
+public class Widget extends EwolObject {
 	@XmlManaged()
 	@XmlProperty()
 	@XmlName(value = "min-size")
@@ -126,7 +132,7 @@ class Widget extends EwolObject {
 	 * @note INTERNAL EWOL SYSTEM
 	 */
 	public void onChangeSize() {
-		Log.verbose("[" + getId() + "] {" + getObjectType() + "} update size : " + this.size);
+		Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "} update size : " + this.size);
 		markToRedraw();
 	}
 	
@@ -321,7 +327,7 @@ class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- focus Area
 	// ----------------------------------------------------------------------------------------------------------------
-	private final boolean hasFocus = false; //!< set the focus on this widget
+	private boolean hasFocus = false; //!< set the focus on this widget
 	
 	/**
 	 * @brief get the focus state of the widget
@@ -532,92 +538,94 @@ class Widget extends EwolObject {
 		shortCutAdd(_descriptiveString, "");
 	}
 	
-	protected void shortCutAdd( final String _descriptiveString,
-			                          final String _message){
-			if (_descriptiveString.size() == 0) {
-				Log.error("try to add shortcut with no descriptive string ...");
-				return;
-			}
-			final EventShortCut tmpElement;
-			if (_message.size() == 0) {
-				tmpElement.message = _descriptiveString;
-			} else {
-				tmpElement.message = _message;
-			}
-			// parsing of the string:
-			//"ctrl+shift+alt+meta+s"
-			if(_descriptiveString.find("ctrl") != String::npos) {
-				tmpElement.specialKey.setCtrlLeft(true);
-			}
-			if(_descriptiveString.find("shift") != String::npos) {
-				tmpElement.specialKey.setShiftLeft(true);
-			}
-			if(_descriptiveString.find("alt") != String::npos) {
-				tmpElement.specialKey.setAltLeft(true);
-			}
-			if(_descriptiveString.find("meta") != String::npos) {
-				tmpElement.specialKey.setMetaLeft(true);
-			}
-			if(_descriptiveString.find("F12") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f12;
-			} else if(_descriptiveString.find("F11") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f11;
-			} else if(_descriptiveString.find("F10") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f10;
-			} else if(_descriptiveString.find("F9") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f9;
-			} else if(_descriptiveString.find("F8") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f8;
-			} else if(_descriptiveString.find("F7") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f7;
-			} else if(_descriptiveString.find("F6") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f6;
-			} else if(_descriptiveString.find("F5") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f5;
-			} else if(_descriptiveString.find("F4") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f4;
-			} else if(_descriptiveString.find("F3") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f3;
-			} else if(_descriptiveString.find("F2") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f2;
-			} else if(_descriptiveString.find("F1") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::f1;
-			} else if(_descriptiveString.find("LEFT") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::left;
-			} else if(_descriptiveString.find("RIGHT") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::right;
-			} else if(_descriptiveString.find("UP") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::up;
-			} else if(_descriptiveString.find("DOWN") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::down;
-			} else if(_descriptiveString.find("PAGE_UP") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::pageUp;
-			} else if(_descriptiveString.find("PAGE_DOWN") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::pageDown;
-			} else if(_descriptiveString.find("START") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::start;
-			} else if(_descriptiveString.find("END") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::end;
-			} else if(_descriptiveString.find("PRINT") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::print;
-			} else if(_descriptiveString.find("ARRET_DEFIL") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::stopDefil;
-			} else if(_descriptiveString.find("WAIT") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::wait;
-			} else if(_descriptiveString.find("INSERT") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::insert;
-			} else if(_descriptiveString.find("CAPLOCK") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::capLock;
-			} else if(_descriptiveString.find("CONTEXT_MENU") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::contextMenu;
-			} else if(_descriptiveString.find("NUM_LOCK") != String::npos) {
-				tmpElement.keyboardMoveValue = KeyKeyboard::numLock;
-			} else {
-				tmpElement.unicodeValue = _descriptiveString[_descriptiveString.size() -1];
-			}
-			// add it on the List ...
-			this.localShortcut.pushBack(etk::move(tmpElement));
+	protected void shortCutAdd(final String _descriptiveString, final String _message) {
+		if (_descriptiveString.length() == 0) {
+			Log.error("try to add shortcut with no descriptive string ...");
+			return;
 		}
+		String message; //!< data link with the event
+		final KeySpecial specialKey = new KeySpecial(); //!< special board key
+		Character unicodeValue = null; //!< 0 if not used
+		KeyKeyboard keyboardMoveValue = KeyKeyboard.unknow; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
+		if (_message.length() == 0) {
+			message = _descriptiveString;
+		} else {
+			message = _message;
+		}
+		// parsing of the string:
+		//"ctrl+shift+alt+metatmpElement.+s"
+		if (_descriptiveString.indexOf("ctrl") != -1) {
+			specialKey.setCtrlLeft(true);
+		}
+		if (_descriptiveString.indexOf("shift") != -1) {
+			specialKey.setShiftLeft(true);
+		}
+		if (_descriptiveString.indexOf("alt") != -1) {
+			specialKey.setAltLeft(true);
+		}
+		if (_descriptiveString.indexOf("meta") != -1) {
+			specialKey.setMetaLeft(true);
+		}
+		if (_descriptiveString.indexOf("F12") != -1) {
+			keyboardMoveValue = KeyKeyboard.f12;
+		} else if (_descriptiveString.indexOf("F11") != -1) {
+			keyboardMoveValue = KeyKeyboard.f11;
+		} else if (_descriptiveString.indexOf("F10") != -1) {
+			keyboardMoveValue = KeyKeyboard.f10;
+		} else if (_descriptiveString.indexOf("F9") != -1) {
+			keyboardMoveValue = KeyKeyboard.f9;
+		} else if (_descriptiveString.indexOf("F8") != -1) {
+			keyboardMoveValue = KeyKeyboard.f8;
+		} else if (_descriptiveString.indexOf("F7") != -1) {
+			keyboardMoveValue = KeyKeyboard.f7;
+		} else if (_descriptiveString.indexOf("F6") != -1) {
+			keyboardMoveValue = KeyKeyboard.f6;
+		} else if (_descriptiveString.indexOf("F5") != -1) {
+			keyboardMoveValue = KeyKeyboard.f5;
+		} else if (_descriptiveString.indexOf("F4") != -1) {
+			keyboardMoveValue = KeyKeyboard.f4;
+		} else if (_descriptiveString.indexOf("F3") != -1) {
+			keyboardMoveValue = KeyKeyboard.f3;
+		} else if (_descriptiveString.indexOf("F2") != -1) {
+			keyboardMoveValue = KeyKeyboard.f2;
+		} else if (_descriptiveString.indexOf("F1") != -1) {
+			keyboardMoveValue = KeyKeyboard.f1;
+		} else if (_descriptiveString.indexOf("LEFT") != -1) {
+			keyboardMoveValue = KeyKeyboard.left;
+		} else if (_descriptiveString.indexOf("RIGHT") != -1) {
+			keyboardMoveValue = KeyKeyboard.right;
+		} else if (_descriptiveString.indexOf("UP") != -1) {
+			keyboardMoveValue = KeyKeyboard.up;
+		} else if (_descriptiveString.indexOf("DOWN") != -1) {
+			keyboardMoveValue = KeyKeyboard.down;
+		} else if (_descriptiveString.indexOf("PAGE_UP") != -1) {
+			keyboardMoveValue = KeyKeyboard.pageUp;
+		} else if (_descriptiveString.indexOf("PAGE_DOWN") != -1) {
+			keyboardMoveValue = KeyKeyboard.pageDown;
+		} else if (_descriptiveString.indexOf("START") != -1) {
+			keyboardMoveValue = KeyKeyboard.start;
+		} else if (_descriptiveString.indexOf("END") != -1) {
+			keyboardMoveValue = KeyKeyboard.end;
+		} else if (_descriptiveString.indexOf("PRINT") != -1) {
+			keyboardMoveValue = KeyKeyboard.print;
+		} else if (_descriptiveString.indexOf("ARRET_DEFIL") != -1) {
+			keyboardMoveValue = KeyKeyboard.stopDefil;
+		} else if (_descriptiveString.indexOf("WAIT") != -1) {
+			keyboardMoveValue = KeyKeyboard.wait;
+		} else if (_descriptiveString.indexOf("INSERT") != -1) {
+			keyboardMoveValue = KeyKeyboard.insert;
+		} else if (_descriptiveString.indexOf("CAPLOCK") != -1) {
+			keyboardMoveValue = KeyKeyboard.capLock;
+		} else if (_descriptiveString.indexOf("CONTEXT_MENU") != -1) {
+			keyboardMoveValue = KeyKeyboard.contextMenu;
+		} else if (_descriptiveString.indexOf("NUM_LOCK") != -1) {
+			keyboardMoveValue = KeyKeyboard.numLock;
+		} else {
+			unicodeValue = _descriptiveString.charAt(_descriptiveString.length() - 1);
+		}
+		// add it on the List ...
+		this.localShortcut.add(new EventShortCut(message, specialKey, unicodeValue, keyboardMoveValue, true));
+	}
 	
 	/**
 	 * @brief remove all current shortCut
@@ -630,18 +638,14 @@ class Widget extends EwolObject {
 			 * @brief remove a specific shortCut with his event name
 			 * @param[in] _message generated event name
 			 */
-		protected void shortCutRemove( final String _message){
-	
-	auto it(this.localShortcut.begin());
-			while(it != this.localShortcut.end()) {
-				if (it.message != _message) {
-					++it;
-					continue;
-				}
-				this.localShortcut.erase(it);
-				it = this.localShortcut.begin();
+	protected void shortCutRemove(final String _message) {
+		final Iterator<EventShortCut> iterator = this.localShortcut.iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().message.contentEquals(_message) == true) {
+				iterator.remove();
 			}
 		}
+	}
 	
 	/**
 	 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref onEventKb).
@@ -653,35 +657,33 @@ class Widget extends EwolObject {
 	 * @note To prevent some error when you get an event get it if it is down and Up ...  ==> like this it could not generate some mistake in the error.
 	 */
 	public boolean onEventShortCut(final KeySpecial _special, Character _unicodeValue, final KeyKeyboard _kbMove, final boolean _isDown) {
-		if (_unicodeValue >= 'A' && _unicodeValue <= 'Z') {
-			_unicodeValue += 'a' - 'A';
-		}
-		Log.verbose("check shortcut...." + _special + " " + _unicodeValue + " " + _kbMove + " " + (_isDown ? "DOWN" : "UP") + " nb shortcut:" << this.localShortcut.size());
+		_unicodeValue = Character.toLowerCase(_unicodeValue);
+		Log.verbose("check shortcut...." + _special + " " + _unicodeValue + " " + _kbMove + " " + (_isDown ? "DOWN" : "UP") + " nb shortcut:" + this.localShortcut.size());
 		// Remove the up event of the shortcut...
 		if (_isDown == false) {
 			for (int iii = this.localShortcut.size() - 1; iii >= 0; iii--) {
-				if (this.localShortcut[iii].isActive == false) {
+				if (this.localShortcut.get(iii).isActive == false) {
 					continue;
 				}
-				if ((this.localShortcut[iii].keyboardMoveValue == KeyKeyboard::unknow && this.localShortcut[iii].unicodeValue == _unicodeValue)
-						|| (this.localShortcut[iii].keyboardMoveValue == _kbMove && this.localShortcut[iii].unicodeValue == 0)) {
+				if ((this.localShortcut.get(iii).keyboardMoveValue == KeyKeyboard.unknow && this.localShortcut.get(iii).unicodeValue == _unicodeValue)
+						|| (this.localShortcut.get(iii).keyboardMoveValue == _kbMove && this.localShortcut.get(iii).unicodeValue == 0)) {
 					// In this case we grap the event in case of an error can occured ...
-					this.localShortcut[iii].isActive = false;
+					this.localShortcut.get(iii).isActive = false;
 					Log.verbose("detect up of a shortcut");
 					return true;
 				}
 			}
 		}
-		//Log.info("Try to find generic shortcut ...");
+		//Log.info("Try to indexOf generic shortcut ...");
 		for (int iii = this.localShortcut.size() - 1; iii >= 0; iii--) {
-			if (this.localShortcut[iii].specialKey.getShift() == _special.getShift() && this.localShortcut[iii].specialKey.getCtrl() == _special.getCtrl()
-					&& this.localShortcut[iii].specialKey.getAlt() == _special.getAlt() && this.localShortcut[iii].specialKey.getMeta() == _special.getMeta()
-					&& ((this.localShortcut[iii].keyboardMoveValue == KeyKeyboard::unknow && this.localShortcut[iii].unicodeValue == _unicodeValue)
-							|| (this.localShortcut[iii].keyboardMoveValue == _kbMove && this.localShortcut[iii].unicodeValue == 0))) {
+			if (this.localShortcut.get(iii).specialKey.getShift() == _special.getShift() && this.localShortcut.get(iii).specialKey.getCtrl() == _special.getCtrl()
+					&& this.localShortcut.get(iii).specialKey.getAlt() == _special.getAlt() && this.localShortcut.get(iii).specialKey.getMeta() == _special.getMeta()
+					&& ((this.localShortcut.get(iii).keyboardMoveValue == KeyKeyboard.unknow && this.localShortcut.get(iii).unicodeValue == _unicodeValue)
+							|| (this.localShortcut.get(iii).keyboardMoveValue == _kbMove && this.localShortcut.get(iii).unicodeValue == 0))) {
 				if (_isDown == true) {
-					this.localShortcut[iii].isActive = true;
-					Log.verbose("Generate shortCut: " + this.localShortcut[iii].message);
-					this.signalShortcut.emit(this.localShortcut[iii].message);
+					this.localShortcut.get(iii).isActive = true;
+					Log.verbose("Generate shortCut: " + this.localShortcut.get(iii).message);
+					this.signalShortcut.emit(this.localShortcut.get(iii).message);
 				}
 				return true;
 			}
@@ -748,52 +750,52 @@ class Widget extends EwolObject {
 			     /
 			   (0,0)
 			 */
-			public			 void systemDraw( final DrawProperty _displayProp){
+			public void systemDraw( final DrawProperty _displayProp){
 				//Log.info("[" + getId() + "] Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" << this.size << " hide=" << propertyHide);
 				if (this.propertyHide == true){
 					// widget is hidden ...
 					return;
 				}
-				final Vector2f displayOrigin = this.origin + this.offset;
+				final Vector2f displayOrigin = this.origin.addNew(this.offset);
 				
 				// check if the element is displayable in the windows : 
-				if(    _displayProp.this.windowsSize.x() < this.origin.x()
-				    || _displayProp.this.windowsSize.y() < this.origin.y() ) {
+				if(    _displayProp.windowsSize.x < this.origin.x
+				    || _displayProp.windowsSize.y < this.origin.y ) {
 					// out of the windows  == > nothing to display ...
 					return;
 				}
 				
 				final DrawProperty tmpSize = _displayProp.clone();
 				tmpSize.limit(this.origin, this.size);
-				if (tmpSize.this.size.x() <= 0 || tmpSize.this.size.y() <= 0) {
+				if (tmpSize.size.x <= 0 || tmpSize.size.y <= 0) {
 					return;
 				}
-				glViewport( (int)tmpSize.this.origin.x(),
-				            (int)tmpSize.this.origin.y(),
-				            (int)tmpSize.this.size.x(),
-				            (int)tmpSize.this.size.y());
+				OpenGL.glViewport( (int)tmpSize.origin.x,
+					            (int)tmpSize.origin.y,
+					            (int)tmpSize.size.x,
+					            (int)tmpSize.size.y);
 				// special case, when origin < display origin, we need to cut the display :
-				final Vector2i downOffset = this.origin - tmpSize.this.origin;
-				downOffset.setMin(Vector2i(0,0));
+				final Vector2i downOffset = new Vector2i((int)(this.origin.x - tmpSize.origin.x), (int)(this.origin.y - tmpSize.origin.y));
+				downOffset.setMin(new Vector2i(0,0));
 				
-				final mat4 tmpTranslate = etk::matTranslate(Vector3fClipInt32(Vector3f(-tmpSize.this.size.x()/2+this.offset.x() + downOffset.x(),
-				                                                         -tmpSize.this.size.y()/2+this.offset.y() + downOffset.y(),
+				final Matrix4f tmpTranslate = etk::matTranslate(Vector3fClipInt32(new Vector3f(-tmpSize.size.x/2+this.offset.x + downOffset.x,
+				                                                         -tmpSize.size.y/2+this.offset.y + downOffset.y,
 				                                                         -1.0f)));
-				final mat4 tmpScale = etk::matScale(Vector3f(this.zoom, this.zoom, 1.0f));
-				final mat4 tmpProjection = etk::matOrtho((int)(-tmpSize.this.size.x())>>1,
-				                                   (int)( tmpSize.this.size.x())>>1,
-				                                   (int)(-tmpSize.this.size.y())>>1,
-				                                   (int)( tmpSize.this.size.y())>>1,
+				final Matrix4f tmpScale = etk::matScale(Vector3f(this.zoom, this.zoom, 1.0f));
+				final Matrix4f tmpProjection = etk::matOrtho((int)(-tmpSize.this.size.x)>>1,
+				                                   (int)( tmpSize.this.size.x)>>1,
+				                                   (int)(-tmpSize.this.size.y)>>1,
+				                                   (int)( tmpSize.this.size.y)>>1,
 				                                   (int)(-1),
 				                                   (int)( 1));
-				mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+				Matrix4f tmpMat = tmpProjection * tmpScale * tmpTranslate;
 				
-				gale::openGL::push();
+				OpenGL.push();
 				// set internal matrix system :
-				gale::openGL::setMatrix(tmpMat);
+				OpenGL.setMatrix(tmpMat);
 				//long ___startTime = ewol::getTime();
 				onDraw();
-				gale::openGL::pop();
+				OpenGL.pop();
 				return;
 			}
 	
@@ -815,12 +817,12 @@ class Widget extends EwolObject {
 			 * @note : the generation of the offset is due to the fact the cursor position is forced at the center of the widget.
 			 * @note This done nothing in "Finger" or "Stylet" mode.
 			 */
-public			 void grabCursor()
-if (this.grabCursor == false) {
-	getContext().inputEventGrabPointer(ememory::dynamicPointerCast<Widget>(sharedFromThis()));
-	this.grabCursor = true;
-}
-}
+	public void grabCursor() {
+		if (this.grabCursor == false) {
+			getContext().inputEventGrabPointer(this);
+			this.grabCursor = true;
+		}
+	}
 	
 	/**
 	 * @brief Un-Grab the cursor (default mode cursor offset)
@@ -840,17 +842,17 @@ if (this.grabCursor == false) {
 		return this.grabCursor;
 	}
 	
-	private final Cursor cursorDisplay = Cursor.arrow;
+	private Cursor cursorDisplay = Cursor.arrow;
 	
 	/**
-			 * @brief set the cursor display type.
-			 * @param[in] _newCursor selected new cursor.
-			 */
-		public			 void setCursor(enum gale::context::cursor _newCursor) {
-			Log.debug("Change Cursor in " + _newCursor);
-			this.cursorDisplay = _newCursor;
-			getContext().setCursor(this.cursorDisplay);
-		}
+	 * @brief set the cursor display type.
+	 * @param[in] _newCursor selected new cursor.
+	 */
+	public void setCursor(final Cursor _newCursor) {
+		Log.debug("Change Cursor in " + _newCursor);
+		this.cursorDisplay = _newCursor;
+		getContext().setCursor(this.cursorDisplay);
+	}
 	
 	/**
 	 * @brief get the current cursor.
@@ -915,47 +917,47 @@ if (this.grabCursor == false) {
 		markToRedraw();
 	}
 	
-	protected 	 void onChangePropertyMaxSize() {
-					final Vector2f pixelMin = this.propertyMinSize.getPixel();
-					final Vector2f pixelMax = this.propertyMaxSize.getPixel();
-					// check minimum  maximum compatibility :
-					boolean error=false;
-					if (pixelMin.x()>pixelMax.x()) {
-						error=true;
-					}
-					if (pixelMin.y()>pixelMax.y()) {
-						error=true;
-					}
-					if (error == true) {
-						Log.error("Can not set a 'min size' > 'max size' reset to maximum ...");
-						this.propertyMaxSize.setDirect(gale::Dimension(Vector2f(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),gale::distance::pixel));
-					}
-					requestUpdateSize();
-				}
+	protected void onChangePropertyMaxSize() {
+		final Vector2f pixelMin = this.propertyMinSize.getPixel();
+		final Vector2f pixelMax = this.propertyMaxSize.getPixel();
+		// check minimum  maximum compatibility :
+		boolean error = false;
+		if (pixelMin.x > pixelMax.x) {
+			error = true;
+		}
+		if (pixelMin.y > pixelMax.y) {
+			error = true;
+		}
+		if (error == true) {
+			Log.error("Can not set a 'min size' > 'max size' reset to maximum ...");
+			this.propertyMaxSize = new Dimension(new Vector2f(999999, 999999), Distance.PIXEL);
+		}
+		requestUpdateSize();
+	}
 	
-	protected 	 void onChangePropertyMinSize() {
-					final Vector2f pixelMin = this.propertyMinSize.getPixel();
-					final Vector2f pixelMax = this.propertyMaxSize.getPixel();
-					// check minimum  maximum compatibility :
-					boolean error=false;
-					if (pixelMin.x()>pixelMax.x()) {
-						error=true;
-					}
-					if (pixelMin.y()>pixelMax.y()) {
-						error=true;
-					}
-					if (error == true) {
-						Log.error("Can not set a 'min size' > 'max size' set nothing ...");
-						this.propertyMinSize.setDirect(gale::Dimension(Vector2f(0,0),gale::distance::pixel));
-					}
-					requestUpdateSize();
-				}
+	protected void onChangePropertyMinSize() {
+		final Vector2f pixelMin = this.propertyMinSize.getPixel();
+		final Vector2f pixelMax = this.propertyMaxSize.getPixel();
+		// check minimum  maximum compatibility :
+		boolean error = false;
+		if (pixelMin.x > pixelMax.x) {
+			error = true;
+		}
+		if (pixelMin.y > pixelMax.y) {
+			error = true;
+		}
+		if (error == true) {
+			Log.error("Can not set a 'min size' > 'max size' set nothing ...");
+			this.propertyMinSize = new Dimension(new Vector2f(0, 0), Distance.PIXEL);
+		}
+		requestUpdateSize();
+	}
 	
 	public void drawWidgetTree(final int _level) {
-		String space;
+		String space = "";
 		for (int iii = 0; iii < _level; ++iii) {
 			space += "    ";
 		}
-		Log.print(space + "[" + getId() + "] name='" + propertyName + "' type=" + getObjectType() + " o=" + this.origin << "  s=" << this.size << " hide=" << this.propertyHide);
+		Log.print(space + "[" + getId() + "] name='" + this.name + "' type=" + getClass().getCanonicalName() + " o=" + this.origin + "  s=" + this.size + " hide=" + this.propertyHide);
 	}
-};};
+}

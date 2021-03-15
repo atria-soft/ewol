@@ -9,10 +9,10 @@ import org.atriasoft.echrono.Duration;
  * @license MPL v2.0 (see license file)
  */
 public class EventTime {
-	private Clock timeSystem; //!< Current system time (micro-second)
-	private Clock timeUpAppl; //!< Current application wake up-time (micro-second)
-	private Duration timeDelta; //!< Time from the last cycle call of the system (main appl tick) (second)
-	private Duration timeDeltaCall; //!< Time from the last call (when we can manage periodic call with specifying periode) (second)
+	private final Clock timeSystem; //!< Current system time (micro-second)
+	private final Clock timeUpAppl; //!< Current application wake up-time (micro-second)
+	private final Duration timeDelta; //!< Time from the last cycle call of the system (main appl tick) (second)
+	private final Duration timeDeltaCall; //!< Time from the last call (when we can manage periodic call with specifying periode) (second)
 	
 	public EventTime(final Clock _timeSystem, final Clock _timeUpAppl, final Duration _timeDelta, final Duration _timeDeltaCall) {
 		this.timeSystem = _timeSystem;
@@ -50,19 +50,4 @@ public class EventTime {
 		return this.timeSystem;
 	};
 	
-	public void setApplWakeUpTime(final Clock _timeUpAppl) {
-		this.timeUpAppl = _timeUpAppl;
-	};
-	
-	public void setDelta(final Duration _timeDelta) {
-		this.timeDelta = _timeDelta;
-	};
-	
-	public void setDeltaCall(final Duration _timeDeltaCall) {
-		this.timeDeltaCall = _timeDeltaCall;
-	};
-	
-	public void setTime(final Clock _timeSystem) {
-		this.timeSystem = _timeSystem;
-	};
 }

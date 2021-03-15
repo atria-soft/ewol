@@ -3,53 +3,48 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
+package org.atriasoft.ewol.resource.font;
 
-#include <etk/types.hpp>
-#include <ewol/debug.hpp>
-#include <egami/Image.hpp>
-#include <egami/ImageMono.hpp>
-#include <ewol/resource/Texture.hpp>
-#include <gale/resource/Resource.hpp>
-#include <ewol/resource/font/GlyphProperty.hpp>
+import java.util.List;
 
+import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ImageMono;
+import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.gale.resource.Resource;
 
-namespace ewol {
-	namespace resource {
-		class FontBase : public gale::Resource {
-			public:
-				FontBase() {
-					addResourceType("ewol::FontFreeType");
-				}
-				void init( etk::Uri _uri) {
-					gale::Resource::init(_uri);
-				};
-				
-				 ~FontBase() { };
-				
-				 boolean getGlyphProperty(int _fontSize,
-				                              ewol::GlyphProperty _property) = 0;
-				
-				 boolean drawGlyph(egami::Image _imageOut,
-				                       int _fontSize,
-				                       Vector2i _glyphPosition,
-				                       ewol::GlyphProperty _property,
-				                       int8_t _posInImage) = 0;
-				
-				 boolean drawGlyph(egami::ImageMono _imageOut,
-				                       int _fontSize,
-				                       ewol::GlyphProperty _property,
-				                       int _borderSize = 0) = 0;
-				
-				 Vector2f getSize(int _fontSize,  String _unicodeString) = 0;
-				 float getSizeWithHeight(float _fontHeight) = 0;
-				
-				 int getHeight(int _fontSize) = 0;
-				
-				 void generateKerning(int _fontSize, List<ewol::GlyphProperty> _listGlyph) { };
-				
-				 void display() {};
-		};
-	};
-};
+// https://developer.mozilla.org/fr/docs/Web/SVG/Tutorial/SVG_fonts
+// https://convertio.co/fr/ttf-svg/
 
+public abstract class FontBase extends Resource {
+	public FontBase(final Uri _uri) {
+		super(_uri);
+	}
+	
+	@Override
+	public void cleanUp() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void display() {}
+	
+	public abstract boolean drawGlyph(final Image _imageOut, final int _fontSize, final Vector2i _glyphPosition, GlyphProperty _property, int _posInImage);
+	
+	public boolean drawGlyph(final ImageMono _imageOut, final int _fontSize, final GlyphProperty _property) {
+		return drawGlyph(_imageOut, _fontSize, _property, 0);
+	}
+	
+	public abstract boolean drawGlyph(final ImageMono _imageOut, final int _fontSize, GlyphProperty _property, int _borderSize);
+	
+	public void generateKerning(final int _fontSize, final List<GlyphProperty> _listGlyph) {}
+	
+	public abstract boolean getGlyphProperty(final int _fontSize, GlyphProperty _property);
+	
+	public abstract int getHeight(final int _fontSize);
+	
+	public abstract Vector2f getSize(final int _fontSize, final String _unicodeString);
+	
+	public abstract float getSizeWithHeight(final float _fontHeight);;
+}

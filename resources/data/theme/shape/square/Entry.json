@@ -1,0 +1,23 @@
+{
+	mode:2,
+	display-outside:false,
+	
+	padding-out-left:2,
+	padding-out-right:2,
+	padding-out-top:2,
+	padding-out-buttom:2,
+	
+	border-left:1,
+	border-right:1,
+	border-top:1,
+	border-buttom:1,
+	
+	padding-in-left:2,
+	padding-in-right:2,
+	padding-in-top:2,
+	padding-in-buttom:2,
+	
+	change-time:356,
+	program:"THEME_GUI:///Entry.prog?lib=ewol",
+	color:"THEME_COLOR:///Entry.json?lib=ewol"
+}

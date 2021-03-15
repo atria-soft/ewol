@@ -242,7 +242,7 @@ namespace ewol {
 				 * @param[in] _id Id of the color
 				 * @return the reference on the color
 				 */
-				 etk::Color<float> getColor(int _id);
+				 Color getColor(int _id);
 			public:
 				/**
 				 * @brief Get an ID on the configuration instance element

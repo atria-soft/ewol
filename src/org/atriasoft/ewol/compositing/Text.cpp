@@ -21,7 +21,7 @@ ewol::compositing::Text::~Text() {
 	
 }
 
-void ewol::compositing::Text::drawMT( mat4 _transformationMatrix, boolean _enableDepthTest) {
+void ewol::compositing::Text::drawMT( Matrix4f _transformationMatrix, boolean _enableDepthTest) {
 	
 	// draw BG in any case:
 	this.vectorialDraw.draw();
@@ -44,9 +44,9 @@ void ewol::compositing::Text::drawMT( mat4 _transformationMatrix, boolean _enabl
 		gale::openGL::enable(gale::openGL::flag_depthTest);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = gale::openGL::getMatrix();
-	mat4 camMatrix = gale::openGL::getCameraMatrix();
-	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
+	Matrix4f projMatrix = gale::openGL::getMatrix();
+	Matrix4f camMatrix = gale::openGL::getCameraMatrix();
+	Matrix4f tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	this.GLprogram.use(); 
 	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// Texture:
@@ -85,7 +85,7 @@ void ewol::compositing::Text::drawD(boolean _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
+	Matrix4f tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
 	this.GLprogram.use(); 
 	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 	// Texture :

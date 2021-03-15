@@ -320,10 +320,10 @@ void ewol::compositing::Drawing::draw(boolean _disableDepthTest) {
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
+	Matrix4f tmpMatrix = gale::openGL::getMatrix()*this.matrixApply;
 	this.GLprogram.use();
 	this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
-	mat4 tmpMatrix2;
+	Matrix4f tmpMatrix2;
 	this.GLprogram.uniformMatrix(this.GLMatrixPosition, tmpMatrix2);
 	// position:
 	this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, this.vboIdCoord);

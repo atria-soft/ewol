@@ -96,7 +96,7 @@ void ewol::widget::Windows::sysDraw() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
-	mat4 newOne;
+	Matrix4f newOne;
 	gale::openGL::setBasicMatrix(newOne);
 	
 	ewol::DrawProperty displayProp;
@@ -127,7 +127,7 @@ void ewol::widget::Windows::systemDraw( ewol::DrawProperty _displayProp) {
 	long ___startTime0 = ewol::getTime();
 	#endif
 	// clear the screen with transparency ...
-	etk::Color<float> colorBg(0.5, 0.5, 0.5, 0.5);
+	Color colorBg(0.5, 0.5, 0.5, 0.5);
 	if (this.resourceColor != null) {
 		colorBg = this.resourceColor.get(this.colorBg);
 	}

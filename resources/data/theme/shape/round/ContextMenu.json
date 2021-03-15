@@ -1,0 +1,23 @@
+{
+	mode:3,
+	display-outside:false,
+	
+	padding-out-left:1,
+	padding-out-right:1,
+	padding-out-top:1,
+	padding-out-buttom:1,
+	
+	border-left:12,
+	border-right:12,
+	border-top:12,
+	border-buttom:12,
+	
+	padding-in-left:1,
+	padding-in-right:1,
+	padding-in-top:1,
+	padding-in-buttom:1,
+	
+	change-time:356,
+	program:"THEME_GUI:///ContextMenu.prog?lib=ewol",
+	color:"THEME_COLOR:///ContextMenu.json?lib=ewol"
+}

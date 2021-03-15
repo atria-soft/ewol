@@ -33,4 +33,8 @@ public class Time {
 	public long get() {
 		return this.data;
 	}
+	
+	public Clock toClock() {
+		return new Clock(this.data);
+	}
 }

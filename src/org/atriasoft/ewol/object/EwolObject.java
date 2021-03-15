@@ -2,6 +2,7 @@ package org.atriasoft.ewol.object;
 
 import java.lang.ref.WeakReference;
 
+import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
 
@@ -13,7 +14,7 @@ import org.atriasoft.ewol.internal.Log;
 
 /**
  * @brief Basic message classes for ewol system
- * this class mermit at every Object to communicate between them.
+ * this class permit at every Object to communicate between them.
  */
 public class EwolObject {
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
@@ -34,18 +35,18 @@ public class EwolObject {
 		return Ewol.getContext().getEObjectManager();
 	}
 	
-	/**
-			 * @brief Retrive an object with his name (in the global list)
-			 * @param[in] _name Name of the object
-			 * @return the requested object or null
-			 */
+	/** 
+	 * @brief Retrive an object with his name (in the global list)
+	 * @param[in] _name Name of the object
+	 * @return the requested object or null
+	 */
 	public static EwolObject getObjectNamed(final String _objectName) {
 		return getObjectManager().getObjectNamed(_objectName);
 	}
 	
 	//@EwolPropertyDescription("Object name, might be a unique reference in all the program")
 	//@JacksonXmlProperty(isAttribute = true, localName = "name")
-	private String name = ""; //!< name of the element ...
+	protected String name = ""; //!< name of the element ...
 	
 	protected WeakReference<EwolObject> parent = null; //!< Reference on the current parent.
 	
@@ -180,8 +181,8 @@ public class EwolObject {
 	 * @return the requested object or null
 	 */
 	public EwolObject getSubObjectNamed(final String _objectName) {
-		Log.verbose("check if name : " + _objectName + " ?= " + this.propertyName);
-		if (_objectName == this.propertyName) {
+		Log.verbose("check if name : " + _objectName + " ?= " + this.name);
+		if (_objectName == this.name) {
 			return this;
 		}
 		return null;
