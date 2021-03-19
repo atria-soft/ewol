@@ -63,6 +63,6 @@ public class DrawProperty {
 	
 	@Override
 	public String toString() {
-		return "DrawProperty [windowsSize=" + this.windowsSize + ", start=" + this.origin + ", stop=" + this.origin.addNew(this.size) + "]";
+		return "DrawProperty [windowsSize=" + this.windowsSize + ", start=" + this.origin + ", stop=" + this.origin.add(this.size) + "]";
 	}
 }

@@ -38,7 +38,7 @@ public class ObjectManager {
 		Log.todo("set this back ...");
 		//this.periodicCall.setPeriodic(true);
 		// set the basic time properties :
-		this.applWakeUpTime = Clock.now();
+		this.applWakeUpTime = Time.now();
 		this.lastPeriodicCallTime = new Clock(this.applWakeUpTime.get());
 	}
 	

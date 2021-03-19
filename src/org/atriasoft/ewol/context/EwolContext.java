@@ -366,7 +366,7 @@ public abstract class EwolContext extends Application {
 			return;
 		}
 		final Vector2f size = getSize();
-		this.windowsCurrent.setSize(new Vector2f((int) size.x, (int) size.y));
+		this.windowsCurrent.setSize(new Vector2f((int) size.x(), (int) size.y()));
 		this.windowsCurrent.onChangeSize();
 	}
 	

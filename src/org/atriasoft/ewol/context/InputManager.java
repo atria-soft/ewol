@@ -78,13 +78,13 @@ class InputManager {
 		eventMouseSaved2[_idInput].destinationInputId = 0;
 		eventMouseSaved2[_idInput].lastTimeEvent = new Clock();
 		eventMouseSaved2[_idInput].curentWidgetEvent = null;
-		eventMouseSaved2[_idInput].origin.setValue(0, 0);
-		eventMouseSaved2[_idInput].size.setValue(99999999, 99999999);
-		eventMouseSaved2[_idInput].downStart.setValue(0, 0);
+		eventMouseSaved2[_idInput].origin = new Vector2f(0, 0);
+		eventMouseSaved2[_idInput].size = new Vector2f(99999999, 99999999);
+		eventMouseSaved2[_idInput].downStart = new Vector2f(0, 0);
 		eventMouseSaved2[_idInput].isDown = false;
 		eventMouseSaved2[_idInput].isInside = false;
 		eventMouseSaved2[_idInput].nbClickEvent = 0;
-		eventMouseSaved2[_idInput].posEvent.setValue(0, 0);
+		eventMouseSaved2[_idInput].posEvent = new Vector2f(0, 0);
 	}
 	
 	/**
@@ -187,8 +187,8 @@ class InputManager {
 				tmpWidget = tmpWindows.getWidgetAtPos(_pos);
 			}
 			if (tmpWidget != eventTable[_pointerID].curentWidgetEvent.get()
-					|| (eventTable[_pointerID].isInside == true && (eventTable[_pointerID].origin.x > _pos.x || eventTable[_pointerID].origin.y > _pos.y
-							|| (eventTable[_pointerID].origin.x + eventTable[_pointerID].size.x) < _pos.x || (eventTable[_pointerID].origin.y + eventTable[_pointerID].size.y) < _pos.y))) {
+					|| (eventTable[_pointerID].isInside == true && (eventTable[_pointerID].origin.x() > _pos.x() || eventTable[_pointerID].origin.y() > _pos.y()
+							|| (eventTable[_pointerID].origin.x() + eventTable[_pointerID].size.x()) < _pos.x() || (eventTable[_pointerID].origin.y() + eventTable[_pointerID].size.y()) < _pos.y()))) {
 				eventTable[_pointerID].isInside = false;
 				//Log.debug("GUI : Input ID=" + _pointerID + " == >" + eventTable[_pointerID].destinationInputId + " [LEAVE] " + _pos);
 				eventTable[_pointerID].posEvent = _pos;
@@ -215,15 +215,15 @@ class InputManager {
 			localEventInput(_type, tmpWidget, eventTable[_pointerID].destinationInputId, KeyStatus.move, _pos);
 		} else if (eventTable[_pointerID].isUsed == true) {
 			if (eventTable[_pointerID].isInside == true) {
-				if (eventTable[_pointerID].origin.x > _pos.x || eventTable[_pointerID].origin.y > _pos.y || (eventTable[_pointerID].origin.x + eventTable[_pointerID].size.x) < _pos.x
-						|| (eventTable[_pointerID].origin.y + eventTable[_pointerID].size.y) < _pos.y) {
+				if (eventTable[_pointerID].origin.x() > _pos.x() || eventTable[_pointerID].origin.y() > _pos.y() || (eventTable[_pointerID].origin.x() + eventTable[_pointerID].size.x()) < _pos.x()
+						|| (eventTable[_pointerID].origin.y() + eventTable[_pointerID].size.y()) < _pos.y()) {
 					eventTable[_pointerID].isInside = false;
 					//Log.debug("GUI : Input ID=" + _pointerID + " == >" + eventTable[_pointerID].destinationInputId + " [LEAVE] " + _pos);
 					eventTable[_pointerID].posEvent = _pos;
 					localEventInput(_type, eventTable[_pointerID].curentWidgetEvent.get(), eventTable[_pointerID].destinationInputId, KeyStatus.leave, _pos);
 				}
-			} else if ((eventTable[_pointerID].origin.x <= _pos.x && (eventTable[_pointerID].origin.x + eventTable[_pointerID].size.x) >= _pos.x)
-					&& (eventTable[_pointerID].origin.y <= _pos.y && (eventTable[_pointerID].origin.y + eventTable[_pointerID].size.y) >= _pos.y)) {
+			} else if ((eventTable[_pointerID].origin.x() <= _pos.x() && (eventTable[_pointerID].origin.x() + eventTable[_pointerID].size.x()) >= _pos.x())
+					&& (eventTable[_pointerID].origin.y() <= _pos.y() && (eventTable[_pointerID].origin.y() + eventTable[_pointerID].size.y()) >= _pos.y())) {
 				eventTable[_pointerID].isInside = true;
 				//Log.debug("GUI : Input ID=" + _pointerID + " == >" + eventTable[_pointerID].destinationInputId + " [ENTER] " + _pos);
 				eventTable[_pointerID].posEvent = _pos;
@@ -291,7 +291,7 @@ class InputManager {
 				// we have an event previously ... check delay between click and offset position
 				if (currentTime.less(eventTable[_pointerID].lastTimeEvent).isGreaterThan(localLimit.sepatateTime)) {
 					cleanElement(eventTable, _pointerID);
-				} else if (FMath.abs(eventTable[_pointerID].downStart.x - _pos.x) >= localLimit.DpiOffset || FMath.abs(eventTable[_pointerID].downStart.y - _pos.y) >= localLimit.DpiOffset) {
+				} else if (FMath.abs(eventTable[_pointerID].downStart.x() - _pos.x()) >= localLimit.DpiOffset || FMath.abs(eventTable[_pointerID].downStart.y() - _pos.y()) >= localLimit.DpiOffset) {
 					cleanElement(eventTable, _pointerID);
 				}
 			}
@@ -367,7 +367,7 @@ class InputManager {
 				// send up event after the single event to prevent multiple widget getting elements
 				localEventInput(_type, tmpWidget, _pointerID, KeyStatus.up, _pos);
 				// generate event (single)
-				if (FMath.abs(eventTable[_pointerID].downStart.x - _pos.x) < localLimit.DpiOffset && FMath.abs(eventTable[_pointerID].downStart.y - _pos.y) < localLimit.DpiOffset) {
+				if (FMath.abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset && FMath.abs(eventTable[_pointerID].downStart.y() - _pos.y()) < localLimit.DpiOffset) {
 					// Save current position :
 					eventTable[_pointerID].downStart = _pos;
 					// save start time

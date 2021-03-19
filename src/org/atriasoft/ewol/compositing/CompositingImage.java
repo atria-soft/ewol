@@ -8,6 +8,7 @@ package org.atriasoft.ewol.compositing;
 import org.atriasoft.egami.Image;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
@@ -116,7 +117,7 @@ class CompositingImage extends Compositing {
 			OpenGL.enable(OpenGL.Flag.flag_depthTest);
 		}
 		// set Matrix : translation/positionMatrix
-		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiplyNew(this.matrixApply);
+		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
 		this.GLprogram.use();
 		this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
 		// TextureID
@@ -197,7 +198,7 @@ class CompositingImage extends Compositing {
 	 * @param[in] _size size of the output image
 	 */
 	public void print(final Vector2i _size) {
-		print(new Vector2f(_size.x, _size.y));
+		print(new Vector2f(_size.x(), _size.y()));
 	};
 	
 	/**
@@ -210,40 +211,36 @@ class CompositingImage extends Compositing {
 		if (this.resource == null) {
 			return;
 		}
-		final Vector2f openGLSize = new Vector2f(this.resource.getOpenGlSize().x, this.resource.getOpenGlSize().y);
+		final Vector2f openGLSize = new Vector2f(this.resource.getOpenGlSize().x(), this.resource.getOpenGlSize().y());
 		final Vector2i usefullSize = this.resource.getUsableSize();
-		final Vector2f ratio = new Vector2f(usefullSize.x / openGLSize.x, usefullSize.y / openGLSize.y);
-		final Vector2f sourcePosStart = _sourcePosStart.multiplyNew(ratio);
-		final Vector2f sourcePosStop = _sourcePosStop.multiplyNew(ratio);
+		final Vector2f ratio = new Vector2f(usefullSize.x() / openGLSize.x(), usefullSize.y() / openGLSize.y());
+		final Vector2f sourcePosStart = _sourcePosStart.multiply(ratio);
+		final Vector2f sourcePosStop = _sourcePosStop.multiply(ratio);
 		Log.verbose("     openGLSize=" + openGLSize + " usableSize=" + usefullSize + " start=" + sourcePosStart + " stop=" + sourcePosStop);
 		
 		if (this.angle == 0.0f) {
-			Vector3f point = this.position.clone();
+			Vector3f point = this.position;
 			
 			final Vector3f[] coords = new Vector3f[6];
 			final Vector2f[] coordsTex = new Vector2f[6];
 			final Color[] colors = new Color[6];
 			int indexElem = 0;
 			
-			Vector2f tex = new Vector2f(sourcePosStart.x, sourcePosStop.y);
+			Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 			coords[indexElem] = point;
 			coordsTex[indexElem] = tex;
 			colors[indexElem] = this.color;
 			indexElem++;
 			
-			tex = new Vector2f(sourcePosStop.x, sourcePosStop.y);
-			point = point.clone();
-			point.setX(this.position.x + _size.x);
-			point.setY(this.position.y);
+			tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
+			point = new Vector3f(this.position.x() + _size.x(), this.position.y(), 0);
 			coords[indexElem] = point;
 			coordsTex[indexElem] = tex;
 			colors[indexElem] = this.color;
 			indexElem++;
 			
-			tex = new Vector2f(sourcePosStop.x, sourcePosStart.y);
-			point = point.clone();
-			point.setX(this.position.x + _size.x);
-			point.setY(this.position.y + _size.y);
+			tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
+			point = new Vector3f(this.position.x() + _size.x(), this.position.y() + _size.y(), 0);
 			coords[indexElem] = point;
 			coordsTex[indexElem] = tex;
 			colors[indexElem] = this.color;
@@ -254,19 +251,15 @@ class CompositingImage extends Compositing {
 			colors[indexElem] = this.color;
 			indexElem++;
 			
-			tex = new Vector2f(sourcePosStart.x, sourcePosStart.y);
-			point = point.clone();
-			point.setX(this.position.x);
-			point.setY(this.position.y + _size.y);
+			tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
+			point = new Vector3f(this.position.x(), this.position.y() + _size.y(), 0);
 			coords[indexElem] = point;
 			coordsTex[indexElem] = tex;
 			colors[indexElem] = this.color;
 			indexElem++;
 			
-			tex = new Vector2f(sourcePosStart.x, sourcePosStop.y);
-			point = point.clone();
-			point.setX(this.position.x);
-			point.setY(this.position.y);
+			tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
+			point = new Vector3f(this.position.x(), this.position.y(), 0);
 			coords[indexElem] = point;
 			coordsTex[indexElem] = tex;
 			colors[indexElem] = this.color;
@@ -280,36 +273,36 @@ class CompositingImage extends Compositing {
 			return;
 		}
 		
-		final Vector3f center = this.position.addNew(new Vector3f(_size.x, _size.y, 0)).divide(2.0f);
+		final Vector3f center = this.position.add(new Vector3f(_size.x(), _size.y(), 0)).divide(2.0f);
 		
-		final Vector3f limitedSize = new Vector3f(_size.x * 0.5f, _size.y * 0.5f, 0.0f);
+		final Vector3f limitedSize = new Vector3f(_size.x() * 0.5f, _size.y() * 0.5f, 0.0f);
 		
 		Vector3f point = new Vector3f(0, 0, 0);
 		
-		Vector2f tex = new Vector2f(_sourcePosStart.x, sourcePosStop.y);
+		Vector2f tex = new Vector2f(_sourcePosStart.x(), sourcePosStop.y());
 		
 		final Vector3f[] coords = new Vector3f[6];
 		final Vector2f[] coordsTex = new Vector2f[6];
 		final Color[] colors = new Color[6];
 		int indexElem = 0;
 		
-		point = new Vector3f(-limitedSize.x, -limitedSize.y, 0);
+		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		coords[indexElem] = point;
 		coordsTex[indexElem] = tex;
 		colors[indexElem] = this.color;
 		indexElem++;
 		
-		tex = new Vector2f(sourcePosStop.x, sourcePosStop.y);
-		point = new Vector3f(limitedSize.x, -limitedSize.y, 0);
+		tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
+		point = new Vector3f(limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		coords[indexElem] = point;
 		coordsTex[indexElem] = tex;
 		colors[indexElem] = this.color;
 		indexElem++;
 		
-		tex = new Vector2f(sourcePosStop.x, sourcePosStart.y);
-		point = new Vector3f(limitedSize.x, limitedSize.y, 0);
+		tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
+		point = new Vector3f(limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		coords[indexElem] = point;
 		coordsTex[indexElem] = tex;
@@ -321,16 +314,16 @@ class CompositingImage extends Compositing {
 		colors[indexElem] = this.color;
 		indexElem++;
 		
-		tex = new Vector2f(sourcePosStart.x, sourcePosStart.y);
-		point = new Vector3f(-limitedSize.x, limitedSize.y, 0);
+		tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
+		point = new Vector3f(-limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		coords[indexElem] = point;
 		coordsTex[indexElem] = tex;
 		colors[indexElem] = this.color;
 		indexElem++;
 		
-		tex = new Vector2f(sourcePosStart.x, sourcePosStop.y);
-		point = new Vector3f(-limitedSize.x, -limitedSize.y, 0);
+		tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
+		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		coords[indexElem] = point;
 		coordsTex[indexElem] = tex;
@@ -353,7 +346,7 @@ class CompositingImage extends Compositing {
 	};
 	
 	void setClipping(final Vector2f _pos, final Vector2f _posEnd) {
-		setClipping(new Vector3f(_pos.x, _pos.y, 0), new Vector3f(_posEnd.x, _posEnd.y, 0));
+		setClipping(new Vector3f(_pos.x(), _pos.y(), 0), new Vector3f(_posEnd.x(), _posEnd.y(), 0));
 	};
 	
 	/**
@@ -362,28 +355,8 @@ class CompositingImage extends Compositing {
 	 * @param[in] _posEnd End position of the clipping
 	 */
 	public void setClipping(final Vector3f _pos, final Vector3f _posEnd) {
-		// note the internal system all time request to have a bounding all time in the same order
-		if (_pos.x <= _posEnd.x) {
-			this.clippingPosStart.setX(_pos.x);
-			this.clippingPosStop.setX(_posEnd.x);
-		} else {
-			this.clippingPosStart.setX(_posEnd.x);
-			this.clippingPosStop.setX(_pos.x);
-		}
-		if (_pos.y <= _posEnd.y) {
-			this.clippingPosStart.setY(_pos.y);
-			this.clippingPosStop.setY(_posEnd.y);
-		} else {
-			this.clippingPosStart.setY(_posEnd.y);
-			this.clippingPosStop.setY(_pos.y);
-		}
-		if (_pos.z <= _posEnd.z) {
-			this.clippingPosStart.setZ(_pos.z);
-			this.clippingPosStop.setZ(_posEnd.z);
-		} else {
-			this.clippingPosStart.setZ(_posEnd.z);
-			this.clippingPosStop.setZ(_pos.z);
-		}
+		this.clippingPosStart = FMath.min(_pos, _posEnd);
+		this.clippingPosStop = FMath.max(_pos, _posEnd);
 		this.clippingEnable = true;
 	}
 	
@@ -396,7 +369,7 @@ class CompositingImage extends Compositing {
 	};
 	
 	public void setClippingWidth(final Vector2f _pos, final Vector2f _width) {
-		setClippingWidth(new Vector3f(_pos.x, _pos.y, 0), new Vector3f(_width.x, _width.y, 0));
+		setClippingWidth(new Vector3f(_pos.x(), _pos.y(), 0), new Vector3f(_width.x(), _width.y(), 0));
 	};
 	
 	/**
@@ -405,7 +378,7 @@ class CompositingImage extends Compositing {
 	 * @param[in] _width Width size of the clipping
 	 */
 	public void setClippingWidth(final Vector3f _pos, final Vector3f _width) {
-		setClipping(_pos, _pos.addNew(_width));
+		setClipping(_pos, _pos.add(_width));
 	}
 	
 	/**
@@ -417,7 +390,7 @@ class CompositingImage extends Compositing {
 	};
 	
 	public void setPos(final Vector2f _pos) {
-		setPos(new Vector3f(_pos.x, _pos.y, 0));
+		setPos(new Vector3f(_pos.x(), _pos.y(), 0));
 	}
 	
 	/**
@@ -429,7 +402,7 @@ class CompositingImage extends Compositing {
 	}
 	
 	public void setRelPos(final Vector2f _pos) {
-		setRelPos(new Vector3f(_pos.x, _pos.y, 0));
+		setRelPos(new Vector3f(_pos.x(), _pos.y(), 0));
 	}
 	
 	/**
@@ -463,7 +436,7 @@ class CompositingImage extends Compositing {
 	
 	public void setSource(final Uri _uri, final Vector2i _size) {
 		clear();
-		if (this.filename == _uri && this.requestSize.x == _size.x && this.requestSize.y == _size.y) {
+		if (this.filename == _uri && this.requestSize.x() == _size.x() && this.requestSize.y() == _size.y()) {
 			// Nothing to do ...
 			return;
 		}
@@ -474,7 +447,7 @@ class CompositingImage extends Compositing {
 		this.resource = null;
 		this.resourceImage = null;
 		
-		final Vector2i tmpSize = new Vector2i(_size.x, _size.y);
+		final Vector2i tmpSize = new Vector2i(_size.x(), _size.y());
 		// note that no image can be loaded...
 		if (_uri.isEmpty() == false) {
 			// link to new one
