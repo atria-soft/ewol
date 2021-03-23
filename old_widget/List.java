@@ -70,7 +70,7 @@ namespace ewol {
 				}
 				
 				/**
-				 * @brief Get the number of colomn and row availlable in the list
+				 * Get the number of colomn and row availlable in the list
 				 * @return Number of colomn and row
 				 */
 				 Vector2i getMatrixSize() ;
@@ -90,22 +90,22 @@ namespace ewol {
 					return fluorine::Variant();
 				};
 				/**
-				 * @brief Calculate an element size to extimate the render size.
+				 * Calculate an element size to extimate the render size.
 				 * @note Does not generate the with the same size.
-				 * @param[in] _pos Position of colomn and Raw of the element.
+				 * @param _pos Position of colomn and Raw of the element.
 				 * @return The estimate size of the element.
 				 */
 				 Vector2f calculateElementSize( Vector2i _pos);
 				/**
-				 * @brief Draw an element in the specific size and position.
-				 * @param[in] _pos Position of colomn and Raw of the element.
-				 * @param[in] _start Start display position.
-				 * @param[in] _size Render raw size
+				 * Draw an element in the specific size and position.
+				 * @param _pos Position of colomn and Raw of the element.
+				 * @param _start Start display position.
+				 * @param _size Render raw size
 				 * @return The estimate size of the element.
 				 */
 				 void drawElement( Vector2i _pos,  Vector2f _start,  Vector2f _size);
 				/**
-				 * @brief Draw the background
+				 * Draw the background
 				 */
 				 void drawBackground();
 				
@@ -113,8 +113,8 @@ namespace ewol {
 					return false;
 				}
 				/**
-				 * @brief set a raw visible in the main display
-				 * @param[in] _id Id of the raw that might be visible.
+				 * set a raw visible in the main display
+				 * @param _id Id of the raw that might be visible.
 				 */
 				//void setRawVisible(int _id);
 			protected:

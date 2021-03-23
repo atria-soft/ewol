@@ -52,7 +52,7 @@ public class ResourceTexture2 extends Resource {
 	 */
 
 	/**
-	 * @brief get the next power 2 if the input
+	 * get the next power 2 if the input
 	 * @param value Value that we want the next power of 2
 	 * @return result value
 	 */
@@ -168,9 +168,9 @@ public class ResourceTexture2 extends Resource {
 	};
 
 	/**
-	 * @brief Set the image in the texture system
+	 * Set the image in the texture system
 	 * @note It will resize in square2 if needed by the system.
-	 * @param[in] _image Image to set.
+	 * @param _image Image to set.
 	 */
 	public synchronized void set(final Image _image) {
 		Log.debug("Set a new image in a texture:");
@@ -187,9 +187,9 @@ public class ResourceTexture2 extends Resource {
 	};
 
 	/**
-	 * @brief Set the Filter mode to apply at the image when display with a scale
+	 * Set the Filter mode to apply at the image when display with a scale
 	 *        (not 1:1 ratio)
-	 * @param[in] _value Value of the new filter mode
+	 * @param _value Value of the new filter mode
 	 */
 	public void setFilterMode(final TextureFilter _filter) {
 		this.filter = _filter;
@@ -202,8 +202,8 @@ public class ResourceTexture2 extends Resource {
 	};
 
 	/**
-	 * @brief Set the repeate mode of the images if UV range is out of [0..1]
-	 * @param[in] _value Value of the new repeate mode
+	 * Set the repeate mode of the images if UV range is out of [0..1]
+	 * @param _value Value of the new repeate mode
 	 */
 	public void setRepeat(final boolean _value) {
 		this.repeat = _value;

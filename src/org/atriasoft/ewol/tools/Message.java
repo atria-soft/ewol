@@ -11,9 +11,9 @@ import org.atriasoft.ewol.Ewol;
 public class Message {
 
     /**
-     * @brief Create a simple pop-up message on the screen for application error.
-     * @param[in] _type Type of the error.
-     * @param[in] _message message to display (decorated text)
+     * Create a simple pop-up message on the screen for application error.
+     * @param _type Type of the error.
+     * @param _message message to display (decorated text)
      */
     private static void create(Type _type, String _message){
 		StdPopUp tmpPopUp = new StdPopUp();
@@ -37,31 +37,31 @@ public class Message {
 	}
 
 	/**
-     * @brief Create a simple information message
-     * @param[in] _message message to display (decorated text)
+     * Create a simple information message
+     * @param _message message to display (decorated text)
      */
     public static void displayInfo(String _message){
 		create(Type.info, _message);
 	}
 
     /**
-     * @brief Create a simple warning message
-     * @param[in] _message message to display (decorated text)
+     * Create a simple warning message
+     * @param _message message to display (decorated text)
      */
     public static void displayWarning(String _message) {
 		create(Type.warning, _message);
 	}
 
     /**
-     * @brief Create a simple error message
-     * @param[in] _message message to display (decorated text)
+     * Create a simple error message
+     * @param _message message to display (decorated text)
      */
     public static void displayError(String _message) {
 		create(Type.error,_message);
 	}
     /**
-     * @brief Create a simple critical message
-     * @param[in] _message message to display (decorated text)
+     * Create a simple critical message
+     * @param _message message to display (decorated text)
      */
     public static void displayCritical(String _message){
 		create(Type.critical, _message);

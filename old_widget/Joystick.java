@@ -59,25 +59,25 @@ namespace ewol {
 					this.displayMode = _newMode;
 				};
 				/**
-				 * @brief set the ratio of the widget joystick
-				 * @param[in] _newRatio the new ratio that might be set
+				 * set the ratio of the widget joystick
+				 * @param _newRatio the new ratio that might be set
 				 */
 				void ratio(float _newRatio);
 				/**
-				 * @brief set the Background of the widget joystick
-				 * @param[in] _imageNameInData the new rbackground that might be set
-				 * @param[in] _display
+				 * set the Background of the widget joystick
+				 * @param _imageNameInData the new rbackground that might be set
+				 * @param _display
 				 */
 				void background(String _imageNameInData, boolean _display=true);
 				/**
-				 * @brief set the Foreground of the widget joystick
-				 * @param[in] _imageNameInData the new Foreground that might be set
+				 * set the Foreground of the widget joystick
+				 * @param _imageNameInData the new Foreground that might be set
 				 */
 				void foreground(String _imageNameInData);
 				/**
-				 * @brief get the property of the joystick
-				 * @param[out] _distance distance to the center
-				 * @param[out] _angle angle of the joy
+				 * get the property of the joystick
+				 * @param _distance distance to the center
+				 * @param _angle angle of the joy
 				 */
 				void getProperty(float _distance, float _angle);
 				

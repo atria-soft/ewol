@@ -21,7 +21,7 @@ public class ConfigFont {
 	public ConfigFont() {}
 	
 	/**
-	 * @brief get the default font folder.
+	 * get the default font folder.
 	 * @return The default font folder.
 	 */
 	public Uri getFolder() {
@@ -29,7 +29,7 @@ public class ConfigFont {
 	}
 	
 	/**
-	 * @brief get the current default font name
+	 * get the current default font name
 	 * @return a reference on the font name string
 	 */
 	public String getName() {
@@ -37,7 +37,7 @@ public class ConfigFont {
 	}
 	
 	/**
-	 * @brief get the default font size.
+	 * get the default font size.
 	 * @return the font size.
 	 */
 	public int getSize() {
@@ -45,7 +45,7 @@ public class ConfigFont {
 	};
 	
 	/**
-	 * @brief get the use of internal/external Font
+	 * get the use of internal/external Font
 	 * @return true to enable search of internal data.
 	 */
 	public boolean getUseExternal() {
@@ -53,9 +53,9 @@ public class ConfigFont {
 	}
 	
 	/**
-	 * @brief set the defaut font for all the widgets and basics display.
-	 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
-	 * @param[in] _size The default size of the font default=10.
+	 * set the defaut font for all the widgets and basics display.
+	 * @param _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
+	 * @param _size The default size of the font default=10.
 	 */
 	public void set(final String _fontName, final int _size) {
 		this.name = _fontName;
@@ -64,16 +64,16 @@ public class ConfigFont {
 	};
 	
 	/**
-	 * @brief Specify the default font folder for the Ewol search system (only needed when embended font)
-	 * @param[in] _folder basic folder of the font (ex: DATA:fonts)
+	 * Specify the default font folder for the Ewol search system (only needed when embended font)
+	 * @param _folder basic folder of the font (ex: DATA:fonts)
 	 */
 	public void setFolder(final Uri _folder) {
 		this.folder = _folder;
 	}
 	
 	/**
-	 * @brief Set the current default font name
-	 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
+	 * Set the current default font name
+	 * @param _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
 	 */
 	public void setName(final String _fontName) {
 		this.name = _fontName;
@@ -81,8 +81,8 @@ public class ConfigFont {
 	}
 	
 	/**
-	 * @brief Set the default font size.
-	 * @param[in] _size new font size.
+	 * Set the default font size.
+	 * @param _size new font size.
 	 */
 	public void setSize(final int _size) {
 		this.size = _size;
@@ -90,8 +90,8 @@ public class ConfigFont {
 	};
 	
 	/**
-	 * @brief set use of internal/external Font
-	 * @param[in] _val true to enable search of internal data.
+	 * set use of internal/external Font
+	 * @param _val true to enable search of internal data.
 	 */
 	public void setUseExternal(final boolean _val) {
 		this.useExternal = _val;

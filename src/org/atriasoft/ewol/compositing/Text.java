@@ -30,9 +30,9 @@ class Text extends TextBase {
 	protected float size;
 
 	/**
-	 * @brief generic ructor
-	 * @param[in] _fontName Name of the font that might be loaded
-	 * @param[in] _fontSize size of the font that might be loaded
+	 * generic ructor
+	 * @param _fontName Name of the font that might be loaded
+	 * @param _fontSize size of the font that might be loaded
 	 */
 	public Text() {
 		this("");

@@ -15,26 +15,26 @@ import org.atriasoft.exml.model.XmlNode;
  */
 /*
  * @ingroup ewolWidgetGroup
- * @brief the Cotainer widget is a widget that have an only one subWidget
+ * the Cotainer widget is a widget that have an only one subWidget
  */
 class Container extends Widget {
 	protected Widget subWidget = null;
 	/**
-	 * @brief Constructor
+	 * Constructor
 	 */
 	public Container() {
 		super();
 	}
 	/**
-	 * @brief get the main node widget
+	 * get the main node widget
 	 * @return the requested pointer on the node
 	 */
 	public Widget getSubWidget(){
 		return this.subWidget;
 	}
 	/**
-	 * @brief set the subWidget node widget.
-	 * @param[in] _newWidget The widget to add.
+	 * set the subWidget node widget.
+	 * @param _newWidget The widget to add.
 	 */
 	public void setSubWidget(Widget _newWidget){
 		if (_newWidget == null) {
@@ -49,9 +49,9 @@ class Container extends Widget {
 		requestUpdateSize();
 	}
 	/**
-	 * @brief Replace a old subwidget with a new one.
-	 * @param[in] _oldWidget The widget to replace.
-	 * @param[in] _newWidget The widget to set.
+	 * Replace a old subwidget with a new one.
+	 * @param _oldWidget The widget to replace.
+	 * @param _newWidget The widget to set.
 	 */
 	public void subWidgetReplace( Widget _oldWidget,
 								   Widget _newWidget){
@@ -68,7 +68,7 @@ class Container extends Widget {
 		requestUpdateSize();
 	}
 	/**
-	 * @brief remove the subWidget node (async).
+	 * remove the subWidget node (async).
 	 */
 	public void subWidgetRemove() {
 		if (this.subWidget != null) {
@@ -79,7 +79,7 @@ class Container extends Widget {
 		}
 	}
 	/**
-	 * @brief Unlink the subwidget Node.
+	 * Unlink the subwidget Node.
 	 */
 	public void subWidgetUnLink(){
 		if (this.subWidget != null) {

@@ -19,7 +19,7 @@ namespace ewol {
 		using WidgetScrolled = ememory::Ptr<ewol::widget::WidgetScrolled>;
 		using WidgetScrolledWeak = ememory::WeakPtr<ewol::widget::WidgetScrolled>;
 		/**
-		 * @brief Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
+		 * Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
 		 */
 		class WidgetScrolled : public Widget {
 			public: // properties:
@@ -50,12 +50,12 @@ namespace ewol {
 				boolean this.singleFingerMode; //!< in many case the moving in a subwidget is done with one finger, it is enought ==> the user select...
 			public:
 				/**
-				 * @brief Set the single finger capabilities/
-				 * @param[in] _status True if single inger mode, two otherwise/
+				 * Set the single finger capabilities/
+				 * @param _status True if single inger mode, two otherwise/
 				 */
 				void setSingleFinger(boolean _status);
 				/**
-				 * @brief Get the single finger capabilities
+				 * Get the single finger capabilities
 				 * @return true The single finger mode is active
 				 * @return false The To finger mode is active
 				 */
@@ -63,7 +63,7 @@ namespace ewol {
 					return this.singleFingerMode;
 				}
 				/**
-				 * @brief Reset the scoll of the subWidget
+				 * Reset the scoll of the subWidget
 				 */
 				void resetScrollOrigin() {
 					this.originScrooled = Vector2f(0,0);
@@ -74,15 +74,15 @@ namespace ewol {
 				Vector2f this.fingerMoveStartPos[CALCULATE_SIMULTANEOUS_FINGER];
 			protected:
 				/**
-				 * @brief Scroll Widget main ructor to be herited from an other widget (this is not a stand-alone widget)
-				 * @param[in] _shaperName Shaper name if the scrolled widget.
+				 * Scroll Widget main ructor to be herited from an other widget (this is not a stand-alone widget)
+				 * @param _shaperName Shaper name if the scrolled widget.
 				 */
 				WidgetScrolled();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(WidgetScrolled, "WidgetScrolled");
 				/**
-				 * @brief Scroll widget destructor.
+				 * Scroll widget destructor.
 				 */
 				 ~WidgetScrolled();
 			protected:
@@ -93,42 +93,42 @@ namespace ewol {
 				void systemDraw( ewol::DrawProperty _displayProp) ;
 			protected:
 				/**
-				 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled
-				 * @param[in] _nbPixel number of pixel scrolling
+				 * For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled
+				 * @param _nbPixel number of pixel scrolling
 				 */
 				void setScrollingSize(float _nbPixel) {
 					this.pixelScrolling = _nbPixel;
 				};
 				/**
-				 * @brief Specify the mode of scrolling for this windows
-				 * @param[in] _newMode the selected mode for the scrolling...
+				 * Specify the mode of scrolling for this windows
+				 * @param _newMode the selected mode for the scrolling...
 				 */
 				void scroolingMode(enum scrollingMode _newMode);
 				/**
-				 * @brief set the specific mawimum size of the widget
-				 * @param[in] _localSize new Maximum size
+				 * set the specific mawimum size of the widget
+				 * @param _localSize new Maximum size
 				 */
 				void setMaxSize( Vector2f _localSize) {
 					this.maxSize = _localSize;
 				};
 				/**
-				 * @brief Request a specific position for the scrolling of the current windows.
-				 * @param[in] _borderWidth size of the border that requested the element might not to be
-				 * @param[in] _currentPosition Position that is requested to view
-				 * @param[in] _center True if the position might be at the center of the widget
+				 * Request a specific position for the scrolling of the current windows.
+				 * @param _borderWidth size of the border that requested the element might not to be
+				 * @param _currentPosition Position that is requested to view
+				 * @param _center True if the position might be at the center of the widget
 				 */
 				void setScrollingPositionDynamic(Vector2f _borderWidth,  Vector2f _currentPosition, boolean _center = false);
 				/**
-				 * @brief set the scrolling limit when arriving at he end of the widget
-				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
+				 * set the scrolling limit when arriving at he end of the widget
+				 * @param _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 				 */
 				void setLimitScrolling(float _poucentageLimit) {
 					_poucentageLimit = etk::avg(0.1f, _poucentageLimit,1.0f);
 					this.limitScrolling = Vector2f(_poucentageLimit, _poucentageLimit);
 				};
 				/**
-				 * @brief set the scrolling limit when arriving at he end of the widget
-				 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end for axis specific...
+				 * set the scrolling limit when arriving at he end of the widget
+				 * @param _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end for axis specific...
 				 */
 				void setLimitScrolling( Vector2f _poucentageLimit) {
 					this.limitScrolling = Vector2f(etk::avg(0.1f, _poucentageLimit.x(),1.0f), etk::avg(0.1f, _poucentageLimit.y(),1.0f));

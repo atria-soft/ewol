@@ -8,7 +8,7 @@ package org.atriasoft.ewol;
 import org.atriasoft.etk.math.Vector2f;
 
 /**
- * @brief Gravity of the widget property
+ * Gravity of the widget property
  */
 public enum Gravity {
 	center, // !< gravity is in center

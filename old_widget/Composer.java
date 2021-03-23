@@ -17,7 +17,7 @@ namespace ewol {
 		using ComposerWeak = ememory::WeakPtr<ewol::widget::Composer>;
 		/**
 		 * @ingroup ewolWidgetGroup
-		 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
+		 * the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 		 */
 		class Composer : public ewol::widget::Container {
 			public:
@@ -25,27 +25,27 @@ namespace ewol {
 				eproperty::Value<etk::Uri> propertySubFile; //!< If loading a sub-file, we must do it here ==> permit to configure it in the xml and not have wrong display
 			protected:
 				/**
-				 * @brief Constructor
+				 * Constructor
 				 */
 				Composer();
 			public:
 				DECLARE_WIDGET_FACTORY(Composer, "Composer");
 				/**
-				 * @brief Destructor
+				 * Destructor
 				 */
 				 ~Composer();
 				/**
-				 * @brief load a composition with a file
-				 * @param[in] _uri Name of the file
-				 * @param[in] _id Unique ID that is used in replacing the balise "{ID}" inside the File (do nothing if == 0)
+				 * load a composition with a file
+				 * @param _uri Name of the file
+				 * @param _id Unique ID that is used in replacing the balise "{ID}" inside the File (do nothing if == 0)
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */
 				boolean loadFromFile( etk::Uri _uri, ulong _id=0);
 				/**
-				 * @brief load a composition with a file
-				 * @param[in] _composerXmlString xml to parse directly
-				 * @param[in] _id Unique ID that is used in replacing the balise "{ID}" inside the String (do nothing if == 0)
+				 * load a composition with a file
+				 * @param _composerXmlString xml to parse directly
+				 * @param _id Unique ID that is used in replacing the balise "{ID}" inside the String (do nothing if == 0)
 				 * @return true  == > all done OK
 				 * @return false  == > some error occured
 				 */

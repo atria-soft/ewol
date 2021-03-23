@@ -22,15 +22,15 @@ class Label extends Widget {
 		int this.colorDefaultBgText; //!< Default Background color of the text
 	protected:
 		/**
-		 * @brief Constructor
-		 * @param[in] _newLabel The displayed decorated text.
+		 * Constructor
+		 * @param _newLabel The displayed decorated text.
 		 */
 		Label();
 		void init() ;
 	public:
 		DECLARE_WIDGET_FACTORY(Label, "Label");
 		/**
-		 * @brief destructor
+		 * destructor
 		 */
 		 ~Label();
 	protected:

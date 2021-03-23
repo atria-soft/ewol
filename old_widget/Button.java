@@ -22,7 +22,7 @@ namespace ewol {
 		using Button = ememory::Ptr<ewol::widget::Button>;
 		using ButtonWeak = ememory::WeakPtr<ewol::widget::Button>;
 		/**
-		 * @brief a composed button is a button with an inside composed with the specify XML element 
+		 * a composed button is a button with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple
 		 */
 		class Button : public ewol::widget::Container2 {
@@ -50,15 +50,15 @@ namespace ewol {
 				ewol::compositing::Shaper this.shaper; //!< Compositing theme.
 			protected:
 				/**
-				 * @brief Constructor
-				 * @param[in] _shaperName Shaper file properties
+				 * Constructor
+				 * @param _shaperName Shaper file properties
 				 */
 				Button();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Button, "Button");
 				/**
-				 * @brief Destructor
+				 * Destructor
 				 */
 				 ~Button();
 			private:
@@ -69,12 +69,12 @@ namespace ewol {
 				Vector2f this.selectableAreaSize; //!< size of the event positions
 			private:
 				/**
-				 * @brief internal system to change the property of the current status
-				 * @param[in] _newStatusId new state
+				 * internal system to change the property of the current status
+				 * @param _newStatusId new state
 				 */
 				void changeStatusIn(int _newStatusId);
 				/**
-				 * @brief update the status with the internal satte of the button ...
+				 * update the status with the internal satte of the button ...
 				 */
 				void CheckStatus();
 			protected: // Derived function
@@ -91,8 +91,8 @@ namespace ewol {
 			protected:
 				esignal::Connection this.PCH; //!< Periodic Call Handle to remove it when needed
 				/**
-				 * @brief Periodic call to update grapgic display
-				 * @param[in] _event Time generic event
+				 * Periodic call to update grapgic display
+				 * @param _event Time generic event
 				 */
 				void periodicCall( ewol::event::Time _event);
 				void onLostFocus() ;

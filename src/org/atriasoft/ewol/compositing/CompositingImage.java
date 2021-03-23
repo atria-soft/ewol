@@ -49,10 +49,10 @@ class CompositingImage extends Compositing {
 	private ResourceVirtualBufferObject VBO = null;
 	
 	/**
-	 * @brief generic ructor
-	 * @param[in] _uri URI of the file that might be loaded
-	 * @param[in] _df enable distance field mode
-	 * @param[in] _size for the image when Verctorial image loading is requested
+	 * generic ructor
+	 * @param _uri URI of the file that might be loaded
+	 * @param _df enable distance field mode
+	 * @param _size for the image when Verctorial image loading is requested
 	 */
 	public CompositingImage() {
 		this(new Uri(""), sizeAuto);
@@ -73,7 +73,7 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief clear alll tre registered element in the current element
+	 * clear alll tre registered element in the current element
 	 */
 	@Override
 	public void clear() {
@@ -91,8 +91,8 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief draw All the refistered text in the current element on openGL
-	 * @param[in] _disableDepthTest disable the Depth test for display
+	 * draw All the refistered text in the current element on openGL
+	 * @param _disableDepthTest disable the Depth test for display
 	 */
 	@Override
 	public void draw(final boolean _disableDepthTest) {
@@ -141,7 +141,7 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief get the current display position (sometime needed in the gui control)
+	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
 	 */
 	public Vector3f getPos() {
@@ -149,7 +149,7 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief get the source image registered size in the file (<0 when multiple size image)
+	 * get the source image registered size in the file (<0 when multiple size image)
 	 * @return tre image registered size
 	 */
 	public Vector2i getRealSize() {
@@ -166,7 +166,7 @@ class CompositingImage extends Compositing {
 	};
 	
 	/**
-	 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
+	 * Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 	 * @return the validity od the resources.
 	 */
 	public boolean hasSources() {
@@ -174,7 +174,7 @@ class CompositingImage extends Compositing {
 	};
 	
 	/**
-	 * @brief load the openGL program and get all the ID needed
+	 * load the openGL program and get all the ID needed
 	 */
 	private void loadProgram() {
 		// get the shader resource:
@@ -194,18 +194,18 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief add a compleate of the image to display with the requested size
-	 * @param[in] _size size of the output image
+	 * add a compleate of the image to display with the requested size
+	 * @param _size size of the output image
 	 */
 	public void print(final Vector2i _size) {
 		print(new Vector2f(_size.x(), _size.y()));
 	};
 	
 	/**
-	 * @brief add a part of the image to display with the requested size
-	 * @param[in] _size size of the output image
-	 * @param[in] _sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
-	 * @param[in] _sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
+	 * add a part of the image to display with the requested size
+	 * @param _size size of the output image
+	 * @param _sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
+	 * @param _sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 	 */
 	public void printPart(final Vector2f _size, final Vector2f _sourcePosStart, final Vector2f _sourcePosStop) {
 		if (this.resource == null) {
@@ -338,8 +338,8 @@ class CompositingImage extends Compositing {
 	};
 	
 	/**
-	 * @brief set a unique rotation of this element (not set in the rotate Generic system)
-	 * @param[in] _angle Angle to set in radiant.
+	 * set a unique rotation of this element (not set in the rotate Generic system)
+	 * @param _angle Angle to set in radiant.
 	 */
 	public void setAngle(final float _angleRad) {
 		this.angle = _angleRad;
@@ -350,9 +350,9 @@ class CompositingImage extends Compositing {
 	};
 	
 	/**
-	 * @brief Request a clipping area for the text (next draw only)
-	 * @param[in] _pos Start position of the clipping
-	 * @param[in] _posEnd End position of the clipping
+	 * Request a clipping area for the text (next draw only)
+	 * @param _pos Start position of the clipping
+	 * @param _posEnd End position of the clipping
 	 */
 	public void setClipping(final Vector3f _pos, final Vector3f _posEnd) {
 		this.clippingPosStart = FMath.min(_pos, _posEnd);
@@ -361,8 +361,8 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief enable/Disable the clipping (without lose the current clipping position)
-	 * @brief _newMode The new status of the clipping
+	 * enable/Disable the clipping (without lose the current clipping position)
+	 * _newMode The new status of the clipping
 	 */
 	public void setClippingMode(final boolean _newMode) {
 		this.clippingEnable = _newMode;
@@ -373,17 +373,17 @@ class CompositingImage extends Compositing {
 	};
 	
 	/**
-	 * @brief Request a clipping area for the text (next draw only)
-	 * @param[in] _pos Start position of the clipping
-	 * @param[in] _width Width size of the clipping
+	 * Request a clipping area for the text (next draw only)
+	 * @param _pos Start position of the clipping
+	 * @param _width Width size of the clipping
 	 */
 	public void setClippingWidth(final Vector3f _pos, final Vector3f _width) {
 		setClipping(_pos, _pos.add(_width));
 	}
 	
 	/**
-	 * @brief set the Color of the current foreground font
-	 * @param[in] _color Color to set on foreground (for next print)
+	 * set the Color of the current foreground font
+	 * @param _color Color to set on foreground (for next print)
 	 */
 	public void setColor(final Color _color) {
 		this.color = _color;
@@ -394,8 +394,8 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief set position for the next text writen
-	 * @param[in] _pos Position of the text (in 3D)
+	 * set position for the next text writen
+	 * @param _pos Position of the text (in 3D)
 	 */
 	public void setPos(final Vector3f _pos) {
 		this.position = _pos;
@@ -406,8 +406,8 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief set relative position for the next text writen
-	 * @param[in] _pos ofset apply of the text (in 3D)
+	 * set relative position for the next text writen
+	 * @param _pos ofset apply of the text (in 3D)
 	 */
 	public void setRelPos(final Vector3f _pos) {
 		this.position.add(_pos);
@@ -422,9 +422,9 @@ class CompositingImage extends Compositing {
 	}
 	
 	/**
-	 * @brief change the image Source  == > can not be done to display 2 images at the same time ...
-	 * @param[in] _uri New file of the Image
-	 * @param[in] _size for the image when Verctorial image loading is requested
+	 * change the image Source  == > can not be done to display 2 images at the same time ...
+	 * @param _uri New file of the Image
+	 * @param _size for the image when Verctorial image loading is requested
 	 */
 	public void setSource(final Uri _uri) {
 		setSource(_uri, 32);

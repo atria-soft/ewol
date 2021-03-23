@@ -48,7 +48,7 @@ public class EventInput {
 	};
 	
 	/**
-	 * @brief Reset the input property of the curent event.
+	 * Reset the input property of the curent event.
 	 */
 	public void reset() {
 		// TODO : Call the entry element ant rest it ...

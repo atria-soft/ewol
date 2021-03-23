@@ -11,7 +11,7 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.internal.Log;
 
 /**
- * @brief This is a simple interface to converte application display string in a
+ * This is a simple interface to converte application display string in a
  *        generic current system language
  * @note: The current name of language reprenent the file name, then if you want
  *        to get the machine language in an other than generic passed, juste add
@@ -30,19 +30,19 @@ public class ETranslate {
 	private static boolean g_isInit = false;
 
 	/**
-	 * @brief Initialize etranslate
-	 * @param[in] _argc Number of argument list
-	 * @param[in] _argv List of arguments
+	 * Initialize etranslate
+	 * @param _argc Number of argument list
+	 * @param _argv List of arguments
 	 */
 	static {
 
 	}
 
 	/**
-	 * @brief Set the path folder of the translation files
-	 * @param[in] _lib Library name that the path depend
-	 * @param[in] _uri ETK generic uri (DATA:... or /xxx)
-	 * @param[in] _major This path is the major path (The last loaded, the one which
+	 * Set the path folder of the translation files
+	 * @param _lib Library name that the path depend
+	 * @param _uri ETK generic uri (DATA:... or /xxx)
+	 * @param _major This path is the major path (The last loaded, the one which
 	 *            overload all)
 	 */
 	public static void addPath(final String _lib, final Uri _uri) {
@@ -60,7 +60,7 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Automatic detection of the system language
+	 * Automatic detection of the system language
 	 */
 	public static void autoDetectLanguage() {
 		if (g_isInit == false) {
@@ -98,9 +98,9 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Translate a specific text (if not find, it will be retured the same
+	 * Translate a specific text (if not find, it will be retured the same
 	 *        text).
-	 * @param[in] _instance Text to translate.
+	 * @param _instance Text to translate.
 	 * @return The tranlated text.
 	 */
 	public static String get(final String _instance) {
@@ -121,7 +121,7 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Get the current language loaded
+	 * Get the current language loaded
 	 * @return The 2/3 char defining the language
 	 */
 	public static String getLanguage() {
@@ -129,7 +129,7 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Get the current language selected
+	 * Get the current language selected
 	 * @return The 2/3 char defining the language
 	 */
 	public static String getLanguageDefault() {
@@ -137,8 +137,8 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Get the current paths of the library
-	 * @param[in] _lib Library name that the path depend
+	 * Get the current paths of the library
+	 * @param _lib Library name that the path depend
 	 * @return Uri value.
 	 */
 	public static Uri getPaths(final String _lib) {
@@ -225,9 +225,9 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Set the language to load data. when no data availlable, we get the
+	 * Set the language to load data. when no data availlable, we get the
 	 *        default language.
-	 * @param[in] _lang Language to load : ("EN" for english, "FR" for french, "DE"
+	 * @param _lang Language to load : ("EN" for english, "FR" for french, "DE"
 	 *            for German, "SP" for spanish ...)
 	 */
 	public static void setLanguage(final String _lang) {
@@ -263,9 +263,9 @@ public class ETranslate {
 	}
 
 	/**
-	 * @brief Set the default language to load data (the default language might
+	 * Set the default language to load data (the default language might
 	 *        contain all internal data for the basic application)
-	 * @param[in] _lang Language to load : ("EN" for english, "FR" for french, "DE"
+	 * @param _lang Language to load : ("EN" for english, "FR" for french, "DE"
 	 *            for German, "SP" for spanish ...)
 	 */
 	public static void setLanguageDefault(final String _lang) {

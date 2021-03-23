@@ -23,7 +23,7 @@ namespace ewol {
 		using EntryWeak = ememory::WeakPtr<ewol::widget::Entry>;
 		/**
 		 * @ingroup ewolWidgetGroup
-		 * @brief Entry box display :
+		 * Entry box display :
 		 *
 		 * ~~~~~~~~~~~~~~~~~~~~~~
 		 * 	----------------------------------------------
@@ -52,21 +52,21 @@ namespace ewol {
 				ewol::compositing::Text this.text; //!< text display this.text
 			protected:
 				/**
-				 * @brief Contuctor
-				 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
+				 * Contuctor
+				 * @param _newData The USting that might be set in the Entry box (no event generation!!)
 				 */
 				Entry();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Entry, "Entry");
 				/**
-				 * @brief Destuctor
+				 * Destuctor
 				 */
 				 ~Entry();
 			protected:
 				/**
-				 * @brief internal check the value with RegExp checking
-				 * @param[in] _newData The new string to display
+				 * internal check the value with RegExp checking
+				 * @param _newData The new string to display
 				 */
 				void setInternalValue( String _newData);
 			private:
@@ -79,28 +79,28 @@ namespace ewol {
 				int this.displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == this.displayCursorPos chan no selection availlable
 			protected:
 				/**
-				 * @brief informe the system thet the text change and the start position change
+				 * informe the system thet the text change and the start position change
 				 */
 				 void markToUpdateTextPosition();
 				/**
-				 * @brief update the display position start  == > depending of the position of the Cursor and the size of the Data inside
+				 * update the display position start  == > depending of the position of the Cursor and the size of the Data inside
 				 * @change this.displayStartPosition < ==  updated
 				 */
 				 void updateTextPosition();
 				/**
-				 * @brief change the cursor position with the curent position requested on the display
-				 * @param[in] _pos Absolute position of the event
+				 * change the cursor position with the curent position requested on the display
+				 * @param _pos Absolute position of the event
 				 * @note The display is automaticly requested when change apear.
 				 */
 				 void updateCursorPosition( Vector2f _pos, boolean _Selection=false);
 			public:
 				/**
-				 * @brief Copy the selected data on the specify clipboard
-				 * @param[in] _clipboardID Selected clipboard
+				 * Copy the selected data on the specify clipboard
+				 * @param _clipboardID Selected clipboard
 				 */
 				 void copySelectionToClipBoard(enum gale::context::clipBoard::clipboardListe _clipboardID);
 				/**
-				 * @brief remove the selected area
+				 * remove the selected area
 				 * @note This request a regeneration of the display
 				 */
 				 void removeSelected();
@@ -118,8 +118,8 @@ namespace ewol {
 			protected:
 				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
-				 * @brief Periodic call to update grapgic display
-				 * @param[in] _event Time generic event
+				 * Periodic call to update grapgic display
+				 * @param _event Time generic event
 				 */
 				void periodicCall( ewol::event::Time _event);
 			private: // callback functions

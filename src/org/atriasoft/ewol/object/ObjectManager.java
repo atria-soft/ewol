@@ -43,9 +43,9 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief Internal API that used only with Object toi reference itself in the manager.
+	 * Internal API that used only with Object toi reference itself in the manager.
 	 * @note The manager remove the object when the refecence Low down 1 (last keeper)
-	 * @param[in] _object Reference shared pointer on the object
+	 * @param _object Reference shared pointer on the object
 	 */
 	public synchronized void add(final EwolObject _object) {
 		if (_object == null) {
@@ -55,7 +55,7 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief clean the weak pointer list (remove weak_ptr that is remoed)
+	 * clean the weak pointer list (remove weak_ptr that is remoed)
 	 */
 	public synchronized void cleanInternalRemoved() {
 		final int nbObject = this.eObjectList.size();
@@ -73,7 +73,7 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief Display all object Open.
+	 * Display all object Open.
 	 */
 	public synchronized void displayListObject() {
 		Log.info("List loaded object : ");
@@ -86,8 +86,8 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief Retrive an Object with his name
-	 * @param[in] _name Name of the Object
+	 * Retrive an Object with his name
+	 * @param _name Name of the Object
 	 * @return Pointer on the finded Object.
 	 */
 	public synchronized EwolObject get(final String _name) {
@@ -104,7 +104,7 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief Get the number of loaded object in the system
+	 * Get the number of loaded object in the system
 	 * @return number of Object
 	 */
 	public synchronized int getNumberObject() {
@@ -112,8 +112,8 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief retrive an object with his name
-	 * @param[in] _name Name of the object
+	 * retrive an object with his name
+	 * @param _name Name of the object
 	 * @return the requested object or null
 	 */
 	public synchronized EwolObject getObjectNamed(final String _name) {
@@ -121,8 +121,8 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief Call every time we can with the current time
-	 * @param[in] _localTime Current system Time.
+	 * Call every time we can with the current time
+	 * @param _localTime Current system Time.
 	 */
 	public synchronized void timeCall(final Clock _localTime) {
 		final Clock previousTime = this.lastPeriodicCallTime;
@@ -145,15 +145,15 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief If the application is suspended The Ewol Object manager does not know it, just call this to update delta call
-	 * @param[in] _localTime Current system Time.
+	 * If the application is suspended The Ewol Object manager does not know it, just call this to update delta call
+	 * @param _localTime Current system Time.
 	 */
 	public synchronized void timeCallResume(final Clock _localTime) {
 		this.lastPeriodicCallTime = _localTime;
 	}
 	
 	/**
-	 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
+	 * remove all resources (un-init) out of the destructor (due to the system implementation)
 	 */
 	public synchronized void unInit() {
 		Log.debug(" == > Un-Init Object-Manager");
@@ -174,16 +174,16 @@ public class ObjectManager {
 	}
 	
 	/**
-	 * @brief Add a worker on the system list.
-	 * @param[in] _worker Worker to add in the list.
+	 * Add a worker on the system list.
+	 * @param _worker Worker to add in the list.
 	 */
 	public synchronized void workerAdd(final EwolObject _worker) {
 		this.workerList.add(_worker);
 	}
 	
 	/**
-	 * @brief Remove a worker on the system list.
-	 * @param[in] _worker Worker to add in the list.
+	 * Remove a worker on the system list.
+	 * @param _worker Worker to add in the list.
 	 */
 	public synchronized void workerRemove(final EwolObject _worker) {
 		

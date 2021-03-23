@@ -14,8 +14,8 @@ public class Sizer extends ContainerN {
 	public displayMode propertyMode; //!< Methode to display the widget list (vert/hory ...)
 	public Dimension propertyBorderSize; //!< Border size needed for all the display
 	/**
-	 * @brief Constructor
-	 * @param[in] _mode The mode to display the elements
+	 * Constructor
+	 * @param _mode The mode to display the elements
 	 */
 	public Sizer();
 	public 	void onChangeSize() ;

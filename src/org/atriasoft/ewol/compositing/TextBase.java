@@ -84,7 +84,7 @@ public abstract class TextBase extends Compositing {
 	public TextDecoration htmlDecoTmp = new TextDecoration(); // !< current decoration
 
 	/**
-	 * @brief generic constructor
+	 * generic constructor
 	 */
 	public TextBase() {
 		this(new Uri("DATA", "text.vert", "ewol"), new Uri("DATA", "text.frag", "ewol"));
@@ -109,8 +109,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief calculate a theoric charcode size
-	 * @param[in] _charcode The Unicode value to calculate dimention.
+	 * calculate a theoric charcode size
+	 * @param _charcode The Unicode value to calculate dimention.
 	 * @return The theoric size used.
 	 */
 	public Vector3f calculateSize(final Character _charcode) {
@@ -118,8 +118,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief calculate a theoric text size
-	 * @param[in] _text The string to calculate dimention.
+	 * calculate a theoric text size
+	 * @param _text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
 	public Vector3f calculateSize(final String _text) {
@@ -138,8 +138,8 @@ public abstract class TextBase extends Compositing {
 	public abstract Vector3f calculateSizeChar(Character _charcode);
 
 	/**
-	 * @brief calculate a theoric text size
-	 * @param[in] _text The string to calculate dimention.
+	 * calculate a theoric text size
+	 * @param _text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
 	public Vector3f calculateSizeDecorated(final String _text) {
@@ -155,8 +155,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief calculate a theoric text size
-	 * @param[in] _text The string to calculate dimention.
+	 * calculate a theoric text size
+	 * @param _text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
 	public Vector3f calculateSizeHTML(final String _text) {
@@ -187,7 +187,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief clear all the registered element in the current element
+	 * clear all the registered element in the current element
 	 */
 	@Override
 	public void clear() {
@@ -202,14 +202,14 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief disable the alignement system
+	 * disable the alignement system
 	 */
 	public void disableAlignement() {
 		this.alignement = AligneMode.alignDisable;
 	}
 
 	/**
-	 * @brief remove the cursor display
+	 * remove the cursor display
 	 */
 	public void disableCursor() {
 		this.selectionStartPos = -100;
@@ -217,7 +217,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief draw All the registered text in the current element on openGL
+	 * draw All the registered text in the current element on openGL
 	 */
 	@Override
 	public void draw(final boolean _disableDepthTest) {
@@ -230,7 +230,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief draw All the refistered text in the current element on openGL
+	 * draw All the refistered text in the current element on openGL
 	 */
 	public abstract void drawD(final boolean _disableDepthTest);;
 
@@ -238,13 +238,13 @@ public abstract class TextBase extends Compositing {
 	public abstract void drawMT(final Matrix4f _transformationMatrix, final boolean _enableDepthTest);
 
 	/**
-	 * @brief calculate the element number that is the first out the alignement
+	 * calculate the element number that is the first out the alignement
 	 *        range (start at the specify ID, and use start pos with current one)
-	 * @param[in] _text The string that might be parsed.
-	 * @param[in] _start The first elemnt that might be used to calculate.
-	 * @param[out] _stop The last Id availlable in the current string.
-	 * @param[out] _space Number of space in the string.
-	 * @param[out] _freespace This represent the number of pixel present in the
+	 * @param _text The string that might be parsed.
+	 * @param _start The first elemnt that might be used to calculate.
+	 * @param _stop The last Id availlable in the current string.
+	 * @param _space Number of space in the string.
+	 * @param _freespace This represent the number of pixel present in the
 	 *             right white space.
 	 * @return true if the rifht has free space that can be use for jystify.
 	 * @return false if we find '\n'
@@ -308,7 +308,7 @@ public abstract class TextBase extends Compositing {
 	};
 
 	/**
-	 * @brief This generate the line return == > it return to the alignement
+	 * This generate the line return == > it return to the alignement
 	 *        position start and at the correct line position ==> it might be use to
 	 *        not know the line height
 	 */
@@ -318,7 +318,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief get the current alignement property
+	 * get the current alignement property
 	 * @return the curent alignement type
 	 */
 	public AligneMode getAlignement() {
@@ -326,7 +326,7 @@ public abstract class TextBase extends Compositing {
 	};
 
 	/**
-	 * @brief get the current font mode
+	 * get the current font mode
 	 * @return The font mode applied
 	 */
 	public FontMode getFontMode() {
@@ -338,7 +338,7 @@ public abstract class TextBase extends Compositing {
 	public abstract float getHeight();;
 
 	/**
-	 * @brief get the current display position (sometime needed in the gui control)
+	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
 	 */
 	public Vector3f getPos() {
@@ -348,8 +348,8 @@ public abstract class TextBase extends Compositing {
 	public abstract float getSize();
 
 	/**
-	 * @brief add a line with the current this.htmlDecoTmp decoration
-	 * @param[in] _data The cuurent data to add.
+	 * add a line with the current this.htmlDecoTmp decoration
+	 * @param _data The cuurent data to add.
 	 */
 	public void htmlAddData(final String _data) {
 		if (this.htmlCurrrentLine.length() > 0
@@ -369,7 +369,7 @@ public abstract class TextBase extends Compositing {
 	};
 
 	/**
-	 * @brief draw the current line
+	 * draw the current line
 	 */
 	public void htmlFlush() {
 		if (this.htmlCurrrentLine.length() > 0) {
@@ -380,7 +380,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief load the openGL program and get all the ID needed
+	 * load the openGL program and get all the ID needed
 	 */
 	public void loadProgram(final Uri _vertexShader, final Uri _fragmentShader) {
 		ResourceProgram old = this.GLprogram;
@@ -401,9 +401,9 @@ public abstract class TextBase extends Compositing {
 	};
 
 	/**
-	 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in
+	 * This parse a tinyXML node (void pointer to permit to hide tiny XML in
 	 *        include).
-	 * @param[in] _element the exml element.
+	 * @param _element the exml element.
 	 */
 	public void parseHtmlNode(final XmlElement _element) {
 		for (XmlNode it : _element.getNodes()) {
@@ -514,8 +514,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief display a compleat string in the current element.
-	 * @param[in] _text The string to display.
+	 * display a compleat string in the current element.
+	 * @param _text The string to display.
 	 */
 	public void print(final String _text) {
 		List<TextDecoration> decorationEmpty = new ArrayList<>();
@@ -523,10 +523,10 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief display a compleat string in the current element whith specific
+	 * display a compleat string in the current element whith specific
 	 *        decorations (advence mode).
-	 * @param[in] _text The string to display.
-	 * @param[in] _decoration The text decoration for the text that might be display
+	 * @param _text The string to display.
+	 * @param _decoration The text decoration for the text that might be display
 	 *            (if the vector is smaller, the last parameter is get)
 	 */
 	public void print(final String _text, final List<TextDecoration> _decoration) {
@@ -705,16 +705,16 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief display the current char in the current element (note that the kerning
+	 * display the current char in the current element (note that the kerning
 	 *        is availlable if the position is not changed)
-	 * @param[in] _charcode Char that might be dispalyed
+	 * @param _charcode Char that might be dispalyed
 	 */
 	public abstract void printChar(Character _charcode);
 
 	/**
-	 * @brief draw a cursor at the specify position
-	 * @param[in] _isInsertMode True if the insert mode is activated
-	 * @param[in] _cursorSize The sizae of the cursor that might be set when insert
+	 * draw a cursor at the specify position
+	 * @param _isInsertMode True if the insert mode is activated
+	 * @param _cursorSize The sizae of the cursor that might be set when insert
 	 *            mode is set [default 20]
 	 */
 	public void printCursor(final boolean _isInsertMode) {
@@ -733,7 +733,7 @@ public abstract class TextBase extends Compositing {
 	};
 
 	/**
-	 * @brief display a compleat string in the current element with the generic
+	 * display a compleat string in the current element with the generic
 	 *        decoration specification. (basic html data)
 	 * 
 	 *        [code style=xml] <br/>
@@ -757,7 +757,7 @@ public abstract class TextBase extends Compositing {
 	 * 
 	 * @note This is parsed with tiny xml, then be carfull that the XML is correct,
 	 *       and all balises are closed ... otherwite the display can not be done
-	 * @param[in] _text The string to display.
+	 * @param _text The string to display.
 	 * @TODO : implementation not done ....
 	 */
 	public void printDecorated(final String _text) {
@@ -769,7 +769,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief display a compleat string in the current element with the generic
+	 * display a compleat string in the current element with the generic
 	 *        decoration specification. (basic html data)
 	 * 
 	 *        [code style=xml] <html> <body> <br/>
@@ -793,7 +793,7 @@ public abstract class TextBase extends Compositing {
 	 * 
 	 * @note This is parsed with tiny xml, then be carfull that the XML is correct,
 	 *       and all balises are closed ... otherwite the display can not be done
-	 * @param[in] _text The string to display.
+	 * @param _text The string to display.
 	 * @TODO : implementation not done ....
 	 */
 	public void printHTML(final String _text) {
@@ -828,7 +828,7 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief clear all the intermediate result detween 2 prints
+	 * clear all the intermediate result detween 2 prints
 	 */
 	public void reset() {
 		this.position = Vector3f.ZERO;
@@ -871,9 +871,9 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief Request a clipping area for the text (next draw only)
-	 * @param[in] _pos Start position of the clipping
-	 * @param[in] _posEnd End position of the clipping
+	 * Request a clipping area for the text (next draw only)
+	 * @param _pos Start position of the clipping
+	 * @param _posEnd End position of the clipping
 	 */
 	public void setClipping(final Vector3f _pos, final Vector3f _posEnd) {
 		// note the internal system all time request to have a bounding all time in the
@@ -886,9 +886,9 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief enable/Disable the clipping (without lose the current clipping
+	 * enable/Disable the clipping (without lose the current clipping
 	 *        position)
-	 * @brief _newMode The new status of the clipping
+	 * _newMode The new status of the clipping
 	 */
 	// TODO : Rename setClippingActivity
 	public void setClippingMode(final boolean _newMode) {
@@ -902,26 +902,26 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief Request a clipping area for the text (next draw only)
-	 * @param[in] _pos Start position of the clipping
-	 * @param[in] _width Width size of the clipping
+	 * Request a clipping area for the text (next draw only)
+	 * @param _pos Start position of the clipping
+	 * @param _width Width size of the clipping
 	 */
 	public void setClippingWidth(final Vector3f _pos, final Vector3f _width) {
 		setClipping(_pos, _pos.add(_width));
 	}
 
 	/**
-	 * @brief set the Color of the current foreground font
-	 * @param[in] _color Color to set on foreground (for next print)
+	 * set the Color of the current foreground font
+	 * @param _color Color to set on foreground (for next print)
 	 */
 	public void setColor(final Color _color) {
 		this.color = _color;
 	}
 
 	/**
-	 * @brief set the background color of the font (for selected Text (not the
+	 * set the background color of the font (for selected Text (not the
 	 *        global BG))
-	 * @param[in] _color Color to set on background (for next print)
+	 * @param _color Color to set on background (for next print)
 	 */
 	public void setColorBg(final Color _color) {
 		this.colorBg = _color;
@@ -929,16 +929,16 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief change the cursor color
-	 * @param[in] _color New color for the Selection
+	 * change the cursor color
+	 * @param _color New color for the Selection
 	 */
 	public void setCursorColor(final Color _color) {
 		this.colorCursor = _color;
 	}
 
 	/**
-	 * @brief set a cursor at a specific position:
-	 * @param[in] _cursorPos id of the cursor position
+	 * set a cursor at a specific position:
+	 * @param _cursorPos id of the cursor position
 	 */
 	public void setCursorPos(final int _cursorPos) {
 		this.selectionStartPos = _cursorPos;
@@ -946,9 +946,9 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief set a cursor at a specific position with his associated selection:
-	 * @param[in] _cursorPos id of the cursor position
-	 * @param[in] _selectionStartPos id of the starting of the selection
+	 * set a cursor at a specific position with his associated selection:
+	 * @param _cursorPos id of the cursor position
+	 * @param _selectionStartPos id of the starting of the selection
 	 */
 	public void setCursorSelection(final int _cursorPos, final int _selectionStartPos) {
 		this.selectionStartPos = _selectionStartPos;
@@ -956,34 +956,34 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief set the default background color of the font (when reset, set this
+	 * set the default background color of the font (when reset, set this
 	 *        value ...)
-	 * @param[in] _color Color to set on background
+	 * @param _color Color to set on background
 	 */
 	public void setDefaultColorBg(final Color _color) {
 		this.defaultColorBg = _color;
 	}
 
 	/**
-	 * @brief set the default Foreground color of the font (when reset, set this
+	 * set the default Foreground color of the font (when reset, set this
 	 *        value ...)
-	 * @param[in] _color Color to set on foreground
+	 * @param _color Color to set on foreground
 	 */
 	public void setDefaultColorFg(final Color _color) {
 		this.defaultColorFg = _color;
 	}
 
 	/**
-	 * @brief Specify the font property (this reset the internal element of the
+	 * Specify the font property (this reset the internal element of the
 	 *        current text (system requirement)
-	 * @param[in] fontName Current name of the selected font
-	 * @param[in] fontSize New font size
+	 * @param fontName Current name of the selected font
+	 * @param fontSize New font size
 	 */
 	public abstract void setFont(final String _fontName, final int _fontSize);
 
 	/**
-	 * @brief enable or disable the bold mode
-	 * @param[in] _status The new status for this display property
+	 * enable or disable the bold mode
+	 * @param _status The new status for this display property
 	 */
 	public void setFontBold(final boolean _status) {
 		if (_status == true) {
@@ -1004,8 +1004,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief enable or disable the italic mode
-	 * @param[in] _status The new status for this display property
+	 * enable or disable the italic mode
+	 * @param _status The new status for this display property
 	 */
 	public void setFontItalic(final boolean _status) {
 		if (_status == true) {
@@ -1026,28 +1026,28 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief Specify the font mode for the next @ref print
-	 * @param[in] mode The font mode requested
+	 * Specify the font mode for the next @ref print
+	 * @param mode The font mode requested
 	 */
 	public abstract void setFontMode(FontMode _mode);;
 
 	/**
-	 * @brief Specify the font name (this reset the internal element of the current
+	 * Specify the font name (this reset the internal element of the current
 	 *        text (system requirement)
-	 * @param[in] _fontName Current name of the selected font
+	 * @param _fontName Current name of the selected font
 	 */
 	public abstract void setFontName(final String _fontName);
 
 	/**
-	 * @brief Specify the font size (this reset the internal element of the current
+	 * Specify the font size (this reset the internal element of the current
 	 *        text (system requirement)
-	 * @param[in] _fontSize New font size
+	 * @param _fontSize New font size
 	 */
 	public abstract void setFontSize(final int _fontSize);
 
 	/**
-	 * @brief set the activation of the Kerning for the display (if it existed)
-	 * @param[in] _newMode enable/Diasable the kerning on this font.
+	 * set the activation of the Kerning for the display (if it existed)
+	 * @param _newMode enable/Diasable the kerning on this font.
 	 */
 	public void setKerningMode(final boolean _newMode) {
 		this.kerning = _newMode;
@@ -1059,8 +1059,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief set position for the next text writen
-	 * @param[in] _pos Position of the text (in 3D)
+	 * set position for the next text writen
+	 * @param _pos Position of the text (in 3D)
 	 */
 	public void setPos(final Vector3f _pos) {
 		// check min max for display area
@@ -1091,8 +1091,8 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief set relative position for the next text written
-	 * @param[in] _pos offset apply of the text (in 3D)
+	 * set relative position for the next text written
+	 * @param _pos offset apply of the text (in 3D)
 	 */
 	public void setRelPos(final Vector3f _pos) {
 		this.position = this.position.add(_pos);
@@ -1101,18 +1101,18 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * @brief change the selection color
-	 * @param[in] _color New color for the Selection
+	 * change the selection color
+	 * @param _color New color for the Selection
 	 */
 	public void setSelectionColor(final Color _color) {
 		this.colorSelection = _color;
 	}
 
 	/**
-	 * @brief This generate the possibility to generate the big text property
-	 * @param[in] _startTextpos The x text start position of the display.
-	 * @param[in] _stopTextPos The x text stop position of the display.
-	 * @param[in] _alignement mode of alignement for the Text.
+	 * This generate the possibility to generate the big text property
+	 * @param _startTextpos The x text start position of the display.
+	 * @param _stopTextPos The x text stop position of the display.
+	 * @param _alignement mode of alignement for the Text.
 	 * @note The text align in center change of line every display done (even if it
 	 *       was just a char)
 	 */

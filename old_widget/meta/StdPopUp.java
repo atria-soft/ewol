@@ -15,7 +15,7 @@ namespace ewol {
 		using StdPopUp = ememory::Ptr<ewol::widget::StdPopUp>;
 		using StdPopUpWeak = ememory::WeakPtr<ewol::widget::StdPopUp>;
 		/**
-		 * @brief The std pop up widget is a siple message widget to notify user of some simple things, like:
+		 * The std pop up widget is a siple message widget to notify user of some simple things, like:
 		 *
 		 * [pre]
 		 * 	+---------------------------------+---+---+---+
@@ -44,33 +44,33 @@ namespace ewol {
 				eproperty::Value<String> propertyComment; //!< comment in the pop-up (can be decorated text)
 			protected:
 				/**
-				 * @brief std-pop-up ructor.
+				 * std-pop-up ructor.
 				 */
 				StdPopUp();
 				void init();
 			public:
 				DECLARE_WIDGET_FACTORY(StdPopUp, "StdPopUp");
 				/**
-				 * @brief std-pop-up destructor.
+				 * std-pop-up destructor.
 				 */
 				 ~StdPopUp();
 			protected:
 				ewol::widget::Label this.title; //!< Title Label widget
 				/**
-				 * @brief property callback when request a change of the title.
+				 * property callback when request a change of the title.
 				 */
 				void onChangePropertyTitle();
 				ewol::widget::Label this.comment; //!< Comment label widget
 				/**
-				 * @brief property callback when request a change of the Comment.
+				 * property callback when request a change of the Comment.
 				 */
 				void onChangePropertyComment();
 			protected:
 				ewol::widget::Sizer this.subBar; //!< subwidget bar containing all the button.
 			public:
 				/**
-				 * @brief Add a buttom button.
-				 * @param[in] _text Decorated text to diplay in button.
+				 * Add a buttom button.
+				 * @param _text Decorated text to diplay in button.
 				 */
 				ewol::widget::Button addButton( String _text, boolean _autoExit=false);
 			public:

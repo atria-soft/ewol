@@ -14,14 +14,14 @@ import org.atriasoft.exml.model.XmlElement;
  */
 
 /**
- * @brief Basic message classes for ewol system
+ * Basic message classes for ewol system
  * this class permit at every Object to communicate between them.
  */
 public class EwolObject {
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
 	
 	/**
-	 * @brief get the curent the system inteface.
+	 * get the curent the system inteface.
 	 * @return current reference on the instance.
 	 */
 	protected static EwolContext getContext() {
@@ -37,8 +37,8 @@ public class EwolObject {
 	}
 	
 	/** 
-	 * @brief Retrive an object with his name (in the global list)
-	 * @param[in] _name Name of the object
+	 * Retrive an object with his name (in the global list)
+	 * @param _name Name of the object
 	 * @return the requested object or null
 	 */
 	public static EwolObject getObjectNamed(final String _objectName) {
@@ -60,7 +60,7 @@ public class EwolObject {
 	private boolean isResource = false; //!< enable this when you want to declare this element is auto-remove
 	
 	/**
-	 * @brief Constructor.
+	 * Constructor.
 	 */
 	public EwolObject() {
 		// note this is nearly atomic ... (but it is enough)
@@ -73,7 +73,7 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Auto-destroy the object
+	 * Auto-destroy the object
 	 */
 	protected void autoDestroy() {
 		Log.verbose("Destroy object: [" + getId() + "] type:" + this.getClass().getCanonicalName());
@@ -89,14 +89,14 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Destroy the current object
+	 * Destroy the current object
 	 */
 	public void destroy() {
 		autoDestroy();
 	};
 	
 	/**
-	 * @brief get the UniqueId of the Object
+	 * get the UniqueId of the Object
 	 * @return the requested ID
 	 */
 	public int getId() {
@@ -108,8 +108,8 @@ public class EwolObject {
 	};
 	
 	/**
-	 * @brief load attribute properties with an XML node.
-	 * @param[in] _node Reference on the XML node.
+	 * load attribute properties with an XML node.
+	 * @param _node Reference on the XML node.
 	 * @return true : All has been done corectly.
 	 * @return false : An error occured.
 	 */
@@ -134,8 +134,8 @@ public class EwolObject {
 	*/
 	
 	/**
-	 * @brief load properties with an XML node.
-	 * @param[in] _node Reference on the XML node.
+	 * load properties with an XML node.
+	 * @param _node Reference on the XML node.
 	 * @return true : All has been done corectly.
 	 * @return false : An error occured.
 	 */
@@ -144,7 +144,7 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief store properties in this XML node.
+	 * store properties in this XML node.
 	 * @param[in,out] _node Reference on the XML node.
 	 * @return true : All has been done corectly.
 	 * @return false : An error occured.
@@ -163,7 +163,7 @@ public class EwolObject {
 	*/
 	
 	/**
-	 * @brief get the static status of the Object  == > mark at true if the user set the object mark as static allocated element ==> not auto remove element
+	 * get the static status of the Object  == > mark at true if the user set the object mark as static allocated element ==> not auto remove element
 	 * @return true if it might not be removed  == > usefull for conficuration class
 	 */
 	public boolean getStatic() {
@@ -171,7 +171,7 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Get the resource status of the element.
+	 * Get the resource status of the element.
 	 * @return the resource status.
 	 */
 	public boolean getStatusResource() {
@@ -179,8 +179,8 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Retrive an object with his name (in the global list)
-	 * @param[in] _name Name of the object
+	 * Retrive an object with his name (in the global list)
+	 * @param _name Name of the object
 	 * @return the requested object or null
 	 */
 	public EwolObject getSubObjectNamed(final String _objectName) {
@@ -192,7 +192,7 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Check if the current objetc his destroy (in removing)
+	 * Check if the current objetc his destroy (in removing)
 	 * @return true The object is removed
 	 * @return false The object is not removed
 	 */
@@ -201,15 +201,15 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Remove the current parenting.
+	 * Remove the current parenting.
 	 */
 	public void removeParent() {
 		this.parent = null;
 	}
 	
 	/**
-	 * @brief Called by a whild that want to remove pointer of itself from the current list of his parrent
-	 * @param[in] _child Object of the child that want to remove itself
+	 * Called by a whild that want to remove pointer of itself from the current list of his parrent
+	 * @param _child Object of the child that want to remove itself
 	 */
 	protected void requestDestroyFromChild(final EwolObject _child) {
 		Log.info("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
@@ -221,8 +221,8 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Set the Object has new parrent.
-	 * @param[in] _newParent Object that requesting the parenting
+	 * Set the Object has new parrent.
+	 * @param _newParent Object that requesting the parenting
 	 */
 	public void setParent(final EwolObject _newParent) {
 		// TODO : Implement change of parent ...
@@ -230,9 +230,9 @@ public class EwolObject {
 	}
 	
 	/**
-	 * @brief Declare this element as a resource (or singleton) this mean the element will 
+	 * Declare this element as a resource (or singleton) this mean the element will 
 	 * not be auto Remove at the end of the programm. It just notify that it is not removed.
-	 * @param[in] _val Value of the type of the element.
+	 * @param _val Value of the type of the element.
 	 */
 	public void setStatusResource(final boolean _val) {
 		this.isResource = _val;

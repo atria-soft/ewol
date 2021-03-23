@@ -40,25 +40,25 @@ namespace ewol {
 				int this.colorId; //!< Color of the image.
 			public:
 				/**
-				 * @brief 
+				 * 
 				 */
 				Image();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(Image, "Image");
 				/**
-				 * @brief 
+				 * 
 				 */
 				 ~Image();
 				/**
-				 * @brief set All the configuration of the current image
-				 * @param[in] _uri URI of the new image
-				 * @param[in] _border New border size to set
+				 * set All the configuration of the current image
+				 * @param _uri URI of the new image
+				 * @param _border New border size to set
 				 */
 				void set( etk::Uri _uri,  gale::Dimension _border);
 				/**
-				 * @brief Set an image with direct elements
-				 * @param[in] _image Image to set in the display
+				 * Set an image with direct elements
+				 * @param _image Image to set in the display
 				 */
 				void setCustumSource( egami::Image _image);
 			protected:

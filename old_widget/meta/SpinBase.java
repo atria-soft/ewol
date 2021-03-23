@@ -76,14 +76,14 @@ namespace ewol {
 				int this.confIdDownData;
 			protected:
 				/**
-				 * @brief Constructor
-				 * @param[in] _mode The mode to display the elements
+				 * Constructor
+				 * @param _mode The mode to display the elements
 				 */
 				SpinBase();
 				void init() ;
 			public:
 				/**
-				 * @brief Destructor
+				 * Destructor
 				 */
 				 ~SpinBase();
 			protected:

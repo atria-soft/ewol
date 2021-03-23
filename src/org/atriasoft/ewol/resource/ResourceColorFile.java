@@ -30,7 +30,7 @@ class ListElement {
 }
 
 /**
- * @brief ColorFile is a Resource designed to be specific with the theme (for
+ * ColorFile is a Resource designed to be specific with the theme (for
  *        example black, or white or orange ...)
  */
 public class ResourceColorFile extends Resource {
@@ -38,8 +38,8 @@ public class ResourceColorFile extends Resource {
 	private Color errorColor = Color.ORANGE;
 
 	/**
-	 * @brief Constructor of the color property file
-	 * @param[in] _uri Name of the file needed
+	 * Constructor of the color property file
+	 * @param _uri Name of the file needed
 	 */
 	public ResourceColorFile(final Uri _uri) {
 		super(_uri.get());
@@ -54,8 +54,8 @@ public class ResourceColorFile extends Resource {
 	}
 
 	/**
-	 * @brief Get the associated color of the ID.
-	 * @param[in] _Id Id of the color.
+	 * Get the associated color of the ID.
+	 * @param _Id Id of the color.
 	 * @return The requested color.
 	 */
 	Color get(final int _id) {
@@ -66,7 +66,7 @@ public class ResourceColorFile extends Resource {
 	}
 
 	/**
-	 * @brief Get All color name
+	 * Get All color name
 	 * @return list of all color existing
 	 */
 	List<String> getColors() {
@@ -138,8 +138,8 @@ public class ResourceColorFile extends Resource {
 	}
 
 	/**
-	 * @brief Request the presence of a specific color.
-	 * @param[in] _paramName Name of the color.
+	 * Request the presence of a specific color.
+	 * @param _paramName Name of the color.
 	 * @return A unique ID of the color (or -1 if an error occured).
 	 */
 	public synchronized int request(final String _paramName) {
@@ -154,8 +154,8 @@ public class ResourceColorFile extends Resource {
 	}
 
 	/**
-	 * @brief Set the error color.
-	 * @param[in] _errorColor Color that might be set when not finding a color
+	 * Set the error color.
+	 * @param _errorColor Color that might be set when not finding a color
 	 */
 	public void setErrorColor(final Color _errorColor) {
 		this.errorColor = _errorColor;

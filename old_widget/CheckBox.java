@@ -40,25 +40,25 @@ namespace ewol {
 				int this.shaperIdSizeInsize;
 			protected:
 				/**
-				 * @brief Main checkbox ructor
-				 * @param[in] _shaperName Shaper file properties
+				 * Main checkbox ructor
+				 * @param _shaperName Shaper file properties
 				 */
 				CheckBox();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(CheckBox, "CheckBox");
 				/**
-				 * @brief main destructor.
+				 * main destructor.
 				 */
 				 ~CheckBox();
 			protected:
 				/**
-				 * @brief internal system to change the property of the current status
-				 * @param[in] _newStatusId new state
+				 * internal system to change the property of the current status
+				 * @param _newStatusId new state
 				 */
 				void changeStatusIn(int _newStatusId);
 				/**
-				 * @brief update the status with the internal satte of the button ...
+				 * update the status with the internal satte of the button ...
 				 */
 				void CheckStatus();
 			protected:
@@ -72,8 +72,8 @@ namespace ewol {
 			protected:
 				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
-				 * @brief Periodic call to update grapgic display
-				 * @param[in] _event Time generic event
+				 * Periodic call to update grapgic display
+				 * @param _event Time generic event
 				 */
 				void periodicCall( ewol::event::Time _event);
 			protected:

@@ -33,9 +33,9 @@ public class WidgetManager {
 	private Runnable funcRedrawNeeded = null;
 	
 	/**
-	 * @brief Create a widget with his name.
-	 * @param[in] _name Name of the widget to create.
-	 * @param[in] _node Reference on the XML node.
+	 * Create a widget with his name.
+	 * @param _name Name of the widget to create.
+	 * @param _node Reference on the XML node.
 	 * @return The widget created (null if it does not exist).
 	 */
 	/*
@@ -84,9 +84,9 @@ public class WidgetManager {
 	
 	/**
 	 * @throws Exception 
-	 * @brief add a factory of a specific widget.
-	 * @param[in] _name Name of the widget that is associated of the factory.
-	 * @param[in] _class class interface
+	 * add a factory of a specific widget.
+	 * @param _name Name of the widget that is associated of the factory.
+	 * @param _class class interface
 	 */
 	public void addWidgetCreator(final String _name, final Class<?> _class) throws Exception {
 		if (_class == null) {
@@ -104,8 +104,8 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Create a widget with his name.
-	 * @param[in] _name Name of the widget to create.
+	 * Create a widget with his name.
+	 * @param _name Name of the widget to create.
 	 * @return The widget created (null if it does not exist).
 	 */
 	public Widget create(final String _name) {
@@ -141,8 +141,8 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Check if an Widget exist
-	 * @param[in] _name Name of the widget to check.
+	 * Check if an Widget exist
+	 * @param _name Name of the widget to check.
 	 * @return true The Widget exist.
 	 * @return false The Widget Does NOT exist.
 	 */
@@ -151,7 +151,7 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Get the current Focused widget.
+	 * Get the current Focused widget.
 	 * @return The pointer on the current focused element.
 	 */
 	public Widget focusGet() {
@@ -159,8 +159,8 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Request a focus on a specify widget.
-	 * @param[in] _newWidget Widget that might get the focus.
+	 * Request a focus on a specify widget.
+	 * @param _newWidget Widget that might get the focus.
 	 */
 	public void focusKeep(final Widget _newWidget) {
 		if (_newWidget == null) {
@@ -187,7 +187,7 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Release the current focus (back on default if possible).
+	 * Release the current focus (back on default if possible).
 	 */
 	public void focusRelease() {
 		final Widget focusWidgetDefault = this.focusWidgetDefault.get();
@@ -209,8 +209,8 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Set the default focus when none selected.
-	 * @param[in] _newWidget Widget that might get the focus (when nothing else).
+	 * Set the default focus when none selected.
+	 * @param _newWidget Widget that might get the focus (when nothing else).
 	 */
 	public void focusSetDefault(final Widget _newWidget) {
 		if ((_newWidget != null) && (!_newWidget.propertyCanFocus)) {
@@ -234,7 +234,7 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Check if a redraw has been requested (set the local value back at false)
+	 * Check if a redraw has been requested (set the local value back at false)
 	 * @return true if something to be redraw
 	 */
 	public boolean isDrawingNeeded() {
@@ -244,7 +244,7 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Get the list of all Widget that can be created.
+	 * Get the list of all Widget that can be created.
 	 * @return Separate with ',' string list.
 	 */
 	public String list() {
@@ -252,7 +252,7 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Mark the display to redraw
+	 * Mark the display to redraw
 	 */
 	public void markDrawingIsNeeded() {
 		if (this.haveRedraw) {
@@ -265,8 +265,8 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @brief Set a callback when we need redraw the display (need by MacOs)
-	 * @param[in] _func function to call
+	 * Set a callback when we need redraw the display (need by MacOs)
+	 * @param _func function to call
 	 */
 	public void setCallbackonRedrawNeeded(final Runnable _func) {
 		this.funcRedrawNeeded = _func;

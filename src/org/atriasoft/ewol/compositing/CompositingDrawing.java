@@ -48,7 +48,7 @@ public class CompositingDrawing extends Compositing {
 
 	// internal API for the generation abstraction of triangles
 	/**
-	 * @brief Basic ructor
+	 * Basic ructor
 	 */
 	public CompositingDrawing() {
 		loadProgram();
@@ -63,7 +63,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief add a point reference at the current position (this is a vertex
+	 * add a point reference at the current position (this is a vertex
 	 *        reference at the current position
 	 */
 	public void addVertex() {
@@ -72,11 +72,11 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief draw a 2D circle with the specify rafdius parameter.
-	 * @param[in] _radius Distence to the dorder
-	 * @param[in] _angleStart start angle of this circle ([0..2PI] otherwithe == >
+	 * draw a 2D circle with the specify rafdius parameter.
+	 * @param _radius Distence to the dorder
+	 * @param _angleStart start angle of this circle ([0..2PI] otherwithe == >
 	 *            disable)
-	 * @param[in] _angleStop stop angle of this circle ([0..2PI] otherwithe == >
+	 * @param _angleStop stop angle of this circle ([0..2PI] otherwithe == >
 	 *            disable)
 	 */
 	public void circle(final float _radius) {
@@ -150,7 +150,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief clear alll tre registered element in the current element
+	 * clear alll tre registered element in the current element
 	 */
 	@Override
 	public void clear() {
@@ -178,7 +178,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief draw All the refistered text in the current element on openGL
+	 * draw All the refistered text in the current element on openGL
 	 */
 	@Override
 	public void draw(final boolean _disableDepthTest) {
@@ -208,7 +208,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief Lunch the generation of triangle
+	 * Lunch the generation of triangle
 	 */
 	private void generateTriangle() {
 		this.triElement = 0;
@@ -221,7 +221,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief Get the foreground color of the font.
+	 * Get the foreground color of the font.
 	 * @return Foreground color.
 	 */
 	public Color getColor() {
@@ -229,7 +229,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief Get the background color of the font.
+	 * Get the background color of the font.
 	 * @return Background color.
 	 */
 	public Color getColorBg() {
@@ -237,7 +237,7 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief get the current display position (sometime needed in the gui control)
+	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
 	 */
 	public Vector3f getPos() {
@@ -245,8 +245,8 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief set the Color of the current triangle drawing
-	 * @param[in] _color Color to current dots generated
+	 * set the Color of the current triangle drawing
+	 * @param _color Color to current dots generated
 	 */
 	private void internalSetColor(final Color _color) {
 		if (this.triElement < 1) {
@@ -265,8 +265,8 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief Relative drawing a line (spacial vector)
-	 * @param[in] _vect Vector of the curent line.
+	 * Relative drawing a line (spacial vector)
+	 * @param _vect Vector of the curent line.
 	 */
 	public void lineRel(final Vector3f _vect) {
 		lineTo(this.position.add(_vect));
@@ -277,8 +277,8 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief draw a line to a specific position
-	 * @param[in] _dest Position of the end of the line.
+	 * draw a line to a specific position
+	 * @param _dest Position of the end of the line.
 	 */
 	public void lineTo(final Vector3f _dest) {
 		resetCount();
@@ -315,7 +315,7 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief load the openGL program and get all the ID needed
+	 * load the openGL program and get all the ID needed
 	 */
 	private void loadProgram() {
 		// remove previous loading ... in case
@@ -337,8 +337,8 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief draw a 2D rectangle to the position requested.
-	 * @param[in] _dest Position the the end of the rectangle
+	 * draw a 2D rectangle to the position requested.
+	 * @param _dest Position the the end of the rectangle
 	 */
 	public void rectangle(final Vector3f _dest) {
 		resetCount();
@@ -393,15 +393,15 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief draw a 2D rectangle to the requested size.
-	 * @param[in] _size size of the rectangle
+	 * draw a 2D rectangle to the requested size.
+	 * @param _size size of the rectangle
 	 */
 	public void rectangleWidth(final Vector3f _size) {
 		rectangle(this.position.add(_size));
 	}
 
 	/**
-	 * @brief in case of some error the count can be reset
+	 * in case of some error the count can be reset
 	 */
 	private void resetCount() {
 		this.triElement = 0;
@@ -412,9 +412,9 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief Request a clipping area for the text (next draw only)
-	 * @param[in] _pos Start position of the clipping
-	 * @param[in] _posEnd End position of the clipping
+	 * Request a clipping area for the text (next draw only)
+	 * @param _pos Start position of the clipping
+	 * @param _posEnd End position of the clipping
 	 */
 	public void setClipping(final Vector3f _pos, final Vector3f _posEnd) {
 		// note the internal system all time request to have a bounding all time in the
@@ -425,9 +425,9 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief enable/Disable the clipping (without lose the current clipping
+	 * enable/Disable the clipping (without lose the current clipping
 	 *        position)
-	 * @brief _newMode The new status of the clipping
+	 * _newMode The new status of the clipping
 	 */
 	public void setClippingMode(final boolean _newMode) {
 		this.clippingEnable = _newMode;
@@ -438,34 +438,34 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief Request a clipping area for the text (next draw only)
-	 * @param[in]_ pos Start position of the clipping
-	 * @param[in] _width Width size of the clipping
+	 * Request a clipping area for the text (next draw only)
+	 * @param_ pos Start position of the clipping
+	 * @param _width Width size of the clipping
 	 */
 	public void setClippingWidth(final Vector3f _pos, final Vector3f _width) {
 		setClipping(_pos, _pos.add(_width));
 	};
 
 	/**
-	 * @brief set the Color of the current foreground font
-	 * @param[in] _color Color to set on foreground (for next print)
+	 * set the Color of the current foreground font
+	 * @param _color Color to set on foreground (for next print)
 	 */
 	public void setColor(final Color _color) {
 		this.color = _color;
 	};
 
 	/**
-	 * @brief set the background color of the font (for selected Text (not the
+	 * set the background color of the font (for selected Text (not the
 	 *        global BG))
-	 * @param[in] _color Color to set on background (for next print)
+	 * @param _color Color to set on background (for next print)
 	 */
 	public void setColorBg(final Color _color) {
 		this.colorBg = _color;
 	};
 
 	/**
-	 * @brief internal add of the specific point
-	 * @param[in] _point The requeste dpoint to add
+	 * internal add of the specific point
+	 * @param _point The requeste dpoint to add
 	 */
 	private void setPoint(final Vector3f point) {
 		this.triangle[this.triElement] = point;
@@ -481,8 +481,8 @@ public class CompositingDrawing extends Compositing {
 	};
 
 	/**
-	 * @brief set position for the next text writen
-	 * @param[in] _pos Position of the text (in 3D)
+	 * set position for the next text writen
+	 * @param _pos Position of the text (in 3D)
 	 */
 	public void setPos(final Vector3f _pos) {
 		this.position = _pos;
@@ -493,16 +493,16 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief set relative position for the next text writen
-	 * @param[in] _pos ofset apply of the text (in 3D)
+	 * set relative position for the next text writen
+	 * @param _pos ofset apply of the text (in 3D)
 	 */
 	public void setRelPos(final Vector3f _pos) {
 		this.position = this.position.add(_pos);
 	}
 
 	/**
-	 * @brief Specify the line thickness for the next elements
-	 * @param[in] _thickness The thickness disired for the next print
+	 * Specify the line thickness for the next elements
+	 * @param _thickness The thickness disired for the next print
 	 */
 	public void setThickness(final float _thickness) {
 		this.thickness = _thickness;
@@ -513,7 +513,7 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * @brief Un-Load the openGL program and get all the ID needed
+	 * Un-Load the openGL program and get all the ID needed
 	 */
 	private void unLoadProgram() {
 		this.GLprogram = null;

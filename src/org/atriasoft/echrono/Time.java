@@ -1,7 +1,7 @@
 package org.atriasoft.echrono;
 
 /**
- * @brief Represent the earth clock (if computer is synchronized)
+ * Represent the earth clock (if computer is synchronized)
  */
 public class Time {
 	public static Time now() {

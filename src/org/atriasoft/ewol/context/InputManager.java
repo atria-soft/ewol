@@ -20,7 +20,7 @@ import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
 
 /**
- * @brief internal structure
+ * internal structure
  */
 class InputLimit {
 	public Duration sepatateTime;
@@ -88,8 +88,8 @@ class InputManager {
 	}
 	
 	/**
-	 * @brief This fonction lock the pointer properties to move in relative instead of absolute
-	 * @param[in] _widget The widget that lock the pointer events
+	 * This fonction lock the pointer properties to move in relative instead of absolute
+	 * @param _widget The widget that lock the pointer events
 	 */
 	public void grabPointer(final Widget _widget) {
 		if (_widget == null) {
@@ -104,12 +104,12 @@ class InputManager {
 	}
 	
 	/**
-	 * @brief generate the event on the destinated widget.
-	 * @param[in] _type Type of the event that might be sended.
-	 * @param[in] _destWidget Pointer on the requested widget that element might be sended
-	 * @param[in] _IdInput Id of the event (PC : [0..9] and touch : [1..9])
-	 * @param[in] _typeEvent type of the eventg generated
-	 * @param[in] _pos position of the event
+	 * generate the event on the destinated widget.
+	 * @param _type Type of the event that might be sended.
+	 * @param _destWidget Pointer on the requested widget that element might be sended
+	 * @param _IdInput Id of the event (PC : [0..9] and touch : [1..9])
+	 * @param _typeEvent type of the eventg generated
+	 * @param _pos position of the event
 	 * @return true if event has been greped
 	 */
 	public boolean localEventInput(final KeyType _type, final Widget _destWidget, final int _IdInput, final KeyStatus _status, final Vector2f _pos) {
@@ -128,12 +128,12 @@ class InputManager {
 	}
 	
 	/**
-	 * @brief convert the system event id in the correct EWOL id depending of the system management mode
+	 * convert the system event id in the correct EWOL id depending of the system management mode
 	 *        This function find the next input id unused on the specifiic widget
 	 *             == > on PC, the ID does not change (GUI is not the same)
-	 * @param[in] _type Type of the kay event.
-	 * @param[in] _destWidget Pointer of the widget destination
-	 * @param[in] _realInputId system Id
+	 * @param _type Type of the kay event.
+	 * @param _destWidget Pointer of the widget destination
+	 * @param _realInputId system Id
 	 * @return the ewol input id
 	 */
 	public int localGetDestinationId(final KeyType _type, final Widget _destWidget, final int _realInputId) {
@@ -236,7 +236,7 @@ class InputManager {
 	}
 	
 	/**
-	 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
+	 * a new layer on the windows is set  == > might remove all the property of the current element ...
 	 */
 	public void newLayerSet() {
 		for (int iii = 0; iii < MAX_MANAGE_INPUT; iii++) {
@@ -404,7 +404,7 @@ class InputManager {
 	}
 	
 	/**
-	 * @brief This is to transfert the event from one widget to another one
+	 * This is to transfert the event from one widget to another one
 	 * @param _source the widget where the event came from
 	 * @param _destination the widget where the event mitgh be generated now
 	 */
@@ -440,7 +440,7 @@ class InputManager {
 	}
 	
 	/**
-	 * @brief This function un-lock the pointer properties to move in relative instead of absolute
+	 * This function un-lock the pointer properties to move in relative instead of absolute
 	 */
 	public void unGrabPointer() {
 		this.grabWidget = null;
@@ -450,7 +450,7 @@ class InputManager {
 };
 
 /**
- * @brief internal structure
+ * internal structure
  */
 class InputPoperty {
 	public boolean isUsed;

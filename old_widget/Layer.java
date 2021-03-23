@@ -21,13 +21,13 @@ namespace ewol {
 		class Layer : public ewol::widget::ContainerN {
 			protected:
 				/**
-				 * @brief Constructor
+				 * Constructor
 				 */
 				Layer();
 			public:
 				DECLARE_WIDGET_FACTORY(Layer, "Layer");
 				/**
-				 * @brief Desstructor
+				 * Desstructor
 				 */
 				 ~Layer();
 			public:

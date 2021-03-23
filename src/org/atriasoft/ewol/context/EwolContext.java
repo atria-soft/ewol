@@ -32,7 +32,7 @@ public abstract class EwolContext extends Application {
 	private static EwolContext curentInterface = null;
 
 	/**
-	 * @brief From everyware in the program, we can get the context inteface.
+	 * From everyware in the program, we can get the context inteface.
 	 * @return current reference on the instance.
 	 */
 	public static EwolContext getContext() {
@@ -40,15 +40,15 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief This is the only one things the User might done in his main();
+	 * This is the only one things the User might done in his main();
 	 * @note : must be implemented in all system OPS implementation
 	 * @note To answare you before you ask the question, this is really simple: Due
 	 *       to the fect that the current system is multiple-platform, you "main"
 	 *       Does not exist in the android platform, then ewol call other start and
 	 *       stop function, to permit to have only one code
 	 * @note The main can not be in the ewol, due to the fact thet is an librairy
-	 * @param[in] _argc Standard argc
-	 * @param[in] _argv Standard argv
+	 * @param _argc Standard argc
+	 * @param _argv Standard argv
 	 * @return normal error int for the application error management
 	 */
 	public static int main(String[] _args);
@@ -79,7 +79,7 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief Redraw all the windows
+	 * Redraw all the windows
 	 */
 	public void forceRedrawAll() {
 		if (this.windowsCurrent == null) {
@@ -115,7 +115,7 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief get the current windows that is displayed
+	 * get the current windows that is displayed
 	 * @return the current handle on the windows (can be null)
 	 */
 	public Windows getWindows() {
@@ -123,16 +123,16 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief This fonction lock the pointer properties to move in relative instead
+	 * This fonction lock the pointer properties to move in relative instead
 	 *        of absolute
-	 * @param[in] widget The widget that lock the pointer events
+	 * @param widget The widget that lock the pointer events
 	 */
 	public void inputEventGrabPointer(final Widget _widget) {
 		this.input.grabPointer(_widget);
 	}
 
 	/**
-	 * @brief This is to transfert the event from one widget to another one
+	 * This is to transfert the event from one widget to another one
 	 * @param source      the widget where the event came from
 	 * @param destination the widget where the event mitgh be generated now
 	 */
@@ -141,7 +141,7 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief This fonction un-lock the pointer properties to move in relative
+	 * This fonction un-lock the pointer properties to move in relative
 	 *        instead of absolute
 	 */
 	public void inputEventUnGrabPointer() {
@@ -391,7 +391,7 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief Request a display after call a resize
+	 * Request a display after call a resize
 	 */
 	public void requestUpdateSize() {
 		final Context context = Gale.getContext();
@@ -399,22 +399,22 @@ public abstract class EwolContext extends Application {
 	}
 
 	/**
-	 * @brief reset event management for the IO like Input ou Mouse or keyborad
+	 * reset event management for the IO like Input ou Mouse or keyborad
 	 */
 	public void resetIOEvent() {
 		this.input.newLayerSet();
 	}
 
 	/**
-	 * @brief Special for init (main) set the start image when loading data
-	 * @param[in] _fileName Name of the image to load
+	 * Special for init (main) set the start image when loading data
+	 * @param _fileName Name of the image to load
 	 */
 	public void setInitImage(final Uri _fileName) {
 		// this.initDisplayImageName = _fileName;
 	}
 
 	/**
-	 * @brief set the current windows to display :
+	 * set the current windows to display :
 	 * @param _windows Windows that might be displayed
 	 */
 	public void setWindows(final Windows _windows) {

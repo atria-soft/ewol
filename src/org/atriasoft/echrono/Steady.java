@@ -1,7 +1,7 @@
 package org.atriasoft.echrono;
 
 /**
- * @brief Steady is a Program start time clock
+ * Steady is a Program start time clock
  */
 public class Steady {
 	public static Steady now() {

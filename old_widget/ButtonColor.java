@@ -37,16 +37,16 @@ namespace ewol {
 				Vector2f this.selectableAreaSize; //!< size of the event positions
 			protected:
 				/**
-				 * @brief Main ructor.
-				 * @param[in] _baseColor basic displayed color.
-				 * @param[in] _shaperName The new shaper filename.
+				 * Main ructor.
+				 * @param _baseColor basic displayed color.
+				 * @param _shaperName The new shaper filename.
 				 */
 				ButtonColor();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(ButtonColor, "ButtonColor");
 				/**
-				 * @brief Main destructor.
+				 * Main destructor.
 				 */
 				 ~ButtonColor();
 			protected:
@@ -57,14 +57,14 @@ namespace ewol {
 				boolean onEventInput( ewol::event::Input _event) ;
 			private:
 				/**
-				 * @brief internal system to change the property of the current status
-				 * @param[in] _newStatusId new state
+				 * internal system to change the property of the current status
+				 * @param _newStatusId new state
 				 */
 				void changeStatusIn(int _newStatusId);
 				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
-				 * @brief Periodic call to update grapgic display
-				 * @param[in] _event Time generic event
+				 * Periodic call to update grapgic display
+				 * @param _event Time generic event
 				 */
 				void periodicCall( ewol::event::Time _event);
 				// Callback function:

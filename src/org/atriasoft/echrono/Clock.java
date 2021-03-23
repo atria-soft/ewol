@@ -1,7 +1,7 @@
 package org.atriasoft.echrono;
 
 /**
- * @brief Clock is a compleate virtual clock that is used to virtualize the urrent clock used (can be non real-time, ex:for simulation)
+ * Clock is a compleate virtual clock that is used to virtualize the urrent clock used (can be non real-time, ex:for simulation)
  */
 public class Clock {
 	public static Clock now() {

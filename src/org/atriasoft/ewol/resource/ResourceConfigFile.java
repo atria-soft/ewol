@@ -17,9 +17,9 @@ import org.atriasoft.gale.resource.Resource;
 
 public class ResourceConfigFile extends Resource {
 	/**
-	 * @brief keep the resource pointer.
+	 * keep the resource pointer.
 	 * @note Never free this pointer by your own...
-	 * @param[in] _filename Name of the configuration file.
+	 * @param _filename Name of the configuration file.
 	 * @return pointer on the resource or null if an error occured.
 	 */
 	public static ResourceConfigFile keep(final String name) {

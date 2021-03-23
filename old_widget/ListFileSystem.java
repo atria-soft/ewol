@@ -15,7 +15,7 @@ namespace ewol {
 		using ListFileSystem = ememory::Ptr<ewol::widget::ListFileSystem>;
 		using ListFileSystemWeak = ememory::WeakPtr<ewol::widget::ListFileSystem>;
 		/**
-		 * @brief Generic display folder class. This widget display the content of a single folder :
+		 * Generic display folder class. This widget display the content of a single folder :
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public: // signals
@@ -49,23 +49,23 @@ namespace ewol {
 			protected:
 				List<etk::Path> this.list; //!< List of all element in the path. (they are filtered)
 				/**
-				 * @brief Clean the list of element.
+				 * Clean the list of element.
 				 */
 				void clearList();
 				/**
-				 * @brief Regenerate the content of the view. this is actually not automation on the system update.
+				 * Regenerate the content of the view. this is actually not automation on the system update.
 				 */
 				 void regenerateView();
 			protected:
 				int this.selectedLine; //!< Current Line ID that is selected
 			public:
 				/**
-				 * @brief Select a specific file in the path
-				 * @param[in] _data File to selested.
+				 * Select a specific file in the path
+				 * @param _data File to selested.
 				 */
 				 void setSelect( etk::Path _data);
 				/**
-				 * @brief Get the current selected file/folder/... in the list
+				 * Get the current selected file/folder/... in the list
 				 * @return the String of the element selected.
 				 */
 				etk::Path getSelect()  ;

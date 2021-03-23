@@ -7,7 +7,7 @@ package org.atriasoft.ewol.resource.font;
 
 /**
  * @not_in_doc
- * @brief Kerning properties of one specific Glyph with an other
+ * Kerning properties of one specific Glyph with an other
  * 
  * Without Kerning :
  * [pre]
@@ -41,7 +41,7 @@ public class Kerning {
 	public float value; //!< kerning real offset
 	
 	/**
-	 * @brief Simple ructor that allow to allocate the List element
+	 * Simple ructor that allow to allocate the List element
 	 */
 	public Kerning() {
 		this.UVal = 0;
@@ -49,9 +49,9 @@ public class Kerning {
 	};
 	
 	/**
-	 * @brief Normal ructor
-	 * @param[in] _charcode The Unicode value of the coresponding character that might be before
-	 * @param[in] _value The Kerning value of the offset (nb pixel number)
+	 * Normal ructor
+	 * @param _charcode The Unicode value of the coresponding character that might be before
+	 * @param _value The Kerning value of the offset (nb pixel number)
 	 */
 	public Kerning(final Character _charcode, final float _value) {
 		this.UVal = _charcode;

@@ -15,7 +15,7 @@ namespace ewol {
 		using Spin = ememory::Ptr<ewol::widget::Spin>;
 		using SpinWeak = ememory::WeakPtr<ewol::widget::Spin>;
 		/**
-		 * @brief a composed Spin is a Spin with an inside composed with the specify XML element 
+		 * a composed Spin is a Spin with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple
 		 */
 		class Spin : public ewol::widget::SpinBase {
@@ -31,15 +31,15 @@ namespace ewol {
 				eproperty::Value<int8_t> propertyMantis; //!< number of value under '.' value
 			protected:
 				/**
-				 * @brief Constructor
-				 * @param[in] _mode mode to display the spin
-				 * @param[in] _shaperName Shaper file properties
+				 * Constructor
+				 * @param _mode mode to display the spin
+				 * @param _shaperName Shaper file properties
 				 */
 				Spin();
 			public:
 				DECLARE_WIDGET_FACTORY(Spin, "Spin");
 				/**
-				 * @brief Destructor
+				 * Destructor
 				 */
 				 ~Spin();
 			protected:

@@ -42,8 +42,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	}
 
 	/**
-	 * @brief Get all the Path contain in the specidy path:
-	 * @param[in] _path Generic path to parse ...
+	 * Get all the Path contain in the specidy path:
+	 * @param _path Generic path to parse ...
 	 * @return The list of path found
 	 * @example[start] auto out = explodeMultiplePath("DATA:///font?lib=ewol"); //
 	 *                 out contain: {"DATA:///font",
@@ -257,8 +257,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	}
 
 	/**
-	 * @brief add a glyph in a texture font.
-	 * @param[in] _val Char value to add.
+	 * add a glyph in a texture font.
+	 * @param _val Char value to add.
 	 * @return true if the image size have change, false otherwise
 	 */
 	private synchronized boolean addGlyph(final Character _val) {
@@ -334,7 +334,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	}
 
 	/**
-	 * @brief get the font height (user friendly)
+	 * get the font height (user friendly)
 	 * @return Dimention of the font the user requested
 	 */
 	public int getFontSize() {
@@ -342,9 +342,9 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	}
 
 	/**
-	 * @brief get the pointer on the coresponding glyph
-	 * @param[in] _charcode The unicodeValue
-	 * @param[in] _displayMode Mode to display the currrent font
+	 * get the pointer on the coresponding glyph
+	 * @param _charcode The unicodeValue
+	 * @param _displayMode Mode to display the currrent font
 	 * @return The pointer on the glyph == > never null
 	 */
 	public synchronized GlyphProperty getGlyph(final Character _charcode, final FontMode _displayMode) {
@@ -368,8 +368,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	};
 
 	/**
-	 * @brief get the display height of this font
-	 * @param[in] _displayMode Mode to display the currrent font
+	 * get the display height of this font
+	 * @param _displayMode Mode to display the currrent font
 	 * @return Dimention of the font need between 2 lines
 	 */
 	public int getHeight() {
@@ -381,9 +381,9 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	}
 
 	/**
-	 * @brief get the ID of a unicode charcode
-	 * @param[in] _charcode The unicodeValue
-	 * @param[in] _displayMode Mode to display the currrent font
+	 * get the ID of a unicode charcode
+	 * @param _charcode The unicodeValue
+	 * @param _displayMode Mode to display the currrent font
 	 * @return The ID in the table (if it does not exist : return 0)
 	 */
 	private synchronized int getIndex(final Character _charcode, final FontMode _displayMode) {
@@ -415,10 +415,10 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	};
 
 	/**
-	 * @brief The wrapping mode is used to prevent the non existance of a specific
+	 * The wrapping mode is used to prevent the non existance of a specific
 	 *        mode. For exemple when a blod mode does not exist, this resend a
 	 *        regular mode.
-	 * @param[in] _source The requested mode.
+	 * @param _source The requested mode.
 	 * @return the best mode we have in stock.
 	 */
 	public FontMode getWrappingMode(final FontMode _source) {

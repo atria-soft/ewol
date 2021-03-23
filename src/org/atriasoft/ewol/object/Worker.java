@@ -7,11 +7,11 @@ package org.atriasoft.ewol.object;
  */
 
 /**
- * @brief A worker might not been possesed by someone, then the system might keep a pointer on it.
+ * A worker might not been possesed by someone, then the system might keep a pointer on it.
  */
 public class Worker extends EwolObject {
 	/**
-	 * @brief Constructor.
+	 * Constructor.
 	 */
 	public Worker() {
 		getObjectManager().workerAdd(this);

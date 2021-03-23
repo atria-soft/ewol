@@ -64,7 +64,7 @@ public class GlyphProperty {
 	}
 	
 	/**
-	 * @brief get the status of the char, if it exist or not in the FONT
+	 * get the status of the char, if it exist or not in the FONT
 	 * @return true if the char is availlable, false otherwise
 	 */
 	public boolean exist() {
@@ -89,7 +89,7 @@ public class GlyphProperty {
 	}
 	
 	/**
-	 * @brief set the element doen not exist !!!
+	 * set the element doen not exist !!!
 	 */
 	public void setNotExist() {
 		this.exist = false;

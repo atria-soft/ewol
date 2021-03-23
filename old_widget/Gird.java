@@ -35,51 +35,51 @@ namespace ewol {
 				boolean this.gavityButtom;
 			protected:
 				/**
-				 * @brief Constructor
+				 * Constructor
 				 */
 				Gird();
 			public:
 				DECLARE_WIDGET_FACTORY(Gird, "Gird");
 				/**
-				 * @brief Desstructor
+				 * Desstructor
 				 */
 				 ~Gird();
 				/**
-				 * @brief set the number of colomn
-				 * @param[in] colNumber Nuber of colomn
+				 * set the number of colomn
+				 * @param colNumber Nuber of colomn
 				 */
 				void setColNumber(int _colNumber);
 				/**
-				 * @brief change a size view of a colomn.
-				 * @param[in] colId Id of the colomn [0..x].
-				 * @param[in] size size of the colomn.
+				 * change a size view of a colomn.
+				 * @param colId Id of the colomn [0..x].
+				 * @param size size of the colomn.
 				 */
 				void setColSize(int _colId, int _size);
 				/**
-				 * @brief change a size view of a line.
-				 * @param[in] size size of the line.
+				 * change a size view of a line.
+				 * @param size size of the line.
 				 */
 				void setRowSize(int _size);
 				/**
-				 * @brief get the size view of a colomn.
-				 * @param[in] colId Id of the colomn [0..x].
+				 * get the size view of a colomn.
+				 * @param colId Id of the colomn [0..x].
 				 * @return The size of the colomn.
 				 */
 				int getColSize(int _colId);
 				/**
-				 * @brief get the size view of the lines.
+				 * get the size view of the lines.
 				 * @return The size of the lines.
 				 */
 				int getRowSize();
 				/**
-				 * @brief set the gravity of the widget on the Button (index 0 is on buttom)
+				 * set the gravity of the widget on the Button (index 0 is on buttom)
 				 */
 				void setGravityButtom() {
 					this.gavityButtom = true;
 					markToRedraw();
 				}
 				/**
-				 * @brief set the gravity of the widget on the Top (index 0 is on top)
+				 * set the gravity of the widget on the Top (index 0 is on top)
 				 */
 				void setGravityTop() {
 					this.gavityButtom = false;
@@ -87,36 +87,36 @@ namespace ewol {
 				}
 			public:
 				/**
-				 * @brief remove all sub element from the widget.
+				 * remove all sub element from the widget.
 				 */
 				 void subWidgetRemoveAll();
 				/**
-				 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-				 * @param[in] _colId Id of the colomn [0..x].
-				 * @param[in] _rowId Id of the row [0..y].
-				 * @param[in] _newWidget the element pointer
+				 * add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+				 * @param _colId Id of the colomn [0..x].
+				 * @param _rowId Id of the row [0..y].
+				 * @param _newWidget the element pointer
 				 */
 				 void subWidgetAdd(int _colId, int _rowId, Widget _newWidget);
 				/**
-				 * @brief remove definitly a widget from the system and this Gird.
-				 * @param[in] _newWidget the element pointer.
+				 * remove definitly a widget from the system and this Gird.
+				 * @param _newWidget the element pointer.
 				 */
 				 void subWidgetRemove(Widget _newWidget);
 				/**
-				 * @brief remove definitly a widget from the system and this Gird.
-				 * @param[in] _colId Id of the colomn [0..x].
-				 * @param[in] _rowId Id of the row [0..y].
+				 * remove definitly a widget from the system and this Gird.
+				 * @param _colId Id of the colomn [0..x].
+				 * @param _rowId Id of the row [0..y].
 				 */
 				 void subWidgetRemove(int _colId, int _rowId);
 				/**
-				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
-				 * @param[in] _newWidget the element pointer.
+				 * Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
+				 * @param _newWidget the element pointer.
 				 */
 				 void subWidgetUnLink(Widget _newWidget);
 				/**
-				 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
-				 * @param[in] _colId Id of the colomn [0..x].
-				 * @param[in] _rowId Id of the row [0..y].
+				 * Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
+				 * @param _colId Id of the colomn [0..x].
+				 * @param _rowId Id of the row [0..y].
 				 */
 				 void subWidgetUnLink(int _colId, int _rowId);
 			private:
@@ -124,12 +124,12 @@ namespace ewol {
 				Vector2i this.borderSize; //!< Border size needed for all the display
 			public:
 				/**
-				 * @brief set the current border size of the current element:
-				 * @param[in] _newBorderSize The border size to set (0 if not used)
+				 * set the current border size of the current element:
+				 * @param _newBorderSize The border size to set (0 if not used)
 				 */
 				void setBorderSize( Vector2i _newBorderSize);
 				/**
-				 * @brief get the current border size of the current element:
+				 * get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
 				 Vector2i getBorderSize() {

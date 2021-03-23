@@ -25,7 +25,7 @@ class Spacer extends Widget {
 	@EwolDescription(value = "background of the spacer")
 	protected Color propertyColor; //!< Background color
 	/**
-	 * @brief Main ructer
+	 * Main ructer
 	 */
 	public Spacer() {
 	

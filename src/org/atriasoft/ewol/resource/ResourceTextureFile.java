@@ -19,12 +19,12 @@ public class ResourceTextureFile extends ResourceTexture2 {
 	public static Vector2i sizeDefault = new Vector2i(0, 0);
 
 	/**
-	 * @brief keep the resource pointer.
+	 * keep the resource pointer.
 	 * @note Never free this pointer by your own...
-	 * @param[in] _filename Name of the image file.
-	 * @param[in] _requested size of the image (usefull when loading .svg to
+	 * @param _filename Name of the image file.
+	 * @param _requested size of the image (usefull when loading .svg to
 	 *            automatic rescale)
-	 * @param[in] _sizeRegister size register in named (When you preaload the images
+	 * @param _sizeRegister size register in named (When you preaload the images
 	 *            the size write here will be )
 	 * @return pointer on the resource or null if an error occured.
 	 */

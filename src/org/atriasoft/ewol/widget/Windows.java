@@ -16,7 +16,7 @@ import org.atriasoft.ewol.resource.ResourceColorFile;
  */
 
 /**
- * @brief Windows basic interface
+ * Windows basic interface
  */
 public class Windows extends Widget {
 	
@@ -41,12 +41,12 @@ public class Windows extends Widget {
 	public Widget getWidgetAtPos(Vector2f _pos);
 	
 	/**
-	 * @brief Called when property change: Color configuration file
+	 * Called when property change: Color configuration file
 	 */
 	protected void onChangePropertyColor();
 	
 	/**
-	 * @brief Called when property change: Title
+	 * Called when property change: Title
 	 */
 	protected void onChangePropertyTitle();
 	
@@ -57,7 +57,7 @@ public class Windows extends Widget {
 	public void onRegenerateDisplay();
 	
 	/**
-	 * @brief Get the number of pop-up
+	 * Get the number of pop-up
 	 * @return Count of pop-up
 	 */
 	public int popUpCount() {
@@ -65,21 +65,21 @@ public class Windows extends Widget {
 	}
 	
 	/**
-	 * @brief Remove the pop-up on top.
+	 * Remove the pop-up on top.
 	 */
 	public void popUpWidgetPop();
 	
 	/**
-	 * @brief Add a pop-up on the Windows.
-	 * @param[in] _widget Widget to set on top of the pop-up.
+	 * Add a pop-up on the Windows.
+	 * @param _widget Widget to set on top of the pop-up.
 	 */
 	public void popUpWidgetPush(Widget _widget);
 	
 	public void requestDestroyFromChild(EwolObject _child); //!< main sub-widget of the Windows.
 	
 	/**
-	 * @brief Set the main widget of the application.
-	 * @param[in] _widget Widget to set in the windows.
+	 * Set the main widget of the application.
+	 * @param _widget Widget to set in the windows.
 	 */
 	public void setSubWidget(Widget _widget);
 	

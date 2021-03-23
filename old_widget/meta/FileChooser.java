@@ -16,7 +16,7 @@ namespace ewol {
 		using FileChooser = ememory::Ptr<ewol::widget::FileChooser>;
 		using FileChooserWeak = ememory::WeakPtr<ewol::widget::FileChooser>;
 		/**
-		 *  @brief File Chooser is a simple selector of file for opening, saving, and what you want ...
+		 *  File Chooser is a simple selector of file for opening, saving, and what you want ...
 		 *  
 		 *  As all other pop-up methode ( wost case we can have) the creating is simple , but event back is not all the time simple:
 		 *  

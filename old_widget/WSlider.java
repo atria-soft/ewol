@@ -45,24 +45,24 @@ namespace ewol {
 				float this.slidingProgress; //!< ratio progression of a sliding
 			protected:
 				/**
-				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
-				 * @param[in] _id Id in the vector
+				 * Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
+				 * @param _id Id in the vector
 				 */
 				void subWidgetSelectSetVectorId(int _id);
 			public:
 				/** 
-				 * @brief Select a new subwidget to display
-				 * @param[in] _id Id of the subwidget requested
+				 * Select a new subwidget to display
+				 * @param _id Id of the subwidget requested
 				 */
 				void subWidgetSelectSet(int _id);
 				/** 
-				 * @brief Select a new subwidget to display
-				 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
+				 * Select a new subwidget to display
+				 * @param _widgetPointer Pointer on the widget selected (must be added before)
 				 */
 				void subWidgetSelectSet( Widget _widgetPointer);
 				/** 
-				 * @brief Select a new subwidget to display
-				 * @param[in] _widgetName Name of the subwidget name
+				 * Select a new subwidget to display
+				 * @param _widgetName Name of the subwidget name
 				 */
 				void subWidgetSelectSet( String _widgetName);
 			public:
@@ -73,8 +73,8 @@ namespace ewol {
 			protected:
 				esignal::Connection this.PCH; //!< Periodic call handle to remove it when needed
 				/**
-				 * @brief Periodic call to update grapgic display
-				 * @param[in] _event Time generic event
+				 * Periodic call to update grapgic display
+				 * @param _event Time generic event
 				 */
 				void periodicCall( ewol::event::Time _event);
 			protected:

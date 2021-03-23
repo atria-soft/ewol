@@ -28,15 +28,15 @@ namespace ewol {
 				eproperty::Value<bool> propertyCloseOutEvent; //!< ratio progression of a sliding
 			protected:
 				/**
-				 * @brief Constructor
-				 * @param[in] _shaperName Shaper file properties
+				 * Constructor
+				 * @param _shaperName Shaper file properties
 				 */
 				PopUp();
 				void init() ;
 			public:
 				DECLARE_WIDGET_FACTORY(PopUp, "PopUp");
 				/**
-				 * @brief Destructor
+				 * Destructor
 				 */
 				 ~PopUp();
 			protected:

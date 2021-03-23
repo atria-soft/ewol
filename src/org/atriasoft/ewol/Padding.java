@@ -35,7 +35,7 @@ public class Padding {
 	}
 
 	/**
-	 * @brief Add a vector to this one
+	 * Add a vector to this one
 	 * @param _v The vector to add to this one
 	 */
 	public Padding add(final Padding _v) {

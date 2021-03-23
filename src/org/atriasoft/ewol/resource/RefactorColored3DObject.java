@@ -18,7 +18,7 @@ import org.atriasoft.gale.resource.Resource;
 import org.atriasoft.gale.resource.ResourceProgram;
 
 /**
- * @brief simple display of Colored3DObject ==> for DEBUG only Not availlable on
+ * simple display of Colored3DObject ==> for DEBUG only Not availlable on
  *        ALL platform (like webGL)
  */
 public class RefactorColored3DObject extends Resource {

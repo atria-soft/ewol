@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * @ingroup ewolWidgetGroup
- * @brief the Cotainer widget is a widget that have an only one subWidget
+ * the Cotainer widget is a widget that have an only one subWidget
  */
 public class ContainerN extends Widget {
 	@XmlManaged()
@@ -29,7 +29,7 @@ public class ContainerN extends Widget {
 	protected List<Widget> subWidget = new ArrayList<>();
 	protected Vector2b subExpend = new Vector2b(false,false); //!< reference of the sub element expention requested.
 	/**
-	 * @brief Constructor
+	 * Constructor
 	 */
 	protected 	ContainerN() {}
 	// herited function
@@ -49,7 +49,7 @@ public class ContainerN extends Widget {
 		return res;
 	}
 	/**
-	 * @brief remove all sub element from the widget.
+	 * remove all sub element from the widget.
 	 */
 	public void subWidgetRemoveAll(){
 		for(Widget it : this.subWidget) {
@@ -61,15 +61,15 @@ public class ContainerN extends Widget {
 		this.subWidget.clear();
 	}
 		/**
-		 * @brief remove all sub element from the widget (delayed to prevent remove in the callbback).
+		 * remove all sub element from the widget (delayed to prevent remove in the callbback).
 		 */
 		public  void subWidgetRemoveAllDelayed(){
 			subWidgetRemoveAll();
 		}
 		/**
-		 * @brief Replace a old subwidget with a new one.
-		 * @param[in] _oldWidget The widget to replace.
-		 * @param[in] _newWidget The widget to set.
+		 * Replace a old subwidget with a new one.
+		 * @param _oldWidget The widget to replace.
+		 * @param _newWidget The widget to set.
 		 */
 		public 	 void subWidgetReplace(Widget _oldWidget,
 									  Widget _newWidget) {
@@ -94,8 +94,8 @@ public class ContainerN extends Widget {
 			requestUpdateSize();
 		}
 		/**
-		 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-		 * @param[in] _newWidget the element pointer
+		 * add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+		 * @param _newWidget the element pointer
 		 * @return the ID of the set element
 		 */
 		public int subWidgetAdd(Widget _newWidget) {
@@ -120,8 +120,8 @@ public class ContainerN extends Widget {
 			return subWidgetAdd(_newWidget);
 		};
 		/**
-		 * @brief add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-		 * @param[in] _newWidget the element pointer
+		 * add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+		 * @param _newWidget the element pointer
 		 * @return the ID of the set element
 		 */
 		public int subWidgetAddStart(Widget _newWidget) {
@@ -142,8 +142,8 @@ public class ContainerN extends Widget {
 			return subWidgetAddStart(_newWidget);
 		};
 		/**
-		 * @brief remove definitly a widget from the system and this layer.
-		 * @param[in] _newWidget the element pointer.
+		 * remove definitly a widget from the system and this layer.
+		 * @param _newWidget the element pointer.
 		 */
 		public void subWidgetRemove(Widget _newWidget){
 			if (_newWidget == null) {
@@ -165,8 +165,8 @@ public class ContainerN extends Widget {
 			}
 		}
 		/**
-		 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
-		 * @param[in] _newWidget the element pointer.
+		 * Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
+		 * @param _newWidget the element pointer.
 		 */
 		public void subWidgetUnLink(Widget _newWidget) {
 			if (_newWidget == null) {

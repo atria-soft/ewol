@@ -15,7 +15,7 @@ namespace ewol {
 		using Select = ememory::Ptr<ewol::widget::Select>;
 		using SelectWeak = ememory::WeakPtr<ewol::widget::Select>;
 		/**
-		 * @brief a composed Select is a Select with an inside composed with the specify XML element 
+		 * a composed Select is a Select with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple
 		 */
 		class Select : public ewol::widget::SpinBase {
@@ -25,14 +25,14 @@ namespace ewol {
 				eproperty::Value<int> propertyValue; //!< Current state of the Select.
 			protected:
 				/**
-				 * @brief Constructor
-				 * @param[in] _shaperName Shaper file properties
+				 * Constructor
+				 * @param _shaperName Shaper file properties
 				 */
 				Select();
 			public:
 				DECLARE_WIDGET_FACTORY(Select, "Select");
 				/**
-				 * @brief Destructor
+				 * Destructor
 				 */
 				 ~Select();
 			protected:
