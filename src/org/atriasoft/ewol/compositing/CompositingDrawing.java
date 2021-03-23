@@ -19,7 +19,7 @@ import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
 
-class Drawing extends Compositing {
+public class CompositingDrawing extends Compositing {
 
 	protected static int vboIdCoord = 0;
 	protected static int vboIdColor = 1;
@@ -50,7 +50,7 @@ class Drawing extends Compositing {
 	/**
 	 * @brief Basic ructor
 	 */
-	public Drawing() {
+	public CompositingDrawing() {
 		loadProgram();
 		for (int iii = 0; iii < 3; iii++) {
 			this.triangle[iii] = this.position;
@@ -58,10 +58,6 @@ class Drawing extends Compositing {
 		}
 		// Create the VBO:
 		this.VBO = ResourceVirtualBufferObject.create(4);
-		if (this.VBO == null) {
-			Log.error("can not instanciate VBO ...");
-			return;
-		}
 		// TO facilitate some debugs we add a name of the VBO:
 		this.VBO.setName("[VBO] of ewol::compositing::Area");
 	}
@@ -189,8 +185,8 @@ class Drawing extends Compositing {
 
 		// push data on the VBO
 		// TODO optimize this with single push when needed
-		this.VBO.setVboData(Drawing.vboIdCoord, this.outTriangles.toArray(Vector3f[]::new));
-		this.VBO.setVboData(Drawing.vboIdColor, this.outColors.toArray(Color[]::new));
+		this.VBO.setVboData(CompositingDrawing.vboIdCoord, this.outTriangles.toArray(Vector3f[]::new));
+		this.VBO.setVboData(CompositingDrawing.vboIdColor, this.outColors.toArray(Color[]::new));
 		this.VBO.flush();
 
 		if (this.GLprogram == null) {
@@ -198,16 +194,16 @@ class Drawing extends Compositing {
 			return;
 		}
 		// set Matrix : translation/positionMatrix
-		Matrix4f tmpMatrix = OpenGL.getMatrix().multiplyNew(this.matrixApply);
+		Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
 		this.GLprogram.use();
 		this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
-		this.GLprogram.uniformMatrix(this.GLMatrixPosition, Matrix4f.identity());
+		this.GLprogram.uniformMatrix(this.GLMatrixPosition, Matrix4f.IDENTITY);
 		// position:
-		this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, Drawing.vboIdCoord);
+		this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, CompositingDrawing.vboIdCoord);
 		// color:
-		this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, Drawing.vboIdColor);
+		this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, CompositingDrawing.vboIdColor);
 		// Request the draw od the elements :
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.VBO.bufferSize(Drawing.vboIdCoord));
+		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.VBO.bufferSize(CompositingDrawing.vboIdCoord));
 		this.GLprogram.unUse();
 	}
 

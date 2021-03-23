@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
+import org.atriasoft.exml.model.XmlElement;
 
 /** @file
  * @author Edouard DUPIN
@@ -138,7 +139,9 @@ public class EwolObject {
 	 * @return true : All has been done corectly.
 	 * @return false : An error occured.
 	 */
-	//boolean loadXML( exml::Element _node);
+	protected boolean loadXML(XmlElement _node) {
+		return true;
+	}
 	
 	/**
 	 * @brief store properties in this XML node.
@@ -200,7 +203,7 @@ public class EwolObject {
 	/**
 	 * @brief Remove the current parenting.
 	 */
-	void removeParent() {
+	public void removeParent() {
 		this.parent = null;
 	}
 	

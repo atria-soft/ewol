@@ -10,13 +10,13 @@ import org.atriasoft.etk.math.Vector3f;
  */
 
 public abstract class Compositing {
-	protected Matrix4f matrixApply = Matrix4f.identity();
+	protected Matrix4f matrixApply = Matrix4f.IDENTITY;;
 	
 	/**
 	 * @brief clear alll tre registered element in the current element
 	 */
 	public void clear() {
-		this.matrixApply.setIdentity();
+		this.matrixApply = Matrix4f.IDENTITY;
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public abstract class Compositing {
 	 * @brief reset to the eye matrix the openGL mouving system
 	 */
 	public void resetMatrix() {
-		this.matrixApply.setIdentity();
+		this.matrixApply = Matrix4f.IDENTITY;
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public abstract class Compositing {
 	 * @param[in] _vect The rotation vector to apply at the transformation matrix
 	 */
 	public void rotate(final Vector3f _vect, final float _angle) {
-		this.matrixApply.multiply(Matrix4f.createMatrixRotate(_vect, _angle));
+		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixRotate(_vect, _angle));
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public abstract class Compositing {
 	 * @param[in] _vect The scaling vector to apply at the transformation matrix
 	 */
 	public void scale(final Vector3f _vect) {
-		this.matrixApply.multiply(Matrix4f.createMatrixScale(_vect));
+		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixScale(_vect));
 	}
 	
 	/**
@@ -64,6 +64,6 @@ public abstract class Compositing {
 	 * @param[in] _vect The translation vector to apply at the transformation matrix
 	 */
 	public void translate(final Vector3f _vect) {
-		this.matrixApply.multiply(Matrix4f.createMatrixTranslate(_vect));
+		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixTranslate(_vect));
 	}
 }

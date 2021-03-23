@@ -1,50 +1,66 @@
+package org.atriasoft.ewol.widget;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
 
-#include <etk/types.hpp>
-#include <etk/Color.hpp>
-#include <ewol/debug.hpp>
-#include <ewol/widget/Widget.hpp>
-#include <ewol/compositing/Drawing.hpp>
-#include <ewol/widget/Manager.hpp>
+import org.atriasoft.etk.Color;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.ewol.annotation.EwolDescription;
+import org.atriasoft.ewol.compositing.CompositingDrawing;
+import org.atriasoft.ewol.widget.Widget;
+import org.atriasoft.exml.annotation.XmlManaged;
+import org.atriasoft.exml.annotation.XmlName;
+import org.atriasoft.exml.annotation.XmlProperty;
 
-namespace ewol {
-	namespace widget {
-		class Spacer;
-		using Spacer = ememory::Ptr<ewol::widget::Spacer>;
-		using SpacerWeak = ememory::WeakPtr<ewol::widget::Spacer>;
-		/**
-		 * @ingroup ewolWidgetGroup
-		 */
-		class Spacer : public Widget {
-			public: // properties:
-				eproperty::Value<etk::Color<>> propertyColor; //!< Background color
-			protected:
-				/**
-				 * @brief Main ructer
-				 */
-				Spacer();
-			public:
-				DECLARE_WIDGET_FACTORY(Spacer, "Spacer");
-				/**
-				 * @brief Main destructer
-				 */
-				 ~Spacer();
-			private:
-				ewol::compositing::Drawing this.draw; //!< Compositing drawing element
-			public:
-				Widget getWidgetAtPos( Vector2f _pos)  {
-					return null;
-				};
-				void onRegenerateDisplay() ;
-				void onDraw() ;
-			protected:
-				 void onChangePropertyColor();
+/**
+ * @ingroup ewolWidgetGroup
+ */
+class Spacer extends Widget {
+	@XmlManaged()
+	@XmlProperty()
+	@XmlName(value = "color")
+	@EwolDescription(value = "background of the spacer")
+	protected Color propertyColor; //!< Background color
+	/**
+	 * @brief Main ructer
+	 */
+	public Spacer() {
+	
+	}
+	private CompositingDrawing draw; //!< Compositing drawing element
+	@Override
+	public Widget getWidgetAtPos( Vector2f _pos)  {
+			return null;
 		};
+	public void onRegenerateDisplay() {
+		if (!needRedraw()) {
+			return;
+		}
+		this.draw.clear();
+		
+		if (propertyColor.a() == 0) {
+			return;
+		}
+		this.draw.setColor(propertyColor);
+		this.draw.setPos(Vector3f.ZERO);
+		this.draw.rectangleWidth(new Vector3f(this.size.x(), this.size.y(),0) );
+	}
+	public void onDraw(){
+		this.draw.draw();
+	}
+	public Color getPropertyColor() {
+		return propertyColor;
+	}
+	
+	public void setPropertyTextColorBgOn(Color propertyColor) {
+		if (propertyColor.equals(this.propertyColor)) {
+			return;
+		}
+		this.propertyColor = propertyColor;
+		markToRedraw();
 	}
 }
 

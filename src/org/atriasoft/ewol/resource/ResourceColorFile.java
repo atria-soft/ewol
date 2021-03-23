@@ -17,13 +17,26 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.resource.Resource;
 
+class ListElement {
+	public String name;
+	public Color color;
+
+	public ListElement(final String name, final Color color) {
+		super();
+		this.name = name;
+		this.color = color;
+	}
+
+}
+
 /**
- * @brief ColorFile is a Resource designed to be specific with the theme (for example black, or white or orange ...)
+ * @brief ColorFile is a Resource designed to be specific with the theme (for
+ *        example black, or white or orange ...)
  */
 public class ResourceColorFile extends Resource {
-	private final List<ListElement> list = new ArrayList<>(); //!< List of all color in the file
+	private final List<ListElement> list = new ArrayList<>(); // !< List of all color in the file
 	private Color errorColor = Color.ORANGE;
-	
+
 	/**
 	 * @brief Constructor of the color property file
 	 * @param[in] _uri Name of the file needed
@@ -32,14 +45,14 @@ public class ResourceColorFile extends Resource {
 		super(_uri.get());
 		Log.debug("CF : load \"" + _uri + "\"");
 		reload();
-		//Log.debug("List of all color : " + this.list.keySet());
+		// Log.debug("List of all color : " + this.list.keySet());
 	}
-	
+
 	@Override
 	public void cleanUp() {
-		
+
 	}
-	
+
 	/**
 	 * @brief Get the associated color of the ID.
 	 * @param[in] _Id Id of the color.
@@ -51,7 +64,7 @@ public class ResourceColorFile extends Resource {
 		}
 		return this.list.get(_id).color;
 	}
-	
+
 	/**
 	 * @brief Get All color name
 	 * @return list of all color existing
@@ -63,7 +76,7 @@ public class ResourceColorFile extends Resource {
 		}
 		return out;
 	};
-	
+
 	public synchronized void put(final String name, final Color color) {
 		for (int iii = 0; iii < this.list.size(); iii++) {
 			final ListElement elem = this.list.get(iii);
@@ -74,7 +87,7 @@ public class ResourceColorFile extends Resource {
 		}
 		this.list.add(new ListElement(name, color));
 	}
-	
+
 	@Override
 	public synchronized void reload() {
 		// remove all previous set of value :
@@ -85,7 +98,7 @@ public class ResourceColorFile extends Resource {
 		// open and read all json elements:
 		try {
 			final JsonObject out = Ejson.parse(new Uri(this.name)).toJsonObject();
-			
+
 			final JsonArray baseArray = out.get("color").toJsonArray();
 			if (baseArray == null) {
 				Log.error("Can not get basic array : 'color' in file:" + this.name);
@@ -109,8 +122,9 @@ public class ResourceColorFile extends Resource {
 					continue;
 				}
 				if (color.length() == 0) {
-					put(name, this.errorColor.clone());
-				} else {}
+					put(name, this.errorColor);
+				} else {
+				}
 				put(name, Color.valueOf(color));
 			}
 			if (findError == true) {
@@ -122,7 +136,7 @@ public class ResourceColorFile extends Resource {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @brief Request the presence of a specific color.
 	 * @param[in] _paramName Name of the color.
@@ -135,10 +149,10 @@ public class ResourceColorFile extends Resource {
 				return iii;
 			}
 		}
-		this.list.add(new ListElement(_paramName, this.errorColor.clone()));
+		this.list.add(new ListElement(_paramName, this.errorColor));
 		return this.list.size() - 1;
 	}
-	
+
 	/**
 	 * @brief Set the error color.
 	 * @param[in] _errorColor Color that might be set when not finding a color
@@ -146,17 +160,5 @@ public class ResourceColorFile extends Resource {
 	public void setErrorColor(final Color _errorColor) {
 		this.errorColor = _errorColor;
 	}
-	
-}
 
-class ListElement {
-	public String name;
-	public Color color;
-	
-	public ListElement(final String name, final Color color) {
-		super();
-		this.name = name;
-		this.color = color;
-	}
-	
 };

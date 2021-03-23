@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.atriasoft.ewol.internal.Log;
+import org.atriasoft.exml.model.XmlElement;
 
 /** @file
  * @author Edouard DUPIN
@@ -56,6 +57,7 @@ public class WidgetManager {
 	*/
 	
 	public WidgetManager() {
+		/*
 		this.creatorList.put("Button", Button.class);
 		this.creatorList.put("ButtonColor", ButtonColor.class);
 		this.creatorList.put("Spacer", Spacer.class);
@@ -77,6 +79,7 @@ public class WidgetManager {
 		this.creatorList.put("Composer", Composer.class);
 		this.creatorList.put("Select", Select.class);
 		this.creatorList.put("Spin", Spin.class);
+		 */
 	}
 	
 	/**
@@ -111,6 +114,22 @@ public class WidgetManager {
 		if (it != null) {
 			try {
 				return (Widget) it.getConstructor().newInstance();
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		Log.warning("try to create an UnExistant widget : " + nameLower);
+		return null;
+	}
+	public Widget create(final String _name, XmlElement node) {
+		final String nameLower = _name.toLowerCase();
+		final Class<?> it = this.creatorList.get(nameLower);
+		if (it != null) {
+			try {
+				Widget tmp = (Widget) it.getConstructor().newInstance();
+				tmp.loadXML(node);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -160,15 +179,11 @@ public class WidgetManager {
 			focusWidgetCurrent.rmFocus();
 			focusWidgetCurrent = null;
 		}
-		if (_newWidget.propertyCanFocus == false) {
+		if (!_newWidget.propertyCanFocus) {
 			Log.debug("Widget can not have focus, id=" + _newWidget.getId());
 			return;
 		}
 		this.focusWidgetCurrent = new WeakReference<>(_newWidget);
-		if (_newWidget != null) {
-			Log.debug("Set focus on WidgetID=" + _newWidget.getId());
-			_newWidget.setFocus();
-		}
 	}
 	
 	/**
@@ -198,7 +213,7 @@ public class WidgetManager {
 	 * @param[in] _newWidget Widget that might get the focus (when nothing else).
 	 */
 	public void focusSetDefault(final Widget _newWidget) {
-		if (_newWidget != null && _newWidget.propertyCanFocus == false) {
+		if ((_newWidget != null) && (!_newWidget.propertyCanFocus)) {
 			Log.verbose("Widget can not have focus, id=" + _newWidget.getId());
 			return;
 		}
@@ -240,7 +255,7 @@ public class WidgetManager {
 	 * @brief Mark the display to redraw
 	 */
 	public void markDrawingIsNeeded() {
-		if (this.haveRedraw == true) {
+		if (this.haveRedraw) {
 			return;
 		}
 		this.haveRedraw = true;

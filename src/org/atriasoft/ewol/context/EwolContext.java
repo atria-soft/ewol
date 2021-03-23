@@ -9,6 +9,7 @@ import org.atriasoft.echrono.Clock;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.event.EntrySystem;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.ObjectManager;
@@ -29,7 +30,7 @@ import org.atriasoft.gale.resource.ResourceManager;
 // Here we hereted from the gale application to be agnostic of the OW where we work ...
 public abstract class EwolContext extends Application {
 	private static EwolContext curentInterface = null;
-	
+
 	/**
 	 * @brief From everyware in the program, we can get the context inteface.
 	 * @return current reference on the instance.
@@ -37,39 +38,37 @@ public abstract class EwolContext extends Application {
 	public static EwolContext getContext() {
 		return curentInterface;
 	}
-	
-	private EwolApplication application; //!< Application handle
-	
-	public EwolApplication getApplication() {
-		return this.application;
-	}
-	
-	public CommandLine getCmd() {
-		return Gale.getContext().getCmd();
-	}
-	
-	private ConfigFont configFont; //!< global font configuration
-	
-	public ConfigFont getFontDefault() {
-		return this.configFont;
-	}
-	
-	private final ObjectManager objectManager; //!< Object Manager main instance
-	
-	public ObjectManager getEObjectManager() {
-		return this.objectManager;
-	}
-	
-	private WidgetManager widgetManager; //!< global widget manager
-	
-	public WidgetManager getWidgetManager() {
-		return this.widgetManager;
-	}
-	
-	public ResourceManager getResourcesManager() {
-		return Gale.getContext().getResourcesManager();
-	}
-	
+
+	/**
+	 * @brief This is the only one things the User might done in his main();
+	 * @note : must be implemented in all system OPS implementation
+	 * @note To answare you before you ask the question, this is really simple: Due
+	 *       to the fect that the current system is multiple-platform, you "main"
+	 *       Does not exist in the android platform, then ewol call other start and
+	 *       stop function, to permit to have only one code
+	 * @note The main can not be in the ewol, due to the fact thet is an librairy
+	 * @param[in] _argc Standard argc
+	 * @param[in] _argv Standard argv
+	 * @return normal error int for the application error management
+	 */
+	public static int main(String[] _args);
+
+	private EwolApplication application; // !< Application handle
+
+	private ConfigFont configFont; // !< global font configuration
+
+	private final ObjectManager objectManager; // !< Object Manager main instance
+
+	private WidgetManager widgetManager; // !< global widget manager
+
+	private final InputManager input;
+
+	private Windows windowsCurrent = null; // !< current displayed windows
+
+	private final int initStepId = 0;
+
+	private final int initTotalStep = 0;
+
 	public EwolContext(final EwolApplication _application) {
 		this.application = _application;
 		this.objectManager = new ObjectManager(this);
@@ -78,22 +77,94 @@ public abstract class EwolContext extends Application {
 			Log.critical("Can not start context with no Application ==> rtfm ...");
 		}
 	}
-	
-	private final InputManager input;
-	
+
+	/**
+	 * @brief Redraw all the windows
+	 */
+	public void forceRedrawAll() {
+		if (this.windowsCurrent == null) {
+			return;
+		}
+		final Vector2f size = getSize();
+		this.windowsCurrent.setSize(new Vector2f((int) size.x(), (int) size.y()));
+		this.windowsCurrent.onChangeSize();
+	}
+
+	public EwolApplication getApplication() {
+		return this.application;
+	}
+
+	public CommandLine getCmd() {
+		return Gale.getContext().getCmd();
+	}
+
+	public ObjectManager getEObjectManager() {
+		return this.objectManager;
+	}
+
+	public ConfigFont getFontDefault() {
+		return this.configFont;
+	}
+
+	public ResourceManager getResourcesManager() {
+		return Gale.getContext().getResourcesManager();
+	}
+
+	public WidgetManager getWidgetManager() {
+		return this.widgetManager;
+	}
+
+	/**
+	 * @brief get the current windows that is displayed
+	 * @return the current handle on the windows (can be null)
+	 */
+	public Windows getWindows() {
+		return this.windowsCurrent;
+	}
+
+	/**
+	 * @brief This fonction lock the pointer properties to move in relative instead
+	 *        of absolute
+	 * @param[in] widget The widget that lock the pointer events
+	 */
+	public void inputEventGrabPointer(final Widget _widget) {
+		this.input.grabPointer(_widget);
+	}
+
+	/**
+	 * @brief This is to transfert the event from one widget to another one
+	 * @param source      the widget where the event came from
+	 * @param destination the widget where the event mitgh be generated now
+	 */
+	public void inputEventTransfertWidget(final Widget _source, final Widget _destination) {
+		this.input.transfertEvent(_source, _destination);
+	}
+
+	/**
+	 * @brief This fonction un-lock the pointer properties to move in relative
+	 *        instead of absolute
+	 */
+	public void inputEventUnGrabPointer() {
+		this.input.unGrabPointer();
+	}
+
+	@Override
+	public void onClipboardEvent(final ClipboardList _clipboardId) {
+		final Widget tmpWidget = this.widgetManager.focusGet();
+		if (tmpWidget != null) {
+			tmpWidget.onEventClipboard(_clipboardId);
+		}
+	}
+
 	@Override
 	public void onCreate(final Context _context) {
 		Log.info(" == > Ewol system create (BEGIN)");
 		// Add basic ewol translation:
-		//etranslate::addPath("ewol", "DATA:///translate/ewol/?lib=ewol");
-		//etranslate::autoDetectLanguage();
-		// By default we set 2 themes (1 color and 1 shape ...) :
-		etk::theme::setNameDefault("GUI", "shape/square/");
-		etk::theme::setNameDefault("COLOR", "color/black/");
+		ETranslate.addPath("ewol", new Uri("DATA", "translate/ewol/", "ewol"));
+		ETranslate.autoDetectLanguage();
 		// parse for help:
-		for(int iii = 0; iii < _context.getCmd().size() ; ++iii) {
-			if (    _context.getCmd().get(iii) == "-h"
-			     || _context.getCmd().get(iii) == "--help") {
+		for (int iii = 0; iii < _context.getCmd().size(); ++iii) {
+			if (_context.getCmd().get(iii) == "-h" || _context.getCmd().get(iii) == "--help") {
 				Log.print("ewol - help : ");
 				Log.print("    xxxxxxxxxxxxx [options]");
 				Log.print("        -h/--help:    Display this help");
@@ -107,22 +178,18 @@ public abstract class EwolContext extends Application {
 			_context.getCmd().remove(iii);
 			--iii;
 		}
-		
-		//Log.info("EWOL v:" + ewol::getVersion());
+
+		// Log.info("EWOL v:" + ewol::getVersion());
 		// force a recalculation
 		/*
-		requestUpdateSize(){
-			Context context = gale::getContext();
-			context.requestUpdateSize();
-		}
-		#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
-			forceOrientation(ewol::screenLandscape);
-		#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
-			forceOrientation(ewol::screenPortrait);
-		#else
-			forceOrientation(ewol::screenAuto);
-		#endif
-		*/
+		 * requestUpdateSize(){ Context context = gale::getContext();
+		 * context.requestUpdateSize(); } #if
+		 * defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
+		 * forceOrientation(ewol::screenLandscape); #elif
+		 * defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
+		 * forceOrientation(ewol::screenPortrait); #else
+		 * forceOrientation(ewol::screenAuto); #endif
+		 */
 		final EwolApplication appl = this.application;
 		if (appl == null) {
 			Log.error(" == > Create without application");
@@ -131,82 +198,7 @@ public abstract class EwolContext extends Application {
 		appl.onCreate(this);
 		Log.info(" == > Ewol system create (END)");
 	}
-	
-	@Override
-	public void onStart(final Context _context) {
-		Log.info(" == > Ewol system start (BEGIN)");
-		final EwolApplication appl = this.application;
-		if (appl == null) {
-			// TODO : Request exit of the application .... with error ...
-			return;
-		}
-		appl.onStart(this);
-		Log.info(" == > Ewol system start (END)");
-	}
-	
-	@Override
-	public void onResume(final Context _context) {
-		Log.info(" == > Ewol system resume (BEGIN)");
-		final EwolApplication appl = this.application;
-		if (appl == null) {
-			return;
-		}
-		appl.onResume(this);
-		Log.info(" == > Ewol system resume (END)");
-	}
-	
-	@Override
-	public void onRegenerateDisplay(final Context _context) {
-		//Log.info("REGENERATE_DISPLAY");
-		// check if the user selected a windows
-		final Windows window = this.windowsCurrent;
-		if (window == null) {
-			Log.debug("No windows ...");
-			return;
-		}
-		// Redraw all needed elements
-		window.onRegenerateDisplay();
-		if (this.widgetManager.isDrawingNeeded() == true) {
-			markDrawingIsNeeded();
-		}
-		//markDrawingIsNeeded();
-	}
-	
-	@Override
-	public void onDraw(final Context _context) {
-		//Log.info("DRAW");
-		// clean internal data...
-		this.objectManager.cleanInternalRemoved();
-		// real draw...
-		final Windows window = this.windowsCurrent;
-		if (window == null) {
-			return;
-		}
-		window.sysDraw();
-	}
-	
-	@Override
-	public void onPause(final Context _context) {
-		Log.info(" == > Ewol system pause (BEGIN)");
-		final EwolApplication appl = this.application;
-		if (appl == null) {
-			return;
-		}
-		appl.onPause(this);
-		Log.info(" == > Ewol system pause (END)");
-	}
-	
-	@Override
-	public void onStop(final Context _context) {
-		Log.info(" == > Ewol system stop (BEGIN)");
-		final EwolApplication appl = this.application;
-		if (appl == null) {
-			return;
-		}
-		appl.onStop(this);
-		Log.info(" == > Ewol system stop (END)");
-	}
-	
+
 	@Override
 	public void onDestroy(final Context _context) {
 		Log.info(" == > Ewol system destroy (BEGIN)");
@@ -228,42 +220,23 @@ public abstract class EwolContext extends Application {
 		this.objectManager.unInit();
 		Log.info(" == > Ewol system destroy (END)");
 	}
-	
+
 	@Override
-	public void onKillDemand(final Context _context) {
-		Log.info(" == > User demand a destroy (BEGIN)");
-		final EwolApplication appl = this.application;
-		if (appl == null) {
-			exit(0);
+	public void onDraw(final Context _context) {
+		// Log.info("DRAW");
+		// clean internal data...
+		this.objectManager.cleanInternalRemoved();
+		// real draw...
+		final Windows window = this.windowsCurrent;
+		if (window == null) {
 			return;
 		}
-		appl.onKillDemand(this);
-		Log.info(" == > User demand a destroy (END)");
+		window.sysDraw();
 	}
-	
-	public void onPointer(final KeyType _type, final int _pointerID, final Vector2f _pos, final KeyStatus _state) {
-		switch (_state) {
-			case move:
-				//Log.debug("Receive MSG : THREAD_INPUT_MOTION");
-				this.input.motion(_type, _pointerID, _pos);
-				break;
-			case down:
-			case downRepeate:
-				//Log.debug("Receive MSG : THREAD_INPUT_STATE");
-				this.input.state(_type, _pointerID, true, _pos);
-				break;
-			case up:
-				//Log.debug("Receive MSG : THREAD_INPUT_STATE");
-				this.input.state(_type, _pointerID, false, _pos);
-				break;
-			default:
-				Log.debug("Unknow state : " + _state);
-				break;
-		}
-	}
-	
+
 	@Override
-	public void onKeyboard(final KeySpecial _special, final KeyKeyboard _type, final Character _value, final KeyStatus _state) {
+	public void onKeyboard(final KeySpecial _special, final KeyKeyboard _type, final Character _value,
+			final KeyStatus _state) {
 		Log.verbose("event {" + _special + "} " + _type + " " + _value + " " + _state);
 		// store the keyboard special key status for mouse event...
 		this.input.setLastKeyboardSpecial(_special);
@@ -284,7 +257,8 @@ public abstract class EwolContext extends Application {
 			return;
 		}
 		// check if the widget allow repeating key events.
-		//Log.info("repeating test :" + repeate + " widget=" + tmpWidget.getKeyboardRepeate() + " state=" + isDown);
+		// Log.info("repeating test :" + repeate + " widget=" +
+		// tmpWidget.getKeyboardRepeate() + " state=" + isDown);
 		if (repeate == false || (repeate == true && tmpWidget.getKeyboardRepeat() == true)) {
 			// check Widget shortcut
 			if (tmpWidget.onEventShortCut(_special, _value, _type, isDown) == false) {
@@ -311,24 +285,134 @@ public abstract class EwolContext extends Application {
 			}
 		}
 	}
-	
+
 	@Override
-	public void onClipboardEvent(final ClipboardList _clipboardId) {
-		final Widget tmpWidget = this.widgetManager.focusGet();
-		if (tmpWidget != null) {
-			tmpWidget.onEventClipboard(_clipboardId);
+	public void onKillDemand(final Context _context) {
+		Log.info(" == > User demand a destroy (BEGIN)");
+		final EwolApplication appl = this.application;
+		if (appl == null) {
+			exit(0);
+			return;
+		}
+		appl.onKillDemand(this);
+		Log.info(" == > User demand a destroy (END)");
+	}
+
+	@Override
+	public void onPause(final Context _context) {
+		Log.info(" == > Ewol system pause (BEGIN)");
+		final EwolApplication appl = this.application;
+		if (appl == null) {
+			return;
+		}
+		appl.onPause(this);
+		Log.info(" == > Ewol system pause (END)");
+	};
+
+	public void onPeriod(final Clock _time) {
+		this.objectManager.timeCall(_time);
+	}
+
+	public void onPointer(final KeyType _type, final int _pointerID, final Vector2f _pos, final KeyStatus _state) {
+		switch (_state) {
+		case move:
+			// Log.debug("Receive MSG : THREAD_INPUT_MOTION");
+			this.input.motion(_type, _pointerID, _pos);
+			break;
+		case down:
+		case downRepeate:
+			// Log.debug("Receive MSG : THREAD_INPUT_STATE");
+			this.input.state(_type, _pointerID, true, _pos);
+			break;
+		case up:
+			// Log.debug("Receive MSG : THREAD_INPUT_STATE");
+			this.input.state(_type, _pointerID, false, _pos);
+			break;
+		default:
+			Log.debug("Unknow state : " + _state);
+			break;
 		}
 	}
-	
+
+	@Override
+	public void onRegenerateDisplay(final Context _context) {
+		// Log.info("REGENERATE_DISPLAY");
+		// check if the user selected a windows
+		final Windows window = this.windowsCurrent;
+		if (window == null) {
+			Log.debug("No windows ...");
+			return;
+		}
+		// Redraw all needed elements
+		window.onRegenerateDisplay();
+		if (this.widgetManager.isDrawingNeeded() == true) {
+			markDrawingIsNeeded();
+		}
+		// markDrawingIsNeeded();
+	}
+
+	public void onResize(final Vector2i _size) {
+		Log.verbose("Resize: " + _size);
+		forceRedrawAll();
+	}
+
+	@Override
+	public void onResume(final Context _context) {
+		Log.info(" == > Ewol system resume (BEGIN)");
+		final EwolApplication appl = this.application;
+		if (appl == null) {
+			return;
+		}
+		appl.onResume(this);
+		Log.info(" == > Ewol system resume (END)");
+	}
+
+	@Override
+	public void onStart(final Context _context) {
+		Log.info(" == > Ewol system start (BEGIN)");
+		final EwolApplication appl = this.application;
+		if (appl == null) {
+			// TODO : Request exit of the application .... with error ...
+			return;
+		}
+		appl.onStart(this);
+		Log.info(" == > Ewol system start (END)");
+	}
+
+	@Override
+	public void onStop(final Context _context) {
+		Log.info(" == > Ewol system stop (BEGIN)");
+		final EwolApplication appl = this.application;
+		if (appl == null) {
+			return;
+		}
+		appl.onStop(this);
+		Log.info(" == > Ewol system stop (END)");
+	}
+
+	/**
+	 * @brief Request a display after call a resize
+	 */
+	public void requestUpdateSize() {
+		final Context context = Gale.getContext();
+		context.requestUpdateSize();
+	}
+
 	/**
 	 * @brief reset event management for the IO like Input ou Mouse or keyborad
 	 */
 	public void resetIOEvent() {
 		this.input.newLayerSet();
 	}
-	
-	private Windows windowsCurrent = null; //!< current displayed windows
-	
+
+	/**
+	 * @brief Special for init (main) set the start image when loading data
+	 * @param[in] _fileName Name of the image to load
+	 */
+	public void setInitImage(final Uri _fileName) {
+		// this.initDisplayImageName = _fileName;
+	}
+
 	/**
 	 * @brief set the current windows to display :
 	 * @param _windows Windows that might be displayed
@@ -348,91 +432,5 @@ public abstract class EwolContext extends Application {
 		}
 		// request all the widget redrawing
 		forceRedrawAll();
-	}
-	
-	/**
-	 * @brief get the current windows that is displayed
-	 * @return the current handle on the windows (can be null)
-	 */
-	public Windows getWindows() {
-		return this.windowsCurrent;
-	};
-	
-	/**
-	 * @brief Redraw all the windows
-	 */
-	public void forceRedrawAll() {
-		if (this.windowsCurrent == null) {
-			return;
-		}
-		final Vector2f size = getSize();
-		this.windowsCurrent.setSize(new Vector2f((int) size.x(), (int) size.y()));
-		this.windowsCurrent.onChangeSize();
-	}
-	
-	/**
-	 * @brief This is to transfert the event from one widget to another one
-	 * @param source the widget where the event came from
-	 * @param destination the widget where the event mitgh be generated now
-	 */
-	public void inputEventTransfertWidget(final Widget _source, final Widget _destination) {
-		this.input.transfertEvent(_source, _destination);
-	}
-	
-	/**
-	 * @brief This fonction lock the pointer properties to move in relative instead of absolute
-	 * @param[in] widget The widget that lock the pointer events
-	 */
-	public void inputEventGrabPointer(final Widget _widget) {
-		this.input.grabPointer(_widget);
-	}
-	
-	/**
-	 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
-	 */
-	public void inputEventUnGrabPointer() {
-		this.input.unGrabPointer();
-	}
-	
-	public void onResize(final Vector2i _size) {
-		Log.verbose("Resize: " + _size);
-		forceRedrawAll();
-	}
-	
-	/**
-	 * @brief This is the only one things the User might done in his main();
-	 * @note : must be implemented in all system OPS implementation
-	 * @note To answare you before you ask the question, this is really simple:
-	 *       Due to the fect that the current system is multiple-platform, you "main"
-	 *       Does not exist in the android platform, then ewol call other start 
-	 *       and stop function, to permit to have only one code
-	 * @note The main can not be in the ewol, due to the fact thet is an librairy
-	 * @param[in] _argc Standard argc
-	 * @param[in] _argv Standard argv
-	 * @return normal error int for the application error management
-	 */
-	public static int main(String[] _args);
-	
-	private final int initStepId = 0;
-	private final int initTotalStep = 0;
-	
-	/**
-	 * @brief Special for init (main) set the start image when loading data
-	 * @param[in] _fileName Name of the image to load
-	 */
-	public void setInitImage(final Uri _fileName) {
-		//this.initDisplayImageName = _fileName;
-	}
-	
-	/**
-	 * @brief Request a display after call a resize
-	 */
-	public void requestUpdateSize() {
-		final Context context = Gale.getContext();
-		context.requestUpdateSize();
-	}
-	
-	public void onPeriod(final Clock _time) {
-		this.objectManager.timeCall(_time);
 	}
 }

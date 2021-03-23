@@ -12,9 +12,9 @@ open module org.atriasoft.ewol {
 	exports org.atriasoft.ewol.object;
 	exports org.atriasoft.ewol.resource;
 	exports org.atriasoft.ewol.resource.font;
-	exports org.atriasoft.ewol.tools;
+	//exports org.atriasoft.ewol.tools;
 	exports org.atriasoft.ewol.widget;
-	exports org.atriasoft.ewol.widget.meta;
+	//exports org.atriasoft.ewol.widget.meta;
 	
 	exports org.atriasoft.echrono;
 	exports org.atriasoft.egami;
