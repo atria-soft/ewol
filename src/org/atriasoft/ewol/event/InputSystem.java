@@ -6,32 +6,19 @@ import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
 
-public class InputSystem {
-	public EventInput event;
-	
-	private Widget dest;
-	
-	private int realIdEvent;
-	
-	public InputSystem(final KeyType _type, final KeyStatus _status, final int _id, final Vector2f _pos, final Widget _dest, final int _realIdEvent, final KeySpecial _specialKey) {
-		this.event = new EventInput(_type, _status, _id, _pos, _specialKey);
-		this.dest = _dest;
-		this.realIdEvent = _realIdEvent;
+@SuppressWarnings("preview")
+public record InputSystem(
+		EventInput event,
+		Widget dest,
+		int realIdEvent) {
+	public InputSystem(final EventInput event, final Widget dest, final int realIdEvent) {
+		this.event = event;
+		this.dest = dest;
+		this.realIdEvent = realIdEvent;
 	}
 	
-	public Widget getDestWidget() {
-		return this.dest;
+	public InputSystem(final KeyType type, final KeyStatus status, final int id, final Vector2f pos, final Widget dest, final int realIdEvent, final KeySpecial specialKey) {
+		this(new EventInput(type, status, id, pos, specialKey), dest, realIdEvent);
 	}
 	
-	public int getRealId() {
-		return this.realIdEvent;
-	}
-	
-	public void setDestWidget(final Widget _dest) {
-		this.dest = _dest;
-	}
-	
-	public void setRealId(final int _realIdEvent) {
-		this.realIdEvent = _realIdEvent;
-	}
 }

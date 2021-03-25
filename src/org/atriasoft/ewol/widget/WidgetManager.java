@@ -16,46 +16,46 @@ import org.atriasoft.exml.model.XmlElement;
 
 public class WidgetManager {
 	// ---------------------------------------------
-	// --  Focus area
-	// ---------------------------------------------
-	private WeakReference<Widget> focusWidgetDefault; //!< default focus when no current focus is set
-	private WeakReference<Widget> focusWidgetCurrent; //!< Current focus selected
-	// ---------------------------------------------
 	// --  Factory area
 	// ---------------------------------------------
 	private final Map<String, Class<?>> creatorList = new HashMap<>(); //!< List of factory of a widget
-	
+	private WeakReference<Widget> focusWidgetCurrent; //!< Current focus selected
 	// ---------------------------------------------
-	// --  Something change area (TODO: maybe set it in the windows)
+	// --  Focus area
 	// ---------------------------------------------
-	private boolean haveRedraw = true; //!< something request a redraw
+	private WeakReference<Widget> focusWidgetDefault; //!< default focus when no current focus is set
 	
 	private Runnable funcRedrawNeeded = null;
 	
+	// ---------------------------------------------
+	// --  Something change area (TODO maybe set it in the windows)
+	// ---------------------------------------------
+	private boolean haveRedraw = true; //!< something request a redraw
+	
 	/**
 	 * Create a widget with his name.
-	 * @param _name Name of the widget to create.
-	 * @param _node Reference on the XML node.
+	 * @param name Name of the widget to create.
+	 * @param node Reference on the XML node.
 	 * @return The widget created (null if it does not exist).
 	 */
-	/*
-	public Widget create( final String _name,  exml::Element _node){
-		final String nameLower = _name.toLowerCase();
-		final Class<?> it = this.creatorList.get(nameLower);
-		if (it != null) {
-			try {
-				return it.getConstructor().newInstance(_node);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
+		/*
+		public Widget create( final String name,  exml::Element node){
+			final String nameLower = name.toLowerCase();
+			final Class<?> it = this.creatorList.get(nameLower);
+			if (it != null) {
+				try {
+					return it.getConstructor().newInstance(node);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
 			}
+			Log.warning("try to create an UnExistant widget : " + nameLower);
+			return null;
 		}
-		Log.warning("try to create an UnExistant widget : " + nameLower);
-		return null;
-	}
-	*/
-	
+		*/
+		
 	public WidgetManager() {
 		/*
 		this.creatorList.put("Button", Button.class);
@@ -85,31 +85,31 @@ public class WidgetManager {
 	/**
 	 * @throws Exception 
 	 * add a factory of a specific widget.
-	 * @param _name Name of the widget that is associated of the factory.
-	 * @param _class class interface
+	 * @param name Name of the widget that is associated of the factory.
+	 * @param klass class interface
 	 */
-	public void addWidgetCreator(final String _name, final Class<?> _class) throws Exception {
-		if (_class == null) {
+	public void addWidgetCreator(final String name, final Class<?> klass) throws Exception {
+		if (klass == null) {
 			throw new Exception("Can not add widget creator without specified class.");
 		}
 		//Keep name in lower case :
-		final String nameLower = _name.toLowerCase();
+		final String nameLower = name.toLowerCase();
 		final Class<?> it = this.creatorList.get(nameLower);
 		if (it != null) {
 			Log.warning("Replace Creator of a specify widget : " + nameLower);
 			return;
 		}
-		this.creatorList.put(nameLower, _class);
+		this.creatorList.put(nameLower, klass);
 		// TODO check constructors ...
 	}
 	
 	/**
 	 * Create a widget with his name.
-	 * @param _name Name of the widget to create.
+	 * @param name Name of the widget to create.
 	 * @return The widget created (null if it does not exist).
 	 */
-	public Widget create(final String _name) {
-		final String nameLower = _name.toLowerCase();
+	public Widget create(final String name) {
+		final String nameLower = name.toLowerCase();
 		final Class<?> it = this.creatorList.get(nameLower);
 		if (it != null) {
 			try {
@@ -123,8 +123,9 @@ public class WidgetManager {
 		Log.warning("try to create an UnExistant widget : " + nameLower);
 		return null;
 	}
-	public Widget create(final String _name, XmlElement node) {
-		final String nameLower = _name.toLowerCase();
+	
+	public Widget create(final String name, final XmlElement node) {
+		final String nameLower = name.toLowerCase();
 		final Class<?> it = this.creatorList.get(nameLower);
 		if (it != null) {
 			try {
@@ -142,12 +143,12 @@ public class WidgetManager {
 	
 	/**
 	 * Check if an Widget exist
-	 * @param _name Name of the widget to check.
+	 * @param name Name of the widget to check.
 	 * @return true The Widget exist.
 	 * @return false The Widget Does NOT exist.
 	 */
-	public boolean exist(final String _name) {
-		return this.creatorList.get(_name.toLowerCase()) != null;
+	public boolean exist(final String name) {
+		return this.creatorList.get(name.toLowerCase()) != null;
 	}
 	
 	/**
@@ -160,17 +161,17 @@ public class WidgetManager {
 	
 	/**
 	 * Request a focus on a specify widget.
-	 * @param _newWidget Widget that might get the focus.
+	 * @param newWidget Widget that might get the focus.
 	 */
-	public void focusKeep(final Widget _newWidget) {
-		if (_newWidget == null) {
+	public void focusKeep(final Widget newWidget) {
+		if (newWidget == null) {
 			// nothing to do ...
 			return;
 		}
-		Log.debug("focusKeep=" + _newWidget.getId());
+		Log.debug("focusKeep=" + newWidget.getId());
 		//elog::displayBacktrace();
 		Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
-		if (_newWidget == focusWidgetCurrent) {
+		if (newWidget == focusWidgetCurrent) {
 			// nothing to do ... 
 			return;
 		}
@@ -179,11 +180,11 @@ public class WidgetManager {
 			focusWidgetCurrent.rmFocus();
 			focusWidgetCurrent = null;
 		}
-		if (!_newWidget.propertyCanFocus) {
-			Log.debug("Widget can not have focus, id=" + _newWidget.getId());
+		if (!newWidget.propertyCanFocus) {
+			Log.debug("Widget can not have focus, id=" + newWidget.getId());
 			return;
 		}
-		this.focusWidgetCurrent = new WeakReference<>(_newWidget);
+		this.focusWidgetCurrent = new WeakReference<>(newWidget);
 	}
 	
 	/**
@@ -210,11 +211,11 @@ public class WidgetManager {
 	
 	/**
 	 * Set the default focus when none selected.
-	 * @param _newWidget Widget that might get the focus (when nothing else).
+	 * @param newWidget Widget that might get the focus (when nothing else).
 	 */
-	public void focusSetDefault(final Widget _newWidget) {
-		if ((_newWidget != null) && (!_newWidget.propertyCanFocus)) {
-			Log.verbose("Widget can not have focus, id=" + _newWidget.getId());
+	public void focusSetDefault(final Widget newWidget) {
+		if ((newWidget != null) && (!newWidget.propertyCanFocus)) {
+			Log.verbose("Widget can not have focus, id=" + newWidget.getId());
 			return;
 		}
 		final Widget focusWidgetDefault = this.focusWidgetDefault.get();
@@ -224,13 +225,13 @@ public class WidgetManager {
 				Log.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
 				focusWidgetCurrent.rmFocus();
 			}
-			this.focusWidgetCurrent = new WeakReference<>(_newWidget);
-			if (_newWidget != null) {
-				Log.debug("Set focus on WidgetID=" + _newWidget.getId());
-				_newWidget.setFocus();
+			this.focusWidgetCurrent = new WeakReference<>(newWidget);
+			if (newWidget != null) {
+				Log.debug("Set focus on WidgetID=" + newWidget.getId());
+				newWidget.setFocus();
 			}
 		}
-		this.focusWidgetDefault = new WeakReference<>(_newWidget);
+		this.focusWidgetDefault = new WeakReference<>(newWidget);
 	}
 	
 	/**
@@ -266,10 +267,10 @@ public class WidgetManager {
 	
 	/**
 	 * Set a callback when we need redraw the display (need by MacOs)
-	 * @param _func function to call
+	 * @param func function to call
 	 */
-	public void setCallbackonRedrawNeeded(final Runnable _func) {
-		this.funcRedrawNeeded = _func;
+	public void setCallbackonRedrawNeeded(final Runnable func) {
+		this.funcRedrawNeeded = func;
 	}
 	
 }

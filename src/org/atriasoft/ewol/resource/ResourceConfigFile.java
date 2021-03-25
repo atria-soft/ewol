@@ -1,4 +1,4 @@
-/** @file
+/* @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -15,17 +15,27 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.resource.Resource;
 
+class ListElementConfig {
+	public final String name;
+	public JsonNode node;
+	
+	public ListElementConfig(final String name, final JsonNode node) {
+		this.name = name;
+		this.node = node;
+	}
+}
+
 public class ResourceConfigFile extends Resource {
 	/**
 	 * keep the resource pointer.
 	 * @note Never free this pointer by your own...
-	 * @param _filename Name of the configuration file.
-	 * @return pointer on the resource or null if an error occured.
+	 * @param name Name of the configuration file.
+	 * @return pointer on the resource or null if an error occurred.
 	 */
 	public static ResourceConfigFile keep(final String name) {
 		Resource resource2 = null;
-		if (name.isEmpty() == false && name != "---") {
-			resource2 = getManager().localKeep(name);
+		if (!name.isEmpty() && !name.contentEquals("---")) {
+			resource2 = Resource.getManager().localKeep(name);
 		}
 		if (resource2 != null) {
 			if (resource2 instanceof ResourceConfigFile) {
@@ -35,8 +45,8 @@ public class ResourceConfigFile extends Resource {
 			Log.critical("Request resource file : '" + name + "' With the wrong type (dynamic cast error)");
 			return null;
 		}
-		final ResourceConfigFile resource = new ResourceConfigFile(new Uri(name));
-		getManager().localAdd(resource);
+		final ResourceConfigFile resource = new ResourceConfigFile(Uri.valueOf(name));
+		Resource.getManager().localAdd(resource);
 		return resource;
 		
 	}
@@ -44,9 +54,9 @@ public class ResourceConfigFile extends Resource {
 	// List of all color in the file
 	private final List<ListElementConfig> list = new ArrayList<>();
 	
-	protected ResourceConfigFile(final Uri _uri) {
-		super(_uri.get());
-		Log.debug("SFP : load '" + _uri + "'");
+	protected ResourceConfigFile(final Uri uri) {
+		super(uri.get());
+		Log.debug("SFP : load '" + uri + "'");
 		reload();
 		
 	}
@@ -57,30 +67,29 @@ public class ResourceConfigFile extends Resource {
 		
 	}
 	
-	boolean getBoolean(final int _id) {
-		if (_id < 0 || this.list.get(_id).node == null || this.list.get(_id).node.isJsonBoolean() == false) {
+	boolean getBoolean(final int id) {
+		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonBoolean()) {
 			return false;
 		}
-		return this.list.get(_id).node.toJsonBoolean().getValue();
+		return this.list.get(id).node.toJsonBoolean().getValue();
 	}
 	
-	public synchronized double getNumber(final int _id) {
-		if (_id < 0 || this.list.get(_id).node == null || this.list.get(_id).node.isJsonNumber() == false) {
+	public synchronized double getNumber(final int id) {
+		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonNumber()) {
 			return 0.0;
 		}
-		return this.list.get(_id).node.toJsonNumber().getValue();
+		return this.list.get(id).node.toJsonNumber().getValue();
 	}
 	
-	String getString(final int _id) {
-		if (_id < 0 || this.list.get(_id).node == null || this.list.get(_id).node.isJsonString() == false) {
+	String getString(final int id) {
+		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonString()) {
 			return "";
 		}
-		return this.list.get(_id).node.toJsonString().getValue();
+		return this.list.get(id).node.toJsonString().getValue();
 	}
 	
 	public synchronized void put(final String name, final JsonNode node) {
-		for (int iii = 0; iii < this.list.size(); iii++) {
-			final ListElementConfig elem = this.list.get(iii);
+		for (final ListElementConfig elem : this.list) {
 			if (elem.name.contentEquals(name)) {
 				elem.node = node;
 				return;
@@ -92,41 +101,28 @@ public class ResourceConfigFile extends Resource {
 	@Override
 	public synchronized void reload() {
 		// reset all parameters
-		for (int iii = 0; iii < this.list.size(); ++iii) {
-			this.list.get(iii).node = null;
+		for (ListElementConfig listElementConfig : this.list) {
+			listElementConfig.node = null;
 		}
 		JsonObject out;
 		try {
-			out = Ejson.parse(new Uri(this.name)).toJsonObject();
+			out = Ejson.parse(Uri.valueOf(this.name)).toJsonObject();
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
-		out.getNodes().forEach((key, value) -> {
-			put(key, value);
-		});
+		out.getNodes().forEach(this::put);
 	}
 	
-	public synchronized int request(final String _paramName) {
+	public synchronized int request(final String paramName) {
 		for (int iii = 0; iii < this.list.size(); iii++) {
 			final ListElementConfig elem = this.list.get(iii);
-			if (elem.name.contentEquals(_paramName)) {
+			if (elem.name.contentEquals(paramName)) {
 				return iii;
 			}
 		}
-		this.list.add(new ListElementConfig(_paramName, null));
+		this.list.add(new ListElementConfig(paramName, null));
 		return this.list.size() - 1;
-	}
-}
-
-class ListElementConfig {
-	public final String name;
-	public JsonNode node;
-	
-	public ListElementConfig(final String name, final JsonNode node) {
-		super();
-		this.name = name;
-		this.node = node;
 	}
 }

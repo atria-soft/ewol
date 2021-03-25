@@ -20,19 +20,19 @@ import org.atriasoft.ewol.internal.Log;
  */
 
 public class ObjectManager {
-	private final List<WeakReference<EwolObject>> eObjectList = new ArrayList<>(); // all widget allocated  == > all time increment ... never removed ...
+	private final Time applWakeUpTime; //!< Time of the application initialize
 	private EwolContext context = null;
 	
-	private final List<EwolObject> workerList = new ArrayList<>();
-	
-	public final Signal<EventTime> periodicCall = new Signal<>();
-	
-	private final Time applWakeUpTime; //!< Time of the application initialize
+	private final List<WeakReference<EwolObject>> eObjectList = new ArrayList<>(); // all widget allocated  == > all time increment ... never removed ...
 	
 	private Clock lastPeriodicCallTime; //!< last call time ...
 	
-	public ObjectManager(final EwolContext _context) {
-		this.context = _context;
+	public final Signal<EventTime> periodicCall = new Signal<>();
+	
+	private final List<EwolObject> workerList = new ArrayList<>();
+	
+	public ObjectManager(final EwolContext context) {
+		this.context = context;
 		//periodicCall(this, "periodic", "Call every time system render");
 		Log.debug(" == > init Object-Manager");
 		Log.todo("set this back ...");
@@ -45,17 +45,17 @@ public class ObjectManager {
 	/**
 	 * Internal API that used only with Object toi reference itself in the manager.
 	 * @note The manager remove the object when the refecence Low down 1 (last keeper)
-	 * @param _object Reference shared pointer on the object
+	 * @param object Reference shared pointer on the object
 	 */
-	public synchronized void add(final EwolObject _object) {
-		if (_object == null) {
+	public synchronized void add(final EwolObject object) {
+		if (object == null) {
 			Log.error("try to add an inexistant Object in manager");
 		}
-		this.eObjectList.add(new WeakReference<>(_object));
+		this.eObjectList.add(new WeakReference<>(object));
 	}
 	
 	/**
-	 * clean the weak pointer list (remove weak_ptr that is remoed)
+	 * clean the weak pointer list (remove weakptr that is remoed)
 	 */
 	public synchronized void cleanInternalRemoved() {
 		final int nbObject = this.eObjectList.size();
@@ -87,16 +87,16 @@ public class ObjectManager {
 	
 	/**
 	 * Retrive an Object with his name
-	 * @param _name Name of the Object
+	 * @param name Name of the Object
 	 * @return Pointer on the finded Object.
 	 */
-	public synchronized EwolObject get(final String _name) {
-		if (_name.isEmpty() == true) {
+	public synchronized EwolObject get(final String name) {
+		if (name.isEmpty()) {
 			return null;
 		}
 		for (final WeakReference<EwolObject> it : this.eObjectList) {
 			final EwolObject element = it.get();
-			if (element != null && element.getName().contentEquals(_name)) {
+			if (element != null && element.getName().contentEquals(name)) {
 				return element;
 			}
 		}
@@ -113,26 +113,26 @@ public class ObjectManager {
 	
 	/**
 	 * retrive an object with his name
-	 * @param _name Name of the object
+	 * @param name Name of the object
 	 * @return the requested object or null
 	 */
-	public synchronized EwolObject getObjectNamed(final String _name) {
-		return get(_name);
+	public synchronized EwolObject getObjectNamed(final String name) {
+		return get(name);
 	}
 	
 	/**
 	 * Call every time we can with the current time
-	 * @param _localTime Current system Time.
+	 * @param localTime Current system Time.
 	 */
-	public synchronized void timeCall(final Clock _localTime) {
+	public synchronized void timeCall(final Clock localTime) {
 		final Clock previousTime = this.lastPeriodicCallTime;
-		this.lastPeriodicCallTime = _localTime;
+		this.lastPeriodicCallTime = localTime;
 		if (this.periodicCall.size() <= 0) {
 			return;
 		}
-		final Duration deltaTime = new Duration(_localTime.get() - previousTime.get());
+		final Duration deltaTime = new Duration(localTime.get() - previousTime.get());
 		
-		final EventTime myTime = new EventTime(_localTime, this.applWakeUpTime.toClock(), deltaTime, deltaTime);
+		final EventTime myTime = new EventTime(localTime, this.applWakeUpTime.toClock(), deltaTime, deltaTime);
 		this.periodicCall.emit(myTime);
 	}
 	
@@ -146,10 +146,10 @@ public class ObjectManager {
 	
 	/**
 	 * If the application is suspended The Ewol Object manager does not know it, just call this to update delta call
-	 * @param _localTime Current system Time.
+	 * @param localTime Current system Time.
 	 */
-	public synchronized void timeCallResume(final Clock _localTime) {
-		this.lastPeriodicCallTime = _localTime;
+	public synchronized void timeCallResume(final Clock localTime) {
+		this.lastPeriodicCallTime = localTime;
 	}
 	
 	/**
@@ -175,22 +175,22 @@ public class ObjectManager {
 	
 	/**
 	 * Add a worker on the system list.
-	 * @param _worker Worker to add in the list.
+	 * @param worker Worker to add in the list.
 	 */
-	public synchronized void workerAdd(final EwolObject _worker) {
-		this.workerList.add(_worker);
+	public synchronized void workerAdd(final EwolObject worker) {
+		this.workerList.add(worker);
 	}
 	
 	/**
 	 * Remove a worker on the system list.
-	 * @param _worker Worker to add in the list.
+	 * @param worker Worker to add in the list.
 	 */
-	public synchronized void workerRemove(final EwolObject _worker) {
+	public synchronized void workerRemove(final EwolObject worker) {
 		
 		final Iterator<EwolObject> iterator = this.workerList.iterator();
 		while (iterator.hasNext()) {
 			final EwolObject elem = iterator.next();
-			if (elem == _worker) {
+			if (elem == worker) {
 				iterator.remove();
 			}
 		}

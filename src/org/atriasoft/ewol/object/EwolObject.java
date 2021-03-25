@@ -38,12 +38,16 @@ public class EwolObject {
 	
 	/** 
 	 * Retrive an object with his name (in the global list)
-	 * @param _name Name of the object
+	 * @param objectName Name of the object
 	 * @return the requested object or null
 	 */
-	public static EwolObject getObjectNamed(final String _objectName) {
-		return getObjectManager().getObjectNamed(_objectName);
+	public static EwolObject getObjectNamed(final String objectName) {
+		return EwolObject.getObjectManager().getObjectNamed(objectName);
 	}
+	
+	protected boolean destroy = false; //!< Flag to know if the object is requesting has destroy.
+	
+	private boolean isResource = false; //!< enable this when you want to declare this element is auto-remove
 	
 	//@EwolPropertyDescription("Object name, might be a unique reference in all the program")
 	//@JacksonXmlProperty(isAttribute = true, localName = "name")
@@ -51,25 +55,21 @@ public class EwolObject {
 	
 	protected WeakReference<EwolObject> parent = null; //!< Reference on the current parent.
 	
-	protected boolean destroy = false; //!< Flag to know if the object is requesting has destroy.
-	
 	private final boolean staticObject = false; //!< set this variable at true if this element must not be auto destroy (exemple : use static object);
 	
 	private final int uniqueId; //!< Object UniqueID  == > TODO : Check if it use is needed
-	
-	private boolean isResource = false; //!< enable this when you want to declare this element is auto-remove
 	
 	/**
 	 * Constructor.
 	 */
 	public EwolObject() {
 		// note this is nearly atomic ... (but it is enough)
-		synchronized (valUID) {
+		synchronized (EwolObject.valUID) {
 			this.uniqueId = EwolObject.valUID++;
 		}
 		Log.debug("new Object : [" + this.uniqueId + "]");
 		
-		getObjectManager().add(this);
+		EwolObject.getObjectManager().add(this);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class EwolObject {
 	 */
 	public void destroy() {
 		autoDestroy();
-	};
+	}
 	
 	/**
 	 * get the UniqueId of the Object
@@ -105,22 +105,22 @@ public class EwolObject {
 	
 	public String getName() {
 		return this.name;
-	};
+	}
 	
 	/**
 	 * load attribute properties with an XML node.
-	 * @param _node Reference on the XML node.
+	 * @param node Reference on the XML node.
 	 * @return true : All has been done corectly.
 	 * @return false : An error occured.
 	 */
 	/*
-	boolean loadXMLAttributes( exml::Element _node){
-		if (_node.exist() == false) {
+	boolean loadXMLAttributes( exml::Element node){
+		if (node.exist() == false) {
 			return false;
 		}
 		boolean errorOccured = false;
 		
-		for( auto it : _node.attributes) {
+		for( auto it : node.attributes) {
 			auto pair = it.getPair();
 			if (pair.first == "") {
 				continue;
@@ -128,35 +128,6 @@ public class EwolObject {
 			if (properties.set(pair.first, pair.second) == false) {
 				errorOccured = true;
 			}
-		}
-		return errorOccured;
-	}
-	*/
-	
-	/**
-	 * load properties with an XML node.
-	 * @param _node Reference on the XML node.
-	 * @return true : All has been done corectly.
-	 * @return false : An error occured.
-	 */
-	protected boolean loadXML(XmlElement _node) {
-		return true;
-	}
-	
-	/**
-	 * store properties in this XML node.
-	 * @param[in,out] _node Reference on the XML node.
-	 * @return true : All has been done corectly.
-	 * @return false : An error occured.
-	 */
-	/*
-	boolean storeXML(exml::Element _node){
-		if (_node.exist() == false) {
-			return false;
-		}
-		boolean errorOccured = true;
-		for (auto it : properties.getAll(true)) {
-			_node.attributes.set(it.first, it.second);
 		}
 		return errorOccured;
 	}
@@ -171,6 +142,25 @@ public class EwolObject {
 	}
 	
 	/**
+	 * store properties in this XML node.
+	 * @param[in,out] node Reference on the XML node.
+	 * @return true : All has been done corectly.
+	 * @return false : An error occured.
+	 */
+	/*
+	boolean storeXML(exml::Element node){
+		if (node.exist() == false) {
+			return false;
+		}
+		boolean errorOccured = true;
+		for (auto it : properties.getAll(true)) {
+			node.attributes.set(it.first, it.second);
+		}
+		return errorOccured;
+	}
+	*/
+	
+	/**
 	 * Get the resource status of the element.
 	 * @return the resource status.
 	 */
@@ -180,12 +170,12 @@ public class EwolObject {
 	
 	/**
 	 * Retrive an object with his name (in the global list)
-	 * @param _name Name of the object
+	 * @param name Name of the object
 	 * @return the requested object or null
 	 */
-	public EwolObject getSubObjectNamed(final String _objectName) {
-		Log.verbose("check if name : " + _objectName + " ?= " + this.name);
-		if (_objectName == this.name) {
+	public EwolObject getSubObjectNamed(final String objectName) {
+		Log.verbose("check if name : " + objectName + " ?= " + this.name);
+		if (objectName.equals(this.name)) {
 			return this;
 		}
 		return null;
@@ -201,6 +191,16 @@ public class EwolObject {
 	}
 	
 	/**
+	 * load properties with an XML node.
+	 * @param node Reference on the XML node.
+	 * @return true : All has been done corectly.
+	 * @return false : An error occured.
+	 */
+	protected boolean loadXML(final XmlElement node) {
+		return true;
+	}
+	
+	/**
 	 * Remove the current parenting.
 	 */
 	public void removeParent() {
@@ -209,9 +209,9 @@ public class EwolObject {
 	
 	/**
 	 * Called by a whild that want to remove pointer of itself from the current list of his parrent
-	 * @param _child Object of the child that want to remove itself
+	 * @param child Object of the child that want to remove itself
 	 */
-	protected void requestDestroyFromChild(final EwolObject _child) {
+	protected void requestDestroyFromChild(final EwolObject child) {
 		Log.info("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
 		Log.critical("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
 	}
@@ -222,20 +222,20 @@ public class EwolObject {
 	
 	/**
 	 * Set the Object has new parrent.
-	 * @param _newParent Object that requesting the parenting
+	 * @param newParent Object that requesting the parenting
 	 */
-	public void setParent(final EwolObject _newParent) {
+	public void setParent(final EwolObject newParent) {
 		// TODO : Implement change of parent ...
-		this.parent = new WeakReference<>(_newParent);
+		this.parent = new WeakReference<>(newParent);
 	}
 	
 	/**
 	 * Declare this element as a resource (or singleton) this mean the element will 
 	 * not be auto Remove at the end of the programm. It just notify that it is not removed.
-	 * @param _val Value of the type of the element.
+	 * @param val Value of the type of the element.
 	 */
-	public void setStatusResource(final boolean _val) {
-		this.isResource = _val;
+	public void setStatusResource(final boolean val) {
+		this.isResource = val;
 	}
 	
 }

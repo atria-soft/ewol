@@ -14,20 +14,20 @@ public class Clock {
 		this.data = 0;
 	}
 	
-	public Clock(final double _val) { //value in second
-		this.data = (long) (_val * 1000000000.0);
+	public Clock(final double val) { //value in second
+		this.data = (long) (val * 1000000000.0);
 	}
 	
-	public Clock(final int _val) { //value in nanosecond
-		this.data = _val;
+	public Clock(final int val) { //value in nanosecond
+		this.data = val;
 	}
 	
-	public Clock(final long _val) { //value in nanosecond
-		this.data = _val;
+	public Clock(final long val) { //value in nanosecond
+		this.data = val;
 	}
 	
-	public Clock(final long _valSec, final long _valNano) { //value in second and nanosecond
-		this.data = _valSec * 1000000000L + _valNano;
+	public Clock(final long valSec, final long valNano) { //value in second and nanosecond
+		this.data = valSec * 1000000000L + valNano;
 	}
 	
 	public long get() {

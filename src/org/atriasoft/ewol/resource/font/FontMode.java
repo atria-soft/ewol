@@ -7,15 +7,12 @@ public enum FontMode {
 	BoldItalic(3);
 	
 	public static FontMode get(final int newValue) {
-		switch (newValue) {
-			case 1:
-				return Italic;
-			case 2:
-				return Bold;
-			case 3:
-				return BoldItalic;
-		}
-		return Regular;
+		return switch (newValue) {
+			case 1 -> Italic;
+			case 2 -> Bold;
+			case 3 -> BoldItalic;
+			default -> Regular;
+		};
 	}
 	
 	private final int value;

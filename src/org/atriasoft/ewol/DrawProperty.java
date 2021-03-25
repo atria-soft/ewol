@@ -10,7 +10,7 @@ import org.atriasoft.etk.math.Vector2i;
  * @license MPL v2.0 (see license file)
  */
 
-	//@formatter:off
+//@formatter:off
 	/*
                                                             /- windowsSize
 		*--------------------------------------------------*
@@ -36,32 +36,32 @@ import org.atriasoft.etk.math.Vector2i;
 		(0,0)
 	 */
 	//@formatter:on
+@SuppressWarnings("preview")
 public record DrawProperty(
 		Vector2i windowsSize, // !< Windows complete size
 		Vector2i origin, // !< Windows clipping upper widget (can not be <0)
 		Vector2i size// !< Windows clipping upper widget (can not be <0 and >this.windowsSize)
 ) {
 	public DrawProperty() {
-		this(Vector2i.ZERO,Vector2i.ZERO,Vector2i.ZERO);
+		this(Vector2i.ZERO, Vector2i.ZERO, Vector2i.ZERO);
 	}
-
+	
 	public DrawProperty(final Vector2i windowsSize, final Vector2i origin, final Vector2i size) {
 		this.windowsSize = windowsSize;
 		this.origin = origin;
 		this.size = size;
 	}
-
-	public DrawProperty withLimit(final Vector2f _origin, final Vector2f _size) {
+	
+	public DrawProperty withLimit(final Vector2f originIn, final Vector2f size) {
 		Vector2i tmpSize = this.size.add(this.origin);
-		Vector2i origin = this.origin.max((int) _origin.x(), (int) _origin.y());
-		tmpSize = tmpSize.min((int) (_origin.x() + _size.x()), (int) (_origin.y() + _size.y()));
+		Vector2i origin = this.origin.max((int) originIn.x(), (int) originIn.y());
+		tmpSize = tmpSize.min((int) (originIn.x() + size.x()), (int) (originIn.y() + size.y()));
 		tmpSize = tmpSize.less(origin);
-		return new DrawProperty(windowsSize, origin, tmpSize);
+		return new DrawProperty(this.windowsSize, origin, tmpSize);
 	}
-
+	
 	@Override
 	public String toString() {
-		return "DrawProperty [windowsSize=" + this.windowsSize + ", start=" + this.origin + ", stop="
-				+ this.origin.add(this.size) + "]";
+		return "DrawProperty [windowsSize=" + this.windowsSize + ", start=" + this.origin + ", stop=" + this.origin.add(this.size) + "]";
 	}
 }

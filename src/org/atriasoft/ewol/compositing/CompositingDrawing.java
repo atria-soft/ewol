@@ -20,32 +20,32 @@ import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
 
 public class CompositingDrawing extends Compositing {
-
-	protected static int vboIdCoord = 0;
+	
 	protected static int vboIdColor = 1;
-	private Vector3f position = new Vector3f(0, 0, 0); // !< The current position to draw
+	protected static int vboIdCoord = 0;
+	private boolean clippingEnable = false; // !< true if the clipping must be activated
 	private Vector3f clippingPosStart = new Vector3f(0, 0, 0); // !< Clipping start position
 	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); // !< Clipping stop position
-	private boolean clippingEnable = false; // !< true if the clipping must be activated
 	private Color color = Color.BLACK; // !< The text foreground color
 	private Color colorBg = Color.NONE; // !< The text background color
-	private ResourceProgram GLprogram; // !< pointer on the opengl display program
-	private int GLPosition = -1; // !< openGL id on the element (vertex buffer)
-	private int GLMatrix = -1; // !< openGL id on the element (transformation matrix)
-	private int GLMatrixPosition = -1; // !< position matrix
-	private int GLColor = -1; // !< openGL id on the element (color buffer)
-	protected ResourceVirtualBufferObject VBO;
-
-	private float thickness = 0; // !< when drawing line and other things
-
-	private int triElement = 0; // !< special counter of the single dot generated
-
-	private final Vector3f[] triangle = new Vector3f[3]; // !< Register every system with a combinaison of tiangle
-
-	private final Color[] tricolor = new Color[3]; // !< Register every the associated color foreground
-	private final List<Vector3f> outTriangles = new ArrayList<>();
+	private int oGLColor = -1; // !< openGL id on the element (color buffer)
+	private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
+	private int oGLMatrixPosition = -1; // !< position matrix
+	private int oGLPosition = -1; // !< openGL id on the element (vertex buffer)
+	private ResourceProgram oGLprogram; // !< pointer on the opengl display program
 	private final List<Color> outColors = new ArrayList<>();
-
+	private final List<Vector3f> outTriangles = new ArrayList<>();
+	
+	private Vector3f position = new Vector3f(0, 0, 0); // !< The current position to draw
+	
+	private float thickness = 0; // !< when drawing line and other things
+	
+	private final Vector3f[] triangle = new Vector3f[3]; // !< Register every system with a combinaison of tiangle
+	
+	private final Color[] tricolor = new Color[3]; // !< Register every the associated color foreground
+	private int triElement = 0; // !< special counter of the single dot generated
+	protected ResourceVirtualBufferObject vbo;
+	
 	// internal API for the generation abstraction of triangles
 	/**
 	 * Basic ructor
@@ -57,11 +57,11 @@ public class CompositingDrawing extends Compositing {
 			this.tricolor[iii] = this.color;
 		}
 		// Create the VBO:
-		this.VBO = ResourceVirtualBufferObject.create(4);
+		this.vbo = ResourceVirtualBufferObject.create(4);
 		// TO facilitate some debugs we add a name of the VBO:
-		this.VBO.setName("[VBO] of ewol::compositing::Area");
+		this.vbo.setName("[VBO] of ewol::compositing::Area");
 	}
-
+	
 	/**
 	 * add a point reference at the current position (this is a vertex
 	 *        reference at the current position
@@ -70,85 +70,85 @@ public class CompositingDrawing extends Compositing {
 		internalSetColor(this.color);
 		setPoint(this.position);
 	}
-
+	
 	/**
 	 * draw a 2D circle with the specify rafdius parameter.
-	 * @param _radius Distence to the dorder
-	 * @param _angleStart start angle of this circle ([0..2PI] otherwithe == >
+	 * @param radius Distence to the dorder
+	 * @param angleStart start angle of this circle ([0..2PI] otherwithe == >
 	 *            disable)
-	 * @param _angleStop stop angle of this circle ([0..2PI] otherwithe == >
+	 * @param angleStop stop angle of this circle ([0..2PI] otherwithe == >
 	 *            disable)
 	 */
-	public void circle(final float _radius) {
-		circle(_radius, 0);
+	public void circle(final float radius) {
+		circle(radius, 0);
 	}
-
-	public void circle(final float _radius, final float _angleStart) {
-		circle(_radius, _angleStart, 2.0f * FMath.PI);
-	};
-
-	public void circle(float _radius, final float _angleStart, float _angleStop) {
+	
+	public void circle(final float radius, final float angleStart) {
+		circle(radius, angleStart, 2.0f * FMath.PI);
+	}
+	
+	public void circle(float radius, final float angleStart, float angleStop) {
 		resetCount();
-
-		if (_radius < 0) {
-			_radius *= -1;
+		
+		if (radius < 0) {
+			radius *= -1;
 		}
-		_angleStop = _angleStop - _angleStart;
-
-		int nbOcurence = (int) _radius;
+		angleStop = angleStop - angleStart;
+		
+		int nbOcurence = (int) radius;
 		if (nbOcurence < 10) {
 			nbOcurence = 10;
 		}
-
+		
 		// display background :
 		if (this.colorBg.a() != 0) {
 			internalSetColor(this.colorBg);
 			for (int iii = 0; iii < nbOcurence; iii++) {
 				setPoint(new Vector3f(this.position.x(), this.position.y(), 0));
-
-				float angleOne = _angleStart + (_angleStop * iii / nbOcurence);
-				float offsety = FMath.sin(angleOne) * _radius;
-				float offsetx = FMath.cos(angleOne) * _radius;
-
+				
+				final float angleOne = angleStart + (angleStop * iii / nbOcurence);
+				float offsety = FMath.sin(angleOne) * radius;
+				float offsetx = FMath.cos(angleOne) * radius;
+				
 				setPoint(new Vector3f(this.position.x() + offsetx, this.position.y() + offsety, 0));
-
-				float angleTwo = _angleStart + (_angleStop * (iii + 1) / nbOcurence);
-				offsety = FMath.sin(angleTwo) * _radius;
-				offsetx = FMath.cos(angleTwo) * _radius;
-
+				
+				final float angleTwo = angleStart + (angleStop * (iii + 1) / nbOcurence);
+				offsety = FMath.sin(angleTwo) * radius;
+				offsetx = FMath.cos(angleTwo) * radius;
+				
 				setPoint(new Vector3f(this.position.x() + offsetx, this.position.y() + offsety, 0));
 			}
 		}
-
+		
 		// show if we have a border :
 		if (this.thickness == 0 || this.color.a() == 0) {
 			return;
 		}
 		internalSetColor(this.color);
 		for (int iii = 0; iii < nbOcurence; iii++) {
-
-			float angleOne = _angleStart + (_angleStop * iii / nbOcurence);
-			float offsetExty = FMath.sin(angleOne) * (_radius + this.thickness / 2);
-			float offsetExtx = FMath.cos(angleOne) * (_radius + this.thickness / 2);
-			float offsetInty = FMath.sin(angleOne) * (_radius - this.thickness / 2);
-			float offsetIntx = FMath.cos(angleOne) * (_radius - this.thickness / 2);
-
-			float angleTwo = _angleStart + (_angleStop * (iii + 1) / nbOcurence);
-			float offsetExt2y = FMath.sin(angleTwo) * (_radius + this.thickness / 2);
-			float offsetExt2x = FMath.cos(angleTwo) * (_radius + this.thickness / 2);
-			float offsetInt2y = FMath.sin(angleTwo) * (_radius - this.thickness / 2);
-			float offsetInt2x = FMath.cos(angleTwo) * (_radius - this.thickness / 2);
-
+			
+			final float angleOne = angleStart + (angleStop * iii / nbOcurence);
+			final float offsetExty = FMath.sin(angleOne) * (radius + this.thickness / 2);
+			final float offsetExtx = FMath.cos(angleOne) * (radius + this.thickness / 2);
+			final float offsetInty = FMath.sin(angleOne) * (radius - this.thickness / 2);
+			final float offsetIntx = FMath.cos(angleOne) * (radius - this.thickness / 2);
+			
+			final float angleTwo = angleStart + (angleStop * (iii + 1) / nbOcurence);
+			final float offsetExt2y = FMath.sin(angleTwo) * (radius + this.thickness / 2);
+			final float offsetExt2x = FMath.cos(angleTwo) * (radius + this.thickness / 2);
+			final float offsetInt2y = FMath.sin(angleTwo) * (radius - this.thickness / 2);
+			final float offsetInt2x = FMath.cos(angleTwo) * (radius - this.thickness / 2);
+			
 			setPoint(new Vector3f(this.position.x() + offsetIntx, this.position.y() + offsetInty, 0));
 			setPoint(new Vector3f(this.position.x() + offsetExtx, this.position.y() + offsetExty, 0));
 			setPoint(new Vector3f(this.position.x() + offsetExt2x, this.position.y() + offsetExt2y, 0));
-
+			
 			setPoint(new Vector3f(this.position.x() + offsetExt2x, this.position.y() + offsetExt2y, 0));
 			setPoint(new Vector3f(this.position.x() + offsetInt2x, this.position.y() + offsetInt2y, 0));
 			setPoint(new Vector3f(this.position.x() + offsetIntx, this.position.y() + offsetInty, 0));
 		}
 	}
-
+	
 	/**
 	 * clear alll tre registered element in the current element
 	 */
@@ -157,56 +157,56 @@ public class CompositingDrawing extends Compositing {
 		// call upper class
 		super.clear();
 		// reset Buffer :
-		this.VBO.clear();
+		this.vbo.clear();
 		this.outTriangles.clear();
 		this.outColors.clear();
-
+		
 		// reset temporal variables :
 		this.position = Vector3f.ZERO;
-
+		
 		this.clippingPosStart = Vector3f.ZERO;
 		this.clippingPosStop = Vector3f.ZERO;
 		this.clippingEnable = false;
-
+		
 		this.color = Color.BLACK;
 		this.colorBg = Color.NONE;
-
+		
 		for (int iii = 0; iii < 3; iii++) {
 			this.triangle[iii] = this.position;
 			this.tricolor[iii] = this.color;
 		}
 	}
-
+	
 	/**
 	 * draw All the refistered text in the current element on openGL
 	 */
 	@Override
-	public void draw(final boolean _disableDepthTest) {
-
+	public void draw(final boolean disableDepthTest) {
+		
 		// push data on the VBO
 		// TODO optimize this with single push when needed
-		this.VBO.setVboData(CompositingDrawing.vboIdCoord, this.outTriangles.toArray(Vector3f[]::new));
-		this.VBO.setVboData(CompositingDrawing.vboIdColor, this.outColors.toArray(Color[]::new));
-		this.VBO.flush();
-
-		if (this.GLprogram == null) {
+		this.vbo.setVboData(CompositingDrawing.vboIdCoord, this.outTriangles.toArray(Vector3f[]::new));
+		this.vbo.setVboData(CompositingDrawing.vboIdColor, this.outColors.toArray(Color[]::new));
+		this.vbo.flush();
+		
+		if (this.oGLprogram == null) {
 			Log.error("No shader ...");
 			return;
 		}
 		// set Matrix : translation/positionMatrix
-		Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
-		this.GLprogram.use();
-		this.GLprogram.uniformMatrix(this.GLMatrix, tmpMatrix);
-		this.GLprogram.uniformMatrix(this.GLMatrixPosition, Matrix4f.IDENTITY);
+		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
+		this.oGLprogram.use();
+		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixPosition, Matrix4f.IDENTITY);
 		// position:
-		this.GLprogram.sendAttributePointer(this.GLPosition, this.VBO, CompositingDrawing.vboIdCoord);
+		this.oGLprogram.sendAttributePointer(this.oGLPosition, this.vbo, CompositingDrawing.vboIdCoord);
 		// color:
-		this.GLprogram.sendAttributePointer(this.GLColor, this.VBO, CompositingDrawing.vboIdColor);
+		this.oGLprogram.sendAttributePointer(this.oGLColor, this.vbo, CompositingDrawing.vboIdColor);
 		// Request the draw od the elements :
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.VBO.bufferSize(CompositingDrawing.vboIdCoord));
-		this.GLprogram.unUse();
+		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.vbo.bufferSize(CompositingDrawing.vboIdCoord));
+		this.oGLprogram.unUse();
 	}
-
+	
 	/**
 	 * Lunch the generation of triangle
 	 */
@@ -219,7 +219,7 @@ public class CompositingDrawing extends Compositing {
 		this.outColors.add(this.tricolor[1]);
 		this.outColors.add(this.tricolor[2]);
 	}
-
+	
 	/**
 	 * Get the foreground color of the font.
 	 * @return Foreground color.
@@ -227,73 +227,73 @@ public class CompositingDrawing extends Compositing {
 	public Color getColor() {
 		return this.color;
 	}
-
+	
 	/**
 	 * Get the background color of the font.
 	 * @return Background color.
 	 */
 	public Color getColorBg() {
 		return this.colorBg;
-	};
-
+	}
+	
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
 	 */
 	public Vector3f getPos() {
 		return this.position;
-	};
-
+	}
+	
 	/**
 	 * set the Color of the current triangle drawing
-	 * @param _color Color to current dots generated
+	 * @param color Color to current dots generated
 	 */
-	private void internalSetColor(final Color _color) {
+	private void internalSetColor(final Color color) {
 		if (this.triElement < 1) {
-			this.tricolor[0] = _color;
+			this.tricolor[0] = color;
 		}
 		if (this.triElement < 2) {
-			this.tricolor[1] = _color;
+			this.tricolor[1] = color;
 		}
 		if (this.triElement < 3) {
-			this.tricolor[2] = _color;
+			this.tricolor[2] = color;
 		}
-	};
-
-	public void lineRel(final Vector2f _vect) {
-		lineRel(new Vector3f(_vect.x(), _vect.y(), 0));
-	};
-
+	}
+	
+	public void lineRel(final Vector2f vect) {
+		lineRel(new Vector3f(vect.x(), vect.y(), 0));
+	}
+	
 	/**
 	 * Relative drawing a line (spacial vector)
-	 * @param _vect Vector of the curent line.
+	 * @param vect Vector of the curent line.
 	 */
-	public void lineRel(final Vector3f _vect) {
-		lineTo(this.position.add(_vect));
-	};
-
-	public void lineTo(final Vector2f _dest) {
-		lineTo(new Vector3f(_dest.x(), _dest.y(), 0));
-	};
-
+	public void lineRel(final Vector3f vect) {
+		lineTo(this.position.add(vect));
+	}
+	
+	public void lineTo(final Vector2f dest) {
+		lineTo(new Vector3f(dest.x(), dest.y(), 0));
+	}
+	
 	/**
 	 * draw a line to a specific position
-	 * @param _dest Position of the end of the line.
+	 * @param dest Position of the end of the line.
 	 */
-	public void lineTo(final Vector3f _dest) {
+	public void lineTo(final Vector3f dest) {
 		resetCount();
 		internalSetColor(this.color);
-		// Log.verbose("DrawLine : " + this.position + " to " + _dest);
-		if (this.position.x() == _dest.x() && this.position.y() == _dest.y() && this.position.z() == _dest.z()) {
+		// Log.verbose("DrawLine : " + this.position + " to " + dest);
+		if (this.position.x() == dest.x() && this.position.y() == dest.y() && this.position.z() == dest.z()) {
 			// Log.warning("Try to draw a line width 0");
 			return;
 		}
 		// teta = tan-1(oposer/adjacent)
 		float teta = 0;
-		if (this.position.x() <= _dest.x()) {
-			teta = FMath.atan((_dest.y() - this.position.y()) / (_dest.x() - this.position.x()));
+		if (this.position.x() <= dest.x()) {
+			teta = FMath.atan((dest.y() - this.position.y()) / (dest.x() - this.position.x()));
 		} else {
-			teta = FMath.PI + FMath.atan((_dest.y() - this.position.y())) / (_dest.x() - this.position.x());
+			teta = FMath.PI + FMath.atan((dest.y() - this.position.y())) / (dest.x() - this.position.x());
 		}
 		if (teta < 0) {
 			teta += 2 * FMath.PI;
@@ -301,19 +301,19 @@ public class CompositingDrawing extends Compositing {
 			teta -= 2 * FMath.PI;
 		}
 		// Log.debug("teta = " + (teta*180/(FMath.PI)) + " deg." );
-		float offsety = FMath.sin(teta - FMath.PI / 2) * (this.thickness / 2);
-		float offsetx = FMath.cos(teta - FMath.PI / 2) * (this.thickness / 2);
+		final float offsety = FMath.sin(teta - FMath.PI / 2) * (this.thickness / 2);
+		final float offsetx = FMath.cos(teta - FMath.PI / 2) * (this.thickness / 2);
 		setPoint(new Vector3f(this.position.x() - offsetx, this.position.y() - offsety, this.position.z()));
 		setPoint(new Vector3f(this.position.x() + offsetx, this.position.y() + offsety, this.position.z()));
-		setPoint(new Vector3f(_dest.x() + offsetx, _dest.y() + offsety, this.position.z()));
-
-		setPoint(new Vector3f(_dest.x() + offsetx, _dest.y() + offsety, _dest.z()));
-		setPoint(new Vector3f(_dest.x() - offsetx, _dest.y() - offsety, _dest.z()));
-		setPoint(new Vector3f(this.position.x() - offsetx, this.position.y() - offsety, _dest.z()));
+		setPoint(new Vector3f(dest.x() + offsetx, dest.y() + offsety, this.position.z()));
+		
+		setPoint(new Vector3f(dest.x() + offsetx, dest.y() + offsety, dest.z()));
+		setPoint(new Vector3f(dest.x() - offsetx, dest.y() - offsety, dest.z()));
+		setPoint(new Vector3f(this.position.x() - offsetx, this.position.y() - offsety, dest.z()));
 		// update the system position :
-		this.position = _dest;
-	};
-
+		this.position = dest;
+	}
+	
 	/**
 	 * load the openGL program and get all the ID needed
 	 */
@@ -321,48 +321,47 @@ public class CompositingDrawing extends Compositing {
 		// remove previous loading ... in case
 		unLoadProgram();
 		// oad the new ...
-		this.GLprogram = ResourceProgram.create(new Uri("DATA", "color3.vert", "ewol"),
-				new Uri("DATA", "color3.frag", "ewol"));
+		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "color3.vert", "ewol"), new Uri("DATA", "color3.frag", "ewol"));
 		// get the shader resource :
-		if (this.GLprogram != null) {
-			this.GLPosition = this.GLprogram.getAttribute("EW_coord3d");
-			this.GLColor = this.GLprogram.getAttribute("EW_color");
-			this.GLMatrix = this.GLprogram.getUniform("EW_MatrixTransformation");
-			this.GLMatrixPosition = this.GLprogram.getUniform("EW_MatrixPosition");
+		if (this.oGLprogram != null) {
+			this.oGLPosition = this.oGLprogram.getAttribute("EWcoord3d");
+			this.oGLColor = this.oGLprogram.getAttribute("EWcolor");
+			this.oGLMatrix = this.oGLprogram.getUniform("EWMatrixTransformation");
+			this.oGLMatrixPosition = this.oGLprogram.getUniform("EWMatrixPosition");
 		}
-	};
-
-	public void rectangle(final Vector2f _dest) {
-		rectangle(new Vector3f(_dest.x(), _dest.y(), 0));
-	};
-
+	}
+	
+	public void rectangle(final Vector2f dest) {
+		rectangle(new Vector3f(dest.x(), dest.y(), 0));
+	}
+	
 	/**
 	 * draw a 2D rectangle to the position requested.
-	 * @param _dest Position the the end of the rectangle
+	 * @param dest Position the the end of the rectangle
 	 */
-	public void rectangle(final Vector3f _dest) {
+	public void rectangle(final Vector3f dest) {
 		resetCount();
 		internalSetColor(this.color);
 		/*
 		 * Bitmap position xA xB yC *------* | | | | yD *------*
 		 */
 		float dxA = this.position.x();
-		float dxB = _dest.x();
+		float dxB = dest.x();
 		if (dxA > dxB) {
 			// inverse order :
-			float tmp = dxA;
+			final float tmp = dxA;
 			dxA = dxB;
 			dxB = tmp;
 		}
 		float dyC = this.position.y();
-		float dyD = _dest.y();
+		float dyD = dest.y();
 		if (dyC > dyD) {
 			// inverse order :
-			float tmp = dyC;
+			final float tmp = dyC;
 			dyC = dyD;
 			dyD = tmp;
 		}
-		if (true == this.clippingEnable) {
+		if (this.clippingEnable) {
 			if (dxA < this.clippingPosStart.x()) {
 				dxA = this.clippingPosStart.x();
 			}
@@ -382,90 +381,90 @@ public class CompositingDrawing extends Compositing {
 		setPoint(new Vector3f(dxA, dyD, 0));
 		setPoint(new Vector3f(dxA, dyC, 0));
 		setPoint(new Vector3f(dxB, dyC, 0));
-
+		
 		setPoint(new Vector3f(dxB, dyC, 0));
 		setPoint(new Vector3f(dxB, dyD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
-	};
-
-	public void rectangleWidth(final Vector2f _size) {
-		rectangleWidth(new Vector3f(_size.x(), _size.y(), 0));
-	};
-
+	}
+	
+	public void rectangleWidth(final Vector2f size) {
+		rectangleWidth(new Vector3f(size.x(), size.y(), 0));
+	}
+	
 	/**
 	 * draw a 2D rectangle to the requested size.
-	 * @param _size size of the rectangle
+	 * @param size size of the rectangle
 	 */
-	public void rectangleWidth(final Vector3f _size) {
-		rectangle(this.position.add(_size));
+	public void rectangleWidth(final Vector3f size) {
+		rectangle(this.position.add(size));
 	}
-
+	
 	/**
 	 * in case of some error the count can be reset
 	 */
 	private void resetCount() {
 		this.triElement = 0;
-	};
-
-	public void setClipping(final Vector2f _pos, final Vector2f _posEnd) {
-		setClipping(new Vector3f(_pos.x(), _pos.y(), -1), new Vector3f(_posEnd.x(), _posEnd.y(), 1));
-	};
-
+	}
+	
+	public void setClipping(final Vector2f pos, final Vector2f posEnd) {
+		setClipping(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(posEnd.x(), posEnd.y(), 1));
+	}
+	
 	/**
 	 * Request a clipping area for the text (next draw only)
-	 * @param _pos Start position of the clipping
-	 * @param _posEnd End position of the clipping
+	 * @param pos Start position of the clipping
+	 * @param posEnd End position of the clipping
 	 */
-	public void setClipping(final Vector3f _pos, final Vector3f _posEnd) {
+	public void setClipping(final Vector3f pos, final Vector3f posEnd) {
 		// note the internal system all time request to have a bounding all time in the
 		// same order
-		this.clippingPosStop = Vector3f.max(_pos, _posEnd);
-		this.clippingPosStart = Vector3f.min(_pos, _posEnd);
+		this.clippingPosStop = Vector3f.max(pos, posEnd);
+		this.clippingPosStart = Vector3f.min(pos, posEnd);
 		this.clippingEnable = true;
 	}
-
+	
 	/**
 	 * enable/Disable the clipping (without lose the current clipping
 	 *        position)
-	 * _newMode The new status of the clipping
+	 * newMode The new status of the clipping
 	 */
-	public void setClippingMode(final boolean _newMode) {
-		this.clippingEnable = _newMode;
+	public void setClippingMode(final boolean newMode) {
+		this.clippingEnable = newMode;
 	}
-
-	public void setClippingWidth(final Vector2f _pos, final Vector2f _width) {
-		setClippingWidth(new Vector3f(_pos.x(), _pos.y(), -1), new Vector3f(_width.x(), _width.y(), 2));
+	
+	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
+		setClippingWidth(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(width.x(), width.y(), 2));
 	}
-
+	
 	/**
 	 * Request a clipping area for the text (next draw only)
-	 * @param_ pos Start position of the clipping
-	 * @param _width Width size of the clipping
+	 * @param pos Start position of the clipping
+	 * @param width Width size of the clipping
 	 */
-	public void setClippingWidth(final Vector3f _pos, final Vector3f _width) {
-		setClipping(_pos, _pos.add(_width));
-	};
-
+	public void setClippingWidth(final Vector3f pos, final Vector3f width) {
+		setClipping(pos, pos.add(width));
+	}
+	
 	/**
 	 * set the Color of the current foreground font
-	 * @param _color Color to set on foreground (for next print)
+	 * @param color Color to set on foreground (for next print)
 	 */
-	public void setColor(final Color _color) {
-		this.color = _color;
-	};
-
+	public void setColor(final Color color) {
+		this.color = color;
+	}
+	
 	/**
 	 * set the background color of the font (for selected Text (not the
 	 *        global BG))
-	 * @param _color Color to set on background (for next print)
+	 * @param color Color to set on background (for next print)
 	 */
-	public void setColorBg(final Color _color) {
-		this.colorBg = _color;
-	};
-
+	public void setColorBg(final Color color) {
+		this.colorBg = color;
+	}
+	
 	/**
 	 * internal add of the specific point
-	 * @param _point The requeste dpoint to add
+	 * @param point The requeste dpoint to add
 	 */
 	private void setPoint(final Vector3f point) {
 		this.triangle[this.triElement] = point;
@@ -473,50 +472,50 @@ public class CompositingDrawing extends Compositing {
 		if (this.triElement >= 3) {
 			generateTriangle();
 		}
-		this.VBO.flush();
+		this.vbo.flush();
 	}
-
-	public void setPos(final Vector2f _pos) {
-		setPos(new Vector3f(_pos.x(), _pos.y(), 0));
-	};
-
+	
+	public void setPos(final Vector2f pos) {
+		setPos(new Vector3f(pos.x(), pos.y(), 0));
+	}
+	
 	/**
 	 * set position for the next text writen
-	 * @param _pos Position of the text (in 3D)
+	 * @param pos Position of the text (in 3D)
 	 */
-	public void setPos(final Vector3f _pos) {
-		this.position = _pos;
-	};
-
-	public void setRelPos(final Vector2f _pos) {
-		setRelPos(new Vector3f(_pos.x(), _pos.y(), 0));
+	public void setPos(final Vector3f pos) {
+		this.position = pos;
 	}
-
+	
+	public void setRelPos(final Vector2f pos) {
+		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
+	}
+	
 	/**
 	 * set relative position for the next text writen
-	 * @param _pos ofset apply of the text (in 3D)
+	 * @param pos ofset apply of the text (in 3D)
 	 */
-	public void setRelPos(final Vector3f _pos) {
-		this.position = this.position.add(_pos);
+	public void setRelPos(final Vector3f pos) {
+		this.position = this.position.add(pos);
 	}
-
+	
 	/**
 	 * Specify the line thickness for the next elements
-	 * @param _thickness The thickness disired for the next print
+	 * @param thickness The thickness disired for the next print
 	 */
-	public void setThickness(final float _thickness) {
-		this.thickness = _thickness;
+	public void setThickness(final float thickness) {
+		this.thickness = thickness;
 		// thickness must be positive
 		if (this.thickness < 0) {
 			this.thickness *= -1;
 		}
 	}
-
+	
 	/**
 	 * Un-Load the openGL program and get all the ID needed
 	 */
 	private void unLoadProgram() {
-		this.GLprogram = null;
+		this.oGLprogram = null;
 	}
-
+	
 }

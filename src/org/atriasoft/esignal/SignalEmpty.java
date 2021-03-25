@@ -4,36 +4,35 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
-class ConnectedElement<T> {
+class ConnectedElementEmpty {
 	private final WeakReference<Object> reference;
-	private final Consumer<T> consumer;
+	private final Runnable runnable;
 	
-	public ConnectedElement(final WeakReference<Object> reference, final Consumer<T> consumer) {
+	public ConnectedElementEmpty(final WeakReference<Object> reference, final Runnable runnable) {
 		this.reference = reference;
-		this.consumer = consumer;
-	}
-	
-	public Consumer<T> getConsumer() {
-		return this.consumer;
+		this.runnable = runnable;
 	}
 	
 	public WeakReference<Object> getReference() {
 		return this.reference;
 	}
 	
+	public Runnable getRunner() {
+		return this.runnable;
+	}
+	
 }
 
-public class Signal<T> {
+public class SignalEmpty {
 	
-	List<ConnectedElement<T>> data = new ArrayList<>();
+	List<ConnectedElementEmpty> data = new ArrayList<>();
 	
 	public void clear(final Object obj) {
 		
 	}
 	
-	public Connection connect(final Object reference, final T fucntion) {
+	public Connection connect(final Object reference, final Runnable runnable) {
 		
 		return null;
 	}
@@ -46,14 +45,14 @@ public class Signal<T> {
 		
 	}
 	
-	public void emit(final T value) {
-		final Iterator<ConnectedElement<T>> iterator = this.data.iterator();
+	public void emit() {
+		final Iterator<ConnectedElementEmpty> iterator = this.data.iterator();
 		while (iterator.hasNext()) {
-			final ConnectedElement<T> elem = iterator.next();
+			final ConnectedElementEmpty elem = iterator.next();
 			if (elem.getReference().get() == null) {
 				iterator.remove();
 			}
-			elem.getConsumer().accept(value);
+			elem.getRunner().run();
 		}
 	}
 	

@@ -10,124 +10,123 @@ package org.atriasoft.ewol;
  */
 public class Padding {
 	private float xLeft;
-	private float yTop;
 	private float xRight;
 	private float yBottom; // !< this represent the 4 padding value Left top right buttom (like css)
-
+	private float yTop;
+	
 	public Padding() {
 		setValue();
 	}
-
-	public Padding(final float _xLeft) {
-		setValue(_xLeft);
+	
+	public Padding(final float xLeft) {
+		setValue(xLeft);
 	}
-
-	public Padding(final float _xLeft, final float _yt) {
-		setValue(_xLeft, _yt);
+	
+	public Padding(final float xLeft, final float yt) {
+		setValue(xLeft, yt);
 	}
-
-	public Padding(final float _xLeft, final float _yt, final float _xr) {
-		setValue(_xLeft, _yt, _xr);
+	
+	public Padding(final float xLeft, final float yt, final float xr) {
+		setValue(xLeft, yt, xr);
 	}
-
-	public Padding(final float _xLeft, final float _yt, final float _xr, final float _yb) {
-		setValue(_xLeft, _yt, _xr, _yb);
+	
+	public Padding(final float xLeft, final float yt, final float xr, final float yb) {
+		setValue(xLeft, yt, xr, yb);
 	}
-
+	
 	/**
 	 * Add a vector to this one
-	 * @param _v The vector to add to this one
+	 * @param v The vector to add to this one
 	 */
-	public Padding add(final Padding _v) {
-		this.xLeft += _v.xLeft;
-		this.yTop += _v.yTop;
-		this.xRight += _v.xRight;
-		this.yBottom += _v.yBottom;
+	public Padding add(final Padding v) {
+		this.xLeft += v.xLeft;
+		this.yTop += v.yTop;
+		this.xRight += v.xRight;
+		this.yBottom += v.yBottom;
 		return this;
 	}
-
+	
 	// ! @previous
-	public Padding addNew(final Padding _v) {
-		return new Padding(this.xLeft + _v.xLeft, this.yTop + _v.yTop, this.xRight + _v.xRight,
-				this.yBottom + _v.yBottom);
+	public Padding addNew(final Padding v) {
+		return new Padding(this.xLeft + v.xLeft, this.yTop + v.yTop, this.xRight + v.xRight, this.yBottom + v.yBottom);
 	}
-
+	
 	public void setValue() {
 		this.xLeft = 0;
 		this.yTop = 0;
 		this.xRight = 0;
 		this.yBottom = 0;
 	}
-
-	public void setValue(final float _xLeft) {
-		this.xLeft = _xLeft;
+	
+	public void setValue(final float xLeft) {
+		this.xLeft = xLeft;
 		this.yTop = 0;
 		this.xRight = 0;
 		this.yBottom = 0;
 	}
-
-	public void setValue(final float _xLeft, final float _yt) {
-		this.xLeft = _xLeft;
-		this.yTop = _yt;
+	
+	public void setValue(final float xLeft, final float yt) {
+		this.xLeft = xLeft;
+		this.yTop = yt;
 		this.xRight = 0;
 		this.yBottom = 0;
 	}
-
-	public void setValue(final float _xLeft, final float _yt, final float _xr) {
-		this.xLeft = _xLeft;
-		this.yTop = _yt;
-		this.xRight = _xr;
+	
+	public void setValue(final float xLeft, final float yt, final float xr) {
+		this.xLeft = xLeft;
+		this.yTop = yt;
+		this.xRight = xr;
 		this.yBottom = 0;
 	}
-
-	public void setValue(final float _xLeft, final float _yt, final float _xr, final float _yb) {
-		this.xLeft = _xLeft;
-		this.yTop = _yt;
-		this.xRight = _xr;
-		this.yBottom = _yb;
+	
+	public void setValue(final float xLeft, final float yt, final float xr, final float yb) {
+		this.xLeft = xLeft;
+		this.yTop = yt;
+		this.xRight = xr;
+		this.yBottom = yb;
 	}
-
-	public void setXLeft(final float _val) {
-		this.xLeft = _val;
+	
+	public void setXLeft(final float val) {
+		this.xLeft = val;
 	}
-
-	public void setXRight(final float _val) {
-		this.xRight = _val;
+	
+	public void setXRight(final float val) {
+		this.xRight = val;
 	}
-
-	public void setYButtom(final float _val) {
-		this.yBottom = _val;
+	
+	public void setYButtom(final float val) {
+		this.yBottom = val;
 	}
-
-	public void setYTop(final float _val) {
-		this.yTop = _val;
+	
+	public void setYTop(final float val) {
+		this.yTop = val;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "{" + xLeft() + "," + yTop() + "," + xRight() + "," + yButtom() + "}";
 	}
-
+	
 	public float x() {
 		return this.xLeft + this.xRight;
 	}
-
+	
 	public float xLeft() {
 		return this.xLeft;
 	}
-
+	
 	public float xRight() {
 		return this.xRight;
 	}
-
+	
 	public float y() {
 		return this.yTop + this.yBottom;
 	}
-
+	
 	public float yButtom() {
 		return this.yBottom;
 	}
-
+	
 	public float yTop() {
 		return this.yTop;
 	}

@@ -35,7 +35,7 @@ import org.atriasoft.etk.math.Vector2i;
          /-.     |    |                                                        
           \-.     \.  |                                                        
   bearing.y           |                                                        
-                      |____*________________________*____________>>   X        
+                      |**>>   X        
                                                                                
                                                                                
                            <-----------------------. : advance.x            
@@ -46,18 +46,18 @@ import org.atriasoft.etk.math.Vector2i;
                        
 */
 /**
- * @not_in_doc
+ * @notindoc
  */
 public class GlyphProperty {
-	public Character UVal = 0; //!< Unicode value
+	public Vector2i advance = new Vector2i(10, 10); //!< space use in the display for this specific char
+	public Vector2i bearing = new Vector2i(2, 2); //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
 	public boolean exist = true;
 	public int glyphIndex = 0; //!< Glyph index in the system
-	public Vector2i sizeTexture = new Vector2i(10, 10); //!< size of the element to display
-	public Vector2i bearing = new Vector2i(2, 2); //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
-	public Vector2i advance = new Vector2i(10, 10); //!< space use in the display for this specific char
-	public Vector2f texturePosStart = new Vector2f(0, 0); //!< Texture normalized position (START)
-	public Vector2f texturePosSize = new Vector2f(0, 0); //!< Texture normalized position (SIZE)
 	private final List<Kerning> kerning = new ArrayList<>(); //!< kerning values of link of all elements
+	public Vector2i sizeTexture = new Vector2i(10, 10); //!< size of the element to display
+	public Vector2f texturePosSize = new Vector2f(0, 0); //!< Texture normalized position (SIZE)
+	public Vector2f texturePosStart = new Vector2f(0, 0); //!< Texture normalized position (START)
+	public Character uVal = 0; //!< Unicode value
 	
 	public GlyphProperty() {
 		
@@ -71,17 +71,17 @@ public class GlyphProperty {
 		return this.exist;
 	}
 	
-	public void kerningAdd(final Character _charcode, final float _value) {
-		this.kerning.add(new Kerning(_charcode, _value));
+	public void kerningAdd(final Character charcode, final float value) {
+		this.kerning.add(new Kerning(charcode, value));
 	}
 	
 	public void kerningClear() {
 		this.kerning.clear();
 	}
 	
-	public float kerningGet(final Character _charcode) {
+	public float kerningGet(final Character charcode) {
 		for (int iii = 0; iii < this.kerning.size(); iii++) {
-			if (this.kerning.get(iii).UVal == _charcode) {
+			if (this.kerning.get(iii).uVal == charcode) {
 				return this.kerning.get(iii).value;
 			}
 		}

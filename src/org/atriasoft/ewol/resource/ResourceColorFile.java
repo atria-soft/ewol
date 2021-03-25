@@ -18,15 +18,14 @@ import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.resource.Resource;
 
 class ListElement {
-	public String name;
 	public Color color;
-
+	public String name;
+	
 	public ListElement(final String name, final Color color) {
-		super();
 		this.name = name;
 		this.color = color;
 	}
-
+	
 }
 
 /**
@@ -34,37 +33,54 @@ class ListElement {
  *        example black, or white or orange ...)
  */
 public class ResourceColorFile extends Resource {
-	private final List<ListElement> list = new ArrayList<>(); // !< List of all color in the file
+	public static ResourceColorFile create(final Uri uri) {
+		Log.verbose("KEEP: ColorFile: " + uri);
+		ResourceColorFile object = null;
+		final Resource object2 = Resource.getManager().localKeep(uri);
+		if (object2 != null) {
+			if (object2 instanceof ResourceColorFile) {
+				return (ResourceColorFile) object2;
+			}
+			Log.critical("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
+			return null;
+		}
+		Log.debug("CREATE: FontFreeType: " + uri);
+		// need to crate a new one ...
+		return new ResourceColorFile(uri);
+	}
+	
 	private Color errorColor = Color.ORANGE;
-
+	
+	private final List<ListElement> list = new ArrayList<>(); // !< List of all color in the file
+	
 	/**
 	 * Constructor of the color property file
-	 * @param _uri Name of the file needed
+	 * @param uri Name of the file needed
 	 */
-	public ResourceColorFile(final Uri _uri) {
-		super(_uri.get());
-		Log.debug("CF : load \"" + _uri + "\"");
+	public ResourceColorFile(final Uri uri) {
+		super(uri.get());
+		Log.debug("CF : load \"" + uri + "\"");
 		reload();
 		// Log.debug("List of all color : " + this.list.keySet());
 	}
-
+	
 	@Override
 	public void cleanUp() {
-
+		
 	}
-
+	
 	/**
 	 * Get the associated color of the ID.
-	 * @param _Id Id of the color.
+	 * @param id Id of the color.
 	 * @return The requested color.
 	 */
-	Color get(final int _id) {
-		if (_id < 0) {
+	public Color get(final int id) {
+		if (id < 0) {
 			return this.errorColor;
 		}
-		return this.list.get(_id).color;
+		return this.list.get(id).color;
 	}
-
+	
 	/**
 	 * Get All color name
 	 * @return list of all color existing
@@ -75,8 +91,8 @@ public class ResourceColorFile extends Resource {
 			out.add(this.list.get(iii).name);
 		}
 		return out;
-	};
-
+	}
+	
 	public synchronized void put(final String name, final Color color) {
 		for (int iii = 0; iii < this.list.size(); iii++) {
 			final ListElement elem = this.list.get(iii);
@@ -87,7 +103,7 @@ public class ResourceColorFile extends Resource {
 		}
 		this.list.add(new ListElement(name, color));
 	}
-
+	
 	@Override
 	public synchronized void reload() {
 		// remove all previous set of value :
@@ -97,8 +113,8 @@ public class ResourceColorFile extends Resource {
 		Log.todo("Mut be implemented ...");
 		// open and read all json elements:
 		try {
-			final JsonObject out = Ejson.parse(new Uri(this.name)).toJsonObject();
-
+			final JsonObject out = Ejson.parse(Uri.valueOf(this.name)).toJsonObject();
+			
 			final JsonArray baseArray = out.get("color").toJsonArray();
 			if (baseArray == null) {
 				Log.error("Can not get basic array : 'color' in file:" + this.name);
@@ -123,11 +139,10 @@ public class ResourceColorFile extends Resource {
 				}
 				if (color.length() == 0) {
 					put(name, this.errorColor);
-				} else {
 				}
 				put(name, Color.valueOf(color));
 			}
-			if (findError == true) {
+			if (findError) {
 				Log.error("pb in parsing file:" + this.name);
 				Ejson.display(out);
 			}
@@ -136,29 +151,29 @@ public class ResourceColorFile extends Resource {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Request the presence of a specific color.
-	 * @param _paramName Name of the color.
+	 * @param paramName Name of the color.
 	 * @return A unique ID of the color (or -1 if an error occured).
 	 */
-	public synchronized int request(final String _paramName) {
+	public synchronized int request(final String paramName) {
 		for (int iii = 0; iii < this.list.size(); iii++) {
 			final ListElement elem = this.list.get(iii);
-			if (elem.name.contentEquals(_paramName)) {
+			if (elem.name.contentEquals(paramName)) {
 				return iii;
 			}
 		}
-		this.list.add(new ListElement(_paramName, this.errorColor));
+		this.list.add(new ListElement(paramName, this.errorColor));
 		return this.list.size() - 1;
 	}
-
+	
 	/**
 	 * Set the error color.
-	 * @param _errorColor Color that might be set when not finding a color
+	 * @param errorColor Color that might be set when not finding a color
 	 */
-	public void setErrorColor(final Color _errorColor) {
-		this.errorColor = _errorColor;
+	public void setErrorColor(final Color errorColor) {
+		this.errorColor = errorColor;
 	}
-
-};
+	
+}

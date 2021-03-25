@@ -63,7 +63,7 @@ public class Image {
 		return this.buffer[(y * this.width + x) * 4];
 	}
 	
-	public byte[] GetRaw() {
+	public byte[] getRaw() {
 		// TODO Auto-generated method stub
 		return this.buffer;
 	}

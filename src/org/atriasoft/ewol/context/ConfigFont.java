@@ -10,7 +10,7 @@ import org.atriasoft.ewol.internal.Log;
  */
 
 public class ConfigFont {
-	private Uri folder = new Uri("DATA:///fonts?lib=ewol");
+	private Uri folder = new Uri("DATA", "fonts", "ewol");
 	private String name = "Arial;Helvetica";
 	private int size = 10;
 	private boolean useExternal = false;
@@ -42,7 +42,7 @@ public class ConfigFont {
 	 */
 	public int getSize() {
 		return this.size;
-	};
+	}
 	
 	/**
 	 * get the use of internal/external Font
@@ -54,46 +54,46 @@ public class ConfigFont {
 	
 	/**
 	 * set the defaut font for all the widgets and basics display.
-	 * @param _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
-	 * @param _size The default size of the font default=10.
+	 * @param fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
+	 * @param size The default size of the font default=10.
 	 */
-	public void set(final String _fontName, final int _size) {
-		this.name = _fontName;
-		this.size = _size;
+	public void set(final String fontName, final int size) {
+		this.name = fontName;
+		this.size = size;
 		Log.debug("Set default Font : '" + this.name + "' size=" + this.size);
-	};
+	}
 	
 	/**
 	 * Specify the default font folder for the Ewol search system (only needed when embended font)
-	 * @param _folder basic folder of the font (ex: DATA:fonts)
+	 * @param folder basic folder of the font (ex: DATA:fonts)
 	 */
-	public void setFolder(final Uri _folder) {
-		this.folder = _folder;
+	public void setFolder(final Uri folder) {
+		this.folder = folder;
 	}
 	
 	/**
 	 * Set the current default font name
-	 * @param _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
+	 * @param fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
 	 */
-	public void setName(final String _fontName) {
-		this.name = _fontName;
+	public void setName(final String fontName) {
+		this.name = fontName;
 		Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change name only)");
 	}
 	
 	/**
 	 * Set the default font size.
-	 * @param _size new font size.
+	 * @param size new font size.
 	 */
-	public void setSize(final int _size) {
-		this.size = _size;
+	public void setSize(final int size) {
+		this.size = size;
 		Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
-	};
+	}
 	
 	/**
 	 * set use of internal/external Font
-	 * @param _val true to enable search of internal data.
+	 * @param val true to enable search of internal data.
 	 */
-	public void setUseExternal(final boolean _val) {
-		this.useExternal = _val;
-	};
-};
+	public void setUseExternal(final boolean val) {
+		this.useExternal = val;
+	}
+}

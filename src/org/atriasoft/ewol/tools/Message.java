@@ -4,76 +4,79 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-package  org.atriasoft.ewol.tools;
+package org.atriasoft.ewol.tools;
 
-import org.atriasoft.ewol.Ewol;
+import org.atriasoft.ewol.internal.Log;
 
 public class Message {
-
-    /**
-     * Create a simple pop-up message on the screen for application error.
-     * @param _type Type of the error.
-     * @param _message message to display (decorated text)
-     */
-    private static void create(Type _type, String _message){
+	private enum Type {
+		critical, //!< Critical message pop-up, //!< information message pop-up
+		error, //!< warning message pop-up
+		info, //!< Error message pop-up
+		warning
+	}
+	
+	/**
+	 * Create a simple pop-up message on the screen for application error.
+	 * @param type Type of the error.
+	 * @param message message to display (decorated text)
+	 */
+	private static void create(final Type type, final String message) {
+		Log.todo("Generic message display (simple interface...)");
+		/*
 		StdPopUp tmpPopUp = new StdPopUp();
-		switch (_type) {
-			case Type.info -> tmpPopUp.propertyTitle.set("<bold>_T{Info}</bold>");
-			case Type.warning -> tmpPopUp.propertyTitle.set("<bold><font color='orange'>_T{Warning}</font></bold>");
-			case Type.error -> tmpPopUp.propertyTitle.set("<bold><font color='red'>_T{Error}</font></bold>");
-			case Type.critical -> tmpPopUp.propertyTitle.set("<bold><font colorBg='red'>_T{Critical}</font></bold>");
+		switch (type) {
+			case Type.info -> tmpPopUp.propertyTitle.set("<bold>T{Info}</bold>");
+			case Type.warning -> tmpPopUp.propertyTitle.set("<bold><font color='orange'>T{Warning}</font></bold>");
+			case Type.error -> tmpPopUp.propertyTitle.set("<bold><font color='red'>T{Error}</font></bold>");
+			case Type.critical -> tmpPopUp.propertyTitle.set("<bold><font colorBg='red'>T{Critical}</font></bold>");
 		}
-		tmpPopUp.propertyComment.set(_message);
-		tmpPopUp.addButton("_T{close}", true);
+		tmpPopUp.propertyComment.set(message);
+		tmpPopUp.addButton("T{close}", true);
 		tmpPopUp.propertyCloseOutEvent.set(true);
 		// get windows:
 		EwolContext context = Ewol.getContext();
 		Windows windows = context.getWindows();
 		if (windows == null) {
-			Log.error("can not get the current windows ... ==> can not display message : " + _message);
+			Log.error("can not get the current windows ... ==> can not display message : " + message);
 			return;
 		}
 		windows.popUpWidgetPush(tmpPopUp);
+		*/
 	}
-
+	
 	/**
-     * Create a simple information message
-     * @param _message message to display (decorated text)
-     */
-    public static void displayInfo(String _message){
-		create(Type.info, _message);
+	 * Create a simple critical message
+	 * @param message message to display (decorated text)
+	 */
+	public static void displayCritical(final String message) {
+		Message.create(Type.critical, message);
 	}
-
-    /**
-     * Create a simple warning message
-     * @param _message message to display (decorated text)
-     */
-    public static void displayWarning(String _message) {
-		create(Type.warning, _message);
+	
+	/**
+	 * Create a simple error message
+	 * @param message message to display (decorated text)
+	 */
+	public static void displayError(final String message) {
+		Message.create(Type.error, message);
 	}
-
-    /**
-     * Create a simple error message
-     * @param _message message to display (decorated text)
-     */
-    public static void displayError(String _message) {
-		create(Type.error,_message);
+	
+	/**
+	 * Create a simple information message
+	 * @param message message to display (decorated text)
+	 */
+	public static void displayInfo(final String message) {
+		Message.create(Type.info, message);
 	}
-    /**
-     * Create a simple critical message
-     * @param _message message to display (decorated text)
-     */
-    public static void displayCritical(String _message){
-		create(Type.critical, _message);
+	
+	/**
+	 * Create a simple warning message
+	 * @param message message to display (decorated text)
+	 */
+	public static void displayWarning(final String message) {
+		Message.create(Type.warning, message);
 	}
-
-    private enum Type {
-        info, //!< information message pop-up
-        warning, //!< warning message pop-up
-        error, //!< Error message pop-up
-        critical //!< Critical message pop-up
-    }
-
-
+	
+	private Message() {}
+	
 }
-

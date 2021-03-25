@@ -6,7 +6,7 @@
 package org.atriasoft.ewol.resource.font;
 
 /**
- * @not_in_doc
+ * @notindoc
  * Kerning properties of one specific Glyph with an other
  * 
  * Without Kerning :
@@ -15,7 +15,7 @@ package org.atriasoft.ewol.resource.font;
  *        \          /      /\         
  *         \        /      /  \        
  *          \      /      /    \       
- *           \    /      /______\      
+ *           \    /      /\      
  *            \  /      /        \     
  *             \/      /          \    
  *        v          v a          a    
@@ -27,7 +27,7 @@ package org.atriasoft.ewol.resource.font;
  *        \          /  /\             
  *         \        /  /  \            
  *          \      /  /    \           
- *           \    /  /______\          
+ *           \    /  /\          
  *            \  /  /        \         
  *             \/  /          \        
  *        v        a v        a        
@@ -37,24 +37,24 @@ package org.atriasoft.ewol.resource.font;
  *       the "VA" has 2 letter that overlap themself. This name Kerning
  */
 public class Kerning {
-	public Character UVal; //!< unicode value (the previous character that must be before)
+	public Character uVal; //!< unicode value (the previous character that must be before)
 	public float value; //!< kerning real offset
 	
 	/**
 	 * Simple ructor that allow to allocate the List element
 	 */
 	public Kerning() {
-		this.UVal = 0;
+		this.uVal = 0;
 		this.value = 0;
-	};
+	}
 	
 	/**
 	 * Normal ructor
-	 * @param _charcode The Unicode value of the coresponding character that might be before
-	 * @param _value The Kerning value of the offset (nb pixel number)
+	 * @param charcode The Unicode value of the coresponding character that might be before
+	 * @param value The Kerning value of the offset (nb pixel number)
 	 */
-	public Kerning(final Character _charcode, final float _value) {
-		this.UVal = _charcode;
-		this.value = _value;
+	public Kerning(final Character charcode, final float value) {
+		this.uVal = charcode;
+		this.value = value;
 	}
 }

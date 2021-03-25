@@ -3,12 +3,12 @@
 
 <!--
     This configuration file was written by the eclipse-cs plugin configuration editor
--.
+-->
 <!--
     Checkstyle-Configuration: Marc Checks
     Description: 
 Checkstyle configuration that checks the sun coding conventions.
--.
+-->
 <module name="Checker">
   <property name="severity" value="error"/>
   <property name="fileExtensions" value="java, properties, xml"/>

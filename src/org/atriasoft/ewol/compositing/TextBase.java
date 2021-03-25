@@ -27,105 +27,93 @@ import org.atriasoft.exml.model.XmlNode;
 import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
 
-enum AligneMode {
-	alignDisable, alignRight, alignLeft, alignCenter, alignJustify
-};
-
 public abstract class TextBase extends Compositing {
-	private static final int NB_VBO = 4;
+	private static final int NBVBO = 4;
+	protected static int vboIdColor = 2;
 	// Text
 	protected static int vboIdCoord = 0;
 	protected static int vboIdCoordText = 1;
-	protected static int vboIdColor = 2;
 	protected static int vboIdGlyphLevel = 3;
-	// TODO set it back later ... protected CompositingDrawing vectorialDraw; //!<
-	// This is used to draw background selection and other things ...
-	/*
-	 * public CompositingDrawing getDrawing() { return //TODO this.vectorialDraw; };
-	 */
-	protected int nbCharDisplayed; // !< prevent some error in calculation size.
-	protected Vector3f sizeDisplayStart = Vector3f.ZERO; // !< The start windows of the display.
-	protected Vector3f sizeDisplayStop = Vector3f.ZERO; // !< The end windows of the display.
-	protected boolean needDisplay; // !< This just need the display and not the size rendering.
-	protected Vector3f position = Vector3f.ZERO; // !< The current position to draw
+	// previously this line and the center is perform with this one)
+	protected AlignMode alignment = AlignMode.alignDisable; // !< Current Alignment mode (justify/left/right ...)
+	protected boolean clippingEnable = false; // !< true if the clipping must be activated
 	protected Vector3f clippingPosStart = Vector3f.ZERO; // !< Clipping start position
 	protected Vector3f clippingPosStop = Vector3f.ZERO; // !< Clipping stop position
-	protected boolean clippingEnable = false; // !< true if the clipping must be activated
-	protected Color defaultColorFg = Color.BLACK; // !< The text foreground color
-	protected Color defaultColorBg = Color.NONE; // !< The text background color
-
 	protected Color color = Color.BLACK; // !< The text foreground color
 	protected Color colorBg = Color.NONE; // !< The text background color
 	protected Color colorCursor = Color.BLACK; // !< The text cursor color
 	protected Color colorSelection = Color.OLIVE; // !< The text Selection color
-	protected FontMode mode = FontMode.Regular; // !< font display property : Regular/Bold/Italic/BoldItalic
-	protected boolean kerning = true; // !< Kerning enable or disable on the next elements displayed
-	protected Character previousCharcode; // !< we remember the previous charcode to perform the kerning. @ref Kerning
-	protected float startTextpos = 0; // !< start position of the Alignement (when \n the text return at this
-	// position)
-	protected float stopTextPos = 0; // !< end of the alignement (when a string is too hight it cut at the word
-	// previously this line and the center is perform with this one)
-	protected AligneMode alignement = AligneMode.alignDisable; // !< Current Alignement mode (justify/left/right ...)
-	protected ResourceProgram GLprogram; // !< pointer on the opengl display program
-	protected int GLPosition = -1; // !< openGL id on the element (vertex buffer)
-	protected int GLMatrix = -1; // !< openGL id on the element (transformation matrix)
-	protected int GLColor = -1; // !< openGL id on the element (color buffer)
-	protected int GLtexture = -1; // !< openGL id on the element (Texture position)
-	protected int GLtexID = -1; // !< openGL id on the element (texture ID)
-	protected int GLtextWidth = -1; // !< openGL Id on the texture width
-	protected int GLtextHeight = -1; // !< openGL Id on the texture height
-	protected int selectionStartPos = -100; // !< start position of the Selection (if == this.cursorPos ==> no
 	// selection)
 	protected int cursorPos = -100; // !< Cursor position (default no cursor == > -100)
-	protected ResourceVirtualBufferObject VBO;
+	protected Color defaultColorBg = Color.NONE; // !< The text background color
+	protected Color defaultColorFg = Color.BLACK; // !< The text foreground color
 	// this section is reserved for HTML parsing and display:
-	public String htmlCurrrentLine = ""; // !< current line for HTML display
+	public String htmlCurrentLine = ""; // !< current line for HTML display
+	
 	public List<TextDecoration> htmlDecoration = new ArrayList<>(); // !< current decoration for the HTML display
 	public TextDecoration htmlDecoTmp = new TextDecoration(); // !< current decoration
-
+	protected boolean kerning = true; // !< Kerning enable or disable on the next elements displayed
+	protected FontMode mode = FontMode.Regular; // !< font display property : Regular/Bold/Italic/BoldItalic
+	protected int nbCharDisplayed; // !< prevent some error in calculation size.
+	protected boolean needDisplay; // !< This just need the display and not the size rendering.
+	protected int oGLColor = -1; // !< openGL id on the element (color buffer)
+	protected int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
+	protected int oGLPosition = -1; // !< openGL id on the element (vertex buffer)
+	protected ResourceProgram oGLprogram; // !< pointer on the opengl display program
+	protected int oGLtexID = -1; // !< openGL id on the element (texture ID)
+	protected int oGLtextHeight = -1; // !< openGL Id on the texture height
+	protected int oGLtexture = -1; // !< openGL id on the element (Texture position)
+	protected int oGLtextWidth = -1; // !< openGL Id on the texture width
+	protected Vector3f position = Vector3f.ZERO; // !< The current position to draw
+	protected Character previousCharcode; // !< we remember the previous charcode to perform the kerning. @ref Kerning
+	protected int selectionStartPos = -100; // !< start position of the Selection (if == this.cursorPos ==> no
+	protected Vector3f sizeDisplayStart = Vector3f.ZERO; // !< The start windows of the display.
+	protected Vector3f sizeDisplayStop = Vector3f.ZERO; // !< The end windows of the display.
+	protected float startTextPos = 0; // !< start position of the Alignment (when \n the text return at this
+	// position)
+	protected float stopTextPos = 0; // !< end of the alignment (when a string is too height it cut at the word
+	protected ResourceVirtualBufferObject vbo;
+	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
+	
 	/**
 	 * generic constructor
 	 */
 	public TextBase() {
 		this(new Uri("DATA", "text.vert", "ewol"), new Uri("DATA", "text.frag", "ewol"));
 	}
-
-	public TextBase(final Uri _vertexShader, final Uri _fragmentShader) {
-		this(_vertexShader, _fragmentShader, true);
+	
+	public TextBase(final Uri vertexShader, final Uri fragmentShader) {
+		this(vertexShader, fragmentShader, true);
 	}
-
-	public TextBase(final Uri _vertexShader, final Uri _fragmentShader, final boolean _loadProgram) {
-		if (_loadProgram == true) {
-			loadProgram(_vertexShader, _fragmentShader);
+	
+	public TextBase(final Uri vertexShader, final Uri fragmentShader, final boolean loadProgram) {
+		if (loadProgram) {
+			loadProgram(vertexShader, fragmentShader);
 		}
 		// Create the VBO:
-		this.VBO = ResourceVirtualBufferObject.create(NB_VBO);
-		if (this.VBO == null) {
-			Log.error("can not instanciate VBO ...");
-			return;
-		}
+		this.vbo = ResourceVirtualBufferObject.create(TextBase.NBVBO);
 		// TO facilitate some debugs we add a name of the VBO:
-		this.VBO.setName("[VBO] of super.TextBase");
+		this.vbo.setName("[VBO] of super.TextBase");
 	}
-
+	
 	/**
 	 * calculate a theoric charcode size
-	 * @param _charcode The Unicode value to calculate dimention.
+	 * @param charcode The Unicode value to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSize(final Character _charcode) {
-		return calculateSizeChar(_charcode);
+	public Vector3f calculateSize(final Character charcode) {
+		return calculateSizeChar(charcode);
 	}
-
+	
 	/**
 	 * calculate a theoric text size
-	 * @param _text The string to calculate dimention.
+	 * @param text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSize(final String _text) {
+	public Vector3f calculateSize(final String text) {
 		Vector3f outputSize = Vector3f.ZERO;
-		for (int iii = 0; iii < _text.length(); iii++) {
-			Vector3f tmpp = calculateSize(_text.charAt(iii));
+		for (int iii = 0; iii < text.length(); iii++) {
+			final Vector3f tmpp = calculateSize(text.charAt(iii));
 			if (outputSize.y() == 0) {
 				outputSize = outputSize.withY(tmpp.y());
 			}
@@ -133,59 +121,56 @@ public abstract class TextBase extends Compositing {
 		}
 		return outputSize;
 	}
-
+	
 	// ! @previous
-	public abstract Vector3f calculateSizeChar(Character _charcode);
-
+	public abstract Vector3f calculateSizeChar(Character charcode);
+	
 	/**
 	 * calculate a theoric text size
-	 * @param _text The string to calculate dimention.
+	 * @param text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSizeDecorated(final String _text) {
-		if (_text.length() == 0) {
+	public Vector3f calculateSizeDecorated(final String text) {
+		if (text.length() == 0) {
 			return Vector3f.ZERO;
 		}
-
+		
 		String tmpData = "<html><body>\n";
-		tmpData += _text;
+		tmpData += text;
 		tmpData += "\n</body></html>\n";
-		Vector3f tmpVal = calculateSizeHTML(tmpData);
-		return tmpVal;
+		return calculateSizeHTML(tmpData);
 	}
-
+	
 	/**
 	 * calculate a theoric text size
-	 * @param _text The string to calculate dimention.
+	 * @param text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSizeHTML(final String _text) {
+	public Vector3f calculateSizeHTML(final String text) {
 		// remove intermediate result
 		reset();
 		// Log.debug(" 0 size for=\n" + text);
 		// disable display system
 		this.needDisplay = false;
-
+		
 		setPos(Vector3f.ZERO);
 		// same as print without the end display ...
-		printHTML(_text);
+		printHTML(text);
 		// Log.debug(" 1 Start pos=" + this.sizeDisplayStart);
 		// Log.debug(" 1 Stop pos=" + this.sizeDisplayStop);
-
+		
 		// get the last elements
 		this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
 		this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStop);
-
+		
 		// Log.debug(" 2 Start pos=" + this.sizeDisplayStart);
 		// Log.debug(" 2 Stop pos=" + this.sizeDisplayStop);
 		// set back the display system
 		this.needDisplay = true;
-
-		return new Vector3f(this.sizeDisplayStop.x() - this.sizeDisplayStart.x(),
-				this.sizeDisplayStop.y() - this.sizeDisplayStart.y(),
-				this.sizeDisplayStop.z() - this.sizeDisplayStart.z());
+		
+		return new Vector3f(this.sizeDisplayStop.x() - this.sizeDisplayStart.x(), this.sizeDisplayStop.y() - this.sizeDisplayStart.y(), this.sizeDisplayStop.z() - this.sizeDisplayStart.z());
 	}
-
+	
 	/**
 	 * clear all the registered element in the current element
 	 */
@@ -194,20 +179,20 @@ public abstract class TextBase extends Compositing {
 		// call upper class
 		super.clear();
 		// remove sub draw system
-		// TODO this.vectorialDraw.clear();
+		this.vectorialDraw.clear();
 		// reset Buffer:
-		this.VBO.clear();
+		this.vbo.clear();
 		// reset temporal variables:
 		reset();
 	}
-
+	
 	/**
 	 * disable the alignement system
 	 */
 	public void disableAlignement() {
-		this.alignement = AligneMode.alignDisable;
+		this.alignment = AlignMode.alignDisable;
 	}
-
+	
 	/**
 	 * remove the cursor display
 	 */
@@ -215,116 +200,119 @@ public abstract class TextBase extends Compositing {
 		this.selectionStartPos = -100;
 		this.cursorPos = -100;
 	}
-
+	
 	/**
 	 * draw All the registered text in the current element on openGL
 	 */
 	@Override
-	public void draw(final boolean _disableDepthTest) {
-		drawD(_disableDepthTest);
+	public void draw(final boolean disableDepthTest) {
+		drawD(disableDepthTest);
 	}
-
+	
 	// ! @previous
-	public void draw(final Matrix4f _transformationMatrix, final boolean _enableDepthTest) {
-		drawMT(_transformationMatrix, _enableDepthTest);
+	public void draw(final Matrix4f transformationMatrix, final boolean enableDepthTest) {
+		drawMT(transformationMatrix, enableDepthTest);
 	}
-
+	
 	/**
 	 * draw All the refistered text in the current element on openGL
 	 */
-	public abstract void drawD(final boolean _disableDepthTest);;
-
+	public abstract void drawD(final boolean disableDepthTest);
+	
 	// ! @previous
-	public abstract void drawMT(final Matrix4f _transformationMatrix, final boolean _enableDepthTest);
-
+	public abstract void drawMT(final Matrix4f transformationMatrix, final boolean enableDepthTest);
+	
 	/**
-	 * calculate the element number that is the first out the alignement
+	 * calculate the element number that is the first out the alignment
 	 *        range (start at the specify ID, and use start pos with current one)
-	 * @param _text The string that might be parsed.
-	 * @param _start The first elemnt that might be used to calculate.
-	 * @param _stop The last Id availlable in the current string.
-	 * @param _space Number of space in the string.
-	 * @param _freespace This represent the number of pixel present in the
+	 * @param text The string that might be parsed.
+	 * @param start The first element that might be used to calculate.
+	 * @param stop The last Id available in the current string.
+	 * @param space Number of space in the string.
+	 * @param freeSpace This represent the number of pixel present in the
 	 *             right white space.
-	 * @return true if the rifht has free space that can be use for jystify.
-	 * @return false if we find '\n'
+	 * @return true if the right has free space that can be use for justify.
+	 * false if we find '\n'
 	 */
-	public boolean extrapolateLastId(final String _text, final int _start, int _stop, int _space, int _freeSpace) {
+	public boolean extrapolateLastId(final String text, final int start, int stop, int space, int freeSpace) {
 		// store previous :
-		Character storePrevious = this.previousCharcode;
-
-		_stop = _text.length();
-		_space = 0;
-
-		int lastSpacePosition = _start;
+		final Character storePrevious = this.previousCharcode;
+		
+		stop = text.length();
+		space = 0;
+		
+		int lastSpacePosition = start;
 		int lastSpacefreeSize = 0;
-
+		
 		float endPos = this.position.x();
 		boolean endOfLine = false;
-
+		
 		float stopPosition = this.stopTextPos;
-		if (this.needDisplay == false || this.stopTextPos == this.startTextpos) {
-			stopPosition = this.startTextpos + 3999999999.0f;
+		if (!this.needDisplay || this.stopTextPos == this.startTextPos) {
+			stopPosition = this.startTextPos + 3999999999.0f;
 		}
-
-		for (int iii = _start; iii < _text.length(); iii++) {
-			Vector3f tmpSize = calculateSize(_text.charAt(iii));
-			// check oveflow :
+		
+		for (int iii = start; iii < text.length(); iii++) {
+			final Vector3f tmpSize = calculateSize(text.charAt(iii));
+			// check overflow :
 			if (endPos + tmpSize.x() > stopPosition) {
-				_stop = iii;
+				stop = iii;
 				break;
 			}
 			// save number of space :
-			if (_text.charAt(iii) == Character.SPACE_SEPARATOR) {
-				_space++;
+			if (text.charAt(iii) == Character.SPACE_SEPARATOR) {
+				space++;
 				lastSpacePosition = iii;
 				lastSpacefreeSize = (int) (stopPosition - endPos);
-			} else if (_text.charAt(iii) == Character.LINE_SEPARATOR) {
-				_stop = iii;
+			} else if (text.charAt(iii) == Character.LINE_SEPARATOR) {
+				stop = iii;
 				endOfLine = true;
 				break;
 			}
 			// update local size :
 			endPos += tmpSize.x();
 		}
-		_freeSpace = (int) (stopPosition - endPos);
-		// retore previous :
+		freeSpace = (int) (stopPosition - endPos);
+		// restore previous :
 		this.previousCharcode = storePrevious;
 		// need to align left or right ...
-		if (_stop == (long) _text.length()) {
+		if (stop == (long) text.length()) {
 			return true;
-		} else {
-			if (endOfLine) {
-				return true;
-			} else {
-				if (_space == 0) {
-					return true;
-				}
-				_stop = lastSpacePosition;
-				_freeSpace = lastSpacefreeSize;
-				return false;
-			}
 		}
-	};
-
+		if (endOfLine) {
+			return true;
+		}
+		if (space == 0) {
+			return true;
+		}
+		stop = lastSpacePosition;
+		freeSpace = lastSpacefreeSize;
+		return false;
+	}
+	
 	/**
-	 * This generate the line return == > it return to the alignement
+	 * This generate the line return == > it return to the alignment
 	 *        position start and at the correct line position ==> it might be use to
 	 *        not know the line height
 	 */
 	public void forceLineReturn() {
 		// reset position :
-		setPos(new Vector3f(this.startTextpos, this.position.y() - getHeight(), 0));
+		setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), 0));
 	}
-
+	
 	/**
-	 * get the current alignement property
-	 * @return the curent alignement type
+	 * get the current alignment property
+	 * @return the current alignment type
 	 */
-	public AligneMode getAlignement() {
-		return this.alignement;
-	};
-
+	public AlignMode getAlignment() {
+		return this.alignment;
+	}
+	
+	// This is used to draw background selection and other things ...
+	public CompositingDrawing getDrawing() {
+		return this.vectorialDraw;
+	}
+	
 	/**
 	 * get the current font mode
 	 * @return The font mode applied
@@ -332,11 +320,11 @@ public abstract class TextBase extends Compositing {
 	public FontMode getFontMode() {
 		return this.mode;
 	}
-
-	public abstract GlyphProperty getGlyphPointer(Character _charcode);
-
-	public abstract float getHeight();;
-
+	
+	public abstract GlyphProperty getGlyphPointer(Character charcode);
+	
+	public abstract float getHeight();
+	
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
@@ -344,122 +332,123 @@ public abstract class TextBase extends Compositing {
 	public Vector3f getPos() {
 		return this.position;
 	}
-
+	
 	public abstract float getSize();
-
+	
 	/**
 	 * add a line with the current this.htmlDecoTmp decoration
-	 * @param _data The cuurent data to add.
+	 * @param data The cuurent data to add.
 	 */
-	public void htmlAddData(final String _data) {
-		if (this.htmlCurrrentLine.length() > 0
-				&& this.htmlCurrrentLine.charAt(this.htmlCurrrentLine.length() - 1) != Character.SPACE_SEPARATOR) {
-			this.htmlCurrrentLine += Character.SPACE_SEPARATOR;
+	public void htmlAddData(final String data) {
+		if (this.htmlCurrentLine.length() > 0 && this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != Character.SPACE_SEPARATOR) {
+			this.htmlCurrentLine += Character.SPACE_SEPARATOR;
 			if (this.htmlDecoration.size() > 0) {
-				TextDecoration tmp = this.htmlDecoration.get(this.htmlDecoration.size() - 1);
+				final TextDecoration tmp = this.htmlDecoration.get(this.htmlDecoration.size() - 1);
 				this.htmlDecoration.add(tmp);
 			} else {
 				this.htmlDecoration.add(this.htmlDecoTmp);
 			}
 		}
-		this.htmlCurrrentLine += _data;
-		for (int iii = 0; iii < _data.length(); iii++) {
+		this.htmlCurrentLine += data;
+		for (int iii = 0; iii < data.length(); iii++) {
 			this.htmlDecoration.add(this.htmlDecoTmp);
 		}
-	};
-
+	}
+	
 	/**
 	 * draw the current line
 	 */
 	public void htmlFlush() {
-		if (this.htmlCurrrentLine.length() > 0) {
-			print(this.htmlCurrrentLine, this.htmlDecoration);
+		if (this.htmlCurrentLine.length() > 0) {
+			print(this.htmlCurrentLine, this.htmlDecoration);
 		}
-		this.htmlCurrrentLine = "";
+		this.htmlCurrentLine = "";
 		this.htmlDecoration.clear();
 	}
-
+	
 	/**
 	 * load the openGL program and get all the ID needed
 	 */
-	public void loadProgram(final Uri _vertexShader, final Uri _fragmentShader) {
-		ResourceProgram old = this.GLprogram;
-		this.GLprogram = ResourceProgram.create(_vertexShader, _fragmentShader);
-		if (this.GLprogram != null) {
-			this.GLPosition = this.GLprogram.getAttribute("EW_coord3d");
-			this.GLColor = this.GLprogram.getAttribute("EW_color");
-			this.GLtexture = this.GLprogram.getAttribute("EW_texture2d");
-			this.GLMatrix = this.GLprogram.getUniform("EW_MatrixTransformation");
-			this.GLtexID = this.GLprogram.getUniform("EW_texID");
-			this.GLtextWidth = this.GLprogram.getUniform("EW_texWidth");
-			this.GLtextHeight = this.GLprogram.getUniform("EW_texHeight");
+	public void loadProgram(final Uri vertexShader, final Uri fragmentShader) {
+		ResourceProgram old = this.oGLprogram;
+		this.oGLprogram = ResourceProgram.create(vertexShader, fragmentShader);
+		if (this.oGLprogram != null) {
+			this.oGLPosition = this.oGLprogram.getAttribute("EWcoord3d");
+			this.oGLColor = this.oGLprogram.getAttribute("EWcolor");
+			this.oGLtexture = this.oGLprogram.getAttribute("EWtexture2d");
+			this.oGLMatrix = this.oGLprogram.getUniform("EWMatrixTransformation");
+			this.oGLtexID = this.oGLprogram.getUniform("EWtexID");
+			this.oGLtextWidth = this.oGLprogram.getUniform("EWtexWidth");
+			this.oGLtextHeight = this.oGLprogram.getUniform("EWtexHeight");
 		} else {
 			Log.error("Can not load the program => create previous one...");
-			this.GLprogram = old;
+			this.oGLprogram = old;
 			old = null;
 		}
-	};
-
+	}
+	
 	/**
 	 * This parse a tinyXML node (void pointer to permit to hide tiny XML in
 	 *        include).
-	 * @param _element the exml element.
+	 * @param element the exml element.
 	 */
-	public void parseHtmlNode(final XmlElement _element) {
-		for (XmlNode it : _element.getNodes()) {
-			if (it.isComment() == true) {
+	public void parseHtmlNode(final XmlElement element) {
+		for (final XmlNode it : element.getNodes()) {
+			if (it.isComment()) {
 				// nothing to do ...
 				continue;
-			} else if (it.isText() == true) {
+			}
+			if (it.isText()) {
 				htmlAddData(it.getValue());
 				Log.verbose("XML add : " + it.getValue());
 				continue;
-			} else if (it.isElement() == false) {
+			}
+			if (!it.isElement()) {
 				Log.error("node not suported type : " + it.getType() + " val='" + it.getValue() + "'");
 				continue;
 			}
-			XmlElement elem = (XmlElement) it;
-			String lowercaseValue = elem.getValue().toLowerCase();
-			if (lowercaseValue.contentEquals("br") == true) {
+			final XmlElement elem = (XmlElement) it;
+			final String lowercaseValue = elem.getValue().toLowerCase();
+			if (lowercaseValue.contentEquals("br")) {
 				htmlFlush();
 				Log.verbose("XML flush  newLine");
 				forceLineReturn();
-			} else if (lowercaseValue.contentEquals("font") == true) {
+			} else if (lowercaseValue.contentEquals("font")) {
 				Log.verbose("XML Font ...");
-				TextDecoration tmpDeco = this.htmlDecoTmp;
+				final TextDecoration tmpDeco = this.htmlDecoTmp;
 				if (elem.existAttribute("color")) {
 					try {
-						String colorValue = elem.getAttribute("color");
+						final String colorValue = elem.getAttribute("color");
 						if (colorValue.length() != 0) {
 							this.htmlDecoTmp = this.htmlDecoTmp.withFG(Color.valueOf(colorValue));
 						}
-					} catch (ExmlAttributeDoesNotExist e) {
+					} catch (final ExmlAttributeDoesNotExist e) {
 						Log.error("Can not get attribute 'color' in XML:" + e.getMessage());
 						e.printStackTrace();
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						Log.error("Can not parse attribute 'color' in XML:" + e.getMessage());
 						e.printStackTrace();
 					}
 				}
 				if (elem.existAttribute("colorBg")) {
 					try {
-						String colorValue = elem.getAttribute("colorBg");
+						final String colorValue = elem.getAttribute("colorBg");
 						if (colorValue.length() != 0) {
 							this.htmlDecoTmp = this.htmlDecoTmp.withBG(Color.valueOf(colorValue));
 						}
-					} catch (ExmlAttributeDoesNotExist e) {
+					} catch (final ExmlAttributeDoesNotExist e) {
 						Log.error("Can not get attribute 'colorBg' in XML:" + e.getMessage());
 						e.printStackTrace();
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						Log.error("Can not parse attribute 'colorBg' in XML:" + e.getMessage());
 						e.printStackTrace();
 					}
 				}
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
-			} else if (lowercaseValue.contentEquals("b") == true || lowercaseValue.contentEquals("bold") == true) {
+			} else if (lowercaseValue.contentEquals("b") || lowercaseValue.contentEquals("bold")) {
 				Log.verbose("XML bold ...");
-				TextDecoration tmpDeco = this.htmlDecoTmp;
+				final TextDecoration tmpDeco = this.htmlDecoTmp;
 				if (this.htmlDecoTmp.mode() == FontMode.Regular) {
 					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.Bold);
 				} else if (this.htmlDecoTmp.mode() == FontMode.Italic) {
@@ -467,9 +456,9 @@ public abstract class TextBase extends Compositing {
 				}
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
-			} else if (lowercaseValue.contentEquals("i") == true || lowercaseValue.contentEquals("italic") == true) {
+			} else if (lowercaseValue.contentEquals("i") || lowercaseValue.contentEquals("italic")) {
 				Log.verbose("XML italic ...");
-				TextDecoration tmpDeco = this.htmlDecoTmp;
+				final TextDecoration tmpDeco = this.htmlDecoTmp;
 				if (this.htmlDecoTmp.mode() == FontMode.Regular) {
 					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.Italic);
 				} else if (this.htmlDecoTmp.mode() == FontMode.Bold) {
@@ -477,84 +466,83 @@ public abstract class TextBase extends Compositing {
 				}
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
-			} else if (lowercaseValue.contentEquals("u") == true || lowercaseValue.contentEquals("underline") == true) {
+			} else if (lowercaseValue.contentEquals("u") || lowercaseValue.contentEquals("underline")) {
 				Log.verbose("XML underline ...");
 				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("p") == true || lowercaseValue.contentEquals("paragraph") == true) {
+			} else if (lowercaseValue.contentEquals("p") || lowercaseValue.contentEquals("paragraph")) {
 				Log.verbose("XML paragraph ...");
 				htmlFlush();
-				this.alignement = AligneMode.alignLeft;
+				this.alignment = AlignMode.alignLeft;
 				forceLineReturn();
 				parseHtmlNode(elem);
 				forceLineReturn();
-			} else if (lowercaseValue.contentEquals("center") == true) {
+			} else if (lowercaseValue.contentEquals("center")) {
 				Log.verbose("XML center ...");
 				htmlFlush();
-				this.alignement = AligneMode.alignCenter;
+				this.alignment = AlignMode.alignCenter;
 				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("left") == true) {
+			} else if (lowercaseValue.contentEquals("left")) {
 				Log.verbose("XML left ...");
 				htmlFlush();
-				this.alignement = AligneMode.alignLeft;
+				this.alignment = AlignMode.alignLeft;
 				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("right") == true) {
+			} else if (lowercaseValue.contentEquals("right")) {
 				Log.verbose("XML right ...");
 				htmlFlush();
-				this.alignement = AligneMode.alignRight;
+				this.alignment = AlignMode.alignRight;
 				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("justify") == true) {
+			} else if (lowercaseValue.contentEquals("justify")) {
 				Log.verbose("XML justify ...");
 				htmlFlush();
-				this.alignement = AligneMode.alignJustify;
+				this.alignment = AlignMode.alignJustify;
 				parseHtmlNode(elem);
 			} else {
 				Log.error("node not suported type: " + elem.getType() + " val='" + elem.getValue() + "'");
 			}
 		}
 	}
-
+	
 	/**
 	 * display a compleat string in the current element.
-	 * @param _text The string to display.
+	 * @param text The string to display.
 	 */
-	public void print(final String _text) {
-		List<TextDecoration> decorationEmpty = new ArrayList<>();
-		print(_text, decorationEmpty);
+	public void print(final String text) {
+		final List<TextDecoration> decorationEmpty = new ArrayList<>();
+		print(text, decorationEmpty);
 	}
-
+	
 	/**
 	 * display a compleat string in the current element whith specific
 	 *        decorations (advence mode).
-	 * @param _text The string to display.
-	 * @param _decoration The text decoration for the text that might be display
+	 * @param text The string to display.
+	 * @param decoration The text decoration for the text that might be display
 	 *            (if the vector is smaller, the last parameter is get)
 	 */
-	public void print(final String _text, final List<TextDecoration> _decoration) {
+	public void print(final String text, final List<TextDecoration> decoration) {
 		Color tmpFg = this.color;
 		Color tmpBg = this.colorBg;
-		if (this.alignement == AligneMode.alignDisable) {
+		if (this.alignment == AlignMode.alignDisable) {
 			// Log.debug(" 1 print in not alligned mode : start=" + this.sizeDisplayStart +
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 			// display the cursor if needed (if it is at the start position...)
-			if (this.needDisplay == true) {
+			if (this.needDisplay) {
 				if (0 == this.cursorPos) {
-					// TODO this.vectorialDraw.setPos(this.position);
+					this.vectorialDraw.setPos(this.position);
 					setColorBg(this.colorCursor);
 					printCursor(false);
 				}
 			}
 			// note this is faster when nothing is requested ...
-			for (int iii = 0; iii < _text.length(); iii++) {
+			for (int iii = 0; iii < text.length(); iii++) {
 				// check if ve have decoration
-				if (iii < _decoration.size()) {
-					tmpFg = _decoration.get(iii).colorFG();
-					tmpBg = _decoration.get(iii).colorBG();
-					setFontMode(_decoration.get(iii).mode());
+				if (iii < decoration.size()) {
+					tmpFg = decoration.get(iii).colorFG();
+					tmpBg = decoration.get(iii).colorBG();
+					setFontMode(decoration.get(iii).mode());
 				}
 				// if real display : ( not display is for size calculation)
-				if (this.needDisplay == true) {
-					if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1)
-							|| (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
+				if (this.needDisplay) {
+					if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1) || (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
 						setColor(Color.BLACK);
 						setColorBg(this.colorSelection);
 					} else {
@@ -562,23 +550,21 @@ public abstract class TextBase extends Compositing {
 						setColorBg(tmpBg);
 					}
 				}
-				if (this.needDisplay == true && this.colorBg.a() != 0) {
-					Vector3f pos = this.position;
-					// TODO this.vectorialDraw.setPos(pos);
-					printChar(_text.charAt(iii));
-					float fontHeigh = getHeight();
-					// TODO
-					// this.vectorialDraw.rectangleWidth(Vector3f(this.position.x()-pos.x(),fontHeigh,0.0f)
-					// );
+				if (this.needDisplay && this.colorBg.a() != 0) {
+					final Vector3f pos = this.position;
+					this.vectorialDraw.setPos(pos);
+					printChar(text.charAt(iii));
+					final float fontHeigh = getHeight();
+					this.vectorialDraw.rectangleWidth(new Vector3f(this.position.x() - pos.x(), fontHeigh, 0.0f));
 					this.nbCharDisplayed++;
 				} else {
-					printChar(_text.charAt(iii));
+					printChar(text.charAt(iii));
 					this.nbCharDisplayed++;
 				}
 				// display the cursor if needed (if it is at the other position...)
-				if (this.needDisplay == true) {
+				if (this.needDisplay) {
 					if ((long) iii == this.cursorPos - 1) {
-						// TODO this.vectorialDraw.setPos(this.position);
+						this.vectorialDraw.setPos(this.position);
 						setColorBg(this.colorCursor);
 						printCursor(false);
 					}
@@ -593,54 +579,55 @@ public abstract class TextBase extends Compositing {
 			if (this.stopTextPos < this.position.x()) {
 				forceLineReturn();
 			}
-			float basicSpaceWidth = calculateSize(' ').x();
+			final float basicSpaceWidth = calculateSize(' ').x();
 			int currentId = 0;
-			int stop = 0;
-			int space = 0;
-			int freeSpace = 0;
-			while (currentId < (long) _text.length()) {
-				boolean needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
+			final int stop = 0;
+			final int space = 0;
+			final int freeSpace = 0;
+			while (currentId < (long) text.length()) {
+				final boolean needNoJustify = extrapolateLastId(text, currentId, stop, space, freeSpace);
 				float interpolation = basicSpaceWidth;
-				switch (this.alignement) {
-				case alignJustify:
-					if (needNoJustify == false) {
-						interpolation += (float) freeSpace / (float) (space - 1);
-					}
-					break;
-				case alignDisable: // must not came from here ...
-				case alignLeft:
-					// nothing to do ...
-					break;
-				case alignRight:
-					if (this.needDisplay == true) {
-						// Move the first char at the right :
-						setPos(new Vector3f(this.position.x() + freeSpace, this.position.y(), this.position.z()));
-					}
-					break;
-				case alignCenter:
-					if (this.needDisplay == true) {
-						// Move the first char at the right :
-						setPos(new Vector3f(this.position.x() + freeSpace / 2, this.position.y(), this.position.z()));
-					}
-					break;
+				switch (this.alignment) {
+					case alignJustify:
+						if (!needNoJustify) {
+							interpolation += (float) freeSpace / (float) (space - 1);
+						}
+						break;
+					case alignDisable: // must not came from here ...
+					case alignLeft:
+						// nothing to do ...
+						break;
+					case alignRight:
+						if (this.needDisplay) {
+							// Move the first char at the right :
+							setPos(new Vector3f(this.position.x() + freeSpace, this.position.y(), this.position.z()));
+						}
+						break;
+					case alignCenter:
+						if (this.needDisplay) {
+							// Move the first char at the right :
+							setPos(new Vector3f(this.position.x() + freeSpace / 2, this.position.y(), this.position.z()));
+						}
+						break;
+					default:
+						break;
 				}
 				// display all the elements
-				if (this.needDisplay == true && this.cursorPos == 0) {
-					// TODO this.vectorialDraw.setPos(this.position);
+				if (this.needDisplay && this.cursorPos == 0) {
+					this.vectorialDraw.setPos(this.position);
 					setColorBg(this.colorCursor);
 					printCursor(false);
 				}
-				for (int iii = currentId; (long) iii < stop && iii < _text.length(); iii++) {
-					float fontHeigh = getHeight();
+				for (int iii = currentId; (long) iii < stop && iii < text.length(); iii++) {
+					final float fontHeigh = getHeight();
 					// get specific decoration if provided
-					if (iii < _decoration.size()) {
-						tmpFg = _decoration.get(iii).colorFG();
-						tmpBg = _decoration.get(iii).colorBG();
-						setFontMode(_decoration.get(iii).mode());
+					if (iii < decoration.size()) {
+						tmpFg = decoration.get(iii).colorFG();
+						tmpBg = decoration.get(iii).colorBG();
+						setFontMode(decoration.get(iii).mode());
 					}
-					if (this.needDisplay == true) {
-						if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1)
-								|| (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
+					if (this.needDisplay) {
+						if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1) || (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
 							setColor(Color.BLACK);
 							setColorBg(this.colorSelection);
 						} else {
@@ -649,35 +636,30 @@ public abstract class TextBase extends Compositing {
 						}
 					}
 					// special for the justify mode
-					if (_text.charAt(iii) == Character.SPACE_SEPARATOR) {
+					if (text.charAt(iii) == Character.SPACE_SEPARATOR) {
 						// Log.debug(" generateString : \" \"");
-						if (this.needDisplay == true && this.colorBg.a() != 0) {
-							// TODO this.vectorialDraw.setPos(this.position);
+						if (this.needDisplay && this.colorBg.a() != 0) {
+							this.vectorialDraw.setPos(this.position);
 						}
 						// Must generate a dynamic space :
 						setPos(new Vector3f(this.position.x() + interpolation, this.position.y(), this.position.z()));
-						if (this.needDisplay == true && this.colorBg.a() != 0) {
-							// TODO this.vectorialDraw.rectangleWidth(Vector3f(interpolation,fontHeigh,0.0f)
-							// );
+						if (this.needDisplay && this.colorBg.a() != 0) {
+							this.vectorialDraw.rectangleWidth(new Vector3f(interpolation, fontHeigh, 0.0f));
 						}
+					} else // Log.debug(" generateString : \"" + (char)text[iii] + "\"");
+					if (this.needDisplay && this.colorBg.a() != 0) {
+						final Vector3f pos = this.position;
+						this.vectorialDraw.setPos(pos);
+						printChar(text.charAt(iii));
+						this.vectorialDraw.rectangleWidth(new Vector3f(this.position.x() - pos.x(), fontHeigh, 0.0f));
+						this.nbCharDisplayed++;
 					} else {
-						// Log.debug(" generateString : \"" + (char)text[iii] + "\"");
-						if (this.needDisplay == true && this.colorBg.a() != 0) {
-							Vector3f pos = this.position;
-							// TODO this.vectorialDraw.setPos(pos);
-							printChar(_text.charAt(iii));
-							// TODO
-							// this.vectorialDraw.rectangleWidth(Vector3f(this.position.x()-pos.x(),fontHeigh,0.0f)
-							// );
-							this.nbCharDisplayed++;
-						} else {
-							printChar(_text.charAt(iii));
-							this.nbCharDisplayed++;
-						}
+						printChar(text.charAt(iii));
+						this.nbCharDisplayed++;
 					}
-					if (this.needDisplay == true) {
+					if (this.needDisplay) {
 						if ((long) iii == this.cursorPos - 1) {
-							// TODO this.vectorialDraw.setPos(this.position);
+							this.vectorialDraw.setPos(this.position);
 							setColorBg(this.colorCursor);
 							printCursor(false);
 						}
@@ -685,15 +667,15 @@ public abstract class TextBase extends Compositing {
 				}
 				if (currentId == stop) {
 					currentId++;
-				} else if (_text.charAt(stop) == Character.SPACE_SEPARATOR) {
+				} else if (text.charAt(stop) == Character.SPACE_SEPARATOR) {
 					currentId = stop + 1;
 					// reset position :
-					setPos(new Vector3f(this.startTextpos, this.position.y() - getHeight(), this.position.z()));
+					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
 					this.nbCharDisplayed++;
-				} else if (_text.charAt(stop) == Character.LINE_SEPARATOR) {
+				} else if (text.charAt(stop) == Character.LINE_SEPARATOR) {
 					currentId = stop + 1;
 					// reset position :
-					setPos(new Vector3f(this.startTextpos, this.position.y() - getHeight(), this.position.z()));
+					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
 					this.nbCharDisplayed++;
 				} else {
 					currentId = stop;
@@ -703,35 +685,33 @@ public abstract class TextBase extends Compositing {
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		}
 	}
-
+	
 	/**
 	 * display the current char in the current element (note that the kerning
 	 *        is availlable if the position is not changed)
-	 * @param _charcode Char that might be dispalyed
+	 * @param charcode Char that might be dispalyed
 	 */
-	public abstract void printChar(Character _charcode);
-
+	public abstract void printChar(Character charcode);
+	
 	/**
 	 * draw a cursor at the specify position
-	 * @param _isInsertMode True if the insert mode is activated
-	 * @param _cursorSize The sizae of the cursor that might be set when insert
-	 *            mode is set [default 20]
+	 * @param isInsertMode True if the insert mode is activated
 	 */
-	public void printCursor(final boolean _isInsertMode) {
-		printCursor(_isInsertMode, 20.0f);
+	public void printCursor(final boolean isInsertMode) {
+		printCursor(isInsertMode, 20.0f);
 	}
-
-	public void printCursor(final boolean _isInsertMode, final float _cursorSize) {
-		int fontHeigh = (int) getHeight();
-		if (true == _isInsertMode) {
-			// TODO this.vectorialDraw.rectangleWidth(Vector3f(_cursorSize, fontHeigh, 0) );
+	
+	public void printCursor(final boolean isInsertMode, final float cursorSize) {
+		final int fontHeigh = (int) getHeight();
+		if (isInsertMode) {
+			this.vectorialDraw.rectangleWidth(new Vector3f(cursorSize, fontHeigh, 0));
 		} else {
-			// TODO this.vectorialDraw.setThickness(2);
-			// TODO this.vectorialDraw.lineRel( Vector3f(0, fontHeigh, 0) );
-			// TODO this.vectorialDraw.setThickness(0);
+			this.vectorialDraw.setThickness(2);
+			this.vectorialDraw.lineRel(new Vector3f(0, fontHeigh, 0));
+			this.vectorialDraw.setThickness(0);
 		}
-	};
-
+	}
+	
 	/**
 	 * display a compleat string in the current element with the generic
 	 *        decoration specification. (basic html data)
@@ -757,17 +737,17 @@ public abstract class TextBase extends Compositing {
 	 * 
 	 * @note This is parsed with tiny xml, then be carfull that the XML is correct,
 	 *       and all balises are closed ... otherwite the display can not be done
-	 * @param _text The string to display.
+	 * @param text The string to display.
 	 * @TODO : implementation not done ....
 	 */
-	public void printDecorated(final String _text) {
+	public void printDecorated(final String text) {
 		String tmpData = "<html>\n<body>\n";
-		tmpData += _text;
+		tmpData += text;
 		tmpData += "\n</body>\n</html>\n";
 		// Log.debug("plop : " + tmpData);
 		printHTML(tmpData);
 	}
-
+	
 	/**
 	 * display a compleat string in the current element with the generic
 	 *        decoration specification. (basic html data)
@@ -793,40 +773,40 @@ public abstract class TextBase extends Compositing {
 	 * 
 	 * @note This is parsed with tiny xml, then be carfull that the XML is correct,
 	 *       and all balises are closed ... otherwite the display can not be done
-	 * @param _text The string to display.
+	 * @param text The string to display.
 	 * @TODO : implementation not done ....
 	 */
-	public void printHTML(final String _text) {
+	public void printHTML(final String text) {
 		// reset parameter :
 		this.htmlDecoTmp = new TextDecoration(this.defaultColorFg, this.defaultColorBg, FontMode.Regular);
 		try {
-			XmlElement doc = Exml.parse(_text);
-			if (doc.existNode("html") == false) {
+			final XmlElement doc = Exml.parse(text);
+			if (!doc.existNode("html")) {
 				Log.error("can not load XML: main node not find: 'html'");
 				Exml.display(doc);
 				return;
 			}
-			XmlElement root = (XmlElement) doc.getNode("html");
-
-			if (root.existNode("body") == false) {
+			final XmlElement root = (XmlElement) doc.getNode("html");
+			
+			if (!root.existNode("body")) {
 				Log.error("can not load XML: main node not find: 'body'");
 				return;
 			}
-			XmlElement bodyNode = (XmlElement) root.getNode("body");
+			final XmlElement bodyNode = (XmlElement) root.getNode("body");
 			parseHtmlNode(bodyNode);
 			htmlFlush();
-		} catch (ExmlParserErrorMulti e) {
+		} catch (final ExmlParserErrorMulti e) {
 			Log.error("Can not parse XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
-		} catch (ExmlBuilderException e) {
+		} catch (final ExmlBuilderException e) {
 			Log.error("Can not generate XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
-		} catch (ExmlNodeDoesNotExist e) {
+		} catch (final ExmlNodeDoesNotExist e) {
 			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * clear all the intermediate result detween 2 prints
 	 */
@@ -842,227 +822,222 @@ public abstract class TextBase extends Compositing {
 		this.colorBg = this.defaultColorBg;
 		this.mode = FontMode.Regular;
 		this.previousCharcode = 0;
-		this.startTextpos = 0;
+		this.startTextPos = 0;
 		this.stopTextPos = 0;
-		this.alignement = AligneMode.alignDisable;
-		this.htmlCurrrentLine = "";
+		this.alignment = AlignMode.alignDisable;
+		this.htmlCurrentLine = "";
 		this.selectionStartPos = -100;
 		this.cursorPos = -100;
 		this.htmlDecoration.clear();
 		this.needDisplay = true;
 		this.nbCharDisplayed = 0;
 	}
-
+	
 	@Override
-	public void rotate(final Vector3f _vect, final float _angle) {
-		super.rotate(_vect, _angle);
-		// TODO this.vectorialDraw.rotate(_vect,_angle);
+	public void rotate(final Vector3f vect, final float angle) {
+		super.rotate(vect, angle);
+		this.vectorialDraw.rotate(vect, angle);
 	}
-
+	
 	@Override
-	public void scale(final Vector3f _vect) {
-		super.scale(_vect);
-		// TODO this.vectorialDraw.scale(_vect);
+	public void scale(final Vector3f vect) {
+		super.scale(vect);
+		this.vectorialDraw.scale(vect);
 	}
-
+	
 	// ! @previous
-	public void setClipping(final Vector2f _pos, final Vector2f _posEnd) {
-		setClipping(new Vector3f(_pos.x(), _pos.y(), -1), new Vector3f(_posEnd.x(), _posEnd.y(), 1));
+	public void setClipping(final Vector2f pos, final Vector2f posEnd) {
+		setClipping(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(posEnd.x(), posEnd.y(), 1));
 	}
-
+	
 	/**
 	 * Request a clipping area for the text (next draw only)
-	 * @param _pos Start position of the clipping
-	 * @param _posEnd End position of the clipping
+	 * @param pos Start position of the clipping
+	 * @param posEnd End position of the clipping
 	 */
-	public void setClipping(final Vector3f _pos, final Vector3f _posEnd) {
+	public void setClipping(final Vector3f pos, final Vector3f posEnd) {
 		// note the internal system all time request to have a bounding all time in the
 		// same order
-		this.clippingPosStop = Vector3f.max(_pos, _posEnd);
-		this.clippingPosStart = Vector3f.min(_pos, _posEnd);
+		this.clippingPosStop = Vector3f.max(pos, posEnd);
+		this.clippingPosStart = Vector3f.min(pos, posEnd);
 		this.clippingEnable = true;
-		// //TODO this.vectorialDraw.setClipping(this.clippingPosStart,
-		// this.clippingPosStop);
+		this.vectorialDraw.setClipping(this.clippingPosStart, this.clippingPosStop);
 	}
-
+	
 	/**
 	 * enable/Disable the clipping (without lose the current clipping
 	 *        position)
-	 * _newMode The new status of the clipping
+	 * newMode The new status of the clipping
 	 */
 	// TODO : Rename setClippingActivity
-	public void setClippingMode(final boolean _newMode) {
-		this.clippingEnable = _newMode;
-		// //TODO this.vectorialDraw.setClippingMode(this.clippingEnable);
+	public void setClippingMode(final boolean newMode) {
+		this.clippingEnable = newMode;
+		this.vectorialDraw.setClippingMode(this.clippingEnable);
 	}
-
+	
 	// ! @previous
-	public void setClippingWidth(final Vector2f _pos, final Vector2f _width) {
-		setClipping(_pos, _pos.add(_width));
+	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
+		setClipping(pos, pos.add(width));
 	}
-
+	
 	/**
 	 * Request a clipping area for the text (next draw only)
-	 * @param _pos Start position of the clipping
-	 * @param _width Width size of the clipping
+	 * @param pos Start position of the clipping
+	 * @param width Width size of the clipping
 	 */
-	public void setClippingWidth(final Vector3f _pos, final Vector3f _width) {
-		setClipping(_pos, _pos.add(_width));
+	public void setClippingWidth(final Vector3f pos, final Vector3f width) {
+		setClipping(pos, pos.add(width));
 	}
-
+	
 	/**
 	 * set the Color of the current foreground font
-	 * @param _color Color to set on foreground (for next print)
+	 * @param color Color to set on foreground (for next print)
 	 */
-	public void setColor(final Color _color) {
-		this.color = _color;
+	public void setColor(final Color color) {
+		this.color = color;
 	}
-
+	
 	/**
 	 * set the background color of the font (for selected Text (not the
 	 *        global BG))
-	 * @param _color Color to set on background (for next print)
+	 * @param color Color to set on background (for next print)
 	 */
-	public void setColorBg(final Color _color) {
-		this.colorBg = _color;
-		// TODO this.vectorialDraw.setColor(_color);
+	public void setColorBg(final Color color) {
+		this.colorBg = color;
+		this.vectorialDraw.setColor(color);
 	}
-
+	
 	/**
 	 * change the cursor color
-	 * @param _color New color for the Selection
+	 * @param color New color for the Selection
 	 */
-	public void setCursorColor(final Color _color) {
-		this.colorCursor = _color;
+	public void setCursorColor(final Color color) {
+		this.colorCursor = color;
 	}
-
+	
 	/**
 	 * set a cursor at a specific position:
-	 * @param _cursorPos id of the cursor position
+	 * @param cursorPos id of the cursor position
 	 */
-	public void setCursorPos(final int _cursorPos) {
-		this.selectionStartPos = _cursorPos;
-		this.cursorPos = _cursorPos;
+	public void setCursorPos(final int cursorPos) {
+		this.selectionStartPos = cursorPos;
+		this.cursorPos = cursorPos;
 	}
-
+	
 	/**
 	 * set a cursor at a specific position with his associated selection:
-	 * @param _cursorPos id of the cursor position
-	 * @param _selectionStartPos id of the starting of the selection
+	 * @param cursorPos id of the cursor position
+	 * @param selectionStartPos id of the starting of the selection
 	 */
-	public void setCursorSelection(final int _cursorPos, final int _selectionStartPos) {
-		this.selectionStartPos = _selectionStartPos;
-		this.cursorPos = _cursorPos;
+	public void setCursorSelection(final int cursorPos, final int selectionStartPos) {
+		this.selectionStartPos = selectionStartPos;
+		this.cursorPos = cursorPos;
 	}
-
+	
 	/**
 	 * set the default background color of the font (when reset, set this
 	 *        value ...)
-	 * @param _color Color to set on background
+	 * @param color Color to set on background
 	 */
-	public void setDefaultColorBg(final Color _color) {
-		this.defaultColorBg = _color;
+	public void setDefaultColorBg(final Color color) {
+		this.defaultColorBg = color;
 	}
-
+	
 	/**
 	 * set the default Foreground color of the font (when reset, set this
 	 *        value ...)
-	 * @param _color Color to set on foreground
+	 * @param color Color to set on foreground
 	 */
-	public void setDefaultColorFg(final Color _color) {
-		this.defaultColorFg = _color;
+	public void setDefaultColorFg(final Color color) {
+		this.defaultColorFg = color;
 	}
-
+	
 	/**
 	 * Specify the font property (this reset the internal element of the
 	 *        current text (system requirement)
 	 * @param fontName Current name of the selected font
 	 * @param fontSize New font size
 	 */
-	public abstract void setFont(final String _fontName, final int _fontSize);
-
+	public abstract void setFont(final String fontName, final int fontSize);
+	
 	/**
 	 * enable or disable the bold mode
-	 * @param _status The new status for this display property
+	 * @param status The new status for this display property
 	 */
-	public void setFontBold(final boolean _status) {
-		if (_status == true) {
+	public void setFontBold(final boolean status) {
+		if (status) {
 			// enable
 			if (this.mode == FontMode.Regular) {
 				setFontMode(FontMode.Bold);
 			} else if (this.mode == FontMode.Italic) {
 				setFontMode(FontMode.BoldItalic);
 			}
-		} else {
-			// disable
-			if (this.mode == FontMode.Bold) {
-				setFontMode(FontMode.Regular);
-			} else if (this.mode == FontMode.BoldItalic) {
-				setFontMode(FontMode.Italic);
-			}
+		} else // disable
+		if (this.mode == FontMode.Bold) {
+			setFontMode(FontMode.Regular);
+		} else if (this.mode == FontMode.BoldItalic) {
+			setFontMode(FontMode.Italic);
 		}
 	}
-
+	
 	/**
 	 * enable or disable the italic mode
-	 * @param _status The new status for this display property
+	 * @param status The new status for this display property
 	 */
-	public void setFontItalic(final boolean _status) {
-		if (_status == true) {
+	public void setFontItalic(final boolean status) {
+		if (status) {
 			// enable
 			if (this.mode == FontMode.Regular) {
 				setFontMode(FontMode.Italic);
 			} else if (this.mode == FontMode.Bold) {
 				setFontMode(FontMode.BoldItalic);
 			}
-		} else {
-			// disable
-			if (this.mode == FontMode.Italic) {
-				setFontMode(FontMode.Regular);
-			} else if (this.mode == FontMode.BoldItalic) {
-				setFontMode(FontMode.Bold);
-			}
+		} else // disable
+		if (this.mode == FontMode.Italic) {
+			setFontMode(FontMode.Regular);
+		} else if (this.mode == FontMode.BoldItalic) {
+			setFontMode(FontMode.Bold);
 		}
 	}
-
+	
 	/**
 	 * Specify the font mode for the next @ref print
 	 * @param mode The font mode requested
 	 */
-	public abstract void setFontMode(FontMode _mode);;
-
+	public abstract void setFontMode(FontMode mode);
+	
 	/**
 	 * Specify the font name (this reset the internal element of the current
 	 *        text (system requirement)
-	 * @param _fontName Current name of the selected font
+	 * @param fontName Current name of the selected font
 	 */
-	public abstract void setFontName(final String _fontName);
-
+	public abstract void setFontName(final String fontName);
+	
 	/**
 	 * Specify the font size (this reset the internal element of the current
 	 *        text (system requirement)
-	 * @param _fontSize New font size
+	 * @param fontSize New font size
 	 */
-	public abstract void setFontSize(final int _fontSize);
-
+	public abstract void setFontSize(final int fontSize);
+	
 	/**
 	 * set the activation of the Kerning for the display (if it existed)
-	 * @param _newMode enable/Diasable the kerning on this font.
+	 * @param newMode enable/Diasable the kerning on this font.
 	 */
-	public void setKerningMode(final boolean _newMode) {
-		this.kerning = _newMode;
+	public void setKerningMode(final boolean newMode) {
+		this.kerning = newMode;
 	}
-
+	
 	// ! @previous
-	public void setPos(final Vector2f _pos) {
-		setPos(new Vector3f(_pos.x(), _pos.y(), 0));
+	public void setPos(final Vector2f pos) {
+		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-
+	
 	/**
 	 * set position for the next text writen
-	 * @param _pos Position of the text (in 3D)
+	 * @param pos Position of the text (in 3D)
 	 */
-	public void setPos(final Vector3f _pos) {
+	public void setPos(final Vector3f pos) {
 		// check min max for display area
 		if (this.nbCharDisplayed != 0) {
 			Log.verbose("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
@@ -1070,8 +1045,9 @@ public abstract class TextBase extends Compositing {
 			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
 		}
 		// update position
-		this.position = _pos;
-		this.previousCharcode = 0;// TODO this.vectorialDraw.setPos(this.position);
+		this.position = pos;
+		this.previousCharcode = 0;
+		this.vectorialDraw.setPos(this.position);
 		// update min max of the display area:
 		if (this.nbCharDisplayed == 0) {
 			this.sizeDisplayStart = this.position;
@@ -1084,56 +1060,55 @@ public abstract class TextBase extends Compositing {
 			Log.verbose("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		}
 	}
-
+	
 	// ! @previous
-	public void setRelPos(final Vector2f _pos) {
-		setRelPos(new Vector3f(_pos.x(), _pos.y(), 0));
+	public void setRelPos(final Vector2f pos) {
+		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-
+	
 	/**
 	 * set relative position for the next text written
-	 * @param _pos offset apply of the text (in 3D)
+	 * @param pos offset apply of the text (in 3D)
 	 */
-	public void setRelPos(final Vector3f _pos) {
-		this.position = this.position.add(_pos);
+	public void setRelPos(final Vector3f pos) {
+		this.position = this.position.add(pos);
 		this.previousCharcode = 0;
-		// TODO this.vectorialDraw.setPos(this.position);
+		this.vectorialDraw.setPos(this.position);
 	}
-
+	
 	/**
 	 * change the selection color
-	 * @param _color New color for the Selection
+	 * @param color New color for the Selection
 	 */
-	public void setSelectionColor(final Color _color) {
-		this.colorSelection = _color;
+	public void setSelectionColor(final Color color) {
+		this.colorSelection = color;
 	}
-
+	
 	/**
 	 * This generate the possibility to generate the big text property
-	 * @param _startTextpos The x text start position of the display.
-	 * @param _stopTextPos The x text stop position of the display.
-	 * @param _alignement mode of alignement for the Text.
+	 * @param startTextPos The x text start position of the display.
+	 * @param stopTextPos The x text stop position of the display.
 	 * @note The text align in center change of line every display done (even if it
 	 *       was just a char)
 	 */
-	public void setTextAlignement(final float _startTextpos, final float _stopTextPos) {
-		setTextAlignement(_startTextpos, _stopTextPos, AligneMode.alignDisable);
+	public void setTextAlignment(final float startTextPos, final float stopTextPos) {
+		setTextAlignment(startTextPos, stopTextPos, AlignMode.alignDisable);
 	}
-
-	public void setTextAlignement(final float _startTextpos, final float _stopTextPos, final AligneMode _alignement) {
-		this.startTextpos = _startTextpos;
-		this.stopTextPos = _stopTextPos + 1;
-		this.alignement = _alignement;
-		if (this.startTextpos >= this.stopTextPos) {
-			// TODO: understand why this flush ...
-			Log.verbose("Request allignement with Borne position error : " + _startTextpos + " => " + _stopTextPos);
+	
+	public void setTextAlignment(final float startTextPos, final float stopTextPos, final AlignMode alignement) {
+		this.startTextPos = startTextPos;
+		this.stopTextPos = stopTextPos + 1;
+		this.alignment = alignement;
+		if (this.startTextPos >= this.stopTextPos) {
+			// TODO understand why this flush ...
+			Log.verbose("Request alignment with Borne position error : " + startTextPos + " => " + stopTextPos);
 		}
 	}
-
+	
 	@Override
-	public void translate(final Vector3f _vect) {
-		super.translate(_vect);
-		// TODO this.vectorialDraw.translate(_vect);
+	public void translate(final Vector3f vect) {
+		super.translate(vect);
+		this.vectorialDraw.translate(vect);
 	}
-
+	
 }

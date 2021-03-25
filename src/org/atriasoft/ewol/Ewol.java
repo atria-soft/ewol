@@ -6,17 +6,20 @@ import org.atriasoft.etk.Uri;
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
+import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.context.EwolApplication;
 import org.atriasoft.ewol.context.EwolContext;
+import org.atriasoft.gale.Gale;
 
 public class Ewol {
-	static {
-		Uri.addLibrary("ewol", Ewol.class);
-	}
-	
 	public static EwolContext getContext() {
 		// TODO Auto-generated method stub
 		return EwolContext.getContext();
+	}
+	
+	public static void init() {
+		Uri.addLibrary("ewol", Ewol.class, "/resources/ewol/");
+		Gale.init();
 	}
 	
 	/**
@@ -26,10 +29,15 @@ public class Ewol {
 	 *       Does not exist in the android platform, then ewol call other start 
 	 *       and stop function, to permit to have only one code
 	 * @note The main can not be in the ewol, due to the fact thet is an librairy
-	 * @param _application just created instance of the applicationo
-	 * @param _argc Standard argc
-	 * @param _argv Standard argv
+	 * @param application just created instance of the applicationo
+	 * @param args Standard args
 	 * @return normal error int for the application error management
 	 */
-	public static int run(final EwolApplication _application, String[] _argv);
+	public static int run(final EwolApplication application, final String[] args) {
+		ETranslate.autoDetectLanguage();
+		EwolContext context = new EwolContext(application);
+		return Gale.run(context, args);
+	}
+	
+	private Ewol() {}
 }

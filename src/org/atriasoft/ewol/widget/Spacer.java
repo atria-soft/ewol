@@ -1,4 +1,5 @@
 package org.atriasoft.ewol.widget;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,7 +11,6 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
-import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.annotation.XmlProperty;
@@ -19,43 +19,50 @@ import org.atriasoft.exml.annotation.XmlProperty;
  * @ingroup ewolWidgetGroup
  */
 class Spacer extends Widget {
-	@XmlManaged()
-	@XmlProperty()
+	private CompositingDrawing draw; //!< Compositing drawing element
+	@XmlManaged
+	@XmlProperty
 	@XmlName(value = "color")
 	@EwolDescription(value = "background of the spacer")
 	protected Color propertyColor; //!< Background color
+	
 	/**
 	 * Main ructer
 	 */
 	public Spacer() {
-	
+		
 	}
-	private CompositingDrawing draw; //!< Compositing drawing element
+	
+	public Color getPropertyColor() {
+		return this.propertyColor;
+	}
+	
 	@Override
-	public Widget getWidgetAtPos( Vector2f _pos)  {
-			return null;
-		};
+	public Widget getWidgetAtPos(final Vector2f pos) {
+		return null;
+	}
+	
+	@Override
+	public void onDraw() {
+		this.draw.draw();
+	}
+	
+	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
 			return;
 		}
 		this.draw.clear();
 		
-		if (propertyColor.a() == 0) {
+		if (this.propertyColor.a() == 0) {
 			return;
 		}
-		this.draw.setColor(propertyColor);
+		this.draw.setColor(this.propertyColor);
 		this.draw.setPos(Vector3f.ZERO);
-		this.draw.rectangleWidth(new Vector3f(this.size.x(), this.size.y(),0) );
-	}
-	public void onDraw(){
-		this.draw.draw();
-	}
-	public Color getPropertyColor() {
-		return propertyColor;
+		this.draw.rectangleWidth(new Vector3f(this.size.x(), this.size.y(), 0));
 	}
 	
-	public void setPropertyTextColorBgOn(Color propertyColor) {
+	public void setPropertyTextColorBgOn(final Color propertyColor) {
 		if (propertyColor.equals(this.propertyColor)) {
 			return;
 		}
@@ -63,4 +70,3 @@ class Spacer extends Widget {
 		markToRedraw();
 	}
 }
-

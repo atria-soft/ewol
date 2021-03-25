@@ -6,10 +6,10 @@ public class Tools {
 	 * @param value Value that we want the next power of 2
 	 * @return result value
 	 */
-	public static int nextP2(final int _value) {
+	public static int nextP2(final int value) {
 		int val = 1;
 		for (int iii = 1; iii < 31; iii++) {
-			if (_value <= val) {
+			if (value <= val) {
 				return val;
 			}
 			val *= 2;

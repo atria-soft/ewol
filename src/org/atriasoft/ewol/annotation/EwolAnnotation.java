@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * Exml annotations generically, and in future also for
  * passing other generic annotation configuration.
  */
-@Target({ ElementType.ANNOTATION_TYPE })
+@Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EwolAnnotation {
 	// for now, a pure tag annotation, no parameters

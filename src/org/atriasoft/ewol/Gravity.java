@@ -11,38 +11,38 @@ import org.atriasoft.etk.math.Vector2f;
  * Gravity of the widget property
  */
 public enum Gravity {
-	center, // !< gravity is in center
-	top, // !< gravity is in top
-	buttom, // !< gravity is in buttom
-	right, // !< gravity is in right
+	buttom, // !< gravity is in center
+	buttomLeft, // !< gravity is in top
+	buttomRight, // !< gravity is in buttom
+	center, // !< gravity is in right
 	left, // !< gravity is in left
-	topRight, // !< gravity is in top-right
-	topLeft, // !< gravity is in top-left
-	buttomRight, // !< gravity is in buttom-right
-	buttomLeft; // !< gravity is in buttom-left
-
-	public static Vector2f gravityGenerateDelta(final Gravity _gravity, final Vector2f _deltas) {
+	right, // !< gravity is in top-right
+	top, // !< gravity is in top-left
+	topLeft, // !< gravity is in buttom-right
+	topRight; // !< gravity is in buttom-left
+	
+	public static Vector2f gravityGenerateDelta(final Gravity gravity, final Vector2f deltas) {
 		float outX = 0;
 		float outY = 0;
-		if (_deltas.x() > 0.0001f) {
-			if (_gravity == left || _gravity == buttomLeft || _gravity == topLeft) {
+		if (deltas.x() > 0.0001f) {
+			if (gravity == left || gravity == buttomLeft || gravity == topLeft) {
 				// nothing to do
-			} else if (_gravity == right || _gravity == buttomRight || _gravity == topRight) {
-				outX = (int) (_deltas.x());
+			} else if (gravity == right || gravity == buttomRight || gravity == topRight) {
+				outX = (int) (deltas.x());
 			} else {
-				outX = (int) (_deltas.x() * 0.5f);
+				outX = (int) (deltas.x() * 0.5f);
 			}
 		}
-		if (_deltas.y() > 0.0001f) {
-			if (_gravity == buttom || _gravity == buttomLeft || _gravity == buttomRight) {
+		if (deltas.y() > 0.0001f) {
+			if (gravity == buttom || gravity == buttomLeft || gravity == buttomRight) {
 				// nothing to do
-			} else if (_gravity == top || _gravity == topRight || _gravity == topLeft) {
-				outY = (int) (_deltas.y());
+			} else if (gravity == top || gravity == topRight || gravity == topLeft) {
+				outY = (int) (deltas.y());
 			} else {
-				outY = (int) (_deltas.y() * 0.5f);
+				outY = (int) (deltas.y() * 0.5f);
 			}
 		}
 		return new Vector2f(outX, outY);
 	}
-
+	
 }
