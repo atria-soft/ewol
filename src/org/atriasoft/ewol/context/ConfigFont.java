@@ -13,7 +13,6 @@ public class ConfigFont {
 	private Uri folder = new Uri("DATA", "fonts", "ewol");
 	private String name = "Arial;Helvetica";
 	private int size = 10;
-	private boolean useExternal = false;
 	
 	/**
 	 * Constructor
@@ -42,14 +41,6 @@ public class ConfigFont {
 	 */
 	public int getSize() {
 		return this.size;
-	}
-	
-	/**
-	 * get the use of internal/external Font
-	 * @return true to enable search of internal data.
-	 */
-	public boolean getUseExternal() {
-		return this.useExternal;
 	}
 	
 	/**
@@ -89,11 +80,4 @@ public class ConfigFont {
 		Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
 	}
 	
-	/**
-	 * set use of internal/external Font
-	 * @param val true to enable search of internal data.
-	 */
-	public void setUseExternal(final boolean val) {
-		this.useExternal = val;
-	}
 }

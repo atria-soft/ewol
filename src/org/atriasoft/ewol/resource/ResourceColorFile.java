@@ -58,7 +58,7 @@ public class ResourceColorFile extends Resource {
 	 * @param uri Name of the file needed
 	 */
 	public ResourceColorFile(final Uri uri) {
-		super(uri.get());
+		super(uri);
 		Log.debug("CF : load \"" + uri + "\"");
 		reload();
 		// Log.debug("List of all color : " + this.list.keySet());

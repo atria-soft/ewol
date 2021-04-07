@@ -5,6 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.etk.Dimension;
+import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
@@ -15,8 +17,6 @@ import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.annotation.XmlProperty;
-import org.atriasoft.gale.Dimension;
-import org.atriasoft.gale.Distance;
 
 public class Sizer extends ContainerN {
 	public enum DisplayMode {

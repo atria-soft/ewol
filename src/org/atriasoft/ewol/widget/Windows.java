@@ -38,7 +38,7 @@ public class Windows extends Widget {
 	@XmlProperty
 	@XmlName(value = "file-color")
 	@EwolDescription(value = "File color of the Windows")
-	public Uri propertyColorConfiguration = new Uri("DATA", "color/Windows.json", "ewol"); //!< Configuration file of the windows theme
+	public Uri propertyColorConfiguration = new Uri("THEME", "color/Windows.json", "ewol"); //!< Configuration file of the windows theme
 	@XmlManaged
 	@XmlProperty
 	@XmlName(value = "title")

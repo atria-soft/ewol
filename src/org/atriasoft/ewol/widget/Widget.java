@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.esignal.Signal;
+import org.atriasoft.etk.Dimension;
+import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2b;
@@ -32,8 +34,6 @@ import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.gale.Dimension;
-import org.atriasoft.gale.Distance;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
@@ -304,23 +304,23 @@ public class Widget extends EwolObject {
 		return this.propertyExpand;
 	}
 	
-	protected Vector2b getPropertyFill() {
+	public Vector2b getPropertyFill() {
 		return this.propertyFill;
 	}
 	
-	protected Gravity getPropertyGravity() {
+	public Gravity getPropertyGravity() {
 		return this.propertyGravity;
 	}
 	
-	protected boolean getPropertyHide() {
+	public boolean getPropertyHide() {
 		return this.propertyHide;
 	}
 	
-	protected Dimension getPropertyMaxSize() {
+	public Dimension getPropertyMaxSize() {
 		return this.propertyMaxSize;
 	}
 	
-	protected Dimension getPropertyMinSize() {
+	public Dimension getPropertyMinSize() {
 		return this.propertyMinSize;
 	}
 	
@@ -666,7 +666,7 @@ public class Widget extends EwolObject {
 		}
 	}
 	
-	protected void setPropertyExpand(final Vector2b value) {
+	public void setPropertyExpand(final Vector2b value) {
 		if (this.propertyExpand.equals(value)) {
 			return;
 		}
@@ -675,7 +675,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	protected void setPropertyFill(final Vector2b value) {
+	public void setPropertyFill(final Vector2b value) {
 		if (this.propertyFill.equals(value)) {
 			return;
 		}
@@ -684,7 +684,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	protected void setPropertyGravity(final Gravity gravity) {
+	public void setPropertyGravity(final Gravity gravity) {
 		if (this.propertyGravity.equals(gravity)) {
 			return;
 		}
@@ -693,7 +693,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	protected void setPropertyHide(final boolean value) {
+	public void setPropertyHide(final boolean value) {
 		if (this.propertyHide == value) {
 			return;
 		}
@@ -702,7 +702,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	protected void setPropertyMaxSize(final Dimension value) {
+	public void setPropertyMaxSize(final Dimension value) {
 		if (this.propertyMaxSize.equals(value)) {
 			return;
 		}
@@ -710,7 +710,7 @@ public class Widget extends EwolObject {
 		onUmpdateMinMaxSize();
 	}
 	
-	protected void setPropertyMinSize(final Dimension value) {
+	public void setPropertyMinSize(final Dimension value) {
 		if (this.propertyMinSize.equals(value)) {
 			return;
 		}
