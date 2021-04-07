@@ -25,7 +25,7 @@ import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.key.KeyStatus;
 
-class Label extends Widget {
+public class Label extends Widget {
 	protected int colorDefaultBgText = -1; //!< Default Background color of the text
 	protected int colorDefaultFgText = -1; //!< Default color of the text
 	protected ResourceColorFile colorProperty; //!< theme color property
@@ -44,15 +44,15 @@ class Label extends Widget {
 	@XmlProperty
 	@XmlName(value = "value")
 	@EwolDescription(value = "Displayed value string")
-	protected String propertyValue; //!< decorated text to display.
+	protected String propertyValue = ""; //!< decorated text to display.
 	@EwolSignal(name = "pressed")
 	@EwolDescription(value = "Label is pressed")
-	public SignalEmpty signalPressed;
+	public SignalEmpty signalPressed = new SignalEmpty();
 	protected CompositingText text = new CompositingText(); //!< Compositing text element.
 	protected String value = "";
 	
 	public Label() {
-		this.colorProperty = ResourceColorFile.create(new Uri("DATA", "/color/Label.json", "ewol"));
+		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");
 			this.colorDefaultBgText = this.colorProperty.request("background");
@@ -66,7 +66,7 @@ class Label extends Widget {
 	 * @param newLabel The displayed decorated text.
 	 */
 	public Label(final String newLabel) {
-		this.colorProperty = ResourceColorFile.create(new Uri("DATA", "/color/Label.json", "ewol"));
+		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");
 			this.colorDefaultBgText = this.colorProperty.request("background");

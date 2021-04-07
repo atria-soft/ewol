@@ -32,9 +32,9 @@ class InputManager {
 	
 	private final EwolContext context;
 	private int dpi;
-	private InputLimit eventInputLimit;
+	private final InputLimit eventInputLimit = new InputLimit();
 	private final InputPoperty[] eventInputSaved = new InputPoperty[InputManager.MAX_MANAGE_INPUT];
-	private InputLimit eventMouseLimit;
+	private final InputLimit eventMouseLimit = new InputLimit();
 	private final InputPoperty[] eventMouseSaved = new InputPoperty[InputManager.MAX_MANAGE_INPUT];
 	
 	// special grab pointer mode : 
@@ -47,9 +47,10 @@ class InputManager {
 		Log.info("Init (start)");
 		for (int iii = 0; iii < InputManager.MAX_MANAGE_INPUT; iii++) {
 			// remove the property of this input ...
-			cleanElement(this.eventInputSaved, iii);
-			cleanElement(this.eventMouseSaved, iii);
+			this.eventInputSaved[iii] = new InputPoperty();
+			this.eventMouseSaved[iii] = new InputPoperty();
 		}
+		
 		Log.info("Init (end)");
 	}
 	
@@ -74,17 +75,7 @@ class InputManager {
 			return;
 		}
 		//Log.info("CleanElement[" + idInput + "] = @" + (long)eventTable);
-		eventMouseSaved2[idInput].isUsed = false;
-		eventMouseSaved2[idInput].destinationInputId = 0;
-		eventMouseSaved2[idInput].lastTimeEvent = new Clock();
-		eventMouseSaved2[idInput].curentWidgetEvent = null;
-		eventMouseSaved2[idInput].origin = new Vector2f(0, 0);
-		eventMouseSaved2[idInput].size = new Vector2f(99999999, 99999999);
-		eventMouseSaved2[idInput].downStart = new Vector2f(0, 0);
-		eventMouseSaved2[idInput].isDown = false;
-		eventMouseSaved2[idInput].isInside = false;
-		eventMouseSaved2[idInput].nbClickEvent = 0;
-		eventMouseSaved2[idInput].posEvent = new Vector2f(0, 0);
+		eventMouseSaved2[idInput].clear();
 	}
 	
 	/**
@@ -451,14 +442,29 @@ class InputManager {
  */
 class InputPoperty {
 	public WeakReference<Widget> curentWidgetEvent;
-	public int destinationInputId;
-	public Vector2f downStart;
-	public boolean isDown;
-	public boolean isInside;
-	public boolean isUsed;
-	public Clock lastTimeEvent;
-	public int nbClickEvent; // 0 .. 1 .. 2 .. 3
-	public Vector2f origin;
-	public Vector2f posEvent;
-	public Vector2f size;
+	public int destinationInputId = 0;
+	public Vector2f downStart = Vector2f.ZERO;
+	public boolean isDown = false;
+	public boolean isInside = false;
+	public boolean isUsed = false;
+	public Clock lastTimeEvent = null;
+	public int nbClickEvent = 0; // 0 .. 1 .. 2 .. 3
+	public Vector2f origin = Vector2f.ZERO;
+	public Vector2f posEvent = Vector2f.ZERO;
+	public Vector2f size = Vector2f.MAX_VALUE;
+	
+	public void clear() {
+		this.isUsed = false;
+		this.destinationInputId = 0;
+		this.lastTimeEvent = new Clock();
+		this.curentWidgetEvent = null;
+		this.origin = Vector2f.ZERO;
+		this.size = Vector2f.MAX_VALUE;
+		this.downStart = Vector2f.ZERO;
+		this.isDown = false;
+		this.isInside = false;
+		this.nbClickEvent = 0;
+		this.posEvent = Vector2f.ZERO;
+		
+	}
 }

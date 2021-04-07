@@ -29,19 +29,23 @@ import org.atriasoft.gale.resource.ResourceManager;
 
 // Here we hereted from the gale application to be agnostic of the OW where we work ...
 public class EwolContext extends Application {
-	private static EwolContext curentInterface = null;
 	
 	/**
 	 * From everyware in the program, we can get the context inteface.
 	 * @return current reference on the instance.
 	 */
+	@SuppressWarnings("preview")
 	public static EwolContext getContext() {
-		return EwolContext.curentInterface;
+		Application appl = Gale.getContext().getApplication();
+		if (appl instanceof EwolContext elem) {
+			return elem;
+		}
+		return null;
 	}
 	
 	private EwolApplication application; // !< Application handle
 	
-	private ConfigFont configFont; // !< global font configuration
+	private final ConfigFont configFont = new ConfigFont(); // !< global font configuration
 	
 	private final int initStepId = 0;
 	
@@ -51,7 +55,7 @@ public class EwolContext extends Application {
 	
 	private final ObjectManager objectManager; // !< Object Manager main instance
 	
-	private WidgetManager widgetManager; // !< global widget manager
+	private final WidgetManager widgetManager = new WidgetManager(); // !< global widget manager
 	
 	private Windows windowsCurrent = null; // !< current displayed windows
 	
@@ -146,7 +150,7 @@ public class EwolContext extends Application {
 	public void onCreate(final Context context) {
 		Log.info(" == > Ewol system create (BEGIN)");
 		// Add basic ewol translation:
-		ETranslate.addPath("ewol", new Uri("DATA", "translate/ewol/", "ewol"));
+		ETranslate.addPath("ewol", new Uri("TRANSLATE", "", "ewol"));
 		ETranslate.autoDetectLanguage();
 		// parse for help:
 		for (int iii = 0; iii < context.getCmd().size(); ++iii) {

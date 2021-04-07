@@ -34,9 +34,7 @@ public class ETranslate {
 	 * @param argc Number of argument list
 	 * @param argv List of arguments
 	 */
-	static {
-		
-	}
+	static {}
 	
 	/**
 	 * Set the path folder of the translation files
@@ -160,6 +158,7 @@ public class ETranslate {
 				final JsonObject root = (JsonObject) Ejson.parse(uri);
 				for (final Map.Entry<String, JsonNode> element : root.getNodes().entrySet()) {
 					final String val = element.getValue().toJsonString().getValue();
+					//Log.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
 					ETranslate.globalTranslate.put(element.getKey(), val);
 				}
 			} catch (final Exception e) {
@@ -171,6 +170,7 @@ public class ETranslate {
 				final JsonObject root = (JsonObject) Ejson.parse(uri);
 				for (final Map.Entry<String, JsonNode> element : root.getNodes().entrySet()) {
 					final String val = element.getValue().toJsonString().getValue();
+					//Log.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
 					ETranslate.globalTranslate.put(element.getKey(), val);
 				}
 			} catch (final Exception e) {
@@ -197,6 +197,7 @@ public class ETranslate {
 			}
 			for (final Map.Entry<String, JsonNode> element : doc.getNodes().entrySet()) {
 				final String val = element.getValue().toJsonString().getValue();
+				//Log.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
 				ETranslate.globalTranslate.put(element.getKey(), val);
 			}
 		}
@@ -219,6 +220,7 @@ public class ETranslate {
 			}
 			for (final Map.Entry<String, JsonNode> element : doc.getNodes().entrySet()) {
 				final String val = element.getValue().toJsonString().getValue();
+				//Log.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
 				ETranslate.globalTranslate.put(element.getKey(), val);
 			}
 		}

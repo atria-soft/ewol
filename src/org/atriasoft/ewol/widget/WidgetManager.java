@@ -218,8 +218,14 @@ public class WidgetManager {
 			Log.verbose("Widget can not have focus, id=" + newWidget.getId());
 			return;
 		}
-		final Widget focusWidgetDefault = this.focusWidgetDefault.get();
-		final Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
+		Widget focusWidgetDefault = null;
+		if (this.focusWidgetDefault != null) {
+			focusWidgetDefault = this.focusWidgetDefault.get();
+		}
+		Widget focusWidgetCurrent = null;
+		if (this.focusWidgetCurrent != null) {
+			focusWidgetCurrent = this.focusWidgetCurrent.get();
+		}
 		if (focusWidgetDefault == focusWidgetCurrent) {
 			if (focusWidgetCurrent != null) {
 				Log.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());

@@ -7,6 +7,7 @@ package org.atriasoft.ewol.widget;
 
 import org.atriasoft.egami.Image;
 import org.atriasoft.esignal.SignalEmpty;
+import org.atriasoft.etk.Dimension;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
@@ -21,7 +22,6 @@ import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.gale.Dimension;
 import org.atriasoft.gale.key.KeyStatus;
 
 /**

@@ -23,8 +23,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	public static ResourceTexturedFont create(final String fontName) {
 		ResourceTexturedFont resource;
 		Resource resource2;
-		if (fontName.isEmpty() || !fontName.contentEquals("---")) {
-			Log.error("Can not create a shader without a filaname");
+		if (fontName.isEmpty() || fontName.contentEquals("---")) {
+			Log.error("Can not create a Texture Font without a filaname " + fontName);
 			return null;
 		}
 		resource2 = Resource.getManager().localKeep(fontName);
@@ -66,7 +66,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	// for the texture generation :
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
 	public int[] lastRawHeigh = new int[4];
-	public List<GlyphProperty>[] listElement;// = new (List<GlyphProperty>)[4];
+	public List<GlyphProperty>[] listElement = new ArrayList[4];// = new (List<GlyphProperty>)[4];
 	
 	private final FontMode[] modeWraping = new FontMode[4]; // !< This is a wrapping mode to prevent the fact that no
 	private int size = 10;
@@ -96,6 +96,11 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		this.lastRawHeigh[2] = 0;
 		this.lastRawHeigh[3] = 0;
 		
+		this.listElement[0] = new ArrayList<>();
+		this.listElement[1] = new ArrayList<>();
+		this.listElement[2] = new ArrayList<>();
+		this.listElement[3] = new ArrayList<>();
+		
 		int tmpSize = 0;
 		// extarct name and size :
 		final String[] tmpList = fontName.split(":");
@@ -116,14 +121,6 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		this.size = tmpSize;
 		
 		final List<Uri> folderList = new ArrayList<>();
-		if (Ewol.getContext().getFontDefault().getUseExternal()) {
-			/*
-			 * #if defined(TARGETOSAndroid)
-			 * folderList.pushBack(etk::Path("/system/fonts"));#elif
-			 * defined(TARGETOSLinux)
-			 * folderList.pushBack(etk::Path("/usr/share/fonts")); #endif
-			 */
-		}
 		final Uri applicationBaseFont = Ewol.getContext().getFontDefault().getFolder();
 		for (final Uri it : ResourceTexturedFont.explodeMultiplePath(applicationBaseFont)) {
 			folderList.add(it);
@@ -375,9 +372,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				if (this.listElement[displayMode.getValue()].get(iii).exist()) {
 					// Log.debug("return " + iii);
 					return iii;
-				} else {
-					return 0;
 				}
+				return 0;
 			}
 		}
 		if (addGlyph(charcode)) {
