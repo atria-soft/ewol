@@ -4,10 +4,10 @@ precision mediump int;
 #endif
 
 // Input:
-uniform sampler2D EW_texID;
+uniform sampler2D in_texID;
 
-varying vec2 f_texcoord;
+varying vec2 io_texcoord;
 
 void main(void) {
-	gl_FragColor = texture2D(EW_texID, f_texcoord);
+	gl_FragColor = texture2D(in_texID, io_texcoord);
 }

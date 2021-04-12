@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
@@ -48,9 +49,9 @@ public class CompositingText extends TextBase {
 	@Override
 	public Vector3f calculateSizeChar(final Character charcode) {
 		// get a pointer on the glyph property :
-		final GlyphProperty myGlyph = getGlyphPointer(charcode);
+		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
 		final int fontHeigh = (int) getHeight();
-		if (myGlyph == null) {
+		if (myGlyphProperty == null) {
 			if (this.font == null) {
 				Log.warning("no Glyph... in no font");
 			} else {
@@ -61,10 +62,10 @@ public class CompositingText extends TextBase {
 		// get the kerning ofset :
 		float kerningOffset = 0.0f;
 		if (this.kerning) {
-			kerningOffset = myGlyph.kerningGet(this.previousCharcode);
+			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode);
 		}
 		
-		final Vector3f outputSize = new Vector3f(myGlyph.advance.x() + kerningOffset, (fontHeigh), 0.0f);
+		final Vector3f outputSize = new Vector3f(myGlyphProperty.getAdvenceX() + kerningOffset, (fontHeigh), 0.0f);
 		// Register the previous character
 		this.previousCharcode = charcode;
 		return outputSize;
@@ -132,15 +133,6 @@ public class CompositingText extends TextBase {
 		// draw BG in any case:
 		this.vectorialDraw.draw();
 		
-		// TODO : do it only one time (when needed ...)
-		// set texture coordonates :
-		this.vbo.setVboData(TextBase.vboIdCoordText, this.texturePositions.toArray(Vector2f[]::new));
-		// set display positions :
-		this.vbo.setVboData(TextBase.vboIdCoord, this.pointPositions.toArray(Vector3f[]::new));
-		// set the color
-		this.vbo.setVboData(TextBase.vboIdColor, this.colors.toArray(Color[]::new));
-		// TODO : do it only one time (when needed ...) --------- end -------
-		
 		if (this.vbo.bufferSize(TextBase.vboIdCoord) <= 0 || this.font == null) {
 			// TODO : set it back ...
 			// Log.warning("Nothink to draw...");
@@ -178,6 +170,17 @@ public class CompositingText extends TextBase {
 	}
 	
 	@Override
+	public void flush() {
+		super.flush();
+		// set texture coordinates :
+		this.vbo.setVboData(TextBase.vboIdCoordText, this.texturePositions.toArray(Vector2f[]::new));
+		// set display positions :
+		this.vbo.setVboData(TextBase.vboIdCoord, this.pointPositions.toArray(Vector3f[]::new));
+		// set the color
+		this.vbo.setVboData(TextBase.vboIdColor, this.colors.toArray(Color[]::new));
+	}
+	
+	@Override
 	public GlyphProperty getGlyphPointer(final Character charcode) {
 		if (this.font == null) {
 			Log.warning("no font...");
@@ -207,8 +210,8 @@ public class CompositingText extends TextBase {
 	@Override
 	public void printChar(final Character charcode) {
 		// get a pointer on the glyph property :
-		final GlyphProperty myGlyph = getGlyphPointer(charcode);
-		if (myGlyph == null) {
+		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
+		if (myGlyphProperty == null) {
 			Log.error(" font does not really existed ...");
 			return;
 		}
@@ -218,7 +221,7 @@ public class CompositingText extends TextBase {
 		// get the kerning ofset :
 		float kerningOffset = 0;
 		if (this.kerning) {
-			kerningOffset = myGlyph.kerningGet(this.previousCharcode);
+			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode);
 			if (kerningOffset != 0) {
 				// Log.debug("Kerning between : '" + this.previousCharcode + "''" + myGlyph.UVal
 				// + "' value : " + kerningOffset);
@@ -229,15 +232,15 @@ public class CompositingText extends TextBase {
 			/*
 			 * Bitmap position xA xB yC *------* | | | | yD *------*
 			 */
-			float dxA = this.position.x() + myGlyph.bearing.x() + kerningOffset;
-			float dxB = dxA + myGlyph.sizeTexture.x();
-			float dyC = this.position.y() + myGlyph.bearing.y() + fontHeigh - fontSize;
-			float dyD = dyC - myGlyph.sizeTexture.y();
+			float dxA = this.position.x() /*+ myGlyphProperty.bearing.x()*/ + kerningOffset;
+			float dxB = dxA + myGlyphProperty.sizeTexture.x();
+			float dyC = this.position.y() /*+ myGlyphProperty.bearing.y()*/ + fontHeigh - fontSize;
+			float dyD = dyC - myGlyphProperty.sizeTexture.y();
 			
-			float tuA = myGlyph.texturePosStart.x();
-			float tuB = tuA + myGlyph.texturePosSize.x();
-			float tvC = myGlyph.texturePosStart.y();
-			float tvD = tvC + myGlyph.texturePosSize.y();
+			float tuA = myGlyphProperty.texturePosStart.x();
+			float tuB = tuA + myGlyphProperty.texturePosSize.x();
+			float tvC = myGlyphProperty.texturePosStart.y();
+			float tvD = tvC + myGlyphProperty.texturePosSize.y();
 			
 			// Clipping and drawing area
 			if (this.clippingEnable && (dxB < this.clippingPosStart.x() || dxA > this.clippingPosStop.x() || dyC < this.clippingPosStart.y() || dyD > this.clippingPosStop.y())) {
@@ -251,7 +254,7 @@ public class CompositingText extends TextBase {
 						final float drawSize = this.clippingPosStart.x() - dxA;
 						// update element start display
 						dxA = this.clippingPosStart.x();
-						final float addElement = texSizeX * drawSize / myGlyph.sizeTexture.x();
+						final float addElement = texSizeX * drawSize / myGlyphProperty.sizeTexture.x();
 						// update texture start X Pos
 						tuA += addElement;
 					}
@@ -260,7 +263,7 @@ public class CompositingText extends TextBase {
 						final float drawSize = dxB - this.clippingPosStop.x();
 						// update element start display
 						dxB = this.clippingPosStop.x();
-						final float addElement = texSizeX * drawSize / myGlyph.sizeTexture.x();
+						final float addElement = texSizeX * drawSize / myGlyphProperty.sizeTexture.x();
 						// update texture start X Pos
 						tuB -= addElement;
 					}
@@ -270,7 +273,7 @@ public class CompositingText extends TextBase {
 						final float drawSize = dyC - this.clippingPosStop.y();
 						// update element start display
 						dyC = this.clippingPosStop.y();
-						final float addElement = texSizeY * drawSize / myGlyph.sizeTexture.y();
+						final float addElement = texSizeY * drawSize / myGlyphProperty.sizeTexture.y();
 						// update texture start X Pos
 						tvC -= addElement;
 					}
@@ -279,7 +282,7 @@ public class CompositingText extends TextBase {
 						final float drawSize = this.clippingPosStart.y() - dyD;
 						// update element start display
 						dyD = this.clippingPosStart.y();
-						final float addElement = texSizeY * drawSize / myGlyph.sizeTexture.y();
+						final float addElement = texSizeY * drawSize / myGlyphProperty.sizeTexture.y();
 						// update texture start X Pos
 						tvD += addElement;
 					}
@@ -342,7 +345,7 @@ public class CompositingText extends TextBase {
 		// move the position :
 		// Log.debug(" 5 pos=" + this.position + " advance=" + myGlyph.advance.x() + "
 		// kerningOffset=" + kerningOffset);
-		this.position = this.position.withX(this.position.x() + myGlyph.advance.x() + kerningOffset);
+		this.position = this.position.withX(this.position.x() + myGlyphProperty.getAdvenceX() + kerningOffset);
 		// Log.debug(" 6 print '" + char-code + "' : start=" + this.sizeDisplayStart + "
 		// stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// Register the previous character
@@ -358,14 +361,14 @@ public class CompositingText extends TextBase {
 		if (fontSize <= 0) {
 			fontSize = Ewol.getContext().getFontDefault().getSize();
 		}
-		if (fontName.equals("")) {
+		if (fontName.isEmpty()) {
 			fontName = Ewol.getContext().getFontDefault().getName();
 		}
-		fontName += ":";
-		fontName += fontSize;
+		Uri fontUri = Ewol.getContext().getFontDefault().getFontUri(fontName).clone();
+		fontUri.setproperty("size", Integer.toString(fontSize));
 		Log.verbose("plop : " + fontName + " size=" + fontSize + " result :" + fontName);
 		// link to new one
-		this.font = ResourceTexturedFont.create(fontName);
+		this.font = ResourceTexturedFont.create(fontUri);
 		if (this.font == null) {
 			Log.error("Can not get font resource");
 			this.font = previousFont;

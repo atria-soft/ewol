@@ -18,37 +18,37 @@ struct Material {
 };
 
 // Light
-uniform DirectionalLight EW_directionalLight;
+uniform DirectionalLight in_directionalLight;
 // Material
-uniform Material EW_material;
+uniform Material in_material;
 
 // Input :
-uniform sampler2D EW_texID;
+uniform sampler2D in_texID;
 
-varying vec2 f_texcoord;
+varying vec2 io_texcoord;
 varying vec3 v_ecNormal;
 
 void main(void) {
-	vec4 tmpElementColor = texture2D(EW_texID, f_texcoord);
+	vec4 tmpElementColor = texture2D(in_texID, io_texcoord);
 	
 	// Normalize v_ecNormal
 	vec3 ecNormal = v_ecNormal / length(v_ecNormal);
 	
-	float ecNormalDotLightDirection = max(0.0, dot(ecNormal, EW_directionalLight.direction));
-	float ecNormalDotLightHalfplane = max(0.0, dot(ecNormal, EW_directionalLight.halfplane));
+	float ecNormalDotLightDirection = max(0.0, dot(ecNormal, in_directionalLight.direction));
+	float ecNormalDotLightHalfplane = max(0.0, dot(ecNormal, in_directionalLight.halfplane));
 	
 	// Calculate ambient light
-	vec4 ambientLight = EW_directionalLight.ambientColor * EW_material.ambientFactor;
+	vec4 ambientLight = in_directionalLight.ambientColor * in_material.ambientFactor;
 	
 	// Calculate diffuse light
-	vec4 diffuseLight = ecNormalDotLightDirection * EW_directionalLight.diffuseColor * EW_material.diffuseFactor;
+	vec4 diffuseLight = ecNormalDotLightDirection * in_directionalLight.diffuseColor * in_material.diffuseFactor;
 	
 	// Calculate specular light
 	vec4 specularLight = vec4(0.0);
 	
 	if (ecNormalDotLightHalfplane > 0.0) {
-		specularLight = pow(ecNormalDotLightHalfplane, EW_material.shininess) * EW_directionalLight.specularColor * EW_material.specularFactor;
-		specularLight = EW_directionalLight.specularColor * EW_material.specularFactor;
+		specularLight = pow(ecNormalDotLightHalfplane, in_material.shininess) * in_directionalLight.specularColor * in_material.specularFactor;
+		specularLight = in_directionalLight.specularColor * in_material.specularFactor;
 	}
 	vec4 light = ambientLight + diffuseLight + specularLight;
 	gl_FragColor = tmpElementColor;// * light;

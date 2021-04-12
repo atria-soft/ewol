@@ -1,5 +1,8 @@
 package org.atriasoft.ewol.context;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.internal.Log;
 
@@ -10,21 +13,26 @@ import org.atriasoft.ewol.internal.Log;
  */
 
 public class ConfigFont {
-	private Uri folder = new Uri("DATA", "fonts", "ewol");
-	private String name = "Arial;Helvetica";
-	private int size = 10;
+	private final Map<String, Uri> fonts = new HashMap<>();
+	private String name = "FreeSherif";
+	private int size = 20;
 	
 	/**
 	 * Constructor
 	 */
-	public ConfigFont() {}
+	public ConfigFont() {
+		// add default Esvg fonts:
+		this.fonts.put("FreeSherif", new Uri("FONTS", "FreeSherif.svg", "esvg"));
+		this.fonts.put("FreeSans", new Uri("FONTS", "FreeSans.svg", "esvg"));
+		this.fonts.put("FreeMono", new Uri("FONTS", "FreeMono.svg", "esvg"));
+	}
 	
-	/**
-	 * get the default font folder.
-	 * @return The default font folder.
-	 */
-	public Uri getFolder() {
-		return this.folder;
+	public Uri getFontUri(final String fontName) {
+		Uri out = this.fonts.get(fontName);
+		if (out == null) {
+			Log.warning(" try to get unexistant font : " + fontName);
+		}
+		return out;
 	}
 	
 	/**
@@ -55,14 +63,6 @@ public class ConfigFont {
 	}
 	
 	/**
-	 * Specify the default font folder for the Ewol search system (only needed when embended font)
-	 * @param folder basic folder of the font (ex: DATA:fonts)
-	 */
-	public void setFolder(final Uri folder) {
-		this.folder = folder;
-	}
-	
-	/**
 	 * Set the current default font name
 	 * @param fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
 	 */
@@ -79,5 +79,4 @@ public class ConfigFont {
 		this.size = size;
 		Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
 	}
-	
 }

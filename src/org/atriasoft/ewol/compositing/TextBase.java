@@ -13,6 +13,7 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.ewol.compositing.tools.TextDecoration;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.font.FontMode;
@@ -161,7 +162,7 @@ public abstract class TextBase extends Compositing {
 		
 		// get the last elements
 		this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
-		this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStop);
+		this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
 		
 		// Log.debug(" 2 Start pos=" + this.sizeDisplayStart);
 		// Log.debug(" 2 Stop pos=" + this.sizeDisplayStop);
@@ -234,12 +235,12 @@ public abstract class TextBase extends Compositing {
 	 * @return true if the right has free space that can be use for justify.
 	 * false if we find '\n'
 	 */
-	public boolean extrapolateLastId(final String text, final int start, int stop, int space, int freeSpace) {
+	public boolean extrapolateLastId(final String text, final int start, final Dynamic<Integer> stop, final Dynamic<Integer> space, final Dynamic<Integer> freeSpace) {
 		// store previous :
 		final Character storePrevious = this.previousCharcode;
 		
-		stop = text.length();
-		space = 0;
+		stop.value = text.length();
+		space.value = 0;
 		
 		int lastSpacePosition = start;
 		int lastSpacefreeSize = 0;
@@ -256,38 +257,43 @@ public abstract class TextBase extends Compositing {
 			final Vector3f tmpSize = calculateSize(text.charAt(iii));
 			// check overflow :
 			if (endPos + tmpSize.x() > stopPosition) {
-				stop = iii;
+				stop.value = iii;
 				break;
 			}
 			// save number of space :
 			if (text.charAt(iii) == Character.SPACE_SEPARATOR) {
-				space++;
+				space.value++;
 				lastSpacePosition = iii;
 				lastSpacefreeSize = (int) (stopPosition - endPos);
 			} else if (text.charAt(iii) == Character.LINE_SEPARATOR) {
-				stop = iii;
+				stop.value = iii;
 				endOfLine = true;
 				break;
 			}
 			// update local size :
 			endPos += tmpSize.x();
 		}
-		freeSpace = (int) (stopPosition - endPos);
+		freeSpace.value = (int) (stopPosition - endPos);
 		// restore previous :
 		this.previousCharcode = storePrevious;
 		// need to align left or right ...
-		if (stop == (long) text.length()) {
+		if (stop.value == (long) text.length()) {
 			return true;
 		}
 		if (endOfLine) {
 			return true;
 		}
-		if (space == 0) {
+		if (space.value == 0) {
 			return true;
 		}
-		stop = lastSpacePosition;
-		freeSpace = lastSpacefreeSize;
+		stop.value = lastSpacePosition;
+		freeSpace.value = lastSpacefreeSize;
 		return false;
+	}
+	
+	@Override
+	public void flush() {
+		this.vectorialDraw.flush();
 	}
 	
 	/**
@@ -516,7 +522,7 @@ public abstract class TextBase extends Compositing {
 	 *        decorations (advence mode).
 	 * @param text The string to display.
 	 * @param decoration The text decoration for the text that might be display
-	 *            (if the vector is smaller, the last parameter is get)
+	 *            (if the vector is smaller, the last 0,·;2p!arameter is get)
 	 */
 	public void print(final String text, final List<TextDecoration> decoration) {
 		Color tmpFg = this.color;
@@ -581,16 +587,16 @@ public abstract class TextBase extends Compositing {
 			}
 			final float basicSpaceWidth = calculateSize(' ').x();
 			int currentId = 0;
-			final int stop = 0;
-			final int space = 0;
-			final int freeSpace = 0;
+			final Dynamic<Integer> stop = new Dynamic<Integer>(0);
+			final Dynamic<Integer> space = new Dynamic<Integer>(0);
+			final Dynamic<Integer> freeSpace = new Dynamic<Integer>(0);
 			while (currentId < (long) text.length()) {
 				final boolean needNoJustify = extrapolateLastId(text, currentId, stop, space, freeSpace);
 				float interpolation = basicSpaceWidth;
 				switch (this.alignment) {
 					case alignJustify:
 						if (!needNoJustify) {
-							interpolation += (float) freeSpace / (float) (space - 1);
+							interpolation += (float) freeSpace.value / (float) (space.value - 1);
 						}
 						break;
 					case alignDisable: // must not came from here ...
@@ -600,13 +606,13 @@ public abstract class TextBase extends Compositing {
 					case alignRight:
 						if (this.needDisplay) {
 							// Move the first char at the right :
-							setPos(new Vector3f(this.position.x() + freeSpace, this.position.y(), this.position.z()));
+							setPos(new Vector3f(this.position.x() + freeSpace.value, this.position.y(), this.position.z()));
 						}
 						break;
 					case alignCenter:
 						if (this.needDisplay) {
 							// Move the first char at the right :
-							setPos(new Vector3f(this.position.x() + freeSpace / 2, this.position.y(), this.position.z()));
+							setPos(new Vector3f(this.position.x() + freeSpace.value / 2, this.position.y(), this.position.z()));
 						}
 						break;
 					default:
@@ -618,7 +624,7 @@ public abstract class TextBase extends Compositing {
 					setColorBg(this.colorCursor);
 					printCursor(false);
 				}
-				for (int iii = currentId; (long) iii < stop && iii < text.length(); iii++) {
+				for (int iii = currentId; (long) iii < stop.value && iii < text.length(); iii++) {
 					final float fontHeigh = getHeight();
 					// get specific decoration if provided
 					if (iii < decoration.size()) {
@@ -665,24 +671,27 @@ public abstract class TextBase extends Compositing {
 						}
 					}
 				}
-				if (currentId == stop) {
+				if (stop.value >= text.length()) {
+					currentId = stop.value;
+					continue;
+				}
+				if (currentId == stop.value) {
 					currentId++;
-				} else if (text.charAt(stop) == Character.SPACE_SEPARATOR) {
-					currentId = stop + 1;
+				} else if (text.charAt(stop.value) == Character.SPACE_SEPARATOR) {
+					currentId = stop.value + 1;
 					// reset position :
 					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
 					this.nbCharDisplayed++;
-				} else if (text.charAt(stop) == Character.LINE_SEPARATOR) {
-					currentId = stop + 1;
+				} else if (text.charAt(stop.value) == Character.LINE_SEPARATOR) {
+					currentId = stop.value + 1;
 					// reset position :
 					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
 					this.nbCharDisplayed++;
 				} else {
-					currentId = stop;
+					currentId = stop.value;
 				}
 			}
-			// Log.debug(" 4 print in not alligned mode : start=" + this.sizeDisplayStart +
-			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
+			Log.debug(" 4 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		}
 	}
 	

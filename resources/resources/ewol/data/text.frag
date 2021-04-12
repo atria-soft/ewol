@@ -4,16 +4,16 @@ precision mediump int;
 #endif
 
 // Input :
-uniform sampler2D EW_texID;
+uniform sampler2D in_texID;
 
-varying vec2  f_texcoord;
-varying vec4  f_color;
+varying vec2  io_texcoord;
+varying vec4  io_color;
 /*
 void main(void) {
-	gl_FragColor = f_color;
-	vec2 tmpCoord = f_texcoord;
+	gl_FragColor = io_color;
+	vec2 tmpCoord = io_texcoord;
 	tmpCoord = mod(tmpCoord, 1.0);
-	vec4 map = texture2D(EW_texID, tmpCoord);
+	vec4 map = texture2D(in_texID, tmpCoord);
 	if (f_texcoord.x<1.0) {
 		// normal font :
 		gl_FragColor.a = gl_FragColor.a*map.a;
@@ -30,12 +30,12 @@ void main(void) {
 }
 */
 
-varying vec4  f_patern;
+varying vec4  io_patern;
 
 void main(void) {
-	gl_FragColor = f_color;
-	vec4 map = texture2D(EW_texID, f_texcoord);
-	float alphaCoef = dot(map, f_patern);
+	gl_FragColor = io_color;
+	vec4 map = texture2D(in_texID, io_texcoord);
+	float alphaCoef = dot(map, io_patern);
 	gl_FragColor.a = gl_FragColor.a*alphaCoef;
 }
 

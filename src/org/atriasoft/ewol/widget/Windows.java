@@ -16,6 +16,7 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.annotation.EwolDescription;
+import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
@@ -47,9 +48,11 @@ public class Windows extends Widget {
 	
 	protected ResourceColorFile resourceColor = null; //!< theme color property (name of file in @ref propertyColorConfiguration)
 	
+	protected Widget subWidget;
+	
 	// internal event at ewol system:
 	
-	protected Widget subWidget;
+	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
 	
 	protected Windows() {
 		this.propertyCanFocus = true;
@@ -279,8 +282,10 @@ public class Windows extends Widget {
 		OpenGL.disable(OpenGL.Flag.flag_fog);
 		OpenGL.disable(OpenGL.Flag.flag_texture2D);
 		OpenGL.disable(OpenGL.Flag.flag_depthTest);
+		OpenGL.disable(OpenGL.Flag.flag_cullFace);
 		
 		OpenGL.enable(OpenGL.Flag.flag_blend);
+		//OpenGL.enable(OpenGL.Flag.flag_cullFace);
 		OpenGL.blendFuncAuto();
 		
 		// clear the matrix system :
@@ -300,14 +305,17 @@ public class Windows extends Widget {
 			colorBg = this.resourceColor.get(this.colorBg);
 		}
 		OpenGL.clearColor(colorBg);
+		OpenGL.clearColor(Color.PURPLE);
 		OpenGL.clear(OpenGL.ClearFlag.clearFlag_colorBuffer);
 		OpenGL.clear(OpenGL.ClearFlag.clearFlag_depthBuffer);
+		
 		//Log.warning(" WINDOWS draw on " + this.currentDrawId);
 		// first display the windows on the display
 		if (this.subWidget != null) {
 			this.subWidget.systemDraw(displayProp);
 			//Log.debug("Draw Windows");
 		}
+		
 		// second display the pop-up
 		for (Widget it : this.popUpWidgetList) {
 			if (it != null) {

@@ -41,23 +41,6 @@ public class ResourceTexture2 extends Resource {
 	 * TextureColorMode.rgb), textureUnit); resource.flush(); return resource; }
 	 */
 	
-	/**
-	 * get the next power 2 if the input
-	 * @param value Value that we want the next power of 2
-	 * @return result value
-	 */
-	private static int nextP2(final int value) {
-		int val = 1;
-		for (int iii = 1; iii < 31; iii++) {
-			if (value <= val) {
-				return val;
-			}
-			val *= 2;
-		}
-		Log.critical("impossible CASE....");
-		return val;
-	}
-	
 	// openGl Context properties :
 	protected Image data = new Image(32, 32);
 	// !< Color space of the image.

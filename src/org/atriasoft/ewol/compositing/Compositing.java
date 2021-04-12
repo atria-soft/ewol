@@ -29,6 +29,11 @@ public abstract class Compositing {
 	public abstract void draw(final boolean disableDepthTest);
 	
 	/**
+	 * Require the transfer of all the data in the Graphic card (doen between the addinc element and the draw)
+	 */
+	public abstract void flush();
+	
+	/**
 	 * reset to the eye matrix the openGL mouving system
 	 */
 	public void resetMatrix() {
@@ -66,5 +71,4 @@ public abstract class Compositing {
 	public void translate(final Vector3f vect) {
 		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixTranslate(vect));
 	}
-	
 }

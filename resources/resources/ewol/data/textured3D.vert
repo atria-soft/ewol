@@ -3,19 +3,19 @@ precision mediump float;
 precision mediump int;
 #endif
 // Input :
-attribute vec3 EW_coord3d;
-attribute vec2 EW_texture2d;
-attribute vec4 EW_color;
-uniform mat4 EW_MatrixTransformation;
+attribute vec3 in_coord3d;
+attribute vec2 in_texture2d;
+attribute vec4 in_color;
+uniform mat4 in_MatrixTransformation;
 
 // output :
-varying vec4 f_color;
-varying vec2 f_texcoord;
+varying vec4 io_color;
+varying vec2 io_texcoord;
 
 void main(void) {
-	gl_Position = EW_MatrixTransformation * vec4(EW_coord3d, 1.0);
+	gl_Position = in_MatrixTransformation * vec4(in_coord3d, 1.0);
 	// set texture output coord
-	f_texcoord = EW_texture2d;
+	io_texcoord = in_texture2d;
 	// set output color :
-	f_color = EW_color;
+	io_color = in_color;
 }

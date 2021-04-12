@@ -1,5 +1,6 @@
 package org.atriasoft.ewol;
 
+import org.atriasoft.esvg.Esvg;
 import org.atriasoft.etk.Uri;
 /** @file
  * @author Edouard DUPIN
@@ -20,6 +21,7 @@ public class Ewol {
 	public static void init() {
 		Uri.addLibrary("ewol", Ewol.class, "/resources/ewol/");
 		Gale.init();
+		Esvg.init();
 	}
 	
 	/**
