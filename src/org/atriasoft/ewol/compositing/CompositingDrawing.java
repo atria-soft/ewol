@@ -17,7 +17,7 @@ import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.resource.ResourceProgram;
-import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
+import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 
 public class CompositingDrawing extends Compositing {
 	
@@ -28,12 +28,13 @@ public class CompositingDrawing extends Compositing {
 	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); // !< Clipping stop position
 	private Color color = Color.BLACK; // !< The text foreground color
 	private Color colorBg = Color.NONE; // !< The text background color
-	private int oGLColor = -1; // !< openGL id on the element (color buffer)
+	private final int oGLColor = -1; // !< openGL id on the element (color buffer)
 	private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
 	private int oGLMatrixPosition = -1; // !< position matrix
-	private int oGLPosition = -1; // !< openGL id on the element (vertex buffer)
+	private final int oGLPosition = -1; // !< openGL id on the element (vertex buffer)
 	private ResourceProgram oGLprogram; // !< pointer on the opengl display program
 	private final List<Color> outColors = new ArrayList<>();
+	private final List<Integer> outIndice = new ArrayList<>();
 	private final List<Vector3f> outTriangles = new ArrayList<>();
 	
 	private Vector3f position = new Vector3f(0, 0, 0); // !< The current position to draw
@@ -43,8 +44,10 @@ public class CompositingDrawing extends Compositing {
 	private final Vector3f[] triangle = new Vector3f[3]; // !< Register every system with a combinaison of tiangle
 	
 	private final Color[] tricolor = new Color[3]; // !< Register every the associated color foreground
+	
 	private int triElement = 0; // !< special counter of the single dot generated
-	protected ResourceVirtualBufferObject vbo;
+	//protected ResourceVirtualBufferObject vbo;
+	protected ResourceVirtualArrayObject vbo;
 	
 	// internal API for the generation abstraction of triangles
 	/**
@@ -57,7 +60,7 @@ public class CompositingDrawing extends Compositing {
 			this.tricolor[iii] = this.color;
 		}
 		// Create the VBO:
-		this.vbo = ResourceVirtualBufferObject.create(4);
+		this.vbo = ResourceVirtualArrayObject.createDynamic();
 		// TO facilitate some debugs we add a name of the VBO:
 		this.vbo.setName("[VBO] of ewol::compositing::Area");
 	}
@@ -74,10 +77,8 @@ public class CompositingDrawing extends Compositing {
 	/**
 	 * draw a 2D circle with the specify rafdius parameter.
 	 * @param radius Distence to the dorder
-	 * @param angleStart start angle of this circle ([0..2PI] otherwithe == >
-	 *            disable)
-	 * @param angleStop stop angle of this circle ([0..2PI] otherwithe == >
-	 *            disable)
+	 * @param angleStart start angle of this circle ([0..2PI] otherwise ==> disable)
+	 * @param angleStop stop angle of this circle ([0..2PI] otherwise ==> disable)
 	 */
 	public void circle(final float radius) {
 		circle(radius, 0);
@@ -160,6 +161,7 @@ public class CompositingDrawing extends Compositing {
 		this.vbo.clear();
 		this.outTriangles.clear();
 		this.outColors.clear();
+		this.outIndice.clear();
 		
 		// reset temporal variables :
 		this.position = Vector3f.ZERO;
@@ -182,13 +184,6 @@ public class CompositingDrawing extends Compositing {
 	 */
 	@Override
 	public void draw(final boolean disableDepthTest) {
-		
-		// push data on the VBO
-		// TODO optimize this with single push when needed
-		this.vbo.setVboData(CompositingDrawing.vboIdCoord, this.outTriangles.toArray(Vector3f[]::new));
-		this.vbo.setVboData(CompositingDrawing.vboIdColor, this.outColors.toArray(Color[]::new));
-		this.vbo.flush();
-		
 		if (this.oGLprogram == null) {
 			Log.error("No shader ...");
 			return;
@@ -196,15 +191,45 @@ public class CompositingDrawing extends Compositing {
 		// set Matrix : translation/positionMatrix
 		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
 		this.oGLprogram.use();
+		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixPosition, Matrix4f.IDENTITY);
-		// position:
-		this.oGLprogram.sendAttributePointer(this.oGLPosition, this.vbo, CompositingDrawing.vboIdCoord);
-		// color:
-		this.oGLprogram.sendAttributePointer(this.oGLColor, this.vbo, CompositingDrawing.vboIdColor);
-		// Request the draw od the elements :
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.vbo.bufferSize(CompositingDrawing.vboIdCoord));
+		
+		// Request the draw of the elements:
+		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
+		//this.vbo.render(OpenGL.RenderMode.triangle);
+		this.vbo.flush();
+		this.vbo.unBindForRendering();
+		// Request the draw of the elements :
+		//     OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.vbo.bufferSize(CompositingDrawing.vboIdCoord));
+		// no: OpenGL.drawElements(OpenGL.RenderMode.triangle, this.vbo.bufferSize(CompositingDrawing.vboIdCoord));
 		this.oGLprogram.unUse();
+	}
+	
+	@Override
+	public void flush() {
+		// push data on the VBO
+		this.vbo.setPosition(this.outTriangles.toArray(Vector3f[]::new));
+		this.vbo.setColors(this.outColors.toArray(Color[]::new));
+		//this.vbo.setIndices(this.outIndice);
+		this.vbo.setVertexCount(this.outTriangles.size());
+		
+		// for test only
+		
+		//float[] vertice = { -500f, -500f, 0.0f, 0.0f, 500f, 0.0f, 500f, -500f, 0.0f };
+		//		float[] color = { 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, };
+		//		
+		//		this.vbo.setPosition(vertice);
+		//		this.vbo.setColors(color);
+		//		this.vbo.setVertexCount(3);
+		
+		//		Vector3f[] vertice = { new Vector3f(-500f, -500f, 0.0f), new Vector3f(0.0f, 500f, 0.0f), new Vector3f(500f, -500f, 0.0f) };
+		//		Color[] color = { Color.RED, Color.GREEN, Color.BLUE };
+		//		
+		//		this.vbo.setPosition(vertice);
+		//		this.vbo.setColors(color);
+		//		this.vbo.setVertexCount(3);
+		//		this.vbo.flush();
 	}
 	
 	/**
@@ -324,10 +349,10 @@ public class CompositingDrawing extends Compositing {
 		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "color3.vert", "ewol"), new Uri("DATA", "color3.frag", "ewol"));
 		// get the shader resource :
 		if (this.oGLprogram != null) {
-			this.oGLPosition = this.oGLprogram.getAttribute("EWcoord3d");
-			this.oGLColor = this.oGLprogram.getAttribute("EWcolor");
-			this.oGLMatrix = this.oGLprogram.getUniform("EWMatrixTransformation");
-			this.oGLMatrixPosition = this.oGLprogram.getUniform("EWMatrixPosition");
+			//this.oGLPosition = this.oGLprogram.getAttribute("in_coord3d");
+			//this.oGLColor = this.oGLprogram.getAttribute("in_color");
+			this.oGLMatrix = this.oGLprogram.getUniform("in_MatrixTransformation");
+			this.oGLMatrixPosition = this.oGLprogram.getUniform("in_MatrixPosition");
 		}
 	}
 	

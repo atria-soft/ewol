@@ -34,7 +34,6 @@ public class CompositingImage extends Compositing {
 	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); //!< Clipping stop position
 	private Color color = new Color(1, 1, 1); //!< The text foreground color
 	private Uri filename;
-	
 	private int oGLColor = -1; //!< openGL id on the element (color buffer)
 	private int oGLMatrix = -1; //!< openGL id on the element (transformation matrix)
 	private int oGLPosition = -1; //!< openGL id on the element (vertex buffer)
@@ -47,6 +46,10 @@ public class CompositingImage extends Compositing {
 	private ResourceTextureFile resource = null; //!< texture resources
 	private ResourceTexture2 resourceImage = null; //!< texture resources
 	private ResourceVirtualBufferObject vbo = null;
+	
+	final Color[] vboDataColors = new Color[6];
+	final Vector3f[] vboDataCoords = new Vector3f[6];
+	final Vector2f[] vboDataCoordsTex = new Vector2f[6];
 	
 	public CompositingImage() {
 		this(new Uri("DATA", ""), CompositingImage.SIZE_AUTO);
@@ -139,6 +142,16 @@ public class CompositingImage extends Compositing {
 		this.oGLprogram.unUse();
 	}
 	
+	@Override
+	public void flush() {
+		
+		this.vbo.setVboData(CompositingImage.VBO_ID_COORD, this.vboDataCoords);
+		this.vbo.setVboData(CompositingImage.VBO_ID_COORD_TEX, this.vboDataCoordsTex);
+		this.vbo.setVboData(CompositingImage.VBO_ID_COLOR, this.vboDataColors);
+		
+		this.vbo.flush();
+	}
+	
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
@@ -177,11 +190,11 @@ public class CompositingImage extends Compositing {
 		this.oGLPosition = 0;
 		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"), new Uri("DATA", "textured3D.frag", "ewol"));
 		if (this.oGLprogram != null) {
-			this.oGLPosition = this.oGLprogram.getAttribute("EWcoord3d");
-			this.oGLColor = this.oGLprogram.getAttribute("EWcolor");
-			this.oGLtexture = this.oGLprogram.getAttribute("EWtexture2d");
-			this.oGLMatrix = this.oGLprogram.getUniform("EWMatrixTransformation");
-			this.oGLtexID = this.oGLprogram.getUniform("EWtexID");
+			this.oGLPosition = this.oGLprogram.getAttribute("in_coord3d");
+			this.oGLColor = this.oGLprogram.getAttribute("in_color");
+			this.oGLtexture = this.oGLprogram.getAttribute("in_texture2d");
+			this.oGLMatrix = this.oGLprogram.getUniform("in_MatrixTransformation");
+			this.oGLtexID = this.oGLprogram.getUniform("in_texID");
 		}
 	}
 	
@@ -216,55 +229,46 @@ public class CompositingImage extends Compositing {
 		
 		if (this.angle == 0.0f) {
 			Vector3f point = this.position;
-			
-			final Vector3f[] coords = new Vector3f[6];
-			final Vector2f[] coordsTex = new Vector2f[6];
-			final Color[] colors = new Color[6];
 			int indexElem = 0;
 			
 			Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
-			coords[indexElem] = point;
-			coordsTex[indexElem] = tex;
-			colors[indexElem] = this.color;
+			this.vboDataCoords[indexElem] = point;
+			this.vboDataCoordsTex[indexElem] = tex;
+			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
 			
 			tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
 			point = new Vector3f(this.position.x() + size.x(), this.position.y(), 0);
-			coords[indexElem] = point;
-			coordsTex[indexElem] = tex;
-			colors[indexElem] = this.color;
+			this.vboDataCoords[indexElem] = point;
+			this.vboDataCoordsTex[indexElem] = tex;
+			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
 			
 			tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
 			point = new Vector3f(this.position.x() + size.x(), this.position.y() + size.y(), 0);
-			coords[indexElem] = point;
-			coordsTex[indexElem] = tex;
-			colors[indexElem] = this.color;
+			this.vboDataCoords[indexElem] = point;
+			this.vboDataCoordsTex[indexElem] = tex;
+			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
 			
-			coords[indexElem] = point;
-			coordsTex[indexElem] = tex;
-			colors[indexElem] = this.color;
+			this.vboDataCoords[indexElem] = point;
+			this.vboDataCoordsTex[indexElem] = tex;
+			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
 			
 			tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
 			point = new Vector3f(this.position.x(), this.position.y() + size.y(), 0);
-			coords[indexElem] = point;
-			coordsTex[indexElem] = tex;
-			colors[indexElem] = this.color;
+			this.vboDataCoords[indexElem] = point;
+			this.vboDataCoordsTex[indexElem] = tex;
+			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
 			
 			tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 			point = new Vector3f(this.position.x(), this.position.y(), 0);
-			coords[indexElem] = point;
-			coordsTex[indexElem] = tex;
-			colors[indexElem] = this.color;
+			this.vboDataCoords[indexElem] = point;
+			this.vboDataCoordsTex[indexElem] = tex;
+			this.vboDataColors[indexElem] = this.color;
 			
-			this.vbo.setVboData(CompositingImage.VBO_ID_COORD, coords);
-			this.vbo.setVboData(CompositingImage.VBO_ID_COORD_TEX, coordsTex);
-			this.vbo.setVboData(CompositingImage.VBO_ID_COLOR, colors);
-			
-			this.vbo.flush();
 			return;
 		}
 		
@@ -276,59 +280,51 @@ public class CompositingImage extends Compositing {
 		
 		Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 		
-		final Vector3f[] coords = new Vector3f[6];
-		final Vector2f[] coordsTex = new Vector2f[6];
-		final Color[] colors = new Color[6];
 		int indexElem = 0;
 		
 		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
-		coords[indexElem] = point;
-		coordsTex[indexElem] = tex;
-		colors[indexElem] = this.color;
+		this.vboDataCoords[indexElem] = point;
+		this.vboDataCoordsTex[indexElem] = tex;
+		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
 		
 		tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
 		point = new Vector3f(limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
-		coords[indexElem] = point;
-		coordsTex[indexElem] = tex;
-		colors[indexElem] = this.color;
+		this.vboDataCoords[indexElem] = point;
+		this.vboDataCoordsTex[indexElem] = tex;
+		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
 		
 		tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
 		point = new Vector3f(limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
-		coords[indexElem] = point;
-		coordsTex[indexElem] = tex;
-		colors[indexElem] = this.color;
+		this.vboDataCoords[indexElem] = point;
+		this.vboDataCoordsTex[indexElem] = tex;
+		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
 		
-		coords[indexElem] = point;
-		coordsTex[indexElem] = tex;
-		colors[indexElem] = this.color;
+		this.vboDataCoords[indexElem] = point;
+		this.vboDataCoordsTex[indexElem] = tex;
+		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
 		
 		tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
 		point = new Vector3f(-limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
-		coords[indexElem] = point;
-		coordsTex[indexElem] = tex;
-		colors[indexElem] = this.color;
+		this.vboDataCoords[indexElem] = point;
+		this.vboDataCoordsTex[indexElem] = tex;
+		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
 		
 		tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
-		coords[indexElem] = point;
-		coordsTex[indexElem] = tex;
-		colors[indexElem] = this.color;
+		this.vboDataCoords[indexElem] = point;
+		this.vboDataCoordsTex[indexElem] = tex;
+		this.vboDataColors[indexElem] = this.color;
 		
-		this.vbo.setVboData(CompositingImage.VBO_ID_COORD, coords);
-		this.vbo.setVboData(CompositingImage.VBO_ID_COORD_TEX, coordsTex);
-		this.vbo.setVboData(CompositingImage.VBO_ID_COLOR, colors);
-		
-		this.vbo.flush();
 	}
 	
 	/**

@@ -6,53 +6,38 @@
 package org.atriasoft.ewol.resource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.ewol.resource.font.FontBase;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.resource.Resource;
 
 public class ResourceTexturedFont extends ResourceTexture2 {
-	public static ResourceTexturedFont create(final String fontName) {
+	public static ResourceTexturedFont create(final Uri fontBaseUri) {
 		ResourceTexturedFont resource;
 		Resource resource2;
-		if (fontName.isEmpty() || fontName.contentEquals("---")) {
-			Log.error("Can not create a Texture Font without a filaname " + fontName);
+		if (fontBaseUri.isEmpty()) {
+			Log.error("Can not create a Texture Font without a filaname " + fontBaseUri);
 			return null;
 		}
-		resource2 = Resource.getManager().localKeep(fontName);
+		resource2 = Resource.getManager().localKeep("__TEXTURED__>>" + fontBaseUri.toString());
 		if (resource2 != null) {
 			if (resource2 instanceof ResourceTexturedFont) {
 				resource2.keep();
 				return (ResourceTexturedFont) resource2;
 			}
-			Log.critical("Request resource fontName : '" + fontName + "' With the wrong type (dynamic cast error)");
+			Log.critical("Request resource fontName : '" + fontBaseUri + "' With the wrong type (dynamic cast error)");
 			return null;
 		}
-		resource = new ResourceTexturedFont(fontName);
+		resource = new ResourceTexturedFont(fontBaseUri);
 		Resource.getManager().localAdd(resource);
 		return resource;
-	}
-	
-	/**
-	 * Get all the Path contain in the specidy path:
-	 * @param path Generic path to parse ...
-	 * @return The list of path found
-	 * example[start] auto out = explodeMultiplePath("DATA:///font?lib=ewol"); //
-	 *                 out contain: {"DATA:///font",
-	 *                 "DATA:///font?lib=ewol"} @example[stop]
-	 */
-	private static List<Uri> explodeMultiplePath(final Uri uri) {
-		final List<Uri> out = new ArrayList<>();
-		out.add(uri);
-		return out;
 	}
 	
 	// font is define for a specific mode
@@ -61,7 +46,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	// specific element to have the the know if the specify element is known...
 	// == > otherwise I can just generate italic ...
 	// == > Bold is a little more complicated (maybe with the bordersize)
-	private final FontBase[] font = new FontBase[4];
+	private final ResourceFontSvg[] font = new ResourceFontSvg[4];
 	private final int[] height = new int[4];
 	// for the texture generation :
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
@@ -71,10 +56,10 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	private final FontMode[] modeWraping = new FontMode[4]; // !< This is a wrapping mode to prevent the fact that no
 	private int size = 10;
 	
-	protected ResourceTexturedFont(final String fontName) {
-		super(fontName);
+	protected ResourceTexturedFont(final Uri fontBaseUri) {
+		super("__TEXTURED_FONT__>>" + fontBaseUri.toString());
 		
-		Log.debug("Load font : '" + fontName + "'");
+		Log.debug("Load font : '" + fontBaseUri + "'");
 		
 		this.font[0] = null;
 		this.font[1] = null;
@@ -101,82 +86,29 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		this.listElement[2] = new ArrayList<>();
 		this.listElement[3] = new ArrayList<>();
 		
-		int tmpSize = 0;
-		// extarct name and size :
-		final String[] tmpList = fontName.split(":");
+		String sizeString = fontBaseUri.getproperty("size");
+		if (sizeString == null) {
+			this.size = 25;
+		} else {
+			this.size = Integer.parseInt(sizeString);
+		}
+		// find all the fonts...
+		Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace("\\.svg", "Bold.svg"), fontBaseUri.getproperties());
+		Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace("\\.svg", "Oblique.svg"), fontBaseUri.getproperties());
+		Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace("\\.svg", "BoldOblique.svg"), fontBaseUri.getproperties());
+		if (fontBaseUri.exist()) {
+			this.fileName[FontMode.Regular.getValue()] = fontBaseUri;
+		}
+		if (fontBaseUriBold.exist()) {
+			this.fileName[FontMode.Bold.getValue()] = fontBaseUriBold;
+		}
+		if (fontBaseUriOblique.exist()) {
+			this.fileName[FontMode.Italic.getValue()] = fontBaseUriOblique;
+		}
+		if (fontBaseUriBoldOblique.exist()) {
+			this.fileName[FontMode.BoldItalic.getValue()] = fontBaseUriBoldOblique;
+		}
 		
-		if (tmpList.length == 1) {
-			this.size = 1;
-			Log.critical("Can not parse the font name: '" + fontName + "' ??? ':' ");
-			return;
-		}
-		// zsdefsdf
-		tmpSize = Integer.parseInt(tmpList[1]);
-		
-		final String localName = tmpList[0];
-		if (tmpSize > 400) {
-			Log.error("Font size too big ==> limit at 400 when exceed ==> error: " + tmpSize + "==>30");
-			tmpSize = 30;
-		}
-		this.size = tmpSize;
-		
-		final List<Uri> folderList = new ArrayList<>();
-		final Uri applicationBaseFont = Ewol.getContext().getFontDefault().getFolder();
-		for (final Uri it : ResourceTexturedFont.explodeMultiplePath(applicationBaseFont)) {
-			folderList.add(it);
-		}
-		for (int folderID = 0; folderID < folderList.size(); folderID++) {
-			final List<Uri> output = Uri.listRecursive(folderList.get(folderID));
-			
-			final String[] split = localName.split(";");
-			Log.debug("try to find font named : " + split + " in: " + output);
-			// Log.critical("parse string : " + split);
-			boolean hasFindAFont = false;
-			for (int jjj = 0; jjj < split.length; jjj++) {
-				Log.debug("    try with : '" + split[jjj] + "'");
-				for (int iii = 0; iii < output.size(); iii++) {
-					final String nameFolder = output.get(iii).getPath();
-					// Log.debug(" file : " + output.get(iii));
-					if (nameFolder.endsWith(split[jjj] + "-" + "bold" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "b" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "bd" + ".ttf")
-							|| nameFolder.endsWith(split[jjj] + "bold" + ".ttf") || nameFolder.endsWith(split[jjj] + "bd" + ".ttf") || nameFolder.endsWith(split[jjj] + "b" + ".ttf")) {
-						Log.debug(" find Font [Bold]        : " + output.get(iii));
-						this.fileName[FontMode.Bold.getValue()] = output.get(iii);
-						hasFindAFont = true;
-					} else if (nameFolder.endsWith(split[jjj] + "-" + "oblique" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "italic" + ".ttf")
-							|| nameFolder.endsWith(split[jjj] + "-" + "Light" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "i" + ".ttf") || nameFolder.endsWith(split[jjj] + "oblique" + ".ttf")
-							|| nameFolder.endsWith(split[jjj] + "italic" + ".ttf") || nameFolder.endsWith(split[jjj] + "light" + ".ttf") || nameFolder.endsWith(split[jjj] + "i" + ".ttf")) {
-						Log.debug(" find Font [Italic]      : " + output.get(iii));
-						this.fileName[FontMode.Italic.getValue()] = output.get(iii);
-						hasFindAFont = true;
-					} else if (nameFolder.endsWith(split[jjj] + "-" + "bolditalic" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "boldoblique" + ".ttf")
-							|| nameFolder.endsWith(split[jjj] + "-" + "bi" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "z" + ".ttf") || nameFolder.endsWith(split[jjj] + "bolditalic" + ".ttf")
-							|| nameFolder.endsWith(split[jjj] + "boldoblique" + ".ttf") || nameFolder.endsWith(split[jjj] + "bi" + ".ttf") || nameFolder.endsWith(split[jjj] + "z" + ".ttf")) {
-						Log.debug(" find Font [Bold-Italic] : " + output.get(iii));
-						this.fileName[FontMode.BoldItalic.getValue()] = output.get(iii);
-						hasFindAFont = true;
-					} else if (nameFolder.endsWith(split[jjj] + "-" + "regular" + ".ttf") || nameFolder.endsWith(split[jjj] + "-" + "r" + ".ttf")
-							|| nameFolder.endsWith(split[jjj] + "regular" + ".ttf") || nameFolder.endsWith(split[jjj] + "r" + ".ttf") || nameFolder.endsWith(split[jjj] + ".ttf")) {
-						Log.debug(" find Font [Regular]     : " + output.get(iii));
-						this.fileName[FontMode.Regular.getValue()] = output.get(iii);
-						hasFindAFont = true;
-					}
-				}
-				if (hasFindAFont) {
-					Log.debug("    find this font : '" + split[jjj] + "'");
-					break;
-				}
-				if (jjj == split.length - 1) {
-					Log.debug("Find NO font in the LIST ... " + Arrays.toString(split));
-				}
-			}
-			if (hasFindAFont) {
-				Log.debug("    find this font : '" + folderList.get(folderID) + "'");
-				break;
-			}
-			if (folderID == folderList.size() - 1) {
-				Log.error("Find NO font in the LIST ... " + folderList);
-			}
-		}
 		// try to find the reference mode :
 		FontMode refMode = FontMode.Regular;
 		for (int iii = 3; iii >= 0; iii--) {
@@ -201,7 +133,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				continue;
 			}
 			Log.debug("Load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size=" + this.size);
-			this.font[iiiFontId] = ResourceFontFreeType.create(this.fileName[iiiFontId]);
+			this.font[iiiFontId] = ResourceFontSvg.create(this.fileName[iiiFontId]);
 			if (this.font[iiiFontId] == null) {
 				Log.debug("error in loading FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size=" + this.size);
 			}
@@ -215,13 +147,13 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			this.height[iiiFontId] = this.font[iiiFontId].getHeight(this.size);
 			// TODO : basic font use 512 is better ... == > maybe estimate it with the dpi
 			// ???
-			setImageSize(new Vector2i(256, 32));
-			// now we can acces directly on the image
+			setImageSize(new Vector2i(FMath.nextP2(256 * this.size / 10), 32));
+			// now we can access directly on the image
 			this.data.clear();
 		}
 		// add error glyph
 		addGlyph((char) 0);
-		// by default we set only the first AINSI char availlable
+		// by default we set only the first AINSI char available
 		for (int iii = 0x20; iii < 0x7F; iii++) {
 			Log.verbose("Add clyph :" + iii);
 			addGlyph((char) iii);
@@ -247,23 +179,22 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				continue;
 			}
 			// add the curent "char"
-			final GlyphProperty tmpchar = new GlyphProperty();
-			tmpchar.uVal = val;
+			final GlyphProperty tmpchar = this.font[iii].getGlyphProperty(this.size, val);
 			
-			if (this.font[iii].getGlyphProperty(this.size, tmpchar)) {
-				// Log.debug("load char : '" + val + "'=" + val.get());
+			if (tmpchar != null && tmpchar.exist()) {
+				Log.debug("load char : '" + val + "'=" + (int) val);
 				hasChange = true;
 				// change line if needed ...
 				if (this.lastGlyphPos[iii].x() + tmpchar.sizeTexture.x() + 3 > this.data.getSize().x()) {
-					this.lastGlyphPos[iii] = new Vector2i(1, this.lastRawHeigh[iii]);
+					this.lastGlyphPos[iii] = new Vector2i(1, this.lastGlyphPos[iii].y() + this.lastRawHeigh[iii]);
 					this.lastRawHeigh[iii] = 0;
 				}
+				Log.error("glyph texture size = " + tmpchar.sizeTexture + "last posY=" + this.lastGlyphPos[iii].y() + "    out size=" + this.data.getSize());
 				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getSize().y()) {
 					this.data.resize(this.data.getSize().x(), this.data.getSize().y() * 2);
-					// note : need to rework all the lyer due to the fact that the texture is used
-					// by the faur type...
+					// note : need to rework all the layer due to the fact that the texture is used by the 4 type...
 					for (int kkk = 0; kkk < 4; kkk++) {
-						// change the coordonate on the element in the texture
+						// change the coordinate on the element in the texture
 						for (int jjj = 0; jjj < this.listElement[kkk].size(); ++jjj) {
 							this.listElement[kkk].get(jjj).texturePosStart = this.listElement[kkk].get(jjj).texturePosStart.multiply(new Vector2f(1.0f, 0.5f));
 							this.listElement[kkk].get(jjj).texturePosSize = this.listElement[kkk].get(jjj).texturePosSize.multiply(new Vector2f(1.0f, 0.5f));
@@ -286,20 +217,13 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				this.lastGlyphPos[iii] = this.lastGlyphPos[iii].add(new Vector2i(tmpchar.sizeTexture.x() + 1, 0));
 			} else {
 				Log.warning("Did not find char : '" + val + "'=" + val);
-				tmpchar.setNotExist();
 			}
 			this.listElement[iii].add(tmpchar);
-			// this.font[iii].display;
-			// generate the kerning for all the characters :
-			if (tmpchar.exist()) {
-				// TODO : set the kerning back ...
-				// this.font[iii].generateKerning(this.size, this.listElement[iii]);
-			}
 		}
 		if (hasChange) {
 			flush();
 			Ewol.getContext().forceRedrawAll();
-			// egami::store(this.data, "fileFont.bmp"); // ==> for debug test only ...
+			//IOgami.storePNG(new Uri("file", "fileFont.png"), this.data); // ==> for debug test only ...
 		}
 		return hasChange;
 	}
@@ -367,11 +291,11 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		for (int iii = 0x80 - 0x20; iii < this.listElement[displayMode.getValue()].size(); iii++) {
 			// Log.debug("search : '" + charcode + "' =?= '" +
 			// (this.listElement[displayMode])[iii].UVal + "'");
-			if (charcode == this.listElement[displayMode.getValue()].get(iii).uVal) {
+			if (charcode == this.listElement[displayMode.getValue()].get(iii).getUnicodeValue()) {
 				// Log.debug("search : '" + charcode + "'");
 				if (this.listElement[displayMode.getValue()].get(iii).exist()) {
 					// Log.debug("return " + iii);
-					return iii;
+					return charcode;
 				}
 				return 0;
 			}

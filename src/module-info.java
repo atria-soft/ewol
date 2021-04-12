@@ -17,13 +17,13 @@ open module org.atriasoft.ewol {
 	//exports org.atriasoft.ewol.widget.meta;
 	
 	exports org.atriasoft.echrono;
-	exports org.atriasoft.egami;
 	exports org.atriasoft.esignal;
 	
+	requires transitive org.atriasoft.iogami;
 	requires transitive org.atriasoft.gale;
 	requires transitive org.atriasoft.etk;
+	requires transitive org.atriasoft.esvg;
 	requires transitive org.atriasoft.exml;
 	requires transitive org.atriasoft.ejson;
 	requires transitive io.scenarium.logger;
-	requires freetype.jni;
 }

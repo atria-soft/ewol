@@ -39,6 +39,7 @@ import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Widget class is the main widget interface, it has so me generic properties: 
@@ -864,37 +865,37 @@ public class Widget extends EwolObject {
 	}
 	
 	/**
-			 * {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
-			 * This function generate a clipping with the view-port openGL system. Like this a widget draw can not draw over an other widget
-			 * @note This function is  for the scrolled widget, and the more complicated openGL widget
-			 * @param displayProp properties of the current display
-			 * @note : INTERNAL EWOL SYSTEM
-			                                                              /-. displayProp.this.windowsSize
-			      *------------------------------------------------------*
-			      |                                                      |
-			      |                                              this.size  |
-			      |                                                 /    |
-			      |                        *-----------------------*     |
-			      |                        '                       '     |
-			      |                        '   displayProp.this.size '     |
-			      |              Viewport  '          /            '     |
-			      |              o---------'---------o             '     |
-			      |              |         '         |             '     |
-			      |              |         '         |             '     |
-			      |              |         '         |             '     |
-			      |              |         '         |             '     |
-			      |              |         *-----------------------*     |
-			      |              |        /          |                   |
-			      |              |   this.offset        |                   |
-			      |              |                   |                   |
-			      |              o-------------------o                   |
-			      |             /                                        |
-			      |  displayProp.this.origin                               |
-			      |                                                      |
-			      *------------------------------------------------------*
-			     /
-			   (0,0)
-			 */
+	 * {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+	 * This function generate a clipping with the view-port openGL system. Like this a widget draw can not draw over an other widget
+	 * @note This function is  for the scrolled widget, and the more complicated openGL widget
+	 * @param displayProp properties of the current display
+	 * @note : INTERNAL EWOL SYSTEM
+	                                                              /-. displayProp.this.windowsSize
+	      *------------------------------------------------------*
+	      |                                                      |
+	      |                                           this.size  |
+	      |                                                 /    |
+	      |                        *-----------------------*     |
+	      |                        '                       '     |
+	      |                        ' displayProp.this.size '     |
+	      |              Viewport  '          /            '     |
+	      |              o---------'---------o             '     |
+	      |              |         '         |             '     |
+	      |              |         '         |             '     |
+	      |              |         '         |             '     |
+	      |              |         '         |             '     |
+	      |              |         *-----------------------*     |
+	      |              |        /          |                   |
+	      |              |this.offset        |                   |
+	      |              |                   |                   |
+	      |              o-------------------o                   |
+	      |             /                                        |
+	      |displayProp.this.origin                               |
+	      |                                                      |
+	      *------------------------------------------------------*
+	     /
+	   (0,0)
+	 */
 	public void systemDraw(final DrawProperty displayProp) {
 		//Log.info("[" + getId() + "] Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" << this.size << " hide=" << propertyHide);
 		if (this.propertyHide) {
@@ -913,15 +914,20 @@ public class Widget extends EwolObject {
 		if (tmpSize.size().x() <= 0 || tmpSize.size().y() <= 0) {
 			return;
 		}
+		Log.info("setViewport(" + tmpSize.origin() + ", " + tmpSize.size() + ")");
 		OpenGL.setViewPort(tmpSize.origin(), tmpSize.size());
 		// special case, when origin < display origin, we need to cut the display :
 		Vector2i downOffset = new Vector2i((int) (this.origin.x() - tmpSize.origin().x()), (int) (this.origin.y() - tmpSize.origin().y()));
 		downOffset = Vector2i.min(downOffset, Vector2i.ZERO);
-		
+		Log.info("translate : (" + (new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
+		// translate the display to have a Gui 0,0 position on the Left button angle
 		final Matrix4f tmpTranslate = Matrix4f
 				.createMatrixTranslate((new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
+		//final Matrix4f tmpTranslate = Matrix4f.createMatrixTranslate(new Vector3f(0, 0, 1.0f));
+		// Scale if needed (feature not validate)
 		final Matrix4f tmpScale = Matrix4f.createMatrixScale(this.zoom, this.zoom, 1.0f);
-		final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho((-tmpSize.size().x()) >> 1, (tmpSize.size().x()) >> 1, (-tmpSize.size().y()) >> 1, (tmpSize.size().y()) >> 1, (-1), (1));
+		// create orthogonal projection for GUI ==> simple to manage staking
+		Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2, -tmpSize.size().y() / 2, tmpSize.size().y() / 2, -50, 50);
 		Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
 		
 		OpenGL.push();
@@ -930,6 +936,7 @@ public class Widget extends EwolObject {
 		//long startTime = ewol::getTime();
 		onDraw();
 		OpenGL.pop();
+		GL11.glFinish();
 	}
 	
 	/**
@@ -939,8 +946,7 @@ public class Widget extends EwolObject {
 	 * @return false if the event has not been used
 	 */
 	public boolean systemEventEntry(final EntrySystem event) {
-		final Widget up = (Widget) this.parent.get();
-		if (up != null) {
+		if (this.parent != null && this.parent.get() != null && this.parent.get() instanceof Widget up) {
 			if (up.systemEventEntry(event)) {
 				return true;
 			}
@@ -948,13 +954,12 @@ public class Widget extends EwolObject {
 		return onEventEntry(event.event());
 	}
 	
-	// event section:
 	/**
-			 * {SYSTEM} system event input (only meta widget might overwrite this function).
-			 * @param event Event properties
-			 * @return true the event is used
-			 * @return false the event is not used
-			 */
+	 * {SYSTEM} system event input (only meta widget might overwrite this function).
+	 * @param event Event properties
+	 * @return true the event is used
+	 * @return false the event is not used
+	 */
 	public boolean systemEventInput(final InputSystem event) {
 		final Widget up = (Widget) this.parent.get();
 		if (up != null) {

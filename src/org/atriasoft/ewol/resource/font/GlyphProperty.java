@@ -5,9 +5,8 @@
  */
 package org.atriasoft.ewol.resource.font;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.atriasoft.esvg.EsvgFont;
+import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 
@@ -18,10 +17,10 @@ import org.atriasoft.etk.math.Vector2i;
                       Y      |            |          |            |            
                       ^      |------------|          |------------|            
                       |                                                        
-    advance.y:/->     |                                                        
+    advance.y:   /->  |                                                        
                  |    |                                                        
                  |    |                                                        
- sizeTex.x/->    |    |         |------------|          |------------|         
+ sizeTex.x /->   |    |         |------------|          |------------|         
            |     |    |         |            |          |            |         
            |     |    |         |            |          |            |         
            |     |    |         |            |          |            |         
@@ -35,32 +34,38 @@ import org.atriasoft.etk.math.Vector2i;
         /-->     |    |                                                        
         \-->     \->  |                                                        
   bearing.y           |                                                        
-                      |**>>   X        
-                                                                               
-                                                                               
-                           <-----------------------. : advance.x            
-                                                                               
-                                <-----------. : sizeTexture.x               
-                                                                               
-                           <--. : bearing.x                                 
+                      |>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   X    
+                           <------------------------> : advance.x              
+                                <------------> : sizeTexture.x                 
+                           <---> : bearing.x                                 
                        
 */
 /**
  * @notindoc
  */
 public class GlyphProperty {
-	public Vector2i advance = new Vector2i(10, 10); //!< space use in the display for this specific char
-	public Vector2i bearing = new Vector2i(2, 2); //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
-	public boolean exist = true;
-	public int glyphIndex = 0; //!< Glyph index in the system
-	private final List<Kerning> kerning = new ArrayList<>(); //!< kerning values of link of all elements
+	private final int charcode;
+	private final int fontSize;
+	public Glyph glyph = null;
+	private final float scaleFactor;
 	public Vector2i sizeTexture = new Vector2i(10, 10); //!< size of the element to display
-	public Vector2f texturePosSize = new Vector2f(0, 0); //!< Texture normalized position (SIZE)
-	public Vector2f texturePosStart = new Vector2f(0, 0); //!< Texture normalized position (START)
-	public Character uVal = 0; //!< Unicode value
+	public Vector2f texturePosSize = Vector2f.ZERO; //!< Texture normalized size (SIZE)
+	public Vector2f texturePosStart = Vector2f.ZERO; //!< Texture normalized position (START)
 	
-	public GlyphProperty() {
-		
+	public GlyphProperty(final EsvgFont font, final Glyph glyph, final int fontSize) {
+		this.glyph = glyph;
+		this.charcode = this.glyph.getUnicodeValue();
+		this.fontSize = fontSize;
+		this.sizeTexture = font.calculateWidthRendering(glyph.getUnicodeValue(), fontSize);
+		this.scaleFactor = font.calculateSclaeFactor(fontSize);
+	}
+	
+	public GlyphProperty(final EsvgFont font, final int charcode, final int fontSize) {
+		this.glyph = null;
+		this.charcode = charcode;
+		this.fontSize = fontSize;
+		//this.sizeTexture = null;
+		this.scaleFactor = 0;
 	}
 	
 	/**
@@ -68,30 +73,25 @@ public class GlyphProperty {
 	 * @return true if the char is availlable, false otherwise
 	 */
 	public boolean exist() {
-		return this.exist;
+		return this.glyph != null;
 	}
 	
-	public void kerningAdd(final Character charcode, final float value) {
-		this.kerning.add(new Kerning(charcode, value));
+	public float getAdvenceX() {
+		if (this.glyph == null) {
+			return 500 * this.scaleFactor;
+		}
+		return this.glyph.getHorizAdvX() * this.scaleFactor;
 	}
 	
-	public void kerningClear() {
-		this.kerning.clear();
+	public int getUnicodeValue() {
+		return this.charcode;
 	}
 	
 	public float kerningGet(final Character charcode) {
-		for (int iii = 0; iii < this.kerning.size(); iii++) {
-			if (this.kerning.get(iii).uVal == charcode) {
-				return this.kerning.get(iii).value;
-			}
+		if (this.glyph == null) {
+			return 0;
 		}
-		return 0;
+		return this.glyph.getKerning(charcode) * this.scaleFactor;
 	}
 	
-	/**
-	 * set the element doen not exist !!!
-	 */
-	public void setNotExist() {
-		this.exist = false;
-	}
 }

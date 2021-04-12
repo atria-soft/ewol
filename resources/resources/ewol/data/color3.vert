@@ -1,18 +1,22 @@
+#version 400 core
+
 #ifdef GL_ES
 precision mediump float;
 precision mediump int;
 #endif
 
 // Input :
-attribute vec3 EW_coord3d;
-attribute vec4 EW_color;
-uniform mat4 EW_MatrixTransformation;
-uniform mat4 EW_MatrixPosition;
+layout (location = 0) in vec3 in_position;
+layout (location = 3) in vec4 in_colors;
+uniform mat4 in_MatrixTransformation;
+uniform mat4 in_MatrixPosition;
 
 // output :
-varying vec4 f_color;
+varying vec4 io_color;
 
 void main(void) {
-	gl_Position = EW_MatrixTransformation * EW_MatrixPosition * vec4(EW_coord3d, 1.0);
-	f_color = EW_color;
+	gl_Position = in_MatrixTransformation * in_MatrixPosition * vec4(in_position, 1.0);
+	gl_Position = in_MatrixTransformation * vec4(in_position, 1.0);
+	//gl_Position = vec4(in_position, 1.0);
+	io_color = in_colors;
 }

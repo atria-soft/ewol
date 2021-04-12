@@ -18,13 +18,13 @@ import org.atriasoft.exml.annotation.XmlProperty;
 /**
  * @ingroup ewolWidgetGroup
  */
-class Spacer extends Widget {
-	private CompositingDrawing draw; //!< Compositing drawing element
+public class Spacer extends Widget {
+	private final CompositingDrawing draw = new CompositingDrawing(); //!< Compositing drawing element
 	@XmlManaged
 	@XmlProperty
 	@XmlName(value = "color")
 	@EwolDescription(value = "background of the spacer")
-	protected Color propertyColor; //!< Background color
+	protected Color propertyColor = Color.GREEN; //!< Background color
 	
 	/**
 	 * Main ructer
@@ -45,6 +45,7 @@ class Spacer extends Widget {
 	@Override
 	public void onDraw() {
 		this.draw.draw();
+		this.draw.flush();
 	}
 	
 	@Override
@@ -59,7 +60,13 @@ class Spacer extends Widget {
 		}
 		this.draw.setColor(this.propertyColor);
 		this.draw.setPos(Vector3f.ZERO);
-		this.draw.rectangleWidth(new Vector3f(this.size.x(), this.size.y(), 0));
+		this.draw.setPos(new Vector3f(this.size.x() * 0.1f, this.size.y() * 0.1f, 0));
+		this.draw.rectangleWidth(new Vector3f(this.size.x() * 0.8f, this.size.y() * 0.8f, 0));
+		
+		//		this.draw.setColor(Color.RED);
+		//		this.draw.setPos(new Vector3f(-1024, -1024, 0));
+		//		this.draw.rectangleWidth(new Vector3f(2048, 2048, 0));
+		this.draw.flush();
 	}
 	
 	public void setPropertyTextColorBgOn(final Color propertyColor) {
