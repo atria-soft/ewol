@@ -491,7 +491,7 @@ public class Widget extends EwolObject {
 				if (!this.localShortcut.get(iii).isActive) {
 					continue;
 				}
-				if ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.unknow && this.localShortcut.get(iii).unicodeValue() == unicodeValue)
+				if ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.UNKNOWN && this.localShortcut.get(iii).unicodeValue() == unicodeValue)
 						|| (this.localShortcut.get(iii).keyboardMoveValue() == kbMove && this.localShortcut.get(iii).unicodeValue() == 0)) {
 					// In this case we grap the event in case of an error can occured ...
 					this.localShortcut.get(iii).isActive = false;
@@ -504,7 +504,7 @@ public class Widget extends EwolObject {
 		for (int iii = this.localShortcut.size() - 1; iii >= 0; iii--) {
 			if (this.localShortcut.get(iii).specialKey().getShift() == special.getShift() && this.localShortcut.get(iii).specialKey().getCtrl() == special.getCtrl()
 					&& this.localShortcut.get(iii).specialKey().getAlt() == special.getAlt() && this.localShortcut.get(iii).specialKey().getMeta() == special.getMeta()
-					&& ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.unknow && this.localShortcut.get(iii).unicodeValue() == unicodeValue)
+					&& ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.UNKNOWN && this.localShortcut.get(iii).unicodeValue() == unicodeValue)
 							|| (this.localShortcut.get(iii).keyboardMoveValue() == kbMove && this.localShortcut.get(iii).unicodeValue() == 0))) {
 				if (isDown) {
 					this.localShortcut.get(iii).isActive = true;
@@ -761,7 +761,7 @@ public class Widget extends EwolObject {
 		String message; //!< data link with the event
 		final KeySpecial specialKey = new KeySpecial(); //!< special board key
 		Character unicodeValue = null; //!< 0 if not used
-		KeyKeyboard keyboardMoveValue = KeyKeyboard.unknow; //!< ewol::EVENTKBMOVETYPENONE if not used
+		KeyKeyboard keyboardMoveValue = KeyKeyboard.UNKNOWN; //!< ewol::EVENTKBMOVETYPENONE if not used
 		if (sendMessage.length() == 0) {
 			message = descriptiveString;
 		} else {
@@ -782,59 +782,59 @@ public class Widget extends EwolObject {
 			specialKey.setMetaLeft(true);
 		}
 		if (descriptiveString.contains("F12")) {
-			keyboardMoveValue = KeyKeyboard.f12;
+			keyboardMoveValue = KeyKeyboard.F12;
 		} else if (descriptiveString.contains("F11")) {
-			keyboardMoveValue = KeyKeyboard.f11;
+			keyboardMoveValue = KeyKeyboard.F11;
 		} else if (descriptiveString.contains("F10")) {
-			keyboardMoveValue = KeyKeyboard.f10;
+			keyboardMoveValue = KeyKeyboard.F10;
 		} else if (descriptiveString.contains("F9")) {
-			keyboardMoveValue = KeyKeyboard.f9;
+			keyboardMoveValue = KeyKeyboard.F9;
 		} else if (descriptiveString.contains("F8")) {
-			keyboardMoveValue = KeyKeyboard.f8;
+			keyboardMoveValue = KeyKeyboard.F8;
 		} else if (descriptiveString.contains("F7")) {
-			keyboardMoveValue = KeyKeyboard.f7;
+			keyboardMoveValue = KeyKeyboard.F7;
 		} else if (descriptiveString.contains("F6")) {
-			keyboardMoveValue = KeyKeyboard.f6;
+			keyboardMoveValue = KeyKeyboard.F6;
 		} else if (descriptiveString.contains("F5")) {
-			keyboardMoveValue = KeyKeyboard.f5;
+			keyboardMoveValue = KeyKeyboard.F5;
 		} else if (descriptiveString.contains("F4")) {
-			keyboardMoveValue = KeyKeyboard.f4;
+			keyboardMoveValue = KeyKeyboard.F4;
 		} else if (descriptiveString.contains("F3")) {
-			keyboardMoveValue = KeyKeyboard.f3;
+			keyboardMoveValue = KeyKeyboard.F3;
 		} else if (descriptiveString.contains("F2")) {
-			keyboardMoveValue = KeyKeyboard.f2;
+			keyboardMoveValue = KeyKeyboard.F2;
 		} else if (descriptiveString.contains("F1")) {
-			keyboardMoveValue = KeyKeyboard.f1;
+			keyboardMoveValue = KeyKeyboard.F1;
 		} else if (descriptiveString.contains("LEFT")) {
-			keyboardMoveValue = KeyKeyboard.left;
+			keyboardMoveValue = KeyKeyboard.LEFT;
 		} else if (descriptiveString.contains("RIGHT")) {
-			keyboardMoveValue = KeyKeyboard.right;
+			keyboardMoveValue = KeyKeyboard.RIGHT;
 		} else if (descriptiveString.contains("UP")) {
-			keyboardMoveValue = KeyKeyboard.up;
+			keyboardMoveValue = KeyKeyboard.UP;
 		} else if (descriptiveString.contains("DOWN")) {
-			keyboardMoveValue = KeyKeyboard.down;
+			keyboardMoveValue = KeyKeyboard.DOWN;
 		} else if (descriptiveString.contains("PAGEUP")) {
-			keyboardMoveValue = KeyKeyboard.pageUp;
+			keyboardMoveValue = KeyKeyboard.PAGE_UP;
 		} else if (descriptiveString.contains("PAGEDOWN")) {
-			keyboardMoveValue = KeyKeyboard.pageDown;
+			keyboardMoveValue = KeyKeyboard.PAGE_DOWN;
 		} else if (descriptiveString.contains("START")) {
-			keyboardMoveValue = KeyKeyboard.start;
+			keyboardMoveValue = KeyKeyboard.START;
 		} else if (descriptiveString.contains("END")) {
-			keyboardMoveValue = KeyKeyboard.end;
+			keyboardMoveValue = KeyKeyboard.END;
 		} else if (descriptiveString.contains("PRINT")) {
-			keyboardMoveValue = KeyKeyboard.print;
+			keyboardMoveValue = KeyKeyboard.PRINT;
 		} else if (descriptiveString.contains("ARRETDEFIL")) {
-			keyboardMoveValue = KeyKeyboard.stopDefil;
+			keyboardMoveValue = KeyKeyboard.STOP_DEFIL;
 		} else if (descriptiveString.contains("WAIT")) {
-			keyboardMoveValue = KeyKeyboard.wait;
+			keyboardMoveValue = KeyKeyboard.WAIT;
 		} else if (descriptiveString.contains("INSERT")) {
-			keyboardMoveValue = KeyKeyboard.insert;
+			keyboardMoveValue = KeyKeyboard.INSERT;
 		} else if (descriptiveString.contains("CAPLOCK")) {
-			keyboardMoveValue = KeyKeyboard.capLock;
+			keyboardMoveValue = KeyKeyboard.CAP_LOCK;
 		} else if (descriptiveString.contains("CONTEXTMENU")) {
-			keyboardMoveValue = KeyKeyboard.contextMenu;
+			keyboardMoveValue = KeyKeyboard.CONTEXT_MENU;
 		} else if (descriptiveString.contains("NUMLOCK")) {
-			keyboardMoveValue = KeyKeyboard.numLock;
+			keyboardMoveValue = KeyKeyboard.NUM_LOCK;
 		} else {
 			unicodeValue = descriptiveString.charAt(descriptiveString.length() - 1);
 		}
@@ -914,12 +914,12 @@ public class Widget extends EwolObject {
 		if (tmpSize.size().x() <= 0 || tmpSize.size().y() <= 0) {
 			return;
 		}
-		Log.info("setViewport(" + tmpSize.origin() + ", " + tmpSize.size() + ")");
+		//Log.info("setViewport(" + tmpSize.origin() + ", " + tmpSize.size() + ")");
 		OpenGL.setViewPort(tmpSize.origin(), tmpSize.size());
 		// special case, when origin < display origin, we need to cut the display :
 		Vector2i downOffset = new Vector2i((int) (this.origin.x() - tmpSize.origin().x()), (int) (this.origin.y() - tmpSize.origin().y()));
 		downOffset = Vector2i.min(downOffset, Vector2i.ZERO);
-		Log.info("translate : (" + (new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
+		//Log.info("translate : (" + (new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
 		// translate the display to have a Gui 0,0 position on the Left button angle
 		final Matrix4f tmpTranslate = Matrix4f
 				.createMatrixTranslate((new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());

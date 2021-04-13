@@ -15,7 +15,7 @@ import org.atriasoft.ewol.internal.Log;
 public class ConfigFont {
 	private final Map<String, Uri> fonts = new HashMap<>();
 	private String name = "FreeSherif";
-	private int size = 20;
+	private int size = 12;
 	
 	/**
 	 * Constructor

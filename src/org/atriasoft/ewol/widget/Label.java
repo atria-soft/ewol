@@ -6,7 +6,6 @@
 package org.atriasoft.ewol.widget;
 
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -16,7 +15,6 @@ import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.AlignMode;
-import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
@@ -52,7 +50,6 @@ public class Label extends Widget {
 	public SignalEmpty signalPressed = new SignalEmpty();
 	protected CompositingText text = new CompositingText(); //!< Compositing text element.
 	protected String value = "";
-	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
 	
 	public Label() {
 		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
@@ -85,7 +82,7 @@ public class Label extends Widget {
 		Vector2f tmpMin = this.propertyMinSize.getPixel();
 		Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} tmpMax : " + tmpMax);
 		if (tmpMax.x() <= 999999) {
-			this.text.setTextAlignment(0, tmpMax.x() - 4, AlignMode.alignLeft);
+			this.text.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
 			Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "}     force Alignement ");
 		}
 		Vector3f minSize = this.text.calculateSizeDecorated(this.value);
@@ -122,7 +119,6 @@ public class Label extends Widget {
 	@Override
 	protected void onDraw() {
 		this.text.draw();
-		this.vectorialDraw.draw();
 	}
 	
 	@Override
@@ -153,7 +149,7 @@ public class Label extends Widget {
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
-			this.text.setTextAlignment(0, tmpMax.x() - 2 * paddingSize, AlignMode.alignLeft);
+			this.text.setTextAlignment(0, tmpMax.x() - 2 * paddingSize, AlignMode.LEFT);
 		}
 		Vector3f currentTextSize = this.text.calculateSizeDecorated(this.value);
 		
@@ -191,17 +187,11 @@ public class Label extends Widget {
 		}
 		this.text.setPos(tmpTextOrigin);
 		Log.verbose("[" + getId() + "] {" + this.value + "} display at pos : " + tmpTextOrigin);
-		this.text.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + localSize.x(), AlignMode.alignLeft);
+		this.text.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + localSize.x(), AlignMode.LEFT);
 		this.text.setClipping(drawClippingPos, drawClippingSize);
 		this.text.printDecorated(this.value);
 		
-		this.vectorialDraw.clear();
-		this.vectorialDraw.setColor(Color.ORANGE);
-		this.vectorialDraw.setPos(new Vector3f(-1024, -1024, 0));
-		this.vectorialDraw.rectangle(new Vector3f(1024, 1024, 0));
-		
 		this.text.flush();
-		this.vectorialDraw.flush();
 	}
 	
 	public void setPropertyAutoTranslate(final boolean propertyAutoTranslate) {

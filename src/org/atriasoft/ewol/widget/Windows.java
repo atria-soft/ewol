@@ -272,7 +272,7 @@ public class Windows extends Widget {
 	}
 	
 	public void sysDraw() {
-		Log.verbose("Draw on " + this.size);
+		//Log.verbose("Draw on " + this.size);
 		// set the size of the open GL system
 		OpenGL.setViewPort(Vector2f.ZERO, this.size);
 		OpenGL.disable(OpenGL.Flag.flag_dither);
