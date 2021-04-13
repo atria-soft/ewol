@@ -26,17 +26,11 @@ import org.atriasoft.exml.exception.ExmlParserErrorMulti;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
 import org.atriasoft.gale.resource.ResourceProgram;
-import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
+import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 
 public abstract class TextBase extends Compositing {
-	private static final int NBVBO = 4;
-	protected static int vboIdColor = 2;
-	// Text
-	protected static int vboIdCoord = 0;
-	protected static int vboIdCoordText = 1;
-	protected static int vboIdGlyphLevel = 3;
 	// previously this line and the center is perform with this one)
-	protected AlignMode alignment = AlignMode.alignDisable; // !< Current Alignment mode (justify/left/right ...)
+	protected AlignMode alignment = AlignMode.DISABLE; // !< Current Alignment mode (justify/left/right ...)
 	protected boolean clippingEnable = false; // !< true if the clipping must be activated
 	protected Vector3f clippingPosStart = Vector3f.ZERO; // !< Clipping start position
 	protected Vector3f clippingPosStop = Vector3f.ZERO; // !< Clipping stop position
@@ -54,16 +48,13 @@ public abstract class TextBase extends Compositing {
 	public List<TextDecoration> htmlDecoration = new ArrayList<>(); // !< current decoration for the HTML display
 	public TextDecoration htmlDecoTmp = new TextDecoration(); // !< current decoration
 	protected boolean kerning = true; // !< Kerning enable or disable on the next elements displayed
-	protected FontMode mode = FontMode.Regular; // !< font display property : Regular/Bold/Italic/BoldItalic
+	protected FontMode mode = FontMode.REGULAR; // !< font display property : Regular/Bold/Italic/BoldItalic
 	protected int nbCharDisplayed; // !< prevent some error in calculation size.
 	protected boolean needDisplay; // !< This just need the display and not the size rendering.
-	protected int oGLColor = -1; // !< openGL id on the element (color buffer)
 	protected int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
-	protected int oGLPosition = -1; // !< openGL id on the element (vertex buffer)
 	protected ResourceProgram oGLprogram; // !< pointer on the opengl display program
 	protected int oGLtexID = -1; // !< openGL id on the element (texture ID)
 	protected int oGLtextHeight = -1; // !< openGL Id on the texture height
-	protected int oGLtexture = -1; // !< openGL id on the element (Texture position)
 	protected int oGLtextWidth = -1; // !< openGL Id on the texture width
 	protected Vector3f position = Vector3f.ZERO; // !< The current position to draw
 	protected Character previousCharcode; // !< we remember the previous charcode to perform the kerning. @ref Kerning
@@ -73,7 +64,7 @@ public abstract class TextBase extends Compositing {
 	protected float startTextPos = 0; // !< start position of the Alignment (when \n the text return at this
 	// position)
 	protected float stopTextPos = 0; // !< end of the alignment (when a string is too height it cut at the word
-	protected ResourceVirtualBufferObject vbo;
+	protected ResourceVirtualArrayObject vbo;
 	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
 	
 	/**
@@ -92,7 +83,7 @@ public abstract class TextBase extends Compositing {
 			loadProgram(vertexShader, fragmentShader);
 		}
 		// Create the VBO:
-		this.vbo = ResourceVirtualBufferObject.create(TextBase.NBVBO);
+		this.vbo = ResourceVirtualArrayObject.createDynamic();
 		// TO facilitate some debugs we add a name of the VBO:
 		this.vbo.setName("[VBO] of super.TextBase");
 	}
@@ -191,7 +182,7 @@ public abstract class TextBase extends Compositing {
 	 * disable the alignement system
 	 */
 	public void disableAlignement() {
-		this.alignment = AlignMode.alignDisable;
+		this.alignment = AlignMode.DISABLE;
 	}
 	
 	/**
@@ -261,11 +252,11 @@ public abstract class TextBase extends Compositing {
 				break;
 			}
 			// save number of space :
-			if (text.charAt(iii) == Character.SPACE_SEPARATOR) {
+			if (text.charAt(iii) == (char) Character.SPACE_SEPARATOR) {
 				space.value++;
 				lastSpacePosition = iii;
 				lastSpacefreeSize = (int) (stopPosition - endPos);
-			} else if (text.charAt(iii) == Character.LINE_SEPARATOR) {
+			} else if (text.charAt(iii) == (char) Character.LINE_SEPARATOR) {
 				stop.value = iii;
 				endOfLine = true;
 				break;
@@ -346,8 +337,8 @@ public abstract class TextBase extends Compositing {
 	 * @param data The cuurent data to add.
 	 */
 	public void htmlAddData(final String data) {
-		if (this.htmlCurrentLine.length() > 0 && this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != Character.SPACE_SEPARATOR) {
-			this.htmlCurrentLine += Character.SPACE_SEPARATOR;
+		if (this.htmlCurrentLine.length() > 0 && this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != (char) Character.SPACE_SEPARATOR) {
+			this.htmlCurrentLine += (char) Character.SPACE_SEPARATOR;
 			if (this.htmlDecoration.size() > 0) {
 				final TextDecoration tmp = this.htmlDecoration.get(this.htmlDecoration.size() - 1);
 				this.htmlDecoration.add(tmp);
@@ -379,13 +370,10 @@ public abstract class TextBase extends Compositing {
 		ResourceProgram old = this.oGLprogram;
 		this.oGLprogram = ResourceProgram.create(vertexShader, fragmentShader);
 		if (this.oGLprogram != null) {
-			this.oGLPosition = this.oGLprogram.getAttribute("EWcoord3d");
-			this.oGLColor = this.oGLprogram.getAttribute("EWcolor");
-			this.oGLtexture = this.oGLprogram.getAttribute("EWtexture2d");
-			this.oGLMatrix = this.oGLprogram.getUniform("EWMatrixTransformation");
-			this.oGLtexID = this.oGLprogram.getUniform("EWtexID");
-			this.oGLtextWidth = this.oGLprogram.getUniform("EWtexWidth");
-			this.oGLtextHeight = this.oGLprogram.getUniform("EWtexHeight");
+			this.oGLMatrix = this.oGLprogram.getUniform("in_MatrixTransformation");
+			this.oGLtexID = this.oGLprogram.getUniform("in_texID");
+			this.oGLtextWidth = this.oGLprogram.getUniform("in_texWidth");
+			this.oGLtextHeight = this.oGLprogram.getUniform("in_texHeight");
 		} else {
 			Log.error("Can not load the program => create previous one...");
 			this.oGLprogram = old;
@@ -455,20 +443,20 @@ public abstract class TextBase extends Compositing {
 			} else if (lowercaseValue.contentEquals("b") || lowercaseValue.contentEquals("bold")) {
 				Log.verbose("XML bold ...");
 				final TextDecoration tmpDeco = this.htmlDecoTmp;
-				if (this.htmlDecoTmp.mode() == FontMode.Regular) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.Bold);
-				} else if (this.htmlDecoTmp.mode() == FontMode.Italic) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BoldItalic);
+				if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
+					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD);
+				} else if (this.htmlDecoTmp.mode() == FontMode.ITALIC) {
+					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD_ITALIC);
 				}
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
 			} else if (lowercaseValue.contentEquals("i") || lowercaseValue.contentEquals("italic")) {
 				Log.verbose("XML italic ...");
 				final TextDecoration tmpDeco = this.htmlDecoTmp;
-				if (this.htmlDecoTmp.mode() == FontMode.Regular) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.Italic);
-				} else if (this.htmlDecoTmp.mode() == FontMode.Bold) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BoldItalic);
+				if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
+					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.ITALIC);
+				} else if (this.htmlDecoTmp.mode() == FontMode.BOLD) {
+					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD_ITALIC);
 				}
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
@@ -478,29 +466,29 @@ public abstract class TextBase extends Compositing {
 			} else if (lowercaseValue.contentEquals("p") || lowercaseValue.contentEquals("paragraph")) {
 				Log.verbose("XML paragraph ...");
 				htmlFlush();
-				this.alignment = AlignMode.alignLeft;
+				this.alignment = AlignMode.LEFT;
 				forceLineReturn();
 				parseHtmlNode(elem);
 				forceLineReturn();
 			} else if (lowercaseValue.contentEquals("center")) {
 				Log.verbose("XML center ...");
 				htmlFlush();
-				this.alignment = AlignMode.alignCenter;
+				this.alignment = AlignMode.CENTER;
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("left")) {
 				Log.verbose("XML left ...");
 				htmlFlush();
-				this.alignment = AlignMode.alignLeft;
+				this.alignment = AlignMode.LEFT;
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("right")) {
 				Log.verbose("XML right ...");
 				htmlFlush();
-				this.alignment = AlignMode.alignRight;
+				this.alignment = AlignMode.RIGHT;
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("justify")) {
 				Log.verbose("XML justify ...");
 				htmlFlush();
-				this.alignment = AlignMode.alignJustify;
+				this.alignment = AlignMode.JUSTIFY;
 				parseHtmlNode(elem);
 			} else {
 				Log.error("node not suported type: " + elem.getType() + " val='" + elem.getValue() + "'");
@@ -527,7 +515,7 @@ public abstract class TextBase extends Compositing {
 	public void print(final String text, final List<TextDecoration> decoration) {
 		Color tmpFg = this.color;
 		Color tmpBg = this.colorBg;
-		if (this.alignment == AlignMode.alignDisable) {
+		if (this.alignment == AlignMode.DISABLE) {
 			// Log.debug(" 1 print in not alligned mode : start=" + this.sizeDisplayStart +
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 			// display the cursor if needed (if it is at the start position...)
@@ -594,22 +582,22 @@ public abstract class TextBase extends Compositing {
 				final boolean needNoJustify = extrapolateLastId(text, currentId, stop, space, freeSpace);
 				float interpolation = basicSpaceWidth;
 				switch (this.alignment) {
-					case alignJustify:
+					case JUSTIFY:
 						if (!needNoJustify) {
 							interpolation += (float) freeSpace.value / (float) (space.value - 1);
 						}
 						break;
-					case alignDisable: // must not came from here ...
-					case alignLeft:
+					case DISABLE: // must not came from here ...
+					case LEFT:
 						// nothing to do ...
 						break;
-					case alignRight:
+					case RIGHT:
 						if (this.needDisplay) {
 							// Move the first char at the right :
 							setPos(new Vector3f(this.position.x() + freeSpace.value, this.position.y(), this.position.z()));
 						}
 						break;
-					case alignCenter:
+					case CENTER:
 						if (this.needDisplay) {
 							// Move the first char at the right :
 							setPos(new Vector3f(this.position.x() + freeSpace.value / 2, this.position.y(), this.position.z()));
@@ -642,7 +630,7 @@ public abstract class TextBase extends Compositing {
 						}
 					}
 					// special for the justify mode
-					if (text.charAt(iii) == Character.SPACE_SEPARATOR) {
+					if (text.charAt(iii) == (char) Character.SPACE_SEPARATOR) {
 						// Log.debug(" generateString : \" \"");
 						if (this.needDisplay && this.colorBg.a() != 0) {
 							this.vectorialDraw.setPos(this.position);
@@ -677,12 +665,12 @@ public abstract class TextBase extends Compositing {
 				}
 				if (currentId == stop.value) {
 					currentId++;
-				} else if (text.charAt(stop.value) == Character.SPACE_SEPARATOR) {
+				} else if (text.charAt(stop.value) == (char) Character.SPACE_SEPARATOR) {
 					currentId = stop.value + 1;
 					// reset position :
 					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
 					this.nbCharDisplayed++;
-				} else if (text.charAt(stop.value) == Character.LINE_SEPARATOR) {
+				} else if (text.charAt(stop.value) == (char) Character.LINE_SEPARATOR) {
 					currentId = stop.value + 1;
 					// reset position :
 					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
@@ -787,7 +775,7 @@ public abstract class TextBase extends Compositing {
 	 */
 	public void printHTML(final String text) {
 		// reset parameter :
-		this.htmlDecoTmp = new TextDecoration(this.defaultColorFg, this.defaultColorBg, FontMode.Regular);
+		this.htmlDecoTmp = new TextDecoration(this.defaultColorFg, this.defaultColorBg, FontMode.REGULAR);
 		try {
 			final XmlElement doc = Exml.parse(text);
 			if (!doc.existNode("html")) {
@@ -829,11 +817,11 @@ public abstract class TextBase extends Compositing {
 		this.clippingEnable = false;
 		this.color = this.defaultColorFg;
 		this.colorBg = this.defaultColorBg;
-		this.mode = FontMode.Regular;
+		this.mode = FontMode.REGULAR;
 		this.previousCharcode = 0;
 		this.startTextPos = 0;
 		this.stopTextPos = 0;
-		this.alignment = AlignMode.alignDisable;
+		this.alignment = AlignMode.DISABLE;
 		this.htmlCurrentLine = "";
 		this.selectionStartPos = -100;
 		this.cursorPos = -100;
@@ -976,16 +964,16 @@ public abstract class TextBase extends Compositing {
 	public void setFontBold(final boolean status) {
 		if (status) {
 			// enable
-			if (this.mode == FontMode.Regular) {
-				setFontMode(FontMode.Bold);
-			} else if (this.mode == FontMode.Italic) {
-				setFontMode(FontMode.BoldItalic);
+			if (this.mode == FontMode.REGULAR) {
+				setFontMode(FontMode.BOLD);
+			} else if (this.mode == FontMode.ITALIC) {
+				setFontMode(FontMode.BOLD_ITALIC);
 			}
 		} else // disable
-		if (this.mode == FontMode.Bold) {
-			setFontMode(FontMode.Regular);
-		} else if (this.mode == FontMode.BoldItalic) {
-			setFontMode(FontMode.Italic);
+		if (this.mode == FontMode.BOLD) {
+			setFontMode(FontMode.REGULAR);
+		} else if (this.mode == FontMode.BOLD_ITALIC) {
+			setFontMode(FontMode.ITALIC);
 		}
 	}
 	
@@ -996,16 +984,16 @@ public abstract class TextBase extends Compositing {
 	public void setFontItalic(final boolean status) {
 		if (status) {
 			// enable
-			if (this.mode == FontMode.Regular) {
-				setFontMode(FontMode.Italic);
-			} else if (this.mode == FontMode.Bold) {
-				setFontMode(FontMode.BoldItalic);
+			if (this.mode == FontMode.REGULAR) {
+				setFontMode(FontMode.ITALIC);
+			} else if (this.mode == FontMode.BOLD) {
+				setFontMode(FontMode.BOLD_ITALIC);
 			}
 		} else // disable
-		if (this.mode == FontMode.Italic) {
-			setFontMode(FontMode.Regular);
-		} else if (this.mode == FontMode.BoldItalic) {
-			setFontMode(FontMode.Bold);
+		if (this.mode == FontMode.ITALIC) {
+			setFontMode(FontMode.REGULAR);
+		} else if (this.mode == FontMode.BOLD_ITALIC) {
+			setFontMode(FontMode.BOLD);
 		}
 	}
 	
@@ -1101,7 +1089,7 @@ public abstract class TextBase extends Compositing {
 	 *       was just a char)
 	 */
 	public void setTextAlignment(final float startTextPos, final float stopTextPos) {
-		setTextAlignment(startTextPos, stopTextPos, AlignMode.alignDisable);
+		setTextAlignment(startTextPos, stopTextPos, AlignMode.DISABLE);
 	}
 	
 	public void setTextAlignment(final float startTextPos, final float stopTextPos, final AlignMode alignement) {

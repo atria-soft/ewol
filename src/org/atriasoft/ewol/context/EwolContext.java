@@ -16,7 +16,7 @@ import org.atriasoft.ewol.object.ObjectManager;
 import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.WidgetManager;
 import org.atriasoft.ewol.widget.Windows;
-import org.atriasoft.gale.Application;
+import org.atriasoft.gale.GaleApplication;
 import org.atriasoft.gale.Gale;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.CommandLine;
@@ -28,7 +28,7 @@ import org.atriasoft.gale.key.KeyType;
 import org.atriasoft.gale.resource.ResourceManager;
 
 // Here we hereted from the gale application to be agnostic of the OW where we work ...
-public class EwolContext extends Application {
+public class EwolContext extends GaleApplication {
 	
 	/**
 	 * From everyware in the program, we can get the context inteface.
@@ -36,7 +36,7 @@ public class EwolContext extends Application {
 	 */
 	@SuppressWarnings("preview")
 	public static EwolContext getContext() {
-		Application appl = Gale.getContext().getApplication();
+		GaleApplication appl = Gale.getContext().getApplication();
 		if (appl instanceof EwolContext elem) {
 			return elem;
 		}
@@ -250,20 +250,20 @@ public class EwolContext extends Application {
 			// check Widget shortcut
 			if (!tmpWidget.onEventShortCut(special, value, type, isDown)) {
 				// generate the direct event ...
-				if (type == KeyKeyboard.character) {
+				if (type == KeyKeyboard.CHARACTER) {
 					final EntrySystem tmpEntryEvent;
 					if (isDown) {
-						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.down, special, value);
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.CHARACTER, KeyStatus.down, special, value);
 					} else {
-						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.up, special, value);
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.CHARACTER, KeyStatus.up, special, value);
 					}
 					tmpWidget.systemEventEntry(tmpEntryEvent);
 				} else { // THREADKEYBORADMOVE
 					final EntrySystem tmpEntryEvent;
 					if (isDown) {
-						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.down, special, null);
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.CHARACTER, KeyStatus.down, special, null);
 					} else {
-						tmpEntryEvent = new EntrySystem(KeyKeyboard.character, KeyStatus.up, special, null);
+						tmpEntryEvent = new EntrySystem(KeyKeyboard.CHARACTER, KeyStatus.up, special, null);
 					}
 					tmpWidget.systemEventEntry(tmpEntryEvent);
 				}

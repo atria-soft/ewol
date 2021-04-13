@@ -66,10 +66,10 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		this.font[2] = null;
 		this.font[3] = null;
 		
-		this.modeWraping[0] = FontMode.Regular;
-		this.modeWraping[1] = FontMode.Regular;
-		this.modeWraping[2] = FontMode.Regular;
-		this.modeWraping[3] = FontMode.Regular;
+		this.modeWraping[0] = FontMode.REGULAR;
+		this.modeWraping[1] = FontMode.REGULAR;
+		this.modeWraping[2] = FontMode.REGULAR;
+		this.modeWraping[3] = FontMode.REGULAR;
 		
 		this.lastGlyphPos[0] = Vector2i.ONE;
 		this.lastGlyphPos[1] = Vector2i.ONE;
@@ -93,24 +93,24 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			this.size = Integer.parseInt(sizeString);
 		}
 		// find all the fonts...
-		Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace("\\.svg", "Bold.svg"), fontBaseUri.getproperties());
-		Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace("\\.svg", "Oblique.svg"), fontBaseUri.getproperties());
-		Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace("\\.svg", "BoldOblique.svg"), fontBaseUri.getproperties());
+		Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Bold.svg"), fontBaseUri.getproperties());
+		Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Oblique.svg"), fontBaseUri.getproperties());
+		Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "BoldOblique.svg"), fontBaseUri.getproperties());
 		if (fontBaseUri.exist()) {
-			this.fileName[FontMode.Regular.getValue()] = fontBaseUri;
+			this.fileName[FontMode.REGULAR.getValue()] = fontBaseUri;
 		}
 		if (fontBaseUriBold.exist()) {
-			this.fileName[FontMode.Bold.getValue()] = fontBaseUriBold;
+			this.fileName[FontMode.BOLD.getValue()] = fontBaseUriBold;
 		}
 		if (fontBaseUriOblique.exist()) {
-			this.fileName[FontMode.Italic.getValue()] = fontBaseUriOblique;
+			this.fileName[FontMode.ITALIC.getValue()] = fontBaseUriOblique;
 		}
 		if (fontBaseUriBoldOblique.exist()) {
-			this.fileName[FontMode.BoldItalic.getValue()] = fontBaseUriBoldOblique;
+			this.fileName[FontMode.BOLD_ITALIC.getValue()] = fontBaseUriBoldOblique;
 		}
 		
 		// try to find the reference mode :
-		FontMode refMode = FontMode.Regular;
+		FontMode refMode = FontMode.REGULAR;
 		for (int iii = 3; iii >= 0; iii--) {
 			if (this.fileName[iii] != null) {
 				refMode = FontMode.get(iii);
@@ -160,10 +160,10 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		}
 		flush();
 		Log.debug("Wrapping properties : ");
-		Log.debug("    " + FontMode.Regular + " == >" + getWrappingMode(FontMode.Regular));
-		Log.debug("    " + FontMode.Italic + " == >" + getWrappingMode(FontMode.Italic));
-		Log.debug("    " + FontMode.Bold + " == >" + getWrappingMode(FontMode.Bold));
-		Log.debug("    " + FontMode.BoldItalic + " == >" + getWrappingMode(FontMode.BoldItalic));
+		Log.debug("    " + FontMode.REGULAR + " == >" + getWrappingMode(FontMode.REGULAR));
+		Log.debug("    " + FontMode.ITALIC + " == >" + getWrappingMode(FontMode.ITALIC));
+		Log.debug("    " + FontMode.BOLD + " == >" + getWrappingMode(FontMode.BOLD));
+		Log.debug("    " + FontMode.BOLD_ITALIC + " == >" + getWrappingMode(FontMode.BOLD_ITALIC));
 	}
 	
 	/**
@@ -268,7 +268,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	 * @return Dimention of the font need between 2 lines
 	 */
 	public int getHeight() {
-		return this.height[FontMode.Regular.getValue()];
+		return this.height[FontMode.REGULAR.getValue()];
 	}
 	
 	public int getHeight(final FontMode displayMode) {

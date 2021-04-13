@@ -22,12 +22,12 @@ import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.backend3d.OpenGL;
 
 public class CompositingText extends TextBase {
-	List<Color> colors = new ArrayList<>();
+	protected List<Color> colors = new ArrayList<>();
 	protected ResourceTexturedFont font; // !< Font resources
-	List<Vector3f> pointPositions = new ArrayList<>();
+	protected List<Vector3f> pointPositions = new ArrayList<>();
 	protected float size;
 	
-	List<Vector2f> texturePositions = new ArrayList<>();
+	protected List<Vector2f> texturePositions = new ArrayList<>();
 	
 	public CompositingText() {
 		this("");
@@ -87,16 +87,7 @@ public class CompositingText extends TextBase {
 		// draw BG in any case:
 		this.vectorialDraw.draw(disableDepthTest);
 		
-		// TODO : do it only one time (when needed ...)
-		// set texture coordonates :
-		this.vbo.setVboData(TextBase.vboIdCoordText, this.texturePositions.toArray(Vector2f[]::new));
-		// set display positions :
-		this.vbo.setVboData(TextBase.vboIdCoord, this.pointPositions.toArray(Vector3f[]::new));
-		// set the color
-		this.vbo.setVboData(TextBase.vboIdColor, this.colors.toArray(Color[]::new));
-		// TODO : do it only one time (when needed ...) --------- end -------
-		
-		if (this.vbo.bufferSize(TextBase.vboIdCoord) <= 0 || this.font == null) {
+		if (this.vbo.getVertexCount() <= 0 || this.font == null) {
 			// Log.warning("Nothink to draw...");
 			return;
 		}
@@ -111,19 +102,16 @@ public class CompositingText extends TextBase {
 		// set Matrix : translation/positionMatrix
 		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
 		this.oGLprogram.use();
+		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
 		// Texture :
 		this.oGLprogram.setTexture0(this.oGLtexID, this.font.getRendererId());
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
 		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().x());
-		// position:
-		this.oGLprogram.sendAttributePointer(this.oGLPosition, this.vbo, TextBase.vboIdCoord);
-		// Texture:
-		this.oGLprogram.sendAttributePointer(this.oGLtexture, this.vbo, TextBase.vboIdCoordText);
-		// color:
-		this.oGLprogram.sendAttributePointer(this.oGLColor, this.vbo, TextBase.vboIdColor);
-		// Request the draw od the elements :
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.vbo.bufferSize(TextBase.vboIdCoord));
+		// Request the draw of the elements:
+		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
+		
+		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 	}
 	
@@ -133,7 +121,7 @@ public class CompositingText extends TextBase {
 		// draw BG in any case:
 		this.vectorialDraw.draw();
 		
-		if (this.vbo.bufferSize(TextBase.vboIdCoord) <= 0 || this.font == null) {
+		if (this.vbo.getVertexCount() <= 0 || this.font == null) {
 			// TODO : set it back ...
 			// Log.warning("Nothink to draw...");
 			return;
@@ -150,19 +138,16 @@ public class CompositingText extends TextBase {
 		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		final Matrix4f tmpMatrix = projMatrix.multiply(camMatrix).multiply(transformationMatrix);
 		this.oGLprogram.use();
+		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
 		// Texture:
 		this.oGLprogram.setTexture0(this.oGLtexID, this.font.getRendererId());
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
 		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().x());
-		// position:
-		this.oGLprogram.sendAttributePointer(this.oGLPosition, this.vbo, TextBase.vboIdCoord);
-		// Texture:
-		this.oGLprogram.sendAttributePointer(this.oGLtexture, this.vbo, TextBase.vboIdCoordText);
-		// color:
-		this.oGLprogram.sendAttributePointer(this.oGLColor, this.vbo, TextBase.vboIdColor);
-		// Request the draw od the elements:
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.vbo.bufferSize(TextBase.vboIdCoord));
+		// Request the draw of the elements:
+		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
+		
+		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 		if (enableDepthTest) {
 			OpenGL.disable(OpenGL.Flag.flag_depthTest);
@@ -172,12 +157,14 @@ public class CompositingText extends TextBase {
 	@Override
 	public void flush() {
 		super.flush();
-		// set texture coordinates :
-		this.vbo.setVboData(TextBase.vboIdCoordText, this.texturePositions.toArray(Vector2f[]::new));
+		// set texture coordonates :
+		this.vbo.setTextureCoordinate(this.texturePositions.toArray(Vector2f[]::new));
 		// set display positions :
-		this.vbo.setVboData(TextBase.vboIdCoord, this.pointPositions.toArray(Vector3f[]::new));
+		this.vbo.setPosition(this.pointPositions.toArray(Vector3f[]::new));
 		// set the color
-		this.vbo.setVboData(TextBase.vboIdColor, this.colors.toArray(Color[]::new));
+		this.vbo.setColors(this.colors.toArray(Color[]::new));
+		this.vbo.setVertexCount(this.pointPositions.size());
+		this.vbo.flush();
 	}
 	
 	@Override

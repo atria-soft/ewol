@@ -59,7 +59,7 @@ public class ObjectManager {
 	 */
 	public synchronized void cleanInternalRemoved() {
 		final int nbObject = this.eObjectList.size();
-		Log.verbose("Clean Object List (if needed) : " + this.eObjectList.size() + " elements");
+		//Log.verbose("Clean Object List (if needed) : " + this.eObjectList.size() + " elements");
 		final Iterator<WeakReference<EwolObject>> iterator = this.eObjectList.iterator();
 		while (iterator.hasNext()) {
 			final WeakReference<EwolObject> elem = iterator.next();

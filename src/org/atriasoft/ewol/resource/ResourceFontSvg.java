@@ -70,7 +70,7 @@ public class ResourceFontSvg extends Resource {
 		}
 		for (int yyy = 0; yyy < weight.getHeight(); yyy++) {
 			for (int xxx = 0; xxx < weight.getWidth(); xxx++) {
-				final float valueColor = weight.get(xxx, yyy);
+				final float valueColor = weight.get(xxx, weight.getHeight() - 1 - yyy);
 				// set only alpha :
 				switch (posInImage) {
 					default:
@@ -96,7 +96,7 @@ public class ResourceFontSvg extends Resource {
 		Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		for (int jjj = 0; jjj < weight.getHeight(); jjj++) {
 			for (int iii = 0; iii < weight.getWidth(); iii++) {
-				final float valueColor = weight.get(iii, jjj);
+				final float valueColor = weight.get(iii, weight.getHeight() - 1 - jjj);
 				// real set of color
 				imageOut.set(borderSize + iii, borderSize + jjj, valueColor);
 			}

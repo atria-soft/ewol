@@ -1,17 +1,17 @@
 package org.atriasoft.ewol.resource.font;
 
 public enum FontMode {
-	Regular(0),
-	Italic(1),
-	Bold(2),
-	BoldItalic(3);
+	REGULAR(0),
+	ITALIC(1),
+	BOLD(2),
+	BOLD_ITALIC(3);
 	
 	public static FontMode get(final int newValue) {
 		return switch (newValue) {
-			case 1 -> Italic;
-			case 2 -> Bold;
-			case 3 -> BoldItalic;
-			default -> Regular;
+			case 1 -> ITALIC;
+			case 2 -> BOLD;
+			case 3 -> BOLD_ITALIC;
+			default -> REGULAR;
 		};
 	}
 	

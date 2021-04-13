@@ -28,13 +28,10 @@ public class CompositingDrawing extends Compositing {
 	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); // !< Clipping stop position
 	private Color color = Color.BLACK; // !< The text foreground color
 	private Color colorBg = Color.NONE; // !< The text background color
-	private final int oGLColor = -1; // !< openGL id on the element (color buffer)
 	private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
 	private int oGLMatrixPosition = -1; // !< position matrix
-	private final int oGLPosition = -1; // !< openGL id on the element (vertex buffer)
 	private ResourceProgram oGLprogram; // !< pointer on the opengl display program
 	private final List<Color> outColors = new ArrayList<>();
-	private final List<Integer> outIndice = new ArrayList<>();
 	private final List<Vector3f> outTriangles = new ArrayList<>();
 	
 	private Vector3f position = new Vector3f(0, 0, 0); // !< The current position to draw
@@ -161,7 +158,6 @@ public class CompositingDrawing extends Compositing {
 		this.vbo.clear();
 		this.outTriangles.clear();
 		this.outColors.clear();
-		this.outIndice.clear();
 		
 		// reset temporal variables :
 		this.position = Vector3f.ZERO;
@@ -194,15 +190,9 @@ public class CompositingDrawing extends Compositing {
 		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixPosition, Matrix4f.IDENTITY);
-		
 		// Request the draw of the elements:
 		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
-		//this.vbo.render(OpenGL.RenderMode.triangle);
-		this.vbo.flush();
 		this.vbo.unBindForRendering();
-		// Request the draw of the elements :
-		//     OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, this.vbo.bufferSize(CompositingDrawing.vboIdCoord));
-		// no: OpenGL.drawElements(OpenGL.RenderMode.triangle, this.vbo.bufferSize(CompositingDrawing.vboIdCoord));
 		this.oGLprogram.unUse();
 	}
 	
@@ -211,25 +201,7 @@ public class CompositingDrawing extends Compositing {
 		// push data on the VBO
 		this.vbo.setPosition(this.outTriangles.toArray(Vector3f[]::new));
 		this.vbo.setColors(this.outColors.toArray(Color[]::new));
-		//this.vbo.setIndices(this.outIndice);
 		this.vbo.setVertexCount(this.outTriangles.size());
-		
-		// for test only
-		
-		//float[] vertice = { -500f, -500f, 0.0f, 0.0f, 500f, 0.0f, 500f, -500f, 0.0f };
-		//		float[] color = { 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, };
-		//		
-		//		this.vbo.setPosition(vertice);
-		//		this.vbo.setColors(color);
-		//		this.vbo.setVertexCount(3);
-		
-		//		Vector3f[] vertice = { new Vector3f(-500f, -500f, 0.0f), new Vector3f(0.0f, 500f, 0.0f), new Vector3f(500f, -500f, 0.0f) };
-		//		Color[] color = { Color.RED, Color.GREEN, Color.BLUE };
-		//		
-		//		this.vbo.setPosition(vertice);
-		//		this.vbo.setColors(color);
-		//		this.vbo.setVertexCount(3);
-		//		this.vbo.flush();
 	}
 	
 	/**

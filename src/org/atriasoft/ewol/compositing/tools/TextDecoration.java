@@ -12,7 +12,7 @@ public record TextDecoration(Color colorFG, Color colorBG, FontMode mode) {
 	}
 
 	public TextDecoration() {
-		this(Color.BLACK, Color.NONE, FontMode.Regular);
+		this(Color.BLACK, Color.NONE, FontMode.REGULAR);
 	}
 
 	public TextDecoration withFG(final Color color) {
