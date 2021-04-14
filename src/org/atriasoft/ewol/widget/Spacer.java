@@ -60,16 +60,14 @@ public class Spacer extends Widget {
 		}
 		this.draw.setColor(this.propertyColor);
 		this.draw.setPos(Vector3f.ZERO);
-		this.draw.setPos(new Vector3f(this.size.x() * 0.1f, this.size.y() * 0.1f, 0));
-		this.draw.rectangleWidth(new Vector3f(this.size.x() * 0.8f, this.size.y() * 0.8f, 0));
+		this.draw.rectangleWidth(new Vector3f(this.size.x(), this.size.y(), 0));
+		//this.draw.setPos(new Vector3f(this.size.x() * 0.1f, this.size.y() * 0.1f, 0));
+		//this.draw.rectangleWidth(new Vector3f(this.size.x() * 0.8f, this.size.y() * 0.8f, 0));
 		
-		//		this.draw.setColor(Color.RED);
-		//		this.draw.setPos(new Vector3f(-1024, -1024, 0));
-		//		this.draw.rectangleWidth(new Vector3f(2048, 2048, 0));
 		this.draw.flush();
 	}
 	
-	public void setPropertyTextColorBgOn(final Color propertyColor) {
+	public void setPropertyColor(final Color propertyColor) {
 		if (propertyColor.equals(this.propertyColor)) {
 			return;
 		}
