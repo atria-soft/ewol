@@ -20,7 +20,7 @@ import org.atriasoft.gale.GaleApplication;
 import org.atriasoft.gale.Gale;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.CommandLine;
-import org.atriasoft.gale.context.Context;
+import org.atriasoft.gale.context.GaleContext;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
@@ -72,6 +72,7 @@ public class EwolContext extends GaleApplication {
 	 * Redraw all the windows
 	 */
 	public void forceRedrawAll() {
+		Log.warning("force redraw on windows:" + this.windowsCurrent);
 		if (this.windowsCurrent == null) {
 			return;
 		}
@@ -147,7 +148,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onCreate(final Context context) {
+	public void onCreate(final GaleContext context) {
 		Log.info(" == > Ewol system create (BEGIN)");
 		// Add basic ewol translation:
 		ETranslate.addPath("ewol", new Uri("TRANSLATE", "", "ewol"));
@@ -188,7 +189,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onDestroy(final Context context) {
+	public void onDestroy(final GaleContext context) {
 		Log.info(" == > Ewol system destroy (BEGIN)");
 		// Remove current windows
 		this.windowsCurrent = null;
@@ -210,8 +211,8 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onDraw(final Context context) {
-		// Log.info("DRAW");
+	public void onDraw(final GaleContext context) {
+		//Log.verbose("EWOL DRAW");
 		// clean internal data...
 		this.objectManager.cleanInternalRemoved();
 		// real draw...
@@ -274,7 +275,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onKillDemand(final Context context) {
+	public void onKillDemand(final GaleContext context) {
 		Log.info(" == > User demand a destroy (BEGIN)");
 		final EwolApplication appl = this.application;
 		if (appl == null) {
@@ -286,7 +287,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onPause(final Context context) {
+	public void onPause(final GaleContext context) {
 		Log.info(" == > Ewol system pause (BEGIN)");
 		final EwolApplication appl = this.application;
 		if (appl == null) {
@@ -322,12 +323,12 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onRegenerateDisplay(final Context context) {
-		// Log.info("REGENERATEDISPLAY");
+	public void onRegenerateDisplay(final GaleContext context) {
+		//Log.info("EWOL onRegenerateDisplay /// ");
 		// check if the user selected a windows
 		final Windows window = this.windowsCurrent;
 		if (window == null) {
-			Log.debug("No windows ...");
+			Log.error("No windows ...");
 			return;
 		}
 		// Redraw all needed elements
@@ -338,13 +339,19 @@ public class EwolContext extends GaleApplication {
 		// markDrawingIsNeeded();
 	}
 	
+	@Override
+	public void onResize(final Vector2f size) {
+		super.onResize(size);
+		forceRedrawAll();
+	}
+	
 	public void onResize(final Vector2i size) {
 		Log.verbose("Resize: " + size);
 		forceRedrawAll();
 	}
 	
 	@Override
-	public void onResume(final Context context) {
+	public void onResume(final GaleContext context) {
 		Log.info(" == > Ewol system resume (BEGIN)");
 		final EwolApplication appl = this.application;
 		if (appl == null) {
@@ -355,7 +362,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onStart(final Context context) {
+	public void onStart(final GaleContext context) {
 		Log.info(" == > Ewol system start (BEGIN)");
 		final EwolApplication appl = this.application;
 		if (appl == null) {
@@ -367,7 +374,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	@Override
-	public void onStop(final Context context) {
+	public void onStop(final GaleContext context) {
 		Log.info(" == > Ewol system stop (BEGIN)");
 		final EwolApplication appl = this.application;
 		if (appl == null) {
@@ -381,7 +388,7 @@ public class EwolContext extends GaleApplication {
 	 * Request a display after call a resize
 	 */
 	public void requestUpdateSize() {
-		final Context context = Gale.getContext();
+		final GaleContext context = Gale.getContext();
 		context.requestUpdateSize();
 	}
 	

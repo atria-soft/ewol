@@ -532,7 +532,7 @@ public class Widget extends EwolObject {
 	 */
 	public void onRegenerateDisplay() {}
 	
-	protected void onUmpdateMinMaxSize() {
+	protected void onUpdateMinMaxSize() {
 		final Vector2f pixelMin = this.propertyMinSize.getPixel();
 		final Vector2f pixelMax = this.propertyMaxSize.getPixel();
 		// check minimum  maximum compatibility :
@@ -708,7 +708,7 @@ public class Widget extends EwolObject {
 			return;
 		}
 		this.propertyMaxSize = value;
-		onUmpdateMinMaxSize();
+		onUpdateMinMaxSize();
 	}
 	
 	public void setPropertyMinSize(final Dimension value) {
@@ -716,7 +716,7 @@ public class Widget extends EwolObject {
 			return;
 		}
 		this.propertyMinSize = value;
-		onUmpdateMinMaxSize();
+		onUpdateMinMaxSize();
 	}
 	
 	/**
