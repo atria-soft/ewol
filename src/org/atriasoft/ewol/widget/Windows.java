@@ -157,11 +157,11 @@ public class Windows extends Widget {
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
-			this.subWidget.onRegenerateDisplay();
+			this.subWidget.systemRegenerateDisplay();
 		}
 		for (Widget it : this.popUpWidgetList) {
 			if (it != null) {
-				it.onRegenerateDisplay();
+				it.systemRegenerateDisplay();
 			}
 		}
 	}

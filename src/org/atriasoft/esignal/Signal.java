@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 class ConnectedElement<T> {
-	private final WeakReference<Object> reference;
 	private final Consumer<T> consumer;
+	private final WeakReference<Object> reference;
 	
 	public ConnectedElement(final WeakReference<Object> reference, final Consumer<T> consumer) {
 		this.reference = reference;

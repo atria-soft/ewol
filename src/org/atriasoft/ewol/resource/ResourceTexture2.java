@@ -6,7 +6,8 @@
 package org.atriasoft.ewol.resource;
 
 import org.atriasoft.echrono.Steady;
-import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ImageByte;
+import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.internal.Log;
@@ -42,11 +43,11 @@ public class ResourceTexture2 extends Resource {
 	 */
 	
 	// openGl Context properties :
-	protected Image data = new Image(32, 32);
+	protected ImageByte data = new ImageByteRGBA(32, 32);
 	// !< Color space of the image.
 	private final TextureColorMode dataColorSpace = TextureColorMode.rgba;
 	// Filter apply at the image when rendering it
-	protected TextureFilter filter = TextureFilter.linear;
+	protected TextureFilter filter = TextureFilter.LINEAR;
 	// ! Last loaded size in the system openGL
 	protected Vector2i lastSize = new Vector2i(1, 1);
 	protected int lastSizeObject = 0;
@@ -105,7 +106,7 @@ public class ResourceTexture2 extends Resource {
 	}
 	
 	// Get the reference on this image to draw something on it ...
-	public Image get() {
+	public ImageByte get() {
 		return this.data;
 	}
 	
@@ -143,7 +144,7 @@ public class ResourceTexture2 extends Resource {
 	 * @note It will resize in square2 if needed by the system.
 	 * @param image Image to set.
 	 */
-	public synchronized void set(final Image image) {
+	public synchronized void set(final ImageByte image) {
 		Log.debug("Set a new image in a texture:");
 		Log.debug("    size=" + image.getSize());
 		this.data = image;
@@ -197,7 +198,7 @@ public class ResourceTexture2 extends Resource {
 		 * TODO : use unlockable synchronized ... if (lock.tryLock() == false) { //Lock
 		 * error ==> try later ... return false; }
 		 */
-		final int typeObject = OpenGL.GL_RGBA;
+		final int typeObject = this.data.hasAlpha() ? OpenGL.GL_RGBA : OpenGL.GL_RGB;
 		final int sizeObject = OpenGL.GL_UNSIGNED_BYTE;
 		if (this.loaded) {
 			if (this.lastTypeObject != typeObject || this.lastSizeObject != sizeObject || !this.lastSize.equals(this.data.getSize())) {
@@ -217,7 +218,7 @@ public class ResourceTexture2 extends Resource {
 			Log.debug("TEXTURE: update [" + getId() + "]=" + this.data.getSize() + "=>" + this.data.getGPUSize() + " OGlId=" + this.texId + " type=" + this.data.getClass().getCanonicalName());
 		}
 		// in all case we set the texture properties :
-		// TODO : check error ???
+		// TODO check error ???
 		OpenGL.bindTexture2D(this.texId);
 		
 		if (!this.loaded) {
@@ -226,7 +227,7 @@ public class ResourceTexture2 extends Resource {
 			} else {
 				OpenGL.setTexture2DWrapRepeat();
 			}
-			if (this.filter == TextureFilter.linear) {
+			if (this.filter == TextureFilter.LINEAR) {
 				OpenGL.setTexture2DFilterLinear();
 			} else {
 				OpenGL.setTexture2DFilterNearest();
@@ -235,26 +236,7 @@ public class ResourceTexture2 extends Resource {
 		// glPixelStorei(GLUNPACKALIGNMENT,1);
 		final Steady toc1 = Steady.now();
 		Log.verbose("    BIND                 ==> " + toc1.less(tic));
-		// egami::store(this.data, String("~/texture") + etk::toString(getId()) +
-		// ".bmp");
-		/*
-		 * if (false) { // On some embended target, the texture size must be square of
-		 * 2: if (this.loaded == false) { // 1: Create the square 2 texture: final int
-		 * bufferSize = this.data.getGPUSize().x() * this.data.getGPUSize().y() * 8;
-		 * static List<float> tmpData; if (tmpData.size() < bufferSize) {
-		 * tmpData.resize(bufferSize, 0.0f); } Log.debug("    CREATE texture ==> " +
-		 * this.data.getGPUSize()); // 2 create a new empty texture:
-		 * OpenGL.glTexImage2D(GLTEXTURE2D, // Target 0, // Level typeObject, //
-		 * Format internal this.data.getGPUSize().x(), this.data.getGPUSize().y(), 0, //
-		 * Border typeObject, // format sizeObject, // type tmpData[0] );
-		 * 
-		 * } //3 Flush all time the data: Steady tic1 = Steady.now();
-		 * glTexSubImage2D(GLTEXTURE2D, // Target 0, // Level 0, // x offset 0, // y
-		 * offset this.data.getWidth(), this.data.getHeight(), typeObject, // format
-		 * sizeObject, // type (void*)((char*)this.data.getTextureDataPointer()) );
-		 * Steady toc2 = Steady.now(); Log.info("    updateContext [STOP] ==> " +
-		 * toc2.less(tic1)); } else
-		 */
+		// egami::store(this.data, String("~/texture") + etk::toString(getId()) + ".bmp");
 		if (!this.loaded) {
 			OpenGL.glTexImage2D(0, // Level
 					typeObject, // Format internal
@@ -277,8 +259,4 @@ public class ResourceTexture2 extends Resource {
 		// Log.error(" updateContext [STOP] ==> " + (toc - toc1));
 		return true;
 	}
-}
-
-enum TextureFilter {
-	linear, nearest
 }

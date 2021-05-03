@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.esignal.Signal;
+import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
@@ -22,6 +23,7 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
+import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.event.EntrySystem;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
@@ -55,8 +57,9 @@ public class Widget extends EwolObject {
 	// -- keyboard event properties Area
 	// ----------------------------------------------------------------------------------------------------------------
 	private boolean allowRepeatKeyboardEvent = true; //!< This remove the repeating keybord event due to the ant pressing key.
-	
 	private Cursor cursorDisplay = Cursor.arrow;
+	
+	private final CompositingDrawing drawDebugBorder = new CompositingDrawing(); //!< Compositing drawing element
 	
 	// grab cursor mode
 	private boolean grabCursor = false;
@@ -484,7 +487,7 @@ public class Widget extends EwolObject {
 	 */
 	public boolean onEventShortCut(final KeySpecial special, Character unicodeValue, final KeyKeyboard kbMove, final boolean isDown) {
 		unicodeValue = Character.toLowerCase(unicodeValue);
-		Log.verbose("check shortcut...." + special + " " + unicodeValue + " " + kbMove + " " + (isDown ? "DOWN" : "UP") + " nb shortcut:" + this.localShortcut.size());
+		//Log.verbose("check shortcut...." + special + " " + unicodeValue + " " + kbMove + " " + (isDown ? "DOWN" : "UP") + " nb shortcut:" + this.localShortcut.size());
 		// Remove the up event of the shortcut...
 		if (!isDown) {
 			for (int iii = this.localShortcut.size() - 1; iii >= 0; iii--) {
@@ -527,10 +530,7 @@ public class Widget extends EwolObject {
 	 */
 	protected void onLostFocus() {}
 	
-	/**
-	 * Event generated when a redraw is needed
-	 */
-	public void onRegenerateDisplay() {}
+	protected void onRegenerateDisplay() {}
 	
 	protected void onUpdateMinMaxSize() {
 		final Vector2f pixelMin = this.propertyMinSize.getPixel();
@@ -927,12 +927,15 @@ public class Widget extends EwolObject {
 		// Scale if needed (feature not validate)
 		final Matrix4f tmpScale = Matrix4f.createMatrixScale(this.zoom, this.zoom, 1.0f);
 		// create orthogonal projection for GUI ==> simple to manage staking
-		Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2, -tmpSize.size().y() / 2, tmpSize.size().y() / 2, -50, 50);
-		Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
+		Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2, -tmpSize.size().y() / 2, tmpSize.size().y() / 2, -500, 500);
+		//Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
 		
 		OpenGL.push();
 		// set internal matrix system :
-		OpenGL.setMatrix(tmpMat);
+		//OpenGL.setMatrix(tmpMat);
+		OpenGL.setMatrix(tmpProjection);
+		OpenGL.setCameraMatrix(tmpScale.multiply(tmpTranslate));
+		this.drawDebugBorder.draw();
 		//long startTime = ewol::getTime();
 		onDraw();
 		OpenGL.pop();
@@ -961,13 +964,41 @@ public class Widget extends EwolObject {
 	 * @return false the event is not used
 	 */
 	public boolean systemEventInput(final InputSystem event) {
-		final Widget up = (Widget) this.parent.get();
-		if (up != null) {
-			if (up.systemEventInput(event)) {
-				return true;
+		if (this.parent != null) {
+			final Widget up = (Widget) this.parent.get();
+			if (up != null) {
+				if (up.systemEventInput(event)) {
+					return true;
+				}
 			}
 		}
 		return onEventInput(event.event());
+	}
+	
+	/**
+	 * Event generated when a redraw is needed
+	 */
+	public void systemRegenerateDisplay() {
+		if (this.drawDebugBorder != null) {
+			this.drawDebugBorder.clear();
+			this.drawDebugBorder.setColor(Color.RED);
+			this.drawDebugBorder.setPos(1, 1);
+			this.drawDebugBorder.setThickness(1);
+			this.drawDebugBorder.lineRel(this.size.x() - 2, 0); // TODO PB with the thickness when draw rectangle ...
+			this.drawDebugBorder.setPos(this.size.x() - 1, 1);
+			this.drawDebugBorder.lineRel(0, this.size.y() - 2);
+			this.drawDebugBorder.setPos(this.size.x() - 1, this.size.y() - 1);
+			this.drawDebugBorder.lineRel(-this.size.x() - 2, 0);
+			this.drawDebugBorder.setPos(1, this.size.y() - 1);
+			this.drawDebugBorder.lineRel(0, -this.size.y() - 2);
+			/*
+			this.drawDebugBorder.setColor(Color.BLUE);
+			this.drawDebugBorder.setPos(3, 3);
+			this.drawDebugBorder.rectangleWidth(new Vector3f(this.size.x() - 6, this.size.y() - 6, 0));
+			*/
+			this.drawDebugBorder.flush();
+		}
+		onRegenerateDisplay();
 	}
 	
 	/**

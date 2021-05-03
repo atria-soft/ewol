@@ -170,13 +170,13 @@ class InputManager {
 			// this event is all time on the good widget ... and manage the enter and leave ...
 			// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
 			Widget tmpWidget = null;
-			if (this.grabWidget.get() != null) {
+			if (this.grabWidget != null && this.grabWidget.get() != null) {
 				// grab all events ...
 				tmpWidget = this.grabWidget.get();
 			} else if (tmpWindows != null) {
 				tmpWidget = tmpWindows.getWidgetAtPos(pos);
 			}
-			if (tmpWidget != eventTable[pointerID].curentWidgetEvent.get()
+			if (eventTable[pointerID].curentWidgetEvent != null && tmpWidget != eventTable[pointerID].curentWidgetEvent.get()
 					|| (eventTable[pointerID].isInside && (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y()
 							|| (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x() || (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()))) {
 				eventTable[pointerID].isInside = false;
@@ -301,7 +301,7 @@ class InputManager {
 				eventTable[pointerID].lastTimeEvent = currentTime;
 				// set the element inside ...
 				eventTable[pointerID].isInside = true;
-				Widget tmpWidget = this.grabWidget.get();
+				Widget tmpWidget = this.grabWidget == null ? null : this.grabWidget.get();
 				// get destination widget :
 				if (tmpWindows != null) {
 					if (tmpWidget != null && type == KeyType.mouse) {
@@ -368,7 +368,7 @@ class InputManager {
 						nbClickMax = 5;
 					}
 					// in grab mode the single to quinte event are not generated ....
-					if ((this.grabWidget.get() == null || type != KeyType.mouse) && eventTable[pointerID].nbClickEvent < nbClickMax) {
+					if ((this.grabWidget == null || this.grabWidget.get() == null || type != KeyType.mouse) && eventTable[pointerID].nbClickEvent < nbClickMax) {
 						// generate event SINGLE :
 						eventTable[pointerID].nbClickEvent++;
 						//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [" + eventTable[pointerID].nbClickEvent + "] " + pos);

@@ -45,7 +45,6 @@ public class Spacer extends Widget {
 	@Override
 	public void onDraw() {
 		this.draw.draw();
-		this.draw.flush();
 	}
 	
 	@Override

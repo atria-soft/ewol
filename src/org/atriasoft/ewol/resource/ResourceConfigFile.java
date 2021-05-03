@@ -32,30 +32,35 @@ public class ResourceConfigFile extends Resource {
 	 * @param name Name of the configuration file.
 	 * @return pointer on the resource or null if an error occurred.
 	 */
-	public static ResourceConfigFile keep(final String name) {
+	@SuppressWarnings("preview")
+	public static ResourceConfigFile create(final Uri name) {
 		Resource resource2 = null;
-		if (!name.isEmpty() && !name.contentEquals("---")) {
+		if (name != null && !name.isEmpty()) {
 			resource2 = Resource.getManager().localKeep(name);
 		}
 		if (resource2 != null) {
-			if (resource2 instanceof ResourceConfigFile) {
+			if (resource2 instanceof ResourceConfigFile tmpp) {
 				resource2.keep();
-				return (ResourceConfigFile) resource2;
+				return tmpp;
 			}
 			Log.critical("Request resource file : '" + name + "' With the wrong type (dynamic cast error)");
 			return null;
 		}
-		final ResourceConfigFile resource = new ResourceConfigFile(Uri.valueOf(name));
+		final ResourceConfigFile resource = new ResourceConfigFile(name);
 		Resource.getManager().localAdd(resource);
 		return resource;
 		
+	}
+	
+	public static ResourceConfigFile keep(final String name) {
+		return ResourceConfigFile.create(Uri.valueOf(name));
 	}
 	
 	// List of all color in the file
 	private final List<ListElementConfig> list = new ArrayList<>();
 	
 	protected ResourceConfigFile(final Uri uri) {
-		super(uri.get());
+		super(uri.toString());
 		Log.debug("SFP : load '" + uri + "'");
 		reload();
 		
@@ -67,7 +72,7 @@ public class ResourceConfigFile extends Resource {
 		
 	}
 	
-	boolean getBoolean(final int id) {
+	public boolean getBoolean(final int id) {
 		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonBoolean()) {
 			return false;
 		}
@@ -81,9 +86,13 @@ public class ResourceConfigFile extends Resource {
 		return this.list.get(id).node.toJsonNumber().getValue();
 	}
 	
-	String getString(final int id) {
+	public String getString(final int id) {
+		return getString(id, "");
+	}
+	
+	public String getString(final int id, final String defaultValue) {
 		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonString()) {
-			return "";
+			return defaultValue;
 		}
 		return this.list.get(id).node.toJsonString().getValue();
 	}
