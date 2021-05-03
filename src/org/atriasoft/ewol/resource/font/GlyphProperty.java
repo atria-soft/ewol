@@ -51,13 +51,15 @@ public class GlyphProperty {
 	public Vector2i sizeTexture = new Vector2i(10, 10); //!< size of the element to display
 	public Vector2f texturePosSize = Vector2f.ZERO; //!< Texture normalized size (SIZE)
 	public Vector2f texturePosStart = Vector2f.ZERO; //!< Texture normalized position (START)
+	public Vector2f textureRenderOffset = Vector2f.ZERO; //!< Offset to apply on the rendering to display glyph at the good position (correct position when render texture is bigger than the glyph size
 	
 	public GlyphProperty(final EsvgFont font, final Glyph glyph, final int fontSize) {
 		this.glyph = glyph;
 		this.charcode = this.glyph.getUnicodeValue();
 		this.fontSize = fontSize;
 		this.sizeTexture = font.calculateWidthRendering(glyph.getUnicodeValue(), fontSize);
-		this.scaleFactor = font.calculateSclaeFactor(fontSize);
+		this.scaleFactor = font.calculateSclaleFactor(fontSize);
+		this.textureRenderOffset = font.calculateRenderOffset(fontSize);
 	}
 	
 	public GlyphProperty(final EsvgFont font, final int charcode, final int fontSize) {
@@ -81,6 +83,10 @@ public class GlyphProperty {
 			return 500 * this.scaleFactor;
 		}
 		return this.glyph.getHorizAdvX() * this.scaleFactor;
+	}
+	
+	public Vector2f getTextureRenderOffset() {
+		return this.textureRenderOffset;
 	}
 	
 	public int getUnicodeValue() {

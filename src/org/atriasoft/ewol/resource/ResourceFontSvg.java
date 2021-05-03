@@ -5,8 +5,8 @@
  */
 package org.atriasoft.ewol.resource;
 
-import org.atriasoft.egami.Image;
-import org.atriasoft.egami.ImageMono;
+import org.atriasoft.egami.ImageByte;
+import org.atriasoft.egami.ImageByteMono;
 import org.atriasoft.esvg.EsvgFont;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.render.Weight;
@@ -63,7 +63,7 @@ public class ResourceFontSvg extends Resource {
 		Log.info("    number of glyph       = " + this.font.getNumGlyphs());
 	}
 	
-	public synchronized boolean drawGlyph(final Image imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage) {
+	public synchronized boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage) {
 		Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		if (weight == null) {
 			return false;
@@ -75,16 +75,16 @@ public class ResourceFontSvg extends Resource {
 				switch (posInImage) {
 					default:
 					case 0:
-						imageOut.setA(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						imageOut.setAFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
 						break;
 					case 1:
-						imageOut.setR(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						imageOut.setRFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
 						break;
 					case 2:
-						imageOut.setG(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						imageOut.setGFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
 						break;
 					case 3:
-						imageOut.setB(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						imageOut.setBFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
 						break;
 				}
 			}
@@ -92,7 +92,7 @@ public class ResourceFontSvg extends Resource {
 		return true;
 	}
 	
-	public synchronized boolean drawGlyph(final ImageMono imageOut, final int fontSize, final GlyphProperty property, final int borderSize) {
+	public synchronized boolean drawGlyph(final ImageByteMono imageOut, final int fontSize, final GlyphProperty property, final int borderSize) {
 		Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		for (int jjj = 0; jjj < weight.getHeight(); jjj++) {
 			for (int iii = 0; iii < weight.getWidth(); iii++) {

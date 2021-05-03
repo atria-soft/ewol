@@ -205,7 +205,7 @@ public class ContainerN extends Widget {
 	public void onRegenerateDisplay() {
 		for (Widget it : this.subWidget) {
 			if (it != null) {
-				it.onRegenerateDisplay();
+				it.systemRegenerateDisplay();
 			}
 		}
 	}

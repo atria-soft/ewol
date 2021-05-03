@@ -5,7 +5,7 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Dimension;
 import org.atriasoft.etk.Uri;
@@ -280,7 +280,7 @@ public class ImageDisplay extends Widget {
 	 * Set an image with direct elements
 	 * @param image Image to set in the display
 	 */
-	public void setCustumSource(final Image image) {
+	public void setCustumSource(final ImageByteRGBA image) {
 		// TODO : Better interfacing of all element internal ==> this is a temporary prototype
 		this.compositing.setSource(image);
 		markToRedraw();

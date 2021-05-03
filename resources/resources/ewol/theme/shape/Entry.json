@@ -1,23 +1,25 @@
 {
-	mode:2,
-	display-outside:false,
-	
+	# padding "outside" the object in pixel ==> prevent bad display
 	padding-out-left:2,
 	padding-out-right:2,
 	padding-out-top:2,
 	padding-out-buttom:2,
 	
-	border-left:1,
-	border-right:1,
-	border-top:1,
-	border-buttom:1,
-	
+	# padding "inside" the object in piuxel ==> prevent bad display
 	padding-in-left:2,
 	padding-in-right:2,
 	padding-in-top:2,
 	padding-in-buttom:2,
 	
-	change-time:356,
-	program:"THEME_GUI:///Entry.prog?lib=ewol",
-	color:"THEME_COLOR:///Entry.json?lib=ewol"
+	# render program:
+	program-vert:"THEME:shape/aaRenderShape.vert?lib=ewol",
+	program-frag:"THEME:shape/aaRenderShape.frag?lib=ewol",
+	
+	# Object to render (with modification)
+	object-file:"THEME:shape/Entry.obj?lib=ewol",
+	
+	# Theme Image (pallete)
+	image-palette:"THEME:shape/GuiPaletteColor.png?lib=ewol",
+	# read mode: 'nearest', 'linear'
+	image-palette-load-mode: "nearest",
 }

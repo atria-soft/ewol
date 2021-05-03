@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Configs;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceTexturedFont;
 import org.atriasoft.ewol.resource.font.FontMode;
@@ -100,10 +100,13 @@ public class CompositingText extends TextBase {
 			return;
 		}
 		// set Matrix : translation/positionMatrix
-		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
+		final Matrix4f projMatrix = OpenGL.getMatrix();
+		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		this.oGLprogram.use();
 		this.vbo.bindForRendering();
-		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, this.matrixApply);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// Texture :
 		this.oGLprogram.setTexture0(this.oGLtexID, this.font.getRendererId());
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
@@ -136,10 +139,11 @@ public class CompositingText extends TextBase {
 		// set Matrix : translation/positionMatrix
 		final Matrix4f projMatrix = OpenGL.getMatrix();
 		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
-		final Matrix4f tmpMatrix = projMatrix.multiply(camMatrix).multiply(transformationMatrix);
 		this.oGLprogram.use();
 		this.vbo.bindForRendering();
-		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, transformationMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// Texture:
 		this.oGLprogram.setTexture0(this.oGLtexID, this.font.getRendererId());
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
@@ -219,9 +223,9 @@ public class CompositingText extends TextBase {
 			/*
 			 * Bitmap position xA xB yC *------* | | | | yD *------*
 			 */
-			float dxA = this.position.x() /*+ myGlyphProperty.bearing.x()*/ + kerningOffset;
+			float dxA = this.position.x() + myGlyphProperty.getTextureRenderOffset().x() + kerningOffset;
 			float dxB = dxA + myGlyphProperty.sizeTexture.x();
-			float dyC = this.position.y() /*+ myGlyphProperty.bearing.y()*/ + fontHeigh - fontSize;
+			float dyC = this.position.y() + myGlyphProperty.getTextureRenderOffset().y() + fontHeigh - fontSize;
 			float dyD = dyC - myGlyphProperty.sizeTexture.y();
 			
 			float tuA = myGlyphProperty.texturePosStart.x();
@@ -346,12 +350,12 @@ public class CompositingText extends TextBase {
 		// remove old one
 		final ResourceTexturedFont previousFont = this.font;
 		if (fontSize <= 0) {
-			fontSize = Ewol.getContext().getFontDefault().getSize();
+			fontSize = Configs.getConfigFonts().getSize();
 		}
 		if (fontName.isEmpty()) {
-			fontName = Ewol.getContext().getFontDefault().getName();
+			fontName = Configs.getConfigFonts().getName();
 		}
-		Uri fontUri = Ewol.getContext().getFontDefault().getFontUri(fontName).clone();
+		Uri fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
 		fontUri.setproperty("size", Integer.toString(fontSize));
 		Log.verbose("plop : " + fontName + " size=" + fontSize + " result :" + fontName);
 		// link to new one

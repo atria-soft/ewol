@@ -137,7 +137,7 @@ public class Label extends Widget {
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
-			return;
+			//return;
 		}
 		this.text.clear();
 		int paddingSize = 2;
@@ -155,7 +155,7 @@ public class Label extends Widget {
 		
 		Vector2i localSize = new Vector2i((int) this.minSize.x(), (int) this.minSize.y());
 		
-		// no change for the text orogin :
+		// no change for the text origin :
 		Vector3f tmpTextOrigin = new Vector3f((this.size.x() - this.minSize.x()) / 2.0f, (this.size.y() - this.minSize.y()) / 2.0f, 0);
 		
 		if (this.propertyFill.x()) {

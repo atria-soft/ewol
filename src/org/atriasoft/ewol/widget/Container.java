@@ -24,8 +24,7 @@ public class Container extends Widget {
 	/**
 	 * Constructor
 	 */
-	public Container() {
-	}
+	public Container() {}
 	
 	@Override
 	public void calculateMinMaxSize() {
@@ -145,7 +144,7 @@ public class Container extends Widget {
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
-			this.subWidget.onRegenerateDisplay();
+			this.subWidget.systemRegenerateDisplay();
 		}
 	}
 	

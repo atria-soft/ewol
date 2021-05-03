@@ -45,8 +45,6 @@ public class EwolContext extends GaleApplication {
 	
 	private EwolApplication application; // !< Application handle
 	
-	private final ConfigFont configFont = new ConfigFont(); // !< global font configuration
-	
 	private final int initStepId = 0;
 	
 	private final int initTotalStep = 0;
@@ -91,10 +89,6 @@ public class EwolContext extends GaleApplication {
 	
 	public ObjectManager getEObjectManager() {
 		return this.objectManager;
-	}
-	
-	public ConfigFont getFontDefault() {
-		return this.configFont;
 	}
 	
 	public ResourceManager getResourcesManager() {
@@ -225,7 +219,7 @@ public class EwolContext extends GaleApplication {
 	
 	@Override
 	public void onKeyboard(final KeySpecial special, final KeyKeyboard type, final Character value, final KeyStatus state) {
-		Log.verbose("event {" + special + "} " + type + " " + value + " " + state);
+		Log.verbose("event {" + special + "} " + type + " '" + value + "' " + state);
 		// store the keyboard special key status for mouse event...
 		this.input.setLastKeyboardSpecial(special);
 		if (this.windowsCurrent == null) {
@@ -262,9 +256,9 @@ public class EwolContext extends GaleApplication {
 				} else { // THREADKEYBORADMOVE
 					final EntrySystem tmpEntryEvent;
 					if (isDown) {
-						tmpEntryEvent = new EntrySystem(KeyKeyboard.CHARACTER, KeyStatus.down, special, null);
+						tmpEntryEvent = new EntrySystem(type, KeyStatus.down, special, null);
 					} else {
-						tmpEntryEvent = new EntrySystem(KeyKeyboard.CHARACTER, KeyStatus.up, special, null);
+						tmpEntryEvent = new EntrySystem(type, KeyStatus.up, special, null);
 					}
 					tmpWidget.systemEventEntry(tmpEntryEvent);
 				}
@@ -301,7 +295,8 @@ public class EwolContext extends GaleApplication {
 		this.objectManager.timeCall(time);
 	}
 	
-	public void onPointer(final KeyType type, final int pointerID, final Vector2f pos, final KeyStatus state) {
+	@Override
+	public void onPointer(final KeySpecial special, final KeyType type, final int pointerID, final Vector2f pos, final KeyStatus state) {
 		switch (state) {
 			case move:
 				// Log.debug("Receive MSG : THREAD_INPUT_MOTION");
@@ -332,7 +327,7 @@ public class EwolContext extends GaleApplication {
 			return;
 		}
 		// Redraw all needed elements
-		window.onRegenerateDisplay();
+		window.systemRegenerateDisplay();
 		if (this.widgetManager.isDrawingNeeded()) {
 			markDrawingIsNeeded();
 		}

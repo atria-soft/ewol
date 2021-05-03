@@ -5,13 +5,13 @@
  */
 package org.atriasoft.ewol.resource;
 
-import org.atriasoft.egami.Egami;
-import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ImageByte;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.internal.Tools;
 import org.atriasoft.gale.resource.Resource;
+import org.atriasoft.iogami.IOgami;
 
 // TODO : Change tis file name ...
 
@@ -82,13 +82,16 @@ public class ResourceTextureFile extends ResourceTexture2 {
 		return object;
 	}
 	
-	protected ResourceTextureFile() {
-	}
+	protected ResourceTextureFile() {}
 	
 	protected ResourceTextureFile(final String genName, final Uri uri, final Vector2i size) {
 		super(genName);
 		Log.debug("create a new resource::Image : genName=" + genName + " uri=" + uri + " size=" + size);
-		final Image tmp = Egami.load(uri, size);
+		final ImageByte tmp = IOgami.load(uri, size);
+		if (tmp == null) {
+			Log.error("Can not load the file : " + uri);
+			return;
+		}
 		set(tmp);
 	}
 	

@@ -1,7 +1,4 @@
 {
-	mode:2,
-	display-outside:false,
-	
 	padding-out-left:1,
 	padding-out-right:1,
 	padding-out-top:1,
@@ -17,7 +14,6 @@
 	padding-in-top:1,
 	padding-in-buttom:1,
 	
-	change-time:356,
-	program:"THEME_GUI:///Button.prog?lib=ewol",
-	color:"THEME_COLOR:///Button.json?lib=ewol"
+	object-file:"THEME:///Button.obj?lib=ewol",
+	object-size:"1,1,1"
 }

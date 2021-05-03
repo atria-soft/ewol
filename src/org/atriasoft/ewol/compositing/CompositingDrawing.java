@@ -28,8 +28,11 @@ public class CompositingDrawing extends Compositing {
 	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); // !< Clipping stop position
 	private Color color = Color.BLACK; // !< The text foreground color
 	private Color colorBg = Color.NONE; // !< The text background color
-	private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
-	private int oGLMatrixPosition = -1; // !< position matrix
+	//private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
+	//private int oGLMatrixPosition = -1; // !< position matrix
+	private int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
+	private int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
+	private int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
 	private ResourceProgram oGLprogram; // !< pointer on the opengl display program
 	private final List<Color> outColors = new ArrayList<>();
 	private final List<Vector3f> outTriangles = new ArrayList<>();
@@ -185,11 +188,13 @@ public class CompositingDrawing extends Compositing {
 			return;
 		}
 		// set Matrix : translation/positionMatrix
-		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
+		Matrix4f projMatrix = OpenGL.getMatrix();
+		Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		this.oGLprogram.use();
 		this.vbo.bindForRendering();
-		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
-		this.oGLprogram.uniformMatrix(this.oGLMatrixPosition, Matrix4f.IDENTITY);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, this.matrixApply);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// Request the draw of the elements:
 		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
 		this.vbo.unBindForRendering();
@@ -257,16 +262,32 @@ public class CompositingDrawing extends Compositing {
 		}
 	}
 	
-	public void lineRel(final Vector2f vect) {
-		lineRel(new Vector3f(vect.x(), vect.y(), 0));
-	}
-	
 	/**
 	 * Relative drawing a line (spacial vector)
 	 * @param vect Vector of the curent line.
 	 */
+	public void lineRel(final float xxx, final float yyy) {
+		lineTo(this.position.add(new Vector3f(xxx, yyy, 0)));
+	}
+	
+	public void lineRel(final float xxx, final float yyy, final float zzz) {
+		lineTo(this.position.add(new Vector3f(xxx, yyy, zzz)));
+	}
+	
+	public void lineRel(final Vector2f vect) {
+		lineRel(new Vector3f(vect.x(), vect.y(), 0));
+	}
+	
 	public void lineRel(final Vector3f vect) {
 		lineTo(this.position.add(vect));
+	}
+	
+	public void lineTo(final float xxx, final float yyy) {
+		lineTo(new Vector3f(xxx, yyy, 0));
+	}
+	
+	public void lineTo(final float xxx, final float yyy, final float zzz) {
+		lineTo(new Vector3f(xxx, yyy, zzz));
 	}
 	
 	public void lineTo(final Vector2f dest) {
@@ -323,9 +344,18 @@ public class CompositingDrawing extends Compositing {
 		if (this.oGLprogram != null) {
 			//this.oGLPosition = this.oGLprogram.getAttribute("in_coord3d");
 			//this.oGLColor = this.oGLprogram.getAttribute("in_color");
-			this.oGLMatrix = this.oGLprogram.getUniform("in_MatrixTransformation");
-			this.oGLMatrixPosition = this.oGLprogram.getUniform("in_MatrixPosition");
+			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
+			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
+			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 		}
+	}
+	
+	public void rectangle(final float xxx, final float yyy) {
+		rectangle(new Vector3f(xxx, yyy, 0));
+	}
+	
+	public void rectangle(final float xxx, final float yyy, final float zzz) {
+		rectangle(new Vector3f(xxx, yyy, zzz));
 	}
 	
 	public void rectangle(final Vector2f dest) {
@@ -382,6 +412,14 @@ public class CompositingDrawing extends Compositing {
 		setPoint(new Vector3f(dxB, dyC, 0));
 		setPoint(new Vector3f(dxB, dyD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
+	}
+	
+	public void rectangleWidth(final float xxx, final float yyy) {
+		rectangleWidth(new Vector3f(xxx, yyy, 0));
+	}
+	
+	public void rectangleWidth(final float xxx, final float yyy, final float zzz) {
+		rectangleWidth(new Vector3f(xxx, yyy, zzz));
 	}
 	
 	public void rectangleWidth(final Vector2f size) {
@@ -472,26 +510,42 @@ public class CompositingDrawing extends Compositing {
 		this.vbo.flush();
 	}
 	
+	public void setPos(final float xxx, final float yyy) {
+		setPos(new Vector3f(xxx, yyy, 0));
+	}
+	
+	public void setPos(final float xxx, final float yyy, final float zzz) {
+		setPos(new Vector3f(xxx, yyy, zzz));
+	}
+	
 	public void setPos(final Vector2f pos) {
 		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
 	
 	/**
-	 * set position for the next text writen
+	 * set position for the next text written
 	 * @param pos Position of the text (in 3D)
 	 */
 	public void setPos(final Vector3f pos) {
 		this.position = pos;
 	}
 	
-	public void setRelPos(final Vector2f pos) {
-		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
+	public void setRelPos(final float xxx, final float yyy) {
+		this.position = this.position.add(xxx, yyy, 0);
 	}
 	
 	/**
 	 * set relative position for the next text writen
 	 * @param pos ofset apply of the text (in 3D)
 	 */
+	public void setRelPos(final float xxx, final float yyy, final float zzz) {
+		this.position = this.position.add(xxx, yyy, zzz);
+	}
+	
+	public void setRelPos(final Vector2f pos) {
+		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
+	}
+	
 	public void setRelPos(final Vector3f pos) {
 		this.position = this.position.add(pos);
 	}

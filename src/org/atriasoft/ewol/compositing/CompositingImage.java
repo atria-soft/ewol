@@ -5,7 +5,7 @@
  */
 package org.atriasoft.ewol.compositing;
 
-import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
@@ -403,7 +403,7 @@ public class CompositingImage extends Compositing {
 		this.position = this.position.add(pos);
 	}
 	
-	public void setSource(final Image image) {
+	public void setSource(final ImageByteRGBA image) {
 		clear();
 		this.filename = null;
 		this.requestSize = image.getSize();

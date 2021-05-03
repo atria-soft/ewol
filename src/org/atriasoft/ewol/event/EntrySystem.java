@@ -4,6 +4,7 @@ import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
 
+@SuppressWarnings("preview")
 public record EntrySystem(
 		EventEntry event) {
 	public EntrySystem(final EventEntry event) {

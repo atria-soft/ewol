@@ -51,7 +51,9 @@ public abstract class TextBase extends Compositing {
 	protected FontMode mode = FontMode.REGULAR; // !< font display property : Regular/Bold/Italic/BoldItalic
 	protected int nbCharDisplayed; // !< prevent some error in calculation size.
 	protected boolean needDisplay; // !< This just need the display and not the size rendering.
-	protected int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
+	protected int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
+	protected int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
+	protected int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
 	protected ResourceProgram oGLprogram; // !< pointer on the opengl display program
 	protected int oGLtexID = -1; // !< openGL id on the element (texture ID)
 	protected int oGLtextHeight = -1; // !< openGL Id on the texture height
@@ -370,7 +372,9 @@ public abstract class TextBase extends Compositing {
 		ResourceProgram old = this.oGLprogram;
 		this.oGLprogram = ResourceProgram.create(vertexShader, fragmentShader);
 		if (this.oGLprogram != null) {
-			this.oGLMatrix = this.oGLprogram.getUniform("in_MatrixTransformation");
+			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
+			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
+			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 			this.oGLtexID = this.oGLprogram.getUniform("in_texID");
 			this.oGLtextWidth = this.oGLprogram.getUniform("in_texWidth");
 			this.oGLtextHeight = this.oGLprogram.getUniform("in_texHeight");
@@ -1037,7 +1041,7 @@ public abstract class TextBase extends Compositing {
 	public void setPos(final Vector3f pos) {
 		// check min max for display area
 		if (this.nbCharDisplayed != 0) {
-			Log.verbose("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//Log.verbose("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 			this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
 			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
 		}
@@ -1049,12 +1053,12 @@ public abstract class TextBase extends Compositing {
 		if (this.nbCharDisplayed == 0) {
 			this.sizeDisplayStart = this.position;
 			this.sizeDisplayStop = this.position.withY(this.sizeDisplayStop.y() + getHeight());
-			Log.verbose("update size 0 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//Log.verbose("update size 0 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		} else {
-			Log.verbose("update size 3 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//Log.verbose("update size 3 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 			this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
 			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
-			Log.verbose("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//Log.verbose("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		}
 	}
 	

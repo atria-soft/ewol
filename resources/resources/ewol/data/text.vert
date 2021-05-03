@@ -9,7 +9,9 @@ precision mediump int;
 layout (location = 0) in vec3 in_position;
 layout (location = 1) in vec2 in_textureCoords;
 layout (location = 3) in vec4 in_colors;
-uniform mat4 in_MatrixTransformation;
+uniform mat4 in_matrixTransformation;
+uniform mat4 in_matrixProjection;
+uniform mat4 in_matrixView;
 
 // output :
 varying vec4  io_color;
@@ -26,8 +28,7 @@ void main(void) {
 */
 varying vec4  io_patern;
 void main(void) {
-	gl_Position = in_MatrixTransformation * vec4(in_position, 1.0);
-	//gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(in_coord2d, 0.0, 1.0);
+	gl_Position = in_matrixProjection * in_matrixView * in_matrixTransformation * vec4(in_position, 1.0);
 	// set output color :
 	io_color = in_colors;
 	if (in_textureCoords.x<1.0) {

@@ -1,4 +1,4 @@
-package sample.atriasoft.ewol.simpleWindowsWithImage;
+package sample.atriasoft.ewol.sampleEntry;
 
 import org.atriasoft.etk.Configs;
 import org.atriasoft.etk.math.Vector2f;
@@ -25,7 +25,7 @@ public class Appl implements EwolApplication {
 		//! [ewol_sample_HW_main_set_windows_size]
 		//! [ewol_sample_HW_main_set_font_property]
 		// select font preference of der with a basic application size
-		Configs.getConfigFonts().set("FreeSherif", 12);
+		Configs.getConfigFonts().set("FreeSherif", 48);
 		//! [ewol_sample_HW_main_set_font_property]
 		//! [ewol_sample_HW_main_set_windows]
 		// Create the windows
