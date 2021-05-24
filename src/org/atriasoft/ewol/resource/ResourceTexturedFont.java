@@ -17,6 +17,7 @@ import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.resource.Resource;
+import org.atriasoft.gale.resource.ResourceTexture2;
 
 public class ResourceTexturedFont extends ResourceTexture2 {
 	public static ResourceTexturedFont create(final Uri fontBaseUri) {

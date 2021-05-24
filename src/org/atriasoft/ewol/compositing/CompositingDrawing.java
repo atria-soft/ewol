@@ -196,7 +196,7 @@ public class CompositingDrawing extends Compositing {
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, this.matrixApply);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// Request the draw of the elements:
-		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
+		this.vbo.renderArrays(OpenGL.RenderMode.TRIANGLE);
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 	}

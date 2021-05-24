@@ -112,7 +112,7 @@ public class CompositingText extends TextBase {
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
 		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().x());
 		// Request the draw of the elements:
-		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
+		this.vbo.renderArrays(OpenGL.RenderMode.TRIANGLE);
 		
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
@@ -149,7 +149,7 @@ public class CompositingText extends TextBase {
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
 		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().x());
 		// Request the draw of the elements:
-		this.vbo.renderArrays(OpenGL.RenderMode.triangle);
+		this.vbo.renderArrays(OpenGL.RenderMode.TRIANGLE);
 		
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();

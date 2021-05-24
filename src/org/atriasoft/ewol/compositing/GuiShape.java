@@ -13,11 +13,12 @@ import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceConfigFile;
-import org.atriasoft.ewol.resource.ResourceTextureFile;
-import org.atriasoft.ewol.resource.TextureFilter;
+import org.atriasoft.gale.TextureFilter;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.backend3d.OpenGL.Flag;
 import org.atriasoft.gale.resource.ResourceProgram;
+import org.atriasoft.gale.resource.ResourceTexture2;
+import org.atriasoft.gale.resource.ResourceTextureFile;
 import org.atriasoft.loader3d.resources.ResourceStaticMeshObjBynamic;
 
 /**
@@ -49,7 +50,8 @@ public class GuiShape extends Compositing {
 	private int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
 	// openGL shaders programs:
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
-	private int oGLtexID = -1; //!< openGL id on the element (texture image)
+	private int oGLtexID0 = -1; //!< openGL id on the element (texture image)
+	private int oGLtexID1 = -1; //!< openGL id on the element (texture image)
 	// For the Image :
 	private ResourceTextureFile resourceTexture = null; //!< texture resources (for the image)
 	private ResourceStaticMeshObjBynamic shape = null;
@@ -121,7 +123,40 @@ public class GuiShape extends Compositing {
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// Texture:
-		this.oGLprogram.setTexture0(this.oGLtexID, this.resourceTexture.getRendererId());
+		this.oGLprogram.setTexture0(this.oGLtexID0, this.resourceTexture.getRendererId());
+		// Request the draw of the elements:
+		this.shape.render();
+		
+		this.shape.unBindForRendering();
+		this.oGLprogram.unUse();
+		OpenGL.disable(Flag.flag_depthTest);
+	}
+	
+	public void draw(final ResourceTexture2 secondaryTexture, final boolean disableDepthTest) {
+		if (this.config == null) {
+			// this is a normal case ... the user can choice to have no config basic file ...
+			return;
+		}
+		if (this.oGLprogram == null) {
+			Log.error("No shader ...");
+		}
+		OpenGL.enable(Flag.flag_depthTest);
+		// set Matrix : translation/positionMatrix
+		Matrix4f projMatrix = OpenGL.getMatrix();
+		Matrix4f camMatrix = OpenGL.getCameraMatrix();
+		Matrix4f tmpMatrix = this.matrixApply.multiply(this.transform);
+		this.oGLprogram.use();
+		this.shape.bindForRendering();
+		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
+		// Texture:
+		this.oGLprogram.setTexture0(this.oGLtexID0, this.resourceTexture.getRendererId());
+		if (secondaryTexture == null) {
+			Log.warning("Request display shape with a second empty texture...");
+		} else {
+			this.oGLprogram.setTexture1(this.oGLtexID0, secondaryTexture.getRendererId());
+		}
 		// Request the draw of the elements:
 		this.shape.render();
 		
@@ -275,7 +310,8 @@ public class GuiShape extends Compositing {
 				this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
 				this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 				// for the texture ID : 
-				this.oGLtexID = this.oGLprogram.getUniform("in_textureBase");
+				this.oGLtexID0 = this.oGLprogram.getUniform("in_textureBase");
+				this.oGLtexID1 = this.oGLprogram.getUniform("in_textureSecondary");
 			}
 		}
 	}

@@ -75,7 +75,7 @@ public class RefactorColored3DObject extends Resource {
 		// color :
 		this.oGLprogram.uniformColor(this.oGLColor, color);
 		// Request the draw od the elements:
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, vertices.size());
+		OpenGL.drawArrays(OpenGL.RenderMode.TRIANGLE, 0, vertices.size());
 		this.oGLprogram.unUse();
 		// Request the draw od the elements:
 		// glDrawArrays(GLLINES, 0, vertices.size());
@@ -119,7 +119,7 @@ public class RefactorColored3DObject extends Resource {
 		// color :
 		this.oGLprogram.uniformColor(this.oGLColor, color);
 		// Request the draw od the elements:
-		OpenGL.drawArrays(OpenGL.RenderMode.triangle, 0, vertices.size());
+		OpenGL.drawArrays(OpenGL.RenderMode.TRIANGLE, 0, vertices.size());
 		this.oGLprogram.unUse();
 		if (depthTest) {
 			if (!updateDepthBuffer) {
@@ -410,7 +410,7 @@ public class RefactorColored3DObject extends Resource {
 		// color :
 		this.oGLprogram.uniformColor(this.oGLColor, color);
 		// Request the draw od the elements:
-		OpenGL.drawArrays(OpenGL.RenderMode.line, 0, vertices.size());
+		OpenGL.drawArrays(OpenGL.RenderMode.LINE, 0, vertices.size());
 		this.oGLprogram.unUse();
 		if (depthTest) {
 			if (!updateDepthBuffer) {
