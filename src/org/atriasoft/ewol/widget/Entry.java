@@ -12,7 +12,7 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
-import org.atriasoft.ewol.compositing.CompositingText;
+import org.atriasoft.ewol.compositing.CompositingGraphicContext;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
@@ -50,6 +50,7 @@ public class Entry extends Widget {
 	
 	private int displayCursorPosSelection = 2; //!< Selection position end (can be befor or after cursor and == this.displayCursorPos chan no selection availlable
 	private int displayStartPosition = 0; //!< offset in pixel of the display of the UString
+	private final CompositingGraphicContext gc = new CompositingGraphicContext(); //!< text display this.text
 	private boolean needUpdateTextPos = true; //!< text position can have change
 	protected Connection periodicConnectionHanble; //!< Periodic call handle to remove it when needed
 	@XmlManaged
@@ -73,6 +74,7 @@ public class Entry extends Widget {
 	@XmlName(value = "regex")
 	@EwolDescription(value = "Control what it is write with a regular expression")
 	private String propertyRegex = ".*";
+	
 	/// Text to display when nothing in in the entry (decorated text...)
 	@XmlManaged
 	@XmlProperty
@@ -87,7 +89,6 @@ public class Entry extends Widget {
 	private String propertyValue = "Test Text..."; //!< string that must be displayed
 	
 	private Pattern regex = null; //!< regular expression to check content
-	
 	private GuiShape shape;
 	//.create()
 	@EwolSignal(name = "click", description = "the user Click on the Entry box")
@@ -96,7 +97,6 @@ public class Entry extends Widget {
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
 	@EwolSignal(name = "modify", description = "Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
-	private final CompositingText text = new CompositingText(); //!< text display this.text
 	
 	/**
 	 * Contuctor
@@ -130,7 +130,7 @@ public class Entry extends Widget {
 		if (this.shape != null) {
 			padding = this.shape.getPadding();
 		}
-		int minHeight = (int) this.text.getHeight();//calculateSize('A').y();
+		int minHeight = this.gc.getTextHeight();//calculateSize('A').y();
 		
 		Vector2f minimumSizeBase = new Vector2f(20, minHeight);
 		// add padding :
@@ -303,9 +303,8 @@ public class Entry extends Widget {
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
-			this.shape.draw();
+			this.shape.draw(this.gc.getResourceTexture(), true);
 		}
-		this.text.draw();
 	}
 	
 	@Override
@@ -506,7 +505,7 @@ public class Entry extends Widget {
 		}
 		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
-		this.text.clear();
+		this.gc.clear();
 		if (this.colorIdTextFg >= 0) {
 			//this.text.setDefaultColorFg(this.shape.getColor(this.colorIdTextFg));
 			//this.text.setDefaultColorBg(this.shape.getColor(this.colorIdTextBg));
@@ -528,7 +527,7 @@ public class Entry extends Widget {
 		Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
 		Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		int minHeight = (int) this.text.getHeight();
+		int minHeight = this.gc.getTextHeight();
 		if (tmpSizeText.y() > minHeight) {
 			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f);
 		}
@@ -538,36 +537,35 @@ public class Entry extends Widget {
 		tmpSizeText = Vector2f.clipInt(tmpSizeText);
 		tmpOriginText = Vector2f.clipInt(tmpOriginText);
 		
-		this.text.reset();
-		this.text.setClippingWidth(tmpOriginText, tmpSizeText);
-		this.text.setPos(tmpOriginText.add(this.displayStartPosition, 0));
+		this.gc.clear();
+		/*
 		if (this.displayCursorPosSelection != this.displayCursorPos) {
 			this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
 		} else {
 			this.text.setCursorPos(this.displayCursorPos);
 		}
+		*/
 		char[] valueToDisplay = this.propertyValue.toCharArray();
 		if (this.propertyPassword) {
 			Arrays.fill(valueToDisplay, '*');
 		}
 		
 		if (valueToDisplay.length != 0) {
-			this.text.print(new String(valueToDisplay));
+			this.gc.text(tmpOriginText.add(this.displayStartPosition, 0), new String(valueToDisplay));
 		} else if (this.propertyTextWhenNothing != null) {
-			this.text.printDecorated(this.propertyTextWhenNothing);
+			this.gc.text(tmpOriginText.add(this.displayStartPosition, 0), this.propertyTextWhenNothing);
 		}
-		this.text.setClippingMode(false);
 		
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
-		this.text.flush();
+		this.gc.flush();
 		this.shape.flush();
 		
 	}
 	
 	/**
-				 * Periodic call to update grapgic display
-				 * @param _event Time generic event
-				 */
+	 * Periodic call to update grapgic display
+	 * @param _event Time generic event
+	 */
 	protected void periodicCall(final EventTime event) {
 		if (!this.shape.periodicCall(event)) {
 			this.periodicConnectionHanble.disconnect();
@@ -690,13 +688,13 @@ public class Entry extends Widget {
 		relPos = relPos.withX(relPos.x() - this.displayStartPosition - padding.left());
 		// try to find the new cursor position :
 		String tmpDisplay = this.propertyValue.substring(0, this.displayStartPosition);
-		int displayHidenSize = (int) this.text.calculateSize(tmpDisplay).x();
+		int displayHidenSize = this.gc.calculateTextSize(tmpDisplay).x();
 		//Log.debug("hidenSize : " + displayHidenSize);
 		int newCursorPosition = -1;
 		int tmpTextOriginX = (int) padding.left();
 		for (int iii = 0; iii < this.propertyValue.length(); iii++) {
 			tmpDisplay = this.propertyValue.substring(0, iii);
-			int tmpWidth = (int) (this.text.calculateSize(tmpDisplay).x() - displayHidenSize);
+			int tmpWidth = this.gc.calculateTextSize(tmpDisplay).x() - displayHidenSize;
 			if (tmpWidth >= relPos.x() - tmpTextOriginX) {
 				newCursorPosition = iii;
 				break;
@@ -734,7 +732,7 @@ public class Entry extends Widget {
 			tmpSizeX = (int) this.size.x();
 		}
 		int tmpUserSize = (int) (tmpSizeX - padding.x());
-		int totalWidth = (int) this.text.calculateSize(this.propertyValue).x();
+		int totalWidth = this.gc.calculateTextSize(this.propertyValue).x();
 		// Check if the data inside the display can be contain in the entry box
 		if (totalWidth < tmpUserSize) {
 			// all can be display :
@@ -742,8 +740,8 @@ public class Entry extends Widget {
 		} else {
 			// all can not be set :
 			String tmpDisplay = this.propertyValue.substring(0, this.displayCursorPos);
-			int pixelCursorPos = (int) this.text.calculateSize(tmpDisplay).x();
-			// check if the Cussor is visible at 10px nearest the border :
+			int pixelCursorPos = this.gc.calculateTextSize(tmpDisplay).x();
+			// check if the Cursor is visible at 10px nearest the border :
 			int tmp1 = pixelCursorPos + this.displayStartPosition;
 			Log.debug("cursorPos=" + pixelCursorPos + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
 			if (tmp1 < 10) {

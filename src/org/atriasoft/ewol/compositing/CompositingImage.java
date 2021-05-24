@@ -14,11 +14,11 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.ewol.resource.ResourceTexture2;
-import org.atriasoft.ewol.resource.ResourceTextureFile;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.backend3d.OpenGL.RenderMode;
 import org.atriasoft.gale.resource.ResourceProgram;
+import org.atriasoft.gale.resource.ResourceTexture2;
+import org.atriasoft.gale.resource.ResourceTextureFile;
 import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
 
 public class CompositingImage extends Compositing {
@@ -137,7 +137,7 @@ public class CompositingImage extends Compositing {
 		// color:
 		this.oGLprogram.sendAttributePointer(this.oGLColor, this.vbo, CompositingImage.VBO_ID_COLOR);
 		// Request the draw of the elements:
-		OpenGL.drawArrays(RenderMode.triangle, 0, this.vbo.bufferSize(CompositingImage.VBO_ID_COORD));
+		OpenGL.drawArrays(RenderMode.TRIANGLE, 0, this.vbo.bufferSize(CompositingImage.VBO_ID_COORD));
 		
 		this.oGLprogram.unUse();
 	}
