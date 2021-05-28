@@ -5,6 +5,7 @@
  */
 package org.atriasoft.ewol.compositing;
 
+import org.atriasoft.egami.ImageByte;
 import org.atriasoft.esvg.CapMode;
 import org.atriasoft.esvg.GraphicContext;
 import org.atriasoft.esvg.JoinMode;
@@ -16,7 +17,7 @@ import org.atriasoft.gale.resource.ResourceTexture2;
 
 public class CompositingGraphicContext extends Compositing {
 	GraphicContext context = new GraphicContext();
-	private final ResourceTexture2 resourcTexture = null;
+	private final ResourceTexture2 texture = new ResourceTexture2();
 	
 	public CompositingGraphicContext() {
 		
@@ -67,12 +68,14 @@ public class CompositingGraphicContext extends Compositing {
 	
 	@Override
 	public void flush() {
-		if (this.resourcTexture == null) {
+		if (this.texture == null) {
 			Log.warning("texture is null");
 			return;
 		}
-		this.resourcTexture.set(this.context.render());
-		this.resourcTexture.flush();
+		ImageByte img = this.context.render();
+		//IOgami.storePNG(new Uri("/home/heero/000000000aaaaplopppp222.png"), img);
+		this.texture.set(img);
+		this.texture.flush();
 	}
 	
 	/**
@@ -112,15 +115,15 @@ public class CompositingGraphicContext extends Compositing {
 	 * @return tre image registered size
 	 */
 	public Vector2i getRealSize() {
-		return this.resourcTexture.get().getSize();
+		return this.texture.get().getSize();
 	}
 	
 	public int getRendererId() {
-		return this.resourcTexture.getRendererId();
+		return this.texture.getRendererId();
 	}
 	
 	public ResourceTexture2 getResourceTexture() {
-		return this.resourcTexture;
+		return this.texture;
 	}
 	
 	public float getStrokeWidth() {
@@ -129,6 +132,10 @@ public class CompositingGraphicContext extends Compositing {
 	
 	public int getTextHeight() {
 		return this.context.getTextHeight();
+	}
+
+	public float getTextSize() {
+		return this.context.getTextSize();
 	}
 	
 	/**
