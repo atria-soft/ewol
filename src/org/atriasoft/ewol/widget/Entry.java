@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
+import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -50,6 +51,7 @@ public class Entry extends Widget {
 	
 	private int displayCursorPosSelection = 2; //!< Selection position end (can be befor or after cursor and == this.displayCursorPos chan no selection availlable
 	private int displayStartPosition = 0; //!< offset in pixel of the display of the UString
+	private int displayCursorPosition = 0; //!< offset in pixel of the display of the UString
 	private final CompositingGraphicContext gc = new CompositingGraphicContext(); //!< text display this.text
 	private boolean needUpdateTextPos = true; //!< text position can have change
 	protected Connection periodicConnectionHanble; //!< Periodic call handle to remove it when needed
@@ -368,8 +370,9 @@ public class Entry extends Widget {
 					} else {
 						StringBuilder newData = new StringBuilder(this.propertyValue);
 						newData.insert(this.displayCursorPos, event.getChar());
-						setInternalValue(newData.toString());
-						if (this.propertyValue.equals(newData)) {
+						String newDataGenerated =newData.toString();  
+						setInternalValue(newDataGenerated);
+						if (this.propertyValue.equals(newDataGenerated)) {
 							this.displayCursorPos += 1;//inputData.length();
 							this.displayCursorPosSelection = this.displayCursorPos;
 						}
@@ -525,12 +528,15 @@ public class Entry extends Widget {
 		
 		Vector2f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
 		Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
-		Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
+		//Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
+		Vector2f tmpOriginText = new Vector2f(0, this.gc.getTextSize());
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
+		/*
 		int minHeight = this.gc.getTextHeight();
 		if (tmpSizeText.y() > minHeight) {
 			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f);
 		}
+		*/
 		// fix all the position in the int class:
 		tmpSizeShaper = Vector2f.clipInt(tmpSizeShaper);
 		tmpOriginShaper = Vector2f.clipInt(tmpOriginShaper);
@@ -538,13 +544,24 @@ public class Entry extends Widget {
 		tmpOriginText = Vector2f.clipInt(tmpOriginText);
 		
 		this.gc.clear();
-		/*
-		if (this.displayCursorPosSelection != this.displayCursorPos) {
-			this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
-		} else {
-			this.text.setCursorPos(this.displayCursorPos);
-		}
-		*/
+		this.gc.setSize((int)tmpSizeText.x(), (int)tmpSizeText.y());
+		
+//		if (this.displayCursorPosSelection != this.displayCursorPos) {
+//			
+//			//this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
+//		} else {
+//			this.text.setCursorPos(this.displayCursorPos);
+//		}
+		this.gc.setColorFill(Color.RED);
+		this.gc.setColorStroke(Color.GREEN);
+		this.gc.setStrokeWidth(5);
+		//this.gc.rectangleRounded(new Vector2f(20, 2), new Vector2f(55, 70), new Vector2f(15, 15));
+		this.gc.line(new Vector2f(this.displayCursorPosition, 2), new Vector2f(this.displayCursorPosition, 70));
+		
+		
+		this.gc.setColorFill(Color.BLACK);
+		this.gc.setColorStroke(Color.NONE);
+		this.gc.setStrokeWidth(1);
 		char[] valueToDisplay = this.propertyValue.toCharArray();
 		if (this.propertyPassword) {
 			Arrays.fill(valueToDisplay, '*');
@@ -687,6 +704,13 @@ public class Entry extends Widget {
 		Vector2f relPos = relativePosition(pos);
 		relPos = relPos.withX(relPos.x() - this.displayStartPosition - padding.left());
 		// try to find the new cursor position :
+		if (this.displayStartPosition > this.propertyValue.length()) {
+			this.displayStartPosition = this.propertyValue.length();
+		}
+		if (this.displayStartPosition <0) {
+			Log.error("wring cursor position : " + this.displayStartPosition + "/" + this.propertyValue.length());
+			this.displayStartPosition = 0;
+		}
 		String tmpDisplay = this.propertyValue.substring(0, this.displayStartPosition);
 		int displayHidenSize = this.gc.calculateTextSize(tmpDisplay).x();
 		//Log.debug("hidenSize : " + displayHidenSize);
@@ -733,23 +757,23 @@ public class Entry extends Widget {
 		}
 		int tmpUserSize = (int) (tmpSizeX - padding.x());
 		int totalWidth = this.gc.calculateTextSize(this.propertyValue).x();
+		// all can not be set :
+		String tmpDisplay = this.propertyValue.substring(0, this.displayCursorPos);
+		this.displayCursorPosition = this.gc.calculateTextSize(tmpDisplay).x();
 		// Check if the data inside the display can be contain in the entry box
 		if (totalWidth < tmpUserSize) {
 			// all can be display :
 			this.displayStartPosition = 0;
 		} else {
-			// all can not be set :
-			String tmpDisplay = this.propertyValue.substring(0, this.displayCursorPos);
-			int pixelCursorPos = this.gc.calculateTextSize(tmpDisplay).x();
 			// check if the Cursor is visible at 10px nearest the border :
-			int tmp1 = pixelCursorPos + this.displayStartPosition;
-			Log.debug("cursorPos=" + pixelCursorPos + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
+			int tmp1 = this.displayCursorPosition + this.displayStartPosition;
+			Log.debug("cursorPos=" + this.displayCursorPosition + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
 			if (tmp1 < 10) {
 				// set the cursor on le left
-				this.displayStartPosition = Math.min(-pixelCursorPos + 10, 0);
+				this.displayStartPosition = Math.min(-this.displayCursorPosition + 10, 0);
 			} else if (tmp1 > tmpUserSize - 10) {
 				// set the cursor of the Right
-				this.displayStartPosition = Math.min(-pixelCursorPos + tmpUserSize - 10, 0);
+				this.displayStartPosition = Math.min(-this.displayCursorPosition + tmpUserSize - 10, 0);
 			}
 			// else : the cursor is inside the display
 			//this.displayStartPosition = -totalWidth + tmpUserSize;

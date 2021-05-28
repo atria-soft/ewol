@@ -1,9 +1,10 @@
 package org.atriasoft.ewol.compositing;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
+import org.atriasoft.egami.ImageByte;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
@@ -13,13 +14,12 @@ import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceConfigFile;
-import org.atriasoft.gale.TextureFilter;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.backend3d.OpenGL.Flag;
 import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceTexture2;
-import org.atriasoft.gale.resource.ResourceTextureFile;
-import org.atriasoft.loader3d.resources.ResourceStaticMeshObjBynamic;
+import org.atriasoft.loader3d.resources.ResourceMesh;
+import org.atriasoft.loader3d.resources.ResourcePaletteFile;
 
 /**
  * @brief the Shaper system is a basic theme configuration for every widget, it corresponds at a background display described by a pool of files
@@ -32,8 +32,7 @@ public class GuiShape extends Compositing {
 	private static final int SHAPER_POS_RIGHT = 2;
 	private static final int SHAPER_POS_TOP = 1;
 	private int confIdChangeTime = -1; //!< ConfigFile padding transition time property
-	private int confIdImagePaletteFile = -1; //!< Palette of the display
-	private int confIdImagePaletteMode = -1; //!< Mode to load the image file ... 'nearest', 'linear'
+	private int confIdPaletteFile = -1; //!< Palette of the display
 	private final int[] confIdPaddingIn = new int[4]; //!< Padding in property : X-left X-right Y-top Y-buttom
 	private final int[] confIdPaddingOut = new int[4]; //!< Padding out property : X-left X-right Y-top Y-buttom
 	// External theme config:
@@ -53,8 +52,10 @@ public class GuiShape extends Compositing {
 	private int oGLtexID0 = -1; //!< openGL id on the element (texture image)
 	private int oGLtexID1 = -1; //!< openGL id on the element (texture image)
 	// For the Image :
-	private ResourceTextureFile resourceTexture = null; //!< texture resources (for the image)
-	private ResourceStaticMeshObjBynamic shape = null;
+
+	private ResourcePaletteFile palette;
+	private ResourceTexture2 texture;
+	private ResourceMesh shape = null;
 	private Padding sizeObject = Padding.ZERO;
 	private int stateActivate = -1; //!< Activate state of the element
 	private final int stateNew = -1; //!< destination state
@@ -62,7 +63,6 @@ public class GuiShape extends Compositing {
 	private final float stateTransition = 0; //!< working state between 2 states
 	private Matrix4f transform = Matrix4f.IDENTITY;
 	private Uri uri; //!< Name of the configuration of the shaper.
-	private float[] verticesToModify = {};
 	
 	/**
 				 * @brief generic constructor
@@ -74,9 +74,33 @@ public class GuiShape extends Compositing {
 			this.confIdPaddingOut[iii] = -1;
 			this.confIdPaddingIn[iii] = -1;
 		}
+		// Load data from the configuration file:
+		loadConfigFile();
+		loadUpdateObjectSize();
+		loadPalette();
 		loadProgram();
 	}
-	
+	protected void loadPalette() {
+		String paletteFile = this.config.getString(this.confIdPaletteFile);
+		Uri paletteFileInterface = Uri.valueOf(paletteFile);
+		this.palette = ResourcePaletteFile.create(paletteFileInterface);
+		this.texture = ResourceTexture2.createNamed("TEXTURE_OF_PALETTE:" + paletteFile);
+		if (this.texture == null) {
+			Log.error("can not instanciate Texture ...");
+		}
+		// element already called
+		loadPaletteUpdate();
+		// for next update (realTime reload)
+		this.palette.onUpdate(() -> {
+			loadPaletteUpdate();
+		});
+	}
+	protected void loadPaletteUpdate() {
+		Log.warning("update palet environnement");
+		final ImageByte img = this.palette.getImageByte();
+		//IOgami.storePNG(new Uri("/home/heero/000000000aaaaplopppp.png"), img);
+		this.texture.set(img);
+	}
 	/**
 	 * @brief change the current status in an other
 	 * @param _newStatusId the next new status requested
@@ -123,9 +147,10 @@ public class GuiShape extends Compositing {
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// Texture:
-		this.oGLprogram.setTexture0(this.oGLtexID0, this.resourceTexture.getRendererId());
+		// TODO : this.texture.bindForRendering(0);
+		this.oGLprogram.setTexture0(this.oGLtexID0, this.texture.getRendererId());
 		// Request the draw of the elements:
-		this.shape.render();
+		this.shape.render("palette");
 		
 		this.shape.unBindForRendering();
 		this.oGLprogram.unUse();
@@ -150,12 +175,21 @@ public class GuiShape extends Compositing {
 		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
+
+		 Set<String> layers = this.shape.getLayers();
+		 Log.warning("get layers:" + layers);
 		// Texture:
-		this.oGLprogram.setTexture0(this.oGLtexID0, this.resourceTexture.getRendererId());
+		//this.oGLprogram.setTexture0(this.oGLtexID0, this.texture.getRendererId());
+		 this.texture.bindForRendering(0);
+		this.shape.render("palette");
+		
 		if (secondaryTexture == null) {
 			Log.warning("Request display shape with a second empty texture...");
 		} else {
-			this.oGLprogram.setTexture1(this.oGLtexID0, secondaryTexture.getRendererId());
+			secondaryTexture.bindForRendering(0);
+			//this.oGLprogram.setTexture0(this.oGLtexID0, secondaryTexture.getRendererId());
+			this.shape.render("gui_dynamic_1");
+			
 		}
 		// Request the draw of the elements:
 		this.shape.render();
@@ -245,10 +279,7 @@ public class GuiShape extends Compositing {
 		return this.oGLprogram != null;
 	}
 	
-	/**
-				 * @brief load the openGL program and get all the ID needed
-				 */
-	private void loadProgram() {
+	private void loadConfigFile() {
 		if (this.uri.isEmpty()) {
 			Log.debug("no Shaper set for loading resources ...");
 			return;
@@ -267,13 +298,22 @@ public class GuiShape extends Compositing {
 			this.confProgramFileVert = this.config.request("program-vert");
 			this.confProgramFileFrag = this.config.request("program-frag");
 			this.confObjectFile = this.config.request("object-file");
-			this.confIdImagePaletteFile = this.config.request("image-palette");
-			this.confIdImagePaletteMode = this.config.request("image-palette-load-mode");
+			this.confIdPaletteFile = this.config.request("palette");
+		}
+	}
+	
+	/**
+	 * load the openGL program and get all the ID needed
+	 */
+	private void loadUpdateObjectSize() {
+		if (this.config == null) {
+			Log.debug("no Shaper set for loading resources ...");
+			return;
 		}
 		String objectFile = this.config.getString(this.confObjectFile);
 		if (!objectFile.isEmpty()) {
-			this.shape = ResourceStaticMeshObjBynamic.create(Uri.valueOf(objectFile));
-			this.verticesToModify = this.shape.getVertices();
+			this.shape = ResourceMesh.create(Uri.valueOf(objectFile));
+			List<Vector3f> verticesToModify = this.shape.getGeneratedPosition();
 			float top = 0;
 			float bottom = 0;
 			float left = 0;
@@ -281,25 +321,25 @@ public class GuiShape extends Compositing {
 			float back = 0;
 			float font = 0;
 			// estimate size of border:
-			for (int iii = 0; iii < this.verticesToModify.length - 2; iii += 3) {
-				left = Math.min(left, this.verticesToModify[iii]);
-				right = Math.max(right, this.verticesToModify[iii]);
-				top = Math.min(top, this.verticesToModify[iii + 1]);
-				bottom = Math.max(bottom, this.verticesToModify[iii + 1]);
-				back = Math.min(back, this.verticesToModify[iii + 2]);
-				font = Math.max(font, this.verticesToModify[iii + 2]);
+			for (int iii = 0; iii < verticesToModify.size(); iii++) {
+				left = Math.min(left, verticesToModify.get(iii).x());
+				right = Math.max(right, verticesToModify.get(iii).x());
+				top = Math.min(top, verticesToModify.get(iii).y());
+				bottom = Math.max(bottom, verticesToModify.get(iii).y());
+				back = Math.min(back, verticesToModify.get(iii).z());
+				font = Math.max(font, verticesToModify.get(iii).z());
 			}
 			this.sizeObject = new Padding(Math.abs(left), Math.abs(top), Math.abs(right), Math.abs(bottom));
 		}
-		String paletteMode = this.config.getString(this.confIdImagePaletteMode, "linear");
-		String paletteFile = this.config.getString(this.confIdImagePaletteFile);
-		if (!paletteFile.isEmpty()) {
-			this.resourceTexture = ResourceTextureFile.create(Uri.valueOf(paletteFile));
-			if (paletteMode.equals("nearest")) {
-				this.resourceTexture.setFilterMode(TextureFilter.NEAREST);
-			} else {
-				this.resourceTexture.setFilterMode(TextureFilter.LINEAR);
-			}
+	}
+
+	/**
+	 * load the openGL program and get all the ID needed
+	 */
+	private void loadProgram() {
+		if (this.config == null) {
+			Log.debug("no Shaper set for loading resources ...");
+			return;
 		}
 		String basicShaderFileVert = this.config.getString(this.confProgramFileVert);
 		String basicShaderFileFrag = this.config.getString(this.confProgramFileFrag);
@@ -386,22 +426,25 @@ public class GuiShape extends Compositing {
 	public void setShape(final Vector2f origin, final Vector2f size, final Vector2f insidePos, final Vector2f insideSize) {
 		//Log.error("Set shape property : origin=" + origin + " size=" + size + "  in-pos=" + insidePos + "  in-size=" + insideSize);
 		Vector2f halfSize = insideSize.multiply(0.5f);
-		float[] newVertices = Arrays.copyOf(this.verticesToModify, this.verticesToModify.length);
-		for (int iii = 0; iii < newVertices.length - 2; iii += 3) {
-			if (newVertices[iii] <= 0.0f) {
-				newVertices[iii] -= halfSize.x();
-			} else {
-				newVertices[iii] += halfSize.x();
-			}
-			if (newVertices[iii + 1] <= 0.0f) {
-				newVertices[iii + 1] -= halfSize.y();
-			} else {
-				newVertices[iii + 1] += halfSize.y();
-			}
+		List<Vector3f> verticesToModify = this.shape.getGeneratedPosition();
+		float[] newVertices = new float[verticesToModify.size()*3]; 
+		for (int iii=0; iii<verticesToModify.size(); ++iii) {
+			Vector3f tmp = verticesToModify.get(iii);
+			newVertices[iii*3+0] = getUpdatedPos(tmp.x(), halfSize.x());
+			newVertices[iii*3+1] = getUpdatedPos(tmp.y(), halfSize.y());
+			newVertices[iii*3+2] = tmp.z();
 		}
+		//this.transform = Matrix4f.createMatrixRotate(new Vector3f(1.0f, 0.0f, 0.0f), -FMath.PI*0.30f);
+		//this.transform = this.transform.multiply(Matrix4f.createMatrixTranslate(new Vector3f(origin.x() + size.x() * 0.5f, origin.y() + size.y() * 0.5f, 0.0f)));
 		this.transform = Matrix4f.createMatrixTranslate(new Vector3f(origin.x() + size.x() * 0.5f, origin.y() + size.y() * 0.5f, 0.0f));
-		this.shape.setVertices(newVertices);
-		this.shape.flush();
+		this.shape.setModifiedPosition(newVertices);
+	}
+	
+	private float getUpdatedPos(final float value, final float halfsize) {
+		if (value <= 0.0f) {
+			return value - halfsize;
+		}
+		return value + halfsize;
 	}
 	
 	public void setShape(final Vector3f origin, final Vector3f size) {
@@ -411,26 +454,16 @@ public class GuiShape extends Compositing {
 	
 	public void setShape(final Vector3f origin, final Vector3f size, final Vector3f insidePos, final Vector3f insideSize) {
 		Vector3f halfSize = insideSize.multiply(0.5f);
-		float[] newVertices = Arrays.copyOf(this.verticesToModify, this.verticesToModify.length);
-		for (int iii = 0; iii < newVertices.length - 2; iii += 3) {
-			if (newVertices[iii] <= 0.0f) {
-				newVertices[iii] -= halfSize.x();
-			} else {
-				newVertices[iii] += halfSize.x();
-			}
-			if (newVertices[iii + 1] <= 0.0f) {
-				newVertices[iii + 1] -= halfSize.y();
-			} else {
-				newVertices[iii + 1] += halfSize.y();
-			}
-			if (newVertices[iii + 2] <= 0.0f) {
-				newVertices[iii + 2] -= halfSize.z();
-			} else {
-				newVertices[iii + 2] += halfSize.z();
-			}
+		List<Vector3f> verticesToModify = this.shape.getGeneratedPosition();
+		float[] newVertices = new float[verticesToModify.size()*3]; 
+		for (int iii=0; iii<newVertices.length; ++iii) {
+			Vector3f tmp = verticesToModify.get(iii);
+			newVertices[iii*3+0] = getUpdatedPos(tmp.x(), halfSize.x());
+			newVertices[iii*3+1] = getUpdatedPos(tmp.y(), halfSize.y());
+			newVertices[iii*3+2] =  getUpdatedPos(tmp.z(), halfSize.z());
 		}
 		this.transform = Matrix4f.createMatrixTranslate(new Vector3f(origin.x() + size.x() * 0.5f, origin.y() + size.y() * 0.5f, origin.z() + size.z() * 0.5f));
-		this.shape.setVertices(newVertices);
+		this.shape.setModifiedPosition(newVertices);
 	}
 	
 	/**
@@ -459,12 +492,11 @@ public class GuiShape extends Compositing {
 	}
 	
 	/**
-				 * @brief Un-Load the openGL program and get all the ID needed
-				 */
-	
+	 * @brief Un-Load the openGL program and get all the ID needed
+	 */
 	private void unLoadProgram() {
 		this.oGLprogram = null;
-		this.resourceTexture = null;
+		this.texture = null;
 		this.config = null;
 		for (int iii = 0; iii < 4; ++iii) {
 			this.confIdPaddingOut[iii] = -1;
