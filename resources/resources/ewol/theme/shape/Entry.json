@@ -16,10 +16,7 @@
 	program-frag:"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
 	# Object to render (with modification)
-	object-file:"THEME:shape/Entry.obj?lib=ewol",
+	object-file:"THEME:shape/Entry.emf?lib=ewol",
 	
-	# Theme Image (pallete)
-	image-palette:"THEME:shape/GuiPaletteColor.png?lib=ewol",
-	# read mode: 'nearest', 'linear'
-	image-palette-load-mode: "nearest",
+	palette:"THEME:shape/palette_gui.json?lib=ewol"
 }
