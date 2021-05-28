@@ -41,6 +41,7 @@ import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
+
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -59,7 +60,7 @@ public class Widget extends EwolObject {
 	private boolean allowRepeatKeyboardEvent = true; //!< This remove the repeating keybord event due to the ant pressing key.
 	private Cursor cursorDisplay = Cursor.arrow;
 	
-	private final CompositingDrawing drawDebugBorder = new CompositingDrawing(); //!< Compositing drawing element
+	private final CompositingDrawing drawDebugBorder = null;//new CompositingDrawing(); //!< Compositing drawing element
 	
 	// grab cursor mode
 	private boolean grabCursor = false;
@@ -935,7 +936,9 @@ public class Widget extends EwolObject {
 		//OpenGL.setMatrix(tmpMat);
 		OpenGL.setMatrix(tmpProjection);
 		OpenGL.setCameraMatrix(tmpScale.multiply(tmpTranslate));
-		this.drawDebugBorder.draw();
+		if (this.drawDebugBorder != null) {
+			this.drawDebugBorder.draw();
+		}
 		//long startTime = ewol::getTime();
 		onDraw();
 		OpenGL.pop();
