@@ -15,10 +15,12 @@ import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.CompositingGraphicContext;
 import org.atriasoft.ewol.compositing.GuiShape;
+import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
+import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.annotation.XmlProperty;
@@ -54,7 +56,7 @@ public class Entry extends Widget {
 	private int displayCursorPosition = 0; //!< offset in pixel of the display of the UString
 	private final CompositingGraphicContext gc = new CompositingGraphicContext(); //!< text display this.text
 	private boolean needUpdateTextPos = true; //!< text position can have change
-	protected Connection periodicConnectionHanble; //!< Periodic call handle to remove it when needed
+	protected Connection periodicConnectionHanble = new Connection(); //!< Periodic call handle to remove it when needed
 	@XmlManaged
 	@XmlProperty
 	@XmlName(value = "config")
@@ -143,13 +145,13 @@ public class Entry extends Widget {
 		Log.error("min size = " + this.minSize);
 	}
 	
-	protected void changeStatusIn(final int newStatusId) {
-		/*
-		if (this.shaper.changeStatusIn(_newStatusId)) {
-			this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, ewol::widget::Entry::periodicCall);
+	protected void changeStatusIn(final GuiShapeMode newStatusId) {
+		if (this.shape.changeStatusIn(newStatusId)) {
+			Log.error("REQUEST: connection on operiodic call");
+			this.periodicConnectionHanble.close();
+			this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connectDynamic(this, eventTime -> { periodicCall(eventTime);});
 			markToRedraw();
 		}
-		*/
 	}
 	
 	/**
@@ -488,7 +490,7 @@ public class Entry extends Widget {
 	@Override
 	protected void onGetFocus() {
 		this.displayCursor = true;
-		//changeStatusIn(STATUS_SELECTED);
+		changeStatusIn(GuiShapeMode.SELECT);
 		showKeyboard();
 		markToRedraw();
 	}
@@ -496,7 +498,7 @@ public class Entry extends Widget {
 	@Override
 	protected void onLostFocus() {
 		this.displayCursor = false;
-		//changeStatusIn(STATUS_NORMAL);
+		changeStatusIn(GuiShapeMode.NORMAL);
 		hideKeyboard();
 		markToRedraw();
 	}
@@ -584,8 +586,9 @@ public class Entry extends Widget {
 	 * @param _event Time generic event
 	 */
 	protected void periodicCall(final EventTime event) {
+		Log.verbose("Periodic call on Entry(" + event + ")");
 		if (!this.shape.periodicCall(event)) {
-			this.periodicConnectionHanble.disconnect();
+			this.periodicConnectionHanble.close();
 		}
 		markToRedraw();
 	}
