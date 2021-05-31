@@ -3,7 +3,7 @@ package org.atriasoft.esignal;
 import java.lang.ref.WeakReference;
 
 public class Connection implements AutoCloseable {
-	protected final WeakReference<ConnectionRemoveInterface> connection;
+	protected WeakReference<ConnectionRemoveInterface> connection;
 	
 	public void disconnect() {
 		close();
@@ -27,5 +27,17 @@ public class Connection implements AutoCloseable {
 			return;
 		}
 		tmp.disconnect(this);
+		this.connection = null;
+	}
+
+	public boolean isConnected() {
+		if (this.connection == null) {
+			return false;
+		}
+		ConnectionRemoveInterface tmp = this.connection.get();
+		if (tmp == null) {
+			return false;
+		}
+		return true;
 	}
 }
