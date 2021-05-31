@@ -5,7 +5,8 @@
  */
 package org.atriasoft.ewol.context;
 
-import org.atriasoft.echrono.Clock;
+import java.time.Clock;
+
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
@@ -16,8 +17,8 @@ import org.atriasoft.ewol.object.ObjectManager;
 import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.WidgetManager;
 import org.atriasoft.ewol.widget.Windows;
-import org.atriasoft.gale.GaleApplication;
 import org.atriasoft.gale.Gale;
+import org.atriasoft.gale.GaleApplication;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.CommandLine;
 import org.atriasoft.gale.context.GaleContext;
@@ -290,9 +291,9 @@ public class EwolContext extends GaleApplication {
 		appl.onPause(this);
 		Log.info(" == > Ewol system pause (END)");
 	}
-	
-	public void onPeriod(final Clock time) {
-		this.objectManager.timeCall(time);
+	@Override
+	public void onPeriod(final Clock clock, final long time) {
+		this.objectManager.timeCall(clock, time);
 	}
 	
 	@Override
