@@ -1,22 +1,24 @@
 {
 	# padding "outside" the object in pixel ==> prevent bad display
-	padding-out-left:2,
-	padding-out-right:2,
-	padding-out-top:2,
-	padding-out-buttom:2,
+	"padding-out-left":2,
+	"padding-out-right":2,
+	"padding-out-top":2,
+	"padding-out-buttom":2,
 	
-	# padding "inside" the object in piuxel ==> prevent bad display
-	padding-in-left:2,
-	padding-in-right:2,
-	padding-in-top:2,
-	padding-in-buttom:2,
+	# padding "inside" the object in pixel ==> prevent bad display
+	"padding-in-left":2,
+	"padding-in-right":2,
+	"padding-in-top":2,
+	"padding-in-buttom":2,
 	
 	# render program:
-	program-vert:"THEME:shape/aaRenderShape.vert?lib=ewol",
-	program-frag:"THEME:shape/aaRenderShape.frag?lib=ewol",
+	"program-vert":"THEME:shape/aaRenderShape.vert?lib=ewol",
+	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
 	# Object to render (with modification)
-	object-file:"THEME:shape/Entry.emf?lib=ewol",
+	"object-file":"THEME:shape/Entry.emf?lib=ewol",
 	
-	palette:"THEME:shape/palette_gui.json?lib=ewol"
+	"palette":"THEME:shape/palette_gui.json?lib=ewol",
+	
+	"change-time":200
 }
