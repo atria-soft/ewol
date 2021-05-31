@@ -1,7 +1,7 @@
 package org.atriasoft.ewol.event;
 
-import org.atriasoft.echrono.Clock;
-import org.atriasoft.echrono.Duration;
+import java.time.Clock;
+import java.time.Duration;
 
 /** @file
  * @author Edouard DUPIN
@@ -9,17 +9,19 @@ import org.atriasoft.echrono.Duration;
  * @license MPL v2.0 (see license file)
  */
 public record EventTime(
-	Clock timeSystem, //!< Current system time (micro-second)
-	Clock timeUpAppl, //!< Current application wake up-time (micro-second)
-	Duration timeDelta, //!< Time from the last cycle call of the system (main appl tick) (second)
-	Duration timeDeltaCall //!< Time from the last call (when we can manage periodic call with specifying periode) (second)
+		Clock currentClock, //!< Current system time "Clock.systemUTC()"
+		Clock upClock, //!< Current application wake up-time "Clock.systemUTC() @ start"
+		long currentTime, //!< Current system time "System.nanoTime()"
+		long upTime, //!< Current application wake up-time "System.nanoTime() @ start"
+		Duration timeDelta, //!< Time from the last cycle call of the system (main appl tick)
+		Duration timeDeltaCall //!< Time from the last call (when we can manage periodic call with specifying periode)
 	) {
 	
 	public float getTimeDeltaCallSecond() {
-		return this.timeDeltaCall.toSeconds();
+		return (float)(this.timeDeltaCall.toNanos() * 0.0000000001);
 	}
 	public Duration getApplUpTime() {
-		return this.timeSystem.less(this.timeUpAppl);
-	};
+		return Duration.ofNanos(this.currentTime-this.upTime);
+	}
 	
 }

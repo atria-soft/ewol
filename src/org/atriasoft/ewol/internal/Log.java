@@ -4,7 +4,7 @@ import io.scenarium.logger.LogLevel;
 import io.scenarium.logger.Logger;
 
 public class Log {
-	private static final boolean FORCE_ALL = true;
+	private static final boolean FORCE_ALL = false;
 	private static final String LIB_NAME = "ewol";
 	private static final String LIB_NAME_DRAW = Logger.getDrawableName(Log.LIB_NAME);
 	private static final boolean PRINT_CRITICAL = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.CRITICAL);

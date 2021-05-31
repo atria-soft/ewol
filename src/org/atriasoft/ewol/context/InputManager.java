@@ -7,8 +7,6 @@ package org.atriasoft.ewol.context;
 
 import java.lang.ref.WeakReference;
 
-import org.atriasoft.echrono.Clock;
-import org.atriasoft.echrono.Duration;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.event.InputSystem;
@@ -24,12 +22,13 @@ import org.atriasoft.gale.key.KeyType;
  */
 class InputLimit {
 	public int dpiOffset;
-	public Duration sepatateTime;
+	public long sepatateTime; // in nanosecond System.nanoTime()
 }
 
 class InputManager {
+	private static final long MILLI_TO_DURATION = 1000000;
+	private static final long SECONDS_TO_DURATION = 1000000000; 
 	private static final int MAX_MANAGE_INPUT = 15;
-	
 	private final EwolContext context;
 	private int dpi;
 	private final InputLimit eventInputLimit = new InputLimit();
@@ -43,6 +42,7 @@ class InputManager {
 	
 	public InputManager(final EwolContext context) {
 		this.context = context;
+		
 		setDpi(200);
 		Log.info("Init (start)");
 		for (int iii = 0; iii < InputManager.MAX_MANAGE_INPUT; iii++) {
@@ -64,9 +64,9 @@ class InputManager {
 	}
 	
 	private void calculateLimit() {
-		this.eventInputLimit.sepatateTime = Duration.milliseconds(300);
+		this.eventInputLimit.sepatateTime = 300 * InputManager.MILLI_TO_DURATION;
 		this.eventInputLimit.dpiOffset = this.dpi * 100;
-		this.eventMouseLimit.sepatateTime = Duration.milliseconds(300);
+		this.eventMouseLimit.sepatateTime = 300 * InputManager.MILLI_TO_DURATION;
 		this.eventMouseLimit.dpiOffset = (int) (this.dpi * 0.1f);
 	}
 	
@@ -272,14 +272,14 @@ class InputManager {
 			return;
 		}
 		// get the curent time ...
-		final Clock currentTime = Clock.now();
+		final long currentTime = System.nanoTime();
 		final Windows tmpWindows = this.context.getWindows();
 		
 		if (isDown) {
 			//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN] " + pos);
 			if (eventTable[pointerID].isUsed) {
 				// we have an event previously ... check delay between click and offset position
-				if (currentTime.less(eventTable[pointerID].lastTimeEvent).isGreaterThan(localLimit.sepatateTime)) {
+				if (currentTime - eventTable[pointerID].lastTimeEvent > localLimit.sepatateTime) {
 					cleanElement(eventTable, pointerID);
 				} else if (FMath.abs(eventTable[pointerID].downStart.x() - pos.x()) >= localLimit.dpiOffset || FMath.abs(eventTable[pointerID].downStart.y() - pos.y()) >= localLimit.dpiOffset) {
 					cleanElement(eventTable, pointerID);
@@ -447,7 +447,7 @@ class InputPoperty {
 	public boolean isDown = false;
 	public boolean isInside = false;
 	public boolean isUsed = false;
-	public Clock lastTimeEvent = null;
+	public long lastTimeEvent = 0; // in ns
 	public int nbClickEvent = 0; // 0 .. 1 .. 2 .. 3
 	public Vector2f origin = Vector2f.ZERO;
 	public Vector2f posEvent = Vector2f.ZERO;
@@ -456,7 +456,7 @@ class InputPoperty {
 	public void clear() {
 		this.isUsed = false;
 		this.destinationInputId = 0;
-		this.lastTimeEvent = new Clock();
+		this.lastTimeEvent = System.nanoTime();
 		this.curentWidgetEvent = null;
 		this.origin = Vector2f.ZERO;
 		this.size = Vector2f.MAX_VALUE;

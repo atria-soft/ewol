@@ -1,13 +1,12 @@
 package org.atriasoft.ewol.object;
 
 import java.lang.ref.WeakReference;
+import java.time.Clock;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.atriasoft.echrono.Clock;
-import org.atriasoft.echrono.Duration;
-import org.atriasoft.echrono.Time;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.event.EventTime;
@@ -20,12 +19,14 @@ import org.atriasoft.ewol.internal.Log;
  */
 
 public class ObjectManager {
-	private final Time applWakeUpTime; //!< Time of the application initialize
+	private final long applWakeUpTime; //!< Time of the application initialize
+	private final Clock applWakeUpClock; //!< Time of the application initialize
 	private EwolContext context = null;
 	
 	private final List<WeakReference<EwolObject>> eObjectList = new ArrayList<>(); // all widget allocated  == > all time increment ... never removed ...
 	
-	private Clock lastPeriodicCallTime; //!< last call time ...
+	private long lastPeriodicCallTime; //!< last call time ...
+	private Clock lastPeriodicCallClock; //!< last call time ...
 	
 	public final Signal<EventTime> periodicCall = new Signal<>();
 	
@@ -38,8 +39,10 @@ public class ObjectManager {
 		Log.todo("set this back ...");
 		//this.periodicCall.setPeriodic(true);
 		// set the basic time properties :
-		this.applWakeUpTime = Time.now();
-		this.lastPeriodicCallTime = new Clock(this.applWakeUpTime.get());
+		this.applWakeUpTime = System.nanoTime();
+		this.lastPeriodicCallTime = this.applWakeUpTime;
+		this.applWakeUpClock = Clock.systemUTC();
+		this.lastPeriodicCallClock = this.applWakeUpClock;
 	}
 	
 	/**
@@ -124,20 +127,23 @@ public class ObjectManager {
 	 * Call every time we can with the current time
 	 * @param localTime Current system Time.
 	 */
-	public synchronized void timeCall(final Clock localTime) {
-		final Clock previousTime = this.lastPeriodicCallTime;
-		this.lastPeriodicCallTime = localTime;
+	public synchronized void timeCall(final Clock clock, final long time) {
+		Log.verbose("Periodic main function : Call [START]");
+		final long previousTime = this.lastPeriodicCallTime;
+		this.lastPeriodicCallTime = time;
 		if (this.periodicCall.size() <= 0) {
+			Log.verbose("Periodic main dunction: Call [ END ] ==> no connection");
 			return;
 		}
-		final Duration deltaTime = new Duration(localTime.get() - previousTime.get());
+		final Duration deltaTime = Duration.ofNanos(time - previousTime);
 		
-		final EventTime myTime = new EventTime(localTime, this.applWakeUpTime.toClock(), deltaTime, deltaTime);
+		final EventTime myTime = new EventTime(clock, this.applWakeUpClock, time, this.applWakeUpTime, deltaTime, deltaTime);
 		this.periodicCall.emit(myTime);
+		Log.verbose("Periodic main dunction : Call [END]");
 	}
 	
 	/**
-	 * @breif check if the Interface have some user that request a periodic call
+	 * Check if the Interface have some user that request a periodic call
 	 * @return true, have some periodic event...
 	 */
 	public synchronized boolean timeCallHave() {
@@ -148,8 +154,9 @@ public class ObjectManager {
 	 * If the application is suspended The Ewol Object manager does not know it, just call this to update delta call
 	 * @param localTime Current system Time.
 	 */
-	public synchronized void timeCallResume(final Clock localTime) {
-		this.lastPeriodicCallTime = localTime;
+	public synchronized void timeCallResume(final Clock clock, final long time) {
+		this.lastPeriodicCallClock = clock;
+		this.lastPeriodicCallTime = time;
 	}
 	
 	/**
@@ -186,7 +193,6 @@ public class ObjectManager {
 	 * @param worker Worker to add in the list.
 	 */
 	public synchronized void workerRemove(final EwolObject worker) {
-		
 		final Iterator<EwolObject> iterator = this.workerList.iterator();
 		while (iterator.hasNext()) {
 			final EwolObject elem = iterator.next();
