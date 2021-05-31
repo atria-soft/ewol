@@ -185,6 +185,10 @@ public class WidgetManager {
 			return;
 		}
 		this.focusWidgetCurrent = new WeakReference<>(newWidget);
+		if (newWidget != null) {
+			Log.debug("Set focus on WidgetID=" + newWidget.getId() );
+			newWidget.setFocus();
+		}
 	}
 	
 	/**
