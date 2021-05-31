@@ -256,7 +256,7 @@ public class Widget extends EwolObject {
 	 * get the focus state of the widget
 	 * @return focus state
 	 */
-	public boolean getFocus() {
+	public boolean isFocused() {
 		return this.hasFocus;
 	}
 	
