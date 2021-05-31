@@ -157,9 +157,10 @@ public class Entry extends Widget {
 	
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
 		if (this.shape.changeStatusIn(newStatusId)) {
-			Log.error("REQUEST: connection on operiodic call");
-			this.periodicConnectionHanble.close();
-			this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connectDynamic(this, eventTime -> { periodicCall(eventTime);});
+			if (!this.periodicConnectionHanble.isConnected()) {
+				Log.error("REQUEST: connection on operiodic call");
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connectDynamic(this, eventTime -> { periodicCall(eventTime);});
+			}
 			markToRedraw();
 		}
 	}
@@ -347,7 +348,7 @@ public class Entry extends Widget {
 	
 	@Override
 	public boolean onEventEntry(final EventEntry event) {
-		Log.warning("Event on Entry ... " + event);
+		Log.verbose("Event on Entry ... " + event);
 		if (event.type() == KeyKeyboard.CHARACTER) {
 			if (event.status() == KeyStatus.down) {
 				// remove current selected data ...
@@ -424,18 +425,16 @@ public class Entry extends Widget {
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		Vector2f relPos = relativePosition(event.pos());
-		Log.warning("Event on Input ... " + event + " relPos = "+ relPos);
+		Log.verbose("Event on Input ... " + event + " relPos = "+ relPos);
 		if (event.inputId() == 0) {
 			if (!isFocused()) {
 				if (KeyStatus.leave == event.status()) {
 					changeStatusIn(GuiShapeMode.NORMAL);
 				} else {
-					Log.warning("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
+					Log.verbose("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
 					if (relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y()) {
-						Log.warning("Detect mouse inside ....");
 						changeStatusIn(GuiShapeMode.OVER); 
 					} else {
-						Log.warning("Detect mouse outside ....");
 						changeStatusIn(GuiShapeMode.NORMAL); 
 					}
 				}
@@ -585,8 +584,7 @@ public class Entry extends Widget {
 		this.gc.setColorStroke(Color.GREEN);
 		this.gc.setStrokeWidth(5);
 		//this.gc.rectangleRounded(new Vector2f(20, 2), new Vector2f(55, 70), new Vector2f(15, 15));
-		this.gc.line(new Vector2f(this.displayCursorPositionPixel, 2), new Vector2f(this.displayCursorPositionPixel, 70));
-		this.gc.line(new Vector2f(this.displayCursorPosSelection, 2), new Vector2f(this.displayCursorPositionPixel, 70));
+		this.gc.line(new Vector2f(this.displayCursorPositionPixel, 2), new Vector2f(this.displayCursorPositionPixel, this.gc.getTextHeight()-4));
 		
 		
 		this.gc.setColorFill(Color.BLACK);
