@@ -16,7 +16,6 @@ open module org.atriasoft.ewol {
 	exports org.atriasoft.ewol.widget;
 	//exports org.atriasoft.ewol.widget.meta;
 	
-	exports org.atriasoft.echrono;
 	exports org.atriasoft.esignal;
 	
 	requires transitive org.atriasoft.iogami;
