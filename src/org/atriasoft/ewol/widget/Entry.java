@@ -45,18 +45,24 @@ public class Entry extends Widget {
 	//private int colorIdSelection; //!< color property of the text selection
 	//private int colorIdTextBg; //!< color property of the text background
 	
-	private int colorIdTextFg; //!< color property of the text foreground
-	
-	private boolean displayCursor = false; //!< Cursor must be display only when the widget has the focus
-	
-	private int displayCursorPos = 2; //!< Cursor position in number of Char
-	
-	private int displayCursorPosSelection = 2; //!< Selection position end (can be befor or after cursor and == this.displayCursorPos chan no selection availlable
-	private int displayStartPosition = 0; //!< offset in pixel of the display of the UString
-	private int displayCursorPosition = 0; //!< offset in pixel of the display of the UString
-	private final CompositingGraphicContext gc = new CompositingGraphicContext(); //!< text display this.text
-	private boolean needUpdateTextPos = true; //!< text position can have change
-	protected Connection periodicConnectionHanble = new Connection(); //!< Periodic call handle to remove it when needed
+	/// color property of the text foreground
+	private int colorIdTextFg;
+	/// Cursor must be display only when the widget has the focus
+	private boolean displayCursor = false;
+	/// Cursor position in number of Char
+	private int displayCursorPos = 0;
+	/// Selection position end (can be before or after cursor and == this.displayCursorPos chan no selection availlable
+	private int displayCursorPosSelection = 0;
+	/// offset in pixel of the display of the UString
+	private int displayStartPosition = 0; 
+	/// offset in pixel of the display of the UString
+	private int displayCursorPositionPixel = 0;
+	/// text display this.text
+	private final CompositingGraphicContext gc = new CompositingGraphicContext();
+	/// text position can have change
+	private boolean needUpdateTextPos = true;
+	/// Periodic call handle to remove it when needed
+	protected Connection periodicConnectionHanble = new Connection();
 	@XmlManaged
 	@XmlProperty
 	@XmlName(value = "config")
@@ -101,6 +107,10 @@ public class Entry extends Widget {
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
 	@EwolSignal(name = "modify", description = "Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
+	
+	// element over:
+	Vector2f overPositionStart = Vector2f.ZERO;
+	Vector2f overPositionStop = Vector2f.ZERO;
 	
 	/**
 	 * Contuctor
@@ -413,7 +423,24 @@ public class Entry extends Widget {
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		Log.warning("Event on Input ... " + event);
+		Vector2f relPos = relativePosition(event.pos());
+		Log.warning("Event on Input ... " + event + " relPos = "+ relPos);
+		if (event.inputId() == 0) {
+			if (!isFocused()) {
+				if (KeyStatus.leave == event.status()) {
+					changeStatusIn(GuiShapeMode.NORMAL);
+				} else {
+					Log.warning("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
+					if (relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y()) {
+						Log.warning("Detect mouse inside ....");
+						changeStatusIn(GuiShapeMode.OVER); 
+					} else {
+						Log.warning("Detect mouse outside ....");
+						changeStatusIn(GuiShapeMode.NORMAL); 
+					}
+				}
+			}
+		}
 		if (event.inputId() == 1) {
 			if (KeyStatus.pressSingle == event.status()) {
 				keepFocus();
@@ -558,7 +585,8 @@ public class Entry extends Widget {
 		this.gc.setColorStroke(Color.GREEN);
 		this.gc.setStrokeWidth(5);
 		//this.gc.rectangleRounded(new Vector2f(20, 2), new Vector2f(55, 70), new Vector2f(15, 15));
-		this.gc.line(new Vector2f(this.displayCursorPosition, 2), new Vector2f(this.displayCursorPosition, 70));
+		this.gc.line(new Vector2f(this.displayCursorPositionPixel, 2), new Vector2f(this.displayCursorPositionPixel, 70));
+		this.gc.line(new Vector2f(this.displayCursorPosSelection, 2), new Vector2f(this.displayCursorPositionPixel, 70));
 		
 		
 		this.gc.setColorFill(Color.BLACK);
@@ -574,7 +602,8 @@ public class Entry extends Widget {
 		} else if (this.propertyTextWhenNothing != null) {
 			this.gc.text(tmpOriginText.add(this.displayStartPosition, 0), this.propertyTextWhenNothing);
 		}
-		
+		this.overPositionStart = tmpOriginShaper;
+		this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 		this.gc.flush();
 		this.shape.flush();
@@ -612,7 +641,11 @@ public class Entry extends Widget {
 		this.displayCursorPos = pos1;
 		this.displayCursorPosSelection = pos1;
 		StringBuilder tmp = new StringBuilder(this.propertyValue);
-		tmp.delete(pos1, pos2 - pos1);
+		if (pos1 < pos2) {
+			tmp.delete(pos1, pos2);
+		} else if (pos1 > pos2) {
+			tmp.delete(pos2, pos2);
+		}
 		this.propertyValue = tmp.toString();
 		markToRedraw();
 	}
@@ -762,21 +795,21 @@ public class Entry extends Widget {
 		int totalWidth = this.gc.calculateTextSize(this.propertyValue).x();
 		// all can not be set :
 		String tmpDisplay = this.propertyValue.substring(0, this.displayCursorPos);
-		this.displayCursorPosition = this.gc.calculateTextSize(tmpDisplay).x();
+		this.displayCursorPositionPixel = this.gc.calculateTextSize(tmpDisplay).x();
 		// Check if the data inside the display can be contain in the entry box
 		if (totalWidth < tmpUserSize) {
 			// all can be display :
 			this.displayStartPosition = 0;
 		} else {
 			// check if the Cursor is visible at 10px nearest the border :
-			int tmp1 = this.displayCursorPosition + this.displayStartPosition;
-			Log.debug("cursorPos=" + this.displayCursorPosition + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
+			int tmp1 = this.displayCursorPositionPixel + this.displayStartPosition;
+			Log.debug("cursorPos=" + this.displayCursorPositionPixel + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
 			if (tmp1 < 10) {
 				// set the cursor on le left
-				this.displayStartPosition = Math.min(-this.displayCursorPosition + 10, 0);
+				this.displayStartPosition = Math.min(-this.displayCursorPositionPixel + 10, 0);
 			} else if (tmp1 > tmpUserSize - 10) {
 				// set the cursor of the Right
-				this.displayStartPosition = Math.min(-this.displayCursorPosition + tmpUserSize - 10, 0);
+				this.displayStartPosition = Math.min(-this.displayCursorPositionPixel + tmpUserSize - 10, 0);
 			}
 			// else : the cursor is inside the display
 			//this.displayStartPosition = -totalWidth + tmpUserSize;
