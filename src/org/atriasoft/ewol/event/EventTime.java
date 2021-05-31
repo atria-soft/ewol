@@ -18,7 +18,7 @@ public record EventTime(
 	) {
 	
 	public float getTimeDeltaCallSecond() {
-		return (float)(this.timeDeltaCall.toNanos() * 0.0000000001);
+		return (float)(this.timeDeltaCall.toNanos() * 0.000000001);
 	}
 	public Duration getApplUpTime() {
 		return Duration.ofNanos(this.currentTime-this.upTime);
