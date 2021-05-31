@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.atriasoft.egami.ImageByte;
 import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
@@ -43,14 +44,13 @@ public class GuiShape extends Compositing {
 	private int confProgramFileVert = -1; //!< ConfigFile opengGl program Name
 	private final List<Vector2i> listAssiciatedId = new ArrayList<>(); //!< Correlation ID between ColorProperty (Y) and OpenGL Program (X)
 	// internal needed data :
-	private int nextStatusRequested = -1; //!< when status is changing, this represent the next step of it
+	private GuiShapeMode nextStatusRequested = GuiShapeMode.NONE; //!< when status is changing, this represent the next step of it
 	private int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
 	private int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
 	private int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
+	private int oGLPaletteOffset = -1; //!< openGL id on the element (offset for the palet rendering)
 	// openGL shaders programs:
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
-	private int oGLtexID0 = -1; //!< openGL id on the element (texture image)
-	private int oGLtexID1 = -1; //!< openGL id on the element (texture image)
 	// For the Image :
 
 	private ResourcePaletteFile palette;
@@ -58,16 +58,18 @@ public class GuiShape extends Compositing {
 	private ResourceMesh shape = null;
 	private Padding sizeObject = Padding.ZERO;
 	private int stateActivate = -1; //!< Activate state of the element
-	private final int stateNew = -1; //!< destination state
-	private final int stateOld = -1; //!< previous state
-	private final float stateTransition = 0; //!< working state between 2 states
+	private GuiShapeMode stateNew = GuiShapeMode.NORMAL; //!< destination state
+	private GuiShapeMode stateOld = GuiShapeMode.NORMAL; //!< previous state
 	private Matrix4f transform = Matrix4f.IDENTITY;
 	private Uri uri; //!< Name of the configuration of the shaper.
 	
+	// dynamic change:
+	private float stateTransition = 0;        //!< working state between 2 states
+	
 	/**
-				 * @brief generic constructor
-				 * @param _uri URI of the file that might be loaded
-				 */
+	 * @brief generic constructor
+	 * @param _uri URI of the file that might be loaded
+	 */
 	public GuiShape(final Uri uri) {
 		this.uri = uri;
 		for (int iii = 0; iii < 4; ++iii) {
@@ -107,12 +109,12 @@ public class GuiShape extends Compositing {
 	 * @return true The widget must call this fuction periodicly (and redraw itself)
 	 * @return false No need to request the periodic call.
 	 */
-	public boolean changeStatusIn(final int newStatusId) {
+	public boolean changeStatusIn(final GuiShapeMode newStatusId) {
 		if (newStatusId != this.stateNew) {
 			this.nextStatusRequested = newStatusId;
 			return true;
 		}
-		if (this.nextStatusRequested != -1 || this.stateNew != this.stateOld) {
+		if (this.stateNew != this.stateOld) {
 			return true;
 		}
 		return false;
@@ -125,36 +127,11 @@ public class GuiShape extends Compositing {
 	public void clear() {}
 	
 	/**
-	 * @brief draw All the refistered text in the current element on openGL
+	 * @brief draw All the registered text in the current element on openGL
 	 */
 	@Override
 	public void draw(final boolean disableDepthTest) {
-		if (this.config == null) {
-			// this is a normal case ... the user can choice to have no config basic file ...
-			return;
-		}
-		if (this.oGLprogram == null) {
-			Log.error("No shader ...");
-		}
-		OpenGL.enable(Flag.flag_depthTest);
-		// set Matrix : translation/positionMatrix
-		Matrix4f projMatrix = OpenGL.getMatrix();
-		Matrix4f camMatrix = OpenGL.getCameraMatrix();
-		Matrix4f tmpMatrix = this.matrixApply.multiply(this.transform);
-		this.oGLprogram.use();
-		this.shape.bindForRendering();
-		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
-		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
-		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
-		// Texture:
-		// TODO : this.texture.bindForRendering(0);
-		this.oGLprogram.setTexture0(this.oGLtexID0, this.texture.getRendererId());
-		// Request the draw of the elements:
-		this.shape.render("palette");
-		
-		this.shape.unBindForRendering();
-		this.oGLprogram.unUse();
-		OpenGL.disable(Flag.flag_depthTest);
+		draw(null, disableDepthTest);
 	}
 	
 	public void draw(final ResourceTexture2 secondaryTexture, final boolean disableDepthTest) {
@@ -176,18 +153,42 @@ public class GuiShape extends Compositing {
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 
-		 Set<String> layers = this.shape.getLayers();
-		 Log.warning("get layers:" + layers);
+
+		Set<String> layers = this.shape.getLayers();
+		Log.verbose("get layers:" + layers);
 		// Texture:
-		//this.oGLprogram.setTexture0(this.oGLtexID0, this.texture.getRendererId());
-		 this.texture.bindForRendering(0);
-		this.shape.render("palette");
+		float imageDelta = (float)1 / ResourcePaletteFile.getHeight();
+		float basicValue = this.stateOld.getValue() / ResourcePaletteFile.getHeight();
+		if (this.stateOld != this.stateNew) {
+			if(this.stateOld == GuiShapeMode.NORMAL) {
+				if (this.stateNew == GuiShapeMode.OVER) {
+					basicValue += imageDelta*this.stateTransition;
+				} else if (this.stateNew == GuiShapeMode.SELECT) {
+					basicValue += imageDelta*3.0f - imageDelta*this.stateTransition;
+				}
+			} else if(this.stateOld == GuiShapeMode.OVER) {
+				if (this.stateNew == GuiShapeMode.NORMAL) {
+					basicValue -= imageDelta*this.stateTransition;
+				} else if (this.stateNew == GuiShapeMode.SELECT) {
+					basicValue += imageDelta*this.stateTransition;
+					
+				}
+			} else if(this.stateOld == GuiShapeMode.SELECT) {
+				if (this.stateNew == GuiShapeMode.NORMAL) {
+					basicValue += imageDelta*this.stateTransition;
+				} else if (this.stateNew == GuiShapeMode.OVER) {
+					basicValue -= imageDelta*this.stateTransition;
+				}
+			}
+		}
+		Log.verbose("colorDelta = " + basicValue + " old = " + this.stateOld + "(" + this.stateOld.getValue()*imageDelta + ") new = " + this.stateNew + "(" + this.stateNew.getValue()*imageDelta  + ")");
+		this.oGLprogram.uniformFloat(this.oGLPaletteOffset, basicValue);
 		
-		if (secondaryTexture == null) {
-			Log.warning("Request display shape with a second empty texture...");
-		} else {
+		this.texture.bindForRendering(0);
+		this.shape.render("palette");
+		if (secondaryTexture != null) {
+			this.oGLprogram.uniformFloat(this.oGLPaletteOffset, 0);
 			secondaryTexture.bindForRendering(0);
-			//this.oGLprogram.setTexture0(this.oGLtexID0, secondaryTexture.getRendererId());
 			this.shape.render("gui_dynamic_1");
 			
 		}
@@ -217,7 +218,7 @@ public class GuiShape extends Compositing {
 	 * @brief get the current displayed status of the shaper
 	 * @return The Status Id
 	 */
-	public int getCurrentDisplayedStatus() {
+	public GuiShapeMode getCurrentDisplayedStatus() {
 		return this.stateNew;
 	}
 	
@@ -225,7 +226,7 @@ public class GuiShape extends Compositing {
 	 * @brief get the next displayed status of the shaper
 	 * @return The next status Id (-1 if no status in next)
 	 */
-	public int getNextDisplayedStatus() {
+	public GuiShapeMode getNextDisplayedStatus() {
 		return this.nextStatusRequested;
 	}
 	
@@ -349,9 +350,7 @@ public class GuiShape extends Compositing {
 				this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
 				this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
 				this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
-				// for the texture ID : 
-				this.oGLtexID0 = this.oGLprogram.getUniform("in_textureBase");
-				this.oGLtexID1 = this.oGLprogram.getUniform("in_textureSecondary");
+				this.oGLPaletteOffset = this.oGLprogram.getUniform("in_offsetPalette");
 			}
 		}
 	}
@@ -363,7 +362,42 @@ public class GuiShape extends Compositing {
 	 * @return false No need to request the periodic call.
 	 */
 	public boolean periodicCall(final EventTime event) {
-		Log.verbose("call=" + event + "state transition=" + this.stateTransition + " speedTime=" + this.config.getNumber(this.confIdChangeTime));
+		Log.verbose("call=" + event.getTimeDeltaCallSecond() + "s state transition=" + this.stateTransition + " speedTime=" + this.config.getNumber(this.confIdChangeTime));
+		// start :
+		if (this.stateTransition >= 1.0) {
+			this.stateOld = this.stateNew;
+			if(    (this.nextStatusRequested == GuiShapeMode.NONE) || (this.nextStatusRequested == this.stateOld)) {
+				this.nextStatusRequested = GuiShapeMode.NONE;
+				// disable periodic call ...
+				return false;
+			}
+			this.stateNew = this.nextStatusRequested;
+			this.nextStatusRequested = GuiShapeMode.NONE;
+			this.stateTransition = 0.0f;
+			Log.verbose("     ##### START #####  ");
+			return true;
+		}
+		if (this.stateTransition<1.0) {
+			// check if no new state requested:
+			if (this.nextStatusRequested != GuiShapeMode.NONE && this.stateTransition<0.5) {
+				// invert sources with destination
+				GuiShapeMode tmppp = this.stateOld;
+				this.stateOld = this.stateNew;
+				this.stateNew = tmppp;
+				this.stateTransition = 1.0f - this.stateTransition;
+				if (this.nextStatusRequested == this.stateNew) {
+					this.nextStatusRequested = GuiShapeMode.NONE;
+				}
+			}
+			float timeRelativity = 0.0f;
+			if (this.config != null) {
+				timeRelativity = (float) (this.config.getNumber(this.confIdChangeTime) / 1000.0f);
+			}
+			this.stateTransition += event.getTimeDeltaCallSecond() / timeRelativity;
+			//stateTransition += _event.getDeltaCall();
+			this.stateTransition = FMath.avg(0.0f, this.stateTransition, 1.0f);
+			Log.verbose("relative=" + timeRelativity + " Transition : " + this.stateTransition);
+		}
 		return true;
 	}
 	
