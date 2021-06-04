@@ -6,7 +6,7 @@
  * Contributors:
  *     Edouard DUPIN - initial API and implementation
  ******************************************************************************/
-package test.atriasoft.etk;
+package test.atriasoft.ewol;
 
 import java.util.ArrayList;
 import java.util.List;

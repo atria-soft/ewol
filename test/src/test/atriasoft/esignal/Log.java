@@ -1,10 +1,10 @@
-package test.atriasoft.ewol;
+package test.atriasoft.esignal;
 
 import io.scenarium.logger.LogLevel;
 import io.scenarium.logger.Logger;
 
 public class Log {
-	private static final String LIB_NAME = "etk-test";
+	private static final String LIB_NAME = "esignal-test";
 	private static final String LIB_NAME_DRAW = Logger.getDrawableName(LIB_NAME);
 	private static final boolean PRINT_CRITICAL = Logger.getNeedPrint(LIB_NAME, LogLevel.CRITICAL);
 	private static final boolean PRINT_ERROR = Logger.getNeedPrint(LIB_NAME, LogLevel.ERROR);

@@ -1,4 +1,4 @@
-package test.atriasoft.etk;
+package test.atriasoft.ewol;
 
 import io.scenarium.logger.LogLevel;
 import io.scenarium.logger.Logger;
