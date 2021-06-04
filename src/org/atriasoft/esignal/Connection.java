@@ -5,6 +5,10 @@ import java.lang.ref.WeakReference;
 public class Connection implements AutoCloseable {
 	protected WeakReference<ConnectionRemoveInterface> connection;
 	
+	public void connectionIsRemovedBySignal() {
+		connection = null;
+	}
+	
 	public void disconnect() {
 		close();
 	}
