@@ -9,7 +9,7 @@ import org.atriasoft.ewol.widget.Windows;
 public class MainWindows extends Windows {
 	
 	public MainWindows() {
-		setPropertyTitle("Simple sample test");
+		setPropertyTitle("Simple Entry test");
 		//EwolObject.getContext().getFontDefault().setName("FreeSans");
 
 		Sizer sizerMain = new Sizer(DisplayMode.modeVert);
