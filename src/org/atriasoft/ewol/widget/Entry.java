@@ -41,10 +41,6 @@ import org.atriasoft.gale.key.KeyType;
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
 public class Entry extends Widget {
-	//private int colorIdCursor; //!< color property of the text cursor
-	//private int colorIdSelection; //!< color property of the text selection
-	//private int colorIdTextBg; //!< color property of the text background
-	
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// Cursor must be display only when the widget has the focus
@@ -159,7 +155,7 @@ public class Entry extends Widget {
 		if (this.shape.changeStatusIn(newStatusId)) {
 			if (!this.periodicConnectionHanble.isConnected()) {
 				Log.error("REQUEST: connection on operiodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connectDynamic(this, eventTime -> { periodicCall(eventTime);});
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, Entry::periodicCall);
 			}
 			markToRedraw();
 		}
@@ -612,12 +608,12 @@ public class Entry extends Widget {
 	 * Periodic call to update grapgic display
 	 * @param _event Time generic event
 	 */
-	protected void periodicCall(final EventTime event) {
+	protected static void periodicCall(final Entry self, final EventTime event) {
 		Log.verbose("Periodic call on Entry(" + event + ")");
-		if (!this.shape.periodicCall(event)) {
-			this.periodicConnectionHanble.close();
+		if (!self.shape.periodicCall(event)) {
+			self.periodicConnectionHanble.close();
 		}
-		markToRedraw();
+		self.markToRedraw();
 	}
 	
 	/**
