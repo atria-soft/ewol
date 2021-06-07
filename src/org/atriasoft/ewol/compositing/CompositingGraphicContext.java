@@ -263,4 +263,5 @@ public class CompositingGraphicContext extends Compositing {
 	public void text(final Vector2f position, final String data) {
 		this.context.text(position, data);
 	}
+
 }

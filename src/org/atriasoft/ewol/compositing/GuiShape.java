@@ -49,19 +49,22 @@ public class GuiShape extends Compositing {
 	private int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
 	private int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
 	private int oGLPaletteOffset = -1; //!< openGL id on the element (offset for the palet rendering)
+	private int oGLOffsetScale = -1;
 	// openGL shaders programs:
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
 	// For the Image :
 
 	private ResourcePaletteFile palette;
 	private ResourceTexture2 texture;
-	private ResourceMesh shape = null;
+	private ResourceMesh mesh = null;
 	private Padding sizeObject = Padding.ZERO;
 	private int stateActivate = -1; //!< Activate state of the element
 	private GuiShapeMode stateNew = GuiShapeMode.NORMAL; //!< destination state
 	private GuiShapeMode stateOld = GuiShapeMode.NORMAL; //!< previous state
 	private Matrix4f transform = Matrix4f.IDENTITY;
 	private Uri uri; //!< Name of the configuration of the shaper.
+	
+	private Vector3f offsetScale = Vector3f.ZERO;
 	
 	// dynamic change:
 	private float stateTransition = 0;        //!< working state between 2 states
@@ -148,13 +151,13 @@ public class GuiShape extends Compositing {
 		Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		Matrix4f tmpMatrix = this.matrixApply.multiply(this.transform);
 		this.oGLprogram.use();
-		this.shape.bindForRendering();
+		this.mesh.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 
 
-		Set<String> layers = this.shape.getLayers();
+		Set<String> layers = this.mesh.getLayers();
 		Log.verbose("get layers:" + layers);
 		// Texture:
 		float imageDelta = (float)1 / ResourcePaletteFile.getHeight();
@@ -184,18 +187,21 @@ public class GuiShape extends Compositing {
 		Log.verbose("colorDelta = " + basicValue + " old = " + this.stateOld + "(" + this.stateOld.getValue()*imageDelta + ") new = " + this.stateNew + "(" + this.stateNew.getValue()*imageDelta  + ")");
 		this.oGLprogram.uniformFloat(this.oGLPaletteOffset, basicValue);
 		
+		Log.error("plop: " + this.offsetScale);
+		this.oGLprogram.uniformVector(this.oGLOffsetScale, this.offsetScale);
+		
 		this.texture.bindForRendering(0);
-		this.shape.render("palette");
+		this.mesh.render("palette");
 		if (secondaryTexture != null) {
 			this.oGLprogram.uniformFloat(this.oGLPaletteOffset, 0);
 			secondaryTexture.bindForRendering(0);
-			this.shape.render("gui_dynamic_1");
+			this.mesh.render("gui_dynamic_1");
 			
 		}
 		// Request the draw of the elements:
-		this.shape.render();
+		this.mesh.render();
 		
-		this.shape.unBindForRendering();
+		this.mesh.unBindForRendering();
 		this.oGLprogram.unUse();
 		OpenGL.disable(Flag.flag_depthTest);
 	}
@@ -313,8 +319,8 @@ public class GuiShape extends Compositing {
 		}
 		String objectFile = this.config.getString(this.confObjectFile);
 		if (!objectFile.isEmpty()) {
-			this.shape = ResourceMesh.create(Uri.valueOf(objectFile));
-			List<Vector3f> verticesToModify = this.shape.getGeneratedPosition();
+			this.mesh = ResourceMesh.create(Uri.valueOf(objectFile));
+			List<Vector3f> verticesToModify = this.mesh.getGeneratedPosition();
 			float top = 0;
 			float bottom = 0;
 			float left = 0;
@@ -351,6 +357,7 @@ public class GuiShape extends Compositing {
 				this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
 				this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 				this.oGLPaletteOffset = this.oGLprogram.getUniform("in_offsetPalette");
+				this.oGLOffsetScale = this.oGLprogram.getUniform("in_offsetScale");
 			}
 		}
 	}
@@ -460,7 +467,9 @@ public class GuiShape extends Compositing {
 	public void setShape(final Vector2f origin, final Vector2f size, final Vector2f insidePos, final Vector2f insideSize) {
 		//Log.error("Set shape property : origin=" + origin + " size=" + size + "  in-pos=" + insidePos + "  in-size=" + insideSize);
 		Vector2f halfSize = insideSize.multiply(0.5f);
-		List<Vector3f> verticesToModify = this.shape.getGeneratedPosition();
+		this.offsetScale = new Vector3f(halfSize.x(), halfSize.y(), 1.0f);
+		/*
+		List<Vector3f> verticesToModify = this.mesh.getGeneratedPosition();
 		float[] newVertices = new float[verticesToModify.size()*3]; 
 		for (int iii=0; iii<verticesToModify.size(); ++iii) {
 			Vector3f tmp = verticesToModify.get(iii);
@@ -470,16 +479,17 @@ public class GuiShape extends Compositing {
 		}
 		//this.transform = Matrix4f.createMatrixRotate(new Vector3f(1.0f, 0.0f, 0.0f), -FMath.PI*0.30f);
 		//this.transform = this.transform.multiply(Matrix4f.createMatrixTranslate(new Vector3f(origin.x() + size.x() * 0.5f, origin.y() + size.y() * 0.5f, 0.0f)));
+		this.mesh.setModifiedPosition(newVertices);
+		 */
 		this.transform = Matrix4f.createMatrixTranslate(new Vector3f(origin.x() + size.x() * 0.5f, origin.y() + size.y() * 0.5f, 0.0f));
-		this.shape.setModifiedPosition(newVertices);
 	}
 	
-	private float getUpdatedPos(final float value, final float halfsize) {
-		if (value <= 0.0f) {
-			return value - halfsize;
-		}
-		return value + halfsize;
-	}
+//	private float getUpdatedPos(final float value, final float halfsize) {
+//		if (value <= 0.0f) {
+//			return value - halfsize;
+//		}
+//		return value + halfsize;
+//	}
 	
 	public void setShape(final Vector3f origin, final Vector3f size) {
 		Padding tmp = getPadding();
@@ -488,7 +498,9 @@ public class GuiShape extends Compositing {
 	
 	public void setShape(final Vector3f origin, final Vector3f size, final Vector3f insidePos, final Vector3f insideSize) {
 		Vector3f halfSize = insideSize.multiply(0.5f);
-		List<Vector3f> verticesToModify = this.shape.getGeneratedPosition();
+		this.offsetScale = halfSize;
+		/*
+		List<Vector3f> verticesToModify = this.mesh.getGeneratedPosition();
 		float[] newVertices = new float[verticesToModify.size()*3]; 
 		for (int iii=0; iii<newVertices.length; ++iii) {
 			Vector3f tmp = verticesToModify.get(iii);
@@ -496,8 +508,9 @@ public class GuiShape extends Compositing {
 			newVertices[iii*3+1] = getUpdatedPos(tmp.y(), halfSize.y());
 			newVertices[iii*3+2] =  getUpdatedPos(tmp.z(), halfSize.z());
 		}
+		this.mesh.setModifiedPosition(newVertices);
+		*/
 		this.transform = Matrix4f.createMatrixTranslate(new Vector3f(origin.x() + size.x() * 0.5f, origin.y() + size.y() * 0.5f, origin.z() + size.z() * 0.5f));
-		this.shape.setModifiedPosition(newVertices);
 	}
 	
 	/**
