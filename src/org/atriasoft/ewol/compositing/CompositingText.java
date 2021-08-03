@@ -356,7 +356,7 @@ public class CompositingText extends TextBase {
 			fontName = Configs.getConfigFonts().getName();
 		}
 		Uri fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
-		fontUri.setproperty("size", Integer.toString(fontSize));
+		fontUri.setProperty("size", Integer.toString(fontSize));
 		Log.verbose("plop : " + fontName + " size=" + fontSize + " result :" + fontName);
 		// link to new one
 		this.font = ResourceTexturedFont.create(fontUri);

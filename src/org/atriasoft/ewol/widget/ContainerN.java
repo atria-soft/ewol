@@ -16,9 +16,9 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
 
@@ -29,7 +29,7 @@ import org.atriasoft.exml.model.XmlNode;
 public class ContainerN extends Widget {
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "lock")
 	@EwolDescription(value = "Lock the subwidget expand")
 	protected Vector2b propertyLockExpand = new Vector2b(false, false); //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget

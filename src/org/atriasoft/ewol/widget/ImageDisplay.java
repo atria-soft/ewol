@@ -18,9 +18,9 @@ import org.atriasoft.ewol.compositing.CompositingImage;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.key.KeyStatus;
 
@@ -32,46 +32,16 @@ public class ImageDisplay extends Widget {
 	protected ResourceColorFile colorProperty = null; //!< theme color property
 	protected CompositingImage compositing = new CompositingImage(); //!< compositing element of the image.
 	protected Vector2f imageRenderSize = Vector2f.ZERO; //!< size of the image when we render it
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "border")
-	@EwolDescription(value = "Border of the image")
+
 	protected Dimension propertyBorder = Dimension.ZERO; //!< border to add at the image.
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "size")
-	@EwolDescription(value = "Basic display size of the image")
 	protected Dimension propertyImageSize = Dimension.ZERO; //!< border to add at the image.
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "ratio")
-	@EwolDescription(value = "Keep ratio of the image")
 	protected boolean propertyKeepRatio = true; //!< keep the image ratio between width and hight
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "part-start")
-	@EwolDescription(value = "Start display position in the image")
 	protected Vector2f propertyPosStart = Vector2f.ZERO; //!< position in the image to start the sisplay (when we want not to display all the image)
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "part-stop")
-	@EwolDescription(value = "Start display position in the image")
-	protected Vector2f propertyPosStop = Vector2f.ZERO; //!< position in the image to start the sisplay (when we want not to display all the image)
+	protected Vector2f propertyPosStop = Vector2f.ONE; //!< position in the image to start the sisplay (when we want not to display all the image)
 	
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "smooth")
-	@EwolDescription(value = "Smooth display of the image")
-	protected boolean propertySmooth = true; //!< display is done in the pixed approximation if false
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "src")
-	@EwolDescription(value = "Image source path")
+
+	protected boolean propertySmooth = true; //!< display is done in the pixel approximation if false
 	protected Uri propertySource = null; //!< file name of the image.
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "use-theme-color")
-	@EwolDescription(value = "Use the theme color to display images")
 	protected boolean propertyUseThemeColor = false; //!< Use the themo color management ("THEMECOLOR:///Image.json?lib=ewol") default false
 	@EwolSignal(name = "pressed")
 	@EwolDescription(value = "Image is pressed")
@@ -110,34 +80,64 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "border")
+	@EwolDescription(value = "Border of the image")
 	public Dimension getPropertyBorder() {
 		return this.propertyBorder;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "size")
+	@EwolDescription(value = "Basic display size of the image")
 	public Dimension getPropertyImageSize() {
 		return this.propertyImageSize;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "part-start")
+	@EwolDescription(value = "Start display position in the image")
 	public Vector2f getPropertyPosStart() {
 		return this.propertyPosStart;
 	}
-	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "part-stop")
+	@EwolDescription(value = "Start display position in the image")
 	public Vector2f getPropertyPosStop() {
 		return this.propertyPosStop;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "src")
+	@EwolDescription(value = "Image source path")
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "ratio")
+	@EwolDescription(value = "Keep ratio of the image")
 	public boolean isPropertyKeepRatio() {
 		return this.propertyKeepRatio;
 	}
-	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "smooth")
+	@EwolDescription(value = "Smooth display of the image")
 	public boolean isPropertySmooth() {
 		return this.propertySmooth;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "use-theme-color")
+	@EwolDescription(value = "Use the theme color to display images")
 	public boolean isPropertyUseThemeColor() {
 		return this.propertyUseThemeColor;
 	}
@@ -263,6 +263,7 @@ public class ImageDisplay extends Widget {
 		Log.debug("Paint Image at : " + origin + " size=" + imageRealSize);
 		Log.debug("Paint Image :" + this.propertySource + " realsize=" + this.compositing.getRealSize() + " origin=" + origin + " size=" + imageRealSize);
 		Log.debug("      start=" + this.propertyPosStart + " stop=" + this.propertyPosStop);
+		this.compositing.flush();
 	}
 	
 	/**
@@ -343,7 +344,7 @@ public class ImageDisplay extends Widget {
 	}
 	
 	public void setPropertySource(final Uri propertySource) {
-		if (this.propertySource.equals(propertySource)) {
+		if (this.propertySource != null && this.propertySource.equals(propertySource)) {
 			return;
 		}
 		this.propertySource = propertySource;

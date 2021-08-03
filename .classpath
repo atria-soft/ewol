@@ -23,17 +23,7 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/loader3d">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-esvg">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-exml">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-esignal">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -43,27 +33,17 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/scenarium-logger">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-exml">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-etk">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/loader3d">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-ejson">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/atriasoft-io-gami">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/atriasoft-esignal">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
