@@ -11,9 +11,9 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -21,7 +21,7 @@ import org.atriasoft.exml.annotation.XmlProperty;
 public class Spacer extends Widget {
 	private final CompositingDrawing draw = new CompositingDrawing(); //!< Compositing drawing element
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "color")
 	@EwolDescription(value = "background of the spacer")
 	protected Color propertyColor = Color.GREEN; //!< Background color

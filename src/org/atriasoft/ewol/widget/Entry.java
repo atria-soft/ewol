@@ -21,9 +21,9 @@ import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.gale.context.ClipBoard;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.key.KeyKeyboard;
@@ -60,36 +60,36 @@ public class Entry extends Widget {
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "config")
 	@EwolDescription(value = "configuration of the widget")
 	private Uri propertyConfig = new Uri("THEME", "shape/Entry.json", "ewol");
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "max")
 	@EwolDescription(value = "Maximum char that can be set on the Entry")
 	private int propertyMaxCharacter = Integer.MAX_VALUE; //!< number max of Character in the list
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "password")
 	@EwolDescription(value = "Not display content in password mode")
 	private boolean propertyPassword = false; //!< Disable display of the content of the entry
 	/// regular expression value
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "regex")
 	@EwolDescription(value = "Control what it is write with a regular expression")
 	private String propertyRegex = ".*";
 	
 	/// Text to display when nothing in in the entry (decorated text...)
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "empty-text")
 	@EwolDescription(value = "Text when nothing is written")
 	private String propertyTextWhenNothing = null;
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "value")
 	@EwolDescription(value = "Value display in the entry (decorated text)")
 	private String propertyValue = "Test Text..."; //!< string that must be displayed

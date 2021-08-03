@@ -6,8 +6,8 @@ import org.atriasoft.ewol.Ewol;
 public class SimpleWindowsWithImageMain {
 	public static void main(final String[] args) {
 		Ewol.init();
-		//Uri.addLibrary("ne", MainCollisionTest.class, "testDataLoxelEngine/");
-		Uri.setApplication(SimpleWindowsWithImageMain.class);
+		//Uri.addLibrary("test-data", SimpleWindowsWithImageMain.class, "test-ewol/");
+		Uri.setApplication(SimpleWindowsWithImageMain.class, "test-ewol/");
 		Ewol.run(new Appl(), args);
 	}
 	

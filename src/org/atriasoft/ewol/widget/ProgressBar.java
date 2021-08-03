@@ -10,32 +10,17 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 
 class ProgressBar extends Widget {
 	private static final int DOT_RADIUS = 6;
 	private final CompositingDrawing draw = new CompositingDrawing(); // basic drawing element
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "color-off")
-	@EwolDescription(value = "Color of the false value")
+	
 	protected Color propertyTextColorBgOff = Color.NONE;
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "color-on")
-	@EwolDescription(value = "Color of the true value")
 	protected Color propertyTextColorBgOn = Color.GREEN;
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "color-bg")
-	@EwolDescription(value = "ackground color")
 	protected Color propertyTextColorFg = Color.BLACK;
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "value")
-	@EwolDescription(value = "Value of the progress bar [0..1]")
 	protected float propertyValue = 0;
 	
 	public ProgressBar() {
@@ -48,19 +33,34 @@ class ProgressBar extends Widget {
 		this.minSize = new Vector2f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f));
 		markToRedraw();
 	}
-	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "color-off")
+	@EwolDescription(value = "Color of the false value")
 	public Color getPropertyTextColorBgOff() {
 		return this.propertyTextColorBgOff;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "color-on")
+	@EwolDescription(value = "Color of the true value")
 	public Color getPropertyTextColorBgOn() {
 		return this.propertyTextColorBgOn;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "color-bg")
+	@EwolDescription(value = "ackground color")
 	public Color getPropertyTextColorFg() {
 		return this.propertyTextColorFg;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "value")
+	@EwolDescription(value = "Value of the progress bar [0..1]")
 	public float getPropertyValue() {
 		return this.propertyValue;
 	}

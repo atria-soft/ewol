@@ -16,9 +16,9 @@ import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.gale.key.KeyStatus;
 
 /**
@@ -39,13 +39,13 @@ public class Button extends Widget {
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "config")
 	@EwolDescription(value = "configuration of the widget")
 	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "value")
 	@EwolDescription(value = "Value display in the entry (decorated text)")
 	private String propertyValue = "Test Text..."; //!< string that must be displayed

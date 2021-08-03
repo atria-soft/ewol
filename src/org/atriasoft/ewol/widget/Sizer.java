@@ -13,10 +13,11 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.annotation.EwolDescription;
+import org.atriasoft.ewol.annotation.EwolObjectProperty;
 import org.atriasoft.ewol.internal.Log;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 
 public class Sizer extends ContainerN {
 	public enum DisplayMode {
@@ -24,17 +25,9 @@ public class Sizer extends ContainerN {
 		modeVert; //!< Horizontal mode
 	}
 	
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "border")
-	@EwolDescription(value = "The sizer border size")
-	public Dimension propertyBorderSize = new Dimension(Vector2f.ZERO, Distance.PIXEL); //!< Border size needed for all the display
+	protected Dimension propertyBorderSize = new Dimension(Vector2f.ZERO, Distance.PIXEL); //!< Border size needed for all the display
 	
-	@XmlManaged
-	@XmlProperty
-	@XmlName(value = "mode")
-	@EwolDescription(value = "The display mode")
-	public DisplayMode propertyMode = DisplayMode.modeHori; //!< Methode to display the widget list (vert/hory ...)
+	protected DisplayMode propertyMode = DisplayMode.modeHori; //!< Methode to display the widget list (vert/hory ...)
 	
 	/**
 	 * Constructor
@@ -87,11 +80,21 @@ public class Sizer extends ContainerN {
 		this.minSize = this.minSize.add(tmpBorderSize.multiply(2));
 		//Log.error("[" + getId() + "] {" + getObjectType() + "} Result min size : " +  this.minSize);
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName("border")
+	@EwolObjectProperty
+	@EwolDescription("The sizer border size")
 	public Dimension getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
-	
+
+	@XmlManaged
+	@XmlAttribute
+	@XmlName("mode")
+	@EwolObjectProperty
+	@EwolDescription("The display mode")
 	public DisplayMode getPropertyMode() {
 		return this.propertyMode;
 	}

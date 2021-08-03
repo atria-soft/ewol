@@ -21,9 +21,9 @@ import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.gale.backend3d.OpenGL;
 
 /**
@@ -36,12 +36,12 @@ public class Windows extends Widget {
 	protected List<Widget> popUpWidgetList = new ArrayList<Widget>();
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "file-color")
 	@EwolDescription(value = "File color of the Windows")
 	public Uri propertyColorConfiguration = new Uri("THEME", "color/Windows.json", "ewol"); //!< Configuration file of the windows theme
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "title")
 	@EwolDescription(value = "Title of the windows")
 	public String propertyTitle = "No title"; //!< Current title of the windows

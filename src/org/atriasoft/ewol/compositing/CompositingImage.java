@@ -19,7 +19,7 @@ import org.atriasoft.gale.backend3d.OpenGL.RenderMode;
 import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceTexture2;
 import org.atriasoft.gale.resource.ResourceTextureFile;
-import org.atriasoft.gale.resource.ResourceVirtualBufferObject;
+import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 
 public class CompositingImage extends Compositing {
 	public static final int NB_VBO = 3;
@@ -30,26 +30,28 @@ public class CompositingImage extends Compositing {
 	public static final int VBO_ID_COORD_TEX = 1;
 	private float angle = 0; //!< Angle to set at the axes
 	private boolean clippingEnable = true; //!< true if the clipping must be activated
-	private Vector3f clippingPosStart = new Vector3f(0, 0, 0); //!< Clipping start position
-	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); //!< Clipping stop position
+	private Vector3f clippingPosStart = Vector3f.ZERO; //!< Clipping start position
+	private Vector3f clippingPosStop = Vector3f.ZERO; //!< Clipping stop position
 	private Color color = new Color(1, 1, 1); //!< The text foreground color
 	private Uri filename;
-	private int oGLColor = -1; //!< openGL id on the element (color buffer)
-	private int oGLMatrix = -1; //!< openGL id on the element (transformation matrix)
+	private final int oGLColor = -1; //!< openGL id on the element (color buffer)
+	protected int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
+	protected int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
+	protected int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
 	private int oGLPosition = -1; //!< openGL id on the element (vertex buffer)
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
 	private int oGLtexID = -1; //!< openGL id on the element (texture ID)
-	private int oGLtexture = -1; //!< openGL id on the element (Texture position)
-	private Vector3f position = new Vector3f(0, 0, 0); //!< The current position to draw
+	private final int oGLtexture = -1; //!< openGL id on the element (Texture position)
+	private Vector3f position = Vector3f.ZERO; //!< The current position to draw
 	private Vector2i requestSize = new Vector2i(2, 2);
 	
 	private ResourceTextureFile resource = null; //!< texture resources
 	private ResourceTexture2 resourceImage = null; //!< texture resources
-	private ResourceVirtualBufferObject vbo = null;
+	private ResourceVirtualArrayObject vbo = null;
 	
-	final Color[] vboDataColors = new Color[6];
-	final Vector3f[] vboDataCoords = new Vector3f[6];
-	final Vector2f[] vboDataCoordsTex = new Vector2f[6];
+	private Color[] vboDataColors = null;
+	private Vector3f[] vboDataCoords = null;
+	private Vector2f[] vboDataCoordsTex = null;
 	
 	public CompositingImage() {
 		this(new Uri("DATA", ""), CompositingImage.SIZE_AUTO);
@@ -63,7 +65,7 @@ public class CompositingImage extends Compositing {
 	public CompositingImage(final Uri uri, final int size) {
 		this.filename = uri;
 		// Create the VBO:
-		this.vbo = ResourceVirtualBufferObject.create(CompositingImage.NB_VBO);
+		this.vbo = ResourceVirtualArrayObject.createDynamic();
 		if (this.vbo == null) {
 			Log.error("can not instanciate VBO ...");
 			return;
@@ -84,9 +86,9 @@ public class CompositingImage extends Compositing {
 		// reset Buffer :
 		this.vbo.clear();
 		// reset temporal variables :
-		this.position = new Vector3f(0, 0, 0);
-		this.clippingPosStart = new Vector3f(0, 0, 0);
-		this.clippingPosStop = new Vector3f(0, 0, 0);
+		this.position = Vector3f.ZERO;
+		this.clippingPosStart = Vector3f.ZERO;
+		this.clippingPosStop = Vector3f.ZERO;
 		this.clippingEnable = false;
 		this.color = Color.WHITE;
 		this.angle = 0;
@@ -119,9 +121,13 @@ public class CompositingImage extends Compositing {
 			OpenGL.enable(OpenGL.Flag.flag_depthTest);
 		}
 		// set Matrix : translation/positionMatrix
-		final Matrix4f tmpMatrix = OpenGL.getMatrix().multiply(this.matrixApply);
+		final Matrix4f projMatrix = OpenGL.getMatrix();
+		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		this.oGLprogram.use();
-		this.oGLprogram.uniformMatrix(this.oGLMatrix, tmpMatrix);
+		this.vbo.bindForRendering();
+		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, this.matrixApply);
+		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		// TextureID
 		if (this.resourceImage != null) {
 			this.resourceImage.bindForRendering(0);
@@ -130,25 +136,17 @@ public class CompositingImage extends Compositing {
 		} else {
 			Log.error("FONT type error Request normal and display distance field ...");
 		}
-		// position:
-		this.oGLprogram.sendAttributePointer(this.oGLPosition, this.vbo, CompositingImage.VBO_ID_COORD);
-		// Texture:
-		this.oGLprogram.sendAttributePointer(this.oGLtexture, this.vbo, CompositingImage.VBO_ID_COORD_TEX);
-		// color:
-		this.oGLprogram.sendAttributePointer(this.oGLColor, this.vbo, CompositingImage.VBO_ID_COLOR);
-		// Request the draw of the elements:
-		OpenGL.drawArrays(RenderMode.TRIANGLE, 0, this.vbo.bufferSize(CompositingImage.VBO_ID_COORD));
-		
+		this.vbo.renderArrays(RenderMode.TRIANGLE);
+		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 	}
 	
 	@Override
 	public void flush() {
-		
-		this.vbo.setVboData(CompositingImage.VBO_ID_COORD, this.vboDataCoords);
-		this.vbo.setVboData(CompositingImage.VBO_ID_COORD_TEX, this.vboDataCoordsTex);
-		this.vbo.setVboData(CompositingImage.VBO_ID_COLOR, this.vboDataColors);
-		
+		this.vbo.setPosition(this.vboDataCoords);
+		this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
+		this.vbo.setColors(this.vboDataColors);
+		this.vbo.setVertexCount(this.vboDataCoords.length);
 		this.vbo.flush();
 	}
 	
@@ -190,16 +188,15 @@ public class CompositingImage extends Compositing {
 		this.oGLPosition = 0;
 		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"), new Uri("DATA", "textured3D.frag", "ewol"));
 		if (this.oGLprogram != null) {
-			this.oGLPosition = this.oGLprogram.getAttribute("in_coord3d");
-			this.oGLColor = this.oGLprogram.getAttribute("in_color");
-			this.oGLtexture = this.oGLprogram.getAttribute("in_texture2d");
-			this.oGLMatrix = this.oGLprogram.getUniform("in_MatrixTransformation");
+			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
+			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
+			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 			this.oGLtexID = this.oGLprogram.getUniform("in_texID");
 		}
 	}
 	
 	public void print(final Vector2f size) {
-		printPart(size, new Vector2f(0, 0), new Vector2f(1, 1));
+		printPart(size, Vector2f.ZERO, Vector2f.ONE);
 	}
 	
 	/**
@@ -226,6 +223,10 @@ public class CompositingImage extends Compositing {
 		final Vector2f sourcePosStart = sourcePosStartIn.multiply(ratio);
 		final Vector2f sourcePosStop = sourcePosStopIn.multiply(ratio);
 		Log.verbose("     openGLSize=" + openGLSize + " usableSize=" + usefullSize + " start=" + sourcePosStart + " stop=" + sourcePosStop);
+
+		this.vboDataColors = new Color[6];
+		this.vboDataCoords = new Vector3f[6];
+		this.vboDataCoordsTex = new Vector2f[6];
 		
 		if (this.angle == 0.0f) {
 			Vector3f point = this.position;
@@ -276,7 +277,7 @@ public class CompositingImage extends Compositing {
 		
 		final Vector3f limitedSize = new Vector3f(size.x() * 0.5f, size.y() * 0.5f, 0.0f);
 		
-		Vector3f point = new Vector3f(0, 0, 0);
+		Vector3f point = Vector3f.ZERO;
 		
 		Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 		

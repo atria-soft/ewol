@@ -31,10 +31,10 @@ import org.atriasoft.ewol.event.EventShortCut;
 import org.atriasoft.ewol.event.InputSystem;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlDefaultManaged;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlProperty;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.context.ClipboardList;
@@ -89,43 +89,43 @@ public class Widget extends EwolObject {
 	protected Vector2f origin = new Vector2f(0, 0); //!< internal ... I do not really known how if can use it ...
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "focus")
 	@EwolDescription(value = "enable the widget to have the focus capacity")
 	protected boolean propertyCanFocus = false; //!< the focus can be done on this widget
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "expand")
 	@EwolDescription(value = "Request the widget Expand size while space is available")
 	protected Vector2b propertyExpand = new Vector2b(false, false); //!< the widget will expand if possible
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "fill")
 	@EwolDescription(value = "Fill the widget available size")
 	protected Vector2b propertyFill = new Vector2b(true, true); //!< the widget will fill all the space provided by the parent.
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "gravity")
 	@EwolDescription(value = "Gravity orientation")
 	protected Gravity propertyGravity = Gravity.buttomLeft; //!< Gravity of the widget
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "hide")
 	@EwolDescription(value = "The widget start hided")
 	protected boolean propertyHide = false; //!< hide a widget on the display
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "max-size")
 	@EwolDescription(value = "User maximum size")
 	protected Dimension propertyMaxSize = new Dimension(new Vector2f(999999, 999999), Distance.PIXEL); //!< user define the maximum size of the widget
 	
 	@XmlManaged
-	@XmlProperty
+	@XmlAttribute
 	@XmlName(value = "min-size")
 	@EwolDescription(value = "User minimum size")
 	protected Dimension propertyMinSize = new Dimension(new Vector2f(0, 0), Distance.PIXEL); //!< user define the minimum size of the widget
