@@ -88,46 +88,12 @@ public class Widget extends EwolObject {
 	
 	protected Vector2f origin = new Vector2f(0, 0); //!< internal ... I do not really known how if can use it ...
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "focus")
-	@EwolDescription(value = "enable the widget to have the focus capacity")
 	protected boolean propertyCanFocus = false; //!< the focus can be done on this widget
-	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "expand")
-	@EwolDescription(value = "Request the widget Expand size while space is available")
 	protected Vector2b propertyExpand = new Vector2b(false, false); //!< the widget will expand if possible
-	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "fill")
-	@EwolDescription(value = "Fill the widget available size")
 	protected Vector2b propertyFill = new Vector2b(true, true); //!< the widget will fill all the space provided by the parent.
-	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "gravity")
-	@EwolDescription(value = "Gravity orientation")
-	protected Gravity propertyGravity = Gravity.buttomLeft; //!< Gravity of the widget
-	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "hide")
-	@EwolDescription(value = "The widget start hided")
+	protected Gravity propertyGravity = Gravity.BUTTOM_LEFT; //!< Gravity of the widget
 	protected boolean propertyHide = false; //!< hide a widget on the display
-	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "max-size")
-	@EwolDescription(value = "User maximum size")
 	protected Dimension propertyMaxSize = new Dimension(new Vector2f(999999, 999999), Distance.PIXEL); //!< user define the maximum size of the widget
-	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "min-size")
-	@EwolDescription(value = "User minimum size")
 	protected Dimension propertyMinSize = new Dimension(new Vector2f(0, 0), Distance.PIXEL); //!< user define the minimum size of the widget
 	
 	// ----------------------------------------------------------------------------------------------------------------
@@ -301,30 +267,58 @@ public class Widget extends EwolObject {
 		return this.origin;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "focus")
+	@EwolDescription(value = "enable the widget to have the focus capacity")
 	public boolean getPropertyCanFocus() {
 		return this.propertyCanFocus;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "expand")
+	@EwolDescription(value = "Request the widget Expand size while space is available")
 	public Vector2b getPropertyExpand() {
 		return this.propertyExpand;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "fill")
+	@EwolDescription(value = "Fill the widget available size")
 	public Vector2b getPropertyFill() {
 		return this.propertyFill;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "gravity")
+	@EwolDescription(value = "Gravity orientation")
 	public Gravity getPropertyGravity() {
 		return this.propertyGravity;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "hide")
+	@EwolDescription(value = "The widget start hided")
 	public boolean getPropertyHide() {
 		return this.propertyHide;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "max-size")
+	@EwolDescription(value = "User maximum size")
 	public Dimension getPropertyMaxSize() {
 		return this.propertyMaxSize;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "min-size")
+	@EwolDescription(value = "User minimum size")
 	public Dimension getPropertyMinSize() {
 		return this.propertyMinSize;
 	}

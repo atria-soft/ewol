@@ -1,6 +1,7 @@
 package org.atriasoft.ewol.widget;
 
 import org.atriasoft.esignal.Connection;
+import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
@@ -31,24 +32,35 @@ import org.atriasoft.gale.key.KeyStatus;
  * 	----------------------------------------------
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
-public class Button extends Widget {
+/*
+public SignalEmpty signalPressed;
+public SignalEmpty signalDown;
+public SignalEmpty signalUp;
+public SignalEmpty signalEnter;
+public Signal<Boolean> signalValue;
+	public boolean propertyValue; //!< Current state of the checkbox.
+public 	Uri> propertyShape; //!< shape of the widget
+*/
+public class CheckBox extends Widget {
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// text display this.text
 	private final CompositingGraphicContext gc = new CompositingGraphicContext();
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
+	private Uri propertyConfig = new Uri("THEME", "shape/CheckBox.json", "ewol");
 	
 	private String propertyValue = "Test Text..."; //!< string that must be displayed
 	
 	private GuiShape shape;
-	@EwolSignal(name = "down", description = "Button is Down")
+	@EwolSignal(name = "down", description = "CheckBox is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
-	@EwolSignal(name = "up", description = "Button is Up")
+	@EwolSignal(name = "up", description = "CheckBox is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
-	@EwolSignal(name = "click", description = "Button is Clicked")
+	@EwolSignal(name = "click", description = "CheckBox is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
+	@EwolSignal(name = "value", description = "CheckBox value change")
+	public Signal<Boolean> signalValue;
 	
 	// element over:
 	Vector2f overPositionStart = Vector2f.ZERO;

@@ -8,7 +8,6 @@ package org.atriasoft.ewol.compositing;
 import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
@@ -29,19 +28,12 @@ public class CompositingImage extends Compositing {
 	public static final int VBO_ID_COORD = 0;
 	public static final int VBO_ID_COORD_TEX = 1;
 	private float angle = 0; //!< Angle to set at the axes
-	private boolean clippingEnable = true; //!< true if the clipping must be activated
-	private Vector3f clippingPosStart = Vector3f.ZERO; //!< Clipping start position
-	private Vector3f clippingPosStop = Vector3f.ZERO; //!< Clipping stop position
 	private Color color = new Color(1, 1, 1); //!< The text foreground color
 	private Uri filename;
-	private final int oGLColor = -1; //!< openGL id on the element (color buffer)
 	protected int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
 	protected int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
 	protected int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
-	private int oGLPosition = -1; //!< openGL id on the element (vertex buffer)
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
-	private int oGLtexID = -1; //!< openGL id on the element (texture ID)
-	private final int oGLtexture = -1; //!< openGL id on the element (Texture position)
 	private Vector3f position = Vector3f.ZERO; //!< The current position to draw
 	private Vector2i requestSize = new Vector2i(2, 2);
 	
@@ -87,15 +79,12 @@ public class CompositingImage extends Compositing {
 		this.vbo.clear();
 		// reset temporal variables :
 		this.position = Vector3f.ZERO;
-		this.clippingPosStart = Vector3f.ZERO;
-		this.clippingPosStop = Vector3f.ZERO;
-		this.clippingEnable = false;
 		this.color = Color.WHITE;
 		this.angle = 0;
 	}
 	
 	/**
-	 * draw All the refistered text in the current element on openGL
+	 * draw All the registered text in the current element on openGL
 	 * @param disableDepthTest disable the Depth test for display
 	 */
 	@Override
@@ -185,13 +174,11 @@ public class CompositingImage extends Compositing {
 	 */
 	private void loadProgram() {
 		// get the shader resource:
-		this.oGLPosition = 0;
 		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"), new Uri("DATA", "textured3D.frag", "ewol"));
 		if (this.oGLprogram != null) {
 			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
 			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
 			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
-			this.oGLtexID = this.oGLprogram.getUniform("in_texID");
 		}
 	}
 	
@@ -334,42 +321,6 @@ public class CompositingImage extends Compositing {
 	 */
 	public void setAngle(final float angleRad) {
 		this.angle = angleRad;
-	}
-	
-	void setClipping(final Vector2f pos, final Vector2f posEnd) {
-		setClipping(new Vector3f(pos.x(), pos.y(), 0), new Vector3f(posEnd.x(), posEnd.y(), 0));
-	}
-	
-	/**
-	 * Request a clipping area for the text (next draw only)
-	 * @param pos Start position of the clipping
-	 * @param posEnd End position of the clipping
-	 */
-	public void setClipping(final Vector3f pos, final Vector3f posEnd) {
-		this.clippingPosStart = FMath.min(pos, posEnd);
-		this.clippingPosStop = FMath.max(pos, posEnd);
-		this.clippingEnable = true;
-	}
-	
-	/**
-	 * enable/Disable the clipping (without lose the current clipping position)
-	 * newMode The new status of the clipping
-	 */
-	public void setClippingMode(final boolean newMode) {
-		this.clippingEnable = newMode;
-	}
-	
-	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
-		setClippingWidth(new Vector3f(pos.x(), pos.y(), 0), new Vector3f(width.x(), width.y(), 0));
-	}
-	
-	/**
-	 * Request a clipping area for the text (next draw only)
-	 * @param pos Start position of the clipping
-	 * @param width Width size of the clipping
-	 */
-	public void setClippingWidth(final Vector3f pos, final Vector3f width) {
-		setClipping(pos, pos.add(width));
 	}
 	
 	/**
