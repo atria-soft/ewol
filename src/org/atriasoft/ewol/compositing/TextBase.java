@@ -21,6 +21,7 @@ import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.exml.Exml;
 import org.atriasoft.exml.exception.ExmlAttributeDoesNotExist;
 import org.atriasoft.exml.exception.ExmlBuilderException;
+import org.atriasoft.exml.exception.ExmlException;
 import org.atriasoft.exml.exception.ExmlNodeDoesNotExist;
 import org.atriasoft.exml.exception.ExmlParserErrorMulti;
 import org.atriasoft.exml.model.XmlElement;
@@ -803,6 +804,9 @@ public abstract class TextBase extends Compositing {
 			Log.error("Can not generate XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		} catch (final ExmlNodeDoesNotExist e) {
+			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
+			e.printStackTrace();
+		} catch (ExmlException e) {
 			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		}
