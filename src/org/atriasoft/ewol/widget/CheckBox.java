@@ -3,14 +3,12 @@ package org.atriasoft.ewol.widget;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
-import org.atriasoft.ewol.compositing.CompositingGraphicContext;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventInput;
@@ -45,12 +43,12 @@ public class CheckBox extends Widget {
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// text display this.text
-	private final CompositingGraphicContext gc = new CompositingGraphicContext();
+	//private final CompositingGraphicContext gc = new CompositingGraphicContext();
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
 	private Uri propertyConfig = new Uri("THEME", "shape/CheckBox.json", "ewol");
 	
-	private String propertyValue = "Test Text..."; //!< string that must be displayed
+	private Boolean propertyValue = false; //!< string that must be displayed
 	
 	private GuiShape shape;
 	@EwolSignal(name = "down", description = "CheckBox is Down")
@@ -70,7 +68,7 @@ public class CheckBox extends Widget {
 	/**
 	 * Constuctor
 	 */
-	public Button() {
+	public CheckBox() {
 		this.propertyCanFocus = true;
 		onChangePropertyShaper();
 		markToRedraw();
@@ -86,7 +84,7 @@ public class CheckBox extends Widget {
 		if (this.shape != null) {
 			padding = this.shape.getPadding();
 		}
-		Vector2i minHeight = this.gc.calculateTextSize(this.propertyValue);
+		Vector2i minHeight = Vector2i.VALUE_16;
 		
 		Vector2f minimumSizeBase = new Vector2f(minHeight.x(), minHeight.y());
 		// add padding :
@@ -101,7 +99,7 @@ public class CheckBox extends Widget {
 		if (this.shape.changeStatusIn(newStatusId)) {
 			if (!this.periodicConnectionHanble.isConnected()) {
 				Log.error("REQUEST: connection on operiodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, Button::periodicCall);
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, CheckBox::periodicCall);
 			}
 			markToRedraw();
 		}
@@ -118,8 +116,8 @@ public class CheckBox extends Widget {
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "value")
-	@EwolDescription(value = "Value display in the entry (decorated text)")
-	public String getPropertyValue() {
+	@EwolDescription(value = "State of the checkbox")
+	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}
 	
@@ -137,14 +135,14 @@ public class CheckBox extends Widget {
 	}
 	
 	protected void onChangePropertyValue() {
-		String newData = this.propertyValue;
+		//Boolean newData = this.propertyValue;
 		markToRedraw();
 	}
 	
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
-			this.shape.draw(this.gc.getResourceTexture(), true);
+			//this.shape.draw(this.gc.getResourceTexture(), true);
 		}
 	}
 		
@@ -200,7 +198,7 @@ public class CheckBox extends Widget {
 		}
 		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
-		this.gc.clear();
+		//this.gc.clear();
 		if (this.colorIdTextFg >= 0) {
 			//this.text.setDefaultColorFg(this.shape.getColor(this.colorIdTextFg));
 			//this.text.setDefaultColorBg(this.shape.getColor(this.colorIdTextBg));
@@ -220,7 +218,7 @@ public class CheckBox extends Widget {
 		Vector2f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
 		Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
 		//Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
-		Vector2f tmpOriginText = new Vector2f(0, this.gc.getTextSize());
+		Vector2f tmpOriginText = new Vector2f(0, 0);//this.gc.getTextSize());
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 		/*
 		int minHeight = this.gc.getTextHeight();
@@ -234,17 +232,17 @@ public class CheckBox extends Widget {
 		tmpSizeText = Vector2f.clipInt(tmpSizeText);
 		tmpOriginText = Vector2f.clipInt(tmpOriginText);
 		
-		this.gc.clear();
-		this.gc.setSize((int)tmpSizeText.x(), (int)tmpSizeText.y());
+		//this.gc.clear();
+		//this.gc.setSize((int)tmpSizeText.x(), (int)tmpSizeText.y());
 		
-		this.gc.setColorFill(Color.BLACK);
-		this.gc.setColorStroke(Color.NONE);
-		this.gc.setStrokeWidth(1);
-		this.gc.text(tmpOriginText, this.propertyValue);
+		//this.gc.setColorFill(Color.BLACK);
+		//this.gc.setColorStroke(Color.NONE);
+		//this.gc.setStrokeWidth(1);
+		//this.gc.text(tmpOriginText, this.propertyValue);
 		this.overPositionStart = tmpOriginShaper;
 		this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
-		this.gc.flush();
+		//this.gc.flush();
 		this.shape.flush();
 		
 	}
@@ -253,7 +251,7 @@ public class CheckBox extends Widget {
 	 * Periodic call to update grapgic display
 	 * @param _event Time generic event
 	 */
-	protected static void periodicCall(final Button self, final EventTime event) {
+	protected static void periodicCall(final CheckBox self, final EventTime event) {
 		Log.verbose("Periodic call on Entry(" + event + ")");
 		if (!self.shape.periodicCall(event)) {
 			self.periodicConnectionHanble.close();
@@ -265,25 +263,7 @@ public class CheckBox extends Widget {
 	 * internal check the value with RegExp checking
 	 * @param newData The new string to display
 	 */
-	protected void setInternalValue(final String newData) {
-		String previous = this.propertyValue;
-		// check the RegExp :
-		if (newData.length() > 0) {
-			/*
-			if (this.regex.parse(_newData, 0, _newData.size()) == false) {
-				Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "'" );
-				return;
-			}
-			if (this.regex.start() != 0) {
-				Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (start position error)" );
-				return;
-			}
-			if (this.regex.stop() != _newData.size()) {
-				Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (stop position error)" );
-				return;
-			}
-			*/
-		}
+	protected void setInternalValue(final Boolean newData) {
 		this.propertyValue = newData;
 		markToRedraw();
 	}
@@ -297,7 +277,7 @@ public class CheckBox extends Widget {
 	}
 	
 	
-	public void setPropertyValue(final String propertyValue) {
+	public void setPropertyValue(final Boolean propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;
 		}
