@@ -40,16 +40,28 @@ public Signal<Boolean> signalValue;
 public 	Uri> propertyShape; //!< shape of the widget
 */
 public class CheckBox extends Widget {
+	/**
+	 * Periodic call to update grapgic display
+	 * @param _event Time generic event
+	 */
+	protected static void periodicCall(final CheckBox self, final EventTime event) {
+		Log.verbose("Periodic call on Entry(" + event + ")");
+		if (!self.shape.periodicCall(event)) {
+			self.periodicConnectionHanble.close();
+		}
+		self.markToRedraw();
+	}
+	
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// text display this.text
 	//private final CompositingGraphicContext gc = new CompositingGraphicContext();
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
+	
 	private Uri propertyConfig = new Uri("THEME", "shape/CheckBox.json", "ewol");
 	
 	private Boolean propertyValue = false; //!< string that must be displayed
-	
 	private GuiShape shape;
 	@EwolSignal(name = "down", description = "CheckBox is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
@@ -59,10 +71,10 @@ public class CheckBox extends Widget {
 	public SignalEmpty signalClick = new SignalEmpty();
 	@EwolSignal(name = "value", description = "CheckBox value change")
 	public Signal<Boolean> signalValue;
-	
 	// element over:
 	Vector2f overPositionStart = Vector2f.ZERO;
 	Vector2f overPositionStop = Vector2f.ZERO;
+	
 	private boolean isDown;
 	
 	/**
@@ -104,7 +116,7 @@ public class CheckBox extends Widget {
 			markToRedraw();
 		}
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "config")
@@ -112,7 +124,7 @@ public class CheckBox extends Widget {
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "value")
@@ -120,7 +132,6 @@ public class CheckBox extends Widget {
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}
-	
 	
 	protected void onChangePropertyShaper() {
 		if (this.shape == null) {
@@ -142,14 +153,14 @@ public class CheckBox extends Widget {
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
-			//this.shape.draw(this.gc.getResourceTexture(), true);
+			this.shape.draw(true);
 		}
 	}
-		
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		Vector2f relPos = relativePosition(event.pos());
-		Log.verbose("Event on Input ... " + event + " relPos = "+ relPos);
+		Log.verbose("Event on Input ... " + event + " relPos = " + relPos);
 		if (event.inputId() == 0) {
 			if (!this.isDown) {
 				if (KeyStatus.leave == event.status()) {
@@ -157,9 +168,9 @@ public class CheckBox extends Widget {
 				} else {
 					Log.verbose("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
 					if (relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y()) {
-						changeStatusIn(GuiShapeMode.OVER); 
+						changeStatusIn(GuiShapeMode.OVER);
 					} else {
-						changeStatusIn(GuiShapeMode.NORMAL); 
+						changeStatusIn(GuiShapeMode.NORMAL);
 					}
 				}
 			}
@@ -248,18 +259,6 @@ public class CheckBox extends Widget {
 	}
 	
 	/**
-	 * Periodic call to update grapgic display
-	 * @param _event Time generic event
-	 */
-	protected static void periodicCall(final CheckBox self, final EventTime event) {
-		Log.verbose("Periodic call on Entry(" + event + ")");
-		if (!self.shape.periodicCall(event)) {
-			self.periodicConnectionHanble.close();
-		}
-		self.markToRedraw();
-	}
-		
-	/**
 	 * internal check the value with RegExp checking
 	 * @param newData The new string to display
 	 */
@@ -276,7 +275,6 @@ public class CheckBox extends Widget {
 		onChangePropertyShaper();
 	}
 	
-	
 	public void setPropertyValue(final Boolean propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;
@@ -284,5 +282,5 @@ public class CheckBox extends Widget {
 		this.propertyValue = propertyValue;
 		onChangePropertyValue();
 	}
-		
+	
 }
