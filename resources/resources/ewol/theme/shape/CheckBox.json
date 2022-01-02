@@ -6,11 +6,11 @@
 	"padding-out-buttom":2,
 	
 	# padding "inside" the object in pixel ==> prevent bad display
-	"padding-in-left":2,
-	"padding-in-right":2,
-	"padding-in-top":2,
-	"padding-in-buttom":2,
-	
+	"padding-in-left":0,
+	"padding-in-right":0,
+	"padding-in-top":0,
+	"padding-in-buttom":0,
+		
 	# render program:
 	"program-vert":"THEME:shape/aaRenderShape.vert?lib=ewol",
 	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",

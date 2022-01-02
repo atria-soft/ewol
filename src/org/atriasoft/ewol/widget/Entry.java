@@ -41,6 +41,18 @@ import org.atriasoft.gale.key.KeyType;
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
 public class Entry extends Widget {
+	/**
+	 * Periodic call to update grapgic display
+	 * @param _event Time generic event
+	 */
+	protected static void periodicCall(final Entry self, final EventTime event) {
+		Log.verbose("Periodic call on Entry(" + event + ")");
+		if (!self.shape.periodicCall(event)) {
+			self.periodicConnectionHanble.close();
+		}
+		self.markToRedraw();
+	}
+	
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// Cursor must be display only when the widget has the focus
@@ -50,7 +62,7 @@ public class Entry extends Widget {
 	/// Selection position end (can be before or after cursor and == this.displayCursorPos chan no selection availlable
 	private int displayCursorPosSelection = 0;
 	/// offset in pixel of the display of the UString
-	private int displayStartPosition = 0; 
+	private int displayStartPosition = 0;
 	/// offset in pixel of the display of the UString
 	private int displayCursorPositionPixel = 0;
 	/// text display this.text
@@ -74,6 +86,7 @@ public class Entry extends Widget {
 	@XmlName(value = "password")
 	@EwolDescription(value = "Not display content in password mode")
 	private boolean propertyPassword = false; //!< Disable display of the content of the entry
+	
 	/// regular expression value
 	@XmlManaged
 	@XmlAttribute
@@ -93,7 +106,6 @@ public class Entry extends Widget {
 	@XmlName(value = "value")
 	@EwolDescription(value = "Value display in the entry (decorated text)")
 	private String propertyValue = "Test Text..."; //!< string that must be displayed
-	
 	private Pattern regex = null; //!< regular expression to check content
 	private GuiShape shape;
 	//.create()
@@ -101,11 +113,12 @@ public class Entry extends Widget {
 	public SignalEmpty signalClick = new SignalEmpty(); //!< bang on click the entry box
 	@EwolSignal(name = "enter", description = "The cursor enter inside the button")
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
+	
 	@EwolSignal(name = "modify", description = "Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
-	
 	// element over:
 	Vector2f overPositionStart = Vector2f.ZERO;
+	
 	Vector2f overPositionStop = Vector2f.ZERO;
 	
 	/**
@@ -379,7 +392,7 @@ public class Entry extends Widget {
 					} else {
 						StringBuilder newData = new StringBuilder(this.propertyValue);
 						newData.insert(this.displayCursorPos, event.getChar());
-						String newDataGenerated =newData.toString();  
+						String newDataGenerated = newData.toString();
 						setInternalValue(newDataGenerated);
 						if (this.propertyValue.equals(newDataGenerated)) {
 							this.displayCursorPos += 1;//inputData.length();
@@ -421,7 +434,7 @@ public class Entry extends Widget {
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		Vector2f relPos = relativePosition(event.pos());
-		Log.verbose("Event on Input ... " + event + " relPos = "+ relPos);
+		Log.verbose("Event on Input ... " + event + " relPos = " + relPos);
 		if (event.inputId() == 0) {
 			if (!isFocused()) {
 				if (KeyStatus.leave == event.status()) {
@@ -429,9 +442,9 @@ public class Entry extends Widget {
 				} else {
 					Log.verbose("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
 					if (relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y()) {
-						changeStatusIn(GuiShapeMode.OVER); 
+						changeStatusIn(GuiShapeMode.OVER);
 					} else {
-						changeStatusIn(GuiShapeMode.NORMAL); 
+						changeStatusIn(GuiShapeMode.NORMAL);
 					}
 				}
 			}
@@ -496,7 +509,7 @@ public class Entry extends Widget {
 		} else if (KeyType.mouse == event.type() && event.inputId() == 2) {
 			if (event.status() == KeyStatus.down || event.status() == KeyStatus.move || event.status() == KeyStatus.up) {
 				keepFocus();
-				// updatethe cursor position : 
+				// updatethe cursor position :
 				updateCursorPosition(event.pos());
 			}
 			// Paste current selection only when up button
@@ -568,20 +581,19 @@ public class Entry extends Widget {
 		tmpOriginText = Vector2f.clipInt(tmpOriginText);
 		
 		this.gc.clear();
-		this.gc.setSize((int)tmpSizeText.x(), (int)tmpSizeText.y());
+		this.gc.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
 		
-//		if (this.displayCursorPosSelection != this.displayCursorPos) {
-//			
-//			//this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
-//		} else {
-//			this.text.setCursorPos(this.displayCursorPos);
-//		}
+		//		if (this.displayCursorPosSelection != this.displayCursorPos) {
+		//			
+		//			//this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
+		//		} else {
+		//			this.text.setCursorPos(this.displayCursorPos);
+		//		}
 		this.gc.setColorFill(Color.RED);
 		this.gc.setColorStroke(Color.GREEN);
 		this.gc.setStrokeWidth(5);
 		//this.gc.rectangleRounded(new Vector2f(20, 2), new Vector2f(55, 70), new Vector2f(15, 15));
-		this.gc.line(new Vector2f(this.displayCursorPositionPixel, 2), new Vector2f(this.displayCursorPositionPixel, this.gc.getTextHeight()-4));
-		
+		this.gc.line(new Vector2f(this.displayCursorPositionPixel, 2), new Vector2f(this.displayCursorPositionPixel, this.gc.getTextHeight() - 4));
 		
 		this.gc.setColorFill(Color.BLACK);
 		this.gc.setColorStroke(Color.NONE);
@@ -602,18 +614,6 @@ public class Entry extends Widget {
 		this.gc.flush();
 		this.shape.flush();
 		
-	}
-	
-	/**
-	 * Periodic call to update grapgic display
-	 * @param _event Time generic event
-	 */
-	protected static void periodicCall(final Entry self, final EventTime event) {
-		Log.verbose("Periodic call on Entry(" + event + ")");
-		if (!self.shape.periodicCall(event)) {
-			self.periodicConnectionHanble.close();
-		}
-		self.markToRedraw();
 	}
 	
 	/**
@@ -737,7 +737,7 @@ public class Entry extends Widget {
 		if (this.displayStartPosition > this.propertyValue.length()) {
 			this.displayStartPosition = this.propertyValue.length();
 		}
-		if (this.displayStartPosition <0) {
+		if (this.displayStartPosition < 0) {
 			Log.error("wring cursor position : " + this.displayStartPosition + "/" + this.propertyValue.length());
 			this.displayStartPosition = 0;
 		}
