@@ -80,7 +80,7 @@ public class Sizer extends ContainerN {
 		this.minSize = this.minSize.add(tmpBorderSize.multiply(2));
 		//Log.error("[" + getId() + "] {" + getObjectType() + "} Result min size : " +  this.minSize);
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName("border")
@@ -89,7 +89,7 @@ public class Sizer extends ContainerN {
 	public Dimension getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName("mode")
@@ -149,15 +149,19 @@ public class Sizer extends ContainerN {
 				countCalculation = nbWidgetExpand.y();
 			}
 			// -4.1- Update every subWidget size
+			Widget lastWidget = null;
+			if (!this.subWidget.isEmpty()) {
+				lastWidget = this.subWidget.get(this.subWidget.size() - 1);
+			}
 			for (Widget it : this.subWidget) {
 				if (it == null) {
 					continue;
 				}
 				Vector2f tmpSizeMin = it.getSize();
 				Vector2f tmpSizeMax = it.getCalculateMaxSize();
-				// Now update his size  his size in X and the curent sizer size in Y:
+				// Now update his size  his size in X and the current sizer size in Y:
 				if (this.propertyMode == DisplayMode.modeVert) {
-					if (it.canExpand().y()) {
+					if (it.canExpand().y() || (it == lastWidget && it.canExpandIfFree().y())) {
 						float sizeExpand = tmpSizeMin.y() + deltaExpandSize;
 						if (sizeExpand > tmpSizeMax.y()) {
 							residualNext += (sizeExpand - tmpSizeMax.y());
@@ -168,7 +172,7 @@ public class Sizer extends ContainerN {
 					}
 					it.setSize(tmpSizeMin);
 				} else {
-					if (it.canExpand().x()) {
+					if (it.canExpand().x() || (it == lastWidget && it.canExpandIfFree().x())) {
 						float sizeExpand = tmpSizeMin.x() + deltaExpandSize;
 						if (sizeExpand > tmpSizeMax.x()) {
 							residualNext += (sizeExpand - tmpSizeMax.x());
@@ -203,16 +207,16 @@ public class Sizer extends ContainerN {
 			if (it == null) {
 				continue;
 			}
-			// Now update his size  his size in X and the curent sizer size in Y:
+			// Now update his size, his size in X and the current sizer size in Y:
 			if (this.propertyMode == DisplayMode.modeVert) {
-				if (!it.canExpand().x()) {
+				if (!it.canExpand().x() && !it.canExpandIfFree().x()) {
 					continue;
 				}
 				Vector2f tmpSizeMin = it.getSize();
 				tmpSizeMin = tmpSizeMin.withX(FMath.avg(tmpSizeMin.x(), localWidgetSize.x(), it.getCalculateMaxSize().x()));
 				it.setSize(tmpSizeMin);
 			} else {
-				if (!it.canExpand().y()) {
+				if (!it.canExpand().y() && !it.canExpandIfFree().y()) {
 					continue;
 				}
 				Vector2f tmpSizeMin = it.getSize();

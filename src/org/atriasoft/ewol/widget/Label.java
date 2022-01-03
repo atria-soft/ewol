@@ -29,21 +29,9 @@ public class Label extends Widget {
 	protected int colorDefaultBgText = -1; //!< Default Background color of the text
 	protected int colorDefaultFgText = -1; //!< Default color of the text
 	protected ResourceColorFile colorProperty; //!< theme color property
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "auto-translate")
-	@EwolDescription(value = "Translate the String with the marker {T:xxxxxx}")
 	protected boolean propertyAutoTranslate = true; //!< if at true the data is translate automaticaly translate.
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "font-size")
-	@EwolDescription(value = "Default font size (0=> system default)")
 	
 	protected int propertyFontSize = 0; //!< default size of the font.
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Displayed value string")
 	protected String propertyValue = ""; //!< decorated text to display.
 	@EwolSignal(name = "pressed")
 	@EwolDescription(value = "Label is pressed")
@@ -194,6 +182,10 @@ public class Label extends Widget {
 		this.text.flush();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "auto-translate")
+	@EwolDescription(value = "Translate the String with the marker {T:xxxxxx}")
 	public void setPropertyAutoTranslate(final boolean propertyAutoTranslate) {
 		if (this.propertyAutoTranslate == propertyAutoTranslate) {
 			return;
@@ -208,6 +200,10 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "font-size")
+	@EwolDescription(value = "Default font size (0=> system default)")
 	public void setPropertyFontSize(final int propertyFontSize) {
 		if (this.propertyFontSize == propertyFontSize) {
 			return;
@@ -217,6 +213,10 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "value")
+	@EwolDescription(value = "Displayed value string")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

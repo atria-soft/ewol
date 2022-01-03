@@ -71,40 +71,16 @@ public class Entry extends Widget {
 	private boolean needUpdateTextPos = true;
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "config")
-	@EwolDescription(value = "configuration of the widget")
 	private Uri propertyConfig = new Uri("THEME", "shape/Entry.json", "ewol");
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "max")
-	@EwolDescription(value = "Maximum char that can be set on the Entry")
 	private int propertyMaxCharacter = Integer.MAX_VALUE; //!< number max of Character in the list
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "password")
-	@EwolDescription(value = "Not display content in password mode")
 	private boolean propertyPassword = false; //!< Disable display of the content of the entry
 	
 	/// regular expression value
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "regex")
-	@EwolDescription(value = "Control what it is write with a regular expression")
 	private String propertyRegex = ".*";
 	
 	/// Text to display when nothing in in the entry (decorated text...)
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "empty-text")
-	@EwolDescription(value = "Text when nothing is written")
 	private String propertyTextWhenNothing = null;
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Value display in the entry (decorated text)")
 	private String propertyValue = "Test Text..."; //!< string that must be displayed
 	private Pattern regex = null; //!< regular expression to check content
 	private GuiShape shape;
@@ -584,7 +560,7 @@ public class Entry extends Widget {
 		this.gc.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
 		
 		//		if (this.displayCursorPosSelection != this.displayCursorPos) {
-		//			
+		//
 		//			//this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
 		//		} else {
 		//			this.text.setCursorPos(this.displayCursorPos);
@@ -671,6 +647,10 @@ public class Entry extends Widget {
 		markToRedraw();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "config")
+	@EwolDescription(value = "configuration of the widget")
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;
@@ -679,6 +659,10 @@ public class Entry extends Widget {
 		onChangePropertyShaper();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "max")
+	@EwolDescription(value = "Maximum char that can be set on the Entry")
 	public void setPropertyMaxCharacter(final int propertyMaxCharacter) {
 		if (this.propertyMaxCharacter == propertyMaxCharacter) {
 			return;
@@ -687,6 +671,10 @@ public class Entry extends Widget {
 		onChangePropertyMaxCharacter();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "password")
+	@EwolDescription(value = "Not display content in password mode")
 	public void setPropertyPassword(final boolean propertyPassword) {
 		if (this.propertyPassword == propertyPassword) {
 			return;
@@ -695,6 +683,10 @@ public class Entry extends Widget {
 		onChangePropertyPassword();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "regex")
+	@EwolDescription(value = "Control what it is write with a regular expression")
 	public void setPropertyRegex(final String propertyRegex) {
 		if (this.propertyRegex.equals(propertyRegex)) {
 			return;
@@ -703,6 +695,10 @@ public class Entry extends Widget {
 		onChangePropertyRegex();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "empty-text")
+	@EwolDescription(value = "Text when nothing is written")
 	public void setPropertyTextWhenNothing(final String propertyTextWhenNothing) {
 		if (this.propertyTextWhenNothing.equals(propertyTextWhenNothing)) {
 			return;
@@ -711,6 +707,10 @@ public class Entry extends Widget {
 		onChangePropertyTextWhenNothing();
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "value")
+	@EwolDescription(value = "Value display in the entry (decorated text)")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

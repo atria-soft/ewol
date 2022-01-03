@@ -24,22 +24,18 @@ import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.key.KeyStatus;
 
-/**
- * @ingroup ewolWidgetGroup
- */
 public class ImageDisplay extends Widget {
 	protected int colorId = -1; //!< Color of the image.
 	protected ResourceColorFile colorProperty = null; //!< theme color property
 	protected CompositingImage compositing = new CompositingImage(); //!< compositing element of the image.
 	protected Vector2f imageRenderSize = Vector2f.ZERO; //!< size of the image when we render it
-
+	
 	protected Dimension propertyBorder = Dimension.ZERO; //!< border to add at the image.
 	protected Dimension propertyImageSize = Dimension.ZERO; //!< border to add at the image.
 	protected boolean propertyKeepRatio = true; //!< keep the image ratio between width and hight
 	protected Vector2f propertyPosStart = Vector2f.ZERO; //!< position in the image to start the sisplay (when we want not to display all the image)
 	protected Vector2f propertyPosStop = Vector2f.ONE; //!< position in the image to start the sisplay (when we want not to display all the image)
 	
-
 	protected boolean propertySmooth = true; //!< display is done in the pixel approximation if false
 	protected Uri propertySource = null; //!< file name of the image.
 	protected boolean propertyUseThemeColor = false; //!< Use the themo color management ("THEMECOLOR:///Image.json?lib=ewol") default false
@@ -63,7 +59,7 @@ public class ImageDisplay extends Widget {
 			this.minSize = imageBoder.add(imageSize);
 			this.maxSize = this.minSize;
 		} else {
-			Vector2i imageSizeReal = this.compositing.getRealSize();
+			Vector2i imageSizeReal = this.getPropertyMinSize().getPixeli();//.compositing.getRealSize();
 			Log.verbose(" Real Size = " + imageSizeReal);
 			Vector2f min1 = imageBoder.add(this.propertyMinSize.getPixel());
 			this.minSize = imageBoder.add(imageSizeReal);
@@ -87,7 +83,7 @@ public class ImageDisplay extends Widget {
 	public Dimension getPropertyBorder() {
 		return this.propertyBorder;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "size")
@@ -95,7 +91,7 @@ public class ImageDisplay extends Widget {
 	public Dimension getPropertyImageSize() {
 		return this.propertyImageSize;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "part-start")
@@ -103,6 +99,7 @@ public class ImageDisplay extends Widget {
 	public Vector2f getPropertyPosStart() {
 		return this.propertyPosStart;
 	}
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "part-stop")
@@ -110,7 +107,7 @@ public class ImageDisplay extends Widget {
 	public Vector2f getPropertyPosStop() {
 		return this.propertyPosStop;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "src")
@@ -118,7 +115,7 @@ public class ImageDisplay extends Widget {
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "ratio")
@@ -126,6 +123,7 @@ public class ImageDisplay extends Widget {
 	public boolean isPropertyKeepRatio() {
 		return this.propertyKeepRatio;
 	}
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "smooth")
@@ -133,7 +131,7 @@ public class ImageDisplay extends Widget {
 	public boolean isPropertySmooth() {
 		return this.propertySmooth;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "use-theme-color")

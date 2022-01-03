@@ -12,7 +12,7 @@
 	"padding-in-buttom":0,
 		
 	# render program:
-	"program-vert":"THEME:shape/aaRenderShape.vert?lib=ewol",
+	"program-vert":"THEME:shape/aaRenderShapeScale.vert?lib=ewol",
 	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
 	# Object to render (with modification)
