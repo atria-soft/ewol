@@ -33,6 +33,7 @@ class ProgressBar extends Widget {
 		this.minSize = new Vector2f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f));
 		markToRedraw();
 	}
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "color-off")
@@ -40,7 +41,7 @@ class ProgressBar extends Widget {
 	public Color getPropertyTextColorBgOff() {
 		return this.propertyTextColorBgOff;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "color-on")
@@ -48,7 +49,7 @@ class ProgressBar extends Widget {
 	public Color getPropertyTextColorBgOn() {
 		return this.propertyTextColorBgOn;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "color-bg")
@@ -56,7 +57,7 @@ class ProgressBar extends Widget {
 	public Color getPropertyTextColorFg() {
 		return this.propertyTextColorFg;
 	}
-
+	
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "value")

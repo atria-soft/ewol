@@ -28,10 +28,6 @@ import org.atriasoft.exml.model.XmlNode;
  */
 public class ContainerN extends Widget {
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "lock")
-	@EwolDescription(value = "Lock the subwidget expand")
 	protected Vector2b propertyLockExpand = new Vector2b(false, false); //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 	protected Vector2b subExpend = new Vector2b(false, false); //!< reference of the sub element expention requested.
 	protected List<Widget> subWidget = new ArrayList<>();
@@ -93,6 +89,10 @@ public class ContainerN extends Widget {
 		}
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "lock")
+	@EwolDescription(value = "Lock the subwidget expand")
 	public Vector2b getPropertyLockExpand() {
 		return this.propertyLockExpand;
 	}

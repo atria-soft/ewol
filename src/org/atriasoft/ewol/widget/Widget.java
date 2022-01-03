@@ -33,6 +33,8 @@ import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlDefaultManaged;
+import org.atriasoft.exml.annotation.XmlDefaultOptional;
+import org.atriasoft.exml.annotation.XmlIgnoreUnknow;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.model.XmlElement;
@@ -41,18 +43,20 @@ import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
-
 import org.lwjgl.opengl.GL11;
 
 /**
- * Widget class is the main widget interface, it has so me generic properties: 
+ * Widget class is the main widget interface, it has so me generic properties:
  * :** known his parent
  * :** Can be display at a special position with a special scale
  * :** Can get focus
  * :** Receive Event (keyboard / mouse / ...)
  * 
  */
+
 @XmlDefaultManaged(value = false)
+@XmlDefaultOptional
+@XmlIgnoreUnknow
 public class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- keyboard event properties Area
@@ -90,6 +94,7 @@ public class Widget extends EwolObject {
 	
 	protected boolean propertyCanFocus = false; //!< the focus can be done on this widget
 	protected Vector2b propertyExpand = new Vector2b(false, false); //!< the widget will expand if possible
+	protected Vector2b propertyExpandIfFree = new Vector2b(false, false); //!< the widget will expand if possible
 	protected Vector2b propertyFill = new Vector2b(true, true); //!< the widget will fill all the space provided by the parent.
 	protected Gravity propertyGravity = Gravity.BUTTOM_LEFT; //!< Gravity of the widget
 	protected boolean propertyHide = false; //!< hide a widget on the display
@@ -142,6 +147,18 @@ public class Widget extends EwolObject {
 	}
 	
 	/**
+	 * get the expend if free capabilities (xy)
+	 * @return 2D boolean represents the capacity to expend (if some free space is available)
+	 * @note : INTERNAL EWOL SYSTEM
+	 */
+	public Vector2b canExpandIfFree() {
+		if (!this.propertyHide) {
+			return this.propertyExpandIfFree;
+		}
+		return new Vector2b(false, false);
+	}
+	
+	/**
 	 * get the filling capabilities xy
 	 * @return Vector2b repensent the capacity to xy filling
 	 * @note : INTERNAL EWOL SYSTEM
@@ -179,11 +196,12 @@ public class Widget extends EwolObject {
 	}
 	
 	public void drawWidgetTree(final int level) {
-		String space = "";
+		StringBuilder space = new StringBuilder();
 		for (int iii = 0; iii < level; ++iii) {
-			space += "    ";
+			space.append("    ");
 		}
-		Log.print(space + "[" + getId() + "] name='" + this.name + "' type=" + getClass().getCanonicalName() + " o=" + this.origin + "  s=" + this.size + " hide=" + this.propertyHide);
+		Log.print(space.append("[").append(getId()).append("] name='").append(this.name).append("' type=").append(getClass().getCanonicalName()).append(" o=").append(this.origin).append("  s=")
+				.append(this.size).append(" hide=").append(this.propertyHide).toString());
 	}
 	
 	/**
@@ -216,14 +234,6 @@ public class Widget extends EwolObject {
 	 */
 	public Cursor getCursor() {
 		return this.cursorDisplay;
-	}
-	
-	/**
-	 * get the focus state of the widget
-	 * @return focus state
-	 */
-	public boolean isFocused() {
-		return this.hasFocus;
 	}
 	
 	/**
@@ -281,6 +291,14 @@ public class Widget extends EwolObject {
 	@EwolDescription(value = "Request the widget Expand size while space is available")
 	public Vector2b getPropertyExpand() {
 		return this.propertyExpand;
+	}
+	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "expand-free")
+	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper wideget)")
+	public Vector2b getPropertyExpandIfFree() {
+		return this.propertyExpandIfFree;
 	}
 	
 	@XmlManaged
@@ -388,6 +406,14 @@ public class Widget extends EwolObject {
 	 */
 	protected void hideKeyboard() {
 		EwolObject.getContext().keyboardHide();
+	}
+	
+	/**
+	 * get the focus state of the widget
+	 * @return focus state
+	 */
+	public boolean isFocused() {
+		return this.hasFocus;
 	}
 	
 	/**
@@ -671,6 +697,15 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
+	public void setPropertyExpandIfFree(final Vector2b value) {
+		if (this.propertyExpandIfFree.equals(value)) {
+			return;
+		}
+		this.propertyExpandIfFree = value;
+		markToRedraw();
+		requestUpdateSize();
+	}
+	
 	public void setPropertyFill(final Vector2b value) {
 		if (this.propertyFill.equals(value)) {
 			return;
@@ -899,7 +934,7 @@ public class Widget extends EwolObject {
 		}
 		final Vector2f displayOrigin = this.origin.add(this.offset);
 		
-		// check if the element is displayable in the windows : 
+		// check if the element is displayable in the windows :
 		if (displayProp.windowsSize().x() < this.origin.x() || displayProp.windowsSize().y() < this.origin.y()) {
 			// out of the windows  == > nothing to display ...
 			return;

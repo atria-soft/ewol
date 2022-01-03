@@ -15,9 +15,6 @@ import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 
-/**
- * @ingroup ewolWidgetGroup
- */
 public class Spacer extends Widget {
 	private final CompositingDrawing draw = new CompositingDrawing(); //!< Compositing drawing element
 	@XmlManaged

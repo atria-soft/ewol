@@ -3,9 +3,10 @@ package sample.atriasoft.ewol.simpleWindowsLabel;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.Spacer;
-import org.atriasoft.ewol.widget.Windows;
 
-public class MainWindows extends Windows {
+import sample.atriasoft.ewol.BasicWindows;
+
+public class MainWindows extends BasicWindows {
 	
 	public MainWindows() {
 		//! [ewol_sample_HW_windows_title]
@@ -19,13 +20,13 @@ public class MainWindows extends Windows {
 					"He<b>llo.</b> <font color='blue'>World</font><br/><br/>  - Coucou comment ca vas ???<br/>  - Pas trop bien, je me suis cassé la jambe.<br/><br/><center>The end</center>");
 			simpleLabel.setPropertyExpand(new Vector2b(true, true));
 			simpleLabel.setPropertyFill(new Vector2b(true, true));
-			setSubWidget(simpleLabel);
+			this.setTestWidget(simpleLabel);
 			//! [ewol_sample_HW_windows_label]
 		} else {
 			Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyExpand(new Vector2b(true, true));
 			simpleSpacer.setPropertyFill(new Vector2b(true, true));
-			setSubWidget(simpleSpacer);
+			this.setTestWidget(simpleSpacer);
 		}
 	}
 }
