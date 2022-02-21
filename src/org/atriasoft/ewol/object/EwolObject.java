@@ -3,9 +3,15 @@ package org.atriasoft.ewol.object;
 import java.lang.ref.WeakReference;
 
 import org.atriasoft.ewol.Ewol;
+import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.exml.annotation.XmlAttribute;
+import org.atriasoft.exml.annotation.XmlDefaultManaged;
+import org.atriasoft.exml.annotation.XmlDefaultOptional;
+import org.atriasoft.exml.annotation.XmlIgnoreUnknow;
+import org.atriasoft.exml.annotation.XmlManaged;
+import org.atriasoft.exml.annotation.XmlName;
 
 /** @file
  * @author Edouard DUPIN
@@ -17,6 +23,9 @@ import org.atriasoft.exml.model.XmlElement;
  * Basic message classes for ewol system
  * this class permit at every Object to communicate between them.
  */
+@XmlDefaultManaged(value = false)
+@XmlDefaultOptional
+@XmlIgnoreUnknow
 public class EwolObject {
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
 	
@@ -36,7 +45,7 @@ public class EwolObject {
 		return Ewol.getContext().getEObjectManager();
 	}
 	
-	/** 
+	/**
 	 * Retrive an object with his name (in the global list)
 	 * @param objectName Name of the object
 	 * @return the requested object or null
@@ -103,35 +112,13 @@ public class EwolObject {
 		return this.uniqueId;
 	}
 	
+	@XmlManaged
+	@XmlAttribute
+	@XmlName(value = "name")
+	@EwolDescription(value = "Name of the object.")
 	public String getName() {
 		return this.name;
 	}
-	
-	/**
-	 * load attribute properties with an XML node.
-	 * @param node Reference on the XML node.
-	 * @return true : All has been done corectly.
-	 * @return false : An error occured.
-	 */
-	/*
-	boolean loadXMLAttributes( exml::Element node){
-		if (node.exist() == false) {
-			return false;
-		}
-		boolean errorOccured = false;
-		
-		for( auto it : node.attributes) {
-			auto pair = it.getPair();
-			if (pair.first == "") {
-				continue;
-			}
-			if (properties.set(pair.first, pair.second) == false) {
-				errorOccured = true;
-			}
-		}
-		return errorOccured;
-	}
-	*/
 	
 	/**
 	 * get the static status of the Object  == > mark at true if the user set the object mark as static allocated element ==> not auto remove element
@@ -140,25 +127,6 @@ public class EwolObject {
 	public boolean getStatic() {
 		return this.staticObject;
 	}
-	
-	/**
-	 * store properties in this XML node.
-	 * @param[in,out] node Reference on the XML node.
-	 * @return true : All has been done corectly.
-	 * @return false : An error occured.
-	 */
-	/*
-	boolean storeXML(exml::Element node){
-		if (node.exist() == false) {
-			return false;
-		}
-		boolean errorOccured = true;
-		for (auto it : properties.getAll(true)) {
-			node.attributes.set(it.first, it.second);
-		}
-		return errorOccured;
-	}
-	*/
 	
 	/**
 	 * Get the resource status of the element.
@@ -191,16 +159,6 @@ public class EwolObject {
 	}
 	
 	/**
-	 * load properties with an XML node.
-	 * @param node Reference on the XML node.
-	 * @return true : All has been done corectly.
-	 * @return false : An error occured.
-	 */
-	protected boolean loadXML(final XmlElement node) {
-		return true;
-	}
-	
-	/**
 	 * Remove the current parenting.
 	 */
 	public void removeParent() {
@@ -230,7 +188,7 @@ public class EwolObject {
 	}
 	
 	/**
-	 * Declare this element as a resource (or singleton) this mean the element will 
+	 * Declare this element as a resource (or singleton) this mean the element will
 	 * not be auto Remove at the end of the programm. It just notify that it is not removed.
 	 * @param val Value of the type of the element.
 	 */

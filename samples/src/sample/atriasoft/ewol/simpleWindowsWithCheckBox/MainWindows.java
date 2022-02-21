@@ -18,5 +18,12 @@ public class MainWindows extends BasicWindows {
 		this.testWidget.setPropertyExpand(Vector2b.TRUE_TRUE);
 		this.testWidget.setPropertyFill(Vector2b.TRUE_TRUE);
 		this.setTestWidget(this.testWidget);
+		/*
+		Button simpleButton = new Button();
+		simpleButton.setPropertyValue("Top Button");
+		simpleButton.setPropertyExpand(Vector2b.TRUE_TRUE);
+		simpleButton.setPropertyFill(Vector2b.TRUE_TRUE);
+		this.setTestWidget(simpleButton);
+		*/
 	}
 }

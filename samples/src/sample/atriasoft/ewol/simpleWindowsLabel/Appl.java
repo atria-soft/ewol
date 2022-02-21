@@ -5,6 +5,8 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.context.EwolApplication;
 import org.atriasoft.ewol.context.EwolContext;
 
+import sample.atriasoft.ewol.Log;
+
 public class Appl implements EwolApplication {
 	
 	//! [ewol_sample_HW_main_application]

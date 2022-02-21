@@ -21,7 +21,6 @@ import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.key.KeyStatus;
 
 public class ImageDisplay extends Widget {
@@ -138,50 +137,6 @@ public class ImageDisplay extends Widget {
 	@EwolDescription(value = "Use the theme color to display images")
 	public boolean isPropertyUseThemeColor() {
 		return this.propertyUseThemeColor;
-	}
-	
-	@Override
-	public boolean loadXML(final XmlElement node) {
-		if (node == null) {
-			return false;
-		}
-		super.loadXML(node);
-		// get internal data :
-		
-		String tmpAttributeValue = node.getAttribute("ratio", "").toLowerCase();
-		if (tmpAttributeValue.length() != 0) {
-			if (tmpAttributeValue.equals("true")) {
-				this.propertyKeepRatio = true;
-			} else if (tmpAttributeValue.equals("1")) {
-				this.propertyKeepRatio = true;
-			} else {
-				this.propertyKeepRatio = false;
-			}
-		}
-		tmpAttributeValue = node.getAttribute("size", "");
-		if (tmpAttributeValue.length() != 0) {
-			//Log.critical(" Parse SIZE : " + tmpAttributeValue);
-			this.propertyImageSize = Dimension.valueOf(tmpAttributeValue);
-			//Log.critical("               == > " + propertyImageSize);
-		}
-		tmpAttributeValue = node.getAttribute("border", "");
-		if (tmpAttributeValue.length() != 0) {
-			this.propertyBorder = Dimension.valueOf(tmpAttributeValue);
-		}
-		tmpAttributeValue = node.getAttribute("smooth", "");
-		if (tmpAttributeValue.length() != 0) {
-			this.propertySmooth = Boolean.parseBoolean(tmpAttributeValue);
-		}
-		//Log.debug("Load label:" + node.ToElement().getText());
-		if (node.getNodes().size() != 0) {
-			this.propertySource = Uri.valueOf(node.getText());
-		} else {
-			tmpAttributeValue = node.getAttribute("src", "");
-			if (tmpAttributeValue.length() != 0) {
-				this.propertySource = Uri.valueOf(tmpAttributeValue);
-			}
-		}
-		return true;
 	}
 	
 	@Override
