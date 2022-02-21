@@ -32,12 +32,8 @@ import org.atriasoft.ewol.event.InputSystem;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlDefaultManaged;
-import org.atriasoft.exml.annotation.XmlDefaultOptional;
-import org.atriasoft.exml.annotation.XmlIgnoreUnknow;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
@@ -53,10 +49,6 @@ import org.lwjgl.opengl.GL11;
  * :** Receive Event (keyboard / mouse / ...)
  * 
  */
-
-@XmlDefaultManaged(value = false)
-@XmlDefaultOptional
-@XmlIgnoreUnknow
 public class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- keyboard event properties Area
@@ -421,13 +413,6 @@ public class Widget extends EwolObject {
 	 */
 	public void keepFocus() {
 		getWidgetManager().focusKeep(this);
-	}
-	
-	@Override
-	public boolean loadXML(final XmlElement node) {
-		super.loadXML(node);
-		markToRedraw();
-		return true;
 	}
 	
 	/**

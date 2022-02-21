@@ -11,8 +11,8 @@ public class MainWindows extends BasicWindows {
 		setPropertyTitle("Simple Entry test");
 		
 		Entry simpleEntry = new Entry();
-		simpleEntry.setPropertyExpand(new Vector2b(true, true));
-		simpleEntry.setPropertyFill(new Vector2b(true, false));
+		simpleEntry.setPropertyExpand(Vector2b.TRUE_TRUE);
+		simpleEntry.setPropertyFill(Vector2b.TRUE_FALSE);
 		this.setTestWidget(simpleEntry);
 		
 	}

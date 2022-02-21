@@ -40,6 +40,7 @@ public class GuiShape extends Compositing {
 	private ResourceConfigFile config = null; //!< pointer on the config file resources
 	
 	private int confObjectFile = -1; //!< Config Id of the object file to display
+	private int confObjectFile2 = -1; //!< Config Id of the object file to display
 	private int confProgramFileFrag = -1; //!< ConfigFile opengGl program Name
 	private int confProgramFileVert = -1; //!< ConfigFile opengGl program Name
 	private final List<Vector2i> listAssiciatedId = new ArrayList<>(); //!< Correlation ID between ColorProperty (Y) and OpenGL Program (X)
@@ -57,7 +58,7 @@ public class GuiShape extends Compositing {
 	
 	private ResourcePaletteFile palette;
 	private ResourceTexture2 texture;
-	private ResourceMesh mesh = null;
+	private ResourceMesh[] mesh = new ResourceMesh[2];
 	private Padding sizeObject = Padding.ZERO;
 	private int stateActivate = -1; //!< Activate state of the element
 	private GuiShapeMode stateNew = GuiShapeMode.NORMAL; //!< destination state
@@ -119,13 +120,32 @@ public class GuiShape extends Compositing {
 		draw(null, disableDepthTest);
 	}
 	
+	public void draw(final boolean disableDepthTest, int idMesh) {
+		draw(null, disableDepthTest, idMesh);
+	}
+	
 	public void draw(final ResourceTexture2 secondaryTexture, final boolean disableDepthTest) {
+		this.draw(secondaryTexture, disableDepthTest, 0);
+	}
+	
+	public void draw(final ResourceTexture2 secondaryTexture, final boolean disableDepthTest, int idMesh) {
 		if (this.config == null) {
 			// this is a normal case ... the user can choice to have no config basic file ...
 			return;
 		}
+		if (idMesh == 0 && this.mesh[0] == null) {
+			Log.error("No Object (0) to display ...");
+			return;
+		} else if (idMesh == 1 && this.mesh[1] == null) {
+			Log.error("No Object (1) to display ...");
+			return;
+		} else if (idMesh < 0 && idMesh > 1) {
+			Log.critical("No Object (" + idMesh + ") to display [0..1]");
+			return;
+		}
 		if (this.oGLprogram == null) {
 			Log.error("No shader ...");
+			return;
 		}
 		OpenGL.enable(Flag.flag_depthTest);
 		// set Matrix : translation/positionMatrix
@@ -133,12 +153,12 @@ public class GuiShape extends Compositing {
 		Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		Matrix4f tmpMatrix = this.matrixApply.multiply(this.transform);
 		this.oGLprogram.use();
-		this.mesh.bindForRendering();
+		this.mesh[idMesh].bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, tmpMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixView, camMatrix);
 		
-		Set<String> layers = this.mesh.getLayers();
+		Set<String> layers = this.mesh[idMesh].getLayers();
 		Log.verbose("get layers:" + layers);
 		// Texture:
 		float imageDelta = (float) 1 / ResourcePaletteFile.getHeight();
@@ -155,7 +175,6 @@ public class GuiShape extends Compositing {
 					basicValue -= imageDelta * this.stateTransition;
 				} else if (this.stateNew == GuiShapeMode.SELECT) {
 					basicValue += imageDelta * this.stateTransition;
-					
 				}
 			} else if (this.stateOld == GuiShapeMode.SELECT) {
 				if (this.stateNew == GuiShapeMode.NORMAL) {
@@ -169,23 +188,23 @@ public class GuiShape extends Compositing {
 				+ ")");
 		this.oGLprogram.uniformFloat(this.oGLPaletteOffset, basicValue);
 		
-		Log.error("plop: " + this.offsetScaleOutside);
-		Log.error("plop: " + this.offsetScaleInside);
+		//Log.verbose("plop: " + this.offsetScaleOutside);
+		//Log.verbose("plop: " + this.offsetScaleInside);
 		this.oGLprogram.uniformVector(this.oGLOffsetScaleInside, this.offsetScaleInside);
 		this.oGLprogram.uniformVector(this.oGLOffsetScaleOutside, this.offsetScaleOutside);
 		
 		this.texture.bindForRendering(0);
-		this.mesh.render("palette");
+		this.mesh[idMesh].render("palette");
 		if (secondaryTexture != null) {
 			this.oGLprogram.uniformFloat(this.oGLPaletteOffset, 0);
 			secondaryTexture.bindForRendering(0);
-			this.mesh.render("gui_dynamic_1");
+			this.mesh[idMesh].render("gui_dynamic_1");
 			
 		}
 		// Request the draw of the elements:
-		this.mesh.render();
+		this.mesh[idMesh].render();
 		
-		this.mesh.unBindForRendering();
+		this.mesh[idMesh].unBindForRendering();
 		this.oGLprogram.unUse();
 		OpenGL.disable(Flag.flag_depthTest);
 	}
@@ -289,6 +308,7 @@ public class GuiShape extends Compositing {
 			this.confProgramFileVert = this.config.request("program-vert");
 			this.confProgramFileFrag = this.config.request("program-frag");
 			this.confObjectFile = this.config.request("object-file");
+			this.confObjectFile2 = this.config.request("object-file-2");
 			this.confIdPaletteFile = this.config.request("palette");
 		}
 	}
@@ -349,8 +369,8 @@ public class GuiShape extends Compositing {
 		}
 		String objectFile = this.config.getString(this.confObjectFile);
 		if (!objectFile.isEmpty()) {
-			this.mesh = ResourceMesh.create(Uri.valueOf(objectFile));
-			List<Vector3f> verticesToModify = this.mesh.getGeneratedPosition();
+			this.mesh[0] = ResourceMesh.create(Uri.valueOf(objectFile));
+			List<Vector3f> verticesToModify = this.mesh[0].getGeneratedPosition();
 			float top = 0;
 			float bottom = 0;
 			float left = 0;
@@ -371,6 +391,30 @@ public class GuiShape extends Compositing {
 				font = Math.max(font, verticesToModify.get(iii).z());
 			}
 			this.sizeObject = new Padding(Math.abs(left), Math.abs(top), Math.abs(right), Math.abs(bottom));
+		}
+		String objectFile2 = this.config.getString(this.confObjectFile2);
+		if (!objectFile2.isEmpty()) {
+			this.mesh[1] = ResourceMesh.create(Uri.valueOf(objectFile2));
+			List<Vector3f> verticesToModify = this.mesh[1].getGeneratedPosition();
+			float top = 0;
+			float bottom = 0;
+			float left = 0;
+			float right = 0;
+			float back = 0;
+			float font = 0;
+			// estimate size of border:
+			if (verticesToModify == null) {
+				Log.critical("Element is null : verticesToModify 2");
+				return;
+			}
+			for (int iii = 0; iii < verticesToModify.size(); iii++) {
+				left = Math.min(left, verticesToModify.get(iii).x());
+				right = Math.max(right, verticesToModify.get(iii).x());
+				top = Math.min(top, verticesToModify.get(iii).y());
+				bottom = Math.max(bottom, verticesToModify.get(iii).y());
+				back = Math.min(back, verticesToModify.get(iii).z());
+				font = Math.max(font, verticesToModify.get(iii).z());
+			}
 		}
 	}
 	
@@ -438,7 +482,7 @@ public class GuiShape extends Compositing {
 	 * @brief set the shape property:
 	 * 
 	 *   ********************************************************************************
-	 *   *                                                                        _size *
+	 *   *                                                                         size *
 	 *   *                                                                              *
 	 *   *        * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *       *
 	 *   *                                                                              *
@@ -447,7 +491,7 @@ public class GuiShape extends Compositing {
 	 *   *        |    *                                                 *      |       *
 	 *   *             *                                                 *              *
 	 *   *        |    *     * - - - - - - - - - - - - - - - - - - *     *      |       *
-	 *   *             *                                _insideSize      *              *
+	 *   *             *                                 insideSize      *              *
 	 *   *        |    *     |                                     |     *      |       *
 	 *   *             *                                                 *              *
 	 *   *        |    *     |                                     |     *      |       *
@@ -459,7 +503,7 @@ public class GuiShape extends Compositing {
 	 *   *        |    *     |                                     |     *      |       *
 	 *   *             *                                                 *              *
 	 *   *        |    *     |                                     |     *      |       *
-	 *   *             *      _insidePos                                 *              *
+	 *   *             *      insidePos                                  *              *
 	 *   *        |    *     * - - - - - - - - - - - - - - - - - - *     *      |       *
 	 *   *             *                                                 *              *
 	 *   *        |    ***************************************************      |       *
@@ -470,7 +514,7 @@ public class GuiShape extends Compositing {
 	 *   *                                                                              *
 	 *   *                                                                              *
 	 *   ********************************************************************************
-	 *   _origin
+	 *   origin
 	 *
 	 *
 	 * @param center Center of the object

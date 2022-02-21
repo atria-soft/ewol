@@ -87,7 +87,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		this.listElement[2] = new ArrayList<>();
 		this.listElement[3] = new ArrayList<>();
 		
-		String sizeString = fontBaseUri.getproperty("size");
+		String sizeString = fontBaseUri.getProperty("size");
 		if (sizeString == null) {
 			this.size = 25;
 		} else {

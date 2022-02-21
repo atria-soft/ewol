@@ -15,10 +15,10 @@ import org.atriasoft.exml.model.XmlElement;
  */
 
 public class WidgetManager {
+	
 	// ---------------------------------------------
 	// --  Factory area
 	// ---------------------------------------------
-	private final Map<String, Class<?>> creatorList = new HashMap<>(); //!< List of factory of a widget
 	private WeakReference<Widget> focusWidgetCurrent; //!< Current focus selected
 	// ---------------------------------------------
 	// --  Focus area
@@ -83,7 +83,7 @@ public class WidgetManager {
 	}
 	
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 * add a factory of a specific widget.
 	 * @param name Name of the widget that is associated of the factory.
 	 * @param klass class interface
@@ -94,7 +94,7 @@ public class WidgetManager {
 		}
 		//Keep name in lower case :
 		final String nameLower = name.toLowerCase();
-		final Class<?> it = this.creatorList.get(nameLower);
+		final Class<?> it = WidgetXmlFactory..creatorList.get(nameLower);
 		if (it != null) {
 			Log.warning("Replace Creator of a specify widget : " + nameLower);
 			return;
@@ -172,7 +172,7 @@ public class WidgetManager {
 		//elog::displayBacktrace();
 		Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (newWidget == focusWidgetCurrent) {
-			// nothing to do ... 
+			// nothing to do ...
 			return;
 		}
 		if (focusWidgetCurrent != null) {
@@ -186,7 +186,7 @@ public class WidgetManager {
 		}
 		this.focusWidgetCurrent = new WeakReference<>(newWidget);
 		if (newWidget != null) {
-			Log.debug("Set focus on WidgetID=" + newWidget.getId() );
+			Log.debug("Set focus on WidgetID=" + newWidget.getId());
 			newWidget.setFocus();
 		}
 	}

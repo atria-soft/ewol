@@ -17,54 +17,54 @@ public class MainWindows extends Windows {
 		setPropertyTitle("Simple sample test");
 		//EwolObject.getContext().getFontDefault().setName("FreeSans");
 		Sizer sizerMain = new Sizer(DisplayMode.modeVert);
-		sizerMain.setPropertyExpand(new Vector2b(true, true));
-		sizerMain.setPropertyFill(new Vector2b(true, true));
+		sizerMain.setPropertyExpand(Vector2b.TRUE_TRUE);
+		sizerMain.setPropertyFill(Vector2b.TRUE_TRUE);
 		setSubWidget(sizerMain);
 		
 		Sizer sizerHori1 = new Sizer(DisplayMode.modeHori);
-		sizerHori1.setPropertyExpand(new Vector2b(true, true));
-		sizerHori1.setPropertyFill(new Vector2b(true, true));
+		sizerHori1.setPropertyExpand(Vector2b.TRUE_TRUE);
+		sizerHori1.setPropertyFill(Vector2b.TRUE_TRUE);
 		sizerMain.subWidgetAdd(sizerHori1);
 		
 		Sizer sizerHori2 = new Sizer(DisplayMode.modeHori);
-		sizerHori2.setPropertyExpand(new Vector2b(true, true));
-		sizerHori2.setPropertyFill(new Vector2b(true, true));
+		sizerHori2.setPropertyExpand(Vector2b.TRUE_TRUE);
+		sizerHori2.setPropertyFill(Vector2b.TRUE_TRUE);
 		sizerMain.subWidgetAdd(sizerHori2);
 		
 		{
 			Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyMinSize(new Dimension(new Vector2f(100, 100), Distance.PIXEL));
 			simpleSpacer.setPropertyColor(Color.ALICE_BLUE);
-			simpleSpacer.setPropertyExpand(new Vector2b(true, true));
-			simpleSpacer.setPropertyFill(new Vector2b(true, true));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE_TRUE);
 			sizerHori1.subWidgetAdd(simpleSpacer);
 		}
 		{
 			Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.DARK_GREEN);
-			simpleSpacer.setPropertyExpand(new Vector2b(true, true));
-			simpleSpacer.setPropertyFill(new Vector2b(true, true));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE_TRUE);
 			sizerHori1.subWidgetAdd(simpleSpacer);
 		}
 		{
 			Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.CHOCOLATE);
-			simpleSpacer.setPropertyExpand(new Vector2b(true, true));
-			simpleSpacer.setPropertyFill(new Vector2b(true, true));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE_TRUE);
 			sizerHori1.subWidgetAdd(simpleSpacer);
 		}
 		{
 			Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.GREEN_YELLOW);
-			simpleSpacer.setPropertyExpand(new Vector2b(true, true));
-			simpleSpacer.setPropertyFill(new Vector2b(true, true));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE_TRUE);
 			sizerHori2.subWidgetAdd(simpleSpacer);
 		}
 		{
 			Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.PINK);
-			simpleSpacer.setPropertyExpand(new Vector2b(true, true));
-			simpleSpacer.setPropertyFill(new Vector2b(true, true));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE_TRUE);
 			sizerHori2.subWidgetAdd(simpleSpacer);
 		}
 	}

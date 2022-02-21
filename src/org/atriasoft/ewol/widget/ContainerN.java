@@ -17,10 +17,9 @@ import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.exml.annotation.XmlAttribute;
+import org.atriasoft.exml.annotation.XmlFactory;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -114,6 +113,13 @@ public class ContainerN extends Widget {
 		return null;
 	}
 	
+	@XmlManaged
+	@XmlFactory(value = WidgetXmlFactory.class)
+	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
+	public List<Widget> getSubWidgets() {
+		return this.subWidget;
+	}
+	
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
 		if (this.propertyHide) {
@@ -135,58 +141,6 @@ public class ContainerN extends Widget {
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public boolean loadXML(final XmlElement node) {
-		if (node == null) {
-			return false;
-		}
-		// parse generic properties :
-		super.loadXML(node);
-		// remove previous element :
-		subWidgetRemoveAll();
-		
-		String tmpAttributeValue = node.getAttribute("lock", "");
-		if (tmpAttributeValue.length() != 0) {
-			setPropertyLockExpand(Vector2b.valueOf(tmpAttributeValue));
-		}
-		boolean invertAdding = false;
-		tmpAttributeValue = node.getAttribute("addmode", "").toLowerCase();
-		if (tmpAttributeValue.contentEquals("invert")) {
-			invertAdding = true;
-		}
-		// parse all the elements :
-		for (XmlNode nodeIt : node.getNodes()) {
-			if (!nodeIt.isElement()) {
-				// trash here all that is not element
-				continue;
-			}
-			XmlElement pNode = nodeIt.toElement();
-			String widgetName = pNode.getValue();
-			Log.verbose(" t=" + this.getClass().getCanonicalName() + " Load node name : '" + widgetName + "'");
-			if (!getWidgetManager().exist(widgetName)) {
-				Log.error("[" + getId() + "] {" + this.getClass().getCanonicalName() + "} Unknown basic node='" + widgetName + "' not in : [" + getWidgetManager().list() + "]");
-				continue;
-			}
-			Log.debug("[" + getId() + "] {" + this.getClass().getCanonicalName() + "} load new element : '" + widgetName + "'");
-			Widget subWidget = getWidgetManager().create(widgetName, pNode);
-			if (subWidget == null) {
-				Log.error("[" + getId() + "] {" + this.getClass().getCanonicalName() + "} Can not create the widget : '" + widgetName + "'");
-				continue;
-			}
-			// add sub element :
-			if (!invertAdding) {
-				subWidgetAdd(subWidget);
-			} else {
-				subWidgetAddStart(subWidget);
-			}
-			if (!subWidget.loadXML(pNode)) {
-				Log.error("[" + getId() + "] {" + this.getClass().getCanonicalName() + "} can not load widget properties : '" + widgetName + "'");
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	@Override
@@ -243,6 +197,21 @@ public class ContainerN extends Widget {
 			return;
 		}
 		this.propertyLockExpand = propertyLockExpand;
+		markToRedraw();
+		requestUpdateSize();
+	}
+	
+	public void setSubWidgets(List<Widget> listData) {
+		// Clean all previous widget
+		this.subWidgetRemoveAll();
+		// add separately all widgets
+		for (Widget elem : listData) {
+			if (elem == null) {
+				continue;
+			}
+			elem.setParent(this);
+			this.subWidget.add(0, elem);
+		}
 		markToRedraw();
 		requestUpdateSize();
 	}

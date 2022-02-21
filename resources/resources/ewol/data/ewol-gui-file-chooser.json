@@ -1,0 +1,121 @@
+{
+	"type":"popup",
+	"child": [
+		{
+			"type":"sizer",
+			"property": {
+				"mode": "vert",
+				"lock": true,
+				"fill": true,
+				"expand": true
+			},
+			"child": [
+				{
+					"type":"sizer",
+					"property": {
+						"mode": "hori"
+					},
+					"child": [
+						{
+							"type":"checkbox-text",
+							"property": {
+								"name": "[{ID}]file-shooser:show-hiden-file",
+								"label": "_T{ShowHiddenFiles}" 
+							}
+						}, {
+							"type":"spacer",
+							"property": {
+								"expand": "true,false" 
+							}
+						}, {
+							"type":"button-icon-text",
+							"property": {
+								"name": "[{ID}]file-shooser:button-validate",
+								"icon": "THEME_GUI:///Load.svg?lib:ewol",
+								"label": "_T{Validate}"
+							}
+						}, {
+							"type":"button-icon-text",
+							"property": {
+								"name": "[{ID}]file-shooser:button-cancel",
+								"icon": "THEME_GUI:///Remove.svg?lib:ewol",
+								"label": "_T{Cancel}"
+							}
+						}
+					]
+				}, {
+					"type":"sizer",
+					"property": {
+						"mode": "hori"
+					},
+					"child": [
+						{
+							"type":"spacer",
+							"property": {
+								"expand": "true,false" 
+							}
+						}, {
+							"type":"ListFileSystem",
+							"property": {
+								"name":"[{ID}]file-shooser:list-folder",
+				                "min-size":"20,0%",
+				                "expand":"false,true",
+				                "show-hidden":false,
+				                "show-file":false,
+				                "show-folder":true,
+				                "show-temporary":false
+						    }
+						}, {
+							"type":"spacer",
+							"property": {
+								"expand": "true,false" 
+							}
+						}, {
+							"type":"ListFileSystem",
+							"property": {
+								"name":"[{ID}]file-shooser:list-files",
+				                "min-size":"20,0%",
+				                "expand":"true,true",
+				                "show-hidden":false,
+				                "show-file":true,
+				                "show-folder":false,
+				                "show-temporary":false
+						    }
+						}, {
+							"type":"spacer",
+							"property": {
+								"expand": "true,false" 
+							}
+						}
+					]
+				}, {
+					"type":"sizer",
+					"property": {
+						"mode": "hori"
+					},
+					"child": [
+						<image name:"[{ID}]file-shooser:img-file" src:"THEME_GUI:///File.svg?lib:ewol" expand:false, size:"8,8mm"]}
+						<entry name:"[{ID}]file-shooser:entry-file" expand:"true,false" fill:"true,false"]}
+					]
+				}, {
+					"type":"sizer",
+					"property": {
+						"mode": "hori"
+					},
+					"child": [
+						<image name:"[{ID}]file-shooser:img-folder" src:"THEME_GUI:///Folder.svg?lib:ewol" expand:false, size:"8,8mm"]}
+						<entry name:"[{ID}]file-shooser:entry-folder" expand:"true,false" fill:"true,false"]}
+						<image name:"[{ID}]file-shooser:img-home" src:"THEME_GUI:///Home.svg?lib:ewol" expand:false, size:"8,8mm"]}
+					]
+				},
+				{
+					"type":"label",
+					"property": {
+						"name":"[{ID}]file-shooser:title-label"
+					},
+					"data": "_T{Title}"
+				}
+			]
+		}
+	]
+}

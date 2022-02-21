@@ -22,7 +22,6 @@ import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.gale.key.KeyStatus;
 
 public class Label extends Widget {
@@ -90,18 +89,6 @@ public class Label extends Widget {
 	
 	public boolean isPropertyAutoTranslate() {
 		return this.propertyAutoTranslate;
-	}
-	
-	@Override
-	public boolean loadXML(final XmlElement node) {
-		if (node == null) {
-			return false;
-		}
-		super.loadXML(node);
-		// get internal data :
-		Log.debug("Load label:" + node.getText());
-		setPropertyValue(node.getText());
-		return true;
 	}
 	
 	@Override

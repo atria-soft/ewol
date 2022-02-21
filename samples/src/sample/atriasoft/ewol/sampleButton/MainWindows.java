@@ -12,8 +12,8 @@ public class MainWindows extends BasicWindows {
 		
 		Button simpleButton = new Button();
 		simpleButton.setPropertyValue("Top Button");
-		simpleButton.setPropertyExpand(new Vector2b(true, true));
-		simpleButton.setPropertyFill(new Vector2b(true, false));
+		simpleButton.setPropertyExpand(Vector2b.TRUE_TRUE);
+		simpleButton.setPropertyFill(Vector2b.TRUE_TRUE);
 		this.setTestWidget(simpleButton);
 	}
 }

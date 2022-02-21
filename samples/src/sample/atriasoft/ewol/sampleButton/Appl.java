@@ -5,6 +5,8 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.context.EwolApplication;
 import org.atriasoft.ewol.context.EwolContext;
 
+import sample.atriasoft.ewol.Log;
+
 public class Appl implements EwolApplication {
 	
 	//! [ewol_sample_HW_main_application]
@@ -25,7 +27,7 @@ public class Appl implements EwolApplication {
 		//! [ewol_sample_HW_main_set_windows_size]
 		//! [ewol_sample_HW_main_set_font_property]
 		// select font preference of der with a basic application size
-		Configs.getConfigFonts().set("FreeSherif", 48);
+		Configs.getConfigFonts().set("FreeSherif", 12);
 		//! [ewol_sample_HW_main_set_font_property]
 		//! [ewol_sample_HW_main_set_windows]
 		// Create the windows

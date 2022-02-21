@@ -17,6 +17,7 @@
 	
 	# Object to render (with modification)
 	"object-file":"THEME:shape/CheckBox.emf?lib=ewol",
+	"object-file-2":"THEME:shape/CheckBox.emf?lib=ewol&filter=^CheckBox.*$",
 	
 	"palette":"THEME:shape/palette_gui.json?lib=ewol",
 	

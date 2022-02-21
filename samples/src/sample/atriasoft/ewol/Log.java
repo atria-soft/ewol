@@ -1,4 +1,4 @@
-package sample.atriasoft.ewol.simpleWindowsWithCheckBox;
+package sample.atriasoft.ewol;
 
 public class Log {
 	private static final String LIBNAME = "LoxelEngine";

@@ -31,23 +31,23 @@ public class MainWindows extends BasicWindows {
 		
 		this.testWidget = new ImageDisplay();
 		this.testWidget.setPropertySource(new Uri("DATA", "mireA.png"));
-		this.testWidget.setPropertyExpand(new Vector2b(true, true));
-		this.testWidget.setPropertyFill(new Vector2b(true, true));
+		this.testWidget.setPropertyExpand(Vector2b.TRUE_TRUE);
+		this.testWidget.setPropertyFill(Vector2b.TRUE_TRUE);
 		this.testWidget.setPropertyMinSize(new Dimension(Vector2f.VALUE_16, Distance.PIXEL));
 		this.setTestWidget(this.testWidget);
 		{
 			Button button = new Button();
 			button.setPropertyValue("Change image");
-			button.setPropertyExpand(new Vector2b(false, false));
-			button.setPropertyFill(new Vector2b(false, false));
+			button.setPropertyExpand(Vector2b.FALSE_FALSE);
+			button.setPropertyFill(Vector2b.FALSE_FALSE);
 			button.setPropertyMinSize(new Dimension(new Vector2f(10, 10), Distance.PIXEL));
 			this.addButton(button);
 			button.signalClick.connectAuto(this, MainWindows::eventButtonChangeImage);
 		}
 		this.buttonAspectRatio = new Button();
 		this.buttonAspectRatio.setPropertyValue("keep aspect ratio");
-		this.buttonAspectRatio.setPropertyExpand(new Vector2b(false, false));
-		this.buttonAspectRatio.setPropertyFill(new Vector2b(false, false));
+		this.buttonAspectRatio.setPropertyExpand(Vector2b.FALSE_FALSE);
+		this.buttonAspectRatio.setPropertyFill(Vector2b.FALSE_FALSE);
 		this.buttonAspectRatio.setPropertyMinSize(new Dimension(new Vector2f(10, 10), Distance.PIXEL));
 		this.addButton(this.buttonAspectRatio);
 		this.buttonAspectRatio.signalClick.connectAuto(this, MainWindows::eventButtonChangeKeepRatio);
