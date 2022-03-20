@@ -32,6 +32,8 @@ build.number
 /.settings/
 /junit/
 /target/
+/__pycache__/
+
 
 *.pdfd
 *.dbc

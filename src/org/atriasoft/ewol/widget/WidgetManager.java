@@ -1,9 +1,6 @@
 package org.atriasoft.ewol.widget;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.exml.model.XmlElement;
@@ -89,18 +86,18 @@ public class WidgetManager {
 	 * @param klass class interface
 	 */
 	public void addWidgetCreator(final String name, final Class<?> klass) throws Exception {
-		if (klass == null) {
-			throw new Exception("Can not add widget creator without specified class.");
-		}
-		//Keep name in lower case :
-		final String nameLower = name.toLowerCase();
-		final Class<?> it = WidgetXmlFactory..creatorList.get(nameLower);
-		if (it != null) {
-			Log.warning("Replace Creator of a specify widget : " + nameLower);
-			return;
-		}
-		this.creatorList.put(nameLower, klass);
-		// TODO check constructors ...
+		//		if (klass == null) {
+		//			throw new Exception("Can not add widget creator without specified class.");
+		//		}
+		//		//Keep name in lower case :
+		//		final String nameLower = name.toLowerCase();
+		//		final Class<?> it = WidgetXmlFactory.creatorList.get(nameLower);
+		//		if (it != null) {
+		//			Log.warning("Replace Creator of a specify widget : " + nameLower);
+		//			return;
+		//		}
+		//		this.creatorList.put(nameLower, klass);
+		//		// TODO check constructors ...
 	}
 	
 	/**
@@ -110,33 +107,33 @@ public class WidgetManager {
 	 */
 	public Widget create(final String name) {
 		final String nameLower = name.toLowerCase();
-		final Class<?> it = this.creatorList.get(nameLower);
-		if (it != null) {
-			try {
-				return (Widget) it.getConstructor().newInstance();
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}
+		//		final Class<?> it = this.creatorList.get(nameLower);
+		//		if (it != null) {
+		//			try {
+		//				return (Widget) it.getConstructor().newInstance();
+		//			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		//				// TODO Auto-generated catch block
+		//				e.printStackTrace();
+		//				return null;
+		//			}
+		//		}
 		Log.warning("try to create an UnExistant widget : " + nameLower);
 		return null;
 	}
 	
 	public Widget create(final String name, final XmlElement node) {
 		final String nameLower = name.toLowerCase();
-		final Class<?> it = this.creatorList.get(nameLower);
-		if (it != null) {
-			try {
-				Widget tmp = (Widget) it.getConstructor().newInstance();
-				tmp.loadXML(node);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}
+		//		final Class<?> it = this.creatorList.get(nameLower);
+		//		if (it != null) {
+		//			try {
+		//				Widget tmp = (Widget) it.getConstructor().newInstance();
+		//				tmp.loadXML(node);
+		//			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		//				// TODO Auto-generated catch block
+		//				e.printStackTrace();
+		//				return null;
+		//			}
+		//		}
 		Log.warning("try to create an UnExistant widget : " + nameLower);
 		return null;
 	}
@@ -148,7 +145,8 @@ public class WidgetManager {
 	 * @return false The Widget Does NOT exist.
 	 */
 	public boolean exist(final String name) {
-		return this.creatorList.get(name.toLowerCase()) != null;
+		//		return this.creatorList.get(name.toLowerCase()) != null;
+		return false;
 	}
 	
 	/**
@@ -259,7 +257,8 @@ public class WidgetManager {
 	 * @return Separate with ',' string list.
 	 */
 	public String list() {
-		return this.creatorList.keySet().toString();
+		//return this.creatorList.keySet().toString();
+		return "";
 	}
 	
 	/**
