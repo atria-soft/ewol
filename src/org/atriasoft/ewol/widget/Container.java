@@ -11,8 +11,6 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
 
 /*
  * @ingroup ewolWidgetGroup
@@ -78,50 +76,50 @@ public class Container extends Widget {
 		return null;
 	}
 	
-	@Override
-	public boolean loadXML(final XmlElement node) {
-		if (node == null) {
-			return false;
-		}
-		// parse generic properties:
-		super.loadXML(node);
-		// remove previous element:
-		subWidgetRemove();
-		// parse all the elements:
-		for (XmlNode it : node.getNodes()) {
-			if (!it.isElement()) {
-				// trash here all that is not element
-				continue;
-			}
-			XmlElement pNode = it.toElement();
-			String widgetName = pNode.getValue();
-			Log.verbose("[" + getId() + "] t=" + getClass().getCanonicalName() + " Load node name : '" + widgetName + "'");
-			if (!getWidgetManager().exist(widgetName)) {
-				Log.error("Unknown basic node='" + widgetName + "' not in : [" + getWidgetManager().list() + "]");
-				continue;
-			}
-			if (getSubWidget() != null) {
-				Log.error("Can only have one subWidget ??? node='" + widgetName + "'");
-				continue;
-			}
-			Log.debug("try to create subwidget : '" + widgetName + "'");
-			Widget tmpWidget = getWidgetManager().create(widgetName, pNode);
-			if (tmpWidget == null) {
-				Log.error("Can not create the widget : '" + widgetName + "'");
-				continue;
-			}
-			// add widget :
-			setSubWidget(tmpWidget);
-			if (!tmpWidget.loadXML(pNode)) {
-				Log.error("can not load widget properties : '" + widgetName + "'");
-				return false;
-			}
-		}
-		if (node.getNodes().size() != 0 && this.subWidget == null) {
-			Log.warning("Load container with no data inside");
-		}
-		return true;
-	}
+	//	@Override
+	//	public boolean loadXML(final XmlElement node) {
+	//		if (node == null) {
+	//			return false;
+	//		}
+	//		// parse generic properties:
+	//		super.loadXML(node);
+	//		// remove previous element:
+	//		subWidgetRemove();
+	//		// parse all the elements:
+	//		for (XmlNode it : node.getNodes()) {
+	//			if (!it.isElement()) {
+	//				// trash here all that is not element
+	//				continue;
+	//			}
+	//			XmlElement pNode = it.toElement();
+	//			String widgetName = pNode.getValue();
+	//			Log.verbose("[" + getId() + "] t=" + getClass().getCanonicalName() + " Load node name : '" + widgetName + "'");
+	//			if (!getWidgetManager().exist(widgetName)) {
+	//				Log.error("Unknown basic node='" + widgetName + "' not in : [" + getWidgetManager().list() + "]");
+	//				continue;
+	//			}
+	//			if (getSubWidget() != null) {
+	//				Log.error("Can only have one subWidget ??? node='" + widgetName + "'");
+	//				continue;
+	//			}
+	//			Log.debug("try to create subwidget : '" + widgetName + "'");
+	//			Widget tmpWidget = getWidgetManager().create(widgetName, pNode);
+	//			if (tmpWidget == null) {
+	//				Log.error("Can not create the widget : '" + widgetName + "'");
+	//				continue;
+	//			}
+	//			// add widget :
+	//			setSubWidget(tmpWidget);
+	//			if (!tmpWidget.loadXML(pNode)) {
+	//				Log.error("can not load widget properties : '" + widgetName + "'");
+	//				return false;
+	//			}
+	//		}
+	//		if (node.getNodes().size() != 0 && this.subWidget == null) {
+	//			Log.warning("Load container with no data inside");
+	//		}
+	//		return true;
+	//	}
 	
 	@Override
 	public void onChangeSize() {
