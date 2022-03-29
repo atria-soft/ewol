@@ -6,7 +6,6 @@
 package org.atriasoft.ewol.widget;
 
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
@@ -29,8 +28,8 @@ class ProgressBar extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		Vector2f tmpMin = this.propertyMinSize.getPixel();
-		this.minSize = new Vector2f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f));
+		Vector3f tmpMin = this.propertyMinSize.getPixel();
+		this.minSize = new Vector3f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f), 10);
 		markToRedraw();
 	}
 	

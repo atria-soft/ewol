@@ -8,7 +8,6 @@ package org.atriasoft.ewol.widget;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etranslate.ETranslate;
@@ -65,8 +64,8 @@ public class Label extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		Vector2f tmpMax = this.propertyMaxSize.getPixel();
-		Vector2f tmpMin = this.propertyMinSize.getPixel();
+		Vector3f tmpMax = this.propertyMaxSize.getPixel();
+		Vector3f tmpMin = this.propertyMinSize.getPixel();
 		Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} tmpMax : " + tmpMax);
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
@@ -75,7 +74,7 @@ public class Label extends Widget {
 		Vector3f minSize = this.text.calculateSizeDecorated(this.value);
 		Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} minSize : " + minSize);
 		
-		this.minSize = new Vector2f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
+		this.minSize = new Vector3f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()), FMath.avg(tmpMin.z(), 4 + minSize.z(), tmpMax.z()));
 		Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "} Result min size : " + tmpMin + " < " + this.minSize + " < " + tmpMax);
 	}
 	
@@ -117,7 +116,7 @@ public class Label extends Widget {
 		this.text.clear();
 		int paddingSize = 2;
 		
-		Vector2f tmpMax = this.propertyMaxSize.getPixel();
+		Vector3f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
 		Vector3f minSize = this.text.calculateSize('A');
 		
@@ -146,7 +145,7 @@ public class Label extends Widget {
 		
 		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
 		
-		Vector2f textPos = new Vector2f(tmpTextOrigin.x(), tmpTextOrigin.y());
+		Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
 		
 		Vector3f drawClippingPos = new Vector3f(paddingSize, paddingSize, -0.5f);
 		Vector3f drawClippingSize = new Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);

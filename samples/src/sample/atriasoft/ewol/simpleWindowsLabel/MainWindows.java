@@ -1,6 +1,6 @@
 package sample.atriasoft.ewol.simpleWindowsLabel;
 
-import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.Spacer;
 
@@ -18,14 +18,14 @@ public class MainWindows extends BasicWindows {
 			Label simpleLabel = new Label();
 			simpleLabel.setPropertyValue(
 					"He<b>llo.</b> <font color='blue'>World</font><br/><br/>  - Coucou comment ca vas ???<br/>  - Pas trop bien, je me suis cassé la jambe.<br/><br/><center>The end</center>");
-			simpleLabel.setPropertyExpand(Vector2b.TRUE_TRUE);
-			simpleLabel.setPropertyFill(Vector2b.TRUE_TRUE);
+			simpleLabel.setPropertyExpand(Vector3b.TRUE);
+			simpleLabel.setPropertyFill(Vector3b.TRUE);
 			this.setTestWidget(simpleLabel);
 			//! [ewol_sample_HW_windows_label]
 		} else {
 			Spacer simpleSpacer = new Spacer();
-			simpleSpacer.setPropertyExpand(Vector2b.TRUE_TRUE);
-			simpleSpacer.setPropertyFill(Vector2b.TRUE_TRUE);
+			simpleSpacer.setPropertyExpand(Vector3b.TRUE);
+			simpleSpacer.setPropertyFill(Vector3b.TRUE);
 			this.setTestWidget(simpleSpacer);
 		}
 	}

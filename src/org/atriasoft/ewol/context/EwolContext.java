@@ -10,6 +10,7 @@ import java.time.Clock;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.event.EntrySystem;
 import org.atriasoft.ewol.internal.Log;
@@ -76,7 +77,7 @@ public class EwolContext extends GaleApplication {
 			return;
 		}
 		final Vector2f size = getSize();
-		this.windowsCurrent.setSize(new Vector2f((int) size.x(), (int) size.y()));
+		this.windowsCurrent.setSize(new Vector3f((int) size.x(), (int) size.y(), 0));
 		this.windowsCurrent.onChangeSize();
 	}
 	
@@ -291,6 +292,7 @@ public class EwolContext extends GaleApplication {
 		appl.onPause(this);
 		Log.info(" == > Ewol system pause (END)");
 	}
+	
 	@Override
 	public void onPeriod(final Clock clock, final long time) {
 		this.objectManager.timeCall(clock, time);

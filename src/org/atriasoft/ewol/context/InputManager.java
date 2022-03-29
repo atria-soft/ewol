@@ -9,6 +9,7 @@ import java.lang.ref.WeakReference;
 
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.event.InputSystem;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.widget.Widget;
@@ -27,7 +28,7 @@ class InputLimit {
 
 class InputManager {
 	private static final long MILLI_TO_DURATION = 1000000;
-	private static final long SECONDS_TO_DURATION = 1000000000; 
+	private static final long SECONDS_TO_DURATION = 1000000000;
 	private static final int MAX_MANAGE_INPUT = 15;
 	private final EwolContext context;
 	private int dpi;
@@ -36,7 +37,7 @@ class InputManager {
 	private final InputLimit eventMouseLimit = new InputLimit();
 	private final InputPoperty[] eventMouseSaved = new InputPoperty[InputManager.MAX_MANAGE_INPUT];
 	
-	// special grab pointer mode : 
+	// special grab pointer mode :
 	private WeakReference<Widget> grabWidget = null; //!< widget that grab the curent pointer.
 	private KeySpecial specialKey;
 	
@@ -87,7 +88,7 @@ class InputManager {
 			return;
 		}
 		this.grabWidget = new WeakReference<>(widget);
-		/* TODO : 
+		/* TODO :
 		this.context.grabPointerEvents(true,   widget.getOrigin()
 		                                  + Vector2i(widget.getSize().x/2.0f,
 		                                          widget.getSize().y/2.0f) );
@@ -174,7 +175,7 @@ class InputManager {
 				// grab all events ...
 				tmpWidget = this.grabWidget.get();
 			} else if (tmpWindows != null) {
-				tmpWidget = tmpWindows.getWidgetAtPos(pos);
+				tmpWidget = tmpWindows.getWidgetAtPos(new Vector3f(pos.x(), pos.y(), 0));
 			}
 			if (eventTable[pointerID].curentWidgetEvent != null && tmpWidget != eventTable[pointerID].curentWidgetEvent.get()
 					|| (eventTable[pointerID].isInside && (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y()
@@ -307,7 +308,7 @@ class InputManager {
 					if (tmpWidget != null && type == KeyType.mouse) {
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 					} else {
-						tmpWidget = tmpWindows.getWidgetAtPos(pos);
+						tmpWidget = tmpWindows.getWidgetAtPos(new Vector3f(pos.x(), pos.y(), 0));
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 						/*
 						if (tmpWidget != null) {
@@ -432,7 +433,7 @@ class InputManager {
 	 */
 	public void unGrabPointer() {
 		this.grabWidget = null;
-		// TODO this.context.grabPointerEvents(false, Vector2f(0,0));
+		// TODO this.context.grabPointerEvents(false, Vector3f(0,0));
 	}
 	
 }
@@ -449,17 +450,17 @@ class InputPoperty {
 	public boolean isUsed = false;
 	public long lastTimeEvent = 0; // in ns
 	public int nbClickEvent = 0; // 0 .. 1 .. 2 .. 3
-	public Vector2f origin = Vector2f.ZERO;
+	public Vector3f origin = Vector3f.ZERO;
 	public Vector2f posEvent = Vector2f.ZERO;
-	public Vector2f size = Vector2f.MAX_VALUE;
+	public Vector3f size = Vector3f.MAX_VALUE;
 	
 	public void clear() {
 		this.isUsed = false;
 		this.destinationInputId = 0;
 		this.lastTimeEvent = System.nanoTime();
 		this.curentWidgetEvent = null;
-		this.origin = Vector2f.ZERO;
-		this.size = Vector2f.MAX_VALUE;
+		this.origin = Vector3f.ZERO;
+		this.size = Vector3f.MAX_VALUE;
 		this.downStart = Vector2f.ZERO;
 		this.isDown = false;
 		this.isInside = false;

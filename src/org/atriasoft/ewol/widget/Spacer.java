@@ -7,7 +7,6 @@ package org.atriasoft.ewol.widget;
  */
 
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
@@ -35,7 +34,7 @@ public class Spacer extends Widget {
 	}
 	
 	@Override
-	public Widget getWidgetAtPos(final Vector2f pos) {
+	public Widget getWidgetAtPos(final Vector3f pos) {
 		return null;
 	}
 	

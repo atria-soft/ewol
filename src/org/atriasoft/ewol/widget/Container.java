@@ -5,10 +5,9 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.etk.math.Vector2b;
-import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector3b;
+import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 
@@ -31,8 +30,8 @@ public class Container extends Widget {
 		// call sub classes
 		if (this.subWidget != null) {
 			this.subWidget.calculateMinMaxSize();
-			Vector2f min = this.subWidget.getCalculateMinSize();
-			this.minSize = Vector2f.max(this.minSize, min);
+			Vector3f min = this.subWidget.getCalculateMinSize();
+			this.minSize = Vector3f.max(this.minSize, min);
 		}
 		//Log.error("[" + getId() + "] Result min size : " +  this.minSize);
 	}
@@ -67,7 +66,7 @@ public class Container extends Widget {
 	}
 	
 	@Override
-	public Widget getWidgetAtPos(final Vector2f pos) {
+	public Widget getWidgetAtPos(final Vector3f pos) {
 		if (!this.propertyHide) {
 			if (this.subWidget != null) {
 				return this.subWidget.getWidgetAtPos(pos);
@@ -130,10 +129,10 @@ public class Container extends Widget {
 		if (this.subWidget == null) {
 			return;
 		}
-		Vector2f origin = this.origin.add(this.offset);
-		Vector2f minSize = this.subWidget.getCalculateMinSize();
-		Vector2b expand = this.subWidget.getPropertyExpand();
-		origin = origin.add(Gravity.gravityGenerateDelta(this.propertyGravity, minSize.less(this.size)));
+		Vector3f origin = this.origin.add(this.offset);
+		Vector3f minSize = this.subWidget.getCalculateMinSize();
+		Vector3b expand = this.subWidget.getPropertyExpand();
+		origin = origin.add(this.propertyGravity.gravityGenerateDelta(minSize.less(this.size)));
 		this.subWidget.setOrigin(origin);
 		this.subWidget.setSize(this.size);
 		this.subWidget.onChangeSize();
@@ -160,7 +159,7 @@ public class Container extends Widget {
 	}
 	
 	@Override
-	public void setOffset(final Vector2f newVal) {
+	public void setOffset(final Vector3f newVal) {
 		if (this.offset.equals(newVal)) {
 			return;
 		}

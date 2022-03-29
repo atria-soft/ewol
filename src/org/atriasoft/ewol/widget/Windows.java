@@ -12,8 +12,8 @@ import java.util.ListIterator;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
-import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector3i;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
@@ -33,7 +33,7 @@ public class Windows extends Widget {
 	
 	protected int colorBg = -1; //!< Default background color of the windows
 	
-	protected List<Widget> popUpWidgetList = new ArrayList<Widget>();
+	protected List<Widget> popUpWidgetList = new ArrayList<>();
 	
 	@XmlManaged
 	@XmlAttribute
@@ -109,10 +109,10 @@ public class Windows extends Widget {
 	}
 	
 	@Override
-	public Widget getWidgetAtPos(final Vector2f pos) {
+	public Widget getWidgetAtPos(final Vector3f pos) {
 		Log.verbose("Get widget at pos : " + pos);
 		// calculate relative position
-		Vector2f relativePos = relativePosition(pos);
+		Vector3f relativePos = relativePosition(pos);
 		// event go directly on the pop-up
 		if (this.popUpWidgetList.size() != 0) {
 			return this.popUpWidgetList.get(this.popUpWidgetList.size() - 1).getWidgetAtPos(pos);
@@ -141,14 +141,14 @@ public class Windows extends Widget {
 			this.subWidget.calculateMinMaxSize();
 			// TODO : do it better ... and manage gravity ...
 			this.subWidget.setSize(this.size);
-			this.subWidget.setOrigin(Vector2f.ZERO);
+			this.subWidget.setOrigin(Vector3f.ZERO);
 			this.subWidget.onChangeSize();
 		}
 		for (Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.calculateMinMaxSize();
 				it.setSize(this.size);
-				it.setOrigin(Vector2f.ZERO);
+				it.setOrigin(Vector3f.ZERO);
 				it.onChangeSize();
 			}
 		}
@@ -274,7 +274,7 @@ public class Windows extends Widget {
 	public void sysDraw() {
 		//Log.verbose("Draw on " + this.size);
 		// set the size of the open GL system
-		OpenGL.setViewPort(Vector2f.ZERO, this.size);
+		OpenGL.setViewPort(Vector3f.ZERO, this.size);
 		OpenGL.disable(OpenGL.Flag.flag_dither);
 		//OpenGL.disable(OpenGL.Flag.flagblend);
 		OpenGL.disable(OpenGL.Flag.flag_stencilTest);
@@ -290,8 +290,8 @@ public class Windows extends Widget {
 		
 		// clear the matrix system :
 		OpenGL.setBasicMatrix(Matrix4f.IDENTITY);
-		Vector2i tmpSize = new Vector2i((int) this.size.x(), (int) this.size.y());
-		DrawProperty displayProp = new DrawProperty(tmpSize, Vector2i.ZERO, tmpSize);
+		Vector3i tmpSize = new Vector3i((int) this.size.x(), (int) this.size.y(), (int) this.size.z());
+		DrawProperty displayProp = new DrawProperty(tmpSize, Vector3i.ZERO, tmpSize);
 		systemDraw(displayProp);
 		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
