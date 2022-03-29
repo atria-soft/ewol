@@ -12,10 +12,10 @@ import org.atriasoft.gale.key.KeyType;
  */
 
 public record EventInput(
-	KeyType type,
-	KeyStatus status,
-	int inputId,
-	Vector2f pos,
-	KeySpecial specialKey) {
+		KeyType type,
+		KeyStatus status,
+		int inputId,
+		Vector2f pos,
+		KeySpecial specialKey) {
 	
 }

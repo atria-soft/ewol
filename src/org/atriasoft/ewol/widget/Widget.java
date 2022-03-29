@@ -11,13 +11,12 @@ import java.util.List;
 
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension;
+import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
-import org.atriasoft.etk.math.Vector2b;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
@@ -73,25 +72,25 @@ public class Widget extends EwolObject {
 	
 	private final List<EventShortCut> localShortcut = new ArrayList<>(); //!< list of all shortcut in the widget
 	
-	protected Vector2f maxSize = new Vector2f(999999, 999999); //!< internal: maximum size of the widget
+	protected Vector3f maxSize = Vector3f.MAX_VALUE; //!< internal: maximum size of the widget
 	
-	protected Vector2f minSize = new Vector2f(0, 0); //!< internal: minimum size of the widget
+	protected Vector3f minSize = Vector3f.ZERO; //!< internal: minimum size of the widget
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 	// ----------------------------------------------------------------------------------------------------------------
 	protected boolean needRegenerateDisplay = true; //!< the display might be done the next regeneration
-	protected Vector2f offset = new Vector2f(0, 0); //!< Offset of the display in the view-port
+	protected Vector3f offset = Vector3f.ZERO; //!< Offset of the display in the view-port
 	
-	protected Vector2f origin = new Vector2f(0, 0); //!< internal ... I do not really known how if can use it ...
+	protected Vector3f origin = Vector3f.ZERO; //!< internal ... I do not really known how if can use it ...
 	
 	protected boolean propertyCanFocus = false; //!< the focus can be done on this widget
-	protected Vector2b propertyExpand = new Vector2b(false, false); //!< the widget will expand if possible
-	protected Vector2b propertyExpandIfFree = new Vector2b(false, false); //!< the widget will expand if possible
-	protected Vector2b propertyFill = new Vector2b(true, true); //!< the widget will fill all the space provided by the parent.
-	protected Gravity propertyGravity = Gravity.BUTTOM_LEFT; //!< Gravity of the widget
+	protected Vector3b propertyExpand = Vector3b.FALSE; //!< the widget will expand if possible
+	protected Vector3b propertyExpandIfFree = Vector3b.FALSE; //!< the widget will expand if possible
+	protected Vector3b propertyFill = Vector3b.TRUE; //!< the widget will fill all the space provided by the parent.
+	protected Gravity propertyGravity = Gravity.BOTTOM_LEFT; //!< Gravity of the widget
 	protected boolean propertyHide = false; //!< hide a widget on the display
-	protected Dimension propertyMaxSize = new Dimension(new Vector2f(999999, 999999), Distance.PIXEL); //!< user define the maximum size of the widget
-	protected Dimension propertyMinSize = new Dimension(new Vector2f(0, 0), Distance.PIXEL); //!< user define the minimum size of the widget
+	protected Dimension3f propertyMaxSize = new Dimension3f(Vector3f.MAX_VALUE, Distance.PIXEL); //!< user define the maximum size of the widget
+	protected Dimension3f propertyMinSize = new Dimension3f(Vector3f.ZERO, Distance.PIXEL); //!< user define the minimum size of the widget
 	
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- Shortcut : management of the shortcut
@@ -102,7 +101,7 @@ public class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- Widget size:
 	// ----------------------------------------------------------------------------------------------------------------
-	protected Vector2f size = new Vector2f(10, 10); //!< internal: current size of the widget
+	protected Vector3f size = Vector3f.VALUE_16; //!< internal: current size of the widget
 	
 	// internal element calculated by the system
 	protected float zoom = 1.0f; //!< generic widget zoom
@@ -131,11 +130,11 @@ public class Widget extends EwolObject {
 	 * @return 2D boolean represents the capacity to expend
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public Vector2b canExpand() {
+	public Vector3b canExpand() {
 		if (!this.propertyHide) {
 			return this.propertyExpand;
 		}
-		return new Vector2b(false, false);
+		return Vector3b.FALSE;
 	}
 	
 	/**
@@ -143,19 +142,19 @@ public class Widget extends EwolObject {
 	 * @return 2D boolean represents the capacity to expend (if some free space is available)
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public Vector2b canExpandIfFree() {
+	public Vector3b canExpandIfFree() {
 		if (!this.propertyHide) {
 			return this.propertyExpandIfFree;
 		}
-		return new Vector2b(false, false);
+		return Vector3b.FALSE;
 	}
 	
 	/**
 	 * get the filling capabilities xy
-	 * @return Vector2b repensent the capacity to xy filling
+	 * @return Vector3b repensent the capacity to xy filling
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public Vector2b canFill() {
+	public Vector3b canFill() {
 		return this.propertyFill;
 	}
 	
@@ -173,8 +172,8 @@ public class Widget extends EwolObject {
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
 	public void checkMaxSize() {
-		final Vector2f pixelSize = this.propertyMaxSize.getPixel();
-		this.maxSize = Vector2f.min(this.maxSize, pixelSize);
+		final Vector3f pixelSize = this.propertyMaxSize.getPixel();
+		this.maxSize = Vector3f.min(this.maxSize, pixelSize);
 	}
 	
 	/**
@@ -183,8 +182,8 @@ public class Widget extends EwolObject {
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
 	public void checkMinSize() {
-		final Vector2f pixelSize = this.propertyMinSize.getPixel();
-		this.minSize = Vector2f.max(this.minSize, pixelSize);
+		final Vector3f pixelSize = this.propertyMinSize.getPixel();
+		this.minSize = Vector3f.max(this.minSize, pixelSize);
 	}
 	
 	public void drawWidgetTree(final int level) {
@@ -201,11 +200,11 @@ public class Widget extends EwolObject {
 	 * @return Requested size
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public Vector2f getCalculateMaxSize() {
+	public Vector3f getCalculateMaxSize() {
 		if (!this.propertyHide) {
 			return this.maxSize;
 		}
-		return new Vector2f(999999, 999999);
+		return Vector3f.MAX_VALUE;
 	}
 	
 	/**
@@ -213,11 +212,11 @@ public class Widget extends EwolObject {
 	 * @return Requested size
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public Vector2f getCalculateMinSize() {
+	public Vector3f getCalculateMinSize() {
 		if (!this.propertyHide) {
 			return this.minSize;
 		}
-		return new Vector2f(0, 0);
+		return Vector3f.ZERO;
 	}
 	
 	/**
@@ -257,7 +256,7 @@ public class Widget extends EwolObject {
 	 * get the offset property of the widget.
 	 * @return The current offset value.
 	 */
-	Vector2f getOffset() {
+	Vector3f getOffset() {
 		return this.offset;
 	}
 	
@@ -265,7 +264,7 @@ public class Widget extends EwolObject {
 	 * Get the origin (absolute position in the windows).
 	 * @return Coordinate of the origin requested.
 	 */
-	public Vector2f getOrigin() {
+	public Vector3f getOrigin() {
 		return this.origin;
 	}
 	
@@ -281,7 +280,7 @@ public class Widget extends EwolObject {
 	@XmlAttribute
 	@XmlName(value = "expand")
 	@EwolDescription(value = "Request the widget Expand size while space is available")
-	public Vector2b getPropertyExpand() {
+	public Vector3b getPropertyExpand() {
 		return this.propertyExpand;
 	}
 	
@@ -289,7 +288,7 @@ public class Widget extends EwolObject {
 	@XmlAttribute
 	@XmlName(value = "expand-free")
 	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper wideget)")
-	public Vector2b getPropertyExpandIfFree() {
+	public Vector3b getPropertyExpandIfFree() {
 		return this.propertyExpandIfFree;
 	}
 	
@@ -297,7 +296,7 @@ public class Widget extends EwolObject {
 	@XmlAttribute
 	@XmlName(value = "fill")
 	@EwolDescription(value = "Fill the widget available size")
-	public Vector2b getPropertyFill() {
+	public Vector3b getPropertyFill() {
 		return this.propertyFill;
 	}
 	
@@ -321,7 +320,7 @@ public class Widget extends EwolObject {
 	@XmlAttribute
 	@XmlName(value = "max-size")
 	@EwolDescription(value = "User maximum size")
-	public Dimension getPropertyMaxSize() {
+	public Dimension3f getPropertyMaxSize() {
 		return this.propertyMaxSize;
 	}
 	
@@ -329,7 +328,7 @@ public class Widget extends EwolObject {
 	@XmlAttribute
 	@XmlName(value = "min-size")
 	@EwolDescription(value = "User minimum size")
-	public Dimension getPropertyMinSize() {
+	public Dimension3f getPropertyMinSize() {
 		return this.propertyMinSize;
 	}
 	
@@ -338,11 +337,11 @@ public class Widget extends EwolObject {
 	 * @return Requested size
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public Vector2f getSize() {
+	public Vector3f getSize() {
 		if (!this.propertyHide) {
 			return this.size;
 		}
-		return new Vector2f(0, 0);
+		return Vector3f.ZERO;
 	}
 	
 	/**
@@ -352,7 +351,7 @@ public class Widget extends EwolObject {
 			 * @return pointer on the widget found
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-	public Widget getWidgetAtPos(final Vector2f pos) {
+	public Widget getWidgetAtPos(final Vector3f pos) {
 		if (!this.propertyHide) {
 			return this;
 		}
@@ -539,12 +538,12 @@ public class Widget extends EwolObject {
 	protected void onRegenerateDisplay() {}
 	
 	protected void onUpdateMinMaxSize() {
-		final Vector2f pixelMin = this.propertyMinSize.getPixel();
-		final Vector2f pixelMax = this.propertyMaxSize.getPixel();
+		final Vector3f pixelMin = this.propertyMinSize.getPixel();
+		final Vector3f pixelMax = this.propertyMaxSize.getPixel();
 		// check minimum  maximum compatibility :
 		if (pixelMin.x() > pixelMax.x() || pixelMin.y() > pixelMax.y()) {
 			Log.error("Can not set a 'min size' > 'max size' reset to maximum ...");
-			this.propertyMaxSize = new Dimension(new Vector2f(999999, 999999), Distance.PIXEL);
+			this.propertyMaxSize = new Dimension3f(Vector3f.MAX_VALUE, Distance.PIXEL);
 		}
 		requestUpdateSize();
 	}
@@ -554,7 +553,7 @@ public class Widget extends EwolObject {
 	 * @param pos Absolute position that you request conversion.
 	 * @return The relative position.
 	 */
-	public Vector2f relativePosition(final Vector2f pos) {
+	public Vector3f relativePosition(final Vector3f pos) {
 		return pos.less(this.origin);
 	}
 	
@@ -628,21 +627,21 @@ public class Widget extends EwolObject {
 	 * User set No maximum size.
 	 */
 	public void setNoMaxSize() {
-		setPropertyMaxSize(new Dimension(new Vector2f(999999, 999999), Distance.PIXEL));
+		setPropertyMaxSize(new Dimension3f(Vector3f.MAX_VALUE, Distance.PIXEL));
 	}
 	
 	/**
 	 * User set No minimum size.
 	 */
 	public void setNoMinSize() {
-		setPropertyMinSize(new Dimension(new Vector2f(0, 0), Distance.PIXEL));
+		setPropertyMinSize(new Dimension3f(Vector3f.ZERO, Distance.PIXEL));
 	}
 	
 	/**
 	 * set the zoom property of the widget.
 	 * @param newVal offset value.
 	 */
-	public void setOffset(final Vector2f newVal) {
+	public void setOffset(final Vector3f newVal) {
 		Log.info("Set offset: " + newVal);
 		if (this.offset != newVal) {
 			this.offset = newVal;
@@ -656,7 +655,7 @@ public class Widget extends EwolObject {
 	 * @param pos Position of the origin.
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
-	public void setOrigin(final Vector2f pos) {
+	public void setOrigin(final Vector3f pos) {
 		this.origin = pos;
 	}
 	
@@ -673,7 +672,7 @@ public class Widget extends EwolObject {
 		}
 	}
 	
-	public void setPropertyExpand(final Vector2b value) {
+	public void setPropertyExpand(final Vector3b value) {
 		if (this.propertyExpand.equals(value)) {
 			return;
 		}
@@ -682,7 +681,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	public void setPropertyExpandIfFree(final Vector2b value) {
+	public void setPropertyExpandIfFree(final Vector3b value) {
 		if (this.propertyExpandIfFree.equals(value)) {
 			return;
 		}
@@ -691,7 +690,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	public void setPropertyFill(final Vector2b value) {
+	public void setPropertyFill(final Vector3b value) {
 		if (this.propertyFill.equals(value)) {
 			return;
 		}
@@ -718,7 +717,7 @@ public class Widget extends EwolObject {
 		requestUpdateSize();
 	}
 	
-	public void setPropertyMaxSize(final Dimension value) {
+	public void setPropertyMaxSize(final Dimension3f value) {
 		if (this.propertyMaxSize.equals(value)) {
 			return;
 		}
@@ -726,7 +725,7 @@ public class Widget extends EwolObject {
 		onUpdateMinMaxSize();
 	}
 	
-	public void setPropertyMinSize(final Dimension value) {
+	public void setPropertyMinSize(final Dimension3f value) {
 		if (this.propertyMinSize.equals(value)) {
 			return;
 		}
@@ -739,7 +738,7 @@ public class Widget extends EwolObject {
 	 * @return Requested size
 	 * @note : INTERNAL EWOL SYSTEM Do not modify the size yourself: calculation is complex and need knowledge of around widget
 	 */
-	public void setSize(final Vector2f value) {
+	public void setSize(final Vector3f value) {
 		this.size = value;
 	}
 	
@@ -917,7 +916,7 @@ public class Widget extends EwolObject {
 			// widget is hidden ...
 			return;
 		}
-		final Vector2f displayOrigin = this.origin.add(this.offset);
+		final Vector3f displayOrigin = this.origin.add(this.offset);
 		
 		// check if the element is displayable in the windows :
 		if (displayProp.windowsSize().x() < this.origin.x() || displayProp.windowsSize().y() < this.origin.y()) {

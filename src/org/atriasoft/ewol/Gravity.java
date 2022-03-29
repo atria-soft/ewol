@@ -5,45 +5,104 @@
  */
 package org.atriasoft.ewol;
 
-import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector3f;
 
 /**
  * Gravity of the widget property
  */
-public enum Gravity {
-	BUTTOM, // !< gravity is in center
-	BUTTOM_LEFT, // !< gravity is in top
-	BUTTOM_RIGHT, // !< gravity is in buttom
-	CENTER, // !< gravity is in right
-	LEFT, // !< gravity is in left
-	RIGHT, // !< gravity is in top-right
-	TOP, // !< gravity is in top-left
-	TOP_LEFT, // !< gravity is in buttom-right
-	TOP_RIGHT; // !< gravity is in buttom-left
+public record Gravity(
+		GravityHorizontal x,
+		GravityVertical y,
+		GravityDepth z) {
 	
-	public static Vector2f gravityGenerateDelta(final Gravity gravity, final Vector2f deltas) {
+	public static final Gravity BOTTOM = new Gravity(GravityHorizontal.CENTER, GravityVertical.BOTTOM, GravityDepth.CENTER); // !< gravity is in center
+	public static final Gravity BOTTOM_LEFT = new Gravity(GravityHorizontal.LEFT, GravityVertical.BOTTOM, GravityDepth.CENTER); // !< gravity is in top
+	public static final Gravity BOTTOM_RIGHT = new Gravity(GravityHorizontal.RIGHT, GravityVertical.BOTTOM, GravityDepth.CENTER); // !< gravity is in bottom
+	public static final Gravity CENTER = new Gravity(GravityHorizontal.CENTER, GravityVertical.CENTER, GravityDepth.CENTER); // !< gravity is in right
+	public static final Gravity LEFT = new Gravity(GravityHorizontal.LEFT, GravityVertical.CENTER, GravityDepth.CENTER); // !< gravity is in left
+	public static final Gravity RIGHT = new Gravity(GravityHorizontal.RIGHT, GravityVertical.CENTER, GravityDepth.CENTER); // !< gravity is in top-right
+	public static final Gravity TOP = new Gravity(GravityHorizontal.CENTER, GravityVertical.TOP, GravityDepth.CENTER); // !< gravity is in top-left
+	public static final Gravity TOP_LEFT = new Gravity(GravityHorizontal.LEFT, GravityVertical.TOP, GravityDepth.CENTER); // !< gravity is in bottom-right
+	public static final Gravity TOP_RIGHT = new Gravity(GravityHorizontal.RIGHT, GravityVertical.TOP, GravityDepth.CENTER); // !< gravity is in bottom-left
+	
+	public Vector3f gravityGenerateDelta(final Vector3f deltas) {
 		float outX = 0;
 		float outY = 0;
+		float outZ = 0;
 		if (deltas.x() > 0.0001f) {
-			if (gravity == LEFT || gravity == BUTTOM_LEFT || gravity == TOP_LEFT) {
+			if (this.x == GravityHorizontal.LEFT) {
 				// nothing to do
-			} else if (gravity == RIGHT || gravity == BUTTOM_RIGHT || gravity == TOP_RIGHT) {
+			} else if (this.x == GravityHorizontal.RIGHT) {
 				outX = (int) (deltas.x());
 			} else {
 				outX = (int) (deltas.x() * 0.5f);
 			}
 		}
 		if (deltas.y() > 0.0001f) {
-			if (gravity == BUTTOM || gravity == BUTTOM_LEFT || gravity == BUTTOM_RIGHT) {
+			if (this.y == GravityVertical.BOTTOM) {
 				// nothing to do
-			} else if (gravity == TOP || gravity == TOP_RIGHT || gravity == TOP_LEFT) {
+			} else if (this.y == GravityVertical.TOP) {
 				outY = (int) (deltas.y());
 			} else {
 				outY = (int) (deltas.y() * 0.5f);
 			}
 		}
-		return new Vector2f(outX, outY);
+		if (deltas.z() > 0.0001f) {
+			if (this.z == GravityDepth.BACK) {
+				// nothing to do
+			} else if (this.z == GravityDepth.FRONT) {
+				outZ = (int) (deltas.z());
+			} else {
+				outZ = (int) (deltas.z() * 0.5f);
+			}
+		}
+		return new Vector3f(outX, outY, outZ);
+	}
+	
+	public static Gravity valueOf(String value) {
+		GravityHorizontal x = GravityHorizontal.CENTER;
+		GravityVertical y = GravityVertical.CENTER;
+		GravityDepth z = GravityDepth.CENTER;
+		if (value.contains("LEFT")) {
+			x = GravityHorizontal.LEFT;
+		} else if (value.contains("RIGHT")) {
+			x = GravityHorizontal.RIGHT;
+		}
+		if (value.contains("TOP")) {
+			y = GravityVertical.TOP;
+		} else if (value.contains("BOTTOM") || value.contains("BUTTOM")) {
+			y = GravityVertical.BOTTOM;
+		}
+		if (value.contains("FRONT")) {
+			z = GravityDepth.FRONT;
+		} else if (value.contains("BACK")) {
+			z = GravityDepth.BACK;
+		}
+		return new Gravity(x, y, z);
+	}
+	
+	@Override
+	public String toString() {
+		if (this.x == GravityHorizontal.CENTER && this.y == GravityVertical.CENTER && this.z == GravityDepth.CENTER) {
+			return GravityHorizontal.CENTER.toString();
+		}
+		StringBuilder data = new StringBuilder();
+		if (this.x != GravityHorizontal.CENTER) {
+			data.append(this.x.toString());
+		}
+		if (this.y != GravityVertical.CENTER) {
+			if (data.length() != 0) {
+				data.append("_");
+			}
+			data.append(this.y.toString());
+		}
+		if (this.z != GravityDepth.CENTER) {
+			if (data.length() != 0) {
+				data.append("_");
+			}
+			data.append(this.z.toString());
+		}
+		return data.toString();
 	}
 	
 }
-

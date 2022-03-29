@@ -6,7 +6,6 @@ import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
 
-@SuppressWarnings("preview")
 public record InputSystem(
 		EventInput event,
 		Widget dest,

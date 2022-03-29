@@ -7,11 +7,11 @@ package org.atriasoft.ewol.widget;
 
 import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.Dimension;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.ewol.Gravity;
+import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.CompositingImage;
@@ -29,11 +29,11 @@ public class ImageDisplay extends Widget {
 	protected CompositingImage compositing = new CompositingImage(); //!< compositing element of the image.
 	protected Vector2f imageRenderSize = Vector2f.ZERO; //!< size of the image when we render it
 	
-	protected Dimension propertyBorder = Dimension.ZERO; //!< border to add at the image.
-	protected Dimension propertyImageSize = Dimension.ZERO; //!< border to add at the image.
-	protected boolean propertyKeepRatio = true; //!< keep the image ratio between width and hight
-	protected Vector2f propertyPosStart = Vector2f.ZERO; //!< position in the image to start the sisplay (when we want not to display all the image)
-	protected Vector2f propertyPosStop = Vector2f.ONE; //!< position in the image to start the sisplay (when we want not to display all the image)
+	protected Dimension2f propertyBorder = Dimension2f.ZERO; //!< border to add at the image.
+	protected Dimension2f propertyImageSize = Dimension2f.ZERO; //!< border to add at the image.
+	protected boolean propertyKeepRatio = true; //!< keep the image ratio between width and height
+	protected Vector2f propertyPosStart = Vector2f.ZERO; //!< position in the image to start the display (when we want not to display all the image)
+	protected Vector2f propertyPosStop = Vector2f.ONE; //!< position in the image to start the display (when we want not to display all the image)
 	
 	protected boolean propertySmooth = true; //!< display is done in the pixel approximation if false
 	protected Uri propertySource = null; //!< file name of the image.
@@ -52,25 +52,26 @@ public class ImageDisplay extends Widget {
 		Log.debug("calculate min size: border=" + this.propertyBorder + " size=" + this.propertyImageSize + " min-size=" + this.propertyMinSize);
 		Vector2f imageBoder = this.propertyBorder.getPixel().multiply(2.0f);
 		Vector2f imageSize = this.propertyImageSize.getPixel();
-		Vector2f size = this.propertyMinSize.getPixel();
+		Vector3f size = this.propertyMinSize.getPixel();
 		Log.debug("                ==> border=" + imageBoder + " size=" + imageSize + " min-size=" + size);
 		if (!imageSize.isZero()) {
-			this.minSize = imageBoder.add(imageSize);
+			Vector2f tmp = imageBoder.add(imageSize);
+			this.minSize = new Vector3f(tmp.x(), tmp.y(), 0);
 			this.maxSize = this.minSize;
 		} else {
 			Vector2i imageSizeReal = this.getPropertyMinSize().getPixeli();//.compositing.getRealSize();
 			Log.verbose(" Real Size = " + imageSizeReal);
-			Vector2f min1 = imageBoder.add(this.propertyMinSize.getPixel());
-			this.minSize = imageBoder.add(imageSizeReal);
+			Vector3f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
+			this.minSize = new Vector3f(imageBoder.x() + imageSizeReal.x(), imageBoder.y() + imageSizeReal.y(), 0);
 			Log.verbose(" set max : " + this.minSize + " min1=" + min1);
-			this.minSize = Vector2f.max(this.minSize, min1);
+			this.minSize = Vector3f.max(this.minSize, min1);
 			Log.verbose("     result : " + this.minSize);
-			this.maxSize = imageBoder.add(this.propertyMaxSize.getPixel());
-			this.minSize = Vector2f.min(this.minSize, this.maxSize);
+			this.maxSize = this.propertyMaxSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
+			this.minSize = Vector3f.min(this.minSize, this.maxSize);
 		}
-		this.imageRenderSize = this.minSize;
-		this.minSize = Vector2f.max(this.minSize, size);
-		this.maxSize = Vector2f.max(this.maxSize, this.minSize);
+		this.imageRenderSize = new Vector2f(this.minSize.x(), this.minSize.y());
+		this.minSize = Vector3f.max(this.minSize, size);
+		this.maxSize = Vector3f.max(this.maxSize, this.minSize);
 		Log.debug("set widget min=" + this.minSize + " max=" + this.maxSize + " with real Image size=" + this.imageRenderSize + " img size=" + imageSize + "  " + this.propertyImageSize);
 		markToRedraw();
 	}
@@ -79,7 +80,7 @@ public class ImageDisplay extends Widget {
 	@XmlAttribute
 	@XmlName(value = "border")
 	@EwolDescription(value = "Border of the image")
-	public Dimension getPropertyBorder() {
+	public Dimension2f getPropertyBorder() {
 		return this.propertyBorder;
 	}
 	
@@ -87,7 +88,7 @@ public class ImageDisplay extends Widget {
 	@XmlAttribute
 	@XmlName(value = "size")
 	@EwolDescription(value = "Basic display size of the image")
-	public Dimension getPropertyImageSize() {
+	public Dimension2f getPropertyImageSize() {
 		return this.propertyImageSize;
 	}
 	
@@ -168,15 +169,15 @@ public class ImageDisplay extends Widget {
 		}
 		// Calculate the new position and size:
 		Vector2f imageBoder = this.propertyBorder.getPixel();
-		Vector2f origin = imageBoder;
+		Vector3f origin = new Vector3f(imageBoder.x(), imageBoder.y(), 0);
 		imageBoder = imageBoder.multiply(2.0f);
 		Vector2f imageRealSize = this.imageRenderSize.less(imageBoder);
-		Vector2f imageRealSizeMax = this.size.less(imageBoder);
+		Vector3f imageRealSizeMax = this.size.less(imageBoder.x(), imageBoder.y(), 0);
 		
 		Vector2f ratioSizeDisplayRequested = this.propertyPosStop.less(this.propertyPosStart);
 		//imageRealSizeMax *= ratioSizeDisplayRequested;
 		
-		Vector2f delta = Gravity.gravityGenerateDelta(this.propertyGravity, this.size.less(this.imageRenderSize));
+		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.imageRenderSize.x(), this.imageRenderSize.y(), 0));
 		if (this.propertyFill.x()) {
 			imageRealSize = imageRealSize.withX(imageRealSizeMax.x());
 			delta = delta.withX(0.0f);
@@ -198,11 +199,11 @@ public class ImageDisplay extends Widget {
 			} else if (ratio < ratioCurrent) {
 				float oldX = imageRealSize.x();
 				imageRealSize = imageRealSize.withX(imageRealSize.y() * ratio);
-				origin = origin.add((oldX - imageRealSize.x()) * 0.5f, 0);
+				origin = origin.add((oldX - imageRealSize.x()) * 0.5f, 0, 0);
 			} else {
 				float oldY = imageRealSize.y();
 				imageRealSize = imageRealSize.withY(imageRealSize.x() / ratio);
-				origin = origin.add(0, (oldY - imageRealSize.y()) * 0.5f);
+				origin = origin.add(0, (oldY - imageRealSize.y()) * 0.5f, 0);
 			}
 		}
 		
@@ -210,7 +211,7 @@ public class ImageDisplay extends Widget {
 		if (this.propertySmooth) {
 			this.compositing.setPos(origin);
 		} else {
-			this.compositing.setPos(Vector2f.clipInt(origin));
+			this.compositing.setPos(Vector3f.clipInt(origin));
 		}
 		this.compositing.printPart(imageRealSize, this.propertyPosStart, this.propertyPosStop);
 		Log.debug("Paint Image at : " + origin + " size=" + imageRealSize);
@@ -224,7 +225,7 @@ public class ImageDisplay extends Widget {
 	 * @param uri URI of the new image
 	 * @param border New border size to set
 	 */
-	public void set(final Uri uri, final Dimension border) {
+	public void set(final Uri uri, final Dimension2f border) {
 		Log.verbose("Set Image : " + uri + " border=" + border);
 		setPropertyBorder(border);
 		setPropertySource(uri);
@@ -241,7 +242,7 @@ public class ImageDisplay extends Widget {
 		requestUpdateSize();
 	}
 	
-	public void setPropertyBorder(final Dimension propertyBorder) {
+	public void setPropertyBorder(final Dimension2f propertyBorder) {
 		if (this.propertyBorder.equals(propertyBorder)) {
 			return;
 		}
@@ -250,7 +251,7 @@ public class ImageDisplay extends Widget {
 		requestUpdateSize();
 	}
 	
-	public void setPropertyImageSize(final Dimension propertyImageSize) {
+	public void setPropertyImageSize(final Dimension2f propertyImageSize) {
 		if (this.propertyImageSize.equals(propertyImageSize)) {
 			return;
 		}
