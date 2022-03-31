@@ -46,13 +46,13 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	private final Uri[] fileName = new Uri[4];
 	// specific element to have the the know if the specify element is known...
 	// == > otherwise I can just generate italic ...
-	// == > Bold is a little more complicated (maybe with the bordersize)
+	// == > Bold is a little more complicated (maybe with the border-size)
 	private final ResourceFontSvg[] font = new ResourceFontSvg[4];
 	private final int[] height = new int[4];
 	// for the texture generation :
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
 	public int[] lastRawHeigh = new int[4];
-	public List<GlyphProperty>[] listElement = new ArrayList[4];// = new (List<GlyphProperty>)[4];
+	public List<GlyphProperty>[] listElement = new ArrayList[4];
 	
 	private final FontMode[] modeWraping = new FontMode[4]; // !< This is a wrapping mode to prevent the fact that no
 	private int size = 10;
@@ -87,16 +87,16 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		this.listElement[2] = new ArrayList<>();
 		this.listElement[3] = new ArrayList<>();
 		
-		String sizeString = fontBaseUri.getProperty("size");
+		final String sizeString = fontBaseUri.getProperty("size");
 		if (sizeString == null) {
 			this.size = 25;
 		} else {
 			this.size = Integer.parseInt(sizeString);
 		}
 		// find all the fonts...
-		Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Bold.svg"), fontBaseUri.getproperties());
-		Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Oblique.svg"), fontBaseUri.getproperties());
-		Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "BoldOblique.svg"), fontBaseUri.getproperties());
+		final Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Bold.svg"), fontBaseUri.getproperties());
+		final Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Oblique.svg"), fontBaseUri.getproperties());
+		final Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "BoldOblique.svg"), fontBaseUri.getproperties());
 		if (fontBaseUri.exist()) {
 			this.fileName[FontMode.REGULAR.getValue()] = fontBaseUri;
 		}
@@ -140,7 +140,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			}
 		}
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
-			// set the bassic charset:
+			// set the basic char-set:
 			this.listElement[iiiFontId].clear();
 			if (this.font[iiiFontId] == null) {
 				continue;
@@ -190,7 +190,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 					this.lastGlyphPos[iii] = new Vector2i(1, this.lastGlyphPos[iii].y() + this.lastRawHeigh[iii]);
 					this.lastRawHeigh[iii] = 0;
 				}
-				Log.error("glyph texture size = " + tmpchar.sizeTexture + "last posY=" + this.lastGlyphPos[iii].y() + "    out size=" + this.data.getSize());
+				Log.verbose("glyph texture size = " + tmpchar.sizeTexture + "last posY=" + this.lastGlyphPos[iii].y() + "    out size=" + this.data.getSize());
 				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getSize().y()) {
 					this.data.resize(this.data.getSize().x(), this.data.getSize().y() * 2);
 					// note : need to rework all the layer due to the fact that the texture is used by the 4 type...
@@ -238,9 +238,9 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	}
 	
 	/**
-	 * get the pointer on the coresponding glyph
+	 * get the pointer on the corresponding glyph
 	 * @param charcode The unicodeValue
-	 * @param displayMode Mode to display the currrent font
+	 * @param displayMode Mode to display the current font
 	 * @return The pointer on the glyph == > never null
 	 */
 	public synchronized GlyphProperty getGlyph(final Character charcode, final FontMode displayMode) {
@@ -265,8 +265,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	
 	/**
 	 * get the display height of this font
-	 * @param DisplayMode Mode to display the currrent font
-	 * @return Dimention of the font need between 2 lines
+	 * @param DisplayMode Mode to display the current font
+	 * @return Dimension of the font need between 2 lines
 	 */
 	public int getHeight() {
 		return this.height[FontMode.REGULAR.getValue()];
@@ -279,7 +279,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	/**
 	 * get the ID of a unicode charcode
 	 * @param charcode The unicodeValue
-	 * @param displayMode Mode to display the currrent font
+	 * @param displayMode Mode to display the current font
 	 * @return The ID in the table (if it does not exist : return 0)
 	 */
 	private synchronized int getIndex(final Character charcode, final FontMode displayMode) {

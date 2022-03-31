@@ -9,8 +9,7 @@ public class MainWindows extends BasicWindows {
 	
 	public MainWindows() {
 		setPropertyTitle("Simple Button test");
-		
-		Button simpleButton = Button.createLabelButton("Top Button");
+		Button simpleButton = Button.createLabelButton("My <font color=\"red\">button <i>internal</i></font> <b>label</b>");
 		simpleButton.setPropertyExpand(Vector3b.TRUE);
 		simpleButton.setPropertyFill(Vector3b.TRUE);
 		this.setTestWidget(simpleButton);

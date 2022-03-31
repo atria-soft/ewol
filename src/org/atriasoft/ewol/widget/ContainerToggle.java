@@ -22,7 +22,10 @@ public class ContainerToggle extends Widget {
 	/**
 	 * Constructor
 	 */
-	public ContainerToggle() {}
+	public ContainerToggle() {
+		this.subWidget[0] = null;
+		this.subWidget[1] = null;
+	}
 	
 	//	@Override
 	//	public boolean loadXML(final XmlElement node) {

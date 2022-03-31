@@ -29,27 +29,22 @@ import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
 import org.atriasoft.gale.resource.ResourceManager;
 
-// Here we hereted from the gale application to be agnostic of the OW where we work ...
+// Here we herited from the gale application to be agnostic of the OW where we work ...
 public class EwolContext extends GaleApplication {
 	
 	/**
-	 * From everyware in the program, we can get the context inteface.
+	 * From everywhere in the program, we can get the context inteface.
 	 * @return current reference on the instance.
 	 */
-	@SuppressWarnings("preview")
 	public static EwolContext getContext() {
-		GaleApplication appl = Gale.getContext().getApplication();
-		if (appl instanceof EwolContext elem) {
+		final GaleApplication appl = Gale.getContext().getApplication();
+		if (appl instanceof final EwolContext elem) {
 			return elem;
 		}
 		return null;
 	}
 	
 	private EwolApplication application; // !< Application handle
-	
-	private final int initStepId = 0;
-	
-	private final int initTotalStep = 0;
 	
 	private final InputManager input;
 	

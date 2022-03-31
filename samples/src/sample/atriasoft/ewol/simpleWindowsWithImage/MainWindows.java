@@ -17,9 +17,9 @@ public class MainWindows extends BasicWindows {
 	}
 	
 	public static void eventButtonChangeKeepRatio(final MainWindows self) {
-		boolean state = self.testWidget.isPropertyKeepRatio();
+		final boolean state = self.testWidget.isPropertyKeepRatio();
 		self.testWidget.setPropertyKeepRatio(!state);
-		self.buttonAspectRatio.setPropertyValue(state ? "fkeep aspect ratio" : "un-keep aspect ratio");
+		//self.buttonAspectRatio.setPropertyValue(state ? "fkeep aspect ratio" : "un-keep aspect ratio");
 	}
 	
 	ImageDisplay testWidget;
@@ -36,7 +36,7 @@ public class MainWindows extends BasicWindows {
 		this.testWidget.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
 		this.setTestWidget(this.testWidget);
 		{
-			Button button = Button.createLabelButton("Change image");
+			final Button button = Button.createLabelButton("Change image");
 			button.setPropertyExpand(Vector3b.FALSE);
 			button.setPropertyFill(Vector3b.FALSE);
 			button.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));

@@ -10,7 +10,7 @@ public class WidgetXmlFactory implements InterfaceXmlFactoryAccess {
 	static {
 		listWidgetAvaillable.put("Button", Button.class);
 		listWidgetAvaillable.put("Sizer", Sizer.class);
-		listWidgetAvaillable.put("Label", Label.class);
+		listWidgetAvaillable.put("Label", LabelOnSVG.class);
 		listWidgetAvaillable.put("CheckBox", CheckBox.class);
 		listWidgetAvaillable.put("Image", ImageDisplay.class);
 	}
