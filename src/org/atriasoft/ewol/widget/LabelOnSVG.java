@@ -23,7 +23,7 @@ import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 
-public class Label extends Widget {
+public class LabelOnSVG extends Widget {
 	protected int colorDefaultBgText = -1; //!< Default Background color of the text
 	protected int colorDefaultFgText = -1; //!< Default color of the text
 	protected ResourceColorFile colorProperty; //!< theme color property
@@ -37,7 +37,7 @@ public class Label extends Widget {
 	protected CompositingText text = new CompositingText(); //!< Compositing text element.
 	protected String value = "";
 	
-	public Label() {
+	public LabelOnSVG() {
 		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");
@@ -51,7 +51,7 @@ public class Label extends Widget {
 	 * Constructor
 	 * @param newLabel The displayed decorated text.
 	 */
-	public Label(final String newLabel) {
+	public LabelOnSVG(final String newLabel) {
 		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");

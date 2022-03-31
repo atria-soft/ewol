@@ -55,8 +55,7 @@ public class ResourceFontSvg extends Resource {
 	
 	@Override
 	public void cleanUp() {
-		// TODO Auto-generated method stub
-		
+		// nothing to do...
 	}
 	
 	public synchronized void display() {
@@ -64,7 +63,7 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public synchronized boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage) {
-		Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
+		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		if (weight == null) {
 			return false;
 		}
@@ -93,7 +92,7 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public synchronized boolean drawGlyph(final ImageByteMono imageOut, final int fontSize, final GlyphProperty property, final int borderSize) {
-		Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
+		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		for (int jjj = 0; jjj < weight.getHeight(); jjj++) {
 			for (int iii = 0; iii < weight.getWidth(); iii++) {
 				final float valueColor = weight.get(iii, weight.getHeight() - 1 - jjj);
@@ -105,7 +104,7 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public synchronized GlyphProperty getGlyphProperty(final int fontSize, final int uicodeVal) {
-		Glyph glyph = this.font.getGlyphNullIfMissing(uicodeVal);
+		final Glyph glyph = this.font.getGlyphNullIfMissing(uicodeVal);
 		GlyphProperty out;
 		if (glyph == null) {
 			out = new GlyphProperty(this.font, uicodeVal, fontSize);
@@ -120,8 +119,8 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public synchronized Vector2f getSize(final int fontSize, final String unicodeString) {
-		float width = this.font.calculateWidth(unicodeString, fontSize, false);
-		float height = this.font.calculateFontRealHeight(fontSize);
+		final float width = this.font.calculateWidth(unicodeString, fontSize, false);
+		final float height = this.font.calculateFontRealHeight(fontSize);
 		return new Vector2f(width, height);
 	}
 	

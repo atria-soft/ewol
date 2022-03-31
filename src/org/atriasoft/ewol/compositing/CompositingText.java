@@ -29,18 +29,22 @@ public class CompositingText extends TextBase {
 	
 	protected List<Vector2f> texturePositions = new ArrayList<>();
 	
+	protected String currentFontName = "";
+	protected int currentFontSize = -2; // -1 is to perform first initialization
+	protected int currentFontSizeRequired = -2; // -1 is to perform first initialization
+	
 	public CompositingText() {
 		this("");
 	}
 	
 	public CompositingText(final String fontName) {
-		this(fontName, -1);
+		this(fontName, 0);
 	}
 	
 	/**
 	 * generic constructor
 	 * @param fontName Name of the font that might be loaded
-	 * @param fontSize size of the font that might be loaded
+	 * @param fontSize Size of the font that might be loaded
 	 */
 	public CompositingText(final String fontName, final int fontSize) {
 		setFont(fontName, fontSize);
@@ -48,6 +52,7 @@ public class CompositingText extends TextBase {
 	
 	@Override
 	public Vector3f calculateSizeChar(final Character charcode) {
+		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
 		// get a pointer on the glyph property :
 		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
 		final int fontHeigh = (int) getHeight();
@@ -57,15 +62,15 @@ public class CompositingText extends TextBase {
 			} else {
 				Log.warning("no Glyph... in font : " + this.font.getName());
 			}
-			return new Vector3f((float) (0.2), (fontHeigh), (float) (0.0));
+			return new Vector3f(0.2f, fontHeigh, 0);
 		}
-		// get the kerning ofset :
-		float kerningOffset = 0.0f;
+		// get the kerning offset :
+		float kerningOffset = 0;
 		if (this.kerning) {
 			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode);
 		}
 		
-		final Vector3f outputSize = new Vector3f(myGlyphProperty.getAdvenceX() + kerningOffset, (fontHeigh), 0.0f);
+		final Vector3f outputSize = new Vector3f((myGlyphProperty.getAdvenceX() + kerningOffset) * renderRatio, (fontHeigh), 0);
 		// Register the previous character
 		this.previousCharcode = charcode;
 		return outputSize;
@@ -186,7 +191,8 @@ public class CompositingText extends TextBase {
 			Log.warning("no font...");
 			return 10.0f;
 		}
-		return this.font.getHeight(this.mode);
+		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
+		return this.font.getHeight(this.mode) * renderRatio;
 	}
 	
 	@Override
@@ -195,7 +201,8 @@ public class CompositingText extends TextBase {
 			Log.warning("no font...");
 			return 1.0f;
 		}
-		return this.font.getFontSize();
+		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
+		return this.font.getFontSize() * renderRatio;
 	}
 	
 	@Override
@@ -206,13 +213,16 @@ public class CompositingText extends TextBase {
 			Log.error(" font does not really existed ...");
 			return;
 		}
-		final int fontSize = (int) getSize();
-		final int fontHeigh = (int) getHeight();
+		// sometime we do net require the correct size to the glyph renderer (due to the fact SVG render is not clear on lower size...)
+		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
 		
-		// get the kerning ofset :
+		final int fontSize = (int) (getSize() * renderRatio);
+		final int fontHeigh = (int) (getHeight() * renderRatio);
+		
+		// get the kerning offset :
 		float kerningOffset = 0;
 		if (this.kerning) {
-			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode);
+			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode) * renderRatio;
 			if (kerningOffset != 0) {
 				// Log.debug("Kerning between : '" + this.previousCharcode + "''" + myGlyph.UVal
 				// + "' value : " + kerningOffset);
@@ -223,10 +233,10 @@ public class CompositingText extends TextBase {
 			/*
 			 * Bitmap position xA xB yC *------* | | | | yD *------*
 			 */
-			float dxA = this.position.x() + myGlyphProperty.getTextureRenderOffset().x() + kerningOffset;
-			float dxB = dxA + myGlyphProperty.sizeTexture.x();
-			float dyC = this.position.y() + myGlyphProperty.getTextureRenderOffset().y() + fontHeigh - fontSize;
-			float dyD = dyC - myGlyphProperty.sizeTexture.y();
+			float dxA = this.position.x() + myGlyphProperty.getTextureRenderOffset().x() * renderRatio + kerningOffset;
+			float dxB = dxA + myGlyphProperty.sizeTexture.x() * renderRatio;
+			float dyC = this.position.y() + myGlyphProperty.getTextureRenderOffset().y() * renderRatio + fontHeigh - fontSize;
+			float dyD = dyC - myGlyphProperty.sizeTexture.y() * renderRatio;
 			
 			float tuA = myGlyphProperty.texturePosStart.x();
 			float tuB = tuA + myGlyphProperty.texturePosSize.x();
@@ -301,7 +311,7 @@ public class CompositingText extends TextBase {
 					 * Step 1 : ******** ****** **** **
 					 * 
 					 */
-					// set texture coordonates :
+					// set texture coordinates :
 					this.texturePositions.add(texturePos0);
 					this.texturePositions.add(texturePos1);
 					this.texturePositions.add(texturePos2);
@@ -318,7 +328,7 @@ public class CompositingText extends TextBase {
 					 * 
 					 * ** **** ****** ********
 					 */
-					// set texture coordonates :
+					// set texture coordinates :
 					this.texturePositions.add(texturePos0);
 					this.texturePositions.add(texturePos2);
 					this.texturePositions.add(texturePos3);
@@ -336,7 +346,7 @@ public class CompositingText extends TextBase {
 		// move the position :
 		// Log.debug(" 5 pos=" + this.position + " advance=" + myGlyph.advance.x() + "
 		// kerningOffset=" + kerningOffset);
-		this.position = this.position.withX(this.position.x() + myGlyphProperty.getAdvenceX() + kerningOffset);
+		this.position = this.position.withX(this.position.x() + myGlyphProperty.getAdvenceX() * renderRatio + kerningOffset);
 		// Log.debug(" 6 print '" + char-code + "' : start=" + this.sizeDisplayStart + "
 		// stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// Register the previous character
@@ -345,8 +355,13 @@ public class CompositingText extends TextBase {
 	}
 	
 	@Override
-	public void setFont(String fontName, int fontSize) {
-		clear();
+	public void setFont(final String inputFontName, final int inputFontSize) {
+		if (inputFontName.equals(this.currentFontName) && inputFontSize == this.currentFontSize) {
+			return;
+		}
+		
+		String fontName = inputFontName;
+		int fontSize = inputFontSize;
 		// remove old one
 		final ResourceTexturedFont previousFont = this.font;
 		if (fontSize <= 0) {
@@ -355,14 +370,30 @@ public class CompositingText extends TextBase {
 		if (fontName.isEmpty()) {
 			fontName = Configs.getConfigFonts().getName();
 		}
-		Uri fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
-		fontUri.setProperty("size", Integer.toString(fontSize));
-		Log.verbose("plop : " + fontName + " size=" + fontSize + " result :" + fontName);
+		
+		// if size in under 25, we request upper size:
+		int sizeRequest = 25;
+		if (fontSize > 25) {
+			sizeRequest = fontSize;
+		}
+		if (inputFontName.equals(this.currentFontName) && this.currentFontSizeRequired == sizeRequest) {
+			this.currentFontSize = inputFontSize;
+			return;
+		}
+		
+		clear();
+		final Uri fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
+		fontUri.setProperty("size", Integer.toString(sizeRequest));
+		Log.verbose("plop : " + fontName + " size=" + sizeRequest + " result :" + fontName);
 		// link to new one
 		this.font = ResourceTexturedFont.create(fontUri);
 		if (this.font == null) {
 			Log.error("Can not get font resource");
 			this.font = previousFont;
+		} else {
+			this.currentFontName = inputFontName;
+			this.currentFontSize = inputFontSize;
+			this.currentFontSizeRequired = sizeRequest;
 		}
 	}
 	
@@ -375,25 +406,12 @@ public class CompositingText extends TextBase {
 	
 	@Override
 	public void setFontName(final String fontName) {
-		// get old size
-		int fontSize = -1;
-		if (this.font != null) {
-			fontSize = this.font.getFontSize();
-		}
-		setFont(fontName, fontSize);
+		setFont(fontName, this.currentFontSize);
 	}
 	
 	@Override
 	public void setFontSize(final int fontSize) {
-		// get old size
-		String fontName = "";
-		if (this.font != null) {
-			fontName = this.font.getName();
-			// Remove the :XX for the size ...
-			final int pos = fontName.lastIndexOf(':');
-			fontName = fontName.substring(0, pos);
-		}
-		setFont(fontName, fontSize);
+		setFont(this.currentFontName, fontSize);
 	}
 	
 }

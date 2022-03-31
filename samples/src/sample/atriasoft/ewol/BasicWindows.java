@@ -116,9 +116,8 @@ public class BasicWindows extends Windows {
 			simpleSpacer.setPropertyMinSize(new Dimension3f(new Vector3f(30, 30, 30), Distance.PIXEL));
 			this.sizerMenuHori.subWidgetAdd(simpleSpacer);
 		}
-		/*
 		{
-			this.buttonExpandX = Button.createLabelButton("un-expand X");
+			this.buttonExpandX = Button.createToggleLabelButton("un-expand X", "expand X");
 			this.buttonExpandX.setPropertyExpand(Vector3b.FALSE);
 			this.buttonExpandX.setPropertyFill(Vector3b.FALSE);
 			this.buttonExpandX.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
@@ -126,7 +125,7 @@ public class BasicWindows extends Windows {
 			this.buttonExpandX.signalClick.connectAuto(this, BasicWindows::eventButtonExpandX);
 		}
 		{
-			this.buttonExpandY = Button.createLabelButton("un-expand Y");
+			this.buttonExpandY = Button.createToggleLabelButton("un-expand Y", "expand Y");
 			this.buttonExpandY.setPropertyExpand(Vector3b.FALSE);
 			this.buttonExpandY.setPropertyFill(Vector3b.FALSE);
 			this.buttonExpandY.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
@@ -134,7 +133,7 @@ public class BasicWindows extends Windows {
 			this.buttonExpandY.signalClick.connectAuto(this, BasicWindows::eventButtonExpandY);
 		}
 		{
-			this.buttonFillX = Button.createLabelButton("un-fill X");
+			this.buttonFillX = Button.createToggleLabelButton("un-fill X", "fill X");
 			this.buttonFillX.setPropertyExpand(Vector3b.FALSE);
 			this.buttonFillX.setPropertyFill(Vector3b.FALSE);
 			this.buttonFillX.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
@@ -142,7 +141,7 @@ public class BasicWindows extends Windows {
 			this.buttonFillX.signalClick.connectAuto(this, BasicWindows::eventButtonFillX);
 		}
 		{
-			this.buttonFillY = Button.createLabelButton("un-fill Y");
+			this.buttonFillY = Button.createToggleLabelButton("un-fill Y", "fill Y");
 			this.buttonFillY.setPropertyExpand(Vector3b.FALSE);
 			this.buttonFillY.setPropertyFill(Vector3b.FALSE);
 			this.buttonFillY.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
@@ -157,7 +156,6 @@ public class BasicWindows extends Windows {
 			this.sizerMenuHori.subWidgetAdd(this.buttonGravity);
 			this.buttonGravity.signalClick.connectAuto(this, BasicWindows::eventButtonChangeGravity);
 		}
-		*/
 	}
 	
 	public void addButton(Widget widget) {

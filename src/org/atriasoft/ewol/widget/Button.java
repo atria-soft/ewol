@@ -44,11 +44,34 @@ public class Button extends ContainerToggle {
 	public static Button createLabelButton(final String label) {
 		final Button out = new Button();
 		final Label labelWidget = new Label();
+		labelWidget.setPropertyFontSize(12);
 		labelWidget.setPropertyFill(Vector3b.FALSE);
 		labelWidget.setPropertyExpand(Vector3b.FALSE);
 		labelWidget.setPropertyGravity(Gravity.CENTER);
 		labelWidget.setPropertyValue(label);
 		out.setSubWidget(labelWidget, 0);
+		return out;
+	}
+	
+	public static Button createToggleLabelButton(final String label0, final String label1) {
+		final Button out = new Button();
+		{
+			final Label labelWidget = new Label();
+			labelWidget.setPropertyFill(Vector3b.FALSE);
+			labelWidget.setPropertyExpand(Vector3b.FALSE);
+			labelWidget.setPropertyGravity(Gravity.CENTER);
+			labelWidget.setPropertyValue(label0);
+			out.setSubWidget(labelWidget, 0);
+		}
+		{
+			final Label labelWidget = new Label();
+			labelWidget.setPropertyFill(Vector3b.FALSE);
+			labelWidget.setPropertyExpand(Vector3b.FALSE);
+			labelWidget.setPropertyGravity(Gravity.CENTER);
+			labelWidget.setPropertyValue(label1);
+			out.setSubWidget(labelWidget, 1);
+		}
+		out.setPropertyToggleMode(true);
 		return out;
 	}
 	
@@ -318,6 +341,9 @@ public class Button extends ContainerToggle {
 		if (KeyStatus.pressSingle == event.status() && over) {
 			keepFocus();
 			this.signalClick.emit();
+			if (this.propertyToggleMode) {
+				this.setPropertyValue(!this.propertyValue);
+			}
 			return true;
 		}
 		if (KeyStatus.down == event.status() && over) {
