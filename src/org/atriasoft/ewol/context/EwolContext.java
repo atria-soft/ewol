@@ -74,6 +74,12 @@ public class EwolContext extends GaleApplication {
 		final Vector2f size = getSize();
 		this.windowsCurrent.setSize(new Vector3f((int) size.x(), (int) size.y(), 0));
 		this.windowsCurrent.onChangeSize();
+		/// Gale.getContext().aaaaaaaaaaaaaa();
+	}
+	
+	public void forceRedrawAllAsync() {
+		Log.warning("force redraw ALL (ASYNC):");
+		GaleContext.getContext().requestUpdateSize();
 	}
 	
 	public EwolApplication getApplication() {

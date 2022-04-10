@@ -8,8 +8,11 @@ package org.atriasoft.ewol.widget;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Padding;
+import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.exml.annotation.XmlFactory;
+import org.atriasoft.exml.annotation.XmlManaged;
 
 /*
  * @ingroup ewolWidgetGroup
@@ -87,7 +90,8 @@ public class ContainerToggle extends Widget {
 		this.minSize = this.minSize.add(padding.x(), padding.y(), padding.z());
 		// verify the min max of the min size ...
 		checkMinSize();
-		markToRedraw();
+		//markToRedraw();
+		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
 	@Override
@@ -120,32 +124,42 @@ public class ContainerToggle extends Widget {
 		return null;
 	}
 	
+	@XmlManaged
+	@XmlFactory(value = WidgetXmlFactory.class)
+	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
+	public Widget[] getSubWidgets() {
+		return this.subWidget;
+	}
+	
 	public Padding onChangeSizePadded(final Padding padding) {
 		super.onChangeSize();
 		final Vector3f localAvaillable = this.size.less(padding.x(), padding.y(), padding.z());
 		// Checking the filling properties  == > for the subElements:
-		Vector3f subElementSize = this.minSize;
+		Vector3f subElementSize = this.minSize.less(padding.x(), padding.y(), padding.z());
 		if (this.propertyFill.x()) {
-			subElementSize = subElementSize.withX(this.size.x());
+			subElementSize = subElementSize.withX(this.size.x() - padding.x());
 		}
 		if (this.propertyFill.y()) {
-			subElementSize = subElementSize.withY(this.size.y());
+			subElementSize = subElementSize.withY(this.size.y() - padding.y());
 		}
-		final Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(subElementSize));
-		final Vector3f origin = delta.add(padding.left(), padding.bottom(), padding.back());
-		subElementSize = subElementSize.less(padding.x(), padding.y(), padding.z());
+		if (this.propertyFill.z()) {
+			subElementSize = subElementSize.withZ(this.size.z() - padding.z());
+		}
+		final Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(subElementSize.add(padding.x(), padding.y(), padding.z())));
+		final Vector3f deltaPadded = delta.add(padding.left(), padding.bottom(), padding.back());
+		//subElementSize = subElementSize.less(padding.x(), padding.y(), padding.z());
 		for (int iii = 0; iii < 2; ++iii) {
 			if (this.subWidget[iii] != null) {
-				Vector3f origin2 = origin.add(this.offset);
-				final Vector3f minSize = this.subWidget[iii].getCalculateMinSize();
+				//final Vector3f origin2 = this.origin.add(this.offset);
+				//final Vector3f minSize = this.subWidget[iii].getCalculateMinSize();
 				//Vector2b expand = this.subWidget[iii].propertyExpand.get();
-				origin2 = origin2.add(this.propertyGravity.gravityGenerateDelta(minSize.less(localAvaillable)));
-				this.subWidget[iii].setOrigin(this.origin.add(origin));
+				//origin2 = origin2.add(this.propertyGravity.gravityGenerateDelta(minSize.less(localAvaillable)));
+				this.subWidget[iii].setOrigin(this.origin.add(deltaPadded));
 				this.subWidget[iii].setSize(subElementSize);
 				this.subWidget[iii].onChangeSize();
 			}
 		}
-		final Vector3f selectableAreaPos = origin.less(padding.left(), padding.bottom(), padding.back());
+		final Vector3f selectableAreaPos = this.origin.add(delta);//.less(padding.left(), padding.bottom(), padding.back());
 		final Vector3f selectableAreaEndPos = this.size.less(selectableAreaPos.add(subElementSize.add(padding.x(), padding.y(), padding.z())));
 		markToRedraw();
 		return new Padding(selectableAreaPos.x(), selectableAreaEndPos.y(), selectableAreaEndPos.x(), selectableAreaPos.y());

@@ -47,9 +47,9 @@ public class Sizer extends ContainerN {
 		Log.verbose("[" + getId() + "] update minimum size");
 		this.subExpend = Vector3b.FALSE;
 		this.minSize = this.propertyMinSize.getPixel();
-		Vector3f tmpBorderSize = this.propertyBorderSize.getPixel();
+		final Vector3f tmpBorderSize = this.propertyBorderSize.getPixel();
 		Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "} set min size : " + this.minSize);
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -60,7 +60,7 @@ public class Sizer extends ContainerN {
 			if (it.canExpand().y()) {
 				this.subExpend = this.subExpend.withY(true);
 			}
-			Vector3f tmpSize = it.getCalculateMinSize();
+			final Vector3f tmpSize = it.getCalculateMinSize();
 			Log.verbose("[" + getId() + "] NewMinSize=" + tmpSize);
 			Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "}     Get minSize=" + tmpSize);
 			if (this.propertyMode == DisplayMode.modeVert) {
@@ -76,7 +76,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		this.minSize = this.minSize.add(tmpBorderSize.multiply(2));
-		//Log.error("[" + getId() + "] {" + getObjectType() + "} Result min size : " +  this.minSize);
+		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
 	@XmlManaged
@@ -100,23 +100,23 @@ public class Sizer extends ContainerN {
 	@Override
 	public void onChangeSize() {
 		super.onChangeSize();
-		Vector3f tmpBorderSize = this.propertyBorderSize.getPixel();
+		final Vector3f tmpBorderSize = this.propertyBorderSize.getPixel();
 		Log.verbose("[" + getId() + "] update size : " + this.size + " nbElement : " + this.subWidget.size() + " borderSize=" + tmpBorderSize + " from border=" + this.propertyBorderSize);
-		Vector3f localWidgetSize = this.size.less(tmpBorderSize.multiply(2.0f));
+		final Vector3f localWidgetSize = this.size.less(tmpBorderSize.multiply(2.0f));
 		// -1- calculate min-size and expand requested:
 		Vector3f minSize = Vector3f.ZERO;
 		Vector3i nbWidgetExpand = Vector3i.ZERO;
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
-			Vector3f tmpSize = it.getCalculateMinSize();
+			final Vector3f tmpSize = it.getCalculateMinSize();
 			if (this.propertyMode == DisplayMode.modeVert) {
 				minSize = new Vector3f(Math.max(minSize.x(), tmpSize.x()), minSize.y() + tmpSize.y(), Math.max(minSize.z(), tmpSize.z()));
 			} else {
 				minSize = new Vector3f(minSize.x() + tmpSize.x(), Math.max(minSize.y(), tmpSize.y()), Math.max(minSize.z(), tmpSize.z()));
 			}
-			Vector3b expand = it.canExpand();
+			final Vector3b expand = it.canExpand();
 			nbWidgetExpand = nbWidgetExpand.add(expand.x() ? 1 : 0, expand.y() ? 1 : 0, 0);
 		}
 		// -2- Calculate the size to add at every elements...
@@ -132,7 +132,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -3- Configure all at the min size ...
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -151,12 +151,12 @@ public class Sizer extends ContainerN {
 			if (!this.subWidget.isEmpty()) {
 				lastWidget = this.subWidget.get(this.subWidget.size() - 1);
 			}
-			for (Widget it : this.subWidget) {
+			for (final Widget it : this.subWidget) {
 				if (it == null) {
 					continue;
 				}
 				Vector3f tmpSizeMin = it.getSize();
-				Vector3f tmpSizeMax = it.getCalculateMaxSize();
+				final Vector3f tmpSizeMax = it.getCalculateMaxSize();
 				// Now update his size  his size in X and the current sizer size in Y:
 				if (this.propertyMode == DisplayMode.modeVert) {
 					if (it.canExpand().y() || (it == lastWidget && it.canExpandIfFree().y())) {
@@ -201,7 +201,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -5- Update the expand in the second size if vert ==> X and if hori ==> Y
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -223,7 +223,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -6- Force size at the entire number:
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -231,28 +231,28 @@ public class Sizer extends ContainerN {
 		}
 		// -7- get under Size
 		Vector3f underSize = Vector3f.ZERO;
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
-			Vector3f size = it.getSize();
+			final Vector3f size = it.getSize();
 			if (this.propertyMode == DisplayMode.modeVert) {
 				underSize = new Vector3f(Math.max(underSize.x(), size.x()), underSize.y() + size.y(), Math.max(underSize.z(), size.z()));
 			} else {
 				underSize = new Vector3f(underSize.x() + size.x(), Math.max(underSize.y(), size.y()), Math.max(underSize.z(), size.z()));
 			}
 		}
-		Vector3f deltas = localWidgetSize.less(underSize);
+		final Vector3f deltas = localWidgetSize.less(underSize);
 		
 		// -8- Calculate the local origin, depending of the gravity:
 		Vector3f tmpOrigin = this.origin.add(tmpBorderSize).add(this.propertyGravity.gravityGenerateDelta(deltas));
 		// -9- Set sub widget origin:
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
 			Vector3f origin;
-			Vector3f size = it.getSize();
+			final Vector3f size = it.getSize();
 			if (this.propertyMode == DisplayMode.modeVert) {
 				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(this.propertyGravity.gravityGenerateDelta(new Vector3f(underSize.x() - size.x(), 0.0f, 0.0f))));
 			} else {
@@ -266,7 +266,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -10- Update all subSize at every element:
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}

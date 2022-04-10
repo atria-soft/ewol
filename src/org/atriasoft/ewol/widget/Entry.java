@@ -6,15 +6,13 @@ import java.util.regex.Pattern;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
-import org.atriasoft.ewol.compositing.CompositingGraphicContext;
+import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventEntry;
@@ -67,7 +65,7 @@ public class Entry extends Widget {
 	/// offset in pixel of the display of the UString
 	private int displayCursorPositionPixel = 0;
 	/// text display this.text
-	private final CompositingGraphicContext gc = new CompositingGraphicContext();
+	private final CompositingText text = new CompositingText();
 	/// text position can have change
 	private boolean needUpdateTextPos = true;
 	/// Periodic call handle to remove it when needed
@@ -130,7 +128,7 @@ public class Entry extends Widget {
 		if (this.shape != null) {
 			padding = this.shape.getPadding();
 		}
-		int minHeight = this.gc.getTextHeight();//calculateSize('A').y();
+		final int minHeight = (int) this.text.getHeight();//calculateSize('A').y();
 		
 		Vector3f minimumSizeBase = new Vector3f(20, minHeight, 10);
 		// add padding :
@@ -167,7 +165,7 @@ public class Entry extends Widget {
 			pos1 = this.displayCursorPos;
 		}
 		// Copy
-		String tmpData = this.propertyValue.substring(pos1, pos2);
+		final String tmpData = this.propertyValue.substring(pos1, pos2);
 		ClipBoard.set(clipboardID, tmpData);
 	}
 	
@@ -304,8 +302,9 @@ public class Entry extends Widget {
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
-			this.shape.draw(this.gc.getResourceTexture(), true);
+			this.shape.draw(true);
 		}
+		this.text.draw();
 	}
 	
 	@Override
@@ -313,10 +312,10 @@ public class Entry extends Widget {
 		// remove curent selected data ...
 		removeSelected();
 		// get current selection / Copy :
-		String tmpData = ClipBoard.get(clipboardID);
+		final String tmpData = ClipBoard.get(clipboardID);
 		// add it on the current display:
 		if (tmpData.length() != 0) {
-			StringBuilder newData = new StringBuilder(this.propertyValue);
+			final StringBuilder newData = new StringBuilder(this.propertyValue);
 			newData.insert(this.displayCursorPos, tmpData.charAt(0));
 			setInternalValue(newData.toString());
 			if (this.propertyValue.equals(newData.toString())) {
@@ -346,7 +345,7 @@ public class Entry extends Widget {
 				if (event.getChar() == 0x7F) {
 					// SUPPR :
 					if (this.propertyValue.length() > 0 && this.displayCursorPos < (long) this.propertyValue.length()) {
-						StringBuilder newData = new StringBuilder(this.propertyValue);
+						final StringBuilder newData = new StringBuilder(this.propertyValue);
 						newData.deleteCharAt(this.displayCursorPos);
 						this.propertyValue = newData.toString();
 						this.displayCursorPos = Math.max(this.displayCursorPos, 0);
@@ -355,7 +354,7 @@ public class Entry extends Widget {
 				} else if (event.getChar() == 0x08) {
 					// DEL :
 					if (this.propertyValue.length() > 0 && this.displayCursorPos != 0) {
-						StringBuilder newData = new StringBuilder(this.propertyValue);
+						final StringBuilder newData = new StringBuilder(this.propertyValue);
 						newData.deleteCharAt(this.displayCursorPos - 1);
 						this.propertyValue = newData.toString();
 						this.displayCursorPos--;
@@ -367,9 +366,9 @@ public class Entry extends Widget {
 					if ((long) this.propertyValue.length() > this.propertyMaxCharacter) {
 						Log.info("Reject data for entry : '" + event.getChar() + "'");
 					} else {
-						StringBuilder newData = new StringBuilder(this.propertyValue);
+						final StringBuilder newData = new StringBuilder(this.propertyValue);
 						newData.insert(this.displayCursorPos, event.getChar());
-						String newDataGenerated = newData.toString();
+						final String newDataGenerated = newData.toString();
 						setInternalValue(newDataGenerated);
 						if (this.propertyValue.equals(newDataGenerated)) {
 							this.displayCursorPos += 1;//inputData.length();
@@ -410,8 +409,8 @@ public class Entry extends Widget {
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		Vector3f absolutePosition = new Vector3f(event.pos().x(), event.pos().y(), 0);
-		Vector3f relPos = relativePosition(absolutePosition);
+		final Vector3f absolutePosition = new Vector3f(event.pos().x(), event.pos().y(), 0);
+		final Vector3f relPos = relativePosition(absolutePosition);
 		Log.verbose("Event on Input ... " + event + " relPos = " + relPos);
 		if (event.inputId() == 0) {
 			if (!isFocused()) {
@@ -523,7 +522,7 @@ public class Entry extends Widget {
 		}
 		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
-		this.gc.clear();
+		this.text.clear();
 		if (this.colorIdTextFg >= 0) {
 			//this.text.setDefaultColorFg(this.shape.getColor(this.colorIdTextFg));
 			//this.text.setDefaultColorBg(this.shape.getColor(this.colorIdTextBg));
@@ -531,7 +530,7 @@ public class Entry extends Widget {
 			//this.text.setSelectionColor(this.shape.getColor(this.colorIdSelection));
 		}
 		updateTextPosition();
-		Padding padding = this.shape.getPadding();
+		final Padding padding = this.shape.getPadding();
 		
 		Vector3f tmpSizeShaper = this.minSize;
 		if (this.propertyFill.x()) {
@@ -540,57 +539,51 @@ public class Entry extends Widget {
 		if (this.propertyFill.y()) {
 			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 		}
+		if (this.propertyFill.z()) {
+			tmpSizeShaper = tmpSizeShaper.withZ(this.size.z());
+		}
 		
 		Vector3f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
 		Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
-		//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
-		Vector3f tmpOriginText = new Vector3f(0, this.gc.getTextSize(), 0);
+		Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
+		//Vector3f tmpOriginText = new Vector3f(0, this.text.getSize(), 0);
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		/*
-		int minHeight = this.gc.getTextHeight();
+		
+		final int minHeight = (int) this.text.getHeight();
 		if (tmpSizeText.y() > minHeight) {
-			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f);
+			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f, 0);
 		}
-		*/
 		// fix all the position in the int class:
 		tmpSizeShaper = Vector3f.clipInt(tmpSizeShaper);
 		tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
 		tmpSizeText = Vector3f.clipInt(tmpSizeText);
 		tmpOriginText = Vector3f.clipInt(tmpOriginText);
 		
-		this.gc.clear();
-		this.gc.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
-		
-		//		if (this.displayCursorPosSelection != this.displayCursorPos) {
-		//
-		//			//this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
-		//		} else {
-		//			this.text.setCursorPos(this.displayCursorPos);
-		//		}
-		this.gc.setColorFill(Color.RED);
-		this.gc.setColorStroke(Color.GREEN);
-		this.gc.setStrokeWidth(5);
-		//this.gc.rectangleRounded(new Vector3f(20, 2), new Vector3f(55, 70), new Vector3f(15, 15));
-		this.gc.line(new Vector2f(this.displayCursorPositionPixel, 2), new Vector2f(this.displayCursorPositionPixel, this.gc.getTextHeight() - 4));
-		
-		this.gc.setColorFill(Color.BLACK);
-		this.gc.setColorStroke(Color.NONE);
-		this.gc.setStrokeWidth(1);
-		char[] valueToDisplay = this.propertyValue.toCharArray();
+		this.text.clear();
+		//this.text.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
+		this.text.setClippingWidth(tmpOriginText, tmpSizeText);
+		this.text.setPos(tmpOriginText.add(this.displayStartPosition, 0, 0));
+		if (this.displayCursorPosSelection != this.displayCursorPos) {
+			this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
+		} else {
+			this.text.setCursorPos(this.displayCursorPos);
+		}
+		final char[] valueToDisplay = this.propertyValue.toCharArray();
 		if (this.propertyPassword) {
 			Arrays.fill(valueToDisplay, '*');
 		}
 		
-		Vector2f plop = new Vector2f(tmpOriginText.x() + this.displayStartPosition, tmpOriginText.y());
+		//final Vector2f plop = new Vector2f(tmpOriginText.x() + this.displayStartPosition, tmpOriginText.y());
 		if (valueToDisplay.length != 0) {
-			this.gc.text(plop, new String(valueToDisplay));
+			this.text.print(new String(valueToDisplay));
 		} else if (this.propertyTextWhenNothing != null) {
-			this.gc.text(plop, this.propertyTextWhenNothing);
+			this.text.printDecorated(this.propertyTextWhenNothing);
 		}
+		this.text.setClippingMode(false);
 		this.overPositionStart = tmpOriginShaper;
 		this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
-		this.gc.flush();
+		this.text.flush();
 		this.shape.flush();
 		
 	}
@@ -613,7 +606,7 @@ public class Entry extends Widget {
 		// remove data ...
 		this.displayCursorPos = pos1;
 		this.displayCursorPosSelection = pos1;
-		StringBuilder tmp = new StringBuilder(this.propertyValue);
+		final StringBuilder tmp = new StringBuilder(this.propertyValue);
 		if (pos1 < pos2) {
 			tmp.delete(pos1, pos2);
 		} else if (pos1 > pos2) {
@@ -628,7 +621,7 @@ public class Entry extends Widget {
 	 * @param newData The new string to display
 	 */
 	protected void setInternalValue(final String newData) {
-		String previous = this.propertyValue;
+		final String previous = this.propertyValue;
 		// check the RegExp :
 		if (newData.length() > 0) {
 			/*
@@ -732,7 +725,7 @@ public class Entry extends Widget {
 	}
 	
 	protected void updateCursorPosition(final Vector3f pos, final boolean selection/*=false*/) {
-		Padding padding = this.shape.getPadding();
+		final Padding padding = this.shape.getPadding();
 		
 		Vector3f relPos = relativePosition(pos);
 		relPos = relPos.withX(relPos.x() - this.displayStartPosition - padding.left());
@@ -745,13 +738,13 @@ public class Entry extends Widget {
 			this.displayStartPosition = 0;
 		}
 		String tmpDisplay = this.propertyValue.substring(0, this.displayStartPosition);
-		int displayHidenSize = this.gc.calculateTextSize(tmpDisplay).x();
+		final int displayHidenSize = (int) this.text.calculateSize(tmpDisplay).x();
 		//Log.debug("hidenSize : " + displayHidenSize);
 		int newCursorPosition = -1;
-		int tmpTextOriginX = (int) padding.left();
+		final int tmpTextOriginX = (int) padding.left();
 		for (int iii = 0; iii < this.propertyValue.length(); iii++) {
 			tmpDisplay = this.propertyValue.substring(0, iii);
-			int tmpWidth = this.gc.calculateTextSize(tmpDisplay).x() - displayHidenSize;
+			final int tmpWidth = (int) (this.text.calculateSize(tmpDisplay).x() - displayHidenSize);
 			if (tmpWidth >= relPos.x() - tmpTextOriginX) {
 				newCursorPosition = iii;
 				break;
@@ -782,27 +775,27 @@ public class Entry extends Widget {
 		if (!this.needUpdateTextPos) {
 			return;
 		}
-		Padding padding = this.shape.getPadding();
+		final Padding padding = this.shape.getPadding();
 		
 		int tmpSizeX = (int) this.minSize.x();
 		if (this.propertyFill.x()) {
 			tmpSizeX = (int) this.size.x();
 		}
-		int tmpUserSize = (int) (tmpSizeX - padding.x());
-		int totalWidth = this.gc.calculateTextSize(this.propertyValue).x();
+		final int tmpUserSize = (int) (tmpSizeX - padding.x());
+		final int totalWidth = (int) this.text.calculateSize(this.propertyValue).x();
 		// all can not be set :
-		String tmpDisplay = this.propertyValue.substring(0, this.displayCursorPos);
-		this.displayCursorPositionPixel = this.gc.calculateTextSize(tmpDisplay).x();
+		final String tmpDisplay = this.propertyValue.substring(0, this.displayCursorPos);
+		this.displayCursorPositionPixel = (int) this.text.calculateSize(tmpDisplay).x();
 		// Check if the data inside the display can be contain in the entry box
 		if (totalWidth < tmpUserSize) {
 			// all can be display :
 			this.displayStartPosition = 0;
 		} else {
 			// check if the Cursor is visible at 10px nearest the border :
-			int tmp1 = this.displayCursorPositionPixel + this.displayStartPosition;
+			final int tmp1 = this.displayCursorPositionPixel + this.displayStartPosition;
 			Log.debug("cursorPos=" + this.displayCursorPositionPixel + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
 			if (tmp1 < 10) {
-				// set the cursor on le left
+				// set the cursor on the left
 				this.displayStartPosition = Math.min(-this.displayCursorPositionPixel + 10, 0);
 			} else if (tmp1 > tmpUserSize - 10) {
 				// set the cursor of the Right

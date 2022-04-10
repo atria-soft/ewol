@@ -11,6 +11,7 @@ import org.atriasoft.esvg.EsvgFont;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.internal.Log;
@@ -62,14 +63,23 @@ public class ResourceFontSvg extends Resource {
 		Log.info("    number of glyph       = " + this.font.getNumGlyphs());
 	}
 	
-	public synchronized boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage) {
+	public boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage) {
+		return drawGlyph(imageOut, fontSize, glyphPosition, property, posInImage, false);
+	}
+	
+	// the forceClimp is to generate a forcing of the rendering in small font, this permit to have a correct view of the font, otherwise it will be transparent.
+	public synchronized boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage, final boolean forceClimp) {
 		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		if (weight == null) {
 			return false;
 		}
 		for (int yyy = 0; yyy < weight.getHeight(); yyy++) {
 			for (int xxx = 0; xxx < weight.getWidth(); xxx++) {
-				final float valueColor = weight.get(xxx, weight.getHeight() - 1 - yyy);
+				float valueColor = weight.get(xxx, weight.getHeight() - 1 - yyy);
+				if (forceClimp) {
+					valueColor = FMath.avg(-0.5f, ((valueColor - 0.2f) * 7.0f), 0.5f) + 0.5f;
+					//valueColor = FMath.avg(-0.5f, (valueColor * 20.0f), 0.5f) + 0.5f;
+				}
 				// set only alpha :
 				switch (posInImage) {
 					default:

@@ -30,10 +30,10 @@ public class Container extends Widget {
 		// call sub classes
 		if (this.subWidget != null) {
 			this.subWidget.calculateMinMaxSize();
-			Vector3f min = this.subWidget.getCalculateMinSize();
+			final Vector3f min = this.subWidget.getCalculateMinSize();
 			this.minSize = Vector3f.max(this.minSize, min);
 		}
-		//Log.error("[" + getId() + "] Result min size : " +  this.minSize);
+		Log.warning("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class Container extends Widget {
 	
 	@Override
 	public EwolObject getSubObjectNamed(final String objectName) {
-		EwolObject tmpObject = super.getSubObjectNamed(objectName);
+		final EwolObject tmpObject = super.getSubObjectNamed(objectName);
 		if (tmpObject != null) {
 			return tmpObject;
 		}
@@ -130,8 +130,8 @@ public class Container extends Widget {
 			return;
 		}
 		Vector3f origin = this.origin.add(this.offset);
-		Vector3f minSize = this.subWidget.getCalculateMinSize();
-		Vector3b expand = this.subWidget.getPropertyExpand();
+		final Vector3f minSize = this.subWidget.getCalculateMinSize();
+		final Vector3b expand = this.subWidget.getPropertyExpand();
 		origin = origin.add(this.propertyGravity.gravityGenerateDelta(minSize.less(this.size)));
 		this.subWidget.setOrigin(origin);
 		this.subWidget.setSize(this.size);
@@ -235,7 +235,7 @@ public class Container extends Widget {
 		}
 		super.systemDraw(displayProp);
 		if (this.subWidget != null) {
-			DrawProperty prop = displayProp.withLimit(this.origin, this.size);
+			final DrawProperty prop = displayProp.withLimit(this.origin, this.size);
 			//Log.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
 			this.subWidget.systemDraw(prop);
 		} else {
