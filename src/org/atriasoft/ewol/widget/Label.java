@@ -53,21 +53,25 @@ public class Label extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
+		Log.verbose("calculateMinMaxSize !!! data = '{}'", this.value);
 		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
 		final Vector3f tmpMin = this.propertyMinSize.getPixel();
 		//EWOL_DEBUG("[" + getId() + "] {" + getObjectType() + "} tmpMax : " + tmpMax);
 		if (tmpMax.x() <= 999999) {
 			this.textCompose.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
 			//EWOL_DEBUG("[" + getId() + "] {" + getObjectType() + "}     force Alignment ");
+		} else {
+			this.textCompose.setTextAlignment(0, 0, AlignMode.LEFT);
 		}
 		Vector3f minSize = this.textCompose.calculateSizeDecorated(this.value);
+		this.textCompose.flush();
 		minSize = minSize.add(2, 2, 0);
 		//EWOL_DEBUG("[" + getId() + "] {" + getObjectType() + "} minSize : " + minSize);
 		
 		this.minSize = new Vector3f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), //
 				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()), //
 				10);
-		Log.verbose("[{}] Result min size : {} < {} < {}", getId(), tmpMin, this.minSize, tmpMax);
+		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
 	public int getPropertyFontSize() {
@@ -135,7 +139,8 @@ public class Label extends Widget {
 		tmpTextOrigin = tmpTextOrigin.add(paddingSize, paddingSize, 0);
 		localSize = localSize.less(2 * paddingSize, 2 * paddingSize, 0);
 		
-		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
+		//tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
+		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + this.minSize.y() / 2 - this.textCompose.getHeight());// - this.minSize.y() - paddingSize);
 		tmpTextOrigin = tmpTextOrigin.withX(tmpTextOrigin.x() - curentTextSize.x() * 0.5f);
 		
 		final Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
@@ -153,9 +158,9 @@ public class Label extends Widget {
 			this.textCompose.setDefaultColorBg(this.colorProperty.get(this.colorDefaultBgText));
 		}
 		this.textCompose.setPos(tmpTextOrigin);
-		Log.error("[{}] '{}' display at pos={}, size={}", getId(), this.value, tmpTextOrigin, this.size);
+		Log.verbose("[{}] '{}' display at pos={}, size={}", getId(), this.value, tmpTextOrigin, this.size);
 		this.textCompose.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + localSize.x(), AlignMode.LEFT);
-		this.textCompose.setClipping(drawClippingPos, drawClippingSize);
+		//this.textCompose.setClipping(drawClippingPos, drawClippingSize);
 		this.textCompose.printDecorated(this.value);
 		this.textCompose.flush();
 	}

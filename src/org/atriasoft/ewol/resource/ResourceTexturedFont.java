@@ -53,13 +53,13 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
 	public int[] lastRawHeigh = new int[4];
 	public List<GlyphProperty>[] listElement = new ArrayList[4];
-	
+	private boolean forceClimp = false;
 	private final FontMode[] modeWraping = new FontMode[4]; // !< This is a wrapping mode to prevent the fact that no
 	private int size = 10;
 	
 	protected ResourceTexturedFont(final Uri fontBaseUri) {
 		super("__TEXTURED_FONT__>>" + fontBaseUri.toString());
-		
+		this.forceClimp = "true".equals(fontBaseUri.getProperty("FORCE_CLIMP"));
 		Log.debug("Load font : '" + fontBaseUri + "'");
 		
 		this.font[0] = null;
@@ -222,8 +222,9 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			this.listElement[iii].add(tmpchar);
 		}
 		if (hasChange) {
+			Log.error("All gliph added ====> request a redraw of all the GUI");
 			flush();
-			Ewol.getContext().forceRedrawAll();
+			Ewol.getContext().forceRedrawAllAsync();
 			//IOgami.storePNG(new Uri("file", "fileFont.png"), this.data); // ==> for debug test only ...
 		}
 		return hasChange;

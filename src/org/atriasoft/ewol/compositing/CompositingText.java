@@ -26,7 +26,8 @@ public class CompositingText extends TextBase {
 	protected ResourceTexturedFont font; // !< Font resources
 	protected List<Vector3f> pointPositions = new ArrayList<>();
 	protected float size;
-	
+	// the forceClimp is to generate a forcing of the rendering in small font, this permit to have a correct view of the font, otherwise it will be transparent.
+	protected final boolean forceClimp = true;
 	protected List<Vector2f> texturePositions = new ArrayList<>();
 	
 	protected String currentFontName = "";
@@ -52,7 +53,7 @@ public class CompositingText extends TextBase {
 	
 	@Override
 	public Vector3f calculateSizeChar(final Character charcode) {
-		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
+		final float renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
 		// get a pointer on the glyph property :
 		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
 		final int fontHeigh = (int) getHeight();
@@ -191,7 +192,7 @@ public class CompositingText extends TextBase {
 			Log.warning("no font...");
 			return 10.0f;
 		}
-		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
+		final float renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
 		return this.font.getHeight(this.mode) * renderRatio;
 	}
 	
@@ -201,12 +202,13 @@ public class CompositingText extends TextBase {
 			Log.warning("no font...");
 			return 1.0f;
 		}
-		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
+		final float renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
 		return this.font.getFontSize() * renderRatio;
 	}
 	
 	@Override
 	public void printChar(final Character charcode) {
+		//Log.error("Request printChar : '{}' @pos={}", charcode, this.position);
 		// get a pointer on the glyph property :
 		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
 		if (myGlyphProperty == null) {
@@ -214,7 +216,7 @@ public class CompositingText extends TextBase {
 			return;
 		}
 		// sometime we do net require the correct size to the glyph renderer (due to the fact SVG render is not clear on lower size...)
-		final float renderRatio = (float) this.currentFontSize / (float) this.currentFontSizeRequired;
+		final float renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
 		
 		final int fontSize = (int) (getSize() * renderRatio);
 		final int fontHeigh = (int) (getHeight() * renderRatio);
@@ -351,7 +353,6 @@ public class CompositingText extends TextBase {
 		// stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		// Register the previous character
 		this.previousCharcode = charcode;
-		this.vbo.flush();
 	}
 	
 	@Override
@@ -373,7 +374,9 @@ public class CompositingText extends TextBase {
 		
 		// if size in under 25, we request upper size:
 		int sizeRequest = 25;
-		if (fontSize > 25) {
+		if (this.forceClimp) {
+			sizeRequest = fontSize;
+		} else if (fontSize > 25) {
 			sizeRequest = fontSize;
 		}
 		if (inputFontName.equals(this.currentFontName) && this.currentFontSizeRequired == sizeRequest) {
@@ -386,6 +389,9 @@ public class CompositingText extends TextBase {
 		fontUri.setProperty("size", Integer.toString(sizeRequest));
 		Log.verbose("plop : " + fontName + " size=" + sizeRequest + " result :" + fontName);
 		// link to new one
+		if (this.forceClimp) {
+			fontUri.setProperty("FORCE_CLIMP", "true");
+		}
 		this.font = ResourceTexturedFont.create(fontUri);
 		if (this.font == null) {
 			Log.error("Can not get font resource");

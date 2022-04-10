@@ -22,7 +22,6 @@ import org.atriasoft.exml.Exml;
 import org.atriasoft.exml.exception.ExmlAttributeDoesNotExist;
 import org.atriasoft.exml.exception.ExmlBuilderException;
 import org.atriasoft.exml.exception.ExmlException;
-import org.atriasoft.exml.exception.ExmlNodeDoesNotExist;
 import org.atriasoft.exml.exception.ExmlParserErrorMulti;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
@@ -50,24 +49,24 @@ public abstract class TextBase extends Compositing {
 	public TextDecoration htmlDecoTmp = new TextDecoration(); // !< current decoration
 	protected boolean kerning = true; // !< Kerning enable or disable on the next elements displayed
 	protected FontMode mode = FontMode.REGULAR; // !< font display property : Regular/Bold/Italic/BoldItalic
-	protected int nbCharDisplayed; // !< prevent some error in calculation size.
-	protected boolean needDisplay; // !< This just need the display and not the size rendering.
+	protected int nbCharDisplayed = 0; // !< prevent some error in calculation size.
+	protected boolean needDisplay = true; // !< This just need the display and not the size rendering.
 	protected int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
 	protected int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
 	protected int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
-	protected ResourceProgram oGLprogram; // !< pointer on the opengl display program
+	protected ResourceProgram oGLprogram = null; // !< pointer on the opengl display program
 	protected int oGLtexID = -1; // !< openGL id on the element (texture ID)
 	protected int oGLtextHeight = -1; // !< openGL Id on the texture height
 	protected int oGLtextWidth = -1; // !< openGL Id on the texture width
 	protected Vector3f position = Vector3f.ZERO; // !< The current position to draw
-	protected Character previousCharcode; // !< we remember the previous charcode to perform the kerning. @ref Kerning
+	protected Character previousCharcode = '\0'; // !< we remember the previous charcode to perform the kerning. @ref Kerning
 	protected int selectionStartPos = -100; // !< start position of the Selection (if == this.cursorPos ==> no
 	protected Vector3f sizeDisplayStart = Vector3f.ZERO; // !< The start windows of the display.
 	protected Vector3f sizeDisplayStop = Vector3f.ZERO; // !< The end windows of the display.
 	protected float startTextPos = 0; // !< start position of the Alignment (when \n the text return at this
 	// position)
 	protected float stopTextPos = 0; // !< end of the alignment (when a string is too height it cut at the word
-	protected ResourceVirtualArrayObject vbo;
+	protected ResourceVirtualArrayObject vbo = null;
 	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
 	
 	/**
@@ -130,10 +129,10 @@ public abstract class TextBase extends Compositing {
 			return Vector3f.ZERO;
 		}
 		
-		String tmpData = "<html><body>\n";
-		tmpData += text;
-		tmpData += "\n</body></html>\n";
-		return calculateSizeHTML(tmpData);
+		final StringBuilder tmpData = new StringBuilder("<html><body>\n");
+		tmpData.append(text);
+		tmpData.append("\n</body></html>\n");
+		return calculateSizeHTML(tmpData.toString());
 	}
 	
 	/**
@@ -151,8 +150,9 @@ public abstract class TextBase extends Compositing {
 		setPos(Vector3f.ZERO);
 		// same as print without the end display ...
 		printHTML(text);
-		// Log.debug(" 1 Start pos=" + this.sizeDisplayStart);
-		// Log.debug(" 1 Stop pos=" + this.sizeDisplayStop);
+		//Log.error(" ]]]] position={}", this.position);
+		//Log.error(" ]]]] sizeDisplayStart={}", this.sizeDisplayStart);
+		//Log.error(" ]]]] sizeDisplayStop={}", this.sizeDisplayStop);
 		
 		// get the last elements
 		this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
@@ -340,6 +340,7 @@ public abstract class TextBase extends Compositing {
 	 * @param data The cuurent data to add.
 	 */
 	public void htmlAddData(final String data) {
+		//Log.error("Add data '{}' @pos=", data, this.position);
 		if (this.htmlCurrentLine.length() > 0 && this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != (char) Character.SPACE_SEPARATOR) {
 			this.htmlCurrentLine += (char) Character.SPACE_SEPARATOR;
 			if (this.htmlDecoration.size() > 0) {
@@ -498,6 +499,8 @@ public abstract class TextBase extends Compositing {
 			} else {
 				Log.error("node not suported type: " + elem.getType() + " val='" + elem.getValue() + "'");
 			}
+			
+			//Log.error("Add data elems... @pos=", this.position);
 		}
 	}
 	
@@ -521,8 +524,7 @@ public abstract class TextBase extends Compositing {
 		Color tmpFg = this.color;
 		Color tmpBg = this.colorBg;
 		if (this.alignment == AlignMode.DISABLE) {
-			// Log.debug(" 1 print in not alligned mode : start=" + this.sizeDisplayStart +
-			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
+			// Log.debug(" 1 print in not aligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 			// display the cursor if needed (if it is at the start position...)
 			if (this.needDisplay) {
 				if (0 == this.cursorPos) {
@@ -533,7 +535,7 @@ public abstract class TextBase extends Compositing {
 			}
 			// note this is faster when nothing is requested ...
 			for (int iii = 0; iii < text.length(); iii++) {
-				// check if ve have decoration
+				// check if we have decoration
 				if (iii < decoration.size()) {
 					tmpFg = decoration.get(iii).colorFG();
 					tmpBg = decoration.get(iii).colorBG();
@@ -569,10 +571,10 @@ public abstract class TextBase extends Compositing {
 					}
 				}
 			}
-			// Log.debug(" 2 print in not alligned mode : start=" + this.sizeDisplayStart +
+			// Log.debug(" 2 print in not aligned mode : start=" + this.sizeDisplayStart +
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		} else {
-			// Log.debug(" 3 print in not alligned mode : start=" + this.sizeDisplayStart +
+			// Log.debug(" 3 print in not aligned mode : start=" + this.sizeDisplayStart +
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 			// special start case at the right of the endpoint :
 			if (this.stopTextPos < this.position.x()) {
@@ -580,9 +582,9 @@ public abstract class TextBase extends Compositing {
 			}
 			final float basicSpaceWidth = calculateSize(' ').x();
 			int currentId = 0;
-			final Dynamic<Integer> stop = new Dynamic<Integer>(0);
-			final Dynamic<Integer> space = new Dynamic<Integer>(0);
-			final Dynamic<Integer> freeSpace = new Dynamic<Integer>(0);
+			final Dynamic<Integer> stop = new Dynamic<>(0);
+			final Dynamic<Integer> space = new Dynamic<>(0);
+			final Dynamic<Integer> freeSpace = new Dynamic<>(0);
 			while (currentId < (long) text.length()) {
 				final boolean needNoJustify = extrapolateLastId(text, currentId, stop, space, freeSpace);
 				float interpolation = basicSpaceWidth;
@@ -743,11 +745,11 @@ public abstract class TextBase extends Compositing {
 	 * @TODO : implementation not done ....
 	 */
 	public void printDecorated(final String text) {
-		String tmpData = "<html>\n<body>\n";
-		tmpData += text;
-		tmpData += "\n</body>\n</html>\n";
+		final StringBuilder tmpData = new StringBuilder("<html>\n<body>\n");
+		tmpData.append(text);
+		tmpData.append("\n</body>\n</html>\n");
 		// Log.debug("plop : " + tmpData);
-		printHTML(tmpData);
+		printHTML(tmpData.toString());
 	}
 	
 	/**
@@ -803,10 +805,7 @@ public abstract class TextBase extends Compositing {
 		} catch (final ExmlBuilderException e) {
 			Log.error("Can not generate XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
-		} catch (final ExmlNodeDoesNotExist e) {
-			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
-			e.printStackTrace();
-		} catch (ExmlException e) {
+		} catch (final ExmlException e) {
 			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		}

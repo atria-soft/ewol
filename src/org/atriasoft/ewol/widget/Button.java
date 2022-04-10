@@ -139,6 +139,7 @@ public class Button extends ContainerToggle {
 			padding = this.shape.getPadding();
 		}
 		calculateMinMaxSizePadded(padding);
+		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
@@ -246,6 +247,7 @@ public class Button extends ContainerToggle {
 	
 	void onChangePropertyToggleMode() {
 		this.propertyValue = !this.propertyValue;
+		this.signalValue.emit(this.propertyValue);
 		if (!this.propertyToggleMode) {
 			this.idWidgetDisplayed = 0;
 		} else {
@@ -443,6 +445,7 @@ public class Button extends ContainerToggle {
 			return;
 		}
 		this.propertyValue = propertyValue;
+		this.signalValue.emit(this.propertyValue);
 		onChangePropertyValue();
 	}
 	

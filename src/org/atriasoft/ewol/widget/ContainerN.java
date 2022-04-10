@@ -42,21 +42,21 @@ public class ContainerN extends Widget {
 		this.minSize = Vector3f.ZERO;
 		this.maxSize = Vector3f.MAX_VALUE;
 		//Log.error("[" + getId() + "] {" + getObjectType() + "} set min size : " +  this.minSize);
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				it.calculateMinMaxSize();
-				Vector3b subExpendProp = it.canExpand();
+				final Vector3b subExpendProp = it.canExpand();
 				if (subExpendProp.x()) {
 					this.subExpend = this.subExpend.withX(true);
 				}
 				if (subExpendProp.y()) {
 					this.subExpend = this.subExpend.withX(true);
 				}
-				Vector3f tmpSize = it.getCalculateMinSize();
+				final Vector3f tmpSize = it.getCalculateMinSize();
 				this.minSize = Vector3f.max(tmpSize, this.minSize);
 			}
 		}
-		//Log.error("[" + getId() + "] {" + getObjectType() + "} Result min size : " +  this.minSize);
+		Log.warning("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
 	// herited function
@@ -81,7 +81,7 @@ public class ContainerN extends Widget {
 	public void drawWidgetTree(int level) {
 		super.drawWidgetTree(level);
 		level++;
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				it.drawWidgetTree(level);
 			}
@@ -102,7 +102,7 @@ public class ContainerN extends Widget {
 		if (tmpObject != null) {
 			return tmpObject;
 		}
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				tmpObject = it.getSubObjectNamed(objectName);
 				if (tmpObject != null) {
@@ -126,12 +126,12 @@ public class ContainerN extends Widget {
 			return null;
 		}
 		// for all element in the sizer ...
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it != null) {
-				Vector3f tmpSize = it.getSize();
-				Vector3f tmpOrigin = it.getOrigin();
+				final Vector3f tmpSize = it.getSize();
+				final Vector3f tmpOrigin = it.getOrigin();
 				if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x()) && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
-					Widget tmpWidget = it.getWidgetAtPos(pos);
+					final Widget tmpWidget = it.getWidgetAtPos(pos);
 					if (tmpWidget != null) {
 						return tmpWidget;
 					}
@@ -145,7 +145,7 @@ public class ContainerN extends Widget {
 	
 	@Override
 	public void onChangeSize() {
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -157,7 +157,7 @@ public class ContainerN extends Widget {
 	
 	@Override
 	public void onRegenerateDisplay() {
-		for (Widget it : this.subWidget) {
+		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				it.systemRegenerateDisplay();
 			}
@@ -168,7 +168,7 @@ public class ContainerN extends Widget {
 	public void requestDestroyFromChild(final EwolObject child) {
 		ListIterator<Widget> it = this.subWidget.listIterator();
 		while (it.hasNext()) {
-			Widget elem = it.next();
+			final Widget elem = it.next();
 			if (elem != child) {
 				continue;
 			}
@@ -201,11 +201,11 @@ public class ContainerN extends Widget {
 		requestUpdateSize();
 	}
 	
-	public void setSubWidgets(List<Widget> listData) {
+	public void setSubWidgets(final List<Widget> listData) {
 		// Clean all previous widget
 		this.subWidgetRemoveAll();
 		// add separately all widgets
-		for (Widget elem : listData) {
+		for (final Widget elem : listData) {
 			if (elem == null) {
 				continue;
 			}
@@ -276,11 +276,11 @@ public class ContainerN extends Widget {
 		if (newWidget == null) {
 			return;
 		}
-		int errorControl = this.subWidget.size();
+		final int errorControl = this.subWidget.size();
 		
-		ListIterator<Widget> it = this.subWidget.listIterator();
+		final ListIterator<Widget> it = this.subWidget.listIterator();
 		while (it.hasNext()) {
-			Widget elem = it.next();
+			final Widget elem = it.next();
 			if (newWidget == elem) {
 				elem.removeParent();
 				it.remove();
@@ -317,9 +317,9 @@ public class ContainerN extends Widget {
 	 */
 	public void subWidgetReplace(final Widget oldWidget, final Widget newWidget) {
 		boolean haveChange = false;
-		ListIterator<Widget> it = this.subWidget.listIterator();
+		final ListIterator<Widget> it = this.subWidget.listIterator();
 		while (it.hasNext()) {
-			Widget elem = it.next();
+			final Widget elem = it.next();
 			if (elem != oldWidget) {
 				continue;
 			}
@@ -346,9 +346,9 @@ public class ContainerN extends Widget {
 		if (newWidget == null) {
 			return;
 		}
-		ListIterator<Widget> it = this.subWidget.listIterator();
+		final ListIterator<Widget> it = this.subWidget.listIterator();
 		while (it.hasNext()) {
-			Widget elem = it.next();
+			final Widget elem = it.next();
 			if (newWidget == elem) {
 				elem.removeParent();
 				it.remove();
@@ -369,9 +369,9 @@ public class ContainerN extends Widget {
 		// subwidget draw
 		DrawProperty prop = displayProp;
 		prop = prop.withLimit(this.origin, this.size);
-		ListIterator<Widget> it = this.subWidget.listIterator(this.subWidget.size());
+		final ListIterator<Widget> it = this.subWidget.listIterator(this.subWidget.size());
 		while (it.hasPrevious()) {
-			Widget elem = it.previous();
+			final Widget elem = it.previous();
 			if (elem != null) {
 				//Log.info("       ***** : [" + (*it).propertyName + "] t=" + (*it).getObjectType() + " o=" + (*it).this.origin + "  s=" + (*it).this.size);
 				elem.systemDraw(prop);
