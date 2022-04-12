@@ -399,6 +399,10 @@ public class Button extends ContainerToggle {
 			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 			delta = delta.withY(0.0f);
 		}
+		if (this.propertyFill.z()) {
+			tmpSizeShaper = tmpSizeShaper.withZ(this.size.y());
+			delta = delta.withZ(0.0f);
+		}
 		
 		Vector3f tmpOriginShaper = delta;
 		Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());

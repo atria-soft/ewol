@@ -426,6 +426,10 @@ public class Entry extends Widget {
 				}
 			}
 		}
+		if (relPos.x() < this.overPositionStart.x() || relPos.y() < this.overPositionStart.y() || relPos.x() > this.overPositionStop.x() || relPos.y() > this.overPositionStop.y()) {
+			Log.warning("Reject {}", relPos);
+			return false;
+		}
 		if (event.inputId() == 1) {
 			if (KeyStatus.pressSingle == event.status()) {
 				keepFocus();
@@ -533,19 +537,23 @@ public class Entry extends Widget {
 		final Padding padding = this.shape.getPadding();
 		
 		Vector3f tmpSizeShaper = this.minSize;
+		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 		if (this.propertyFill.x()) {
 			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
+			delta = delta.withX(0.0f);
 		}
 		if (this.propertyFill.y()) {
 			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
+			delta = delta.withY(0.0f);
 		}
 		if (this.propertyFill.z()) {
 			tmpSizeShaper = tmpSizeShaper.withZ(this.size.z());
+			delta = delta.withZ(0.0f);
 		}
-		
-		Vector3f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
+		Vector3f tmpOriginShaper = delta;
+		//Vector3f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
 		Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
-		Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
+		Vector3f tmpOriginText = tmpOriginShaper.add(padding.bottom(), padding.left(), padding.back()); //this.size.less(tmpSizeText).multiply(0.5f);
 		//Vector3f tmpOriginText = new Vector3f(0, this.text.getSize(), 0);
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 		
@@ -727,8 +735,9 @@ public class Entry extends Widget {
 	protected void updateCursorPosition(final Vector3f pos, final boolean selection/*=false*/) {
 		final Padding padding = this.shape.getPadding();
 		
-		Vector3f relPos = relativePosition(pos);
-		relPos = relPos.withX(relPos.x() - this.displayStartPosition - padding.left());
+		final Vector3f relPos = relativePosition(pos).less(this.overPositionStart);
+		// reject when outside ...
+		
 		// try to find the new cursor position :
 		if (this.displayStartPosition > this.propertyValue.length()) {
 			this.displayStartPosition = this.propertyValue.length();

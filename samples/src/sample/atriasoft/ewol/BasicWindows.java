@@ -52,25 +52,25 @@ public class BasicWindows extends Windows {
 	public static void eventButtonExpandX(final BasicWindows self, final Boolean value) {
 		final Vector3b state = self.testWidget.getPropertyExpand();
 		self.testWidget.setPropertyExpand(state.withX(value));
-		//self.buttonExpandX.setPropertyValue(state.x() ? "expand X" : "un-expand X");
+		Log.info("set expand X: {}", state.x() ? "un-expand X" : "expand X");
 	}
 	
 	public static void eventButtonExpandY(final BasicWindows self, final Boolean value) {
 		final Vector3b state = self.testWidget.getPropertyExpand();
 		self.testWidget.setPropertyExpand(state.withY(value));
-		//self.buttonExpandY.setPropertyValue(state.y() ? "expand Y" : "un-expand Y");
+		Log.info("set expand Y: {}", state.y() ? "un-expand Y" : "expand Y");
 	}
 	
 	public static void eventButtonFillX(final BasicWindows self, final Boolean value) {
 		final Vector3b state = self.testWidget.getPropertyFill();
 		self.testWidget.setPropertyFill(state.withX(value));
-		//self.buttonFillX.setPropertyValue(state.x() ? "fill X" : "un-fill X");
+		Log.info("set fill X: {}", state.x() ? "un-fill X" : "fill X");
 	}
 	
 	public static void eventButtonFillY(final BasicWindows self, final Boolean value) {
 		final Vector3b state = self.testWidget.getPropertyFill();
 		self.testWidget.setPropertyFill(state.withY(value));
-		//self.buttonFillY.setPropertyValue(state.y() ? "fill Y" : "un-fill Y");
+		Log.info("set fill Y: {}", state.y() ? "un-fill Y" : "fill Y");
 	}
 	
 	Widget testWidget;

@@ -16,8 +16,8 @@
 	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
 	# Object to render (with modification)
-	"object-file":"THEME:shape/CheckBox.emf?lib=ewol",
-	"object-file-2":"THEME:shape/CheckBox.emf?lib=ewol&filter=^CheckBox.*$",
+	"object-file":"THEME:shape/Tick.emf?lib=ewol",
+	"object-file-2":"THEME:shape/Tick.emf?lib=ewol&filter=^CheckBox.*$",
 	
 	"palette":"THEME:shape/palette_gui.json?lib=ewol",
 	
