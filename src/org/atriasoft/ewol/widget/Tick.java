@@ -36,15 +36,15 @@ public SignalEmpty signalDown;
 public SignalEmpty signalUp;
 public SignalEmpty signalEnter;
 public Signal<Boolean> signalValue;
-	public boolean propertyValue; //!< Current state of the checkbox.
+	public boolean propertyValue; //!< Current state of the Tick.
 public 	Uri> propertyShape; //!< shape of the widget
 */
-public class CheckBox extends Widget {
+public class Tick extends Widget {
 	/**
 	 * Periodic call to update grapgic display
 	 * @param _event Time generic event
 	 */
-	protected static void periodicCall(final CheckBox self, final EventTime event) {
+	protected static void periodicCall(final Tick self, final EventTime event) {
 		Log.verbose("Periodic call on Entry(" + event + ")");
 		if (!self.shape.periodicCall(event)) {
 			//Log.error("end periodic call");
@@ -60,17 +60,17 @@ public class CheckBox extends Widget {
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
 	
-	private Uri propertyConfig = new Uri("THEME", "shape/CheckBox.json", "ewol");
+	private Uri propertyConfig = new Uri("THEME", "shape/Tick.json", "ewol");
 	
 	private Boolean propertyValue = false; //!< string that must be displayed
 	private GuiShape shape;
-	@EwolSignal(name = "down", description = "CheckBox is Down")
+	@EwolSignal(name = "down", description = "Tick is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
-	@EwolSignal(name = "up", description = "CheckBox is Up")
+	@EwolSignal(name = "up", description = "Tick is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
-	@EwolSignal(name = "click", description = "CheckBox is Clicked")
+	@EwolSignal(name = "click", description = "Tick is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
-	@EwolSignal(name = "value", description = "CheckBox value change")
+	@EwolSignal(name = "value", description = "Tick value change")
 	public Signal<Boolean> signalValue;
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
@@ -81,7 +81,7 @@ public class CheckBox extends Widget {
 	/**
 	 * Constuctor
 	 */
-	public CheckBox() {
+	public Tick() {
 		this.propertyCanFocus = true;
 		onChangePropertyShaper();
 		markToRedraw();
@@ -99,7 +99,7 @@ public class CheckBox extends Widget {
 		if (this.shape != null) {
 			padding = this.shape.getPadding();
 		}
-		Vector3i minHeight = Vector3i.VALUE_16;
+		final Vector3i minHeight = Vector3i.VALUE_16;
 		
 		Vector3f minimumSizeBase = new Vector3f(minHeight.x(), minHeight.y(), minHeight.z());
 		// add padding :
@@ -114,13 +114,13 @@ public class CheckBox extends Widget {
 		if (this.shape.changeStatusIn(newStatusId)) {
 			if (!this.periodicConnectionHanble.isConnected()) {
 				//Log.error("REQUEST: connection on periodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, CheckBox::periodicCall);
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, Tick::periodicCall);
 			}
 			markToRedraw();
 		}
 	}
 	
-	private boolean checkIfOver(Vector3f relPos) {
+	private boolean checkIfOver(final Vector3f relPos) {
 		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
 	
@@ -135,7 +135,7 @@ public class CheckBox extends Widget {
 	@XmlManaged
 	@XmlAttribute
 	@XmlName(value = "value")
-	@EwolDescription(value = "State of the checkbox")
+	@EwolDescription(value = "State of the Tick")
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}
@@ -166,10 +166,10 @@ public class CheckBox extends Widget {
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
-		Vector3f relPos = relativePosition(positionAbsolute);
+		final Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
+		final Vector3f relPos = relativePosition(positionAbsolute);
 		Log.warning("Event on Input ... " + event + " relPos = " + relPos);
-		boolean over = checkIfOver(relPos);
+		final boolean over = checkIfOver(relPos);
 		//filter if outside the element...
 		if (event.status() == KeyStatus.leave) {
 			changeStatusIn(GuiShapeMode.NORMAL);
@@ -238,7 +238,7 @@ public class CheckBox extends Widget {
 			//this.text.setCursorColor(this.shape.getColor(this.colorIdCursor));
 			//this.text.setSelectionColor(this.shape.getColor(this.colorIdSelection));
 		}
-		Padding padding = this.shape.getPadding();
+		final Padding padding = this.shape.getPadding();
 		
 		Vector3f tmpSizeShaper = this.minSize;
 		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));

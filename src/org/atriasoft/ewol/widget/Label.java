@@ -10,6 +10,7 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etranslate.ETranslate;
+import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.AlignMode;
@@ -110,7 +111,8 @@ public class Label extends Widget {
 			return;
 		}
 		this.textCompose.clear();
-		final int paddingSize = 2;
+		//final int paddingSize = 2;
+		final Padding padding = new Padding(2, 2, 2, 2);
 		
 		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
@@ -119,34 +121,45 @@ public class Label extends Widget {
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
-			this.textCompose.setTextAlignment(0, tmpMax.x() - 2.0f * paddingSize, AlignMode.LEFT);
+			this.textCompose.setTextAlignment(0, tmpMax.x() - padding.x(), AlignMode.LEFT);
 		}
 		final Vector3f curentTextSize = this.textCompose.calculateSizeDecorated(this.value);
 		
-		Vector3f localSize = this.minSize.clipInteger();
+		//Vector3f localSize = this.minSize.clipInteger();
+		Vector3f tmpSizeShaper = this.minSize;
 		
 		// no change for the text origin :
 		Vector3f tmpTextOrigin = new Vector3f((this.size.x() - minSize.x()) * 0.5f, (this.size.y() - minSize.y()) * 0.5f, 0);
+		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 		
 		if (this.propertyFill.x()) {
-			localSize = localSize.withX(this.size.x());
+			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
+			delta = delta.withX(0.0f);
 			tmpTextOrigin = tmpTextOrigin.withX(0);
 		}
 		if (this.propertyFill.y()) {
-			localSize = localSize.withY(this.size.y());
-			tmpTextOrigin = tmpTextOrigin.withY(this.size.y() - 2 * paddingSize - curentTextSize.y());
+			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
+			delta = delta.withY(0.0f);
+			//tmpTextOrigin = tmpTextOrigin.withY(this.size.y() - 2 * paddingSize - curentTextSize.y());
 		}
-		tmpTextOrigin = tmpTextOrigin.add(paddingSize, paddingSize, 0);
-		localSize = localSize.less(2 * paddingSize, 2 * paddingSize, 0);
+		if (this.propertyFill.z()) {
+			tmpSizeShaper = tmpSizeShaper.withZ(this.size.y());
+			delta = delta.withZ(0.0f);
+		}
+		final Vector3f tmpOriginShaper = delta;
+		final Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
+		
+		tmpTextOrigin = tmpOriginShaper;//tmpTextOrigin.add(paddingSize, paddingSize, 0);
+		//localSize = localSize.less(2 * paddingSize, 2 * paddingSize, 0);
 		
 		//tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
-		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + this.minSize.y() / 2 - this.textCompose.getHeight());// - this.minSize.y() - paddingSize);
-		tmpTextOrigin = tmpTextOrigin.withX(tmpTextOrigin.x() - curentTextSize.x() * 0.5f);
+		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + this.minSize.y() - this.textCompose.getHeight() - padding.top());// - this.minSize.y() - paddingSize);
+		tmpTextOrigin = tmpTextOrigin.withX(tmpTextOrigin.x() + padding.left());
 		
 		final Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
 		
-		final Vector3f drawClippingPos = new Vector3f(paddingSize, paddingSize, -0.5f);
-		final Vector3f drawClippingSize = new Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
+		final Vector3f drawClippingPos = tmpOriginShaper.less(new Vector3f(padding.left(), padding.bottom(), padding.back()));
+		final Vector3f drawClippingSize = tmpOriginShaper.add(tmpSizeShaper); /// new  Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
 		
 		// clean the element
 		this.textCompose.reset();
@@ -159,8 +172,8 @@ public class Label extends Widget {
 		}
 		this.textCompose.setPos(tmpTextOrigin);
 		Log.verbose("[{}] '{}' display at pos={}, size={}", getId(), this.value, tmpTextOrigin, this.size);
-		this.textCompose.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + localSize.x(), AlignMode.LEFT);
-		//this.textCompose.setClipping(drawClippingPos, drawClippingSize);
+		this.textCompose.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + tmpSizeText.x(), AlignMode.LEFT);
+		this.textCompose.setClipping(drawClippingPos, drawClippingSize);
 		this.textCompose.printDecorated(this.value);
 		this.textCompose.flush();
 	}
