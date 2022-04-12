@@ -71,7 +71,7 @@ public class Tick extends Widget {
 	@EwolSignal(name = "click", description = "Tick is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
 	@EwolSignal(name = "value", description = "Tick value change")
-	public Signal<Boolean> signalValue;
+	public Signal<Boolean> signalValue = new Signal<>();
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
 	Vector3f overPositionStop = Vector3f.ZERO;
@@ -305,6 +305,7 @@ public class Tick extends Widget {
 			return;
 		}
 		this.propertyValue = propertyValue;
+		this.signalValue.emit(this.propertyValue);
 		onChangePropertyValue();
 	}
 	

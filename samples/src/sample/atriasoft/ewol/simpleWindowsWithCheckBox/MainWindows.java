@@ -13,7 +13,7 @@ public class MainWindows extends BasicWindows {
 		//! [ewol_sample_HW_windows_title]
 		setPropertyTitle("Simple CheckBox");
 		
-		this.testWidget = new CheckBox();
+		this.testWidget = new CheckBox("<b>Hello, how Are</b> You?<br/>second-life?");
 		//this.testWidget.setPropertySource(new Uri("DATA", "mireA.png"));
 		this.testWidget.setPropertyExpand(Vector3b.TRUE);
 		this.testWidget.setPropertyFill(Vector3b.TRUE);
