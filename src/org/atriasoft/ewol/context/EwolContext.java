@@ -78,7 +78,7 @@ public class EwolContext extends GaleApplication {
 	}
 	
 	public void forceRedrawAllAsync() {
-		Log.warning("force redraw ALL (ASYNC):");
+		Log.verbose("force redraw ALL (ASYNC):");
 		GaleContext.getContext().requestUpdateSize();
 	}
 	

@@ -7,6 +7,7 @@ import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.exml.annotation.XmlAttribute;
+import org.atriasoft.exml.annotation.XmlDefaultAttibute;
 import org.atriasoft.exml.annotation.XmlDefaultManaged;
 import org.atriasoft.exml.annotation.XmlDefaultOptional;
 import org.atriasoft.exml.annotation.XmlIgnoreUnknow;
@@ -25,6 +26,7 @@ import org.atriasoft.exml.annotation.XmlName;
  */
 @XmlDefaultManaged(value = false)
 @XmlDefaultOptional
+@XmlDefaultAttibute
 @XmlIgnoreUnknow
 public class EwolObject {
 	private static Integer valUID = 0; //!< Static used for the unique ID definition

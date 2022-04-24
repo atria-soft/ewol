@@ -75,15 +75,15 @@ void ewol::widget::Spin::updateGui() {
 	ewol::widget::SpinBase::updateGui();
 	
 	if (    this.widgetEntry != null
-	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionEntry.isConnected() == false) {
+	     && this.connectionEntry.isConnected() == false) {
 		
 	}
 	if (    this.widgetButtonUp != null
-	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionButtonUp.isConnected() == false) {
+	     && this.connectionButtonUp.isConnected() == false) {
 		this.connectionButtonUp = this.widgetButtonUp.signalPressed.connect(this, ewol::widget::Spin::onCallbackUp);
 	}
 	if (    this.widgetButtonDown != null
-	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.connectionButtonDown.isConnected() == false) {
+	     && this.connectionButtonDown.isConnected() == false) {
 		this.connectionButtonDown = this.widgetButtonDown.signalPressed.connect(this, ewol::widget::Spin::onCallbackDown);
 	}
 	Log.warning("updateGui [STOP]");

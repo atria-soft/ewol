@@ -267,6 +267,12 @@ public class ContainerToggle extends Widget {
 		requestUpdateSize();
 	}
 	
+	public void setSubWidgets(final Widget[] newWidget) {
+		for (int iii = 0; iii < Math.min(newWidget.length, 2); iii++) {
+			setSubWidget(newWidget[iii], iii);
+		}
+	}
+	
 	public void subWidgetRemove(final int idWidget) {
 		if (this.subWidget[idWidget] != null) {
 			Log.verbose("Remove widget : " + idWidget);

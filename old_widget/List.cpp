@@ -287,13 +287,13 @@ boolean ewol::widget::List::onEventInput( ewol::event::Input _event) {
 		int previous = offsetY;
 		offsetY += this.listSizeY[iii];
 		if (    relativePos.y() < offsetY
-		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM relativePos.y() >= previous ) {
+		     && relativePos.y() >= previous ) {
 			pos.setY(iii);
 			offsetY = previous;
 			break;
 		}
 		if (    iii == this.listSizeY.size()-2
-		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM relativePos.y() >= offsetY ) {
+		     && relativePos.y() >= offsetY ) {
 			pos.setY(iii+1);
 			break;
 		}
@@ -303,13 +303,13 @@ boolean ewol::widget::List::onEventInput( ewol::event::Input _event) {
 		int previous = offsetX;
 		offsetX += this.listSizeX[iii];
 		if (    relativePos.x() < offsetX
-		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM relativePos.x() >= previous ) {
+		     && relativePos.x() >= previous ) {
 			pos.setX(iii);
 			offsetX = previous;
 			break;
 		}
 		if (    iii == this.listSizeX.size()-2
-		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM relativePos.x() >= offsetX ) {
+		     && relativePos.x() >= offsetX ) {
 			pos.setX(iii+1);
 			break;
 		}

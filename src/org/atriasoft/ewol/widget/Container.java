@@ -8,8 +8,12 @@ package org.atriasoft.ewol.widget;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
+import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.exml.annotation.XmlAttribute;
+import org.atriasoft.exml.annotation.XmlFactory;
+import org.atriasoft.exml.annotation.XmlManaged;
 
 /*
  * @ingroup ewolWidgetGroup
@@ -61,6 +65,10 @@ public class Container extends Widget {
 	 * get the main node widget
 	 * @return the requested pointer on the node
 	 */
+	@XmlManaged
+	@XmlAttribute(false)
+	@XmlFactory(WidgetXmlFactory.class)
+	@EwolDescription(value = "Sub-node with multiple names...")
 	public Widget getSubWidget() {
 		return this.subWidget;
 	}

@@ -80,14 +80,12 @@ public class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	protected boolean needRegenerateDisplay = true; //!< the display might be done the next regeneration
 	protected Vector3f offset = Vector3f.ZERO; //!< Offset of the display in the view-port
-	
 	protected Vector3f origin = Vector3f.ZERO; //!< internal ... I do not really known how if can use it ...
-	
 	protected boolean propertyCanFocus = false; //!< the focus can be done on this widget
 	protected Vector3b propertyExpand = Vector3b.FALSE; //!< the widget will expand if possible
 	protected Vector3b propertyExpandIfFree = Vector3b.FALSE; //!< the widget will expand if possible
-	protected Vector3b propertyFill = Vector3b.TRUE; //!< the widget will fill all the space provided by the parent.
-	protected Gravity propertyGravity = Gravity.BOTTOM_LEFT; //!< Gravity of the widget
+	protected Vector3b propertyFill = Vector3b.FALSE; //!< the widget will fill all the space provided by the parent.
+	protected Gravity propertyGravity = Gravity.CENTER; //!< Gravity of the widget
 	protected boolean propertyHide = false; //!< hide a widget on the display
 	protected Dimension3f propertyMaxSize = new Dimension3f(Vector3f.MAX_VALUE, Distance.PIXEL); //!< user define the maximum size of the widget
 	protected Dimension3f propertyMinSize = new Dimension3f(Vector3f.ZERO, Distance.PIXEL); //!< user define the minimum size of the widget
@@ -187,7 +185,7 @@ public class Widget extends EwolObject {
 	}
 	
 	public void drawWidgetTree(final int level) {
-		StringBuilder space = new StringBuilder();
+		final StringBuilder space = new StringBuilder();
 		for (int iii = 0; iii < level; ++iii) {
 			space.append("    ");
 		}
@@ -941,7 +939,7 @@ public class Widget extends EwolObject {
 		// Scale if needed (feature not validate)
 		final Matrix4f tmpScale = Matrix4f.createMatrixScale(this.zoom, this.zoom, 1.0f);
 		// create orthogonal projection for GUI ==> simple to manage staking
-		Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2, -tmpSize.size().y() / 2, tmpSize.size().y() / 2, -500, 500);
+		final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2, -tmpSize.size().y() / 2, tmpSize.size().y() / 2, -500, 500);
 		//Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
 		
 		OpenGL.push();
@@ -965,7 +963,7 @@ public class Widget extends EwolObject {
 	 * @return false if the event has not been used
 	 */
 	public boolean systemEventEntry(final EntrySystem event) {
-		if (this.parent != null && this.parent.get() != null && this.parent.get() instanceof Widget up) {
+		if (this.parent != null && this.parent.get() != null && this.parent.get() instanceof final Widget up) {
 			if (up.systemEventEntry(event)) {
 				return true;
 			}

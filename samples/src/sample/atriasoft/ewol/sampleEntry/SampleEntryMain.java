@@ -2,6 +2,7 @@ package sample.atriasoft.ewol.sampleEntry;
 
 import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.Ewol;
+import org.atriasoft.ewol.widget.MainWindows;
 
 public class SampleEntryMain {
 	public static void main(final String[] args) {

@@ -1,10 +1,9 @@
-package sample.atriasoft.ewol.sampleEntry;
+package org.atriasoft.ewol.widget;
 
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.widget.Entry;
 
 import sample.atriasoft.ewol.BasicWindows;
 
