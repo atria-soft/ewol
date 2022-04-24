@@ -279,7 +279,7 @@ void ewol::widget::Gird::subWidgetUnLink(int _colId, int _rowId) {
 	// try to find it ...
 	for (int iii=0; iii<this.subWidget.size(); iii++) {
 		if(    this.subWidget[iii].row == _rowId
-		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.subWidget[iii].col == _colId) {
+		    && this.subWidget[iii].col == _colId) {
 			this.subWidget.erase(this.subWidget.begin()+iii);
 			return;
 		}
@@ -315,8 +315,8 @@ Widget ewol::widget::Gird::getWidgetAtPos( Vector2f _pos) {
 		}
 		Vector2f tmpSize = it.widget.getSize();
 		Vector2f tmpOrigin = it.widget.getOrigin();
-		if(    (tmpOrigin.x() <= _pos.x() LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM tmpOrigin.x() + tmpSize.x() >= _pos.x())
-		    LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM (tmpOrigin.y() <= _pos.y() LOMLOMLOMLOMLOM tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
+		if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
+		    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) ) {
 			Widget tmpWidget = it.widget.getWidgetAtPos(_pos);
 			if (tmpWidget != null) {
 				return tmpWidget;

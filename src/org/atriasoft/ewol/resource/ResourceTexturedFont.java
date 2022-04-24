@@ -222,7 +222,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			this.listElement[iii].add(tmpchar);
 		}
 		if (hasChange) {
-			Log.error("All gliph added ====> request a redraw of all the GUI");
+			Log.verbose("All gliph added ====> request a redraw of all the GUI");
 			flush();
 			Ewol.getContext().forceRedrawAllAsync();
 			//IOgami.storePNG(new Uri("file", "fileFont.png"), this.data); // ==> for debug test only ...

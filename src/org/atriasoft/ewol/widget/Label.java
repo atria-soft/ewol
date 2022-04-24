@@ -21,6 +21,7 @@ import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
+import org.atriasoft.exml.annotation.XmlText;
 import org.atriasoft.gale.key.KeyStatus;
 
 public class Label extends Widget {
@@ -210,8 +211,8 @@ public class Label extends Widget {
 	}
 	
 	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
+	@XmlText
+	@XmlName(value = "ZZZZZZZZZ-ploppppppp")
 	@EwolDescription(value = "Displayed value string")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
