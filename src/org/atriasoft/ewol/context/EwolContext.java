@@ -301,6 +301,8 @@ public class EwolContext extends GaleApplication {
 	
 	@Override
 	public void onPointer(final KeySpecial special, final KeyType type, final int pointerID, final Vector2f pos, final KeyStatus state) {
+		// TODO: WTF !!!
+		this.input.setLastKeyboardSpecial(special);
 		switch (state) {
 			case move:
 				// Log.debug("Receive MSG : THREAD_INPUT_MOTION");

@@ -30,18 +30,12 @@ class WidgetScrolled extends Widget {
 	}
 	
 	public static final int CALCULATE_SIMULTANEOUS_FINGER = 5;
-	protected Uri propertyShapeVert = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol"); //!< Vertical shaper name
-	
-	protected Uri propertyShapeHori = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol"); //!< Horizontal shaper name
-	
-	private GuiShape shaperH; //!< Compositing theme Horizontal.
-	
-	private GuiShape shaperV; //!< Compositing theme Vertical.
-	
+	protected Uri propertyShapeVert = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Vertical shaper name
+	protected Uri propertyShapeHori = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Horizontal shaper name
+	private GuiShape shaperH = null; //!< Compositing theme Horizontal.
+	private GuiShape shaperV = null; //!< Compositing theme Vertical.
 	protected Vector2f originScrooled = Vector2f.ZERO; //!< pixel distance from the origin of the display (Bottum left)
-	
 	protected Vector2f maxSize; //!< Maximum size of the Widget ==> to display scrollbar
-	
 	protected Vector2f limitScrolling = Vector2f.ZERO; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
 	// Mouse section :
 	private ScrollingMode scroollingMode = ScrollingMode.scroolModeNormal; //!< mode of management of the scrooling
@@ -57,7 +51,7 @@ class WidgetScrolled extends Widget {
 	private final Vector2f[] fingerMoveStartPos = new Vector2f[CALCULATE_SIMULTANEOUS_FINGER];
 	
 	/**
-	 * Scroll Widget main ructor to be herited from an other widget (this is not a stand-alone widget)
+	 * Scroll Widget main constructor to be inherited from an other widget (this is not a stand-alone widget)
 	 * @param _shaperName Shaper name if the scrolled widget.
 	 */
 	public WidgetScrolled() {
@@ -91,12 +85,20 @@ class WidgetScrolled extends Widget {
 	}
 	
 	protected void onChangePropertyShapeHori() {
-		this.shaperH.setSource(this.propertyShapeHori);
+		if (this.shaperH == null) {
+			this.shaperH = new GuiShape(this.propertyShapeHori);
+		} else {
+			this.shaperH.setSource(this.propertyShapeHori);
+		}
 		markToRedraw();
 	}
 	
 	protected void onChangePropertyShapeVert() {
-		this.shaperV.setSource(this.propertyShapeVert);
+		if (this.shaperV == null) {
+			this.shaperV = new GuiShape(this.propertyShapeVert);
+		} else {
+			this.shaperV.setSource(this.propertyShapeVert);
+		}
 		markToRedraw();
 	}
 	

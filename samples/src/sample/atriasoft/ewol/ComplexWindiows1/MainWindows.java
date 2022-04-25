@@ -16,17 +16,17 @@ public class MainWindows extends Windows {
 		//! [ewol_sample_HW_windows_title]
 		setPropertyTitle("Simple sample test");
 		//EwolObject.getContext().getFontDefault().setName("FreeSans");
-		Sizer sizerMain = new Sizer(DisplayMode.modeVert);
+		Sizer sizerMain = new Sizer(DisplayMode.VERTICAL);
 		sizerMain.setPropertyExpand(Vector3b.TRUE);
 		sizerMain.setPropertyFill(Vector3b.TRUE);
 		setSubWidget(sizerMain);
 		
-		Sizer sizerHori1 = new Sizer(DisplayMode.modeHori);
+		Sizer sizerHori1 = new Sizer(DisplayMode.HORIZONTAL);
 		sizerHori1.setPropertyExpand(Vector3b.TRUE);
 		sizerHori1.setPropertyFill(Vector3b.TRUE);
 		sizerMain.subWidgetAdd(sizerHori1);
 		
-		Sizer sizerHori2 = new Sizer(DisplayMode.modeHori);
+		Sizer sizerHori2 = new Sizer(DisplayMode.HORIZONTAL);
 		sizerHori2.setPropertyExpand(Vector3b.TRUE);
 		sizerHori2.setPropertyFill(Vector3b.TRUE);
 		sizerMain.subWidgetAdd(sizerHori2);

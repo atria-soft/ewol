@@ -106,8 +106,8 @@ public class ETranslate {
 		ETranslate.loadTranslation();
 		Log.verbose("Request translate: '" + instance + "'");
 		// find all iterance of 'T{' ... '}'
-		final String out = Pattern.compile("T\\{.*\\}").matcher(instance).replaceAll(mr -> {
-			final String data = mr.group();
+		final String out = Pattern.compile("_T\\{(.*)\\}").matcher(instance).replaceAll(mr -> {
+			final String data = mr.group(1);
 			Log.info("translate : '" + data + "'");
 			final String itTranslate = ETranslate.globalTranslate.get(data);
 			if (itTranslate == null) {

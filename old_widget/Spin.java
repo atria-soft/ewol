@@ -1,19 +1,4 @@
-/** @file
- * @author Edouard DUPIN
- * @copyright 2011, Edouard DUPIN, all right reserved
- * @license MPL v2.0 (see license file)
- */
-#pragma once
 
-#include <etk/Vector.hpp>
-#include <etk/types.hpp>
-#include <ewol/widget/meta/SpinBase.hpp>
-
-namespace ewol {
-	namespace widget {
-		class Spin;
-		using Spin = ememory::Ptr<ewol::widget::Spin>;
-		using SpinWeak = ememory::WeakPtr<ewol::widget::Spin>;
 		/**
 		 * a composed Spin is a Spin with an inside composed with the specify XML element 
 		 * ==> this permit to generate standard element simple
@@ -58,6 +43,4 @@ namespace ewol {
 				 void onChangePropertyMax();
 				 void onChangePropertyIncrement();
 				 void onChangePropertyMantis();
-		};
-	};
-};
+}
