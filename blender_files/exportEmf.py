@@ -7,7 +7,8 @@ import bpy
 
 list_elem = [
 	"Entry",
-	"CheckBox"
+	"CheckBox",
+	"ScrollBar"
 	]
 
 for elem in list_elem:

@@ -14,18 +14,20 @@ import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolObjectProperty;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.exml.annotation.XmlAttribute;
+import org.atriasoft.exml.annotation.XmlCaseSensitive;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
 
 public class Sizer extends ContainerN {
+	@XmlCaseSensitive(value = false)
 	public enum DisplayMode {
-		modeHori, //!< Vertical mode
-		modeVert; //!< Horizontal mode
+		HORIZONTAL, //!< Horizontal mode
+		VERTICAL; //!< Vertical mode
 	}
 	
 	protected Dimension3f propertyBorderSize = Dimension3f.ZERO; //!< Border size needed for all the display
 	
-	protected DisplayMode propertyMode = DisplayMode.modeHori; //!< Methode to display the widget list (vert/hory ...)
+	protected DisplayMode propertyMode = DisplayMode.HORIZONTAL; //!< Methode to display the widget list (vert/hory ...)
 	
 	/**
 	 * Constructor
@@ -63,7 +65,7 @@ public class Sizer extends ContainerN {
 			final Vector3f tmpSize = it.getCalculateMinSize();
 			Log.verbose("[" + getId() + "] NewMinSize=" + tmpSize);
 			Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "}     Get minSize=" + tmpSize);
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				this.minSize = this.minSize.withY(this.minSize.y() + tmpSize.y());
 				if (tmpSize.x() > this.minSize.x()) {
 					this.minSize = this.minSize.withX(tmpSize.x());
@@ -111,7 +113,7 @@ public class Sizer extends ContainerN {
 				continue;
 			}
 			final Vector3f tmpSize = it.getCalculateMinSize();
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				minSize = new Vector3f(Math.max(minSize.x(), tmpSize.x()), minSize.y() + tmpSize.y(), Math.max(minSize.z(), tmpSize.z()));
 			} else {
 				minSize = new Vector3f(minSize.x() + tmpSize.x(), Math.max(minSize.y(), tmpSize.y()), Math.max(minSize.z(), tmpSize.z()));
@@ -122,7 +124,7 @@ public class Sizer extends ContainerN {
 		// -2- Calculate the size to add at every elements...
 		float deltaExpandSize = 0.0f;
 		if (!nbWidgetExpand.isEqual(Vector3i.ZERO)) {
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				deltaExpandSize = (localWidgetSize.y() - minSize.y()) / (nbWidgetExpand.y());
 			} else {
 				deltaExpandSize = (localWidgetSize.x() - minSize.x()) / (nbWidgetExpand.x());
@@ -143,7 +145,7 @@ public class Sizer extends ContainerN {
 			float residualNext = 0.0f;
 			// get the number of element that need to devide...
 			int countCalculation = nbWidgetExpand.x();
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				countCalculation = nbWidgetExpand.y();
 			}
 			// -4.1- Update every subWidget size
@@ -158,7 +160,7 @@ public class Sizer extends ContainerN {
 				Vector3f tmpSizeMin = it.getSize();
 				final Vector3f tmpSizeMax = it.getCalculateMaxSize();
 				// Now update his size  his size in X and the current sizer size in Y:
-				if (this.propertyMode == DisplayMode.modeVert) {
+				if (this.propertyMode == DisplayMode.VERTICAL) {
 					if (it.canExpand().y() || (it == lastWidget && it.canExpandIfFree().y())) {
 						float sizeExpand = tmpSizeMin.y() + deltaExpandSize;
 						if (sizeExpand > tmpSizeMax.y()) {
@@ -190,7 +192,7 @@ public class Sizer extends ContainerN {
 			if (countCalculation <= 0) {
 				break;
 			}
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				deltaExpandSize = residualNext / (countCalculation);
 			} else {
 				deltaExpandSize = residualNext / (countCalculation);
@@ -206,7 +208,7 @@ public class Sizer extends ContainerN {
 				continue;
 			}
 			// Now update his size, his size in X and the current sizer size in Y:
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				if (!it.canExpand().x() && !it.canExpandIfFree().x()) {
 					continue;
 				}
@@ -236,7 +238,7 @@ public class Sizer extends ContainerN {
 				continue;
 			}
 			final Vector3f size = it.getSize();
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				underSize = new Vector3f(Math.max(underSize.x(), size.x()), underSize.y() + size.y(), Math.max(underSize.z(), size.z()));
 			} else {
 				underSize = new Vector3f(underSize.x() + size.x(), Math.max(underSize.y(), size.y()), Math.max(underSize.z(), size.z()));
@@ -253,13 +255,13 @@ public class Sizer extends ContainerN {
 			}
 			Vector3f origin;
 			final Vector3f size = it.getSize();
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(this.propertyGravity.gravityGenerateDelta(new Vector3f(underSize.x() - size.x(), 0.0f, 0.0f))));
 			} else {
 				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(this.propertyGravity.gravityGenerateDelta(new Vector3f(0.0f, underSize.y() - size.y(), 0.0f))));
 			}
 			it.setOrigin(origin);
-			if (this.propertyMode == DisplayMode.modeVert) {
+			if (this.propertyMode == DisplayMode.VERTICAL) {
 				tmpOrigin = tmpOrigin.withY(tmpOrigin.y() + size.y());
 			} else {
 				tmpOrigin = tmpOrigin.withX(tmpOrigin.x() + size.x());

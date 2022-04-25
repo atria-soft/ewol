@@ -87,12 +87,12 @@ public class BasicWindows extends Windows {
 		//! [ewol_sample_HW_windows_title]
 		setPropertyTitle("No title set !!! for this test");
 		
-		final Sizer sizerVertMain = new Sizer(DisplayMode.modeVert);
+		final Sizer sizerVertMain = new Sizer(DisplayMode.VERTICAL);
 		sizerVertMain.setPropertyExpand(Vector3b.TRUE);
 		sizerVertMain.setPropertyFill(Vector3b.TRUE);
 		setSubWidget(sizerVertMain);
 		
-		this.sizerMenuHori = new Sizer(DisplayMode.modeHori);
+		this.sizerMenuHori = new Sizer(DisplayMode.HORIZONTAL);
 		this.sizerMenuHori.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
 		this.sizerMenuHori.setPropertyLockExpand(Vector3b.TRUE);
 		this.sizerMenuHori.setPropertyFill(Vector3b.TRUE);
@@ -109,7 +109,7 @@ public class BasicWindows extends Windows {
 			sizerVertMain.subWidgetAdd(simpleSpacer);
 		}
 		
-		this.sizerTestAreaHori = new Sizer(DisplayMode.modeHori);
+		this.sizerTestAreaHori = new Sizer(DisplayMode.HORIZONTAL);
 		this.sizerTestAreaHori.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
 		this.sizerTestAreaHori.setPropertyExpandIfFree(Vector3b.TRUE);
 		this.sizerTestAreaHori.setPropertyFill(Vector3b.TRUE_FALSE_FALSE);

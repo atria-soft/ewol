@@ -10,6 +10,7 @@ import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 import org.atriasoft.exml.annotation.XmlAttribute;
 import org.atriasoft.exml.annotation.XmlManaged;
 import org.atriasoft.exml.annotation.XmlName;
+import org.atriasoft.exml.annotation.XmlText;
 
 public class CheckBox extends Container {
 	
@@ -50,7 +51,7 @@ public class CheckBox extends Container {
 	}
 	
 	public CheckBox(final String basicLabel) {
-		final Sizer subs = new Sizer(DisplayMode.modeHori);
+		final Sizer subs = new Sizer(DisplayMode.HORIZONTAL);
 		subs.setPropertyLockExpand(Vector3b.TRUE);
 		subs.setPropertyGravity(Gravity.CENTER);
 		setSubWidget(subs);
@@ -74,7 +75,7 @@ public class CheckBox extends Container {
 	}
 	
 	@XmlManaged
-	@XmlAttribute
+	@XmlText
 	@XmlName(value = "label")
 	@EwolDescription(value = "value of the label")
 	public String getPropertyLabel() {

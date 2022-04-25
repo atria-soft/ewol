@@ -212,7 +212,7 @@ public class Label extends Widget {
 	
 	@XmlManaged
 	@XmlText
-	@XmlName(value = "ZZZZZZZZZ-ploppppppp")
+	@XmlName(value = "value")
 	@EwolDescription(value = "Displayed value string")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {

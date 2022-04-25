@@ -126,7 +126,6 @@ public class Button extends ContainerToggle {
 		onChangePropertyShaper();
 		// can not support multiple click...
 		setMouseLimit(1);
-		this.shape = new GuiShape(this.propertyConfig);
 	}
 	
 	@Override

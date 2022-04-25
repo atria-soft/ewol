@@ -26,4 +26,5 @@ open module org.atriasoft.ewol {
 	requires transitive io.scenarium.logger;
 	requires org.atriasoft.loader3d;
 	requires org.atriasoft.egami;
+	requires java.base;
 }

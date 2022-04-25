@@ -1,23 +1,24 @@
 {
-	mode:2,
-	display-outside:true,
+	# padding "outside" the object in pixel ==> prevent bad display
+	"padding-out-left":0,
+	"padding-out-right":1,
+	"padding-out-top":1,
+	"padding-out-buttom":1,
 	
-	padding-out-left:1,
-	padding-out-right:1,
-	padding-out-top:1,
-	padding-out-buttom:1,
+	# padding "inside" the object in pixel ==> prevent bad display
+	"padding-in-left":1,
+	"padding-in-right":1,
+	"padding-in-top":1,
+	"padding-in-buttom":1,
 	
-	border-left:1,
-	border-right:1,
-	border-top:1,
-	border-buttom:1,
+	# render program:
+	"program-vert":"THEME:shape/aaRenderShape.vert?lib=ewol",
+	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
-	padding-in-left:3,
-	padding-in-right:3,
-	padding-in-top:3,
-	padding-in-buttom:3,
+	# Object to render (with modification)
+	"object-file":"THEME:shape/ScrollBar.emf?lib=ewol",
 	
-	change-time:200,
-	program:"THEME_GUI:///WidgetScrolled.prog?lib=ewol",
-	color:"THEME_COLOR:///WidgetScrolled.json?lib=ewol"
+	"palette":"THEME:shape/palette_gui.json?lib=ewol",
+	
+	"change-time":0
 }
