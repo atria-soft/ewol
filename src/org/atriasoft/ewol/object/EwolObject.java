@@ -32,7 +32,7 @@ public class EwolObject {
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
 	
 	/**
-	 * get the curent the system inteface.
+	 * get the current the system interface.
 	 * @return current reference on the instance.
 	 */
 	protected static EwolContext getContext() {
@@ -60,8 +60,6 @@ public class EwolObject {
 	
 	private boolean isResource = false; //!< enable this when you want to declare this element is auto-remove
 	
-	//@EwolPropertyDescription("Object name, might be a unique reference in all the program")
-	//@JacksonXmlProperty(isAttribute = true, localName = "name")
 	protected String name = ""; //!< name of the element ...
 	
 	protected WeakReference<EwolObject> parent = null; //!< Reference on the current parent.

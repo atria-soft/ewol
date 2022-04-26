@@ -3,6 +3,7 @@ package org.atriasoft.ewol.widget;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.atriasoft.ewol.widget.meta.FileChooser;
 import org.atriasoft.exml.annotation.XmlFactory.InterfaceXmlFactoryAccess;
 
 public class WidgetXmlFactory implements InterfaceXmlFactoryAccess {
@@ -18,6 +19,7 @@ public class WidgetXmlFactory implements InterfaceXmlFactoryAccess {
 		listWidgetAvaillable.put("CheckBox", CheckBox.class);
 		listWidgetAvaillable.put("ListFileSystem", ListFileSystem.class);
 		listWidgetAvaillable.put("PopUp", PopUp.class);
+		listWidgetAvaillable.put("FileChooser", FileChooser.class);
 	}
 	
 	@Override
