@@ -1,4 +1,4 @@
-<Composer>
+<PopUp>
 	<Sizer mode="VERTICAL" lock="true" fill="true" expand="true">
 		<Label name="[{ID}]file-shooser:title-label">_T{Title}</Label> 
 		<Sizer mode="HORIZONTAL">
@@ -45,4 +45,4 @@
 			</Button >
 		</Sizer >
 	</Sizer>
-</Composer>
+</PopUp>

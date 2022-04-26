@@ -20,7 +20,7 @@ public class Spacer extends Widget {
 	@XmlAttribute
 	@XmlName(value = "color")
 	@EwolDescription(value = "background of the spacer")
-	protected Color propertyColor = Color.GREEN; //!< Background color
+	protected Color propertyColor = Color.NONE; //!< Background color
 	
 	/**
 	 * Main ructer

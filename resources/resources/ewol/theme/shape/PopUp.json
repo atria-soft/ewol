@@ -1,23 +1,30 @@
 {
-	mode:2,
-	display-outside:false,
+	# padding "outside" the object in pixel ==> prevent bad display
+	"padding-out-left":2,
+	"padding-out-right":2,
+	"padding-out-top":2,
+	"padding-out-buttom":2,
 	
-	padding-out-left:2,
-	padding-out-right:2,
-	padding-out-top:2,
-	padding-out-buttom:2,
+	# border description
+	"border-left":3,
+	"border-right":3,
+	"border-top":3,
+	"border-buttom":3,
 	
-	border-left:3,
-	border-right:3,
-	border-top:3,
-	border-buttom:3,
+	# padding "inside" the object in pixel ==> prevent bad display
+	"padding-in-left":2,
+	"padding-in-right":2,
+	"padding-in-top":2,
+	"padding-in-buttom":2,
 	
-	padding-in-left:2,
-	padding-in-right:2,
-	padding-in-top:2,
-	padding-in-buttom:2,
+	# render program:
+	"program-vert":"THEME:shape/aaRenderShape.vert?lib=ewol",
+	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
-	change-time:356,
-	program:"THEME_GUI:///PopUp.prog?lib=ewol",
-	color:"THEME_COLOR:///PopUp.json?lib=ewol"
+	# Object to render (with modification)
+	"object-file":"THEME:shape/PopUp.emf?lib=ewol",
+	
+	"palette":"THEME:shape/palette_gui.json?lib=ewol",
+	
+	"change-time":200
 }

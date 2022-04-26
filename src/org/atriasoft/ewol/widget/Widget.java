@@ -115,6 +115,10 @@ public class Widget extends EwolObject {
 	 * @note : INTERNAL EWOL SYSTEM
 	 */
 	public void calculateMinMaxSize() {
+		calculateMinMaxSizeWidget();
+	}
+	
+	protected void calculateMinMaxSizeWidget() {
 		this.minSize = this.propertyMinSize.getPixel();
 		//Log.error("[" + getId() + "] convert in min size : " + propertyMinSize + " out=" + this.minSize);
 		this.maxSize = this.propertyMaxSize.getPixel();
@@ -909,6 +913,10 @@ public class Widget extends EwolObject {
 	   (0,0)
 	 */
 	public void systemDraw(final DrawProperty displayProp) {
+		systemDrawWidget(displayProp);
+	}
+	
+	protected void systemDrawWidget(final DrawProperty displayProp) {
 		//Log.info("[" + getId() + "] Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" << this.size << " hide=" << propertyHide);
 		if (this.propertyHide) {
 			// widget is hidden ...

@@ -88,11 +88,13 @@ public class EwolObject {
 	 */
 	protected void autoDestroy() {
 		Log.verbose("Destroy object: [" + getId() + "] type:" + this.getClass().getCanonicalName());
-		final EwolObject parent = this.parent.get();
-		// TODO : set a signal to do this ...
-		if (parent != null) {
-			Log.verbose("Destroy object: Call parrent");
-			parent.requestDestroyFromChild(this);
+		if (this.parent != null) {
+			final EwolObject parent = this.parent.get();
+			// TODO : set a signal to do this ...
+			if (parent != null) {
+				Log.verbose("Destroy object: Call parrent");
+				parent.requestDestroyFromChild(this);
+			}
 		}
 		//if no parent ==> noting to do ...
 		this.destroy = true;
