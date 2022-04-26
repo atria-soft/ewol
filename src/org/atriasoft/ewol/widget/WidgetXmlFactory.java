@@ -17,6 +17,7 @@ public class WidgetXmlFactory implements InterfaceXmlFactoryAccess {
 		listWidgetAvaillable.put("Tick", Tick.class);
 		listWidgetAvaillable.put("CheckBox", CheckBox.class);
 		listWidgetAvaillable.put("ListFileSystem", ListFileSystem.class);
+		listWidgetAvaillable.put("PopUp", PopUp.class);
 	}
 	
 	@Override

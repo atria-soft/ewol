@@ -26,8 +26,7 @@ public class Sizer extends ContainerN {
 	}
 	
 	protected Dimension3f propertyBorderSize = Dimension3f.ZERO; //!< Border size needed for all the display
-	
-	protected DisplayMode propertyMode = DisplayMode.HORIZONTAL; //!< Methode to display the widget list (vert/hory ...)
+	protected DisplayMode propertyMode = DisplayMode.HORIZONTAL; //!< Method to display the widget list (vert/hory ...)
 	
 	/**
 	 * Constructor

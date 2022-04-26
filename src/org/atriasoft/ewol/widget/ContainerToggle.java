@@ -30,56 +30,11 @@ public class ContainerToggle extends Widget {
 		this.subWidget[1] = null;
 	}
 	
-	//	@Override
-	//	public boolean loadXML(final XmlElement node) {
-	//		if (node == null) {
-	//			return false;
-	//		}
-	//		// parse generic properties:
-	//		super.loadXML(node);
-	//		// remove previous element:
-	//		subWidgetRemove();
-	//		// parse all the elements:
-	//		for (XmlNode it : node.getNodes()) {
-	//			if (!it.isElement()) {
-	//				// trash here all that is not element
-	//				continue;
-	//			}
-	//			XmlElement pNode = it.toElement();
-	//			String widgetName = pNode.getValue();
-	//			Log.verbose("[" + getId() + "] t=" + getClass().getCanonicalName() + " Load node name : '" + widgetName + "'");
-	//			if (!getWidgetManager().exist(widgetName)) {
-	//				Log.error("Unknown basic node='" + widgetName + "' not in : [" + getWidgetManager().list() + "]");
-	//				continue;
-	//			}
-	//			if (getSubWidget() != null) {
-	//				Log.error("Can only have one subWidget ??? node='" + widgetName + "'");
-	//				continue;
-	//			}
-	//			Log.debug("try to create subwidget : '" + widgetName + "'");
-	//			Widget tmpWidget = getWidgetManager().create(widgetName, pNode);
-	//			if (tmpWidget == null) {
-	//				Log.error("Can not create the widget : '" + widgetName + "'");
-	//				continue;
-	//			}
-	//			// add widget :
-	//			setSubWidget(tmpWidget);
-	//			if (!tmpWidget.loadXML(pNode)) {
-	//				Log.error("can not load widget properties : '" + widgetName + "'");
-	//				return false;
-	//			}
-	//		}
-	//		if (node.getNodes().size() != 0 && this.subWidget == null) {
-	//			Log.warning("Load container with no data inside");
-	//		}
-	//		return true;
-	//	}
-	
 	void calculateMinMaxSizePadded(final Padding padding) {
 		// call main class
 		this.minSize = Vector3f.ZERO;
 		// call sub classes
-		for (int iii = 0; iii < 2; ++iii) {
+		for (int iii = 0; iii < this.subWidget.length; ++iii) {
 			if (this.subWidget[iii] != null) {
 				this.subWidget[iii].calculateMinMaxSize();
 				final Vector3f min = this.subWidget[iii].getCalculateMinSize();
@@ -148,7 +103,7 @@ public class ContainerToggle extends Widget {
 		final Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(subElementSize.add(padding.x(), padding.y(), padding.z())));
 		final Vector3f deltaPadded = delta.add(padding.left(), padding.bottom(), padding.back());
 		//subElementSize = subElementSize.less(padding.x(), padding.y(), padding.z());
-		for (int iii = 0; iii < 2; ++iii) {
+		for (int iii = 0; iii < this.subWidget.length; ++iii) {
 			if (this.subWidget[iii] != null) {
 				//final Vector3f origin2 = this.origin.add(this.offset);
 				//final Vector3f minSize = this.subWidget[iii].getCalculateMinSize();
@@ -171,56 +126,6 @@ public class ContainerToggle extends Widget {
 			this.subWidget[this.idWidgetDisplayed].onRegenerateDisplay();
 		}
 	}
-	/*
-	boolean loadXML( exml::Element _node) {
-	if (_node.exist() == false) {
-		return false;
-	}
-	// parse generic properties :
-	Widget::loadXML(_node);
-	// remove previous element :
-	subWidgetRemove();
-	Log.verbose("Create en element 2 ... with nodes.size()=" + _node.nodes.size());
-	// parse all the elements:
-	for( auto it : _node.nodes) {
-		Log.verbose("    node: " + it);
-		exml::Element pNode = it.toElement();
-		if (pNode.exist() == false) {
-			// trash here all that is not element
-			continue;
-		}
-		String widgetName = pNode.getValue();
-		if (getWidgetManager().exist(widgetName) == false) {
-			Log.error("(l " + pNode.getPos() + ") Unknown basic node='" + widgetName + "' not in: [" + getWidgetManager().list() + "]" );
-			continue;
-		}
-		boolean toogleMode=false;
-		if (getSubWidget() != null) {
-			toogleMode=true;
-			if (getSubWidgetToggle() != null) {
-				Log.error("(l " + pNode.getPos() + ") Can only have one subWidget ??? node='" + widgetName + "'" );
-				continue;
-			}
-		}
-		Log.debug("try to create subwidget : '" + widgetName + "'");
-		Widget tmpWidget = getWidgetManager().create(widgetName, pNode);
-		if (tmpWidget == null) {
-			EWOL_ERROR ("(l " + pNode.getPos() + ") Can not create the widget: '" + widgetName + "'");
-			continue;
-		}
-		// add widget :
-		if (toogleMode == false) {
-			setSubWidget(tmpWidget);
-		} else {
-			setSubWidgetToggle(tmpWidget);
-		}
-		if (tmpWidget.loadXML(pNode) == false) {
-			EWOL_ERROR ("(l "+pNode.getPos()+") can not load widget properties: '" + widgetName + "'");
-			return false;
-		}
-	}
-	return true;
-	}*/
 	
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
@@ -268,7 +173,7 @@ public class ContainerToggle extends Widget {
 	}
 	
 	public void setSubWidgets(final Widget[] newWidget) {
-		for (int iii = 0; iii < Math.min(newWidget.length, 2); iii++) {
+		for (int iii = 0; iii < Math.min(newWidget.length, this.subWidget.length); iii++) {
 			setSubWidget(newWidget[iii], iii);
 		}
 	}
@@ -285,7 +190,7 @@ public class ContainerToggle extends Widget {
 	
 	public void subWidgetReplace(final Widget oldWidget, final Widget newWidget) {
 		boolean haveChange = false;
-		for (int iii = 0; iii < 2; ++iii) {
+		for (int iii = 0; iii < this.subWidget.length; ++iii) {
 			if (this.subWidget[iii] != oldWidget) {
 				continue;
 			}

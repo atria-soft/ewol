@@ -12,6 +12,7 @@ import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
+import org.atriasoft.ewol.compositing.ShapeBox;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
@@ -96,6 +97,7 @@ public class Button extends ContainerToggle {
 	private boolean propertyToggleMode = false;
 	private boolean propertyEnableSingle = false;
 	
+	protected ShapeBox shapeProperty = ShapeBox.ZERO;
 	private GuiShape shape;
 	
 	@EwolSignal(name = "down", description = "Button is Down")
@@ -110,10 +112,6 @@ public class Button extends ContainerToggle {
 	public SignalEmpty signalLeave = new SignalEmpty();
 	@EwolSignal(name = "value", description = "The button value change")
 	public Signal<Boolean> signalValue = new Signal<>();
-	
-	// element over:
-	Vector3f overPositionStart = Vector3f.ZERO;
-	Vector3f overPositionStop = Vector3f.ZERO;
 	
 	private boolean buttonPressed = false;
 	private boolean mouseHover = false;
@@ -150,13 +148,6 @@ public class Button extends ContainerToggle {
 			markToRedraw();
 		}
 		
-	}
-	
-	private boolean checkIfOver(final Vector3f relPos) {
-		return relPos.x() > this.overPositionStart.x() //
-				&& relPos.y() > this.overPositionStart.y() //
-				&& relPos.x() < this.overPositionStop.x() //
-				&& relPos.y() < this.overPositionStop.y();
 	}
 	
 	void checkStatus() {
@@ -314,7 +305,7 @@ public class Button extends ContainerToggle {
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f relPos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
 		Log.warning("Event on Input ... " + event + " relPos = " + relPos);
-		final boolean over = checkIfOver(relPos);
+		final boolean over = this.shapeProperty.isInside(relPos);
 		//filter if outside the element...
 		if (event.status() == KeyStatus.leave) {
 			changeStatusIn(GuiShapeMode.NORMAL);
@@ -326,7 +317,7 @@ public class Button extends ContainerToggle {
 				if (KeyStatus.leave == event.status()) {
 					changeStatusIn(GuiShapeMode.NORMAL);
 				} else {
-					Log.verbose("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
+					Log.verbose("Detect Over : " + this.shapeProperty);
 					if (over) {
 						changeStatusIn(GuiShapeMode.OVER);
 					} else {
@@ -408,13 +399,12 @@ public class Button extends ContainerToggle {
 		//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
 		Vector3f tmpOriginText = new Vector3f(0, 0, 0);
 		// not sure this is needed...
-		tmpSizeShaper = Vector3f.clipInt(tmpSizeShaper);
-		tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
-		tmpSizeText = Vector3f.clipInt(tmpSizeText);
-		tmpOriginText = Vector3f.clipInt(tmpOriginText);
+		tmpSizeShaper = tmpSizeShaper.clipInteger();
+		tmpOriginShaper = tmpOriginShaper.clipInteger();
+		tmpSizeText = tmpSizeText.clipInteger();
+		tmpOriginText = tmpOriginText.clipInteger();
 		
-		this.overPositionStart = tmpOriginShaper;
-		this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
+		this.shapeProperty = new ShapeBox(tmpOriginShaper, tmpSizeShaper, padding);
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 		this.shape.flush();
 		
