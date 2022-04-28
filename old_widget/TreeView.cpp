@@ -176,9 +176,9 @@ boolean ewol::widget::TreeView::onItemEvent( ewol::event::Input _event,  Vector2
 	             + " in " + posStart
 	             + " . " + (posStart+Vector2f(propertyIconTreeViewSize.get(),propertyIconTreeViewSize.get())));
 	if (    _mousePosition.x() >= posStart.x()
-	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM _mousePosition.x() <= posStart.x()+propertyIconTreeViewSize.get()
-	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.listSizeY[_pos.y()] - _mousePosition.y() >= posStart.y()
-	     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.listSizeY[_pos.y()] - _mousePosition.y() <= propertyIconTreeViewSize.get() ) {
+	     && _mousePosition.x() <= posStart.x()+propertyIconTreeViewSize.get()
+	     && this.listSizeY[_pos.y()] - _mousePosition.y() >= posStart.y()
+	     && this.listSizeY[_pos.y()] - _mousePosition.y() <= propertyIconTreeViewSize.get() ) {
 		onItemExpandEvent(_pos);
 		return true;
 	}

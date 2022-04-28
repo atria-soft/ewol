@@ -91,7 +91,7 @@ public class FileChooser extends Composer {
 		// == > change the file name.get(.get(
 		self.propertyFile = value;
 		// update the selected file in the list :
-		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-shooser:list-files") instanceof final ListFileSystem tmp) {
+		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyFile(new File(self.propertyFile));
 		}
 	}
@@ -102,10 +102,10 @@ public class FileChooser extends Composer {
 	}
 	
 	protected static void onCallbackHidenFileChangeChangeValue(final FileChooser self, final Boolean value) {
-		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-shooser:list-files") instanceof final ListFileSystem tmp) {
+		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyShowHidden(value);
 		}
-		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-shooser:list-folder") instanceof final ListFileSystem tmp) {
+		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyShowHidden(value);
 		}
 	}
@@ -182,30 +182,30 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelValidate();
 		onChangePropertyLabelCancel();
 		
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:show-hiden-file") instanceof final CheckBox tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:show-hiden-file") instanceof final CheckBox tmp) {
 			tmp.signalValue.connectAuto(this, FileChooser::onCallbackHidenFileChangeChangeValue);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:button-validate") instanceof final Button tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:button-validate") instanceof final Button tmp) {
 			tmp.signalValue.connectAuto(this, FileChooser::onCallbackListValidate);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:button-cancel") instanceof final Button tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:button-cancel") instanceof final Button tmp) {
 			tmp.signalValue.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:list-folder") instanceof final ListFileSystem tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
 			tmp.signalFolderValidate.connectAuto(this, FileChooser::onCallbackListFolderSelectChange);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:list-files") instanceof final ListFileSystem tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.signalFileSelect.connectAuto(this, FileChooser::onCallbackListFileSelectChange);
 			tmp.signalFileValidate.connectAuto(this, FileChooser::onCallbackListFileValidate);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:entry-file") instanceof final Entry tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final Entry tmp) {
 			tmp.signalModify.connectAuto(this, FileChooser::onCallbackEntryFileChangeValue);
 			tmp.signalEnter.connectAuto(this, FileChooser::onCallbackEntryFileChangeValidate);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:entry-folder") instanceof final Entry tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
 			tmp.signalModify.connectAuto(this, FileChooser::onCallbackEntryFolderChangeValue);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:img-home") instanceof final ImageDisplay tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:img-home") instanceof final ImageDisplay tmp) {
 			tmp.signalPressed.connectAuto(this, FileChooser::onCallbackHomePressed);
 		}
 		// set the default Folder properties:
@@ -235,25 +235,25 @@ public class FileChooser extends Composer {
 	}
 	
 	protected void onChangePropertyFile() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:entry-file") instanceof final ListFileSystem tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyFile(new File(this.propertyFile));
 		}
 	}
 	
 	protected void onChangePropertyLabelCancel() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:cancel-label") instanceof final Label tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:cancel-label") instanceof final Label tmp) {
 			tmp.setPropertyValue(this.propertyLabelCancel);
 		}
 	}
 	
 	protected void onChangePropertyLabelTitle() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:title-label") instanceof final Label tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:title-label") instanceof final Label tmp) {
 			tmp.setPropertyValue(this.propertyLabelTitle);
 		}
 	}
 	
 	protected void onChangePropertyLabelValidate() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:validate-label") instanceof final Label tmp) {
+		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:validate-label") instanceof final Label tmp) {
 			tmp.setPropertyValue(this.propertyLabelValidate);
 		}
 	}
@@ -266,7 +266,7 @@ public class FileChooser extends Composer {
 	@Override
 	public void onGetFocus() {
 		// transfert focus on a specific widget...
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:entry-folder") instanceof final Entry tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
 			tmp.keepFocus();
 		}
 	}
@@ -331,13 +331,13 @@ public class FileChooser extends Composer {
 	}
 	
 	private void updateCurrentFolder() {
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:list-files") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyPath(this.propertyPath);
 		}
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:list-folder") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyPath(this.propertyPath);
 		}
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-shooser:entry-folder") instanceof final Entry tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
 			tmp.setPropertyValue(this.propertyPath);
 		}
 		markToRedraw();

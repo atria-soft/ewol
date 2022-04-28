@@ -32,14 +32,13 @@ public class ResourceConfigFile extends Resource {
 	 * @param name Name of the configuration file.
 	 * @return pointer on the resource or null if an error occurred.
 	 */
-	@SuppressWarnings("preview")
 	public static ResourceConfigFile create(final Uri name) {
 		Resource resource2 = null;
 		if (name != null && !name.isEmpty()) {
 			resource2 = Resource.getManager().localKeep(name);
 		}
 		if (resource2 != null) {
-			if (resource2 instanceof ResourceConfigFile tmpp) {
+			if (resource2 instanceof final ResourceConfigFile tmpp) {
 				resource2.keep();
 				return tmpp;
 			}
@@ -110,7 +109,7 @@ public class ResourceConfigFile extends Resource {
 	@Override
 	public synchronized void reload() {
 		// reset all parameters
-		for (ListElementConfig listElementConfig : this.list) {
+		for (final ListElementConfig listElementConfig : this.list) {
 			listElementConfig.node = null;
 		}
 		JsonObject out;

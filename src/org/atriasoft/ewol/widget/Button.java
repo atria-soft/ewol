@@ -335,6 +335,9 @@ public class Button extends ContainerToggle {
 			this.signalClick.emit();
 			if (this.propertyToggleMode) {
 				this.setPropertyValue(!this.propertyValue);
+			} else {
+				this.setPropertyValue(!this.propertyValue);
+				this.setPropertyValue(!this.propertyValue);
 			}
 			return true;
 		}

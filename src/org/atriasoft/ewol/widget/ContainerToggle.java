@@ -157,6 +157,11 @@ public class ContainerToggle extends Widget {
 		onChangeSize();
 	}
 	
+	@XmlManaged(value = false)
+	public void setSubWidget(final Widget newWidget) {
+		setSubWidget(newWidget, 0);
+	}
+	
 	/**
 	 * set the subWidget node widget.
 	 * @param newWidget The widget to add.

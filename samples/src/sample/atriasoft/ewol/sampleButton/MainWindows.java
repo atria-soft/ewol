@@ -11,7 +11,7 @@ public class MainWindows extends BasicWindows {
 	public MainWindows() {
 		setPropertyTitle("Simple Button test");
 		//final Widget data = Composer.composerGenerateString("<Composer><Label>hello, how are you</Label></Composer>");
-		final Widget data = Composer.composerGenerateString("<FileChooser/>");
+		final Widget data = Composer.composerGenerateString("<Spin/>");
 		/*
 		final Widget data = Composer.composerGenerateString("<Button toggle='true' fill='true,false,false' expand='true'>" + "<Label>hello, how are you</Label>"
 				+ "<Label>You <br/>Click - Me <b>!?<!--kjlkjlkjlkj-->d</b></Label>" + "</Button>");
