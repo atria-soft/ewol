@@ -1,23 +1,20 @@
 {
-	mode:2,
-	display-outside:false,
+	"padding-out-left":0,
+	"padding-out-right":0,
+	"padding-out-top":2,
+	"padding-out-buttom":2,
 	
-	padding-out-left:0,
-	padding-out-right:0,
-	padding-out-top:1,
-	padding-out-buttom:1,
+	"padding-in-left":2,
+	"padding-in-right":2,
+	"padding-in-top":2,
+	"padding-in-buttom":2,
 	
-	border-left:1,
-	border-right:1,
-	border-top:1,
-	border-buttom:1,
+	"program-vert":"THEME:shape/aaRenderShape.vert?lib=ewol",
+	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
 	
-	padding-in-left:1,
-	padding-in-right:1,
-	padding-in-top:1,
-	padding-in-buttom:1,
+	"object-file":"THEME:shape/Button.emf?lib=ewol",
 	
-	change-time:356,
-	program:"THEME_GUI:///Button.prog?lib=ewol",
-	color:"THEME_COLOR:///Button.json?lib=ewol"
+	"palette":"THEME:shape/palette_gui.json?lib=ewol",
+	
+	"change-time":200
 }

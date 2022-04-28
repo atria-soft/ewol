@@ -35,7 +35,7 @@ namespace ewol {
 				DECLARE_WIDGET_FACTORY(Slider, "Slider");
 				 ~Slider();
 			public:
-				// TODO : Rewoek the color in the theme ...
+				// TODO : Rework the color in the theme ...
 				void setColor(etk::Color<> _newColor) {
 					this.textColorFg = _newColor;
 				};
