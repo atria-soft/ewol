@@ -3,10 +3,10 @@ package org.atriasoft.ewol.widget;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.atriasoft.aknot.model.InterfaceFactoryAccess;
 import org.atriasoft.ewol.widget.meta.FileChooser;
-import org.atriasoft.exml.annotation.XmlFactory.InterfaceXmlFactoryAccess;
 
-public class WidgetXmlFactory implements InterfaceXmlFactoryAccess {
+public class WidgetXmlFactory implements InterfaceFactoryAccess {
 	private static Map<String, Class<?>> listWidgetAvaillable = new HashMap<>();
 	static {
 		listWidgetAvaillable.put("Sizer", Sizer.class);
@@ -24,7 +24,7 @@ public class WidgetXmlFactory implements InterfaceXmlFactoryAccess {
 	}
 	
 	@Override
-	public Class<?> findClass(final String name) {
+	public Class<?> findClass(final String name, final boolean caseSensitive) {
 		return listWidgetAvaillable.get(name);
 	}
 	

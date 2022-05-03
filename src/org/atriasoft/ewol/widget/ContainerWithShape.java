@@ -5,17 +5,17 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.ShapeBox;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 /**
  * Simple Container that have a Shape (not directly instantiate!!!!)
@@ -50,10 +50,10 @@ public class ContainerWithShape extends Container {
 		Log.warning("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "shape")
-	@EwolDescription(value = "The uri one the shape for the Pop-up")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "shape")
+	@AknotDescription(value = "The uri one the shape for the Pop-up")
 	public Uri getPropertyShape() {
 		return this.propertyShape;
 	}

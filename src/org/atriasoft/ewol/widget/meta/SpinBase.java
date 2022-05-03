@@ -1,9 +1,12 @@
 package org.atriasoft.ewol.widget.meta;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.ewol.Gravity;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceConfigFile;
 import org.atriasoft.ewol.widget.Button;
@@ -12,9 +15,6 @@ import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.model.SpinPosition;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -53,18 +53,18 @@ public class SpinBase extends Sizer {
 		updateGui();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "shape")
-	@EwolDescription(value = "shape for the display")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "shape")
+	@AknotDescription(value = "shape for the display")
 	public Uri getPropertyShape() {
 		return this.propertyShape;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "spin-mode")
-	@EwolDescription(value = "The display spin mode")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "spin-mode")
+	@AknotDescription(value = "The display spin mode")
 	public SpinPosition getPropertySpinMode() {
 		return this.propertySpinMode;
 	}

@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotFactory;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlFactory;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -88,10 +88,10 @@ public class ContainerN extends Widget {
 		}
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "lock")
-	@EwolDescription(value = "Lock the subwidget expand")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "lock")
+	@AknotDescription(value = "Lock the subwidget expand")
 	public Vector3b getPropertyLockExpand() {
 		return this.propertyLockExpand;
 	}
@@ -113,9 +113,9 @@ public class ContainerN extends Widget {
 		return null;
 	}
 	
-	@XmlManaged
-	@XmlFactory(value = WidgetXmlFactory.class)
-	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
+	@AknotManaged
+	@AknotFactory(value = WidgetXmlFactory.class)
+	@AknotDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
 	public List<Widget> getSubWidgets() {
 		return this.subWidget;
 	}

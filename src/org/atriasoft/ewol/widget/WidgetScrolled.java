@@ -1,5 +1,9 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
@@ -8,13 +12,9 @@ import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.HighSpeedMode;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
@@ -59,18 +59,18 @@ class WidgetScrolled extends Widget {
 		onChangePropertyShapeHori();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "shape-hori")
-	@EwolDescription(value = "shape for the horizontal display")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("shape-hori")
+	@AknotDescription("shape for the horizontal display")
 	public Uri getPropertyShapeHori() {
 		return this.propertyShapeHori;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "shape-vert")
-	@EwolDescription(value = "shape for the vertical display")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("shape-vert")
+	@AknotDescription("shape for the vertical display")
 	public Uri getPropertyShapeVert() {
 		return this.propertyShapeVert;
 	}

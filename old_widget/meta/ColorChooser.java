@@ -29,10 +29,10 @@ class ColorChooser entends Sizer {
 	public Signal<Color> signalChange;
 
 	protected Color propertyValue = Color.WHITE;
-	@XmlManaged
+	@AKManaged
 	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "color to select")
+	@AKName(value = "value")
+	@AknotDescription(value = "color to select")
 	public Color getPropertyValue() {
 		return propertyValue;
 	}

@@ -9,6 +9,11 @@ package org.atriasoft.ewol.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension3f;
@@ -20,8 +25,6 @@ import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.event.EntrySystem;
 import org.atriasoft.ewol.event.EventEntry;
@@ -30,9 +33,6 @@ import org.atriasoft.ewol.event.EventShortCut;
 import org.atriasoft.ewol.event.InputSystem;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
@@ -93,7 +93,8 @@ public class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- Shortcut : management of the shortcut
 	// ----------------------------------------------------------------------------------------------------------------
-	@EwolSignal(name = "shortcut")
+	@AknotSignal
+	@AknotName("shortcut")
 	public Signal<String> signalShortcut; //!< signal handle of the message
 	
 	// ----------------------------------------------------------------------------------------------------------------
@@ -270,66 +271,66 @@ public class Widget extends EwolObject {
 		return this.origin;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "focus")
-	@EwolDescription(value = "enable the widget to have the focus capacity")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("focus")
+	@AknotDescription("enable the widget to have the focus capacity")
 	public boolean getPropertyCanFocus() {
 		return this.propertyCanFocus;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "expand")
-	@EwolDescription(value = "Request the widget Expand size while space is available")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("expand")
+	@AknotDescription("Request the widget Expand size while space is available")
 	public Vector3b getPropertyExpand() {
 		return this.propertyExpand;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "expand-free")
-	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper wideget)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("expand-free")
+	@AknotDescription("Request the widget Expand size while free space is detected (does not generate expand in upper wideget)")
 	public Vector3b getPropertyExpandIfFree() {
 		return this.propertyExpandIfFree;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "fill")
-	@EwolDescription(value = "Fill the widget available size")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("fill")
+	@AknotDescription("Fill the widget available size")
 	public Vector3b getPropertyFill() {
 		return this.propertyFill;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "gravity")
-	@EwolDescription(value = "Gravity orientation")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("gravity")
+	@AknotDescription("Gravity orientation")
 	public Gravity getPropertyGravity() {
 		return this.propertyGravity;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "hide")
-	@EwolDescription(value = "The widget start hided")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("hide")
+	@AknotDescription("The widget start hided")
 	public boolean getPropertyHide() {
 		return this.propertyHide;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "max-size")
-	@EwolDescription(value = "User maximum size")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("max-size")
+	@AknotDescription("User maximum size")
 	public Dimension3f getPropertyMaxSize() {
 		return this.propertyMaxSize;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "min-size")
-	@EwolDescription(value = "User minimum size")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("min-size")
+	@AknotDescription("User minimum size")
 	public Dimension3f getPropertyMinSize() {
 		return this.propertyMinSize;
 	}

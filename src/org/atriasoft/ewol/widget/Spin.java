@@ -1,16 +1,16 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.widget.meta.SpinBase;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 /**
  * a composed Spin is a Spin with an inside composed with the specify XML element
@@ -18,9 +18,13 @@ import org.atriasoft.exml.annotation.XmlName;
  */
 public class Spin extends SpinBase {
 	// Event list of properties
-	@EwolSignal(name = "value", description = "Spin updated value (depend of the mantis)")
+	@AknotSignal
+	@AknotName("value")
+	@AknotDescription("Spin updated value (depend of the mantis)")
 	public Signal<Long> signalValue = new Signal<>();
-	@EwolSignal(name = "valueDouble", description = "Spin value change value in 'double' (application of the mantis)")
+	@AknotSignal
+	@AknotName("valueDouble")
+	@AknotDescription("Spin value change value in 'double' (application of the mantis)")
 	public Signal<Double> signalValueDouble = new Signal<>();
 	protected long propertyValue = 0; //!< Current value of the Spin.
 	protected long propertyMin = Long.MIN_VALUE; //!< Minimum value
@@ -68,42 +72,42 @@ public class Spin extends SpinBase {
 		Log.warning("updateGui [STOP]");
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "increment")
-	@EwolDescription(value = "Increment value at each button event or keybord event")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("increment")
+	@AknotDescription("Increment value at each button event or keybord event")
 	public long getPropertyIncrement() {
 		return this.propertyIncrement;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "mantis")
-	@EwolDescription(value = "fix-point mantis element (number of digit under the .)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("mantis")
+	@AknotDescription("fix-point mantis element (number of digit under the .)")
 	public int getPropertyMantis() {
 		return this.propertyMantis;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "max")
-	@EwolDescription(value = "Maximum value of the spin (depend on mantis)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "max")
+	@AknotDescription(value = "Maximum value of the spin (depend on mantis)")
 	public long getPropertyMax() {
 		return this.propertyMax;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "min")
-	@EwolDescription(value = "Minimum value of the spin (depend on mantis)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("min")
+	@AknotDescription("Minimum value of the spin (depend on mantis)")
 	public long getPropertyMin() {
 		return this.propertyMin;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Value of the Spin")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("value")
+	@AknotDescription("Value of the Spin")
 	public long getPropertyValue() {
 		return this.propertyValue;
 	}

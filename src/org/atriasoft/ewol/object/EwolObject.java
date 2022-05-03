@@ -2,17 +2,17 @@ package org.atriasoft.ewol.object;
 
 import java.lang.ref.WeakReference;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDefaultAttribute;
+import org.atriasoft.aknot.annotation.AknotDefaultManaged;
+import org.atriasoft.aknot.annotation.AknotDefaultOptional;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotIgnoreUnknown;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.ewol.Ewol;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlDefaultAttibute;
-import org.atriasoft.exml.annotation.XmlDefaultManaged;
-import org.atriasoft.exml.annotation.XmlDefaultOptional;
-import org.atriasoft.exml.annotation.XmlIgnoreUnknow;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 /** @file
  * @author Edouard DUPIN
@@ -24,10 +24,10 @@ import org.atriasoft.exml.annotation.XmlName;
  * Basic message classes for ewol system
  * this class permit at every Object to communicate between them.
  */
-@XmlDefaultManaged(value = false)
-@XmlDefaultOptional
-@XmlDefaultAttibute
-@XmlIgnoreUnknow
+@AknotDefaultManaged(value = false)
+@AknotDefaultOptional
+@AknotDefaultAttribute
+@AknotIgnoreUnknown
 public class EwolObject {
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
 	
@@ -114,10 +114,10 @@ public class EwolObject {
 		return this.uniqueId;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "name")
-	@EwolDescription(value = "Name of the object.")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "name")
+	@AknotDescription(value = "Name of the object.")
 	public String getName() {
 		return this.name;
 	}

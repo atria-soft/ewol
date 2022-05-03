@@ -1,5 +1,10 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
@@ -7,17 +12,12 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 
 /**
@@ -64,13 +64,21 @@ public class Tick extends Widget {
 	
 	private Boolean propertyValue = false; //!< string that must be displayed
 	private GuiShape shape;
-	@EwolSignal(name = "down", description = "Tick is Down")
+	@AknotSignal
+	@AknotName("down")
+	@AknotDescription("Tick is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
-	@EwolSignal(name = "up", description = "Tick is Up")
+	@AknotSignal
+	@AknotName("up")
+	@AknotDescription("Tick is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
-	@EwolSignal(name = "click", description = "Tick is Clicked")
+	@AknotSignal
+	@AknotName("click")
+	@AknotDescription("Tick is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
-	@EwolSignal(name = "value", description = "Tick value change")
+	@AknotSignal
+	@AknotName("value")
+	@AknotDescription("Tick value change")
 	public Signal<Boolean> signalValue = new Signal<>();
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
@@ -124,18 +132,18 @@ public class Tick extends Widget {
 		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "config")
-	@EwolDescription(value = "configuration of the widget")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("config")
+	@AknotDescription("configuration of the widget")
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "State of the Tick")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("value")
+	@AknotDescription("State of the Tick")
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}

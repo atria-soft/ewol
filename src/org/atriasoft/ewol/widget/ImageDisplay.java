@@ -5,6 +5,11 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Dimension2f;
@@ -12,15 +17,10 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.CompositingImage;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 
 public class ImageDisplay extends Widget {
@@ -38,30 +38,31 @@ public class ImageDisplay extends Widget {
 	protected boolean propertySmooth = true; //!< display is done in the pixel approximation if false
 	protected Uri propertySource = null; //!< file name of the image.
 	protected boolean propertyUseThemeColor = false; //!< Use the themo color management ("THEMECOLOR:///Image.json?lib=ewol") default false
-	@EwolSignal(name = "pressed")
-	@EwolDescription(value = "Image is pressed")
+	@AknotSignal
+	@AknotName("pressed")
+	@AknotDescription(value = "Image is pressed")
 	public final SignalEmpty signalPressed = new SignalEmpty();
 	
 	/**
-	 *
+	 * 
 	 */
 	public ImageDisplay() {}
 	
 	@Override
 	public void calculateMinMaxSize() {
 		Log.debug("calculate min size: border=" + this.propertyBorder + " size=" + this.propertyImageSize + " min-size=" + this.propertyMinSize);
-		Vector2f imageBoder = this.propertyBorder.getPixel().multiply(2.0f);
-		Vector2f imageSize = this.propertyImageSize.getPixel();
-		Vector3f size = this.propertyMinSize.getPixel();
+		final Vector2f imageBoder = this.propertyBorder.getPixel().multiply(2.0f);
+		final Vector2f imageSize = this.propertyImageSize.getPixel();
+		final Vector3f size = this.propertyMinSize.getPixel();
 		Log.debug("                ==> border=" + imageBoder + " size=" + imageSize + " min-size=" + size);
 		if (!imageSize.isZero()) {
-			Vector2f tmp = imageBoder.add(imageSize);
+			final Vector2f tmp = imageBoder.add(imageSize);
 			this.minSize = new Vector3f(tmp.x(), tmp.y(), 0);
 			this.maxSize = this.minSize;
 		} else {
-			Vector2i imageSizeReal = this.getPropertyMinSize().getPixeli();//.compositing.getRealSize();
+			final Vector2i imageSizeReal = this.getPropertyMinSize().getPixeli();//.compositing.getRealSize();
 			Log.verbose(" Real Size = " + imageSizeReal);
-			Vector3f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
+			final Vector3f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
 			this.minSize = new Vector3f(imageBoder.x() + imageSizeReal.x(), imageBoder.y() + imageSizeReal.y(), 0);
 			Log.verbose(" set max : " + this.minSize + " min1=" + min1);
 			this.minSize = Vector3f.max(this.minSize, min1);
@@ -76,66 +77,66 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "border")
-	@EwolDescription(value = "Border of the image")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "border")
+	@AknotDescription(value = "Border of the image")
 	public Dimension2f getPropertyBorder() {
 		return this.propertyBorder;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "size")
-	@EwolDescription(value = "Basic display size of the image")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "size")
+	@AknotDescription(value = "Basic display size of the image")
 	public Dimension2f getPropertyImageSize() {
 		return this.propertyImageSize;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "part-start")
-	@EwolDescription(value = "Start display position in the image")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "part-start")
+	@AknotDescription(value = "Start display position in the image")
 	public Vector2f getPropertyPosStart() {
 		return this.propertyPosStart;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "part-stop")
-	@EwolDescription(value = "Start display position in the image")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "part-stop")
+	@AknotDescription(value = "Start display position in the image")
 	public Vector2f getPropertyPosStop() {
 		return this.propertyPosStop;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "src")
-	@EwolDescription(value = "Image source path")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "src")
+	@AknotDescription(value = "Image source path")
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "ratio")
-	@EwolDescription(value = "Keep ratio of the image")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "ratio")
+	@AknotDescription(value = "Keep ratio of the image")
 	public boolean isPropertyKeepRatio() {
 		return this.propertyKeepRatio;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "smooth")
-	@EwolDescription(value = "Smooth display of the image")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "smooth")
+	@AknotDescription(value = "Smooth display of the image")
 	public boolean isPropertySmooth() {
 		return this.propertySmooth;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "use-theme-color")
-	@EwolDescription(value = "Use the theme color to display images")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "use-theme-color")
+	@AknotDescription(value = "Use the theme color to display images")
 	public boolean isPropertyUseThemeColor() {
 		return this.propertyUseThemeColor;
 	}
@@ -172,9 +173,9 @@ public class ImageDisplay extends Widget {
 		Vector3f origin = new Vector3f(imageBoder.x(), imageBoder.y(), 0);
 		imageBoder = imageBoder.multiply(2.0f);
 		Vector2f imageRealSize = this.imageRenderSize.less(imageBoder);
-		Vector3f imageRealSizeMax = this.size.less(imageBoder.x(), imageBoder.y(), 0);
+		final Vector3f imageRealSizeMax = this.size.less(imageBoder.x(), imageBoder.y(), 0);
 		
-		Vector2f ratioSizeDisplayRequested = this.propertyPosStop.less(this.propertyPosStart);
+		final Vector2f ratioSizeDisplayRequested = this.propertyPosStop.less(this.propertyPosStart);
 		//imageRealSizeMax *= ratioSizeDisplayRequested;
 		
 		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.imageRenderSize.x(), this.imageRenderSize.y(), 0));
@@ -189,19 +190,19 @@ public class ImageDisplay extends Widget {
 		origin = origin.add(delta);
 		
 		if (this.propertyKeepRatio) {
-			Vector2i tmpSize = this.compositing.getRealSize();
+			final Vector2i tmpSize = this.compositing.getRealSize();
 			//float ratio = tmpSize.x() / tmpSize.y();
-			float ratio = (tmpSize.x() * ratioSizeDisplayRequested.x()) / (tmpSize.y() * ratioSizeDisplayRequested.y());
+			final float ratio = (tmpSize.x() * ratioSizeDisplayRequested.x()) / (tmpSize.y() * ratioSizeDisplayRequested.y());
 			//float ratioCurrent = (imageRealSize.x()*ratioSizeDisplayRequested.x()) / (imageRealSize.y() * ratioSizeDisplayRequested.y());
-			float ratioCurrent = imageRealSize.x() / imageRealSize.y();
+			final float ratioCurrent = imageRealSize.x() / imageRealSize.y();
 			if (ratio == ratioCurrent) {
 				// nothing to do ...
 			} else if (ratio < ratioCurrent) {
-				float oldX = imageRealSize.x();
+				final float oldX = imageRealSize.x();
 				imageRealSize = imageRealSize.withX(imageRealSize.y() * ratio);
 				origin = origin.add((oldX - imageRealSize.x()) * 0.5f, 0, 0);
 			} else {
-				float oldY = imageRealSize.y();
+				final float oldY = imageRealSize.y();
 				imageRealSize = imageRealSize.withY(imageRealSize.x() / ratio);
 				origin = origin.add(0, (oldY - imageRealSize.y()) * 0.5f, 0);
 			}

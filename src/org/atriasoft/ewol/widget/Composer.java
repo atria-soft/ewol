@@ -1,23 +1,23 @@
-/*
+package org.atriasoft.ewol.widget;
+
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+/**
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-package org.atriasoft.ewol.widget;
-
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.exml.Exml;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.exml.exception.ExmlException;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
@@ -301,10 +301,10 @@ public class Composer extends Container {
 		return super.getPropertyMinSize();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "sub-file")
-	@EwolDescription(value = "compose with a subXML file")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "sub-file")
+	@AknotDescription(value = "compose with a subXML file")
 	public Uri getPropertySubFile() {
 		return this.propertySubFile;
 	}
@@ -351,10 +351,10 @@ public class Composer extends Container {
 		return super.isFocused();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "remove-if-under-remove")
-	@EwolDescription(value = "Demand the remove iof the widget if the subObject demand a remove")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "remove-if-under-remove")
+	@AknotDescription(value = "Demand the remove iof the widget if the subObject demand a remove")
 	public boolean isPropertyRemoveIfUnderRemove() {
 		return this.propertyRemoveIfUnderRemove;
 	}

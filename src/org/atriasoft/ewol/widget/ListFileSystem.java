@@ -16,6 +16,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
@@ -23,35 +28,34 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.ewol.widget.model.ListRole;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 
 /**
  * Generic display folder class. This widget display the content of a single folder :
  */
 public class ListFileSystem extends WidgetList {
-	@EwolSignal(name = "file-select")
-	@EwolDescription(value = "A file has been selected in the List")
+	@AknotSignal
+	@AknotName(value = "file-select")
+	@AknotDescription(value = "A file has been selected in the List")
 	public Signal<String> signalFileSelect = new Signal<>(); //!< @event "file-select" Generated when a file is selected.
 	
-	@EwolSignal(name = "file-validate")
-	@EwolDescription(value = "A file has been validated on the list (double clicked or return pressed)")
+	@AknotSignal
+	@AknotName(value = "file-validate")
+	@AknotDescription(value = "A file has been validated on the list (double clicked or return pressed)")
 	public Signal<String> signalFileValidate = new Signal<>(); //!< @event "file-validate" Generate when the user validate (return) or double click on the element
 	
-	@EwolSignal(name = "folder-select")
-	@EwolDescription(value = "A folder has been selected in the List")
+	@AknotSignal
+	@AknotName(value = "folder-select")
+	@AknotDescription(value = "A folder has been selected in the List")
 	public Signal<String> signalFolderSelect = new Signal<>();
 	
-	@EwolSignal(name = "folder-validate")
-	@EwolDescription(value = "A folder has been validated on the list (double clicked or return pressed)")
+	@AknotSignal
+	@AknotName(value = "folder-validate")
+	@AknotDescription(value = "A folder has been validated on the list (double clicked or return pressed)")
 	public Signal<String> signalFolderValidate = new Signal<>();
 	protected String propertyPath = "/"; //!< Current folder that display point on.
 	protected File propertyFile = null; //!< current selected file
@@ -144,26 +148,26 @@ public class ListFileSystem extends WidgetList {
 		return new Vector2i(1, this.list.size() + offset);
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "select")
-	@EwolDescription(value = "selection af a specific file")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "select")
+	@AknotDescription(value = "selection af a specific file")
 	public File getPropertyFile() {
 		return this.propertyFile;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "filter")
-	@EwolDescription(value = "regex to filter files ...")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "filter")
+	@AknotDescription(value = "regex to filter files ...")
 	public String getPropertyFilter() {
 		return this.propertyFilter;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "Path")
-	@EwolDescription(value = "Path to display")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "Path")
+	@AknotDescription(value = "Path to display")
 	public String getPropertyPath() {
 		return this.propertyPath;
 	}
@@ -179,26 +183,26 @@ public class ListFileSystem extends WidgetList {
 		return null;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "show-file")
-	@EwolDescription(value = "Display files")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "show-file")
+	@AknotDescription(value = "Display files")
 	public boolean isPropertyShowFile() {
 		return this.propertyShowFile;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "show-folder")
-	@EwolDescription(value = "display folders")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "show-folder")
+	@AknotDescription(value = "display folders")
 	public boolean isPropertyShowFolder() {
 		return this.propertyShowFolder;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "show-hidden")
-	@EwolDescription(value = "Show the hidden element (file, folder, ...)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "show-hidden")
+	@AknotDescription(value = "Show the hidden element (file, folder, ...)")
 	public boolean isPropertyShowHidden() {
 		return this.propertyShowHidden;
 	}
