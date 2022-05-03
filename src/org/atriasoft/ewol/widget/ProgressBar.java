@@ -5,13 +5,13 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 class ProgressBar extends Widget {
 	private static final int DOT_RADIUS = 6;
@@ -28,39 +28,39 @@ class ProgressBar extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		Vector3f tmpMin = this.propertyMinSize.getPixel();
+		final Vector3f tmpMin = this.propertyMinSize.getPixel();
 		this.minSize = new Vector3f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f), 10);
 		markToRedraw();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "color-off")
-	@EwolDescription(value = "Color of the false value")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "color-off")
+	@AknotDescription(value = "Color of the false value")
 	public Color getPropertyTextColorBgOff() {
 		return this.propertyTextColorBgOff;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "color-on")
-	@EwolDescription(value = "Color of the true value")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "color-on")
+	@AknotDescription(value = "Color of the true value")
 	public Color getPropertyTextColorBgOn() {
 		return this.propertyTextColorBgOn;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "color-bg")
-	@EwolDescription(value = "ackground color")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "color-bg")
+	@AknotDescription(value = "ackground color")
 	public Color getPropertyTextColorFg() {
 		return this.propertyTextColorFg;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Value of the progress bar [0..1]")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "value")
+	@AknotDescription(value = "Value of the progress bar [0..1]")
 	public float getPropertyValue() {
 		return this.propertyValue;
 	}
@@ -80,10 +80,10 @@ class ProgressBar extends Widget {
 		
 		this.draw.setColor(this.propertyTextColorFg);
 		
-		int tmpSizeX = (int) (this.size.x() - 10);
-		int tmpSizeY = (int) (this.size.y() - 10);
-		int tmpOriginX = 5;
-		int tmpOriginY = 5;
+		final int tmpSizeX = (int) (this.size.x() - 10);
+		final int tmpSizeY = (int) (this.size.y() - 10);
+		final int tmpOriginX = 5;
+		final int tmpOriginY = 5;
 		this.draw.setColor(this.propertyTextColorBgOn);
 		this.draw.setPos(new Vector3f(tmpOriginX, tmpOriginY, 0));
 		this.draw.rectangleWidth(new Vector3f(tmpSizeX * this.propertyValue, tmpSizeY, 0));

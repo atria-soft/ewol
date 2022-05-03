@@ -5,14 +5,14 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotFactory;
+import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.annotation.XmlFactory;
-import org.atriasoft.exml.annotation.XmlManaged;
 
 /*
  * @ingroup ewolWidgetGroup
@@ -79,9 +79,9 @@ public class ContainerToggle extends Widget {
 		return null;
 	}
 	
-	@XmlManaged
-	@XmlFactory(value = WidgetXmlFactory.class)
-	@EwolDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
+	@AknotManaged
+	@AknotFactory(value = WidgetXmlFactory.class)
+	@AknotDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
 	public Widget[] getSubWidgets() {
 		return this.subWidget;
 	}
@@ -157,7 +157,7 @@ public class ContainerToggle extends Widget {
 		onChangeSize();
 	}
 	
-	@XmlManaged(value = false)
+	@AknotManaged(value = false)
 	public void setSubWidget(final Widget newWidget) {
 		setSubWidget(newWidget, 0);
 	}

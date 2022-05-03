@@ -1,5 +1,15 @@
 package sample.atriasoft.ewol;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
+
+import org.atriasoft.aknot.reflect.ReflectClass;
+import org.atriasoft.aknot.reflect.ReflectTools;
+import org.atriasoft.esignal.Signal;
+import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Distance;
@@ -16,6 +26,7 @@ import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 import org.atriasoft.ewol.widget.Spacer;
 import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.Windows;
+import org.atriasoft.exml.parser.Tools;
 
 public class BasicWindows extends Windows {
 	private static final String LABEL_GRAVITY = "gravity<br/>";
@@ -186,7 +197,96 @@ public class BasicWindows extends Windows {
 		this.sizerMenuHori.subWidgetAdd(widget);
 	}
 	
+	public void connectAllSignals(final Widget widget) throws Exception {
+		Log.warning("Connect all signal(s) on '{}'", widget.getName());
+		final Class<?> classType = widget.getClass();
+		final Field[] fields = classType.getFields();
+		Log.verbose("    Fields: (" + fields.length + ")");
+		for (final Field elem : fields) {
+			// we does not manage static field
+			if (Modifier.isStatic(elem.getModifiers())) {
+				continue;
+			}
+			// we does not manage private field
+			// NOTE: if the field is private I do not check the elements ==> the user want a private API !!! (maybe change ...)
+			if (!Modifier.isPublic(elem.getModifiers())) {
+				continue;
+			}
+			final Boolean isSignal = ReflectTools.getIsSignal(elem, false);
+			if (!isSignal) {
+				continue;
+			}
+			final String[] names = ReflectTools.getNames(elem, null);
+			String eventName = elem.toGenericString();
+			Log.error("        - name={} otherNames={}", eventName, Arrays.toString(names));
+			if (names.length != 0 && names[0] != null) {
+				eventName = names[0];
+			}
+			final String description = ReflectTools.getDescription(elem);
+			if (description != null) {
+				Log.error("        ==> '{}'", description);
+			}
+			final Class<?>[] types = ReflectTools.getTypeField(elem);
+			Log.error("        typeSignal '{}'", Arrays.toString(types));
+			if (types.length == 2 && types[0] == Signal.class) {
+				Log.error("        ** Signal<{}>", types[1].getCanonicalName());
+				final Object signalObject = elem.get(widget);
+				if (signalObject == null) {
+					Log.error("Signal is not accessible !!!!!!! ");
+				} else {
+					final String valueNameOfSignal = eventName;
+					@SuppressWarnings("unchecked")
+					final Signal<Object> tmp = (Signal<Object>) signalObject;
+					tmp.connect((object) -> {
+						Log.print("Get event from '{}' value='{}'", valueNameOfSignal, object);
+					});
+				}
+			}
+			if (types.length == 1 && types[0] == SignalEmpty.class) {
+				Log.error("        ** SignalEmpty");
+				
+			}
+			
+		}
+		
+	}
+	
+	public void displayAllPropertyWithType(final Widget widget) throws Exception {
+		Log.warning("Connect all property(ies) on '{}'", widget.getName());
+		final Class<?> classType = widget.getClass();
+		final List<Method> methods = ReflectClass.getFilterGenericFucntion(classType, null, true, true, true);
+		// Separate the methods and filer as:
+		//     - XXX GetXxx(); & XXX != boolean
+		//     - void setXxx(XXX elem);
+		//     - [bB]oolean isXxx();
+		// for records:
+		//     - xxx();
+		final boolean isRecord = Record.class.isAssignableFrom(classType);
+		final List<Method> methodsGet = ReflectClass.extractGetMethod(classType, methods, null);
+		for (final Method elem : methodsGet) {
+			final String name = Tools.decapitalizeFirst(isRecord ? elem.getName() : elem.getName().substring(3));
+			final Boolean isAttribute = ReflectTools.getIsAttribute(elem, false);
+			if (!isAttribute) {
+				continue;
+			}
+			final String[] otherNames = ReflectTools.getNames(elem, null);
+			Log.error("    - '{}' otherNames={}", name, Arrays.toString(otherNames));
+			final String description = ReflectTools.getDescription(elem);
+			if (description != null) {
+				Log.error("        ==> '{}'", description);
+			}
+		}
+		
+	}
+	
 	public void setTestWidget(final Widget widget) {
+		try {
+			connectAllSignals(widget);
+			displayAllPropertyWithType(widget);
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.sizerTestAreaHori.subWidgetRemoveAll();
 		{
 			final Spacer simpleSpacer = new Spacer();
@@ -220,4 +320,5 @@ public class BasicWindows extends Windows {
 		final Label gravLabel = (Label) (this.buttonGravity.getSubWidgets()[0]);
 		gravLabel.setPropertyValue(LABEL_GRAVITY + gravity.toString());
 	}
+	
 }

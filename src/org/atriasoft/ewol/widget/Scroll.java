@@ -5,6 +5,10 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -14,13 +18,9 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.GravityVertical;
 import org.atriasoft.ewol.HighSpeedMode;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
 
@@ -70,26 +70,26 @@ class Scroll extends Container {
 		}
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "limit")
-	@EwolDescription(value = "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "limit")
+	@AknotDescription(value = "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end")
 	public Vector3f getPropertyLimit() {
 		return this.propertyLimit;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "shape-hori")
-	@EwolDescription(value = "shape for the horizontal display")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "shape-hori")
+	@AknotDescription(value = "shape for the horizontal display")
 	public Uri getPropertyShapeHori() {
 		return this.propertyShapeHori;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "shape-vert")
-	@EwolDescription(value = "shape for the vertical display")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "shape-vert")
+	@AknotDescription(value = "shape for the vertical display")
 	public Uri getPropertyShapeVert() {
 		return this.propertyShapeVert;
 	}
@@ -103,10 +103,10 @@ class Scroll extends Container {
 		return this;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "hover")
-	@EwolDescription(value = "The display bar are hover the subWidget")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "hover")
+	@AknotDescription(value = "The display bar are hover the subWidget")
 	public boolean isPropertyHover() {
 		return this.propertyHover;
 	}

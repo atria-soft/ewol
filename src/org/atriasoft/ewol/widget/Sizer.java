@@ -5,21 +5,20 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotCaseSensitive;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolObjectProperty;
 import org.atriasoft.ewol.internal.Log;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlCaseSensitive;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 public class Sizer extends ContainerN {
-	@XmlCaseSensitive(value = false)
+	@AknotCaseSensitive(value = false)
 	public enum DisplayMode {
 		HORIZONTAL, //!< Horizontal mode
 		VERTICAL; //!< Vertical mode
@@ -80,20 +79,18 @@ public class Sizer extends ContainerN {
 		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName("border")
-	@EwolObjectProperty
-	@EwolDescription("The sizer border size")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("border")
+	@AknotDescription("The sizer border size")
 	public Dimension3f getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName("mode")
-	@EwolObjectProperty
-	@EwolDescription("The display mode")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("mode")
+	@AknotDescription("The display mode")
 	public DisplayMode getPropertyMode() {
 		return this.propertyMode;
 	}

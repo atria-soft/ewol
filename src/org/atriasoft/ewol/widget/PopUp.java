@@ -5,16 +5,16 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 
 /**
@@ -33,10 +33,10 @@ public class PopUp extends ContainerWithShape {
 		this.propertyExpand = Vector3b.FALSE;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "out-click-remove")
-	@EwolDescription(value = "Remove the widget if the use click outside")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "out-click-remove")
+	@AknotDescription(value = "Remove the widget if the use click outside")
 	public boolean isPropertyCloseOutEvent() {
 		return this.propertyCloseOutEvent;
 	}

@@ -5,22 +5,22 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etranslate.ETranslate;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.AlignMode;
 import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyStatus;
 
 public class LabelOnSVG extends Widget {
@@ -31,8 +31,9 @@ public class LabelOnSVG extends Widget {
 	
 	protected int propertyFontSize = 0; //!< default size of the font.
 	protected String propertyValue = ""; //!< decorated text to display.
-	@EwolSignal(name = "pressed")
-	@EwolDescription(value = "Label is pressed")
+	@AknotSignal
+	@AknotName("pressed")
+	@AknotDescription("Label is pressed")
 	public SignalEmpty signalPressed = new SignalEmpty();
 	protected CompositingText text = new CompositingText(); //!< Compositing text element.
 	protected String value = "";
@@ -64,14 +65,14 @@ public class LabelOnSVG extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		Vector3f tmpMax = this.propertyMaxSize.getPixel();
-		Vector3f tmpMin = this.propertyMinSize.getPixel();
+		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
+		final Vector3f tmpMin = this.propertyMinSize.getPixel();
 		Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} tmpMax : " + tmpMax);
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
 			Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "}     force Alignement ");
 		}
-		Vector3f minSize = this.text.calculateSizeDecorated(this.value);
+		final Vector3f minSize = this.text.calculateSizeDecorated(this.value);
 		Log.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} minSize : " + minSize);
 		
 		this.minSize = new Vector3f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()), FMath.avg(tmpMin.z(), 4 + minSize.z(), tmpMax.z()));
@@ -114,18 +115,18 @@ public class LabelOnSVG extends Widget {
 			//return;
 		}
 		this.text.clear();
-		int paddingSize = 2;
+		final int paddingSize = 2;
 		
-		Vector3f tmpMax = this.propertyMaxSize.getPixel();
+		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
-		Vector3f minSize = this.text.calculateSize('A');
+		final Vector3f minSize = this.text.calculateSize('A');
 		
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 2 * paddingSize, AlignMode.LEFT);
 		}
-		Vector3f currentTextSize = this.text.calculateSizeDecorated(this.value);
+		final Vector3f currentTextSize = this.text.calculateSizeDecorated(this.value);
 		
 		Vector2i localSize = new Vector2i((int) this.minSize.x(), (int) this.minSize.y());
 		
@@ -145,10 +146,10 @@ public class LabelOnSVG extends Widget {
 		
 		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
 		
-		Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
+		final Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
 		
-		Vector3f drawClippingPos = new Vector3f(paddingSize, paddingSize, -0.5f);
-		Vector3f drawClippingSize = new Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
+		final Vector3f drawClippingPos = new Vector3f(paddingSize, paddingSize, -0.5f);
+		final Vector3f drawClippingSize = new Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
 		
 		// clean the element
 		this.text.reset();
@@ -168,10 +169,10 @@ public class LabelOnSVG extends Widget {
 		this.text.flush();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "auto-translate")
-	@EwolDescription(value = "Translate the String with the marker {T:xxxxxx}")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("auto-translate")
+	@AknotDescription("Translate the String with the marker {T:xxxxxx}")
 	public void setPropertyAutoTranslate(final boolean propertyAutoTranslate) {
 		if (this.propertyAutoTranslate == propertyAutoTranslate) {
 			return;
@@ -186,10 +187,10 @@ public class LabelOnSVG extends Widget {
 		requestUpdateSize();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "font-size")
-	@EwolDescription(value = "Default font size (0=> system default)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("font-size")
+	@AknotDescription("Default font size (0=> system default)")
 	public void setPropertyFontSize(final int propertyFontSize) {
 		if (this.propertyFontSize == propertyFontSize) {
 			return;
@@ -199,10 +200,10 @@ public class LabelOnSVG extends Widget {
 		requestUpdateSize();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Displayed value string")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("value")
+	@AknotDescription("Displayed value string")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

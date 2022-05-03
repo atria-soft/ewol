@@ -9,21 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.backend3d.OpenGL;
 
 /**
@@ -35,15 +35,15 @@ public class Windows extends Widget {
 	
 	protected List<Widget> popUpWidgetList = new ArrayList<>();
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "file-color")
-	@EwolDescription(value = "File color of the Windows")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("file-color")
+	@AknotDescription("File color of the Windows")
 	public Uri propertyColorConfiguration = new Uri("THEME", "color/Windows.json", "ewol"); //!< Configuration file of the windows theme
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "title")
-	@EwolDescription(value = "Title of the windows")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("title")
+	@AknotDescription("Title of the windows")
 	public String propertyTitle = "No title"; //!< Current title of the windows
 	
 	protected ResourceColorFile resourceColor = null; //!< theme color property (name of file in @ref propertyColorConfiguration)
@@ -67,7 +67,7 @@ public class Windows extends Widget {
 		if (this.subWidget != null) {
 			this.subWidget.drawWidgetTree(level);
 		}
-		for (Widget it : this.popUpWidgetList) {
+		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.drawWidgetTree(level);
 			}
@@ -96,7 +96,7 @@ public class Windows extends Widget {
 			}
 		}
 		// get all subwidget "pop-up"
-		for (Widget it : this.popUpWidgetList) {
+		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				tmpObject = it.getSubObjectNamed(objectName);
 				if (tmpObject != null) {
@@ -112,7 +112,7 @@ public class Windows extends Widget {
 	public Widget getWidgetAtPos(final Vector3f pos) {
 		Log.verbose("Get widget at pos : " + pos);
 		// calculate relative position
-		Vector3f relativePos = relativePosition(pos);
+		final Vector3f relativePos = relativePosition(pos);
 		// event go directly on the pop-up
 		if (this.popUpWidgetList.size() != 0) {
 			return this.popUpWidgetList.get(this.popUpWidgetList.size() - 1).getWidgetAtPos(pos);
@@ -144,7 +144,7 @@ public class Windows extends Widget {
 			this.subWidget.setOrigin(Vector3f.ZERO);
 			this.subWidget.onChangeSize();
 		}
-		for (Widget it : this.popUpWidgetList) {
+		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.calculateMinMaxSize();
 				it.setSize(this.size);
@@ -159,7 +159,7 @@ public class Windows extends Widget {
 		if (this.subWidget != null) {
 			this.subWidget.systemRegenerateDisplay();
 		}
-		for (Widget it : this.popUpWidgetList) {
+		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.systemRegenerateDisplay();
 			}
@@ -210,7 +210,7 @@ public class Windows extends Widget {
 		Log.verbose("A child has been removed");
 		ListIterator<Widget> it = this.popUpWidgetList.listIterator();
 		while (it.hasNext()) {
-			Widget elem = it.next();
+			final Widget elem = it.next();
 			if (elem == child) {
 				Log.verbose("    Find it ...");
 				if (elem != null) {
@@ -245,7 +245,7 @@ public class Windows extends Widget {
 			return;
 		}
 		this.propertyTitle = propertyTitle;
-		EwolContext context = EwolObject.getContext();
+		final EwolContext context = EwolObject.getContext();
 		if (context.getWindows() == this) {
 			context.setTitle(propertyTitle);
 		} else {
@@ -290,8 +290,8 @@ public class Windows extends Widget {
 		
 		// clear the matrix system :
 		OpenGL.setBasicMatrix(Matrix4f.IDENTITY);
-		Vector3i tmpSize = new Vector3i((int) this.size.x(), (int) this.size.y(), (int) this.size.z());
-		DrawProperty displayProp = new DrawProperty(tmpSize, Vector3i.ZERO, tmpSize);
+		final Vector3i tmpSize = new Vector3i((int) this.size.x(), (int) this.size.y(), (int) this.size.z());
+		final DrawProperty displayProp = new DrawProperty(tmpSize, Vector3i.ZERO, tmpSize);
 		systemDraw(displayProp);
 		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
@@ -317,7 +317,7 @@ public class Windows extends Widget {
 		}
 		
 		// second display the pop-up
-		for (Widget it : this.popUpWidgetList) {
+		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.systemDraw(displayProp);
 				//Log.debug("Draw Pop-up");

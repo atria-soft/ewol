@@ -5,28 +5,29 @@
  */
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
+import org.atriasoft.aknot.annotation.AknotText;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.AlignMode;
 import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlText;
 import org.atriasoft.gale.key.KeyStatus;
 
 public class Label extends Widget {
-	@EwolSignal(name = "pressed")
-	@EwolDescription(value = "Label is pressed")
+	@AknotSignal
+	@AknotName("pressed")
+	@AknotDescription("Label is pressed")
 	public SignalEmpty signalPressed = new SignalEmpty();
 	private String propertyValue = ""; //!< decorated text to display.
 	private int propertyFontSize = 0; //!< default size of the font.
@@ -179,10 +180,10 @@ public class Label extends Widget {
 		this.textCompose.flush();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "auto-translate")
-	@EwolDescription(value = "Translate the String with the marker {T:xxxxxx}")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "auto-translate")
+	@AknotDescription(value = "Translate the String with the marker {T:xxxxxx}")
 	public void setPropertyAutoTranslate(final boolean propertyAutoTranslate) {
 		if (this.propertyAutoTranslate == propertyAutoTranslate) {
 			return;
@@ -197,10 +198,10 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "font-size")
-	@EwolDescription(value = "Default font size (0=> system default)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "font-size")
+	@AknotDescription(value = "Default font size (0=> system default)")
 	public void setPropertyFontSize(final int propertyFontSize) {
 		if (this.propertyFontSize == propertyFontSize) {
 			return;
@@ -210,10 +211,10 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
-	@XmlManaged
-	@XmlText
-	@XmlName(value = "value")
-	@EwolDescription(value = "Displayed value string")
+	@AknotManaged
+	@AknotText
+	@AknotName(value = "value")
+	@AknotDescription(value = "Displayed value string")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

@@ -3,6 +3,11 @@ package org.atriasoft.ewol.widget;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
@@ -10,8 +15,6 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
@@ -20,9 +23,6 @@ import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.context.ClipBoard;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.key.KeyKeyboard;
@@ -84,12 +84,18 @@ public class Entry extends Widget {
 	private Pattern regex = null; //!< regular expression to check content
 	private GuiShape shape;
 	//.create()
-	@EwolSignal(name = "click", description = "the user Click on the Entry box")
+	@AknotSignal
+	@AknotName(value = "click")
+	@AknotDescription("the user Click on the Entry box")
 	public SignalEmpty signalClick = new SignalEmpty(); //!< bang on click the entry box
-	@EwolSignal(name = "enter", description = "The cursor enter inside the button")
+	@AknotSignal
+	@AknotName(value = "enter")
+	@AknotDescription("The cursor enter inside the button")
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
 	
-	@EwolSignal(name = "modify", description = "Entry box value change")
+	@AknotSignal
+	@AknotName(value = "modify")
+	@AknotDescription("Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
@@ -97,7 +103,7 @@ public class Entry extends Widget {
 	Vector3f overPositionStop = Vector3f.ZERO;
 	
 	/**
-	 * Contuctor
+	 * Constructor
 	 * @param _newData The USting that might be set in the Entry box (no event generation!!)
 	 */
 	public Entry() {
@@ -651,10 +657,10 @@ public class Entry extends Widget {
 		markToRedraw();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "config")
-	@EwolDescription(value = "configuration of the widget")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "config")
+	@AknotDescription(value = "configuration of the widget")
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;
@@ -663,10 +669,10 @@ public class Entry extends Widget {
 		onChangePropertyShaper();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "max")
-	@EwolDescription(value = "Maximum char that can be set on the Entry")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "max")
+	@AknotDescription(value = "Maximum char that can be set on the Entry")
 	public void setPropertyMaxCharacter(final int propertyMaxCharacter) {
 		if (this.propertyMaxCharacter == propertyMaxCharacter) {
 			return;
@@ -675,10 +681,10 @@ public class Entry extends Widget {
 		onChangePropertyMaxCharacter();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "password")
-	@EwolDescription(value = "Not display content in password mode")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "password")
+	@AknotDescription(value = "Not display content in password mode")
 	public void setPropertyPassword(final boolean propertyPassword) {
 		if (this.propertyPassword == propertyPassword) {
 			return;
@@ -687,10 +693,10 @@ public class Entry extends Widget {
 		onChangePropertyPassword();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "regex")
-	@EwolDescription(value = "Control what it is write with a regular expression")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "regex")
+	@AknotDescription(value = "Control what it is write with a regular expression")
 	public void setPropertyRegex(final String propertyRegex) {
 		if (this.propertyRegex.equals(propertyRegex)) {
 			return;
@@ -699,10 +705,10 @@ public class Entry extends Widget {
 		onChangePropertyRegex();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "empty-text")
-	@EwolDescription(value = "Text when nothing is written")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "empty-text")
+	@AknotDescription(value = "Text when nothing is written")
 	public void setPropertyTextWhenNothing(final String propertyTextWhenNothing) {
 		if (this.propertyTextWhenNothing.equals(propertyTextWhenNothing)) {
 			return;
@@ -711,10 +717,10 @@ public class Entry extends Widget {
 		onChangePropertyTextWhenNothing();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Value display in the entry (decorated text)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "value")
+	@AknotDescription(value = "Value display in the entry (decorated text)")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

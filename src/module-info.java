@@ -4,7 +4,6 @@
 
 open module org.atriasoft.ewol {
 	exports org.atriasoft.ewol;
-	exports org.atriasoft.ewol.annotation;
 	exports org.atriasoft.ewol.compositing;
 	exports org.atriasoft.ewol.compositing.tools;
 	exports org.atriasoft.ewol.context;
@@ -14,7 +13,7 @@ open module org.atriasoft.ewol {
 	exports org.atriasoft.ewol.resource.font;
 	//exports org.atriasoft.ewol.tools;
 	exports org.atriasoft.ewol.widget;
-	//exports org.atriasoft.ewol.widget.meta;
+	exports org.atriasoft.ewol.widget.meta;
 	
 	requires transitive org.atriasoft.esignal;
 	requires transitive org.atriasoft.iogami;

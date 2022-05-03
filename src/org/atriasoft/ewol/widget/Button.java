@@ -1,5 +1,10 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
@@ -8,8 +13,6 @@ import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.compositing.ShapeBox;
@@ -18,9 +21,6 @@ import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeyStatus;
 
@@ -100,17 +100,29 @@ public class Button extends ContainerToggle {
 	protected ShapeBox shapeProperty = ShapeBox.ZERO;
 	private GuiShape shape;
 	
-	@EwolSignal(name = "down", description = "Button is Down")
+	@AknotSignal
+	@AknotName(value = "down")
+	@AknotDescription("Button is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
-	@EwolSignal(name = "up", description = "Button is Up")
+	@AknotSignal
+	@AknotName(value = "up")
+	@AknotDescription("Button is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
-	@EwolSignal(name = "click", description = "Button is Clicked")
+	@AknotSignal
+	@AknotName(value = "click")
+	@AknotDescription("Button is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
-	@EwolSignal(name = "enter", description = "The cursor enter inside the button")
+	@AknotSignal
+	@AknotName(value = "enter")
+	@AknotDescription("The cursor enter inside the button")
 	public SignalEmpty signalEnter = new SignalEmpty();
-	@EwolSignal(name = "leave", description = "The cursor leave the button")
+	@AknotSignal
+	@AknotName(value = "leave")
+	@AknotDescription("The cursor leave the button")
 	public SignalEmpty signalLeave = new SignalEmpty();
-	@EwolSignal(name = "value", description = "The button value change")
+	@AknotSignal
+	@AknotName(value = "value")
+	@AknotDescription("The button value change")
 	public Signal<Boolean> signalValue = new Signal<>();
 	
 	private boolean buttonPressed = false;
@@ -165,42 +177,42 @@ public class Button extends ContainerToggle {
 		changeStatusIn(GuiShapeMode.NONE);
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "config")
-	@EwolDescription(value = "configuration of the widget")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "config")
+	@AknotDescription(value = "configuration of the widget")
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "lock")
-	@EwolDescription(value = "Lock the button in a special state to permit changing state only by the coder")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "lock")
+	@AknotDescription(value = "Lock the button in a special state to permit changing state only by the coder")
 	public ButtonLock getPropertyLock() {
 		return this.propertyLock;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "Value display in the entry (decorated text)")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "value")
+	@AknotDescription(value = "Value display in the entry (decorated text)")
 	public boolean getPropertyValue() {
 		return this.propertyValue;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "enable-single")
-	@EwolDescription(value = "If one element set in the Button ==> display only set")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "enable-single")
+	@AknotDescription(value = "If one element set in the Button ==> display only set")
 	public boolean isPropertyEnableSingle() {
 		return this.propertyEnableSingle;
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "toggle")
-	@EwolDescription(value = "The button can toggle")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "toggle")
+	@AknotDescription(value = "The button can toggle")
 	public boolean isPropertyToggleMode() {
 		return this.propertyToggleMode;
 	}

@@ -1,5 +1,10 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,18 +13,14 @@ package org.atriasoft.ewol.widget;
 
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.annotation.EwolDescription;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 public class Spacer extends Widget {
 	private final CompositingDrawing draw = new CompositingDrawing(); //!< Compositing drawing element
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "color")
-	@EwolDescription(value = "background of the spacer")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("color")
+	@AknotDescription("background of the spacer")
 	protected Color propertyColor = Color.NONE; //!< Background color
 	
 	/**

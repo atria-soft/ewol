@@ -7,11 +7,14 @@ package org.atriasoft.ewol.widget.meta;
 
 import java.io.File;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.CheckBox;
@@ -20,9 +23,6 @@ import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.ImageDisplay;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ListFileSystem;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
 
 /**
  *  File Chooser is a simple selector of file for opening, saving, and what you want ...
@@ -158,12 +158,14 @@ public class FileChooser extends Composer {
 		self.autoDestroy();
 	}
 	
-	@EwolSignal(name = "cancel")
-	@EwolDescription(value = "Cancel button is pressed")
+	@AknotSignal
+	@AknotName(value = "cancel")
+	@AknotDescription(value = "Cancel button is pressed")
 	public SignalEmpty signalCancel; //!< abort the display of the pop-up or press cancel button
 	
-	@EwolSignal(name = "validate")
-	@EwolDescription(value = "Validate button is pressed")
+	@AknotSignal
+	@AknotName(value = "validate")
+	@AknotDescription(value = "Validate button is pressed")
 	public Signal<String> signalValidate; //!< select file(s)
 	// properties
 	public String propertyPath = System.getProperty("user.home"); //!< Current path to explore
@@ -271,9 +273,9 @@ public class FileChooser extends Composer {
 		}
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "file")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "file")
 	public void setPropertyFile(final String propertyFile) {
 		if (this.propertyFile.equals(propertyFile)) {
 			return;
@@ -282,10 +284,10 @@ public class FileChooser extends Composer {
 		onChangePropertyFile();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "label-cancel")
-	@EwolDescription(value = "Label for cancel button")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "label-cancel")
+	@AknotDescription(value = "Label for cancel button")
 	public void setPropertyLabelCancel(final String propertyLabelCancel) {
 		if (this.propertyLabelCancel.equals(propertyLabelCancel)) {
 			return;
@@ -294,10 +296,10 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelCancel();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "title")
-	@EwolDescription(value = "Titile of the Pop-up")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "title")
+	@AknotDescription(value = "Titile of the Pop-up")
 	public void setPropertyLabelTitle(final String propertyLabelTitle) {
 		if (this.propertyLabelTitle.equals(propertyLabelTitle)) {
 			return;
@@ -306,10 +308,10 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelTitle();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "label-validate")
-	@EwolDescription(value = "Label for validate button")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "label-validate")
+	@AknotDescription(value = "Label for validate button")
 	public void setPropertyLabelValidate(final String propertyLabelValidate) {
 		if (this.propertyLabelValidate.equals(propertyLabelValidate)) {
 			return;
@@ -318,10 +320,10 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelValidate();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "path")
-	@EwolDescription(value = "Path of the File chooser")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "path")
+	@AknotDescription(value = "Path of the File chooser")
 	public void setPropertyPath(final String propertyPath) {
 		if (this.propertyPath.equals(propertyPath)) {
 			return;

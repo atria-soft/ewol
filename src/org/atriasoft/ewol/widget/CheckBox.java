@@ -1,16 +1,16 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotManaged;
+import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.annotation.AknotSignal;
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotText;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.ewol.Gravity;
-import org.atriasoft.ewol.annotation.EwolDescription;
-import org.atriasoft.ewol.annotation.EwolSignal;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
-import org.atriasoft.exml.annotation.XmlAttribute;
-import org.atriasoft.exml.annotation.XmlManaged;
-import org.atriasoft.exml.annotation.XmlName;
-import org.atriasoft.exml.annotation.XmlText;
 
 public class CheckBox extends Container {
 	
@@ -35,13 +35,21 @@ public class CheckBox extends Container {
 		self.signalValue.emit(value);
 	}
 	
-	@EwolSignal(name = "down", description = "CheckBox is Down")
+	@AknotSignal
+	@AknotName("down")
+	@AknotDescription("CheckBox is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
-	@EwolSignal(name = "up", description = "CheckBox is Up")
+	@AknotSignal
+	@AknotName("up")
+	@AknotDescription("CheckBox is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
-	@EwolSignal(name = "click", description = "CheckBox is Clicked")
+	@AknotSignal
+	@AknotName("click")
+	@AknotDescription("CheckBox is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
-	@EwolSignal(name = "value", description = "CheckBox value change")
+	@AknotSignal
+	@AknotName("value")
+	@AknotDescription("CheckBox value change")
 	public Signal<Boolean> signalValue = new Signal<>();
 	final Tick tick;
 	final Label label;
@@ -74,18 +82,18 @@ public class CheckBox extends Container {
 		this.label.signalPressed.connectAuto(this, CheckBox::eventLabelClick);
 	}
 	
-	@XmlManaged
-	@XmlText
-	@XmlName(value = "label")
-	@EwolDescription(value = "value of the label")
+	@AknotManaged
+	@AknotText
+	@AknotName(value = "label")
+	@AknotDescription(value = "value of the label")
 	public String getPropertyLabel() {
 		return this.label.getPropertyValue();
 	}
 	
-	@XmlManaged
-	@XmlAttribute
-	@XmlName(value = "value")
-	@EwolDescription(value = "State of the checkbox")
+	@AknotManaged
+	@AknotAttribute
+	@AknotName(value = "value")
+	@AknotDescription(value = "State of the checkbox")
 	public Boolean getPropertyValue() {
 		return this.tick.getPropertyValue();
 	}
