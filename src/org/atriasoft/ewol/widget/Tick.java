@@ -205,7 +205,7 @@ public class Tick extends Widget {
 		if (KeyStatus.pressSingle == event.status() && over) {
 			keepFocus();
 			this.signalClick.emit();
-			this.propertyValue = !this.propertyValue;
+			setPropertyValue(!this.propertyValue);
 			return true;
 		}
 		if (KeyStatus.down == event.status() && over) {

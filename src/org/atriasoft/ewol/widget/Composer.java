@@ -9,6 +9,7 @@ import org.atriasoft.aknot.annotation.AknotDescription;
  */
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3b;
@@ -61,6 +62,9 @@ public class Composer extends Container {
 		try {
 			result = Exml.parse(data, Composer.class, "Composer");//new WidgetXmlFactory());
 		} catch (final ExmlException ex) {
+			Log.error("Fail to load Data !!! {}", ex.toString());
+			ex.printStackTrace();
+		} catch (final AknotException ex) {
 			Log.error("Fail to load Data !!! {}", ex.toString());
 			ex.printStackTrace();
 		}

@@ -1,6 +1,5 @@
 package sample.atriasoft.ewol.sampleButton;
 
-import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.widget.Composer;
 import org.atriasoft.ewol.widget.Widget;
 
@@ -11,11 +10,11 @@ public class MainWindows extends BasicWindows {
 	public MainWindows() {
 		setPropertyTitle("Simple Button test");
 		//final Widget data = Composer.composerGenerateString("<Composer><Label>hello, how are you</Label></Composer>");
-		final Widget data = Composer.composerGenerateString("<Spin/>");
-		/*
-		final Widget data = Composer.composerGenerateString("<Button toggle='true' fill='true,false,false' expand='true'>" + "<Label>hello, how are you</Label>"
+		//final Widget data = Composer.composerGenerateString("<Spin/>");
+		/* */
+		final Widget data = Composer.composerGenerateString("<Button name='My name is Bob' toggle='true' fill='true,false,false' expand='true'>" + "<Label>hello, how are you</Label>"
 				+ "<Label>You <br/>Click - Me <b>!?<!--kjlkjlkjlkj-->d</b></Label>" + "</Button>");
-		*/
+		/* */
 		//final Widget data = Composer.composerGenerateFile(new Uri("DATA", "ewol-gui-file-chooser.xml", "ewol"));
 		this.setTestWidget(data);
 		/*
