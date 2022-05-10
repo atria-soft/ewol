@@ -8,6 +8,7 @@ package org.atriasoft.ewol.compositing;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
@@ -807,6 +808,9 @@ public abstract class TextBase extends Compositing {
 			e.printStackTrace();
 		} catch (final ExmlException e) {
 			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
+			e.printStackTrace();
+		} catch (final AknotException e) {
+			Log.error("Error in parsing pojo data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
