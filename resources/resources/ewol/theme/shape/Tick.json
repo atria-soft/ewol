@@ -21,5 +21,5 @@
 	
 	"palette":"THEME:shape/palette_gui.json?lib=ewol",
 	
-	"change-time":200
+	"change-time":100
 }

@@ -49,7 +49,6 @@ public class Spin extends SpinBase {
 	public void checkValue(long value) {
 		value = FMath.clamp(this.propertyMin, value, this.propertyMax);
 		this.propertyValue = value;
-		// TODO: manage the mantis ...
 		this.widgetEntry.setPropertyValue(Long.toString(value));
 		this.signalValue.emit(this.propertyValue);
 	}
@@ -57,10 +56,8 @@ public class Spin extends SpinBase {
 	public void connectGui() {
 		Log.warning("updateGui [START]");
 		super.updateGui();
-		
 		if (this.widgetEntry != null && !this.connectionEntry.isConnected()) {
 			this.connectionEntry = this.widgetEntry.signalModify.connect(this, Spin::onCallbackModify);
-			// TODO: set a regExp Filter
 		}
 		if (this.widgetButtonUp != null && !this.connectionButtonUp.isConnected()) {
 			this.connectionButtonUp = this.widgetButtonUp.signalValue.connect(this, Spin::onCallbackUp);

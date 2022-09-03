@@ -40,9 +40,15 @@ import org.atriasoft.ewol.widget.Windows;
 public class BasicWindows extends Windows {
 	private static final String LABEL_GRAVITY = "gravity: ";
 	
+	public static void staticRequestNext(final BasicWindows self) {
+		self.requestNext();
+	}
+	
 	Widget testWidget;
 	Sizer sizerTestAreaHori;
+	Sizer sizerMenuRoot;
 	Sizer sizerMenu;
+	
 	Gravity basicGravity = Gravity.BOTTOM_LEFT;
 	
 	private final List<Connection> conections = new ArrayList<>();
@@ -56,13 +62,25 @@ public class BasicWindows extends Windows {
 		sizerMain.setPropertyFill(Vector3b.TRUE);
 		setSubWidget(sizerMain);
 		
+		this.sizerMenuRoot = new Sizer(DisplayMode.VERTICAL);
+		this.sizerMenuRoot.setPropertyExpand(Vector3b.FALSE_TRUE_FALSE);
+		this.sizerMenuRoot.setPropertyLockExpand(Vector3b.TRUE);
+		this.sizerMenuRoot.setPropertyFill(Vector3b.TRUE);
+		this.sizerMenuRoot.setPropertyMinSize(new Dimension3f(new Vector3f(350, 10, 10), Distance.PIXEL));
+		this.sizerMenuRoot.setPropertyGravity(Gravity.TOP);
+		sizerMain.subWidgetAdd(this.sizerMenuRoot);
+		
+		final Button next = Button.createLabelButton("Next ...");
+		this.sizerMenuRoot.subWidgetAdd(next);
+		next.signalClick.connectAuto(this, BasicWindows::staticRequestNext);
+		
 		this.sizerMenu = new Sizer(DisplayMode.VERTICAL);
 		this.sizerMenu.setPropertyExpand(Vector3b.FALSE_TRUE_FALSE);
 		this.sizerMenu.setPropertyLockExpand(Vector3b.TRUE);
 		this.sizerMenu.setPropertyFill(Vector3b.TRUE);
 		this.sizerMenu.setPropertyMinSize(new Dimension3f(new Vector3f(350, 10, 10), Distance.PIXEL));
 		this.sizerMenu.setPropertyGravity(Gravity.TOP);
-		sizerMain.subWidgetAdd(this.sizerMenu);
+		this.sizerMenuRoot.subWidgetAdd(this.sizerMenu);
 		
 		final Sizer sizerVertMain = new Sizer(DisplayMode.VERTICAL);
 		sizerVertMain.setPropertyExpand(Vector3b.TRUE);
@@ -1131,7 +1149,12 @@ public class BasicWindows extends Windows {
 		}
 	}
 	
+	public void requestNext() {
+		// nothing to do ...
+	}
+	
 	public void setTestWidget(final Widget widget) {
+		this.sizerMenu.subWidgetRemoveAll();
 		try {
 			final IntrospectionModelComplex modelPojo = new IntrospectionModelComplex(widget.getClass());
 			
