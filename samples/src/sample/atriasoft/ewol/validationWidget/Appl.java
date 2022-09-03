@@ -1,10 +1,9 @@
-package sample.atriasoft.ewol.sampleEntry;
+package sample.atriasoft.ewol.validationWidget;
 
 import org.atriasoft.etk.Configs;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.context.EwolApplication;
 import org.atriasoft.ewol.context.EwolContext;
-import org.atriasoft.ewol.widget.MainWindows;
 
 import sample.atriasoft.ewol.Log;
 

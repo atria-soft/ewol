@@ -1,11 +1,10 @@
 package org.atriasoft.ewol.widget;
 
+import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotText;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.math.Vector3b;
@@ -83,7 +82,8 @@ public class CheckBox extends Container {
 	}
 	
 	@AknotManaged
-	@AknotText
+	//@AknotText
+	@AknotAttribute
 	@AknotName(value = "label")
 	@AknotDescription(value = "value of the label")
 	public String getPropertyLabel() {

@@ -1,9 +1,9 @@
-package sample.atriasoft.ewol.sampleButton;
+package sample.atriasoft.ewol.validationWidget;
 
 import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.Ewol;
 
-public class SampleButtonMain {
+public class ValidatorMain {
 	public static void main(final String[] args) {
 		Ewol.init();
 		//Uri.addLibrary("ne", MainCollisionTest.class, "testDataLoxelEngine/");
@@ -11,5 +11,5 @@ public class SampleButtonMain {
 		Ewol.run(new Appl(), args);
 	}
 	
-	private SampleButtonMain() {}
+	private ValidatorMain() {}
 }

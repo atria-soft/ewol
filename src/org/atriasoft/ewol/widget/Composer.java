@@ -1,12 +1,13 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
 /**
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
+
+import org.atriasoft.aknot.annotation.AknotAttribute;
+import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.exception.AknotException;
@@ -18,7 +19,7 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.Exml;
+import org.atriasoft.exml.XmlMapper;
 import org.atriasoft.exml.exception.ExmlException;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
@@ -58,13 +59,11 @@ public class Composer extends Container {
 			requestComposer = false;
 		}
 		data = data.replace("{ID}", Long.toString(id));
-		Composer[] result = null;
+		Composer result = null;
+		final XmlMapper mapper = new XmlMapper();
 		try {
-			result = Exml.parse(data, Composer.class, "Composer");//new WidgetXmlFactory());
-		} catch (final ExmlException ex) {
-			Log.error("Fail to load Data !!! {}", ex.toString());
-			ex.printStackTrace();
-		} catch (final AknotException ex) {
+			result = mapper.parse(data, Composer.class);//new WidgetXmlFactory());
+		} catch (final ExmlException | AknotException ex) {
 			Log.error("Fail to load Data !!! {}", ex.toString());
 			ex.printStackTrace();
 		}
@@ -72,9 +71,9 @@ public class Composer extends Container {
 			return null;
 		}
 		if (requestComposer) {
-			return result[0];
+			return result;
 		}
-		return result[0].getSubWidget();
+		return result.getSubWidget();
 	}
 	
 	protected boolean propertyRemoveIfUnderRemove; //!< Remove the composer if sub element request a remove
