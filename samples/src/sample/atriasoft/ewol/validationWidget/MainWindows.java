@@ -16,7 +16,11 @@ public class MainWindows extends BasicWindows {
 	
 	public MainWindows() {
 		setPropertyTitle("Test all compositing");
-		
+
+		this.titles.add("test Slider");
+		this.values.add("""
+				<Slider name='My name is Bob' fill='true,false,false' expand='true'/>
+				""");
 		this.titles.add("test Entry");
 		this.values.add("""
 				<Entry name='My name is Bob' fill='true,false,false' expand='true'/>

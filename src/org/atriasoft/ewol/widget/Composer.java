@@ -37,13 +37,13 @@ public class Composer extends Container {
 	public static Widget composerGenerateFile(final Uri uri, final long id) {
 		final byte[] elemData = Uri.getAllData(uri);
 		if (elemData == null) {
-			Log.error("Can not read the Stream : " + uri);
+			Log.error("Can not read the Stream : {}", uri);
 			return null;
 		}
 		final String dataToParse = new String(elemData);
 		final Widget tmp = composerGenerateString(dataToParse, id);
 		if (tmp == null) {
-			Log.error("Faiul to Load data: {}", uri);
+			Log.error("Fail to Load data: {}", uri);
 		}
 		return tmp;
 	}

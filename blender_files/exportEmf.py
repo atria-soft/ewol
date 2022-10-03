@@ -9,7 +9,8 @@ list_elem = [
 	"Entry",
 	"Tick",
 	"ScrollBar",
-	"Button"
+	"Button",
+    "Slider"
 	]
 
 for elem in list_elem:

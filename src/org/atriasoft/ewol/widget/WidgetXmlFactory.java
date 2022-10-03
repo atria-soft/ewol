@@ -21,6 +21,7 @@ public class WidgetXmlFactory implements InterfaceFactoryAccess {
 		listWidgetAvaillable.put("PopUp", PopUp.class);
 		listWidgetAvaillable.put("FileChooser", FileChooser.class);
 		listWidgetAvaillable.put("Spin", Spin.class);
+		listWidgetAvaillable.put("Slider", Slider.class);
 	}
 	
 	@Override
