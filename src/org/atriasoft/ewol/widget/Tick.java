@@ -95,7 +95,6 @@ public class Tick extends Widget {
 		markToRedraw();
 		// can not support multiple click...
 		setMouseLimit(1);
-		this.shape = new GuiShape(this.propertyConfig);
 	}
 	
 	@Override

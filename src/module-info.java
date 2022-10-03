@@ -22,7 +22,7 @@ open module org.atriasoft.ewol {
 	requires transitive org.atriasoft.esvg;
 	requires transitive org.atriasoft.exml;
 	requires transitive org.atriasoft.ejson;
-	requires transitive io.scenarium.logger;
+	requires transitive org.atriasoft.reggol;
 	requires org.atriasoft.loader3d;
 	requires org.atriasoft.egami;
 	requires java.base;

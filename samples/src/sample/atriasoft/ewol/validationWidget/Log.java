@@ -5,8 +5,8 @@
  */
 package sample.atriasoft.ewol.validationWidget;
 
-import io.scenarium.logger.LogLevel;
-import io.scenarium.logger.Logger;
+import org.atriasoft.reggol.LogLevel;
+import org.atriasoft.reggol.Logger;
 
 public class Log {
 	private static final String LIB_NAME = "ejson-test";

@@ -79,7 +79,7 @@ public class ImageDisplay extends Widget {
 	
 	@AknotManaged
 	@AknotAttribute
-	@AknotName(value = "border")
+	@AknotName(value = "image-border")
 	@AknotDescription(value = "Border of the image")
 	public Dimension2f getPropertyBorder() {
 		return this.propertyBorder;
@@ -87,7 +87,7 @@ public class ImageDisplay extends Widget {
 	
 	@AknotManaged
 	@AknotAttribute
-	@AknotName(value = "size")
+	@AknotName(value = "image-size")
 	@AknotDescription(value = "Basic display size of the image")
 	public Dimension2f getPropertyImageSize() {
 		return this.propertyImageSize;
