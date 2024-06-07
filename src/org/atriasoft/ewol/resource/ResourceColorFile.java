@@ -14,8 +14,9 @@ import org.atriasoft.ejson.model.JsonNode;
 import org.atriasoft.ejson.model.JsonObject;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class ListElement {
 	public Color color;
@@ -33,18 +34,21 @@ class ListElement {
  *        example black, or white or orange ...)
  */
 public class ResourceColorFile extends Resource {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceColorFile.class);
+
 	public static ResourceColorFile create(final Uri uri) {
-		Log.verbose("KEEP: ColorFile: " + uri);
-		ResourceColorFile object = null;
+		LOGGER.trace("KEEP: ColorFile: " + uri);
+		final ResourceColorFile object = null;
 		final Resource object2 = Resource.getManager().localKeep(uri);
 		if (object2 != null) {
 			if (object2 instanceof ResourceColorFile) {
 				return (ResourceColorFile) object2;
 			}
-			Log.critical("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
+			LOGGER.error("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
+			System.exit(-1);
 			return null;
 		}
-		Log.debug("CREATE: FontFreeType: " + uri);
+		LOGGER.debug("CREATE: FontFreeType: " + uri);
 		// need to crate a new one ...
 		return new ResourceColorFile(uri);
 	}
@@ -59,9 +63,9 @@ public class ResourceColorFile extends Resource {
 	 */
 	public ResourceColorFile(final Uri uri) {
 		super(uri);
-		Log.debug("CF : load \"" + uri + "\"");
+		LOGGER.debug("CF : load \"" + uri + "\"");
 		reload();
-		// Log.debug("List of all color : " + this.list.keySet());
+		// LOGGER.debug("List of all color : " + this.list.keySet());
 	}
 	
 	@Override
@@ -94,8 +98,8 @@ public class ResourceColorFile extends Resource {
 	}
 	
 	public synchronized void put(final String name, final Color color) {
-		for (int iii = 0; iii < this.list.size(); iii++) {
-			final ListElement elem = this.list.get(iii);
+		for (final ListElement element : this.list) {
+			final ListElement elem = element;
 			if (elem.name.contentEquals(name)) {
 				elem.color = color;
 				return;
@@ -107,17 +111,17 @@ public class ResourceColorFile extends Resource {
 	@Override
 	public synchronized void reload() {
 		// remove all previous set of value :
-		for (int iii = 0; iii < this.list.size(); ++iii) {
-			this.list.get(iii).color = this.errorColor;
+		for (final ListElement element : this.list) {
+			element.color = this.errorColor;
 		}
-		Log.todo("Mut be implemented ...");
+		LOGGER.info("[TODO] Mut be implemented ...");
 		// open and read all json elements:
 		try {
 			final JsonObject out = Ejson.parse(Uri.valueOf(this.name)).toJsonObject();
 			
 			final JsonArray baseArray = out.get("color").toJsonArray();
 			if (baseArray == null) {
-				Log.error("Can not get basic array : 'color' in file:" + this.name);
+				LOGGER.error("Can not get basic array : 'color' in file:" + this.name);
 				Ejson.display(out);
 				return;
 			}
@@ -125,15 +129,15 @@ public class ResourceColorFile extends Resource {
 			for (final JsonNode it : baseArray.getNodes()) {
 				final JsonObject tmpObj = it.toJsonObject();
 				if (tmpObj == null) {
-					Log.error(" can not get object in 'color' : " + it);
+					LOGGER.error(" can not get object in 'color' : " + it);
 					findError = true;
 					continue;
 				}
 				final String name = tmpObj.get("name").toJsonString().getValue();
 				final String color = tmpObj.get("color").toJsonString().getValue();
-				Log.debug("find new color : '" + name + "' color='" + color + "'");
+				LOGGER.debug("find new color : '" + name + "' color='" + color + "'");
 				if (name.length() == 0) {
-					Log.error("Drop an empty name");
+					LOGGER.error("Drop an empty name");
 					findError = true;
 					continue;
 				}
@@ -143,11 +147,11 @@ public class ResourceColorFile extends Resource {
 				put(name, Color.valueOf(color));
 			}
 			if (findError) {
-				Log.error("pb in parsing file:" + this.name);
+				LOGGER.error("pb in parsing file:" + this.name);
 				Ejson.display(out);
 			}
 		} catch (final Exception e) {
-			Log.error("chach exception in parsing config file... " + e.getMessage());
+			LOGGER.error("chach exception in parsing config file... " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

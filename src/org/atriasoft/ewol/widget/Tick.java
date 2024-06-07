@@ -16,9 +16,10 @@ import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.gale.key.KeyStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -40,28 +41,30 @@ public Signal<Boolean> signalValue;
 public 	Uri> propertyShape; //!< shape of the widget
 */
 public class Tick extends Widget {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Tick.class);
+	
 	/**
 	 * Periodic call to update grapgic display
 	 * @param _event Time generic event
 	 */
 	protected static void periodicCall(final Tick self, final EventTime event) {
-		Log.verbose("Periodic call on Entry(" + event + ")");
+		LOGGER.trace("Periodic call on Entry(" + event + ")");
 		if (!self.shape.periodicCall(event)) {
-			//Log.error("end periodic call");
+			//LOGGER.error("end periodic call");
 			self.periodicConnectionHanble.close();
 		}
 		self.markToRedraw();
 	}
-	
+
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// text display this.text
 	//private final CompositingGraphicContext gc = new CompositingGraphicContext();
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-	
+
 	private Uri propertyConfig = new Uri("THEME", "shape/Tick.json", "ewol");
-	
+
 	private Boolean propertyValue = false; //!< string that must be displayed
 	private GuiShape shape;
 	@AknotSignal
@@ -83,9 +86,9 @@ public class Tick extends Widget {
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
 	Vector3f overPositionStop = Vector3f.ZERO;
-	
+
 	private boolean isDown;
-	
+
 	/**
 	 * Constuctor
 	 */
@@ -96,7 +99,7 @@ public class Tick extends Widget {
 		// can not support multiple click...
 		setMouseLimit(1);
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -107,30 +110,32 @@ public class Tick extends Widget {
 			padding = this.shape.getPadding();
 		}
 		final Vector3i minHeight = Vector3i.VALUE_16;
-		
+
 		Vector3f minimumSizeBase = new Vector3f(minHeight.x(), minHeight.y(), minHeight.z());
 		// add padding :
 		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y(), padding.z());
 		this.minSize = Vector3f.max(this.minSize, minimumSizeBase);
 		// verify the min max of the min size ...
 		checkMinSize();
-		Log.error("min size = " + this.minSize);
+		LOGGER.error("min size = " + this.minSize);
 	}
-	
+
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
 		if (this.shape.changeStatusIn(newStatusId)) {
 			if (!this.periodicConnectionHanble.isConnected()) {
-				//Log.error("REQUEST: connection on periodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, Tick::periodicCall);
+				//LOGGER.error("REQUEST: connection on periodic call");
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this,
+						Tick::periodicCall);
 			}
 			markToRedraw();
 		}
 	}
-	
+
 	private boolean checkIfOver(final Vector3f relPos) {
-		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
+		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
+				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("config")
@@ -138,7 +143,7 @@ public class Tick extends Widget {
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -146,7 +151,7 @@ public class Tick extends Widget {
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	protected void onChangePropertyShaper() {
 		if (this.shape == null) {
 			this.shape = new GuiShape(this.propertyConfig);
@@ -154,28 +159,28 @@ public class Tick extends Widget {
 			this.shape.setSource(this.propertyConfig);
 		}
 	}
-	
+
 	protected void onChangePropertyTextWhenNothing() {
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyValue() {
 		//Boolean newData = this.propertyValue;
 		markToRedraw();
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
 			this.shape.draw(true, this.propertyValue ? 0 : 1);
 		}
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
 		final Vector3f relPos = relativePosition(positionAbsolute);
-		Log.warning("Event on Input ... " + event + " relPos = " + relPos);
+		LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = checkIfOver(relPos);
 		//filter if outside the element...
 		if (event.status() == KeyStatus.leave) {
@@ -188,7 +193,7 @@ public class Tick extends Widget {
 				if (KeyStatus.leave == event.status()) {
 					changeStatusIn(GuiShapeMode.NORMAL);
 				} else {
-					Log.verbose("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
+					LOGGER.trace("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
 					if (over) {
 						changeStatusIn(GuiShapeMode.OVER);
 					} else {
@@ -230,13 +235,13 @@ public class Tick extends Widget {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
 			//return;
 		}
-		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
+		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
 		//this.gc.clear();
 		if (this.colorIdTextFg >= 0) {
@@ -246,7 +251,7 @@ public class Tick extends Widget {
 			//this.text.setSelectionColor(this.shape.getColor(this.colorIdSelection));
 		}
 		final Padding padding = this.shape.getPadding();
-		
+
 		Vector3f tmpSizeShaper = this.minSize;
 		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 		if (this.propertyFill.x()) {
@@ -257,7 +262,7 @@ public class Tick extends Widget {
 			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 			delta = delta.withY(0.0f);
 		}
-		
+
 		Vector3f tmpOriginShaper = delta;
 		Vector3f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
 		//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
@@ -274,10 +279,10 @@ public class Tick extends Widget {
 		tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
 		tmpSizeInside = Vector3f.clipInt(tmpSizeInside);
 		tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
-		
+
 		//this.gc.clear();
 		//this.gc.setSize((int)tmpSizeText.x(), (int)tmpSizeText.y());
-		
+
 		//this.gc.setColorFill(Color.BLACK);
 		//this.gc.setColorStroke(Color.NONE);
 		//this.gc.setStrokeWidth(1);
@@ -287,9 +292,9 @@ public class Tick extends Widget {
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
 		//this.gc.flush();
 		this.shape.flush();
-		
+
 	}
-	
+
 	/**
 	 * internal check the value with RegExp checking
 	 * @param newData The new string to display
@@ -298,7 +303,7 @@ public class Tick extends Widget {
 		this.propertyValue = newData;
 		markToRedraw();
 	}
-	
+
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;
@@ -306,7 +311,7 @@ public class Tick extends Widget {
 		this.propertyConfig = propertyConfig;
 		onChangePropertyShaper();
 	}
-	
+
 	public void setPropertyValue(final Boolean propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;
@@ -315,5 +320,5 @@ public class Tick extends Widget {
 		this.signalValue.emit(this.propertyValue);
 		onChangePropertyValue();
 	}
-	
+
 }

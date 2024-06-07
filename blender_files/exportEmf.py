@@ -14,5 +14,5 @@ list_elem = [
 	]
 
 for elem in list_elem:
-	bpy.ops.wm.open_mainfile(filepath="/home/heero/dev/WORKSPACE-game/jatria-soft/ewol/blender_files/" + elem + ".blend")
-	bpy.ops.export_scene.emf(filepath="/home/heero/dev/WORKSPACE-game/jatria-soft/ewol/resources/resources/ewol/theme/shape/" + elem + ".emf")
+	bpy.ops.wm.open_mainfile(filepath="/home/heero/dev/WORKSPACE-game/org.atriasoft/ewol/blender_files/" + elem + ".blend")
+	bpy.ops.export_scene.emf(filepath="/home/heero/dev/WORKSPACE-game/org.atriasoft/ewol/resources/resources/ewol/theme/shape/" + elem + ".emf")

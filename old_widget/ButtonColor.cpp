@@ -65,7 +65,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay() {
 	if (needRedraw() == false) {
 		return;
 	}
-	Log.debug("redraw");
+	LOGGER.debug("redraw");
 	this.text.clear();
 	this.shaper.clear();
 	
@@ -144,7 +144,7 @@ boolean ewol::widget::ButtonColor::onEventInput( ewol::event::Input _event) {
 		}
 	}
 	boolean previousPressed = this.buttonPressed;
-	//Log.debug("Event on BT ... mouse position : " + this.mouseHover);
+	//LOGGER.debug("Event on BT ... mouse position : " + this.mouseHover);
 	if (true == this.mouseHover) {
 		if (1 == _event.getId()) {
 			if(KeyStatus::down == _event.getStatus()) {
@@ -161,7 +161,7 @@ boolean ewol::widget::ButtonColor::onEventInput( ewol::event::Input _event) {
 				// create a context menu : 
 				this.widgetContextMenu = ewol::widget::ContextMenu::create();
 				if (this.widgetContextMenu == null) {
-					Log.error("Allocation Error");
+					LOGGER.error("Allocation Error");
 					return true;
 				}
 				Vector2f tmpPos = this.origin + this.selectableAreaPos + this.selectableAreaSize;
@@ -175,7 +175,7 @@ boolean ewol::widget::ButtonColor::onEventInput( ewol::event::Input _event) {
 				myColorChooser.signalChange.connect(sharedFromThis(), ewol::widget::ButtonColor::onCallbackColorChange);
 				ewol::widget::Windows currentWindows = getWindows();
 				if (currentWindows == null) {
-					Log.error("Can not get the curent Windows...");
+					LOGGER.error("Can not get the curent Windows...");
 					this.widgetContextMenu.reset();
 				} else {
 					currentWindows.popUpWidgetPush(this.widgetContextMenu);

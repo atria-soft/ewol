@@ -6,9 +6,12 @@
  */
 package org.atriasoft.ewol.tools;
 
-import org.atriasoft.ewol.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Message {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Message.class);
+
 	private enum Type {
 		critical, //!< Critical message pop-up, //!< information message pop-up
 		error, //!< warning message pop-up
@@ -22,7 +25,7 @@ public class Message {
 	 * @param message message to display (decorated text)
 	 */
 	private static void create(final Type type, final String message) {
-		Log.todo("Generic message display (simple interface...)");
+		LOGGER.info("[TODO] Generic message display (simple interface...)");
 		/*
 		StdPopUp tmpPopUp = new StdPopUp();
 		switch (type) {
@@ -38,7 +41,7 @@ public class Message {
 		EwolContext context = Ewol.getContext();
 		Windows windows = context.getWindows();
 		if (windows == null) {
-			Log.error("can not get the current windows ... ==> can not display message : " + message);
+			LOGGER.error("can not get the current windows ... ==> can not display message : " + message);
 			return;
 		}
 		windows.popUpWidgetPush(tmpPopUp);

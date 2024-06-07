@@ -16,7 +16,6 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.ewol.compositing.tools.TextDecoration;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.exml.Exml;
@@ -28,8 +27,11 @@ import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
 import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class TextBase extends Compositing {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextBase.class);
 	// previously this line and the center is perform with this one)
 	protected AlignMode alignment = AlignMode.DISABLE; // !< Current Alignment mode (justify/left/right ...)
 	protected boolean clippingEnable = false; // !< true if the clipping must be activated
@@ -45,7 +47,7 @@ public abstract class TextBase extends Compositing {
 	protected Color defaultColorFg = Color.BLACK; // !< The text foreground color
 	// this section is reserved for HTML parsing and display:
 	public String htmlCurrentLine = ""; // !< current line for HTML display
-	
+
 	public List<TextDecoration> htmlDecoration = new ArrayList<>(); // !< current decoration for the HTML display
 	public TextDecoration htmlDecoTmp = new TextDecoration(); // !< current decoration
 	protected boolean kerning = true; // !< Kerning enable or disable on the next elements displayed
@@ -69,18 +71,18 @@ public abstract class TextBase extends Compositing {
 	protected float stopTextPos = 0; // !< end of the alignment (when a string is too height it cut at the word
 	protected ResourceVirtualArrayObject vbo = null;
 	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
-	
+
 	/**
 	 * generic constructor
 	 */
 	public TextBase() {
 		this(new Uri("DATA", "text.vert", "ewol"), new Uri("DATA", "text.frag", "ewol"));
 	}
-	
+
 	public TextBase(final Uri vertexShader, final Uri fragmentShader) {
 		this(vertexShader, fragmentShader, true);
 	}
-	
+
 	public TextBase(final Uri vertexShader, final Uri fragmentShader, final boolean loadProgram) {
 		if (loadProgram) {
 			loadProgram(vertexShader, fragmentShader);
@@ -90,7 +92,7 @@ public abstract class TextBase extends Compositing {
 		// TO facilitate some debugs we add a name of the VBO:
 		this.vbo.setName("[VBO] of super.TextBase");
 	}
-	
+
 	/**
 	 * calculate a theoric charcode size
 	 * @param charcode The Unicode value to calculate dimention.
@@ -99,7 +101,7 @@ public abstract class TextBase extends Compositing {
 	public Vector3f calculateSize(final Character charcode) {
 		return calculateSizeChar(charcode);
 	}
-	
+
 	/**
 	 * calculate a theoric text size
 	 * @param text The string to calculate dimention.
@@ -116,10 +118,10 @@ public abstract class TextBase extends Compositing {
 		}
 		return outputSize;
 	}
-	
+
 	// ! @previous
 	public abstract Vector3f calculateSizeChar(Character charcode);
-	
+
 	/**
 	 * calculate a theoric text size
 	 * @param text The string to calculate dimention.
@@ -129,13 +131,13 @@ public abstract class TextBase extends Compositing {
 		if (text.length() == 0) {
 			return Vector3f.ZERO;
 		}
-		
+
 		final StringBuilder tmpData = new StringBuilder("<html><body>\n");
 		tmpData.append(text);
 		tmpData.append("\n</body></html>\n");
 		return calculateSizeHTML(tmpData.toString());
 	}
-	
+
 	/**
 	 * calculate a theoric text size
 	 * @param text The string to calculate dimention.
@@ -144,29 +146,31 @@ public abstract class TextBase extends Compositing {
 	public Vector3f calculateSizeHTML(final String text) {
 		// remove intermediate result
 		reset();
-		// Log.debug(" 0 size for=\n" + text);
+		// LOGGER.debug(" 0 size for=\n" + text);
 		// disable display system
 		this.needDisplay = false;
-		
+
 		setPos(Vector3f.ZERO);
 		// same as print without the end display ...
 		printHTML(text);
-		//Log.error(" ]]]] position={}", this.position);
-		//Log.error(" ]]]] sizeDisplayStart={}", this.sizeDisplayStart);
-		//Log.error(" ]]]] sizeDisplayStop={}", this.sizeDisplayStop);
-		
+		//LOGGER.error(" ]]]] position={}", this.position);
+		//LOGGER.error(" ]]]] sizeDisplayStart={}", this.sizeDisplayStart);
+		//LOGGER.error(" ]]]] sizeDisplayStop={}", this.sizeDisplayStop);
+
 		// get the last elements
 		this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
 		this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
-		
-		// Log.debug(" 2 Start pos=" + this.sizeDisplayStart);
-		// Log.debug(" 2 Stop pos=" + this.sizeDisplayStop);
+
+		// LOGGER.debug(" 2 Start pos=" + this.sizeDisplayStart);
+		// LOGGER.debug(" 2 Stop pos=" + this.sizeDisplayStop);
 		// set back the display system
 		this.needDisplay = true;
-		
-		return new Vector3f(this.sizeDisplayStop.x() - this.sizeDisplayStart.x(), this.sizeDisplayStop.y() - this.sizeDisplayStart.y(), this.sizeDisplayStop.z() - this.sizeDisplayStart.z());
+
+		return new Vector3f(this.sizeDisplayStop.x() - this.sizeDisplayStart.x(),
+				this.sizeDisplayStop.y() - this.sizeDisplayStart.y(),
+				this.sizeDisplayStop.z() - this.sizeDisplayStart.z());
 	}
-	
+
 	/**
 	 * clear all the registered element in the current element
 	 */
@@ -181,14 +185,14 @@ public abstract class TextBase extends Compositing {
 		// reset temporal variables:
 		reset();
 	}
-	
+
 	/**
 	 * disable the alignement system
 	 */
 	public void disableAlignement() {
 		this.alignment = AlignMode.DISABLE;
 	}
-	
+
 	/**
 	 * remove the cursor display
 	 */
@@ -196,7 +200,7 @@ public abstract class TextBase extends Compositing {
 		this.selectionStartPos = -100;
 		this.cursorPos = -100;
 	}
-	
+
 	/**
 	 * draw All the registered text in the current element on openGL
 	 */
@@ -204,20 +208,20 @@ public abstract class TextBase extends Compositing {
 	public void draw(final boolean disableDepthTest) {
 		drawD(disableDepthTest);
 	}
-	
+
 	// ! @previous
 	public void draw(final Matrix4f transformationMatrix, final boolean enableDepthTest) {
 		drawMT(transformationMatrix, enableDepthTest);
 	}
-	
+
 	/**
 	 * draw All the refistered text in the current element on openGL
 	 */
 	public abstract void drawD(final boolean disableDepthTest);
-	
+
 	// ! @previous
 	public abstract void drawMT(final Matrix4f transformationMatrix, final boolean enableDepthTest);
-	
+
 	/**
 	 * calculate the element number that is the first out the alignment
 	 *        range (start at the specify ID, and use start pos with current one)
@@ -230,24 +234,29 @@ public abstract class TextBase extends Compositing {
 	 * @return true if the right has free space that can be use for justify.
 	 * false if we find '\n'
 	 */
-	public boolean extrapolateLastId(final String text, final int start, final Dynamic<Integer> stop, final Dynamic<Integer> space, final Dynamic<Integer> freeSpace) {
+	public boolean extrapolateLastId(
+			final String text,
+			final int start,
+			final Dynamic<Integer> stop,
+			final Dynamic<Integer> space,
+			final Dynamic<Integer> freeSpace) {
 		// store previous :
 		final Character storePrevious = this.previousCharcode;
-		
+
 		stop.value = text.length();
 		space.value = 0;
-		
+
 		int lastSpacePosition = start;
 		int lastSpacefreeSize = 0;
-		
+
 		float endPos = this.position.x();
 		boolean endOfLine = false;
-		
+
 		float stopPosition = this.stopTextPos;
 		if (!this.needDisplay || this.stopTextPos == this.startTextPos) {
 			stopPosition = this.startTextPos + 3999999999.0f;
 		}
-		
+
 		for (int iii = start; iii < text.length(); iii++) {
 			final Vector3f tmpSize = calculateSize(text.charAt(iii));
 			// check overflow :
@@ -285,12 +294,12 @@ public abstract class TextBase extends Compositing {
 		freeSpace.value = lastSpacefreeSize;
 		return false;
 	}
-	
+
 	@Override
 	public void flush() {
 		this.vectorialDraw.flush();
 	}
-	
+
 	/**
 	 * This generate the line return == > it return to the alignment
 	 *        position start and at the correct line position ==> it might be use to
@@ -300,7 +309,7 @@ public abstract class TextBase extends Compositing {
 		// reset position :
 		setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), 0));
 	}
-	
+
 	/**
 	 * get the current alignment property
 	 * @return the current alignment type
@@ -308,12 +317,12 @@ public abstract class TextBase extends Compositing {
 	public AlignMode getAlignment() {
 		return this.alignment;
 	}
-	
+
 	// This is used to draw background selection and other things ...
 	public CompositingDrawing getDrawing() {
 		return this.vectorialDraw;
 	}
-	
+
 	/**
 	 * get the current font mode
 	 * @return The font mode applied
@@ -321,11 +330,11 @@ public abstract class TextBase extends Compositing {
 	public FontMode getFontMode() {
 		return this.mode;
 	}
-	
+
 	public abstract GlyphProperty getGlyphPointer(Character charcode);
-	
+
 	public abstract float getHeight();
-	
+
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
@@ -333,16 +342,17 @@ public abstract class TextBase extends Compositing {
 	public Vector3f getPos() {
 		return this.position;
 	}
-	
+
 	public abstract float getSize();
-	
+
 	/**
 	 * add a line with the current this.htmlDecoTmp decoration
 	 * @param data The cuurent data to add.
 	 */
 	public void htmlAddData(final String data) {
-		//Log.error("Add data '{}' @pos=", data, this.position);
-		if (this.htmlCurrentLine.length() > 0 && this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != (char) Character.SPACE_SEPARATOR) {
+		//LOGGER.error("Add data '{}' @pos=", data, this.position);
+		if (this.htmlCurrentLine.length() > 0
+				&& this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != (char) Character.SPACE_SEPARATOR) {
 			this.htmlCurrentLine += (char) Character.SPACE_SEPARATOR;
 			if (this.htmlDecoration.size() > 0) {
 				final TextDecoration tmp = this.htmlDecoration.get(this.htmlDecoration.size() - 1);
@@ -356,7 +366,7 @@ public abstract class TextBase extends Compositing {
 			this.htmlDecoration.add(this.htmlDecoTmp);
 		}
 	}
-	
+
 	/**
 	 * draw the current line
 	 */
@@ -367,7 +377,7 @@ public abstract class TextBase extends Compositing {
 		this.htmlCurrentLine = "";
 		this.htmlDecoration.clear();
 	}
-	
+
 	/**
 	 * load the openGL program and get all the ID needed
 	 */
@@ -382,12 +392,12 @@ public abstract class TextBase extends Compositing {
 			this.oGLtextWidth = this.oGLprogram.getUniform("in_texWidth");
 			this.oGLtextHeight = this.oGLprogram.getUniform("in_texHeight");
 		} else {
-			Log.error("Can not load the program => create previous one...");
+			LOGGER.error("Can not load the program => create previous one...");
 			this.oGLprogram = old;
 			old = null;
 		}
 	}
-	
+
 	/**
 	 * This parse a tinyXML node (void pointer to permit to hide tiny XML in
 	 *        include).
@@ -401,21 +411,21 @@ public abstract class TextBase extends Compositing {
 			}
 			if (it.isText()) {
 				htmlAddData(it.getValue());
-				Log.verbose("XML add : " + it.getValue());
+				LOGGER.trace("XML add : " + it.getValue());
 				continue;
 			}
 			if (!it.isElement()) {
-				Log.error("node not suported type : " + it.getType() + " val='" + it.getValue() + "'");
+				LOGGER.error("node not suported type : " + it.getType() + " val='" + it.getValue() + "'");
 				continue;
 			}
 			final XmlElement elem = (XmlElement) it;
 			final String lowercaseValue = elem.getValue().toLowerCase();
 			if (lowercaseValue.contentEquals("br")) {
 				htmlFlush();
-				Log.verbose("XML flush  newLine");
+				LOGGER.trace("XML flush  newLine");
 				forceLineReturn();
 			} else if (lowercaseValue.contentEquals("font")) {
-				Log.verbose("XML Font ...");
+				LOGGER.trace("XML Font ...");
 				final TextDecoration tmpDeco = this.htmlDecoTmp;
 				if (elem.existAttribute("color")) {
 					try {
@@ -424,10 +434,10 @@ public abstract class TextBase extends Compositing {
 							this.htmlDecoTmp = this.htmlDecoTmp.withFG(Color.valueOf(colorValue));
 						}
 					} catch (final ExmlAttributeDoesNotExist e) {
-						Log.error("Can not get attribute 'color' in XML:" + e.getMessage());
+						LOGGER.error("Can not get attribute 'color' in XML:" + e.getMessage());
 						e.printStackTrace();
 					} catch (final Exception e) {
-						Log.error("Can not parse attribute 'color' in XML:" + e.getMessage());
+						LOGGER.error("Can not parse attribute 'color' in XML:" + e.getMessage());
 						e.printStackTrace();
 					}
 				}
@@ -438,17 +448,17 @@ public abstract class TextBase extends Compositing {
 							this.htmlDecoTmp = this.htmlDecoTmp.withBG(Color.valueOf(colorValue));
 						}
 					} catch (final ExmlAttributeDoesNotExist e) {
-						Log.error("Can not get attribute 'colorBg' in XML:" + e.getMessage());
+						LOGGER.error("Can not get attribute 'colorBg' in XML:" + e.getMessage());
 						e.printStackTrace();
 					} catch (final Exception e) {
-						Log.error("Can not parse attribute 'colorBg' in XML:" + e.getMessage());
+						LOGGER.error("Can not parse attribute 'colorBg' in XML:" + e.getMessage());
 						e.printStackTrace();
 					}
 				}
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
 			} else if (lowercaseValue.contentEquals("b") || lowercaseValue.contentEquals("bold")) {
-				Log.verbose("XML bold ...");
+				LOGGER.trace("XML bold ...");
 				final TextDecoration tmpDeco = this.htmlDecoTmp;
 				if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
 					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD);
@@ -458,7 +468,7 @@ public abstract class TextBase extends Compositing {
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
 			} else if (lowercaseValue.contentEquals("i") || lowercaseValue.contentEquals("italic")) {
-				Log.verbose("XML italic ...");
+				LOGGER.trace("XML italic ...");
 				final TextDecoration tmpDeco = this.htmlDecoTmp;
 				if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
 					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.ITALIC);
@@ -468,43 +478,43 @@ public abstract class TextBase extends Compositing {
 				parseHtmlNode(elem);
 				this.htmlDecoTmp = tmpDeco;
 			} else if (lowercaseValue.contentEquals("u") || lowercaseValue.contentEquals("underline")) {
-				Log.verbose("XML underline ...");
+				LOGGER.trace("XML underline ...");
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("p") || lowercaseValue.contentEquals("paragraph")) {
-				Log.verbose("XML paragraph ...");
+				LOGGER.trace("XML paragraph ...");
 				htmlFlush();
 				this.alignment = AlignMode.LEFT;
 				forceLineReturn();
 				parseHtmlNode(elem);
 				forceLineReturn();
 			} else if (lowercaseValue.contentEquals("center")) {
-				Log.verbose("XML center ...");
+				LOGGER.trace("XML center ...");
 				htmlFlush();
 				this.alignment = AlignMode.CENTER;
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("left")) {
-				Log.verbose("XML left ...");
+				LOGGER.trace("XML left ...");
 				htmlFlush();
 				this.alignment = AlignMode.LEFT;
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("right")) {
-				Log.verbose("XML right ...");
+				LOGGER.trace("XML right ...");
 				htmlFlush();
 				this.alignment = AlignMode.RIGHT;
 				parseHtmlNode(elem);
 			} else if (lowercaseValue.contentEquals("justify")) {
-				Log.verbose("XML justify ...");
+				LOGGER.trace("XML justify ...");
 				htmlFlush();
 				this.alignment = AlignMode.JUSTIFY;
 				parseHtmlNode(elem);
 			} else {
-				Log.error("node not suported type: " + elem.getType() + " val='" + elem.getValue() + "'");
+				LOGGER.error("node not suported type: " + elem.getType() + " val='" + elem.getValue() + "'");
 			}
-			
-			//Log.error("Add data elems... @pos=", this.position);
+
+			//LOGGER.error("Add data elems... @pos=", this.position);
 		}
 	}
-	
+
 	/**
 	 * display a compleat string in the current element.
 	 * @param text The string to display.
@@ -513,7 +523,7 @@ public abstract class TextBase extends Compositing {
 		final List<TextDecoration> decorationEmpty = new ArrayList<>();
 		print(text, decorationEmpty);
 	}
-	
+
 	/**
 	 * display a compleat string in the current element whith specific
 	 *        decorations (advence mode).
@@ -525,7 +535,7 @@ public abstract class TextBase extends Compositing {
 		Color tmpFg = this.color;
 		Color tmpBg = this.colorBg;
 		if (this.alignment == AlignMode.DISABLE) {
-			// Log.debug(" 1 print in not aligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
+			// LOGGER.debug(" 1 print in not aligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 			// display the cursor if needed (if it is at the start position...)
 			if (this.needDisplay) {
 				if (0 == this.cursorPos) {
@@ -544,7 +554,8 @@ public abstract class TextBase extends Compositing {
 				}
 				// if real display : ( not display is for size calculation)
 				if (this.needDisplay) {
-					if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1) || (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
+					if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1)
+							|| (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
 						setColor(Color.BLACK);
 						setColorBg(this.colorSelection);
 					} else {
@@ -572,10 +583,10 @@ public abstract class TextBase extends Compositing {
 					}
 				}
 			}
-			// Log.debug(" 2 print in not aligned mode : start=" + this.sizeDisplayStart +
+			// LOGGER.debug(" 2 print in not aligned mode : start=" + this.sizeDisplayStart +
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 		} else {
-			// Log.debug(" 3 print in not aligned mode : start=" + this.sizeDisplayStart +
+			// LOGGER.debug(" 3 print in not aligned mode : start=" + this.sizeDisplayStart +
 			// " stop=" + this.sizeDisplayStop + " pos=" + this.position);
 			// special start case at the right of the endpoint :
 			if (this.stopTextPos < this.position.x()) {
@@ -602,13 +613,15 @@ public abstract class TextBase extends Compositing {
 					case RIGHT:
 						if (this.needDisplay) {
 							// Move the first char at the right :
-							setPos(new Vector3f(this.position.x() + freeSpace.value, this.position.y(), this.position.z()));
+							setPos(new Vector3f(this.position.x() + freeSpace.value, this.position.y(),
+									this.position.z()));
 						}
 						break;
 					case CENTER:
 						if (this.needDisplay) {
 							// Move the first char at the right :
-							setPos(new Vector3f(this.position.x() + freeSpace.value / 2, this.position.y(), this.position.z()));
+							setPos(new Vector3f(this.position.x() + freeSpace.value / 2, this.position.y(),
+									this.position.z()));
 						}
 						break;
 					default:
@@ -629,7 +642,8 @@ public abstract class TextBase extends Compositing {
 						setFontMode(decoration.get(iii).mode());
 					}
 					if (this.needDisplay) {
-						if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1) || (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
+						if ((this.selectionStartPos - 1 < (long) iii && (long) iii <= this.cursorPos - 1)
+								|| (this.selectionStartPos - 1 >= (long) iii && (long) iii > this.cursorPos - 1)) {
 							setColor(Color.BLACK);
 							setColorBg(this.colorSelection);
 						} else {
@@ -639,7 +653,7 @@ public abstract class TextBase extends Compositing {
 					}
 					// special for the justify mode
 					if (text.charAt(iii) == (char) Character.SPACE_SEPARATOR) {
-						// Log.debug(" generateString : \" \"");
+						// LOGGER.debug(" generateString : \" \"");
 						if (this.needDisplay && this.colorBg.a() != 0) {
 							this.vectorialDraw.setPos(this.position);
 						}
@@ -648,7 +662,7 @@ public abstract class TextBase extends Compositing {
 						if (this.needDisplay && this.colorBg.a() != 0) {
 							this.vectorialDraw.rectangleWidth(new Vector3f(interpolation, fontHeigh, 0.0f));
 						}
-					} else // Log.debug(" generateString : \"" + (char)text[iii] + "\"");
+					} else // LOGGER.debug(" generateString : \"" + (char)text[iii] + "\"");
 					if (this.needDisplay && this.colorBg.a() != 0) {
 						final Vector3f pos = this.position;
 						this.vectorialDraw.setPos(pos);
@@ -687,17 +701,18 @@ public abstract class TextBase extends Compositing {
 					currentId = stop.value;
 				}
 			}
-			Log.debug(" 4 print in not alligned mode : start=" + this.sizeDisplayStart + " stop=" + this.sizeDisplayStop + " pos=" + this.position);
+			LOGGER.debug(" 4 print in not alligned mode : start=" + this.sizeDisplayStart + " stop="
+					+ this.sizeDisplayStop + " pos=" + this.position);
 		}
 	}
-	
+
 	/**
 	 * display the current char in the current element (note that the kerning
 	 *        is availlable if the position is not changed)
 	 * @param charcode Char that might be dispalyed
 	 */
 	public abstract void printChar(Character charcode);
-	
+
 	/**
 	 * draw a cursor at the specify position
 	 * @param isInsertMode True if the insert mode is activated
@@ -705,7 +720,7 @@ public abstract class TextBase extends Compositing {
 	public void printCursor(final boolean isInsertMode) {
 		printCursor(isInsertMode, 20.0f);
 	}
-	
+
 	public void printCursor(final boolean isInsertMode, final float cursorSize) {
 		final int fontHeigh = (int) getHeight();
 		if (isInsertMode) {
@@ -716,11 +731,11 @@ public abstract class TextBase extends Compositing {
 			this.vectorialDraw.setThickness(0);
 		}
 	}
-	
+
 	/**
 	 * display a compleat string in the current element with the generic
 	 *        decoration specification. (basic html data)
-	 * 
+	 *
 	 *        [code style=xml] <br/>
 	 *        <br/>
 	 *        <br/>
@@ -739,7 +754,7 @@ public abstract class TextBase extends Compositing {
 	 *        <br/>
 	 *        <br/>
 	 *        <justify> Un exemple de text </justify> [/code]
-	 * 
+	 *
 	 * @note This is parsed with tiny xml, then be carfull that the XML is correct,
 	 *       and all balises are closed ... otherwite the display can not be done
 	 * @param text The string to display.
@@ -749,14 +764,14 @@ public abstract class TextBase extends Compositing {
 		final StringBuilder tmpData = new StringBuilder("<html>\n<body>\n");
 		tmpData.append(text);
 		tmpData.append("\n</body>\n</html>\n");
-		// Log.debug("plop : " + tmpData);
+		// LOGGER.debug("plop : " + tmpData);
 		printHTML(tmpData.toString());
 	}
-	
+
 	/**
 	 * display a compleat string in the current element with the generic
 	 *        decoration specification. (basic html data)
-	 * 
+	 *
 	 *        [code style=xml] <html> <body> <br/>
 	 *        <br/>
 	 *        <br/>
@@ -775,7 +790,7 @@ public abstract class TextBase extends Compositing {
 	 *        <br/>
 	 *        <br/>
 	 *        <justify> Un exemple de text </justify> </body> </html> [/code]
-	 * 
+	 *
 	 * @note This is parsed with tiny xml, then be carfull that the XML is correct,
 	 *       and all balises are closed ... otherwite the display can not be done
 	 * @param text The string to display.
@@ -787,34 +802,34 @@ public abstract class TextBase extends Compositing {
 		try {
 			final XmlElement doc = Exml.parse(text);
 			if (!doc.existNode("html")) {
-				Log.error("can not load XML: main node not find: 'html'");
+				LOGGER.error("can not load XML: main node not find: 'html'");
 				Exml.display(doc);
 				return;
 			}
 			final XmlElement root = (XmlElement) doc.getNode("html");
-			
+
 			if (!root.existNode("body")) {
-				Log.error("can not load XML: main node not find: 'body'");
+				LOGGER.error("can not load XML: main node not find: 'body'");
 				return;
 			}
 			final XmlElement bodyNode = (XmlElement) root.getNode("body");
 			parseHtmlNode(bodyNode);
 			htmlFlush();
 		} catch (final ExmlParserErrorMulti e) {
-			Log.error("Can not parse XML data in printHTML:" + e.getMessage());
+			LOGGER.error("Can not parse XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		} catch (final ExmlBuilderException e) {
-			Log.error("Can not generate XML data in printHTML:" + e.getMessage());
+			LOGGER.error("Can not generate XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		} catch (final ExmlException e) {
-			Log.error("Error in finding node from XML data in printHTML:" + e.getMessage());
+			LOGGER.error("Error in finding node from XML data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		} catch (final AknotException e) {
-			Log.error("Error in parsing pojo data in printHTML:" + e.getMessage());
+			LOGGER.error("Error in parsing pojo data in printHTML:" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * clear all the intermediate result detween 2 prints
 	 */
@@ -840,24 +855,24 @@ public abstract class TextBase extends Compositing {
 		this.needDisplay = true;
 		this.nbCharDisplayed = 0;
 	}
-	
+
 	@Override
 	public void rotate(final Vector3f vect, final float angle) {
 		super.rotate(vect, angle);
 		this.vectorialDraw.rotate(vect, angle);
 	}
-	
+
 	@Override
 	public void scale(final Vector3f vect) {
 		super.scale(vect);
 		this.vectorialDraw.scale(vect);
 	}
-	
+
 	// ! @previous
 	public void setClipping(final Vector2f pos, final Vector2f posEnd) {
 		setClipping(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(posEnd.x(), posEnd.y(), 1));
 	}
-	
+
 	/**
 	 * Request a clipping area for the text (next draw only)
 	 * @param pos Start position of the clipping
@@ -871,7 +886,7 @@ public abstract class TextBase extends Compositing {
 		this.clippingEnable = true;
 		this.vectorialDraw.setClipping(this.clippingPosStart, this.clippingPosStop);
 	}
-	
+
 	/**
 	 * enable/Disable the clipping (without lose the current clipping
 	 *        position)
@@ -882,12 +897,12 @@ public abstract class TextBase extends Compositing {
 		this.clippingEnable = newMode;
 		this.vectorialDraw.setClippingMode(this.clippingEnable);
 	}
-	
+
 	// ! @previous
 	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
 		setClipping(pos, pos.add(width));
 	}
-	
+
 	/**
 	 * Request a clipping area for the text (next draw only)
 	 * @param pos Start position of the clipping
@@ -896,7 +911,7 @@ public abstract class TextBase extends Compositing {
 	public void setClippingWidth(final Vector3f pos, final Vector3f width) {
 		setClipping(pos, pos.add(width));
 	}
-	
+
 	/**
 	 * set the Color of the current foreground font
 	 * @param color Color to set on foreground (for next print)
@@ -904,7 +919,7 @@ public abstract class TextBase extends Compositing {
 	public void setColor(final Color color) {
 		this.color = color;
 	}
-	
+
 	/**
 	 * set the background color of the font (for selected Text (not the
 	 *        global BG))
@@ -914,7 +929,7 @@ public abstract class TextBase extends Compositing {
 		this.colorBg = color;
 		this.vectorialDraw.setColor(color);
 	}
-	
+
 	/**
 	 * change the cursor color
 	 * @param color New color for the Selection
@@ -922,7 +937,7 @@ public abstract class TextBase extends Compositing {
 	public void setCursorColor(final Color color) {
 		this.colorCursor = color;
 	}
-	
+
 	/**
 	 * set a cursor at a specific position:
 	 * @param cursorPos id of the cursor position
@@ -931,7 +946,7 @@ public abstract class TextBase extends Compositing {
 		this.selectionStartPos = cursorPos;
 		this.cursorPos = cursorPos;
 	}
-	
+
 	/**
 	 * set a cursor at a specific position with his associated selection:
 	 * @param cursorPos id of the cursor position
@@ -941,7 +956,7 @@ public abstract class TextBase extends Compositing {
 		this.selectionStartPos = selectionStartPos;
 		this.cursorPos = cursorPos;
 	}
-	
+
 	/**
 	 * set the default background color of the font (when reset, set this
 	 *        value ...)
@@ -950,7 +965,7 @@ public abstract class TextBase extends Compositing {
 	public void setDefaultColorBg(final Color color) {
 		this.defaultColorBg = color;
 	}
-	
+
 	/**
 	 * set the default Foreground color of the font (when reset, set this
 	 *        value ...)
@@ -959,7 +974,7 @@ public abstract class TextBase extends Compositing {
 	public void setDefaultColorFg(final Color color) {
 		this.defaultColorFg = color;
 	}
-	
+
 	/**
 	 * Specify the font property (this reset the internal element of the
 	 *        current text (system requirement)
@@ -967,7 +982,7 @@ public abstract class TextBase extends Compositing {
 	 * @param fontSize New font size
 	 */
 	public abstract void setFont(final String fontName, final int fontSize);
-	
+
 	/**
 	 * enable or disable the bold mode
 	 * @param status The new status for this display property
@@ -987,7 +1002,7 @@ public abstract class TextBase extends Compositing {
 			setFontMode(FontMode.ITALIC);
 		}
 	}
-	
+
 	/**
 	 * enable or disable the italic mode
 	 * @param status The new status for this display property
@@ -1007,27 +1022,27 @@ public abstract class TextBase extends Compositing {
 			setFontMode(FontMode.BOLD);
 		}
 	}
-	
+
 	/**
 	 * Specify the font mode for the next @ref print
 	 * @param mode The font mode requested
 	 */
 	public abstract void setFontMode(FontMode mode);
-	
+
 	/**
 	 * Specify the font name (this reset the internal element of the current
 	 *        text (system requirement)
 	 * @param fontName Current name of the selected font
 	 */
 	public abstract void setFontName(final String fontName);
-	
+
 	/**
 	 * Specify the font size (this reset the internal element of the current
 	 *        text (system requirement)
 	 * @param fontSize New font size
 	 */
 	public abstract void setFontSize(final int fontSize);
-	
+
 	/**
 	 * set the activation of the Kerning for the display (if it existed)
 	 * @param newMode enable/Diasable the kerning on this font.
@@ -1035,12 +1050,12 @@ public abstract class TextBase extends Compositing {
 	public void setKerningMode(final boolean newMode) {
 		this.kerning = newMode;
 	}
-	
+
 	// ! @previous
 	public void setPos(final Vector2f pos) {
 		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	/**
 	 * set position for the next text writen
 	 * @param pos Position of the text (in 3D)
@@ -1048,7 +1063,7 @@ public abstract class TextBase extends Compositing {
 	public void setPos(final Vector3f pos) {
 		// check min max for display area
 		if (this.nbCharDisplayed != 0) {
-			//Log.verbose("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//LOGGER.trace("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 			this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
 			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
 		}
@@ -1060,20 +1075,20 @@ public abstract class TextBase extends Compositing {
 		if (this.nbCharDisplayed == 0) {
 			this.sizeDisplayStart = this.position;
 			this.sizeDisplayStop = this.position.withY(this.sizeDisplayStop.y() + getHeight());
-			//Log.verbose("update size 0 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//LOGGER.trace("update size 0 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		} else {
-			//Log.verbose("update size 3 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//LOGGER.trace("update size 3 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 			this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
 			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
-			//Log.verbose("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
+			//LOGGER.trace("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		}
 	}
-	
+
 	// ! @previous
 	public void setRelPos(final Vector2f pos) {
 		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	/**
 	 * set relative position for the next text written
 	 * @param pos offset apply of the text (in 3D)
@@ -1083,7 +1098,7 @@ public abstract class TextBase extends Compositing {
 		this.previousCharcode = 0;
 		this.vectorialDraw.setPos(this.position);
 	}
-	
+
 	/**
 	 * change the selection color
 	 * @param color New color for the Selection
@@ -1091,7 +1106,7 @@ public abstract class TextBase extends Compositing {
 	public void setSelectionColor(final Color color) {
 		this.colorSelection = color;
 	}
-	
+
 	/**
 	 * This generate the possibility to generate the big text property
 	 * @param startTextPos The x text start position of the display.
@@ -1102,21 +1117,21 @@ public abstract class TextBase extends Compositing {
 	public void setTextAlignment(final float startTextPos, final float stopTextPos) {
 		setTextAlignment(startTextPos, stopTextPos, AlignMode.DISABLE);
 	}
-	
+
 	public void setTextAlignment(final float startTextPos, final float stopTextPos, final AlignMode alignement) {
 		this.startTextPos = startTextPos;
 		this.stopTextPos = stopTextPos + 1;
 		this.alignment = alignement;
 		if (this.startTextPos >= this.stopTextPos) {
 			// TODO understand why this flush ...
-			Log.verbose("Request alignment with Borne position error : " + startTextPos + " => " + stopTextPos);
+			LOGGER.trace("Request alignment with Borne position error : " + startTextPos + " => " + stopTextPos);
 		}
 	}
-	
+
 	@Override
 	public void translate(final Vector3f vect) {
 		super.translate(vect);
 		this.vectorialDraw.translate(vect);
 	}
-	
+
 }

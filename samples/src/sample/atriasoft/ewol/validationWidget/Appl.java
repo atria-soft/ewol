@@ -16,7 +16,7 @@ public class Appl implements EwolApplication {
 		for (int iii = 0; iii < context.getCmd().size(); iii++) {
 			final String tmpppp = context.getCmd().get(iii);
 			if (tmpppp == "-h" || tmpppp == "--help") {
-				Log.print("  -h/--help display this help");
+				LOGGER.print("  -h/--help display this help");
 				System.exit(0);
 			}
 		}
@@ -39,44 +39,44 @@ public class Appl implements EwolApplication {
 	
 	@Override
 	public void onCreate(final EwolContext context) {
-		Log.info("Application onCreate: [BEGIN]");
+		LOGGER.info("Application onCreate: [BEGIN]");
 		localCreate(context);
-		Log.info("Application onCreate: [ END ]");
+		LOGGER.info("Application onCreate: [ END ]");
 	}
 	
 	@Override
 	public void onDestroy(final EwolContext context) {
-		Log.info("Application onDestroy: [BEGIN]");
+		LOGGER.info("Application onDestroy: [BEGIN]");
 		
-		Log.info("Application onDestroy: [ END ]");
+		LOGGER.info("Application onDestroy: [ END ]");
 	}
 	
 	@Override
 	public void onPause(final EwolContext context) {
-		Log.info("Application onPause: [BEGIN]");
+		LOGGER.info("Application onPause: [BEGIN]");
 		
-		Log.info("Application onPause: [ END ]");
+		LOGGER.info("Application onPause: [ END ]");
 	}
 	
 	@Override
 	public void onResume(final EwolContext context) {
-		Log.info("Application onResume: [BEGIN]");
+		LOGGER.info("Application onResume: [BEGIN]");
 		
-		Log.info("Application onResume: [ END ]");
+		LOGGER.info("Application onResume: [ END ]");
 	}
 	
 	@Override
 	public void onStart(final EwolContext context) {
-		Log.info("Application onStart: [BEGIN]");
+		LOGGER.info("Application onStart: [BEGIN]");
 		
-		Log.info("Application onStart: [ END ]");
+		LOGGER.info("Application onStart: [ END ]");
 	}
 	
 	@Override
 	public void onStop(final EwolContext context) {
-		Log.info("Application onStop: [BEGIN]");
+		LOGGER.info("Application onStop: [BEGIN]");
 		
-		Log.info("Application onStop: [ END ]");
+		LOGGER.info("Application onStop: [ END ]");
 	}
 	
 }

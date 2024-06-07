@@ -34,7 +34,7 @@ def configure(target, my_module):
 	    'src/module-info.java',
 	    'src/org/atriasoft/ewol/DrawProperty.java',
 	    'src/org/atriasoft/ewol/internal/LoadPackageStream.java',
-	    'src/org/atriasoft/ewol/internal/Log.java',
+	    'src/org/atriasoft/ewol/internal/LOGGER.java',
 	    'src/org/atriasoft/ewol/context/EwolContext.java',
 	    'src/org/atriasoft/ewol/context/EwolApplication.java',
 	    'src/org/atriasoft/ewol/context/InputManager.java',

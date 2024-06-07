@@ -6,15 +6,15 @@ import org.atriasoft.reggol.Logger;
 public class Log {
 	private static final boolean FORCE_ALL = false;
 	private static final String LIB_NAME = "ewol-sample";
-	private static final String LIB_NAME_DRAW = Logger.getDrawableName(Log.LIB_NAME);
-	private static final boolean PRINT_CRITICAL = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.CRITICAL);
-	private static final boolean PRINT_DEBUG = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.DEBUG);
-	private static final boolean PRINT_ERROR = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.ERROR);
-	private static final boolean PRINT_INFO = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.INFO);
-	private static final boolean PRINT_PRINT = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.PRINT);
-	private static final boolean PRINT_TODO = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.TODO);
-	private static final boolean PRINT_VERBOSE = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.VERBOSE);
-	private static final boolean PRINT_WARNING = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.WARNING);
+	private static final String LIB_NAME_DRAW = Logger.getDrawableName(LOGGER.LIB_NAME);
+	private static final boolean PRINT_CRITICAL = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.CRITICAL);
+	private static final boolean PRINT_DEBUG = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.DEBUG);
+	private static final boolean PRINT_ERROR = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.ERROR);
+	private static final boolean PRINT_INFO = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.INFO);
+	private static final boolean PRINT_PRINT = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.PRINT);
+	private static final boolean PRINT_TODO = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.TODO);
+	private static final boolean PRINT_VERBOSE = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.VERBOSE);
+	private static final boolean PRINT_WARNING = Logger.getNeedPrint(LOGGER.LIB_NAME, LogLevel.WARNING);
 	
 	public static void critical(final Exception e, final String data) {
 		e.printStackTrace();

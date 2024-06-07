@@ -177,7 +177,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Dimension2f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withSize(castedValue.size().withX(valueButton)));
+							LOGGER.warn("Set new value: {}", castedValue.withSize(castedValue.size().withX(valueButton)));
 							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withX(valueButton)));
 						}
 					} catch (final AknotException e) {
@@ -209,7 +209,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Dimension2f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withSize(castedValue.size().withY(valueButton)));
+							LOGGER.warn("Set new value: {}", castedValue.withSize(castedValue.size().withY(valueButton)));
 							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withY(valueButton)));
 						}
 					} catch (final AknotException e) {
@@ -253,7 +253,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Dimension3f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withSize(castedValue.size().withX(valueButton)));
+							LOGGER.warn("Set new value: {}", castedValue.withSize(castedValue.size().withX(valueButton)));
 							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withX(valueButton)));
 						}
 					} catch (final AknotException e) {
@@ -285,7 +285,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Dimension3f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withSize(castedValue.size().withY(valueButton)));
+							LOGGER.warn("Set new value: {}", castedValue.withSize(castedValue.size().withY(valueButton)));
 							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withY(valueButton)));
 						}
 					} catch (final AknotException e) {
@@ -317,7 +317,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Dimension3f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withSize(castedValue.size().withZ(valueButton)));
+							LOGGER.warn("Set new value: {}", castedValue.withSize(castedValue.size().withZ(valueButton)));
 							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withZ(valueButton)));
 						}
 					} catch (final AknotException e) {
@@ -346,7 +346,7 @@ public class BasicWindows extends Windows {
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect((valueButton) -> {
 				try {
-					Log.warning("Set new value: {}", valueButton);
+					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, (double) valueButton);
 				} catch (final AknotException e) {
 					e.printStackTrace();
@@ -373,7 +373,7 @@ public class BasicWindows extends Windows {
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect((valueButton) -> {
 				try {
-					Log.warning("Set new value: {}", valueButton);
+					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, (float) valueButton);
 				} catch (final AknotException e) {
 					e.printStackTrace();
@@ -430,7 +430,7 @@ public class BasicWindows extends Windows {
 							state = new Gravity(GravityHorizontal.LEFT, GravityVertical.BOTTOM, GravityDepth.CENTER);
 						}
 						gravLabel.setPropertyValue(LABEL_GRAVITY + state.toString());
-						Log.warning("Set new value: {}", state);
+						LOGGER.warn("Set new value: {}", state);
 						pojo.setExistingValue(widget, state);
 					}
 				} catch (final AknotException e) {
@@ -458,7 +458,7 @@ public class BasicWindows extends Windows {
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect((valueButton) -> {
 				try {
-					Log.warning("Set new value: {}", valueButton);
+					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, (int) (long) valueButton);
 					
 				} catch (final AknotException e) {
@@ -486,7 +486,7 @@ public class BasicWindows extends Windows {
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect((valueButton) -> {
 				try {
-					Log.warning("Set new value: {}", valueButton);
+					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, valueButton);
 				} catch (final AknotException e) {
 					e.printStackTrace();
@@ -513,7 +513,7 @@ public class BasicWindows extends Windows {
 			this.sizerMenu.subWidgetAdd(element);
 			final Connection con = element.signalModify.connect((valueButton) -> {
 				try {
-					Log.warning("Set new value: {}", valueButton);
+					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, valueButton);
 				} catch (final AknotException e) {
 					e.printStackTrace();
@@ -540,7 +540,7 @@ public class BasicWindows extends Windows {
 			this.sizerMenu.subWidgetAdd(element);
 			final Connection con = element.signalModify.connect((valueButton) -> {
 				try {
-					Log.warning("Set new value: {}", valueButton);
+					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, Uri.valueOf(valueButton));
 				} catch (final AknotException e) {
 					e.printStackTrace();
@@ -574,7 +574,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector2b castedValue) {
-							Log.warning("Set new value: {}", castedValue.withX(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
 							pojo.setExistingValue(widget, castedValue.withX(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -638,7 +638,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector2f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withX(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
 							pojo.setExistingValue(widget, castedValue.withX(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -670,7 +670,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector2f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withY(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withY(valueButton));
 							pojo.setExistingValue(widget, castedValue.withY(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -714,7 +714,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector2i castedValue) {
-							Log.warning("Set new value: {}", castedValue.withX((int) (long) valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withX((int) (long) valueButton));
 							pojo.setExistingValue(widget, castedValue.withX((int) (long) valueButton));
 						}
 					} catch (final AknotException e) {
@@ -746,7 +746,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector2i castedValue) {
-							Log.warning("Set new value: {}", castedValue.withY((int) (long) valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withY((int) (long) valueButton));
 							pojo.setExistingValue(widget, castedValue.withY((int) (long) valueButton));
 						}
 					} catch (final AknotException e) {
@@ -782,7 +782,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3b castedValue) {
-							Log.warning("Set new value: {}", castedValue.withX(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
 							pojo.setExistingValue(widget, castedValue.withX(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -865,7 +865,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withX(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
 							pojo.setExistingValue(widget, castedValue.withX(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -897,7 +897,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withY(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withY(valueButton));
 							pojo.setExistingValue(widget, castedValue.withY(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -929,7 +929,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3f castedValue) {
-							Log.warning("Set new value: {}", castedValue.withZ(valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withZ(valueButton));
 							pojo.setExistingValue(widget, castedValue.withZ(valueButton));
 						}
 					} catch (final AknotException e) {
@@ -973,7 +973,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3i castedValue) {
-							Log.warning("Set new value: {}", castedValue.withX((int) (long) valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withX((int) (long) valueButton));
 							pojo.setExistingValue(widget, castedValue.withX((int) (long) valueButton));
 						}
 					} catch (final AknotException e) {
@@ -1005,7 +1005,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3i castedValue) {
-							Log.warning("Set new value: {}", castedValue.withY((int) (long) valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withY((int) (long) valueButton));
 							pojo.setExistingValue(widget, castedValue.withY((int) (long) valueButton));
 						}
 					} catch (final AknotException e) {
@@ -1037,7 +1037,7 @@ public class BasicWindows extends Windows {
 					try {
 						final Object oldValue = pojo.getValue(widget);
 						if (oldValue instanceof final Vector3i castedValue) {
-							Log.warning("Set new value: {}", castedValue.withZ((int) (long) valueButton));
+							LOGGER.warn("Set new value: {}", castedValue.withZ((int) (long) valueButton));
 							pojo.setExistingValue(widget, castedValue.withZ((int) (long) valueButton));
 						}
 					} catch (final AknotException e) {
@@ -1051,40 +1051,40 @@ public class BasicWindows extends Windows {
 	}
 	
 	public void connectAllSignals(final Widget widget, final IntrospectionModelComplex modelPojo) throws Exception {
-		Log.warning("Connect all signal(s) on '{}'", widget.getName());
+		LOGGER.warn("Connect all signal(s) on '{}'", widget.getName());
 		final List<IntrospectionProperty> signals = modelPojo.getSignals();
 		for (final IntrospectionProperty pojo : signals) {
-			Log.warning("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
-			Log.warning("        ==> description='{}'", pojo.getDescription());
-			Log.warning("        ==> type='{}'", pojo.getType());
-			Log.warning("        ==> sub-type='{}'", pojo.getSubType());
+			LOGGER.warn("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
+			LOGGER.warn("        ==> description='{}'", pojo.getDescription());
+			LOGGER.warn("        ==> type='{}'", pojo.getType());
+			LOGGER.warn("        ==> sub-type='{}'", pojo.getSubType());
 			
 			final String eventName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0] : pojo.getBeanName();
 			
 			if (pojo.getSubType() != null && pojo.getType() == Signal.class) {
-				Log.warning("        ** Signal<{}>", pojo.getSubType());
+				LOGGER.warn("        ** Signal<{}>", pojo.getSubType());
 				final Object signalObject = pojo.getValue(widget);
 				if (signalObject == null) {
-					Log.error("Signal is not accessible !!!!!!! ");
+					LOGGER.error("Signal is not accessible !!!!!!! ");
 				} else {
 					final String valueNameOfSignal = eventName;
 					@SuppressWarnings("unchecked")
 					final Signal<Object> tmp = (Signal<Object>) signalObject;
 					tmp.connect((object) -> {
-						Log.print("Get event from '{}' value='{}'", valueNameOfSignal, object);
+						LOGGER.print("Get event from '{}' value='{}'", valueNameOfSignal, object);
 					});
 				}
 			}
 			if (pojo.getSubType() == null && pojo.getType() == SignalEmpty.class) {
-				Log.warning("        ** SignalEmpty");
+				LOGGER.warn("        ** SignalEmpty");
 				final Object signalObject = pojo.getValue(widget);
 				if (signalObject == null) {
-					Log.error("Signal is not accessible !!!!!!! ");
+					LOGGER.error("Signal is not accessible !!!!!!! ");
 				} else {
 					final String valueNameOfSignal = eventName;
 					final SignalEmpty tmp = (SignalEmpty) signalObject;
 					tmp.connect(() -> {
-						Log.print("Get event from '{}'", valueNameOfSignal);
+						LOGGER.print("Get event from '{}'", valueNameOfSignal);
 					});
 				}
 				
@@ -1093,13 +1093,13 @@ public class BasicWindows extends Windows {
 	}
 	
 	public void displayAllPropertyWithType(final Widget widget, final IntrospectionModel modelPojo) throws Exception {
-		Log.warning("Connect all property(ies) on '{}'", widget.getName());
+		LOGGER.warn("Connect all property(ies) on '{}'", widget.getName());
 		final List<IntrospectionProperty> atributes = modelPojo.getAttributes();
 		for (final IntrospectionProperty pojo : atributes) {
-			Log.warning("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
-			Log.warning("        ==> description='{}'", pojo.getDescription());
-			Log.warning("        ==> type='{}'", pojo.getType());
-			Log.warning("        ==> sub-type='{}'", pojo.getSubType());
+			LOGGER.warn("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
+			LOGGER.warn("        ==> description='{}'", pojo.getDescription());
+			LOGGER.warn("        ==> type='{}'", pojo.getType());
+			LOGGER.warn("        ==> sub-type='{}'", pojo.getSubType());
 			final String propertyName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0] : pojo.getBeanName();
 			if (pojo.getType() == int.class || pojo.getType() == Integer.class) {
 				addMenuInt(widget, pojo);
@@ -1130,13 +1130,13 @@ public class BasicWindows extends Windows {
 			} else if (pojo.getType() == Dimension2f.class) {
 				addMenuDimension2f(widget, pojo);
 			} else if (pojo.getType() == DisplayMode.class) {
-				Log.error("        ==> plop");
+				LOGGER.error("        ==> plop");
 			} else if (pojo.getType() == Uri.class) {
 				addMenuURI(widget, pojo);
 			} else if (pojo.getType() == Gravity.class) {
 				addMenuGravity(widget, pojo);
 			} else {
-				Log.error("        ==> property type unknown='{}'", pojo.getType());
+				LOGGER.error("        ==> property type unknown='{}'", pojo.getType());
 			}
 			{
 				final Label simpleLabel = new Label("<b>" + propertyName + ":</b>");

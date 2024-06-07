@@ -21,13 +21,14 @@ import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.gale.context.ClipBoard;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -40,18 +41,20 @@ import org.atriasoft.gale.key.KeyType;
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
 public class Entry extends Widget {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Entry.class);
+	
 	/**
 	 * Periodic call to update grapgic display
 	 * @param _event Time generic event
 	 */
 	protected static void periodicCall(final Entry self, final EventTime event) {
-		Log.verbose("Periodic call on Entry(" + event + ")");
+		LOGGER.trace("Periodic call on Entry(" + event + ")");
 		if (!self.shape.periodicCall(event)) {
 			self.periodicConnectionHanble.close();
 		}
 		self.markToRedraw();
 	}
-	
+
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// Cursor must be display only when the widget has the focus
@@ -73,13 +76,13 @@ public class Entry extends Widget {
 	private Uri propertyConfig = new Uri("THEME", "shape/Entry.json", "ewol");
 	private int propertyMaxCharacter = Integer.MAX_VALUE; //!< number max of Character in the list
 	private boolean propertyPassword = false; //!< Disable display of the content of the entry
-	
+
 	/// regular expression value
 	private String propertyRegex = ".*";
-	
+
 	/// Text to display when nothing in in the entry (decorated text...)
 	private String propertyTextWhenNothing = null;
-	
+
 	private String propertyValue = "Test Text..."; //!< string that must be displayed
 	private Pattern regex = null; //!< regular expression to check content
 	private GuiShape shape;
@@ -92,16 +95,16 @@ public class Entry extends Widget {
 	@AknotName(value = "enter")
 	@AknotDescription("The cursor enter inside the button")
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
-	
+
 	@AknotSignal
 	@AknotName(value = "modify")
 	@AknotDescription("Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
-	
+
 	Vector3f overPositionStop = Vector3f.ZERO;
-	
+
 	/**
 	 * Constructor
 	 * @param _newData The USting that might be set in the Entry box (no event generation!!)
@@ -109,10 +112,10 @@ public class Entry extends Widget {
 	public Entry() {
 		this.propertyCanFocus = true;
 		onChangePropertyShaper();
-		
+
 		this.regex = Pattern.compile(this.propertyRegex);
 		if (this.regex == null) {
-			Log.error("can not parse regex for : " + this.propertyRegex);
+			LOGGER.error("can not parse regex for : " + this.propertyRegex);
 		}
 		markToRedraw();
 		shortCutAdd("ctrl+w", "clean");
@@ -124,7 +127,7 @@ public class Entry extends Widget {
 		this.shape = new GuiShape(this.propertyConfig);
 		//TODO this.signalShortcut.connect(this, Entry::onCallbackShortCut);
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -135,26 +138,27 @@ public class Entry extends Widget {
 			padding = this.shape.getPadding();
 		}
 		final int minHeight = (int) this.text.getHeight();//calculateSize('A').y();
-		
+
 		Vector3f minimumSizeBase = new Vector3f(20, minHeight, 10);
 		// add padding :
 		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y(), padding.z());
 		this.minSize = Vector3f.max(this.minSize, minimumSizeBase);
 		// verify the min max of the min size ...
 		checkMinSize();
-		Log.error("min size = " + this.minSize);
+		LOGGER.error("min size = " + this.minSize);
 	}
-	
+
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
 		if (this.shape.changeStatusIn(newStatusId)) {
 			if (!this.periodicConnectionHanble.isConnected()) {
-				Log.error("REQUEST: connection on operiodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, Entry::periodicCall);
+				LOGGER.error("REQUEST: connection on operiodic call");
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this,
+						Entry::periodicCall);
 			}
 			markToRedraw();
 		}
 	}
-	
+
 	/**
 	 * Copy the selected data on the specify clipboard
 	 * @param clipboardID Selected clipboard
@@ -174,48 +178,48 @@ public class Entry extends Widget {
 		final String tmpData = this.propertyValue.substring(pos1, pos2);
 		ClipBoard.set(clipboardID, tmpData);
 	}
-	
+
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
-	
+
 	public int getPropertyMaxCharacter() {
 		return this.propertyMaxCharacter;
 	}
-	
+
 	public String getPropertyRegex() {
 		return this.propertyRegex;
 	}
-	
+
 	public String getPropertyTextWhenNothing() {
 		return this.propertyTextWhenNothing;
 	}
-	
+
 	public String getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	public boolean isPropertyPassword() {
 		return this.propertyPassword;
 	}
-	
+
 	/**
 	 * informe the system thet the text change and the start position change
 	 */
 	protected void markToUpdateTextPosition() {
 		this.needUpdateTextPos = true;
 	}
-	
+
 	private void onCallbackCopy() {
 		copySelectionToClipBoard(ClipboardList.CLIPBOARD_STD);
 	}
-	
+
 	private void onCallbackCut() {
 		copySelectionToClipBoard(ClipboardList.CLIPBOARD_STD);
 		removeSelected();
 		this.signalModify.emit(this.propertyValue);
 	}
-	
+
 	private void onCallbackEntryClean() {
 		this.propertyValue = "";
 		this.displayStartPosition = 0;
@@ -223,11 +227,11 @@ public class Entry extends Widget {
 		this.displayCursorPosSelection = this.displayCursorPos;
 		markToRedraw();
 	}
-	
+
 	private void onCallbackPaste() {
 		ClipBoard.request(ClipboardList.CLIPBOARD_STD);
 	}
-	
+
 	private void onCallbackSelect(final boolean all) {
 		if (all) {
 			this.displayCursorPosSelection = 0;
@@ -237,7 +241,7 @@ public class Entry extends Widget {
 		}
 		markToRedraw();
 	}
-	
+
 	private void onCallbackShortCut(final String value) {
 		if (value.equals("clean")) {
 			onCallbackEntryClean();
@@ -246,33 +250,33 @@ public class Entry extends Widget {
 		} else if (value.equals("copy")) {
 			onCallbackCopy();
 		} else if (value.equals("paste")) {
-			Log.warning("Request past ...");
+			LOGGER.warn("Request past ...");
 			onCallbackPaste();
 		} else if (value.equals("select:all")) {
 			onCallbackSelect(true);
 		} else if (value.equals("select:none")) {
 			onCallbackSelect(false);
 		} else {
-			Log.warning("Unknow event from ShortCut : " + value);
+			LOGGER.warn("Unknow event from ShortCut : " + value);
 		}
 	}
-	
+
 	protected void onChangePropertyMaxCharacter() {
 		// TODO : check number of char in the data
 	}
-	
+
 	protected void onChangePropertyPassword() {
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyRegex() {
 		this.regex = Pattern.compile(this.propertyRegex);
 		if (this.regex != null) {
-			Log.error("can not parse regex for : " + this.propertyRegex);
+			LOGGER.error("can not parse regex for : " + this.propertyRegex);
 		}
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyShaper() {
 		if (this.shape == null) {
 			this.shape = new GuiShape(this.propertyConfig);
@@ -284,27 +288,27 @@ public class Entry extends Widget {
 		// this.colorIdCursor = this.shape.requestColor("text-cursor");
 		// this.colorIdSelection = this.shape.requestColor("text-selection");
 	}
-	
+
 	protected void onChangePropertyTextWhenNothing() {
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyValue() {
 		String newData = this.propertyValue;
 		if ((long) newData.length() > this.propertyMaxCharacter) {
 			newData = newData.substring(0, this.propertyMaxCharacter);
-			Log.debug("Limit entry set of data... " + newData);
+			LOGGER.debug("Limit entry set of data... " + newData);
 		}
 		// set the value with the check of the RegExp ...
 		setInternalValue(newData);
 		if (newData == this.propertyValue) {
 			this.displayCursorPos = this.propertyValue.length();
 			this.displayCursorPosSelection = this.displayCursorPos;
-			Log.verbose("Set : '" + newData + "'");
+			LOGGER.trace("Set : '" + newData + "'");
 		}
 		markToRedraw();
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
@@ -312,7 +316,7 @@ public class Entry extends Widget {
 		}
 		this.text.draw();
 	}
-	
+
 	@Override
 	public void onEventClipboard(final ClipboardList clipboardID) {
 		// remove curent selected data ...
@@ -336,10 +340,10 @@ public class Entry extends Widget {
 		}
 		this.signalModify.emit(this.propertyValue);
 	}
-	
+
 	@Override
 	public boolean onEventEntry(final EventEntry event) {
-		Log.verbose("Event on Entry ... " + event);
+		LOGGER.trace("Event on Entry ... " + event);
 		if (event.type() == KeyKeyboard.CHARACTER) {
 			if (event.status() == KeyStatus.down) {
 				// remove current selected data ...
@@ -368,9 +372,9 @@ public class Entry extends Widget {
 						this.displayCursorPosSelection = this.displayCursorPos;
 					}
 				} else if (event.getChar() >= 20) {
-					Log.error("get data: '" + event.getChar() + "' = '" + event.getChar() + "'");
+					LOGGER.error("get data: '" + event.getChar() + "' = '" + event.getChar() + "'");
 					if ((long) this.propertyValue.length() > this.propertyMaxCharacter) {
-						Log.info("Reject data for entry : '" + event.getChar() + "'");
+						LOGGER.info("Reject data for entry : '" + event.getChar() + "'");
 					} else {
 						final StringBuilder newData = new StringBuilder(this.propertyValue);
 						newData.insert(this.displayCursorPos, event.getChar());
@@ -412,19 +416,20 @@ public class Entry extends Widget {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f absolutePosition = new Vector3f(event.pos().x(), event.pos().y(), 0);
 		final Vector3f relPos = relativePosition(absolutePosition);
-		Log.verbose("Event on Input ... " + event + " relPos = " + relPos);
+		LOGGER.trace("Event on Input ... " + event + " relPos = " + relPos);
 		if (event.inputId() == 0) {
 			if (!isFocused()) {
 				if (KeyStatus.leave == event.status()) {
 					changeStatusIn(GuiShapeMode.NORMAL);
 				} else {
-					Log.verbose("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
-					if (relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y()) {
+					LOGGER.trace("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
+					if (relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
+							&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y()) {
 						changeStatusIn(GuiShapeMode.OVER);
 					} else {
 						changeStatusIn(GuiShapeMode.NORMAL);
@@ -432,8 +437,9 @@ public class Entry extends Widget {
 				}
 			}
 		}
-		if (relPos.x() < this.overPositionStart.x() || relPos.y() < this.overPositionStart.y() || relPos.x() > this.overPositionStop.x() || relPos.y() > this.overPositionStop.y()) {
-			Log.warning("Reject {}", relPos);
+		if (relPos.x() < this.overPositionStart.x() || relPos.y() < this.overPositionStart.y()
+				|| relPos.x() > this.overPositionStop.x() || relPos.y() > this.overPositionStop.y()) {
+			LOGGER.warn("Reject {}", relPos);
 			return false;
 		}
 		if (event.inputId() == 1) {
@@ -453,8 +459,10 @@ public class Entry extends Widget {
 						this.displayCursorPos = iii;
 						break;
 					}
-					if (!((this.propertyValue.charAt(iii) >= 'a' && this.propertyValue.charAt(iii) <= 'z') || (this.propertyValue.charAt(iii) >= 'A' && this.propertyValue.charAt(iii) <= 'Z')
-							|| (this.propertyValue.charAt(iii) >= '0' && this.propertyValue.charAt(iii) <= '9') || this.propertyValue.charAt(iii) == '_' || this.propertyValue.charAt(iii) == '-')) {
+					if (!((this.propertyValue.charAt(iii) >= 'a' && this.propertyValue.charAt(iii) <= 'z')
+							|| (this.propertyValue.charAt(iii) >= 'A' && this.propertyValue.charAt(iii) <= 'Z')
+							|| (this.propertyValue.charAt(iii) >= '0' && this.propertyValue.charAt(iii) <= '9')
+							|| this.propertyValue.charAt(iii) == '_' || this.propertyValue.charAt(iii) == '-')) {
 						this.displayCursorPos = iii;
 						break;
 					}
@@ -465,8 +473,10 @@ public class Entry extends Widget {
 						this.displayCursorPosSelection = 0;
 						break;
 					}
-					if (!((this.propertyValue.charAt(iii) >= 'a' && this.propertyValue.charAt(iii) <= 'z') || (this.propertyValue.charAt(iii) >= 'A' && this.propertyValue.charAt(iii) <= 'Z')
-							|| (this.propertyValue.charAt(iii) >= '0' && this.propertyValue.charAt(iii) <= '9') || this.propertyValue.charAt(iii) == '_' || this.propertyValue.charAt(iii) == '-')) {
+					if (!((this.propertyValue.charAt(iii) >= 'a' && this.propertyValue.charAt(iii) <= 'z')
+							|| (this.propertyValue.charAt(iii) >= 'A' && this.propertyValue.charAt(iii) <= 'Z')
+							|| (this.propertyValue.charAt(iii) >= '0' && this.propertyValue.charAt(iii) <= '9')
+							|| this.propertyValue.charAt(iii) == '_' || this.propertyValue.charAt(iii) == '-')) {
 						this.displayCursorPosSelection = iii + 1;
 						break;
 					}
@@ -494,7 +504,8 @@ public class Entry extends Widget {
 				markToRedraw();
 			}
 		} else if (KeyType.mouse == event.type() && event.inputId() == 2) {
-			if (event.status() == KeyStatus.down || event.status() == KeyStatus.move || event.status() == KeyStatus.up) {
+			if (event.status() == KeyStatus.down || event.status() == KeyStatus.move
+					|| event.status() == KeyStatus.up) {
 				keepFocus();
 				// updatethe cursor position :
 				updateCursorPosition(absolutePosition);
@@ -508,7 +519,7 @@ public class Entry extends Widget {
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void onGetFocus() {
 		this.displayCursor = true;
@@ -516,7 +527,7 @@ public class Entry extends Widget {
 		showKeyboard();
 		markToRedraw();
 	}
-	
+
 	@Override
 	protected void onLostFocus() {
 		this.displayCursor = false;
@@ -524,13 +535,13 @@ public class Entry extends Widget {
 		hideKeyboard();
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
 			//return;
 		}
-		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
+		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
 		this.text.clear();
 		if (this.colorIdTextFg >= 0) {
@@ -541,7 +552,7 @@ public class Entry extends Widget {
 		}
 		updateTextPosition();
 		final Padding padding = this.shape.getPadding();
-		
+
 		Vector3f tmpSizeShaper = this.minSize;
 		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 		if (this.propertyFill.x()) {
@@ -562,7 +573,7 @@ public class Entry extends Widget {
 		Vector3f tmpOriginText = tmpOriginShaper.add(padding.bottom(), padding.left(), padding.back()); //this.size.less(tmpSizeText).multiply(0.5f);
 		//Vector3f tmpOriginText = new Vector3f(0, this.text.getSize(), 0);
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		
+
 		final int minHeight = (int) this.text.getHeight();
 		if (tmpSizeText.y() > minHeight) {
 			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f, 0);
@@ -572,7 +583,7 @@ public class Entry extends Widget {
 		tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
 		tmpSizeText = Vector3f.clipInt(tmpSizeText);
 		tmpOriginText = Vector3f.clipInt(tmpOriginText);
-		
+
 		this.text.clear();
 		//this.text.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
 		this.text.setClippingWidth(tmpOriginText, tmpSizeText);
@@ -586,7 +597,7 @@ public class Entry extends Widget {
 		if (this.propertyPassword) {
 			Arrays.fill(valueToDisplay, '*');
 		}
-		
+
 		//final Vector2f plop = new Vector2f(tmpOriginText.x() + this.displayStartPosition, tmpOriginText.y());
 		if (valueToDisplay.length != 0) {
 			this.text.print(new String(valueToDisplay));
@@ -599,9 +610,9 @@ public class Entry extends Widget {
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 		this.text.flush();
 		this.shape.flush();
-		
+
 	}
-	
+
 	/**
 	 * remove the selected area
 	 * @note This request a regeneration of the display
@@ -629,7 +640,7 @@ public class Entry extends Widget {
 		this.propertyValue = tmp.toString();
 		markToRedraw();
 	}
-	
+
 	/**
 	 * internal check the value with RegExp checking
 	 * @param newData The new string to display
@@ -640,15 +651,15 @@ public class Entry extends Widget {
 		if (newData.length() > 0) {
 			/*
 			if (this.regex.parse(_newData, 0, _newData.size()) == false) {
-				Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "'" );
+				LOGGER.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "'" );
 				return;
 			}
 			if (this.regex.start() != 0) {
-				Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (start position error)" );
+				LOGGER.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (start position error)" );
 				return;
 			}
 			if (this.regex.stop() != _newData.size()) {
-				Log.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (stop position error)" );
+				LOGGER.info("The input data does not match with the regExp '" + _newData + "' Regex='" + propertyRegex + "' (stop position error)" );
 				return;
 			}
 			*/
@@ -656,7 +667,7 @@ public class Entry extends Widget {
 		this.propertyValue = newData;
 		markToRedraw();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "config")
@@ -668,7 +679,7 @@ public class Entry extends Widget {
 		this.propertyConfig = propertyConfig;
 		onChangePropertyShaper();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "max")
@@ -680,7 +691,7 @@ public class Entry extends Widget {
 		this.propertyMaxCharacter = propertyMaxCharacter;
 		onChangePropertyMaxCharacter();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "password")
@@ -692,7 +703,7 @@ public class Entry extends Widget {
 		this.propertyPassword = propertyPassword;
 		onChangePropertyPassword();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "regex")
@@ -704,7 +715,7 @@ public class Entry extends Widget {
 		this.propertyRegex = propertyRegex;
 		onChangePropertyRegex();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "empty-text")
@@ -716,7 +727,7 @@ public class Entry extends Widget {
 		this.propertyTextWhenNothing = propertyTextWhenNothing;
 		onChangePropertyTextWhenNothing();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "value")
@@ -728,7 +739,7 @@ public class Entry extends Widget {
 		this.propertyValue = propertyValue;
 		onChangePropertyValue();
 	}
-	
+
 	/**
 	 * change the cursor position with the curent position requested on the display
 	 * @param pos Absolute position of the event
@@ -737,24 +748,24 @@ public class Entry extends Widget {
 	protected void updateCursorPosition(final Vector3f pos) {
 		updateCursorPosition(pos, false);
 	}
-	
+
 	protected void updateCursorPosition(final Vector3f pos, final boolean selection/*=false*/) {
 		final Padding padding = this.shape.getPadding();
-		
+
 		final Vector3f relPos = relativePosition(pos).less(this.overPositionStart);
 		// reject when outside ...
-		
+
 		// try to find the new cursor position :
 		if (this.displayStartPosition > this.propertyValue.length()) {
 			this.displayStartPosition = this.propertyValue.length();
 		}
 		if (this.displayStartPosition < 0) {
-			Log.error("wring cursor position : " + this.displayStartPosition + "/" + this.propertyValue.length());
+			LOGGER.error("wring cursor position : " + this.displayStartPosition + "/" + this.propertyValue.length());
 			this.displayStartPosition = 0;
 		}
 		String tmpDisplay = this.propertyValue.substring(0, this.displayStartPosition);
 		final int displayHidenSize = (int) this.text.calculateSize(tmpDisplay).x();
-		//Log.debug("hidenSize : " + displayHidenSize);
+		//LOGGER.debug("hidenSize : " + displayHidenSize);
 		int newCursorPosition = -1;
 		final int tmpTextOriginX = (int) padding.left();
 		for (int iii = 0; iii < this.propertyValue.length(); iii++) {
@@ -781,7 +792,7 @@ public class Entry extends Widget {
 		}
 		markToUpdateTextPosition();
 	}
-	
+
 	/**
 	 * update the display position start  == > depending of the position of the Cursor and the size of the Data inside
 	 * @change this.displayStartPosition < ==  updated
@@ -791,7 +802,7 @@ public class Entry extends Widget {
 			return;
 		}
 		final Padding padding = this.shape.getPadding();
-		
+
 		int tmpSizeX = (int) this.minSize.x();
 		if (this.propertyFill.x()) {
 			tmpSizeX = (int) this.size.x();
@@ -808,7 +819,8 @@ public class Entry extends Widget {
 		} else {
 			// check if the Cursor is visible at 10px nearest the border :
 			final int tmp1 = this.displayCursorPositionPixel + this.displayStartPosition;
-			Log.debug("cursorPos=" + this.displayCursorPositionPixel + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
+			LOGGER.debug(
+					"cursorPos=" + this.displayCursorPositionPixel + "px maxSize=" + tmpUserSize + "px tmp1=" + tmp1);
 			if (tmp1 < 10) {
 				// set the cursor on the left
 				this.displayStartPosition = Math.min(-this.displayCursorPositionPixel + 10, 0);
@@ -820,5 +832,5 @@ public class Entry extends Widget {
 			//this.displayStartPosition = -totalWidth + tmpUserSize;
 		}
 	}
-	
+
 }

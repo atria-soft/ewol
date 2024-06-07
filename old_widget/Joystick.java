@@ -75,7 +75,7 @@ class Joystick extends Widget {
 			_newRatio = 1;
 		}
 		this.ratio = _newRatio;
-		Log.info("Set default Joystick ratio at " + this.ratio);
+		LOGGER.info("Set default Joystick ratio at " + this.ratio);
 	}
 	/**
 	 * set the Background of the widget joystick
@@ -86,7 +86,7 @@ class Joystick extends Widget {
 		// TODO : check if it existed
 		this.background = _imageNameInData;
 		this.displayBackground = _display;
-		Log.info("Set default Joystick background at " + this.background + " display it=" + this.displayBackground);
+		LOGGER.info("Set default Joystick background at " + this.background + " display it=" + this.displayBackground);
 	}
 	/**
 	 * set the Foreground of the widget joystick
@@ -95,7 +95,7 @@ class Joystick extends Widget {
 	public void foreground(String _imageNameInData) {
 		// TODO : check if it existed
 		this.foreground = imageNameInData;
-		Log.info("Set default Joystick Foreground at " + this.foreground);
+		LOGGER.info("Set default Joystick Foreground at " + this.foreground);
 	}
 	/**
 	 * get the property of the joystick
@@ -189,7 +189,7 @@ class Joystick extends Widget {
 					signalMove.emit(this.angle+M_PI/2);
 				}
 				//teta += M_PI/2;
-				//Log.debug("TETA = " + (this.angle*180/M_PI) + " deg distance = " + this.distance);
+				//LOGGER.debug("TETA = " + (this.angle*180/M_PI) + " deg distance = " + this.distance);
 				return true;
 			} else if( KeyStatus::up == typeEvent) {
 				if(    true == this.lock

@@ -7,7 +7,6 @@ import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.ewol.Gravity;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceConfigFile;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.Composer;
@@ -15,11 +14,14 @@ import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.model.SpinPosition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @ingroup ewolWidgetGroup
  */
 public class SpinBase extends Sizer {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SpinBase.class);
 	// properties list:
 	private Uri propertyShape; //!< Shape of the widget
 	private SpinPosition propertySpinMode = SpinPosition.RIGHT_RIGHT; //!< How to display the spin base
@@ -29,13 +31,13 @@ public class SpinBase extends Sizer {
 	protected int confIdDownShaper = -1;
 	protected int confIdUpData = -1;
 	protected int confIdDownData = -1;
-	
+
 	protected Entry widgetEntry = null;
-	
+
 	protected Button widgetButtonDown = null;
-	
+
 	protected Button widgetButtonUp = null;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -52,7 +54,7 @@ public class SpinBase extends Sizer {
 		setPropertyGravity(Gravity.CENTER);
 		updateGui();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "shape")
@@ -60,7 +62,7 @@ public class SpinBase extends Sizer {
 	public Uri getPropertyShape() {
 		return this.propertyShape;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "spin-mode")
@@ -68,7 +70,7 @@ public class SpinBase extends Sizer {
 	public SpinPosition getPropertySpinMode() {
 		return this.propertySpinMode;
 	}
-	
+
 	protected void onChangePropertyShape() {
 		this.config = ResourceConfigFile.create(this.propertyShape);
 		if (this.config != null) {
@@ -80,11 +82,11 @@ public class SpinBase extends Sizer {
 		}
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertySpinMode() {
 		updateGui();
 	}
-	
+
 	public void setPropertyShape(final Uri propertyShape) {
 		if (this.propertyShape != null && this.propertyShape.equals(propertyShape)) {
 			return;
@@ -92,7 +94,7 @@ public class SpinBase extends Sizer {
 		this.propertyShape = propertyShape;
 		onChangePropertyShape();
 	}
-	
+
 	public void setPropertySpinMode(final SpinPosition propertySpinMode) {
 		if (this.propertySpinMode == propertySpinMode) {
 			return;
@@ -100,7 +102,7 @@ public class SpinBase extends Sizer {
 		this.propertySpinMode = propertySpinMode;
 		onChangePropertySpinMode();
 	}
-	
+
 	protected void updateGui() {
 		subWidgetRemoveAll();
 		markToRedraw();
@@ -109,7 +111,7 @@ public class SpinBase extends Sizer {
 			this.widgetEntry = new Entry();
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdEntryShaper);
-				Log.verbose("shaper entry : " + shaper);
+				LOGGER.trace("shaper entry : " + shaper);
 				if (!shaper.isEmpty()) {
 					this.widgetEntry.setPropertyConfig(Uri.valueOf(shaper));
 				}
@@ -121,7 +123,7 @@ public class SpinBase extends Sizer {
 			this.widgetButtonDown = new Button();
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdDownShaper);
-				Log.verbose("shaper button DOWN : " + shaper);
+				LOGGER.trace("shaper button DOWN : " + shaper);
 				if (!shaper.isEmpty()) {
 					this.widgetButtonDown.setPropertyConfig(Uri.valueOf(shaper));
 				}
@@ -136,7 +138,7 @@ public class SpinBase extends Sizer {
 			this.widgetButtonUp = new Button();
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdUpShaper);
-				Log.verbose("shaper button UP : " + shaper);
+				LOGGER.trace("shaper button UP : " + shaper);
 				if (!shaper.isEmpty()) {
 					this.widgetButtonUp.setPropertyConfig(Uri.valueOf(shaper));
 				}
@@ -178,5 +180,5 @@ public class SpinBase extends Sizer {
 				break;
 		}
 	}
-	
+
 }

@@ -14,14 +14,20 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LoadPackageStream {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoadPackageStream.class);
+	
 	public static byte[] getAllData(final String resourceName) {
-		Log.verbose("Load resource: '/resources" + resourceName + "'");
+		LOGGER.trace("Load resource: '/resources" + resourceName + "'");
 		final InputStream out = LoadPackageStream.class.getResourceAsStream("/resources" + resourceName);
 		if (out == null) {
-			Log.error("Can not load resource: '" + resourceName + "'");
-			for (final Path elem : LoadPackageStream.getResources(LoadPackageStream.class.getResource("/resources")).toArray(Path[]::new)) {
-				Log.warning("  - '" + elem + "'");
+			LOGGER.error("Can not load resource: '" + resourceName + "'");
+			for (final Path elem : LoadPackageStream.getResources(LoadPackageStream.class.getResource("/resources"))
+					.toArray(Path[]::new)) {
+				LOGGER.warn("  - '" + elem + "'");
 			}
 			return null;
 		}
@@ -34,7 +40,7 @@ public class LoadPackageStream {
 		}
 		return data;
 	}
-	
+
 	public static Stream<Path> getResources(final URL element) {
 		try {
 			final URI uri = element.toURI();
@@ -66,19 +72,20 @@ public class LoadPackageStream {
 			return Stream.of();
 		}
 	}
-	
+
 	public static InputStream getStream(final String resourceName) {
-		Log.verbose("Load resource: '/resources" + resourceName + "'");
+		LOGGER.trace("Load resource: '/resources" + resourceName + "'");
 		final InputStream out = LoadPackageStream.class.getResourceAsStream("/resources" + resourceName);
 		if (out == null) {
-			Log.error("Can not load resource: '" + resourceName + "'");
-			for (final Path elem : LoadPackageStream.getResources(LoadPackageStream.class.getResource("/resources")).toArray(Path[]::new)) {
-				Log.warning("  - '" + elem + "'");
+			LOGGER.error("Can not load resource: '" + resourceName + "'");
+			for (final Path elem : LoadPackageStream.getResources(LoadPackageStream.class.getResource("/resources"))
+					.toArray(Path[]::new)) {
+				LOGGER.warn("  - '" + elem + "'");
 			}
 		}
 		return out;
 	}
-	
+
 	private LoadPackageStream() {}
-	
+
 }

@@ -124,7 +124,7 @@ void ewol::widget::TreeView::drawElement( Vector2i _pos,  Vector2f _start,  Vect
 			tmpImage.setPos(posStart);
 			tmpImage.print(Vector2f(propertyIconTreeViewSize.get(), propertyIconTreeViewSize.get()));
 		} else {
-			Log.error("can not get : " + iconName );
+			LOGGER.error("can not get : " + iconName );
 		}
 		// move right
 		posStart.setX(posStart.x() + propertyIconTreeViewSize.get());
@@ -161,7 +161,7 @@ boolean ewol::widget::TreeView::onItemEvent( ewol::event::Input _event,  Vector2
 	if (_pos.x() != 0) {
 		return false;
 	}
-	//Log.info("event: " + _event);
+	//LOGGER.info("event: " + _event);
 	Vector2f posStart = Vector2f(0,0);
 	boolean haveChild = getData(ListRole::HaveChild, _pos).getSafeBoolean();
 	if (haveChild == false) {
@@ -172,7 +172,7 @@ boolean ewol::widget::TreeView::onItemEvent( ewol::event::Input _event,  Vector2
 		posStart.setX(posStart.x() + value.getSafeNumber() * propertyOffsetTreeView.get());
 	}
 	// Inverse the display of Y
-	Log.verbose("check: " + Vector2f(_mousePosition.x(), this.listSizeY[_pos.y()] - _mousePosition.y())
+	LOGGER.trace("check: " + Vector2f(_mousePosition.x(), this.listSizeY[_pos.y()] - _mousePosition.y())
 	             + " in " + posStart
 	             + " . " + (posStart+Vector2f(propertyIconTreeViewSize.get(),propertyIconTreeViewSize.get())));
 	if (    _mousePosition.x() >= posStart.x()

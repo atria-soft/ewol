@@ -15,25 +15,28 @@ import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
-import org.atriasoft.ewol.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Sizer extends ContainerN {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Sizer.class);
+	
 	@AknotCaseSensitive(value = false)
 	public enum DisplayMode {
 		HORIZONTAL, //!< Horizontal mode
 		VERTICAL; //!< Vertical mode
 	}
-	
+
 	protected Dimension3f propertyBorderSize = Dimension3f.ZERO; //!< Border size needed for all the display
 	protected DisplayMode propertyMode = DisplayMode.HORIZONTAL; //!< Method to display the widget list (vert/hory ...)
-	
+
 	/**
 	 * Constructor
 	 */
 	public Sizer() {
-		
+
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param mode The mode to display the elements
@@ -41,14 +44,14 @@ public class Sizer extends ContainerN {
 	public Sizer(final DisplayMode mode) {
 		this.propertyMode = mode;
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
-		Log.verbose("[" + getId() + "] update minimum size");
+		LOGGER.trace("[" + getId() + "] update minimum size");
 		this.subExpend = Vector3b.FALSE;
 		this.minSize = this.propertyMinSize.getPixel();
 		final Vector3f tmpBorderSize = this.propertyBorderSize.getPixel();
-		Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "} set min size : " + this.minSize);
+		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} set min size : " + this.minSize);
 		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
@@ -61,8 +64,8 @@ public class Sizer extends ContainerN {
 				this.subExpend = this.subExpend.withY(true);
 			}
 			final Vector3f tmpSize = it.getCalculateMinSize();
-			Log.verbose("[" + getId() + "] NewMinSize=" + tmpSize);
-			Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "}     Get minSize=" + tmpSize);
+			LOGGER.trace("[" + getId() + "] NewMinSize=" + tmpSize);
+			LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "}     Get minSize=" + tmpSize);
 			if (this.propertyMode == DisplayMode.VERTICAL) {
 				this.minSize = this.minSize.withY(this.minSize.y() + tmpSize.y());
 				if (tmpSize.x() > this.minSize.x()) {
@@ -76,9 +79,9 @@ public class Sizer extends ContainerN {
 			}
 		}
 		this.minSize = this.minSize.add(tmpBorderSize.multiply(2));
-		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
+		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("border")
@@ -86,7 +89,7 @@ public class Sizer extends ContainerN {
 	public Dimension3f getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("mode")
@@ -94,12 +97,13 @@ public class Sizer extends ContainerN {
 	public DisplayMode getPropertyMode() {
 		return this.propertyMode;
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		super.onChangeSize();
 		final Vector3f tmpBorderSize = this.propertyBorderSize.getPixel();
-		Log.verbose("[" + getId() + "] update size : " + this.size + " nbElement : " + this.subWidget.size() + " borderSize=" + tmpBorderSize + " from border=" + this.propertyBorderSize);
+		LOGGER.trace("[" + getId() + "] update size : " + this.size + " nbElement : " + this.subWidget.size()
+				+ " borderSize=" + tmpBorderSize + " from border=" + this.propertyBorderSize);
 		final Vector3f localWidgetSize = this.size.less(tmpBorderSize.multiply(2.0f));
 		// -1- calculate min-size and expand requested:
 		Vector3f minSize = Vector3f.ZERO;
@@ -110,9 +114,11 @@ public class Sizer extends ContainerN {
 			}
 			final Vector3f tmpSize = it.getCalculateMinSize();
 			if (this.propertyMode == DisplayMode.VERTICAL) {
-				minSize = new Vector3f(Math.max(minSize.x(), tmpSize.x()), minSize.y() + tmpSize.y(), Math.max(minSize.z(), tmpSize.z()));
+				minSize = new Vector3f(Math.max(minSize.x(), tmpSize.x()), minSize.y() + tmpSize.y(),
+						Math.max(minSize.z(), tmpSize.z()));
 			} else {
-				minSize = new Vector3f(minSize.x() + tmpSize.x(), Math.max(minSize.y(), tmpSize.y()), Math.max(minSize.z(), tmpSize.z()));
+				minSize = new Vector3f(minSize.x() + tmpSize.x(), Math.max(minSize.y(), tmpSize.y()),
+						Math.max(minSize.z(), tmpSize.z()));
 			}
 			final Vector3b expand = it.canExpand();
 			nbWidgetExpand = nbWidgetExpand.add(expand.x() ? 1 : 0, expand.y() ? 1 : 0, 0);
@@ -209,14 +215,16 @@ public class Sizer extends ContainerN {
 					continue;
 				}
 				Vector3f tmpSizeMin = it.getSize();
-				tmpSizeMin = tmpSizeMin.withX(FMath.avg(tmpSizeMin.x(), localWidgetSize.x(), it.getCalculateMaxSize().x()));
+				tmpSizeMin = tmpSizeMin
+						.withX(FMath.avg(tmpSizeMin.x(), localWidgetSize.x(), it.getCalculateMaxSize().x()));
 				it.setSize(tmpSizeMin);
 			} else {
 				if (!it.canExpand().y() && !it.canExpandIfFree().y()) {
 					continue;
 				}
 				Vector3f tmpSizeMin = it.getSize();
-				tmpSizeMin = tmpSizeMin.withY(FMath.avg(tmpSizeMin.y(), localWidgetSize.y(), it.getCalculateMaxSize().y()));
+				tmpSizeMin = tmpSizeMin
+						.withY(FMath.avg(tmpSizeMin.y(), localWidgetSize.y(), it.getCalculateMaxSize().y()));
 				it.setSize(tmpSizeMin);
 			}
 		}
@@ -235,13 +243,15 @@ public class Sizer extends ContainerN {
 			}
 			final Vector3f size = it.getSize();
 			if (this.propertyMode == DisplayMode.VERTICAL) {
-				underSize = new Vector3f(Math.max(underSize.x(), size.x()), underSize.y() + size.y(), Math.max(underSize.z(), size.z()));
+				underSize = new Vector3f(Math.max(underSize.x(), size.x()), underSize.y() + size.y(),
+						Math.max(underSize.z(), size.z()));
 			} else {
-				underSize = new Vector3f(underSize.x() + size.x(), Math.max(underSize.y(), size.y()), Math.max(underSize.z(), size.z()));
+				underSize = new Vector3f(underSize.x() + size.x(), Math.max(underSize.y(), size.y()),
+						Math.max(underSize.z(), size.z()));
 			}
 		}
 		final Vector3f deltas = localWidgetSize.less(underSize);
-		
+
 		// -8- Calculate the local origin, depending of the gravity:
 		Vector3f tmpOrigin = this.origin.add(tmpBorderSize).add(this.propertyGravity.gravityGenerateDelta(deltas));
 		// -9- Set sub widget origin:
@@ -252,9 +262,11 @@ public class Sizer extends ContainerN {
 			Vector3f origin;
 			final Vector3f size = it.getSize();
 			if (this.propertyMode == DisplayMode.VERTICAL) {
-				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(this.propertyGravity.gravityGenerateDelta(new Vector3f(underSize.x() - size.x(), 0.0f, 0.0f))));
+				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(
+						this.propertyGravity.gravityGenerateDelta(new Vector3f(underSize.x() - size.x(), 0.0f, 0.0f))));
 			} else {
-				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(this.propertyGravity.gravityGenerateDelta(new Vector3f(0.0f, underSize.y() - size.y(), 0.0f))));
+				origin = Vector3f.clipInt(tmpOrigin.add(this.offset).add(
+						this.propertyGravity.gravityGenerateDelta(new Vector3f(0.0f, underSize.y() - size.y(), 0.0f))));
 			}
 			it.setOrigin(origin);
 			if (this.propertyMode == DisplayMode.VERTICAL) {
@@ -272,14 +284,14 @@ public class Sizer extends ContainerN {
 		}
 		markToRedraw();
 	}
-	
+
 	public void setPropertyBorderSize(final Dimension3f propertyBorderSize) {
 		if (this.propertyBorderSize.equals(propertyBorderSize)) {
 			return;
 		}
 		this.propertyBorderSize = propertyBorderSize;
 	}
-	
+
 	public void setPropertyMode(final DisplayMode propertyMode) {
 		if (this.propertyMode.equals(propertyMode)) {
 			return;

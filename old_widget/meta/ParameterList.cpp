@@ -52,7 +52,7 @@ void ewol::widget::ParameterList::calculateMinMaxSize() {
 
 void ewol::widget::ParameterList::addOObject( ememory::Ptr<ewol::Compositing> _newObject, int _pos) {
 	if (_newObject == null) {
-		Log.error("Try to add an empty object in the Widget generic display system");
+		LOGGER.error("Try to add an empty object in the Widget generic display system");
 		return;
 	}
 	if (_pos < 0 || (int)_pos >= this.listOObject.size() ) {
@@ -79,7 +79,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay() {
 	if (needRedraw() == true) {
 		// clean the object list ...
 		clearOObjectList();
-		//Log.debug("OnRegenerateDisplay(" + this.size.x + "," + this.size.y + ")");
+		//LOGGER.debug("OnRegenerateDisplay(" + this.size.x + "," + this.size.y + ")");
 		
 		int tmpOriginX = 0;
 		int tmpOriginY = 0;
@@ -195,17 +195,17 @@ boolean ewol::widget::ParameterList::onEventInput( ewol::event::Input _event) {
 }
 
 void ewol::widget::ParameterList::onGetFocus() {
-	Log.debug("Ewol::List get focus");
+	LOGGER.debug("Ewol::List get focus");
 }
 
 void ewol::widget::ParameterList::onLostFocus() {
-	Log.debug("Ewol::List Lost focus");
+	LOGGER.debug("Ewol::List Lost focus");
 }
 
 void ewol::widget::ParameterList::menuAdd(String _label, int _refId, String _image) {
 	ememory::Ptr<ewol::widget::elementPL> tmpEmement = ememory::make<widget::elementPL>(_label, _refId, _image, false);
 	if (tmpEmement == null) {
-		Log.error("Can not allocacte menu parameter");
+		LOGGER.error("Can not allocacte menu parameter");
 		return;
 	}
 	this.list.pushBack(tmpEmement);
@@ -219,7 +219,7 @@ void ewol::widget::ParameterList::menuAddGroup(String _label) {
 	String image = "";
 	ememory::Ptr<ewol::widget::elementPL> tmpEmement = ememory::make<widget::elementPL>(_label, -1, image, true);
 	if (tmpEmement == null) {
-		Log.error("Can not allocacte menu parameter");
+		LOGGER.error("Can not allocacte menu parameter");
 		return;
 	}
 	this.list.pushBack(tmpEmement);
