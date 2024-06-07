@@ -12,7 +12,8 @@ import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.context.EwolContext;
-import org.atriasoft.ewol.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -29,6 +30,7 @@ import org.atriasoft.ewol.internal.Log;
 @AknotDefaultAttribute
 @AknotIgnoreUnknown
 public class EwolObject {
+	private static final Logger LOGGER = LoggerFactory.getLogger(EwolObject.class);
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
 	
 	/**
@@ -76,7 +78,7 @@ public class EwolObject {
 		synchronized (EwolObject.valUID) {
 			this.uniqueId = EwolObject.valUID++;
 		}
-		Log.debug("new Object : [" + this.uniqueId + "]");
+		LOGGER.debug("new Object : [" + this.uniqueId + "]");
 		
 		EwolObject.getObjectManager().add(this);
 	}
@@ -85,12 +87,12 @@ public class EwolObject {
 	 * Auto-destroy the object
 	 */
 	protected void autoDestroy() {
-		Log.verbose("Destroy object: [" + getId() + "] type:" + this.getClass().getCanonicalName());
+		LOGGER.trace("Destroy object: [" + getId() + "] type:" + this.getClass().getCanonicalName());
 		if (this.parent != null) {
 			final EwolObject parent = this.parent.get();
 			// TODO : set a signal to do this ...
 			if (parent != null) {
-				Log.verbose("Destroy object: Call parrent");
+				LOGGER.trace("Destroy object: Call parrent");
 				parent.requestDestroyFromChild(this);
 			}
 		}
@@ -144,7 +146,7 @@ public class EwolObject {
 	 * @return the requested object or null
 	 */
 	public EwolObject getSubObjectNamed(final String objectName) {
-		Log.verbose("check if name : " + objectName + " ?= " + this.name);
+		LOGGER.trace("check if name : " + objectName + " ?= " + this.name);
 		if (objectName.equals(this.name)) {
 			return this;
 		}
@@ -172,8 +174,10 @@ public class EwolObject {
 	 * @param child Object of the child that want to remove itself
 	 */
 	protected void requestDestroyFromChild(final EwolObject child) {
-		Log.info("requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
-		Log.critical("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
+		LOGGER.info(
+				"requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
+		LOGGER.error("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
+		System.exit(-1);
 	}
 	
 	public void setName(final String name) {

@@ -14,20 +14,23 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
 public class ResourceFontSvg extends Resource {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceFontSvg.class);
 	
 	public static ResourceFontSvg create(final Uri uri) {
-		Log.verbose("KEEP: FontFreeType: " + uri);
+		LOGGER.trace("KEEP: FontFreeType: " + uri);
 		ResourceFontSvg object = null;
 		final Resource object2 = Resource.getManager().localKeep(uri);
 		if (object2 != null) {
 			if (!(object2 instanceof ResourceFontSvg)) {
-				Log.critical("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
+				LOGGER.error("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
+				System.exit(-1);
 				return null;
 			}
 			object = (ResourceFontSvg) object2;
@@ -35,7 +38,7 @@ public class ResourceFontSvg extends Resource {
 		if (object != null) {
 			return object;
 		}
-		Log.debug("CREATE: FontFreeType: " + uri);
+		LOGGER.debug("CREATE: FontFreeType: " + uri);
 		// need to crate a new one ...
 		return new ResourceFontSvg(uri);
 	}
@@ -46,10 +49,11 @@ public class ResourceFontSvg extends Resource {
 		super(uri);
 		this.font = EsvgFont.load(uri);
 		if (this.font == null) {
-			Log.error("... the font file could be opened and read, but it appears ... that its font format is unsupported");
+			LOGGER.error(
+					"... the font file could be opened and read, but it appears ... that its font format is unsupported");
 		} else {
 			// all OK
-			Log.debug("load font : '" + uri + "' glyph count = " + this.font.getNumGlyphs());
+			LOGGER.debug("load font : '" + uri + "' glyph count = " + this.font.getNumGlyphs());
 			// display();
 		}
 	}
@@ -60,15 +64,26 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public synchronized void display() {
-		Log.info("    number of glyph       = " + this.font.getNumGlyphs());
+		LOGGER.info("    number of glyph       = " + this.font.getNumGlyphs());
 	}
 	
-	public boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage) {
+	public boolean drawGlyph(
+			final ImageByte imageOut,
+			final int fontSize,
+			final Vector2i glyphPosition,
+			final GlyphProperty property,
+			final int posInImage) {
 		return drawGlyph(imageOut, fontSize, glyphPosition, property, posInImage, false);
 	}
 	
 	// the forceClimp is to generate a forcing of the rendering in small font, this permit to have a correct view of the font, otherwise it will be transparent.
-	public synchronized boolean drawGlyph(final ImageByte imageOut, final int fontSize, final Vector2i glyphPosition, final GlyphProperty property, final int posInImage, final boolean forceClimp) {
+	public synchronized boolean drawGlyph(
+			final ImageByte imageOut,
+			final int fontSize,
+			final Vector2i glyphPosition,
+			final GlyphProperty property,
+			final int posInImage,
+			final boolean forceClimp) {
 		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		if (weight == null) {
 			return false;
@@ -101,7 +116,11 @@ public class ResourceFontSvg extends Resource {
 		return true;
 	}
 	
-	public synchronized boolean drawGlyph(final ImageByteMono imageOut, final int fontSize, final GlyphProperty property, final int borderSize) {
+	public synchronized boolean drawGlyph(
+			final ImageByteMono imageOut,
+			final int fontSize,
+			final GlyphProperty property,
+			final int borderSize) {
 		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		for (int jjj = 0; jjj < weight.getHeight(); jjj++) {
 			for (int iii = 0; iii < weight.getWidth(); iii++) {

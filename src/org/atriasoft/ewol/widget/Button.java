@@ -19,10 +19,11 @@ import org.atriasoft.ewol.compositing.ShapeBox;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeyStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -35,13 +36,15 @@ import org.atriasoft.gale.key.KeyStatus;
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
 public class Button extends ContainerToggle {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Button.class);
+	
 	public enum ButtonLock {
 		LOCK_NONE, //!< normal status of the button
 		LOCK_WHEN_PRESSED, //!< When the state is set in pressed, the status stay in this one
 		LOCK_WHEN_RELEASED, //!< When the state is set in not pressed, the status stay in this one
 		LOCK_ACCESS, //!< all event are trashed  == > acctivity of the button is disable
 	}
-	
+
 	public static Button createLabelButton(final String label) {
 		final Button out = new Button();
 		final Label labelWidget = new Label();
@@ -53,7 +56,7 @@ public class Button extends ContainerToggle {
 		out.setSubWidget(labelWidget, 0);
 		return out;
 	}
-	
+
 	public static Button createToggleLabelButton(final String label0, final String label1) {
 		final Button out = new Button();
 		{
@@ -75,31 +78,31 @@ public class Button extends ContainerToggle {
 		out.setPropertyToggleMode(true);
 		return out;
 	}
-	
+
 	/**
 	 * Periodic call to update grapgic display
 	 * @param event Time generic event
 	 */
 	protected static void periodicCall(final Button self, final EventTime event) {
-		Log.verbose("Periodic call on Entry(" + event + ")");
+		LOGGER.trace("Periodic call on Entry(" + event + ")");
 		if (!self.shape.periodicCall(event)) {
 			self.periodicConnectionHanble.close();
 		}
 		self.markToRedraw();
 	}
-	
+
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-	
+
 	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
 	private boolean propertyValue = false;
 	private ButtonLock propertyLock = ButtonLock.LOCK_NONE;
 	private boolean propertyToggleMode = false;
 	private boolean propertyEnableSingle = false;
-	
+
 	protected ShapeBox shapeProperty = ShapeBox.ZERO;
 	private GuiShape shape;
-	
+
 	@AknotSignal
 	@AknotName(value = "down")
 	@AknotDescription("Button is Down")
@@ -124,10 +127,10 @@ public class Button extends ContainerToggle {
 	@AknotName(value = "value")
 	@AknotDescription("The button value change")
 	public Signal<Boolean> signalValue = new Signal<>();
-	
+
 	private boolean buttonPressed = false;
 	private boolean mouseHover = false;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -137,7 +140,7 @@ public class Button extends ContainerToggle {
 		// can not support multiple click...
 		setMouseLimit(1);
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -148,20 +151,21 @@ public class Button extends ContainerToggle {
 			padding = this.shape.getPadding();
 		}
 		calculateMinMaxSizePadded(padding);
-		Log.verbose("[{}] Result min size : {}", getId(), this.minSize);
+		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
-	
+
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
 		if (this.shape.changeStatusIn(newStatusId)) {
 			if (!this.periodicConnectionHanble.isConnected()) {
-				//Log.error("REQUEST: connection on periodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this, Button::periodicCall);
+				//LOGGER.error("REQUEST: connection on periodic call");
+				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this,
+						Button::periodicCall);
 			}
 			markToRedraw();
 		}
-		
+
 	}
-	
+
 	void checkStatus() {
 		if (this.buttonPressed) {
 			changeStatusIn(GuiShapeMode.SELECT);
@@ -176,7 +180,7 @@ public class Button extends ContainerToggle {
 		}
 		changeStatusIn(GuiShapeMode.NONE);
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "config")
@@ -184,7 +188,7 @@ public class Button extends ContainerToggle {
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "lock")
@@ -192,7 +196,7 @@ public class Button extends ContainerToggle {
 	public ButtonLock getPropertyLock() {
 		return this.propertyLock;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "value")
@@ -200,7 +204,7 @@ public class Button extends ContainerToggle {
 	public boolean getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "enable-single")
@@ -208,7 +212,7 @@ public class Button extends ContainerToggle {
 	public boolean isPropertyEnableSingle() {
 		return this.propertyEnableSingle;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "toggle")
@@ -216,7 +220,7 @@ public class Button extends ContainerToggle {
 	public boolean isPropertyToggleMode() {
 		return this.propertyToggleMode;
 	}
-	
+
 	void onChangePropertyEnableSingle() {
 		if (this.propertyEnableSingle) {
 			if (this.idWidgetDisplayed == 0 && this.subWidget[0] == null && this.subWidget[1] != null) {
@@ -228,7 +232,7 @@ public class Button extends ContainerToggle {
 			}
 		}
 	}
-	
+
 	void onChangePropertyLock() {
 		if (ButtonLock.LOCK_ACCESS == this.propertyLock) {
 			this.buttonPressed = false;
@@ -237,7 +241,7 @@ public class Button extends ContainerToggle {
 		checkStatus();
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyShaper() {
 		if (this.shape == null) {
 			this.shape = new GuiShape(this.propertyConfig);
@@ -246,18 +250,16 @@ public class Button extends ContainerToggle {
 		}
 		markToRedraw();
 	}
-	
+
 	void onChangePropertyToggleMode() {
 		this.propertyValue = !this.propertyValue;
 		this.signalValue.emit(this.propertyValue);
 		if (!this.propertyToggleMode) {
 			this.idWidgetDisplayed = 0;
+		} else if (!this.propertyValue) {
+			this.idWidgetDisplayed = 0;
 		} else {
-			if (!this.propertyValue) {
-				this.idWidgetDisplayed = 0;
-			} else {
-				this.idWidgetDisplayed = 1;
-			}
+			this.idWidgetDisplayed = 1;
 		}
 		if (this.propertyEnableSingle) {
 			if (this.idWidgetDisplayed == 0 && this.subWidget[0] == null && this.subWidget[1] != null) {
@@ -269,7 +271,7 @@ public class Button extends ContainerToggle {
 		checkStatus();
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyValue() {
 		if (this.propertyToggleMode) {
 			if (!this.propertyValue) {
@@ -288,13 +290,13 @@ public class Button extends ContainerToggle {
 		checkStatus();
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		final Padding padding = this.shape.getPadding();
 		onChangeSizePadded(padding);
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		if (this.shape != null) {
@@ -302,21 +304,21 @@ public class Button extends ContainerToggle {
 		}
 		super.onDraw();
 	}
-	
+
 	@Override
 	protected boolean onEventEntry(final EventEntry event) {
-		//Log.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
+		//LOGGER.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 		if (event.type() == KeyKeyboard.CHARACTER && event.status() == KeyStatus.down && event.getChar() == '\r') {
 			this.signalEnter.emit();
 			return true;
 		}
 		return super.onEventEntry(event);
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f relPos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
-		Log.warning("Event on Input ... " + event + " relPos = " + relPos);
+		LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = this.shapeProperty.isInside(relPos);
 		//filter if outside the element...
 		if (event.status() == KeyStatus.leave) {
@@ -329,7 +331,7 @@ public class Button extends ContainerToggle {
 				if (KeyStatus.leave == event.status()) {
 					changeStatusIn(GuiShapeMode.NORMAL);
 				} else {
-					Log.verbose("Detect Over : " + this.shapeProperty);
+					LOGGER.trace("Detect Over : " + this.shapeProperty);
 					if (over) {
 						changeStatusIn(GuiShapeMode.OVER);
 					} else {
@@ -346,10 +348,10 @@ public class Button extends ContainerToggle {
 			keepFocus();
 			this.signalClick.emit();
 			if (this.propertyToggleMode) {
-				this.setPropertyValue(!this.propertyValue);
+				setPropertyValue(!this.propertyValue);
 			} else {
-				this.setPropertyValue(!this.propertyValue);
-				this.setPropertyValue(!this.propertyValue);
+				setPropertyValue(!this.propertyValue);
+				setPropertyValue(!this.propertyValue);
 			}
 			return true;
 		}
@@ -376,24 +378,24 @@ public class Button extends ContainerToggle {
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void onLostFocus() {
 		this.buttonPressed = false;
-		Log.verbose(this.name + " : Remove Focus ...");
+		LOGGER.trace(this.name + " : Remove Focus ...");
 		checkStatus();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		super.onRegenerateDisplay();
 		if (!needRedraw()) {
 			//return;
 		}
-		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
+		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
 		final Padding padding = this.shape.getPadding();
-		
+
 		Vector3f tmpSizeShaper = this.minSize;
 		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 		if (this.propertyFill.x()) {
@@ -408,7 +410,7 @@ public class Button extends ContainerToggle {
 			tmpSizeShaper = tmpSizeShaper.withZ(this.size.y());
 			delta = delta.withZ(0.0f);
 		}
-		
+
 		Vector3f tmpOriginShaper = delta;
 		Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
 		//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
@@ -418,13 +420,13 @@ public class Button extends ContainerToggle {
 		tmpOriginShaper = tmpOriginShaper.clipInteger();
 		tmpSizeText = tmpSizeText.clipInteger();
 		tmpOriginText = tmpOriginText.clipInteger();
-		
+
 		this.shapeProperty = new ShapeBox(tmpOriginShaper, tmpSizeShaper, padding);
 		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
 		this.shape.flush();
-		
+
 	}
-	
+
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;
@@ -432,22 +434,22 @@ public class Button extends ContainerToggle {
 		this.propertyConfig = propertyConfig;
 		onChangePropertyShaper();
 	}
-	
+
 	public void setPropertyEnableSingle(final boolean propertyEnableSingle) {
 		this.propertyEnableSingle = propertyEnableSingle;
 		markToRedraw();
 	}
-	
+
 	public void setPropertyLock(final ButtonLock propertyLock) {
 		this.propertyLock = propertyLock;
 		markToRedraw();
 	}
-	
+
 	public void setPropertyToggleMode(final boolean propertyToggleMode) {
 		this.propertyToggleMode = propertyToggleMode;
 		markToRedraw();
 	}
-	
+
 	public void setPropertyValue(final boolean propertyValue) {
 		if (this.propertyValue == propertyValue) {
 			return;
@@ -456,5 +458,5 @@ public class Button extends ContainerToggle {
 		this.signalValue.emit(this.propertyValue);
 		onChangePropertyValue();
 	}
-	
+
 }

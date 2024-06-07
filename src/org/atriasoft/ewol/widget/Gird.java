@@ -10,12 +10,15 @@ import java.util.List;
 
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @ingroup ewolWidgetGroup
  */
 class Gird extends Widget {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Gird.class);
+
 	protected class GirdProperties {
 		public Widget widget;
 		public int row;
@@ -45,7 +48,7 @@ class Gird extends Widget {
 				this.sizeCol.set(iii, 0);
 			}
 		}
-		//Log.debug("Update minimum size");
+		//LOGGER.debug("Update minimum size");
 		this.minSize = this.propertyMinSize.getPixel();
 		this.maxSize = this.propertyMaxSize.getPixel();
 		this.uniformSizeRow = 0;
@@ -59,12 +62,13 @@ class Gird extends Widget {
 			if (this.subWidget.get(iii).widget != null) {
 				this.subWidget.get(iii).widget.calculateMinMaxSize();
 				final Vector3f tmpSize = this.subWidget.get(iii).widget.getCalculateMinSize();
-				Log.debug("     [" + iii + "] subWidgetMinSize=" + tmpSize);
+				LOGGER.debug("     [" + iii + "] subWidgetMinSize=" + tmpSize);
 				// for all we get the max size :
 				this.uniformSizeRow = Math.max((int) tmpSize.y(), this.uniformSizeRow);
 				// for the colomn size : We set the autamatic value in negative :
 				if (this.sizeCol.get(this.subWidget.get(iii).col) <= 0) {
-					this.sizeCol.set(this.subWidget.get(iii).col, Math.min(this.sizeCol.get(this.subWidget.get(iii).col), (int) -tmpSize.x()));
+					this.sizeCol.set(this.subWidget.get(iii).col,
+							Math.min(this.sizeCol.get(this.subWidget.get(iii).col), (int) -tmpSize.x()));
 				}
 			}
 		}
@@ -73,16 +77,16 @@ class Gird extends Widget {
 			this.uniformSizeRow = this.sizeRow;
 		}
 		int tmpSizeWidth = 0;
-		for (int iii = 0; iii < this.sizeCol.size(); iii++) {
-			tmpSizeWidth += Math.abs(this.sizeCol.get(iii));
+		for (final Integer element : this.sizeCol) {
+			tmpSizeWidth += Math.abs(element);
 		}
-		Log.debug("     tmpSizeWidth=" + tmpSizeWidth);
-		Log.debug("     this.uniformSizeRow=" + this.uniformSizeRow);
+		LOGGER.debug("     tmpSizeWidth=" + tmpSizeWidth);
+		LOGGER.debug("     this.uniformSizeRow=" + this.uniformSizeRow);
 		this.minSize = this.minSize.add(tmpSizeWidth, (lastLineID + 1) * this.uniformSizeRow, 0);
 		
-		Log.debug("Calculate min size : " + this.minSize);
+		LOGGER.debug("Calculate min size : " + this.minSize);
 		
-		//Log.debug("Vert Result : expand="+ this.userExpand + "  minSize="+ this.minSize);
+		//LOGGER.debug("Vert Result : expand="+ this.userExpand + "  minSize="+ this.minSize);
 	}
 	
 	/**
@@ -105,7 +109,7 @@ class Gird extends Widget {
 			}
 			return this.sizeCol.get(colId);
 		}
-		Log.error("Can not get the Colomn size : " + colId + 1 + "  we have " + this.sizeCol.size() + " colomn");
+		LOGGER.error("Can not get the Colomn size : " + colId + 1 + "  we have " + this.sizeCol.size() + " colomn");
 		return 0;
 	}
 	
@@ -133,7 +137,8 @@ class Gird extends Widget {
 			}
 			final Vector3f tmpSize = it.widget.getSize();
 			final Vector3f tmpOrigin = it.widget.getOrigin();
-			if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x()) && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
+			if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
+					&& (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
 				final Widget tmpWidget = it.widget.getWidgetAtPos(pos);
 				if (tmpWidget != null) {
 					return tmpWidget;
@@ -147,8 +152,9 @@ class Gird extends Widget {
 	
 	@Override
 	public void onChangeSize() {
-		//Log.debug("Update size");
-		this.size = this.size.less(this.propertyBorderSize.x() * 2, this.propertyBorderSize.y() * 2, this.propertyBorderSize.y() * 2);
+		//LOGGER.debug("Update size");
+		this.size = this.size.less(this.propertyBorderSize.x() * 2, this.propertyBorderSize.y() * 2,
+				this.propertyBorderSize.y() * 2);
 		
 		for (int iii = 0; iii < this.subWidget.size(); iii++) {
 			if (this.subWidget.get(iii).widget != null) {
@@ -171,16 +177,19 @@ class Gird extends Widget {
 				}
 				tmpOrigin = tmpOrigin.add(tmpSizeWidth, addingPos, 0);
 				
-				Log.debug("     [{}] set subwidget origin={} size={}", iii, tmpOrigin, new Vector3f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow, 0));
+				LOGGER.debug("     [{}] set subwidget origin={} size={}", iii, tmpOrigin,
+						new Vector3f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow, 0));
 				// set the origin :
 				this.subWidget.get(iii).widget.setOrigin(tmpOrigin.clipInteger());
 				// all time set all the space .
-				this.subWidget.get(iii).widget.setSize((new Vector3f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow, 0)).clipInteger());
+				this.subWidget.get(iii).widget.setSize(
+						(new Vector3f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow, 0))
+								.clipInteger());
 				this.subWidget.get(iii).widget.onChangeSize();
 			}
 		}
 		this.size = this.size.add(this.propertyBorderSize.multiply(0.5f));
-		Log.debug("Calculate size : " + this.size);
+		LOGGER.debug("Calculate size : " + this.size);
 		markToRedraw();
 	}
 	
@@ -216,11 +225,12 @@ class Gird extends Widget {
 						this.subWidget.get(iii).widget = null;
 						// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 						if (errorControl == this.subWidget.size()) {
-							Log.critical(
-									"[" + getId() + "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+							LOGGER.error("[" + getId()
+									+ "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+							System.exit(-1);
 						}
 					} else {
-						Log.warning("[" + getId() + "] Must not have null pointer on the subWidget list ...");
+						LOGGER.warn("[" + getId() + "] Must not have null pointer on the subWidget list ...");
 						this.subWidget.remove(iii);
 					}
 					errorControl = this.subWidget.size();
@@ -245,7 +255,8 @@ class Gird extends Widget {
 		if ((long) this.sizeCol.size() > colId) {
 			this.sizeCol.set(colId, size);
 		} else {
-			Log.error("Can not set the Colomn size : " + colId + 1 + " at " + size + "px  we have " + this.sizeCol.size() + " colomn");
+			LOGGER.error("Can not set the Colomn size : " + colId + 1 + " at " + size + "px  we have "
+					+ this.sizeCol.size() + " colomn");
 		}
 	}
 	
@@ -268,11 +279,11 @@ class Gird extends Widget {
 	public void setPropertyBorderSize(final Vector3f propertyBorderSize) {
 		this.propertyBorderSize = propertyBorderSize;
 		if (this.propertyBorderSize.x() < 0) {
-			Log.error("Try to set a border size <0 on x : " + this.propertyBorderSize.x() + "  == > restore to 0");
+			LOGGER.error("Try to set a border size <0 on x : " + this.propertyBorderSize.x() + "  == > restore to 0");
 			this.propertyBorderSize = this.propertyBorderSize.withX(0);
 		}
 		if (this.propertyBorderSize.y() < 0) {
-			Log.error("Try to set a border size <0 on y : " + this.propertyBorderSize.y() + "  == > restore to 0");
+			LOGGER.error("Try to set a border size <0 on y : " + this.propertyBorderSize.y() + "  == > restore to 0");
 			this.propertyBorderSize = this.propertyBorderSize.withY(0);
 		}
 		markToRedraw();
@@ -310,19 +321,17 @@ class Gird extends Widget {
 				// find a new position;
 				this.subWidget.add(iii, prop);
 				return;
+			} else if (this.subWidget.get(iii).col < prop.col) {
+				continue;
+			} else if (this.subWidget.get(iii).col > prop.col) {
+				// find a new position;
+				this.subWidget.add(iii, prop);
+				return;
 			} else {
-				if (this.subWidget.get(iii).col < prop.col) {
-					continue;
-				} else if (this.subWidget.get(iii).col > prop.col) {
-					// find a new position;
-					this.subWidget.add(iii, prop);
-					return;
-				} else {
-					// The element already exist  == > replace it ...
-					this.tmpWidget = this.subWidget.get(iii).widget;
-					this.subWidget.get(iii).widget = newWidget;
-					this.tmpWidget = null;
-				}
+				// The element already exist  == > replace it ...
+				this.tmpWidget = this.subWidget.get(iii).widget;
+				this.subWidget.get(iii).widget = newWidget;
+				this.tmpWidget = null;
 			}
 		}
 		// not find  == > just adding it ...
@@ -336,7 +345,7 @@ class Gird extends Widget {
 	 */
 	public void subWidgetRemove(final int colId, final int rowId) {
 		if (colId < 0 || rowId < 0) {
-			Log.warning("[" + getId() + "] try to remove widget with id < 0 col=" + colId + " row=" + rowId);
+			LOGGER.warn("[" + getId() + "] try to remove widget with id < 0 col=" + colId + " row=" + rowId);
 			return;
 		}
 		final int errorControl = this.subWidget.size();
@@ -347,7 +356,7 @@ class Gird extends Widget {
 				return;
 			}
 		}
-		Log.warning("[" + getId() + "] Can not remove unExistant widget");
+		LOGGER.warn("[" + getId() + "] Can not remove unExistant widget");
 	}
 	
 	/**
@@ -361,7 +370,7 @@ class Gird extends Widget {
 				return;
 			}
 		}
-		Log.warning("[" + getId() + "] Can not remove unExistant widget");
+		LOGGER.warn("[" + getId() + "] Can not remove unExistant widget");
 	}
 	
 	/**
@@ -379,7 +388,7 @@ class Gird extends Widget {
 	 */
 	public void subWidgetUnLink(final int colId, final int rowId) {
 		if (colId < 0 || rowId < 0) {
-			Log.warning("[" + getId() + "] try to Unlink widget with id < 0 col=" + colId + " row=" + rowId);
+			LOGGER.warn("[" + getId() + "] try to Unlink widget with id < 0 col=" + colId + " row=" + rowId);
 			return;
 		}
 		// try to find it ...
@@ -389,7 +398,7 @@ class Gird extends Widget {
 				return;
 			}
 		}
-		Log.warning("[" + getId() + "] Can not unLink unExistant widget");
+		LOGGER.warn("[" + getId() + "] Can not unLink unExistant widget");
 	}
 	
 	/**

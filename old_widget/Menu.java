@@ -48,16 +48,16 @@ public class Menu extends Sizer
 		ewol::widget::Sizer::subWidgetRemoveAll();
 	}
 	private int subWidgetAdd(Widget _newWidget){
-		Log.error("Not availlable");
+		LOGGER.error("Not availlable");
 		return -1;
 	}
 	
 	private void subWidgetRemove(Widget _newWidget){
-		Log.error("Not availlable");
+		LOGGER.error("Not availlable");
 	}
 	
 	private void subWidgetUnLink(Widget _newWidget){
-		Log.error("Not availlable");
+		LOGGER.error("Not availlable");
 	}
 	protected static final String eventButtonPressed = "menu-local-pressed";
 	private boolean loadXML( exml::Element _node) ;
@@ -98,7 +98,7 @@ public class Menu extends Sizer
 		if (tmpObject.this.parentId == -1) {
 			ewol::widget::Button myButton = ewol::widget::Button::create();
 			if (myButton == null) {
-				Log.error("Allocation button error");
+				LOGGER.error("Allocation button error");
 				return tmpObject.this.localId;
 			}
 			if (tmpObject.this.image.size()!=0) {
@@ -137,7 +137,7 @@ public class Menu extends Sizer
 		if (tmpObject.this.parentId == -1) {
 			ewol::widget::Spacer mySpacer = ewol::widget::Spacer::create();
 			if (mySpacer == null) {
-				Log.error("Allocation spacer error");
+				LOGGER.error("Allocation spacer error");
 				return tmpObject.this.localId;
 			}
 			mySpacer.propertyExpand.set(Vector2b(true,true));
@@ -153,7 +153,7 @@ public class Menu extends Sizer
 	}
 	
 	public void remove(int _id){
-		Log.todo("NOT remove...");
+		LOGGER.info("[TODO] NOT remove...");
 	}
 
 
@@ -169,17 +169,17 @@ public class Menu extends Sizer
 			}
 			// 2 posible case (have a message or have a child ...
 			if (it.this.message.size() > 0) {
-				Log.debug("Menu  == > generate Event");
+				LOGGER.debug("Menu  == > generate Event");
 				// Send a multicast event ...
 				signalSelect.emit(it.this.message);
 				ewol::widget::ContextMenu tmpContext = this.widgetContextMenu.lock();
 				if (tmpContext != null) {
-					Log.debug("Mark the menu to remove ...");
+					LOGGER.debug("Mark the menu to remove ...");
 					tmpContext.destroy();
 				}
 				return;
 			}
-			Log.debug("Menu  == > load Sub Menu");
+			LOGGER.debug("Menu  == > load Sub Menu");
 			boolean findChild = false;
 			for (auto it2 : this.listElement) {
 				if (it.this.localId == it2.this.parentId) {
@@ -188,14 +188,14 @@ public class Menu extends Sizer
 				}
 			}
 			if (false == findChild) {
-				Log.warning("Event on menu element with no child an no event... label=" + it.this.label);
+				LOGGER.warn("Event on menu element with no child an no event... label=" + it.this.label);
 				return;
 			}
 			// create a context menu:
 			ewol::widget::ContextMenu tmpContext = ewol::widget::ContextMenu::create();
 			this.widgetContextMenu = tmpContext;
 			if (tmpContext == null) {
-				Log.error("Allocation Error");
+				LOGGER.error("Allocation Error");
 				return;
 			}
 			// get the button widget:
@@ -235,7 +235,7 @@ public class Menu extends Sizer
 					if (this.listElement[iii].this.message == "" LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM this.listElement[iii].this.label == "") {
 						ewol::widget::Spacer mySpacer = ewol::widget::Spacer::create();
 						if (mySpacer == null) {
-							Log.error("Allocation spacer error");
+							LOGGER.error("Allocation spacer error");
 							continue;
 						}
 						mySpacer.propertyExpand.set(Vector2b(true,true));
@@ -248,7 +248,7 @@ public class Menu extends Sizer
 					} else {
 						myButton = ewol::widget::Button::create();
 						if (myButton == null) {
-							Log.error("Allocation Error");
+							LOGGER.error("Allocation Error");
 							continue;
 						}
 						myButton.propertyExpand.set(Vector2b(true,true));
@@ -293,7 +293,7 @@ public class Menu extends Sizer
 			}
 			ewol::widget::Windows currentWindows = getWindows();
 			if (currentWindows == null) {
-				Log.error("Can not get the curent Windows...");
+				LOGGER.error("Can not get the curent Windows...");
 			} else {
 				currentWindows.popUpWidgetPush(tmpContext);
 			}
@@ -316,7 +316,7 @@ boolean ewol::widget::Menu::loadXML( exml::Element _node) {
 			continue;
 		}
 		String widgetName = pNode.getValue();
-		Log.info("Get node : " + pNode);
+		LOGGER.info("Get node : " + pNode);
 		if (widgetName == "elem") {
 			// <elem title="_T{Title of the button}" image="DATA:///List.svg" event="menu:exit">
 			int idMenu = addTitle(pNode.attributes["title"], pNode.attributes["image"], pNode.attributes["event"]);
@@ -334,13 +334,13 @@ boolean ewol::widget::Menu::loadXML( exml::Element _node) {
 				} else if (widgetName2 == "separator") {
 					addSpacer(idMenu);
 				} else {
-					Log.error("[" + getId() + "] {" + getObjectType() + "} (l " + pNode2.getPos() + ") Unknown basic node='" + widgetName2 + "' not in : [elem,separator]" );
+					LOGGER.error("[" + getId() + "] {" + getObjectType() + "} (l " + pNode2.getPos() + ") Unknown basic node='" + widgetName2 + "' not in : [elem,separator]" );
 				}
 			}
 		} else if (widgetName == "separator") {
 			addSpacer();
 		} else {
-			Log.error("[" + getId() + "] {" + getObjectType() + "} (l " + pNode.getPos() + ") Unknown basic node='" + widgetName + "' not in : [elem,separator]" );
+			LOGGER.error("[" + getId() + "] {" + getObjectType() + "} (l " + pNode.getPos() + ") Unknown basic node='" + widgetName + "' not in : [elem,separator]" );
 		}
 	}
 	return true;

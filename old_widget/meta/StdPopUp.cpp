@@ -104,17 +104,17 @@ void ewol::widget::StdPopUp::onChangePropertyComment() {
 
 ewol::widget::Button ewol::widget::StdPopUp::addButton( String _text, boolean _autoExit) {
 	if (this.subBar == null) {
-		Log.error("button-bar does not existed ...");
+		LOGGER.error("button-bar does not existed ...");
 		return null;
 	}
 	ewol::widget::Button myButton = widget::Button::create();
 	if (myButton == null) {
-		Log.error("Can not allocate new button ...");
+		LOGGER.error("Can not allocate new button ...");
 		return null;
 	}
 	ewol::widget::Label myLabel = ewol::widget::Label::create();
 	if (myLabel == null) {
-		Log.error("Can not allocate new label ...");
+		LOGGER.error("Can not allocate new label ...");
 		return null;
 	}
 	myLabel.propertyValue.set(_text);

@@ -72,7 +72,7 @@ class Select extends SpinBase {
 		protected List<ewol::widget::Select::Element> this.listElement;
 	public void optionSelectDefault(){
 		if (this.widgetEntry == null) {
-			Log.error("Can not acces at entry ...");
+			LOGGER.error("Can not acces at entry ...");
 			return;
 		}
 		for (auto it : this.listElement) {
@@ -88,7 +88,7 @@ class Select extends SpinBase {
 	public void optionRemove(int _value){
 		for (auto it=this.listElement.begin(); it != this.listElement.end(); ++it) {
 			if (_value == it.this.value) {
-				Log.debug("remove element: " + _value);
+				LOGGER.debug("remove element: " + _value);
 				this.listElement.erase(it);
 				break;
 			}
@@ -104,7 +104,7 @@ class Select extends SpinBase {
 	public void optionAdd(int _value, String _name) {
 		for (auto it : this.listElement) {
 			if (_value == it.this.value) {
-				Log.debug("replace element: " + _value + " with: '" + _data + "'");
+				LOGGER.debug("replace element: " + _value + " with: '" + _data + "'");
 				it.this.name = _data;
 			}
 		}
@@ -127,7 +127,7 @@ class Select extends SpinBase {
 				continue;
 			}
 			if (pNode.getValue() != "option") {
-				Log.error("(l " + pNode.getPos() + ") Unknown basic node='" + pNode.getValue() + "' not in : [option]" );
+				LOGGER.error("(l " + pNode.getPos() + ") Unknown basic node='" + pNode.getValue() + "' not in : [option]" );
 				continue;
 			}
 			String valId = pNode.attributes["id"];
@@ -139,7 +139,7 @@ class Select extends SpinBase {
 			if (select == true) {
 				propertyValue.set(id);
 			}
-			Log.warning("Add option : id='" + valId + "' select='" + valIsSelected + "' text='" + valText + "'");
+			LOGGER.warn("Add option : id='" + valId + "' select='" + valIsSelected + "' text='" + valText + "'");
 		}
 		return true;
 	}
@@ -161,7 +161,7 @@ class Select extends SpinBase {
 		// create a context menu:
 		ewol::widget::ContextMenu tmpContext = ewol::widget::ContextMenu::create();
 		if (tmpContext == null) {
-			Log.error("Allocation Error");
+			LOGGER.error("Allocation Error");
 			return;
 		}
 		// auto-select mark position:
@@ -169,7 +169,7 @@ class Select extends SpinBase {
 		ewol::widget::Sizer mySizer;
 		mySizer = ewol::widget::Sizer::create();
 		if (mySizer == null) {
-			Log.error("Allocation Error or sizer");
+			LOGGER.error("Allocation Error or sizer");
 			return;
 		}
 		mySizer.propertyMode.set(widget::Sizer::modeVert);
@@ -180,7 +180,7 @@ class Select extends SpinBase {
 		for (auto it : this.listElement) {
 			ewol::widget::Label myLabel = ewol::widget::Label::create();
 			if (myLabel == null) {
-				Log.error("Allocation Error");
+				LOGGER.error("Allocation Error");
 				continue;
 			}
 			if (it.this.selected == true) {
@@ -198,13 +198,13 @@ class Select extends SpinBase {
 		}
 		ewol::widget::Windows currentWindows = getWindows();
 		if (currentWindows == null) {
-			Log.error("Can not get the curent Windows...");
+			LOGGER.error("Can not get the curent Windows...");
 		} else {
 			currentWindows.popUpWidgetPush(tmpContext);
 		}
 	}
 	protected void onCallbackLabelPressed(int _value){
-		Log.verbose("User select:" + _value);
+		LOGGER.trace("User select:" + _value);
 		propertyValue.set(_value);
 	}
 	protected esignal::Connection connectionEntry = null;
@@ -212,7 +212,7 @@ class Select extends SpinBase {
 	protected void onChangePropertyValue(){
 		markToRedraw();
 		if (this.widgetEntry == null) {
-			Log.error("Can not acces at entry ...");
+			LOGGER.error("Can not acces at entry ...");
 			return;
 		}
 		for (auto it : this.listElement) {

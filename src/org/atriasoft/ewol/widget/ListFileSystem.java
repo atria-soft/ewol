@@ -29,30 +29,32 @@ import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.ewol.widget.model.ListRole;
 import org.atriasoft.gale.key.KeyStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generic display folder class. This widget display the content of a single folder :
  */
 public class ListFileSystem extends WidgetList {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ListFileSystem.class);
 	@AknotSignal
 	@AknotName(value = "file-select")
 	@AknotDescription(value = "A file has been selected in the List")
 	public Signal<String> signalFileSelect = new Signal<>(); //!< @event "file-select" Generated when a file is selected.
-	
+
 	@AknotSignal
 	@AknotName(value = "file-validate")
 	@AknotDescription(value = "A file has been validated on the list (double clicked or return pressed)")
 	public Signal<String> signalFileValidate = new Signal<>(); //!< @event "file-validate" Generate when the user validate (return) or double click on the element
-	
+
 	@AknotSignal
 	@AknotName(value = "folder-select")
 	@AknotDescription(value = "A folder has been selected in the List")
 	public Signal<String> signalFolderSelect = new Signal<>();
-	
+
 	@AknotSignal
 	@AknotName(value = "folder-validate")
 	@AknotDescription(value = "A folder has been validated on the list (double clicked or return pressed)")
@@ -63,7 +65,7 @@ public class ListFileSystem extends WidgetList {
 	protected boolean propertyShowFolder = true; //!< Display the folders elements
 	protected boolean propertyShowHidden = true; //!< Display hidden elements
 	protected String propertyFilter = "^.*$"; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
-	
+
 	protected ResourceColorFile colorProperty; //!< theme color property.
 	protected int colorIdText = -1; //!< Color of the text.
 	protected int colorIdBackground1 = -1; //!< Color of the Background.
@@ -71,9 +73,9 @@ public class ListFileSystem extends WidgetList {
 	protected int colorIdBackgroundSelected = -1; //!< Color of line selected.
 	protected List<File> list = new ArrayList<>(); //!< List of all element in the File. (they are filtered)
 	protected int selectedLine; //!< Current Line ID that is selected
-	
+
 	public ListFileSystem() {
-		
+
 		this.colorProperty = new ResourceColorFile(new Uri("THEME", "/color/ListFileSystem.json", "ewol"));
 		if (this.colorProperty != null) {
 			this.colorIdText = this.colorProperty.request("text");
@@ -83,19 +85,19 @@ public class ListFileSystem extends WidgetList {
 		}
 		setMouseLimit(2);
 	}
-	
+
 	/**
 	 * Clean the list of element.
 	 */
 	protected void clearList() {
 		this.list.clear();
 	}
-	
+
 	@Override
 	protected Color getBasicBG() {
 		return this.colorProperty.get(this.colorIdBackground1);
 	}
-	
+
 	@Override
 	protected Object getData(final ListRole role, final Vector2i pos) {
 		switch (role) {
@@ -114,7 +116,8 @@ public class ListFileSystem extends WidgetList {
 					}
 				}
 				if (pos.y() - offset >= 0 && pos.y() - offset < this.list.size()) {
-					Log.verbose("get filename for : {}:'{}'", this.list.get(pos.y() - offset), this.list.get(pos.y() - offset).getName());
+					LOGGER.trace("get filename for : {}:'{}'", this.list.get(pos.y() - offset),
+							this.list.get(pos.y() - offset).getName());
 					return this.list.get(pos.y() - offset).getName();
 				}
 			}
@@ -134,7 +137,7 @@ public class ListFileSystem extends WidgetList {
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected Vector2i getMatrixSize() {
 		int offset = 0;
@@ -147,7 +150,7 @@ public class ListFileSystem extends WidgetList {
 		}
 		return new Vector2i(1, this.list.size() + offset);
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "select")
@@ -155,7 +158,7 @@ public class ListFileSystem extends WidgetList {
 	public File getPropertyFile() {
 		return this.propertyFile;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "filter")
@@ -163,7 +166,7 @@ public class ListFileSystem extends WidgetList {
 	public String getPropertyFilter() {
 		return this.propertyFilter;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "Path")
@@ -171,7 +174,7 @@ public class ListFileSystem extends WidgetList {
 	public String getPropertyPath() {
 		return this.propertyPath;
 	}
-	
+
 	/**
 	 * Get the current selected file/folder/... in the list
 	 * @return the String of the element selected.
@@ -182,7 +185,7 @@ public class ListFileSystem extends WidgetList {
 		}
 		return null;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "show-file")
@@ -190,7 +193,7 @@ public class ListFileSystem extends WidgetList {
 	public boolean isPropertyShowFile() {
 		return this.propertyShowFile;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "show-folder")
@@ -198,7 +201,7 @@ public class ListFileSystem extends WidgetList {
 	public boolean isPropertyShowFolder() {
 		return this.propertyShowFolder;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "show-hidden")
@@ -206,8 +209,12 @@ public class ListFileSystem extends WidgetList {
 	public boolean isPropertyShowHidden() {
 		return this.propertyShowHidden;
 	}
-	
-	public List<File> listSelectedFiles(final String dir, final boolean showFiles, final boolean showFolder, final boolean showHidden) throws IOException {
+
+	public List<File> listSelectedFiles(
+			final String dir,
+			final boolean showFiles,
+			final boolean showFolder,
+			final boolean showHidden) throws IOException {
 		final List<File> fileList = new ArrayList<>();
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dir))) {
 			for (final Path path : stream) {
@@ -215,18 +222,18 @@ public class ListFileSystem extends WidgetList {
 					continue;
 				}
 				if (Files.isDirectory(path) && showFolder) {
-					Log.error("Add Directory '{}'", path);
+					LOGGER.error("Add Directory '{}'", path);
 					fileList.add(new File(path.toString()));
 				}
 				if (!Files.isDirectory(path) && showFiles) {
-					Log.error("Add File      '{}'", path);
+					LOGGER.error("Add File      '{}'", path);
 					fileList.add(new File(path.toString()));
 				}
 			}
 		}
 		return fileList;
 	}
-	
+
 	@Override
 	protected boolean onItemEvent(final EventInput event, final Vector3i pos, final Vector3f mousePosition) {
 		int offset = 0;
@@ -238,7 +245,7 @@ public class ListFileSystem extends WidgetList {
 			}
 		}
 		if (event.status() == KeyStatus.pressSingle || event.status() == KeyStatus.pressDouble) {
-			Log.verbose("Event on List : IdInput=" + event.inputId() + " _pos=" + pos);
+			LOGGER.trace("Event on List : IdInput=" + event.inputId() + " _pos=" + pos);
 			if (1 == event.inputId()) {
 				if (pos.y() > this.list.size() + offset) {
 					this.selectedLine = -1;
@@ -267,12 +274,10 @@ public class ListFileSystem extends WidgetList {
 						} else {
 							this.signalFolderValidate.emit(this.list.get(this.selectedLine - offset).getPath());
 						}
+					} else if (event.status() == KeyStatus.pressSingle) {
+						this.signalFileSelect.emit(this.list.get(this.selectedLine - offset).getPath());
 					} else {
-						if (event.status() == KeyStatus.pressSingle) {
-							this.signalFileSelect.emit(this.list.get(this.selectedLine - offset).getPath());
-						} else {
-							this.signalFileValidate.emit(this.list.get(this.selectedLine - offset).getPath());
-						}
+						this.signalFileValidate.emit(this.list.get(this.selectedLine - offset).getPath());
 					}
 				}
 				// need to regenerate the display of the list :
@@ -282,7 +287,7 @@ public class ListFileSystem extends WidgetList {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Regenerate the content of the view. this is actually not automation on the system update.
 	 */
@@ -293,7 +298,8 @@ public class ListFileSystem extends WidgetList {
 		this.originScrooled = new Vector2f(0, 0);
 		final int flags = 0;
 		try {
-			this.list = listSelectedFiles(this.propertyPath, this.propertyShowFile, this.propertyShowFolder, this.propertyShowHidden);
+			this.list = listSelectedFiles(this.propertyPath, this.propertyShowFile, this.propertyShowFolder,
+					this.propertyShowHidden);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -303,7 +309,7 @@ public class ListFileSystem extends WidgetList {
 		// request a redraw ...
 		markToRedraw();
 	}
-	
+
 	public void setPropertyFile(final File propertyFile) {
 		if (this.propertyFile.equals(propertyFile)) {
 			return;
@@ -311,7 +317,7 @@ public class ListFileSystem extends WidgetList {
 		this.propertyFile = propertyFile;
 		regenerateView();
 	}
-	
+
 	public void setPropertyFilter(final String propertyFilter) {
 		if (!this.propertyFilter.equals(propertyFilter)) {
 			return;
@@ -319,7 +325,7 @@ public class ListFileSystem extends WidgetList {
 		this.propertyFilter = propertyFilter;
 		regenerateView();
 	}
-	
+
 	public void setPropertyPath(final String propertyPath) {
 		if (this.propertyPath.equals(propertyPath)) {
 			return;
@@ -327,7 +333,7 @@ public class ListFileSystem extends WidgetList {
 		this.propertyPath = propertyPath;
 		regenerateView();
 	}
-	
+
 	public void setPropertyShowFile(final boolean propertyShowFile) {
 		if (this.propertyShowFile == propertyShowFile) {
 			return;
@@ -335,7 +341,7 @@ public class ListFileSystem extends WidgetList {
 		this.propertyShowFile = propertyShowFile;
 		regenerateView();
 	}
-	
+
 	public void setPropertyShowFolder(final boolean propertyShowFolder) {
 		if (this.propertyShowFolder == propertyShowFolder) {
 			return;
@@ -343,7 +349,7 @@ public class ListFileSystem extends WidgetList {
 		this.propertyShowFolder = propertyShowFolder;
 		regenerateView();
 	}
-	
+
 	public void setPropertyShowHidden(final boolean propertyShowHidden) {
 		if (this.propertyShowHidden == propertyShowHidden) {
 			return;
@@ -351,7 +357,7 @@ public class ListFileSystem extends WidgetList {
 		this.propertyShowHidden = propertyShowHidden;
 		regenerateView();
 	}
-	
+
 	/**
 	 * Select a specific file in the File
 	 * @param data File to selected.

@@ -104,7 +104,7 @@ void ewol::widget::WSlider::onChangeSize() {
 
 void ewol::widget::WSlider::subWidgetSelectSetVectorId(int _id) {
 	if (_id<0) {
-		Log.error("Can not change to a widget not present : vectID=" + _id);
+		LOGGER.error("Can not change to a widget not present : vectID=" + _id);
 		return;
 	}
 	if (_id != this.windowsDestination) {
@@ -143,7 +143,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int _id) {
 
 void ewol::widget::WSlider::subWidgetSelectSet( Widget _widgetPointer) {
 	if (_widgetPointer == null) {
-		Log.error("Can not change to a widget null");
+		LOGGER.error("Can not change to a widget null");
 		return;
 	}
 	int iii = 0;
@@ -161,15 +161,15 @@ void ewol::widget::WSlider::subWidgetSelectSet( Widget _widgetPointer) {
 		}
 		iii++;
 	}
-	Log.error("Can not change to a widget not present");
+	LOGGER.error("Can not change to a widget not present");
 }
 
 void ewol::widget::WSlider::subWidgetSelectSet( String _widgetName) {
 	if (_widgetName == "") {
-		Log.error("Can not change to a widget with no name (input)");
+		LOGGER.error("Can not change to a widget with no name (input)");
 		return;
 	}
-	Log.verbose("Select a new sub-widget to dosplay : '" + _widgetName + "'");
+	LOGGER.trace("Select a new sub-widget to dosplay : '" + _widgetName + "'");
 	int iii = 0;
 	for (auto it : this.subWidget) {
 		if (    it != null
@@ -181,10 +181,10 @@ void ewol::widget::WSlider::subWidgetSelectSet( String _widgetName) {
 		}
 		iii++;
 	}
-	Log.error("Can not change to a widget not present");
+	LOGGER.error("Can not change to a widget not present");
 }
 void ewol::widget::WSlider::periodicCall( ewol::event::Time _event) {
-	Log.error("Periodic: " + this.slidingProgress + "/1.0 " + this.windowsSources + " ==> " + this.windowsDestination + "  " + _event);
+	LOGGER.error("Periodic: " + this.slidingProgress + "/1.0 " + this.windowsSources + " ==> " + this.windowsDestination + "  " + _event);
 	if (this.slidingProgress >= 1.0) {
 		this.windowsSources = this.windowsDestination;
 		if(    this.windowsRequested != -1
@@ -230,16 +230,16 @@ void ewol::widget::WSlider::systemDraw( ewol::DrawProperty _displayProp) {
 	prop.limit(this.origin, this.size);
 	
 	if (this.windowsDestination == this.windowsSources) {
-		//Log.debug("Draw : " + this.windowsDestination);
+		//LOGGER.debug("Draw : " + this.windowsDestination);
 		auto it = this.subWidget.begin();
 		it += this.windowsDestination;
 		if (    it != this.subWidget.end()
 		     LOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOMLOM *it != null) {
-			//Log.info("Draw : [" + propertyName + "] t=" + getObjectType() + "o=" + this.origin + "  s=" + this.size);
+			//LOGGER.info("Draw : [" + propertyName + "] t=" + getObjectType() + "o=" + this.origin + "  s=" + this.size);
 			(*it).systemDraw(prop);
 		}
 	} else {
-		//Log.debug("Draw : " + this.windowsSources + "=>" + this.windowsDestination + "progress=" + ((float)this.slidingProgress/1000.) );
+		//LOGGER.debug("Draw : " + this.windowsSources + "=>" + this.windowsDestination + "progress=" + ((float)this.slidingProgress/1000.) );
 		// draw Sources :
 		auto it = this.subWidget.begin();
 		it += this.windowsSources;
@@ -283,7 +283,7 @@ void ewol::widget::WSlider::onRegenerateDisplay() {
 
 void ewol::widget::WSlider::onChangePropertySelectWidget() {
 	if (propertySelectWidget.get() != "") {
-		Log.error("SELECT new widget: " + propertySelectWidget.get());
+		LOGGER.error("SELECT new widget: " + propertySelectWidget.get());
 		subWidgetSelectSet(*propertySelectWidget);
 	}
 }

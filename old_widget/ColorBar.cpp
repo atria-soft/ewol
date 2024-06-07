@@ -51,7 +51,7 @@ static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
 void ewol::widget::ColorBar::onChangePropertyValue() {
 	propertyValue.getDirect().setA(0xFF);
 	// estimate the cursor position:
-	Log.todo("Later when really needed ...");
+	LOGGER.info("[TODO] Later when really needed ...");
 }
 
 void ewol::widget::ColorBar::onDraw() {
@@ -159,7 +159,7 @@ void ewol::widget::ColorBar::onRegenerateDisplay() {
 
 boolean ewol::widget::ColorBar::onEventInput( ewol::event::Input _event) {
 	Vector2f relativePos = relativePosition(_event.getPos());
-	//Log.debug("Event on BT ...");
+	//LOGGER.debug("Event on BT ...");
 	if (1 == _event.getId()) {
 		relativePos.setValue( etk::avg(0.0f, this.size.x(),relativePos.x()),
 		                      etk::avg(0.0f, this.size.y(),relativePos.y()) );
@@ -170,11 +170,11 @@ boolean ewol::widget::ColorBar::onEventInput( ewol::event::Input _event) {
 			                           relativePos.y()/this.size.y() );
 			markToRedraw();
 			// == > try to estimate color
-			Log.verbose("event on (" + relativePos.x() + "," + relativePos.y() + ")");
+			LOGGER.trace("event on (" + relativePos.x() + "," + relativePos.y() + ")");
 			int bandID = (int)(relativePos.x()/(this.size.x()/6));
 			float localPos = relativePos.x() - (this.size.x()/6) * bandID;
 			float poroportionnalPos = localPos/(this.size.x()/6);
-			Log.verbose("bandId=" + bandID + "  relative pos=" + localPos);
+			LOGGER.trace("bandId=" + bandID + "  relative pos=" + localPos);
 			etk::Color<> estimateColor = etk::color::white;
 			if (s_listColor[bandID].r() == s_listColor[bandID+1].r()) {
 				estimateColor.setR(s_listColor[bandID].r());

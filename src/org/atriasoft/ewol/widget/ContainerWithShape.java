@@ -15,18 +15,20 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.compositing.ShapeBox;
-import org.atriasoft.ewol.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple Container that have a Shape (not directly instantiate!!!!)
  */
 public class ContainerWithShape extends Container {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerWithShape.class);
 	// properties
 	public Uri propertyShape = null; //!< Compositing theme.
-	
+
 	protected GuiShape shape; //!< Compositing theme.
 	protected ShapeBox shapeProperty = ShapeBox.ZERO;
-	
+
 	/**
 	 * Constructor
 	 * @param propertyShape shape file properties
@@ -35,7 +37,7 @@ public class ContainerWithShape extends Container {
 		this.propertyShape = propertyShape;
 		onChangePropertyShape();
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -47,9 +49,9 @@ public class ContainerWithShape extends Container {
 			final Padding padding = this.shape.getPadding();
 			this.minSize = Vector3f.max(this.minSize, min.add(padding.x(), padding.y(), padding.z()));
 		}
-		Log.warning("[{}] Result min size : {}", getId(), this.minSize);
+		LOGGER.warn("[{}] Result min size : {}", getId(), this.minSize);
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "shape")
@@ -57,7 +59,7 @@ public class ContainerWithShape extends Container {
 	public Uri getPropertyShape() {
 		return this.propertyShape;
 	}
-	
+
 	@Override
 	public Widget getWidgetAtPos(final Vector3f pos) {
 		final Widget val = super.getWidgetAtPos(pos);
@@ -66,7 +68,7 @@ public class ContainerWithShape extends Container {
 		}
 		return this;
 	}
-	
+
 	protected void onChangePropertyShape() {
 		if (this.shape == null) {
 			this.shape = new GuiShape(this.propertyShape);
@@ -76,7 +78,7 @@ public class ContainerWithShape extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		markToRedraw();
@@ -102,21 +104,21 @@ public class ContainerWithShape extends Container {
 		}
 		subWidgetSize = subWidgetSize.less(padding.x(), padding.y(), padding.z());
 		subWidgetSize = subWidgetSize.clipInteger();
-		
+
 		// set config to the Sub-widget
 		Vector3f subWidgetOrigin = this.origin.add(this.size.less(subWidgetSize).multiply(0.5f));
 		subWidgetOrigin = subWidgetOrigin.clipInteger();
-		
+
 		this.subWidget.setOrigin(subWidgetOrigin);
 		this.subWidget.setSize(subWidgetSize);
 		this.subWidget.onChangeSize();
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		this.shape.draw();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (needRedraw()) {
@@ -140,7 +142,7 @@ public class ContainerWithShape extends Container {
 			// not sure this is needed...
 			tmpSizeShaper = tmpSizeShaper.clipInteger();
 			tmpOriginShaper = tmpOriginShaper.clipInteger();
-			
+
 			this.shapeProperty = new ShapeBox(tmpOriginShaper, tmpSizeShaper, padding);
 			this.shape.setShape(tmpOriginShaper, tmpSizeShaper);
 		}
@@ -149,7 +151,7 @@ public class ContainerWithShape extends Container {
 			this.subWidget.onRegenerateDisplay();
 		}
 	}
-	
+
 	public void setPropertyShape(final Uri propertyShape) {
 		if (this.propertyShape.equals(propertyShape)) {
 			return;
@@ -157,7 +159,7 @@ public class ContainerWithShape extends Container {
 		this.propertyShape = propertyShape;
 		onChangePropertyShape();
 	}
-	
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {
@@ -173,5 +175,5 @@ public class ContainerWithShape extends Container {
 			this.subWidget.systemDraw(prop);
 		}
 	}
-	
+
 }

@@ -12,15 +12,17 @@ import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.backend3d.OpenGL.RenderMode;
 import org.atriasoft.gale.resource.ResourceProgram;
 import org.atriasoft.gale.resource.ResourceTexture2;
 import org.atriasoft.gale.resource.ResourceTextureFile;
 import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CompositingImage extends Compositing {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompositingImage.class);
 	public static final int NB_VBO = 3;
 	public static final int SIZE_AUTO = 0;
 	public static final int VBO_ID_COLOR = 2;
@@ -36,19 +38,19 @@ public class CompositingImage extends Compositing {
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
 	private Vector3f position = Vector3f.ZERO; //!< The current position to draw
 	private Vector2i requestSize = new Vector2i(2, 2);
-	
+
 	private ResourceTextureFile resource = null; //!< texture resources
 	private ResourceTexture2 resourceImage = null; //!< texture resources
 	private ResourceVirtualArrayObject vbo = null;
-	
+
 	private Color[] vboDataColors = null;
 	private Vector3f[] vboDataCoords = null;
 	private Vector2f[] vboDataCoordsTex = null;
-	
+
 	public CompositingImage() {
 		this(new Uri("DATA", ""), CompositingImage.SIZE_AUTO);
 	}
-	
+
 	/**
 	 * generic ructor
 	 * @param uri URI of the file that might be loaded
@@ -59,7 +61,7 @@ public class CompositingImage extends Compositing {
 		// Create the VBO:
 		this.vbo = ResourceVirtualArrayObject.createDynamic();
 		if (this.vbo == null) {
-			Log.error("can not instanciate VBO ...");
+			LOGGER.error("can not instanciate VBO ...");
 			return;
 		}
 		// TO facilitate some debugs we add a name of the VBO:
@@ -67,7 +69,7 @@ public class CompositingImage extends Compositing {
 		setSource(uri, size);
 		loadProgram();
 	}
-	
+
 	/**
 	 * clear alll tre registered element in the current element
 	 */
@@ -82,7 +84,7 @@ public class CompositingImage extends Compositing {
 		this.color = Color.WHITE;
 		this.angle = 0;
 	}
-	
+
 	/**
 	 * draw All the registered text in the current element on openGL
 	 * @param disableDepthTest disable the Depth test for display
@@ -91,7 +93,7 @@ public class CompositingImage extends Compositing {
 	public void draw(final boolean disableDepthTest) {
 		/*
 		if (this.VBO.bufferSize(this.vboIdCoord) <= 0) {
-			//Log.warning("Nothink to draw...");
+			//LOGGER.warn("Nothink to draw...");
 			return;
 		}
 		*/
@@ -100,10 +102,10 @@ public class CompositingImage extends Compositing {
 			return;
 		}
 		if (this.oGLprogram == null) {
-			Log.error("No shader ...");
+			LOGGER.error("No shader ...");
 			return;
 		}
-		//Log.warning("Display image : " + this.VBO.bufferSize(this.vboIdCoord));
+		//LOGGER.warn("Display image : " + this.VBO.bufferSize(this.vboIdCoord));
 		if (disableDepthTest) {
 			OpenGL.disable(OpenGL.Flag.flag_depthTest);
 		} else {
@@ -123,13 +125,13 @@ public class CompositingImage extends Compositing {
 		} else if (this.resource != null) {
 			this.resource.bindForRendering(0);
 		} else {
-			Log.error("FONT type error Request normal and display distance field ...");
+			LOGGER.error("FONT type error Request normal and display distance field ...");
 		}
 		this.vbo.renderArrays(RenderMode.TRIANGLE);
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 	}
-	
+
 	@Override
 	public void flush() {
 		this.vbo.setPosition(this.vboDataCoords);
@@ -138,7 +140,7 @@ public class CompositingImage extends Compositing {
 		this.vbo.setVertexCount(this.vboDataCoords.length);
 		this.vbo.flush();
 	}
-	
+
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
@@ -146,7 +148,7 @@ public class CompositingImage extends Compositing {
 	public Vector3f getPos() {
 		return this.position;
 	}
-	
+
 	/**
 	 * get the source image registered size in the file (<0 when multiple size image)
 	 * @return tre image registered size
@@ -160,7 +162,7 @@ public class CompositingImage extends Compositing {
 		}
 		return this.resourceImage.getUsableSize();
 	}
-	
+
 	/**
 	 * Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 	 * @return the validity od the resources.
@@ -168,24 +170,25 @@ public class CompositingImage extends Compositing {
 	public boolean hasSources() {
 		return this.resource != null;
 	}
-	
+
 	/**
 	 * load the openGL program and get all the ID needed
 	 */
 	private void loadProgram() {
 		// get the shader resource:
-		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"), new Uri("DATA", "textured3D.frag", "ewol"));
+		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"),
+				new Uri("DATA", "textured3D.frag", "ewol"));
 		if (this.oGLprogram != null) {
 			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
 			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
 			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 		}
 	}
-	
+
 	public void print(final Vector2f size) {
 		printPart(size, Vector2f.ZERO, Vector2f.ONE);
 	}
-	
+
 	/**
 	 * add a compleate of the image to display with the requested size
 	 * @param size size of the output image
@@ -193,7 +196,7 @@ public class CompositingImage extends Compositing {
 	public void print(final Vector2i size) {
 		print(new Vector2f(size.x(), size.y()));
 	}
-	
+
 	/**
 	 * add a part of the image to display with the requested size
 	 * @param size size of the output image
@@ -209,74 +212,75 @@ public class CompositingImage extends Compositing {
 		final Vector2f ratio = new Vector2f(usefullSize.x() / openGLSize.x(), usefullSize.y() / openGLSize.y());
 		final Vector2f sourcePosStart = sourcePosStartIn.multiply(ratio);
 		final Vector2f sourcePosStop = sourcePosStopIn.multiply(ratio);
-		Log.verbose("     openGLSize=" + openGLSize + " usableSize=" + usefullSize + " start=" + sourcePosStart + " stop=" + sourcePosStop);
-
+		LOGGER.trace("     openGLSize=" + openGLSize + " usableSize=" + usefullSize + " start=" + sourcePosStart
+				+ " stop=" + sourcePosStop);
+		
 		this.vboDataColors = new Color[6];
 		this.vboDataCoords = new Vector3f[6];
 		this.vboDataCoordsTex = new Vector2f[6];
-		
+
 		if (this.angle == 0.0f) {
 			Vector3f point = this.position;
 			int indexElem = 0;
-			
+
 			Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
 			point = new Vector3f(this.position.x() + size.x(), this.position.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
 			point = new Vector3f(this.position.x() + size.x(), this.position.y() + size.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
 			point = new Vector3f(this.position.x(), this.position.y() + size.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 			point = new Vector3f(this.position.x(), this.position.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
-			
+
 			return;
 		}
-		
+
 		final Vector3f center = this.position.add(new Vector3f(size.x(), size.y(), 0)).divide(2.0f);
-		
+
 		final Vector3f limitedSize = new Vector3f(size.x() * 0.5f, size.y() * 0.5f, 0.0f);
-		
+
 		Vector3f point = Vector3f.ZERO;
-		
+
 		Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
-		
+
 		int indexElem = 0;
-		
+
 		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		this.vboDataCoords[indexElem] = point;
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
 		point = new Vector3f(limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
@@ -284,7 +288,7 @@ public class CompositingImage extends Compositing {
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
 		point = new Vector3f(limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
@@ -292,12 +296,12 @@ public class CompositingImage extends Compositing {
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		this.vboDataCoords[indexElem] = point;
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
 		point = new Vector3f(-limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
@@ -305,16 +309,16 @@ public class CompositingImage extends Compositing {
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		this.vboDataCoords[indexElem] = point;
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
-		
+
 	}
-	
+
 	/**
 	 * set a unique rotation of this element (not set in the rotate Generic system)
 	 * @param angleRad Angle to set in radiant.
@@ -322,7 +326,7 @@ public class CompositingImage extends Compositing {
 	public void setAngle(final float angleRad) {
 		this.angle = angleRad;
 	}
-	
+
 	/**
 	 * set the Color of the current foreground font
 	 * @param color Color to set on foreground (for next print)
@@ -330,11 +334,11 @@ public class CompositingImage extends Compositing {
 	public void setColor(final Color color) {
 		this.color = color;
 	}
-	
+
 	public void setPos(final Vector2f pos) {
 		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	/**
 	 * set position for the next text writen
 	 * @param pos Position of the text (in 3D)
@@ -342,11 +346,11 @@ public class CompositingImage extends Compositing {
 	public void setPos(final Vector3f pos) {
 		this.position = pos;
 	}
-	
+
 	public void setRelPos(final Vector2f pos) {
 		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	/**
 	 * set relative position for the next text writen
 	 * @param pos ofset apply of the text (in 3D)
@@ -354,7 +358,7 @@ public class CompositingImage extends Compositing {
 	public void setRelPos(final Vector3f pos) {
 		this.position = this.position.add(pos);
 	}
-	
+
 	public void setSource(final ImageByteRGBA image) {
 		clear();
 		this.filename = null;
@@ -362,7 +366,7 @@ public class CompositingImage extends Compositing {
 		this.resourceImage = new ResourceTexture2();
 		this.resourceImage.set(image);
 	}
-	
+
 	/**
 	 * change the image Source  == > can not be done to display 2 images at the same time ...
 	 * @param uri New file of the Image
@@ -370,11 +374,11 @@ public class CompositingImage extends Compositing {
 	public void setSource(final Uri uri) {
 		setSource(uri, 32);
 	}
-	
+
 	public void setSource(final Uri uri, final int size) {
 		setSource(uri, new Vector2i(size, size));
 	}
-	
+
 	public void setSource(final Uri uri, final Vector2i size) {
 		clear();
 		if (this.filename == uri && this.requestSize.x() == size.x() && this.requestSize.y() == size.y()) {
@@ -387,26 +391,26 @@ public class CompositingImage extends Compositing {
 		this.requestSize = size;
 		this.resource = null;
 		this.resourceImage = null;
-		
+
 		final Vector2i tmpSize = new Vector2i(size.x(), size.y());
 		// note that no image can be loaded...
 		if (!uri.isEmpty()) {
 			// link to new one
 			this.resource = ResourceTextureFile.create(this.filename, tmpSize);
 			if (this.resource == null) {
-				Log.error("Can not get Image resource");
+				LOGGER.error("Can not get Image resource");
 			}
 		}
 		if (this.resource == null && this.resourceImage == null) {
 			if (resource != null) {
-				Log.warning("Retrive previous resource");
+				LOGGER.warn("Retrive previous resource");
 				this.resource = resource;
 			}
 			if (resourceTex != null) {
-				Log.warning("Retrive previous resource (image)");
+				LOGGER.warn("Retrive previous resource (image)");
 				this.resourceImage = resourceTex;
 			}
 		}
 	}
-	
+
 }

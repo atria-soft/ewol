@@ -19,22 +19,24 @@ import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.compositing.CompositingImage;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.gale.key.KeyStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ImageDisplay extends Widget {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ImageDisplay.class);
 	protected int colorId = -1; //!< Color of the image.
 	protected ResourceColorFile colorProperty = null; //!< theme color property
 	protected CompositingImage compositing = new CompositingImage(); //!< compositing element of the image.
 	protected Vector2f imageRenderSize = Vector2f.ZERO; //!< size of the image when we render it
-	
+
 	protected Dimension2f propertyBorder = Dimension2f.ZERO; //!< border to add at the image.
 	protected Dimension2f propertyImageSize = Dimension2f.ZERO; //!< border to add at the image.
 	protected boolean propertyKeepRatio = true; //!< keep the image ratio between width and height
 	protected Vector2f propertyPosStart = Vector2f.ZERO; //!< position in the image to start the display (when we want not to display all the image)
 	protected Vector2f propertyPosStop = Vector2f.ONE; //!< position in the image to start the display (when we want not to display all the image)
-	
+
 	protected boolean propertySmooth = true; //!< display is done in the pixel approximation if false
 	protected Uri propertySource = null; //!< file name of the image.
 	protected boolean propertyUseThemeColor = false; //!< Use the themo color management ("THEMECOLOR:///Image.json?lib=ewol") default false
@@ -42,41 +44,43 @@ public class ImageDisplay extends Widget {
 	@AknotName("pressed")
 	@AknotDescription(value = "Image is pressed")
 	public final SignalEmpty signalPressed = new SignalEmpty();
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ImageDisplay() {}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
-		Log.debug("calculate min size: border=" + this.propertyBorder + " size=" + this.propertyImageSize + " min-size=" + this.propertyMinSize);
+		LOGGER.debug("calculate min size: border=" + this.propertyBorder + " size=" + this.propertyImageSize
+				+ " min-size=" + this.propertyMinSize);
 		final Vector2f imageBoder = this.propertyBorder.getPixel().multiply(2.0f);
 		final Vector2f imageSize = this.propertyImageSize.getPixel();
 		final Vector3f size = this.propertyMinSize.getPixel();
-		Log.debug("                ==> border=" + imageBoder + " size=" + imageSize + " min-size=" + size);
+		LOGGER.debug("                ==> border=" + imageBoder + " size=" + imageSize + " min-size=" + size);
 		if (!imageSize.isZero()) {
 			final Vector2f tmp = imageBoder.add(imageSize);
 			this.minSize = new Vector3f(tmp.x(), tmp.y(), 0);
 			this.maxSize = this.minSize;
 		} else {
-			final Vector2i imageSizeReal = this.getPropertyMinSize().getPixeli();//.compositing.getRealSize();
-			Log.verbose(" Real Size = " + imageSizeReal);
+			final Vector2i imageSizeReal = getPropertyMinSize().getPixeli();//.compositing.getRealSize();
+			LOGGER.trace(" Real Size = " + imageSizeReal);
 			final Vector3f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
 			this.minSize = new Vector3f(imageBoder.x() + imageSizeReal.x(), imageBoder.y() + imageSizeReal.y(), 0);
-			Log.verbose(" set max : " + this.minSize + " min1=" + min1);
+			LOGGER.trace(" set max : " + this.minSize + " min1=" + min1);
 			this.minSize = Vector3f.max(this.minSize, min1);
-			Log.verbose("     result : " + this.minSize);
+			LOGGER.trace("     result : " + this.minSize);
 			this.maxSize = this.propertyMaxSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
 			this.minSize = Vector3f.min(this.minSize, this.maxSize);
 		}
 		this.imageRenderSize = new Vector2f(this.minSize.x(), this.minSize.y());
 		this.minSize = Vector3f.max(this.minSize, size);
 		this.maxSize = Vector3f.max(this.maxSize, this.minSize);
-		Log.debug("set widget min=" + this.minSize + " max=" + this.maxSize + " with real Image size=" + this.imageRenderSize + " img size=" + imageSize + "  " + this.propertyImageSize);
+		LOGGER.debug("set widget min=" + this.minSize + " max=" + this.maxSize + " with real Image size="
+				+ this.imageRenderSize + " img size=" + imageSize + "  " + this.propertyImageSize);
 		markToRedraw();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "image-border")
@@ -84,7 +88,7 @@ public class ImageDisplay extends Widget {
 	public Dimension2f getPropertyBorder() {
 		return this.propertyBorder;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "image-size")
@@ -92,7 +96,7 @@ public class ImageDisplay extends Widget {
 	public Dimension2f getPropertyImageSize() {
 		return this.propertyImageSize;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "part-start")
@@ -100,7 +104,7 @@ public class ImageDisplay extends Widget {
 	public Vector2f getPropertyPosStart() {
 		return this.propertyPosStart;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "part-stop")
@@ -108,7 +112,7 @@ public class ImageDisplay extends Widget {
 	public Vector2f getPropertyPosStop() {
 		return this.propertyPosStop;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "src")
@@ -116,7 +120,7 @@ public class ImageDisplay extends Widget {
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "ratio")
@@ -124,7 +128,7 @@ public class ImageDisplay extends Widget {
 	public boolean isPropertyKeepRatio() {
 		return this.propertyKeepRatio;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "smooth")
@@ -132,7 +136,7 @@ public class ImageDisplay extends Widget {
 	public boolean isPropertySmooth() {
 		return this.propertySmooth;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "use-theme-color")
@@ -140,15 +144,15 @@ public class ImageDisplay extends Widget {
 	public boolean isPropertyUseThemeColor() {
 		return this.propertyUseThemeColor;
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		this.compositing.draw();
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		//Log.debug("Event on BT ...");
+		//LOGGER.debug("Event on BT ...");
 		if (event.inputId() == 1) {
 			if (KeyStatus.pressSingle == event.status()) {
 				this.signalPressed.emit();
@@ -157,7 +161,7 @@ public class ImageDisplay extends Widget {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
@@ -174,11 +178,12 @@ public class ImageDisplay extends Widget {
 		imageBoder = imageBoder.multiply(2.0f);
 		Vector2f imageRealSize = this.imageRenderSize.less(imageBoder);
 		final Vector3f imageRealSizeMax = this.size.less(imageBoder.x(), imageBoder.y(), 0);
-		
+
 		final Vector2f ratioSizeDisplayRequested = this.propertyPosStop.less(this.propertyPosStart);
 		//imageRealSizeMax *= ratioSizeDisplayRequested;
-		
-		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.imageRenderSize.x(), this.imageRenderSize.y(), 0));
+
+		Vector3f delta = this.propertyGravity
+				.gravityGenerateDelta(this.size.less(this.imageRenderSize.x(), this.imageRenderSize.y(), 0));
 		if (this.propertyFill.x()) {
 			imageRealSize = imageRealSize.withX(imageRealSizeMax.x());
 			delta = delta.withX(0.0f);
@@ -188,11 +193,12 @@ public class ImageDisplay extends Widget {
 			delta = delta.withY(0.0f);
 		}
 		origin = origin.add(delta);
-		
+
 		if (this.propertyKeepRatio) {
 			final Vector2i tmpSize = this.compositing.getRealSize();
 			//float ratio = tmpSize.x() / tmpSize.y();
-			final float ratio = (tmpSize.x() * ratioSizeDisplayRequested.x()) / (tmpSize.y() * ratioSizeDisplayRequested.y());
+			final float ratio = (tmpSize.x() * ratioSizeDisplayRequested.x())
+					/ (tmpSize.y() * ratioSizeDisplayRequested.y());
 			//float ratioCurrent = (imageRealSize.x()*ratioSizeDisplayRequested.x()) / (imageRealSize.y() * ratioSizeDisplayRequested.y());
 			final float ratioCurrent = imageRealSize.x() / imageRealSize.y();
 			if (ratio == ratioCurrent) {
@@ -207,7 +213,7 @@ public class ImageDisplay extends Widget {
 				origin = origin.add(0, (oldY - imageRealSize.y()) * 0.5f, 0);
 			}
 		}
-		
+
 		// set the somposition properties :
 		if (this.propertySmooth) {
 			this.compositing.setPos(origin);
@@ -215,23 +221,24 @@ public class ImageDisplay extends Widget {
 			this.compositing.setPos(Vector3f.clipInt(origin));
 		}
 		this.compositing.printPart(imageRealSize, this.propertyPosStart, this.propertyPosStop);
-		Log.debug("Paint Image at : " + origin + " size=" + imageRealSize);
-		Log.debug("Paint Image :" + this.propertySource + " realsize=" + this.compositing.getRealSize() + " origin=" + origin + " size=" + imageRealSize);
-		Log.debug("      start=" + this.propertyPosStart + " stop=" + this.propertyPosStop);
+		LOGGER.debug("Paint Image at : " + origin + " size=" + imageRealSize);
+		LOGGER.debug("Paint Image :" + this.propertySource + " realsize=" + this.compositing.getRealSize() + " origin="
+				+ origin + " size=" + imageRealSize);
+		LOGGER.debug("      start=" + this.propertyPosStart + " stop=" + this.propertyPosStop);
 		this.compositing.flush();
 	}
-	
+
 	/**
 	 * set All the configuration of the current image
 	 * @param uri URI of the new image
 	 * @param border New border size to set
 	 */
 	public void set(final Uri uri, final Dimension2f border) {
-		Log.verbose("Set Image : " + uri + " border=" + border);
+		LOGGER.trace("Set Image : " + uri + " border=" + border);
 		setPropertyBorder(border);
 		setPropertySource(uri);
 	}
-	
+
 	/**
 	 * Set an image with direct elements
 	 * @param image Image to set in the display
@@ -242,7 +249,7 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	public void setPropertyBorder(final Dimension2f propertyBorder) {
 		if (this.propertyBorder.equals(propertyBorder)) {
 			return;
@@ -251,7 +258,7 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	public void setPropertyImageSize(final Dimension2f propertyImageSize) {
 		if (this.propertyImageSize.equals(propertyImageSize)) {
 			return;
@@ -259,10 +266,10 @@ public class ImageDisplay extends Widget {
 		this.propertyImageSize = propertyImageSize;
 		markToRedraw();
 		requestUpdateSize();
-		Log.verbose("Set sources : " + this.propertySource + " size=" + propertyImageSize);
+		LOGGER.trace("Set sources : " + this.propertySource + " size=" + propertyImageSize);
 		this.compositing.setSource(this.propertySource, propertyImageSize.getPixeli());
 	}
-	
+
 	public void setPropertyKeepRatio(final boolean propertyKeepRatio) {
 		if (this.propertyKeepRatio == propertyKeepRatio) {
 			return;
@@ -271,7 +278,7 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	public void setPropertyPosStart(final Vector2f propertyPosStart) {
 		if (this.propertyPosStart.equals(propertyPosStart)) {
 			return;
@@ -280,7 +287,7 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	public void setPropertyPosStop(final Vector2f propertyPosStop) {
 		if (this.propertyPosStop.equals(propertyPosStop)) {
 			return;
@@ -289,7 +296,7 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	public void setPropertySmooth(final boolean propertySmooth) {
 		if (this.propertySmooth == propertySmooth) {
 			return;
@@ -297,7 +304,7 @@ public class ImageDisplay extends Widget {
 		this.propertySmooth = propertySmooth;
 		markToRedraw();
 	}
-	
+
 	public void setPropertySource(final Uri propertySource) {
 		if (this.propertySource != null && this.propertySource.equals(propertySource)) {
 			return;
@@ -305,10 +312,10 @@ public class ImageDisplay extends Widget {
 		this.propertySource = propertySource;
 		markToRedraw();
 		requestUpdateSize();
-		Log.verbose("Set sources : " + propertySource + " size=" + this.propertyImageSize);
+		LOGGER.trace("Set sources : " + propertySource + " size=" + this.propertyImageSize);
 		this.compositing.setSource(propertySource, this.propertyImageSize.getPixeli());
 	}
-	
+
 	public void setPropertyUseThemeColor(final boolean propertyUseThemeColor) {
 		if (this.propertyUseThemeColor == propertyUseThemeColor) {
 			return;

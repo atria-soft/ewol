@@ -59,7 +59,7 @@ void ewol::widget::ContextMenu::onChangeSize() {
 	markToRedraw();
 	// pop-up fill all the display :
 	ewol::Padding padding = this.shaper.getPadding();
-	Log.verbose("our origin=" + this.origin + " size=" + this.size);
+	LOGGER.trace("our origin=" + this.origin + " size=" + this.size);
 	if (this.subWidget == null) {
 		return;
 	}
@@ -115,7 +115,7 @@ void ewol::widget::ContextMenu::onChangeSize() {
 			}
 			break;
 	}
-	Log.verbose("       == > sub origin=" + subWidgetOrigin + " size=" + subWidgetSize);
+	LOGGER.trace("       == > sub origin=" + subWidgetOrigin + " size=" + subWidgetSize);
 	this.subWidget.setOrigin(subWidgetOrigin);
 	this.subWidget.setSize(subWidgetSize);
 	this.subWidget.onChangeSize();
@@ -128,7 +128,7 @@ void ewol::widget::ContextMenu::calculateMinMaxSize() {
 	// add padding of the display
 	ewol::Padding padding = this.shaper.getPadding();
 	this.minSize += Vector2f(padding.x(), padding.y());
-	//Log.debug("CalculateMinSize=>>" + this.minSize);
+	//LOGGER.debug("CalculateMinSize=>>" + this.minSize);
 	markToRedraw();
 }
 
@@ -195,7 +195,7 @@ void ewol::widget::ContextMenu::onRegenerateDisplay() {
 		default:
 		case markRight:
 		case markLeft:
-			Log.todo("later");
+			LOGGER.info("[TODO] later");
 			break;
 	}
 	

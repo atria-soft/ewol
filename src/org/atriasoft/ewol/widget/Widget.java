@@ -31,7 +31,6 @@ import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventShortCut;
 import org.atriasoft.ewol.event.InputSystem;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.context.ClipboardList;
@@ -39,6 +38,8 @@ import org.atriasoft.gale.context.Cursor;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
 import org.lwjgl.opengl.GL11;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Widget class is the main widget interface, it has so me generic properties:
@@ -46,9 +47,10 @@ import org.lwjgl.opengl.GL11;
  * :** Can be display at a special position with a special scale
  * :** Can get focus
  * :** Receive Event (keyboard / mouse / ...)
- * 
+ *
  */
 public class Widget extends EwolObject {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Widget.class);
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- keyboard event properties Area
 	// ----------------------------------------------------------------------------------------------------------------
@@ -121,7 +123,7 @@ public class Widget extends EwolObject {
 	
 	protected void calculateMinMaxSizeWidget() {
 		this.minSize = this.propertyMinSize.getPixel();
-		//Log.error("[" + getId() + "] convert in min size : " + propertyMinSize + " out=" + this.minSize);
+		//LOGGER.error("[" + getId() + "] convert in min size : " + propertyMinSize + " out=" + this.minSize);
 		this.maxSize = this.propertyMaxSize.getPixel();
 		markToRedraw();
 	}
@@ -194,7 +196,8 @@ public class Widget extends EwolObject {
 		for (int iii = 0; iii < level; ++iii) {
 			space.append("    ");
 		}
-		Log.print(space.append("[").append(getId()).append("] name='").append(this.name).append("' type=").append(getClass().getCanonicalName()).append(" o=").append(this.origin).append("  s=")
+		LOGGER.info(space.append("[").append(getId()).append("] name='").append(this.name).append("' type=")
+				.append(getClass().getCanonicalName()).append(" o=").append(this.origin).append("  s=")
 				.append(this.size).append(" hide=").append(this.propertyHide).toString());
 	}
 	
@@ -444,7 +447,7 @@ public class Widget extends EwolObject {
 	 * @note INTERNAL EWOL SYSTEM
 	 */
 	public void onChangeSize() {
-		Log.verbose("[" + getId() + "] {" + getClass().getCanonicalName() + "} update size : " + this.size);
+		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} update size : " + this.size);
 		markToRedraw();
 	}
 	
@@ -493,33 +496,43 @@ public class Widget extends EwolObject {
 	 * @return false if the event has not been used.
 	 * @note To prevent some error when you get an event get it if it is down and Up ...  ==> like this it could not generate some mistake in the error.
 	 */
-	public boolean onEventShortCut(final KeySpecial special, Character unicodeValue, final KeyKeyboard kbMove, final boolean isDown) {
+	public boolean onEventShortCut(
+			final KeySpecial special,
+			Character unicodeValue,
+			final KeyKeyboard kbMove,
+			final boolean isDown) {
 		unicodeValue = Character.toLowerCase(unicodeValue);
-		//Log.verbose("check shortcut...." + special + " " + unicodeValue + " " + kbMove + " " + (isDown ? "DOWN" : "UP") + " nb shortcut:" + this.localShortcut.size());
+		//LOGGER.trace("check shortcut...." + special + " " + unicodeValue + " " + kbMove + " " + (isDown ? "DOWN" : "UP") + " nb shortcut:" + this.localShortcut.size());
 		// Remove the up event of the shortcut...
 		if (!isDown) {
 			for (int iii = this.localShortcut.size() - 1; iii >= 0; iii--) {
 				if (!this.localShortcut.get(iii).isActive) {
 					continue;
 				}
-				if ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.UNKNOWN && this.localShortcut.get(iii).unicodeValue() == unicodeValue)
-						|| (this.localShortcut.get(iii).keyboardMoveValue() == kbMove && this.localShortcut.get(iii).unicodeValue() == 0)) {
+				if ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.UNKNOWN
+						&& this.localShortcut.get(iii).unicodeValue() == unicodeValue)
+						|| (this.localShortcut.get(iii).keyboardMoveValue() == kbMove
+								&& this.localShortcut.get(iii).unicodeValue() == 0)) {
 					// In this case we grap the event in case of an error can occured ...
 					this.localShortcut.get(iii).isActive = false;
-					Log.verbose("detect up of a shortcut");
+					LOGGER.trace("detect up of a shortcut");
 					return true;
 				}
 			}
 		}
-		//Log.info("Try to indexOf generic shortcut ...");
+		//LOGGER.info("Try to indexOf generic shortcut ...");
 		for (int iii = this.localShortcut.size() - 1; iii >= 0; iii--) {
-			if (this.localShortcut.get(iii).specialKey().getShift() == special.getShift() && this.localShortcut.get(iii).specialKey().getCtrl() == special.getCtrl()
-					&& this.localShortcut.get(iii).specialKey().getAlt() == special.getAlt() && this.localShortcut.get(iii).specialKey().getMeta() == special.getMeta()
-					&& ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.UNKNOWN && this.localShortcut.get(iii).unicodeValue() == unicodeValue)
-							|| (this.localShortcut.get(iii).keyboardMoveValue() == kbMove && this.localShortcut.get(iii).unicodeValue() == 0))) {
+			if (this.localShortcut.get(iii).specialKey().getShift() == special.getShift()
+					&& this.localShortcut.get(iii).specialKey().getCtrl() == special.getCtrl()
+					&& this.localShortcut.get(iii).specialKey().getAlt() == special.getAlt()
+					&& this.localShortcut.get(iii).specialKey().getMeta() == special.getMeta()
+					&& ((this.localShortcut.get(iii).keyboardMoveValue() == KeyKeyboard.UNKNOWN
+							&& this.localShortcut.get(iii).unicodeValue() == unicodeValue)
+							|| (this.localShortcut.get(iii).keyboardMoveValue() == kbMove
+									&& this.localShortcut.get(iii).unicodeValue() == 0))) {
 				if (isDown) {
 					this.localShortcut.get(iii).isActive = true;
-					Log.verbose("Generate shortCut: " + this.localShortcut.get(iii).message());
+					LOGGER.trace("Generate shortCut: " + this.localShortcut.get(iii).message());
 					this.signalShortcut.emit(this.localShortcut.get(iii).message());
 				}
 				return true;
@@ -545,7 +558,7 @@ public class Widget extends EwolObject {
 		final Vector3f pixelMax = this.propertyMaxSize.getPixel();
 		// check minimum  maximum compatibility :
 		if (pixelMin.x() > pixelMax.x() || pixelMin.y() > pixelMax.y()) {
-			Log.error("Can not set a 'min size' > 'max size' reset to maximum ...");
+			LOGGER.error("Can not set a 'min size' > 'max size' reset to maximum ...");
 			this.propertyMaxSize = new Dimension3f(Vector3f.MAX_VALUE, Distance.PIXEL);
 		}
 		requestUpdateSize();
@@ -587,7 +600,7 @@ public class Widget extends EwolObject {
 	 * @param newCursor selected new cursor.
 	 */
 	public void setCursor(final Cursor newCursor) {
-		Log.debug("Change Cursor in " + newCursor);
+		LOGGER.debug("Change Cursor in " + newCursor);
 		this.cursorDisplay = newCursor;
 		EwolObject.getContext().setCursor(this.cursorDisplay);
 	}
@@ -597,16 +610,17 @@ public class Widget extends EwolObject {
 	 * @return return true if the widget keep the focus
 	 */
 	public boolean setFocus() {
-		Log.verbose("set focus (start) *propertyCanFocus=" + this.propertyCanFocus + " this.hasFocus=" + this.hasFocus);
+		LOGGER.trace(
+				"set focus (start) *propertyCanFocus=" + this.propertyCanFocus + " this.hasFocus=" + this.hasFocus);
 		if (this.propertyCanFocus) {
 			if (!this.hasFocus) {
 				this.hasFocus = true;
 				onGetFocus();
 			}
-			Log.verbose("set focus (stop) ret true");
+			LOGGER.trace("set focus (stop) ret true");
 			return true;
 		}
-		Log.verbose("set focus (stop) ret false");
+		LOGGER.trace("set focus (stop) ret false");
 		return false;
 	}
 	
@@ -645,7 +659,7 @@ public class Widget extends EwolObject {
 	 * @param newVal offset value.
 	 */
 	public void setOffset(final Vector3f newVal) {
-		Log.info("Set offset: " + newVal);
+		LOGGER.info("Set offset: " + newVal);
 		if (this.offset != newVal) {
 			this.offset = newVal;
 			markToRedraw();
@@ -772,7 +786,7 @@ public class Widget extends EwolObject {
 	 */
 	protected void shortCutAdd(final String descriptiveString, final String sendMessage) {
 		if (descriptiveString.length() == 0) {
-			Log.error("try to add shortcut with no descriptive string ...");
+			LOGGER.error("try to add shortcut with no descriptive string ...");
 			return;
 		}
 		String message; //!< data link with the event
@@ -918,7 +932,7 @@ public class Widget extends EwolObject {
 	}
 	
 	protected void systemDrawWidget(final DrawProperty displayProp) {
-		//Log.info("[" + getId() + "] Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" << this.size << " hide=" << propertyHide);
+		//LOGGER.info("[" + getId() + "] Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" << this.size << " hide=" << propertyHide);
 		if (this.propertyHide) {
 			// widget is hidden ...
 			return;
@@ -935,20 +949,23 @@ public class Widget extends EwolObject {
 		if (tmpSize.size().x() <= 0 || tmpSize.size().y() <= 0) {
 			return;
 		}
-		//Log.info("setViewport(" + tmpSize.origin() + ", " + tmpSize.size() + ")");
+		//LOGGER.info("setViewport(" + tmpSize.origin() + ", " + tmpSize.size() + ")");
 		OpenGL.setViewPort(tmpSize.origin(), tmpSize.size());
 		// special case, when origin < display origin, we need to cut the display :
-		Vector2i downOffset = new Vector2i((int) (this.origin.x() - tmpSize.origin().x()), (int) (this.origin.y() - tmpSize.origin().y()));
+		Vector2i downOffset = new Vector2i((int) (this.origin.x() - tmpSize.origin().x()),
+				(int) (this.origin.y() - tmpSize.origin().y()));
 		downOffset = Vector2i.min(downOffset, Vector2i.ZERO);
-		//Log.info("translate : (" + (new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
+		//LOGGER.info("translate : (" + (new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
 		// translate the display to have a Gui 0,0 position on the Left button angle
 		final Matrix4f tmpTranslate = Matrix4f
-				.createMatrixTranslate((new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(), -tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
+				.createMatrixTranslate((new Vector3f(-tmpSize.size().x() / 2 + this.offset.x() + downOffset.x(),
+						-tmpSize.size().y() / 2 + this.offset.y() + downOffset.y(), -1.0f)).clipInteger());
 		//final Matrix4f tmpTranslate = Matrix4f.createMatrixTranslate(new Vector3f(0, 0, 1.0f));
 		// Scale if needed (feature not validate)
 		final Matrix4f tmpScale = Matrix4f.createMatrixScale(this.zoom, this.zoom, 1.0f);
 		// create orthogonal projection for GUI ==> simple to manage staking
-		final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2, -tmpSize.size().y() / 2, tmpSize.size().y() / 2, -500, 500);
+		final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2,
+				-tmpSize.size().y() / 2, tmpSize.size().y() / 2, -500, 500);
 		//Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
 		
 		OpenGL.push();

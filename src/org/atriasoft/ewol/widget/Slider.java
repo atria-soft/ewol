@@ -15,8 +15,9 @@ import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.compositing.GuiShape;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.key.KeyStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -28,9 +29,10 @@ import org.atriasoft.gale.key.KeyStatus;
  * @ingroup ewolWidgetGroup
  */
 public class Slider extends Widget {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(Slider.class);
+
 	private Uri propertyConfig = new Uri("THEME", "shape/Slider.json", "ewol");
-	
+
 	private Float propertyValue = 0.0f; //!< string that must be displayed
 	private GuiShape shape = null;
 	private final GuiShape shapeTop = null;
@@ -43,20 +45,20 @@ public class Slider extends Widget {
 	Vector3f overPositionStop = Vector3f.ZERO;
 	Vector3f overCursorPositionStart = Vector3f.ZERO;
 	Vector3f overCursorPositionStop = Vector3f.ZERO;
-	
+
 	//@AknotAutoGenerateProperty("minimum", "configuration of the widget")
 	private Float propertyMinimum = 0.0f;
-	
+
 	private Float propertyMaximum = 10.0f;
-	
+
 	private Float propertyStep = 0.1f;
-	
+
 	private final Color textColorFg = Color.BLACK; //!< Text color
-	
+
 	private final Color textColorBg = Color.BLACK.withA(0x3F); //!< Background color
-	
+
 	CompositingDrawing draw = new CompositingDrawing(); //!< drawing tool.
-	
+
 	public Slider() {
 		this.propertyCanFocus = true;
 		onChangePropertyShaper();
@@ -64,7 +66,7 @@ public class Slider extends Widget {
 		// Limit event at 1:
 		setMouseLimit(1);
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -75,21 +77,22 @@ public class Slider extends Widget {
 			padding = this.shape.getPadding();
 		}
 		final Vector3i minHeight = Vector3i.VALUE_16;
-		
+
 		Vector3f minimumSizeBase = new Vector3f(minHeight.x(), minHeight.y(), minHeight.z());
 		// add padding :
 		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y(), padding.z());
 		this.minSize = Vector3f.max(this.minSize, minimumSizeBase);
 		// verify the min max of the min size ...
 		checkMinSize();
-		Log.error("min size = " + this.minSize);
-		
+		LOGGER.error("min size = " + this.minSize);
+
 	}
-	
+
 	private boolean checkIfOver(final Vector3f relPos) {
-		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y() && relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
+		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
+				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("config")
@@ -97,7 +100,7 @@ public class Slider extends Widget {
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("maximum")
@@ -105,7 +108,7 @@ public class Slider extends Widget {
 	public Float getPropertyMaximum() {
 		return this.propertyMaximum;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("minimum")
@@ -113,7 +116,7 @@ public class Slider extends Widget {
 	public Float getPropertyMinimum() {
 		return this.propertyMinimum;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("step")
@@ -121,7 +124,7 @@ public class Slider extends Widget {
 	public Float getPropertyStep() {
 		return this.propertyStep;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -129,7 +132,7 @@ public class Slider extends Widget {
 	public Float getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	protected void onChangePropertyShaper() {
 		if (this.shape == null) {
 			this.shape = new GuiShape(this.propertyConfig);
@@ -137,7 +140,7 @@ public class Slider extends Widget {
 			this.shape.setSource(this.propertyConfig);
 		}
 	}
-	
+
 	@Override
 	public void onDraw() {
 		if (this.shape != null) {
@@ -146,14 +149,14 @@ public class Slider extends Widget {
 			// draw slider
 			this.shape.draw(true, 1);
 		}
-		
+
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
 		final Vector3f relPos = relativePosition(positionAbsolute);
-		Log.warning("Event on Input ... " + event + " relPos = " + relPos);
+		LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = checkIfOver(relPos);
 		if (event.inputId() != 1) {
 			return false;
@@ -161,7 +164,8 @@ public class Slider extends Widget {
 		if (KeyStatus.pressSingle == event.status() && over) {
 			keepFocus();
 			// get percent value
-			final float pourcent = (relPos.x() - this.overPositionStart.x()) / (this.overPositionStop.x() - this.overPositionStart.x());
+			final float pourcent = (relPos.x() - this.overPositionStart.x())
+					/ (this.overPositionStop.x() - this.overPositionStart.x());
 			float value = (this.propertyMaximum - this.propertyMinimum) * pourcent + this.propertyMinimum;
 			if (this.propertyStep != 0.0f) {
 				value += this.propertyStep * 0.5f;
@@ -172,7 +176,8 @@ public class Slider extends Widget {
 		if (KeyStatus.down == event.status() && over) {
 			keepFocus();
 			// get percent value
-			final float pourcent = (relPos.x() - this.overPositionStart.x()) / (this.overPositionStop.x() - this.overPositionStart.x());
+			final float pourcent = (relPos.x() - this.overPositionStart.x())
+					/ (this.overPositionStop.x() - this.overPositionStart.x());
 			float value = (this.propertyMaximum - this.propertyMinimum) * pourcent + this.propertyMinimum;
 			if (this.propertyStep != 0.0f) {
 				value += this.propertyStep * 0.5f;
@@ -183,7 +188,8 @@ public class Slider extends Widget {
 		if (KeyStatus.move == event.status() && over) {
 			keepFocus();
 			// get percent value
-			final float pourcent = (relPos.x() - this.overPositionStart.x()) / (this.overPositionStop.x() - this.overPositionStart.x());
+			final float pourcent = (relPos.x() - this.overPositionStart.x())
+					/ (this.overPositionStop.x() - this.overPositionStart.x());
 			float value = (this.propertyMaximum - this.propertyMinimum) * pourcent + this.propertyMinimum;
 			if (this.propertyStep != 0.0f) {
 				value += this.propertyStep * 0.5f;
@@ -194,7 +200,8 @@ public class Slider extends Widget {
 		if (KeyStatus.up == event.status() && over) {
 			keepFocus();
 			// get percent value
-			final float pourcent = (relPos.x() - this.overPositionStart.x()) / (this.overPositionStop.x() - this.overPositionStart.x());
+			final float pourcent = (relPos.x() - this.overPositionStart.x())
+					/ (this.overPositionStop.x() - this.overPositionStart.x());
 			float value = (this.propertyMaximum - this.propertyMinimum) * pourcent + this.propertyMinimum;
 			if (this.propertyStep != 0.0f) {
 				value += this.propertyStep * 0.5f;
@@ -204,13 +211,13 @@ public class Slider extends Widget {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
 			//return;
 		}
-		//Log.verbose("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
+		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.shape.clear();
 		//this.gc.clear();
 		/*
@@ -234,7 +241,7 @@ public class Slider extends Widget {
 				tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 				delta = delta.withY(0.0f);
 			}
-			
+
 			Vector3f tmpOriginShaper = delta;
 			Vector3f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
 			//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
@@ -245,7 +252,7 @@ public class Slider extends Widget {
 			tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
 			tmpSizeInside = Vector3f.clipInt(tmpSizeInside);
 			tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
-			
+
 			this.overPositionStart = tmpOriginShaper;
 			this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
 			this.shape.setShape(0, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
@@ -258,31 +265,32 @@ public class Slider extends Widget {
 				tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 				delta = delta.withY(0.0f);
 			}
-			
+
 			Vector3f tmpOriginShaper = delta;
 			Vector3f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
 			//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
 			Vector3f tmpOriginInside = Vector3f.ZERO;
-			
+
 			final float xxx = tmpOriginShaper.x() * 2.0f;
-			
-			tmpOriginShaper = tmpOriginShaper.withX(xxx * (this.propertyValue - this.propertyMinimum) / (this.propertyMaximum - this.propertyMinimum));
+
+			tmpOriginShaper = tmpOriginShaper.withX(
+					xxx * (this.propertyValue - this.propertyMinimum) / (this.propertyMaximum - this.propertyMinimum));
 			// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 			// fix all the position in the int class:
 			tmpSizeShaper = Vector3f.clipInt(tmpSizeShaper);
 			tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
 			tmpSizeInside = Vector3f.clipInt(tmpSizeInside);
 			tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
-			
+
 			this.overCursorPositionStart = tmpOriginShaper;
 			this.overCursorPositionStop = tmpOriginShaper.add(tmpSizeShaper);
 			this.shape.setShape(1, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
 		}
 		//this.gc.flush();
 		this.shape.flush();
-		
+
 	}
-	
+
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;
@@ -290,7 +298,7 @@ public class Slider extends Widget {
 		this.propertyConfig = propertyConfig;
 		onChangePropertyShaper();
 	}
-	
+
 	public void setPropertyMaximum(final Float propertyMaximum) {
 		if (this.propertyMaximum == propertyMaximum) {
 			return;
@@ -299,7 +307,7 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 		this.signalValue.emit(this.propertyValue);
 	}
-	
+
 	public void setPropertyMinimum(final Float propertyMinimum) {
 		if (this.propertyMinimum == propertyMinimum) {
 			return;
@@ -308,7 +316,7 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 		this.signalValue.emit(this.propertyValue);
 	}
-	
+
 	public void setPropertyStep(final Float propertyStep) {
 		if (this.propertyStep == propertyStep) {
 			return;
@@ -317,7 +325,7 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 		this.signalValue.emit(this.propertyValue);
 	}
-	
+
 	public void setPropertyValue(final Float propertyValue) {
 		if (this.propertyValue == propertyValue) {
 			return;
@@ -326,7 +334,7 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 		this.signalValue.emit(this.propertyValue);
 	}
-	
+
 	protected void updateValue(float newValue) {
 		newValue = FMath.max(FMath.min(newValue, this.propertyMaximum), this.propertyMinimum);
 		if (this.propertyStep == 0.0f) {

@@ -15,7 +15,6 @@ import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.CheckBox;
 import org.atriasoft.ewol.widget.Composer;
@@ -23,17 +22,19 @@ import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.ImageDisplay;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ListFileSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *  File Chooser is a simple selector of file for opening, saving, and what you want ...
- * 
+ *
  *  As all other pop-up methode ( wost case we can have) the creating is simple , but event back is not all the time simple:
- * 
+ *
  *  Fist global static declaration and inclusion:
  *  [code style=c++]
  *  package org.atriasoft.ewol.widget.meta.FileChooser;
  *  [/code]
- * 
+ *
  *  The first step is to create the file chooser pop-up : (never in the ructor!!!)
  *  [code style=c++]
  *  ewol::widget::FileChooser tmpWidget = ewol::widget::FileChooser::create();
@@ -59,9 +60,9 @@ import org.atriasoft.ewol.widget.ListFileSystem;
  *  }
  *  tmpWindows.popUpWidgetPush(tmpWidget);
  *  [/code]
- * 
+ *
  *  Now we just need to wait the the open event message.
- * 
+ *
  *  [code style=c++]
  *  void ****::onCallbackOpenFile( String _value) {
  *  	APPL_INFO("Request open file : '" + _value + "'");
@@ -73,7 +74,8 @@ import org.atriasoft.ewol.widget.ListFileSystem;
  *  This is the best example of a Meta-widget.
  */
 public class FileChooser extends Composer {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileChooser.class);
+
 	static void onCallbackButtonCancelPressed(final FileChooser self, final Boolean value) {
 		if (!value) {
 			return;
@@ -82,43 +84,46 @@ public class FileChooser extends Composer {
 		self.signalCancel.emit();
 		self.autoDestroy();
 	}
-	
+
 	protected static void onCallbackEntryFileChangeValidate(final FileChooser self, final String value) {
 		onCallbackListFileValidate(self, value);
 	}
-	
+
 	protected static void onCallbackEntryFileChangeValue(final FileChooser self, final String value) {
 		// == > change the file name.get(.get(
 		self.propertyFile = value;
 		// update the selected file in the list :
-		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
+		if (self.getSubObjectNamed(
+				"[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyFile(new File(self.propertyFile));
 		}
 	}
-	
+
 	protected static void onCallbackEntryFolderChangeValue(final FileChooser self, final String value) {
 		// == > change the folder name
 		// TODO : change the folder, if it exit ...
 	}
-	
+
 	protected static void onCallbackHidenFileChangeChangeValue(final FileChooser self, final Boolean value) {
-		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
+		if (self.getSubObjectNamed(
+				"[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyShowHidden(value);
 		}
-		if (self.getSubObjectNamed("[" + Long.toString(self.getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
+		if (self.getSubObjectNamed(
+				"[" + Long.toString(self.getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyShowHidden(value);
 		}
 	}
-	
+
 	protected static void onCallbackHomePressed(final FileChooser self) {
 		final String tmpUserFolder = System.getProperty("user.home");
-		Log.debug("new PATH: '" + tmpUserFolder + "'");
-		
+		LOGGER.debug("new PATH: '" + tmpUserFolder + "'");
+
 		self.propertyPath = tmpUserFolder;
 		self.propertyFile = "";
 		self.updateCurrentFolder();
 	}
-	
+
 	protected static void onCallbackListFileSelectChange(final FileChooser self, final String value) {
 		self.setPropertyFile(value);
 		/*
@@ -127,55 +132,55 @@ public class FileChooser extends Composer {
 		// TODO : generateEventId(_msg.getMessage(), tmpFileCompleatName);
 		*/
 	}
-	
+
 	protected static void onCallbackListFileValidate(final FileChooser self, final String value) {
 		// select the file  == > generate a validate
 		self.setPropertyFile(value);
-		Log.verbose(" generate a fiel opening : '" + self.propertyFile + "'");
+		LOGGER.trace(" generate a fiel opening : '" + self.propertyFile + "'");
 		self.signalValidate.emit(value);
 		self.autoDestroy();
 	}
-	
+
 	protected static void onCallbackListFolderSelectChange(final FileChooser self, final String value) {
 		// == > this is an internal event ...
-		Log.debug(" old PATH: '" + self.propertyPath + "' ==> '" + value + "'");
+		LOGGER.debug(" old PATH: '" + self.propertyPath + "' ==> '" + value + "'");
 		self.propertyPath = value;
-		Log.debug("new PATH: '" + self.propertyPath + "'");
+		LOGGER.debug("new PATH: '" + self.propertyPath + "'");
 		self.propertyFile = "";
 		self.updateCurrentFolder();
 	}
-	
+
 	protected static void onCallbackListValidate(final FileChooser self, final Boolean value) {
 		if (!value) {
 			return;
 		}
 		if (self.propertyFile.isEmpty()) {
-			Log.warning(" Validate : '" + self.propertyFile + "' ==> error No name ...");
+			LOGGER.warn(" Validate : '" + self.propertyFile + "' ==> error No name ...");
 			return;
 		}
-		Log.debug(" generate a file opening : '" + self.propertyFile + "'");
+		LOGGER.debug(" generate a file opening : '" + self.propertyFile + "'");
 		self.signalValidate.emit(self.propertyFile);
 		self.autoDestroy();
 	}
-	
+
 	@AknotSignal
 	@AknotName(value = "cancel")
 	@AknotDescription(value = "Cancel button is pressed")
 	public SignalEmpty signalCancel; //!< abort the display of the pop-up or press cancel button
-	
+
 	@AknotSignal
 	@AknotName(value = "validate")
 	@AknotDescription(value = "Validate button is pressed")
 	public Signal<String> signalValidate; //!< select file(s)
 	// properties
 	public String propertyPath = System.getProperty("user.home"); //!< Current path to explore
-	
+
 	public String propertyFile = ""; //!< Selected file
 	public String propertyLabelTitle = "_T{FileChooser}"; //!< Label of the pop-up (can use translation)
-	
+
 	public String propertyLabelValidate = "_T{Validate}"; //!< Label of validate button of the pop-up (can use translation)
 	public String propertyLabelCancel = "_T{Cancel}"; //!< Label of cancel/close button of the pop-up (can use translation)
-	
+
 	public FileChooser() {
 		// Load file with replacing the "{ID}" with the local ID of the widget ==> obtain unique ID
 		loadFromFile(new Uri("DATA", "ewol-gui-file-chooser.xml", "ewol"));
@@ -183,88 +188,96 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelTitle();
 		onChangePropertyLabelValidate();
 		onChangePropertyLabelCancel();
-		
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:show-hiden-file") instanceof final CheckBox tmp) {
+
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:show-hiden-file") instanceof final CheckBox tmp) {
 			tmp.signalValue.connectAuto(this, FileChooser::onCallbackHidenFileChangeChangeValue);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:button-validate") instanceof final Button tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:button-validate") instanceof final Button tmp) {
 			tmp.signalValue.connectAuto(this, FileChooser::onCallbackListValidate);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:button-cancel") instanceof final Button tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:button-cancel") instanceof final Button tmp) {
 			tmp.signalValue.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
 			tmp.signalFolderValidate.connectAuto(this, FileChooser::onCallbackListFolderSelectChange);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.signalFileSelect.connectAuto(this, FileChooser::onCallbackListFileSelectChange);
 			tmp.signalFileValidate.connectAuto(this, FileChooser::onCallbackListFileValidate);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final Entry tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final Entry tmp) {
 			tmp.signalModify.connectAuto(this, FileChooser::onCallbackEntryFileChangeValue);
 			tmp.signalEnter.connectAuto(this, FileChooser::onCallbackEntryFileChangeValidate);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
 			tmp.signalModify.connectAuto(this, FileChooser::onCallbackEntryFolderChangeValue);
 		}
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:img-home") instanceof final ImageDisplay tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:img-home") instanceof final ImageDisplay tmp) {
 			tmp.signalPressed.connectAuto(this, FileChooser::onCallbackHomePressed);
 		}
 		// set the default Folder properties:
 		updateCurrentFolder();
 		setPropertyCanFocus(true);
 	}
-	
+
 	public String getPropertyFile() {
 		return this.propertyFile;
 	}
-	
+
 	public String getPropertyLabelCancel() {
 		return this.propertyLabelCancel;
 	}
-	
+
 	// callback functions:
 	public String getPropertyLabelTitle() {
 		return this.propertyLabelTitle;
 	}
-	
+
 	public String getPropertyLabelValidate() {
 		return this.propertyLabelValidate;
 	}
-	
+
 	public String getPropertyPath() {
 		return this.propertyPath;
 	}
-	
+
 	protected void onChangePropertyFile() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyFile(new File(this.propertyFile));
 		}
 	}
-	
+
 	protected void onChangePropertyLabelCancel() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:cancel-label") instanceof final Label tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:cancel-label") instanceof final Label tmp) {
 			tmp.setPropertyValue(this.propertyLabelCancel);
 		}
 	}
-	
+
 	protected void onChangePropertyLabelTitle() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:title-label") instanceof final Label tmp) {
+		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:title-label") instanceof final Label tmp) {
 			tmp.setPropertyValue(this.propertyLabelTitle);
 		}
 	}
-	
+
 	protected void onChangePropertyLabelValidate() {
-		if (this.getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:validate-label") instanceof final Label tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:validate-label") instanceof final Label tmp) {
 			tmp.setPropertyValue(this.propertyLabelValidate);
 		}
 	}
-	
+
 	protected void onChangePropertyPath() {
 		this.propertyPath = this.propertyPath + "/";
 		updateCurrentFolder();
 	}
-	
+
 	@Override
 	public void onGetFocus() {
 		// transfert focus on a specific widget...
@@ -272,7 +285,7 @@ public class FileChooser extends Composer {
 			tmp.keepFocus();
 		}
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "file")
@@ -283,7 +296,7 @@ public class FileChooser extends Composer {
 		this.propertyFile = propertyFile;
 		onChangePropertyFile();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "label-cancel")
@@ -295,7 +308,7 @@ public class FileChooser extends Composer {
 		this.propertyLabelCancel = propertyLabelCancel;
 		onChangePropertyLabelCancel();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "title")
@@ -307,7 +320,7 @@ public class FileChooser extends Composer {
 		this.propertyLabelTitle = propertyLabelTitle;
 		onChangePropertyLabelTitle();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "label-validate")
@@ -319,7 +332,7 @@ public class FileChooser extends Composer {
 		this.propertyLabelValidate = propertyLabelValidate;
 		onChangePropertyLabelValidate();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "path")
@@ -331,12 +344,14 @@ public class FileChooser extends Composer {
 		this.propertyPath = propertyPath;
 		onChangePropertyPath();
 	}
-	
+
 	private void updateCurrentFolder() {
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyPath(this.propertyPath);
 		}
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
+		if (getSubObjectNamed(
+				"[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
 			tmp.setPropertyPath(this.propertyPath);
 		}
 		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {

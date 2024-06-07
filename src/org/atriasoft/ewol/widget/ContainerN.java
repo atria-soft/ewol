@@ -18,30 +18,32 @@ import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @ingroup ewolWidgetGroup
  * the Cotainer widget is a widget that have an only one subWidget
  */
 public class ContainerN extends Widget {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerN.class);
+
 	protected Vector3b propertyLockExpand = Vector3b.FALSE; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 	protected Vector3b subExpend = Vector3b.FALSE; //!< reference of the sub element expention requested.
 	protected List<Widget> subWidget = new ArrayList<>();
-	
+
 	/**
 	 * Constructor
 	 */
 	protected ContainerN() {}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		this.subExpend = Vector3b.FALSE;
 		this.minSize = Vector3f.ZERO;
 		this.maxSize = Vector3f.MAX_VALUE;
-		//Log.error("[" + getId() + "] {" + getObjectType() + "} set min size : " +  this.minSize);
+		//LOGGER.error("[" + getId() + "] {" + getObjectType() + "} set min size : " +  this.minSize);
 		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				it.calculateMinMaxSize();
@@ -56,9 +58,9 @@ public class ContainerN extends Widget {
 				this.minSize = Vector3f.max(tmpSize, this.minSize);
 			}
 		}
-		Log.warning("[{}] Result min size : {}", getId(), this.minSize);
+		LOGGER.warn("[{}] Result min size : {}", getId(), this.minSize);
 	}
-	
+
 	// herited function
 	@Override
 	public Vector3b canExpand() {
@@ -73,10 +75,10 @@ public class ContainerN extends Widget {
 				res = res.withY(true);
 			}
 		}
-		//Log.debug("Expend check : user=" + this.userExpand + " lock=" + propertyLockExpand + " sub=" + this.subExpend + " res=" + res);
+		//LOGGER.debug("Expend check : user=" + this.userExpand + " lock=" + propertyLockExpand + " sub=" + this.subExpend + " res=" + res);
 		return res;
 	}
-	
+
 	@Override
 	public void drawWidgetTree(int level) {
 		super.drawWidgetTree(level);
@@ -87,7 +89,7 @@ public class ContainerN extends Widget {
 			}
 		}
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "lock")
@@ -95,7 +97,7 @@ public class ContainerN extends Widget {
 	public Vector3b getPropertyLockExpand() {
 		return this.propertyLockExpand;
 	}
-	
+
 	@Override
 	public EwolObject getSubObjectNamed(final String objectName) {
 		EwolObject tmpObject = super.getSubObjectNamed(objectName);
@@ -112,14 +114,14 @@ public class ContainerN extends Widget {
 		}
 		return null;
 	}
-	
+
 	@AknotManaged
 	@AknotFactory(value = WidgetXmlFactory.class)
 	@AknotDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
 	public List<Widget> getSubWidgets() {
 		return this.subWidget;
 	}
-	
+
 	@Override
 	public Widget getWidgetAtPos(final Vector3f pos) {
 		if (this.propertyHide) {
@@ -130,7 +132,8 @@ public class ContainerN extends Widget {
 			if (it != null) {
 				final Vector3f tmpSize = it.getSize();
 				final Vector3f tmpOrigin = it.getOrigin();
-				if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x()) && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
+				if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
+						&& (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
 					final Widget tmpWidget = it.getWidgetAtPos(pos);
 					if (tmpWidget != null) {
 						return tmpWidget;
@@ -142,7 +145,7 @@ public class ContainerN extends Widget {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		for (final Widget it : this.subWidget) {
@@ -154,7 +157,7 @@ public class ContainerN extends Widget {
 			it.onChangeSize();
 		}
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		for (final Widget it : this.subWidget) {
@@ -163,7 +166,7 @@ public class ContainerN extends Widget {
 			}
 		}
 	}
-	
+
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		ListIterator<Widget> it = this.subWidget.listIterator();
@@ -182,7 +185,7 @@ public class ContainerN extends Widget {
 			markToRedraw();
 		}
 	}
-	
+
 	@Override
 	public void setOffset(final Vector3f newVal) {
 		if (this.offset != newVal) {
@@ -191,7 +194,7 @@ public class ContainerN extends Widget {
 			onChangeSize();
 		}
 	}
-	
+
 	public void setPropertyLockExpand(final Vector3b propertyLockExpand) {
 		if (propertyLockExpand.equals(this.propertyLockExpand)) {
 			return;
@@ -200,10 +203,10 @@ public class ContainerN extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	public void setSubWidgets(final List<Widget> listData) {
 		// Clean all previous widget
-		this.subWidgetRemoveAll();
+		subWidgetRemoveAll();
 		// add separately all widgets
 		for (final Widget elem : listData) {
 			if (elem == null) {
@@ -215,7 +218,7 @@ public class ContainerN extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 	 * @param newWidget the element pointer
@@ -223,7 +226,7 @@ public class ContainerN extends Widget {
 	 */
 	public int subWidgetAdd(final Widget newWidget) {
 		if (newWidget == null) {
-			Log.error("[" + getId() + "] {" + getClass().getCanonicalName() + "} Try to add An empty Widget ... ");
+			LOGGER.error("[" + getId() + "] {" + getClass().getCanonicalName() + "} Try to add An empty Widget ... ");
 			return -1;
 		}
 		newWidget.setParent(this);
@@ -233,22 +236,22 @@ public class ContainerN extends Widget {
 		// added at the last eelement :
 		return newWidget.getId();
 	}
-	
+
 	//! @previous
 	public int subWidgetAddBack(final Widget newWidget) {
 		return subWidgetAdd(newWidget);
 	}
-	
+
 	//! @previous
 	public int subWidgetAddEnd(final Widget newWidget) {
 		return subWidgetAdd(newWidget);
 	}
-	
+
 	//! @previous
 	public int subWidgetAddFront(final Widget newWidget) {
 		return subWidgetAddStart(newWidget);
 	}
-	
+
 	/**
 	 * add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 	 * @param newWidget the element pointer
@@ -256,7 +259,8 @@ public class ContainerN extends Widget {
 	 */
 	public int subWidgetAddStart(final Widget newWidget) {
 		if (newWidget == null) {
-			Log.error("[" + getId() + "] {" + getClass().getCanonicalName() + "} Try to add start An empty Widget ... ");
+			LOGGER.error(
+					"[" + getId() + "] {" + getClass().getCanonicalName() + "} Try to add start An empty Widget ... ");
 			return -1;
 		}
 		if (newWidget != null) {
@@ -267,7 +271,7 @@ public class ContainerN extends Widget {
 		requestUpdateSize();
 		return newWidget.getId();
 	}
-	
+
 	/**
 	 * remove definitly a widget from the system and this layer.
 	 * @param newWidget the element pointer.
@@ -277,7 +281,7 @@ public class ContainerN extends Widget {
 			return;
 		}
 		final int errorControl = this.subWidget.size();
-		
+
 		final ListIterator<Widget> it = this.subWidget.listIterator();
 		while (it.hasNext()) {
 			final Widget elem = it.next();
@@ -289,7 +293,7 @@ public class ContainerN extends Widget {
 			}
 		}
 	}
-	
+
 	/**
 	 * remove all sub element from the widget.
 	 */
@@ -302,14 +306,14 @@ public class ContainerN extends Widget {
 		}
 		this.subWidget.clear();
 	}
-	
+
 	/**
 	 * remove all sub element from the widget (delayed to prevent remove in the callbback).
 	 */
 	public void subWidgetRemoveAllDelayed() {
 		subWidgetRemoveAll();
 	}
-	
+
 	/**
 	 * Replace a old subwidget with a new one.
 	 * @param oldWidget The widget to replace.
@@ -331,13 +335,13 @@ public class ContainerN extends Widget {
 			haveChange = true;
 		}
 		if (!haveChange) {
-			Log.warning("Request replace with a wrong old widget");
+			LOGGER.warn("Request replace with a wrong old widget");
 			return;
 		}
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * Just unlock the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
 	 * @param newWidget the element pointer.
@@ -357,7 +361,7 @@ public class ContainerN extends Widget {
 			}
 		}
 	}
-	
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {
@@ -373,7 +377,7 @@ public class ContainerN extends Widget {
 		while (it.hasPrevious()) {
 			final Widget elem = it.previous();
 			if (elem != null) {
-				//Log.info("       ***** : [" + (*it).propertyName + "] t=" + (*it).getObjectType() + " o=" + (*it).this.origin + "  s=" + (*it).this.size);
+				//LOGGER.info("       ***** : [" + (*it).propertyName + "] t=" + (*it).getObjectType() + " o=" + (*it).this.origin + "  s=" + (*it).this.size);
 				elem.systemDraw(prop);
 			}
 		}

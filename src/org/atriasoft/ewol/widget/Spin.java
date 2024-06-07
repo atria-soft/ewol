@@ -9,14 +9,16 @@ import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.widget.meta.SpinBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a composed Spin is a Spin with an inside composed with the specify XML element
  * ==> this permit to generate standard element simple
  */
 public class Spin extends SpinBase {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Spin.class);
 	// Event list of properties
 	@AknotSignal
 	@AknotName("value")
@@ -35,7 +37,7 @@ public class Spin extends SpinBase {
 	protected Connection connectionEntry = new Connection();
 	protected Connection connectionButtonUp = new Connection();
 	protected Connection connectionButtonDown = new Connection();
-	
+
 	/**
 	 * Constructor
 	 * @param _mode mode to display the spin
@@ -45,16 +47,16 @@ public class Spin extends SpinBase {
 		super(new Uri("THEME", "shape/Spin.json", "ewol"));
 		connectGui();
 	}
-	
+
 	public void checkValue(long value) {
 		value = FMath.clamp(this.propertyMin, value, this.propertyMax);
 		this.propertyValue = value;
 		this.widgetEntry.setPropertyValue(Long.toString(value));
 		this.signalValue.emit(this.propertyValue);
 	}
-	
+
 	public void connectGui() {
-		Log.warning("updateGui [START]");
+		LOGGER.warn("updateGui [START]");
 		super.updateGui();
 		if (this.widgetEntry != null && !this.connectionEntry.isConnected()) {
 			this.connectionEntry = this.widgetEntry.signalModify.connect(this, Spin::onCallbackModify);
@@ -66,9 +68,9 @@ public class Spin extends SpinBase {
 			this.connectionButtonDown = this.widgetButtonDown.signalValue.connect(this, Spin::onCallbackDown);
 		}
 		checkValue(this.propertyValue);
-		Log.warning("updateGui [STOP]");
+		LOGGER.warn("updateGui [STOP]");
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("increment")
@@ -76,7 +78,7 @@ public class Spin extends SpinBase {
 	public long getPropertyIncrement() {
 		return this.propertyIncrement;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("mantis")
@@ -84,7 +86,7 @@ public class Spin extends SpinBase {
 	public int getPropertyMantis() {
 		return this.propertyMantis;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "max")
@@ -92,7 +94,7 @@ public class Spin extends SpinBase {
 	public long getPropertyMax() {
 		return this.propertyMax;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("min")
@@ -100,7 +102,7 @@ public class Spin extends SpinBase {
 	public long getPropertyMin() {
 		return this.propertyMin;
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -108,7 +110,7 @@ public class Spin extends SpinBase {
 	public long getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	protected void onCallbackDown(final Boolean value) {
 		if (value) {
 			return;
@@ -116,7 +118,7 @@ public class Spin extends SpinBase {
 		final long data = this.propertyValue - this.propertyIncrement;
 		checkValue(data);
 	}
-	
+
 	protected void onCallbackModify(final String value) {
 		if (value.isEmpty()) {
 			return;
@@ -124,7 +126,7 @@ public class Spin extends SpinBase {
 		final long value1 = Long.valueOf(value);
 		checkValue(value1);
 	}
-	
+
 	protected void onCallbackUp(final Boolean value) {
 		if (value) {
 			return;
@@ -132,32 +134,32 @@ public class Spin extends SpinBase {
 		final long data = this.propertyValue + this.propertyIncrement;
 		checkValue(data);
 	}
-	
+
 	protected void onChangePropertyIncrement() {
-		
+
 	}
-	
+
 	protected void onChangePropertyMantis() {
-		
+
 	}
-	
+
 	protected void onChangePropertyMax() {
 		checkValue(this.propertyValue);
 	}
-	
+
 	protected void onChangePropertyMin() {
 		checkValue(this.propertyValue);
 	}
-	
+
 	protected void onChangePropertyValue() {
 		markToRedraw();
 		if (this.widgetEntry == null) {
-			Log.error("Can not acces at entry ...");
+			LOGGER.error("Can not acces at entry ...");
 			return;
 		}
 		checkValue(this.propertyValue);
 	}
-	
+
 	public void setPropertyIncrement(final long propertyIncrement) {
 		if (this.propertyIncrement == propertyIncrement) {
 			return;
@@ -165,7 +167,7 @@ public class Spin extends SpinBase {
 		this.propertyIncrement = propertyIncrement;
 		onChangePropertyIncrement();
 	}
-	
+
 	public void setPropertyMantis(final int propertyMantis) {
 		if (this.propertyMantis == propertyMantis) {
 			return;
@@ -173,7 +175,7 @@ public class Spin extends SpinBase {
 		this.propertyMantis = propertyMantis;
 		onChangePropertyMantis();
 	}
-	
+
 	public void setPropertyMax(final long propertyMax) {
 		if (this.propertyMax == propertyMax) {
 			return;
@@ -181,7 +183,7 @@ public class Spin extends SpinBase {
 		this.propertyMax = propertyMax;
 		onChangePropertyMax();
 	}
-	
+
 	public void setPropertyMin(final long propertyMin) {
 		if (this.propertyMin == propertyMin) {
 			return;
@@ -189,7 +191,7 @@ public class Spin extends SpinBase {
 		this.propertyMin = propertyMin;
 		onChangePropertyMin();
 	}
-	
+
 	public void setPropertyValue(final long propertyValue) {
 		if (this.propertyValue == propertyValue) {
 			return;

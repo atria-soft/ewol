@@ -21,20 +21,22 @@ import org.atriasoft.etk.math.Vector3i;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.context.EwolContext;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.gale.backend3d.OpenGL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Windows basic interface
  */
 public class Windows extends Widget {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(Windows.class);
+
 	protected int colorBg = -1; //!< Default background color of the windows
-	
+
 	protected List<Widget> popUpWidgetList = new ArrayList<>();
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("file-color")
@@ -45,20 +47,20 @@ public class Windows extends Widget {
 	@AknotName("title")
 	@AknotDescription("Title of the windows")
 	public String propertyTitle = "No title"; //!< Current title of the windows
-	
+
 	protected ResourceColorFile resourceColor = null; //!< theme color property (name of file in @ref propertyColorConfiguration)
-	
+
 	protected Widget subWidget;
-	
+
 	// internal event at ewol system:
-	
+
 	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
-	
+
 	protected Windows() {
 		this.propertyCanFocus = true;
 		onChangePropertyColor();
 	}
-	
+
 	//!< List of pop-up displayed
 	@Override
 	public void drawWidgetTree(int level) {
@@ -73,15 +75,15 @@ public class Windows extends Widget {
 			}
 		}
 	}
-	
+
 	public Uri getPropertyColorConfiguration() {
 		return this.propertyColorConfiguration;
 	}
-	
+
 	public String getPropertyTitle() {
 		return this.propertyTitle;
 	}
-	
+
 	@Override
 	public EwolObject getSubObjectNamed(final String objectName) {
 		EwolObject tmpObject = super.getSubObjectNamed(objectName);
@@ -107,10 +109,10 @@ public class Windows extends Widget {
 		// not find ...
 		return null;
 	}
-	
+
 	@Override
 	public Widget getWidgetAtPos(final Vector3f pos) {
-		Log.verbose("Get widget at pos : " + pos);
+		LOGGER.trace("Get widget at pos : " + pos);
 		// calculate relative position
 		final Vector3f relativePos = relativePosition(pos);
 		// event go directly on the pop-up
@@ -124,16 +126,17 @@ public class Windows extends Widget {
 		// otherwise the event go to this widget ...
 		return this;
 	}
-	
+
 	protected void onChangePropertyColor() {
 		this.resourceColor = ResourceColorFile.create(this.propertyColorConfiguration);
 		if (this.resourceColor != null) {
 			this.colorBg = this.resourceColor.request("background");
 		} else {
-			Log.warning("Can not open the default color configuration file for the windows: " + this.propertyColorConfiguration);
+			LOGGER.warn("Can not open the default color configuration file for the windows: "
+					+ this.propertyColorConfiguration);
 		}
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		super.onChangeSize();
@@ -153,7 +156,7 @@ public class Windows extends Widget {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
@@ -165,7 +168,7 @@ public class Windows extends Widget {
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the number of pop-up
 	 * @return Count of pop-up
@@ -173,7 +176,7 @@ public class Windows extends Widget {
 	public int popUpCount() {
 		return this.popUpWidgetList.size();
 	}
-	
+
 	/**
 	 * Remove the pop-up on top.
 	 */
@@ -183,7 +186,7 @@ public class Windows extends Widget {
 		}
 		this.popUpWidgetList.remove(this.popUpWidgetList.size() - 1);
 	}
-	
+
 	/**
 	 * Add a pop-up on the Windows.
 	 * @param widget Widget to set on top of the pop-up.
@@ -191,7 +194,7 @@ public class Windows extends Widget {
 	public void popUpWidgetPush(final Widget widget) {
 		if (widget == null) {
 			// nothing to do an error appear :
-			Log.error("can not set widget pop-up (null pointer)");
+			LOGGER.error("can not set widget pop-up (null pointer)");
 			return;
 		}
 		this.popUpWidgetList.add(widget);
@@ -203,16 +206,16 @@ public class Windows extends Widget {
 		// TODO : it is dangerous to access directly to the system ...
 		EwolObject.getContext().resetIOEvent();
 	}
-	
+
 	//!< main sub-widget of the Windows.
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
-		Log.verbose("A child has been removed");
+		LOGGER.trace("A child has been removed");
 		ListIterator<Widget> it = this.popUpWidgetList.listIterator();
 		while (it.hasNext()) {
 			final Widget elem = it.next();
 			if (elem == child) {
-				Log.verbose("    Find it ...");
+				LOGGER.trace("    Find it ...");
 				if (elem != null) {
 					elem.removeParent();
 				}
@@ -222,7 +225,7 @@ public class Windows extends Widget {
 			}
 		}
 		if (this.subWidget == child) {
-			Log.verbose("    Find it ... 2");
+			LOGGER.trace("    Find it ... 2");
 			if (this.subWidget == null) {
 				return;
 			}
@@ -231,7 +234,7 @@ public class Windows extends Widget {
 			markToRedraw();
 		}
 	}
-	
+
 	public void setPropertyColorConfiguration(final Uri propertyColorConfiguration) {
 		if (this.propertyColorConfiguration.equals(propertyColorConfiguration)) {
 			return;
@@ -239,7 +242,7 @@ public class Windows extends Widget {
 		this.propertyColorConfiguration = propertyColorConfiguration;
 		onChangePropertyColor();
 	}
-	
+
 	public void setPropertyTitle(final String propertyTitle) {
 		if (this.propertyTitle.contentEquals(propertyTitle)) {
 			return;
@@ -249,17 +252,17 @@ public class Windows extends Widget {
 		if (context.getWindows() == this) {
 			context.setTitle(propertyTitle);
 		} else {
-			Log.info("Set title is delayed ...");
+			LOGGER.info("Set title is delayed ...");
 		}
 	}
-	
+
 	/**
 	 * Set the main widget of the application.
 	 * @param widget Widget to set in the windows.
 	 */
 	public void setSubWidget(final Widget widget) {
 		if (this.subWidget != null) {
-			Log.info("Remove current main windows Widget...");
+			LOGGER.info("Remove current main windows Widget...");
 			this.subWidget.removeParent();
 			this.subWidget = null;
 		}
@@ -270,9 +273,9 @@ public class Windows extends Widget {
 		// Regenerate the size calculation :
 		onChangeSize();
 	}
-	
+
 	public void sysDraw() {
-		//Log.verbose("Draw on " + this.size);
+		//LOGGER.trace("Draw on " + this.size);
 		// set the size of the open GL system
 		OpenGL.setViewPort(Vector3f.ZERO, this.size);
 		OpenGL.disable(OpenGL.Flag.flag_dither);
@@ -283,11 +286,11 @@ public class Windows extends Widget {
 		OpenGL.disable(OpenGL.Flag.flag_texture2D);
 		OpenGL.disable(OpenGL.Flag.flag_depthTest);
 		OpenGL.disable(OpenGL.Flag.flag_cullFace);
-		
+
 		OpenGL.enable(OpenGL.Flag.flag_blend);
 		//OpenGL.enable(OpenGL.Flag.flag_cullFace);
 		OpenGL.blendFuncAuto();
-		
+
 		// clear the matrix system :
 		OpenGL.setBasicMatrix(Matrix4f.IDENTITY);
 		final Vector3i tmpSize = new Vector3i((int) this.size.x(), (int) this.size.y(), (int) this.size.z());
@@ -295,7 +298,7 @@ public class Windows extends Widget {
 		systemDraw(displayProp);
 		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
-	
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		super.systemDraw(displayProp);
@@ -308,19 +311,19 @@ public class Windows extends Widget {
 		OpenGL.clearColor(Color.PURPLE);
 		OpenGL.clear(OpenGL.ClearFlag.clearFlag_colorBuffer);
 		OpenGL.clear(OpenGL.ClearFlag.clearFlag_depthBuffer);
-		
-		//Log.warning(" WINDOWS draw on " + this.currentDrawId);
+
+		//LOGGER.warn(" WINDOWS draw on " + this.currentDrawId);
 		// first display the windows on the display
 		if (this.subWidget != null) {
 			this.subWidget.systemDraw(displayProp);
-			//Log.debug("Draw Windows");
+			//LOGGER.debug("Draw Windows");
 		}
-		
+
 		// second display the pop-up
 		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.systemDraw(displayProp);
-				//Log.debug("Draw Pop-up");
+				//LOGGER.debug("Draw Pop-up");
 			}
 		}
 	}

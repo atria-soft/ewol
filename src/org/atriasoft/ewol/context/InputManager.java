@@ -11,12 +11,13 @@ import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.event.InputSystem;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.widget.Widget;
 import org.atriasoft.ewol.widget.Windows;
 import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * internal structure
@@ -27,6 +28,7 @@ class InputLimit {
 }
 
 class InputManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(InputManager.class);
 	private static final long MILLI_TO_DURATION = 1000000;
 	private static final long SECONDS_TO_DURATION = 1000000000;
 	private static final int MAX_MANAGE_INPUT = 15;
@@ -36,49 +38,50 @@ class InputManager {
 	private final InputPoperty[] eventInputSaved = new InputPoperty[InputManager.MAX_MANAGE_INPUT];
 	private final InputLimit eventMouseLimit = new InputLimit();
 	private final InputPoperty[] eventMouseSaved = new InputPoperty[InputManager.MAX_MANAGE_INPUT];
-	
+
 	// special grab pointer mode :
 	private WeakReference<Widget> grabWidget = null; //!< widget that grab the curent pointer.
 	private KeySpecial specialKey;
-	
+
 	public InputManager(final EwolContext context) {
 		this.context = context;
-		
+
 		setDpi(200);
-		Log.info("Init (start)");
+		LOGGER.info("Init (start)");
 		for (int iii = 0; iii < InputManager.MAX_MANAGE_INPUT; iii++) {
 			// remove the property of this input ...
 			this.eventInputSaved[iii] = new InputPoperty();
 			this.eventMouseSaved[iii] = new InputPoperty();
 		}
-		
-		Log.info("Init (end)");
+
+		LOGGER.info("Init (end)");
 	}
-	
+
 	public void abortElement(final InputPoperty[] eventTable, final int idInput, final KeyType type) {
 		if (eventTable == null) {
 			return;
 		}
 		if (eventTable[idInput].isUsed) {
-			localEventInput(type, eventTable[idInput].curentWidgetEvent.get(), eventTable[idInput].destinationInputId, KeyStatus.abort, eventTable[idInput].posEvent);
+			localEventInput(type, eventTable[idInput].curentWidgetEvent.get(), eventTable[idInput].destinationInputId,
+					KeyStatus.abort, eventTable[idInput].posEvent);
 		}
 	}
-	
+
 	private void calculateLimit() {
 		this.eventInputLimit.sepatateTime = 300 * InputManager.MILLI_TO_DURATION;
 		this.eventInputLimit.dpiOffset = this.dpi * 100;
 		this.eventMouseLimit.sepatateTime = 300 * InputManager.MILLI_TO_DURATION;
 		this.eventMouseLimit.dpiOffset = (int) (this.dpi * 0.1f);
 	}
-	
+
 	public void cleanElement(final InputPoperty[] eventMouseSaved2, final int idInput) {
 		if (eventMouseSaved2 == null) {
 			return;
 		}
-		//Log.info("CleanElement[" + idInput + "] = @" + (long)eventTable);
+		//LOGGER.info("CleanElement[" + idInput + "] = @" + (long)eventTable);
 		eventMouseSaved2[idInput].clear();
 	}
-	
+
 	/**
 	 * This fonction lock the pointer properties to move in relative instead of absolute
 	 * @param widget The widget that lock the pointer events
@@ -94,7 +97,7 @@ class InputManager {
 		                                          widget.getSize().y/2.0f) );
 		*/
 	}
-	
+
 	/**
 	 * generate the event on the destinated widget.
 	 * @param type Type of the event that might be sended.
@@ -104,12 +107,18 @@ class InputManager {
 	 * @param pos position of the event
 	 * @return true if event has been greped
 	 */
-	public boolean localEventInput(final KeyType type, final Widget destWidget, final int idInput, final KeyStatus status, final Vector2f pos) {
+	public boolean localEventInput(
+			final KeyType type,
+			final Widget destWidget,
+			final int idInput,
+			final KeyStatus status,
+			final Vector2f pos) {
 		if (destWidget != null) {
 			if (type == KeyType.mouse || type == KeyType.finger) {
 				// create the system Event :
 				// TODO : set the real ID ...
-				final InputSystem tmpEventSystem = new InputSystem(type, status, idInput, pos, destWidget, 0, this.specialKey);
+				final InputSystem tmpEventSystem = new InputSystem(type, status, idInput, pos, destWidget, 0,
+						this.specialKey);
 				// generate the event :
 				return destWidget.systemEventInput(tmpEventSystem);
 			}
@@ -117,7 +126,7 @@ class InputManager {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * convert the system event id in the correct EWOL id depending of the system management mode
 	 *        This function find the next input id unused on the specifiic widget
@@ -144,10 +153,10 @@ class InputManager {
 		}
 		return realInputId;
 	}
-	
+
 	// note if id<0  == > the it was finger event ...
 	public void motion(final KeyType type, final int pointerID, final Vector2f pos) {
-		//Log.debug("motion event : " + type + " " + pointerID + " " + pos);
+		//LOGGER.debug("motion event : " + type + " " + pointerID + " " + pos);
 		if (InputManager.MAX_MANAGE_INPUT <= pointerID) {
 			// reject pointer  == > out of IDs...
 			return;
@@ -158,7 +167,7 @@ class InputManager {
 		} else if (type == KeyType.finger) {
 			eventTable = this.eventInputSaved;
 		} else {
-			Log.error("Unknown type of event");
+			LOGGER.error("Unknown type of event");
 			return;
 		}
 		if (pointerID > InputManager.MAX_MANAGE_INPUT || pointerID < 0) {
@@ -177,13 +186,17 @@ class InputManager {
 			} else if (tmpWindows != null) {
 				tmpWidget = tmpWindows.getWidgetAtPos(new Vector3f(pos.x(), pos.y(), 0));
 			}
-			if (eventTable[pointerID].curentWidgetEvent != null && tmpWidget != eventTable[pointerID].curentWidgetEvent.get()
-					|| (eventTable[pointerID].isInside && (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y()
-							|| (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x() || (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()))) {
+			if (eventTable[pointerID].curentWidgetEvent != null
+					&& tmpWidget != eventTable[pointerID].curentWidgetEvent.get()
+					|| (eventTable[pointerID].isInside && (eventTable[pointerID].origin.x() > pos.x()
+							|| eventTable[pointerID].origin.y() > pos.y()
+							|| (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
+							|| (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()))) {
 				eventTable[pointerID].isInside = false;
-				//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [LEAVE] " + pos);
+				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [LEAVE] " + pos);
 				eventTable[pointerID].posEvent = pos;
-				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(), eventTable[pointerID].destinationInputId, KeyStatus.leave, pos);
+				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
+						eventTable[pointerID].destinationInputId, KeyStatus.leave, pos);
 			}
 			if (!eventTable[pointerID].isInside) {
 				// set the element inside ...
@@ -197,35 +210,41 @@ class InputManager {
 					eventTable[pointerID].size = tmpWidget.getSize();
 				}
 				eventTable[pointerID].destinationInputId = 0;
-				//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [ENTER] " + pos);
+				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [ENTER] " + pos);
 				eventTable[pointerID].posEvent = pos;
 				localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId, KeyStatus.enter, pos);
 			}
-			//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [MOVE]  " + pos);
+			//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [MOVE]  " + pos);
 			eventTable[pointerID].posEvent = pos;
 			localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId, KeyStatus.move, pos);
 		} else if (eventTable[pointerID].isUsed) {
 			if (eventTable[pointerID].isInside) {
-				if (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y() || (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
+				if (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y()
+						|| (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
 						|| (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()) {
 					eventTable[pointerID].isInside = false;
-					//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [LEAVE] " + pos);
+					//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [LEAVE] " + pos);
 					eventTable[pointerID].posEvent = pos;
-					localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(), eventTable[pointerID].destinationInputId, KeyStatus.leave, pos);
+					localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
+							eventTable[pointerID].destinationInputId, KeyStatus.leave, pos);
 				}
-			} else if ((eventTable[pointerID].origin.x() <= pos.x() && (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) >= pos.x())
-					&& (eventTable[pointerID].origin.y() <= pos.y() && (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) >= pos.y())) {
+			} else if ((eventTable[pointerID].origin.x() <= pos.x()
+					&& (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) >= pos.x())
+					&& (eventTable[pointerID].origin.y() <= pos.y()
+							&& (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) >= pos.y())) {
 				eventTable[pointerID].isInside = true;
-				//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [ENTER] " + pos);
+				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [ENTER] " + pos);
 				eventTable[pointerID].posEvent = pos;
-				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(), eventTable[pointerID].destinationInputId, KeyStatus.enter, pos);
+				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
+						eventTable[pointerID].destinationInputId, KeyStatus.enter, pos);
 			}
-			//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [MOVE]  " + pos);
+			//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [MOVE]  " + pos);
 			eventTable[pointerID].posEvent = pos;
-			localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(), eventTable[pointerID].destinationInputId, KeyStatus.move, pos);
+			localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
+					eventTable[pointerID].destinationInputId, KeyStatus.move, pos);
 		}
 	}
-	
+
 	/**
 	 * a new layer on the windows is set  == > might remove all the property of the current element ...
 	 */
@@ -238,23 +257,23 @@ class InputManager {
 			cleanElement(this.eventMouseSaved, iii);
 		}
 	}
-	
+
 	public void setDpi(final int newDPI) {
 		this.dpi = newDPI;
 		// recalculate the DPI system ...
 		calculateLimit();
 	}
-	
+
 	public void setLastKeyboardSpecial(final KeySpecial specialKey) {
 		this.specialKey = specialKey;
 	}
-	
+
 	public void state(final KeyType type, final int pointerID, final boolean isDown, final Vector2f pos) {
 		if (pointerID >= InputManager.MAX_MANAGE_INPUT) {
 			// reject pointer  == > out of IDs...
 			return;
 		}
-		//Log.debug("event pointerId=" + pointerID);
+		//LOGGER.debug("event pointerId=" + pointerID);
 		// convert position in open-GL coordonates ...
 		InputPoperty[] eventTable = null;
 		InputLimit localLimit;
@@ -265,7 +284,7 @@ class InputManager {
 			eventTable = this.eventInputSaved;
 			localLimit = this.eventInputLimit;
 		} else {
-			Log.error("Unknown type of event");
+			LOGGER.error("Unknown type of event");
 			return;
 		}
 		if (pointerID > InputManager.MAX_MANAGE_INPUT || pointerID <= 0) {
@@ -275,14 +294,15 @@ class InputManager {
 		// get the curent time ...
 		final long currentTime = System.nanoTime();
 		final Windows tmpWindows = this.context.getWindows();
-		
+
 		if (isDown) {
-			//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN] " + pos);
+			//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN] " + pos);
 			if (eventTable[pointerID].isUsed) {
 				// we have an event previously ... check delay between click and offset position
 				if (currentTime - eventTable[pointerID].lastTimeEvent > localLimit.sepatateTime) {
 					cleanElement(eventTable, pointerID);
-				} else if (FMath.abs(eventTable[pointerID].downStart.x() - pos.x()) >= localLimit.dpiOffset || FMath.abs(eventTable[pointerID].downStart.y() - pos.y()) >= localLimit.dpiOffset) {
+				} else if (FMath.abs(eventTable[pointerID].downStart.x() - pos.x()) >= localLimit.dpiOffset
+						|| FMath.abs(eventTable[pointerID].downStart.y() - pos.y()) >= localLimit.dpiOffset) {
 					cleanElement(eventTable, pointerID);
 				}
 			}
@@ -290,9 +310,10 @@ class InputManager {
 				// save start time
 				eventTable[pointerID].lastTimeEvent = currentTime;
 				// generate DOWN Event
-				//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN]   " + pos);
+				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN]   " + pos);
 				eventTable[pointerID].posEvent = pos;
-				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(), eventTable[pointerID].destinationInputId, KeyStatus.down, pos);
+				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
+						eventTable[pointerID].destinationInputId, KeyStatus.down, pos);
 			} else {
 				// Mark it used :
 				eventTable[pointerID].isUsed = true;
@@ -312,9 +333,9 @@ class InputManager {
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 						/*
 						if (tmpWidget != null) {
-							Log.debug("Get widget at pos=" + pos + " type: " + tmpWidget.getObjectType());
+							LOGGER.debug("Get widget at pos=" + pos + " type: " + tmpWidget.getObjectType());
 						} else {
-							Log.debug("Get widget at pos=" + pos + " NO WIDGET");
+							LOGGER.debug("Get widget at pos=" + pos + " NO WIDGET");
 						}
 						*/
 					}
@@ -330,35 +351,36 @@ class InputManager {
 					eventTable[pointerID].destinationInputId = -1;
 				}
 				// generate DOWN Event
-				//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN]   " + pos);
+				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN]   " + pos);
 				eventTable[pointerID].posEvent = pos;
 				localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId, KeyStatus.down, pos);
 			}
 		} else {
-			//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [UP]     " + pos);
+			//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [UP]     " + pos);
 			final Widget tmpWidget = eventTable[pointerID].curentWidgetEvent.get();
 			if (!eventTable[pointerID].isUsed) {
 				// bad case ... ???
-				Log.debug("Up event without previous down ... ");
+				LOGGER.debug("Up event without previous down ... ");
 				// Mark it un-used :
 				eventTable[pointerID].isUsed = false;
 				// revove the widget ...
 				eventTable[pointerID].curentWidgetEvent = null;
 			} else if (tmpWidget == null) {
 				// The widget has been removed:
-				//Log.debug("    Object Removed ...");
+				//LOGGER.debug("    Object Removed ...");
 				// Mark it un-used :
 				eventTable[pointerID].isUsed = false;
 				// revove the widget ...
 				eventTable[pointerID].curentWidgetEvent = null;
 			} else {
 				// generate UP Event
-				//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [UP]     " + pos);
+				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [UP]     " + pos);
 				eventTable[pointerID].posEvent = pos;
 				// send up event after the single event to prevent multiple widget getting elements
 				localEventInput(type, tmpWidget, pointerID, KeyStatus.up, pos);
 				// generate event (single)
-				if (FMath.abs(eventTable[pointerID].downStart.x() - pos.x()) < localLimit.dpiOffset && FMath.abs(eventTable[pointerID].downStart.y() - pos.y()) < localLimit.dpiOffset) {
+				if (FMath.abs(eventTable[pointerID].downStart.x() - pos.x()) < localLimit.dpiOffset
+						&& FMath.abs(eventTable[pointerID].downStart.y() - pos.y()) < localLimit.dpiOffset) {
 					// Save current position :
 					eventTable[pointerID].downStart = pos;
 					// save start time
@@ -369,12 +391,14 @@ class InputManager {
 						nbClickMax = 5;
 					}
 					// in grab mode the single to quinte event are not generated ....
-					if ((this.grabWidget == null || this.grabWidget.get() == null || type != KeyType.mouse) && eventTable[pointerID].nbClickEvent < nbClickMax) {
+					if ((this.grabWidget == null || this.grabWidget.get() == null || type != KeyType.mouse)
+							&& eventTable[pointerID].nbClickEvent < nbClickMax) {
 						// generate event SINGLE :
 						eventTable[pointerID].nbClickEvent++;
-						//Log.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [" + eventTable[pointerID].nbClickEvent + "] " + pos);
+						//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [" + eventTable[pointerID].nbClickEvent + "] " + pos);
 						eventTable[pointerID].posEvent = pos;
-						localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId, KeyStatus.pressCount(eventTable[pointerID].nbClickEvent), pos);
+						localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId,
+								KeyStatus.pressCount(eventTable[pointerID].nbClickEvent), pos);
 						if (eventTable[pointerID].nbClickEvent >= nbClickMax) {
 							eventTable[pointerID].nbClickEvent = 0;
 						}
@@ -391,7 +415,7 @@ class InputManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * This is to transfert the event from one widget to another one
 	 * @param source the widget where the event came from
@@ -406,28 +430,32 @@ class InputManager {
 			Widget tmpWidget = this.eventInputSaved[iii].curentWidgetEvent.get();
 			if (tmpWidget == source) {
 				// inform the widget that it does not receive the event now
-				//Log.debug("GUI : Input ID=" + iii + " == >" + this.eventInputSaved[iii].destinationInputId + " [EVENTINPUTTYPEABORT] " + this.eventInputSaved[iii].posEvent);
-				localEventInput(KeyType.finger, tmpWidget, this.eventInputSaved[iii].destinationInputId, KeyStatus.abort, this.eventInputSaved[iii].posEvent);
+				//LOGGER.debug("GUI : Input ID=" + iii + " == >" + this.eventInputSaved[iii].destinationInputId + " [EVENTINPUTTYPEABORT] " + this.eventInputSaved[iii].posEvent);
+				localEventInput(KeyType.finger, tmpWidget, this.eventInputSaved[iii].destinationInputId,
+						KeyStatus.abort, this.eventInputSaved[iii].posEvent);
 				// set the new widget ...
 				this.eventInputSaved[iii].curentWidgetEvent = new WeakReference<>(destination);
 				// inform the widget that he receive the event property now...
-				//Log.debug("GUI : Input ID=" + iii + " == >" + this.eventInputSaved[iii].destinationInputId + " [EVENTINPUTTYPETRANSFERT] " + this.eventInputSaved[iii].posEvent);
-				localEventInput(KeyType.finger, destination, this.eventInputSaved[iii].destinationInputId, KeyStatus.transfer, this.eventInputSaved[iii].posEvent);
+				//LOGGER.debug("GUI : Input ID=" + iii + " == >" + this.eventInputSaved[iii].destinationInputId + " [EVENTINPUTTYPETRANSFERT] " + this.eventInputSaved[iii].posEvent);
+				localEventInput(KeyType.finger, destination, this.eventInputSaved[iii].destinationInputId,
+						KeyStatus.transfer, this.eventInputSaved[iii].posEvent);
 			}
 			tmpWidget = this.eventMouseSaved[iii].curentWidgetEvent.get();
 			if (tmpWidget == source) {
 				// inform the widget that it does not receive the event now
-				//Log.debug("GUI : Input ID=" + iii + " == >" + this.eventMouseSaved[iii].destinationInputId + " [EVENTINPUTTYPEABORT] " + this.eventMouseSaved[iii].posEvent);
-				localEventInput(KeyType.mouse, tmpWidget, this.eventMouseSaved[iii].destinationInputId, KeyStatus.abort, this.eventMouseSaved[iii].posEvent);
+				//LOGGER.debug("GUI : Input ID=" + iii + " == >" + this.eventMouseSaved[iii].destinationInputId + " [EVENTINPUTTYPEABORT] " + this.eventMouseSaved[iii].posEvent);
+				localEventInput(KeyType.mouse, tmpWidget, this.eventMouseSaved[iii].destinationInputId, KeyStatus.abort,
+						this.eventMouseSaved[iii].posEvent);
 				// set the new widget ...
 				this.eventMouseSaved[iii].curentWidgetEvent = new WeakReference<>(destination);
 				// inform the widget that he receive the event property now...
-				//Log.debug("GUI : Input ID=" + iii + " == >" + this.eventMouseSaved[iii].destinationInputId + " [EVENTINPUTTYPETRANSFERT] " + this.eventMouseSaved[iii].posEvent);
-				localEventInput(KeyType.mouse, destination, this.eventMouseSaved[iii].destinationInputId, KeyStatus.transfer, this.eventMouseSaved[iii].posEvent);
+				//LOGGER.debug("GUI : Input ID=" + iii + " == >" + this.eventMouseSaved[iii].destinationInputId + " [EVENTINPUTTYPETRANSFERT] " + this.eventMouseSaved[iii].posEvent);
+				localEventInput(KeyType.mouse, destination, this.eventMouseSaved[iii].destinationInputId,
+						KeyStatus.transfer, this.eventMouseSaved[iii].posEvent);
 			}
 		}
 	}
-	
+
 	/**
 	 * This function un-lock the pointer properties to move in relative instead of absolute
 	 */
@@ -435,7 +463,7 @@ class InputManager {
 		this.grabWidget = null;
 		// TODO this.context.grabPointerEvents(false, Vector3f(0,0));
 	}
-	
+
 }
 
 /**
@@ -453,7 +481,7 @@ class InputPoperty {
 	public Vector3f origin = Vector3f.ZERO;
 	public Vector2f posEvent = Vector2f.ZERO;
 	public Vector3f size = Vector3f.MAX_VALUE;
-	
+
 	public void clear() {
 		this.isUsed = false;
 		this.destinationInputId = 0;
@@ -466,6 +494,6 @@ class InputPoperty {
 		this.isInside = false;
 		this.nbClickEvent = 0;
 		this.posEvent = Vector2f.ZERO;
-		
+
 	}
 }

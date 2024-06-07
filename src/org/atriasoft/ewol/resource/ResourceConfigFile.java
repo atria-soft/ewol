@@ -12,8 +12,9 @@ import org.atriasoft.ejson.Ejson;
 import org.atriasoft.ejson.model.JsonNode;
 import org.atriasoft.ejson.model.JsonObject;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.gale.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class ListElementConfig {
 	public final String name;
@@ -26,6 +27,8 @@ class ListElementConfig {
 }
 
 public class ResourceConfigFile extends Resource {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceConfigFile.class);
+
 	/**
 	 * keep the resource pointer.
 	 * @note Never free this pointer by your own...
@@ -42,7 +45,8 @@ public class ResourceConfigFile extends Resource {
 				resource2.keep();
 				return tmpp;
 			}
-			Log.critical("Request resource file : '" + name + "' With the wrong type (dynamic cast error)");
+			LOGGER.error("Request resource file : '" + name + "' With the wrong type (dynamic cast error)");
+			System.exit(-1);
 			return null;
 		}
 		final ResourceConfigFile resource = new ResourceConfigFile(name);
@@ -60,7 +64,7 @@ public class ResourceConfigFile extends Resource {
 	
 	protected ResourceConfigFile(final Uri uri) {
 		super(uri.toString());
-		Log.debug("SFP : load '" + uri + "'");
+		LOGGER.debug("SFP : load '" + uri + "'");
 		reload();
 		
 	}

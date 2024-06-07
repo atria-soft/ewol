@@ -2,8 +2,9 @@ package org.atriasoft.ewol.widget;
 
 import java.lang.ref.WeakReference;
 
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.exml.model.XmlElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -12,7 +13,8 @@ import org.atriasoft.exml.model.XmlElement;
  */
 
 public class WidgetManager {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(WidgetManager.class);
+
 	// ---------------------------------------------
 	// --  Factory area
 	// ---------------------------------------------
@@ -21,14 +23,14 @@ public class WidgetManager {
 	// --  Focus area
 	// ---------------------------------------------
 	private WeakReference<Widget> focusWidgetDefault; //!< default focus when no current focus is set
-	
+
 	private Runnable funcRedrawNeeded = null;
-	
+
 	// ---------------------------------------------
 	// --  Something change area (TODO maybe set it in the windows)
 	// ---------------------------------------------
 	private boolean haveRedraw = true; //!< something request a redraw
-	
+
 	/**
 	 * Create a widget with his name.
 	 * @param name Name of the widget to create.
@@ -48,11 +50,11 @@ public class WidgetManager {
 					return null;
 				}
 			}
-			Log.warning("try to create an UnExistant widget : " + nameLower);
+			LOGGER.warn("try to create an UnExistant widget : " + nameLower);
 			return null;
 		}
 		*/
-		
+
 	public WidgetManager() {
 		/*
 		this.creatorList.put("Button", Button.class);
@@ -78,7 +80,7 @@ public class WidgetManager {
 		this.creatorList.put("Spin", Spin.class);
 		 */
 	}
-	
+
 	/**
 	 * @throws Exception
 	 * add a factory of a specific widget.
@@ -93,13 +95,13 @@ public class WidgetManager {
 		//		final String nameLower = name.toLowerCase();
 		//		final Class<?> it = WidgetXmlFactory.creatorList.get(nameLower);
 		//		if (it != null) {
-		//			Log.warning("Replace Creator of a specify widget : " + nameLower);
+		//			LOGGER.warn("Replace Creator of a specify widget : " + nameLower);
 		//			return;
 		//		}
 		//		this.creatorList.put(nameLower, klass);
 		//		// TODO check constructors ...
 	}
-	
+
 	/**
 	 * Create a widget with his name.
 	 * @param name Name of the widget to create.
@@ -117,10 +119,10 @@ public class WidgetManager {
 		//				return null;
 		//			}
 		//		}
-		Log.warning("try to create an UnExistant widget : " + nameLower);
+		LOGGER.warn("try to create an UnExistant widget : " + nameLower);
 		return null;
 	}
-	
+
 	public Widget create(final String name, final XmlElement node) {
 		final String nameLower = name.toLowerCase();
 		//		final Class<?> it = this.creatorList.get(nameLower);
@@ -134,10 +136,10 @@ public class WidgetManager {
 		//				return null;
 		//			}
 		//		}
-		Log.warning("try to create an UnExistant widget : " + nameLower);
+		LOGGER.warn("try to create an UnExistant widget : " + nameLower);
 		return null;
 	}
-	
+
 	/**
 	 * Check if an Widget exist
 	 * @param name Name of the widget to check.
@@ -148,7 +150,7 @@ public class WidgetManager {
 		//		return this.creatorList.get(name.toLowerCase()) != null;
 		return false;
 	}
-	
+
 	/**
 	 * Get the current Focused widget.
 	 * @return The pointer on the current focused element.
@@ -156,7 +158,7 @@ public class WidgetManager {
 	public Widget focusGet() {
 		return this.focusWidgetCurrent.get();
 	}
-	
+
 	/**
 	 * Request a focus on a specify widget.
 	 * @param newWidget Widget that might get the focus.
@@ -166,7 +168,7 @@ public class WidgetManager {
 			// nothing to do ...
 			return;
 		}
-		Log.debug("focusKeep=" + newWidget.getId());
+		LOGGER.debug("focusKeep=" + newWidget.getId());
 		//elog::displayBacktrace();
 		Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (newWidget == focusWidgetCurrent) {
@@ -174,21 +176,21 @@ public class WidgetManager {
 			return;
 		}
 		if (focusWidgetCurrent != null) {
-			Log.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
+			LOGGER.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
 			focusWidgetCurrent.rmFocus();
 			focusWidgetCurrent = null;
 		}
 		if (!newWidget.propertyCanFocus) {
-			Log.debug("Widget can not have focus, id=" + newWidget.getId());
+			LOGGER.debug("Widget can not have focus, id=" + newWidget.getId());
 			return;
 		}
 		this.focusWidgetCurrent = new WeakReference<>(newWidget);
 		if (newWidget != null) {
-			Log.debug("Set focus on WidgetID=" + newWidget.getId());
+			LOGGER.debug("Set focus on WidgetID=" + newWidget.getId());
 			newWidget.setFocus();
 		}
 	}
-	
+
 	/**
 	 * Release the current focus (back on default if possible).
 	 */
@@ -200,24 +202,24 @@ public class WidgetManager {
 			return;
 		}
 		if (focusWidgetCurrent != null) {
-			Log.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
+			LOGGER.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
 			focusWidgetCurrent.rmFocus();
 		}
 		this.focusWidgetCurrent = this.focusWidgetDefault;
 		focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (focusWidgetCurrent != null) {
-			Log.debug("Set focus on WidgetID=" + focusWidgetCurrent.getId());
+			LOGGER.debug("Set focus on WidgetID=" + focusWidgetCurrent.getId());
 			focusWidgetCurrent.setFocus();
 		}
 	}
-	
+
 	/**
 	 * Set the default focus when none selected.
 	 * @param newWidget Widget that might get the focus (when nothing else).
 	 */
 	public void focusSetDefault(final Widget newWidget) {
 		if ((newWidget != null) && (!newWidget.propertyCanFocus)) {
-			Log.verbose("Widget can not have focus, id=" + newWidget.getId());
+			LOGGER.trace("Widget can not have focus, id=" + newWidget.getId());
 			return;
 		}
 		Widget focusWidgetDefault = null;
@@ -230,18 +232,18 @@ public class WidgetManager {
 		}
 		if (focusWidgetDefault == focusWidgetCurrent) {
 			if (focusWidgetCurrent != null) {
-				Log.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
+				LOGGER.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
 				focusWidgetCurrent.rmFocus();
 			}
 			this.focusWidgetCurrent = new WeakReference<>(newWidget);
 			if (newWidget != null) {
-				Log.debug("Set focus on WidgetID=" + newWidget.getId());
+				LOGGER.debug("Set focus on WidgetID=" + newWidget.getId());
 				newWidget.setFocus();
 			}
 		}
 		this.focusWidgetDefault = new WeakReference<>(newWidget);
 	}
-	
+
 	/**
 	 * Check if a redraw has been requested (set the local value back at false)
 	 * @return true if something to be redraw
@@ -251,7 +253,7 @@ public class WidgetManager {
 		this.haveRedraw = false;
 		return tmp;
 	}
-	
+
 	/**
 	 * Get the list of all Widget that can be created.
 	 * @return Separate with ',' string list.
@@ -260,7 +262,7 @@ public class WidgetManager {
 		//return this.creatorList.keySet().toString();
 		return "";
 	}
-	
+
 	/**
 	 * Mark the display to redraw
 	 */
@@ -273,7 +275,7 @@ public class WidgetManager {
 			this.funcRedrawNeeded.run();
 		}
 	}
-	
+
 	/**
 	 * Set a callback when we need redraw the display (need by MacOs)
 	 * @param func function to call
@@ -281,5 +283,5 @@ public class WidgetManager {
 	public void setCallbackonRedrawNeeded(final Runnable func) {
 		this.funcRedrawNeeded = func;
 	}
-	
+
 }

@@ -12,21 +12,23 @@ import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.object.EwolObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * @ingroup ewolWidgetGroup
  * the Cotainer widget is a widget that have an only one subWidget
  */
 public class Container extends Widget {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Container.class);
 	protected Widget subWidget = null;
-	
+
 	/**
 	 * Constructor
 	 */
 	public Container() {}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -37,9 +39,9 @@ public class Container extends Widget {
 			final Vector3f min = this.subWidget.getCalculateMinSize();
 			this.minSize = Vector3f.max(this.minSize, min);
 		}
-		Log.warning("[{}] Result min size : {}", getId(), this.minSize);
+		LOGGER.warn("[{}] Result min size : {}", getId(), this.minSize);
 	}
-	
+
 	@Override
 	public void drawWidgetTree(int level) {
 		super.drawWidgetTree(level);
@@ -48,7 +50,7 @@ public class Container extends Widget {
 			this.subWidget.drawWidgetTree(level);
 		}
 	}
-	
+
 	@Override
 	public EwolObject getSubObjectNamed(final String objectName) {
 		final EwolObject tmpObject = super.getSubObjectNamed(objectName);
@@ -60,7 +62,7 @@ public class Container extends Widget {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * get the main node widget
 	 * @return the requested pointer on the node
@@ -72,7 +74,7 @@ public class Container extends Widget {
 	public Widget getSubWidget() {
 		return this.subWidget;
 	}
-	
+
 	@Override
 	public Widget getWidgetAtPos(final Vector3f pos) {
 		if (!this.propertyHide) {
@@ -82,7 +84,7 @@ public class Container extends Widget {
 		}
 		return null;
 	}
-	
+
 	//	@Override
 	//	public boolean loadXML(final XmlElement node) {
 	//		if (node == null) {
@@ -100,34 +102,34 @@ public class Container extends Widget {
 	//			}
 	//			XmlElement pNode = it.toElement();
 	//			String widgetName = pNode.getValue();
-	//			Log.verbose("[" + getId() + "] t=" + getClass().getCanonicalName() + " Load node name : '" + widgetName + "'");
+	//			LOGGER.trace("[" + getId() + "] t=" + getClass().getCanonicalName() + " Load node name : '" + widgetName + "'");
 	//			if (!getWidgetManager().exist(widgetName)) {
-	//				Log.error("Unknown basic node='" + widgetName + "' not in : [" + getWidgetManager().list() + "]");
+	//				LOGGER.error("Unknown basic node='" + widgetName + "' not in : [" + getWidgetManager().list() + "]");
 	//				continue;
 	//			}
 	//			if (getSubWidget() != null) {
-	//				Log.error("Can only have one subWidget ??? node='" + widgetName + "'");
+	//				LOGGER.error("Can only have one subWidget ??? node='" + widgetName + "'");
 	//				continue;
 	//			}
-	//			Log.debug("try to create subwidget : '" + widgetName + "'");
+	//			LOGGER.debug("try to create subwidget : '" + widgetName + "'");
 	//			Widget tmpWidget = getWidgetManager().create(widgetName, pNode);
 	//			if (tmpWidget == null) {
-	//				Log.error("Can not create the widget : '" + widgetName + "'");
+	//				LOGGER.error("Can not create the widget : '" + widgetName + "'");
 	//				continue;
 	//			}
 	//			// add widget :
 	//			setSubWidget(tmpWidget);
 	//			if (!tmpWidget.loadXML(pNode)) {
-	//				Log.error("can not load widget properties : '" + widgetName + "'");
+	//				LOGGER.error("can not load widget properties : '" + widgetName + "'");
 	//				return false;
 	//			}
 	//		}
 	//		if (node.getNodes().size() != 0 && this.subWidget == null) {
-	//			Log.warning("Load container with no data inside");
+	//			LOGGER.warn("Load container with no data inside");
 	//		}
 	//		return true;
 	//	}
-	
+
 	@Override
 	public void onChangeSize() {
 		super.onChangeSize();
@@ -145,14 +147,14 @@ public class Container extends Widget {
 		this.subWidget.setSize(this.size);
 		this.subWidget.onChangeSize();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
 			this.subWidget.systemRegenerateDisplay();
 		}
 	}
-	
+
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		if (this.subWidget != child) {
@@ -165,7 +167,7 @@ public class Container extends Widget {
 		this.subWidget = null;
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void setOffset(final Vector3f newVal) {
 		if (this.offset.equals(newVal)) {
@@ -174,9 +176,9 @@ public class Container extends Widget {
 		super.setOffset(newVal);
 		// recalculate the new sise and position of sub widget ...
 		onChangeSize();
-		
+
 	}
-	
+
 	/**
 	 * set the subWidget node widget.
 	 * @param newWidget The widget to add.
@@ -193,7 +195,7 @@ public class Container extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * remove the subWidget node (async).
 	 */
@@ -205,7 +207,7 @@ public class Container extends Widget {
 			requestUpdateSize();
 		}
 	}
-	
+
 	/**
 	 * Replace a old subwidget with a new one.
 	 * @param oldWidget The widget to replace.
@@ -213,7 +215,7 @@ public class Container extends Widget {
 	 */
 	public void subWidgetReplace(final Widget oldWidget, final Widget newWidget) {
 		if (this.subWidget != oldWidget) {
-			Log.warning("Request replace with a wrong old widget");
+			LOGGER.warn("Request replace with a wrong old widget");
 			return;
 		}
 		this.subWidget.removeParent();
@@ -224,7 +226,7 @@ public class Container extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * Unlink the subwidget Node.
 	 */
@@ -234,7 +236,7 @@ public class Container extends Widget {
 		}
 		this.subWidget = null;
 	}
-	
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {
@@ -244,10 +246,10 @@ public class Container extends Widget {
 		super.systemDraw(displayProp);
 		if (this.subWidget != null) {
 			final DrawProperty prop = displayProp.withLimit(this.origin, this.size);
-			//Log.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
+			//LOGGER.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
 			this.subWidget.systemDraw(prop);
 		} else {
-			Log.info("[" + getId() + "]       ++++++ : [null]");
+			LOGGER.info("[" + getId() + "]       ++++++ : [null]");
 		}
 	}
 }

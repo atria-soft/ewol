@@ -13,18 +13,21 @@ import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Ewol;
-import org.atriasoft.ewol.internal.Log;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.resource.Resource;
 import org.atriasoft.gale.resource.ResourceTexture2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceTexturedFont extends ResourceTexture2 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceTexturedFont.class);
+
 	public static ResourceTexturedFont create(final Uri fontBaseUri) {
 		ResourceTexturedFont resource;
 		Resource resource2;
 		if (fontBaseUri.isEmpty()) {
-			Log.error("Can not create a Texture Font without a filaname " + fontBaseUri);
+			LOGGER.error("Can not create a Texture Font without a filaname " + fontBaseUri);
 			return null;
 		}
 		resource2 = Resource.getManager().localKeep("__TEXTURED__>>" + fontBaseUri.toString());
@@ -33,7 +36,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				resource2.keep();
 				return (ResourceTexturedFont) resource2;
 			}
-			Log.critical("Request resource fontName : '" + fontBaseUri + "' With the wrong type (dynamic cast error)");
+			LOGGER.error("Request resource fontName : '" + fontBaseUri + "' With the wrong type (dynamic cast error)");
+			System.exit(-1);
 			return null;
 		}
 		resource = new ResourceTexturedFont(fontBaseUri);
@@ -60,7 +64,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	protected ResourceTexturedFont(final Uri fontBaseUri) {
 		super("__TEXTURED_FONT__>>" + fontBaseUri.toString());
 		this.forceClimp = "true".equals(fontBaseUri.getProperty("FORCE_CLIMP"));
-		Log.debug("Load font : '" + fontBaseUri + "'");
+		LOGGER.debug("Load font : '" + fontBaseUri + "'");
 		
 		this.font[0] = null;
 		this.font[1] = null;
@@ -94,9 +98,12 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			this.size = Integer.parseInt(sizeString);
 		}
 		// find all the fonts...
-		final Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Bold.svg"), fontBaseUri.getproperties());
-		final Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Oblique.svg"), fontBaseUri.getproperties());
-		final Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "BoldOblique.svg"), fontBaseUri.getproperties());
+		final Uri fontBaseUriBold = new Uri(fontBaseUri.getGroup(), fontBaseUri.getPath().replace(".svg", "Bold.svg"),
+				fontBaseUri.getproperties());
+		final Uri fontBaseUriOblique = new Uri(fontBaseUri.getGroup(),
+				fontBaseUri.getPath().replace(".svg", "Oblique.svg"), fontBaseUri.getproperties());
+		final Uri fontBaseUriBoldOblique = new Uri(fontBaseUri.getGroup(),
+				fontBaseUri.getPath().replace(".svg", "BoldOblique.svg"), fontBaseUri.getproperties());
 		if (fontBaseUri.exist()) {
 			this.fileName[FontMode.REGULAR.getValue()] = fontBaseUri;
 		}
@@ -117,7 +124,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				refMode = FontMode.get(iii);
 			}
 		}
-		Log.debug("         set reference mode : " + refMode);
+		LOGGER.debug("         set reference mode : " + refMode);
 		// generate the wrapping on the preventing error
 		for (int iii = 3; iii >= 0; iii--) {
 			if (this.fileName[iii] != null) {
@@ -129,14 +136,17 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
 			if (this.fileName[iiiFontId] == null) {
-				Log.debug("can not load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size=" + this.size);
+				LOGGER.debug("can not load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId]
+						+ "\"  == > size=" + this.size);
 				this.font[iiiFontId] = null;
 				continue;
 			}
-			Log.debug("Load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size=" + this.size);
+			LOGGER.debug("Load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size="
+					+ this.size);
 			this.font[iiiFontId] = ResourceFontSvg.create(this.fileName[iiiFontId]);
 			if (this.font[iiiFontId] == null) {
-				Log.debug("error in loading FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size=" + this.size);
+				LOGGER.debug("error in loading FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId]
+						+ "\"  == > size=" + this.size);
 			}
 		}
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
@@ -156,15 +166,15 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		addGlyph((char) 0);
 		// by default we set only the first AINSI char available
 		for (int iii = 0x20; iii < 0x7F; iii++) {
-			Log.verbose("Add clyph :" + iii);
+			LOGGER.trace("Add clyph :" + iii);
 			addGlyph((char) iii);
 		}
 		flush();
-		Log.debug("Wrapping properties : ");
-		Log.debug("    " + FontMode.REGULAR + " == >" + getWrappingMode(FontMode.REGULAR));
-		Log.debug("    " + FontMode.ITALIC + " == >" + getWrappingMode(FontMode.ITALIC));
-		Log.debug("    " + FontMode.BOLD + " == >" + getWrappingMode(FontMode.BOLD));
-		Log.debug("    " + FontMode.BOLD_ITALIC + " == >" + getWrappingMode(FontMode.BOLD_ITALIC));
+		LOGGER.debug("Wrapping properties : ");
+		LOGGER.debug("    " + FontMode.REGULAR + " == >" + getWrappingMode(FontMode.REGULAR));
+		LOGGER.debug("    " + FontMode.ITALIC + " == >" + getWrappingMode(FontMode.ITALIC));
+		LOGGER.debug("    " + FontMode.BOLD + " == >" + getWrappingMode(FontMode.BOLD));
+		LOGGER.debug("    " + FontMode.BOLD_ITALIC + " == >" + getWrappingMode(FontMode.BOLD_ITALIC));
 	}
 	
 	/**
@@ -183,30 +193,34 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			final GlyphProperty tmpchar = this.font[iii].getGlyphProperty(this.size, val);
 			
 			if (tmpchar != null && tmpchar.exist()) {
-				Log.debug("load char : '" + val + "'=" + (int) val);
+				LOGGER.debug("load char : '" + val + "'=" + (int) val);
 				hasChange = true;
 				// change line if needed ...
 				if (this.lastGlyphPos[iii].x() + tmpchar.sizeTexture.x() + 3 > this.data.getSize().x()) {
 					this.lastGlyphPos[iii] = new Vector2i(1, this.lastGlyphPos[iii].y() + this.lastRawHeigh[iii]);
 					this.lastRawHeigh[iii] = 0;
 				}
-				Log.verbose("glyph texture size = " + tmpchar.sizeTexture + "last posY=" + this.lastGlyphPos[iii].y() + "    out size=" + this.data.getSize());
+				LOGGER.trace("glyph texture size = " + tmpchar.sizeTexture + "last posY=" + this.lastGlyphPos[iii].y()
+						+ "    out size=" + this.data.getSize());
 				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getSize().y()) {
 					this.data.resize(this.data.getSize().x(), this.data.getSize().y() * 2);
 					// note : need to rework all the layer due to the fact that the texture is used by the 4 type...
 					for (int kkk = 0; kkk < 4; kkk++) {
 						// change the coordinate on the element in the texture
-						for (int jjj = 0; jjj < this.listElement[kkk].size(); ++jjj) {
-							this.listElement[kkk].get(jjj).texturePosStart = this.listElement[kkk].get(jjj).texturePosStart.multiply(new Vector2f(1.0f, 0.5f));
-							this.listElement[kkk].get(jjj).texturePosSize = this.listElement[kkk].get(jjj).texturePosSize.multiply(new Vector2f(1.0f, 0.5f));
+						for (final GlyphProperty element : this.listElement[kkk]) {
+							element.texturePosStart = element.texturePosStart.multiply(new Vector2f(1.0f, 0.5f));
+							element.texturePosSize = element.texturePosSize.multiply(new Vector2f(1.0f, 0.5f));
 						}
 					}
 				}
 				// draw the glyph
 				this.font[iii].drawGlyph(this.data, this.size, this.lastGlyphPos[iii], tmpchar, iii);
 				// set video position
-				tmpchar.texturePosStart = new Vector2f((float) this.lastGlyphPos[iii].x() / (float) this.data.getSize().x(), (float) this.lastGlyphPos[iii].y() / (float) this.data.getSize().y());
-				tmpchar.texturePosSize = new Vector2f((float) tmpchar.sizeTexture.x() / this.data.getSize().x(), (float) tmpchar.sizeTexture.y() / this.data.getSize().y());
+				tmpchar.texturePosStart = new Vector2f(
+						(float) this.lastGlyphPos[iii].x() / (float) this.data.getSize().x(),
+						(float) this.lastGlyphPos[iii].y() / (float) this.data.getSize().y());
+				tmpchar.texturePosSize = new Vector2f((float) tmpchar.sizeTexture.x() / this.data.getSize().x(),
+						(float) tmpchar.sizeTexture.y() / this.data.getSize().y());
 				
 				// update the maximum of the line hight :
 				if (this.lastRawHeigh[iii] < tmpchar.sizeTexture.y()) {
@@ -217,12 +231,12 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				// update the Bitmap position drawing :
 				this.lastGlyphPos[iii] = this.lastGlyphPos[iii].add(new Vector2i(tmpchar.sizeTexture.x() + 1, 0));
 			} else {
-				Log.warning("Did not find char : '" + val + "'=" + val);
+				LOGGER.warn("Did not find char : '" + val + "'=" + val);
 			}
 			this.listElement[iii].add(tmpchar);
 		}
 		if (hasChange) {
-			Log.verbose("All gliph added ====> request a redraw of all the GUI");
+			LOGGER.trace("All gliph added ====> request a redraw of all the GUI");
 			flush();
 			Ewol.getContext().forceRedrawAllAsync();
 			//IOgami.storePNG(new Uri("file", "fileFont.png"), this.data); // ==> for debug test only ...
@@ -245,22 +259,22 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	 * @return The pointer on the glyph == > never null
 	 */
 	public synchronized GlyphProperty getGlyph(final Character charcode, final FontMode displayMode) {
-		// Log.debug("Get glyph property for mode: " + displayMode + " == > wrapping
+		// LOGGER.debug("Get glyph property for mode: " + displayMode + " == > wrapping
 		// index : " + this.modeWraping[displayMode]);
 		final int index = getIndex(charcode, displayMode);
 		if (index < 0 || index >= this.listElement[displayMode.getValue()].size()) {
-			Log.error(" Try to get glyph index inexistant ...  == > return the index 0 ... id=" + index);
+			LOGGER.error(" Try to get glyph index inexistant ...  == > return the index 0 ... id=" + index);
 			if (this.listElement[displayMode.getValue()].size() > 0) {
 				return this.listElement[displayMode.getValue()].get(0);
 			}
 			return this.emptyGlyph;
 		}
-		// Log.error(" index=" + index);
-		// Log.error(" this.UVal=" + this.listElement[displayMode][index].UVal);
-		// Log.error(" this.glyphIndex=" +
+		// LOGGER.error(" index=" + index);
+		// LOGGER.error(" this.UVal=" + this.listElement[displayMode][index].UVal);
+		// LOGGER.error(" this.glyphIndex=" +
 		// this.listElement[displayMode][index].glyphIndex);
-		// Log.error(" this.advance=" + this.listElement[displayMode][index].advance);
-		// Log.error(" this.bearing=" + this.listElement[displayMode][index].bearing);
+		// LOGGER.error(" this.advance=" + this.listElement[displayMode][index].advance);
+		// LOGGER.error(" this.bearing=" + this.listElement[displayMode][index].bearing);
 		return this.listElement[displayMode.getValue()].get(index);
 	}
 	
@@ -291,12 +305,12 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			return charcode - 0x1F;
 		}
 		for (int iii = 0x80 - 0x20; iii < this.listElement[displayMode.getValue()].size(); iii++) {
-			// Log.debug("search : '" + charcode + "' =?= '" +
+			// LOGGER.debug("search : '" + charcode + "' =?= '" +
 			// (this.listElement[displayMode])[iii].UVal + "'");
 			if (charcode == this.listElement[displayMode.getValue()].get(iii).getUnicodeValue()) {
-				// Log.debug("search : '" + charcode + "'");
+				// LOGGER.debug("search : '" + charcode + "'");
 				if (this.listElement[displayMode.getValue()].get(iii).exist()) {
-					// Log.debug("return " + iii);
+					// LOGGER.debug("return " + iii);
 					return charcode;
 				}
 				return 0;
