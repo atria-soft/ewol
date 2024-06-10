@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.atriasoft</groupId>
-  <artifactId>ewol</artifactId>
+  <artifactId>ewol-sample</artifactId>
   <version>0.1.0</version>
 	<properties>
 		<maven.compiler.version>3.13.0</maven.compiler.version>
@@ -30,44 +30,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.atriasoft</groupId>
-			<artifactId>gale</artifactId>
+			<artifactId>ewol</artifactId>
 			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>io-gami</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>esvg</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>ejson</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>exml</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>esignal</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>loader3d</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>5.11.0-M2</version>
-		    <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -81,11 +45,9 @@
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>${basedir}/src/resources</directory>
+				
 			</resource>
 		</resources>
-		<testSourceDirectory>test/src</testSourceDirectory>
-    	
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -101,6 +63,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
