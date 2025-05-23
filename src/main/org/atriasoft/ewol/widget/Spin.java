@@ -37,7 +37,7 @@ public class Spin extends SpinBase {
 	protected Connection connectionEntry = new Connection();
 	protected Connection connectionButtonUp = new Connection();
 	protected Connection connectionButtonDown = new Connection();
-
+	
 	/**
 	 * Constructor
 	 * @param _mode mode to display the spin
@@ -47,14 +47,14 @@ public class Spin extends SpinBase {
 		super(new Uri("THEME", "shape/Spin.json", "ewol"));
 		connectGui();
 	}
-
+	
 	public void checkValue(long value) {
 		value = FMath.clamp(this.propertyMin, value, this.propertyMax);
 		this.propertyValue = value;
 		this.widgetEntry.setPropertyValue(Long.toString(value));
 		this.signalValue.emit(this.propertyValue);
 	}
-
+	
 	public void connectGui() {
 		LOGGER.warn("updateGui [START]");
 		super.updateGui();
@@ -70,7 +70,7 @@ public class Spin extends SpinBase {
 		checkValue(this.propertyValue);
 		LOGGER.warn("updateGui [STOP]");
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("increment")
@@ -78,7 +78,7 @@ public class Spin extends SpinBase {
 	public long getPropertyIncrement() {
 		return this.propertyIncrement;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("mantis")
@@ -86,7 +86,7 @@ public class Spin extends SpinBase {
 	public int getPropertyMantis() {
 		return this.propertyMantis;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "max")
@@ -94,7 +94,7 @@ public class Spin extends SpinBase {
 	public long getPropertyMax() {
 		return this.propertyMax;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("min")
@@ -102,7 +102,7 @@ public class Spin extends SpinBase {
 	public long getPropertyMin() {
 		return this.propertyMin;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -110,7 +110,7 @@ public class Spin extends SpinBase {
 	public long getPropertyValue() {
 		return this.propertyValue;
 	}
-
+	
 	protected void onCallbackDown(final Boolean value) {
 		if (value) {
 			return;
@@ -118,15 +118,19 @@ public class Spin extends SpinBase {
 		final long data = this.propertyValue - this.propertyIncrement;
 		checkValue(data);
 	}
-
+	
 	protected void onCallbackModify(final String value) {
 		if (value.isEmpty()) {
 			return;
 		}
-		final long value1 = Long.valueOf(value);
-		checkValue(value1);
+		try {
+			final long value1 = Long.valueOf(value);
+			checkValue(value1);
+		} catch (final NumberFormatException ex) {
+			LOGGER.error("This is not a value {} ==> {}", value, ex.getLocalizedMessage());
+		}
 	}
-
+	
 	protected void onCallbackUp(final Boolean value) {
 		if (value) {
 			return;
@@ -134,23 +138,23 @@ public class Spin extends SpinBase {
 		final long data = this.propertyValue + this.propertyIncrement;
 		checkValue(data);
 	}
-
+	
 	protected void onChangePropertyIncrement() {
-
+		
 	}
-
+	
 	protected void onChangePropertyMantis() {
-
+		
 	}
-
+	
 	protected void onChangePropertyMax() {
 		checkValue(this.propertyValue);
 	}
-
+	
 	protected void onChangePropertyMin() {
 		checkValue(this.propertyValue);
 	}
-
+	
 	protected void onChangePropertyValue() {
 		markToRedraw();
 		if (this.widgetEntry == null) {
@@ -159,7 +163,7 @@ public class Spin extends SpinBase {
 		}
 		checkValue(this.propertyValue);
 	}
-
+	
 	public void setPropertyIncrement(final long propertyIncrement) {
 		if (this.propertyIncrement == propertyIncrement) {
 			return;
@@ -167,7 +171,7 @@ public class Spin extends SpinBase {
 		this.propertyIncrement = propertyIncrement;
 		onChangePropertyIncrement();
 	}
-
+	
 	public void setPropertyMantis(final int propertyMantis) {
 		if (this.propertyMantis == propertyMantis) {
 			return;
@@ -175,7 +179,7 @@ public class Spin extends SpinBase {
 		this.propertyMantis = propertyMantis;
 		onChangePropertyMantis();
 	}
-
+	
 	public void setPropertyMax(final long propertyMax) {
 		if (this.propertyMax == propertyMax) {
 			return;
@@ -183,7 +187,7 @@ public class Spin extends SpinBase {
 		this.propertyMax = propertyMax;
 		onChangePropertyMax();
 	}
-
+	
 	public void setPropertyMin(final long propertyMin) {
 		if (this.propertyMin == propertyMin) {
 			return;
@@ -191,7 +195,7 @@ public class Spin extends SpinBase {
 		this.propertyMin = propertyMin;
 		onChangePropertyMin();
 	}
-
+	
 	public void setPropertyValue(final long propertyValue) {
 		if (this.propertyValue == propertyValue) {
 			return;
