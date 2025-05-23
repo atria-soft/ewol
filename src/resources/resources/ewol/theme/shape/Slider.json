@@ -1,0 +1,25 @@
+{
+	# padding "outside" the object in pixel ==> prevent bad display
+	"padding-out-left":2,
+	"padding-out-right":2,
+	"padding-out-top":2,
+	"padding-out-buttom":2,
+	
+	# padding "inside" the object in pixel ==> prevent bad display
+	"padding-in-left":0,
+	"padding-in-right":0,
+	"padding-in-top":0,
+	"padding-in-buttom":0,
+		
+	# render program:
+	"program-vert":"THEME:shape/aaRenderShapeScale.vert?lib=ewol",
+	"program-frag":"THEME:shape/aaRenderShape.frag?lib=ewol",
+	
+	# Object to render (with modification)
+	"object-file":"THEME:shape/Slider.emf?lib=ewol&filter=^Background.*$",
+	"object-file-2":"THEME:shape/Slider.emf?lib=ewol&filter=^Slider.*$",
+	
+	"palette":"THEME:shape/palette_gui.json?lib=ewol",
+	
+	"change-time":100
+}
