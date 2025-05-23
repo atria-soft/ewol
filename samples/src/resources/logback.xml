@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- environment detection (defaut: dev) -->
+    <property name="LOG_LEVEL_ENV" value="${LOG_LEVEL:-dev}" />
+    <!-- Appender for development -->
+    <if condition="property(&quot;LOG_LEVEL_ENV&quot;).equals(&quot;dev&quot;)">
+        <then>
+            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>%green(%d{HH:mm:ss.SSS}) %highlight(%-5level) %-30((%file:%line\)): %msg%n</pattern>
+                </encoder>
+            </appender>
+            <logger name="org.atriasoft.etk" level="DEBUG" />
+            <logger name="org.atriasoft.ewol" level="DEBUG" />
+            <logger name="org.atriasoft.esignal" level="DEBUG" />
+            <logger name="org.atriasoft.esvg" level="DEBUG" />
+            <logger name="sample.atriasoft.ewol" level="DEBUG" />
+            <root level="INFO">
+                <appender-ref ref="CONSOLE" />
+            </root>
+        </then>
+    </if>
+    <!-- Appender for production -->
+    <if condition="property(&quot;LOG_LEVEL_ENV&quot;).matches(&quot;^prod.*&quot;)">
+        <then>
+            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>[%thread] %level %logger - %msg%n</pattern>
+                </encoder>
+            </appender>
+            <root level="INFO">
+                <appender-ref ref="CONSOLE" />
+            </root>
+        </then>
+    </if>
+    <if condition="property(&quot;LOG_LEVEL_ENV&quot;).equals(&quot;prod-debug&quot;)">
+        <then>
+            <logger name="org.atriasoft.ewol" level="DEBUG" />
+        </then>
+    </if>
+    <if condition="property(&quot;LOG_LEVEL_ENV&quot;).equals(&quot;prod-trace&quot;)">
+        <then>
+            <logger name="org.atriasoft.ewol" level="TRACE" />
+            <logger name="org.atriasoft.etk" level="DEBUG" />
+        </then>
+    </if>
+    <if condition="property(&quot;LOG_LEVEL_ENV&quot;).equals(&quot;prod-trace-full&quot;)">
+        <then>
+            <logger name="org.atriasoft.ewol" level="TRACE" />
+            <logger name="org.atriasoft.v" level="TRACE" />
+        </then>
+    </if>
+</configuration>
