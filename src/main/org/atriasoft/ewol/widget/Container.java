@@ -28,6 +28,13 @@ public class Container extends Widget {
 	 * Constructor
 	 */
 	public Container() {}
+	
+	/**
+	 * Constructor with his child
+	 */
+	public Container(final Widget subWidget) {
+		this.subWidget = subWidget;
+	}
 
 	@Override
 	public void calculateMinMaxSize() {
@@ -249,7 +256,7 @@ public class Container extends Widget {
 			//LOGGER.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
 			this.subWidget.systemDraw(prop);
 		} else {
-			LOGGER.info("[" + getId() + "]       ++++++ : [null]");
+			LOGGER.trace("[" + getId() + "]       ++++++ : [null]");
 		}
 	}
 }

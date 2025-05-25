@@ -30,7 +30,7 @@ public class LabelOnSVG extends Widget {
 	protected int colorDefaultFgText = -1; //!< Default color of the text
 	protected ResourceColorFile colorProperty; //!< theme color property
 	protected boolean propertyAutoTranslate = true; //!< if at true the data is translate automaticaly translate.
-	
+
 	protected int propertyFontSize = 0; //!< default size of the font.
 	protected String propertyValue = ""; //!< decorated text to display.
 	@AknotSignal
@@ -39,7 +39,7 @@ public class LabelOnSVG extends Widget {
 	public SignalEmpty signalPressed = new SignalEmpty();
 	protected CompositingText text = new CompositingText(); //!< Compositing text element.
 	protected String value = "";
-	
+
 	public LabelOnSVG() {
 		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
 		if (this.colorProperty != null) {
@@ -49,7 +49,7 @@ public class LabelOnSVG extends Widget {
 		setMouseLimit(1);
 		setPropertyCanFocus(false);
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param newLabel The displayed decorated text.
@@ -64,7 +64,7 @@ public class LabelOnSVG extends Widget {
 		setPropertyCanFocus(false);
 		setPropertyValue(newLabel);
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
@@ -76,30 +76,30 @@ public class LabelOnSVG extends Widget {
 		}
 		final Vector3f minSize = this.text.calculateSizeDecorated(this.value);
 		LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} minSize : " + minSize);
-		
+
 		this.minSize = new Vector3f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()),
 				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()), FMath.avg(tmpMin.z(), 4 + minSize.z(), tmpMax.z()));
 		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} Result min size : " + tmpMin + " < "
 				+ this.minSize + " < " + tmpMax);
 	}
-	
+
 	public int getPropertyFontSize() {
 		return this.propertyFontSize;
 	}
-	
+
 	public String getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	public boolean isPropertyAutoTranslate() {
 		return this.propertyAutoTranslate;
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		this.text.draw();
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		//LOGGER.debug("Event on Label ...");
@@ -112,7 +112,7 @@ public class LabelOnSVG extends Widget {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
@@ -120,24 +120,24 @@ public class LabelOnSVG extends Widget {
 		}
 		this.text.clear();
 		final int paddingSize = 2;
-		
+
 		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
 		final Vector3f minSize = this.text.calculateSize('A');
-		
+
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 2 * paddingSize, AlignMode.LEFT);
 		}
 		final Vector3f currentTextSize = this.text.calculateSizeDecorated(this.value);
-		
+
 		Vector2i localSize = new Vector2i((int) this.minSize.x(), (int) this.minSize.y());
-		
+
 		// no change for the text origin :
 		Vector3f tmpTextOrigin = new Vector3f((this.size.x() - this.minSize.x()) / 2.0f,
 				(this.size.y() - this.minSize.y()) / 2.0f, 0);
-		
+
 		if (this.propertyFill.x()) {
 			localSize = localSize.withX((int) this.size.x());
 			tmpTextOrigin = tmpTextOrigin.withX(0);
@@ -148,14 +148,14 @@ public class LabelOnSVG extends Widget {
 		}
 		tmpTextOrigin = tmpTextOrigin.add(paddingSize, paddingSize, 0);
 		localSize = localSize.less(2 * paddingSize, 2 * paddingSize);
-		
+
 		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
-		
+
 		final Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
-		
+
 		final Vector3f drawClippingPos = new Vector3f(paddingSize, paddingSize, -0.5f);
 		final Vector3f drawClippingSize = new Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
-		
+
 		// clean the element
 		this.text.reset();
 		if (this.propertyFontSize != 0) {
@@ -170,10 +170,10 @@ public class LabelOnSVG extends Widget {
 		this.text.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + localSize.x(), AlignMode.LEFT);
 		this.text.setClipping(drawClippingPos, drawClippingSize);
 		this.text.printDecorated(this.value);
-		
+
 		this.text.flush();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("auto-translate")
@@ -191,7 +191,7 @@ public class LabelOnSVG extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("font-size")
@@ -204,7 +204,7 @@ public class LabelOnSVG extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -222,5 +222,5 @@ public class LabelOnSVG extends Widget {
 		requestUpdateSize();
 		this.propertyValue = propertyValue;
 	}
-	
+
 }
