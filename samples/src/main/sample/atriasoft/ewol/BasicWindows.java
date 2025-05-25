@@ -12,6 +12,7 @@ import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.Distance;
@@ -148,7 +149,44 @@ public class BasicWindows extends Windows {
 			this.conections.add(con);
 		}
 	}
-	
+
+	public void addMenuDimension1f(final Widget widget, final IntrospectionProperty pojo) {
+		Object valueRaw = null;
+		try {
+			valueRaw = pojo.getValue(widget);
+		} catch (final AknotException e) {
+			e.printStackTrace();
+			return;
+		}
+		if (valueRaw instanceof final Dimension1f value) {
+			{
+				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
+				lineSizer.setPropertyFill(Vector3b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+				
+				final Spin spin = new Spin();
+				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
+				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyValue((int) value.size());
+				lineSizer.subWidgetAdd(spin);
+				final Connection con = spin.signalValue.connect(valueButton -> {
+					try {
+						final Object oldValue = pojo.getValue(widget);
+						if (oldValue instanceof final Dimension1f castedValue) {
+							LOGGER.warn("Set new value: {}", castedValue.withSize(valueButton));
+							pojo.setExistingValue(widget, new Dimension1f(valueButton));
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+		}
+	}
+
 	public void addMenuDimension2f(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -1139,6 +1177,8 @@ public class BasicWindows extends Windows {
 				addMenuDimension3f(widget, pojo);
 			} else if (pojo.getType() == Dimension2f.class) {
 				addMenuDimension2f(widget, pojo);
+			} else if (pojo.getType() == Dimension1f.class) {
+				addMenuDimension1f(widget, pojo);
 			} else if (pojo.getType() == DisplayMode.class) {
 				LOGGER.error("        ==> plop");
 			} else if (pojo.getType() == Uri.class) {
