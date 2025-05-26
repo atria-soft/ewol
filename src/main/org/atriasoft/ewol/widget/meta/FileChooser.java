@@ -76,10 +76,7 @@ import org.slf4j.LoggerFactory;
 public class FileChooser extends Composer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileChooser.class);
 
-	static void onCallbackButtonCancelPressed(final FileChooser self, final Boolean value) {
-		if (!value) {
-			return;
-		}
+	static void onCallbackButtonCancelPressed(final FileChooser self) {
 		// == > Auto remove ...
 		self.signalCancel.emit();
 		self.autoDestroy();
@@ -150,10 +147,7 @@ public class FileChooser extends Composer {
 		self.updateCurrentFolder();
 	}
 
-	protected static void onCallbackListValidate(final FileChooser self, final Boolean value) {
-		if (!value) {
-			return;
-		}
+	protected static void onCallbackListValidate(final FileChooser self) {
 		if (self.propertyFile.isEmpty()) {
 			LOGGER.warn(" Validate : '" + self.propertyFile + "' ==> error No name ...");
 			return;
@@ -195,11 +189,11 @@ public class FileChooser extends Composer {
 		}
 		if (getSubObjectNamed(
 				"[" + Long.toString(getId()) + "]file-chooser:button-validate") instanceof final Button tmp) {
-			tmp.signalValue.connectAuto(this, FileChooser::onCallbackListValidate);
+			tmp.signalClick.connectAuto(this, FileChooser::onCallbackListValidate);
 		}
 		if (getSubObjectNamed(
 				"[" + Long.toString(getId()) + "]file-chooser:button-cancel") instanceof final Button tmp) {
-			tmp.signalValue.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
+			tmp.signalClick.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
 		}
 		if (getSubObjectNamed(
 				"[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {

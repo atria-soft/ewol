@@ -171,8 +171,10 @@ public class BasicWindows extends Windows {
 				spin.setPropertyValue((int) value.size());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
+					LOGGER.warn("Receved event for button ...");
 					try {
 						final Object oldValue = pojo.getValue(widget);
+						LOGGER.warn("Receved event for button ... {}", oldValue);
 						if (oldValue instanceof final Dimension1f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withSize(valueButton));
 							pojo.setExistingValue(widget, new Dimension1f(valueButton));
@@ -445,7 +447,7 @@ public class BasicWindows extends Windows {
 			buttonGravity.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
 			buttonGravity.setPropertyGravity(Gravity.CENTER);
 			this.sizerMenu.subWidgetAdd(buttonGravity);
-			final Label gravLabel = (Label) (buttonGravity.getSubWidgets()[0]);
+			final Label gravLabel = (Label) (buttonGravity.getSubWidget());
 			gravLabel.setPropertyValue(LABEL_GRAVITY + Gravity.BOTTOM_LEFT);
 			
 			final Connection con = buttonGravity.signalClick.connect(() -> {

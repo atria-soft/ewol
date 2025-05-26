@@ -31,13 +31,13 @@ public class SpinBase extends Sizer {
 	protected int confIdDownShaper = -1;
 	protected int confIdUpData = -1;
 	protected int confIdDownData = -1;
-
+	
 	protected Entry widgetEntry = null;
-
+	
 	protected Button widgetButtonDown = null;
-
+	
 	protected Button widgetButtonUp = null;
-
+	
 	/**
 	 * Constructor
 	 */
@@ -54,7 +54,7 @@ public class SpinBase extends Sizer {
 		setPropertyGravity(Gravity.CENTER);
 		updateGui();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "shape")
@@ -62,7 +62,7 @@ public class SpinBase extends Sizer {
 	public Uri getPropertyShape() {
 		return this.propertyShape;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "spin-mode")
@@ -70,7 +70,7 @@ public class SpinBase extends Sizer {
 	public SpinPosition getPropertySpinMode() {
 		return this.propertySpinMode;
 	}
-
+	
 	protected void onChangePropertyShape() {
 		this.config = ResourceConfigFile.create(this.propertyShape);
 		if (this.config != null) {
@@ -82,11 +82,11 @@ public class SpinBase extends Sizer {
 		}
 		markToRedraw();
 	}
-
+	
 	protected void onChangePropertySpinMode() {
 		updateGui();
 	}
-
+	
 	public void setPropertyShape(final Uri propertyShape) {
 		if (this.propertyShape != null && this.propertyShape.equals(propertyShape)) {
 			return;
@@ -94,7 +94,7 @@ public class SpinBase extends Sizer {
 		this.propertyShape = propertyShape;
 		onChangePropertyShape();
 	}
-
+	
 	public void setPropertySpinMode(final SpinPosition propertySpinMode) {
 		if (this.propertySpinMode == propertySpinMode) {
 			return;
@@ -102,7 +102,7 @@ public class SpinBase extends Sizer {
 		this.propertySpinMode = propertySpinMode;
 		onChangePropertySpinMode();
 	}
-
+	
 	protected void updateGui() {
 		subWidgetRemoveAll();
 		markToRedraw();
@@ -132,7 +132,8 @@ public class SpinBase extends Sizer {
 			this.widgetButtonDown.setPropertyFill(Vector3b.TRUE);
 			final String data = this.config.getString(this.confIdDownData);
 			final Widget widget = Composer.composerGenerateString(data);
-			this.widgetButtonDown.setSubWidget(widget, 0);
+			//this.widgetButtonDown.setSubWidget(widget, 0);
+			this.widgetButtonDown.setSubWidget(widget);
 		}
 		if (this.widgetButtonUp == null) {
 			this.widgetButtonUp = new Button();
@@ -180,5 +181,5 @@ public class SpinBase extends Sizer {
 				break;
 		}
 	}
-
+	
 }
