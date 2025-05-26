@@ -10,19 +10,20 @@ import org.atriasoft.ewol.widget.Box;
 import sample.atriasoft.ewol.BasicWindows;
 
 public class MainWindows extends BasicWindows {
-
+	
 	Box testWidget;
-
+	
 	public MainWindows() {
 		//! [ewol_sample_HW_windows_title]
 		setPropertyTitle("Simple CheckBox");
-		
+
 		final Box innerWidget = new Box();
 		//this.testWidget.setPropertySource(new Uri("DATA", "mireA.png"));
 		innerWidget.setPropertyExpand(Vector3b.FALSE);
+		innerWidget.setPropertyExpandIfFree(Vector3b.TRUE);
 		innerWidget.setPropertyFill(Vector3b.TRUE);
 		innerWidget.setPropertyColor(Color.PINK);
-
+		
 		this.testWidget = new Box(innerWidget);
 		//this.testWidget.setPropertySource(new Uri("DATA", "mireA.png"));
 		this.testWidget.setPropertyExpand(Vector3b.TRUE);

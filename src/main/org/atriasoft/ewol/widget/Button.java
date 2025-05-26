@@ -6,20 +6,18 @@ import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
-import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
+import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Dimension1f;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3b;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.Gravity;
-import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.compositing.GuiShape;
-import org.atriasoft.ewol.compositing.GuiShapeMode;
-import org.atriasoft.ewol.compositing.ShapeBox;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventTime;
-import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
@@ -35,15 +33,8 @@ import org.slf4j.LoggerFactory;
  * 	----------------------------------------------
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
-public class Button extends ContainerToggle {
+public class Button extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Button.class);
-	
-	public enum ButtonLock {
-		LOCK_NONE, //!< normal status of the button
-		LOCK_WHEN_PRESSED, //!< When the state is set in pressed, the status stay in this one
-		LOCK_WHEN_RELEASED, //!< When the state is set in not pressed, the status stay in this one
-		LOCK_ACCESS, //!< all event are trashed  == > acctivity of the button is disable
-	}
 
 	public static Button createLabelButton(final String label) {
 		final Button out = new Button();
@@ -53,56 +44,27 @@ public class Button extends ContainerToggle {
 		labelWidget.setPropertyExpand(Vector3b.FALSE);
 		labelWidget.setPropertyGravity(Gravity.CENTER);
 		labelWidget.setPropertyValue(label);
-		out.setSubWidget(labelWidget, 0);
+		out.setSubWidget(labelWidget);
 		return out;
 	}
-
-	public static Button createToggleLabelButton(final String label0, final String label1) {
-		final Button out = new Button();
-		{
-			final Label labelWidget = new Label();
-			labelWidget.setPropertyFill(Vector3b.FALSE);
-			labelWidget.setPropertyExpand(Vector3b.FALSE);
-			labelWidget.setPropertyGravity(Gravity.CENTER);
-			labelWidget.setPropertyValue(label0);
-			out.setSubWidget(labelWidget, 0);
-		}
-		{
-			final Label labelWidget = new Label();
-			labelWidget.setPropertyFill(Vector3b.FALSE);
-			labelWidget.setPropertyExpand(Vector3b.FALSE);
-			labelWidget.setPropertyGravity(Gravity.CENTER);
-			labelWidget.setPropertyValue(label1);
-			out.setSubWidget(labelWidget, 1);
-		}
-		out.setPropertyToggleMode(true);
-		return out;
-	}
-
+	
 	/**
-	 * Periodic call to update grapgic display
+	 * Periodic call to update graphic display
 	 * @param event Time generic event
 	 */
 	protected static void periodicCall(final Button self, final EventTime event) {
 		LOGGER.trace("Periodic call on Entry(" + event + ")");
-		if (!self.shape.periodicCall(event)) {
-			self.periodicConnectionHanble.close();
-		}
+		//		if (!self.shape.periodicCall(event)) {
+		//			self.periodicConnectionHanble.close();
+		//		}
 		self.markToRedraw();
 	}
-
+	
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-
+	
 	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
-	private boolean propertyValue = false;
-	private ButtonLock propertyLock = ButtonLock.LOCK_NONE;
-	private boolean propertyToggleMode = false;
-	private boolean propertyEnableSingle = false;
-
-	protected ShapeBox shapeProperty = ShapeBox.ZERO;
-	private GuiShape shape;
-
+	
 	@AknotSignal
 	@AknotName(value = "down")
 	@AknotDescription("Button is Down")
@@ -123,62 +85,27 @@ public class Button extends ContainerToggle {
 	@AknotName(value = "leave")
 	@AknotDescription("The cursor leave the button")
 	public SignalEmpty signalLeave = new SignalEmpty();
-	@AknotSignal
-	@AknotName(value = "value")
-	@AknotDescription("The button value change")
-	public Signal<Boolean> signalValue = new Signal<>();
-
+	
 	private boolean buttonPressed = false;
-	private boolean mouseHover = false;
-
+	private final boolean mouseHover = false;
+	
 	/**
 	 * Constructor
 	 */
 	public Button() {
 		this.propertyCanFocus = true;
-		onChangePropertyShaper();
+		//onChangePropertyShaper();
 		// can not support multiple click...
 		setMouseLimit(1);
-	}
+		setPropertyExpand(Vector3b.TRUE);
+		setPropertyFill(Vector3b.TRUE);
+		setPropertyBorderWidth(new Dimension1f(4));
+		//setPropertyBorderRadius(new Dimension1f(15));
+		setPropertyBorderColor(Color.BLACK);
+		setPropertyColor(Color.WHITE);
+		setPropertyPadding(new Dimension2f(new Vector2f(3, 3)));
+		setPropertyMargin(new Dimension2f(new Vector2f(0, 0)));
 
-	@Override
-	public void calculateMinMaxSize() {
-		// call main class
-		super.calculateMinMaxSize();
-		// get generic padding
-		Padding padding = Padding.ZERO;
-		if (this.shape != null) {
-			padding = this.shape.getPadding();
-		}
-		calculateMinMaxSizePadded(padding);
-		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
-	}
-
-	protected void changeStatusIn(final GuiShapeMode newStatusId) {
-		if (this.shape.changeStatusIn(newStatusId)) {
-			if (!this.periodicConnectionHanble.isConnected()) {
-				//LOGGER.error("REQUEST: connection on periodic call");
-				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this,
-						Button::periodicCall);
-			}
-			markToRedraw();
-		}
-
-	}
-
-	void checkStatus() {
-		if (this.buttonPressed) {
-			changeStatusIn(GuiShapeMode.SELECT);
-			return;
-		}
-		if (this.mouseHover) {
-			changeStatusIn(GuiShapeMode.OVER);
-			return;
-		}
-		if (this.propertyValue) {
-			changeStatusIn(GuiShapeMode.NORMAL);
-		}
-		changeStatusIn(GuiShapeMode.NONE);
 	}
 
 	@AknotManaged
@@ -187,122 +114,6 @@ public class Button extends ContainerToggle {
 	@AknotDescription(value = "configuration of the widget")
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
-	}
-
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "lock")
-	@AknotDescription(value = "Lock the button in a special state to permit changing state only by the coder")
-	public ButtonLock getPropertyLock() {
-		return this.propertyLock;
-	}
-
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "value")
-	@AknotDescription(value = "Value display in the entry (decorated text)")
-	public boolean getPropertyValue() {
-		return this.propertyValue;
-	}
-
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "enable-single")
-	@AknotDescription(value = "If one element set in the Button ==> display only set")
-	public boolean isPropertyEnableSingle() {
-		return this.propertyEnableSingle;
-	}
-
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "toggle")
-	@AknotDescription(value = "The button can toggle")
-	public boolean isPropertyToggleMode() {
-		return this.propertyToggleMode;
-	}
-
-	void onChangePropertyEnableSingle() {
-		if (this.propertyEnableSingle) {
-			if (this.idWidgetDisplayed == 0 && this.subWidget[0] == null && this.subWidget[1] != null) {
-				this.idWidgetDisplayed = 1;
-			} else if (this.idWidgetDisplayed == 1 && this.subWidget[1] == null && this.subWidget[0] != null) {
-				this.idWidgetDisplayed = 0;
-			} else if (this.subWidget[0] == null && this.subWidget[1] == null) {
-				this.idWidgetDisplayed = 0;
-			}
-		}
-	}
-
-	void onChangePropertyLock() {
-		if (ButtonLock.LOCK_ACCESS == this.propertyLock) {
-			this.buttonPressed = false;
-			this.mouseHover = false;
-		}
-		checkStatus();
-		markToRedraw();
-	}
-
-	protected void onChangePropertyShaper() {
-		if (this.shape == null) {
-			this.shape = new GuiShape(this.propertyConfig);
-		} else {
-			this.shape.setSource(this.propertyConfig);
-		}
-		markToRedraw();
-	}
-
-	void onChangePropertyToggleMode() {
-		this.propertyValue = !this.propertyValue;
-		this.signalValue.emit(this.propertyValue);
-		if (!this.propertyToggleMode) {
-			this.idWidgetDisplayed = 0;
-		} else if (!this.propertyValue) {
-			this.idWidgetDisplayed = 0;
-		} else {
-			this.idWidgetDisplayed = 1;
-		}
-		if (this.propertyEnableSingle) {
-			if (this.idWidgetDisplayed == 0 && this.subWidget[0] == null && this.subWidget[1] != null) {
-				this.idWidgetDisplayed = 1;
-			} else if (this.idWidgetDisplayed == 1 && this.subWidget[1] == null && this.subWidget[0] != null) {
-				this.idWidgetDisplayed = 0;
-			}
-		}
-		checkStatus();
-		markToRedraw();
-	}
-
-	protected void onChangePropertyValue() {
-		if (this.propertyToggleMode) {
-			if (!this.propertyValue) {
-				this.idWidgetDisplayed = 0;
-			} else {
-				this.idWidgetDisplayed = 1;
-			}
-		}
-		if (this.propertyEnableSingle) {
-			if (this.idWidgetDisplayed == 0 && this.subWidget[0] == null && this.subWidget[1] != null) {
-				this.idWidgetDisplayed = 1;
-			} else if (this.idWidgetDisplayed == 1 && this.subWidget[1] == null && this.subWidget[0] != null) {
-				this.idWidgetDisplayed = 0;
-			}
-		}
-		checkStatus();
-		markToRedraw();
-	}
-
-	@Override
-	public void onChangeSize() {
-		final Padding padding = this.shape.getPadding();
-		onChangeSizePadded(padding);
-	}
-
-	@Override
-	protected void onDraw() {
-		if (this.shape != null) {
-			this.shape.draw(true);
-		}
-		super.onDraw();
 	}
 
 	@Override
@@ -314,30 +125,30 @@ public class Button extends ContainerToggle {
 		}
 		return super.onEventEntry(event);
 	}
-
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f relPos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
-		LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
-		final boolean over = this.shapeProperty.isInside(relPos);
+		//LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
+		final boolean over = isInside(relPos);
 		//filter if outside the element...
 		if (event.status() == KeyStatus.leave) {
-			changeStatusIn(GuiShapeMode.NORMAL);
+			//			changeStatusIn(GuiShapeMode.NORMAL);
 			this.buttonPressed = false;
 			return true;
 		}
 		if (event.inputId() == 0) {
 			if (!this.buttonPressed) {
-				if (KeyStatus.leave == event.status()) {
-					changeStatusIn(GuiShapeMode.NORMAL);
-				} else {
-					LOGGER.trace("Detect Over : " + this.shapeProperty);
-					if (over) {
-						changeStatusIn(GuiShapeMode.OVER);
-					} else {
-						changeStatusIn(GuiShapeMode.NORMAL);
-					}
-				}
+				//				if (KeyStatus.leave == event.status()) {
+				//					changeStatusIn(GuiShapeMode.NORMAL);
+				//				} else {
+				//					LOGGER.trace("Detect Over : " + this.shapeProperty);
+				//					if (over) {
+				//						changeStatusIn(GuiShapeMode.OVER);
+				//					} else {
+				//						changeStatusIn(GuiShapeMode.NORMAL);
+				//					}
+				//				}
 				return true;
 			}
 		}
@@ -347,18 +158,14 @@ public class Button extends ContainerToggle {
 		if (KeyStatus.pressSingle == event.status() && over) {
 			keepFocus();
 			this.signalClick.emit();
-			if (this.propertyToggleMode) {
-				setPropertyValue(!this.propertyValue);
-			} else {
-				setPropertyValue(!this.propertyValue);
-				setPropertyValue(!this.propertyValue);
-			}
+			LOGGER.info("Generate click event !!!!!!!!!!");
+			/////// setPropertyValue(!this.propertyValue);
 			return true;
 		}
 		if (KeyStatus.down == event.status() && over) {
 			keepFocus();
 			this.buttonPressed = true;
-			changeStatusIn(GuiShapeMode.SELECT);
+			/////   changeStatusIn(GuiShapeMode.SELECT);
 			markToRedraw();
 			this.signalDown.emit();
 			return true;
@@ -372,91 +179,25 @@ public class Button extends ContainerToggle {
 			keepFocus();
 			this.buttonPressed = false;
 			this.signalUp.emit();
-			changeStatusIn(GuiShapeMode.OVER);
+			//////  changeStatusIn(GuiShapeMode.OVER);
 			markToRedraw();
 			return true;
 		}
 		return false;
 	}
-
+	
 	@Override
 	protected void onLostFocus() {
 		this.buttonPressed = false;
 		LOGGER.trace(this.name + " : Remove Focus ...");
-		checkStatus();
+		//checkStatus();
 	}
-
-	@Override
-	public void onRegenerateDisplay() {
-		super.onRegenerateDisplay();
-		if (!needRedraw()) {
-			//return;
-		}
-		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
-		this.shape.clear();
-		final Padding padding = this.shape.getPadding();
-
-		Vector3f tmpSizeShaper = this.minSize;
-		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
-		if (this.propertyFill.x()) {
-			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
-			delta = delta.withX(0.0f);
-		}
-		if (this.propertyFill.y()) {
-			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
-			delta = delta.withY(0.0f);
-		}
-		if (this.propertyFill.z()) {
-			tmpSizeShaper = tmpSizeShaper.withZ(this.size.y());
-			delta = delta.withZ(0.0f);
-		}
-
-		Vector3f tmpOriginShaper = delta;
-		Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
-		//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
-		Vector3f tmpOriginText = new Vector3f(0, 0, 0);
-		// not sure this is needed...
-		tmpSizeShaper = tmpSizeShaper.clipInteger();
-		tmpOriginShaper = tmpOriginShaper.clipInteger();
-		tmpSizeText = tmpSizeText.clipInteger();
-		tmpOriginText = tmpOriginText.clipInteger();
-
-		this.shapeProperty = new ShapeBox(tmpOriginShaper, tmpSizeShaper, padding);
-		this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
-		this.shape.flush();
-
-	}
-
+	
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;
 		}
 		this.propertyConfig = propertyConfig;
-		onChangePropertyShaper();
+		//onChangePropertyShaper();
 	}
-
-	public void setPropertyEnableSingle(final boolean propertyEnableSingle) {
-		this.propertyEnableSingle = propertyEnableSingle;
-		markToRedraw();
-	}
-
-	public void setPropertyLock(final ButtonLock propertyLock) {
-		this.propertyLock = propertyLock;
-		markToRedraw();
-	}
-
-	public void setPropertyToggleMode(final boolean propertyToggleMode) {
-		this.propertyToggleMode = propertyToggleMode;
-		markToRedraw();
-	}
-
-	public void setPropertyValue(final boolean propertyValue) {
-		if (this.propertyValue == propertyValue) {
-			return;
-		}
-		this.propertyValue = propertyValue;
-		this.signalValue.emit(this.propertyValue);
-		onChangePropertyValue();
-	}
-
 }
