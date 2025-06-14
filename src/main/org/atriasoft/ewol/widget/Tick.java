@@ -169,6 +169,7 @@ public class Tick extends Box {
 	public boolean onEventInput(final EventInput event) {
 		final Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
 		final Vector3f relPos = relativePosition(positionAbsolute);
+		System.out.println("Event on Input ... " + event + " relPos = " + relPos);
 		LOGGER.trace("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = checkIfOver(relPos);
 		//filter if outside the element...
@@ -197,6 +198,7 @@ public class Tick extends Box {
 		}
 		if (KeyStatus.pressSingle == event.status() && over) {
 			keepFocus();
+			System.out.println("event ....");
 			this.signalClick.emit();
 			setPropertyValue(!this.propertyValue);
 			return true;

@@ -12,28 +12,29 @@ import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 
 public class CheckBox extends Container {
-	
+
 	protected static void eventLabelClick(final CheckBox self) {
 		self.tick.setPropertyValue(!self.tick.getPropertyValue());
 		self.signalClick.emit();
 	}
-	
+
 	protected static void eventTickClick(final CheckBox self) {
+		self.tick.setPropertyValue(!self.tick.getPropertyValue());
 		self.signalClick.emit();
 	}
-	
+
 	protected static void eventTickDown(final CheckBox self) {
 		self.signalDown.emit();
 	}
-	
+
 	protected static void eventTickUp(final CheckBox self) {
 		self.signalUp.emit();
 	}
-	
+
 	protected static void eventTickValue(final CheckBox self, final Boolean value) {
 		self.signalValue.emit(value);
 	}
-	
+
 	@AknotSignal
 	@AknotName("down")
 	@AknotDescription("CheckBox is Down")
@@ -52,17 +53,17 @@ public class CheckBox extends Container {
 	public Signal<Boolean> signalValue = new Signal<>();
 	final Tick tick;
 	final Label label;
-	
+
 	public CheckBox() {
 		this("No Label");
 	}
-	
+
 	public CheckBox(final String basicLabel) {
 		final Sizer subs = new Sizer(DisplayMode.HORIZONTAL);
 		subs.setPropertyLockExpand(Vector3b.TRUE);
 		subs.setPropertyGravity(Gravity.CENTER);
 		setSubWidget(subs);
-		
+
 		this.tick = new Tick();
 		this.tick.setPropertyExpand(new Vector3b(false, true, true));
 		this.tick.setPropertyFill(Vector3b.FALSE);
@@ -72,7 +73,7 @@ public class CheckBox extends Container {
 		this.tick.signalUp.connectAuto(this, CheckBox::eventTickUp);
 		this.tick.signalDown.connectAuto(this, CheckBox::eventTickDown);
 		this.tick.signalValue.connectAuto(this, CheckBox::eventTickValue);
-		
+
 		this.label = new Label(basicLabel);
 		this.label.setPropertyExpand(Vector3b.TRUE);
 		this.label.setPropertyFill(Vector3b.FALSE);
@@ -80,7 +81,7 @@ public class CheckBox extends Container {
 		subs.subWidgetAdd(this.label);
 		this.label.signalPressed.connectAuto(this, CheckBox::eventLabelClick);
 	}
-	
+
 	@AknotManaged
 	//@AknotText
 	@AknotAttribute
@@ -89,7 +90,7 @@ public class CheckBox extends Container {
 	public String getPropertyLabel() {
 		return this.label.getPropertyValue();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "value")
@@ -97,13 +98,13 @@ public class CheckBox extends Container {
 	public Boolean getPropertyValue() {
 		return this.tick.getPropertyValue();
 	}
-	
+
 	public void setPropertyLabel(final String value) {
 		this.label.setPropertyValue(value);
 	}
-	
+
 	public void setPropertyValue(final Boolean value) {
 		this.tick.setPropertyValue(value);
 	}
-	
+
 }

@@ -333,7 +333,7 @@ public class CompositingSVG extends Compositing {
 	}
 
 	/**
-	 * set position for the next text writen
+	 * set position for the next text written
 	 * @param pos Position of the text (in 3D)
 	 */
 	public void setPos(final Vector3f pos) {
@@ -345,8 +345,8 @@ public class CompositingSVG extends Compositing {
 	}
 
 	/**
-	 * set relative position for the next text writen
-	 * @param pos ofset apply of the text (in 3D)
+	 * set relative position for the next text written
+	 * @param pos offset apply of the text (in 3D)
 	 */
 	public void setRelPos(final Vector3f pos) {
 		this.position = this.position.add(pos);
@@ -374,6 +374,10 @@ public class CompositingSVG extends Compositing {
 	//	}
 
 	public void setSource(final String data, final Vector2i size) {
+		if (data == null) {
+			LOGGER.error("try to set NULL data in svg");
+			return;
+		}
 		if (this.svgDoc == null && this.svgData.equals(data) && this.requestSize.x() == size.x()
 				&& this.requestSize.y() == size.y()) {
 			// Nothing to do ...
@@ -383,6 +387,7 @@ public class CompositingSVG extends Compositing {
 		this.svgDoc = null;
 		final EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
+		LOGGER.error("render size = {}", size);
 		final ImageByte tmp = ToolImage.convertImageByte(doc.renderImageFloatRGBA(size));
 		if (tmp == null) {
 			LOGGER.error("Can not load the Raw SVG ... ");
