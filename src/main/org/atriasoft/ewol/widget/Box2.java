@@ -15,8 +15,8 @@ import org.atriasoft.ewol.event.EventTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Box extends Container {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Box.class);
+public class Box2 extends Container {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Box2.class);
 	protected CompositingSVG compositing = new CompositingSVG();
 
 	public static class BoxParameter {
@@ -29,10 +29,10 @@ public class Box extends Container {
 	}
 
 	/**
-	 * Periodic call to update grapgic display
+	 * Periodic call to update graphic display
 	 * @param event Time generic event
 	 */
-	protected static void periodicCall(final Box self, final EventTime event) {
+	protected static void periodicCall(final Box2 self, final EventTime event) {
 		LOGGER.trace("Periodic call on Entry(" + event + ")");
 		self.markToRedraw();
 	}
@@ -50,12 +50,12 @@ public class Box extends Container {
 	/**
 	 * Constructor
 	 */
-	public Box() {}
+	public Box2() {}
 	
 	/**
 	 * Constructor with his subWidget
 	 */
-	public Box(final Widget subWidget) {
+	public Box2(final Widget subWidget) {
 		super(subWidget);
 	}
 
