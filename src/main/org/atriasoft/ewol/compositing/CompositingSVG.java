@@ -422,4 +422,55 @@ public class CompositingSVG extends Compositing {
 		this.requestSize = size;
 	}
 
+	public void setRectangleAsSource(final int sizeX, final int sizeY, final Color color) {
+		setSource("""
+				<svg width="%d" height="%d">
+				  <rect
+				    x="%d"
+				    y="%d"
+				    width="%d"
+				    height="%d"
+				    fill="%s"
+				  />
+				</svg>""".formatted( //
+				sizeX, sizeY, //
+				0, 0, //
+				sizeX, sizeY, //
+				color.toStringSharp() //
+		), new Vector2i(sizeX, sizeY));
+	}
+
+	public void setRectangleBorderAsSource(
+			final int sizeX,
+			final int sizeY,
+			final Color color,
+			final int borderSize,
+			final int borderRadius,
+			final Color borderColor) {
+		
+		final int paddingCompensateBorder = Math.round(borderSize * 0.5f);
+		setSource("""
+				<svg width="%d" height="%d">
+				  <rect
+				    x="%d"
+				    y="%d"
+				    width="%d"
+				    height="%d"
+				    rx="%d"
+				    ry="%d"
+				    fill="%s"
+				    stroke="%s"
+				    stroke-width="%d"
+				  />
+				</svg>""".formatted( //
+				sizeX, sizeY, //
+				paddingCompensateBorder, paddingCompensateBorder, //
+				sizeX - 2 * paddingCompensateBorder, sizeY - 2 * paddingCompensateBorder, //
+				borderRadius, //
+				borderRadius, //
+				color.toStringSharp(), //
+				borderColor.toStringSharp(), //
+				borderSize //
+		), new Vector2i(sizeX, sizeY));
+	}
 }

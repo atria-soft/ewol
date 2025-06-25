@@ -271,49 +271,10 @@ public class Box extends Container {
 		final int borderSize = (int) this.propertyBorderWidth.size();
 		final int paddingCompensateBorder = Math.round(borderSize * 0.5f);
 		if (borderSize > 0.0f) {
-			this.compositing.setSource("""
-					<svg width="%d" height="%d">
-					  <rect
-					    x="%d"
-					    y="%d"
-					    width="%d"
-					    height="%d"
-					    rx="%d"
-					    ry="%d"
-					    fill="%s"
-					    stroke="%s"
-					    stroke-width="%d"
-					  />
-					</svg>""".formatted( //
-					this.renderSize.x(), this.renderSize.y(), //
-					paddingCompensateBorder, paddingCompensateBorder, //
-					this.renderSize.x() - 2 * paddingCompensateBorder,
-					this.renderSize.y() - 2 * paddingCompensateBorder, //
-					(int) this.propertyBorderRadius.size(), //
-					(int) this.propertyBorderRadius.size(), //
-					this.propertyColor.toStringSharp(), //
-					this.propertyBorderColor.toStringSharp(), //
-					borderSize //
-			), //
-					this.renderSize);
+			this.compositing.setRectangleBorderAsSource(this.renderSize.x(), this.renderSize.y(), this.propertyColor,
+					borderSize, (int) this.propertyBorderRadius.size(), this.propertyBorderColor);
 		} else {
-			this.compositing.setSource("""
-					<svg width="%d" height="%d">
-					  <rect
-					    x="%d"
-					    y="%d"
-					    width="%d"
-					    height="%d"
-					    fill="%s"
-					  />
-					</svg>""".formatted( //
-					this.renderSize.x(), this.renderSize.y(), //
-					paddingCompensateBorder, paddingCompensateBorder, //
-					this.renderSize.x() - 2 * paddingCompensateBorder,
-					this.renderSize.y() - 2 * paddingCompensateBorder, //
-					this.propertyColor.toStringSharp() //
-			), //
-					this.renderSize);
+			this.compositing.setRectangleAsSource(this.renderSize.x(), this.renderSize.y(), this.propertyColor);
 		}
 		this.compositing.setPos(this.renderOrigin);
 		// For events:

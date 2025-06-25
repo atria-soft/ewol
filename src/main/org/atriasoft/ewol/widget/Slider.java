@@ -9,11 +9,12 @@ import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.etk.math.Vector3i;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
-import org.atriasoft.ewol.compositing.GuiShape;
+import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
@@ -34,8 +35,7 @@ public class Slider extends Widget {
 	private Uri propertyConfig = new Uri("THEME", "shape/Slider.json", "ewol");
 
 	private Float propertyValue = 0.0f; //!< string that must be displayed
-	private GuiShape shape = null;
-	private final GuiShape shapeTop = null;
+	protected CompositingSVG compositing = new CompositingSVG();
 	@AknotSignal
 	@AknotName("value")
 	@AknotDescription("Tick value change")
@@ -43,8 +43,10 @@ public class Slider extends Widget {
 	// element over:
 	Vector3f overPositionStart = Vector3f.ZERO;
 	Vector3f overPositionStop = Vector3f.ZERO;
+	Vector3f overPositionSize = Vector3f.ZERO;
 	Vector3f overCursorPositionStart = Vector3f.ZERO;
 	Vector3f overCursorPositionStop = Vector3f.ZERO;
+	Vector3f overCursorPositionSize = Vector3f.ZERO;
 
 	//@AknotAutoGenerateProperty("minimum", "configuration of the widget")
 	private Float propertyMinimum = 0.0f;
@@ -72,10 +74,7 @@ public class Slider extends Widget {
 		// call main class
 		super.calculateMinMaxSize();
 		// get generic padding
-		Padding padding = Padding.ZERO;
-		if (this.shape != null) {
-			padding = this.shape.getPadding();
-		}
+		final Padding padding = Padding.ZERO;
 		final Vector3i minHeight = Vector3i.VALUE_16;
 
 		Vector3f minimumSizeBase = new Vector3f(minHeight.x(), minHeight.y(), minHeight.z());
@@ -134,22 +133,16 @@ public class Slider extends Widget {
 	}
 
 	protected void onChangePropertyShaper() {
-		if (this.shape == null) {
-			this.shape = new GuiShape(this.propertyConfig);
-		} else {
-			this.shape.setSource(this.propertyConfig);
-		}
+		//		if (this.shape == null) {
+		//			this.shape = new GuiShape(this.propertyConfig);
+		//		} else {
+		//			this.shape.setSource(this.propertyConfig);
+		//		}
 	}
 
 	@Override
 	public void onDraw() {
-		if (this.shape != null) {
-			// draw background
-			this.shape.draw(true, 0);
-			// draw slider
-			this.shape.draw(true, 1);
-		}
-
+		this.compositing.draw();
 	}
 
 	@Override
@@ -218,7 +211,7 @@ public class Slider extends Widget {
 			//return;
 		}
 		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
-		this.shape.clear();
+		this.compositing.clear();
 		//this.gc.clear();
 		/*
 		if (this.colorIdTextFg >= 0) {
@@ -228,7 +221,7 @@ public class Slider extends Widget {
 			//this.text.setSelectionColor(this.shape.getColor(this.colorIdSelection));
 		}
 		*/
-		final Padding padding = this.shape.getPadding();
+		final Padding padding = Padding.ZERO;//this.shape.getPadding();
 		{
 			// Manage external shape:
 			Vector3f tmpSizeShaper = this.minSize;
@@ -254,8 +247,9 @@ public class Slider extends Widget {
 			tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
 
 			this.overPositionStart = tmpOriginShaper;
+			this.overPositionSize = tmpSizeShaper;
 			this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
-			this.shape.setShape(0, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
+			//this.shape.setShape(0, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
 		}
 		{
 			// Manage cursor:
@@ -283,11 +277,19 @@ public class Slider extends Widget {
 			tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
 
 			this.overCursorPositionStart = tmpOriginShaper;
+			this.overCursorPositionSize = tmpSizeShaper;
 			this.overCursorPositionStop = tmpOriginShaper.add(tmpSizeShaper);
-			this.shape.setShape(1, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
+			//this.shape.setShape(1, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
 		}
+		this.compositing.setRectangleAsSource((int) this.overPositionSize.x(), (int) this.overPositionSize.y(),
+				Color.GREEN);
+		// TODO: Refaire le design de cet affichage...
+		this.compositing.setPos(this.overPositionStart);
+		this.compositing.print(new Vector2f(this.overPositionSize.x(), this.overPositionSize.y()));
+		this.compositing.flush();
+		
 		//this.gc.flush();
-		this.shape.flush();
+		this.compositing.flush();
 
 	}
 
