@@ -4,6 +4,7 @@ import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
@@ -12,7 +13,7 @@ import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.HighSpeedMode;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.compositing.GuiShape;
+import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.key.KeyStatus;
@@ -35,8 +36,9 @@ class WidgetScrolled extends Widget {
 	public static final int CALCULATE_SIMULTANEOUS_FINGER = 5;
 	protected Uri propertyShapeVert = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Vertical shaper name
 	protected Uri propertyShapeHori = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Horizontal shaper name
-	private GuiShape shaperH = null; //!< Compositing theme Horizontal.
-	private GuiShape shaperV = null; //!< Compositing theme Vertical.
+
+	protected CompositingSVG compositingH = new CompositingSVG();
+	protected CompositingSVG compositingV = new CompositingSVG();
 	protected Vector2f originScrooled = Vector2f.ZERO; //!< pixel distance from the origin of the display (Bottum left)
 	protected Vector2f maxSize; //!< Maximum size of the Widget ==> to display scrollbar
 	protected Vector2f limitScrolling = Vector2f.ZERO; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
@@ -88,27 +90,27 @@ class WidgetScrolled extends Widget {
 	}
 
 	protected void onChangePropertyShapeHori() {
-		if (this.shaperH == null) {
-			this.shaperH = new GuiShape(this.propertyShapeHori);
-		} else {
-			this.shaperH.setSource(this.propertyShapeHori);
-		}
+		//		if (this.shaperH == null) {
+		//			this.shaperH = new GuiShape(this.propertyShapeHori);
+		//		} else {
+		//			this.shaperH.setSource(this.propertyShapeHori);
+		//		}
 		markToRedraw();
 	}
 
 	protected void onChangePropertyShapeVert() {
-		if (this.shaperV == null) {
-			this.shaperV = new GuiShape(this.propertyShapeVert);
-		} else {
-			this.shaperV.setSource(this.propertyShapeVert);
-		}
+		//		if (this.shaperV == null) {
+		//			this.shaperV = new GuiShape(this.propertyShapeVert);
+		//		} else {
+		//			this.shaperV.setSource(this.propertyShapeVert);
+		//		}
 		markToRedraw();
 	}
 
 	@Override
 	protected void onDraw() {
-		this.shaperH.draw();
-		this.shaperV.draw();
+		this.compositingH.draw();
+		this.compositingV.draw();
 	}
 
 	@Override
@@ -117,8 +119,8 @@ class WidgetScrolled extends Widget {
 		Vector3f relativePos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0.0f));
 		// Correction due to the open Gl insertion ...
 		relativePos = relativePos.withY(this.size.y() - relativePos.y());
-		final Padding paddingV = this.shaperV.getPadding();
-		final Padding paddingH = this.shaperH.getPadding();
+		final Padding paddingV = new Padding(2, 2, 2, 2);// this.shaperV.getPadding();
+		final Padding paddingH = new Padding(2, 2, 2, 2);// this.shaperH.getPadding();
 		if (this.scroollingMode == ScrollingMode.scroolModeNormal) {
 			if (event.type() == KeyType.mouse
 					&& (this.highSpeedType == KeyType.unknow || this.highSpeedType == KeyType.mouse)) {
@@ -443,14 +445,14 @@ class WidgetScrolled extends Widget {
 
 	@Override
 	public void onRegenerateDisplay() {
-		this.shaperH.clear();
-		this.shaperV.clear();
+		this.compositingH.clear();
+		this.compositingV.clear();
 		if (this.scroollingMode == ScrollingMode.scroolModeGame) {
 			// nothing to do ...
 			return;
 		}
-		final Padding paddingVert = this.shaperV.getPadding();
-		final Padding paddingHori = this.shaperH.getPadding();
+		final Padding paddingVert = new Padding(2, 2, 2, 2); // this.compositingV.getPadding();
+		final Padding paddingHori = new Padding(2, 2, 2, 2); // this.compositingH.getPadding();
 		if (this.size.y() < this.maxSize.y() || this.originScrooled.y() != 0) {
 			float lenScrollBar = this.size.y() * this.size.y() / this.maxSize.y();
 			lenScrollBar = FMath.avg(10.0f, lenScrollBar, this.size.y());
@@ -458,10 +460,18 @@ class WidgetScrolled extends Widget {
 					/ (this.maxSize.y() - this.size.y() * this.limitScrolling.y());
 			originScrollBar = FMath.avg(0.0f, originScrollBar, 1.0f);
 			originScrollBar *= (this.size.y() - lenScrollBar);
-			this.shaperV.setShape(new Vector2f(this.size.x() - paddingVert.x(), 0),
-					new Vector2f(paddingVert.x(), this.size.y()),
-					new Vector2f(this.size.x() - paddingVert.right(), this.size.y() - originScrollBar - lenScrollBar),
-					new Vector2f(0, lenScrollBar));
+
+			final Vector2f renderOrigin = new Vector2f(this.size.x() - paddingVert.x(), 0);
+			final Vector2f renderSize = new Vector2f(paddingVert.x(), this.size.y());
+			this.compositingV.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
+			this.compositingV.setPos(renderOrigin);
+			this.compositingV.print(renderSize);
+			this.compositingV.flush();
+			
+			//			this.shaperV.setShape(new Vector2f(this.size.x() - paddingVert.x(), 0),
+			//					new Vector2f(paddingVert.x(), this.size.y()),
+			//					new Vector2f(this.size.x() - paddingVert.right(), this.size.y() - originScrollBar - lenScrollBar),
+			//					new Vector2f(0, lenScrollBar));
 		}
 		if (this.size.x() < this.maxSize.x() || this.originScrooled.x() != 0) {
 			float lenScrollBar = (this.size.x() - paddingHori.left()) * (this.size.x() - paddingVert.x())
@@ -471,8 +481,16 @@ class WidgetScrolled extends Widget {
 					/ (this.maxSize.x() - this.size.x() * this.limitScrolling.x());
 			originScrollBar = FMath.avg(0.0f, originScrollBar, 1.0f);
 			originScrollBar *= (this.size.x() - paddingHori.right() - lenScrollBar);
-			this.shaperH.setShape(new Vector2f(0, 0), new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y()),
-					new Vector2f(originScrollBar, paddingHori.bottom()), new Vector2f(lenScrollBar, 0));
+
+			final Vector2f renderOrigin = Vector2f.ZERO;
+			final Vector2f renderSize = new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y());
+			this.compositingH.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
+			this.compositingH.setPos(renderOrigin);
+			this.compositingH.print(renderSize);
+			this.compositingH.flush();
+			
+			//			this.shaperH.setShape(new Vector2f(0, 0), new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y()),
+			//					new Vector2f(originScrollBar, paddingHori.bottom()), new Vector2f(lenScrollBar, 0));
 		}
 	}
 

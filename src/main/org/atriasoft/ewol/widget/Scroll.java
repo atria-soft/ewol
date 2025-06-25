@@ -9,6 +9,7 @@ import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -18,7 +19,7 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.GravityVertical;
 import org.atriasoft.ewol.HighSpeedMode;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.compositing.GuiShape;
+import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
@@ -36,9 +37,8 @@ class Scroll extends Container {
 
 	protected boolean propertyHover = true; //!< Horizontal shaper name
 
-	protected GuiShape shaperH; //!< Compositing theme Horizontal.
-
-	protected GuiShape shaperV; //!< Compositing theme Vertical.
+	protected CompositingSVG compositingH = new CompositingSVG();
+	protected CompositingSVG compositingV = new CompositingSVG();
 	protected float pixelScrolling = 20;
 	protected Vector3f highSpeedStartPos = Vector3f.ZERO;
 	protected HighSpeedMode highSpeedMode = HighSpeedMode.speedModeDisable;
@@ -46,18 +46,6 @@ class Scroll extends Container {
 	protected KeyType highSpeedType = KeyType.unknow;
 
 	public Scroll() {
-		/*
-		// Remove gravity property: (only keep top/buttom)
-		propertyGravity.remove("center");
-		propertyGravity.remove("top-left");
-		//propertyGravity.remove("top");
-		propertyGravity.remove("top-right");
-		propertyGravity.remove("right");
-		propertyGravity.remove("buttom-right");
-		//propertyGravity.remove("buttom");
-		propertyGravity.remove("buttom-left");
-		propertyGravity.remove("left");
-		*/
 		onChangePropertyShapeVert();
 		onChangePropertyShapeHori();
 	}
@@ -118,12 +106,12 @@ class Scroll extends Container {
 	}
 
 	protected void onChangePropertyShapeHori() {
-		this.shaperH.setSource(this.propertyShapeHori);
+		//TODO: this.shaperH.setSource(this.propertyShapeHori);
 		markToRedraw();
 	}
 
 	protected void onChangePropertyShapeVert() {
-		this.shaperV.setSource(this.propertyShapeVert);
+		//TODO: this.shaperV.setSource(this.propertyShapeVert);
 		markToRedraw();
 	}
 
@@ -171,8 +159,8 @@ class Scroll extends Container {
 
 	@Override
 	protected void onDraw() {
-		this.shaperH.draw();
-		this.shaperV.draw();
+		this.compositingH.draw();
+		this.compositingV.draw();
 	}
 
 	@Override
@@ -428,10 +416,10 @@ class Scroll extends Container {
 			return;
 		}
 		// clear all previous display
-		this.shaperH.clear();
-		this.shaperV.clear();
-		final Padding paddingVert = this.shaperV.getPadding();
-		final Padding paddingHori = this.shaperH.getPadding();
+		this.compositingH.clear();
+		this.compositingV.clear();
+		final Padding paddingVert = new Padding(2, 2, 2, 2); // this.compositingV.getPadding();
+		final Padding paddingHori = new Padding(2, 2, 2, 2); // this.compositingH.getPadding();
 		Vector3f scrollOffset = Vector3f.ZERO;
 		Vector3f scrollSize = Vector3f.ZERO;
 		if (this.subWidget != null) {
@@ -444,10 +432,19 @@ class Scroll extends Container {
 			float originScrollBar = scrollOffset.y() / (scrollSize.y() - this.size.y() * this.propertyLimit.y());
 			originScrollBar = FMath.avg(0.0f, originScrollBar, 1.0f);
 			originScrollBar *= (this.size.y() - lenScrollBar);
+			
+			final Vector2f renderOrigin = new Vector2f(this.size.x() - paddingVert.x(), 0);
+			final Vector2f renderSize = new Vector2f(paddingVert.x(), this.size.y());
+			this.compositingV.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
+			this.compositingV.setPos(renderOrigin);
+			this.compositingV.print(renderSize);
+			this.compositingV.flush();
+			/*
 			this.shaperV.setShape(new Vector2f(this.size.x() - paddingVert.x(), 0),
 					new Vector2f(paddingVert.x(), this.size.y()),
 					new Vector2f(this.size.x() - paddingVert.right(), this.size.y() - originScrollBar - lenScrollBar),
 					new Vector2f(0, lenScrollBar));
+			*/
 		}
 		if (this.size.x() < scrollSize.x() || scrollOffset.x() != 0) {
 			float lenScrollBar = (this.size.x() - paddingHori.left()) * (this.size.x() - paddingVert.x())
@@ -456,8 +453,17 @@ class Scroll extends Container {
 			float originScrollBar = scrollOffset.x() / (scrollSize.x() - this.size.x() * this.propertyLimit.x());
 			originScrollBar = FMath.avg(0.0f, originScrollBar, 1.0f);
 			originScrollBar *= (this.size.x() - paddingHori.right() - lenScrollBar);
+			
+			final Vector2f renderOrigin = Vector2f.ZERO;
+			final Vector2f renderSize = new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y());
+			this.compositingH.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
+			this.compositingH.setPos(renderOrigin);
+			this.compositingH.print(renderSize);
+			this.compositingH.flush();
+			/*
 			this.shaperH.setShape(Vector2f.ZERO, new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y()),
 					new Vector2f(originScrollBar, paddingHori.bottom()), new Vector2f(lenScrollBar, 0));
+			*/
 		}
 	}
 
