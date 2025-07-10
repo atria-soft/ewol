@@ -10,8 +10,8 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.etk.math.Vector3i;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.compositing.CompositingSVG;
@@ -41,12 +41,12 @@ public class Slider extends Widget {
 	@AknotDescription("Tick value change")
 	public Signal<Float> signalValue = new Signal<>();
 	// element over:
-	Vector3f overPositionStart = Vector3f.ZERO;
-	Vector3f overPositionStop = Vector3f.ZERO;
-	Vector3f overPositionSize = Vector3f.ZERO;
-	Vector3f overCursorPositionStart = Vector3f.ZERO;
-	Vector3f overCursorPositionStop = Vector3f.ZERO;
-	Vector3f overCursorPositionSize = Vector3f.ZERO;
+	Vector2f overPositionStart = Vector2f.ZERO;
+	Vector2f overPositionStop = Vector2f.ZERO;
+	Vector2f overPositionSize = Vector2f.ZERO;
+	Vector2f overCursorPositionStart = Vector2f.ZERO;
+	Vector2f overCursorPositionStop = Vector2f.ZERO;
+	Vector2f overCursorPositionSize = Vector2f.ZERO;
 
 	//@AknotAutoGenerateProperty("minimum", "configuration of the widget")
 	private Float propertyMinimum = 0.0f;
@@ -75,19 +75,19 @@ public class Slider extends Widget {
 		super.calculateMinMaxSize();
 		// get generic padding
 		final Padding padding = Padding.ZERO;
-		final Vector3i minHeight = Vector3i.VALUE_16;
+		final Vector2i minHeight = Vector2i.VALUE_16;
 
-		Vector3f minimumSizeBase = new Vector3f(minHeight.x(), minHeight.y(), minHeight.z());
+		Vector2f minimumSizeBase = new Vector2f(minHeight.x(), minHeight.y());
 		// add padding :
-		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y(), padding.z());
-		this.minSize = Vector3f.max(this.minSize, minimumSizeBase);
+		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
+		this.minSize = Vector2f.max(this.minSize, minimumSizeBase);
 		// verify the min max of the min size ...
 		checkMinSize();
 		LOGGER.error("min size = " + this.minSize);
 
 	}
 
-	private boolean checkIfOver(final Vector3f relPos) {
+	private boolean checkIfOver(final Vector2f relPos) {
 		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
 				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
@@ -147,8 +147,8 @@ public class Slider extends Widget {
 
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		final Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
-		final Vector3f relPos = relativePosition(positionAbsolute);
+		final Vector2f positionAbsolute = new Vector2f(event.pos().x(), event.pos().y());
+		final Vector2f relPos = relativePosition(positionAbsolute);
 		LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = checkIfOver(relPos);
 		if (event.inputId() != 1) {
@@ -224,8 +224,8 @@ public class Slider extends Widget {
 		final Padding padding = Padding.ZERO;//this.shape.getPadding();
 		{
 			// Manage external shape:
-			Vector3f tmpSizeShaper = this.minSize;
-			Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
+			Vector2f tmpSizeShaper = this.minSize;
+			Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 			if (this.propertyFill.x()) {
 				tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
 				delta = delta.withX(0.0f);
@@ -235,16 +235,16 @@ public class Slider extends Widget {
 				delta = delta.withY(0.0f);
 			}
 
-			Vector3f tmpOriginShaper = delta;
-			Vector3f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
-			//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
-			Vector3f tmpOriginInside = Vector3f.ZERO;
+			Vector2f tmpOriginShaper = delta;
+			Vector2f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y());
+			//Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
+			Vector2f tmpOriginInside = Vector2f.ZERO;
 			// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 			// fix all the position in the int class:
-			tmpSizeShaper = Vector3f.clipInt(tmpSizeShaper);
-			tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
-			tmpSizeInside = Vector3f.clipInt(tmpSizeInside);
-			tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
+			tmpSizeShaper = Vector2f.clipInt(tmpSizeShaper);
+			tmpOriginShaper = Vector2f.clipInt(tmpOriginShaper);
+			tmpSizeInside = Vector2f.clipInt(tmpSizeInside);
+			tmpOriginInside = Vector2f.clipInt(tmpOriginInside);
 
 			this.overPositionStart = tmpOriginShaper;
 			this.overPositionSize = tmpSizeShaper;
@@ -253,17 +253,17 @@ public class Slider extends Widget {
 		}
 		{
 			// Manage cursor:
-			Vector3f tmpSizeShaper = this.minSize;
-			Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
+			Vector2f tmpSizeShaper = this.minSize;
+			Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 			if (this.propertyFill.y()) {
 				tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 				delta = delta.withY(0.0f);
 			}
 
-			Vector3f tmpOriginShaper = delta;
-			Vector3f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
-			//Vector3f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
-			Vector3f tmpOriginInside = Vector3f.ZERO;
+			Vector2f tmpOriginShaper = delta;
+			Vector2f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y());
+			//Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
+			Vector2f tmpOriginInside = Vector2f.ZERO;
 
 			final float xxx = tmpOriginShaper.x() * 2.0f;
 
@@ -271,10 +271,10 @@ public class Slider extends Widget {
 					xxx * (this.propertyValue - this.propertyMinimum) / (this.propertyMaximum - this.propertyMinimum));
 			// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 			// fix all the position in the int class:
-			tmpSizeShaper = Vector3f.clipInt(tmpSizeShaper);
-			tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
-			tmpSizeInside = Vector3f.clipInt(tmpSizeInside);
-			tmpOriginInside = Vector3f.clipInt(tmpOriginInside);
+			tmpSizeShaper = Vector2f.clipInt(tmpSizeShaper);
+			tmpOriginShaper = Vector2f.clipInt(tmpOriginShaper);
+			tmpSizeInside = Vector2f.clipInt(tmpSizeInside);
+			tmpOriginInside = Vector2f.clipInt(tmpOriginInside);
 
 			this.overCursorPositionStart = tmpOriginShaper;
 			this.overCursorPositionSize = tmpSizeShaper;

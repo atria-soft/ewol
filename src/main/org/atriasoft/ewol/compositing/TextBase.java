@@ -13,7 +13,7 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.ewol.compositing.tools.TextDecoration;
 import org.atriasoft.ewol.resource.font.FontMode;
@@ -35,8 +35,8 @@ public abstract class TextBase extends Compositing {
 	// previously this line and the center is perform with this one)
 	protected AlignMode alignment = AlignMode.DISABLE; // !< Current Alignment mode (justify/left/right ...)
 	protected boolean clippingEnable = false; // !< true if the clipping must be activated
-	protected Vector3f clippingPosStart = Vector3f.ZERO; // !< Clipping start position
-	protected Vector3f clippingPosStop = Vector3f.ZERO; // !< Clipping stop position
+	protected Vector2f clippingPosStart = Vector2f.ZERO; // !< Clipping start position
+	protected Vector2f clippingPosStop = Vector2f.ZERO; // !< Clipping stop position
 	protected Color color = Color.BLACK; // !< The text foreground color
 	protected Color colorBg = Color.NONE; // !< The text background color
 	protected Color colorCursor = Color.BLACK; // !< The text cursor color
@@ -61,11 +61,11 @@ public abstract class TextBase extends Compositing {
 	protected int oGLtexID = -1; // !< openGL id on the element (texture ID)
 	protected int oGLtextHeight = -1; // !< openGL Id on the texture height
 	protected int oGLtextWidth = -1; // !< openGL Id on the texture width
-	protected Vector3f position = Vector3f.ZERO; // !< The current position to draw
+	protected Vector2f position = Vector2f.ZERO; // !< The current position to draw
 	protected Character previousCharcode = '\0'; // !< we remember the previous charcode to perform the kerning. @ref Kerning
 	protected int selectionStartPos = -100; // !< start position of the Selection (if == this.cursorPos ==> no
-	protected Vector3f sizeDisplayStart = Vector3f.ZERO; // !< The start windows of the display.
-	protected Vector3f sizeDisplayStop = Vector3f.ZERO; // !< The end windows of the display.
+	protected Vector2f sizeDisplayStart = Vector2f.ZERO; // !< The start windows of the display.
+	protected Vector2f sizeDisplayStop = Vector2f.ZERO; // !< The end windows of the display.
 	protected float startTextPos = 0; // !< start position of the Alignment (when \n the text return at this
 	// position)
 	protected float stopTextPos = 0; // !< end of the alignment (when a string is too height it cut at the word
@@ -98,7 +98,7 @@ public abstract class TextBase extends Compositing {
 	 * @param charcode The Unicode value to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSize(final Character charcode) {
+	public Vector2f calculateSize(final Character charcode) {
 		return calculateSizeChar(charcode);
 	}
 	
@@ -107,10 +107,10 @@ public abstract class TextBase extends Compositing {
 	 * @param text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSize(final String text) {
-		Vector3f outputSize = Vector3f.ZERO;
+	public Vector2f calculateSize(final String text) {
+		Vector2f outputSize = Vector2f.ZERO;
 		for (int iii = 0; iii < text.length(); iii++) {
-			final Vector3f tmpp = calculateSize(text.charAt(iii));
+			final Vector2f tmpp = calculateSize(text.charAt(iii));
 			if (outputSize.y() == 0) {
 				outputSize = outputSize.withY(tmpp.y());
 			}
@@ -120,16 +120,16 @@ public abstract class TextBase extends Compositing {
 	}
 	
 	// ! @previous
-	public abstract Vector3f calculateSizeChar(Character charcode);
+	public abstract Vector2f calculateSizeChar(Character charcode);
 	
 	/**
 	 * calculate a theoric text size
 	 * @param text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSizeDecorated(final String text) {
+	public Vector2f calculateSizeDecorated(final String text) {
 		if (text.length() == 0) {
-			return Vector3f.ZERO;
+			return Vector2f.ZERO;
 		}
 		
 		final StringBuilder tmpData = new StringBuilder("<html><body>\n");
@@ -143,14 +143,14 @@ public abstract class TextBase extends Compositing {
 	 * @param text The string to calculate dimention.
 	 * @return The theoric size used.
 	 */
-	public Vector3f calculateSizeHTML(final String text) {
+	public Vector2f calculateSizeHTML(final String text) {
 		// remove intermediate result
 		reset();
 		// LOGGER.debug(" 0 size for=\n" + text);
 		// disable display system
 		this.needDisplay = false;
 		
-		setPos(Vector3f.ZERO);
+		setPos(Vector2f.ZERO);
 		// same as print without the end display ...
 		printHTML(text);
 		//LOGGER.error(" ]]]] position={}", this.position);
@@ -158,17 +158,16 @@ public abstract class TextBase extends Compositing {
 		//LOGGER.error(" ]]]] sizeDisplayStop={}", this.sizeDisplayStop);
 		
 		// get the last elements
-		this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
-		this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
+		this.sizeDisplayStop = Vector2f.max(this.position, this.sizeDisplayStop);
+		this.sizeDisplayStart = Vector2f.min(this.position, this.sizeDisplayStart);
 		
 		// LOGGER.debug(" 2 Start pos=" + this.sizeDisplayStart);
 		// LOGGER.debug(" 2 Stop pos=" + this.sizeDisplayStop);
 		// set back the display system
 		this.needDisplay = true;
 		
-		return new Vector3f(this.sizeDisplayStop.x() - this.sizeDisplayStart.x(),
-				this.sizeDisplayStop.y() - this.sizeDisplayStart.y(),
-				this.sizeDisplayStop.z() - this.sizeDisplayStart.z());
+		return new Vector2f(this.sizeDisplayStop.x() - this.sizeDisplayStart.x(),
+				this.sizeDisplayStop.y() - this.sizeDisplayStart.y());
 	}
 	
 	/**
@@ -258,7 +257,7 @@ public abstract class TextBase extends Compositing {
 		}
 		
 		for (int iii = start; iii < text.length(); iii++) {
-			final Vector3f tmpSize = calculateSize(text.charAt(iii));
+			final Vector2f tmpSize = calculateSize(text.charAt(iii));
 			// check overflow :
 			if (endPos + tmpSize.x() > stopPosition) {
 				stop.value = iii;
@@ -307,7 +306,7 @@ public abstract class TextBase extends Compositing {
 	 */
 	public void forceLineReturn() {
 		// reset position :
-		setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), 0));
+		setPos(new Vector2f(this.startTextPos, this.position.y() - getHeight()));
 	}
 	
 	/**
@@ -339,7 +338,7 @@ public abstract class TextBase extends Compositing {
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
 	 */
-	public Vector3f getPos() {
+	public Vector2f getPos() {
 		return this.position;
 	}
 	
@@ -564,11 +563,11 @@ public abstract class TextBase extends Compositing {
 					}
 				}
 				if (this.needDisplay && this.colorBg.a() != 0) {
-					final Vector3f pos = this.position;
+					final Vector2f pos = this.position;
 					this.vectorialDraw.setPos(pos);
 					printChar(text.charAt(iii));
 					final float fontHeigh = getHeight();
-					this.vectorialDraw.rectangleWidth(new Vector3f(this.position.x() - pos.x(), fontHeigh, 0.0f));
+					this.vectorialDraw.rectangleWidth(new Vector2f(this.position.x() - pos.x(), fontHeigh));
 					this.nbCharDisplayed++;
 				} else {
 					printChar(text.charAt(iii));
@@ -613,15 +612,13 @@ public abstract class TextBase extends Compositing {
 					case RIGHT:
 						if (this.needDisplay) {
 							// Move the first char at the right :
-							setPos(new Vector3f(this.position.x() + freeSpace.value, this.position.y(),
-									this.position.z()));
+							setPos(new Vector2f(this.position.x() + freeSpace.value, this.position.y()));
 						}
 						break;
 					case CENTER:
 						if (this.needDisplay) {
 							// Move the first char at the right :
-							setPos(new Vector3f(this.position.x() + freeSpace.value / 2, this.position.y(),
-									this.position.z()));
+							setPos(new Vector2f(this.position.x() + freeSpace.value / 2, this.position.y()));
 						}
 						break;
 					default:
@@ -658,16 +655,16 @@ public abstract class TextBase extends Compositing {
 							this.vectorialDraw.setPos(this.position);
 						}
 						// Must generate a dynamic space :
-						setPos(new Vector3f(this.position.x() + interpolation, this.position.y(), this.position.z()));
+						setPos(new Vector2f(this.position.x() + interpolation, this.position.y()));
 						if (this.needDisplay && this.colorBg.a() != 0) {
-							this.vectorialDraw.rectangleWidth(new Vector3f(interpolation, fontHeigh, 0.0f));
+							this.vectorialDraw.rectangleWidth(new Vector2f(interpolation, fontHeigh));
 						}
 					} else // LOGGER.debug(" generateString : \"" + (char)text[iii] + "\"");
 					if (this.needDisplay && this.colorBg.a() != 0) {
-						final Vector3f pos = this.position;
+						final Vector2f pos = this.position;
 						this.vectorialDraw.setPos(pos);
 						printChar(text.charAt(iii));
-						this.vectorialDraw.rectangleWidth(new Vector3f(this.position.x() - pos.x(), fontHeigh, 0.0f));
+						this.vectorialDraw.rectangleWidth(new Vector2f(this.position.x() - pos.x(), fontHeigh));
 						this.nbCharDisplayed++;
 					} else {
 						printChar(text.charAt(iii));
@@ -690,12 +687,12 @@ public abstract class TextBase extends Compositing {
 				} else if (text.charAt(stop.value) == (char) Character.SPACE_SEPARATOR) {
 					currentId = stop.value + 1;
 					// reset position :
-					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
+					setPos(new Vector2f(this.startTextPos, this.position.y() - getHeight()));
 					this.nbCharDisplayed++;
 				} else if (text.charAt(stop.value) == (char) Character.LINE_SEPARATOR) {
 					currentId = stop.value + 1;
 					// reset position :
-					setPos(new Vector3f(this.startTextPos, this.position.y() - getHeight(), this.position.z()));
+					setPos(new Vector2f(this.startTextPos, this.position.y() - getHeight()));
 					this.nbCharDisplayed++;
 				} else {
 					currentId = stop.value;
@@ -724,10 +721,10 @@ public abstract class TextBase extends Compositing {
 	public void printCursor(final boolean isInsertMode, final float cursorSize) {
 		final int fontHeigh = (int) getHeight();
 		if (isInsertMode) {
-			this.vectorialDraw.rectangleWidth(new Vector3f(cursorSize, fontHeigh, 0));
+			this.vectorialDraw.rectangleWidth(new Vector2f(cursorSize, fontHeigh));
 		} else {
 			this.vectorialDraw.setThickness(2);
-			this.vectorialDraw.lineRel(new Vector3f(0, fontHeigh, 0));
+			this.vectorialDraw.lineRel(new Vector2f(0, fontHeigh));
 			this.vectorialDraw.setThickness(0);
 		}
 	}
@@ -834,9 +831,9 @@ public abstract class TextBase extends Compositing {
 	 * clear all the intermediate result detween 2 prints
 	 */
 	public void reset() {
-		this.position = Vector3f.ZERO;
-		this.clippingPosStart = Vector3f.ZERO;
-		this.clippingPosStop = Vector3f.ZERO;
+		this.position = Vector2f.ZERO;
+		this.clippingPosStart = Vector2f.ZERO;
+		this.clippingPosStop = Vector2f.ZERO;
 		this.sizeDisplayStart = this.position;
 		this.sizeDisplayStop = this.position;
 		this.nbCharDisplayed = 0;
@@ -857,20 +854,15 @@ public abstract class TextBase extends Compositing {
 	}
 	
 	@Override
-	public void rotate(final Vector3f vect, final float angle) {
+	public void rotate(final Vector2f vect, final float angle) {
 		super.rotate(vect, angle);
 		this.vectorialDraw.rotate(vect, angle);
 	}
 	
 	@Override
-	public void scale(final Vector3f vect) {
+	public void scale(final Vector2f vect) {
 		super.scale(vect);
 		this.vectorialDraw.scale(vect);
-	}
-	
-	// ! @previous
-	public void setClipping(final Vector2f pos, final Vector2f posEnd) {
-		setClipping(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(posEnd.x(), posEnd.y(), 1));
 	}
 	
 	/**
@@ -878,11 +870,11 @@ public abstract class TextBase extends Compositing {
 	 * @param pos Start position of the clipping
 	 * @param posEnd End position of the clipping
 	 */
-	public void setClipping(final Vector3f pos, final Vector3f posEnd) {
+	public void setClipping(final Vector2f pos, final Vector2f posEnd) {
 		// note the internal system all time request to have a bounding all time in the
 		// same order
-		this.clippingPosStop = Vector3f.max(pos, posEnd);
-		this.clippingPosStart = Vector3f.min(pos, posEnd);
+		this.clippingPosStop = Vector2f.max(pos, posEnd);
+		this.clippingPosStart = Vector2f.min(pos, posEnd);
 		this.clippingEnable = true;
 		this.vectorialDraw.setClipping(this.clippingPosStart, this.clippingPosStop);
 	}
@@ -898,17 +890,13 @@ public abstract class TextBase extends Compositing {
 		this.vectorialDraw.setClippingMode(this.clippingEnable);
 	}
 	
-	// ! @previous
-	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
-		setClipping(pos, pos.add(width));
-	}
 	
 	/**
 	 * Request a clipping area for the text (next draw only)
 	 * @param pos Start position of the clipping
 	 * @param width Width size of the clipping
 	 */
-	public void setClippingWidth(final Vector3f pos, final Vector3f width) {
+	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
 		setClipping(pos, pos.add(width));
 	}
 	
@@ -1051,21 +1039,16 @@ public abstract class TextBase extends Compositing {
 		this.kerning = newMode;
 	}
 	
-	// ! @previous
-	public void setPos(final Vector2f pos) {
-		setPos(new Vector3f(pos.x(), pos.y(), 0));
-	}
-	
 	/**
 	 * set position for the next text writen
 	 * @param pos Position of the text (in 3D)
 	 */
-	public void setPos(final Vector3f pos) {
+	public void setPos(final Vector2f pos) {
 		// check min max for display area
 		if (this.nbCharDisplayed != 0) {
 			//LOGGER.trace("update size 1 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
-			this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
-			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
+			this.sizeDisplayStop = Vector2f.max(this.position, this.sizeDisplayStop);
+			this.sizeDisplayStart = Vector2f.min(this.position, this.sizeDisplayStart);
 		}
 		// update position
 		this.position = pos;
@@ -1078,22 +1061,17 @@ public abstract class TextBase extends Compositing {
 			//LOGGER.trace("update size 0 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		} else {
 			//LOGGER.trace("update size 3 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
-			this.sizeDisplayStop = Vector3f.max(this.position, this.sizeDisplayStop);
-			this.sizeDisplayStart = Vector3f.min(this.position, this.sizeDisplayStart);
+			this.sizeDisplayStop = Vector2f.max(this.position, this.sizeDisplayStop);
+			this.sizeDisplayStart = Vector2f.min(this.position, this.sizeDisplayStart);
 			//LOGGER.trace("update size 4 " + this.sizeDisplayStart + " " + this.sizeDisplayStop);
 		}
-	}
-	
-	// ! @previous
-	public void setRelPos(final Vector2f pos) {
-		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
 	
 	/**
 	 * set relative position for the next text written
 	 * @param pos offset apply of the text (in 3D)
 	 */
-	public void setRelPos(final Vector3f pos) {
+	public void setRelPos(final Vector2f pos) {
 		this.position = this.position.add(pos);
 		this.previousCharcode = 0;
 		this.vectorialDraw.setPos(this.position);
@@ -1129,7 +1107,7 @@ public abstract class TextBase extends Compositing {
 	}
 	
 	@Override
-	public void translate(final Vector3f vect) {
+	public void translate(final Vector2f vect) {
 		super.translate(vect);
 		this.vectorialDraw.translate(vect);
 	}

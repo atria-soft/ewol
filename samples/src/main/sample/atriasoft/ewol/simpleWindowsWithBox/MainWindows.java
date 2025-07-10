@@ -3,18 +3,15 @@ package sample.atriasoft.ewol.simpleWindowsWithBox;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
-import org.atriasoft.etk.Dimension3f;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.widget.Box;
-import org.atriasoft.ewol.widget.Box2;
 
 import sample.atriasoft.ewol.BasicWindows;
 
 public class MainWindows extends BasicWindows {
 
-	Box2 testWidget;
+	Box testWidget;
 
 	public MainWindows() {
 		//! [ewol_sample_HW_windows_title]
@@ -22,15 +19,15 @@ public class MainWindows extends BasicWindows {
 		
 		final Box innerWidget = new Box();
 		//this.testWidget.setPropertySource(new Uri("DATA", "mireA.png"));
-		innerWidget.setPropertyExpand(Vector3b.FALSE);
-		innerWidget.setPropertyExpandIfFree(Vector3b.TRUE);
-		innerWidget.setPropertyFill(Vector3b.TRUE);
+		innerWidget.setPropertyExpand(Vector2b.FALSE);
+		innerWidget.setPropertyExpandIfFree(Vector2b.TRUE);
+		innerWidget.setPropertyFill(Vector2b.TRUE);
 		innerWidget.setPropertyColor(Color.PINK);
-		innerWidget.setPropertyMinSize(new Dimension3f(new Vector3f(50, 80, 15)));
+		innerWidget.setPropertyMinSize(new Dimension2f(new Vector2f(50, 80)));
 
-		this.testWidget = new Box2(innerWidget);
-		this.testWidget.setPropertyExpand(Vector3b.FALSE);
-		this.testWidget.setPropertyFill(Vector3b.FALSE);
+		this.testWidget = new Box(innerWidget);
+		this.testWidget.setPropertyExpand(Vector2b.FALSE);
+		this.testWidget.setPropertyFill(Vector2b.FALSE);
 		this.testWidget.setPropertyBorderWidth(new Dimension1f(10));
 		this.testWidget.setPropertyBorderRadius(new Dimension1f(25));
 		this.testWidget.setPropertyBorderColor(Color.BLACK);

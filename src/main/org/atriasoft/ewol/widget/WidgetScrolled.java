@@ -9,7 +9,7 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.HighSpeedMode;
 import org.atriasoft.ewol.Padding;
@@ -116,7 +116,7 @@ class WidgetScrolled extends Widget {
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		LOGGER.trace("event XXX {}", event);
-		Vector3f relativePos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0.0f));
+		Vector2f relativePos = relativePosition(new Vector2f(event.pos().x(), event.pos().y()));
 		// Correction due to the open Gl insertion ...
 		relativePos = relativePos.withY(this.size.y() - relativePos.y());
 		final Padding paddingV = new Padding(2, 2, 2, 2);// this.shaperV.getPadding();
@@ -618,9 +618,9 @@ class WidgetScrolled extends Widget {
 			OpenGL.setViewPort(this.origin, this.size);
 			final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-this.size.x() / 2, this.size.x() / 2,
 					-this.size.y() / 2, this.size.y() / 2, -1, 1);
-			final Matrix4f tmpScale = Matrix4f.createMatrixScale(new Vector3f(this.zoom, this.zoom, 1));
+			final Matrix4f tmpScale = Matrix4f.createMatrixScale(new Vector2f(this.zoom, this.zoom));
 			final Matrix4f tmpTranslate = Matrix4f
-					.createMatrixTranslate(new Vector3f(-this.maxSize.x() / 2, -this.maxSize.y() / 2, -1));
+					.createMatrixTranslate(new Vector2f(-this.maxSize.x() / 2, -this.maxSize.y() / 2));
 			final Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
 			// set internal matrix system :
 			OpenGL.setMatrix(tmpMat);
@@ -633,7 +633,7 @@ class WidgetScrolled extends Widget {
 			final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-this.size.x() / 2, this.size.x() / 2,
 					-this.size.y() / 2, this.size.y() / 2, -1, 1);
 			final Matrix4f tmpTranslate = Matrix4f
-					.createMatrixTranslate(new Vector3f(-this.maxSize.x() / 2, -this.maxSize.y() / 2, -1));
+					.createMatrixTranslate(new Vector2f(-this.maxSize.x() / 2, -this.maxSize.y() / 2));
 			final Matrix4f tmpMat = tmpProjection.multiply(tmpTranslate);
 			// set internal matrix system :
 			OpenGL.setMatrix(tmpMat);

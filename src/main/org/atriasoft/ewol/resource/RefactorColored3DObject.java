@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * simple display of Colored3DObject ==> for DEBUG only Not availlable on
+ * simple display of Colored3DObject ==> for DEBUG only Not available on
  *        ALL platform (like webGL)
  */
 public class RefactorColored3DObject extends Resource {

@@ -15,8 +15,8 @@ import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotFactory;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.object.EwolObject;
 import org.slf4j.Logger;
@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 public class ContainerN extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerN.class);
 
-	protected Vector3b propertyLockExpand = Vector3b.FALSE; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
-	protected Vector3b subExpend = Vector3b.FALSE; //!< reference of the sub element expention requested.
+	protected Vector2b propertyLockExpand = Vector2b.FALSE; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
+	protected Vector2b subExpend = Vector2b.FALSE; //!< reference of the sub element expention requested.
 	protected List<Widget> subWidget = new ArrayList<>();
 
 	/**
@@ -40,22 +40,22 @@ public class ContainerN extends Widget {
 
 	@Override
 	public void calculateMinMaxSize() {
-		this.subExpend = Vector3b.FALSE;
-		this.minSize = Vector3f.ZERO;
-		this.maxSize = Vector3f.MAX_VALUE;
+		this.subExpend = Vector2b.FALSE;
+		this.minSize = Vector2f.ZERO;
+		this.maxSize = Vector2f.MAX_VALUE;
 		//LOGGER.error("[" + getId() + "] {" + getObjectType() + "} set min size : " +  this.minSize);
 		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				it.calculateMinMaxSize();
-				final Vector3b subExpendProp = it.canExpand();
+				final Vector2b subExpendProp = it.canExpand();
 				if (subExpendProp.x()) {
 					this.subExpend = this.subExpend.withX(true);
 				}
 				if (subExpendProp.y()) {
 					this.subExpend = this.subExpend.withX(true);
 				}
-				final Vector3f tmpSize = it.getCalculateMinSize();
-				this.minSize = Vector3f.max(tmpSize, this.minSize);
+				final Vector2f tmpSize = it.getCalculateMinSize();
+				this.minSize = Vector2f.max(tmpSize, this.minSize);
 			}
 		}
 		LOGGER.warn("[{}] Result min size : {}", getId(), this.minSize);
@@ -63,8 +63,8 @@ public class ContainerN extends Widget {
 
 	// herited function
 	@Override
-	public Vector3b canExpand() {
-		Vector3b res = this.propertyExpand;
+	public Vector2b canExpand() {
+		Vector2b res = this.propertyExpand;
 		if (!this.propertyLockExpand.x()) {
 			if (this.subExpend.x()) {
 				res = res.withX(true);
@@ -94,7 +94,7 @@ public class ContainerN extends Widget {
 	@AknotAttribute
 	@AknotName(value = "lock")
 	@AknotDescription(value = "Lock the subwidget expand")
-	public Vector3b getPropertyLockExpand() {
+	public Vector2b getPropertyLockExpand() {
 		return this.propertyLockExpand;
 	}
 
@@ -123,15 +123,15 @@ public class ContainerN extends Widget {
 	}
 
 	@Override
-	public Widget getWidgetAtPos(final Vector3f pos) {
+	public Widget getWidgetAtPos(final Vector2f pos) {
 		if (this.propertyHide) {
 			return null;
 		}
 		// for all element in the sizer ...
 		for (final Widget it : this.subWidget) {
 			if (it != null) {
-				final Vector3f tmpSize = it.getSize();
-				final Vector3f tmpOrigin = it.getOrigin();
+				final Vector2f tmpSize = it.getSize();
+				final Vector2f tmpOrigin = it.getOrigin();
 				if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
 						&& (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
 					final Widget tmpWidget = it.getWidgetAtPos(pos);
@@ -187,7 +187,7 @@ public class ContainerN extends Widget {
 	}
 
 	@Override
-	public void setOffset(final Vector3f newVal) {
+	public void setOffset(final Vector2f newVal) {
 		if (this.offset != newVal) {
 			super.setOffset(newVal);
 			// recalculate the new sise and position of sub widget ...
@@ -195,7 +195,7 @@ public class ContainerN extends Widget {
 		}
 	}
 
-	public void setPropertyLockExpand(final Vector3b propertyLockExpand) {
+	public void setPropertyLockExpand(final Vector2b propertyLockExpand) {
 		if (propertyLockExpand.equals(this.propertyLockExpand)) {
 			return;
 		}

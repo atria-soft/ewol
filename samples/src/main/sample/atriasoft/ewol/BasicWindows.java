@@ -62,15 +62,15 @@ public class BasicWindows extends Windows {
 		setPropertyTitle("No title set !!! for this test");
 		
 		final Sizer sizerMain = new Sizer(DisplayMode.HORIZONTAL);
-		sizerMain.setPropertyExpand(Vector3b.TRUE);
-		sizerMain.setPropertyFill(Vector3b.TRUE);
+		sizerMain.setPropertyExpand(Vector2b.TRUE);
+		sizerMain.setPropertyFill(Vector2b.TRUE);
 		setSubWidget(sizerMain);
 		
 		this.sizerMenuRoot = new Sizer(DisplayMode.VERTICAL);
-		this.sizerMenuRoot.setPropertyExpand(Vector3b.FALSE_TRUE_FALSE);
-		this.sizerMenuRoot.setPropertyLockExpand(Vector3b.TRUE);
-		this.sizerMenuRoot.setPropertyFill(Vector3b.TRUE);
-		this.sizerMenuRoot.setPropertyMinSize(new Dimension3f(new Vector3f(350, 10, 10), Distance.PIXEL));
+		this.sizerMenuRoot.setPropertyExpand(Vector2b.FALSE_TRUE);
+		this.sizerMenuRoot.setPropertyLockExpand(Vector2b.TRUE);
+		this.sizerMenuRoot.setPropertyFill(Vector2b.TRUE);
+		this.sizerMenuRoot.setPropertyMinSize(new Dimension2f(new Vector2f(350, 10), Distance.PIXEL));
 		this.sizerMenuRoot.setPropertyGravity(Gravity.TOP);
 		sizerMain.subWidgetAdd(this.sizerMenuRoot);
 		
@@ -79,42 +79,42 @@ public class BasicWindows extends Windows {
 		next.signalClick.connectAuto(this, BasicWindows::staticRequestNext);
 		
 		this.sizerMenu = new Sizer(DisplayMode.VERTICAL);
-		this.sizerMenu.setPropertyExpand(Vector3b.FALSE_TRUE_FALSE);
-		this.sizerMenu.setPropertyLockExpand(Vector3b.TRUE);
-		this.sizerMenu.setPropertyFill(Vector3b.TRUE);
-		this.sizerMenu.setPropertyMinSize(new Dimension3f(new Vector3f(350, 10, 10), Distance.PIXEL));
+		this.sizerMenu.setPropertyExpand(Vector2b.FALSE_TRUE);
+		this.sizerMenu.setPropertyLockExpand(Vector2b.TRUE);
+		this.sizerMenu.setPropertyFill(Vector2b.TRUE);
+		this.sizerMenu.setPropertyMinSize(new Dimension2f(new Vector2f(350, 10), Distance.PIXEL));
 		this.sizerMenu.setPropertyGravity(Gravity.TOP);
 		this.sizerMenuRoot.subWidgetAdd(this.sizerMenu);
 		
 		final Sizer sizerVertMain = new Sizer(DisplayMode.VERTICAL);
-		sizerVertMain.setPropertyExpand(Vector3b.TRUE);
-		sizerVertMain.setPropertyFill(Vector3b.TRUE);
+		sizerVertMain.setPropertyExpand(Vector2b.TRUE);
+		sizerVertMain.setPropertyFill(Vector2b.TRUE);
 		sizerMain.subWidgetAdd(sizerVertMain);
 		
 		{
 			final Spacer simpleSpacer = new Spacer();
-			simpleSpacer.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_128, Distance.PIXEL));
+			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_128, Distance.PIXEL));
 			simpleSpacer.setPropertyColor(Color.ALICE_BLUE);
-			simpleSpacer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			simpleSpacer.setPropertyExpandIfFree(Vector3b.TRUE);
-			simpleSpacer.setPropertyFill(Vector3b.TRUE);
-			simpleSpacer.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+			simpleSpacer.setPropertyExpandIfFree(Vector2b.TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE);
+			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			sizerVertMain.subWidgetAdd(simpleSpacer);
 		}
 		
 		this.sizerTestAreaHori = new Sizer(DisplayMode.HORIZONTAL);
-		this.sizerTestAreaHori.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-		this.sizerTestAreaHori.setPropertyExpandIfFree(Vector3b.TRUE);
-		this.sizerTestAreaHori.setPropertyFill(Vector3b.TRUE_FALSE_FALSE);
+		this.sizerTestAreaHori.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.sizerTestAreaHori.setPropertyExpandIfFree(Vector2b.TRUE);
+		this.sizerTestAreaHori.setPropertyFill(Vector2b.TRUE_FALSE);
 		sizerVertMain.subWidgetAdd(this.sizerTestAreaHori);
 		
 		{
 			final Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.DARK_GREEN);
-			simpleSpacer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			simpleSpacer.setPropertyExpandIfFree(Vector3b.TRUE);
-			simpleSpacer.setPropertyFill(Vector3b.TRUE);
-			simpleSpacer.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+			simpleSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+			simpleSpacer.setPropertyExpandIfFree(Vector2b.TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE);
+			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			sizerVertMain.subWidgetAdd(simpleSpacer);
 		}
 	}
@@ -133,8 +133,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Boolean value) {
 			final CheckBox checkBox = new CheckBox("Y");
-			checkBox.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			checkBox.setPropertyFill(Vector3b.TRUE);
+			checkBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+			checkBox.setPropertyFill(Vector2b.TRUE);
 			checkBox.setPropertyValue(value);
 			this.sizerMenu.subWidgetAdd(checkBox);
 			final Connection con = checkBox.signalValue.connect(valueButton -> {
@@ -161,13 +161,13 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Dimension1f value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -200,20 +200,20 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Dimension2f value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("X");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().x());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -233,20 +233,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Y");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().y());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -278,20 +278,20 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Dimension3f value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("X");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().x());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -311,20 +311,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Y");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().y());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -344,20 +344,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Z");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().z());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -388,8 +388,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Double value) {
 			final Spin spin = new Spin();
-			spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			spin.setPropertyFill(Vector3b.TRUE);
+			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue((int) (double) value);
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect(valueButton -> {
@@ -415,8 +415,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Float value) {
 			final Spin spin = new Spin();
-			spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			spin.setPropertyFill(Vector3b.TRUE);
+			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue((int) (float) value);
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect(valueButton -> {
@@ -442,9 +442,9 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Gravity value) {
 			final Button buttonGravity = Button.createLabelButton("Gravity");
-			buttonGravity.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			buttonGravity.setPropertyFill(Vector3b.TRUE);
-			buttonGravity.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+			buttonGravity.setPropertyExpand(Vector2b.TRUE_FALSE);
+			buttonGravity.setPropertyFill(Vector2b.TRUE);
+			buttonGravity.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			buttonGravity.setPropertyGravity(Gravity.CENTER);
 			this.sizerMenu.subWidgetAdd(buttonGravity);
 			final Label gravLabel = (Label) (buttonGravity.getSubWidget());
@@ -500,8 +500,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Integer value) {
 			final Spin spin = new Spin();
-			spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			spin.setPropertyFill(Vector3b.TRUE);
+			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue(value);
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect(valueButton -> {
@@ -528,8 +528,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Long value) {
 			final Spin spin = new Spin();
-			spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			spin.setPropertyFill(Vector3b.TRUE);
+			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue(value);
 			this.sizerMenu.subWidgetAdd(spin);
 			final Connection con = spin.signalValue.connect(valueButton -> {
@@ -555,8 +555,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final String value) {
 			final Entry element = new Entry();
-			element.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			element.setPropertyFill(Vector3b.TRUE);
+			element.setPropertyExpand(Vector2b.TRUE_FALSE);
+			element.setPropertyFill(Vector2b.TRUE);
 			element.setPropertyValue(value);
 			this.sizerMenu.subWidgetAdd(element);
 			final Connection con = element.signalModify.connect(valueButton -> {
@@ -582,8 +582,8 @@ public class BasicWindows extends Windows {
 		}
 		if (valueRaw instanceof final Uri value) {
 			final Entry element = new Entry();
-			element.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			element.setPropertyFill(Vector3b.TRUE);
+			element.setPropertyExpand(Vector2b.TRUE_FALSE);
+			element.setPropertyFill(Vector2b.TRUE);
 			element.setPropertyValue(value.toString());
 			this.sizerMenu.subWidgetAdd(element);
 			final Connection con = element.signalModify.connect(valueButton -> {
@@ -609,13 +609,13 @@ public class BasicWindows extends Windows {
 			return;
 		}
 		if (valueRaw instanceof final Vector3b value) {
-			lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			lineSizer.setPropertyFill(Vector3b.TRUE);
+			lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+			lineSizer.setPropertyFill(Vector2b.TRUE);
 			this.sizerMenu.subWidgetAdd(lineSizer);
 			{
 				final CheckBox checkBox = new CheckBox("X");
-				checkBox.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				checkBox.setPropertyFill(Vector3b.TRUE);
+				checkBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+				checkBox.setPropertyFill(Vector2b.TRUE);
 				checkBox.setPropertyValue(value.x());
 				lineSizer.subWidgetAdd(checkBox);
 				final Connection con = checkBox.signalValue.connect(valueButton -> {
@@ -634,8 +634,8 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final CheckBox checkBox = new CheckBox("Y");
-				checkBox.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				checkBox.setPropertyFill(Vector3b.TRUE);
+				checkBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+				checkBox.setPropertyFill(Vector2b.TRUE);
 				checkBox.setPropertyValue(value.y());
 				lineSizer.subWidgetAdd(checkBox);
 				final Connection con = checkBox.signalValue.connect(valueButton -> {
@@ -666,20 +666,20 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Vector2f value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("X");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.x());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -698,20 +698,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Y");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.y());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -742,20 +742,20 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Vector2i value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("X");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.x());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -774,20 +774,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Y");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.y());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -817,13 +817,13 @@ public class BasicWindows extends Windows {
 			return;
 		}
 		if (valueRaw instanceof final Vector3b value) {
-			lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-			lineSizer.setPropertyFill(Vector3b.TRUE);
+			lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+			lineSizer.setPropertyFill(Vector2b.TRUE);
 			this.sizerMenu.subWidgetAdd(lineSizer);
 			{
 				final CheckBox checkBox = new CheckBox("X");
-				checkBox.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				checkBox.setPropertyFill(Vector3b.TRUE);
+				checkBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+				checkBox.setPropertyFill(Vector2b.TRUE);
 				checkBox.setPropertyValue(value.x());
 				lineSizer.subWidgetAdd(checkBox);
 				final Connection con = checkBox.signalValue.connect(valueButton -> {
@@ -842,8 +842,8 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final CheckBox checkBox = new CheckBox("Y");
-				checkBox.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				checkBox.setPropertyFill(Vector3b.TRUE);
+				checkBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+				checkBox.setPropertyFill(Vector2b.TRUE);
 				checkBox.setPropertyValue(value.y());
 				lineSizer.subWidgetAdd(checkBox);
 				final Connection con = checkBox.signalValue.connect(valueButton -> {
@@ -861,8 +861,8 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final CheckBox checkBox = new CheckBox("Z");
-				checkBox.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				checkBox.setPropertyFill(Vector3b.TRUE);
+				checkBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+				checkBox.setPropertyFill(Vector2b.TRUE);
 				checkBox.setPropertyValue(value.z());
 				lineSizer.subWidgetAdd(checkBox);
 				final Connection con = checkBox.signalValue.connect(valueButton -> {
@@ -893,20 +893,20 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Vector3f value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("X");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.x());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -925,20 +925,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Y");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.y());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -957,20 +957,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Z");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.z());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -1001,20 +1001,20 @@ public class BasicWindows extends Windows {
 		if (valueRaw instanceof final Vector3i value) {
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("X");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.x());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -1033,20 +1033,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Y");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.y());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -1065,20 +1065,20 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Sizer lineSizer = new Sizer(DisplayMode.HORIZONTAL);
-				lineSizer.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				lineSizer.setPropertyFill(Vector3b.TRUE);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
 				final Label simpleLabel = new Label("Z");
-				simpleLabel.setPropertyExpand(Vector3b.FALSE);
-				simpleLabel.setPropertyFill(Vector3b.TRUE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
 				final Spin spin = new Spin();
-				spin.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				spin.setPropertyFill(Vector3b.TRUE);
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.z());
 				lineSizer.subWidgetAdd(spin);
 				final Connection con = spin.signalValue.connect(valueButton -> {
@@ -1192,9 +1192,9 @@ public class BasicWindows extends Windows {
 			}
 			{
 				final Label simpleLabel = new Label("<b>" + propertyName + ":</b>");
-				simpleLabel.setPropertyExpand(Vector3b.TRUE_FALSE_FALSE);
-				simpleLabel.setPropertyFill(Vector3b.FALSE);
-				simpleLabel.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+				simpleLabel.setPropertyFill(Vector2b.FALSE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				this.sizerMenu.subWidgetAdd(simpleLabel);
 			}
@@ -1219,10 +1219,10 @@ public class BasicWindows extends Windows {
 		{
 			final Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.CHOCOLATE);
-			simpleSpacer.setPropertyExpand(Vector3b.FALSE);
-			simpleSpacer.setPropertyExpandIfFree(Vector3b.TRUE);
-			simpleSpacer.setPropertyFill(Vector3b.TRUE);
-			simpleSpacer.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+			simpleSpacer.setPropertyExpand(Vector2b.FALSE);
+			simpleSpacer.setPropertyExpandIfFree(Vector2b.TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE);
+			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			this.sizerTestAreaHori.subWidgetAdd(simpleSpacer);
 		}
 		this.testWidget = widget;
@@ -1230,10 +1230,10 @@ public class BasicWindows extends Windows {
 		{
 			final Spacer simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.GREEN_YELLOW);
-			simpleSpacer.setPropertyExpand(Vector3b.FALSE);
-			simpleSpacer.setPropertyExpandIfFree(Vector3b.TRUE);
-			simpleSpacer.setPropertyFill(Vector3b.TRUE);
-			simpleSpacer.setPropertyMinSize(new Dimension3f(Vector3f.VALUE_16, Distance.PIXEL));
+			simpleSpacer.setPropertyExpand(Vector2b.FALSE);
+			simpleSpacer.setPropertyExpandIfFree(Vector2b.TRUE);
+			simpleSpacer.setPropertyFill(Vector2b.TRUE);
+			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			this.sizerTestAreaHori.subWidgetAdd(simpleSpacer);
 		}
 		// update properties...

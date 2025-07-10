@@ -9,10 +9,10 @@ import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.etk.Dimension3f;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.key.KeyStatus;
 
@@ -28,8 +28,8 @@ public class PopUp extends Box {
 	 */
 	public PopUp() {
 		//super(new Uri("THEME", "shape/PopUp.json", "ewol"));
-		this.propertyMinSize = new Dimension3f(new Vector3f(80, 80, 20), Distance.POURCENT);
-		this.propertyExpand = Vector3b.FALSE;
+		this.propertyMinSize = new Dimension2f(new Vector2f(80, 80), Distance.POURCENT);
+		this.propertyExpand = Vector2b.FALSE;
 	}
 
 	@AknotManaged
@@ -52,7 +52,7 @@ public class PopUp extends Box {
 			return false;
 		}
 
-		final Vector3f pos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
+		final Vector2f pos = relativePosition(event.pos());
 		//		if (!this.shapeProperty.isInside(pos)) {
 		//			autoDestroy();
 		//			return true;

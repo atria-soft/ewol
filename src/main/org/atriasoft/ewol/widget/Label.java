@@ -14,7 +14,7 @@ import org.atriasoft.aknot.annotation.AknotText;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.AlignMode;
@@ -59,8 +59,8 @@ public class Label extends Widget {
 	@Override
 	public void calculateMinMaxSize() {
 		LOGGER.trace("calculateMinMaxSize !!! data = '{}'", this.value);
-		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
-		final Vector3f tmpMin = this.propertyMinSize.getPixel();
+		final Vector2f tmpMax = this.propertyMaxSize.getPixel();
+		final Vector2f tmpMin = this.propertyMinSize.getPixel();
 		//EWOL_DEBUG("[" + getId() + "] {" + getObjectType() + "} tmpMax : " + tmpMax);
 		if (tmpMax.x() <= 999999) {
 			this.textCompose.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
@@ -68,14 +68,13 @@ public class Label extends Widget {
 		} else {
 			this.textCompose.setTextAlignment(0, 0, AlignMode.LEFT);
 		}
-		Vector3f minSize = this.textCompose.calculateSizeDecorated(this.value);
+		Vector2f minSize = this.textCompose.calculateSizeDecorated(this.value);
 		this.textCompose.flush();
-		minSize = minSize.add(2, 2, 0);
+		minSize = minSize.add(2, 2);
 		//EWOL_DEBUG("[" + getId() + "] {" + getObjectType() + "} minSize : " + minSize);
 
-		this.minSize = new Vector3f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), //
-				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()), //
-				10);
+		this.minSize = new Vector2f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), //
+				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
 		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
 
@@ -118,24 +117,24 @@ public class Label extends Widget {
 		//final int paddingSize = 2;
 		final Padding padding = new Padding(2, 2, 2, 2);
 
-		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
+		final Vector2f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
-		final Vector3f minSize = this.textCompose.calculateSize('A');
+		final Vector2f minSize = this.textCompose.calculateSize('A');
 
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
 			this.textCompose.setTextAlignment(0, tmpMax.x() - padding.x(), AlignMode.LEFT);
 		}
-		final Vector3f curentTextSize = this.textCompose.calculateSizeDecorated(this.value);
+		final Vector2f curentTextSize = this.textCompose.calculateSizeDecorated(this.value);
 
-		//Vector3f localSize = this.minSize.clipInteger();
-		Vector3f tmpSizeShaper = this.minSize;
+		//Vector2f localSize = this.minSize.clipInteger();
+		Vector2f tmpSizeShaper = this.minSize;
 
 		// no change for the text origin :
-		Vector3f tmpTextOrigin = new Vector3f((this.size.x() - minSize.x()) * 0.5f,
-				(this.size.y() - minSize.y()) * 0.5f, 0);
-		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
+		Vector2f tmpTextOrigin = new Vector2f((this.size.x() - minSize.x()) * 0.5f,
+				(this.size.y() - minSize.y()) * 0.5f);
+		Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 
 		if (this.propertyFill.x()) {
 			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
@@ -147,12 +146,8 @@ public class Label extends Widget {
 			delta = delta.withY(0.0f);
 			//tmpTextOrigin = tmpTextOrigin.withY(this.size.y() - 2 * paddingSize - curentTextSize.y());
 		}
-		if (this.propertyFill.z()) {
-			tmpSizeShaper = tmpSizeShaper.withZ(this.size.y());
-			delta = delta.withZ(0.0f);
-		}
-		final Vector3f tmpOriginShaper = delta;
-		final Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
+		final Vector2f tmpOriginShaper = delta;
+		final Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
 
 		tmpTextOrigin = tmpOriginShaper;//tmpTextOrigin.add(paddingSize, paddingSize, 0);
 		//localSize = localSize.less(2 * paddingSize, 2 * paddingSize, 0);
@@ -162,11 +157,11 @@ public class Label extends Widget {
 				.withY(tmpTextOrigin.y() + this.minSize.y() - this.textCompose.getHeight() - padding.top());// - this.minSize.y() - paddingSize);
 		tmpTextOrigin = tmpTextOrigin.withX(tmpTextOrigin.x() + padding.left());
 
-		final Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
+		final Vector2f textPos = new Vector2f(tmpTextOrigin.x(), tmpTextOrigin.y());
 
-		final Vector3f drawClippingPos = tmpOriginShaper
-				.less(new Vector3f(padding.left(), padding.bottom(), padding.back()));
-		final Vector3f drawClippingSize = tmpOriginShaper.add(tmpSizeShaper); /// new  Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
+		final Vector2f drawClippingPos = tmpOriginShaper
+				.less(new Vector2f(padding.left(), padding.bottom()));
+		final Vector2f drawClippingSize = tmpOriginShaper.add(tmpSizeShaper); /// new  Vector2f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
 
 		// clean the element
 		this.textCompose.reset();

@@ -1,7 +1,7 @@
 package org.atriasoft.ewol.compositing;
 
 import org.atriasoft.etk.math.Matrix4f;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 
 /** @file
  * @author Edouard DUPIN
@@ -13,14 +13,14 @@ public abstract class Compositing {
 	protected Matrix4f matrixApply = Matrix4f.IDENTITY;
 	
 	/**
-	 * clear alll tre registered element in the current element
+	 * clear all the registered element in the current element
 	 */
 	public void clear() {
 		this.matrixApply = Matrix4f.IDENTITY;
 	}
 	
 	/**
-	 * Virtal pure function that request the draw of all openGl elements
+	 * Virtual pure function that request the draw of all openGl elements
 	 */
 	public void draw() {
 		draw(true);
@@ -29,12 +29,12 @@ public abstract class Compositing {
 	public abstract void draw(final boolean disableDepthTest);
 	
 	/**
-	 * Require the transfer of all the data in the Graphic card (doen between the addinc element and the draw)
+	 * Require the transfer of all the data in the Graphic card (does between the adding element and the draw)
 	 */
 	public abstract void flush();
 	
 	/**
-	 * reset to the eye matrix the openGL mouving system
+	 * reset to the eye matrix the openGL moving system
 	 */
 	public void resetMatrix() {
 		this.matrixApply = Matrix4f.IDENTITY;
@@ -44,7 +44,7 @@ public abstract class Compositing {
 	 * rotate the curent display of this element
 	 * @param vect The rotation vector to apply at the transformation matrix
 	 */
-	public void rotate(final Vector3f vect, final float angle) {
+	public void rotate(final Vector2f vect, final float angle) {
 		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixRotate(vect, angle));
 	}
 	
@@ -52,7 +52,7 @@ public abstract class Compositing {
 	 * scale the current diaplsy of this element
 	 * @param vect The scaling vector to apply at the transformation matrix
 	 */
-	public void scale(final Vector3f vect) {
+	public void scale(final Vector2f vect) {
 		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixScale(vect));
 	}
 	
@@ -68,7 +68,7 @@ public abstract class Compositing {
 	 * translate the current display of this element
 	 * @param vect The translation vector to apply at the transformation matrix
 	 */
-	public void translate(final Vector3f vect) {
+	public void translate(final Vector2f vect) {
 		this.matrixApply = this.matrixApply.multiply(Matrix4f.createMatrixTranslate(vect));
 	}
 }

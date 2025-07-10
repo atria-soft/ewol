@@ -13,8 +13,8 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.GravityVertical;
 import org.atriasoft.ewol.HighSpeedMode;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 class Scroll extends Container {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Scroll.class);
 	protected static final int SCROLL_BAR_SPACE = 15;
-	protected Vector3f propertyLimit = new Vector3f(0.15f, 0.5f, 0.0f); //!< Set the limitation of the ratio in the screen
+	protected Vector2f propertyLimit = new Vector2f(0.15f, 0.5f); //!< Set the limitation of the ratio in the screen
 
 	protected Uri propertyShapeVert = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol"); //!< Vertical shaper name
 
@@ -40,7 +40,7 @@ class Scroll extends Container {
 	protected CompositingSVG compositingH = new CompositingSVG();
 	protected CompositingSVG compositingV = new CompositingSVG();
 	protected float pixelScrolling = 20;
-	protected Vector3f highSpeedStartPos = Vector3f.ZERO;
+	protected Vector2f highSpeedStartPos = Vector2f.ZERO;
 	protected HighSpeedMode highSpeedMode = HighSpeedMode.speedModeDisable;
 	protected int highSpeedButton = -1;
 	protected KeyType highSpeedType = KeyType.unknow;
@@ -64,7 +64,7 @@ class Scroll extends Container {
 	@AknotAttribute
 	@AknotName(value = "limit")
 	@AknotDescription(value = "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end")
-	public Vector3f getPropertyLimit() {
+	public Vector2f getPropertyLimit() {
 		return this.propertyLimit;
 	}
 
@@ -85,7 +85,7 @@ class Scroll extends Container {
 	}
 
 	@Override
-	public Widget getWidgetAtPos(final Vector3f pos) {
+	public Widget getWidgetAtPos(final Vector2f pos) {
 		final Widget tmpWidget = super.getWidgetAtPos(pos);
 		if (tmpWidget != null) {
 			return tmpWidget;
@@ -126,14 +126,14 @@ class Scroll extends Container {
 			return;
 		}
 		// remove the bar if hover
-		Vector3f basicSize = this.size;
+		Vector2f basicSize = this.size;
 		if (!this.propertyHover) {
-			basicSize = basicSize.less(SCROLL_BAR_SPACE, SCROLL_BAR_SPACE, SCROLL_BAR_SPACE);
+			basicSize = basicSize.less(SCROLL_BAR_SPACE, SCROLL_BAR_SPACE);
 		}
 
-		Vector3f origin = this.origin.add(this.offset);
-		Vector3f minSize = this.subWidget.getCalculateMinSize();
-		final Vector3b expand = this.subWidget.propertyExpand;
+		Vector2f origin = this.origin.add(this.offset);
+		Vector2f minSize = this.subWidget.getCalculateMinSize();
+		final Vector2b expand = this.subWidget.propertyExpand;
 		//The gravity is not set on the sub element ==> special use of the widget
 		//origin += ewol::gravityGenerateDelta(propertyGravity.get(), minSize - this.size);
 		if (expand.x() && minSize.x() < basicSize.x()) {
@@ -144,9 +144,9 @@ class Scroll extends Container {
 		}
 		this.subWidget.setSize(minSize);
 		if (this.propertyGravity.y() == GravityVertical.TOP) {
-			origin = origin.add(0.0f, basicSize.y() - minSize.y(), 0);
+			origin = origin.add(0.0f, basicSize.y() - minSize.y());
 			if (!this.propertyHover) {
-				origin = origin.add(0, SCROLL_BAR_SPACE, 0);
+				origin = origin.add(0, SCROLL_BAR_SPACE);
 			}
 		} else if (this.propertyGravity.y() == GravityVertical.BOTTOM) {
 			// nothing to do ... origin +=
@@ -167,9 +167,9 @@ class Scroll extends Container {
 	public boolean onEventInput(final EventInput event) {
 		//ewol::event::Input _event = event;
 		//_event.setType(KeyType.finger);
-		Vector3f relativePos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
-		Vector3f scrollOffset = Vector3f.ZERO;
-		Vector3f scrollSize = Vector3f.ZERO;
+		Vector2f relativePos = relativePosition(new Vector2f(event.pos().x(), event.pos().y()));
+		Vector2f scrollOffset = Vector2f.ZERO;
+		Vector2f scrollSize = Vector2f.ZERO;
 		if (this.subWidget != null) {
 			scrollOffset = this.subWidget.getOffset();
 			scrollSize = this.subWidget.getSize();
@@ -248,7 +248,7 @@ class Scroll extends Container {
 				if (event.status() == KeyStatus.down) {
 					this.highSpeedMode = HighSpeedMode.speedModeInit;
 					this.highSpeedType = KeyType.mouse;
-					this.highSpeedStartPos = new Vector3f(relativePos.x(), relativePos.y(), 0);
+					this.highSpeedStartPos = new Vector2f(relativePos.x(), relativePos.y());
 					this.highSpeedButton = 2;
 					// not really use...  == > just keep some informations
 					return false;
@@ -344,7 +344,7 @@ class Scroll extends Container {
 				if (KeyStatus.down == event.status()) {
 					this.highSpeedMode = HighSpeedMode.speedModeInit;
 					this.highSpeedType = KeyType.finger;
-					this.highSpeedStartPos = new Vector3f(relativePos.x(), relativePos.y(), 0);
+					this.highSpeedStartPos = new Vector2f(relativePos.x(), relativePos.y());
 					LOGGER.trace("SCROOL  == > INIT pos=" + this.highSpeedStartPos + " && curent scrollOffset="
 							+ scrollOffset);
 					return true;
@@ -420,8 +420,8 @@ class Scroll extends Container {
 		this.compositingV.clear();
 		final Padding paddingVert = new Padding(2, 2, 2, 2); // this.compositingV.getPadding();
 		final Padding paddingHori = new Padding(2, 2, 2, 2); // this.compositingH.getPadding();
-		Vector3f scrollOffset = Vector3f.ZERO;
-		Vector3f scrollSize = Vector3f.ZERO;
+		Vector2f scrollOffset = Vector2f.ZERO;
+		Vector2f scrollSize = Vector2f.ZERO;
 		if (this.subWidget != null) {
 			scrollOffset = this.subWidget.getOffset();
 			scrollSize = this.subWidget.getSize();
@@ -474,8 +474,8 @@ class Scroll extends Container {
 		this.propertyHover = propertyHover;
 	}
 
-	public void setPropertyLimit(final Vector3f propertyLimit) {
-		final Vector3f tmp = Vector3f.avg(Vector3f.ZERO, propertyLimit, Vector3f.ONE);
+	public void setPropertyLimit(final Vector2f propertyLimit) {
+		final Vector2f tmp = Vector2f.avg(Vector2f.ZERO, propertyLimit, Vector2f.ONE);
 		if (tmp.equals(this.propertyLimit)) {
 			return;
 		}

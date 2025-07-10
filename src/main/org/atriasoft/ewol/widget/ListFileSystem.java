@@ -26,8 +26,8 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.etk.math.Vector3i;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.ewol.widget.model.ListRole;
@@ -235,7 +235,7 @@ public class ListFileSystem extends WidgetList {
 	}
 
 	@Override
-	protected boolean onItemEvent(final EventInput event, final Vector3i pos, final Vector3f mousePosition) {
+	protected boolean onItemEvent(final EventInput event, final Vector2i pos, final Vector2f mousePosition) {
 		int offset = 0;
 		if (this.propertyShowFolder) {
 			if (this.propertyPath.equals("/")) {

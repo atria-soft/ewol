@@ -5,7 +5,7 @@
  */
 package org.atriasoft.ewol;
 
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 
 /**
  * Gravity of the widget property
@@ -25,7 +25,7 @@ public record Gravity(
 	public static final Gravity TOP_LEFT = new Gravity(GravityHorizontal.LEFT, GravityVertical.TOP, GravityDepth.CENTER); // !< gravity is in bottom-right
 	public static final Gravity TOP_RIGHT = new Gravity(GravityHorizontal.RIGHT, GravityVertical.TOP, GravityDepth.CENTER); // !< gravity is in bottom-left
 	
-	public Vector3f gravityGenerateDelta(final Vector3f deltas) {
+	public Vector2f gravityGenerateDelta(final Vector2f deltas) {
 		float outX = 0;
 		float outY = 0;
 		float outZ = 0;
@@ -47,16 +47,7 @@ public record Gravity(
 				outY = (int) (deltas.y() * 0.5f);
 			}
 		}
-		if (deltas.z() > 0.0001f) {
-			if (this.z == GravityDepth.BACK) {
-				// nothing to do
-			} else if (this.z == GravityDepth.FRONT) {
-				outZ = (int) (deltas.z());
-			} else {
-				outZ = (int) (deltas.z() * 0.5f);
-			}
-		}
-		return new Vector3f(outX, outY, outZ);
+		return new Vector2f(outX, outY);
 	}
 	
 	public static Gravity valueOf(String value) {

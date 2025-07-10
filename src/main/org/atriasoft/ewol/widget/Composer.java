@@ -11,10 +11,10 @@ import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.exception.AknotException;
-import org.atriasoft.etk.Dimension3f;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.object.EwolObject;
@@ -111,7 +111,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3b canExpand() {
+	public Vector2b canExpand() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.canExpand();
@@ -120,7 +120,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3b canExpandIfFree() {
+	public Vector2b canExpandIfFree() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.canExpandIfFree();
@@ -129,7 +129,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3b canFill() {
+	public Vector2b canFill() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.canFill();
@@ -166,7 +166,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3f getCalculateMaxSize() {
+	public Vector2f getCalculateMaxSize() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getCalculateMaxSize();
@@ -175,7 +175,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3f getCalculateMinSize() {
+	public Vector2f getCalculateMinSize() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getCalculateMinSize();
@@ -220,7 +220,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	Vector3f getOffset() {
+	Vector2f getOffset() {
 		if (this.subWidget != null) {
 			return this.subWidget.getOffset();
 		}
@@ -228,7 +228,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3f getOrigin() {
+	public Vector2f getOrigin() {
 		if (this.subWidget != null) {
 			return this.subWidget.getOrigin();
 		}
@@ -245,7 +245,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3b getPropertyExpand() {
+	public Vector2b getPropertyExpand() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyExpand();
@@ -254,7 +254,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3b getPropertyExpandIfFree() {
+	public Vector2b getPropertyExpandIfFree() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyExpandIfFree();
@@ -263,7 +263,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3b getPropertyFill() {
+	public Vector2b getPropertyFill() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyFill();
@@ -290,7 +290,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Dimension3f getPropertyMaxSize() {
+	public Dimension2f getPropertyMaxSize() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyMaxSize();
@@ -299,7 +299,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Dimension3f getPropertyMinSize() {
+	public Dimension2f getPropertyMinSize() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyMinSize();
@@ -316,7 +316,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3f getSize() {
+	public Vector2f getSize() {
 
 		if (this.subWidget != null) {
 			return this.subWidget.getSize();
@@ -482,7 +482,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public Vector3f relativePosition(final Vector3f pos) {
+	public Vector2f relativePosition(final Vector2f pos) {
 		if (this.subWidget != null) {
 			return this.subWidget.relativePosition(pos);
 		}
@@ -560,7 +560,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setOffset(final Vector3f newVal) {
+	public void setOffset(final Vector2f newVal) {
 		if (this.subWidget != null) {
 			this.subWidget.setOffset(newVal);
 			return;
@@ -569,7 +569,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setOrigin(final Vector3f pos) {
+	public void setOrigin(final Vector2f pos) {
 		if (this.subWidget != null) {
 			this.subWidget.setOrigin(pos);
 			return;
@@ -587,7 +587,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setPropertyExpand(final Vector3b value) {
+	public void setPropertyExpand(final Vector2b value) {
 		if (this.subWidget != null) {
 			this.subWidget.setPropertyExpand(value);
 			return;
@@ -596,7 +596,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setPropertyExpandIfFree(final Vector3b value) {
+	public void setPropertyExpandIfFree(final Vector2b value) {
 		if (this.subWidget != null) {
 			this.subWidget.setPropertyExpandIfFree(value);
 			return;
@@ -605,7 +605,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setPropertyFill(final Vector3b value) {
+	public void setPropertyFill(final Vector2b value) {
 		if (this.subWidget != null) {
 			this.subWidget.setPropertyFill(value);
 			return;
@@ -632,7 +632,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setPropertyMaxSize(final Dimension3f value) {
+	public void setPropertyMaxSize(final Dimension2f value) {
 		if (this.subWidget != null) {
 			this.subWidget.setPropertyMaxSize(value);
 			return;
@@ -641,7 +641,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setPropertyMinSize(final Dimension3f value) {
+	public void setPropertyMinSize(final Dimension2f value) {
 		if (this.subWidget != null) {
 			this.subWidget.setPropertyMinSize(value);
 			return;
@@ -665,7 +665,7 @@ public class Composer extends Container {
 	}
 
 	@Override
-	public void setSize(final Vector3f value) {
+	public void setSize(final Vector2f value) {
 		if (this.subWidget != null) {
 			this.subWidget.setSize(value);
 			return;

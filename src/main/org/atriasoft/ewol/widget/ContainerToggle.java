@@ -8,7 +8,7 @@ package org.atriasoft.ewol.widget;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotFactory;
 import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.object.EwolObject;
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 /*
  * @ingroup ewolWidgetGroup
- * the Cotainer widget is a widget that have an only one subWidget
+ * the Container widget is a widget that have an only one subWidget
  */
 public class ContainerToggle extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerToggle.class);
@@ -34,17 +34,17 @@ public class ContainerToggle extends Widget {
 
 	void calculateMinMaxSizePadded(final Padding padding) {
 		// call main class
-		this.minSize = Vector3f.ZERO;
+		this.minSize = Vector2f.ZERO;
 		// call sub classes
 		for (final Widget element : this.subWidget) {
 			if (element != null) {
 				element.calculateMinMaxSize();
-				final Vector3f min = element.getCalculateMinSize();
+				final Vector2f min = element.getCalculateMinSize();
 				this.minSize = this.minSize.max(min);
 			}
 		}
 		// add padding :
-		this.minSize = this.minSize.add(padding.x(), padding.y(), padding.z());
+		this.minSize = this.minSize.add(padding.x(), padding.y());
 		// verify the min max of the min size ...
 		checkMinSize();
 		//markToRedraw();
@@ -90,26 +90,23 @@ public class ContainerToggle extends Widget {
 
 	public Padding onChangeSizePadded(final Padding padding) {
 		super.onChangeSize();
-		final Vector3f localAvaillable = this.size.less(padding.x(), padding.y(), padding.z());
+		final Vector2f localAvaillable = this.size.less(padding.x(), padding.y());
 		// Checking the filling properties  == > for the subElements:
-		Vector3f subElementSize = this.minSize.less(padding.x(), padding.y(), padding.z());
+		Vector2f subElementSize = this.minSize.less(padding.x(), padding.y());
 		if (this.propertyFill.x()) {
 			subElementSize = subElementSize.withX(this.size.x() - padding.x());
 		}
 		if (this.propertyFill.y()) {
 			subElementSize = subElementSize.withY(this.size.y() - padding.y());
 		}
-		if (this.propertyFill.z()) {
-			subElementSize = subElementSize.withZ(this.size.z() - padding.z());
-		}
-		final Vector3f delta = this.propertyGravity
-				.gravityGenerateDelta(this.size.less(subElementSize.add(padding.x(), padding.y(), padding.z())));
-		final Vector3f deltaPadded = delta.add(padding.left(), padding.bottom(), padding.back());
+		final Vector2f delta = this.propertyGravity
+				.gravityGenerateDelta(this.size.less(subElementSize.add(padding.x(), padding.y())));
+		final Vector2f deltaPadded = delta.add(padding.left(), padding.bottom());
 		//subElementSize = subElementSize.less(padding.x(), padding.y(), padding.z());
 		for (final Widget element : this.subWidget) {
 			if (element != null) {
-				//final Vector3f origin2 = this.origin.add(this.offset);
-				//final Vector3f minSize = this.subWidget[iii].getCalculateMinSize();
+				//final Vector2f origin2 = this.origin.add(this.offset);
+				//final Vector2f minSize = this.subWidget[iii].getCalculateMinSize();
 				//Vector2b expand = this.subWidget[iii].propertyExpand.get();
 				//origin2 = origin2.add(this.propertyGravity.gravityGenerateDelta(minSize.less(localAvaillable)));
 				element.setOrigin(this.origin.add(deltaPadded));
@@ -117,9 +114,9 @@ public class ContainerToggle extends Widget {
 				element.onChangeSize();
 			}
 		}
-		final Vector3f selectableAreaPos = this.origin.add(delta);//.less(padding.left(), padding.bottom(), padding.back());
-		final Vector3f selectableAreaEndPos = this.size
-				.less(selectableAreaPos.add(subElementSize.add(padding.x(), padding.y(), padding.z())));
+		final Vector2f selectableAreaPos = this.origin.add(delta);//.less(padding.left(), padding.bottom(), padding.back());
+		final Vector2f selectableAreaEndPos = this.size
+				.less(selectableAreaPos.add(subElementSize.add(padding.x(), padding.y())));
 		markToRedraw();
 		return new Padding(selectableAreaPos.x(), selectableAreaEndPos.y(), selectableAreaEndPos.x(),
 				selectableAreaPos.y());
@@ -153,7 +150,7 @@ public class ContainerToggle extends Widget {
 	}
 
 	@Override
-	public void setOffset(final Vector3f newVal) {
+	public void setOffset(final Vector2f newVal) {
 		if (this.offset.equals(newVal)) {
 			return;
 		}

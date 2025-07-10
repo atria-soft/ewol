@@ -1,15 +1,15 @@
 package org.atriasoft.ewol.compositing;
 
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.Padding;
 
 public record ShapeBox(
-		Vector3f outOrigin,
-		Vector3f outSize,
-		Vector3f inOrigin,
-		Vector3f inSize) {
+		Vector2f outOrigin,
+		Vector2f outSize,
+		Vector2f inOrigin,
+		Vector2f inSize) {
 	
-	public static final ShapeBox ZERO = new ShapeBox(Vector3f.ZERO, Vector3f.ZERO, Vector3f.ZERO, Vector3f.ZERO);
+	public static final ShapeBox ZERO = new ShapeBox(Vector2f.ZERO, Vector2f.ZERO, Vector2f.ZERO, Vector2f.ZERO);
 	
 	@Override
 	public String toString() {
@@ -26,18 +26,18 @@ public record ShapeBox(
 		return out.toString();
 	}
 	
-	public ShapeBox(final Vector3f outOrigin, final Vector3f outSize, final Vector3f inOrigin, final Vector3f inSize) {
+	public ShapeBox(final Vector2f outOrigin, final Vector2f outSize, final Vector2f inOrigin, final Vector2f inSize) {
 		this.outOrigin = outOrigin;
 		this.outSize = outSize;
 		this.inOrigin = inOrigin;
 		this.inSize = inSize;
 	}
 	
-	public ShapeBox(final Vector3f outOrigin, final Vector3f outSize, final Padding padding) {
-		this(outOrigin, outSize, outOrigin.add(padding.left(), padding.bottom(), padding.back()), outSize.less(padding.x(), padding.y(), padding.z()));
+	public ShapeBox(final Vector2f outOrigin, final Vector2f outSize, final Padding padding) {
+		this(outOrigin, outSize, outOrigin.add(padding.left(), padding.bottom()), outSize.less(padding.x(), padding.y()));
 	}
 	
-	public boolean isInside(final Vector3f value) {
+	public boolean isInside(final Vector2f value) {
 		return value.x() > this.outOrigin.x() //
 				&& value.y() > this.outOrigin.y() //
 				&& value.x() < this.outOrigin.x() + this.outSize.x() //

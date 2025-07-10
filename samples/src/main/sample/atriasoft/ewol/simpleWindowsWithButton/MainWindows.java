@@ -14,8 +14,8 @@ public class MainWindows extends BasicWindows {
 		setPropertyTitle("Simple Button");
 		this.testWidget = Button.createLabelButton("A simple Label");
 		//this.testWidget.setPropertySource(new Uri("DATA", "mireA.png"));
-		//		this.testWidget.setPropertyExpand(Vector3b.TRUE);
-		//		this.testWidget.setPropertyFill(Vector3b.TRUE);
+		//		this.testWidget.setPropertyExpand(Vector2b.TRUE);
+		//		this.testWidget.setPropertyFill(Vector2b.TRUE);
 		//		this.testWidget.setPropertyBorderWidth(new Dimension1f(10));
 		//		this.testWidget.setPropertyBorderRadius(new Dimension1f(25));
 		//		this.testWidget.setPropertyBorderColor(Color.BLACK);
