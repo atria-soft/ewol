@@ -12,7 +12,7 @@ import org.atriasoft.aknot.annotation.AknotName;
  */
 
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 
 public class Spacer extends Widget {
@@ -35,7 +35,7 @@ public class Spacer extends Widget {
 	}
 	
 	@Override
-	public Widget getWidgetAtPos(final Vector3f pos) {
+	public Widget getWidgetAtPos(final Vector2f pos) {
 		return null;
 	}
 	
@@ -55,10 +55,10 @@ public class Spacer extends Widget {
 			return;
 		}
 		this.draw.setColor(this.propertyColor);
-		this.draw.setPos(Vector3f.ZERO);
-		this.draw.rectangleWidth(new Vector3f(this.size.x(), this.size.y(), 0));
-		//this.draw.setPos(new Vector3f(this.size.x() * 0.1f, this.size.y() * 0.1f, 0));
-		//this.draw.rectangleWidth(new Vector3f(this.size.x() * 0.8f, this.size.y() * 0.8f, 0));
+		this.draw.setPos(Vector2f.ZERO);
+		this.draw.rectangleWidth(new Vector2f(this.size.x(), this.size.y()));
+		//this.draw.setPos(new Vector2f(this.size.x() * 0.1f, this.size.y() * 0.1f, 0));
+		//this.draw.rectangleWidth(new Vector2f(this.size.x() * 0.8f, this.size.y() * 0.8f, 0));
 		
 		this.draw.flush();
 	}

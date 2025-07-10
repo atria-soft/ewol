@@ -7,7 +7,7 @@ import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.math.Vector3b;
+import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 
@@ -60,13 +60,13 @@ public class CheckBox extends Container {
 
 	public CheckBox(final String basicLabel) {
 		final Sizer subs = new Sizer(DisplayMode.HORIZONTAL);
-		subs.setPropertyLockExpand(Vector3b.TRUE);
+		subs.setPropertyLockExpand(Vector2b.TRUE);
 		subs.setPropertyGravity(Gravity.CENTER);
 		setSubWidget(subs);
 
 		this.tick = new Tick();
-		this.tick.setPropertyExpand(new Vector3b(false, true, true));
-		this.tick.setPropertyFill(Vector3b.FALSE);
+		this.tick.setPropertyExpand(Vector2b.FALSE_TRUE);
+		this.tick.setPropertyFill(Vector2b.FALSE);
 		this.tick.setPropertyGravity(Gravity.CENTER);
 		subs.subWidgetAdd(this.tick);
 		this.tick.signalClick.connectAuto(this, CheckBox::eventTickClick);
@@ -75,8 +75,8 @@ public class CheckBox extends Container {
 		this.tick.signalValue.connectAuto(this, CheckBox::eventTickValue);
 
 		this.label = new Label(basicLabel);
-		this.label.setPropertyExpand(Vector3b.TRUE);
-		this.label.setPropertyFill(Vector3b.FALSE);
+		this.label.setPropertyExpand(Vector2b.TRUE);
+		this.label.setPropertyFill(Vector2b.FALSE);
 		this.label.setPropertyGravity(Gravity.LEFT);
 		subs.subWidgetAdd(this.label);
 		this.label.signalPressed.connectAuto(this, CheckBox::eventLabelClick);

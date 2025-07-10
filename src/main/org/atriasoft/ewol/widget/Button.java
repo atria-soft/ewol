@@ -12,8 +12,8 @@ import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.event.EventInput;
@@ -40,8 +40,8 @@ public class Button extends Box {
 		final Button out = new Button();
 		final Label labelWidget = new Label();
 		labelWidget.setPropertyFontSize(12);
-		labelWidget.setPropertyFill(Vector3b.FALSE);
-		labelWidget.setPropertyExpand(Vector3b.FALSE);
+		labelWidget.setPropertyFill(Vector2b.FALSE);
+		labelWidget.setPropertyExpand(Vector2b.FALSE);
 		labelWidget.setPropertyGravity(Gravity.CENTER);
 		labelWidget.setPropertyValue(label);
 		out.setSubWidget(labelWidget);
@@ -97,8 +97,8 @@ public class Button extends Box {
 		//onChangePropertyShaper();
 		// can not support multiple click...
 		setMouseLimit(1);
-		setPropertyExpand(Vector3b.TRUE);
-		setPropertyFill(Vector3b.TRUE);
+		setPropertyExpand(Vector2b.TRUE);
+		setPropertyFill(Vector2b.TRUE);
 		setPropertyBorderWidth(new Dimension1f(4));
 		//setPropertyBorderRadius(new Dimension1f(15));
 		setPropertyBorderColor(Color.BLACK);
@@ -128,7 +128,7 @@ public class Button extends Box {
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		final Vector3f relPos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
+		final Vector2f relPos = relativePosition(event.pos());
 		//LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = isInside(relPos);
 		//filter if outside the element...

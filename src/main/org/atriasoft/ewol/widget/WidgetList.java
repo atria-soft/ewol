@@ -14,8 +14,8 @@ import java.util.Map.Entry;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.etk.math.Vector3i;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.compositing.Compositing;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.compositing.CompositingText;
@@ -29,7 +29,7 @@ class WidgetList extends WidgetScrolled {
 	// drawing capabilities ....
 	protected List<Compositing> listOObject = new ArrayList<>(); //!< generic element to display...
 
-	protected List<Integer> listSizeX = new ArrayList<>(); //!< size of every colomns
+	protected List<Integer> listSizeX = new ArrayList<>(); //!< size of every colons
 
 	protected List<Integer> listSizeY = new ArrayList<>(); //!< size of every rows
 	protected Map<String, Compositing> compositingElements = new HashMap<>();
@@ -37,7 +37,7 @@ class WidgetList extends WidgetScrolled {
 	protected int paddingSizeX = 0;
 	protected int paddingSizeY = 0;
 
-	protected int displayStartRaw = 0; //!< Current starting diaplayed raw
+	protected int displayStartRaw = 0; //!< Current starting displayed raw
 
 	protected int displayCurrentNbLine = 0; //!< Number of line in the display
 
@@ -68,7 +68,7 @@ class WidgetList extends WidgetScrolled {
 	protected Vector2f calculateElementSize(final Vector2i pos) {
 		if (getComposeElemnent("text") instanceof final CompositingText tmpText) {
 			if (getData(ListRole.Text, pos) instanceof final String myTextToWrite) {
-				final Vector3f textSize = tmpText.calculateSize(myTextToWrite);
+				final Vector2f textSize = tmpText.calculateSize(myTextToWrite);
 				//final Vector2i count = getMatrixSize();
 				return new Vector2f(textSize.x(), textSize.y() + this.paddingSizeY * 3);
 			}
@@ -84,7 +84,7 @@ class WidgetList extends WidgetScrolled {
 		this.minSize.x = 3+minWidth;
 		this.minSize.y = 3+minHeight;
 		*/
-		this.minSize = new Vector3f(200, 150, 10);
+		this.minSize = new Vector2f(200, 150);
 	}
 
 	protected void clearComposeElemnent() {
@@ -105,7 +105,7 @@ class WidgetList extends WidgetScrolled {
 		if (getComposeElemnent("drawing") instanceof final CompositingDrawing BGOObjects) {
 			final Color basicBG = getBasicBG();
 			BGOObjects.setColor(basicBG);
-			BGOObjects.setPos(Vector3f.ZERO);
+			BGOObjects.setPos(Vector2f.ZERO);
 			BGOObjects.rectangleWidth(new Vector2f(this.size.x(), this.size.y()));
 		}
 	}
@@ -122,7 +122,7 @@ class WidgetList extends WidgetScrolled {
 			if (getData(ListRole.BgColor, pos) instanceof final Color bg) {
 				if (getComposeElemnent("drawing") instanceof final CompositingDrawing BGOObjects) {
 					BGOObjects.setColor(bg);
-					BGOObjects.setPos(new Vector3f(start.x(), start.y(), 0));
+					BGOObjects.setPos(new Vector2f(start.x(), start.y()));
 					BGOObjects.rectangleWidth(size);
 				}
 			}
@@ -131,7 +131,7 @@ class WidgetList extends WidgetScrolled {
 					if (getComposeElemnent("text") instanceof final CompositingText tmpText) {
 						final int displayPositionY = (int) (start.y() + this.paddingSizeY);
 						tmpText.setColor(fg);
-						tmpText.setPos(new Vector3f(start.x() + this.paddingSizeX, displayPositionY, 0));
+						tmpText.setPos(new Vector2f(start.x() + this.paddingSizeX, displayPositionY));
 						tmpText.print(myTextToWrite);
 					}
 				}
@@ -198,7 +198,7 @@ class WidgetList extends WidgetScrolled {
 
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		Vector3f relativePos = relativePosition(new Vector3f(event.pos().x(), event.pos().y(), 0));
+		Vector2f relativePos = relativePosition(new Vector2f(event.pos().x(), event.pos().y()));
 		if (super.onEventInput(event)) {
 			keepFocus();
 			// nothing to do ... done on upper widget ...
@@ -207,10 +207,10 @@ class WidgetList extends WidgetScrolled {
 		if (this.listSizeY.size() == 0) {
 			return false;
 		}
-		relativePos = new Vector3f(relativePos.x() + this.originScrooled.x(),
-				this.size.y() - relativePos.y() + this.originScrooled.y(), 0);
+		relativePos = new Vector2f(relativePos.x() + this.originScrooled.x(),
+				this.size.y() - relativePos.y() + this.originScrooled.y());
 		// Find the colomn and the row
-		Vector3i pos = Vector3i.ZERO;
+		Vector2i pos = Vector2i.ZERO;
 		float offsetY = 0;
 		for (int iii = 0; iii < this.listSizeY.size() - 1; iii++) {
 			final int previous = (int) offsetY;
@@ -239,7 +239,7 @@ class WidgetList extends WidgetScrolled {
 				break;
 			}
 		}
-		final Vector3f posInternalMouse = relativePos.less(offsetX, offsetY, 0);
+		final Vector2f posInternalMouse = relativePos.less(offsetX, offsetY);
 		final boolean isUsed = onItemEvent(event, pos, posInternalMouse);
 		if (isUsed) {
 			// TODO : this generate bugs ... I did not understand why ..
@@ -258,7 +258,7 @@ class WidgetList extends WidgetScrolled {
 		LOGGER.debug("WidgetList get focus");
 	}
 
-	protected boolean onItemEvent(final EventInput event, final Vector3i pos, final Vector3f mousePosition) {
+	protected boolean onItemEvent(final EventInput event, final Vector2i pos, final Vector2f mousePosition) {
 		return false;
 	}
 

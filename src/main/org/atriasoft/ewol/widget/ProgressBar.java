@@ -10,7 +10,7 @@ import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
 
 class ProgressBar extends Widget {
@@ -28,8 +28,8 @@ class ProgressBar extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		final Vector3f tmpMin = this.propertyMinSize.getPixel();
-		this.minSize = new Vector3f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f), 10);
+		final Vector2f tmpMin = this.propertyMinSize.getPixel();
+		this.minSize = new Vector2f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f));
 		markToRedraw();
 	}
 	
@@ -85,11 +85,11 @@ class ProgressBar extends Widget {
 		final int tmpOriginX = 5;
 		final int tmpOriginY = 5;
 		this.draw.setColor(this.propertyTextColorBgOn);
-		this.draw.setPos(new Vector3f(tmpOriginX, tmpOriginY, 0));
-		this.draw.rectangleWidth(new Vector3f(tmpSizeX * this.propertyValue, tmpSizeY, 0));
+		this.draw.setPos(new Vector2f(tmpOriginX, tmpOriginY));
+		this.draw.rectangleWidth(new Vector2f(tmpSizeX * this.propertyValue, tmpSizeY));
 		this.draw.setColor(this.propertyTextColorBgOff);
-		this.draw.setPos(new Vector3f(tmpOriginX + tmpSizeX * this.propertyValue, tmpOriginY, 0));
-		this.draw.rectangleWidth(new Vector3f(tmpSizeX * (1.0f - this.propertyValue), tmpSizeY, 0));
+		this.draw.setPos(new Vector2f(tmpOriginX + tmpSizeX * this.propertyValue, tmpOriginY));
+		this.draw.rectangleWidth(new Vector2f(tmpSizeX * (1.0f - this.propertyValue), tmpSizeY));
 		
 		// TODO : Create a better progress Bar ...
 		//this.draw.setColor(propertyTextColorFg);

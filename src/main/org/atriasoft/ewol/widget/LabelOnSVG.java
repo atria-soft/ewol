@@ -14,7 +14,7 @@ import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.compositing.AlignMode;
 import org.atriasoft.ewol.compositing.CompositingText;
@@ -67,18 +67,18 @@ public class LabelOnSVG extends Widget {
 
 	@Override
 	public void calculateMinMaxSize() {
-		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
-		final Vector3f tmpMin = this.propertyMinSize.getPixel();
+		final Vector2f tmpMax = this.propertyMaxSize.getPixel();
+		final Vector2f tmpMin = this.propertyMinSize.getPixel();
 		LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} tmpMax : " + tmpMax);
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
 			LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "}     force Alignement ");
 		}
-		final Vector3f minSize = this.text.calculateSizeDecorated(this.value);
+		final Vector2f minSize = this.text.calculateSizeDecorated(this.value);
 		LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} minSize : " + minSize);
 
-		this.minSize = new Vector3f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()),
-				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()), FMath.avg(tmpMin.z(), 4 + minSize.z(), tmpMax.z()));
+		this.minSize = new Vector2f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()),
+				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
 		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} Result min size : " + tmpMin + " < "
 				+ this.minSize + " < " + tmpMax);
 	}
@@ -121,22 +121,22 @@ public class LabelOnSVG extends Widget {
 		this.text.clear();
 		final int paddingSize = 2;
 
-		final Vector3f tmpMax = this.propertyMaxSize.getPixel();
+		final Vector2f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
-		final Vector3f minSize = this.text.calculateSize('A');
+		final Vector2f minSize = this.text.calculateSize('A');
 
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 2 * paddingSize, AlignMode.LEFT);
 		}
-		final Vector3f currentTextSize = this.text.calculateSizeDecorated(this.value);
+		final Vector2f currentTextSize = this.text.calculateSizeDecorated(this.value);
 
 		Vector2i localSize = new Vector2i((int) this.minSize.x(), (int) this.minSize.y());
 
 		// no change for the text origin :
-		Vector3f tmpTextOrigin = new Vector3f((this.size.x() - this.minSize.x()) / 2.0f,
-				(this.size.y() - this.minSize.y()) / 2.0f, 0);
+		Vector2f tmpTextOrigin = new Vector2f((this.size.x() - this.minSize.x()) / 2.0f,
+				(this.size.y() - this.minSize.y()) / 2.0f);
 
 		if (this.propertyFill.x()) {
 			localSize = localSize.withX((int) this.size.x());
@@ -146,15 +146,15 @@ public class LabelOnSVG extends Widget {
 			localSize = localSize.withY((int) this.size.y());
 			tmpTextOrigin = tmpTextOrigin.withY(this.size.y() - 2 * paddingSize - currentTextSize.y());
 		}
-		tmpTextOrigin = tmpTextOrigin.add(paddingSize, paddingSize, 0);
+		tmpTextOrigin = tmpTextOrigin.add(paddingSize, paddingSize);
 		localSize = localSize.less(2 * paddingSize, 2 * paddingSize);
 
 		tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
 
-		final Vector3f textPos = new Vector3f(tmpTextOrigin.x(), tmpTextOrigin.y(), 0);
+		final Vector2f textPos = new Vector2f(tmpTextOrigin.x(), tmpTextOrigin.y());
 
-		final Vector3f drawClippingPos = new Vector3f(paddingSize, paddingSize, -0.5f);
-		final Vector3f drawClippingSize = new Vector3f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
+		final Vector2f drawClippingPos = new Vector2f(paddingSize, paddingSize);
+		final Vector2f drawClippingSize = new Vector2f((this.size.x() - paddingSize), (this.size.y() - paddingSize));
 
 		// clean the element
 		this.text.reset();

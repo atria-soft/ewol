@@ -15,7 +15,7 @@ import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.compositing.CompositingText;
@@ -45,7 +45,7 @@ public class Entry extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Entry.class);
 	
 	/**
-	 * Periodic call to update grapgic display
+	 * Periodic call to update graphic display
 	 * @param _event Time generic event
 	 */
 	protected static void periodicCall(final Entry self, final EventTime event) {
@@ -103,9 +103,9 @@ public class Entry extends Widget {
 	@AknotDescription("Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
 	// element over:
-	Vector3f overPositionStart = Vector3f.ZERO;
+	Vector2f overPositionStart = Vector2f.ZERO;
 
-	Vector3f overPositionStop = Vector3f.ZERO;
+	Vector2f overPositionStop = Vector2f.ZERO;
 
 	/**
 	 * Constructor
@@ -137,10 +137,10 @@ public class Entry extends Widget {
 		final Padding padding = Padding.ZERO;
 		final int minHeight = (int) this.text.getHeight();//calculateSize('A').y();
 
-		Vector3f minimumSizeBase = new Vector3f(20, minHeight, 10);
+		Vector2f minimumSizeBase = new Vector2f(20, minHeight);
 		// add padding :
-		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y(), padding.z());
-		this.minSize = Vector3f.max(this.minSize, minimumSizeBase);
+		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
+		this.minSize = Vector2f.max(this.minSize, minimumSizeBase);
 		// verify the min max of the min size ...
 		checkMinSize();
 		//LOGGER.trace("min size = " + this.minSize);
@@ -405,8 +405,8 @@ public class Entry extends Widget {
 
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		final Vector3f absolutePosition = new Vector3f(event.pos().x(), event.pos().y(), 0);
-		final Vector3f relPos = relativePosition(absolutePosition);
+		final Vector2f absolutePosition = event.pos();
+		final Vector2f relPos = relativePosition(absolutePosition);
 		LOGGER.trace("Event on Input ... " + event + " relPos = " + relPos);
 		if (event.inputId() == 0) {
 			if (!isFocused()) {
@@ -539,8 +539,8 @@ public class Entry extends Widget {
 		updateTextPosition();
 		final Padding padding = Padding.ZERO;
 
-		Vector3f tmpSizeShaper = this.minSize;
-		Vector3f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
+		Vector2f tmpSizeShaper = this.minSize;
+		Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 		if (this.propertyFill.x()) {
 			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
 			delta = delta.withX(0.0f);
@@ -549,31 +549,27 @@ public class Entry extends Widget {
 			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
 			delta = delta.withY(0.0f);
 		}
-		if (this.propertyFill.z()) {
-			tmpSizeShaper = tmpSizeShaper.withZ(this.size.z());
-			delta = delta.withZ(0.0f);
-		}
-		Vector3f tmpOriginShaper = delta;
-		//Vector3f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
-		Vector3f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y(), padding.z());
-		Vector3f tmpOriginText = tmpOriginShaper.add(padding.bottom(), padding.left(), padding.back()); //this.size.less(tmpSizeText).multiply(0.5f);
-		//Vector3f tmpOriginText = new Vector3f(0, this.text.getSize(), 0);
+		Vector2f tmpOriginShaper = delta;
+		//Vector2f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
+		Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
+		Vector2f tmpOriginText = tmpOriginShaper.add(padding.bottom(), padding.left()); //this.size.less(tmpSizeText).multiply(0.5f);
+		//Vector2f tmpOriginText = new Vector2f(0, this.text.getSize(), 0);
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 
 		final int minHeight = (int) this.text.getHeight();
 		if (tmpSizeText.y() > minHeight) {
-			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f, 0);
+			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f);
 		}
 		// fix all the position in the int class:
-		tmpSizeShaper = Vector3f.clipInt(tmpSizeShaper);
-		tmpOriginShaper = Vector3f.clipInt(tmpOriginShaper);
-		tmpSizeText = Vector3f.clipInt(tmpSizeText);
-		tmpOriginText = Vector3f.clipInt(tmpOriginText);
+		tmpSizeShaper = Vector2f.clipInt(tmpSizeShaper);
+		tmpOriginShaper = Vector2f.clipInt(tmpOriginShaper);
+		tmpSizeText = Vector2f.clipInt(tmpSizeText);
+		tmpOriginText = Vector2f.clipInt(tmpOriginText);
 
 		this.text.clear();
 		//this.text.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
 		this.text.setClippingWidth(tmpOriginText, tmpSizeText);
-		this.text.setPos(tmpOriginText.add(this.displayStartPosition, 0, 0));
+		this.text.setPos(tmpOriginText.add(this.displayStartPosition, 0));
 		if (this.displayCursorPosSelection != this.displayCursorPos) {
 			this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
 		} else {
@@ -748,14 +744,14 @@ public class Entry extends Widget {
 	 * @param pos Absolute position of the event
 	 * @note The display is automaticly requested when change apear.
 	 */
-	protected void updateCursorPosition(final Vector3f pos) {
+	protected void updateCursorPosition(final Vector2f pos) {
 		updateCursorPosition(pos, false);
 	}
 
-	protected void updateCursorPosition(final Vector3f pos, final boolean selection/*=false*/) {
+	protected void updateCursorPosition(final Vector2f pos, final boolean selection/*=false*/) {
 		final Padding padding = Padding.ZERO;
 
-		final Vector3f relPos = relativePosition(pos).less(this.overPositionStart);
+		final Vector2f relPos = relativePosition(pos).less(this.overPositionStart);
 		// reject when outside ...
 
 		// try to find the new cursor position :

@@ -5,7 +5,7 @@ import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.math.Vector3b;
+import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.resource.ResourceConfigFile;
 import org.atriasoft.ewol.widget.Button;
@@ -116,8 +116,8 @@ public class SpinBase extends Sizer {
 					this.widgetEntry.setPropertyConfig(Uri.valueOf(shaper));
 				}
 			}
-			this.widgetEntry.setPropertyExpand(new Vector3b(true, false, false));
-			this.widgetEntry.setPropertyFill(Vector3b.TRUE);
+			this.widgetEntry.setPropertyExpand(Vector2b.TRUE_FALSE);
+			this.widgetEntry.setPropertyFill(Vector2b.TRUE);
 		}
 		if (this.widgetButtonDown == null) {
 			this.widgetButtonDown = new Button();
@@ -128,8 +128,8 @@ public class SpinBase extends Sizer {
 					this.widgetButtonDown.setPropertyConfig(Uri.valueOf(shaper));
 				}
 			}
-			this.widgetButtonDown.setPropertyExpand(new Vector3b(false, false, false));
-			this.widgetButtonDown.setPropertyFill(Vector3b.TRUE);
+			this.widgetButtonDown.setPropertyExpand(Vector2b.FALSE);
+			this.widgetButtonDown.setPropertyFill(Vector2b.TRUE);
 			final String data = this.config.getString(this.confIdDownData);
 			final Widget widget = Composer.composerGenerateString(data);
 			//this.widgetButtonDown.setSubWidget(widget, 0);
@@ -144,8 +144,8 @@ public class SpinBase extends Sizer {
 					this.widgetButtonUp.setPropertyConfig(Uri.valueOf(shaper));
 				}
 			}
-			this.widgetButtonUp.setPropertyExpand(new Vector3b(false, false, false));
-			this.widgetButtonUp.setPropertyFill(Vector3b.TRUE);
+			this.widgetButtonUp.setPropertyExpand(Vector2b.FALSE);
+			this.widgetButtonUp.setPropertyFill(Vector2b.TRUE);
 			final String data = this.config.getString(this.confIdUpData);
 			final Widget widget = Composer.composerGenerateString(data);
 			this.widgetButtonUp.setSubWidget(widget);

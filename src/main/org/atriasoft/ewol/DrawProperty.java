@@ -1,7 +1,7 @@
 package org.atriasoft.ewol;
 
-import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.etk.math.Vector3i;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 
 /**
  * @file
@@ -37,24 +37,24 @@ import org.atriasoft.etk.math.Vector3i;
 	 */
 	//@formatter:on
 public record DrawProperty(
-		Vector3i windowsSize, // !< Windows complete size
-		Vector3i origin, // !< Windows clipping upper widget (can not be <0)
-		Vector3i size// !< Windows clipping upper widget (can not be <0 and >this.windowsSize)
+		Vector2i windowsSize, // !< Windows complete size
+		Vector2i origin, // !< Windows clipping upper widget (can not be <0)
+		Vector2i size// !< Windows clipping upper widget (can not be <0 and >this.windowsSize)
 ) {
 	public DrawProperty() {
-		this(Vector3i.ZERO, Vector3i.ZERO, Vector3i.ZERO);
+		this(Vector2i.ZERO, Vector2i.ZERO, Vector2i.ZERO);
 	}
 	
-	public DrawProperty(final Vector3i windowsSize, final Vector3i origin, final Vector3i size) {
+	public DrawProperty(final Vector2i windowsSize, final Vector2i origin, final Vector2i size) {
 		this.windowsSize = windowsSize;
 		this.origin = origin;
 		this.size = size;
 	}
 	
-	public DrawProperty withLimit(final Vector3f originIn, final Vector3f size) {
-		Vector3i tmpSize = this.size.add(this.origin);
-		Vector3i origin = this.origin.max((int) originIn.x(), (int) originIn.y(), (int) originIn.z());
-		tmpSize = tmpSize.min((int) (originIn.x() + size.x()), (int) (originIn.y() + size.y()), (int) (originIn.z() + size.z()));
+	public DrawProperty withLimit(final Vector2f originIn, final Vector2f size) {
+		Vector2i tmpSize = this.size.add(this.origin);
+		Vector2i origin = this.origin.max((int) originIn.x(), (int) originIn.y());
+		tmpSize = tmpSize.min((int) (originIn.x() + size.x()), (int) (originIn.y() + size.y()));
 		tmpSize = tmpSize.less(origin);
 		return new DrawProperty(this.windowsSize, origin, tmpSize);
 	}

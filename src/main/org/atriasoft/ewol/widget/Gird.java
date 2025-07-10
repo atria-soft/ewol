@@ -8,7 +8,7 @@ package org.atriasoft.ewol.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ class Gird extends Widget {
 	protected Widget tmpWidget = null; //!< use when replace a widget ...
 	protected boolean gavityButtom = true;
 	
-	protected Vector3f propertyBorderSize = Vector3f.ZERO; //!< Border size needed for all the display
+	protected Vector2f propertyBorderSize = Vector2f.ZERO; //!< Border size needed for all the display
 	
 	/**
 	 * Constructor
@@ -61,7 +61,7 @@ class Gird extends Widget {
 			}
 			if (this.subWidget.get(iii).widget != null) {
 				this.subWidget.get(iii).widget.calculateMinMaxSize();
-				final Vector3f tmpSize = this.subWidget.get(iii).widget.getCalculateMinSize();
+				final Vector2f tmpSize = this.subWidget.get(iii).widget.getCalculateMinSize();
 				LOGGER.debug("     [" + iii + "] subWidgetMinSize=" + tmpSize);
 				// for all we get the max size :
 				this.uniformSizeRow = Math.max((int) tmpSize.y(), this.uniformSizeRow);
@@ -82,7 +82,7 @@ class Gird extends Widget {
 		}
 		LOGGER.debug("     tmpSizeWidth=" + tmpSizeWidth);
 		LOGGER.debug("     this.uniformSizeRow=" + this.uniformSizeRow);
-		this.minSize = this.minSize.add(tmpSizeWidth, (lastLineID + 1) * this.uniformSizeRow, 0);
+		this.minSize = this.minSize.add(tmpSizeWidth, (lastLineID + 1) * this.uniformSizeRow);
 		
 		LOGGER.debug("Calculate min size : " + this.minSize);
 		
@@ -93,7 +93,7 @@ class Gird extends Widget {
 	 * get the current border size of the current element:
 	 * @return the border size (0 if not used)
 	 */
-	public Vector3f getBorderSize() {
+	public Vector2f getBorderSize() {
 		return this.propertyBorderSize;
 	}
 	
@@ -113,7 +113,7 @@ class Gird extends Widget {
 		return 0;
 	}
 	
-	public Vector3f getPropertyBorderSize() {
+	public Vector2f getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
 	
@@ -126,7 +126,7 @@ class Gird extends Widget {
 	}
 	
 	@Override
-	public Widget getWidgetAtPos(final Vector3f pos) {
+	public Widget getWidgetAtPos(final Vector2f pos) {
 		if (this.propertyHide) {
 			return null;
 		}
@@ -135,8 +135,8 @@ class Gird extends Widget {
 			if (it.widget == null) {
 				continue;
 			}
-			final Vector3f tmpSize = it.widget.getSize();
-			final Vector3f tmpOrigin = it.widget.getOrigin();
+			final Vector2f tmpSize = it.widget.getSize();
+			final Vector2f tmpOrigin = it.widget.getOrigin();
 			if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
 					&& (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
 				final Widget tmpWidget = it.widget.getWidgetAtPos(pos);
@@ -153,15 +153,14 @@ class Gird extends Widget {
 	@Override
 	public void onChangeSize() {
 		//LOGGER.debug("Update size");
-		this.size = this.size.less(this.propertyBorderSize.x() * 2, this.propertyBorderSize.y() * 2,
-				this.propertyBorderSize.y() * 2);
+		this.size = this.size.less(this.propertyBorderSize.multiply(2));
 		
 		for (int iii = 0; iii < this.subWidget.size(); iii++) {
 			if (this.subWidget.get(iii).widget != null) {
 				//calculate the origin :
-				Vector3f tmpOrigin = this.origin.add(this.propertyBorderSize);
+				Vector2f tmpOrigin = this.origin.add(this.propertyBorderSize);
 				if (!this.gavityButtom) {
-					tmpOrigin = tmpOrigin.add(0, this.size.y() - this.propertyBorderSize.y(), 0);
+					tmpOrigin = tmpOrigin.add(0, this.size.y() - this.propertyBorderSize.y());
 				}
 				
 				int tmpSizeWidth = 0;
@@ -175,15 +174,15 @@ class Gird extends Widget {
 				} else {
 					addingPos = -(this.subWidget.get(iii).row + 1) * this.uniformSizeRow;
 				}
-				tmpOrigin = tmpOrigin.add(tmpSizeWidth, addingPos, 0);
+				tmpOrigin = tmpOrigin.add(tmpSizeWidth, addingPos);
 				
 				LOGGER.debug("     [{}] set subwidget origin={} size={}", iii, tmpOrigin,
-						new Vector3f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow, 0));
+						new Vector2f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow));
 				// set the origin :
 				this.subWidget.get(iii).widget.setOrigin(tmpOrigin.clipInteger());
 				// all time set all the space .
 				this.subWidget.get(iii).widget.setSize(
-						(new Vector3f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow, 0))
+						(new Vector2f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow))
 								.clipInteger());
 				this.subWidget.get(iii).widget.onChangeSize();
 			}
@@ -206,7 +205,7 @@ class Gird extends Widget {
 	 * set the current border size of the current element:
 	 * @param newBorderSize The border size to set (0 if not used)
 	 */
-	public void setBorderSize(final Vector3f newBorderSize) {
+	public void setBorderSize(final Vector2f newBorderSize) {
 		this.propertyBorderSize = newBorderSize;
 	}
 	
@@ -276,7 +275,7 @@ class Gird extends Widget {
 		markToRedraw();
 	}
 	
-	public void setPropertyBorderSize(final Vector3f propertyBorderSize) {
+	public void setPropertyBorderSize(final Vector2f propertyBorderSize) {
 		this.propertyBorderSize = propertyBorderSize;
 		if (this.propertyBorderSize.x() < 0) {
 			LOGGER.error("Try to set a border size <0 on x : " + this.propertyBorderSize.x() + "  == > restore to 0");

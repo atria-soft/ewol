@@ -5,7 +5,7 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 
 /**
  * @ingroup ewolWidgetGroup
@@ -19,7 +19,7 @@ class Layer extends ContainerN {
 	}
 	
 	@Override
-	public Widget getWidgetAtPos(final Vector3f pos) {
+	public Widget getWidgetAtPos(final Vector2f pos) {
 		if (this.propertyHide) {
 			return null;
 		}
@@ -28,8 +28,8 @@ class Layer extends ContainerN {
 			if (it == null) {
 				continue;
 			}
-			final Vector3f tmpSize = it.getSize();
-			final Vector3f tmpOrigin = it.getOrigin();
+			final Vector2f tmpSize = it.getSize();
+			final Vector2f tmpOrigin = it.getOrigin();
 			if ((tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x()) && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y())) {
 				final Widget tmpWidget = it.getWidgetAtPos(pos);
 				if (tmpWidget != null) {

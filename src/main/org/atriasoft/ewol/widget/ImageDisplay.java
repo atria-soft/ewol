@@ -16,7 +16,7 @@ import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.compositing.CompositingImage;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.resource.ResourceColorFile;
@@ -56,26 +56,26 @@ public class ImageDisplay extends Widget {
 				+ " min-size=" + this.propertyMinSize);
 		final Vector2f imageBoder = this.propertyBorder.getPixel().multiply(2.0f);
 		final Vector2f imageSize = this.propertyImageSize.getPixel();
-		final Vector3f size = this.propertyMinSize.getPixel();
+		final Vector2f size = this.propertyMinSize.getPixel();
 		LOGGER.debug("                ==> border=" + imageBoder + " size=" + imageSize + " min-size=" + size);
 		if (!imageSize.isZero()) {
 			final Vector2f tmp = imageBoder.add(imageSize);
-			this.minSize = new Vector3f(tmp.x(), tmp.y(), 0);
+			this.minSize = new Vector2f(tmp.x(), tmp.y());
 			this.maxSize = this.minSize;
 		} else {
 			final Vector2i imageSizeReal = getPropertyMinSize().getPixeli();//.compositing.getRealSize();
 			LOGGER.trace(" Real Size = " + imageSizeReal);
-			final Vector3f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
-			this.minSize = new Vector3f(imageBoder.x() + imageSizeReal.x(), imageBoder.y() + imageSizeReal.y(), 0);
+			final Vector2f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y());
+			this.minSize = new Vector2f(imageBoder.x() + imageSizeReal.x(), imageBoder.y() + imageSizeReal.y());
 			LOGGER.trace(" set max : " + this.minSize + " min1=" + min1);
-			this.minSize = Vector3f.max(this.minSize, min1);
+			this.minSize = Vector2f.max(this.minSize, min1);
 			LOGGER.trace("     result : " + this.minSize);
-			this.maxSize = this.propertyMaxSize.getPixel().add(imageBoder.x(), imageBoder.y(), 0);
-			this.minSize = Vector3f.min(this.minSize, this.maxSize);
+			this.maxSize = this.propertyMaxSize.getPixel().add(imageBoder.x(), imageBoder.y());
+			this.minSize = Vector2f.min(this.minSize, this.maxSize);
 		}
 		this.imageRenderSize = new Vector2f(this.minSize.x(), this.minSize.y());
-		this.minSize = Vector3f.max(this.minSize, size);
-		this.maxSize = Vector3f.max(this.maxSize, this.minSize);
+		this.minSize = Vector2f.max(this.minSize, size);
+		this.maxSize = Vector2f.max(this.maxSize, this.minSize);
 		LOGGER.debug("set widget min=" + this.minSize + " max=" + this.maxSize + " with real Image size="
 				+ this.imageRenderSize + " img size=" + imageSize + "  " + this.propertyImageSize);
 		markToRedraw();
@@ -174,16 +174,16 @@ public class ImageDisplay extends Widget {
 		}
 		// Calculate the new position and size:
 		Vector2f imageBoder = this.propertyBorder.getPixel();
-		Vector3f origin = new Vector3f(imageBoder.x(), imageBoder.y(), 0);
+		Vector2f origin = new Vector2f(imageBoder.x(), imageBoder.y());
 		imageBoder = imageBoder.multiply(2.0f);
 		Vector2f imageRealSize = this.imageRenderSize.less(imageBoder);
-		final Vector3f imageRealSizeMax = this.size.less(imageBoder.x(), imageBoder.y(), 0);
+		final Vector2f imageRealSizeMax = this.size.less(imageBoder.x(), imageBoder.y());
 
 		final Vector2f ratioSizeDisplayRequested = this.propertyPosStop.less(this.propertyPosStart);
 		//imageRealSizeMax *= ratioSizeDisplayRequested;
 
-		Vector3f delta = this.propertyGravity
-				.gravityGenerateDelta(this.size.less(this.imageRenderSize.x(), this.imageRenderSize.y(), 0));
+		Vector2f delta = this.propertyGravity
+				.gravityGenerateDelta(this.size.less(this.imageRenderSize.x(), this.imageRenderSize.y()));
 		if (this.propertyFill.x()) {
 			imageRealSize = imageRealSize.withX(imageRealSizeMax.x());
 			delta = delta.withX(0.0f);
@@ -206,11 +206,11 @@ public class ImageDisplay extends Widget {
 			} else if (ratio < ratioCurrent) {
 				final float oldX = imageRealSize.x();
 				imageRealSize = imageRealSize.withX(imageRealSize.y() * ratio);
-				origin = origin.add((oldX - imageRealSize.x()) * 0.5f, 0, 0);
+				origin = origin.add((oldX - imageRealSize.x()) * 0.5f, 0);
 			} else {
 				final float oldY = imageRealSize.y();
 				imageRealSize = imageRealSize.withY(imageRealSize.x() / ratio);
-				origin = origin.add(0, (oldY - imageRealSize.y()) * 0.5f, 0);
+				origin = origin.add(0, (oldY - imageRealSize.y()) * 0.5f);
 			}
 		}
 
@@ -218,7 +218,7 @@ public class ImageDisplay extends Widget {
 		if (this.propertySmooth) {
 			this.compositing.setPos(origin);
 		} else {
-			this.compositing.setPos(Vector3f.clipInt(origin));
+			this.compositing.setPos(Vector2f.clipInt(origin));
 		}
 		this.compositing.printPart(imageRealSize, this.propertyPosStart, this.propertyPosStop);
 		LOGGER.debug("Paint Image at : " + origin + " size=" + imageRealSize);

@@ -11,12 +11,12 @@ import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
-import org.atriasoft.etk.Dimension3f;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector3b;
-import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.etk.math.Vector3i;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
@@ -77,8 +77,8 @@ public class Tick extends Box {
 	@AknotDescription("Tick value change")
 	public Signal<Boolean> signalValue = new Signal<>();
 	// element over:
-	Vector3f overPositionStart = Vector3f.ZERO;
-	Vector3f overPositionStop = Vector3f.ZERO;
+	Vector2f overPositionStart = Vector2f.ZERO;
+	Vector2f overPositionStop = Vector2f.ZERO;
 	
 	private boolean isDown;
 	
@@ -90,9 +90,9 @@ public class Tick extends Box {
 		markToRedraw();
 		// can not support multiple click...
 		setMouseLimit(1);
-		setPropertyExpand(Vector3b.FALSE);
-		setPropertyFill(Vector3b.TRUE);
-		setPropertyMinSize(new Dimension3f(new Vector3f(32f, 32f, 32f)));
+		setPropertyExpand(Vector2b.FALSE);
+		setPropertyFill(Vector2b.TRUE);
+		setPropertyMinSize(new Dimension2f(new Vector2f(32f, 32f)));
 		setPropertyBorderWidth(new Dimension1f(4));
 		//setPropertyBorderRadius(new Dimension1f(15));
 		setPropertyBorderColor(Color.BLACK);
@@ -108,12 +108,12 @@ public class Tick extends Box {
 		super.calculateMinMaxSize();
 		// get generic padding
 		final Padding padding = Padding.ZERO;
-		final Vector3i minHeight = Vector3i.VALUE_16;
+		final Vector2i minHeight = Vector2i.VALUE_16;
 		
-		Vector3f minimumSizeBase = new Vector3f(minHeight.x(), minHeight.y(), minHeight.z());
+		Vector2f minimumSizeBase = new Vector2f(minHeight.x(), minHeight.y());
 		// add padding :
-		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y(), padding.z());
-		this.minSize = Vector3f.max(this.minSize, minimumSizeBase);
+		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
+		this.minSize = Vector2f.max(this.minSize, minimumSizeBase);
 		// verify the min max of the min size ...
 		checkMinSize();
 		LOGGER.error("min size = " + this.minSize);
@@ -130,7 +130,7 @@ public class Tick extends Box {
 		//		}
 	}
 	
-	private boolean checkIfOver(final Vector3f relPos) {
+	private boolean checkIfOver(final Vector2f relPos) {
 		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
 				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
@@ -167,8 +167,8 @@ public class Tick extends Box {
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		final Vector3f positionAbsolute = new Vector3f(event.pos().x(), event.pos().y(), 0);
-		final Vector3f relPos = relativePosition(positionAbsolute);
+		final Vector2f positionAbsolute = new Vector2f(event.pos().x(), event.pos().y());
+		final Vector2f relPos = relativePosition(positionAbsolute);
 		System.out.println("Event on Input ... " + event + " relPos = " + relPos);
 		LOGGER.trace("Event on Input ... " + event + " relPos = " + relPos);
 		final boolean over = checkIfOver(relPos);

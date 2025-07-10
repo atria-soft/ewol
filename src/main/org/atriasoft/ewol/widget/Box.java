@@ -9,7 +9,7 @@ import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventTime;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class Box extends Container {
 	Vector2i startPosition = Vector2i.ZERO;
 	Vector2i endPosition = Vector2i.ZERO;
 	
-	public boolean isInside(final Vector3f value) {
+	public boolean isInside(final Vector2f value) {
 		return value.x() > this.startPosition.x() //
 				&& value.y() > this.startPosition.y() //
 				&& value.x() < this.endPosition.x() //
@@ -185,8 +185,8 @@ public class Box extends Container {
 		final Vector2f margin = this.propertyMargin.size().multiply(2);
 		final Vector2f calculatedBoxMinSize = childMinSize.add(margin).add(padding).add(borderSize);
 		
-		this.minSize = new Vector3f(calculatedBoxMinSize.x(), calculatedBoxMinSize.y(), 0);
-		this.maxSize = Vector3f.max(this.minSize, this.propertyMaxSize.size());
+		this.minSize = calculatedBoxMinSize;
+		this.maxSize = Vector2f.max(this.minSize, this.propertyMaxSize.size());
 		markToRedraw();
 	}
 
@@ -204,7 +204,7 @@ public class Box extends Container {
 		final float localBorderSize = this.propertyBorderWidth.size();
 		final Vector2f offsetSubWidget = localPadding.add(localMargin).add(localBorderSize);
 
-		Vector3f subWidgetSize = this.subWidget.getCalculateMinSize();
+		Vector2f subWidgetSize = this.subWidget.getCalculateMinSize();
 		if (this.subWidget.canExpand().x() && this.propertyFill.x()) {
 			subWidgetSize = subWidgetSize.withX(this.size.x());
 		} else {
@@ -215,13 +215,13 @@ public class Box extends Container {
 		} else {
 			subWidgetSize = subWidgetSize.withY(this.minSize.y());
 		}
-		subWidgetSize = subWidgetSize.less(offsetSubWidget.x() * 2, offsetSubWidget.y() * 2, 0);
+		subWidgetSize = subWidgetSize.less(offsetSubWidget.multiply(2));
 		subWidgetSize = subWidgetSize.clipInteger();
 
-		final Vector3f freeSizeWithoutWidget = this.size
-				.less(new Vector3f(offsetSubWidget.x() * 2, offsetSubWidget.y() * 2, 0)).less(subWidgetSize);
-		Vector3f subWidgetOrigin = this.origin.add(this.propertyGravity.gravityGenerateDelta(freeSizeWithoutWidget));
-		subWidgetOrigin = subWidgetOrigin.add(new Vector3f(offsetSubWidget.x(), offsetSubWidget.y(), 0));
+		final Vector2f freeSizeWithoutWidget = this.size
+				.less(offsetSubWidget.multiply(2)).less(subWidgetSize);
+		Vector2f subWidgetOrigin = this.origin.add(this.propertyGravity.gravityGenerateDelta(freeSizeWithoutWidget));
+		subWidgetOrigin = subWidgetOrigin.add(offsetSubWidget);
 		subWidgetOrigin = subWidgetOrigin.clipInteger();
 		this.subWidget.setOrigin(subWidgetOrigin);
 		this.subWidget.setSize(subWidgetSize);
@@ -231,12 +231,12 @@ public class Box extends Container {
 	protected Vector2i renderOrigin;
 	protected Vector2i renderSize;
 	
-	private Vector3f calculateOriginRendering(final Vector3f renderSize) {
+	private Vector2f calculateOriginRendering(final Vector2f renderSize) {
 		return this.propertyGravity.gravityGenerateDelta(this.size.less(renderSize));
 	}
 	
-	private Vector3f calculateSizeRendering() {
-		Vector3f tmpRenderSize = this.minSize;
+	private Vector2f calculateSizeRendering() {
+		Vector2f tmpRenderSize = this.minSize;
 		if (this.propertyFill.x()) {
 			tmpRenderSize = tmpRenderSize.withX(this.size.x());
 		}
@@ -254,11 +254,11 @@ public class Box extends Container {
 		}
 		final Vector2f localMargin = this.propertyMargin.size();
 		
-		Vector3f tmpRenderSize = calculateSizeRendering();
-		Vector3f tmpRenderOrigin = calculateOriginRendering(tmpRenderSize);
+		Vector2f tmpRenderSize = calculateSizeRendering();
+		Vector2f tmpRenderOrigin = calculateOriginRendering(tmpRenderSize);
 		
-		tmpRenderOrigin = tmpRenderOrigin.add(localMargin.x(), localMargin.y(), 0);
-		tmpRenderSize = tmpRenderSize.less(localMargin.x() * 2, localMargin.y() * 2, 0);
+		tmpRenderOrigin = tmpRenderOrigin.add(localMargin);
+		tmpRenderSize = tmpRenderSize.less(localMargin.multiply(2));
 		// not sure this is needed...
 		tmpRenderSize = tmpRenderSize.clipInteger();
 		tmpRenderOrigin = tmpRenderOrigin.clipInteger();

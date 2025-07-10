@@ -26,8 +26,8 @@ public class CompositingDrawing extends Compositing {
 	protected static int vboIdColor = 1;
 	protected static int vboIdCoord = 0;
 	private boolean clippingEnable = false; // !< true if the clipping must be activated
-	private Vector3f clippingPosStart = new Vector3f(0, 0, 0); // !< Clipping start position
-	private Vector3f clippingPosStop = new Vector3f(0, 0, 0); // !< Clipping stop position
+	private Vector3f clippingPosStart = Vector3f.ZERO; // !< Clipping start position
+	private Vector3f clippingPosStop = Vector3f.ZERO; // !< Clipping stop position
 	private Color color = Color.BLACK; // !< The text foreground color
 	private Color colorBg = Color.NONE; // !< The text background color
 	//private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
@@ -265,8 +265,8 @@ public class CompositingDrawing extends Compositing {
 	}
 
 	/**
-	 * Relative drawing a line (spacial vector)
-	 * @param vect Vector of the curent line.
+	 * Relative drawing a line (special vector)
+	 * @param vect Vector of the current line.
 	 */
 	public void lineRel(final float xxx, final float yyy) {
 		lineTo(this.position.add(new Vector3f(xxx, yyy, 0)));
@@ -555,7 +555,7 @@ public class CompositingDrawing extends Compositing {
 
 	/**
 	 * Specify the line thickness for the next elements
-	 * @param thickness The thickness disired for the next print
+	 * @param thickness The thickness desired for the next print
 	 */
 	public void setThickness(final float thickness) {
 		this.thickness = thickness;
