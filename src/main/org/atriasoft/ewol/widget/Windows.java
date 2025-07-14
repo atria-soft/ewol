@@ -19,7 +19,6 @@ import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.DrawProperty;
-import org.atriasoft.ewol.compositing.CompositingDrawing;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
@@ -51,11 +50,7 @@ public class Windows extends Widget {
 	protected ResourceColorFile resourceColor = null; //!< theme color property (name of file in @ref propertyColorConfiguration)
 
 	protected Widget subWidget;
-
-	// internal event at ewol system:
-
-	protected CompositingDrawing vectorialDraw = new CompositingDrawing();
-
+	
 	protected Windows() {
 		this.propertyCanFocus = true;
 		onChangePropertyColor();

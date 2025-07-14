@@ -8,13 +8,21 @@ package org.atriasoft.ewol.compositing;
 import org.atriasoft.egami.ImageByte;
 import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.egami.ToolImage;
+import org.atriasoft.esvg.CapMode;
+import org.atriasoft.esvg.Circle;
+import org.atriasoft.esvg.Ellipse;
 import org.atriasoft.esvg.EsvgDocument;
+import org.atriasoft.esvg.JoinMode;
+import org.atriasoft.esvg.Line;
+import org.atriasoft.esvg.PaintState;
+import org.atriasoft.esvg.Rectangle;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
+import org.atriasoft.etk.util.Pair;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.backend3d.OpenGL.RenderMode;
 import org.atriasoft.gale.resource.ResourceProgram;
@@ -23,7 +31,7 @@ import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CompositingSVG extends Compositing {
+public class CompositingSVG extends CompositingDraw {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompositingSVG.class);
 	public static final int NB_VBO = 3;
 	public static final int SIZE_AUTO = 0;
@@ -126,11 +134,14 @@ public class CompositingSVG extends Compositing {
 
 	@Override
 	public void flush() {
-		this.vbo.setPosition(this.vboDataCoords);
-		this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
-		this.vbo.setColors(this.vboDataColors);
-		this.vbo.setVertexCount(this.vboDataCoords.length);
-		this.vbo.flush();
+		generate();
+		if (this.vboDataCoords != null) {
+			this.vbo.setPosition(this.vboDataCoords);
+			this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
+			this.vbo.setColors(this.vboDataColors);
+			this.vbo.setVertexCount(this.vboDataCoords.length);
+			this.vbo.flush();
+		}
 	}
 
 	/**
@@ -407,39 +418,120 @@ public class CompositingSVG extends Compositing {
 			// Nothing to do ...
 			return;
 		}
-		this.svgData = null;
 		clear();
-		final ImageByte tmp = ToolImage.convertImageByte(data.renderImageFloatRGBA(size));
-		if (tmp == null) {
-			LOGGER.error("Can not load the Raw SVG ... ");
-			return;
-		}
-		if (this.resource == null) {
-			this.resource = new ResourceTexture2();
-		}
-		this.resource.set(tmp);
 		this.svgDoc = data;
+		this.requestSize = size;
+		generate();
+	}
+
+	protected void generate() {
+		final Vector2i size = this.requestSize;
+		if (this.svgDoc != null) {
+			final ImageByte tmp = ToolImage.convertImageByte(this.svgDoc.renderImageFloatRGBA(size));
+			if (tmp == null) {
+				LOGGER.error("Can not load the Raw SVG ... ");
+				return;
+			}
+			if (this.resource == null) {
+				this.resource = new ResourceTexture2();
+			}
+			this.resource.set(tmp);
+		}
+	}
+	
+	PaintState paint = new PaintState();
+
+	public void clearPaint() {
+		this.paint.clear();
+	}
+	
+	public void createSize(final Vector2i size) {
+		clear();
+		this.paint.clear();
+		if (this.svgDoc == null) {
+			this.svgDoc = new EsvgDocument(size);
+		}
 		this.requestSize = size;
 	}
 
-	public void setRectangleAsSource(final int sizeX, final int sizeY, final Color color) {
-		setSource("""
-				<svg width="%d" height="%d">
-				  <rect
-				    x="%d"
-				    y="%d"
-				    width="%d"
-				    height="%d"
-				    fill="%s"
-				  />
-				</svg>""".formatted( //
-				sizeX, sizeY, //
-				0, 0, //
-				sizeX, sizeY, //
-				color.toStringSharp() //
-		), new Vector2i(sizeX, sizeY));
+	@Override
+	public void setPaintFillColor(final Color color) {
+		this.paint.fill = new Pair<>(color, "");
 	}
 
+	@Override
+	public void setPaintStrokeColor(final Color color) {
+		this.paint.stroke = new Pair<>(color, "");
+	}
+
+	@Override
+	public void setPaintStrokeWidth(final float width) {
+		this.paint.strokeWidth = width;
+	}
+
+	public void setPaintLineJoin(final JoinMode lineJoin) {
+		this.paint.lineJoin = lineJoin;
+	}
+
+	public void setPaintLineCap(final CapMode lineCap) {
+		this.paint.lineCap = lineCap;
+	}
+
+	public void setPaintMiterLimit(final float miterLimit) {
+		this.paint.miterLimit = miterLimit;
+	}
+
+	public void setPaintOpacity(final float opacity) {
+		this.paint.opacity = opacity;
+	}
+
+	@Override
+	public void addLine(final Vector2f startPos, final Vector2f stopPos) {
+		if (this.svgDoc == null) {
+			this.svgDoc = new EsvgDocument();
+		}
+		this.svgDoc.addElement(new Line(startPos, stopPos, this.paint));
+	}
+
+	@Override
+	public void addRectangle(final Vector2f position, final Vector2f size) {
+		if (this.svgDoc == null) {
+			this.svgDoc = new EsvgDocument();
+		}
+		this.svgDoc.addElement(new Rectangle(position, size, this.paint));
+	}
+
+	@Override
+	public void addRectangle(final Vector2f position, final Vector2f size, final Vector2f roundedCorner) {
+		if (this.svgDoc == null) {
+			this.svgDoc = new EsvgDocument();
+		}
+		this.svgDoc.addElement(new Rectangle(position, size, roundedCorner, this.paint));
+	}
+	
+	@Override
+	public void addCircle(final Vector2f position, final float radius) {
+		if (this.svgDoc == null) {
+			this.svgDoc = new EsvgDocument();
+		}
+		this.svgDoc.addElement(new Circle(position, radius, this.paint));
+	}
+	
+	@Override
+	public void addEllipse(final Vector2f center, final Vector2f radius) {
+		if (this.svgDoc == null) {
+			this.svgDoc = new EsvgDocument();
+		}
+		this.svgDoc.addElement(new Ellipse(center, radius, this.paint));
+	}
+	
+	public void setRectangleAsSource(final int sizeX, final int sizeY, final Color color) {
+		createSize(new Vector2i(sizeX, sizeY)); // specific for SVG
+		setPaintFillColor(color);
+		addRectangle(Vector2f.ZERO, new Vector2f(sizeX, sizeY));
+		flush();
+	}
+	
 	public void setRectangleBorderAsSource(
 			final int sizeX,
 			final int sizeY,
@@ -447,30 +539,15 @@ public class CompositingSVG extends Compositing {
 			final int borderSize,
 			final int borderRadius,
 			final Color borderColor) {
-		
+
 		final int paddingCompensateBorder = Math.round(borderSize * 0.5f);
-		setSource("""
-				<svg width="%d" height="%d">
-				  <rect
-				    x="%d"
-				    y="%d"
-				    width="%d"
-				    height="%d"
-				    rx="%d"
-				    ry="%d"
-				    fill="%s"
-				    stroke="%s"
-				    stroke-width="%d"
-				  />
-				</svg>""".formatted( //
-				sizeX, sizeY, //
-				paddingCompensateBorder, paddingCompensateBorder, //
-				sizeX - 2 * paddingCompensateBorder, sizeY - 2 * paddingCompensateBorder, //
-				borderRadius, //
-				borderRadius, //
-				color.toStringSharp(), //
-				borderColor.toStringSharp(), //
-				borderSize //
-		), new Vector2i(sizeX, sizeY));
+		createSize(new Vector2i(sizeX, sizeY)); // specific for SVG
+		setPaintFillColor(color);
+		setPaintStrokeColor(borderColor);
+		setPaintStrokeWidth(borderSize);
+		addRectangle(new Vector2f(paddingCompensateBorder, paddingCompensateBorder), //
+				new Vector2f(sizeX - 2 * paddingCompensateBorder, sizeY - 2 * paddingCompensateBorder), //
+				new Vector2f(borderRadius, borderRadius));
+		flush();
 	}
 }

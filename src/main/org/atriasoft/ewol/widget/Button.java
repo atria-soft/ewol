@@ -11,7 +11,6 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.Gravity;
@@ -129,7 +128,7 @@ public class Button extends Box {
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector2f relPos = relativePosition(event.pos());
-		//LOGGER.warn("Event on Input ... " + event + " relPos = " + relPos);
+		//LOGGER.warn("Event on Input ... event={} relPos={}", event, relPos);
 		final boolean over = isInside(relPos);
 		//filter if outside the element...
 		if (event.status() == KeyStatus.leave) {

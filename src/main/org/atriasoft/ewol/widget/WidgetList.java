@@ -14,10 +14,9 @@ import java.util.Map.Entry;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.compositing.Compositing;
 import org.atriasoft.ewol.compositing.CompositingDrawing;
+import org.atriasoft.ewol.compositing.CompositingGC;
 import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.widget.model.ListRole;
@@ -28,37 +27,37 @@ class WidgetList extends WidgetScrolled {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WidgetList.class);
 	// drawing capabilities ....
 	protected List<Compositing> listOObject = new ArrayList<>(); //!< generic element to display...
-
+	
 	protected List<Integer> listSizeX = new ArrayList<>(); //!< size of every colons
-
+	
 	protected List<Integer> listSizeY = new ArrayList<>(); //!< size of every rows
 	protected Map<String, Compositing> compositingElements = new HashMap<>();
 	// list properties ...
 	protected int paddingSizeX = 0;
 	protected int paddingSizeY = 0;
-
+	
 	protected int displayStartRaw = 0; //!< Current starting displayed raw
-
+	
 	protected int displayCurrentNbLine = 0; //!< Number of line in the display
-
+	
 	protected int nbVisibleRaw = 0; // set the number of visible raw (calculate don display)
 	// function call to display the list :
-
+	
 	public WidgetList() {
 		this.paddingSizeX = 2;
 		this.paddingSizeY = 2;
 		this.nbVisibleRaw = 0;
 		this.propertyCanFocus = true;
 		this.limitScrolling = new Vector2f(1.0f, 0.5f);
-		addComposeElemnent("drawing", new CompositingDrawing());
+		addComposeElemnent("drawing", new CompositingGC());
 		addComposeElemnent("text", new CompositingText());
 	}
-
+	
 	protected void addComposeElemnent(final String name, final Compositing element) {
 		this.compositingElements.put(name, element);
 		//this.listOObject.add(element);
 	}
-
+	
 	/**
 	 * Calculate an element size to estimate the render size.
 	 * @note Does not generate the with the same size.
@@ -75,7 +74,7 @@ class WidgetList extends WidgetScrolled {
 		}
 		return Vector2f.ZERO;
 	}
-
+	
 	@Override
 	public void calculateMinMaxSize() {
 		/*int fontId = getDefaultFontId();
@@ -86,18 +85,18 @@ class WidgetList extends WidgetScrolled {
 		*/
 		this.minSize = new Vector2f(200, 150);
 	}
-
+	
 	protected void clearComposeElemnent() {
 		for (final Entry<String, Compositing> it : this.compositingElements.entrySet()) {
 			//it.setValue(null);
 			it.getValue().clear();
 		}
 	}
-
+	
 	public void clearOObjectList() {
 		//this.listOObject.clear();
 	}
-
+	
 	/**
 	 * Draw the background
 	 */
@@ -109,7 +108,7 @@ class WidgetList extends WidgetScrolled {
 			BGOObjects.rectangleWidth(new Vector2f(this.size.x(), this.size.y()));
 		}
 	}
-
+	
 	/**
 	 * Draw an element in the specific size and position.
 	 * @param pos Position of colomn and Raw of the element.
@@ -138,7 +137,7 @@ class WidgetList extends WidgetScrolled {
 			}
 		}
 	}
-
+	
 	protected void flushElements() {
 		for (final Entry<String, Compositing> it : this.compositingElements.entrySet()) {
 			it.getValue().flush();
@@ -149,15 +148,15 @@ class WidgetList extends WidgetScrolled {
 			}
 		}
 	}
-
+	
 	protected Color getBasicBG() {
 		return new Color(0xFF, 0xFF, 0xFF, 0xFF);
 	}
-
+	
 	protected Compositing getComposeElemnent(final String name) {
 		return this.compositingElements.get(name);
 	}
-
+	
 	protected Object getData(final ListRole role, final Vector2i pos) {
 		switch (role) {
 			case Text:
@@ -174,7 +173,7 @@ class WidgetList extends WidgetScrolled {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Get the number of colomn and row availlable in the list
 	 * @return Number of colomn and row
@@ -182,7 +181,7 @@ class WidgetList extends WidgetScrolled {
 	protected Vector2i getMatrixSize() {
 		return new Vector2i(1, 0);
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		for (final Entry<String, Compositing> it : this.compositingElements.entrySet()) {
@@ -195,7 +194,7 @@ class WidgetList extends WidgetScrolled {
 		}
 		super.onDraw();
 	}
-
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		Vector2f relativePos = relativePosition(new Vector2f(event.pos().x(), event.pos().y()));
@@ -247,7 +246,7 @@ class WidgetList extends WidgetScrolled {
 		}
 		return isUsed;
 	}
-
+	
 	/**
 	 * set a raw visible in the main display
 	 * @param _id Id of the raw that might be visible.
@@ -257,16 +256,16 @@ class WidgetList extends WidgetScrolled {
 	protected void onGetFocus() {
 		LOGGER.debug("WidgetList get focus");
 	}
-
+	
 	protected boolean onItemEvent(final EventInput event, final Vector2i pos, final Vector2f mousePosition) {
 		return false;
 	}
-
+	
 	@Override
 	protected void onLostFocus() {
 		LOGGER.debug("WidgetList Lost focus");
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
@@ -394,9 +393,9 @@ class WidgetList extends WidgetScrolled {
 		// flush all compositing drawing
 		flushElements();
 	}
-
+	
 	protected void removeComposeElemnent() {
 		this.compositingElements.clear();
 	}
-
+	
 }
