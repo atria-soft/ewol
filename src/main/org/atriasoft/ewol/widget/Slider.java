@@ -7,13 +7,11 @@ import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.compositing.CompositingDrawing;
+import org.atriasoft.ewol.compositing.CompositingGC;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.key.KeyStatus;
@@ -31,8 +29,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Slider extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Slider.class);
-
-	private Uri propertyConfig = new Uri("THEME", "shape/Slider.json", "ewol");
 
 	private Float propertyValue = 0.0f; //!< string that must be displayed
 	protected CompositingSVG compositing = new CompositingSVG();
@@ -59,11 +55,10 @@ public class Slider extends Widget {
 
 	private final Color textColorBg = Color.BLACK.withA(0x3F); //!< Background color
 
-	CompositingDrawing draw = new CompositingDrawing(); //!< drawing tool.
+	CompositingGC vectorialDraw = new CompositingGC(); //!< drawing tool.
 
 	public Slider() {
 		this.propertyCanFocus = true;
-		onChangePropertyShaper();
 		markToRedraw();
 		// Limit event at 1:
 		setMouseLimit(1);
@@ -94,18 +89,19 @@ public class Slider extends Widget {
 
 	@AknotManaged
 	@AknotAttribute
-	@AknotName("config")
-	@AknotDescription("configuration of the widget")
-	public Uri getPropertyConfig() {
-		return this.propertyConfig;
-	}
-
-	@AknotManaged
-	@AknotAttribute
 	@AknotName("maximum")
 	@AknotDescription("Maximum value of the slider")
 	public Float getPropertyMaximum() {
 		return this.propertyMaximum;
+	}
+	
+	public void setPropertyMaximum(final Float propertyMaximum) {
+		if (this.propertyMaximum == propertyMaximum) {
+			return;
+		}
+		this.propertyMaximum = propertyMaximum;
+		updateValue(this.propertyValue);
+		this.signalValue.emit(this.propertyValue);
 	}
 
 	@AknotManaged
@@ -116,6 +112,15 @@ public class Slider extends Widget {
 		return this.propertyMinimum;
 	}
 
+	public void setPropertyMinimum(final Float propertyMinimum) {
+		if (this.propertyMinimum == propertyMinimum) {
+			return;
+		}
+		this.propertyMinimum = propertyMinimum;
+		updateValue(this.propertyValue);
+		this.signalValue.emit(this.propertyValue);
+	}
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("step")
@@ -123,7 +128,16 @@ public class Slider extends Widget {
 	public Float getPropertyStep() {
 		return this.propertyStep;
 	}
-
+	
+	public void setPropertyStep(final Float propertyStep) {
+		if (this.propertyStep == propertyStep) {
+			return;
+		}
+		this.propertyStep = propertyStep;
+		updateValue(this.propertyValue);
+		this.signalValue.emit(this.propertyValue);
+	}
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -131,13 +145,25 @@ public class Slider extends Widget {
 	public Float getPropertyValue() {
 		return this.propertyValue;
 	}
+	
+	public void setPropertyValue(final Float propertyValue) {
+		if (this.propertyValue == propertyValue) {
+			return;
+		}
+		this.propertyValue = propertyValue;
+		updateValue(this.propertyValue);
+		this.signalValue.emit(this.propertyValue);
+	}
 
-	protected void onChangePropertyShaper() {
-		//		if (this.shape == null) {
-		//			this.shape = new GuiShape(this.propertyConfig);
-		//		} else {
-		//			this.shape.setSource(this.propertyConfig);
-		//		}
+	protected void updateValue(float newValue) {
+		newValue = FMath.max(FMath.min(newValue, this.propertyMaximum), this.propertyMinimum);
+		if (this.propertyStep == 0.0f) {
+			this.propertyValue = newValue;
+		} else {
+			final float basicVal = (long) (newValue / this.propertyStep);
+			this.propertyValue = basicVal * this.propertyStep;
+		}
+		markToRedraw();
 	}
 
 	@Override
@@ -208,7 +234,7 @@ public class Slider extends Widget {
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
-			//return;
+			return;
 		}
 		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
 		this.compositing.clear();
@@ -281,70 +307,15 @@ public class Slider extends Widget {
 			this.overCursorPositionStop = tmpOriginShaper.add(tmpSizeShaper);
 			//this.shape.setShape(1, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
 		}
+		LOGGER.error("REQUEST display an immage with size={}x{}", (int) this.overPositionSize.x(),
+				(int) this.overPositionSize.y());
 		this.compositing.setRectangleAsSource((int) this.overPositionSize.x(), (int) this.overPositionSize.y(),
 				Color.GREEN);
 		// TODO: Refaire le design de cet affichage...
 		this.compositing.setPos(this.overPositionStart);
 		this.compositing.print(new Vector2f(this.overPositionSize.x(), this.overPositionSize.y()));
 		this.compositing.flush();
-		
-		//this.gc.flush();
-		this.compositing.flush();
 
 	}
 
-	public void setPropertyConfig(final Uri propertyConfig) {
-		if (this.propertyConfig.equals(propertyConfig)) {
-			return;
-		}
-		this.propertyConfig = propertyConfig;
-		onChangePropertyShaper();
-	}
-
-	public void setPropertyMaximum(final Float propertyMaximum) {
-		if (this.propertyMaximum == propertyMaximum) {
-			return;
-		}
-		this.propertyMaximum = propertyMaximum;
-		updateValue(this.propertyValue);
-		this.signalValue.emit(this.propertyValue);
-	}
-
-	public void setPropertyMinimum(final Float propertyMinimum) {
-		if (this.propertyMinimum == propertyMinimum) {
-			return;
-		}
-		this.propertyMinimum = propertyMinimum;
-		updateValue(this.propertyValue);
-		this.signalValue.emit(this.propertyValue);
-	}
-
-	public void setPropertyStep(final Float propertyStep) {
-		if (this.propertyStep == propertyStep) {
-			return;
-		}
-		this.propertyStep = propertyStep;
-		updateValue(this.propertyValue);
-		this.signalValue.emit(this.propertyValue);
-	}
-
-	public void setPropertyValue(final Float propertyValue) {
-		if (this.propertyValue == propertyValue) {
-			return;
-		}
-		this.propertyValue = propertyValue;
-		updateValue(this.propertyValue);
-		this.signalValue.emit(this.propertyValue);
-	}
-
-	protected void updateValue(float newValue) {
-		newValue = FMath.max(FMath.min(newValue, this.propertyMaximum), this.propertyMinimum);
-		if (this.propertyStep == 0.0f) {
-			this.propertyValue = newValue;
-		} else {
-			final float basicVal = (long) (newValue / this.propertyStep);
-			this.propertyValue = basicVal * this.propertyStep;
-		}
-		markToRedraw();
-	}
 }
