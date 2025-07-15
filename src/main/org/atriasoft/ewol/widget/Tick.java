@@ -9,8 +9,8 @@ import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
+import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
@@ -45,19 +45,19 @@ public 	Uri> propertyShape; //!< shape of the widget
 public class Tick extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Tick.class);
 	protected CompositingSVG compositingTick = new CompositingSVG();
-	
+
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// text display this.text
 	//private final CompositingGraphicContext gc = new CompositingGraphicContext();
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-
+	
 	private final Uri propertyConfig = new Uri("THEME", "shape/Tick.json", "ewol");
 	private final Uri uriCheckGreen = new Uri("THEME", "CheckBoxCrossRed.svg", "ewol");
-
-	private Boolean propertyValue = false; //!< string that must be displayed
 	
+	private Boolean propertyValue = false; //!< string that must be displayed
+
 	@AknotSignal
 	@AknotName("down")
 	@AknotDescription("Tick is Down")
@@ -77,9 +77,9 @@ public class Tick extends Box {
 	// element over:
 	Vector2f overPositionStart = Vector2f.ZERO;
 	Vector2f overPositionStop = Vector2f.ZERO;
-
+	
 	private boolean isDown;
-
+	
 	/**
 	 * Constuctor
 	 */
@@ -91,15 +91,15 @@ public class Tick extends Box {
 		setPropertyExpand(Vector2b.FALSE);
 		setPropertyFill(Vector2b.TRUE);
 		setPropertyMinSize(new Dimension2f(new Vector2f(32f, 32f)));
-		setPropertyBorderWidth(new Dimension1f(4));
+		setPropertyBorderWidth(new DimensionInsets(4));
 		//setPropertyBorderRadius(new Dimension1f(15));
 		setPropertyBorderColor(Color.BLACK);
 		setPropertyColor(Color.WHITE);
 		setPropertyPadding(new Dimension2f(new Vector2f(3, 3)));
 		setPropertyMargin(new Dimension2f(new Vector2f(0, 0)));
-		
-	}
 
+	}
+	
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -107,7 +107,7 @@ public class Tick extends Box {
 		// get generic padding
 		final Padding padding = Padding.ZERO;
 		final Vector2i minHeight = Vector2i.VALUE_16;
-
+		
 		Vector2f minimumSizeBase = new Vector2f(minHeight.x(), minHeight.y());
 		// add padding :
 		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
@@ -116,7 +116,7 @@ public class Tick extends Box {
 		checkMinSize();
 		LOGGER.error("min size = " + this.minSize);
 	}
-
+	
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
 		//		if (this.shape.changeStatusIn(newStatusId)) {
 		//			if (!this.periodicConnectionHanble.isConnected()) {
@@ -127,12 +127,12 @@ public class Tick extends Box {
 		//			markToRedraw();
 		//		}
 	}
-
+	
 	private boolean checkIfOver(final Vector2f relPos) {
 		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
 				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
@@ -140,16 +140,16 @@ public class Tick extends Box {
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}
-
+	
 	protected void onChangePropertyTextWhenNothing() {
 		markToRedraw();
 	}
-
+	
 	protected void onChangePropertyValue() {
 		//Boolean newData = this.propertyValue;
 		markToRedraw();
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		super.onDraw();
@@ -162,7 +162,7 @@ public class Tick extends Box {
 		//			this.shape.draw(true, this.propertyValue ? 0 : 1);
 		//		}
 	}
-
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector2f positionAbsolute = new Vector2f(event.pos().x(), event.pos().y());
@@ -224,7 +224,7 @@ public class Tick extends Box {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		super.onRegenerateDisplay();
@@ -236,7 +236,7 @@ public class Tick extends Box {
 		this.compositingTick.print(this.startPosition.less(4).toVector2f());
 		this.compositingTick.flush();
 	}
-
+	
 	/**
 	 * internal check the value with RegExp checking
 	 * @param newData The new string to display
@@ -245,7 +245,7 @@ public class Tick extends Box {
 		this.propertyValue = newData;
 		markToRedraw();
 	}
-
+	
 	public void setPropertyValue(final Boolean propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;
@@ -254,5 +254,5 @@ public class Tick extends Box {
 		this.signalValue.emit(this.propertyValue);
 		onChangePropertyValue();
 	}
-
+	
 }

@@ -8,8 +8,8 @@ import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
+import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Button extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Button.class);
-
+	
 	public static Button createLabelButton(final String label) {
 		final Button out = new Button();
 		final Label labelWidget = new Label();
@@ -46,7 +46,7 @@ public class Button extends Box {
 		out.setSubWidget(labelWidget);
 		return out;
 	}
-	
+
 	/**
 	 * Periodic call to update graphic display
 	 * @param event Time generic event
@@ -58,12 +58,12 @@ public class Button extends Box {
 		//		}
 		self.markToRedraw();
 	}
-	
+
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-	
+
 	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
-	
+
 	@AknotSignal
 	@AknotName(value = "down")
 	@AknotDescription("Button is Down")
@@ -84,10 +84,10 @@ public class Button extends Box {
 	@AknotName(value = "leave")
 	@AknotDescription("The cursor leave the button")
 	public SignalEmpty signalLeave = new SignalEmpty();
-	
+
 	private boolean buttonPressed = false;
 	private final boolean mouseHover = false;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -98,15 +98,15 @@ public class Button extends Box {
 		setMouseLimit(1);
 		setPropertyExpand(Vector2b.TRUE);
 		setPropertyFill(Vector2b.TRUE);
-		setPropertyBorderWidth(new Dimension1f(4));
+		setPropertyBorderWidth(new DimensionInsets(4));
 		//setPropertyBorderRadius(new Dimension1f(15));
 		setPropertyBorderColor(Color.BLACK);
 		setPropertyColor(Color.WHITE);
 		setPropertyPadding(new Dimension2f(new Vector2f(3, 3)));
 		setPropertyMargin(new Dimension2f(new Vector2f(0, 0)));
-
+		
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "config")
@@ -114,7 +114,7 @@ public class Button extends Box {
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}
-
+	
 	@Override
 	protected boolean onEventEntry(final EventEntry event) {
 		//LOGGER.debug("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
@@ -124,7 +124,7 @@ public class Button extends Box {
 		}
 		return super.onEventEntry(event);
 	}
-	
+
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector2f relPos = relativePosition(event.pos());
@@ -184,14 +184,14 @@ public class Button extends Box {
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void onLostFocus() {
 		this.buttonPressed = false;
 		LOGGER.trace(this.name + " : Remove Focus ...");
 		//checkStatus();
 	}
-	
+
 	public void setPropertyConfig(final Uri propertyConfig) {
 		if (this.propertyConfig.equals(propertyConfig)) {
 			return;

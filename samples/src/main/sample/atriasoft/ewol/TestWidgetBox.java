@@ -1,8 +1,9 @@
 package sample.atriasoft.ewol;
 
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
+import org.atriasoft.etk.DimensionBorderRadius;
+import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.widget.Box;
@@ -22,8 +23,8 @@ public class TestWidgetBox implements TestWidgetInterface {
 		final var testWidget = new Box(innerWidget);
 		testWidget.setPropertyExpand(Vector2b.FALSE);
 		testWidget.setPropertyFill(Vector2b.FALSE);
-		testWidget.setPropertyBorderWidth(new Dimension1f(10));
-		testWidget.setPropertyBorderRadius(new Dimension1f(25));
+		testWidget.setPropertyBorderWidth(new DimensionInsets(10));
+		testWidget.setPropertyBorderRadius(new DimensionBorderRadius(25));
 		testWidget.setPropertyBorderColor(Color.BLACK);
 		testWidget.setPropertyColor(Color.GREEN_YELLOW);
 		testWidget.setPropertyPadding(new Dimension2f(new Vector2f(15, 15)));

@@ -15,6 +15,8 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Dimension3f;
+import org.atriasoft.etk.DimensionBorderRadius;
+import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2b;
@@ -1135,6 +1137,294 @@ public class ModelWidget extends Container {
 		}
 	}
 
+	public void addMenuDimensionBorderRadius(final Widget widget, final IntrospectionProperty pojo) {
+		Object valueRaw = null;
+		try {
+			valueRaw = pojo.getValue(widget);
+		} catch (final AknotException e) {
+			e.printStackTrace();
+			return;
+		}
+		if (valueRaw instanceof final DimensionBorderRadius value) {
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("bottom-left");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().bottomLeft());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionBorderRadius castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withBottomLeft(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("bottom-right");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().bottomRight());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionBorderRadius castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withBottomRight(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("top-right");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().topRight());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionBorderRadius castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withTopRight(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("top-left");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().topLeft());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionBorderRadius castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withTopLeft(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+		}
+	}
+
+	public void addMenuDimensionInsets(final Widget widget, final IntrospectionProperty pojo) {
+		Object valueRaw = null;
+		try {
+			valueRaw = pojo.getValue(widget);
+		} catch (final AknotException e) {
+			e.printStackTrace();
+			return;
+		}
+		if (valueRaw instanceof final DimensionInsets value) {
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("left");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().left());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionInsets castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withLeft(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("bottom");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().bottom());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionInsets castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withBottom(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("right");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().right());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionInsets castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withRight(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+			{
+				final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
+				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+				lineSizer.setPropertyFill(Vector2b.TRUE);
+				this.sizerMenu.subWidgetAdd(lineSizer);
+
+				final var simpleLabel = new Label("top");
+				simpleLabel.setPropertyExpand(Vector2b.FALSE);
+				simpleLabel.setPropertyFill(Vector2b.TRUE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				lineSizer.subWidgetAdd(simpleLabel);
+
+				final var spin = new Spin();
+				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
+				spin.setPropertyFill(Vector2b.TRUE);
+				spin.setPropertyValue((int) value.size().top());
+				lineSizer.subWidgetAdd(spin);
+				final var con = spin.signalValue.connect(newValue -> {
+					try {
+						final var oldValue = pojo.getValue(widget);
+						if (oldValue instanceof DimensionInsets castedValue) {
+							castedValue = castedValue.withSize(castedValue.size().withTop(newValue));
+							LOGGER.warn("Set new value: {}", castedValue);
+							pojo.setExistingValue(widget, castedValue);
+						}
+					} catch (final AknotException e) {
+						e.printStackTrace();
+						return;
+					}
+				});
+				this.conections.add(con);
+			}
+		}
+	}
+
 	public void displayAllPropertyWithType(final Widget widget, final IntrospectionModel modelPojo) throws Exception {
 		LOGGER.warn("Connect all property(ies) on '{}'", widget.getName());
 		final var atributes = modelPojo.getAttributes();
@@ -1175,6 +1465,10 @@ public class ModelWidget extends Container {
 				addMenuDimension2f(widget, pojo);
 			} else if (pojo.getType() == Dimension1f.class) {
 				addMenuDimension1f(widget, pojo);
+			} else if (pojo.getType() == DimensionBorderRadius.class) {
+				addMenuDimensionBorderRadius(widget, pojo);
+			} else if (pojo.getType() == DimensionInsets.class) {
+				addMenuDimensionInsets(widget, pojo);
 			} else if (pojo.getType() == DisplayMode.class) {
 				LOGGER.error("        ==> plop");
 			} else if (pojo.getType() == Uri.class) {
