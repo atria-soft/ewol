@@ -5,7 +5,9 @@
  */
 package org.atriasoft.ewol.compositing;
 
+import org.atriasoft.etk.BorderRadius;
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Insets;
 import org.atriasoft.etk.math.Vector2f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,24 @@ public class CompositingGC extends CompositingDrawing {
 			rectangleRadius(position.add(size), roundedCorner.x());
 			if (this.strokeSize > 0) {
 				rectangleBorderRadius(position.add(size), this.strokeSize, roundedCorner.x());
+			}
+		}
+	}
+	
+	@Override
+	public void addRectangle(
+			final Vector2f position,
+			final Vector2f size,
+			final Insets thickness,
+			final BorderRadius radius) {
+		if (radius == null || radius.isZero()) {
+			//addRectangle(position, size);
+			//throw new RuntimeException("Not implemented ...");
+		} else {
+			setPos(position);
+			rectangleRadius(position.add(size), thickness, radius);
+			if (this.strokeSize > 0) {
+				rectangleBorderRadius(position.add(size), thickness, radius);
 			}
 		}
 	}

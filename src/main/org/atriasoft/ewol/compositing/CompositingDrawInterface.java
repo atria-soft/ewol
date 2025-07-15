@@ -5,7 +5,9 @@
  */
 package org.atriasoft.ewol.compositing;
 
+import org.atriasoft.etk.BorderRadius;
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Insets;
 import org.atriasoft.etk.math.Vector2f;
 
 public interface CompositingDrawInterface {
@@ -28,5 +30,7 @@ public interface CompositingDrawInterface {
 	void addCircle(final Vector2f position, final float radius);
 	
 	void addEllipse(final Vector2f center, final Vector2f radius);
+
+	void addRectangle(Vector2f position, Vector2f size, Insets thickness, BorderRadius radius);
 	
 }
