@@ -72,7 +72,7 @@ public class CompositingGC extends CompositingDrawing {
 		} else {
 			setPos(position);
 			rectangleRadius(position.add(size), thickness, radius);
-			if (this.strokeSize > 0) {
+			if (!thickness.isZero()) {
 				rectangleBorderRadius(position.add(size), thickness, radius);
 			}
 		}
