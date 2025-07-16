@@ -114,17 +114,17 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			nbOcurence = 10;
 		}
 		for (int iii = 0; iii < nbOcurence; iii++) {
-			final float thickness = thicknessStart + ((thicknessStart - thicknessStop) * iii / nbOcurence);
+			final float thickness = thicknessStart + ((thicknessStop - thicknessStart) * iii / nbOcurence);
 			final float angleOne = angleStart + (angleStop * iii / nbOcurence);
-			final float offsetExty = FMath.sin(angleOne) * (radius + thickness / 2);
-			final float offsetExtx = FMath.cos(angleOne) * (radius + thickness / 2);
-			final float offsetInty = FMath.sin(angleOne) * (radius - thickness / 2);
-			final float offsetIntx = FMath.cos(angleOne) * (radius - thickness / 2);
+			final float offsetExty = FMath.sin(angleOne) * (radius);
+			final float offsetExtx = FMath.cos(angleOne) * (radius);
+			final float offsetInty = FMath.sin(angleOne) * (radius - thickness);
+			final float offsetIntx = FMath.cos(angleOne) * (radius - thickness);
 			final float angleTwo = angleStart + (angleStop * (iii + 1) / nbOcurence);
-			final float offsetExt2y = FMath.sin(angleTwo) * (radius + thickness / 2);
-			final float offsetExt2x = FMath.cos(angleTwo) * (radius + thickness / 2);
-			final float offsetInt2y = FMath.sin(angleTwo) * (radius - thickness / 2);
-			final float offsetInt2x = FMath.cos(angleTwo) * (radius - thickness / 2);
+			final float offsetExt2y = FMath.sin(angleTwo) * (radius);
+			final float offsetExt2x = FMath.cos(angleTwo) * (radius);
+			final float offsetInt2y = FMath.sin(angleTwo) * (radius - thickness);
+			final float offsetInt2x = FMath.cos(angleTwo) * (radius - thickness);
 			setPoint(new Vector3f(centerPos.x() + offsetIntx, centerPos.y() + offsetInty, 0));
 			setPoint(new Vector3f(centerPos.x() + offsetExtx, centerPos.y() + offsetExty, 0));
 			setPoint(new Vector3f(centerPos.x() + offsetExt2x, centerPos.y() + offsetExt2y, 0));
@@ -462,6 +462,17 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		setPoint(new Vector3f(dxB, dyD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
 	}
+
+	public void drawQuad(final Vector3f pos1, final Vector3f pos2, final Vector3f pos3, final Vector3f pos4) {
+		resetCount();
+		setPoint(pos1);
+		setPoint(pos2);
+		setPoint(pos3);
+
+		setPoint(pos1);
+		setPoint(pos3);
+		setPoint(pos4);
+	}
 	
 	public void rectangleBorder(final Vector2f dest, final float borderWidth) {
 		rectangleBorder(dest.toVector3f(), borderWidth);
@@ -621,35 +632,145 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		internalSetColor(this.color);
 		final boolean showConstruct = true;
 		
-		// center rectangle
-		rectangleRaw(this.position.add(new Vector3f(thickness.top(), thickness.top(), 0)),
-				dest.toVector3f().less(new Vector3f(thickness.top(), thickness.top(), 0)));
-		// top & bottom rectangle ==> refacto ..
-		//		rectangleRaw(this.position.add(new Vector3f(thickness.top(), 0, 0)),
-		//				dest.toVector3f().less(new Vector3f(radius.topLeft(), 0, 0)));
-		//		if (showConstruct) {
-		//			internalSetColor(Color.ORANGE);
-		//		}
-		//		// left rectangle
-		//		rectangleRaw(this.position.add(new Vector3f(0, radius.topLeft(), 0)),
-		//				new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(), 0));
-		//		if (showConstruct) {
-		//			internalSetColor(Color.GRAY);
-		//		}
-		//		// right rectangle
-		//		rectangleRaw(new Vector3f(dest.x() - radius.topLeft(), this.position.y() + radius.topLeft(), 0),
-		//				new Vector3f(dest.x(), dest.y() - radius.topLeft(), 0));
-		
 		if (showConstruct) {
-			internalSetColor(Color.AQUA_MARINE);
+			internalSetColor(Color.DARK_KHAKI);
 		}
-		circleRaw(this.position.add(radius.topLeft(), radius.topLeft(), 0), radius.topLeft(), FMath.PI,
+		// buttom-left
+		final Vector3f centerBottomLeft = this.position.add(radius.bottomLeft(), radius.bottomLeft(), 0);
+		circleRaw(centerBottomLeft, radius.bottomLeft(), FMath.PI, FMath.PI * 0.5f);
+		if (showConstruct) {
+			internalSetColor(Color.DARK_CYAN);
+		}
+		// Top right
+		final Vector3f centerTopRight = dest.toVector3f().less(radius.topRight(), radius.topRight(), 0);
+		circleRaw(centerTopRight, radius.topRight(), 0, FMath.PI * 0.5f);
+		if (showConstruct) {
+			internalSetColor(Color.DARK_OLIVEGREEN);
+		}
+		// bottom right
+		final Vector3f centerBottomRight = new Vector3f(dest.x() - radius.bottomRight(),
+				this.position.y() + radius.bottomRight(), 0);
+		circleRaw(centerBottomRight, radius.bottomRight(), FMath.PI * 1.5f, FMath.PI * 0.5f);
+		if (showConstruct) {
+			internalSetColor(Color.DARK_ORANGE);
+		}
+		// top-left
+		final Vector3f centerTopLeft = new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(),
+				0);
+		circleRaw(centerTopLeft, radius.topLeft(), FMath.PI * 0.5f, FMath.PI * 0.5f);
+
+		// center area:
+		if (showConstruct) {
+			internalSetColor(Color.DARK_GOLDENROD);
+		}
+		drawQuad(centerBottomLeft, centerTopLeft, centerTopRight, centerBottomRight);
+
+		// buttom area:
+		if (showConstruct) {
+			internalSetColor(Color.DARK_BLUE);
+		}
+		drawQuad(centerBottomLeft.less(0, radius.bottomLeft(), 0), centerBottomLeft, centerBottomRight,
+				centerBottomRight.less(0, radius.bottomRight(), 0));
+		// top area:
+		if (showConstruct) {
+			internalSetColor(Color.DARK_GRAY);
+		}
+		drawQuad(centerTopLeft.add(0, radius.topLeft(), 0), centerTopLeft, centerTopRight,
+				centerTopRight.add(0, radius.topRight(), 0));
+
+		// right area:
+		if (showConstruct) {
+			internalSetColor(Color.DARK_SLATE_GRAY);
+		}
+		drawQuad(centerBottomRight.add(radius.bottomRight(), 0, 0), centerBottomRight, centerTopRight,
+				centerTopRight.add(radius.topRight(), 0, 0));
+		// left area:
+		if (showConstruct) {
+			internalSetColor(Color.DARK_SLATE_BLUE);
+		}
+		drawQuad(centerBottomLeft.less(radius.bottomLeft(), 0, 0), centerBottomLeft, centerTopLeft,
+				centerTopLeft.less(radius.topLeft(), 0, 0));
+
+		if (showConstruct) {
+			internalSetColor(Color.BLACK);
+			rectangleRaw(this.position, this.position.add(10));
+			internalSetColor(Color.RED);
+			rectangleRaw(dest.toVector3f().less(10), dest.toVector3f());
+		}
+	}
+
+	public void rectangleBorderRadius(
+			//final Vector2f pos,
+			final Vector2f dest,
+			final Insets thickness,
+			final BorderRadius radius) {
+		internalSetColor(this.colorBg);
+		final boolean showConstruct = true;
+
+		if (showConstruct) {
+			internalSetColor(Color.KHAKI);
+		}
+		// buttom-left
+		final Vector3f centerBottomLeft = this.position.add(radius.bottomLeft(), radius.bottomLeft(), 0);
+		circleBorderRaw(centerBottomLeft, radius.bottomLeft(), thickness.left(), thickness.bottom(), FMath.PI,
 				FMath.PI * 0.5f);
-		circleRaw(dest.toVector3f().less(radius.topLeft(), radius.topLeft(), 0), radius.topLeft(), 0, FMath.PI * 0.5f);
-		circleRaw(new Vector3f(dest.x() - radius.topLeft(), this.position.y() + radius.topLeft(), 0), radius.topLeft(),
-				FMath.PI * 1.5f, FMath.PI * 0.5f);
-		circleRaw(new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(), 0), radius.topLeft(),
-				FMath.PI * 0.5f, FMath.PI * 0.5f);
+
+		if (showConstruct) {
+			internalSetColor(Color.CYAN);
+		}
+		// Top right
+		final Vector3f centerTopRight = dest.toVector3f().less(radius.topRight(), radius.topRight(), 0);
+		circleBorderRaw(centerTopRight, radius.topRight(), thickness.right(), thickness.top(), 0, FMath.PI * 0.5f);
+		if (showConstruct) {
+			internalSetColor(Color.OLIVE);
+		}
+		// bottom right
+		final Vector3f centerBottomRight = new Vector3f(dest.x() - radius.bottomRight(),
+				this.position.y() + radius.bottomRight(), 0);
+		circleBorderRaw(centerBottomRight, radius.bottomRight(), thickness.bottom(), thickness.right(), FMath.PI * 1.5f,
+				FMath.PI * 0.5f);
+		if (showConstruct) {
+			internalSetColor(Color.ORANGE);
+		}
+		// top-left
+		final Vector3f centerTopLeft = new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(),
+				0);
+		circleBorderRaw(centerTopLeft, radius.topLeft(), thickness.left(), thickness.top(), FMath.PI * 0.5f,
+				FMath.PI * 0.5f);
+
+		// buttom area:
+		if (showConstruct) {
+			internalSetColor(Color.BLUE);
+		}
+		drawQuad(centerBottomLeft.less(0, radius.bottomLeft(), 0), //
+				centerBottomLeft.less(0, radius.bottomLeft() - thickness.bottom(), 0), //
+				centerBottomRight.less(0, radius.bottomRight() - thickness.bottom(), 0), //
+				centerBottomRight.less(0, radius.bottomRight(), 0));
+		// top area:
+		if (showConstruct) {
+			internalSetColor(Color.GRAY);
+		}
+		drawQuad(centerTopLeft.add(0, radius.topLeft(), 0), //
+				centerTopLeft.add(0, radius.topLeft() - thickness.top(), 0), //
+				centerTopRight.add(0, radius.topRight() - thickness.top(), 0), //
+				centerTopRight.add(0, radius.topRight(), 0));
+
+		// right area:
+		if (showConstruct) {
+			internalSetColor(Color.SLATE_GRAY);
+		}
+		drawQuad(centerBottomRight.add(radius.bottomRight(), 0, 0), //
+				centerBottomRight.add(radius.bottomRight() - thickness.right(), 0, 0), //
+				centerTopRight.add(radius.topRight() - thickness.right(), 0, 0), //
+				centerTopRight.add(radius.topRight(), 0, 0));
+		// left area:
+		if (showConstruct) {
+			internalSetColor(Color.SLATE_BLUE);
+		}
+		drawQuad(centerBottomLeft.less(radius.bottomLeft(), 0, 0), //
+				centerBottomLeft.less(radius.bottomLeft() - thickness.left(), 0, 0), //
+				centerTopLeft.less(radius.topLeft() - thickness.left(), 0, 0), //
+				centerTopLeft.less(radius.topLeft(), 0, 0));
 		
 		if (showConstruct) {
 			internalSetColor(Color.BLACK);
@@ -698,47 +819,6 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			internalSetColor(Color.RED);
 			rectangleRaw(dest.less(10), dest);
 		}
-	}
-	
-	public void rectangleBorderRadius(
-			//final Vector2f pos,
-			final Vector2f dest,
-			final Insets thickness,
-			final BorderRadius radius) {
-		internalSetColor(this.color);
-		final boolean showConstruct = true;
-		if (showConstruct) {
-			internalSetColor(Color.ANTIQUE_WHITE);
-		}
-		//		// Bottom
-		//		rectangleRaw(new Vector3f(this.position.x() + radius, this.position.y() - thickness * 0.5f, 0),
-		//				new Vector3f(dest.x() - radius, this.position.y() + thickness * 0.5f, 0));
-		//		// top
-		//		rectangleRaw(new Vector3f(this.position.x() + radius, dest.y() - thickness * 0.5f, 0),
-		//				new Vector3f(dest.x() - radius, dest.y() + thickness * 0.5f, 0));
-		//		// left
-		//		rectangleRaw(new Vector3f(this.position.x() - thickness * 0.5f, this.position.y() + radius, 0),
-		//				new Vector3f(this.position.x() + thickness * 0.5f, dest.y() - radius, 0));
-		//		// right
-		//		rectangleRaw(new Vector3f(dest.x() - thickness * 0.5f, this.position.y() + radius, 0),
-		//				new Vector3f(dest.x() + thickness * 0.5f, dest.y() - radius, 0));
-		//
-		//		if (showConstruct) {
-		//			internalSetColor(Color.DARK_RED);
-		//		}
-		//		circleBorderRaw(this.position.add(radius, radius, 0), radius, thickness, FMath.PI, FMath.PI * 0.5f);
-		//		circleBorderRaw(dest.less(radius, radius, 0), radius, thickness, 0, FMath.PI * 0.5f);
-		//		circleBorderRaw(new Vector3f(dest.x() - radius, this.position.y() + radius, 0), radius, thickness,
-		//				FMath.PI * 1.5f, FMath.PI * 0.5f);
-		//		circleBorderRaw(new Vector3f(this.position.x() + radius, dest.y() - radius, 0), radius, thickness,
-		//				FMath.PI * 0.5f, FMath.PI * 0.5f);
-		//
-		//		if (showConstruct) {
-		//			internalSetColor(Color.BLACK);
-		//			rectangleRaw(this.position, this.position.add(10));
-		//			internalSetColor(Color.RED);
-		//			rectangleRaw(dest.less(10), dest);
-		//		}
 	}
 
 	public void rectangleWidth(final float xxx, final float yyy) {
