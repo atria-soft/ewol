@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class Box extends Container {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Box.class);
 	protected CompositingGC vectorialDraw = new CompositingGC();
-	
+
 	public static class BoxParameter {
 		public Float margin;
 		public Float padding;
@@ -28,7 +28,7 @@ public class Box extends Container {
 		public String borderColor;
 		public String color;
 	}
-	
+
 	/**
 	 * Periodic call to update grapgic display
 	 * @param event Time generic event
@@ -37,31 +37,31 @@ public class Box extends Container {
 		LOGGER.trace("Periodic call on Entry(" + event + ")");
 		self.markToRedraw();
 	}
-
+	
 	Vector2i startPosition = Vector2i.ZERO;
 	Vector2i endPosition = Vector2i.ZERO;
-
+	
 	public boolean isInside(final Vector2f value) {
 		return value.x() > this.startPosition.x() //
 				&& value.y() > this.startPosition.y() //
 				&& value.x() < this.endPosition.x() //
 				&& value.y() < this.endPosition.y();
 	}
-	
+
 	/**
 	 * Constructor
 	 */
 	public Box() {}
-
+	
 	/**
 	 * Constructor with his subWidget
 	 */
 	public Box(final Widget subWidget) {
 		super(subWidget);
 	}
-	
-	protected DimensionInsets propertyBorderWidth = DimensionInsets.ZERO;
 
+	protected DimensionInsets propertyBorderWidth = DimensionInsets.ZERO;
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "border-width")
@@ -69,7 +69,7 @@ public class Box extends Container {
 	public DimensionInsets getPropertyBorderWidth() {
 		return this.propertyBorderWidth;
 	}
-
+	
 	public void setPropertyBorderWidth(final DimensionInsets propertyBorder) {
 		if (this.propertyBorderWidth.equals(propertyBorder)) {
 			return;
@@ -78,9 +78,9 @@ public class Box extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	protected DimensionBorderRadius propertyBorderRadius = DimensionBorderRadius.ZERO;
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "border-radius")
@@ -88,7 +88,7 @@ public class Box extends Container {
 	public DimensionBorderRadius getPropertyBorderRadius() {
 		return this.propertyBorderRadius;
 	}
-
+	
 	public void setPropertyBorderRadius(final DimensionBorderRadius propertyBorderRadius) {
 		if (this.propertyBorderRadius.equals(propertyBorderRadius)) {
 			return;
@@ -97,9 +97,9 @@ public class Box extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
-	protected Color propertyBorderColor = Color.NONE;
 	
+	protected Color propertyBorderColor = Color.NONE;
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "border-color")
@@ -107,7 +107,7 @@ public class Box extends Container {
 	public Color getPropertyBorderColor() {
 		return this.propertyBorderColor;
 	}
-
+	
 	public void setPropertyBorderColor(final Color propertyBorderColor) {
 		if (this.propertyBorderColor.equals(propertyBorderColor)) {
 			return;
@@ -116,9 +116,9 @@ public class Box extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	protected Color propertyColor = Color.NONE;
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "color")
@@ -126,7 +126,7 @@ public class Box extends Container {
 	public Color getPropertyColor() {
 		return this.propertyColor;
 	}
-
+	
 	public void setPropertyColor(final Color propertyColor) {
 		if (this.propertyColor.equals(propertyColor)) {
 			return;
@@ -135,9 +135,9 @@ public class Box extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
-	protected Dimension2f propertyMargin = Dimension2f.ZERO;
 
+	protected Dimension2f propertyMargin = Dimension2f.ZERO;
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "margin")
@@ -145,7 +145,7 @@ public class Box extends Container {
 	public Dimension2f getPropertyMargin() {
 		return this.propertyMargin;
 	}
-
+	
 	public void setPropertyMargin(final Dimension2f propertyMargin) {
 		if (this.propertyMargin.equals(propertyMargin)) {
 			return;
@@ -154,9 +154,9 @@ public class Box extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
-	protected Dimension2f propertyPadding = Dimension2f.ZERO;
 
+	protected Dimension2f propertyPadding = Dimension2f.ZERO;
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "padding")
@@ -164,7 +164,7 @@ public class Box extends Container {
 	public Dimension2f getPropertyPadding() {
 		return this.propertyPadding;
 	}
-
+	
 	public void setPropertyPadding(final Dimension2f propertyPadding) {
 		if (this.propertyPadding.equals(propertyPadding)) {
 			return;
@@ -173,25 +173,25 @@ public class Box extends Container {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		super.calculateMinMaxSize();
 		final Vector2f childMinSize = new Vector2f(this.minSize.x(), this.minSize.y());
-
+		
 		LOGGER.debug("calculate min size: border=" + this.propertyBorderWidth);
 		final Insets borderSize = this.propertyBorderWidth.getPixel();
-
-		final Vector2f padding = this.propertyPadding.size().multiply(2);
-		final Vector2f margin = this.propertyMargin.size().multiply(2);
-
+		
+		final Vector2f padding = this.propertyPadding.getPixel().multiply(2);
+		final Vector2f margin = this.propertyMargin.getPixel().multiply(2);
+		
 		final Vector2f calculatedBoxMinSize = childMinSize.add(margin).add(padding).add(borderSize.toVector2f());
-
+		
 		this.minSize = calculatedBoxMinSize;
-		this.maxSize = Vector2f.max(this.minSize, this.propertyMaxSize.size());
+		this.maxSize = Vector2f.max(this.minSize, this.propertyMaxSize.getPixel());
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		markToRedraw();
@@ -201,11 +201,11 @@ public class Box extends Container {
 		if (this.subWidget == null) {
 			return;
 		}
-		final Vector2f localPadding = this.propertyPadding.size();
-		final Vector2f localMargin = this.propertyMargin.size();
+		final Vector2f localPadding = this.propertyPadding.getPixel();
+		final Vector2f localMargin = this.propertyMargin.getPixel();
 		final Insets localBorderSize = this.propertyBorderWidth.getPixel();
 		final Vector2f offsetSubWidget = localPadding.add(localMargin).add(localBorderSize.toVector2f());
-		
+
 		Vector2f subWidgetSize = this.subWidget.getCalculateMinSize();
 		if (this.subWidget.canExpand().x() && this.propertyFill.x()) {
 			subWidgetSize = subWidgetSize.withX(this.size.x());
@@ -219,7 +219,8 @@ public class Box extends Container {
 		}
 		subWidgetSize = subWidgetSize.less(offsetSubWidget.multiply(2));
 		subWidgetSize = subWidgetSize.clipInteger();
-		
+
+		on a un pb ici car on double les margin, ce qui est normal, mai on redouble les border size
 		final Vector2f freeSizeWithoutWidget = this.size.less(offsetSubWidget.multiply(2)).less(subWidgetSize);
 		Vector2f subWidgetOrigin = this.origin.add(this.propertyGravity.gravityGenerateDelta(freeSizeWithoutWidget));
 		subWidgetOrigin = subWidgetOrigin.add(offsetSubWidget);
@@ -228,11 +229,11 @@ public class Box extends Container {
 		this.subWidget.setSize(subWidgetSize);
 		this.subWidget.onChangeSize();
 	}
-	
+
 	private Vector2f calculateOriginRendering(final Vector2f renderSize) {
 		return this.propertyGravity.gravityGenerateDelta(this.size.less(renderSize));
 	}
-
+	
 	private Vector2f calculateSizeRendering() {
 		Vector2f tmpRenderSize = this.minSize;
 		if (this.propertyFill.x()) {
@@ -243,7 +244,7 @@ public class Box extends Container {
 		}
 		return tmpRenderSize;
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		super.onRegenerateDisplay();
@@ -251,23 +252,22 @@ public class Box extends Container {
 			//return;
 		}
 		final Vector2f localMargin = this.propertyMargin.size();
-
+		
 		Vector2f renderSize = calculateSizeRendering();
 		Vector2f renderOrigin = calculateOriginRendering(renderSize);
-
+		
 		renderOrigin = renderOrigin.add(localMargin);
 		renderSize = renderSize.less(localMargin.multiply(2));
 		// not sure this is needed...
 		renderSize = renderSize.clipInteger();
 		renderOrigin = renderOrigin.clipInteger();
-
+		
 		renderOrigin = renderOrigin.clipInteger();
 		renderSize = renderSize.clipInteger();
 		this.startPosition = renderOrigin.toVector2i();
 		this.endPosition = renderSize.toVector2i();
-
-		//System.out.println("renderSize: " + this.renderSize);
-		// remove data of the previous composition :
+		
+		// remove data of the previous composition:
 		this.vectorialDraw.clear();
 		this.vectorialDraw.setPaintFillColor(this.propertyColor);
 		this.vectorialDraw.setPaintStrokeColor(this.propertyBorderColor);
@@ -276,7 +276,7 @@ public class Box extends Container {
 				this.propertyBorderRadius.getPixel());
 		this.vectorialDraw.flush();
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		if (this.vectorialDraw != null) {
@@ -284,5 +284,5 @@ public class Box extends Container {
 		}
 		super.onDraw();
 	}
-
+	
 }
