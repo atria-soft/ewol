@@ -4,6 +4,8 @@ import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
+import org.atriasoft.etk.DimensionBorderRadius;
+import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.Gravity;
@@ -121,6 +123,7 @@ public class SpinBase extends Sizer {
 		}
 		if (this.widgetButtonDown == null) {
 			this.widgetButtonDown = new Button();
+			this.widgetButtonDown.setPropertyBorderWidth(new DimensionInsets(2f, 1f, 2f, 1f));
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdDownShaper);
 				LOGGER.trace("shaper button DOWN : " + shaper);
@@ -137,6 +140,8 @@ public class SpinBase extends Sizer {
 		}
 		if (this.widgetButtonUp == null) {
 			this.widgetButtonUp = new Button();
+			this.widgetButtonUp.setPropertyBorderWidth(new DimensionInsets(2, 2, 2, 1));
+			this.widgetButtonUp.setPropertyBorderRadius(new DimensionBorderRadius(0, 8, 8, 0));
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdUpShaper);
 				LOGGER.trace("shaper button UP : " + shaper);

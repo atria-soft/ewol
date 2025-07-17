@@ -66,15 +66,10 @@ public class CompositingGC extends CompositingDrawing {
 			final Vector2f size,
 			final Insets thickness,
 			final BorderRadius radius) {
-		if (radius == null || radius.isZero()) {
-			//addRectangle(position, size);
-			//throw new RuntimeException("Not implemented ...");
-		} else {
-			setPos(position);
-			rectangleRadius(position.add(size), thickness, radius);
-			if (!thickness.isZero()) {
-				rectangleBorderRadius(position.add(size), thickness, radius);
-			}
+		setPos(position);
+		rectangleRadius(position.add(size), thickness, radius);
+		if (!thickness.isZero()) {
+			rectangleBorderRadius(position.add(size), thickness, radius);
 		}
 	}
 	

@@ -104,18 +104,32 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void circleBorderRaw(
 			final Vector3f centerPos,
 			final float radius,
-			final float thicknessStart,
-			final float thicknessStop,
+			float thicknessStart,
+			float thicknessStop,
 			final float angleStart,
 			final float angleStop) {
 		resetCount();
+		if (thicknessStart < 0.001 && thicknessStop < 0.001) {
+			return;
+		}
+		if (radius < 0.001) {
+			return;
+		}
+		if (thicknessStart > radius) {
+			thicknessStart = radius;
+		}
+		if (thicknessStop > radius) {
+			thicknessStop = radius;
+		}
 		int nbOcurence = (int) radius;
 		if (nbOcurence < 10) {
 			nbOcurence = 10;
 		}
 		for (int iii = 0; iii < nbOcurence; iii++) {
-			final float thickness = thicknessStart + ((thicknessStop - thicknessStart) * iii / nbOcurence);
-			final float angleOne = angleStart + (angleStop * iii / nbOcurence);
+			final float ratio = (float) iii / (float) nbOcurence;
+			final float thickness = thicknessStart + ((thicknessStop - thicknessStart) * ratio);
+			//final float thickness = thicknessStart * FMath.cos(ratio * FMath.PI * 0.5f)	+ thicknessStop * FMath.sin(ratio * FMath.PI * 0.5f);
+			final float angleOne = angleStart + (angleStop * ratio);
 			final float offsetExty = FMath.sin(angleOne) * (radius);
 			final float offsetExtx = FMath.cos(angleOne) * (radius);
 			final float offsetInty = FMath.sin(angleOne) * (radius - thickness);
@@ -144,6 +158,9 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			final float radiusStop,
 			final float angleStart,
 			final float angleStop) {
+		if (radiusStart < 0.001 && radiusStop < 0.001) {
+			return;
+		}
 		resetCount();
 		int nbOcurence = (int) FMath.max(radiusStart, radiusStop);
 		if (nbOcurence < 10) {
@@ -596,7 +613,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 
 	public void rectangleRadius(final Vector3f dest, final float radius) {
 		internalSetColor(this.color);
-		final boolean showConstruct = true;
+		final boolean showConstruct = false;
 
 		rectangleRaw(this.position.add(new Vector3f(radius, 0, 0)), dest.less(new Vector3f(radius, 0, 0)));
 		if (showConstruct) {
@@ -630,7 +647,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	
 	public void rectangleRadius(final Vector2f dest, final Insets thickness, final BorderRadius radius) {
 		internalSetColor(this.color);
-		final boolean showConstruct = true;
+		final boolean showConstruct = false;
 		
 		if (showConstruct) {
 			internalSetColor(Color.DARK_KHAKI);
@@ -705,7 +722,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			final Insets thickness,
 			final BorderRadius radius) {
 		internalSetColor(this.colorBg);
-		final boolean showConstruct = true;
+		final boolean showConstruct = false;
 
 		if (showConstruct) {
 			internalSetColor(Color.KHAKI);
@@ -735,7 +752,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		// top-left
 		final Vector3f centerTopLeft = new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(),
 				0);
-		circleBorderRaw(centerTopLeft, radius.topLeft(), thickness.left(), thickness.top(), FMath.PI * 0.5f,
+		circleBorderRaw(centerTopLeft, radius.topLeft(), thickness.top(), thickness.left(), FMath.PI * 0.5f,
 				FMath.PI * 0.5f);
 
 		// buttom area:
