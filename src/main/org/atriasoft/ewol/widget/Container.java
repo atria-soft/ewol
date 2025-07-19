@@ -23,19 +23,19 @@ import org.slf4j.LoggerFactory;
 public class Container extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Container.class);
 	protected Widget subWidget = null;
-	
+
 	/**
 	 * Constructor
 	 */
 	public Container() {}
-
+	
 	/**
 	 * Constructor with his child
 	 */
 	public Container(final Widget subWidget) {
 		this.subWidget = subWidget;
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		// call main class
@@ -48,7 +48,7 @@ public class Container extends Widget {
 		}
 		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
-	
+
 	@Override
 	public void drawWidgetTree(int level) {
 		super.drawWidgetTree(level);
@@ -57,7 +57,7 @@ public class Container extends Widget {
 			this.subWidget.drawWidgetTree(level);
 		}
 	}
-	
+
 	@Override
 	public EwolObject getSubObjectNamed(final String objectName) {
 		final EwolObject tmpObject = super.getSubObjectNamed(objectName);
@@ -69,7 +69,7 @@ public class Container extends Widget {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * get the main node widget
 	 * @return the requested pointer on the node
@@ -81,17 +81,18 @@ public class Container extends Widget {
 	public Widget getSubWidget() {
 		return this.subWidget;
 	}
-	
+
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
-		if (!this.propertyHide) {
-			if (this.subWidget != null) {
-				return this.subWidget.getWidgetAtPos(pos);
-			}
+		if (this.propertyHide) {
+			return null;
 		}
-		return null;
+		if (this.subWidget != null) {
+			return this.subWidget.getWidgetAtPos(pos);
+		}
+		return this;
 	}
-	
+
 	//	@Override
 	//	public boolean loadXML(final XmlElement node) {
 	//		if (node == null) {
@@ -136,7 +137,7 @@ public class Container extends Widget {
 	//		}
 	//		return true;
 	//	}
-	
+
 	@Override
 	public void onChangeSize() {
 		super.onChangeSize();
@@ -154,14 +155,14 @@ public class Container extends Widget {
 		this.subWidget.setSize(this.size);
 		this.subWidget.onChangeSize();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
 			this.subWidget.systemRegenerateDisplay();
 		}
 	}
-	
+
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		if (this.subWidget != child) {
@@ -174,7 +175,7 @@ public class Container extends Widget {
 		this.subWidget = null;
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void setOffset(final Vector2f newVal) {
 		if (this.offset.equals(newVal)) {
@@ -183,9 +184,9 @@ public class Container extends Widget {
 		super.setOffset(newVal);
 		// recalculate the new sise and position of sub widget ...
 		onChangeSize();
-		
+
 	}
-	
+
 	/**
 	 * set the subWidget node widget.
 	 * @param newWidget The widget to add.
@@ -202,7 +203,7 @@ public class Container extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * remove the subWidget node (async).
 	 */
@@ -214,7 +215,7 @@ public class Container extends Widget {
 			requestUpdateSize();
 		}
 	}
-	
+
 	/**
 	 * Replace a old subwidget with a new one.
 	 * @param oldWidget The widget to replace.
@@ -233,7 +234,7 @@ public class Container extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * Unlink the subwidget Node.
 	 */
@@ -243,7 +244,7 @@ public class Container extends Widget {
 		}
 		this.subWidget = null;
 	}
-	
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {

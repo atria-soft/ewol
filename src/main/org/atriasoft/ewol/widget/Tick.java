@@ -95,8 +95,8 @@ public class Tick extends Box {
 		//setPropertyBorderRadius(new Dimension1f(15));
 		setPropertyBorderColor(Color.BLACK);
 		setPropertyColor(Color.WHITE);
-		setPropertyPadding(new Dimension2f(new Vector2f(3, 3)));
-		setPropertyMargin(new Dimension2f(new Vector2f(0, 0)));
+		setPropertyPadding(new DimensionInsets(3));
+		setPropertyMargin(new DimensionInsets(0));
 
 	}
 	
@@ -231,9 +231,9 @@ public class Tick extends Box {
 		if (!needRedraw()) {
 			//return;
 		}
-		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckGreen), this.startPosition.less(4));
-		this.compositingTick.setPos(this.propertyMargin.size().add(2));
-		this.compositingTick.print(this.startPosition.less(4).toVector2f());
+		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckGreen));//, this.overPositionStart.less(4));
+		this.compositingTick.setPos(this.overPositionStart.add(2));
+		this.compositingTick.print(this.overPositionStop.less(this.overPositionStart).less(4));
 		this.compositingTick.flush();
 	}
 	

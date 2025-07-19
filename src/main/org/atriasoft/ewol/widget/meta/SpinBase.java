@@ -111,15 +111,11 @@ public class SpinBase extends Sizer {
 		requestUpdateSize();
 		if (this.widgetEntry == null) {
 			this.widgetEntry = new Entry();
-			if (this.config != null) {
-				final String shaper = this.config.getString(this.confIdEntryShaper);
-				LOGGER.trace("shaper entry : " + shaper);
-				if (!shaper.isEmpty()) {
-					this.widgetEntry.setPropertyConfig(Uri.valueOf(shaper));
-				}
-			}
 			this.widgetEntry.setPropertyExpand(Vector2b.TRUE_FALSE);
 			this.widgetEntry.setPropertyFill(Vector2b.TRUE);
+			this.widgetEntry.setPropertyPadding(new DimensionInsets(6f, 4f, 6f, 4f));
+			this.widgetEntry.setPropertyBorderWidth(new DimensionInsets(2f, 1f, 2f, 2f));
+			this.widgetEntry.setPropertyBorderRadius(new DimensionBorderRadius(8, 0, 0, 8));
 		}
 		if (this.widgetButtonDown == null) {
 			this.widgetButtonDown = new Button();

@@ -14,30 +14,30 @@ import org.slf4j.LoggerFactory;
 
 public class CompositingGC extends CompositingDrawing {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompositingGC.class);
-	
+
 	@Override
 	public void setPaintFillColor(final Color color) {
 		setColor(color);
 	}
-	
+
 	@Override
 	public void setPaintStrokeColor(final Color color) {
 		setColorBg(color);
 	}
-
+	
 	float strokeSize = 0;
-
+	
 	@Override
 	public void setPaintStrokeWidth(final float width) {
 		this.strokeSize = width;
 	}
-	
+
 	@Override
 	public void addLine(final Vector2f startPos, final Vector2f stopPos) {
 		setPos(startPos);
 		lineTo(stopPos);
 	}
-	
+
 	@Override
 	public void addRectangle(final Vector2f position, final Vector2f size) {
 		setPos(position);
@@ -46,7 +46,7 @@ public class CompositingGC extends CompositingDrawing {
 			rectangleBorder(position.add(size), this.strokeSize);
 		}
 	}
-	
+
 	@Override
 	public void addRectangle(final Vector2f position, final Vector2f size, final Vector2f roundedCorner) {
 		if (roundedCorner == null || roundedCorner.x() <= 0) {
@@ -59,30 +59,30 @@ public class CompositingGC extends CompositingDrawing {
 			}
 		}
 	}
-	
+
 	@Override
 	public void addRectangle(
-			final Vector2f position,
-			final Vector2f size,
+			final Vector2f positionStart,
+			final Vector2f positionStop,
 			final Insets thickness,
 			final BorderRadius radius) {
-		setPos(position);
-		rectangleRadius(position.add(size), thickness, radius);
+		setPos(positionStart);
+		rectangleRadius(positionStop, thickness, radius);
 		if (!thickness.isZero()) {
-			rectangleBorderRadius(position.add(size), thickness, radius);
+			rectangleBorderRadius(positionStop, thickness, radius);
 		}
 	}
-	
+
 	@Override
 	public void addCircle(final Vector2f position, final float radius) {
 		setPos(position);
 		circle(radius);
-
+		
 	}
-	
+
 	@Override
 	public void addEllipse(final Vector2f center, final Vector2f radius) {
 		// TODO Auto-generated method stub
-
+		
 	}
 }

@@ -11,12 +11,11 @@ import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.Color;
+import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
-import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.compositing.CompositingText;
 import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventEntry;
@@ -40,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * 	----------------------------------------------
  * ~~~~~~~~~~~~~~~~~~~~~~
  */
-public class Entry extends Widget {
+public class Entry extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Entry.class);
 
 	/**
@@ -69,12 +68,10 @@ public class Entry extends Widget {
 	private int displayCursorPositionPixel = 0;
 	/// text display this.text
 	private final CompositingText text = new CompositingText();
-	protected CompositingSVG vectorialDraw = new CompositingSVG();
 	/// text position can have change
 	private boolean needUpdateTextPos = true;
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
-	private Uri propertyConfig = new Uri("THEME", "shape/Entry.json", "ewol");
 	private int propertyMaxCharacter = Integer.MAX_VALUE; //!< number max of Character in the list
 	private boolean propertyPassword = false; //!< Disable display of the content of the entry
 	
@@ -101,10 +98,6 @@ public class Entry extends Widget {
 	@AknotName(value = "modify")
 	@AknotDescription("Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
-	// element over:
-	Vector2f overPositionStart = Vector2f.ZERO;
-	
-	Vector2f overPositionStop = Vector2f.ZERO;
 	
 	/**
 	 * Constructor
@@ -126,23 +119,15 @@ public class Entry extends Widget {
 		shortCutAdd("ctrl+a", "select:all");
 		shortCutAdd("ctrl+shift+a", "select:none");
 		//TODO this.signalShortcut.connect(this, Entry::onCallbackShortCut);
+		setPropertyColor(Color.WHITE);
+		setPropertyBorderColor(Color.BLACK);
+		setPropertyBorderWidth(new DimensionInsets(2));
+		setPropertyPadding(new DimensionInsets(4));
 	}
 	
 	@Override
 	public void calculateMinMaxSize() {
-		// call main class
-		super.calculateMinMaxSize();
-		// get generic padding
-		final Padding padding = Padding.ZERO;
-		final int minHeight = (int) this.text.getHeight();//calculateSize('A').y();
-		
-		Vector2f minimumSizeBase = new Vector2f(20, minHeight);
-		// add padding :
-		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
-		this.minSize = Vector2f.max(this.minSize, minimumSizeBase);
-		// verify the min max of the min size ...
-		checkMinSize();
-		//LOGGER.trace("min size = " + this.minSize);
+		calculateMinMaxSizeChild(new Vector2f(25, this.text.getHeight()));
 	}
 	
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
@@ -175,11 +160,7 @@ public class Entry extends Widget {
 		final String tmpData = this.propertyValue.substring(pos1, pos2);
 		ClipBoard.set(clipboardID, tmpData);
 	}
-	
-	public Uri getPropertyConfig() {
-		return this.propertyConfig;
-	}
-	
+
 	public int getPropertyMaxCharacter() {
 		return this.propertyMaxCharacter;
 	}
@@ -296,15 +277,13 @@ public class Entry extends Widget {
 	
 	@Override
 	protected void onDraw() {
-		if (this.vectorialDraw != null) {
-			this.vectorialDraw.draw(true);
-		}
+		super.onDraw();
 		this.text.draw();
 	}
 	
 	@Override
 	public void onEventClipboard(final ClipboardList clipboardID) {
-		// remove curent selected data ...
+		// remove current selected data ...
 		removeSelected();
 		// get current selection / Copy :
 		final String tmpData = ClipBoard.get(clipboardID);
@@ -403,10 +382,10 @@ public class Entry extends Widget {
 	}
 	
 	@Override
-	public boolean onEventInput(final EventInput event) {
+	protected boolean onEventInput(final EventInput event) {
 		final Vector2f absolutePosition = event.pos();
 		final Vector2f relPos = relativePosition(absolutePosition);
-		LOGGER.trace("Event on Input ... " + event + " relPos = " + relPos);
+		LOGGER.error("Event on Input ... " + event + " relPos = " + relPos);
 		if (event.inputId() == 0) {
 			if (!isFocused()) {
 				if (KeyStatus.leave == event.status()) {
@@ -422,8 +401,7 @@ public class Entry extends Widget {
 				}
 			}
 		}
-		if (relPos.x() < this.overPositionStart.x() || relPos.y() < this.overPositionStart.y()
-				|| relPos.x() > this.overPositionStop.x() || relPos.y() > this.overPositionStop.y()) {
+		if (!isInside(relPos)) {
 			LOGGER.warn("Reject {}", relPos);
 			return false;
 		}
@@ -520,55 +498,20 @@ public class Entry extends Widget {
 		hideKeyboard();
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
 			return;
 		}
-		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
-		this.vectorialDraw.clear();
+		super.onRegenerateDisplay();
+		// calculate the vertical offset to center the text:
+		final float offsetCenter = FMath.max(0.0f,
+				(FMath.abs(this.insidePositionStop.y() - this.insidePositionStart.y()) - this.text.getHeight()) * 0.5f);
+
 		this.text.clear();
-		if (this.colorIdTextFg >= 0) {
-			//this.text.setDefaultColorFg(this.shape.getColor(this.colorIdTextFg));
-			//this.text.setDefaultColorBg(this.shape.getColor(this.colorIdTextBg));
-			//this.text.setCursorColor(this.shape.getColor(this.colorIdCursor));
-			//this.text.setSelectionColor(this.shape.getColor(this.colorIdSelection));
-		}
-		updateTextPosition();
-		final Padding padding = Padding.ZERO;
-		
-		Vector2f tmpSizeShaper = this.minSize;
-		Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
-		if (this.propertyFill.x()) {
-			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
-			delta = delta.withX(0.0f);
-		}
-		if (this.propertyFill.y()) {
-			tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
-			delta = delta.withY(0.0f);
-		}
-		Vector2f tmpOriginShaper = delta;
-		//Vector2f tmpOriginShaper = this.size.less(tmpSizeShaper).multiply(0.5f);
-		Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
-		Vector2f tmpOriginText = tmpOriginShaper.add(padding.bottom(), padding.left()); //this.size.less(tmpSizeText).multiply(0.5f);
-		//Vector2f tmpOriginText = new Vector2f(0, this.text.getSize(), 0);
-		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		
-		final int minHeight = (int) this.text.getHeight();
-		if (tmpSizeText.y() > minHeight) {
-			tmpOriginText = tmpOriginText.add(0, (tmpSizeText.y() - minHeight) * 0.5f);
-		}
-		// fix all the position in the int class:
-		tmpSizeShaper = Vector2f.clipInt(tmpSizeShaper);
-		tmpOriginShaper = Vector2f.clipInt(tmpOriginShaper);
-		tmpSizeText = Vector2f.clipInt(tmpSizeText);
-		tmpOriginText = Vector2f.clipInt(tmpOriginText);
-		
-		this.text.clear();
-		//this.text.setSize((int) tmpSizeText.x(), (int) tmpSizeText.y());
-		this.text.setClippingWidth(tmpOriginText, tmpSizeText);
-		this.text.setPos(tmpOriginText.add(this.displayStartPosition, 0));
+		//this.text.setClippingWidth(this.insidePositionStart, this.insidePositionStop);
+		this.text.setPos(this.insidePositionStart.add(0, offsetCenter));
 		if (this.displayCursorPosSelection != this.displayCursorPos) {
 			this.text.setCursorSelection(this.displayCursorPos, this.displayCursorPosSelection);
 		} else {
@@ -586,29 +529,7 @@ public class Entry extends Widget {
 			this.text.printDecorated(this.propertyTextWhenNothing);
 		}
 		this.text.setClippingMode(false);
-		this.overPositionStart = tmpOriginShaper;
-		this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
-		//this.shape.setShape(tmpOriginShaper, tmpSizeShaper, tmpOriginText, tmpSizeText);
-		this.vectorialDraw.setSource("""
-				<svg width="%d" height="%d">
-				  <rect
-				    x="0.5"
-				    y="0.5"
-				    width="%f"
-				    height="%f"
-				    fill="white"
-				    stroke="black"
-				    stroke-width="1"
-				  />
-				</svg>""".formatted( //
-				(int) tmpSizeShaper.x(), (int) tmpSizeShaper.y(), //
-				tmpSizeShaper.x() - 0.5, tmpSizeShaper.y() - 0.5//
-		), new Vector2i((int) tmpSizeShaper.x(), (int) tmpSizeShaper.y()));
-		this.vectorialDraw.setPos(tmpOriginShaper);
-		this.vectorialDraw.print(new Vector2f(tmpSizeShaper.x(), tmpSizeShaper.y()));
 		this.text.flush();
-		this.vectorialDraw.flush();
-		
 	}
 	
 	/**
@@ -664,18 +585,6 @@ public class Entry extends Widget {
 		}
 		this.propertyValue = newData;
 		markToRedraw();
-	}
-	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "config")
-	@AknotDescription(value = "configuration of the widget")
-	public void setPropertyConfig(final Uri propertyConfig) {
-		if (this.propertyConfig.equals(propertyConfig)) {
-			return;
-		}
-		this.propertyConfig = propertyConfig;
-		//onChangePropertyShaper();
 	}
 	
 	@AknotManaged

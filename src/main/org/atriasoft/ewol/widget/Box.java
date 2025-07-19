@@ -5,12 +5,10 @@ import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.DimensionBorderRadius;
 import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Insets;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.compositing.CompositingGC;
 import org.atriasoft.ewol.event.EventTime;
 import org.slf4j.Logger;
@@ -38,14 +36,16 @@ public class Box extends Container {
 		self.markToRedraw();
 	}
 	
-	Vector2i startPosition = Vector2i.ZERO;
-	Vector2i endPosition = Vector2i.ZERO;
+	Vector2f overPositionStart = Vector2f.ZERO;
+	Vector2f overPositionStop = Vector2f.ZERO;
+	Vector2f insidePositionStart = Vector2f.ZERO;
+	Vector2f insidePositionStop = Vector2f.ZERO;
 	
 	public boolean isInside(final Vector2f value) {
-		return value.x() > this.startPosition.x() //
-				&& value.y() > this.startPosition.y() //
-				&& value.x() < this.endPosition.x() //
-				&& value.y() < this.endPosition.y();
+		return value.x() > this.overPositionStart.x() //
+				&& value.y() > this.overPositionStart.y() //
+				&& value.x() < this.overPositionStop.x() //
+				&& value.y() < this.overPositionStop.y();
 	}
 
 	/**
@@ -136,17 +136,17 @@ public class Box extends Container {
 		requestUpdateSize();
 	}
 
-	protected Dimension2f propertyMargin = Dimension2f.ZERO;
+	protected DimensionInsets propertyMargin = DimensionInsets.ZERO;
 	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "margin")
 	@AknotDescription(value = "margin of the box")
-	public Dimension2f getPropertyMargin() {
+	public DimensionInsets getPropertyMargin() {
 		return this.propertyMargin;
 	}
 	
-	public void setPropertyMargin(final Dimension2f propertyMargin) {
+	public void setPropertyMargin(final DimensionInsets propertyMargin) {
 		if (this.propertyMargin.equals(propertyMargin)) {
 			return;
 		}
@@ -155,17 +155,17 @@ public class Box extends Container {
 		requestUpdateSize();
 	}
 
-	protected Dimension2f propertyPadding = Dimension2f.ZERO;
+	protected DimensionInsets propertyPadding = DimensionInsets.ZERO;
 	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "padding")
 	@AknotDescription(value = "Padding of the box")
-	public Dimension2f getPropertyPadding() {
+	public DimensionInsets getPropertyPadding() {
 		return this.propertyPadding;
 	}
 	
-	public void setPropertyPadding(final Dimension2f propertyPadding) {
+	public void setPropertyPadding(final DimensionInsets propertyPadding) {
 		if (this.propertyPadding.equals(propertyPadding)) {
 			return;
 		}
@@ -174,22 +174,39 @@ public class Box extends Container {
 		requestUpdateSize();
 	}
 
-	@Override
-	public void calculateMinMaxSize() {
+	protected void calculateMinMaxSizeChild(Vector2f childMinSize) {
 		super.calculateMinMaxSize();
-		final Vector2f childMinSize = new Vector2f(this.minSize.x(), this.minSize.y());
-		
+		childMinSize = this.minSize.max(childMinSize);
 		LOGGER.debug("calculate min size: border=" + this.propertyBorderWidth);
 		final Insets borderSize = this.propertyBorderWidth.getPixel();
 		
-		final Vector2f padding = this.propertyPadding.getPixel().multiply(2);
-		final Vector2f margin = this.propertyMargin.getPixel().multiply(2);
+		final Insets padding = this.propertyPadding.getPixel();
+		final Insets margin = this.propertyMargin.getPixel();
 		
-		final Vector2f calculatedBoxMinSize = childMinSize.add(margin).add(padding).add(borderSize.toVector2f());
+		final Vector2f calculatedBoxMinSize = childMinSize.add(margin.toVector2f()).add(padding.toVector2f())
+				.add(borderSize.toVector2f());
 		
 		this.minSize = calculatedBoxMinSize;
 		this.maxSize = Vector2f.max(this.minSize, this.propertyMaxSize.getPixel());
 		markToRedraw();
+	}
+	
+	@Override
+	public void calculateMinMaxSize() {
+		calculateMinMaxSizeChild(Vector2f.ZERO);
+	}
+	
+	public Insets getBorderAggregation() {
+		final Insets localPadding = this.propertyPadding.getPixel();
+		final Insets localMargin = this.propertyMargin.getPixel();
+		final Insets localBorderSize = this.propertyBorderWidth.getPixel();
+		return localPadding.add(localMargin).add(localBorderSize);
+	}
+	
+	public Insets getBorderInsideAggregation() {
+		final Insets localPadding = this.propertyPadding.getPixel();
+		final Insets localBorderSize = this.propertyBorderWidth.getPixel();
+		return localPadding.add(localBorderSize);
 	}
 
 	@Override
@@ -198,36 +215,46 @@ public class Box extends Container {
 		if (this.propertyHide) {
 			return;
 		}
-		if (this.subWidget == null) {
-			return;
-		}
-		final Vector2f localPadding = this.propertyPadding.getPixel();
-		final Vector2f localMargin = this.propertyMargin.getPixel();
-		final Insets localBorderSize = this.propertyBorderWidth.getPixel();
-		final Vector2f offsetSubWidget = localPadding.add(localMargin).add(localBorderSize.toVector2f());
-
-		Vector2f subWidgetSize = this.subWidget.getCalculateMinSize();
-		if (this.subWidget.canExpand().x() && this.propertyFill.x()) {
-			subWidgetSize = subWidgetSize.withX(this.size.x());
+		final Insets offsetSubWidget = getBorderAggregation();
+		Vector2f subWidgetSize = Vector2f.ZERO;
+		if (this.subWidget != null) {
+			subWidgetSize = this.subWidget.getCalculateMinSize();
+			if (this.subWidget.canExpand().x() && this.propertyFill.x()) {
+				subWidgetSize = subWidgetSize.withX(this.size.x());
+			} else {
+				subWidgetSize = subWidgetSize.withX(this.minSize.x());
+			}
+			if (this.subWidget.canExpand().y() && this.propertyFill.y()) {
+				subWidgetSize = subWidgetSize.withY(this.size.y());
+			} else {
+				subWidgetSize = subWidgetSize.withY(this.minSize.y());
+			}
 		} else {
-			subWidgetSize = subWidgetSize.withX(this.minSize.x());
+			if (canExpand().x() && this.propertyFill.x()) {
+				subWidgetSize = subWidgetSize.withX(this.size.x());
+			} else {
+				subWidgetSize = subWidgetSize.withX(this.minSize.x());
+			}
+			if (canExpand().y() && this.propertyFill.y()) {
+				subWidgetSize = subWidgetSize.withY(this.size.y());
+			} else {
+				subWidgetSize = subWidgetSize.withY(this.minSize.y());
+			}
 		}
-		if (this.subWidget.canExpand().y() && this.propertyFill.y()) {
-			subWidgetSize = subWidgetSize.withY(this.size.y());
-		} else {
-			subWidgetSize = subWidgetSize.withY(this.minSize.y());
-		}
-		subWidgetSize = subWidgetSize.less(offsetSubWidget.multiply(2));
+		subWidgetSize = subWidgetSize.less(offsetSubWidget.toVector2f());
 		subWidgetSize = subWidgetSize.clipInteger();
 
-		on a un pb ici car on double les margin, ce qui est normal, mai on redouble les border size
-		final Vector2f freeSizeWithoutWidget = this.size.less(offsetSubWidget.multiply(2)).less(subWidgetSize);
-		Vector2f subWidgetOrigin = this.origin.add(this.propertyGravity.gravityGenerateDelta(freeSizeWithoutWidget));
-		subWidgetOrigin = subWidgetOrigin.add(offsetSubWidget);
-		subWidgetOrigin = subWidgetOrigin.clipInteger();
-		this.subWidget.setOrigin(subWidgetOrigin);
-		this.subWidget.setSize(subWidgetSize);
-		this.subWidget.onChangeSize();
+		final Vector2f freeSizeWithoutWidget = this.size.less(offsetSubWidget.toVector2f()).less(subWidgetSize);
+		this.insidePositionStart = this.origin.add(this.propertyGravity.gravityGenerateDelta(freeSizeWithoutWidget));
+		this.insidePositionStart = this.insidePositionStart.add(offsetSubWidget.getOrigin());
+		this.insidePositionStart = this.insidePositionStart.clipInteger();
+		this.insidePositionStop = this.insidePositionStart.add(subWidgetSize);
+		
+		if (this.subWidget != null) {
+			this.subWidget.setOrigin(this.insidePositionStart);
+			this.subWidget.setSize(subWidgetSize);
+			this.subWidget.onChangeSize();
+		}
 	}
 
 	private Vector2f calculateOriginRendering(final Vector2f renderSize) {
@@ -249,31 +276,35 @@ public class Box extends Container {
 	public void onRegenerateDisplay() {
 		super.onRegenerateDisplay();
 		if (!needRedraw()) {
-			//return;
+			return;
 		}
-		final Vector2f localMargin = this.propertyMargin.size();
-		
+		final Insets localMargin = this.propertyMargin.size();
 		Vector2f renderSize = calculateSizeRendering();
-		Vector2f renderOrigin = calculateOriginRendering(renderSize);
-		
-		renderOrigin = renderOrigin.add(localMargin);
-		renderSize = renderSize.less(localMargin.multiply(2));
-		// not sure this is needed...
-		renderSize = renderSize.clipInteger();
-		renderOrigin = renderOrigin.clipInteger();
-		
-		renderOrigin = renderOrigin.clipInteger();
-		renderSize = renderSize.clipInteger();
-		this.startPosition = renderOrigin.toVector2i();
-		this.endPosition = renderSize.toVector2i();
+		this.overPositionStart = calculateOriginRendering(renderSize);
+		this.overPositionStart = this.overPositionStart.add(localMargin.getOrigin());
+		renderSize = renderSize.less(localMargin.toVector2f());
+		this.overPositionStart = this.overPositionStart.clipInteger();
+		this.overPositionStop = this.overPositionStart.add(renderSize.clipInteger());
+		final Insets offsetSubWidget = getBorderInsideAggregation();
+		this.insidePositionStart = this.overPositionStart.add(offsetSubWidget.getOrigin());
+		this.insidePositionStop = this.overPositionStop.less(offsetSubWidget.getEnd());
 		
 		// remove data of the previous composition:
 		this.vectorialDraw.clear();
 		this.vectorialDraw.setPaintFillColor(this.propertyColor);
 		this.vectorialDraw.setPaintStrokeColor(this.propertyBorderColor);
-		//this.vectorialDraw.setPaintStrokeWidth(borderSize);
-		this.vectorialDraw.addRectangle(renderOrigin, renderSize, this.propertyBorderWidth.getPixel(),
-				this.propertyBorderRadius.getPixel());
+		this.vectorialDraw.addRectangle(this.overPositionStart, this.overPositionStop,
+				this.propertyBorderWidth.getPixel(), this.propertyBorderRadius.getPixel());
+		//		this.vectorialDraw.setPaintFillColor(Color.RED);
+		//		this.vectorialDraw.setPaintStrokeWidth(0);
+		//		this.vectorialDraw.addRectangle(this.overPositionStart, Vector2f.VALUE_4);
+		//		this.vectorialDraw.setPaintFillColor(Color.BLUE);
+		//		this.vectorialDraw.addRectangle(this.overPositionStop.less(Vector2f.VALUE_4), Vector2f.VALUE_4);
+		//		this.vectorialDraw.setPaintFillColor(Color.ORANGE);
+		//		this.vectorialDraw.setPaintStrokeWidth(0);
+		//		this.vectorialDraw.addRectangle(this.insidePositionStart, Vector2f.VALUE_4);
+		//		this.vectorialDraw.setPaintFillColor(Color.PURPLE);
+		//		this.vectorialDraw.addRectangle(this.insidePositionStop.less(Vector2f.VALUE_4), Vector2f.VALUE_4);
 		this.vectorialDraw.flush();
 	}
 	
