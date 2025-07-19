@@ -19,7 +19,7 @@ public class TestWidgetBox implements TestWidgetInterface {
 		innerWidget.setPropertyFill(Vector2b.TRUE);
 		innerWidget.setPropertyColor(Color.PINK);
 		innerWidget.setPropertyMinSize(new Dimension2f(new Vector2f(50, 80)));
-
+		
 		final var testWidget = new Box(innerWidget);
 		testWidget.setPropertyExpand(Vector2b.FALSE);
 		testWidget.setPropertyFill(Vector2b.FALSE);
@@ -27,12 +27,12 @@ public class TestWidgetBox implements TestWidgetInterface {
 		testWidget.setPropertyBorderRadius(new DimensionBorderRadius(25));
 		testWidget.setPropertyBorderColor(Color.BLACK);
 		testWidget.setPropertyColor(Color.GREEN_YELLOW);
-		testWidget.setPropertyPadding(new Dimension2f(new Vector2f(15, 15)));
-		testWidget.setPropertyMargin(new Dimension2f(new Vector2f(25, 25)));
-
+		testWidget.setPropertyPadding(new DimensionInsets(15, 15));
+		testWidget.setPropertyMargin(new DimensionInsets(25, 25));
+		
 		return testWidget;
 	}
-
+	
 	@Override
 	public String getTitle() {
 		return "Simple CheckBox";
