@@ -158,11 +158,15 @@ public class Container extends Widget {
 
 	@Override
 	public void onRegenerateDisplay() {
+		regenerateDisplay();
+	}
+
+	public void regenerateDisplay() {
 		if (this.subWidget != null) {
 			this.subWidget.systemRegenerateDisplay();
 		}
 	}
-
+	
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		if (this.subWidget != child) {

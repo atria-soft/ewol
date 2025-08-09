@@ -8,23 +8,13 @@ package org.atriasoft.ewol.compositing;
 import org.atriasoft.egami.ImageByte;
 import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.egami.ToolImage;
-import org.atriasoft.esvg.CapMode;
-import org.atriasoft.esvg.Circle;
-import org.atriasoft.esvg.Ellipse;
 import org.atriasoft.esvg.EsvgDocument;
-import org.atriasoft.esvg.JoinMode;
-import org.atriasoft.esvg.Line;
-import org.atriasoft.esvg.PaintState;
-import org.atriasoft.esvg.Rectangle;
-import org.atriasoft.etk.BorderRadius;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Insets;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
-import org.atriasoft.etk.util.Pair;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.backend3d.OpenGL.RenderMode;
 import org.atriasoft.gale.resource.ResourceProgram;
@@ -33,7 +23,7 @@ import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CompositingSVG extends CompositingDraw {
+public class CompositingSVG extends Compositing {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompositingSVG.class);
 	public static final int NB_VBO = 3;
 	public static final int SIZE_AUTO = 0;
@@ -51,20 +41,20 @@ public class CompositingSVG extends CompositingDraw {
 	private ResourceProgram oGLprogram = null; //!< pointer on the opengl display program
 	private Vector3f position = Vector3f.ZERO; //!< The current position to draw
 	private Vector2i requestSize = new Vector2i(2, 2);
-	
+
 	private ResourceTexture2 resource = null; //!< texture resources
 	private ResourceVirtualArrayObject vbo = null;
-	
+
 	private Color[] vboDataColors = null;
 	private Vector3f[] vboDataCoords = null;
 	private Vector2f[] vboDataCoordsTex = null;
-	
+
 	public CompositingSVG() {
 		this("""
 				<svg width="10" height="10"></svg>
 				""", CompositingSVG.SIZE_AUTO);
 	}
-	
+
 	public CompositingSVG(final String data, final int size) {
 		this.svgData = data;
 		// Create the VBO:
@@ -78,7 +68,7 @@ public class CompositingSVG extends CompositingDraw {
 		setSource(this.svgData, size);
 		loadProgram();
 	}
-	
+
 	/**
 	 * clear alll tre registered element in the current element
 	 */
@@ -93,7 +83,7 @@ public class CompositingSVG extends CompositingDraw {
 		this.color = Color.WHITE;
 		this.angle = 0;
 	}
-	
+
 	/**
 	 * draw All the registered text in the current element on openGL
 	 * @param disableDepthTest disable the Depth test for display
@@ -133,19 +123,16 @@ public class CompositingSVG extends CompositingDraw {
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 	}
-	
+
 	@Override
 	public void flush() {
-		generate();
-		if (this.vboDataCoords != null) {
-			this.vbo.setPosition(this.vboDataCoords);
-			this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
-			this.vbo.setColors(this.vboDataColors);
-			this.vbo.setVertexCount(this.vboDataCoords.length);
-			this.vbo.flush();
-		}
+		this.vbo.setPosition(this.vboDataCoords);
+		this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
+		this.vbo.setColors(this.vboDataColors);
+		this.vbo.setVertexCount(this.vboDataCoords.length);
+		this.vbo.flush();
 	}
-	
+
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
@@ -153,7 +140,7 @@ public class CompositingSVG extends CompositingDraw {
 	public Vector3f getPos() {
 		return this.position;
 	}
-	
+
 	/**
 	 * get the source image registered size in the file (<0 when multiple size image)
 	 * @return tre image registered size
@@ -164,7 +151,7 @@ public class CompositingSVG extends CompositingDraw {
 		}
 		return this.resource.getUsableSize();
 	}
-	
+
 	/**
 	 * Sometimes the user declare an image but not allocate the resources all the time, this is to know it ..
 	 * @return the validity of the resources.
@@ -172,7 +159,7 @@ public class CompositingSVG extends CompositingDraw {
 	public boolean hasSources() {
 		return this.resource != null;
 	}
-	
+
 	/**
 	 * load the openGL program and get all the ID needed
 	 */
@@ -186,11 +173,11 @@ public class CompositingSVG extends CompositingDraw {
 			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 		}
 	}
-	
+
 	public void print(final Vector2f size) {
 		printPart(size, Vector2f.ZERO, Vector2f.ONE);
 	}
-	
+
 	/**
 	 * add a compleate of the image to display with the requested size
 	 * @param size size of the output image
@@ -198,7 +185,7 @@ public class CompositingSVG extends CompositingDraw {
 	public void print(final Vector2i size) {
 		print(new Vector2f(size.x(), size.y()));
 	}
-	
+
 	/**
 	 * add a part of the image to display with the requested size
 	 * @param size size of the output image
@@ -220,69 +207,69 @@ public class CompositingSVG extends CompositingDraw {
 		this.vboDataColors = new Color[6];
 		this.vboDataCoords = new Vector3f[6];
 		this.vboDataCoordsTex = new Vector2f[6];
-		
+
 		if (this.angle == 0.0f) {
 			Vector3f point = this.position;
 			int indexElem = 0;
-			
+
 			Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
 			point = new Vector3f(this.position.x() + size.x(), this.position.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
 			point = new Vector3f(this.position.x() + size.x(), this.position.y() + size.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
 			point = new Vector3f(this.position.x(), this.position.y() + size.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
 			indexElem++;
-			
+
 			tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 			point = new Vector3f(this.position.x(), this.position.y(), 0);
 			this.vboDataCoords[indexElem] = point;
 			this.vboDataCoordsTex[indexElem] = tex;
 			this.vboDataColors[indexElem] = this.color;
-			
+
 			return;
 		}
-		
+
 		final Vector3f center = this.position.add(new Vector3f(size.x(), size.y(), 0)).divide(2.0f);
-		
+
 		final Vector3f limitedSize = new Vector3f(size.x() * 0.5f, size.y() * 0.5f, 0.0f);
-		
+
 		Vector3f point = Vector3f.ZERO;
-		
+
 		Vector2f tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
-		
+
 		int indexElem = 0;
-		
+
 		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		this.vboDataCoords[indexElem] = point;
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStop.x(), sourcePosStop.y());
 		point = new Vector3f(limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
@@ -290,7 +277,7 @@ public class CompositingSVG extends CompositingDraw {
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStop.x(), sourcePosStart.y());
 		point = new Vector3f(limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
@@ -298,12 +285,12 @@ public class CompositingSVG extends CompositingDraw {
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		this.vboDataCoords[indexElem] = point;
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStart.x(), sourcePosStart.y());
 		point = new Vector3f(-limitedSize.x(), limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
@@ -311,16 +298,16 @@ public class CompositingSVG extends CompositingDraw {
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
 		indexElem++;
-		
+
 		tex = new Vector2f(sourcePosStart.x(), sourcePosStop.y());
 		point = new Vector3f(-limitedSize.x(), -limitedSize.y(), 0);
 		point = point.rotateNew(new Vector3f(0, 0, 1), this.angle).add(center);
 		this.vboDataCoords[indexElem] = point;
 		this.vboDataCoordsTex[indexElem] = tex;
 		this.vboDataColors[indexElem] = this.color;
-		
+
 	}
-	
+
 	/**
 	 * set a unique rotation of this element (not set in the rotate Generic system)
 	 * @param angleRad Angle to set in radiant.
@@ -328,7 +315,7 @@ public class CompositingSVG extends CompositingDraw {
 	public void setAngle(final float angleRad) {
 		this.angle = angleRad;
 	}
-	
+
 	/**
 	 * set the Color of the current foreground font
 	 * @param color Color to set on foreground (for next print)
@@ -336,15 +323,15 @@ public class CompositingSVG extends CompositingDraw {
 	public void setColor(final Color color) {
 		this.color = color;
 	}
-	
+
 	public void setPos(final Vector2f pos) {
 		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	public void setPos(final Vector2i pos) {
 		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	/**
 	 * set position for the next text written
 	 * @param pos Position of the text (in 3D)
@@ -352,11 +339,11 @@ public class CompositingSVG extends CompositingDraw {
 	public void setPos(final Vector3f pos) {
 		this.position = pos;
 	}
-	
+
 	public void setRelPos(final Vector2f pos) {
 		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-	
+
 	/**
 	 * set relative position for the next text written
 	 * @param pos offset apply of the text (in 3D)
@@ -364,7 +351,7 @@ public class CompositingSVG extends CompositingDraw {
 	public void setRelPos(final Vector3f pos) {
 		this.position = this.position.add(pos);
 	}
-	
+
 	public void setSource(final ImageByteRGBA image) {
 		clear();
 		this.svgData = null;
@@ -372,11 +359,11 @@ public class CompositingSVG extends CompositingDraw {
 		this.resource = new ResourceTexture2();
 		this.resource.set(image);
 	}
-	
+
 	public void setSource(final String data) {
 		setSource(data, 32);
 	}
-	
+
 	public void setSource(final String data, final int size) {
 		setSource(data, new Vector2i(size, size));
 	}
@@ -385,7 +372,7 @@ public class CompositingSVG extends CompositingDraw {
 	//		data
 	//		setSource
 	//	}
-	
+
 	public void setSource(final String data, final Vector2i size) {
 		if (data == null) {
 			LOGGER.error("try to set NULL data in svg");
@@ -413,153 +400,25 @@ public class CompositingSVG extends CompositingDraw {
 		this.svgData = data;
 		this.requestSize = size;
 	}
-	
+
 	public void setSource(final EsvgDocument data, final Vector2i size) {
 		if (this.svgData == null && this.svgDoc.equals(data) && this.requestSize.x() == size.x()
 				&& this.requestSize.y() == size.y()) {
 			// Nothing to do ...
 			return;
 		}
+		this.svgData = null;
 		clear();
+		final ImageByte tmp = ToolImage.convertImageByte(data.renderImageFloatRGBA(size));
+		if (tmp == null) {
+			LOGGER.error("Can not load the Raw SVG ... ");
+			return;
+		}
+		if (this.resource == null) {
+			this.resource = new ResourceTexture2();
+		}
+		this.resource.set(tmp);
 		this.svgDoc = data;
 		this.requestSize = size;
-		generate();
-	}
-	
-	protected void generate() {
-		final Vector2i size = this.requestSize;
-		if (this.svgDoc != null) {
-			final ImageByte tmp = ToolImage.convertImageByte(this.svgDoc.renderImageFloatRGBA(size));
-			if (tmp == null) {
-				LOGGER.error("Can not load the Raw SVG ... ");
-				return;
-			}
-			if (this.resource == null) {
-				this.resource = new ResourceTexture2();
-			}
-			this.resource.set(tmp);
-		}
-	}
-
-	PaintState paint = new PaintState();
-	
-	public void clearPaint() {
-		this.paint.clear();
-	}
-
-	public void createSize(final Vector2i size) {
-		clear();
-		this.paint.clear();
-		if (this.svgDoc == null) {
-			this.svgDoc = new EsvgDocument(size);
-		}
-		this.requestSize = size;
-	}
-	
-	@Override
-	public void setPaintFillColor(final Color color) {
-		this.paint.fill = new Pair<>(color, "");
-	}
-	
-	@Override
-	public void setPaintStrokeColor(final Color color) {
-		this.paint.stroke = new Pair<>(color, "");
-	}
-	
-	@Override
-	public void setPaintStrokeWidth(final float width) {
-		this.paint.strokeWidth = width;
-	}
-	
-	public void setPaintLineJoin(final JoinMode lineJoin) {
-		this.paint.lineJoin = lineJoin;
-	}
-	
-	public void setPaintLineCap(final CapMode lineCap) {
-		this.paint.lineCap = lineCap;
-	}
-	
-	public void setPaintMiterLimit(final float miterLimit) {
-		this.paint.miterLimit = miterLimit;
-	}
-	
-	public void setPaintOpacity(final float opacity) {
-		this.paint.opacity = opacity;
-	}
-	
-	@Override
-	public void addLine(final Vector2f startPos, final Vector2f stopPos) {
-		if (this.svgDoc == null) {
-			this.svgDoc = new EsvgDocument();
-		}
-		this.svgDoc.addElement(new Line(startPos, stopPos, this.paint));
-	}
-	
-	@Override
-	public void addRectangle(final Vector2f position, final Vector2f size) {
-		if (this.svgDoc == null) {
-			this.svgDoc = new EsvgDocument();
-		}
-		this.svgDoc.addElement(new Rectangle(position, size, this.paint));
-	}
-	
-	@Override
-	public void addRectangle(final Vector2f position, final Vector2f size, final Vector2f roundedCorner) {
-		if (this.svgDoc == null) {
-			this.svgDoc = new EsvgDocument();
-		}
-		this.svgDoc.addElement(new Rectangle(position, size, roundedCorner, this.paint));
-	}
-
-	@Override
-	public void addCircle(final Vector2f position, final float radius) {
-		if (this.svgDoc == null) {
-			this.svgDoc = new EsvgDocument();
-		}
-		this.svgDoc.addElement(new Circle(position, radius, this.paint));
-	}
-
-	@Override
-	public void addEllipse(final Vector2f center, final Vector2f radius) {
-		if (this.svgDoc == null) {
-			this.svgDoc = new EsvgDocument();
-		}
-		this.svgDoc.addElement(new Ellipse(center, radius, this.paint));
-	}
-
-	public void setRectangleAsSource(final int sizeX, final int sizeY, final Color color) {
-		createSize(new Vector2i(sizeX, sizeY)); // specific for SVG
-		setPaintFillColor(color);
-		addRectangle(Vector2f.ZERO, new Vector2f(sizeX, sizeY));
-		flush();
-	}
-
-	public void setRectangleBorderAsSource(
-			final int sizeX,
-			final int sizeY,
-			final Color color,
-			final int borderSize,
-			final int borderRadius,
-			final Color borderColor) {
-		
-		final int paddingCompensateBorder = Math.round(borderSize * 0.5f);
-		createSize(new Vector2i(sizeX, sizeY)); // specific for SVG
-		setPaintFillColor(color);
-		setPaintStrokeColor(borderColor);
-		setPaintStrokeWidth(borderSize);
-		addRectangle(new Vector2f(paddingCompensateBorder, paddingCompensateBorder), //
-				new Vector2f(sizeX - 2 * paddingCompensateBorder, sizeY - 2 * paddingCompensateBorder), //
-				new Vector2f(borderRadius, borderRadius));
-		flush();
-	}
-	
-	@Override
-	public void addRectangle(
-			final Vector2f position,
-			final Vector2f size,
-			final Insets thickness,
-			final BorderRadius radius) {
-		// TODO Auto-generated method stub
-
 	}
 }

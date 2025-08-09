@@ -23,7 +23,7 @@ public class ContainerToggle extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerToggle.class);
 	protected Widget[] subWidget = new Widget[2];
 	int idWidgetDisplayed = 0; //!< current widget displayed
-
+	
 	/**
 	 * Constructor
 	 */
@@ -31,7 +31,7 @@ public class ContainerToggle extends Widget {
 		this.subWidget[0] = null;
 		this.subWidget[1] = null;
 	}
-
+	
 	void calculateMinMaxSizePadded(final Padding padding) {
 		// call main class
 		this.minSize = Vector2f.ZERO;
@@ -50,7 +50,7 @@ public class ContainerToggle extends Widget {
 		//markToRedraw();
 		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
-
+	
 	@Override
 	public void drawWidgetTree(int level) {
 		super.drawWidgetTree(level);
@@ -62,7 +62,7 @@ public class ContainerToggle extends Widget {
 			this.subWidget[1].drawWidgetTree(level);
 		}
 	}
-
+	
 	@Override
 	public EwolObject getSubObjectNamed(final String widgetName) {
 		EwolObject tmpObject = super.getSubObjectNamed(widgetName);
@@ -80,14 +80,14 @@ public class ContainerToggle extends Widget {
 		}
 		return null;
 	}
-
+	
 	@AknotManaged
 	@AknotFactory(value = WidgetXmlFactory.class)
 	@AknotDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
 	public Widget[] getSubWidgets() {
 		return this.subWidget;
 	}
-
+	
 	public Padding onChangeSizePadded(final Padding padding) {
 		super.onChangeSize();
 		final Vector2f localAvaillable = this.size.less(padding.x(), padding.y());
@@ -121,14 +121,14 @@ public class ContainerToggle extends Widget {
 		return new Padding(selectableAreaPos.x(), selectableAreaEndPos.y(), selectableAreaEndPos.x(),
 				selectableAreaPos.y());
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget[this.idWidgetDisplayed] != null) {
 			this.subWidget[this.idWidgetDisplayed].onRegenerateDisplay();
 		}
 	}
-
+	
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		if (this.subWidget[0] == child) {
@@ -148,7 +148,7 @@ public class ContainerToggle extends Widget {
 			markToRedraw();
 		}
 	}
-
+	
 	@Override
 	public void setOffset(final Vector2f newVal) {
 		if (this.offset.equals(newVal)) {
@@ -158,12 +158,12 @@ public class ContainerToggle extends Widget {
 		// recalculate the new size and position of sub widget ...
 		onChangeSize();
 	}
-
+	
 	@AknotManaged(value = false)
 	public void setSubWidget(final Widget newWidget) {
 		setSubWidget(newWidget, 0);
 	}
-
+	
 	/**
 	 * set the subWidget node widget.
 	 * @param newWidget The widget to add.
@@ -178,13 +178,13 @@ public class ContainerToggle extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void setSubWidgets(final Widget[] newWidget) {
 		for (int iii = 0; iii < Math.min(newWidget.length, this.subWidget.length); iii++) {
 			setSubWidget(newWidget[iii], iii);
 		}
 	}
-
+	
 	public void subWidgetRemove(final int idWidget) {
 		if (this.subWidget[idWidget] != null) {
 			LOGGER.trace("Remove widget : " + idWidget);
@@ -194,7 +194,7 @@ public class ContainerToggle extends Widget {
 			requestUpdateSize();
 		}
 	}
-
+	
 	public void subWidgetReplace(final Widget oldWidget, final Widget newWidget) {
 		boolean haveChange = false;
 		for (int iii = 0; iii < this.subWidget.length; ++iii) {
@@ -215,7 +215,7 @@ public class ContainerToggle extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void subWidgetUnLink(final int idWidget) {
 		if (this.subWidget[idWidget] != null) {
 			this.subWidget[idWidget].removeParent();
@@ -223,7 +223,7 @@ public class ContainerToggle extends Widget {
 		}
 		this.subWidget[idWidget] = null;
 	}
-
+	
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {

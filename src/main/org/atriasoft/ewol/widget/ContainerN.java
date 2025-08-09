@@ -160,6 +160,10 @@ public class ContainerN extends Widget {
 
 	@Override
 	public void onRegenerateDisplay() {
+		regenerateDisplay();
+	}
+	
+	public void regenerateDisplay() {
 		for (final Widget it : this.subWidget) {
 			if (it != null) {
 				it.systemRegenerateDisplay();

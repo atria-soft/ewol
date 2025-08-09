@@ -4,11 +4,9 @@ import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.HighSpeedMode;
@@ -26,17 +24,17 @@ import org.slf4j.LoggerFactory;
  */
 class WidgetScrolled extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WidgetScrolled.class);
-	
+
 	public enum ScrollingMode {
 		scroolModeNormal, //!< No Zoom , can UP and down, left and right
 		scroolModeCenter, //!< Zoom enable, no move left and right
 		scroolModeGame, //!< Zoom enable, no move left and right
 	}
-
+	
 	public static final int CALCULATE_SIMULTANEOUS_FINGER = 5;
 	protected Uri propertyShapeVert = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Vertical shaper name
 	protected Uri propertyShapeHori = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Horizontal shaper name
-
+	
 	protected CompositingSVG compositingH = new CompositingSVG();
 	protected CompositingSVG compositingV = new CompositingSVG();
 	protected Vector2f originScrooled = Vector2f.ZERO; //!< pixel distance from the origin of the display (Bottum left)
@@ -54,7 +52,7 @@ class WidgetScrolled extends Widget {
 	private final boolean[] fingerPresent = { false, false, false, false, false };
 	private boolean fingerScoolActivated = false;
 	private final Vector2f[] fingerMoveStartPos = new Vector2f[CALCULATE_SIMULTANEOUS_FINGER];
-
+	
 	/**
 	 * Scroll Widget main constructor to be inherited from an other widget (this is not a stand-alone widget)
 	 * @param _shaperName Shaper name if the scrolled widget.
@@ -63,7 +61,7 @@ class WidgetScrolled extends Widget {
 		onChangePropertyShapeVert();
 		onChangePropertyShapeHori();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("shape-hori")
@@ -71,7 +69,7 @@ class WidgetScrolled extends Widget {
 	public Uri getPropertyShapeHori() {
 		return this.propertyShapeHori;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("shape-vert")
@@ -79,7 +77,7 @@ class WidgetScrolled extends Widget {
 	public Uri getPropertyShapeVert() {
 		return this.propertyShapeVert;
 	}
-
+	
 	/**
 	 * Get the single finger capabilities
 	 * @return true The single finger mode is active
@@ -88,7 +86,7 @@ class WidgetScrolled extends Widget {
 	public boolean getSingleFinger() {
 		return this.singleFingerMode;
 	}
-
+	
 	protected void onChangePropertyShapeHori() {
 		//		if (this.shaperH == null) {
 		//			this.shaperH = new GuiShape(this.propertyShapeHori);
@@ -97,7 +95,7 @@ class WidgetScrolled extends Widget {
 		//		}
 		markToRedraw();
 	}
-
+	
 	protected void onChangePropertyShapeVert() {
 		//		if (this.shaperV == null) {
 		//			this.shaperV = new GuiShape(this.propertyShapeVert);
@@ -106,13 +104,13 @@ class WidgetScrolled extends Widget {
 		//		}
 		markToRedraw();
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		this.compositingH.draw();
 		this.compositingV.draw();
 	}
-
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		LOGGER.trace("event XXX {}", event);
@@ -436,13 +434,13 @@ class WidgetScrolled extends Widget {
 				}
 			}
 		} else if (this.scroollingMode == ScrollingMode.scroolModeGame) {
-
+			
 		} else {
 			LOGGER.error("Scrolling mode unknow ... " + this.scroollingMode);
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		this.compositingH.clear();
@@ -460,14 +458,14 @@ class WidgetScrolled extends Widget {
 					/ (this.maxSize.y() - this.size.y() * this.limitScrolling.y());
 			originScrollBar = FMath.avg(0.0f, originScrollBar, 1.0f);
 			originScrollBar *= (this.size.y() - lenScrollBar);
-
+			
 			final Vector2f renderOrigin = new Vector2f(this.size.x() - paddingVert.x(), 0);
 			final Vector2f renderSize = new Vector2f(paddingVert.x(), this.size.y());
-			this.compositingV.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
-			this.compositingV.setPos(renderOrigin);
-			this.compositingV.print(renderSize);
-			this.compositingV.flush();
-			
+			//			this.compositingV.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
+			//			this.compositingV.setPos(renderOrigin);
+			//			this.compositingV.print(renderSize);
+			//			this.compositingV.flush();
+
 			//			this.shaperV.setShape(new Vector2f(this.size.x() - paddingVert.x(), 0),
 			//					new Vector2f(paddingVert.x(), this.size.y()),
 			//					new Vector2f(this.size.x() - paddingVert.right(), this.size.y() - originScrollBar - lenScrollBar),
@@ -481,26 +479,26 @@ class WidgetScrolled extends Widget {
 					/ (this.maxSize.x() - this.size.x() * this.limitScrolling.x());
 			originScrollBar = FMath.avg(0.0f, originScrollBar, 1.0f);
 			originScrollBar *= (this.size.x() - paddingHori.right() - lenScrollBar);
-
+			
 			final Vector2f renderOrigin = Vector2f.ZERO;
 			final Vector2f renderSize = new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y());
-			this.compositingH.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
-			this.compositingH.setPos(renderOrigin);
-			this.compositingH.print(renderSize);
-			this.compositingH.flush();
-			
+			//			this.compositingH.setRectangleAsSource((int) renderSize.x(), (int) renderSize.y(), Color.GREEN);
+			//			this.compositingH.setPos(renderOrigin);
+			//			this.compositingH.print(renderSize);
+			//			this.compositingH.flush();
+			//
 			//			this.shaperH.setShape(new Vector2f(0, 0), new Vector2f(this.size.x() - paddingVert.x(), paddingHori.y()),
 			//					new Vector2f(originScrollBar, paddingHori.bottom()), new Vector2f(lenScrollBar, 0));
 		}
 	}
-
+	
 	/**
 	 * Reset the scoll of the subWidget
 	 */
 	public void resetScrollOrigin() {
 		this.originScrooled = new Vector2f(0, 0);
 	}
-
+	
 	/**
 	 * Specify the mode of scrolling for this windows
 	 * @param newMode the selected mode for the scrolling...
@@ -513,7 +511,7 @@ class WidgetScrolled extends Widget {
 			this.zoom = 1;
 		}
 	}
-
+	
 	/**
 	 * set the scrolling limit when arriving at he end of the widget
 	 * @param poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
@@ -522,7 +520,7 @@ class WidgetScrolled extends Widget {
 		poucentageLimit = FMath.avg(0.1f, poucentageLimit, 1.0f);
 		this.limitScrolling = new Vector2f(poucentageLimit, poucentageLimit);
 	}
-
+	
 	/**
 	 * set the scrolling limit when arriving at he end of the widget
 	 * @param poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end for axis specific...
@@ -531,7 +529,7 @@ class WidgetScrolled extends Widget {
 		this.limitScrolling = new Vector2f(FMath.avg(0.1f, poucentageLimit.x(), 1.0f),
 				FMath.avg(0.1f, poucentageLimit.y(), 1.0f));
 	}
-
+	
 	/**
 	 * set the specific mawimum size of the widget
 	 * @param localSize new Maximum size
@@ -539,7 +537,7 @@ class WidgetScrolled extends Widget {
 	protected void setMaxSize(final Vector2f localSize) {
 		this.maxSize = localSize;
 	}
-
+	
 	public void setPropertyShapeHori(final Uri value) {
 		if (this.propertyShapeHori.equals(value)) {
 			return;
@@ -547,7 +545,7 @@ class WidgetScrolled extends Widget {
 		this.propertyShapeHori = value;
 		onChangePropertyShapeHori();
 	}
-
+	
 	public void setPropertyShapeVert(final Uri value) {
 		if (this.propertyShapeVert.equals(value)) {
 			return;
@@ -555,7 +553,7 @@ class WidgetScrolled extends Widget {
 		this.propertyShapeVert = value;
 		onChangePropertyShapeVert();
 	}
-
+	
 	/**
 		 * Request a specific position for the scrolling of the current windows.
 		 * @param borderWidth size of the border that requested the element might not to be
@@ -565,7 +563,7 @@ class WidgetScrolled extends Widget {
 	protected void setScrollingPositionDynamic(final Vector2f borderWidth, final Vector2f currentPosition) {
 		setScrollingPositionDynamic(borderWidth, currentPosition, false);
 	}
-
+	
 	protected void setScrollingPositionDynamic(
 			Vector2f borderWidth,
 			final Vector2f currentPosition,
@@ -590,7 +588,7 @@ class WidgetScrolled extends Widget {
 			this.originScrooled = this.originScrooled.withY(FMath.max(0.0f, this.originScrooled.y()));
 		}
 	}
-
+	
 	/**
 	 * For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled
 	 * @param nbPixel number of pixel scrolling
@@ -598,7 +596,7 @@ class WidgetScrolled extends Widget {
 	protected void setScrollingSize(final float nbPixel) {
 		this.pixelScrolling = nbPixel;
 	}
-
+	
 	/**
 	 * Set the single finger capabilities/
 	 * @param status True if single inger mode, two otherwise/
@@ -609,7 +607,7 @@ class WidgetScrolled extends Widget {
 		}
 		this.singleFingerMode = status;
 	}
-
+	
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		OpenGL.push();
