@@ -6,13 +6,15 @@ import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
+import org.atriasoft.etk.BorderRadius;
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Dimension1f;
+import org.atriasoft.etk.Insets;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingGC;
-import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
@@ -31,7 +33,6 @@ public class Slider extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Slider.class);
 
 	private Float propertyValue = 0.0f; //!< string that must be displayed
-	protected CompositingSVG compositing = new CompositingSVG();
 	@AknotSignal
 	@AknotName("value")
 	@AknotDescription("Tick value change")
@@ -56,6 +57,8 @@ public class Slider extends Widget {
 	private final Color textColorBg = Color.BLACK.withA(0x3F); //!< Background color
 
 	CompositingGC vectorialDraw = new CompositingGC(); //!< drawing tool.
+	
+	private final Dimension1f propertyLineWidth = new Dimension1f(20);
 
 	public Slider() {
 		this.propertyCanFocus = true;
@@ -168,7 +171,7 @@ public class Slider extends Widget {
 
 	@Override
 	public void onDraw() {
-		this.compositing.draw();
+		this.vectorialDraw.draw();
 	}
 
 	@Override
@@ -234,48 +237,35 @@ public class Slider extends Widget {
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
-			return;
+			//return;
 		}
-		//LOGGER.trace("Regenerate Display ==> is needed: '" + this.propertyValue + "'");
-		this.compositing.clear();
-		//this.gc.clear();
-		/*
-		if (this.colorIdTextFg >= 0) {
-			//this.text.setDefaultColorFg(this.shape.getColor(this.colorIdTextFg));
-			//this.text.setDefaultColorBg(this.shape.getColor(this.colorIdTextBg));
-			//this.text.setCursorColor(this.shape.getColor(this.colorIdCursor));
-			//this.text.setSelectionColor(this.shape.getColor(this.colorIdSelection));
-		}
-		*/
+		this.vectorialDraw.clear();
 		final Padding padding = Padding.ZERO;//this.shape.getPadding();
 		{
 			// Manage external shape:
-			Vector2f tmpSizeShaper = this.minSize;
+			Vector2f sizeInsideRender = this.minSize;
 			Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
 			if (this.propertyFill.x()) {
-				tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
+				sizeInsideRender = sizeInsideRender.withX(this.size.x());
 				delta = delta.withX(0.0f);
 			}
 			if (this.propertyFill.y()) {
-				tmpSizeShaper = tmpSizeShaper.withY(this.size.y());
+				sizeInsideRender = sizeInsideRender.withY(this.size.y());
 				delta = delta.withY(0.0f);
 			}
 
 			Vector2f tmpOriginShaper = delta;
-			Vector2f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y());
-			//Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
-			Vector2f tmpOriginInside = Vector2f.ZERO;
-			// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
 			// fix all the position in the int class:
-			tmpSizeShaper = Vector2f.clipInt(tmpSizeShaper);
-			tmpOriginShaper = Vector2f.clipInt(tmpOriginShaper);
-			tmpSizeInside = Vector2f.clipInt(tmpSizeInside);
-			tmpOriginInside = Vector2f.clipInt(tmpOriginInside);
+			sizeInsideRender = Vector2f.clipInt(sizeInsideRender);
+			tmpOriginShaper = Vector2f
+					.clipInt(tmpOriginShaper.addY(sizeInsideRender.y() * 0.5f - this.propertyLineWidth.size() * 0.5f));
 
 			this.overPositionStart = tmpOriginShaper;
-			this.overPositionSize = tmpSizeShaper;
-			this.overPositionStop = tmpOriginShaper.add(tmpSizeShaper);
-			//this.shape.setShape(0, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
+			this.overPositionSize = sizeInsideRender.withY(this.propertyLineWidth.size());
+			this.overPositionStop = tmpOriginShaper.add(this.overPositionSize);
+			this.vectorialDraw.setPaintFillColor(this.textColorBg);
+			this.vectorialDraw.addRectangle(this.overPositionStart, this.overPositionStop, new Insets(0),
+					new BorderRadius(this.propertyLineWidth.size() * 0.5f));
 		}
 		{
 			// Manage cursor:
@@ -287,7 +277,8 @@ public class Slider extends Widget {
 			}
 
 			Vector2f tmpOriginShaper = delta;
-			Vector2f tmpSizeInside = tmpSizeShaper.less(padding.x(), padding.y());
+			Vector2f tmpSizeInside = new Vector2f(this.propertyLineWidth.size() * 2.0f,
+					this.propertyLineWidth.size() * 2.0f);
 			//Vector2f tmpOriginText = this.size.less(tmpSizeText).multiply(0.5f);
 			Vector2f tmpOriginInside = Vector2f.ZERO;
 
@@ -304,17 +295,11 @@ public class Slider extends Widget {
 
 			this.overCursorPositionStart = tmpOriginShaper;
 			this.overCursorPositionSize = tmpSizeShaper;
-			this.overCursorPositionStop = tmpOriginShaper.add(tmpSizeShaper);
-			//this.shape.setShape(1, tmpOriginShaper, tmpSizeShaper, tmpOriginInside, tmpSizeInside);
+			this.overCursorPositionStop = tmpOriginShaper.add(this.overCursorPositionSize);
+			this.vectorialDraw.addRectangle(this.overCursorPositionStart, this.overCursorPositionStop, new Insets(0),
+					new BorderRadius(this.propertyLineWidth.size() * 2.0f));
 		}
-		LOGGER.error("REQUEST display an immage with size={}x{}", (int) this.overPositionSize.x(),
-				(int) this.overPositionSize.y());
-		this.compositing.setRectangleAsSource((int) this.overPositionSize.x(), (int) this.overPositionSize.y(),
-				Color.GREEN);
-		// TODO: Refaire le design de cet affichage...
-		this.compositing.setPos(this.overPositionStart);
-		this.compositing.print(new Vector2f(this.overPositionSize.x(), this.overPositionSize.y()));
-		this.compositing.flush();
+		this.vectorialDraw.flush();
 
 	}
 

@@ -20,9 +20,9 @@ import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix4f;
-import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.math.Vector3f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
@@ -57,26 +57,26 @@ public class Widget extends EwolObject {
 	// ----------------------------------------------------------------------------------------------------------------
 	private boolean allowRepeatKeyboardEvent = true; //!< This remove the repeating keybord event due to the ant pressing key.
 	private Cursor cursorDisplay = Cursor.arrow;
-
+	
 	private final CompositingDrawing drawDebugBorder = null;//new CompositingDrawing(); //!< Compositing drawing element
-
+	
 	// grab cursor mode
 	private boolean grabCursor = false;
-
+	
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- focus Area
 	// ----------------------------------------------------------------------------------------------------------------
 	private boolean hasFocus = false; //!< set the focus on this widget
-
+	
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- Mouse event properties Area
 	// ----------------------------------------------------------------------------------------------------------------
 	private int limitMouseEvent = 3; //!< this is to limit the number of mouse event that the widget can supported
-
+	
 	private final List<EventShortCut> localShortcut = new ArrayList<>(); //!< list of all shortcut in the widget
-
+	
 	protected Vector2f maxSize = Vector2f.MAX_VALUE; //!< internal: maximum size of the widget
-
+	
 	protected Vector2f minSize = Vector2f.ZERO; //!< internal: minimum size of the widget
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
@@ -92,28 +92,28 @@ public class Widget extends EwolObject {
 	protected boolean propertyHide = false; //!< hide a widget on the display
 	protected Dimension2f propertyMaxSize = new Dimension2f(Vector2f.MAX_VALUE, Distance.PIXEL); //!< user define the maximum size of the widget
 	protected Dimension2f propertyMinSize = new Dimension2f(Vector2f.ZERO, Distance.PIXEL); //!< user define the minimum size of the widget
-
+	
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- Shortcut : management of the shortcut
 	// ----------------------------------------------------------------------------------------------------------------
 	@AknotSignal
 	@AknotName("shortcut")
 	public Signal<String> signalShortcut; //!< signal handle of the message
-
+	
 	// ----------------------------------------------------------------------------------------------------------------
 	// -- Widget size:
 	// ----------------------------------------------------------------------------------------------------------------
 	protected Vector2f size = Vector2f.VALUE_16; //!< internal: current size of the widget
-
+	
 	// internal element calculated by the system
 	protected float zoom = 1.0f; //!< generic widget zoom
-
+	
 	/**
 	 * Constructor of the widget classes
 	 * @return (no exception generated (not managed in embedded platform))
 	 */
 	public Widget() {}
-
+	
 	/**
 	 * calculate the minimum and maximum size (need to estimate expend properties of the widget)
 	 * @note : INTERNAL EWOL SYSTEM
@@ -121,16 +121,16 @@ public class Widget extends EwolObject {
 	public void calculateMinMaxSize() {
 		calculateMinMaxSizeWidget();
 	}
-
+	
 	protected void calculateMinMaxSizeWidget() {
 		this.minSize = this.propertyMinSize.getPixel();
 		//LOGGER.error("[" + getId() + "] convert in min size : " + propertyMinSize + " out=" + this.minSize);
 		this.maxSize = this.propertyMaxSize.getPixel();
 		markToRedraw();
 	}
-
+	
 	public void calculateSize() {}
-
+	
 	/**
 	 * get the expend capabilities (xy)
 	 * @return 2D boolean represents the capacity to expend
@@ -142,7 +142,7 @@ public class Widget extends EwolObject {
 		}
 		return Vector2b.FALSE;
 	}
-
+	
 	/**
 	 * get the expend if free capabilities (xy)
 	 * @return 2D boolean represents the capacity to expend (if some free space is available)
@@ -154,7 +154,7 @@ public class Widget extends EwolObject {
 		}
 		return Vector2b.FALSE;
 	}
-
+	
 	/**
 	 * get the filling capabilities xy
 	 * @return Vector2b repensent the capacity to xy filling
@@ -163,15 +163,15 @@ public class Widget extends EwolObject {
 	public Vector2b canFill() {
 		return this.propertyFill;
 	}
-
+	
 	/**
 	 * Change Zoom property.
 	 * @param range Range of the zoom change.
 	 */
 	void changeZoom(final float range) {
-
+		
 	}
-
+	
 	/**
 	 * Check if the current max size is compatible with the user maximum size
 	 *        If it is not the user maximum size will overWrite the maximum size set.
@@ -181,7 +181,7 @@ public class Widget extends EwolObject {
 		final Vector2f pixelSize = this.propertyMaxSize.getPixel();
 		this.maxSize = Vector2f.min(this.maxSize, pixelSize);
 	}
-
+	
 	/**
 	 * Check if the current min size is compatible with the user minimum size
 	 *        If it is not the user minimum size will overWrite the minimum size set.
@@ -191,7 +191,7 @@ public class Widget extends EwolObject {
 		final Vector2f pixelSize = this.propertyMinSize.getPixel();
 		this.minSize = Vector2f.max(this.minSize, pixelSize);
 	}
-
+	
 	public void drawWidgetTree(final int level) {
 		final StringBuilder space = new StringBuilder();
 		for (int iii = 0; iii < level; ++iii) {
@@ -201,7 +201,7 @@ public class Widget extends EwolObject {
 				.append(getClass().getCanonicalName()).append(" o=").append(this.origin).append("  s=")
 				.append(this.size).append(" hide=").append(this.propertyHide).toString());
 	}
-
+	
 	/**
 	 * get the widget maximum size calculated
 	 * @return Requested size
@@ -213,7 +213,7 @@ public class Widget extends EwolObject {
 		}
 		return Vector2f.MAX_VALUE;
 	}
-
+	
 	/**
 	 * get the widget minimum size calculated
 	 * @return Requested size
@@ -225,7 +225,7 @@ public class Widget extends EwolObject {
 		}
 		return Vector2f.ZERO;
 	}
-
+	
 	/**
 	 * get the current cursor.
 	 * @return the type of the cursor.
@@ -233,7 +233,7 @@ public class Widget extends EwolObject {
 	public Cursor getCursor() {
 		return this.cursorDisplay;
 	}
-
+	
 	/**
 	 * get the grabbing status of the cursor.
 	 * @return true if the cursor is currently grabbed
@@ -241,7 +241,7 @@ public class Widget extends EwolObject {
 	public boolean getGrabStatus() {
 		return this.grabCursor;
 	}
-
+	
 	/**
 	 * get the keyboard repeating event supporting.
 	 * @return true : the event can be repeated.
@@ -250,7 +250,7 @@ public class Widget extends EwolObject {
 	public boolean getKeyboardRepeat() {
 		return this.allowRepeatKeyboardEvent;
 	}
-
+	
 	/**
 	 * get the number of mouse event supported
 	 * @return return the number of event that the mouse supported [0..3]
@@ -258,7 +258,7 @@ public class Widget extends EwolObject {
 	public int getMouseLimit() {
 		return this.limitMouseEvent;
 	}
-
+	
 	/**
 	 * get the offset property of the widget.
 	 * @return The current offset value.
@@ -266,7 +266,7 @@ public class Widget extends EwolObject {
 	Vector2f getOffset() {
 		return this.offset;
 	}
-
+	
 	/**
 	 * Get the origin (absolute position in the windows).
 	 * @return Coordinate of the origin requested.
@@ -274,7 +274,7 @@ public class Widget extends EwolObject {
 	public Vector2f getOrigin() {
 		return this.origin;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("focus")
@@ -282,7 +282,7 @@ public class Widget extends EwolObject {
 	public boolean getPropertyCanFocus() {
 		return this.propertyCanFocus;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("expand")
@@ -290,7 +290,7 @@ public class Widget extends EwolObject {
 	public Vector2b getPropertyExpand() {
 		return this.propertyExpand;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("expand-free")
@@ -298,7 +298,7 @@ public class Widget extends EwolObject {
 	public Vector2b getPropertyExpandIfFree() {
 		return this.propertyExpandIfFree;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("fill")
@@ -306,7 +306,7 @@ public class Widget extends EwolObject {
 	public Vector2b getPropertyFill() {
 		return this.propertyFill;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("gravity")
@@ -314,7 +314,7 @@ public class Widget extends EwolObject {
 	public Gravity getPropertyGravity() {
 		return this.propertyGravity;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("hide")
@@ -322,7 +322,7 @@ public class Widget extends EwolObject {
 	public boolean getPropertyHide() {
 		return this.propertyHide;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("max-size")
@@ -330,7 +330,7 @@ public class Widget extends EwolObject {
 	public Dimension2f getPropertyMaxSize() {
 		return this.propertyMaxSize;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("min-size")
@@ -338,7 +338,7 @@ public class Widget extends EwolObject {
 	public Dimension2f getPropertyMinSize() {
 		return this.propertyMinSize;
 	}
-
+	
 	/**
 	 * get the widget size
 	 * @return Requested size
@@ -350,7 +350,7 @@ public class Widget extends EwolObject {
 		}
 		return Vector2f.ZERO;
 	}
-
+	
 	/**
 			 * get the widget at the specific windows absolute position
 			 * @param pos gAbsolute position of the requested widget knowledge
@@ -364,21 +364,21 @@ public class Widget extends EwolObject {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Get the current Widget Manager.
 	 */
 	public WidgetManager getWidgetManager() {
 		return EwolObject.getContext().getWidgetManager();
 	}
-
+	
 	/**
 	 * Get the current Windows.
 	 */
 	public Windows getWindows() {
 		return EwolObject.getContext().getWindows();
 	}
-
+	
 	/**
 	 * get the zoom property of the widget
 	 * @return the current zoom value
@@ -386,7 +386,7 @@ public class Widget extends EwolObject {
 	public float getZoom() {
 		return this.zoom;
 	}
-
+	
 	/**
 			 * Grab the cursor : This get all the movement of the mouse in PC mode, and generate an offset instead of a position.
 			 * @note : the generation of the offset is due to the fact the cursor position is forced at the center of the widget.
@@ -398,14 +398,14 @@ public class Widget extends EwolObject {
 			this.grabCursor = true;
 		}
 	}
-
+	
 	/**
 	 * Hide the  keyboard (if needed)
 	 */
 	protected void hideKeyboard() {
 		EwolObject.getContext().keyboardHide();
 	}
-
+	
 	/**
 	 * get the focus state of the widget
 	 * @return focus state
@@ -413,14 +413,14 @@ public class Widget extends EwolObject {
 	public boolean isFocused() {
 		return this.hasFocus;
 	}
-
+	
 	/**
 	 * keep the focus on this widget  == > this remove the previous focus on all other widget
 	 */
 	public void keepFocus() {
 		getWidgetManager().focusKeep(this);
 	}
-
+	
 	/**
 	 * The widget mark itself that it need to regenerate the nest time.
 	 */
@@ -431,7 +431,7 @@ public class Widget extends EwolObject {
 		this.needRegenerateDisplay = true;
 		getWidgetManager().markDrawingIsNeeded();
 	}
-
+	
 	/**
 	 * get the need of the redrawing of the widget and reset it to false
 	 * @return true if we need to redraw
@@ -442,7 +442,7 @@ public class Widget extends EwolObject {
 		this.needRegenerateDisplay = false;
 		return tmpData;
 	}
-
+	
 	/**
 	 * Parent have set the size and the origin. The container need to update the child widget property
 	 * @note INTERNAL EWOL SYSTEM
@@ -451,19 +451,19 @@ public class Widget extends EwolObject {
 		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} update size : " + this.size);
 		markToRedraw();
 	}
-
+	
 	/**
 	 * Common widget drawing function (called by the drawing thread [Android, X11, ...])
 	 */
 	protected void onDraw() {}
-
+	
 	/**
 	 * Event on a past event  == > this event is asynchronous due to all system does not support direct getting data.
 	 * @note : need to have focus ...
 	 * @param clipboardID Mode of data requested
 	 */
 	public void onEventClipboard(final ClipboardList clipboardID) {}
-
+	
 	/**
 	 * Entry event.
 	 *        represent the physical event :
@@ -477,7 +477,7 @@ public class Widget extends EwolObject {
 	protected boolean onEventEntry(final EventEntry event) {
 		return false;
 	}
-
+	
 	/**
 	 * Event on an input of this Widget (finger, mouse, stylet)
 	 * @param event Event properties
@@ -487,7 +487,7 @@ public class Widget extends EwolObject {
 	protected boolean onEventInput(final EventInput event) {
 		return false;
 	}
-
+	
 	/**
 	 * Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref onEventKb).
 	 * @param special All the special kay pressed at this time.
@@ -541,19 +541,19 @@ public class Widget extends EwolObject {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Event of the focus has been grabed by the current widget
 	 */
 	protected void onGetFocus() {}
-
+	
 	/**
 	 * Event of the focus has been lost by the current widget
 	 */
 	protected void onLostFocus() {}
-
+	
 	protected void onRegenerateDisplay() {}
-
+	
 	protected void onUpdateMinMaxSize() {
 		final Vector2f pixelMin = this.propertyMinSize.getPixel();
 		final Vector2f pixelMax = this.propertyMaxSize.getPixel();
@@ -564,7 +564,7 @@ public class Widget extends EwolObject {
 		}
 		requestUpdateSize();
 	}
-
+	
 	/**
 	 * Convert the absolute position in the local Position (Relative)
 	 * @param pos Absolute position that you request conversion.
@@ -573,14 +573,14 @@ public class Widget extends EwolObject {
 	public Vector2f relativePosition(final Vector2f pos) {
 		return pos.less(this.origin);
 	}
-
+	
 	/**
 	 * Need to be call When the size of the current widget have change  ==> this force the system to recalculate all the widget positions.
 	 */
 	public void requestUpdateSize() {
 		EwolObject.getContext().requestUpdateSize();
 	}
-
+	
 	/**
 	 * remove the focus on this widget
 	 * @return return true if the widget have release his focus (if he has it)
@@ -595,7 +595,7 @@ public class Widget extends EwolObject {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * set the cursor display type.
 	 * @param newCursor selected new cursor.
@@ -605,7 +605,7 @@ public class Widget extends EwolObject {
 		this.cursorDisplay = newCursor;
 		EwolObject.getContext().setCursor(this.cursorDisplay);
 	}
-
+	
 	/**
 	 * set focus on this widget
 	 * @return return true if the widget keep the focus
@@ -624,7 +624,7 @@ public class Widget extends EwolObject {
 		LOGGER.trace("set focus (stop) ret false");
 		return false;
 	}
-
+	
 	/**
 	 * set the keyboard repeating event supporting.
 	 * @param state The repeating status (true: enable, false disable).
@@ -632,7 +632,7 @@ public class Widget extends EwolObject {
 	protected void setKeyboardRepeat(final boolean state) {
 		this.allowRepeatKeyboardEvent = state;
 	}
-
+	
 	/**
 	 * get the number of mouse event supported
 	 * @param numberState The number of event that the mouse supported [0..3]
@@ -640,21 +640,21 @@ public class Widget extends EwolObject {
 	public void setMouseLimit(final int numberState) {
 		this.limitMouseEvent = numberState;
 	}
-
+	
 	/**
 	 * User set No maximum size.
 	 */
 	public void setNoMaxSize() {
 		setPropertyMaxSize(new Dimension2f(Vector2f.MAX_VALUE, Distance.PIXEL));
 	}
-
+	
 	/**
 	 * User set No minimum size.
 	 */
 	public void setNoMinSize() {
 		setPropertyMinSize(new Dimension2f(Vector2f.ZERO, Distance.PIXEL));
 	}
-
+	
 	/**
 	 * set the zoom property of the widget.
 	 * @param newVal offset value.
@@ -666,7 +666,7 @@ public class Widget extends EwolObject {
 			markToRedraw();
 		}
 	}
-
+	
 	/**
 	 * Set origin at the widget (must be an parent widget that set this parameter).
 	 * This represent the absolute origin in the program windows.
@@ -676,7 +676,7 @@ public class Widget extends EwolObject {
 	public void setOrigin(final Vector2f pos) {
 		this.origin = pos;
 	}
-
+	
 	public void setPropertyCanFocus(final boolean canFocus) {
 		if (this.propertyCanFocus == canFocus) {
 			return;
@@ -689,7 +689,7 @@ public class Widget extends EwolObject {
 			rmFocus();
 		}
 	}
-
+	
 	public void setPropertyExpand(final Vector2b value) {
 		if (this.propertyExpand.equals(value)) {
 			return;
@@ -698,7 +698,7 @@ public class Widget extends EwolObject {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void setPropertyExpandIfFree(final Vector2b value) {
 		if (this.propertyExpandIfFree.equals(value)) {
 			return;
@@ -707,7 +707,7 @@ public class Widget extends EwolObject {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void setPropertyFill(final Vector2b value) {
 		if (this.propertyFill.equals(value)) {
 			return;
@@ -716,7 +716,7 @@ public class Widget extends EwolObject {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void setPropertyGravity(final Gravity gravity) {
 		if (this.propertyGravity.equals(gravity)) {
 			return;
@@ -725,7 +725,7 @@ public class Widget extends EwolObject {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void setPropertyHide(final boolean value) {
 		if (this.propertyHide == value) {
 			return;
@@ -734,7 +734,7 @@ public class Widget extends EwolObject {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	public void setPropertyMaxSize(final Dimension2f value) {
 		if (this.propertyMaxSize.equals(value)) {
 			return;
@@ -742,7 +742,7 @@ public class Widget extends EwolObject {
 		this.propertyMaxSize = value;
 		onUpdateMinMaxSize();
 	}
-
+	
 	public void setPropertyMinSize(final Dimension2f value) {
 		if (this.propertyMinSize.equals(value)) {
 			return;
@@ -750,7 +750,7 @@ public class Widget extends EwolObject {
 		this.propertyMinSize = value;
 		onUpdateMinMaxSize();
 	}
-
+	
 	/**
 	 * set the widget size
 	 * @return Requested size
@@ -762,7 +762,7 @@ public class Widget extends EwolObject {
 			return;
 		}
 	}
-
+	
 	/**
 	 * set the zoom property of the widget
 	 * @param newVal newZoom value
@@ -774,7 +774,7 @@ public class Widget extends EwolObject {
 		this.zoom = FMath.avg(0.0000001f, newVal, 1000000.0f);
 		markToRedraw();
 	}
-
+	
 	/**
 	 * add a specific shortcut with his description
 	 * @param descriptiveString Description string of the shortcut
@@ -782,7 +782,7 @@ public class Widget extends EwolObject {
 	protected void shortCutAdd(final String descriptiveString) {
 		shortCutAdd(descriptiveString, "");
 	}
-
+	
 	/**
 	 * add a specific shortcut with his description
 	 * @param descriptiveString Description string of the shortcut
@@ -876,14 +876,14 @@ public class Widget extends EwolObject {
 		// add it on the List ...
 		this.localShortcut.add(new EventShortCut(message, specialKey, unicodeValue, keyboardMoveValue, true));
 	}
-
+	
 	/**
 	 * remove all current shortCut
 	 */
 	protected void shortCutClean() {
 		this.localShortcut.clear();
 	}
-
+	
 	/**
 			 * remove a specific shortCut with his event name
 			 * @param message generated event name
@@ -891,14 +891,14 @@ public class Widget extends EwolObject {
 	protected void shortCutRemove(final String message) {
 		this.localShortcut.removeIf(eventShortCut -> eventShortCut.message().contentEquals(message));
 	}
-
+	
 	/**
 	 * display the  keyboard (if needed)
 	 */
 	protected void showKeyboard() {
 		EwolObject.getContext().keyboardShow();
 	}
-
+	
 	/**
 	 * {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 	 * This function generate a clipping with the view-port openGL system. Like this a widget draw can not draw over an other widget
@@ -934,7 +934,7 @@ public class Widget extends EwolObject {
 	public void systemDraw(final DrawProperty displayProp) {
 		systemDrawWidget(displayProp);
 	}
-
+	
 	protected void systemDrawWidget(final DrawProperty displayProp) {
 		//LOGGER.info("[" + getId() + "] Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" << this.size << " hide=" << propertyHide);
 		if (this.propertyHide) {
@@ -942,13 +942,13 @@ public class Widget extends EwolObject {
 			return;
 		}
 		final Vector2f displayOrigin = this.origin.add(this.offset);
-
+		
 		// check if the element is displayable in the windows :
 		if (displayProp.windowsSize().x() < this.origin.x() || displayProp.windowsSize().y() < this.origin.y()) {
 			// out of the windows  == > nothing to display ...
 			return;
 		}
-
+		
 		final DrawProperty tmpSize = displayProp.withLimit(this.origin, this.size);
 		if (tmpSize.size().x() <= 0 || tmpSize.size().y() <= 0) {
 			return;
@@ -971,7 +971,7 @@ public class Widget extends EwolObject {
 		final Matrix4f tmpProjection = Matrix4f.createMatrixOrtho(-tmpSize.size().x() / 2, tmpSize.size().x() / 2,
 				-tmpSize.size().y() / 2, tmpSize.size().y() / 2, -500, 500);
 		//Matrix4f tmpMat = tmpProjection.multiply(tmpScale).multiply(tmpTranslate);
-
+		
 		OpenGL.push();
 		// set internal matrix system :
 		//OpenGL.setMatrix(tmpMat);
@@ -985,7 +985,7 @@ public class Widget extends EwolObject {
 		OpenGL.pop();
 		GL11.glFinish();
 	}
-
+	
 	/**
 	 * {SYSTEM} Entry event (only meta widget might overwrite this function).
 	 * @param event Event properties
@@ -1000,7 +1000,7 @@ public class Widget extends EwolObject {
 		}
 		return onEventEntry(event.event());
 	}
-
+	
 	/**
 	 * {SYSTEM} system event input (only meta widget might overwrite this function).
 	 * @param event Event properties
@@ -1018,7 +1018,7 @@ public class Widget extends EwolObject {
 		}
 		return onEventInput(event.event());
 	}
-
+	
 	/**
 	 * Event generated when a redraw is needed
 	 */
@@ -1044,7 +1044,7 @@ public class Widget extends EwolObject {
 		}
 		onRegenerateDisplay();
 	}
-
+	
 	/**
 	 * Un-Grab the cursor (default mode cursor offset)
 	 */

@@ -32,11 +32,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Composer extends Container {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Composer.class);
-	
+
 	public static Widget composerGenerateFile(final Uri data) {
 		return composerGenerateFile(data, 0);
 	}
-
+	
 	public static Widget composerGenerateFile(final Uri uri, final long id) {
 		final byte[] elemData = Uri.getAllData(uri);
 		if (elemData == null) {
@@ -50,11 +50,11 @@ public class Composer extends Container {
 		}
 		return tmp;
 	}
-
+	
 	public static Widget composerGenerateString(final String data) {
 		return composerGenerateString(data, 0);
 	}
-
+	
 	public static Widget composerGenerateString(String data, final long id) {
 		boolean requestComposer = true;
 		if (!data.startsWith("<Composer>")) {
@@ -78,19 +78,19 @@ public class Composer extends Container {
 		}
 		return result.getSubWidget();
 	}
-
+	
 	protected boolean propertyRemoveIfUnderRemove; //!< Remove the composer if sub element request a remove
-
+	
 	protected Uri propertySubFile; //!< If loading a sub-file, we must do it here ==> permit to configure it in the xml and not have wrong display
-
+	
 	/**
 	 * Constructor
 	 */
 	public Composer() {
 		// nothing to do...
-
+		
 	}
-
+	
 	@Override
 	public void calculateMinMaxSize() {
 		if (this.subWidget != null) {
@@ -99,44 +99,44 @@ public class Composer extends Container {
 		}
 		super.calculateMinMaxSize();
 	}
-
+	
 	@Override
 	public void calculateSize() {
-
+		
 		if (this.subWidget != null) {
 			this.subWidget.calculateSize();
 			return;
 		}
 		super.calculateSize();
 	}
-
+	
 	@Override
 	public Vector2b canExpand() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.canExpand();
 		}
 		return super.canExpand();
 	}
-
+	
 	@Override
 	public Vector2b canExpandIfFree() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.canExpandIfFree();
 		}
 		return super.canExpandIfFree();
 	}
-
+	
 	@Override
 	public Vector2b canFill() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.canFill();
 		}
 		return super.canFill();
 	}
-
+	
 	@Override
 	void changeZoom(final float range) {
 		if (this.subWidget != null) {
@@ -145,7 +145,7 @@ public class Composer extends Container {
 		}
 		super.changeZoom(range);
 	}
-
+	
 	@Override
 	public void checkMaxSize() {
 		if (this.subWidget != null) {
@@ -154,71 +154,71 @@ public class Composer extends Container {
 		}
 		super.checkMaxSize();
 	}
-
+	
 	@Override
 	public void checkMinSize() {
-
+		
 		if (this.subWidget != null) {
 			this.subWidget.checkMinSize();
 			return;
 		}
 		super.checkMinSize();
 	}
-
+	
 	@Override
 	public Vector2f getCalculateMaxSize() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getCalculateMaxSize();
 		}
 		return super.getCalculateMaxSize();
 	}
-
+	
 	@Override
 	public Vector2f getCalculateMinSize() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getCalculateMinSize();
 		}
 		return super.getCalculateMinSize();
 	}
-
+	
 	@Override
 	public Cursor getCursor() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getCursor();
 		}
 		return super.getCursor();
 	}
-
+	
 	@Override
 	public boolean getGrabStatus() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getGrabStatus();
 		}
 		return super.getGrabStatus();
 	}
-
+	
 	@Override
 	public boolean getKeyboardRepeat() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getKeyboardRepeat();
 		}
 		return super.getKeyboardRepeat();
 	}
-
+	
 	@Override
 	public int getMouseLimit() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getMouseLimit();
 		}
 		return super.getMouseLimit();
 	}
-
+	
 	@Override
 	Vector2f getOffset() {
 		if (this.subWidget != null) {
@@ -226,7 +226,7 @@ public class Composer extends Container {
 		}
 		return super.getOffset();
 	}
-
+	
 	@Override
 	public Vector2f getOrigin() {
 		if (this.subWidget != null) {
@@ -234,79 +234,79 @@ public class Composer extends Container {
 		}
 		return super.getOrigin();
 	}
-
+	
 	@Override
 	public boolean getPropertyCanFocus() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyCanFocus();
 		}
 		return super.getPropertyCanFocus();
 	}
-
+	
 	@Override
 	public Vector2b getPropertyExpand() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyExpand();
 		}
 		return super.getPropertyExpand();
 	}
-
+	
 	@Override
 	public Vector2b getPropertyExpandIfFree() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyExpandIfFree();
 		}
 		return super.getPropertyExpandIfFree();
 	}
-
+	
 	@Override
 	public Vector2b getPropertyFill() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyFill();
 		}
 		return super.getPropertyFill();
 	}
-
+	
 	@Override
 	public Gravity getPropertyGravity() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyGravity();
 		}
 		return super.getPropertyGravity();
 	}
-
+	
 	@Override
 	public boolean getPropertyHide() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyHide();
 		}
 		return super.getPropertyHide();
 	}
-
+	
 	@Override
 	public Dimension2f getPropertyMaxSize() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyMaxSize();
 		}
 		return super.getPropertyMaxSize();
 	}
-
+	
 	@Override
 	public Dimension2f getPropertyMinSize() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getPropertyMinSize();
 		}
 		return super.getPropertyMinSize();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "sub-file")
@@ -314,16 +314,16 @@ public class Composer extends Container {
 	public Uri getPropertySubFile() {
 		return this.propertySubFile;
 	}
-
+	
 	@Override
 	public Vector2f getSize() {
-
+		
 		if (this.subWidget != null) {
 			return this.subWidget.getSize();
 		}
 		return super.getSize();
 	}
-
+	
 	@Override
 	public EwolObject getSubObjectNamed(final String objectName) {
 		if (this.subWidget != null) {
@@ -331,7 +331,7 @@ public class Composer extends Container {
 		}
 		return super.getSubObjectNamed(objectName);
 	}
-
+	
 	@Override
 	public float getZoom() {
 		if (this.subWidget != null) {
@@ -339,7 +339,7 @@ public class Composer extends Container {
 		}
 		return super.getZoom();
 	}
-
+	
 	@Override
 	public void grabCursor() {
 		if (this.subWidget != null) {
@@ -348,7 +348,7 @@ public class Composer extends Container {
 		}
 		super.grabCursor();
 	}
-
+	
 	@Override
 	public boolean isFocused() {
 		if (this.subWidget != null) {
@@ -356,7 +356,7 @@ public class Composer extends Container {
 		}
 		return super.isFocused();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "remove-if-under-remove")
@@ -364,7 +364,7 @@ public class Composer extends Container {
 	public boolean isPropertyRemoveIfUnderRemove() {
 		return this.propertyRemoveIfUnderRemove;
 	}
-
+	
 	@Override
 	public void keepFocus() {
 		if (this.subWidget != null) {
@@ -373,7 +373,7 @@ public class Composer extends Container {
 		}
 		super.keepFocus();
 	}
-
+	
 	/**
 	 * load a composition with a file
 	 * @param _uri Name of the file
@@ -396,7 +396,7 @@ public class Composer extends Container {
 		// T O D O: Change this with a throw.a..a
 		return true;
 	}
-
+	
 	/**
 	 * load a composition with a file
 	 * @param composerXmlString xml to parse directly
@@ -419,17 +419,17 @@ public class Composer extends Container {
 		// T O D O: Change this with a throw.a..a
 		return true;
 	}
-
+	
 	@Override
 	public void markToRedraw() {
-
+		
 		if (this.subWidget != null) {
 			this.subWidget.calculateMinMaxSize();
 			return;
 		}
 		super.markToRedraw();
 	}
-
+	
 	protected void onChangePropertySubFile() {
 		LOGGER.info("Load compositing form external file : " + this.propertySubFile);
 		if (this.propertySubFile.isEmpty()) {
@@ -441,7 +441,7 @@ public class Composer extends Container {
 			LOGGER.error("Can not load Player GUI from file ... " + this.propertySubFile);
 		}
 	}
-
+	
 	@Override
 	public void onChangeSize() {
 		if (this.subWidget != null) {
@@ -450,7 +450,7 @@ public class Composer extends Container {
 		}
 		super.onChangeSize();
 	}
-
+	
 	@Override
 	public void onEventClipboard(final ClipboardList clipboardID) {
 		if (this.subWidget != null) {
@@ -459,7 +459,7 @@ public class Composer extends Container {
 		}
 		super.onEventClipboard(clipboardID);
 	}
-
+	
 	@Override
 	public boolean onEventShortCut(
 			final KeySpecial special,
@@ -471,7 +471,7 @@ public class Composer extends Container {
 		}
 		return super.onEventShortCut(special, unicodeValue, kbMove, isDown);
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
@@ -480,7 +480,7 @@ public class Composer extends Container {
 		}
 		super.onRegenerateDisplay();
 	}
-
+	
 	@Override
 	public Vector2f relativePosition(final Vector2f pos) {
 		if (this.subWidget != null) {
@@ -488,7 +488,7 @@ public class Composer extends Container {
 		}
 		return super.relativePosition(pos);
 	}
-
+	
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		super.requestDestroyFromChild(child);
@@ -497,7 +497,7 @@ public class Composer extends Container {
 			autoDestroy();
 		}
 	}
-
+	
 	@Override
 	public void requestUpdateSize() {
 		if (this.subWidget != null) {
@@ -506,7 +506,7 @@ public class Composer extends Container {
 		}
 		super.requestUpdateSize();
 	}
-
+	
 	@Override
 	public boolean rmFocus() {
 		if (this.subWidget != null) {
@@ -514,7 +514,7 @@ public class Composer extends Container {
 		}
 		return super.rmFocus();
 	}
-
+	
 	@Override
 	public void setCursor(final Cursor newCursor) {
 		if (this.subWidget != null) {
@@ -523,7 +523,7 @@ public class Composer extends Container {
 		}
 		super.setCursor(newCursor);
 	}
-
+	
 	@Override
 	public boolean setFocus() {
 		if (this.subWidget != null) {
@@ -531,7 +531,7 @@ public class Composer extends Container {
 		}
 		return super.setFocus();
 	}
-
+	
 	@Override
 	public void setMouseLimit(final int numberState) {
 		if (this.subWidget != null) {
@@ -540,7 +540,7 @@ public class Composer extends Container {
 		}
 		super.setMouseLimit(numberState);
 	}
-
+	
 	@Override
 	public void setNoMaxSize() {
 		if (this.subWidget != null) {
@@ -549,7 +549,7 @@ public class Composer extends Container {
 		}
 		super.setNoMaxSize();
 	}
-
+	
 	@Override
 	public void setNoMinSize() {
 		if (this.subWidget != null) {
@@ -558,7 +558,7 @@ public class Composer extends Container {
 		}
 		super.setNoMinSize();
 	}
-
+	
 	@Override
 	public void setOffset(final Vector2f newVal) {
 		if (this.subWidget != null) {
@@ -567,7 +567,7 @@ public class Composer extends Container {
 		}
 		super.setOffset(newVal);
 	}
-
+	
 	@Override
 	public void setOrigin(final Vector2f pos) {
 		if (this.subWidget != null) {
@@ -576,7 +576,7 @@ public class Composer extends Container {
 		}
 		super.setOrigin(pos);
 	}
-
+	
 	@Override
 	public void setPropertyCanFocus(final boolean canFocus) {
 		if (this.subWidget != null) {
@@ -585,7 +585,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyCanFocus(canFocus);
 	}
-
+	
 	@Override
 	public void setPropertyExpand(final Vector2b value) {
 		if (this.subWidget != null) {
@@ -594,7 +594,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyExpand(value);
 	}
-
+	
 	@Override
 	public void setPropertyExpandIfFree(final Vector2b value) {
 		if (this.subWidget != null) {
@@ -603,7 +603,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyExpandIfFree(value);
 	}
-
+	
 	@Override
 	public void setPropertyFill(final Vector2b value) {
 		if (this.subWidget != null) {
@@ -612,7 +612,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyFill(value);
 	}
-
+	
 	@Override
 	public void setPropertyGravity(final Gravity gravity) {
 		if (this.subWidget != null) {
@@ -621,7 +621,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyGravity(gravity);
 	}
-
+	
 	@Override
 	public void setPropertyHide(final boolean value) {
 		if (this.subWidget != null) {
@@ -630,7 +630,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyHide(value);
 	}
-
+	
 	@Override
 	public void setPropertyMaxSize(final Dimension2f value) {
 		if (this.subWidget != null) {
@@ -639,7 +639,7 @@ public class Composer extends Container {
 		}
 		super.setPropertyMaxSize(value);
 	}
-
+	
 	@Override
 	public void setPropertyMinSize(final Dimension2f value) {
 		if (this.subWidget != null) {
@@ -648,14 +648,14 @@ public class Composer extends Container {
 		}
 		super.setPropertyMinSize(value);
 	}
-
+	
 	public void setPropertyRemoveIfUnderRemove(final boolean propertyRemoveIfUnderRemove) {
 		if (this.propertyRemoveIfUnderRemove == propertyRemoveIfUnderRemove) {
 			return;
 		}
 		this.propertyRemoveIfUnderRemove = propertyRemoveIfUnderRemove;
 	}
-
+	
 	public void setPropertySubFile(final Uri propertySubFile) {
 		if (this.propertySubFile.equals(propertySubFile)) {
 			return;
@@ -663,7 +663,7 @@ public class Composer extends Container {
 		this.propertySubFile = propertySubFile;
 		onChangePropertySubFile();
 	}
-
+	
 	@Override
 	public void setSize(final Vector2f value) {
 		if (this.subWidget != null) {
@@ -672,7 +672,7 @@ public class Composer extends Container {
 		}
 		super.setSize(value);
 	}
-
+	
 	@Override
 	public void setZoom(final float newVal) {
 		if (this.subWidget != null) {
@@ -681,7 +681,7 @@ public class Composer extends Container {
 		}
 		super.setZoom(newVal);
 	}
-
+	
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.subWidget != null) {
@@ -690,7 +690,7 @@ public class Composer extends Container {
 		}
 		super.systemDraw(displayProp);
 	}
-
+	
 	@Override
 	public void unGrabCursor() {
 		if (this.subWidget != null) {
@@ -699,5 +699,5 @@ public class Composer extends Container {
 		}
 		super.unGrabCursor();
 	}
-
+	
 }

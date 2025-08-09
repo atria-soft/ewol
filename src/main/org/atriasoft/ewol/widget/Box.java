@@ -274,10 +274,15 @@ public class Box extends Container {
 	
 	@Override
 	public void onRegenerateDisplay() {
-		super.onRegenerateDisplay();
 		if (!needRedraw()) {
 			return;
 		}
+		regenerateDisplay();
+	}
+	
+	@Override
+	public void regenerateDisplay() {
+		super.regenerateDisplay();
 		final Insets localMargin = this.propertyMargin.size();
 		Vector2f renderSize = calculateSizeRendering();
 		this.overPositionStart = calculateOriginRendering(renderSize);

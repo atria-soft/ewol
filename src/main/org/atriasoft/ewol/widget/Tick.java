@@ -53,7 +53,6 @@ public class Tick extends Box {
 	/// Periodic call handle to remove it when needed
 	protected Connection periodicConnectionHanble = new Connection();
 	
-	private final Uri propertyConfig = new Uri("THEME", "shape/Tick.json", "ewol");
 	private final Uri uriCheckGreen = new Uri("THEME", "CheckBoxCrossRed.svg", "ewol");
 	
 	private Boolean propertyValue = false; //!< string that must be displayed
@@ -74,9 +73,6 @@ public class Tick extends Box {
 	@AknotName("value")
 	@AknotDescription("Tick value change")
 	public Signal<Boolean> signalValue = new Signal<>();
-	// element over:
-	Vector2f overPositionStart = Vector2f.ZERO;
-	Vector2f overPositionStop = Vector2f.ZERO;
 	
 	private boolean isDown;
 	
@@ -153,14 +149,10 @@ public class Tick extends Box {
 	@Override
 	protected void onDraw() {
 		super.onDraw();
-		if (this.propertyValue) {
-			if (this.compositingTick != null) {
-				this.compositingTick.draw(true);
-			}
+		//if (this.propertyValue) {
+		if (this.compositingTick != null && this.propertyValue) {
+			this.compositingTick.draw(true);
 		}
-		//		if (this.shape != null) {
-		//			this.shape.draw(true, this.propertyValue ? 0 : 1);
-		//		}
 	}
 	
 	@Override
@@ -227,13 +219,19 @@ public class Tick extends Box {
 	
 	@Override
 	public void onRegenerateDisplay() {
-		super.onRegenerateDisplay();
 		if (!needRedraw()) {
 			//return;
 		}
-		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckGreen));//, this.overPositionStart.less(4));
+		regenerateDisplay();
+	}
+	
+	@Override
+	public void regenerateDisplay() {
+		super.regenerateDisplay();
+		final Vector2f size = this.overPositionStop.less(this.overPositionStart);
+		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckGreen), size.toVector2i());
 		this.compositingTick.setPos(this.overPositionStart.add(2));
-		this.compositingTick.print(this.overPositionStop.less(this.overPositionStart).less(4));
+		this.compositingTick.print(size.less(4));
 		this.compositingTick.flush();
 	}
 	

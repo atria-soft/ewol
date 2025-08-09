@@ -18,29 +18,29 @@ import org.slf4j.LoggerFactory;
  */
 class Gird extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Gird.class);
-
+	
 	protected class GirdProperties {
 		public Widget widget;
 		public int row;
 		public int col;
 	}
-	
+
 	protected int sizeRow = 0; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
 	protected int uniformSizeRow = 0;
 	protected List<Integer> sizeCol = new ArrayList<>(); //!< size of all colomn (if set (otherwise 0))
 	protected List<GirdProperties> subWidget = new ArrayList<>(); //!< all sub widget are contained in this element
 	protected Widget tmpWidget = null; //!< use when replace a widget ...
 	protected boolean gavityButtom = true;
-	
+
 	protected Vector2f propertyBorderSize = Vector2f.ZERO; //!< Border size needed for all the display
-	
+
 	/**
 	 * Constructor
 	 */
 	public Gird() {
-		
+
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		for (int iii = 0; iii < this.sizeCol.size(); iii++) {
@@ -72,7 +72,7 @@ class Gird extends Widget {
 				}
 			}
 		}
-		
+
 		if (this.sizeRow > 0) {
 			this.uniformSizeRow = this.sizeRow;
 		}
@@ -83,12 +83,12 @@ class Gird extends Widget {
 		LOGGER.debug("     tmpSizeWidth=" + tmpSizeWidth);
 		LOGGER.debug("     this.uniformSizeRow=" + this.uniformSizeRow);
 		this.minSize = this.minSize.add(tmpSizeWidth, (lastLineID + 1) * this.uniformSizeRow);
-		
+
 		LOGGER.debug("Calculate min size : " + this.minSize);
-		
+
 		//LOGGER.debug("Vert Result : expand="+ this.userExpand + "  minSize="+ this.minSize);
 	}
-	
+
 	/**
 	 * get the current border size of the current element:
 	 * @return the border size (0 if not used)
@@ -96,7 +96,7 @@ class Gird extends Widget {
 	public Vector2f getBorderSize() {
 		return this.propertyBorderSize;
 	}
-	
+
 	/**
 	 * get the size view of a colomn.
 	 * @param colId Id of the colomn [0..x].
@@ -112,11 +112,11 @@ class Gird extends Widget {
 		LOGGER.error("Can not get the Colomn size : " + colId + 1 + "  we have " + this.sizeCol.size() + " colomn");
 		return 0;
 	}
-	
+
 	public Vector2f getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
-	
+
 	/**
 	 * get the size view of the lines.
 	 * @return The size of the lines.
@@ -124,7 +124,7 @@ class Gird extends Widget {
 	public int getRowSize() {
 		return this.sizeRow;
 	}
-	
+
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
 		if (this.propertyHide) {
@@ -149,12 +149,12 @@ class Gird extends Widget {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void onChangeSize() {
 		//LOGGER.debug("Update size");
 		this.size = this.size.less(this.propertyBorderSize.multiply(2));
-		
+
 		for (int iii = 0; iii < this.subWidget.size(); iii++) {
 			if (this.subWidget.get(iii).widget != null) {
 				//calculate the origin :
@@ -162,7 +162,7 @@ class Gird extends Widget {
 				if (!this.gavityButtom) {
 					tmpOrigin = tmpOrigin.add(0, this.size.y() - this.propertyBorderSize.y());
 				}
-				
+
 				int tmpSizeWidth = 0;
 				for (int jjj = 0; jjj < this.subWidget.get(iii).col; jjj++) {
 					tmpSizeWidth += Math.abs(this.sizeCol.get(jjj));
@@ -175,7 +175,7 @@ class Gird extends Widget {
 					addingPos = -(this.subWidget.get(iii).row + 1) * this.uniformSizeRow;
 				}
 				tmpOrigin = tmpOrigin.add(tmpSizeWidth, addingPos);
-				
+
 				LOGGER.debug("     [{}] set subwidget origin={} size={}", iii, tmpOrigin,
 						new Vector2f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow));
 				// set the origin :
@@ -191,7 +191,7 @@ class Gird extends Widget {
 		LOGGER.debug("Calculate size : " + this.size);
 		markToRedraw();
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		for (final GirdProperties it : this.subWidget) {
@@ -200,7 +200,7 @@ class Gird extends Widget {
 			}
 		}
 	}
-	
+
 	/**
 	 * set the current border size of the current element:
 	 * @param newBorderSize The border size to set (0 if not used)
@@ -208,7 +208,7 @@ class Gird extends Widget {
 	public void setBorderSize(final Vector2f newBorderSize) {
 		this.propertyBorderSize = newBorderSize;
 	}
-	
+
 	/**
 	 * set the number of colomn
 	 * @param colNumber Nuber of colomn
@@ -244,7 +244,7 @@ class Gird extends Widget {
 			}
 		}
 	}
-	
+
 	/**
 	 * change a size view of a colomn.
 	 * @param colId Id of the colomn [0..x].
@@ -258,7 +258,7 @@ class Gird extends Widget {
 					+ this.sizeCol.size() + " colomn");
 		}
 	}
-	
+
 	/**
 	 * set the gravity of the widget on the Button (index 0 is on buttom)
 	 */
@@ -266,7 +266,7 @@ class Gird extends Widget {
 		this.gavityButtom = true;
 		markToRedraw();
 	}
-	
+
 	/**
 	 * set the gravity of the widget on the Top (index 0 is on top)
 	 */
@@ -274,7 +274,7 @@ class Gird extends Widget {
 		this.gavityButtom = false;
 		markToRedraw();
 	}
-	
+
 	public void setPropertyBorderSize(final Vector2f propertyBorderSize) {
 		this.propertyBorderSize = propertyBorderSize;
 		if (this.propertyBorderSize.x() < 0) {
@@ -288,7 +288,7 @@ class Gird extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-	
+
 	/**
 	 * change a size view of a line.
 	 * @param size size of the line.
@@ -296,7 +296,7 @@ class Gird extends Widget {
 	public void setRowSize(final int size) {
 		this.sizeRow = size;
 	}
-	
+
 	/**
 	 * add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 	 * @param colId Id of the colomn [0..x].
@@ -311,7 +311,7 @@ class Gird extends Widget {
 		prop.row = rowId;
 		prop.col = colId;
 		prop.widget = newWidget;
-		
+
 		// need to find the correct position :
 		for (int iii = 0; iii < this.subWidget.size(); iii++) {
 			if (this.subWidget.get(iii).row < prop.row) {
@@ -336,7 +336,7 @@ class Gird extends Widget {
 		// not find  == > just adding it ...
 		this.subWidget.add(prop);
 	}
-	
+
 	/**
 	 * remove definitly a widget from the system and this Gird.
 	 * @param colId Id of the colomn [0..x].
@@ -357,7 +357,7 @@ class Gird extends Widget {
 		}
 		LOGGER.warn("[" + getId() + "] Can not remove unExistant widget");
 	}
-	
+
 	/**
 	 * remove definitly a widget from the system and this Gird.
 	 * @param newWidget the element pointer.
@@ -371,7 +371,7 @@ class Gird extends Widget {
 		}
 		LOGGER.warn("[" + getId() + "] Can not remove unExistant widget");
 	}
-	
+
 	/**
 	 * remove all sub element from the widget.
 	 */
@@ -379,7 +379,7 @@ class Gird extends Widget {
 		final int errorControl = this.subWidget.size();
 		this.subWidget.clear();
 	}
-	
+
 	/**
 	 * Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 	 * @param colId Id of the colomn [0..x].
@@ -399,7 +399,7 @@ class Gird extends Widget {
 		}
 		LOGGER.warn("[" + getId() + "] Can not unLink unExistant widget");
 	}
-	
+
 	/**
 	 * Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).
 	 * @param newWidget the element pointer.
@@ -415,7 +415,7 @@ class Gird extends Widget {
 			}
 		}
 	}
-	
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		super.systemDraw(displayProp);

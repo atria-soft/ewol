@@ -17,23 +17,23 @@ import org.atriasoft.ewol.compositing.CompositingGC;
 class ProgressBar extends Widget {
 	private static final int DOT_RADIUS = 6;
 	private final CompositingDrawing vectorialDraw = new CompositingGC(); // basic drawing element
-
+	
 	protected Color propertyTextColorBgOff = Color.NONE;
 	protected Color propertyTextColorBgOn = Color.GREEN;
 	protected Color propertyTextColorFg = Color.BLACK;
 	protected float propertyValue = 0;
-
+	
 	public ProgressBar() {
 		setPropertyCanFocus(true);
 	}
-
+	
 	@Override
 	public void calculateMinMaxSize() {
 		final Vector2f tmpMin = this.propertyMinSize.getPixel();
 		this.minSize = new Vector2f(Math.max(tmpMin.x(), 40.0f), Math.max(tmpMin.y(), ProgressBar.DOT_RADIUS * 2.0f));
 		markToRedraw();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "color-off")
@@ -41,7 +41,7 @@ class ProgressBar extends Widget {
 	public Color getPropertyTextColorBgOff() {
 		return this.propertyTextColorBgOff;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "color-on")
@@ -49,7 +49,7 @@ class ProgressBar extends Widget {
 	public Color getPropertyTextColorBgOn() {
 		return this.propertyTextColorBgOn;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "color-bg")
@@ -57,7 +57,7 @@ class ProgressBar extends Widget {
 	public Color getPropertyTextColorFg() {
 		return this.propertyTextColorFg;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "value")
@@ -65,12 +65,12 @@ class ProgressBar extends Widget {
 	public float getPropertyValue() {
 		return this.propertyValue;
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		this.vectorialDraw.draw();
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
@@ -78,9 +78,9 @@ class ProgressBar extends Widget {
 		}
 		// clean the object list ...
 		this.vectorialDraw.clear();
-
+		
 		this.vectorialDraw.setColor(this.propertyTextColorFg);
-
+		
 		final int tmpSizeX = (int) (this.size.x() - 10);
 		final int tmpSizeY = (int) (this.size.y() - 10);
 		final int tmpOriginX = 5;
@@ -91,12 +91,12 @@ class ProgressBar extends Widget {
 		this.vectorialDraw.setColor(this.propertyTextColorBgOff);
 		this.vectorialDraw.setPos(new Vector2f(tmpOriginX + tmpSizeX * this.propertyValue, tmpOriginY));
 		this.vectorialDraw.rectangleWidth(new Vector2f(tmpSizeX * (1.0f - this.propertyValue), tmpSizeY));
-
+		
 		// TODO : Create a better progress Bar ...
 		//this.draw.setColor(propertyTextColorFg);
 		//this.draw.rectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
 	}
-
+	
 	public void setPropertyTextColorBgOff(final Color propertyTextColorBgOff) {
 		if (propertyTextColorBgOff.equals(this.propertyTextColorBgOff)) {
 			return;
@@ -104,7 +104,7 @@ class ProgressBar extends Widget {
 		this.propertyTextColorBgOff = propertyTextColorBgOff;
 		markToRedraw();
 	}
-
+	
 	public void setPropertyTextColorBgOn(final Color propertyTextColorBgOn) {
 		if (propertyTextColorBgOn.equals(this.propertyTextColorBgOn)) {
 			return;
@@ -112,7 +112,7 @@ class ProgressBar extends Widget {
 		this.propertyTextColorBgOn = propertyTextColorBgOn;
 		markToRedraw();
 	}
-
+	
 	public void setPropertyTextColorFg(final Color propertyTextColorFg) {
 		if (propertyTextColorFg.equals(this.propertyTextColorFg)) {
 			return;
@@ -120,7 +120,7 @@ class ProgressBar extends Widget {
 		this.propertyTextColorFg = propertyTextColorFg;
 		markToRedraw();
 	}
-
+	
 	public void setPropertyValue(final float propertyValue) {
 		if (propertyValue == this.propertyValue) {
 			return;

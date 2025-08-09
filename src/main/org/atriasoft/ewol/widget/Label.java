@@ -35,16 +35,16 @@ public class Label extends Widget {
 	private int propertyFontSize = 0; //!< default size of the font.
 	private final CompositingText textCompose = new CompositingText(); //!< Compositing text element.
 	private String value = "";
-
+	
 	protected int colorDefaultBgText = -1; //!< Default Background color of the text
 	protected int colorDefaultFgText = -1; //!< Default color of the text
 	protected ResourceColorFile colorProperty; //!< theme color property
 	protected boolean propertyAutoTranslate = true; //!< if at true the data is translate automaticaly translate.
-
+	
 	public Label() {
 		this("---");
 	}
-
+	
 	public Label(final String label) {
 		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
 		if (this.colorProperty != null) {
@@ -55,7 +55,7 @@ public class Label extends Widget {
 		setPropertyCanFocus(false);
 		setPropertyValue(label);
 	}
-
+	
 	@Override
 	public void calculateMinMaxSize() {
 		LOGGER.trace("calculateMinMaxSize !!! data = '{}'", this.value);
@@ -72,29 +72,29 @@ public class Label extends Widget {
 		this.textCompose.flush();
 		minSize = minSize.add(2, 2);
 		//EWOL_DEBUG("[" + getId() + "] {" + getObjectType() + "} minSize : " + minSize);
-
+		
 		this.minSize = new Vector2f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()), //
 				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
 		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
-
+	
 	public int getPropertyFontSize() {
 		return this.propertyFontSize;
 	}
-
+	
 	public String getPropertyValue() {
 		return this.propertyValue;
 	}
-
+	
 	public boolean isPropertyAutoTranslate() {
 		return this.propertyAutoTranslate;
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		this.textCompose.draw();
 	}
-
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		//LOGGER.debug("Event on Label ...");
@@ -107,7 +107,7 @@ public class Label extends Widget {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
@@ -116,26 +116,26 @@ public class Label extends Widget {
 		this.textCompose.clear();
 		//final int paddingSize = 2;
 		final Padding padding = new Padding(2, 2, 2, 2);
-
+		
 		final Vector2f tmpMax = this.propertyMaxSize.getPixel();
 		// to know the size of one line :
 		final Vector2f minSize = this.textCompose.calculateSize('A');
-
+		
 		//minSize.setX(etk::max(minSize.x(), this.minSize.x()));
 		//minSize.setY(etk::max(minSize.y(), this.minSize.y()));
 		if (tmpMax.x() <= 999999) {
 			this.textCompose.setTextAlignment(0, tmpMax.x() - padding.x(), AlignMode.LEFT);
 		}
 		final Vector2f curentTextSize = this.textCompose.calculateSizeDecorated(this.value);
-
+		
 		//Vector2f localSize = this.minSize.clipInteger();
 		Vector2f tmpSizeShaper = this.minSize;
-
+		
 		// no change for the text origin :
 		Vector2f tmpTextOrigin = new Vector2f((this.size.x() - minSize.x()) * 0.5f,
 				(this.size.y() - minSize.y()) * 0.5f);
 		Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
-
+		
 		if (this.propertyFill.x()) {
 			tmpSizeShaper = tmpSizeShaper.withX(this.size.x());
 			delta = delta.withX(0.0f);
@@ -148,21 +148,20 @@ public class Label extends Widget {
 		}
 		final Vector2f tmpOriginShaper = delta;
 		final Vector2f tmpSizeText = tmpSizeShaper.less(padding.x(), padding.y());
-
+		
 		tmpTextOrigin = tmpOriginShaper;//tmpTextOrigin.add(paddingSize, paddingSize, 0);
 		//localSize = localSize.less(2 * paddingSize, 2 * paddingSize, 0);
-
+		
 		//tmpTextOrigin = tmpTextOrigin.withY(tmpTextOrigin.y() + (this.minSize.y() - 2 * paddingSize) - minSize.y());
 		tmpTextOrigin = tmpTextOrigin
 				.withY(tmpTextOrigin.y() + this.minSize.y() - this.textCompose.getHeight() - padding.top());// - this.minSize.y() - paddingSize);
 		tmpTextOrigin = tmpTextOrigin.withX(tmpTextOrigin.x() + padding.left());
-
+		
 		final Vector2f textPos = new Vector2f(tmpTextOrigin.x(), tmpTextOrigin.y());
-
-		final Vector2f drawClippingPos = tmpOriginShaper
-				.less(new Vector2f(padding.left(), padding.bottom()));
+		
+		final Vector2f drawClippingPos = tmpOriginShaper.less(new Vector2f(padding.left(), padding.bottom()));
 		final Vector2f drawClippingSize = tmpOriginShaper.add(tmpSizeShaper); /// new  Vector2f((this.size.x() - paddingSize), (this.size.y() - paddingSize), 1);
-
+		
 		// clean the element
 		this.textCompose.reset();
 		if (this.propertyFontSize != 0) {
@@ -179,7 +178,7 @@ public class Label extends Widget {
 		this.textCompose.printDecorated(this.value);
 		this.textCompose.flush();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "auto-translate")
@@ -197,7 +196,7 @@ public class Label extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "font-size")
@@ -210,7 +209,7 @@ public class Label extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	@AknotManaged
 	@AknotText
 	@AknotName(value = "value")
@@ -228,5 +227,5 @@ public class Label extends Widget {
 		requestUpdateSize();
 		this.propertyValue = propertyValue;
 	}
-
+	
 }
