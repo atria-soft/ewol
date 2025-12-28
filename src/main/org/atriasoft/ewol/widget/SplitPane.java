@@ -5,9 +5,12 @@
  */
 package org.atriasoft.ewol.widget;
 
+import java.util.List;
+
 import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotCaseSensitive;
 import org.atriasoft.aknot.annotation.AknotDescription;
+import org.atriasoft.aknot.annotation.AknotFactory;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
@@ -488,6 +491,43 @@ public class SplitPane extends Widget {
 			return;
 		}
 		this.propertyMinSecondSize = Math.max(0.0f, size);
+	}
+
+	/**
+	 * Get the list of sub-widgets for XML parsing.
+	 * Returns a list containing firstWidget and secondWidget (if set).
+	 * @return list of child widgets
+	 */
+	@AknotManaged
+	@AknotFactory(value = WidgetXmlFactory.class)
+	@AknotDescription(value = "Sub-widgets of the split pane (first and second)")
+	public List<Widget> getSubWidgets() {
+		if (this.firstWidget != null && this.secondWidget != null) {
+			return List.of(this.firstWidget, this.secondWidget);
+		} else if (this.firstWidget != null) {
+			return List.of(this.firstWidget);
+		} else if (this.secondWidget != null) {
+			return List.of(this.secondWidget);
+		}
+		return List.of();
+	}
+
+	/**
+	 * Set the sub-widgets from XML parsing.
+	 * The first widget in the list becomes the first widget,
+	 * the second becomes the second widget.
+	 * @param widgets list of widgets to add
+	 */
+	public void setSubWidgets(final List<Widget> widgets) {
+		if (widgets == null || widgets.isEmpty()) {
+			return;
+		}
+		if (widgets.size() >= 1) {
+			setFirstWidget(widgets.get(0));
+		}
+		if (widgets.size() >= 2) {
+			setSecondWidget(widgets.get(1));
+		}
 	}
 
 	public Widget getFirstWidget() {

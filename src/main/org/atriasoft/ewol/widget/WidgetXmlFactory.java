@@ -9,6 +9,8 @@ import org.atriasoft.ewol.widget.meta.FileChooser;
 public class WidgetXmlFactory implements InterfaceFactoryAccess {
 	private static Map<String, Class<?>> listWidgetAvaillable = new HashMap<>();
 	static {
+		listWidgetAvaillable.put("Box", Box.class);
+		listWidgetAvaillable.put("SplitPane", SplitPane.class);
 		listWidgetAvaillable.put("Sizer", Sizer.class);
 		listWidgetAvaillable.put("Spacer", Spacer.class);
 		listWidgetAvaillable.put("Label", Label.class);
