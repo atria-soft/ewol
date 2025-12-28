@@ -52,11 +52,19 @@ public class ModelWidget extends Container {
 	Sizer sizerMenuRoot;
 	Sizer sizerMenu;
 
+	// Log callback provided by BasicWindows
+	private java.util.function.Consumer<String> logCallback;
+
 	Gravity basicGravity = Gravity.BOTTOM_LEFT;
 
 	private final List<Connection> conections = new ArrayList<>();
 
 	public ModelWidget(final TestWidgetInterface interfaceToTest) {
+		this(interfaceToTest, null);
+	}
+
+	public ModelWidget(final TestWidgetInterface interfaceToTest, final java.util.function.Consumer<String> logCallback) {
+		this.logCallback = logCallback;
 
 		setPropertyExpand(Vector2b.TRUE);
 		setPropertyFill(Vector2b.TRUE);
@@ -116,8 +124,18 @@ public class ModelWidget extends Container {
 			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			sizerVertMain.subWidgetAdd(simpleSpacer);
 		}
+
 		// add the default widget to test:
 		setTestWidget(interfaceToTest.getWidget());
+	}
+
+	/**
+	 * Adds a log entry via the callback.
+	 */
+	public void addLogEntry(final String message) {
+		if (this.logCallback != null) {
+			this.logCallback.accept(message);
+		}
 	}
 
 	public void addButton(final Widget widget) {
@@ -1100,19 +1118,19 @@ public class ModelWidget extends Container {
 	}
 
 	public void connectAllSignals(final Widget widget, final IntrospectionModelComplex modelPojo) throws Exception {
-		LOGGER.warn("Connect all signal(s) on '{}'", widget.getName());
+		LOGGER.trace("Connect all signal(s) on '{}'", widget.getName());
 		final var signals = modelPojo.getSignals();
 		for (final IntrospectionProperty pojo : signals) {
-			LOGGER.warn("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
-			LOGGER.warn("        ==> description='{}'", pojo.getDescription());
-			LOGGER.warn("        ==> type='{}'", pojo.getType());
-			LOGGER.warn("        ==> sub-type='{}'", pojo.getSubType());
+			LOGGER.trace("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
+			LOGGER.trace("        ==> description='{}'", pojo.getDescription());
+			LOGGER.trace("        ==> type='{}'", pojo.getType());
+			LOGGER.trace("        ==> sub-type='{}'", pojo.getSubType());
 
 			final var eventName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0]
 					: pojo.getBeanName();
 
 			if (pojo.getSubType() != null && pojo.getType() == Signal.class) {
-				LOGGER.warn("        ** Signal<{}>", pojo.getSubType());
+				LOGGER.trace("        ** Signal<{}>", pojo.getSubType());
 				final var signalObject = pojo.getValue(widget);
 				if (signalObject == null) {
 					LOGGER.error("Signal is not accessible !!!!!!! ");
@@ -1120,21 +1138,25 @@ public class ModelWidget extends Container {
 					final var valueNameOfSignal = eventName;
 					@SuppressWarnings("unchecked")
 					final var tmp = (Signal<Object>) signalObject;
-					tmp.connect(object -> {
+					tmp.connectAuto(this, (final ModelWidget self, final Object object) -> {
+						final String logMessage = "<b>" + valueNameOfSignal + "</b>: " + object;
 						LOGGER.info("Get event from '{}' value='{}'", valueNameOfSignal, object);
+						self.addLogEntry(logMessage);
 					});
 				}
 			}
 			if (pojo.getSubType() == null && pojo.getType() == SignalEmpty.class) {
-				LOGGER.warn("        ** SignalEmpty");
+				LOGGER.trace("        ** SignalEmpty");
 				final var signalObject = pojo.getValue(widget);
 				if (signalObject == null) {
 					LOGGER.error("Signal is not accessible !!!!!!! ");
 				} else {
 					final var valueNameOfSignal = eventName;
 					final var tmp = (SignalEmpty) signalObject;
-					tmp.connect(() -> {
+					tmp.connectAuto(this, (final ModelWidget self) -> {
+						final String logMessage = "<b>" + valueNameOfSignal + "</b>";
 						LOGGER.info("Get event from '{}'", valueNameOfSignal);
+						self.addLogEntry(logMessage);
 					});
 				}
 

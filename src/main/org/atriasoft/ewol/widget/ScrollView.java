@@ -521,13 +521,13 @@ public class ScrollView extends Container {
 			// inputId 4 = wheel up (scroll content up = decrease scrollOffset = show earlier content)
 			// inputId 5 = wheel down (scroll content down = increase scrollOffset = show later content)
 			if (event.inputId() == 4 && event.status() == KeyStatus.up) {
-				// Shift + wheel = horizontal scroll
+				// Shift + wheel up = horizontal scroll right
 				if (event.specialKey().getShift() && needsHorizontalScrollbar()) {
 					final Vector2f contentSize = getContentSize();
 					final Vector2f contentArea = getContentAreaSize();
 					final float maxScroll = contentSize.x() - contentArea.x();
 					this.scrollOffset = this.scrollOffset
-							.withX(FMath.avg(0, this.scrollOffset.x() - this.pixelScrolling, maxScroll));
+							.withX(FMath.avg(0, this.scrollOffset.x() + this.pixelScrolling, maxScroll));
 					onChangeSize();
 					markToRedraw();
 					return true;
@@ -546,13 +546,13 @@ public class ScrollView extends Container {
 			}
 
 			if (event.inputId() == 5 && event.status() == KeyStatus.up) {
-				// Shift + wheel = horizontal scroll
+				// Shift + wheel down = horizontal scroll left
 				if (event.specialKey().getShift() && needsHorizontalScrollbar()) {
 					final Vector2f contentSize = getContentSize();
 					final Vector2f contentArea = getContentAreaSize();
 					final float maxScroll = contentSize.x() - contentArea.x();
 					this.scrollOffset = this.scrollOffset
-							.withX(FMath.avg(0, this.scrollOffset.x() + this.pixelScrolling, maxScroll));
+							.withX(FMath.avg(0, this.scrollOffset.x() - this.pixelScrolling, maxScroll));
 					onChangeSize();
 					markToRedraw();
 					return true;

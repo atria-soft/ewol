@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Entry extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Entry.class);
-
+	
 	/**
 	 * Periodic call to update graphic display
 	 * @param _event Time generic event
@@ -53,7 +53,7 @@ public class Entry extends Box {
 		//		}
 		self.markToRedraw();
 	}
-	
+
 	/// color property of the text foreground
 	private int colorIdTextFg;
 	/// Cursor must be display only when the widget has the focus
@@ -74,16 +74,16 @@ public class Entry extends Box {
 	protected Connection periodicConnectionHandle = new Connection();
 	private int propertyMaxCharacter = Integer.MAX_VALUE; //!< number max of Character in the list
 	private boolean propertyPassword = false; //!< Disable display of the content of the entry
-	
+
 	/// regular expression value
 	private String propertyRegex = ".*";
-	
+
 	/// Text to display when nothing in in the entry (decorated text...)
 	private String propertyTextWhenNothing = null;
-	
+
 	private String propertyValue = ""; //!< string that must be displayed
 	private Pattern regex = null; //!< regular expression to check content
-
+	
 	//.create()
 	@AknotSignal
 	@AknotName(value = "click")
@@ -93,12 +93,12 @@ public class Entry extends Box {
 	@AknotName(value = "enter")
 	@AknotDescription("The cursor enter inside the button")
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
-	
+
 	@AknotSignal
 	@AknotName(value = "modify")
 	@AknotDescription("Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
-	
+
 	/**
 	 * Constructor
 	 * @param _newData The USting that might be set in the Entry box (no event generation!!)
@@ -106,7 +106,7 @@ public class Entry extends Box {
 	public Entry() {
 		this.propertyCanFocus = true;
 		//onChangePropertyShaper();
-		
+
 		this.regex = Pattern.compile(this.propertyRegex);
 		if (this.regex == null) {
 			LOGGER.error("can not parse regex for: {}", this.propertyRegex);
@@ -124,12 +124,12 @@ public class Entry extends Box {
 		setPropertyBorderWidth(new DimensionInsets(2));
 		setPropertyPadding(new DimensionInsets(4));
 	}
-	
+
 	@Override
 	public void calculateMinMaxSize() {
 		calculateMinMaxSizeChild(new Vector2f(25, this.text.getHeight()));
 	}
-	
+
 	protected void changeStatusIn(final GuiShapeMode newStatusId) {
 		//		if (this.shape.changeStatusIn(newStatusId)) {
 		//			if (!this.periodicConnectionHanble.isConnected()) {
@@ -140,7 +140,7 @@ public class Entry extends Box {
 		//			markToRedraw();
 		//		}
 	}
-	
+
 	/**
 	 * Copy the selected data on the specify clipboard
 	 * @param clipboardID Selected clipboard
@@ -160,44 +160,44 @@ public class Entry extends Box {
 		final String tmpData = this.propertyValue.substring(pos1, pos2);
 		ClipBoard.set(clipboardID, tmpData);
 	}
-
+	
 	public int getPropertyMaxCharacter() {
 		return this.propertyMaxCharacter;
 	}
-	
+
 	public String getPropertyRegex() {
 		return this.propertyRegex;
 	}
-	
+
 	public String getPropertyTextWhenNothing() {
 		return this.propertyTextWhenNothing;
 	}
-	
+
 	public String getPropertyValue() {
 		return this.propertyValue;
 	}
-	
+
 	public boolean isPropertyPassword() {
 		return this.propertyPassword;
 	}
-	
+
 	/**
 	 * informe the system thet the text change and the start position change
 	 */
 	protected void markToUpdateTextPosition() {
 		this.needUpdateTextPos = true;
 	}
-	
+
 	private void onCallbackCopy() {
 		copySelectionToClipBoard(ClipboardList.CLIPBOARD_STD);
 	}
-	
+
 	private void onCallbackCut() {
 		copySelectionToClipBoard(ClipboardList.CLIPBOARD_STD);
 		removeSelected();
 		this.signalModify.emit(this.propertyValue);
 	}
-	
+
 	private void onCallbackEntryClean() {
 		this.propertyValue = "";
 		this.displayStartPosition = 0;
@@ -205,11 +205,11 @@ public class Entry extends Box {
 		this.displayCursorPosSelection = this.displayCursorPos;
 		markToRedraw();
 	}
-	
+
 	private void onCallbackPaste() {
 		ClipBoard.request(ClipboardList.CLIPBOARD_STD);
 	}
-	
+
 	private void onCallbackSelect(final boolean all) {
 		if (all) {
 			this.displayCursorPosSelection = 0;
@@ -219,7 +219,7 @@ public class Entry extends Box {
 		}
 		markToRedraw();
 	}
-	
+
 	private void onCallbackShortCut(final String value) {
 		if (value.equals("clean")) {
 			onCallbackEntryClean();
@@ -238,15 +238,15 @@ public class Entry extends Box {
 			LOGGER.warn("Unknown event from ShortCut: {}", value);
 		}
 	}
-	
+
 	protected void onChangePropertyMaxCharacter() {
 		// TODO : check number of char in the data
 	}
-	
+
 	protected void onChangePropertyPassword() {
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyRegex() {
 		try {
 			this.regex = Pattern.compile(this.propertyRegex);
@@ -256,11 +256,11 @@ public class Entry extends Box {
 		}
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyTextWhenNothing() {
 		markToRedraw();
 	}
-	
+
 	protected void onChangePropertyValue() {
 		String newData = this.propertyValue;
 		if (newData.length() > this.propertyMaxCharacter) {
@@ -276,13 +276,13 @@ public class Entry extends Box {
 		}
 		markToRedraw();
 	}
-	
+
 	@Override
 	protected void onDraw() {
 		super.onDraw();
 		this.text.draw();
 	}
-	
+
 	@Override
 	public void onEventClipboard(final ClipboardList clipboardID) {
 		// remove current selected data ...
@@ -306,7 +306,7 @@ public class Entry extends Box {
 		}
 		this.signalModify.emit(this.propertyValue);
 	}
-	
+
 	@Override
 	public boolean onEventEntry(final EventEntry event) {
 		LOGGER.trace("Event on Entry: {}", event);
@@ -382,7 +382,7 @@ public class Entry extends Box {
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected boolean onEventInput(final EventInput event) {
 		final Vector2f absolutePosition = event.pos();
@@ -404,7 +404,7 @@ public class Entry extends Box {
 			}
 		}
 		if (!isInside(relPos)) {
-			LOGGER.debug("Reject {}", relPos);
+			LOGGER.trace("Reject {}", relPos);
 			return false;
 		}
 		if (event.inputId() == 1) {
@@ -484,7 +484,7 @@ public class Entry extends Box {
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void onGetFocus() {
 		this.displayCursor = true;
@@ -492,7 +492,7 @@ public class Entry extends Box {
 		showKeyboard();
 		markToRedraw();
 	}
-	
+
 	@Override
 	protected void onLostFocus() {
 		this.displayCursor = false;
@@ -500,7 +500,7 @@ public class Entry extends Box {
 		hideKeyboard();
 		markToRedraw();
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
@@ -508,14 +508,14 @@ public class Entry extends Box {
 		}
 		regenerateDisplay();
 	}
-
+	
 	@Override
 	public void regenerateDisplay() {
 		super.regenerateDisplay();
 		// calculate the vertical offset to center the text:
 		final float offsetCenter = FMath.max(0.0f,
 				(FMath.abs(this.insidePositionStop.y() - this.insidePositionStart.y()) - this.text.getHeight()) * 0.5f);
-
+		
 		this.text.clear();
 		//this.text.setClippingWidth(this.insidePositionStart, this.insidePositionStop);
 		this.text.setPos(this.insidePositionStart.add(0, offsetCenter));
@@ -528,7 +528,7 @@ public class Entry extends Box {
 		if (this.propertyPassword) {
 			Arrays.fill(valueToDisplay, '*');
 		}
-		
+
 		//final Vector2f plop = new Vector2f(tmpOriginText.x() + this.displayStartPosition, tmpOriginText.y());
 		if (valueToDisplay.length != 0) {
 			this.text.print(new String(valueToDisplay));
@@ -538,7 +538,7 @@ public class Entry extends Box {
 		this.text.setClippingMode(false);
 		this.text.flush();
 	}
-	
+
 	/**
 	 * remove the selected area
 	 * @note This request a regeneration of the display
@@ -566,7 +566,7 @@ public class Entry extends Box {
 		this.propertyValue = tmp.toString();
 		markToRedraw();
 	}
-	
+
 	/**
 	 * internal check the value with RegExp checking
 	 * @param newData The new string to display
@@ -593,7 +593,7 @@ public class Entry extends Box {
 		this.propertyValue = newData;
 		markToRedraw();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "max")
@@ -605,7 +605,7 @@ public class Entry extends Box {
 		this.propertyMaxCharacter = propertyMaxCharacter;
 		onChangePropertyMaxCharacter();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "password")
@@ -617,7 +617,7 @@ public class Entry extends Box {
 		this.propertyPassword = propertyPassword;
 		onChangePropertyPassword();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "regex")
@@ -629,7 +629,7 @@ public class Entry extends Box {
 		this.propertyRegex = propertyRegex;
 		onChangePropertyRegex();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "empty-text")
@@ -645,7 +645,7 @@ public class Entry extends Box {
 		this.propertyTextWhenNothing = propertyTextWhenNothing;
 		onChangePropertyTextWhenNothing();
 	}
-	
+
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "value")
@@ -660,7 +660,7 @@ public class Entry extends Box {
 		this.displayCursorPosSelection = this.displayCursorPos;
 		markToRedraw();
 	}
-	
+
 	/**
 	 * change the cursor position with the current position requested on the display
 	 * @param pos Absolute position of the event
@@ -669,13 +669,13 @@ public class Entry extends Box {
 	protected void updateCursorPosition(final Vector2f pos) {
 		updateCursorPosition(pos, false);
 	}
-	
+
 	protected void updateCursorPosition(final Vector2f pos, final boolean selection/*=false*/) {
 		final Padding padding = Padding.ZERO;
-		
+
 		final Vector2f relPos = relativePosition(pos).less(this.overPositionStart);
 		// reject when outside ...
-		
+
 		// try to find the new cursor position :
 		if (this.displayStartPosition > this.propertyValue.length()) {
 			this.displayStartPosition = this.propertyValue.length();
@@ -713,7 +713,7 @@ public class Entry extends Box {
 		}
 		markToUpdateTextPosition();
 	}
-	
+
 	/**
 	 * update the display position start  == > depending of the position of the Cursor and the size of the Data inside
 	 * @change this.displayStartPosition < ==  updated
@@ -723,7 +723,7 @@ public class Entry extends Box {
 			return;
 		}
 		final Padding padding = Padding.ZERO;
-		
+
 		int tmpSizeX = (int) this.minSize.x();
 		if (this.propertyFill.x()) {
 			tmpSizeX = (int) this.size.x();
@@ -752,11 +752,11 @@ public class Entry extends Box {
 			//this.displayStartPosition = -totalWidth + tmpUserSize;
 		}
 	}
-	
+
 	// ========================================================================
 	// Factory methods and Fluent API
 	// ========================================================================
-	
+
 	/**
 	 * Create a new Entry.
 	 * @return a new Entry
@@ -764,7 +764,7 @@ public class Entry extends Box {
 	public static Entry create() {
 		return new Entry();
 	}
-	
+
 	/**
 	 * Fluent method to set text value.
 	 * @param value the text value
@@ -774,7 +774,7 @@ public class Entry extends Box {
 		setPropertyValue(value);
 		return this;
 	}
-	
+
 	/**
 	 * Fluent method to set placeholder text.
 	 * @param text the placeholder text
@@ -784,7 +784,7 @@ public class Entry extends Box {
 		setPropertyTextWhenNothing(text);
 		return this;
 	}
-	
+
 	/**
 	 * Fluent method to enable password mode.
 	 * @param password true for password mode
@@ -794,7 +794,7 @@ public class Entry extends Box {
 		setPropertyPassword(password);
 		return this;
 	}
-	
+
 	/**
 	 * Fluent method to set max characters.
 	 * @param max the maximum number of characters
@@ -804,7 +804,7 @@ public class Entry extends Box {
 		setPropertyMaxCharacter(max);
 		return this;
 	}
-	
+
 	/**
 	 * Fluent method to set regex validation.
 	 * @param regex the regex pattern
@@ -814,7 +814,7 @@ public class Entry extends Box {
 		setPropertyRegex(regex);
 		return this;
 	}
-	
+
 	/**
 	 * Fluent method to connect a modify callback.
 	 * @param callback the callback to invoke on text change
@@ -824,7 +824,7 @@ public class Entry extends Box {
 		this.signalModify.connect(callback::accept);
 		return this;
 	}
-	
+
 	/**
 	 * Fluent method to connect an enter callback.
 	 * @param callback the callback to invoke on enter key

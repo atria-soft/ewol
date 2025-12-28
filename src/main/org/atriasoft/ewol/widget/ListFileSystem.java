@@ -222,11 +222,11 @@ public class ListFileSystem extends WidgetList {
 					continue;
 				}
 				if (Files.isDirectory(path) && showFolder) {
-					LOGGER.error("Add Directory '{}'", path);
+					LOGGER.trace("Add Directory '{}'", path);
 					fileList.add(new File(path.toString()));
 				}
 				if (!Files.isDirectory(path) && showFiles) {
-					LOGGER.error("Add File      '{}'", path);
+					LOGGER.trace("Add File      '{}'", path);
 					fileList.add(new File(path.toString()));
 				}
 			}
@@ -245,7 +245,7 @@ public class ListFileSystem extends WidgetList {
 			}
 		}
 		if (event.status() == KeyStatus.pressSingle || event.status() == KeyStatus.pressDouble) {
-			LOGGER.debug("Event on List: IdInput={} pos={}", event.inputId(), pos);
+			LOGGER.trace("Event on List: IdInput={} pos={} status={}", event.inputId(), pos, event.status());
 			if (1 == event.inputId()) {
 				if (pos.y() > this.list.size() + offset) {
 					this.selectedLine = -1;
@@ -259,7 +259,7 @@ public class ListFileSystem extends WidgetList {
 					} else {
 						this.signalFolderValidate.emit(this.propertyPath);
 					}
-				} else if (this.propertyShowFolder && this.selectedLine == 1) {
+				} else if (this.propertyShowFolder && this.selectedLine == 1 && !this.propertyPath.equals("/")) {
 					// ".." folder
 					if (event.status() == KeyStatus.pressSingle) {
 						this.signalFolderSelect.emit(new File(this.propertyPath).getParent());
@@ -268,16 +268,17 @@ public class ListFileSystem extends WidgetList {
 					}
 				} else if (this.selectedLine - offset >= 0 && this.selectedLine - offset < this.list.size()) {
 					// generate event extern:
-					if (this.list.get(this.selectedLine - offset).isDirectory()) {
+					final File selectedFile = this.list.get(this.selectedLine - offset);
+					if (selectedFile.isDirectory()) {
 						if (event.status() == KeyStatus.pressSingle) {
-							this.signalFolderSelect.emit(this.list.get(this.selectedLine - offset).getPath());
+							this.signalFolderSelect.emit(selectedFile.getPath());
 						} else {
-							this.signalFolderValidate.emit(this.list.get(this.selectedLine - offset).getPath());
+							this.signalFolderValidate.emit(selectedFile.getPath());
 						}
 					} else if (event.status() == KeyStatus.pressSingle) {
-						this.signalFileSelect.emit(this.list.get(this.selectedLine - offset).getPath());
+						this.signalFileSelect.emit(selectedFile.getPath());
 					} else {
-						this.signalFileValidate.emit(this.list.get(this.selectedLine - offset).getPath());
+						this.signalFileValidate.emit(selectedFile.getPath());
 					}
 				}
 				// need to regenerate the display of the list :
@@ -311,7 +312,10 @@ public class ListFileSystem extends WidgetList {
 	}
 
 	public void setPropertyFile(final File propertyFile) {
-		if (this.propertyFile.equals(propertyFile)) {
+		if (this.propertyFile != null && this.propertyFile.equals(propertyFile)) {
+			return;
+		}
+		if (this.propertyFile == null && propertyFile == null) {
 			return;
 		}
 		this.propertyFile = propertyFile;
@@ -319,7 +323,7 @@ public class ListFileSystem extends WidgetList {
 	}
 
 	public void setPropertyFilter(final String propertyFilter) {
-		if (!this.propertyFilter.equals(propertyFilter)) {
+		if (this.propertyFilter.equals(propertyFilter)) {
 			return;
 		}
 		this.propertyFilter = propertyFilter;
@@ -445,7 +449,7 @@ public class ListFileSystem extends WidgetList {
 	 * @return this list for chaining
 	 */
 	public ListFileSystem onFileSelect(final java.util.function.Consumer<String> callback) {
-		this.signalFileSelect.connect(callback::accept);
+		this.signalFileSelect.connect(callback);
 		return this;
 	}
 
@@ -455,7 +459,7 @@ public class ListFileSystem extends WidgetList {
 	 * @return this list for chaining
 	 */
 	public ListFileSystem onFileValidate(final java.util.function.Consumer<String> callback) {
-		this.signalFileValidate.connect(callback::accept);
+		this.signalFileValidate.connect(callback);
 		return this;
 	}
 
@@ -465,7 +469,7 @@ public class ListFileSystem extends WidgetList {
 	 * @return this list for chaining
 	 */
 	public ListFileSystem onFolderSelect(final java.util.function.Consumer<String> callback) {
-		this.signalFolderSelect.connect(callback::accept);
+		this.signalFolderSelect.connect(callback);
 		return this;
 	}
 
@@ -475,7 +479,7 @@ public class ListFileSystem extends WidgetList {
 	 * @return this list for chaining
 	 */
 	public ListFileSystem onFolderValidate(final java.util.function.Consumer<String> callback) {
-		this.signalFolderValidate.connect(callback::accept);
+		this.signalFolderValidate.connect(callback);
 		return this;
 	}
 }
