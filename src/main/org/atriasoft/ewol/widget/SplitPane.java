@@ -153,6 +153,7 @@ public class SplitPane extends Widget {
 
 		// Check if position is on separator
 		if (isOnSeparator(pos)) {
+			LOGGER.debug("getWidgetAtPos: on separator, returning this");
 			return this;
 		}
 
@@ -160,9 +161,11 @@ public class SplitPane extends Widget {
 		if (this.firstWidget != null) {
 			final Vector2f tmpSize = this.firstWidget.getSize();
 			final Vector2f tmpOrigin = this.firstWidget.getOrigin();
+			LOGGER.debug("getWidgetAtPos: checking first widget pos={} origin={} size={}", pos, tmpOrigin, tmpSize);
 			if (pos.x() >= tmpOrigin.x() && pos.x() <= tmpOrigin.x() + tmpSize.x()
 					&& pos.y() >= tmpOrigin.y() && pos.y() <= tmpOrigin.y() + tmpSize.y()) {
 				final Widget result = this.firstWidget.getWidgetAtPos(pos);
+				LOGGER.debug("getWidgetAtPos: first widget hit, result={}", result);
 				if (result != null) {
 					return result;
 				}
@@ -173,15 +176,18 @@ public class SplitPane extends Widget {
 		if (this.secondWidget != null) {
 			final Vector2f tmpSize = this.secondWidget.getSize();
 			final Vector2f tmpOrigin = this.secondWidget.getOrigin();
+			LOGGER.debug("getWidgetAtPos: checking second widget pos={} origin={} size={}", pos, tmpOrigin, tmpSize);
 			if (pos.x() >= tmpOrigin.x() && pos.x() <= tmpOrigin.x() + tmpSize.x()
 					&& pos.y() >= tmpOrigin.y() && pos.y() <= tmpOrigin.y() + tmpSize.y()) {
 				final Widget result = this.secondWidget.getWidgetAtPos(pos);
+				LOGGER.debug("getWidgetAtPos: second widget hit, result={}", result);
 				if (result != null) {
 					return result;
 				}
 			}
 		}
 
+		LOGGER.debug("getWidgetAtPos: no widget found, returning this");
 		return this;
 	}
 

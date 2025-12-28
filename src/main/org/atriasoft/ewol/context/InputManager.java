@@ -296,7 +296,6 @@ class InputManager {
 		final Windows tmpWindows = this.context.getWindows();
 
 		if (isDown) {
-			//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [DOWN] " + pos);
 			if (eventTable[pointerID].isUsed) {
 				// we have an event previously ... check delay between click and offset position
 				if (currentTime - eventTable[pointerID].lastTimeEvent > localLimit.sepatateTime) {
@@ -324,12 +323,15 @@ class InputManager {
 				// set the element inside ...
 				eventTable[pointerID].isInside = true;
 				Widget tmpWidget = this.grabWidget == null ? null : this.grabWidget.get();
+				LOGGER.info("InputManager: DOWN event grabWidget={}", tmpWidget != null ? tmpWidget.getClass().getSimpleName() : "null");
 				// get destination widget :
 				if (tmpWindows != null) {
 					if (tmpWidget != null && type == KeyType.mouse) {
+						LOGGER.info("InputManager: using grabWidget for mouse");
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 					} else {
 						tmpWidget = tmpWindows.getWidgetAtPos(pos);
+						LOGGER.info("InputManager: getWidgetAtPos returned: {}", tmpWidget != null ? tmpWidget.getClass().getSimpleName() : "null");
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 						/*
 						if (tmpWidget != null) {
