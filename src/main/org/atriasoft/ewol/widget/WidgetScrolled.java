@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
  */
-class WidgetScrolled extends Widget {
+public class WidgetScrolled extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WidgetScrolled.class);
 
 	public enum ScrollingMode {
@@ -32,23 +32,22 @@ class WidgetScrolled extends Widget {
 	}
 	
 	public static final int CALCULATE_SIMULTANEOUS_FINGER = 5;
-	protected Uri propertyShapeVert = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Vertical shaper name
-	protected Uri propertyShapeHori = new Uri("THEME", "shape/WidgetScrolled.json", "ewol"); //!< Horizontal shaper name
+	protected Uri propertyShapeVert = new Uri("THEME", "shape/WidgetScrolled.json", "ewol");
+	protected Uri propertyShapeHori = new Uri("THEME", "shape/WidgetScrolled.json", "ewol");
 	
 	protected CompositingSVG compositingH = new CompositingSVG();
 	protected CompositingSVG compositingV = new CompositingSVG();
-	protected Vector2f originScrooled = Vector2f.ZERO; //!< pixel distance from the origin of the display (Bottum left)
-	protected Vector2f maxSize; //!< Maximum size of the Widget ==> to display scrollbar
-	protected Vector2f limitScrolling = Vector2f.ZERO; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
-	// Mouse section :
-	private ScrollingMode scroollingMode = ScrollingMode.scroolModeNormal; //!< mode of management of the scrooling
+	protected Vector2f originScrooled = Vector2f.ZERO;
+	protected Vector2f maxSize;
+	protected Vector2f limitScrolling = Vector2f.ZERO;
+	private ScrollingMode scroollingMode = ScrollingMode.scroolModeNormal;
 	private float pixelScrolling = 20;
 	private Vector2f highSpeedStartPos;
 	private HighSpeedMode highSpeedMode = HighSpeedMode.speedModeDisable;
 	private int highSpeedButton = -1;
 	private KeyType highSpeedType = KeyType.unknow;
 	// finger section:
-	private boolean singleFingerMode = true; //!< in many case the moving in a subwidget is done with one finger, it is enought ==> the user select...
+	private boolean singleFingerMode = true;
 	private final boolean[] fingerPresent = { false, false, false, false, false };
 	private boolean fingerScoolActivated = false;
 	private final Vector2f[] fingerMoveStartPos = new Vector2f[CALCULATE_SIMULTANEOUS_FINGER];
@@ -113,7 +112,7 @@ class WidgetScrolled extends Widget {
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		LOGGER.trace("event XXX {}", event);
+		LOGGER.trace("event: {}", event);
 		Vector2f relativePos = relativePosition(new Vector2f(event.pos().x(), event.pos().y()));
 		// Correction due to the open Gl insertion ...
 		relativePos = relativePos.withY(this.size.y() - relativePos.y());
@@ -318,7 +317,7 @@ class WidgetScrolled extends Widget {
 					}
 					if (this.fingerPresent[0] && this.fingerPresent[1] && !this.fingerScoolActivated) {
 						this.fingerScoolActivated = true;
-						LOGGER.trace("SCROOL  == > START pos=" + this.fingerMoveStartPos);
+						LOGGER.trace("SCROOL  == > START pos={}", this.fingerMoveStartPos);
 					}
 					if (this.fingerScoolActivated) {
 						// 1: HighSpeedMode...
@@ -333,8 +332,8 @@ class WidgetScrolled extends Widget {
 							this.originScrooled = this.originScrooled.withY(FMath.avg(0.0f, this.originScrooled.y(),
 									(this.maxSize.y() - this.size.y() * this.limitScrolling.y())));
 							this.fingerMoveStartPos[idTable] = new Vector2f(relativePos.x(), relativePos.y());
-							LOGGER.trace("SCROOL  == > MOVE this.originScrooled=" + this.originScrooled + " "
-									+ relativePos + " " + this.highSpeedStartPos);
+							LOGGER.trace("SCROOL  == > MOVE this.originScrooled={} {} {}", this.originScrooled,
+									relativePos, this.highSpeedStartPos);
 							markToRedraw();
 						}
 						if (!this.fingerPresent[0] && !this.fingerPresent[1]) {
@@ -350,7 +349,7 @@ class WidgetScrolled extends Widget {
 				// ** Single finger mode : **
 				// **************************
 				if (event.inputId() == 1) {
-					LOGGER.trace("event 1  " + event);
+					LOGGER.trace("event 1: {}", event);
 					if (event.status() == KeyStatus.down) {
 						this.highSpeedMode = HighSpeedMode.speedModeInit;
 						this.highSpeedType = KeyType.finger;
@@ -394,8 +393,8 @@ class WidgetScrolled extends Widget {
 						this.originScrooled = this.originScrooled.withY(FMath.avg(0.0f, this.originScrooled.y(),
 								(this.maxSize.y() - this.size.y() * this.limitScrolling.y())));
 						this.highSpeedStartPos = new Vector2f(relativePos.x(), relativePos.y());
-						LOGGER.trace("SCROOL  == > MOVE this.originScrooled=" + this.originScrooled + " " + relativePos
-								+ " " + this.highSpeedStartPos);
+						LOGGER.trace("SCROOL  == > MOVE this.originScrooled={} {} {}", this.originScrooled, relativePos,
+								this.highSpeedStartPos);
 						markToRedraw();
 						return true;
 					}
@@ -434,9 +433,9 @@ class WidgetScrolled extends Widget {
 				}
 			}
 		} else if (this.scroollingMode == ScrollingMode.scroolModeGame) {
-			
+
 		} else {
-			LOGGER.error("Scrolling mode unknow ... " + this.scroollingMode);
+			LOGGER.error("Scrolling mode unknown: {}", this.scroollingMode);
 		}
 		return false;
 	}

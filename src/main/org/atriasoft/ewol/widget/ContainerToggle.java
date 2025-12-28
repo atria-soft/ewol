@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class ContainerToggle extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerToggle.class);
 	protected Widget[] subWidget = new Widget[2];
-	int idWidgetDisplayed = 0; //!< current widget displayed
+	int idWidgetDisplayed = 0;
 	
 	/**
 	 * Constructor
@@ -172,7 +172,7 @@ public class ContainerToggle extends Widget {
 		subWidgetRemove(idWidget);
 		this.subWidget[idWidget] = newWidget;
 		if (this.subWidget[idWidget] != null) {
-			LOGGER.trace("Add widget : " + idWidget);
+			LOGGER.trace("Add widget: {}", idWidget);
 			this.subWidget[idWidget].setParent(this);
 		}
 		markToRedraw();
@@ -187,7 +187,7 @@ public class ContainerToggle extends Widget {
 	
 	public void subWidgetRemove(final int idWidget) {
 		if (this.subWidget[idWidget] != null) {
-			LOGGER.trace("Remove widget : " + idWidget);
+			LOGGER.trace("Remove widget: {}", idWidget);
 			this.subWidget[idWidget].removeParent();
 			this.subWidget[idWidget] = null;
 			markToRedraw();
@@ -219,7 +219,7 @@ public class ContainerToggle extends Widget {
 	public void subWidgetUnLink(final int idWidget) {
 		if (this.subWidget[idWidget] != null) {
 			this.subWidget[idWidget].removeParent();
-			LOGGER.trace("Unlink widget : " + idWidget);
+			LOGGER.trace("Unlink widget: {}", idWidget);
 		}
 		this.subWidget[idWidget] = null;
 	}
@@ -227,16 +227,74 @@ public class ContainerToggle extends Widget {
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {
-			// widget is hidden ...
 			return;
 		}
 		super.systemDraw(displayProp);
 		if (this.subWidget[this.idWidgetDisplayed] != null) {
 			final DrawProperty prop = displayProp.withLimit(this.origin, this.size);
-			//LOGGER.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
 			this.subWidget[this.idWidgetDisplayed].systemDraw(prop);
 		} else {
-			LOGGER.info("[" + getId() + "]       ++++++ : [null]");
+			LOGGER.debug("[{}]       ++++++ : [null]", getId());
 		}
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new ContainerToggle.
+	 * @return a new ContainerToggle
+	 */
+	public static ContainerToggle create() {
+		return new ContainerToggle();
+	}
+
+	/**
+	 * Fluent method to set first widget.
+	 * @param widget the first widget
+	 * @return this container for chaining
+	 */
+	public ContainerToggle first(final Widget widget) {
+		setSubWidget(widget, 0);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set second widget.
+	 * @param widget the second widget
+	 * @return this container for chaining
+	 */
+	public ContainerToggle second(final Widget widget) {
+		setSubWidget(widget, 1);
+		return this;
+	}
+
+	/**
+	 * Fluent method to show first widget.
+	 * @return this container for chaining
+	 */
+	public ContainerToggle showFirst() {
+		this.idWidgetDisplayed = 0;
+		markToRedraw();
+		return this;
+	}
+
+	/**
+	 * Fluent method to show second widget.
+	 * @return this container for chaining
+	 */
+	public ContainerToggle showSecond() {
+		this.idWidgetDisplayed = 1;
+		markToRedraw();
+		return this;
+	}
+
+	/**
+	 * Toggle between first and second widget.
+	 */
+	public void toggle() {
+		this.idWidgetDisplayed = (this.idWidgetDisplayed + 1) % 2;
+		markToRedraw();
 	}
 }

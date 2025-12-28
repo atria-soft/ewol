@@ -34,6 +34,7 @@ import org.atriasoft.ewol.widget.CheckBox;
 import org.atriasoft.ewol.widget.Container;
 import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.Label;
+import org.atriasoft.ewol.widget.ScrollView;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 import org.atriasoft.ewol.widget.Spacer;
@@ -45,25 +46,25 @@ import org.slf4j.LoggerFactory;
 public class ModelWidget extends Container {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModelWidget.class);
 	private static final String LABEL_GRAVITY = "gravity: ";
-	
+
 	Widget testWidget;
 	Sizer sizerTestAreaHori;
 	Sizer sizerMenuRoot;
 	Sizer sizerMenu;
-	
+
 	Gravity basicGravity = Gravity.BOTTOM_LEFT;
-	
+
 	private final List<Connection> conections = new ArrayList<>();
-	
+
 	public ModelWidget(final TestWidgetInterface interfaceToTest) {
-		
+
 		setPropertyExpand(Vector2b.TRUE);
 		setPropertyFill(Vector2b.TRUE);
 		final var sizerMain = new Sizer(DisplayMode.HORIZONTAL);
 		sizerMain.setPropertyExpand(Vector2b.TRUE);
 		sizerMain.setPropertyFill(Vector2b.TRUE);
 		setSubWidget(sizerMain);
-		
+
 		this.sizerMenuRoot = new Sizer(DisplayMode.VERTICAL);
 		this.sizerMenuRoot.setPropertyExpand(Vector2b.FALSE_TRUE);
 		this.sizerMenuRoot.setPropertyLockExpand(Vector2b.TRUE);
@@ -71,20 +72,24 @@ public class ModelWidget extends Container {
 		this.sizerMenuRoot.setPropertyMinSize(new Dimension2f(new Vector2f(350, 10), Distance.PIXEL));
 		this.sizerMenuRoot.setPropertyGravity(Gravity.TOP);
 		sizerMain.subWidgetAdd(this.sizerMenuRoot);
-		
+
 		this.sizerMenu = new Sizer(DisplayMode.VERTICAL);
-		this.sizerMenu.setPropertyExpand(Vector2b.FALSE_TRUE);
-		this.sizerMenu.setPropertyLockExpand(Vector2b.TRUE);
-		this.sizerMenu.setPropertyFill(Vector2b.TRUE);
+		this.sizerMenu.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.sizerMenu.setPropertyFill(Vector2b.TRUE_FALSE);
 		this.sizerMenu.setPropertyMinSize(new Dimension2f(new Vector2f(350, 10), Distance.PIXEL));
 		this.sizerMenu.setPropertyGravity(Gravity.TOP);
-		this.sizerMenuRoot.subWidgetAdd(this.sizerMenu);
 		
+		// Wrap sizerMenu in a ScrollView for scrolling when there are many parameters
+		final var scrollView = ScrollView.create().content(this.sizerMenu).showVertical(true).showHorizontal(false)
+				.expand(true, true).fill(true, true);
+		scrollView.setPropertyGravity(Gravity.TOP);
+		this.sizerMenuRoot.subWidgetAdd(scrollView);
+
 		final var sizerVertMain = new Sizer(DisplayMode.VERTICAL);
 		sizerVertMain.setPropertyExpand(Vector2b.TRUE);
 		sizerVertMain.setPropertyFill(Vector2b.TRUE);
 		sizerMain.subWidgetAdd(sizerVertMain);
-		
+
 		{
 			final var simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_128, Distance.PIXEL));
@@ -95,13 +100,13 @@ public class ModelWidget extends Container {
 			simpleSpacer.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 			sizerVertMain.subWidgetAdd(simpleSpacer);
 		}
-		
+
 		this.sizerTestAreaHori = new Sizer(DisplayMode.HORIZONTAL);
 		this.sizerTestAreaHori.setPropertyExpand(Vector2b.TRUE_FALSE);
 		this.sizerTestAreaHori.setPropertyExpandIfFree(Vector2b.TRUE);
 		this.sizerTestAreaHori.setPropertyFill(Vector2b.TRUE_FALSE);
 		sizerVertMain.subWidgetAdd(this.sizerTestAreaHori);
-		
+
 		{
 			final var simpleSpacer = new Spacer();
 			simpleSpacer.setPropertyColor(Color.DARK_GREEN);
@@ -114,11 +119,11 @@ public class ModelWidget extends Container {
 		// add the default widget to test:
 		setTestWidget(interfaceToTest.getWidget());
 	}
-	
+
 	public void addButton(final Widget widget) {
 		this.sizerMenu.subWidgetAdd(widget);
 	}
-	
+
 	public void addMenuBoolean(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -145,7 +150,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuDimension1f(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -160,7 +165,7 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -184,7 +189,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuDimension2f(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -199,14 +204,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("X");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -232,14 +237,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Y");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -262,7 +267,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuDimension3f(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -277,14 +282,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("X");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -310,14 +315,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Y");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -343,14 +348,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Z");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -373,7 +378,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuDouble(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -400,7 +405,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuFloat(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -427,7 +432,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuGravity(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -445,7 +450,7 @@ public class ModelWidget extends Container {
 			this.sizerMenu.subWidgetAdd(buttonGravity);
 			final var gravLabel = (Label) buttonGravity.getSubWidget();
 			gravLabel.setPropertyValue(LABEL_GRAVITY + Gravity.BOTTOM_LEFT);
-			
+
 			final var con = buttonGravity.signalClick.connect(() -> {
 				try {
 					final var oldValue = pojo.getValue(widget);
@@ -458,14 +463,14 @@ public class ModelWidget extends Container {
 							state = new Gravity(GravityHorizontal.RIGHT, GravityVertical.BOTTOM, GravityDepth.CENTER);
 						} else if (state.x() == GravityHorizontal.RIGHT && state.y() == GravityVertical.BOTTOM) {
 							state = new Gravity(GravityHorizontal.LEFT, GravityVertical.CENTER, GravityDepth.CENTER);
-							
+
 						} else if (state.x() == GravityHorizontal.LEFT && state.y() == GravityVertical.CENTER) {
 							state = new Gravity(GravityHorizontal.CENTER, GravityVertical.CENTER, GravityDepth.CENTER);
 						} else if (state.x() == GravityHorizontal.CENTER && state.y() == GravityVertical.CENTER) {
 							state = new Gravity(GravityHorizontal.RIGHT, GravityVertical.CENTER, GravityDepth.CENTER);
 						} else if (state.x() == GravityHorizontal.RIGHT && state.y() == GravityVertical.CENTER) {
 							state = new Gravity(GravityHorizontal.LEFT, GravityVertical.TOP, GravityDepth.CENTER);
-							
+
 						} else if (state.x() == GravityHorizontal.LEFT && state.y() == GravityVertical.TOP) {
 							state = new Gravity(GravityHorizontal.CENTER, GravityVertical.TOP, GravityDepth.CENTER);
 						} else if (state.x() == GravityHorizontal.CENTER && state.y() == GravityVertical.TOP) {
@@ -485,7 +490,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuInt(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -504,7 +509,7 @@ public class ModelWidget extends Container {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
 					pojo.setExistingValue(widget, (int) (long) valueButton);
-					
+
 				} catch (final AknotException e) {
 					e.printStackTrace();
 					return;
@@ -513,7 +518,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuLong(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -540,7 +545,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuString(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -567,7 +572,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuURI(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -594,7 +599,7 @@ public class ModelWidget extends Container {
 			this.conections.add(con);
 		}
 	}
-	
+
 	public void addMenuVector2b(final Widget widget, final IntrospectionProperty pojo) {
 		final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
 		Object valueRaw = null;
@@ -648,9 +653,9 @@ public class ModelWidget extends Container {
 				this.conections.add(con);
 			}
 		}
-		
+
 	}
-	
+
 	public void addMenuVector2f(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -665,14 +670,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("X");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -697,14 +702,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Y");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -726,7 +731,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuVector2i(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -741,14 +746,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("X");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -773,14 +778,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Y");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -802,7 +807,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuVector3b(final Widget widget, final IntrospectionProperty pojo) {
 		final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
 		Object valueRaw = null;
@@ -875,9 +880,9 @@ public class ModelWidget extends Container {
 				this.conections.add(con);
 			}
 		}
-		
+
 	}
-	
+
 	public void addMenuVector3f(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -892,14 +897,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("X");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -924,14 +929,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Y");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -956,14 +961,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Z");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -985,7 +990,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuVector3i(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -1000,14 +1005,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("X");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1032,14 +1037,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Y");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1064,14 +1069,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("Z");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1093,7 +1098,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void connectAllSignals(final Widget widget, final IntrospectionModelComplex modelPojo) throws Exception {
 		LOGGER.warn("Connect all signal(s) on '{}'", widget.getName());
 		final var signals = modelPojo.getSignals();
@@ -1102,10 +1107,10 @@ public class ModelWidget extends Container {
 			LOGGER.warn("        ==> description='{}'", pojo.getDescription());
 			LOGGER.warn("        ==> type='{}'", pojo.getType());
 			LOGGER.warn("        ==> sub-type='{}'", pojo.getSubType());
-			
+
 			final var eventName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0]
 					: pojo.getBeanName();
-			
+
 			if (pojo.getSubType() != null && pojo.getType() == Signal.class) {
 				LOGGER.warn("        ** Signal<{}>", pojo.getSubType());
 				final var signalObject = pojo.getValue(widget);
@@ -1132,11 +1137,11 @@ public class ModelWidget extends Container {
 						LOGGER.info("Get event from '{}'", valueNameOfSignal);
 					});
 				}
-				
+
 			}
 		}
 	}
-	
+
 	public void addMenuDimensionBorderRadius(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -1151,14 +1156,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("bottom-left");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1187,14 +1192,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("bottom-right");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1223,14 +1228,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("top-right");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1259,14 +1264,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("top-left");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1292,7 +1297,7 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void addMenuDimensionInsets(final Widget widget, final IntrospectionProperty pojo) {
 		Object valueRaw = null;
 		try {
@@ -1307,14 +1312,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("left");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1343,14 +1348,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("bottom");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1379,14 +1384,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("right");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1415,14 +1420,14 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
-				
+
 				final var simpleLabel = new Label("top");
 				simpleLabel.setPropertyExpand(Vector2b.FALSE);
 				simpleLabel.setPropertyFill(Vector2b.TRUE);
 				simpleLabel.setPropertyMinSize(new Dimension2f(new Vector2f(100, 0), Distance.PIXEL));
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
-				
+
 				final var spin = new Spin();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
@@ -1448,15 +1453,15 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void displayAllPropertyWithType(final Widget widget, final IntrospectionModel modelPojo) throws Exception {
 		LOGGER.warn("Connect all property(ies) on '{}'", widget.getName());
 		final var atributes = modelPojo.getAttributes();
 		for (final IntrospectionProperty pojo : atributes) {
-			LOGGER.warn("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
-			LOGGER.warn("        ==> description='{}'", pojo.getDescription());
-			LOGGER.warn("        ==> type='{}'", pojo.getType());
-			LOGGER.warn("        ==> sub-type='{}'", pojo.getSubType());
+			LOGGER.trace("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
+			LOGGER.trace("        ==> description='{}'", pojo.getDescription());
+			LOGGER.trace("        ==> type='{}'", pojo.getType());
+			LOGGER.trace("        ==> sub-type='{}'", pojo.getSubType());
 			final var propertyName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0]
 					: pojo.getBeanName();
 			if (pojo.getType() == int.class || pojo.getType() == Integer.class) {
@@ -1512,12 +1517,12 @@ public class ModelWidget extends Container {
 			}
 		}
 	}
-	
+
 	public void setTestWidget(final Widget widget) {
 		this.sizerMenu.subWidgetRemoveAll();
 		try {
 			final var modelPojo = new IntrospectionModelComplex(widget.getClass());
-			
+
 			connectAllSignals(widget, modelPojo);
 			displayAllPropertyWithType(widget, modelPojo);
 		} catch (final Exception e) {
@@ -1551,10 +1556,10 @@ public class ModelWidget extends Container {
 		// final Vector3b stateFill = this.testWidget.getPropertyFill();
 		// this.buttonFillX.setPropertyValue(stateFill.x());
 		// this.buttonFillY.setPropertyValue(stateFill.y());
-		
+
 		// final Gravity gravity = this.testWidget.getPropertyGravity();
 		// final Label gravLabel = (Label) (this.buttonGravity.getSubWidgets()[0]);
 		// gravLabel.setPropertyValue(LABEL_GRAVITY + gravity.toString());
 	}
-	
+
 }

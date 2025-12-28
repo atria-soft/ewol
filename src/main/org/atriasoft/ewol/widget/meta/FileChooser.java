@@ -114,7 +114,7 @@ public class FileChooser extends Composer {
 
 	protected static void onCallbackHomePressed(final FileChooser self) {
 		final String tmpUserFolder = System.getProperty("user.home");
-		LOGGER.debug("new PATH: '" + tmpUserFolder + "'");
+		LOGGER.debug("new PATH: '{}'", tmpUserFolder);
 
 		self.propertyPath = tmpUserFolder;
 		self.propertyFile = "";
@@ -133,26 +133,26 @@ public class FileChooser extends Composer {
 	protected static void onCallbackListFileValidate(final FileChooser self, final String value) {
 		// select the file  == > generate a validate
 		self.setPropertyFile(value);
-		LOGGER.trace(" generate a fiel opening : '" + self.propertyFile + "'");
+		LOGGER.trace(" generate a file opening : '{}'", self.propertyFile);
 		self.signalValidate.emit(value);
 		self.autoDestroy();
 	}
 
 	protected static void onCallbackListFolderSelectChange(final FileChooser self, final String value) {
 		// == > this is an internal event ...
-		LOGGER.debug(" old PATH: '" + self.propertyPath + "' ==> '" + value + "'");
+		LOGGER.debug(" old PATH: '{}' ==> '{}'", self.propertyPath, value);
 		self.propertyPath = value;
-		LOGGER.debug("new PATH: '" + self.propertyPath + "'");
+		LOGGER.debug("new PATH: '{}'", self.propertyPath);
 		self.propertyFile = "";
 		self.updateCurrentFolder();
 	}
 
 	protected static void onCallbackListValidate(final FileChooser self) {
 		if (self.propertyFile.isEmpty()) {
-			LOGGER.warn(" Validate : '" + self.propertyFile + "' ==> error No name ...");
+			LOGGER.warn(" Validate : '{}' ==> error No name ...", self.propertyFile);
 			return;
 		}
-		LOGGER.debug(" generate a file opening : '" + self.propertyFile + "'");
+		LOGGER.debug(" generate a file opening : '{}'", self.propertyFile);
 		self.signalValidate.emit(self.propertyFile);
 		self.autoDestroy();
 	}

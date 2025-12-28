@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -31,15 +31,15 @@ public class Label extends Widget {
 	@AknotName("pressed")
 	@AknotDescription("Label is pressed")
 	public SignalEmpty signalPressed = new SignalEmpty();
-	private String propertyValue = ""; //!< decorated text to display.
-	private int propertyFontSize = 0; //!< default size of the font.
-	private final CompositingText textCompose = new CompositingText(); //!< Compositing text element.
+	private String propertyValue = "";
+	private int propertyFontSize = 0;
+	private final CompositingText textCompose = new CompositingText();
 	private String value = "";
 	
-	protected int colorDefaultBgText = -1; //!< Default Background color of the text
-	protected int colorDefaultFgText = -1; //!< Default color of the text
-	protected ResourceColorFile colorProperty; //!< theme color property
-	protected boolean propertyAutoTranslate = true; //!< if at true the data is translate automaticaly translate.
+	protected int colorDefaultBgText = -1;
+	protected int colorDefaultFgText = -1;
+	protected ResourceColorFile colorProperty;
+	protected boolean propertyAutoTranslate = true;
 	
 	public Label() {
 		this("---");
@@ -227,5 +227,57 @@ public class Label extends Widget {
 		requestUpdateSize();
 		this.propertyValue = propertyValue;
 	}
-	
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Label with text.
+	 * @param text the text to display
+	 * @return a new Label
+	 */
+	public static Label create(final String text) {
+		return new Label(text);
+	}
+
+	/**
+	 * Fluent method to set text value.
+	 * @param text the text to display
+	 * @return this label for chaining
+	 */
+	public Label text(final String text) {
+		setPropertyValue(text);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set font size.
+	 * @param size the font size (0 for system default)
+	 * @return this label for chaining
+	 */
+	public Label fontSize(final int size) {
+		setPropertyFontSize(size);
+		return this;
+	}
+
+	/**
+	 * Fluent method to enable/disable auto-translation.
+	 * @param autoTranslate true to enable auto-translation
+	 * @return this label for chaining
+	 */
+	public Label autoTranslate(final boolean autoTranslate) {
+		setPropertyAutoTranslate(autoTranslate);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a pressed callback.
+	 * @param callback the callback to invoke when pressed
+	 * @return this label for chaining
+	 */
+	public Label onPressed(final Runnable callback) {
+		this.signalPressed.connect(callback);
+		return this;
+	}
 }

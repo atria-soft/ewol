@@ -59,20 +59,20 @@ public class ListFileSystem extends WidgetList {
 	@AknotName(value = "folder-validate")
 	@AknotDescription(value = "A folder has been validated on the list (double clicked or return pressed)")
 	public Signal<String> signalFolderValidate = new Signal<>();
-	protected String propertyPath = "/"; //!< Current folder that display point on.
-	protected File propertyFile = null; //!< current selected file
-	protected boolean propertyShowFile = true; //!< Show files elements
-	protected boolean propertyShowFolder = true; //!< Display the folders elements
-	protected boolean propertyShowHidden = true; //!< Display hidden elements
-	protected String propertyFilter = "^.*$"; //!< Regular expression to filter the view (for temporary file:".*(~|.bck|.pyc)\e")
+	protected String propertyPath = "/";
+	protected File propertyFile = null;
+	protected boolean propertyShowFile = true;
+	protected boolean propertyShowFolder = true;
+	protected boolean propertyShowHidden = true;
+	protected String propertyFilter = "^.*$";
 
-	protected ResourceColorFile colorProperty; //!< theme color property.
-	protected int colorIdText = -1; //!< Color of the text.
-	protected int colorIdBackground1 = -1; //!< Color of the Background.
-	protected int colorIdBackground2 = -1; //!< Color of the Background 2.
-	protected int colorIdBackgroundSelected = -1; //!< Color of line selected.
-	protected List<File> list = new ArrayList<>(); //!< List of all element in the File. (they are filtered)
-	protected int selectedLine; //!< Current Line ID that is selected
+	protected ResourceColorFile colorProperty;
+	protected int colorIdText = -1;
+	protected int colorIdBackground1 = -1;
+	protected int colorIdBackground2 = -1;
+	protected int colorIdBackgroundSelected = -1;
+	protected List<File> list = new ArrayList<>();
+	protected int selectedLine;
 
 	public ListFileSystem() {
 
@@ -245,7 +245,7 @@ public class ListFileSystem extends WidgetList {
 			}
 		}
 		if (event.status() == KeyStatus.pressSingle || event.status() == KeyStatus.pressDouble) {
-			LOGGER.trace("Event on List : IdInput=" + event.inputId() + " _pos=" + pos);
+			LOGGER.debug("Event on List: IdInput={} pos={}", event.inputId(), pos);
 			if (1 == event.inputId()) {
 				if (pos.y() > this.list.size() + offset) {
 					this.selectedLine = -1;
@@ -374,5 +374,108 @@ public class ListFileSystem extends WidgetList {
 			}
 		}
 		markToRedraw();
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new ListFileSystem.
+	 * @return a new ListFileSystem
+	 */
+	public static ListFileSystem create() {
+		return new ListFileSystem();
+	}
+
+	/**
+	 * Create a new ListFileSystem with path.
+	 * @param path the initial path
+	 * @return a new ListFileSystem
+	 */
+	public static ListFileSystem create(final String path) {
+		final ListFileSystem list = new ListFileSystem();
+		list.setPropertyPath(path);
+		return list;
+	}
+
+	/**
+	 * Fluent method to set path.
+	 * @param path the path to display
+	 * @return this list for chaining
+	 */
+	public ListFileSystem path(final String path) {
+		setPropertyPath(path);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set file visibility.
+	 * @param show true to show files
+	 * @return this list for chaining
+	 */
+	public ListFileSystem showFiles(final boolean show) {
+		setPropertyShowFile(show);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set folder visibility.
+	 * @param show true to show folders
+	 * @return this list for chaining
+	 */
+	public ListFileSystem showFolders(final boolean show) {
+		setPropertyShowFolder(show);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set hidden visibility.
+	 * @param show true to show hidden elements
+	 * @return this list for chaining
+	 */
+	public ListFileSystem showHidden(final boolean show) {
+		setPropertyShowHidden(show);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a file select callback.
+	 * @param callback the callback to invoke when file is selected
+	 * @return this list for chaining
+	 */
+	public ListFileSystem onFileSelect(final java.util.function.Consumer<String> callback) {
+		this.signalFileSelect.connect(callback::accept);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a file validate callback.
+	 * @param callback the callback to invoke when file is validated
+	 * @return this list for chaining
+	 */
+	public ListFileSystem onFileValidate(final java.util.function.Consumer<String> callback) {
+		this.signalFileValidate.connect(callback::accept);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a folder select callback.
+	 * @param callback the callback to invoke when folder is selected
+	 * @return this list for chaining
+	 */
+	public ListFileSystem onFolderSelect(final java.util.function.Consumer<String> callback) {
+		this.signalFolderSelect.connect(callback::accept);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a folder validate callback.
+	 * @param callback the callback to invoke when folder is validated
+	 * @return this list for chaining
+	 */
+	public ListFileSystem onFolderValidate(final java.util.function.Consumer<String> callback) {
+		this.signalFolderValidate.connect(callback::accept);
+		return this;
 	}
 }

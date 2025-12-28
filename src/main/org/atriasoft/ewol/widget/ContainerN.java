@@ -1,10 +1,10 @@
 package org.atriasoft.ewol.widget;
 
-/** @file
-* @author Edouard DUPIN
-* @copyright 2011, Edouard DUPIN, all right reserved
-* @license MPL v2.0 (see license file)
-*/
+/*
+ * @author Edouard DUPIN
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * @license MPL v2.0 (see license file)
+ */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,9 @@ import org.slf4j.LoggerFactory;
 public class ContainerN extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerN.class);
 
-	protected Vector2b propertyLockExpand = Vector2b.FALSE; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
-	protected Vector2b subExpend = Vector2b.FALSE; //!< reference of the sub element expention requested.
+	/** Lock the expand of sub widgets */
+	protected Vector2b propertyLockExpand = Vector2b.FALSE;
+	protected Vector2b subExpend = Vector2b.FALSE;
 	protected List<Widget> subWidget = new ArrayList<>();
 
 	/**
@@ -230,7 +231,7 @@ public class ContainerN extends Widget {
 	 */
 	public int subWidgetAdd(final Widget newWidget) {
 		if (newWidget == null) {
-			LOGGER.error("[" + getId() + "] {" + getClass().getCanonicalName() + "} Try to add An empty Widget ... ");
+			LOGGER.error("[{}] {{}} Try to add An empty Widget", getId(), getClass().getCanonicalName());
 			return -1;
 		}
 		newWidget.setParent(this);
@@ -263,8 +264,7 @@ public class ContainerN extends Widget {
 	 */
 	public int subWidgetAddStart(final Widget newWidget) {
 		if (newWidget == null) {
-			LOGGER.error(
-					"[" + getId() + "] {" + getClass().getCanonicalName() + "} Try to add start An empty Widget ... ");
+			LOGGER.error("[{}] {{}} Try to add start An empty Widget", getId(), getClass().getCanonicalName());
 			return -1;
 		}
 		if (newWidget != null) {
@@ -381,9 +381,24 @@ public class ContainerN extends Widget {
 		while (it.hasPrevious()) {
 			final Widget elem = it.previous();
 			if (elem != null) {
-				//LOGGER.info("       ***** : [" + (*it).propertyName + "] t=" + (*it).getObjectType() + " o=" + (*it).this.origin + "  s=" + (*it).this.size);
 				elem.systemDraw(prop);
 			}
 		}
+	}
+
+	// ========================================================================
+	// Fluent API methods
+	// ========================================================================
+
+	/**
+	 * Fluent method to lock expand property.
+	 * @param x lock horizontal expand
+	 * @param y lock vertical expand
+	 * @return this container for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ContainerN> T lockExpand(final boolean x, final boolean y) {
+		setPropertyLockExpand(new Vector2b(x, y));
+		return (T) this;
 	}
 }

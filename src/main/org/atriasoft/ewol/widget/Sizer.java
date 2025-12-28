@@ -47,11 +47,11 @@ public class Sizer extends ContainerN {
 
 	@Override
 	public void calculateMinMaxSize() {
-		LOGGER.trace("[" + getId() + "] update minimum size");
+		LOGGER.trace("[{}] update minimum size", getId());
 		this.subExpend = Vector2b.FALSE;
 		this.minSize = this.propertyMinSize.getPixel();
 		final Vector2f tmpBorderSize = this.propertyBorderSize.getPixel();
-		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} set min size : " + this.minSize);
+		LOGGER.trace("[{}] {{}} set min size: {}", getId(), getClass().getCanonicalName(), this.minSize);
 		for (final Widget it : this.subWidget) {
 			if (it == null) {
 				continue;
@@ -64,8 +64,8 @@ public class Sizer extends ContainerN {
 				this.subExpend = this.subExpend.withY(true);
 			}
 			final Vector2f tmpSize = it.getCalculateMinSize();
-			LOGGER.trace("[" + getId() + "] NewMinSize=" + tmpSize);
-			LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "}     Get minSize=" + tmpSize);
+			LOGGER.trace("[{}] NewMinSize={}", getId(), tmpSize);
+			LOGGER.trace("[{}] {{}}     Get minSize={}", getId(), getClass().getCanonicalName(), tmpSize);
 			if (this.propertyMode == DisplayMode.VERTICAL) {
 				this.minSize = this.minSize.withY(this.minSize.y() + tmpSize.y());
 				if (tmpSize.x() > this.minSize.x()) {
@@ -102,8 +102,8 @@ public class Sizer extends ContainerN {
 	public void onChangeSize() {
 		super.onChangeSize();
 		final Vector2f tmpBorderSize = this.propertyBorderSize.getPixel();
-		LOGGER.trace("[" + getId() + "] update size : " + this.size + " nbElement : " + this.subWidget.size()
-				+ " borderSize=" + tmpBorderSize + " from border=" + this.propertyBorderSize);
+		LOGGER.trace("[{}] update size: {} nbElement: {} borderSize={} from border={}", getId(), this.size,
+				this.subWidget.size(), tmpBorderSize, this.propertyBorderSize);
 		final Vector2f localWidgetSize = this.size.less(tmpBorderSize.multiply(2.0f));
 		// -1- calculate min-size and expand requested:
 		Vector2f minSize = Vector2f.ZERO;
@@ -192,11 +192,7 @@ public class Sizer extends ContainerN {
 			if (countCalculation <= 0) {
 				break;
 			}
-			if (this.propertyMode == DisplayMode.VERTICAL) {
-				deltaExpandSize = residualNext / (countCalculation);
-			} else {
-				deltaExpandSize = residualNext / (countCalculation);
-			}
+			deltaExpandSize = residualNext / countCalculation;
 			if (deltaExpandSize < 0.0f) {
 				deltaExpandSize = 0.0f;
 				break;
@@ -293,5 +289,57 @@ public class Sizer extends ContainerN {
 			return;
 		}
 		this.propertyMode = propertyMode;
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a horizontal sizer.
+	 * @return a new horizontal Sizer
+	 */
+	public static Sizer horizontal() {
+		return new Sizer(DisplayMode.HORIZONTAL);
+	}
+
+	/**
+	 * Create a vertical sizer.
+	 * @return a new vertical Sizer
+	 */
+	public static Sizer vertical() {
+		return new Sizer(DisplayMode.VERTICAL);
+	}
+
+	/**
+	 * Fluent method to set border size.
+	 * @param border the border size
+	 * @return this sizer for chaining
+	 */
+	public Sizer border(final Dimension2f border) {
+		setPropertyBorderSize(border);
+		return this;
+	}
+
+	/**
+	 * Fluent method to add a child widget.
+	 * @param widget the widget to add
+	 * @return this sizer for chaining
+	 */
+	public Sizer add(final Widget widget) {
+		subWidgetAdd(widget);
+		return this;
+	}
+
+	/**
+	 * Fluent method to add multiple child widgets.
+	 * @param widgets the widgets to add
+	 * @return this sizer for chaining
+	 */
+	public Sizer add(final Widget... widgets) {
+		for (final Widget widget : widgets) {
+			subWidgetAdd(widget);
+		}
+		return this;
 	}
 }

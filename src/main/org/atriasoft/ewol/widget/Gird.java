@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @ingroup ewolWidgetGroup
+ * Grid container for placing widgets in rows and columns.
  */
-class Gird extends Widget {
+public class Gird extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Gird.class);
 	
 	protected class GirdProperties {
@@ -25,14 +25,14 @@ class Gird extends Widget {
 		public int col;
 	}
 
-	protected int sizeRow = 0; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
+	protected int sizeRow = 0;
 	protected int uniformSizeRow = 0;
-	protected List<Integer> sizeCol = new ArrayList<>(); //!< size of all colomn (if set (otherwise 0))
-	protected List<GirdProperties> subWidget = new ArrayList<>(); //!< all sub widget are contained in this element
-	protected Widget tmpWidget = null; //!< use when replace a widget ...
+	protected List<Integer> sizeCol = new ArrayList<>();
+	protected List<GirdProperties> subWidget = new ArrayList<>();
+	protected Widget tmpWidget = null;
 	protected boolean gavityButtom = true;
 
-	protected Vector2f propertyBorderSize = Vector2f.ZERO; //!< Border size needed for all the display
+	protected Vector2f propertyBorderSize = Vector2f.ZERO;
 
 	/**
 	 * Constructor
@@ -62,7 +62,7 @@ class Gird extends Widget {
 			if (this.subWidget.get(iii).widget != null) {
 				this.subWidget.get(iii).widget.calculateMinMaxSize();
 				final Vector2f tmpSize = this.subWidget.get(iii).widget.getCalculateMinSize();
-				LOGGER.debug("     [" + iii + "] subWidgetMinSize=" + tmpSize);
+				LOGGER.trace("     [{}] subWidgetMinSize={}", iii, tmpSize);
 				// for all we get the max size :
 				this.uniformSizeRow = Math.max((int) tmpSize.y(), this.uniformSizeRow);
 				// for the colomn size : We set the autamatic value in negative :
@@ -80,11 +80,11 @@ class Gird extends Widget {
 		for (final Integer element : this.sizeCol) {
 			tmpSizeWidth += Math.abs(element);
 		}
-		LOGGER.debug("     tmpSizeWidth=" + tmpSizeWidth);
-		LOGGER.debug("     this.uniformSizeRow=" + this.uniformSizeRow);
+		LOGGER.trace("     tmpSizeWidth={}", tmpSizeWidth);
+		LOGGER.trace("     this.uniformSizeRow={}", this.uniformSizeRow);
 		this.minSize = this.minSize.add(tmpSizeWidth, (lastLineID + 1) * this.uniformSizeRow);
 
-		LOGGER.debug("Calculate min size : " + this.minSize);
+		LOGGER.trace("Calculate min size: {}", this.minSize);
 
 		//LOGGER.debug("Vert Result : expand="+ this.userExpand + "  minSize="+ this.minSize);
 	}
@@ -109,7 +109,7 @@ class Gird extends Widget {
 			}
 			return this.sizeCol.get(colId);
 		}
-		LOGGER.error("Can not get the Colomn size : " + colId + 1 + "  we have " + this.sizeCol.size() + " colomn");
+		LOGGER.error("Can not get the Column size: {} we have {} column", colId + 1, this.sizeCol.size());
 		return 0;
 	}
 
@@ -176,7 +176,7 @@ class Gird extends Widget {
 				}
 				tmpOrigin = tmpOrigin.add(tmpSizeWidth, addingPos);
 
-				LOGGER.debug("     [{}] set subwidget origin={} size={}", iii, tmpOrigin,
+				LOGGER.trace("     [{}] set subwidget origin={} size={}", iii, tmpOrigin,
 						new Vector2f(Math.abs(this.sizeCol.get(this.subWidget.get(iii).col)), this.uniformSizeRow));
 				// set the origin :
 				this.subWidget.get(iii).widget.setOrigin(tmpOrigin.clipInteger());
@@ -188,7 +188,7 @@ class Gird extends Widget {
 			}
 		}
 		this.size = this.size.add(this.propertyBorderSize.multiply(0.5f));
-		LOGGER.debug("Calculate size : " + this.size);
+		LOGGER.trace("Calculate size: {}", this.size);
 		markToRedraw();
 	}
 
@@ -224,12 +224,11 @@ class Gird extends Widget {
 						this.subWidget.get(iii).widget = null;
 						// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
 						if (errorControl == this.subWidget.size()) {
-							LOGGER.error("[" + getId()
-									+ "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+							LOGGER.error("[{}] The number of element might have been reduced...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function", getId());
 							System.exit(-1);
 						}
 					} else {
-						LOGGER.warn("[" + getId() + "] Must not have null pointer on the subWidget list ...");
+						LOGGER.warn("[{}] Must not have null pointer on the subWidget list", getId());
 						this.subWidget.remove(iii);
 					}
 					errorControl = this.subWidget.size();
@@ -254,8 +253,8 @@ class Gird extends Widget {
 		if ((long) this.sizeCol.size() > colId) {
 			this.sizeCol.set(colId, size);
 		} else {
-			LOGGER.error("Can not set the Colomn size : " + colId + 1 + " at " + size + "px  we have "
-					+ this.sizeCol.size() + " colomn");
+			LOGGER.error("Can not set the Column size: {} at {}px  we have {} column", colId + 1, size,
+					this.sizeCol.size());
 		}
 	}
 
@@ -278,11 +277,11 @@ class Gird extends Widget {
 	public void setPropertyBorderSize(final Vector2f propertyBorderSize) {
 		this.propertyBorderSize = propertyBorderSize;
 		if (this.propertyBorderSize.x() < 0) {
-			LOGGER.error("Try to set a border size <0 on x : " + this.propertyBorderSize.x() + "  == > restore to 0");
+			LOGGER.error("Try to set a border size <0 on x: {}  == > restore to 0", this.propertyBorderSize.x());
 			this.propertyBorderSize = this.propertyBorderSize.withX(0);
 		}
 		if (this.propertyBorderSize.y() < 0) {
-			LOGGER.error("Try to set a border size <0 on y : " + this.propertyBorderSize.y() + "  == > restore to 0");
+			LOGGER.error("Try to set a border size <0 on y: {}  == > restore to 0", this.propertyBorderSize.y());
 			this.propertyBorderSize = this.propertyBorderSize.withY(0);
 		}
 		markToRedraw();
@@ -344,7 +343,7 @@ class Gird extends Widget {
 	 */
 	public void subWidgetRemove(final int colId, final int rowId) {
 		if (colId < 0 || rowId < 0) {
-			LOGGER.warn("[" + getId() + "] try to remove widget with id < 0 col=" + colId + " row=" + rowId);
+			LOGGER.warn("[{}] try to remove widget with id < 0 col={} row={}", getId(), colId, rowId);
 			return;
 		}
 		final int errorControl = this.subWidget.size();
@@ -355,7 +354,7 @@ class Gird extends Widget {
 				return;
 			}
 		}
-		LOGGER.warn("[" + getId() + "] Can not remove unExistant widget");
+		LOGGER.warn("[{}] Cannot remove unExistant widget", getId());
 	}
 
 	/**
@@ -369,7 +368,7 @@ class Gird extends Widget {
 				return;
 			}
 		}
-		LOGGER.warn("[" + getId() + "] Can not remove unExistant widget");
+		LOGGER.warn("[{}] Cannot remove unExistant widget", getId());
 	}
 
 	/**
@@ -387,7 +386,7 @@ class Gird extends Widget {
 	 */
 	public void subWidgetUnLink(final int colId, final int rowId) {
 		if (colId < 0 || rowId < 0) {
-			LOGGER.warn("[" + getId() + "] try to Unlink widget with id < 0 col=" + colId + " row=" + rowId);
+			LOGGER.warn("[{}] try to Unlink widget with id < 0 col={} row={}", getId(), colId, rowId);
 			return;
 		}
 		// try to find it ...
@@ -397,7 +396,7 @@ class Gird extends Widget {
 				return;
 			}
 		}
-		LOGGER.warn("[" + getId() + "] Can not unLink unExistant widget");
+		LOGGER.warn("[{}] Cannot unLink unExistant widget", getId());
 	}
 
 	/**
@@ -424,5 +423,88 @@ class Gird extends Widget {
 				it.widget.systemDraw(displayProp);
 			}
 		}
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Gird.
+	 * @return a new Gird
+	 */
+	public static Gird create() {
+		return new Gird();
+	}
+
+	/**
+	 * Create a new Gird with specified columns.
+	 * @param columns number of columns
+	 * @return a new Gird
+	 */
+	public static Gird create(final int columns) {
+		final Gird gird = new Gird();
+		gird.setColNumber(columns);
+		return gird;
+	}
+
+	/**
+	 * Fluent method to set number of columns.
+	 * @param columns number of columns
+	 * @return this gird for chaining
+	 */
+	public Gird columns(final int columns) {
+		setColNumber(columns);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set row size.
+	 * @param size size of rows
+	 * @return this gird for chaining
+	 */
+	public Gird rowSize(final int size) {
+		setRowSize(size);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set border size.
+	 * @param border the border size
+	 * @return this gird for chaining
+	 */
+	public Gird border(final Vector2f border) {
+		setPropertyBorderSize(border);
+		return this;
+	}
+
+	/**
+	 * Fluent method to add a widget at position.
+	 * @param col column index
+	 * @param row row index
+	 * @param widget the widget to add
+	 * @return this gird for chaining
+	 */
+	public Gird add(final int col, final int row, final Widget widget) {
+		subWidgetAdd(col, row, widget);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set gravity to bottom.
+	 * @return this gird for chaining
+	 */
+	public Gird gravityBottom() {
+		setGravityButtom();
+		return this;
+	}
+
+	/**
+	 * Fluent method to set gravity to top.
+	 * @return this gird for chaining
+	 */
+	public Gird gravityTop() {
+		setGravityTop();
+		return this;
 	}
 }

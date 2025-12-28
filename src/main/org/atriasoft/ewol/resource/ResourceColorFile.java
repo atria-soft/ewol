@@ -121,7 +121,7 @@ public class ResourceColorFile extends Resource {
 			
 			final JsonArray baseArray = out.get("color").toJsonArray();
 			if (baseArray == null) {
-				LOGGER.error("Can not get basic array : 'color' in file:" + this.name);
+				LOGGER.error("Can not get basic array : 'color' in file: {}", this.name);
 				Ejson.display(out);
 				return;
 			}
@@ -129,13 +129,13 @@ public class ResourceColorFile extends Resource {
 			for (final JsonNode it : baseArray.getNodes()) {
 				final JsonObject tmpObj = it.toJsonObject();
 				if (tmpObj == null) {
-					LOGGER.error(" can not get object in 'color' : " + it);
+					LOGGER.error(" can not get object in 'color' : {}", it);
 					findError = true;
 					continue;
 				}
 				final String name = tmpObj.get("name").toJsonString().getValue();
 				final String color = tmpObj.get("color").toJsonString().getValue();
-				LOGGER.debug("find new color : '" + name + "' color='" + color + "'");
+				LOGGER.debug("find new color : '{}' color='{}'", name, color);
 				if (name.length() == 0) {
 					LOGGER.error("Drop an empty name");
 					findError = true;
@@ -147,11 +147,11 @@ public class ResourceColorFile extends Resource {
 				put(name, Color.valueOf(color));
 			}
 			if (findError) {
-				LOGGER.error("pb in parsing file:" + this.name);
+				LOGGER.error("pb in parsing file: {}", this.name);
 				Ejson.display(out);
 			}
 		} catch (final Exception e) {
-			LOGGER.error("chach exception in parsing config file... " + e.getMessage());
+			LOGGER.error("catch exception in parsing config file: {}", e.getMessage());
 			e.printStackTrace();
 		}
 	}

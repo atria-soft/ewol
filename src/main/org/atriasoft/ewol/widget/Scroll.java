@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2020, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -24,16 +24,16 @@ import org.atriasoft.gale.key.KeyType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class Scroll extends Container {
+public class Scroll extends Container {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Scroll.class);
 	protected static final int SCROLL_BAR_SPACE = 15;
-	protected Vector2f propertyLimit = new Vector2f(0.15f, 0.5f); //!< Set the limitation of the ratio in the screen
-	
-	protected Uri propertyShapeVert = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol"); //!< Vertical shaper name
-	
-	protected Uri propertyShapeHori = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol"); //!< Horizontal shaper name
-	
-	protected boolean propertyHover = true; //!< Horizontal shaper name
+	protected Vector2f propertyLimit = new Vector2f(0.15f, 0.5f);
+
+	protected Uri propertyShapeVert = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol");
+
+	protected Uri propertyShapeHori = new Uri("THEME_GUI", "WidgetScrolled.json", "ewol");
+
+	protected boolean propertyHover = true;
 	
 	protected CompositingSVG compositingH = new CompositingSVG();
 	protected CompositingSVG compositingV = new CompositingSVG();
@@ -50,9 +50,11 @@ class Scroll extends Container {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		// Note: No call of container ==> normal case ...
-		super.calculateMinMaxSize();
-		// call sub classes
+		// Don't call Container's calculateMinMaxSize - we don't want to inherit child's size
+		// That's the whole point of scrolling: the viewport is smaller than the content
+		this.minSize = getPropertyMinSize().getPixel();
+		this.maxSize = getPropertyMaxSize().getPixel();
+		// Still calculate child's min/max so it knows its own size
 		if (this.subWidget != null) {
 			this.subWidget.calculateMinMaxSize();
 		}
@@ -172,7 +174,7 @@ class Scroll extends Container {
 			scrollOffset = this.subWidget.getOffset();
 			scrollSize = this.subWidget.getSize();
 		}
-		LOGGER.trace("Get Event on scroll : " + event);
+		LOGGER.trace("Get Event on scroll: {}", event);
 		relativePos = relativePos.withY(this.size.y() - relativePos.y());
 		if (event.type() == KeyType.mouse
 				&& (this.highSpeedType == KeyType.unknow || this.highSpeedType == KeyType.mouse)) {
@@ -219,7 +221,7 @@ class Scroll extends Container {
 				}
 				return false;
 			} else if (event.inputId() == 4 && event.status() == KeyStatus.up) {
-				LOGGER.trace("    mode UP " + this.size.y() + "<" + scrollSize.y());
+				LOGGER.trace("    mode UP {}<{}", this.size.y(), scrollSize.y());
 				if (this.size.y() < scrollSize.y()) {
 					scrollOffset = scrollOffset.withY(scrollOffset.y() - this.pixelScrolling);
 					scrollOffset = scrollOffset.withY(FMath.avg(0.0f, scrollOffset.y(),
@@ -231,7 +233,7 @@ class Scroll extends Container {
 					return true;
 				}
 			} else if (event.inputId() == 5 && event.status() == KeyStatus.up) {
-				LOGGER.trace("    mode DOWN " + this.size.y() + "<" + scrollSize.y());
+				LOGGER.trace("    mode DOWN {}<{}", this.size.y(), scrollSize.y());
 				if (this.size.y() < scrollSize.y()) {
 					scrollOffset = scrollOffset.withY(scrollOffset.y() + this.pixelScrolling);
 					scrollOffset = scrollOffset.withY(FMath.avg(0.0f, scrollOffset.y(),
@@ -338,13 +340,13 @@ class Scroll extends Container {
 		} else if (KeyType.finger == event.type()
 				&& (KeyType.unknow == this.highSpeedType || KeyType.finger == this.highSpeedType)) {
 			if (1 == event.inputId()) {
-				LOGGER.trace("event: " + event);
+				LOGGER.trace("event: {}", event);
 				if (KeyStatus.down == event.status()) {
 					this.highSpeedMode = HighSpeedMode.speedModeInit;
 					this.highSpeedType = KeyType.finger;
 					this.highSpeedStartPos = new Vector2f(relativePos.x(), relativePos.y());
-					LOGGER.trace("SCROOL  == > INIT pos=" + this.highSpeedStartPos + " && curent scrollOffset="
-							+ scrollOffset);
+					LOGGER.trace("SCROOL  == > INIT pos={} && curent scrollOffset={}", this.highSpeedStartPos,
+							scrollOffset);
 					return true;
 				} else if (KeyStatus.upAfter == event.status()) {
 					this.highSpeedMode = HighSpeedMode.speedModeDisable;
@@ -365,8 +367,8 @@ class Scroll extends Container {
 					return true;
 				}
 				if (this.highSpeedMode == HighSpeedMode.speedModeEnableFinger && KeyStatus.move == event.status()) {
-					LOGGER.trace("SCROOL  == > INIT scrollOffset=" + scrollOffset.y() + " relativePos="
-							+ relativePos.y() + " this.highSpeedStartPos=" + this.highSpeedStartPos.y());
+					LOGGER.trace("SCROOL  == > INIT scrollOffset={} relativePos={} this.highSpeedStartPos={}",
+							scrollOffset.y(), relativePos.y(), this.highSpeedStartPos.y());
 					//scrollOffset.x = (int)(scrollSize.x * x / this.size.x);
 					if (this.propertyLimit.x() != 0.0f) {
 						scrollOffset = scrollOffset
@@ -382,7 +384,7 @@ class Scroll extends Container {
 					}
 					// update current position:
 					this.highSpeedStartPos = relativePos;
-					LOGGER.trace("SCROOL  == > MOVE " + scrollOffset);
+					LOGGER.trace("SCROOL  == > MOVE {}", scrollOffset);
 					markToRedraw();
 					if (this.subWidget != null) {
 						this.subWidget.setOffset(scrollOffset);
@@ -496,7 +498,49 @@ class Scroll extends Container {
 		this.propertyShapeVert = value;
 		onChangePropertyShapeVert();
 	}
-	
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Scroll.
+	 * @return a new Scroll
+	 */
+	public static Scroll create() {
+		return new Scroll();
+	}
+
+	/**
+	 * Fluent method to set scroll limit.
+	 * @param limit the scroll limit [0..1]
+	 * @return this scroll for chaining
+	 */
+	public Scroll limit(final Vector2f limit) {
+		setPropertyLimit(limit);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set hover mode.
+	 * @param hover true for hover display of scrollbars
+	 * @return this scroll for chaining
+	 */
+	public Scroll hover(final boolean hover) {
+		setPropertyHover(hover);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set the content widget.
+	 * @param widget the widget to scroll
+	 * @return this scroll for chaining
+	 */
+	public Scroll content(final Widget widget) {
+		setSubWidget(widget);
+		return this;
+	}
+
 	@Override
 	public void systemDraw(final DrawProperty displayProp) {
 		if (this.propertyHide) {

@@ -22,21 +22,22 @@ import org.slf4j.LoggerFactory;
 
 public class ResourceTexturedFont extends ResourceTexture2 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceTexturedFont.class);
+	
+	private static final String CACHE_PREFIX = "__TEXTURED_FONT__>>";
 
 	public static ResourceTexturedFont create(final Uri fontBaseUri) {
 		ResourceTexturedFont resource;
 		Resource resource2;
 		if (fontBaseUri.isEmpty()) {
-			LOGGER.error("Can not create a Texture Font without a filaname " + fontBaseUri);
+			LOGGER.error("Can not create a Texture Font without a filename: {}", fontBaseUri);
 			return null;
 		}
-		resource2 = Resource.getManager().localKeep("__TEXTURED__>>" + fontBaseUri.toString());
+		resource2 = Resource.getManager().localKeep(CACHE_PREFIX + fontBaseUri.toString());
 		if (resource2 != null) {
 			if (resource2 instanceof ResourceTexturedFont) {
-				resource2.keep();
 				return (ResourceTexturedFont) resource2;
 			}
-			LOGGER.error("Request resource fontName : '" + fontBaseUri + "' With the wrong type (dynamic cast error)");
+			LOGGER.error("Request resource fontName: '{}' with the wrong type (dynamic cast error)", fontBaseUri);
 			System.exit(-1);
 			return null;
 		}
@@ -44,7 +45,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		Resource.getManager().localAdd(resource);
 		return resource;
 	}
-	
+
 	// font is define for a specific mode
 	public GlyphProperty emptyGlyph;
 	private final Uri[] fileName = new Uri[4];
@@ -60,37 +61,37 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	private boolean forceClimp = false;
 	private final FontMode[] modeWraping = new FontMode[4]; // !< This is a wrapping mode to prevent the fact that no
 	private int size = 10;
-	
+
 	protected ResourceTexturedFont(final Uri fontBaseUri) {
-		super("__TEXTURED_FONT__>>" + fontBaseUri.toString());
+		super(CACHE_PREFIX + fontBaseUri.toString());
 		this.forceClimp = "true".equals(fontBaseUri.getProperty("FORCE_CLIMP"));
-		LOGGER.debug("Load font : '" + fontBaseUri + "'");
-		
+		LOGGER.debug("Load font: '{}'", fontBaseUri);
+
 		this.font[0] = null;
 		this.font[1] = null;
 		this.font[2] = null;
 		this.font[3] = null;
-		
+
 		this.modeWraping[0] = FontMode.REGULAR;
 		this.modeWraping[1] = FontMode.REGULAR;
 		this.modeWraping[2] = FontMode.REGULAR;
 		this.modeWraping[3] = FontMode.REGULAR;
-		
+
 		this.lastGlyphPos[0] = Vector2i.ONE;
 		this.lastGlyphPos[1] = Vector2i.ONE;
 		this.lastGlyphPos[2] = Vector2i.ONE;
 		this.lastGlyphPos[3] = Vector2i.ONE;
-		
+
 		this.lastRawHeigh[0] = 0;
 		this.lastRawHeigh[1] = 0;
 		this.lastRawHeigh[2] = 0;
 		this.lastRawHeigh[3] = 0;
-		
+
 		this.listElement[0] = new ArrayList<>();
 		this.listElement[1] = new ArrayList<>();
 		this.listElement[2] = new ArrayList<>();
 		this.listElement[3] = new ArrayList<>();
-		
+
 		final String sizeString = fontBaseUri.getProperty("size");
 		if (sizeString == null) {
 			this.size = 25;
@@ -116,7 +117,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		if (fontBaseUriBoldOblique.exist()) {
 			this.fileName[FontMode.BOLD_ITALIC.getValue()] = fontBaseUriBoldOblique;
 		}
-		
+
 		// try to find the reference mode :
 		FontMode refMode = FontMode.REGULAR;
 		for (int iii = 3; iii >= 0; iii--) {
@@ -124,7 +125,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				refMode = FontMode.get(iii);
 			}
 		}
-		LOGGER.debug("         set reference mode : " + refMode);
+		LOGGER.debug("         set reference mode: {}", refMode);
 		// generate the wrapping on the preventing error
 		for (int iii = 3; iii >= 0; iii--) {
 			if (this.fileName[iii] != null) {
@@ -133,20 +134,17 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				this.modeWraping[iii] = refMode;
 			}
 		}
-		
+
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
 			if (this.fileName[iiiFontId] == null) {
-				LOGGER.debug("can not load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId]
-						+ "\"  == > size=" + this.size);
+				LOGGER.trace("can not load FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId], this.size);
 				this.font[iiiFontId] = null;
 				continue;
 			}
-			LOGGER.debug("Load FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId] + "\"  == > size="
-					+ this.size);
+			LOGGER.debug("Load FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId], this.size);
 			this.font[iiiFontId] = ResourceFontSvg.create(this.fileName[iiiFontId]);
 			if (this.font[iiiFontId] == null) {
-				LOGGER.debug("error in loading FONT [" + iiiFontId + "] name : \"" + this.fileName[iiiFontId]
-						+ "\"  == > size=" + this.size);
+				LOGGER.warn("error in loading FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId], this.size);
 			}
 		}
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
@@ -166,17 +164,17 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		addGlyph((char) 0);
 		// by default we set only the first AINSI char available
 		for (int iii = 0x20; iii < 0x7F; iii++) {
-			LOGGER.trace("Add clyph :" + iii);
+			LOGGER.trace("Add glyph: {}", iii);
 			addGlyph((char) iii);
 		}
 		flush();
-		LOGGER.debug("Wrapping properties : ");
-		LOGGER.debug("    " + FontMode.REGULAR + " == >" + getWrappingMode(FontMode.REGULAR));
-		LOGGER.debug("    " + FontMode.ITALIC + " == >" + getWrappingMode(FontMode.ITALIC));
-		LOGGER.debug("    " + FontMode.BOLD + " == >" + getWrappingMode(FontMode.BOLD));
-		LOGGER.debug("    " + FontMode.BOLD_ITALIC + " == >" + getWrappingMode(FontMode.BOLD_ITALIC));
+		LOGGER.debug("Wrapping properties:");
+		LOGGER.debug("    {} ==> {}", FontMode.REGULAR, getWrappingMode(FontMode.REGULAR));
+		LOGGER.debug("    {} ==> {}", FontMode.ITALIC, getWrappingMode(FontMode.ITALIC));
+		LOGGER.debug("    {} ==> {}", FontMode.BOLD, getWrappingMode(FontMode.BOLD));
+		LOGGER.debug("    {} ==> {}", FontMode.BOLD_ITALIC, getWrappingMode(FontMode.BOLD_ITALIC));
 	}
-	
+
 	/**
 	 * add a glyph in a texture font.
 	 * @param val Char value to add.
@@ -189,19 +187,18 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			if (this.font[iii] == null) {
 				continue;
 			}
-			// add the curent "char"
+			// add the current "char"
 			final GlyphProperty tmpchar = this.font[iii].getGlyphProperty(this.size, val);
-			
+
 			if (tmpchar != null && tmpchar.exist()) {
-				LOGGER.debug("load char : '" + val + "'=" + (int) val);
+				LOGGER.trace("load char: '{}'={}", val, (int) val);
 				hasChange = true;
 				// change line if needed ...
 				if (this.lastGlyphPos[iii].x() + tmpchar.sizeTexture.x() + 3 > this.data.getSize().x()) {
 					this.lastGlyphPos[iii] = new Vector2i(1, this.lastGlyphPos[iii].y() + this.lastRawHeigh[iii]);
 					this.lastRawHeigh[iii] = 0;
 				}
-				LOGGER.trace("glyph texture size = " + tmpchar.sizeTexture + "last posY=" + this.lastGlyphPos[iii].y()
-						+ "    out size=" + this.data.getSize());
+				LOGGER.trace("glyph texture size = {} last posY={} out size={}", tmpchar.sizeTexture, this.lastGlyphPos[iii].y(), this.data.getSize());
 				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getSize().y()) {
 					this.data.resize(this.data.getSize().x(), this.data.getSize().y() * 2);
 					// note : need to rework all the layer due to the fact that the texture is used by the 4 type...
@@ -221,7 +218,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 						(float) this.lastGlyphPos[iii].y() / (float) this.data.getSize().y());
 				tmpchar.texturePosSize = new Vector2f((float) tmpchar.sizeTexture.x() / this.data.getSize().x(),
 						(float) tmpchar.sizeTexture.y() / this.data.getSize().y());
-				
+
 				// update the maximum of the line hight :
 				if (this.lastRawHeigh[iii] < tmpchar.sizeTexture.y()) {
 					// note : +1 is for the overlapping of the glyph (Part 2)
@@ -231,7 +228,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				// update the Bitmap position drawing :
 				this.lastGlyphPos[iii] = this.lastGlyphPos[iii].add(new Vector2i(tmpchar.sizeTexture.x() + 1, 0));
 			} else {
-				LOGGER.warn("Did not find char : '" + val + "'=" + val);
+				LOGGER.trace("Did not find char: '{}'={}", val, (int) val);
 			}
 			this.listElement[iii].add(tmpchar);
 		}
@@ -243,7 +240,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		}
 		return hasChange;
 	}
-	
+
 	/**
 	 * get the font height (user friendly)
 	 * @return Dimention of the font the user requested
@@ -251,7 +248,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	public int getFontSize() {
 		return this.size;
 	}
-	
+
 	/**
 	 * get the pointer on the corresponding glyph
 	 * @param charcode The unicodeValue
@@ -263,7 +260,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		// index : " + this.modeWraping[displayMode]);
 		final int index = getIndex(charcode, displayMode);
 		if (index < 0 || index >= this.listElement[displayMode.getValue()].size()) {
-			LOGGER.error(" Try to get glyph index inexistant ...  == > return the index 0 ... id=" + index);
+			LOGGER.warn("Try to get glyph index inexistant ==> return the index 0, id={}", index);
 			if (this.listElement[displayMode.getValue()].size() > 0) {
 				return this.listElement[displayMode.getValue()].get(0);
 			}
@@ -277,7 +274,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		// LOGGER.error(" this.bearing=" + this.listElement[displayMode][index].bearing);
 		return this.listElement[displayMode.getValue()].get(index);
 	}
-	
+
 	/**
 	 * get the display height of this font
 	 * @param DisplayMode Mode to display the current font
@@ -286,11 +283,11 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	public int getHeight() {
 		return this.height[FontMode.REGULAR.getValue()];
 	}
-	
+
 	public int getHeight(final FontMode displayMode) {
 		return this.height[displayMode.getValue()];
 	}
-	
+
 	/**
 	 * get the ID of a unicode charcode
 	 * @param charcode The unicodeValue
@@ -323,7 +320,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * The wrapping mode is used to prevent the non existance of a specific
 	 *        mode. For exemple when a blod mode does not exist, this resend a

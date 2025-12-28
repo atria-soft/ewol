@@ -14,49 +14,78 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * a composed Spin is a Spin with an inside composed with the specify XML element
- * ==> this permit to generate standard element simple
+ * Spin widget allowing the user to select a numeric value using +/- buttons or direct entry.
+ *
+ * Signals emitted:
+ * - signalValue: when the value changes (emits Long value)
+ * - signalValueDouble: when the value changes (emits Double value with mantis applied)
  */
 public class Spin extends SpinBase {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Spin.class);
-	// Event list of properties
+
 	@AknotSignal
 	@AknotName("value")
-	@AknotDescription("Spin updated value (depend of the mantis)")
+	@AknotDescription("Spin updated value (raw long value)")
 	public Signal<Long> signalValue = new Signal<>();
+
 	@AknotSignal
 	@AknotName("valueDouble")
-	@AknotDescription("Spin value change value in 'double' (application of the mantis)")
+	@AknotDescription("Spin value as double (with mantis applied)")
 	public Signal<Double> signalValueDouble = new Signal<>();
-	protected long propertyValue = 0; //!< Current value of the Spin.
-	protected long propertyMin = Long.MIN_VALUE; //!< Minimum value
-	protected long propertyMax = Long.MAX_VALUE; //!< Maximum value
-	protected long propertyIncrement = 1; //!< Increment value
-	protected int propertyMantis = 0; //!< number of value under '.' value
-	// connection to the elements interface.
+
+	protected long propertyValue = 0;
+	protected long propertyMin = Long.MIN_VALUE;
+	protected long propertyMax = Long.MAX_VALUE;
+	protected long propertyIncrement = 1;
+	protected int propertyMantis = 0;
+
 	protected Connection connectionEntry = new Connection();
 	protected Connection connectionButtonUp = new Connection();
 	protected Connection connectionButtonDown = new Connection();
 
 	/**
-	 * Constructor
-	 * @param _mode mode to display the spin
-	 * @param _shaperName Shaper file properties
+	 * Default constructor.
 	 */
 	public Spin() {
 		super(new Uri("THEME", "shape/Spin.json", "ewol"));
 		connectGui();
 	}
 
+	/**
+	 * Validate and apply a new value, clamping it to min/max bounds.
+	 * @param value The new value to set
+	 */
 	public void checkValue(long value) {
 		value = FMath.clamp(this.propertyMin, value, this.propertyMax);
+		final boolean changed = this.propertyValue != value;
 		this.propertyValue = value;
-		this.widgetEntry.setPropertyValue(Long.toString(value));
-		this.signalValue.emit(this.propertyValue);
+		// Always update the entry display
+		if (this.widgetEntry != null) {
+			this.widgetEntry.setPropertyValue(Long.toString(value));
+		}
+		if (changed) {
+			this.signalValue.emit(this.propertyValue);
+			emitDoubleValue();
+		}
 	}
 
+	/**
+	 * Emit the double value signal with mantis applied.
+	 */
+	private void emitDoubleValue() {
+		if (this.propertyMantis > 0) {
+			final double divisor = Math.pow(10, this.propertyMantis);
+			this.signalValueDouble.emit(this.propertyValue / divisor);
+		} else {
+			this.signalValueDouble.emit((double) this.propertyValue);
+		}
+	}
+
+	/**
+	 * Connect GUI elements (buttons and entry) to their callbacks.
+	 */
 	public void connectGui() {
-		LOGGER.warn("updateGui [START]");
+		LOGGER.debug("connectGui [START]");
 		super.updateGui();
 		if (this.widgetEntry != null && !this.connectionEntry.isConnected()) {
 			this.connectionEntry = this.widgetEntry.signalModify.connect(this, Spin::onCallbackModify);
@@ -68,13 +97,13 @@ public class Spin extends SpinBase {
 			this.connectionButtonDown = this.widgetButtonDown.signalClick.connect(this, Spin::onCallbackDown);
 		}
 		checkValue(this.propertyValue);
-		LOGGER.warn("updateGui [STOP]");
+		LOGGER.debug("connectGui [STOP]");
 	}
 
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("increment")
-	@AknotDescription("Increment value at each button event or keybord event")
+	@AknotDescription("Increment value at each button or keyboard event")
 	public long getPropertyIncrement() {
 		return this.propertyIncrement;
 	}
@@ -82,7 +111,7 @@ public class Spin extends SpinBase {
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("mantis")
-	@AknotDescription("fix-point mantis element (number of digit under the .)")
+	@AknotDescription("Fixed-point mantissa (number of digits after decimal point)")
 	public int getPropertyMantis() {
 		return this.propertyMantis;
 	}
@@ -90,7 +119,7 @@ public class Spin extends SpinBase {
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "max")
-	@AknotDescription(value = "Maximum value of the spin (depend on mantis)")
+	@AknotDescription(value = "Maximum value of the spin")
 	public long getPropertyMax() {
 		return this.propertyMax;
 	}
@@ -98,7 +127,7 @@ public class Spin extends SpinBase {
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("min")
-	@AknotDescription("Minimum value of the spin (depend on mantis)")
+	@AknotDescription("Minimum value of the spin")
 	public long getPropertyMin() {
 		return this.propertyMin;
 	}
@@ -106,40 +135,54 @@ public class Spin extends SpinBase {
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
-	@AknotDescription("Value of the Spin")
+	@AknotDescription("Current value of the Spin")
 	public long getPropertyValue() {
 		return this.propertyValue;
 	}
 
+	/**
+	 * Get the value as a double with mantis applied.
+	 * @return The value as double
+	 */
+	public double getValueAsDouble() {
+		if (this.propertyMantis > 0) {
+			final double divisor = Math.pow(10, this.propertyMantis);
+			return this.propertyValue / divisor;
+		}
+		return this.propertyValue;
+	}
+
 	protected void onCallbackDown() {
-		LOGGER.warn("lkjlkjljlkjlkjlkjlkjlkjlklkjlkjlkj {}");
+		LOGGER.debug("Spin decrement button clicked");
 		final long data = this.propertyValue - this.propertyIncrement;
 		checkValue(data);
 	}
 
 	protected void onCallbackModify(final String value) {
-		if (value.isEmpty()) {
+		if (value == null || value.isEmpty()) {
 			return;
 		}
 		try {
-			final long value1 = Long.valueOf(value);
-			checkValue(value1);
+			final long parsedValue = Long.parseLong(value);
+			checkValue(parsedValue);
 		} catch (final NumberFormatException ex) {
-			LOGGER.error("This is not a value {} ==> {}", value, ex.getLocalizedMessage());
+			LOGGER.warn("Invalid number format: '{}' - {}", value, ex.getMessage());
 		}
 	}
 
 	protected void onCallbackUp() {
+		LOGGER.debug("Spin increment button clicked");
 		final long data = this.propertyValue + this.propertyIncrement;
 		checkValue(data);
 	}
 
 	protected void onChangePropertyIncrement() {
-
+		// Increment change doesn't require immediate action
 	}
 
 	protected void onChangePropertyMantis() {
-
+		emitDoubleValue();
+		markToRedraw();
 	}
 
 	protected void onChangePropertyMax() {
@@ -153,7 +196,7 @@ public class Spin extends SpinBase {
 	protected void onChangePropertyValue() {
 		markToRedraw();
 		if (this.widgetEntry == null) {
-			LOGGER.error("Can not acces at entry ...");
+			LOGGER.warn("Cannot access entry widget");
 			return;
 		}
 		checkValue(this.propertyValue);
@@ -197,5 +240,99 @@ public class Spin extends SpinBase {
 		}
 		this.propertyValue = propertyValue;
 		onChangePropertyValue();
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Spin.
+	 * @return a new Spin
+	 */
+	public static Spin create() {
+		return new Spin();
+	}
+
+	/**
+	 * Fluent method to set value.
+	 * @param value the current value
+	 * @return this spin for chaining
+	 */
+	public Spin value(final long value) {
+		setPropertyValue(value);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set minimum value.
+	 * @param min the minimum value
+	 * @return this spin for chaining
+	 */
+	public Spin min(final long min) {
+		setPropertyMin(min);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set maximum value.
+	 * @param max the maximum value
+	 * @return this spin for chaining
+	 */
+	public Spin max(final long max) {
+		setPropertyMax(max);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set range.
+	 * @param min the minimum value
+	 * @param max the maximum value
+	 * @return this spin for chaining
+	 */
+	public Spin range(final long min, final long max) {
+		setPropertyMin(min);
+		setPropertyMax(max);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set increment.
+	 * @param increment the increment value
+	 * @return this spin for chaining
+	 */
+	public Spin increment(final long increment) {
+		setPropertyIncrement(increment);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set mantis (decimal precision).
+	 * @param mantis number of decimal places
+	 * @return this spin for chaining
+	 */
+	public Spin mantis(final int mantis) {
+		setPropertyMantis(mantis);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a value change callback.
+	 * @param callback the callback to invoke when value changes
+	 * @return this spin for chaining
+	 */
+	public Spin onValueChange(final java.util.function.Consumer<Long> callback) {
+		this.signalValue.connect(callback::accept);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a double value change callback.
+	 * @param callback the callback to invoke when value changes
+	 * @return this spin for chaining
+	 */
+	public Spin onDoubleValueChange(final java.util.function.Consumer<Double> callback) {
+		this.signalValueDouble.connect(callback::accept);
+		return this;
 	}
 }

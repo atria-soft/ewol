@@ -21,13 +21,13 @@ public class LoadPackageStream {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoadPackageStream.class);
 	
 	public static byte[] getAllData(final String resourceName) {
-		LOGGER.trace("Load resource: '/resources" + resourceName + "'");
+		LOGGER.trace("Load resource: '/resources{}'", resourceName);
 		final InputStream out = LoadPackageStream.class.getResourceAsStream("/resources" + resourceName);
 		if (out == null) {
-			LOGGER.error("Can not load resource: '" + resourceName + "'");
+			LOGGER.error("Can not load resource: '{}'", resourceName);
 			for (final Path elem : LoadPackageStream.getResources(LoadPackageStream.class.getResource("/resources"))
 					.toArray(Path[]::new)) {
-				LOGGER.warn("  - '" + elem + "'");
+				LOGGER.warn("  - '{}'", elem);
 			}
 			return null;
 		}
@@ -74,13 +74,13 @@ public class LoadPackageStream {
 	}
 
 	public static InputStream getStream(final String resourceName) {
-		LOGGER.trace("Load resource: '/resources" + resourceName + "'");
+		LOGGER.trace("Load resource: '/resources{}'", resourceName);
 		final InputStream out = LoadPackageStream.class.getResourceAsStream("/resources" + resourceName);
 		if (out == null) {
-			LOGGER.error("Can not load resource: '" + resourceName + "'");
+			LOGGER.error("Can not load resource: '{}'", resourceName);
 			for (final Path elem : LoadPackageStream.getResources(LoadPackageStream.class.getResource("/resources"))
 					.toArray(Path[]::new)) {
-				LOGGER.warn("  - '" + elem + "'");
+				LOGGER.warn("  - '{}'", elem);
 			}
 		}
 		return out;

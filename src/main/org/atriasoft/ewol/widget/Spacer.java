@@ -71,4 +71,26 @@ public class Spacer extends Widget {
 		this.propertyColor = propertyColor;
 		markToRedraw();
 	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Spacer.
+	 * @return a new Spacer
+	 */
+	public static Spacer create() {
+		return new Spacer();
+	}
+
+	/**
+	 * Fluent method to set color.
+	 * @param color the background color
+	 * @return this spacer for chaining
+	 */
+	public Spacer color(final Color color) {
+		setPropertyColor(color);
+		return this;
+	}
 }

@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -25,20 +25,20 @@ import org.slf4j.LoggerFactory;
 
 public class ImageDisplay extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImageDisplay.class);
-	protected int colorId = -1; //!< Color of the image.
-	protected ResourceColorFile colorProperty = null; //!< theme color property
-	protected CompositingImage compositing = new CompositingImage(); //!< compositing element of the image.
-	protected Vector2f imageRenderSize = Vector2f.ZERO; //!< size of the image when we render it
-	
-	protected Dimension2f propertyBorder = Dimension2f.ZERO; //!< border to add at the image.
-	protected Dimension2f propertyImageSize = Dimension2f.ZERO; //!< border to add at the image.
-	protected boolean propertyKeepRatio = true; //!< keep the image ratio between width and height
-	protected Vector2f propertyPosStart = Vector2f.ZERO; //!< position in the image to start the display (when we want not to display all the image)
-	protected Vector2f propertyPosStop = Vector2f.ONE; //!< position in the image to start the display (when we want not to display all the image)
-	
-	protected boolean propertySmooth = true; //!< display is done in the pixel approximation if false
-	protected Uri propertySource = null; //!< file name of the image.
-	protected boolean propertyUseThemeColor = false; //!< Use the themo color management ("THEMECOLOR:///Image.json?lib=ewol") default false
+	protected int colorId = -1;
+	protected ResourceColorFile colorProperty = null;
+	protected CompositingImage compositing = new CompositingImage();
+	protected Vector2f imageRenderSize = Vector2f.ZERO;
+
+	protected Dimension2f propertyBorder = Dimension2f.ZERO;
+	protected Dimension2f propertyImageSize = Dimension2f.ZERO;
+	protected boolean propertyKeepRatio = true;
+	protected Vector2f propertyPosStart = Vector2f.ZERO;
+	protected Vector2f propertyPosStop = Vector2f.ONE;
+
+	protected boolean propertySmooth = true;
+	protected Uri propertySource = null;
+	protected boolean propertyUseThemeColor = false;
 	@AknotSignal
 	@AknotName("pressed")
 	@AknotDescription(value = "Image is pressed")
@@ -51,32 +51,32 @@ public class ImageDisplay extends Widget {
 	
 	@Override
 	public void calculateMinMaxSize() {
-		LOGGER.debug("calculate min size: border=" + this.propertyBorder + " size=" + this.propertyImageSize
-				+ " min-size=" + this.propertyMinSize);
+		LOGGER.debug("calculate min size: border={} size={} min-size={}", this.propertyBorder, this.propertyImageSize,
+				this.propertyMinSize);
 		final Vector2f imageBoder = this.propertyBorder.getPixel().multiply(2.0f);
 		final Vector2f imageSize = this.propertyImageSize.getPixel();
 		final Vector2f size = this.propertyMinSize.getPixel();
-		LOGGER.debug("                ==> border=" + imageBoder + " size=" + imageSize + " min-size=" + size);
+		LOGGER.debug("                ==> border={} size={} min-size={}", imageBoder, imageSize, size);
 		if (!imageSize.isZero()) {
 			final Vector2f tmp = imageBoder.add(imageSize);
 			this.minSize = new Vector2f(tmp.x(), tmp.y());
 			this.maxSize = this.minSize;
 		} else {
 			final Vector2i imageSizeReal = getPropertyMinSize().getPixeli();//.compositing.getRealSize();
-			LOGGER.trace(" Real Size = " + imageSizeReal);
+			LOGGER.trace("Real Size = {}", imageSizeReal);
 			final Vector2f min1 = this.propertyMinSize.getPixel().add(imageBoder.x(), imageBoder.y());
 			this.minSize = new Vector2f(imageBoder.x() + imageSizeReal.x(), imageBoder.y() + imageSizeReal.y());
-			LOGGER.trace(" set max : " + this.minSize + " min1=" + min1);
+			LOGGER.trace("set max: {} min1={}", this.minSize, min1);
 			this.minSize = Vector2f.max(this.minSize, min1);
-			LOGGER.trace("     result : " + this.minSize);
+			LOGGER.trace("     result: {}", this.minSize);
 			this.maxSize = this.propertyMaxSize.getPixel().add(imageBoder.x(), imageBoder.y());
 			this.minSize = Vector2f.min(this.minSize, this.maxSize);
 		}
 		this.imageRenderSize = new Vector2f(this.minSize.x(), this.minSize.y());
 		this.minSize = Vector2f.max(this.minSize, size);
 		this.maxSize = Vector2f.max(this.maxSize, this.minSize);
-		LOGGER.debug("set widget min=" + this.minSize + " max=" + this.maxSize + " with real Image size="
-				+ this.imageRenderSize + " img size=" + imageSize + "  " + this.propertyImageSize);
+		LOGGER.debug("set widget min={} max={} with real Image size={} img size={}  {}", this.minSize, this.maxSize,
+				this.imageRenderSize, imageSize, this.propertyImageSize);
 		markToRedraw();
 	}
 	
@@ -220,10 +220,10 @@ public class ImageDisplay extends Widget {
 			this.compositing.setPos(Vector2f.clipInt(origin));
 		}
 		this.compositing.printPart(imageRealSize, this.propertyPosStart, this.propertyPosStop);
-		LOGGER.debug("Paint Image at : " + origin + " size=" + imageRealSize);
-		LOGGER.debug("Paint Image :" + this.propertySource + " realsize=" + this.compositing.getRealSize() + " origin="
-				+ origin + " size=" + imageRealSize);
-		LOGGER.debug("      start=" + this.propertyPosStart + " stop=" + this.propertyPosStop);
+		LOGGER.trace("Paint Image at: {} size={}", origin, imageRealSize);
+		LOGGER.trace("Paint Image: {} realsize={} origin={} size={}", this.propertySource,
+				this.compositing.getRealSize(), origin, imageRealSize);
+		LOGGER.trace("      start={} stop={}", this.propertyPosStart, this.propertyPosStop);
 		this.compositing.flush();
 	}
 	
@@ -233,7 +233,7 @@ public class ImageDisplay extends Widget {
 	 * @param border New border size to set
 	 */
 	public void set(final Uri uri, final Dimension2f border) {
-		LOGGER.trace("Set Image : " + uri + " border=" + border);
+		LOGGER.trace("Set Image: {} border={}", uri, border);
 		setPropertyBorder(border);
 		setPropertySource(uri);
 	}
@@ -265,7 +265,7 @@ public class ImageDisplay extends Widget {
 		this.propertyImageSize = propertyImageSize;
 		markToRedraw();
 		requestUpdateSize();
-		LOGGER.trace("Set sources : " + this.propertySource + " size=" + propertyImageSize);
+		LOGGER.trace("Set sources: {} size={}", this.propertySource, propertyImageSize);
 		this.compositing.setSource(this.propertySource, propertyImageSize.getPixeli());
 	}
 	
@@ -311,7 +311,7 @@ public class ImageDisplay extends Widget {
 		this.propertySource = propertySource;
 		markToRedraw();
 		requestUpdateSize();
-		LOGGER.trace("Set sources : " + propertySource + " size=" + this.propertyImageSize);
+		LOGGER.trace("Set sources: {} size={}", propertySource, this.propertyImageSize);
 		this.compositing.setSource(propertySource, this.propertyImageSize.getPixeli());
 	}
 	
@@ -321,5 +321,88 @@ public class ImageDisplay extends Widget {
 		}
 		this.propertyUseThemeColor = propertyUseThemeColor;
 		markToRedraw();
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new ImageDisplay.
+	 * @return a new ImageDisplay
+	 */
+	public static ImageDisplay create() {
+		return new ImageDisplay();
+	}
+
+	/**
+	 * Create a new ImageDisplay with source.
+	 * @param source the image source URI
+	 * @return a new ImageDisplay
+	 */
+	public static ImageDisplay create(final Uri source) {
+		final ImageDisplay image = new ImageDisplay();
+		image.setPropertySource(source);
+		return image;
+	}
+
+	/**
+	 * Fluent method to set image source.
+	 * @param source the image source URI
+	 * @return this image for chaining
+	 */
+	public ImageDisplay source(final Uri source) {
+		setPropertySource(source);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set image size.
+	 * @param size the image size
+	 * @return this image for chaining
+	 */
+	public ImageDisplay imageSize(final Dimension2f size) {
+		setPropertyImageSize(size);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set border.
+	 * @param border the border size
+	 * @return this image for chaining
+	 */
+	public ImageDisplay border(final Dimension2f border) {
+		setPropertyBorder(border);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set keep ratio.
+	 * @param keepRatio true to keep aspect ratio
+	 * @return this image for chaining
+	 */
+	public ImageDisplay keepRatio(final boolean keepRatio) {
+		setPropertyKeepRatio(keepRatio);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set smooth display.
+	 * @param smooth true for smooth display
+	 * @return this image for chaining
+	 */
+	public ImageDisplay smooth(final boolean smooth) {
+		setPropertySmooth(smooth);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a pressed callback.
+	 * @param callback the callback to invoke when pressed
+	 * @return this image for chaining
+	 */
+	public ImageDisplay onPressed(final Runnable callback) {
+		this.signalPressed.connect(callback);
+		return this;
 	}
 }

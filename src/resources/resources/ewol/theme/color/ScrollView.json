@@ -1,0 +1,8 @@
+{
+	"color": [
+		{ name:"track",       color:"#E0E0E0" },
+		{ name:"thumb",       color:"#888888" },
+		{ name:"thumb-hover", color:"#666666" },
+		{ name:"thumb-drag",  color:"#444444" }
+	]
+}

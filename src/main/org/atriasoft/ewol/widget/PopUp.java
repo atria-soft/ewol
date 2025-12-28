@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -20,8 +20,7 @@ import org.atriasoft.gale.key.KeyStatus;
  * Pop-up Display a sub element in a field inside the whole size (id set in pup-up windows)
  */
 public class PopUp extends Box {
-	// properties
-	public boolean propertyCloseOutEvent = false; //!< ratio progression of a sliding
+	protected boolean propertyCloseOutEvent = false;
 
 	/**
 	 * Constructor
@@ -67,4 +66,35 @@ public class PopUp extends Box {
 		this.propertyCloseOutEvent = propertyCloseOutEvent;
 	}
 
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new PopUp.
+	 * @return a new PopUp
+	 */
+	public static PopUp create() {
+		return new PopUp();
+	}
+
+	/**
+	 * Fluent method to set close on outside click.
+	 * @param closeOnOutside true to close when clicking outside
+	 * @return this popup for chaining
+	 */
+	public PopUp closeOnOutside(final boolean closeOnOutside) {
+		setPropertyCloseOutEvent(closeOnOutside);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set the content widget.
+	 * @param widget the widget to display in popup
+	 * @return this popup for chaining
+	 */
+	public PopUp content(final Widget widget) {
+		setSubWidget(widget);
+		return this;
+	}
 }

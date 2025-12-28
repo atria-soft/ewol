@@ -32,7 +32,7 @@ public class Box extends Container {
 	 * @param event Time generic event
 	 */
 	protected static void periodicCall(final Box self, final EventTime event) {
-		LOGGER.trace("Periodic call on Entry(" + event + ")");
+		LOGGER.trace("Periodic call on Entry({})", event);
 		self.markToRedraw();
 	}
 	
@@ -177,7 +177,7 @@ public class Box extends Container {
 	protected void calculateMinMaxSizeChild(Vector2f childMinSize) {
 		super.calculateMinMaxSize();
 		childMinSize = this.minSize.max(childMinSize);
-		LOGGER.debug("calculate min size: border=" + this.propertyBorderWidth);
+		LOGGER.trace("calculate min size: border={}", this.propertyBorderWidth);
 		final Insets borderSize = this.propertyBorderWidth.getPixel();
 		
 		final Insets padding = this.propertyPadding.getPixel();
@@ -320,5 +320,74 @@ public class Box extends Container {
 		}
 		super.onDraw();
 	}
-	
+
+	// ========================================================================
+	// Fluent API methods
+	// ========================================================================
+
+	/**
+	 * Fluent method to set border width.
+	 * @param borderWidth the border width
+	 * @return this box for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Box> T borderWidth(final DimensionInsets borderWidth) {
+		setPropertyBorderWidth(borderWidth);
+		return (T) this;
+	}
+
+	/**
+	 * Fluent method to set border radius.
+	 * @param borderRadius the border radius
+	 * @return this box for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Box> T borderRadius(final DimensionBorderRadius borderRadius) {
+		setPropertyBorderRadius(borderRadius);
+		return (T) this;
+	}
+
+	/**
+	 * Fluent method to set border color.
+	 * @param color the border color
+	 * @return this box for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Box> T borderColor(final Color color) {
+		setPropertyBorderColor(color);
+		return (T) this;
+	}
+
+	/**
+	 * Fluent method to set background color.
+	 * @param color the background color
+	 * @return this box for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Box> T color(final Color color) {
+		setPropertyColor(color);
+		return (T) this;
+	}
+
+	/**
+	 * Fluent method to set margin.
+	 * @param margin the margin
+	 * @return this box for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Box> T margin(final DimensionInsets margin) {
+		setPropertyMargin(margin);
+		return (T) this;
+	}
+
+	/**
+	 * Fluent method to set padding.
+	 * @param padding the padding
+	 * @return this box for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Box> T padding(final DimensionInsets padding) {
+		setPropertyPadding(padding);
+		return (T) this;
+	}
 }

@@ -23,24 +23,24 @@ import org.atriasoft.ewol.widget.model.ListRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class WidgetList extends WidgetScrolled {
+public class WidgetList extends WidgetScrolled {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WidgetList.class);
 	// drawing capabilities ....
-	protected List<Compositing> listOObject = new ArrayList<>(); //!< generic element to display...
-	
-	protected List<Integer> listSizeX = new ArrayList<>(); //!< size of every colons
-	
-	protected List<Integer> listSizeY = new ArrayList<>(); //!< size of every rows
+	protected List<Compositing> listOObject = new ArrayList<>();
+
+	protected List<Integer> listSizeX = new ArrayList<>();
+
+	protected List<Integer> listSizeY = new ArrayList<>();
 	protected Map<String, Compositing> compositingElements = new HashMap<>();
 	// list properties ...
 	protected int paddingSizeX = 0;
 	protected int paddingSizeY = 0;
 	
-	protected int displayStartRaw = 0; //!< Current starting displayed raw
-	
-	protected int displayCurrentNbLine = 0; //!< Number of line in the display
-	
-	protected int nbVisibleRaw = 0; // set the number of visible raw (calculate don display)
+	protected int displayStartRaw = 0;
+
+	protected int displayCurrentNbLine = 0;
+
+	protected int nbVisibleRaw = 0;
 	// function call to display the list :
 	
 	public WidgetList() {

@@ -46,7 +46,7 @@ public class ETranslate {
 		ETranslate.globalListPath.put(lib, uri);
 		if (major) {
 			ETranslate.globalMajor = lib;
-			LOGGER.info("Change major translation : '" + ETranslate.globalMajor + "'");
+			LOGGER.info("Change major translation : '{}'", ETranslate.globalMajor);
 		}
 		ETranslate.globalTranslateLoadad = false;
 		ETranslate.globalTranslate.clear();
@@ -87,7 +87,7 @@ public class ETranslate {
 		}
 		lang = lang.substring(0, 2);
 		lang = lang.toUpperCase();
-		LOGGER.info("Select Language : '" + lang + "'");
+		LOGGER.info("Select Language : '{}'", lang);
 		ETranslate.setLanguage(lang);
 	}
 	
@@ -99,14 +99,14 @@ public class ETranslate {
 	 */
 	public static String get(final String instance) {
 		ETranslate.loadTranslation();
-		LOGGER.trace("Request translate: '" + instance + "'");
+		LOGGER.trace("Request translate: '{}'", instance);
 		// find all iterance of 'T{' ... '}'
 		final String out = Pattern.compile("_T\\{(.*)\\}").matcher(instance).replaceAll(mr -> {
 			final String data = mr.group(1);
-			LOGGER.info("translate : '" + data + "'");
+			LOGGER.info("translate : '{}'", data);
 			final String itTranslate = ETranslate.globalTranslate.get(data);
 			if (itTranslate == null) {
-				LOGGER.debug("Can not find tranlation : '" + instance + "'");
+				LOGGER.debug("Can not find tranlation : '{}'", instance);
 				return data;
 			}
 			return itTranslate;
@@ -143,9 +143,8 @@ public class ETranslate {
 		if (ETranslate.globalTranslateLoadad) {
 			return;
 		}
-		LOGGER.debug("Load Translation MAJOR='" + ETranslate.globalMajor + "' LANG='" + ETranslate.globalLanguage
-				+ "' default=" + ETranslate.globalLanguageDefault);
-		LOGGER.debug("list path=" + ETranslate.globalListPath.keySet());
+		LOGGER.debug("Load Translation MAJOR='{}' LANG='{}' default={}", ETranslate.globalMajor, ETranslate.globalLanguage, ETranslate.globalLanguageDefault);
+		LOGGER.debug("list path={}", ETranslate.globalListPath.keySet());
 		// start parse language for Major:
 		final Uri itMajor = ETranslate.globalListPath.get(ETranslate.globalMajor);
 		if (itMajor != null) {
@@ -238,27 +237,27 @@ public class ETranslate {
 		ETranslate.globalTranslateLoadad = false;
 		ETranslate.globalTranslate.clear();
 		if (lang.equals("EN")) {
-			LOGGER.info("Change language translation: '" + lang + "'=English");
+			LOGGER.info("Change language translation: '{}'=English", lang);
 		} else if (lang.equals("FR")) {
-			LOGGER.info("Change language translation: '" + lang + "'=French");
+			LOGGER.info("Change language translation: '{}'=French", lang);
 		} else if (lang.equals("DE")) {
-			LOGGER.info("Change language translation: '" + lang + "'=German");
+			LOGGER.info("Change language translation: '{}'=German", lang);
 		} else if (lang.equals("SP")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Spanish");
+			LOGGER.info("Change language translation: '{}'=Spanish", lang);
 		} else if (lang.equals("JA")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Japanese");
+			LOGGER.info("Change language translation: '{}'=Japanese", lang);
 		} else if (lang.equals("IT")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Italian");
+			LOGGER.info("Change language translation: '{}'=Italian", lang);
 		} else if (lang.equals("KO")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Korean");
+			LOGGER.info("Change language translation: '{}'=Korean", lang);
 		} else if (lang.equals("RU")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Russian");
+			LOGGER.info("Change language translation: '{}'=Russian", lang);
 		} else if (lang.equals("PT")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Portuguese, Brazilian");
+			LOGGER.info("Change language translation: '{}'=Portuguese, Brazilian", lang);
 		} else if (lang.equals("ZH")) {
-			LOGGER.info("Change language translation: '" + lang + "'=Chinese");
+			LOGGER.info("Change language translation: '{}'=Chinese", lang);
 		} else {
-			LOGGER.info("Change language translation: '" + lang + "'=Unknow");
+			LOGGER.info("Change language translation: '{}'=Unknown", lang);
 		}
 	}
 	
@@ -272,7 +271,7 @@ public class ETranslate {
 		if (ETranslate.globalLanguageDefault.equals(lang)) {
 			return;
 		}
-		LOGGER.info("Change default language translation : '" + lang + "'");
+		LOGGER.info("Change default language translation : '{}'", lang);
 		ETranslate.globalLanguageDefault = lang;
 		ETranslate.globalTranslateLoadad = false;
 		ETranslate.globalTranslate.clear();

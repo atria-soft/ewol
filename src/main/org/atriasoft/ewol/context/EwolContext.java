@@ -10,7 +10,6 @@ import java.time.Clock;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.event.EntrySystem;
 import org.atriasoft.ewol.object.ObjectManager;
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
 // Here we herited from the gale application to be agnostic of the OW where we work ...
 public class EwolContext extends GaleApplication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EwolContext.class);
-
+	
 	/**
 	 * From everywhere in the program, we can get the context inteface.
 	 * @return current reference on the instance.
@@ -45,17 +44,17 @@ public class EwolContext extends GaleApplication {
 		}
 		return null;
 	}
-
+	
 	private EwolApplication application; // !< Application handle
-
+	
 	private final InputManager input;
-
+	
 	private final ObjectManager objectManager; // !< Object Manager main instance
-
+	
 	private final WidgetManager widgetManager = new WidgetManager(); // !< global widget manager
-
+	
 	private Windows windowsCurrent = null; // !< current displayed windows
-
+	
 	public EwolContext(final EwolApplication application) {
 		this.application = application;
 		this.objectManager = new ObjectManager(this);
@@ -65,12 +64,12 @@ public class EwolContext extends GaleApplication {
 			System.exit(-1);
 		}
 	}
-
+	
 	/**
 	 * Redraw all the windows
 	 */
 	public void forceRedrawAll() {
-		LOGGER.warn("force redraw on windows:" + this.windowsCurrent);
+		LOGGER.trace("force redraw on windows: {}", this.windowsCurrent);
 		if (this.windowsCurrent == null) {
 			return;
 		}
@@ -79,32 +78,32 @@ public class EwolContext extends GaleApplication {
 		this.windowsCurrent.onChangeSize();
 		/// Gale.getContext().aaaaaaaaaaaaaa();
 	}
-
+	
 	public void forceRedrawAllAsync() {
 		LOGGER.trace("force redraw ALL (ASYNC):");
 		GaleContext.getContext().requestUpdateSize();
 	}
-
+	
 	public EwolApplication getApplication() {
 		return this.application;
 	}
-
+	
 	public CommandLine getCmd() {
 		return Gale.getContext().getCmd();
 	}
-
+	
 	public ObjectManager getEObjectManager() {
 		return this.objectManager;
 	}
-
+	
 	public ResourceManager getResourcesManager() {
 		return Gale.getContext().getResourcesManager();
 	}
-
+	
 	public WidgetManager getWidgetManager() {
 		return this.widgetManager;
 	}
-
+	
 	/**
 	 * get the current windows that is displayed
 	 * @return the current handle on the windows (can be null)
@@ -112,7 +111,7 @@ public class EwolContext extends GaleApplication {
 	public Windows getWindows() {
 		return this.windowsCurrent;
 	}
-
+	
 	/**
 	 * This fonction lock the pointer properties to move in relative instead
 	 *        of absolute
@@ -121,7 +120,7 @@ public class EwolContext extends GaleApplication {
 	public void inputEventGrabPointer(final Widget widget) {
 		this.input.grabPointer(widget);
 	}
-
+	
 	/**
 	 * This is to transfert the event from one widget to another one
 	 * @param source      the widget where the event came from
@@ -130,7 +129,7 @@ public class EwolContext extends GaleApplication {
 	public void inputEventTransfertWidget(final Widget source, final Widget destination) {
 		this.input.transfertEvent(source, destination);
 	}
-
+	
 	/**
 	 * This fonction un-lock the pointer properties to move in relative
 	 *        instead of absolute
@@ -138,7 +137,7 @@ public class EwolContext extends GaleApplication {
 	public void inputEventUnGrabPointer() {
 		this.input.unGrabPointer();
 	}
-
+	
 	@Override
 	public void onClipboardEvent(final ClipboardList clipboardId) {
 		final Widget tmpWidget = this.widgetManager.focusGet();
@@ -146,10 +145,10 @@ public class EwolContext extends GaleApplication {
 			tmpWidget.onEventClipboard(clipboardId);
 		}
 	}
-
+	
 	@Override
 	public void onCreate(final GaleContext context) {
-		LOGGER.info(" == > Ewol system create (BEGIN)");
+		LOGGER.trace(" == > Ewol system create (BEGIN)");
 		// Add basic ewol translation:
 		ETranslate.addPath("ewol", new Uri("TRANSLATE", "", "ewol"));
 		ETranslate.autoDetectLanguage();
@@ -167,7 +166,7 @@ public class EwolContext extends GaleApplication {
 			//context.getCmd().remove(iii);
 			//--iii;
 		}
-
+		
 		// LOGGER.info("EWOL v:" + ewol::getVersion());
 		// force a recalculation
 		/*
@@ -185,12 +184,12 @@ public class EwolContext extends GaleApplication {
 			return;
 		}
 		appl.onCreate(this);
-		LOGGER.info(" == > Ewol system create (END)");
+		LOGGER.trace(" == > Ewol system create (END)");
 	}
-
+	
 	@Override
 	public void onDestroy(final GaleContext context) {
-		LOGGER.info(" == > Ewol system destroy (BEGIN)");
+		LOGGER.trace(" == > Ewol system destroy (BEGIN)");
 		// Remove current windows
 		this.windowsCurrent = null;
 		// clean all widget and sub widget with their resources:
@@ -209,7 +208,7 @@ public class EwolContext extends GaleApplication {
 		this.objectManager.unInit();
 		LOGGER.info(" == > Ewol system destroy (END)");
 	}
-
+	
 	@Override
 	public void onDraw(final GaleContext context) {
 		//LOGGER.trace("EWOL DRAW");
@@ -222,14 +221,14 @@ public class EwolContext extends GaleApplication {
 		}
 		window.sysDraw();
 	}
-
+	
 	@Override
 	public void onKeyboard(
 			final KeySpecial special,
 			final KeyKeyboard type,
 			final Character value,
 			final KeyStatus state) {
-		LOGGER.trace("event {" + special + "} " + type + " '" + value + "' " + state);
+		LOGGER.trace("event {{{}}} {} '{}' {}", special, type, value, state);
 		// store the keyboard special key status for mouse event...
 		this.input.setLastKeyboardSpecial(special);
 		if (this.windowsCurrent == null) {
@@ -277,7 +276,7 @@ public class EwolContext extends GaleApplication {
 			}
 		}
 	}
-
+	
 	@Override
 	public void onKillDemand(final GaleContext context) {
 		LOGGER.info(" == > User demand a destroy (BEGIN)");
@@ -289,7 +288,7 @@ public class EwolContext extends GaleApplication {
 		appl.onKillDemand(this);
 		LOGGER.info(" == > User demand a destroy (END)");
 	}
-
+	
 	@Override
 	public void onPause(final GaleContext context) {
 		LOGGER.info(" == > Ewol system pause (BEGIN)");
@@ -300,12 +299,12 @@ public class EwolContext extends GaleApplication {
 		appl.onPause(this);
 		LOGGER.info(" == > Ewol system pause (END)");
 	}
-
+	
 	@Override
 	public void onPeriod(final Clock clock, final long time) {
 		this.objectManager.timeCall(clock, time);
 	}
-
+	
 	@Override
 	public void onPointer(
 			final KeySpecial special,
@@ -329,11 +328,11 @@ public class EwolContext extends GaleApplication {
 				this.input.state(type, pointerID, false, pos);
 				break;
 			default:
-				LOGGER.debug("Unknow state : " + state);
+				LOGGER.debug("Unknown state: {}", state);
 				break;
 		}
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay(final GaleContext context) {
 		//LOGGER.info("EWOL onRegenerateDisplay /// ");
@@ -350,18 +349,18 @@ public class EwolContext extends GaleApplication {
 		}
 		// markDrawingIsNeeded();
 	}
-
+	
 	@Override
 	public void onResize(final Vector2f size) {
 		super.onResize(size);
 		forceRedrawAll();
 	}
-
+	
 	public void onResize(final Vector2i size) {
-		LOGGER.trace("Resize: " + size);
+		LOGGER.trace("Resize: {}", size);
 		forceRedrawAll();
 	}
-
+	
 	@Override
 	public void onResume(final GaleContext context) {
 		LOGGER.info(" == > Ewol system resume (BEGIN)");
@@ -372,7 +371,7 @@ public class EwolContext extends GaleApplication {
 		appl.onResume(this);
 		LOGGER.info(" == > Ewol system resume (END)");
 	}
-
+	
 	@Override
 	public void onStart(final GaleContext context) {
 		LOGGER.info(" == > Ewol system start (BEGIN)");
@@ -384,7 +383,7 @@ public class EwolContext extends GaleApplication {
 		appl.onStart(this);
 		LOGGER.info(" == > Ewol system start (END)");
 	}
-
+	
 	@Override
 	public void onStop(final GaleContext context) {
 		LOGGER.info(" == > Ewol system stop (BEGIN)");
@@ -395,7 +394,7 @@ public class EwolContext extends GaleApplication {
 		appl.onStop(this);
 		LOGGER.info(" == > Ewol system stop (END)");
 	}
-
+	
 	/**
 	 * Request a display after call a resize
 	 */
@@ -403,14 +402,14 @@ public class EwolContext extends GaleApplication {
 		final GaleContext context = Gale.getContext();
 		context.requestUpdateSize();
 	}
-
+	
 	/**
 	 * reset event management for the IO like Input ou Mouse or keyborad
 	 */
 	public void resetIOEvent() {
 		this.input.newLayerSet();
 	}
-
+	
 	/**
 	 * Special for init (main) set the start image when loading data
 	 * @param fileName Name of the image to load
@@ -418,7 +417,7 @@ public class EwolContext extends GaleApplication {
 	public void setInitImage(final Uri fileName) {
 		// this.initDisplayImageName = fileName;
 	}
-
+	
 	/**
 	 * set the current windows to display :
 	 * @param windows Windows that might be displayed
