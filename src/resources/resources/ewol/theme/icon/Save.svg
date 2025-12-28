@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64" height="64">
+	<!-- Floppy disk body -->
+	<path d="M 8,8 L 8,56 L 56,56 L 56,16 L 48,8 Z" style="fill:#FFFFFF"/>
+	<!-- Label area (cut out) -->
+	<rect x="16" y="8" width="24" height="20" style="fill:#000000"/>
+	<!-- Metal slider -->
+	<rect x="18" y="36" width="28" height="16" rx="2" style="fill:#000000"/>
+</svg>

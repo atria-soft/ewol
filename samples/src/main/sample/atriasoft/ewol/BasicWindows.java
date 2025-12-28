@@ -115,6 +115,7 @@ public class BasicWindows extends Windows {
 		this.container.setPropertyExpandIfFree(Vector2b.TRUE);
 		sizerMain.subWidgetAdd(this.container);
 		
+		this.testedElement.add(new TestWidgetIcon());
 		this.testedElement.add(new TestWidgetFileChooser());
 		this.testedElement.add(new TestWidgetColorPicker());
 		this.testedElement.add(new TestWidgetListFileSystem());

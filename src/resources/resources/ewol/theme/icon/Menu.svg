@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64" height="64">
+	<!-- Three horizontal lines (hamburger menu) -->
+	<rect x="8" y="14" width="48" height="6" rx="2" style="fill:#FFFFFF"/>
+	<rect x="8" y="29" width="48" height="6" rx="2" style="fill:#FFFFFF"/>
+	<rect x="8" y="44" width="48" height="6" rx="2" style="fill:#FFFFFF"/>
+</svg>

@@ -10,6 +10,7 @@ public class WidgetXmlFactory implements InterfaceFactoryAccess {
 	private static Map<String, Class<?>> listWidgetAvaillable = new HashMap<>();
 	static {
 		listWidgetAvaillable.put("Box", Box.class);
+		listWidgetAvaillable.put("Icon", Icon.class);
 		listWidgetAvaillable.put("SplitPane", SplitPane.class);
 		listWidgetAvaillable.put("Sizer", Sizer.class);
 		listWidgetAvaillable.put("Spacer", Spacer.class);
@@ -25,20 +26,20 @@ public class WidgetXmlFactory implements InterfaceFactoryAccess {
 		listWidgetAvaillable.put("Spin", Spin.class);
 		listWidgetAvaillable.put("Slider", Slider.class);
 	}
-	
+
 	@Override
 	public Class<?> findClass(final String name, final boolean caseSensitive) {
 		return listWidgetAvaillable.get(name);
 	}
-	
+
 	@Override
 	public String generateName(final Object widget) {
 		return null;
 	}
-	
+
 	@Override
 	public Map<String, Class<?>> getConversionMap() {
 		return listWidgetAvaillable;
 	}
-	
+
 }
