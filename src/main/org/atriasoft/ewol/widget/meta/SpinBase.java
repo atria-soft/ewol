@@ -122,7 +122,7 @@ public class SpinBase extends Sizer {
 			this.widgetButtonDown.setPropertyBorderWidth(new DimensionInsets(2f, 1f, 2f, 1f));
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdDownShaper);
-				LOGGER.trace("shaper button DOWN : " + shaper);
+				LOGGER.trace("shaper button DOWN : {}", shaper);
 				if (!shaper.isEmpty()) {
 					this.widgetButtonDown.setPropertyConfig(Uri.valueOf(shaper));
 				}
@@ -140,7 +140,7 @@ public class SpinBase extends Sizer {
 			this.widgetButtonUp.setPropertyBorderRadius(new DimensionBorderRadius(0, 8, 8, 0));
 			if (this.config != null) {
 				final String shaper = this.config.getString(this.confIdUpShaper);
-				LOGGER.trace("shaper button UP : " + shaper);
+				LOGGER.trace("shaper button UP : {}", shaper);
 				if (!shaper.isEmpty()) {
 					this.widgetButtonUp.setPropertyConfig(Uri.valueOf(shaper));
 				}

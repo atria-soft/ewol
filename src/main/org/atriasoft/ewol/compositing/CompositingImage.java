@@ -212,8 +212,7 @@ public class CompositingImage extends Compositing {
 		final Vector2f ratio = new Vector2f(usefullSize.x() / openGLSize.x(), usefullSize.y() / openGLSize.y());
 		final Vector2f sourcePosStart = sourcePosStartIn.multiply(ratio);
 		final Vector2f sourcePosStop = sourcePosStopIn.multiply(ratio);
-		LOGGER.trace("     openGLSize=" + openGLSize + " usableSize=" + usefullSize + " start=" + sourcePosStart
-				+ " stop=" + sourcePosStop);
+		LOGGER.trace("     openGLSize={} usableSize={} start={} stop={}", openGLSize, usefullSize, sourcePosStart, sourcePosStop);
 		
 		this.vboDataColors = new Color[6];
 		this.vboDataCoords = new Vector3f[6];

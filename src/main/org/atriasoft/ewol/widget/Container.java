@@ -258,10 +258,24 @@ public class Container extends Widget {
 		super.systemDraw(displayProp);
 		if (this.subWidget != null) {
 			final DrawProperty prop = displayProp.withLimit(this.origin, this.size);
-			//LOGGER.info("Draw : [" + propertyName + "] t=" + getObjectType() + " o=" + this.origin + "  s=" + this.size);
 			this.subWidget.systemDraw(prop);
 		} else {
-			LOGGER.trace("[" + getId() + "]       ++++++ : [null]");
+			LOGGER.trace("[{}]       ++++++ : [null]", getId());
 		}
+	}
+
+	// ========================================================================
+	// Fluent API methods
+	// ========================================================================
+
+	/**
+	 * Fluent method to set the child widget.
+	 * @param widget the child widget
+	 * @return this container for chaining
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Container> T child(final Widget widget) {
+		setSubWidget(widget);
+		return (T) this;
 	}
 }

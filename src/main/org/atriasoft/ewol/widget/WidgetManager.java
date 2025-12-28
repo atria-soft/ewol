@@ -50,7 +50,7 @@ public class WidgetManager {
 					return null;
 				}
 			}
-			LOGGER.warn("try to create an UnExistant widget : " + nameLower);
+			LOGGER.warn("try to create an UnExistant widget : {}", nameLower);
 			return null;
 		}
 		*/
@@ -119,7 +119,7 @@ public class WidgetManager {
 		//				return null;
 		//			}
 		//		}
-		LOGGER.warn("try to create an UnExistant widget : " + nameLower);
+		LOGGER.warn("try to create an UnExistant widget : {}", nameLower);
 		return null;
 	}
 
@@ -136,7 +136,7 @@ public class WidgetManager {
 		//				return null;
 		//			}
 		//		}
-		LOGGER.warn("try to create an UnExistant widget : " + nameLower);
+		LOGGER.warn("try to create an UnExistant widget : {}", nameLower);
 		return null;
 	}
 
@@ -168,7 +168,7 @@ public class WidgetManager {
 			// nothing to do ...
 			return;
 		}
-		LOGGER.debug("focusKeep=" + newWidget.getId());
+		LOGGER.debug("focusKeep={}", newWidget.getId());
 		//elog::displayBacktrace();
 		Widget focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (newWidget == focusWidgetCurrent) {
@@ -176,17 +176,17 @@ public class WidgetManager {
 			return;
 		}
 		if (focusWidgetCurrent != null) {
-			LOGGER.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
+			LOGGER.debug("Rm focus on WidgetID={}", focusWidgetCurrent.getId());
 			focusWidgetCurrent.rmFocus();
 			focusWidgetCurrent = null;
 		}
 		if (!newWidget.propertyCanFocus) {
-			LOGGER.debug("Widget can not have focus, id=" + newWidget.getId());
+			LOGGER.debug("Widget can not have focus, id={}", newWidget.getId());
 			return;
 		}
 		this.focusWidgetCurrent = new WeakReference<>(newWidget);
 		if (newWidget != null) {
-			LOGGER.debug("Set focus on WidgetID=" + newWidget.getId());
+			LOGGER.debug("Set focus on WidgetID={}", newWidget.getId());
 			newWidget.setFocus();
 		}
 	}
@@ -202,13 +202,13 @@ public class WidgetManager {
 			return;
 		}
 		if (focusWidgetCurrent != null) {
-			LOGGER.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
+			LOGGER.debug("Rm focus on WidgetID={}", focusWidgetCurrent.getId());
 			focusWidgetCurrent.rmFocus();
 		}
 		this.focusWidgetCurrent = this.focusWidgetDefault;
 		focusWidgetCurrent = this.focusWidgetCurrent.get();
 		if (focusWidgetCurrent != null) {
-			LOGGER.debug("Set focus on WidgetID=" + focusWidgetCurrent.getId());
+			LOGGER.debug("Set focus on WidgetID={}", focusWidgetCurrent.getId());
 			focusWidgetCurrent.setFocus();
 		}
 	}
@@ -219,7 +219,7 @@ public class WidgetManager {
 	 */
 	public void focusSetDefault(final Widget newWidget) {
 		if ((newWidget != null) && (!newWidget.propertyCanFocus)) {
-			LOGGER.trace("Widget can not have focus, id=" + newWidget.getId());
+			LOGGER.trace("Widget can not have focus, id={}", newWidget.getId());
 			return;
 		}
 		Widget focusWidgetDefault = null;
@@ -232,12 +232,12 @@ public class WidgetManager {
 		}
 		if (focusWidgetDefault == focusWidgetCurrent) {
 			if (focusWidgetCurrent != null) {
-				LOGGER.debug("Rm focus on WidgetID=" + focusWidgetCurrent.getId());
+				LOGGER.debug("Rm focus on WidgetID={}", focusWidgetCurrent.getId());
 				focusWidgetCurrent.rmFocus();
 			}
 			this.focusWidgetCurrent = new WeakReference<>(newWidget);
 			if (newWidget != null) {
-				LOGGER.debug("Set focus on WidgetID=" + newWidget.getId());
+				LOGGER.debug("Set focus on WidgetID={}", newWidget.getId());
 				newWidget.setFocus();
 			}
 		}

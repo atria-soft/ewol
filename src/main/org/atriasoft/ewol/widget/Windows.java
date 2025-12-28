@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -32,31 +32,30 @@ import org.slf4j.LoggerFactory;
 public class Windows extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Windows.class);
 	
-	protected int colorBg = -1; //!< Default background color of the windows
-	
+	protected int colorBg = -1;
+
 	protected List<Widget> popUpWidgetList = new ArrayList<>();
 	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("file-color")
 	@AknotDescription("File color of the Windows")
-	public Uri propertyColorConfiguration = new Uri("THEME", "color/Windows.json", "ewol"); //!< Configuration file of the windows theme
+	public Uri propertyColorConfiguration = new Uri("THEME", "color/Windows.json", "ewol");
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("title")
 	@AknotDescription("Title of the windows")
-	public String propertyTitle = "No title"; //!< Current title of the windows
-	
-	protected ResourceColorFile resourceColor = null; //!< theme color property (name of file in @ref propertyColorConfiguration)
-	
+	public String propertyTitle = "No title";
+
+	protected ResourceColorFile resourceColor = null;
+
 	protected Widget subWidget;
 
 	protected Windows() {
 		this.propertyCanFocus = true;
 		onChangePropertyColor();
 	}
-	
-	//!< List of pop-up displayed
+
 	@Override
 	public void drawWidgetTree(int level) {
 		super.drawWidgetTree(level);
@@ -107,7 +106,7 @@ public class Windows extends Widget {
 	
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
-		LOGGER.trace("Get widget at pos : " + pos);
+		LOGGER.trace("Get widget at pos: {}", pos);
 		// calculate relative position
 		final Vector2f relativePos = relativePosition(pos);
 		// event go directly on the pop-up
@@ -127,8 +126,8 @@ public class Windows extends Widget {
 		if (this.resourceColor != null) {
 			this.colorBg = this.resourceColor.request("background");
 		} else {
-			LOGGER.warn("Can not open the default color configuration file for the windows: "
-					+ this.propertyColorConfiguration);
+			LOGGER.warn("Can not open the default color configuration file for the windows: {}",
+					this.propertyColorConfiguration);
 		}
 	}
 	
@@ -189,7 +188,7 @@ public class Windows extends Widget {
 	public void popUpWidgetPush(final Widget widget) {
 		if (widget == null) {
 			// nothing to do an error appear :
-			LOGGER.error("can not set widget pop-up (null pointer)");
+			LOGGER.error("cannot set widget pop-up (null pointer)");
 			return;
 		}
 		this.popUpWidgetList.add(widget);
@@ -201,8 +200,7 @@ public class Windows extends Widget {
 		// TODO : it is dangerous to access directly to the system ...
 		EwolObject.getContext().resetIOEvent();
 	}
-	
-	//!< main sub-widget of the Windows.
+
 	@Override
 	public void requestDestroyFromChild(final EwolObject child) {
 		LOGGER.trace("A child has been removed");
@@ -247,7 +245,7 @@ public class Windows extends Widget {
 		if (context.getWindows() == this) {
 			context.setTitle(propertyTitle);
 		} else {
-			LOGGER.info("Set title is delayed ...");
+			LOGGER.debug("Set title is delayed");
 		}
 	}
 	
@@ -257,7 +255,7 @@ public class Windows extends Widget {
 	 */
 	public void setSubWidget(final Widget widget) {
 		if (this.subWidget != null) {
-			LOGGER.info("Remove current main windows Widget...");
+			LOGGER.debug("Remove current main windows Widget");
 			this.subWidget.removeParent();
 			this.subWidget = null;
 		}
@@ -318,8 +316,41 @@ public class Windows extends Widget {
 		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
 				it.systemDraw(displayProp);
-				//LOGGER.debug("Draw Pop-up");
 			}
 		}
+	}
+
+	// ========================================================================
+	// Fluent API
+	// ========================================================================
+
+	/**
+	 * Fluent method to set window title.
+	 * @param title the window title
+	 * @return this windows for chaining
+	 */
+	public Windows title(final String title) {
+		setPropertyTitle(title);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set the content widget.
+	 * @param widget the main widget
+	 * @return this windows for chaining
+	 */
+	public Windows content(final Widget widget) {
+		setSubWidget(widget);
+		return this;
+	}
+
+	/**
+	 * Fluent method to push a popup.
+	 * @param widget the popup widget
+	 * @return this windows for chaining
+	 */
+	public Windows pushPopup(final Widget widget) {
+		popUpWidgetPush(widget);
+		return this;
 	}
 }

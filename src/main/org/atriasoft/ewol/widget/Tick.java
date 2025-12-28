@@ -17,210 +17,173 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingSVG;
-import org.atriasoft.ewol.compositing.GuiShapeMode;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @ingroup ewolWidgetGroup
- * Entry box display :
+ * Tick widget (checkbox indicator) that can be toggled on/off.
  *
- * ~~~~~~~~~~~~~~~~~~~~~~
- * 	----------------------------------------------
- * 	|                Text Label                  |
- * 	----------------------------------------------
- * ~~~~~~~~~~~~~~~~~~~~~~
+ * Signals emitted:
+ * - signalDown: when tick is pressed down
+ * - signalUp: when tick is released
+ * - signalClick: when tick is clicked
+ * - signalValue: when tick value changes (emits the new boolean value)
  */
-/*
-public SignalEmpty signalPressed;
-public SignalEmpty signalDown;
-public SignalEmpty signalUp;
-public SignalEmpty signalEnter;
-public Signal<Boolean> signalValue;
-	public boolean propertyValue; //!< Current state of the Tick.
-public 	Uri> propertyShape; //!< shape of the widget
-*/
 public class Tick extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Tick.class);
-	protected CompositingSVG compositingTick = new CompositingSVG();
-
-	/// color property of the text foreground
-	private int colorIdTextFg;
-	/// text display this.text
-	//private final CompositingGraphicContext gc = new CompositingGraphicContext();
-	/// Periodic call handle to remove it when needed
-	protected Connection periodicConnectionHanble = new Connection();
 	
-	private final Uri uriCheckGreen = new Uri("THEME", "CheckBoxCrossRed.svg", "ewol");
+	private final CompositingSVG compositingTick = new CompositingSVG();
+	private final Uri uriCheckIcon = new Uri("THEME", "CheckBoxCrossRed.svg", "ewol");
 	
-	private Boolean propertyValue = false; //!< string that must be displayed
-
+	/** Periodic call handle to remove it when needed */
+	protected Connection periodicConnectionHandle = new Connection();
+	
+	private boolean propertyValue = false;
+	private boolean isDown = false;
+	private boolean mouseHover = false;
+	
 	@AknotSignal
 	@AknotName("down")
 	@AknotDescription("Tick is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
+	
 	@AknotSignal
 	@AknotName("up")
 	@AknotDescription("Tick is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
+	
 	@AknotSignal
 	@AknotName("click")
 	@AknotDescription("Tick is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
+	
 	@AknotSignal
 	@AknotName("value")
 	@AknotDescription("Tick value change")
 	public Signal<Boolean> signalValue = new Signal<>();
 	
-	private boolean isDown;
-	
 	/**
-	 * Constuctor
+	 * Default constructor.
 	 */
 	public Tick() {
 		this.propertyCanFocus = true;
 		markToRedraw();
-		// can not support multiple click...
 		setMouseLimit(1);
 		setPropertyExpand(Vector2b.FALSE);
 		setPropertyFill(Vector2b.TRUE);
 		setPropertyMinSize(new Dimension2f(new Vector2f(32f, 32f)));
 		setPropertyBorderWidth(new DimensionInsets(4));
-		//setPropertyBorderRadius(new Dimension1f(15));
 		setPropertyBorderColor(Color.BLACK);
 		setPropertyColor(Color.WHITE);
 		setPropertyPadding(new DimensionInsets(3));
 		setPropertyMargin(new DimensionInsets(0));
-
 	}
 	
 	@Override
 	public void calculateMinMaxSize() {
-		// call main class
 		super.calculateMinMaxSize();
-		// get generic padding
 		final Padding padding = Padding.ZERO;
 		final Vector2i minHeight = Vector2i.VALUE_16;
 		
 		Vector2f minimumSizeBase = new Vector2f(minHeight.x(), minHeight.y());
-		// add padding :
 		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
 		this.minSize = Vector2f.max(this.minSize, minimumSizeBase);
-		// verify the min max of the min size ...
 		checkMinSize();
-		LOGGER.error("min size = " + this.minSize);
-	}
-	
-	protected void changeStatusIn(final GuiShapeMode newStatusId) {
-		//		if (this.shape.changeStatusIn(newStatusId)) {
-		//			if (!this.periodicConnectionHanble.isConnected()) {
-		//				//LOGGER.error("REQUEST: connection on periodic call");
-		//				this.periodicConnectionHanble = EwolObject.getObjectManager().periodicCall.connect(this,
-		//						Tick::periodicCall);
-		//			}
-		//			markToRedraw();
-		//		}
-	}
-	
-	private boolean checkIfOver(final Vector2f relPos) {
-		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
-				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
+		LOGGER.trace("min size = {}", this.minSize);
 	}
 	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("value")
-	@AknotDescription("State of the Tick")
+	@AknotDescription("State of the Tick (true = checked)")
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}
 	
-	protected void onChangePropertyTextWhenNothing() {
-		markToRedraw();
-	}
-	
 	protected void onChangePropertyValue() {
-		//Boolean newData = this.propertyValue;
 		markToRedraw();
 	}
 	
 	@Override
 	protected void onDraw() {
 		super.onDraw();
-		//if (this.propertyValue) {
-		if (this.compositingTick != null && this.propertyValue) {
+		if (this.propertyValue) {
 			this.compositingTick.draw(true);
 		}
 	}
 	
 	@Override
 	public boolean onEventInput(final EventInput event) {
-		final Vector2f positionAbsolute = new Vector2f(event.pos().x(), event.pos().y());
-		final Vector2f relPos = relativePosition(positionAbsolute);
-		System.out.println("Event on Input ... " + event + " relPos = " + relPos);
-		LOGGER.trace("Event on Input ... " + event + " relPos = " + relPos);
-		final boolean over = checkIfOver(relPos);
-		//filter if outside the element...
+		final Vector2f relPos = relativePosition(event.pos());
+		LOGGER.trace("Event on Input: {} relPos = {}", event, relPos);
+		final boolean over = isInside(relPos);
+		
+		// Handle cursor leave
 		if (event.status() == KeyStatus.leave) {
-			changeStatusIn(GuiShapeMode.NORMAL);
 			this.isDown = false;
+			this.mouseHover = false;
+			markToRedraw();
 			return true;
 		}
+		
+		// Handle hover detection (inputId == 0 means cursor movement without button press)
 		if (event.inputId() == 0) {
-			if (!this.isDown) {
-				if (KeyStatus.leave == event.status()) {
-					changeStatusIn(GuiShapeMode.NORMAL);
-				} else {
-					LOGGER.trace("Detect Over : " + this.overPositionStart + " -> " + this.overPositionStop);
-					if (over) {
-						changeStatusIn(GuiShapeMode.OVER);
-					} else {
-						changeStatusIn(GuiShapeMode.NORMAL);
-					}
-				}
-				return true;
+			if (over != this.mouseHover) {
+				this.mouseHover = over;
+				markToRedraw();
 			}
+			return over;
 		}
+		
+		// Only handle primary mouse button (inputId == 1)
 		if (event.inputId() != 1) {
 			return false;
 		}
+		
 		if (KeyStatus.pressSingle == event.status() && over) {
 			keepFocus();
-			System.out.println("event ....");
 			this.signalClick.emit();
 			setPropertyValue(!this.propertyValue);
 			return true;
 		}
+		
 		if (KeyStatus.down == event.status() && over) {
 			keepFocus();
 			this.isDown = true;
-			changeStatusIn(GuiShapeMode.SELECT);
 			markToRedraw();
 			this.signalDown.emit();
 			return true;
 		}
-		if (KeyStatus.move == event.status() && over) {
-			keepFocus();
-			markToRedraw();
-			return true;
+		
+		if (KeyStatus.move == event.status()) {
+			if (this.isDown) {
+				markToRedraw();
+			}
+			return over;
 		}
+		
 		if (KeyStatus.up == event.status() && this.isDown) {
 			keepFocus();
 			this.isDown = false;
 			this.signalUp.emit();
-			changeStatusIn(GuiShapeMode.OVER);
 			markToRedraw();
 			return true;
 		}
+		
 		return false;
+	}
+	
+	@Override
+	protected void onLostFocus() {
+		this.isDown = false;
 	}
 	
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
-			//return;
+			return;
 		}
 		regenerateDisplay();
 	}
@@ -228,29 +191,84 @@ public class Tick extends Box {
 	@Override
 	public void regenerateDisplay() {
 		super.regenerateDisplay();
-		final Vector2f size = this.overPositionStop.less(this.overPositionStart);
-		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckGreen), size.toVector2i());
+		final Vector2f tickSize = this.overPositionStop.less(this.overPositionStart);
+		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckIcon), tickSize.toVector2i());
 		this.compositingTick.setPos(this.overPositionStart.add(2));
-		this.compositingTick.print(size.less(4));
+		this.compositingTick.print(tickSize.less(4));
 		this.compositingTick.flush();
 	}
 	
-	/**
-	 * internal check the value with RegExp checking
-	 * @param newData The new string to display
-	 */
-	protected void setInternalValue(final Boolean newData) {
-		this.propertyValue = newData;
-		markToRedraw();
-	}
-	
 	public void setPropertyValue(final Boolean propertyValue) {
-		if (this.propertyValue.equals(propertyValue)) {
+		if (Boolean.valueOf(this.propertyValue).equals(propertyValue)) {
 			return;
 		}
-		this.propertyValue = propertyValue;
+		this.propertyValue = propertyValue != null && propertyValue;
 		this.signalValue.emit(this.propertyValue);
 		onChangePropertyValue();
 	}
 	
+	/**
+	 * Toggle the tick value.
+	 */
+	public void toggle() {
+		setPropertyValue(!this.propertyValue);
+	}
+	
+	/**
+	 * Check if the tick is currently checked.
+	 * @return true if checked
+	 */
+	public boolean isChecked() {
+		return this.propertyValue;
+	}
+	
+	/**
+	 * Check if the tick is currently pressed.
+	 * @return true if pressed
+	 */
+	public boolean isPressed() {
+		return this.isDown;
+	}
+	
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+	
+	/**
+	 * Create a new Tick.
+	 * @return a new Tick
+	 */
+	public static Tick create() {
+		return new Tick();
+	}
+	
+	/**
+	 * Fluent method to set checked state.
+	 * @param checked true to check
+	 * @return this tick for chaining
+	 */
+	public Tick checked(final boolean checked) {
+		setPropertyValue(checked);
+		return this;
+	}
+	
+	/**
+	 * Fluent method to connect a value change callback.
+	 * @param callback the callback to invoke when value changes
+	 * @return this tick for chaining
+	 */
+	public Tick onValueChange(final java.util.function.Consumer<Boolean> callback) {
+		this.signalValue.connect(callback::accept);
+		return this;
+	}
+	
+	/**
+	 * Fluent method to connect a click callback.
+	 * @param callback the callback to invoke when clicked
+	 * @return this tick for chaining
+	 */
+	public Tick onClick(final Runnable callback) {
+		this.signalClick.connect(callback);
+		return this;
+	}
 }

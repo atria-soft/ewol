@@ -11,15 +11,23 @@ import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 
+/**
+ * CheckBox widget combining a Tick (checkbox indicator) and a Label.
+ * Clicking on either the tick or the label toggles the checkbox state.
+ *
+ * Signals emitted:
+ * - signalDown: when checkbox is pressed down
+ * - signalUp: when checkbox is released
+ * - signalClick: when checkbox is clicked
+ * - signalValue: when checkbox value changes (emits the new boolean value)
+ */
 public class CheckBox extends Container {
 
 	protected static void eventLabelClick(final CheckBox self) {
-		self.tick.setPropertyValue(!self.tick.getPropertyValue());
 		self.signalClick.emit();
 	}
 
 	protected static void eventTickClick(final CheckBox self) {
-		self.tick.setPropertyValue(!self.tick.getPropertyValue());
 		self.signalClick.emit();
 	}
 
@@ -39,25 +47,36 @@ public class CheckBox extends Container {
 	@AknotName("down")
 	@AknotDescription("CheckBox is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
+
 	@AknotSignal
 	@AknotName("up")
 	@AknotDescription("CheckBox is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
+
 	@AknotSignal
 	@AknotName("click")
 	@AknotDescription("CheckBox is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
+
 	@AknotSignal
 	@AknotName("value")
 	@AknotDescription("CheckBox value change")
 	public Signal<Boolean> signalValue = new Signal<>();
-	final Tick tick;
-	final Label label;
 
+	private final Tick tick;
+	private final Label label;
+
+	/**
+	 * Default constructor with "No Label" text.
+	 */
 	public CheckBox() {
 		this("No Label");
 	}
 
+	/**
+	 * Constructor with custom label text.
+	 * @param basicLabel The label text to display
+	 */
 	public CheckBox(final String basicLabel) {
 		final Sizer subs = new Sizer(DisplayMode.HORIZONTAL);
 		subs.setPropertyLockExpand(Vector2b.TRUE);
@@ -83,10 +102,9 @@ public class CheckBox extends Container {
 	}
 
 	@AknotManaged
-	//@AknotText
 	@AknotAttribute
 	@AknotName(value = "label")
-	@AknotDescription(value = "value of the label")
+	@AknotDescription(value = "Text label of the checkbox")
 	public String getPropertyLabel() {
 		return this.label.getPropertyValue();
 	}
@@ -94,17 +112,92 @@ public class CheckBox extends Container {
 	@AknotManaged
 	@AknotAttribute
 	@AknotName(value = "value")
-	@AknotDescription(value = "State of the checkbox")
+	@AknotDescription(value = "State of the checkbox (true = checked)")
 	public Boolean getPropertyValue() {
 		return this.tick.getPropertyValue();
 	}
 
+	/**
+	 * Set the label text.
+	 * @param value The new label text
+	 */
 	public void setPropertyLabel(final String value) {
 		this.label.setPropertyValue(value);
 	}
 
+	/**
+	 * Set the checkbox state.
+	 * @param value true for checked, false for unchecked
+	 */
 	public void setPropertyValue(final Boolean value) {
 		this.tick.setPropertyValue(value);
 	}
 
+	/**
+	 * Toggle the checkbox state.
+	 */
+	public void toggle() {
+		setPropertyValue(!getPropertyValue());
+	}
+
+	/**
+	 * Check if the checkbox is checked.
+	 * @return true if checked
+	 */
+	public boolean isChecked() {
+		return Boolean.TRUE.equals(getPropertyValue());
+	}
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new CheckBox with label.
+	 * @param label the label text
+	 * @return a new CheckBox
+	 */
+	public static CheckBox create(final String label) {
+		return new CheckBox(label);
+	}
+
+	/**
+	 * Fluent method to set label text.
+	 * @param label the label text
+	 * @return this checkbox for chaining
+	 */
+	public CheckBox label(final String label) {
+		setPropertyLabel(label);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set checked state.
+	 * @param checked true for checked
+	 * @return this checkbox for chaining
+	 */
+	public CheckBox checked(final boolean checked) {
+		setPropertyValue(checked);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a value change callback.
+	 * @param callback the callback to invoke on value change
+	 * @return this checkbox for chaining
+	 */
+	public CheckBox onValueChange(final java.util.function.Consumer<Boolean> callback) {
+		this.signalValue.connect(callback::accept);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a click callback.
+	 * @param callback the callback to invoke when clicked
+	 * @return this checkbox for chaining
+	 */
+	public CheckBox onClick(final Runnable callback) {
+		this.signalClick.connect(callback);
+		return this;
+	}
 }

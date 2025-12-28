@@ -79,9 +79,9 @@ public class Composer extends Container {
 		return result.getSubWidget();
 	}
 	
-	protected boolean propertyRemoveIfUnderRemove; //!< Remove the composer if sub element request a remove
-	
-	protected Uri propertySubFile; //!< If loading a sub-file, we must do it here ==> permit to configure it in the xml and not have wrong display
+	protected boolean propertyRemoveIfUnderRemove;
+
+	protected Uri propertySubFile;
 	
 	/**
 	 * Constructor
@@ -431,14 +431,14 @@ public class Composer extends Container {
 	}
 	
 	protected void onChangePropertySubFile() {
-		LOGGER.info("Load compositing form external file : " + this.propertySubFile);
+		LOGGER.debug("Load compositing from external file: {}", this.propertySubFile);
 		if (this.propertySubFile.isEmpty()) {
 			// remove all elements:
 			subWidgetRemove();
 			return;
 		}
 		if (!loadFromFile(this.propertySubFile)) {
-			LOGGER.error("Can not load Player GUI from file ... " + this.propertySubFile);
+			LOGGER.error("Can not load Player GUI from file: {}", this.propertySubFile);
 		}
 	}
 	
@@ -699,5 +699,64 @@ public class Composer extends Container {
 		}
 		super.unGrabCursor();
 	}
-	
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Composer.
+	 * @return a new Composer
+	 */
+	public static Composer create() {
+		return new Composer();
+	}
+
+	/**
+	 * Create a new Composer from file.
+	 * @param uri the file URI to load
+	 * @return the created widget or null on failure
+	 */
+	public static Widget fromFile(final Uri uri) {
+		return composerGenerateFile(uri);
+	}
+
+	/**
+	 * Create a new Composer from XML string.
+	 * @param xml the XML string to parse
+	 * @return the created widget or null on failure
+	 */
+	public static Widget fromString(final String xml) {
+		return composerGenerateString(xml);
+	}
+
+	/**
+	 * Fluent method to load from file.
+	 * @param uri the file URI
+	 * @return this composer for chaining
+	 */
+	public Composer file(final Uri uri) {
+		loadFromFile(uri);
+		return this;
+	}
+
+	/**
+	 * Fluent method to load from XML string.
+	 * @param xml the XML string
+	 * @return this composer for chaining
+	 */
+	public Composer xml(final String xml) {
+		loadFromString(xml);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set the content widget.
+	 * @param widget the widget to set
+	 * @return this composer for chaining
+	 */
+	public Composer content(final Widget widget) {
+		setSubWidget(widget);
+		return this;
+	}
 }

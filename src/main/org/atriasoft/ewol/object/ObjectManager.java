@@ -73,7 +73,7 @@ public class ObjectManager {
 			}
 		}
 		if (this.eObjectList.size() != nbObject) {
-			LOGGER.trace(" remove " + (nbObject - this.eObjectList.size()) + " deprecated objects");
+			LOGGER.trace(" remove {} deprecated objects", (nbObject - this.eObjectList.size()));
 		}
 	}
 
@@ -85,8 +85,7 @@ public class ObjectManager {
 		for (final WeakReference<EwolObject> it : this.eObjectList) {
 			final EwolObject element = it.get();
 			if (element != null) {
-				LOGGER.info("  [" + element.getId() + "] name='" + element.getName() + "' type="
-						+ element.getClass().getCanonicalName());
+				LOGGER.info("  [{}] name='{}' type={}", element.getId(), element.getName(), element.getClass().getCanonicalName());
 			}
 		}
 	}
@@ -179,7 +178,7 @@ public class ObjectManager {
 			}
 		}
 		if (this.eObjectList.size() != 0) {
-			LOGGER.error("Have " + this.eObjectList.size() + " active Object");
+			LOGGER.error("Have {} active Object", this.eObjectList.size());
 		}
 		this.eObjectList.clear();
 	}

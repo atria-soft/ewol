@@ -24,12 +24,18 @@ public class ResourceFontSvg extends Resource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceFontSvg.class);
 	
 	public static ResourceFontSvg create(final Uri uri) {
-		LOGGER.trace("KEEP: FontFreeType: " + uri);
+		LOGGER.trace("KEEP: FontFreeType: {}", uri);
+		// Create cache key without size/FORCE_CLIMP properties (they're only for rendering, not loading)
+		// Keep other properties like 'lib' that are needed for resource resolution
+		final Uri cacheKey = uri.clone();
+		cacheKey.getproperties().remove("size");
+		cacheKey.getproperties().remove("FORCE_CLIMP");
+
 		ResourceFontSvg object = null;
-		final Resource object2 = Resource.getManager().localKeep(uri);
+		final Resource object2 = Resource.getManager().localKeep(cacheKey);
 		if (object2 != null) {
 			if (!(object2 instanceof ResourceFontSvg)) {
-				LOGGER.error("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
+				LOGGER.error("Request resource file: '{}' with the wrong type (dynamic cast error)", uri);
 				System.exit(-1);
 				return null;
 			}
@@ -38,9 +44,9 @@ public class ResourceFontSvg extends Resource {
 		if (object != null) {
 			return object;
 		}
-		LOGGER.debug("CREATE: FontFreeType: " + uri);
+		LOGGER.debug("CREATE: FontFreeType: {}", uri);
 		// need to crate a new one ...
-		return new ResourceFontSvg(uri);
+		return new ResourceFontSvg(cacheKey);
 	}
 	
 	private final EsvgFont font;
@@ -53,7 +59,7 @@ public class ResourceFontSvg extends Resource {
 					"... the font file could be opened and read, but it appears ... that its font format is unsupported");
 		} else {
 			// all OK
-			LOGGER.debug("load font : '" + uri + "' glyph count = " + this.font.getNumGlyphs());
+			LOGGER.debug("load font: '{}' glyph count = {}", uri, this.font.getNumGlyphs());
 			// display();
 		}
 	}
@@ -64,7 +70,7 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public synchronized void display() {
-		LOGGER.info("    number of glyph       = " + this.font.getNumGlyphs());
+		LOGGER.debug("    number of glyph = {}", this.font.getNumGlyphs());
 	}
 	
 	public boolean drawGlyph(

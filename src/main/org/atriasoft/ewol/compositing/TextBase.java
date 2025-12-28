@@ -409,11 +409,11 @@ public abstract class TextBase extends Compositing {
 			}
 			if (it.isText()) {
 				htmlAddData(it.getValue());
-				LOGGER.trace("XML add : " + it.getValue());
+				LOGGER.trace("XML add : {}", it.getValue());
 				continue;
 			}
 			if (!it.isElement()) {
-				LOGGER.error("node not suported type : " + it.getType() + " val='" + it.getValue() + "'");
+				LOGGER.error("node not suported type : {} val='{}'", it.getType(), it.getValue());
 				continue;
 			}
 			final XmlElement elem = (XmlElement) it;
@@ -432,10 +432,10 @@ public abstract class TextBase extends Compositing {
 							this.htmlDecoTmp = this.htmlDecoTmp.withFG(Color.valueOf(colorValue));
 						}
 					} catch (final ExmlAttributeDoesNotExist e) {
-						LOGGER.error("Can not get attribute 'color' in XML:" + e.getMessage());
+						LOGGER.error("Can not get attribute 'color' in XML: {}", e.getMessage());
 						e.printStackTrace();
 					} catch (final Exception e) {
-						LOGGER.error("Can not parse attribute 'color' in XML:" + e.getMessage());
+						LOGGER.error("Can not parse attribute 'color' in XML: {}", e.getMessage());
 						e.printStackTrace();
 					}
 				}
@@ -446,10 +446,10 @@ public abstract class TextBase extends Compositing {
 							this.htmlDecoTmp = this.htmlDecoTmp.withBG(Color.valueOf(colorValue));
 						}
 					} catch (final ExmlAttributeDoesNotExist e) {
-						LOGGER.error("Can not get attribute 'colorBg' in XML:" + e.getMessage());
+						LOGGER.error("Can not get attribute 'colorBg' in XML: {}", e.getMessage());
 						e.printStackTrace();
 					} catch (final Exception e) {
-						LOGGER.error("Can not parse attribute 'colorBg' in XML:" + e.getMessage());
+						LOGGER.error("Can not parse attribute 'colorBg' in XML: {}", e.getMessage());
 						e.printStackTrace();
 					}
 				}
@@ -506,7 +506,7 @@ public abstract class TextBase extends Compositing {
 				this.alignment = AlignMode.JUSTIFY;
 				parseHtmlNode(elem);
 			} else {
-				LOGGER.error("node not suported type: " + elem.getType() + " val='" + elem.getValue() + "'");
+				LOGGER.error("node not suported type: {} val='{}'", elem.getType(), elem.getValue());
 			}
 
 			//LOGGER.error("Add data elems... @pos=", this.position);
@@ -697,8 +697,7 @@ public abstract class TextBase extends Compositing {
 					currentId = stop.value;
 				}
 			}
-			LOGGER.trace(" 4 print in not alligned mode : start=" + this.sizeDisplayStart + " stop="
-					+ this.sizeDisplayStop + " pos=" + this.position);
+			LOGGER.trace(" 4 print in not alligned mode : start={} stop={} pos={}", this.sizeDisplayStart, this.sizeDisplayStop, this.position);
 		}
 	}
 
@@ -812,16 +811,16 @@ public abstract class TextBase extends Compositing {
 			parseHtmlNode(bodyNode);
 			htmlFlush();
 		} catch (final ExmlParserErrorMulti e) {
-			LOGGER.error("Can not parse XML data in printHTML:" + e.getMessage());
+			LOGGER.error("Can not parse XML data in printHTML: {}", e.getMessage());
 			e.printStackTrace();
 		} catch (final ExmlBuilderException e) {
-			LOGGER.error("Can not generate XML data in printHTML:" + e.getMessage());
+			LOGGER.error("Can not generate XML data in printHTML: {}", e.getMessage());
 			e.printStackTrace();
 		} catch (final ExmlException e) {
-			LOGGER.error("Error in finding node from XML data in printHTML:" + e.getMessage());
+			LOGGER.error("Error in finding node from XML data in printHTML: {}", e.getMessage());
 			e.printStackTrace();
 		} catch (final AknotException e) {
-			LOGGER.error("Error in parsing pojo data in printHTML:" + e.getMessage());
+			LOGGER.error("Error in parsing pojo data in printHTML: {}", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -1100,7 +1099,7 @@ public abstract class TextBase extends Compositing {
 		this.alignment = alignement;
 		if (this.startTextPos >= this.stopTextPos) {
 			// TODO understand why this flush ...
-			LOGGER.trace("Request alignment with Borne position error : " + startTextPos + " => " + stopTextPos);
+			LOGGER.trace("Request alignment with Borne position error : {} => {}", startTextPos, stopTextPos);
 		}
 	}
 

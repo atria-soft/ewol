@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2020, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -8,9 +8,9 @@ package org.atriasoft.ewol.widget;
 import org.atriasoft.etk.math.Vector2f;
 
 /**
- * @ingroup ewolWidgetGroup
+ * Layer container that stacks widgets on top of each other.
  */
-class Layer extends ContainerN {
+public class Layer extends ContainerN {
 	/**
 	 * Constructor
 	 */
@@ -40,5 +40,28 @@ class Layer extends ContainerN {
 		}
 		return null;
 	}
-	
+
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new Layer.
+	 * @return a new Layer
+	 */
+	public static Layer create() {
+		return new Layer();
+	}
+
+	/**
+	 * Fluent method to add widgets to the layer.
+	 * @param widgets the widgets to add
+	 * @return this layer for chaining
+	 */
+	public Layer add(final Widget... widgets) {
+		for (final Widget w : widgets) {
+			subWidgetAdd(w);
+		}
+		return this;
+	}
 }

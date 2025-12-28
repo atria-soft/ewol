@@ -64,7 +64,7 @@ public class CompositingText extends TextBase {
 			if (this.font == null) {
 				LOGGER.warn("no Glyph... in no font");
 			} else {
-				LOGGER.warn("no Glyph... in font : " + this.font.getName());
+				LOGGER.warn("no Glyph... in font : {}", this.font.getName());
 			}
 			return new Vector2f(0.2f, fontHeigh);
 		}
@@ -395,7 +395,7 @@ public class CompositingText extends TextBase {
 		clear();
 		final var fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
 		fontUri.setProperty("size", Integer.toString(sizeRequest));
-		LOGGER.trace("plop={} size={} result={}", fontName, sizeRequest, fontName);
+		LOGGER.trace("fontName={} sizeRequest={}", fontName, sizeRequest);
 		// link to new one
 		if (this.forceClimp) {
 			fontUri.setProperty("FORCE_CLIMP", "true");

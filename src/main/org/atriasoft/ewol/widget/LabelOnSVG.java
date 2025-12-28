@@ -1,4 +1,4 @@
-/** @file
+/*
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
@@ -26,18 +26,18 @@ import org.slf4j.LoggerFactory;
 
 public class LabelOnSVG extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LabelOnSVG.class);
-	protected int colorDefaultBgText = -1; //!< Default Background color of the text
-	protected int colorDefaultFgText = -1; //!< Default color of the text
-	protected ResourceColorFile colorProperty; //!< theme color property
-	protected boolean propertyAutoTranslate = true; //!< if at true the data is translate automaticaly translate.
+	protected int colorDefaultBgText = -1;
+	protected int colorDefaultFgText = -1;
+	protected ResourceColorFile colorProperty;
+	protected boolean propertyAutoTranslate = true;
 
-	protected int propertyFontSize = 0; //!< default size of the font.
-	protected String propertyValue = ""; //!< decorated text to display.
+	protected int propertyFontSize = 0;
+	protected String propertyValue = "";
 	@AknotSignal
 	@AknotName("pressed")
 	@AknotDescription("Label is pressed")
 	public SignalEmpty signalPressed = new SignalEmpty();
-	protected CompositingText text = new CompositingText(); //!< Compositing text element.
+	protected CompositingText text = new CompositingText();
 	protected String value = "";
 
 	public LabelOnSVG() {
@@ -69,18 +69,18 @@ public class LabelOnSVG extends Widget {
 	public void calculateMinMaxSize() {
 		final Vector2f tmpMax = this.propertyMaxSize.getPixel();
 		final Vector2f tmpMin = this.propertyMinSize.getPixel();
-		LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} tmpMax : " + tmpMax);
+		LOGGER.debug("[{}] {{}} tmpMax: {}", getId(), getClass().getCanonicalName(), tmpMax);
 		if (tmpMax.x() <= 999999) {
 			this.text.setTextAlignment(0, tmpMax.x() - 4, AlignMode.LEFT);
-			LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "}     force Alignement ");
+			LOGGER.debug("[{}] {{}}     force Alignement", getId(), getClass().getCanonicalName());
 		}
 		final Vector2f minSize = this.text.calculateSizeDecorated(this.value);
-		LOGGER.debug("[" + getId() + "] {" + getClass().getCanonicalName() + "} minSize : " + minSize);
+		LOGGER.debug("[{}] {{}} minSize: {}", getId(), getClass().getCanonicalName(), minSize);
 
 		this.minSize = new Vector2f(FMath.avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()),
 				FMath.avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
-		LOGGER.trace("[" + getId() + "] {" + getClass().getCanonicalName() + "} Result min size : " + tmpMin + " < "
-				+ this.minSize + " < " + tmpMax);
+		LOGGER.trace("[{}] {{}} Result min size: {} < {} < {}", getId(), getClass().getCanonicalName(), tmpMin,
+				this.minSize, tmpMax);
 	}
 
 	public int getPropertyFontSize() {
@@ -166,7 +166,7 @@ public class LabelOnSVG extends Widget {
 			this.text.setDefaultColorBg(this.colorProperty.get(this.colorDefaultBgText));
 		}
 		this.text.setPos(tmpTextOrigin);
-		LOGGER.trace("[" + getId() + "] {" + this.value + "} display at pos : " + tmpTextOrigin);
+		LOGGER.trace("[{}] {{}} display at pos: {}", getId(), this.value, tmpTextOrigin);
 		this.text.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + localSize.x(), AlignMode.LEFT);
 		this.text.setClipping(drawClippingPos, drawClippingSize);
 		this.text.printDecorated(this.value);
@@ -223,4 +223,54 @@ public class LabelOnSVG extends Widget {
 		this.propertyValue = propertyValue;
 	}
 
+	// ========================================================================
+	// Factory methods and Fluent API
+	// ========================================================================
+
+	/**
+	 * Create a new LabelOnSVG.
+	 * @return a new LabelOnSVG
+	 */
+	public static LabelOnSVG create() {
+		return new LabelOnSVG();
+	}
+
+	/**
+	 * Create a new LabelOnSVG with text.
+	 * @param text the text to display
+	 * @return a new LabelOnSVG
+	 */
+	public static LabelOnSVG create(final String text) {
+		return new LabelOnSVG(text);
+	}
+
+	/**
+	 * Fluent method to set text.
+	 * @param text the text to display
+	 * @return this label for chaining
+	 */
+	public LabelOnSVG text(final String text) {
+		setPropertyValue(text);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set font size.
+	 * @param size the font size
+	 * @return this label for chaining
+	 */
+	public LabelOnSVG fontSize(final int size) {
+		setPropertyFontSize(size);
+		return this;
+	}
+
+	/**
+	 * Fluent method to connect a pressed callback.
+	 * @param callback the callback to invoke when pressed
+	 * @return this label for chaining
+	 */
+	public LabelOnSVG onPressed(final Runnable callback) {
+		this.signalPressed.connect(callback);
+		return this;
+	}
 }

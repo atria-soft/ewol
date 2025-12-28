@@ -1,0 +1,7 @@
+{
+	"color": [
+		{ name:"separator",       color:"#888" },
+		{ name:"separator-hover", color:"#AAA" },
+		{ name:"separator-drag",  color:"#666" },
+	]
+}
