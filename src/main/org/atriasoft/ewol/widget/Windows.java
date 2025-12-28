@@ -106,7 +106,6 @@ public class Windows extends Widget {
 	
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
-		LOGGER.trace("Get widget at pos: {}", pos);
 		// calculate relative position
 		final Vector2f relativePos = relativePosition(pos);
 		// event go directly on the pop-up

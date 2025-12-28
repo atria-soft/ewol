@@ -274,15 +274,20 @@ public class Box extends Container {
 	
 	@Override
 	public void onRegenerateDisplay() {
+		// Always regenerate children first (they may need redraw even if we don't)
+		super.regenerateDisplay();
+
 		if (!needRedraw()) {
 			return;
 		}
+		// Regenerate our own display (box background, border, etc.)
 		regenerateDisplay();
 	}
-	
+
 	@Override
 	public void regenerateDisplay() {
-		super.regenerateDisplay();
+		// Note: super.regenerateDisplay() is called from onRegenerateDisplay() to ensure
+		// children are always regenerated, even when Box itself doesn't need redraw.
 		final Insets localMargin = this.propertyMargin.size();
 		Vector2f renderSize = calculateSizeRendering();
 		this.overPositionStart = calculateOriginRendering(renderSize);
@@ -293,7 +298,7 @@ public class Box extends Container {
 		final Insets offsetSubWidget = getBorderInsideAggregation();
 		this.insidePositionStart = this.overPositionStart.add(offsetSubWidget.getOrigin());
 		this.insidePositionStop = this.overPositionStop.less(offsetSubWidget.getEnd());
-		
+
 		// remove data of the previous composition:
 		this.vectorialDraw.clear();
 		this.vectorialDraw.setPaintFillColor(this.propertyColor);

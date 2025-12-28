@@ -245,7 +245,7 @@ public class ListFileSystem extends WidgetList {
 			}
 		}
 		if (event.status() == KeyStatus.pressSingle || event.status() == KeyStatus.pressDouble) {
-			LOGGER.trace("Event on List: IdInput={} pos={} status={}", event.inputId(), pos, event.status());
+			LOGGER.debug("Event on List (press): IdInput={} pos={} status={}", event.inputId(), pos, event.status());
 			if (1 == event.inputId()) {
 				if (pos.y() > this.list.size() + offset) {
 					this.selectedLine = -1;
