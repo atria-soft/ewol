@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.atriasoft.aknot.model.InterfaceFactoryAccess;
+import org.atriasoft.ewol.widget.meta.ColorPickerPopup;
 import org.atriasoft.ewol.widget.meta.FileChooser;
 
 public class WidgetXmlFactory implements InterfaceFactoryAccess {
@@ -23,23 +24,26 @@ public class WidgetXmlFactory implements InterfaceFactoryAccess {
 		listWidgetAvaillable.put("ListFileSystem", ListFileSystem.class);
 		listWidgetAvaillable.put("PopUp", PopUp.class);
 		listWidgetAvaillable.put("FileChooser", FileChooser.class);
+		listWidgetAvaillable.put("ColorPicker", ColorPicker.class);
+		listWidgetAvaillable.put("ColorPickerPopup", ColorPickerPopup.class);
 		listWidgetAvaillable.put("Spin", Spin.class);
 		listWidgetAvaillable.put("Slider", Slider.class);
+		listWidgetAvaillable.put("ColorGradient", ColorGradient.class);
 	}
-
+	
 	@Override
 	public Class<?> findClass(final String name, final boolean caseSensitive) {
 		return listWidgetAvaillable.get(name);
 	}
-
+	
 	@Override
 	public String generateName(final Object widget) {
 		return null;
 	}
-
+	
 	@Override
 	public Map<String, Class<?>> getConversionMap() {
 		return listWidgetAvaillable;
 	}
-
+	
 }

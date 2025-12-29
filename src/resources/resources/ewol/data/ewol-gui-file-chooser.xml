@@ -1,17 +1,17 @@
 <PopUp color="#000000A0" min-size="100,100%" expand="true" fill="true">
-	<Box color="#404040FF" border-radius="8px" border-color="#606060FF" border-width="2px" padding="0px" margin="10%" min-size="80,80%" max-size="80,80%" expand="false" fill="false">
+	<Box color="#00000000" padding="0px" margin="0px" min-size="80,80%" max-size="80,80%" expand="false" fill="false">
 		<Sizer mode="VERTICAL" lock="true" fill="true" expand="true">
 			<!-- Title bar -->
-			<Box color="#505050FF" border-radius="8,8,0,0px" padding="8px" expand="true,false" fill="true,false">
+			<Box color="#B0B0B0FF" border-radius="8,8,0,0px" padding="10px" expand="true,false" fill="true,false">
 				<Label name="[{ID}]file-chooser:title-label" expand="true,false" fill="true,false">_T{Title}</Label>
 			</Box>
 
 			<!-- Content area -->
-			<Box color="#353535FF" padding="10px" expand="true" fill="true">
+			<Box color="#353535FF" border-color="#B0B0B0FF" border-width="0,2,0,2px" padding="10px" expand="true" fill="true">
 				<Sizer mode="VERTICAL" expand="true" fill="true">
 					<!-- Folder path entry -->
 					<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
-						<Icon name="[{ID}]file-chooser:icon-folder" icon="Volume" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF"/>
+						<Icon name="[{ID}]file-chooser:icon-folder" icon="Folder" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF"/>
 						<Spacer min-size="5,0px"/>
 						<Entry name="[{ID}]file-chooser:entry-folder" expand="true,false" fill="true,false"/>
 						<Spacer min-size="5,0px"/>
@@ -55,8 +55,8 @@
 				</Sizer>
 			</Box>
 
-			<!-- Footer with buttons -->
-			<Box color="#454545FF" border-radius="0,0,8,8px" padding="8px" expand="true,false" fill="true,false">
+			<!-- Footer -->
+			<Box color="#B0B0B0FF" border-radius="0,0,8,8px" padding="8px" expand="true,false" fill="true,false">
 				<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
 					<CheckBox name="[{ID}]file-chooser:show-hiden-file" label="_T{ShowHiddenFiles}"/>
 					<Spacer expand="true,false"/>

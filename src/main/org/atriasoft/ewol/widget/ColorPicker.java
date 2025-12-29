@@ -17,14 +17,17 @@ import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.event.EventInput;
+import org.atriasoft.ewol.widget.meta.ColorPickerPopup;
 import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * ColorPicker widget that displays a color preview and opens a popup for color selection.
+ *
+ * This is a simple widget that shows the current color as a colored rectangle.
+ * When clicked, it opens a ColorPickerPopup for detailed color selection.
  *
  * Signals emitted:
  * - signalColorChanged: when the color is changed
@@ -84,6 +87,19 @@ public class ColorPicker extends Box {
 	}
 
 	@Override
+	public Widget getWidgetAtPos(final Vector2f pos) {
+		if (this.propertyHide) {
+			return null;
+		}
+		// ColorPicker handles its own events, don't delegate to subWidget (Spacer returns null)
+		final Vector2f relPos = relativePosition(pos);
+		if (isInside(relPos)) {
+			return this;
+		}
+		return null;
+	}
+
+	@Override
 	public boolean onEventInput(final EventInput event) {
 		final Vector2f relPos = relativePosition(event.pos());
 		final boolean over = isInside(relPos);
@@ -98,8 +114,9 @@ public class ColorPicker extends Box {
 		}
 
 		if (KeyStatus.pressSingle == event.status() && over) {
+			LOGGER.debug("ColorPicker clicked - opening popup");
 			keepFocus();
-			openColorPickerPopup(event.pos());
+			openColorPickerPopup();
 			return true;
 		}
 
@@ -107,42 +124,32 @@ public class ColorPicker extends Box {
 	}
 
 	/**
-	 * Opens the color picker popup at the specified position.
+	 * Opens the color picker popup.
 	 */
-	protected void openColorPickerPopup(final Vector2f position) {
+	protected void openColorPickerPopup() {
 		final Windows windows = getWindows();
 		if (windows == null) {
 			LOGGER.error("Cannot open popup: no windows found");
 			return;
 		}
 
-		// Create the popup content
-		final ColorPickerPanel pickerPanel = new ColorPickerPanel(this.propertyValue);
-		pickerPanel.signalColorChanged.connectAuto(this, (final ColorPicker self, final Color color) -> {
-			self.setPropertyValue(color);
-			self.signalColorChanged.emit(color);
-		});
-		pickerPanel.signalValidate.connectAuto(this, (final ColorPicker self, final Color color) -> {
-			self.setPropertyValue(color);
-			self.signalColorChanged.emit(color);
-		});
-		pickerPanel.signalCancel.connectAuto(this, (final ColorPicker self) -> {
-			// Color already reverted in panel if needed
-		});
-
-		// Create popup
-		final PopUp popup = PopUp.create()
-				.closeOnOutside(true)
-				.content(pickerPanel);
-		popup.setPropertyExpand(Vector2b.FALSE);
-		popup.setPropertyFill(Vector2b.FALSE);
-		popup.setPropertyGravity(Gravity.CENTER);
-		popup.setPropertyMinSize(new Dimension2f(new Vector2f(300, 350), Distance.PIXEL));
-
-		// Store reference for closing
-		pickerPanel.setPopup(popup);
+		// Create the popup
+		final ColorPickerPopup popup = ColorPickerPopup.create(this.propertyValue);
+		popup.signalColorChanged.connectAuto(this, ColorPicker::onCallbackColorChanged);
+		popup.signalValidate.connectAuto(this, ColorPicker::onCallbackColorValidate);
 
 		windows.popUpWidgetPush(popup);
+	}
+
+	// Static callback methods for signal connections (avoid lambda GC issues)
+	private static void onCallbackColorChanged(final ColorPicker self, final Color color) {
+		self.setPropertyValue(color);
+		self.signalColorChanged.emit(color);
+	}
+
+	private static void onCallbackColorValidate(final ColorPicker self, final Color color) {
+		self.setPropertyValue(color);
+		self.signalColorChanged.emit(color);
 	}
 
 	// ========================================================================

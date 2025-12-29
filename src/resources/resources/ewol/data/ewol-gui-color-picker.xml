@@ -1,0 +1,94 @@
+<PopUp color="#000000A0" min-size="100,100%" expand="true" fill="true">
+	<Box color="#00000000" padding="0px" margin="0%" min-size="500,320px" max-size="500,400px" expand="false" fill="false">
+		<Sizer mode="VERTICAL" lock="true" fill="true" expand="true">
+			<!-- Title bar -->
+			<Box color="#B0B0B0FF" border-radius="6,6,0,0px" padding="10px" expand="true,false" fill="true,false">
+				<Label name="[{ID}]color-picker:title-label" expand="true,false" fill="true,false">_T{ColorPicker}</Label>
+			</Box>
+
+			<!-- Content area -->
+			<Box color="#353535FF" border-color="#B0B0B0FF" border-width="0,2,0,2px" padding="10px" expand="true" fill="true">
+				<Sizer mode="HORIZONTAL" expand="true" fill="true">
+					<!-- Left side: Color Gradient -->
+					<ColorGradient name="[{ID}]color-picker:gradient" min-size="200,200px" expand="false" fill="false"/>
+
+					<!-- Spacer between gradient and controls -->
+					<Spacer min-size="10,0px"/>
+
+					<!-- Right side: Controls -->
+					<Sizer mode="VERTICAL" expand="true,false" fill="true,false">
+						<!-- Red slider -->
+						<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
+							<Label min-size="25,25px" expand="false">R:</Label>
+							<Slider name="[{ID}]color-picker:slider-red" minimum="0" maximum="255" step="1" expand="true,false" fill="true,false" min-size="120,25px"/>
+						</Sizer>
+
+						<!-- Green slider -->
+						<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
+							<Label min-size="25,25px" expand="false">G:</Label>
+							<Slider name="[{ID}]color-picker:slider-green" minimum="0" maximum="255" step="1" expand="true,false" fill="true,false" min-size="120,25px"/>
+						</Sizer>
+
+						<!-- Blue slider -->
+						<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
+							<Label min-size="25,25px" expand="false">B:</Label>
+							<Slider name="[{ID}]color-picker:slider-blue" minimum="0" maximum="255" step="1" expand="true,false" fill="true,false" min-size="120,25px"/>
+						</Sizer>
+
+						<!-- Alpha slider -->
+						<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
+							<Label min-size="25,25px" expand="false">A:</Label>
+							<Slider name="[{ID}]color-picker:slider-alpha" minimum="0" maximum="255" step="1" expand="true,false" fill="true,false" min-size="120,25px"/>
+						</Sizer>
+
+						<!-- Spacer -->
+						<Spacer min-size="0,8px"/>
+
+						<!-- Hex entry -->
+						<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
+							<Label min-size="35,25px" expand="false">Hex:</Label>
+							<Entry name="[{ID}]color-picker:entry-hex" max="9" expand="true,false" fill="true,false"/>
+						</Sizer>
+
+						<!-- Spacer -->
+						<Spacer min-size="0,8px"/>
+
+						<!-- Preview boxes -->
+						<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false" min-size="0,50px">
+							<Box expand="true" fill="true" border-width="1px" border-color="#606060FF">
+								<Spacer name="[{ID}]color-picker:preview-current" expand="true" fill="true"/>
+							</Box>
+							<Box expand="true" fill="true" border-width="1px" border-color="#606060FF">
+								<Spacer name="[{ID}]color-picker:preview-original" expand="true" fill="true"/>
+							</Box>
+						</Sizer>
+
+						<!-- Spacer (expand to push buttons to bottom) -->
+						<Spacer expand="true,true"/>
+
+					</Sizer>
+				</Sizer>
+			</Box>
+			<!-- Footer -->
+			<Box color="#B0B0B0FF" border-radius="0,0,8,8px" padding="10px" expand="true,false" fill="true,false">
+				<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
+					<Button name="[{ID}]color-picker:button-select" expand="true,false" fill="true,false">
+						<Sizer mode="HORIZONTAL">
+							<Icon icon="Check" fill-color="#80FF80FF" icon-size="20,20px"/>
+							<Spacer min-size="5,0px"/>
+							<Label name="[{ID}]color-picker:select-label">_T{Select}</Label>
+						</Sizer>
+					</Button>
+					<Spacer min-size="10,0px"/>
+					<Button name="[{ID}]color-picker:button-cancel" expand="true,false" fill="true,false">
+						<Sizer mode="HORIZONTAL">
+							<Icon icon="Cancel" fill-color="#FF8080FF" icon-size="20,20px"/>
+							<Spacer min-size="5,0px"/>
+							<Label name="[{ID}]color-picker:cancel-label">_T{Cancel}</Label>
+						</Sizer>
+					</Button>
+				</Sizer>
+			</Box>
+		</Sizer>
+	</Box>
+</PopUp>

@@ -23,26 +23,26 @@ import org.slf4j.LoggerFactory;
 public class BasicWindows extends Windows {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicWindows.class);
 	private static final int MAX_LOG_LINES = 100;
-	
+
 	private int index = -1;
 	private final List<TestWidgetInterface> testedElement = new ArrayList<>();
 	private Container container = null;
 	private Label title = null;
 	private ModelWidget currentModelWidget = null;
-	
+
 	// Log panel components
 	private Sizer logContent;
 	private ScrollView logScrollView;
 	private final List<String> logLines = new ArrayList<>();
-
+	
 	public static void staticRequestNext(final BasicWindows self) {
 		self.requestNext();
 	}
-
+	
 	public static void staticRequestPrevious(final BasicWindows self) {
 		self.requestPrevious();
 	}
-
+	
 	public void requestNext() {
 		LOGGER.info("Request Next");
 		this.index++;
@@ -51,7 +51,7 @@ public class BasicWindows extends Windows {
 		}
 		updateDisplay();
 	}
-
+	
 	public void requestPrevious() {
 		LOGGER.info("Request Previous");
 		this.index--;
@@ -60,7 +60,7 @@ public class BasicWindows extends Windows {
 		}
 		updateDisplay();
 	}
-
+	
 	public void updateDisplay() {
 		final var test = this.testedElement.get(this.index);
 		final var titlegenerated = "<b>[" + (this.index + 1) + "/" + this.testedElement.size() + "] " + test.getTitle()
@@ -73,14 +73,14 @@ public class BasicWindows extends Windows {
 		this.currentModelWidget = new ModelWidget(test, this::addLogEntry);
 		this.container.setSubWidget(this.currentModelWidget);
 	}
-
+	
 	public BasicWindows() {
-		
+
 		final var sizerMain = new Sizer(DisplayMode.VERTICAL);
 		sizerMain.setPropertyExpand(Vector2b.TRUE);
 		sizerMain.setPropertyFill(Vector2b.TRUE);
 		setSubWidget(sizerMain);
-		
+
 		// Navigation menu at top
 		final var menu = new Sizer(DisplayMode.HORIZONTAL);
 		menu.setPropertyExpand(Vector2b.TRUE_FALSE);
@@ -89,32 +89,32 @@ public class BasicWindows extends Windows {
 		menu.setPropertyLockExpand(Vector2b.TRUE);
 		menu.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 3), Distance.CENTIMETER));
 		sizerMain.subWidgetAdd(menu);
-		
+
 		final var next = Button.createLabelButton("&lt;&lt; Previous");
 		next.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 2), Distance.CENTIMETER));
 		menu.subWidgetAdd(next);
 		next.signalClick.connectAuto(this, BasicWindows::staticRequestNext);
-		
+
 		this.title = new Label("unknown");
 		this.title.setPropertyFill(Vector2b.FALSE);
 		this.title.setPropertyExpand(Vector2b.TRUE);
 		menu.subWidgetAdd(this.title);
-		
+
 		final var previous = Button.createLabelButton("Next &gt;&gt;");
 		previous.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 2), Distance.CENTIMETER));
 		menu.subWidgetAdd(previous);
 		previous.signalClick.connectAuto(this, BasicWindows::staticRequestPrevious);
-		
+
 		// Log panel below navigation buttons
 		createLogPanel(sizerMain);
-		
+
 		// Test widget container
 		this.container = new Container();
 		this.container.setPropertyExpand(Vector2b.TRUE);
 		this.container.setPropertyFill(Vector2b.TRUE);
 		this.container.setPropertyExpandIfFree(Vector2b.TRUE);
 		sizerMain.subWidgetAdd(this.container);
-		
+
 		this.testedElement.add(new TestWidgetIcon());
 		this.testedElement.add(new TestWidgetFileChooser());
 		this.testedElement.add(new TestWidgetColorPicker());
@@ -131,7 +131,7 @@ public class BasicWindows extends Windows {
 		this.testedElement.add(new TestWidgetLabel());
 		requestNext();
 	}
-	
+
 	/**
 	 * Creates the log panel below the navigation buttons.
 	 */
@@ -143,35 +143,35 @@ public class BasicWindows extends Windows {
 		logPanel.setPropertyMinSize(new Dimension2f(new Vector2f(0, 10), Distance.POURCENT));
 		logPanel.setPropertyMaxSize(new Dimension2f(new Vector2f(100, 25), Distance.POURCENT));
 		parent.subWidgetAdd(logPanel);
-		
+
 		// Header with title and clear button
 		final var header = new Sizer(DisplayMode.HORIZONTAL);
 		header.setPropertyExpand(Vector2b.TRUE_FALSE);
 		header.setPropertyFill(Vector2b.TRUE);
 		logPanel.subWidgetAdd(header);
-		
+
 		final var titleLabel = new Label("<b>Signal Events Log:</b>");
 		titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
 		titleLabel.setPropertyFill(Vector2b.TRUE);
 		titleLabel.setPropertyGravity(Gravity.LEFT);
 		header.subWidgetAdd(titleLabel);
-		
+
 		final var clearButton = Button.createLabelButton("Clear");
 		clearButton.setPropertyExpand(Vector2b.FALSE);
 		header.subWidgetAdd(clearButton);
 		clearButton.signalClick.connectAuto(this, BasicWindows::staticClearLog);
-		
+
 		// Log content area
 		this.logContent = new Sizer(DisplayMode.VERTICAL);
 		this.logContent.setPropertyExpand(Vector2b.TRUE_FALSE);
 		this.logContent.setPropertyFill(Vector2b.TRUE);
 		this.logContent.setPropertyGravity(Gravity.TOP_LEFT);
-		
+
 		this.logScrollView = ScrollView.create().content(this.logContent).showVertical(true).showHorizontal(false);
 		this.logScrollView.setPropertyExpand(Vector2b.TRUE);
 		this.logScrollView.setPropertyFill(Vector2b.TRUE);
 		logPanel.subWidgetAdd(this.logScrollView);
-		
+
 		// Separator line
 		final var separator = new Spacer();
 		separator.setPropertyColor(Color.DARK_GRAY);
@@ -181,11 +181,11 @@ public class BasicWindows extends Windows {
 		separator.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 2), Distance.PIXEL));
 		parent.subWidgetAdd(separator);
 	}
-	
+
 	public static void staticClearLog(final BasicWindows self) {
 		self.clearLog();
 	}
-	
+
 	/**
 	 * Clears all log entries.
 	 */
@@ -195,7 +195,7 @@ public class BasicWindows extends Windows {
 			this.logContent.subWidgetRemoveAll();
 		}
 	}
-	
+
 	/**
 	 * Adds a log entry to the log panel.
 	 */
@@ -204,28 +204,28 @@ public class BasicWindows extends Windows {
 		if (this.logContent == null || this.logScrollView == null) {
 			return;
 		}
-		
+
 		// Add to list
 		this.logLines.add(message);
-		
+
 		// Limit the number of lines
 		while (this.logLines.size() > MAX_LOG_LINES) {
 			this.logLines.remove(0);
 		}
-		
+
 		// Add label widget
 		final var logLabel = new Label(message);
 		logLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
 		logLabel.setPropertyFill(Vector2b.TRUE);
 		logLabel.setPropertyGravity(Gravity.LEFT);
 		this.logContent.subWidgetAdd(logLabel);
-		
+
 		// Remove oldest widget if exceeding limit
 		final var widgets = this.logContent.getSubWidgets();
 		if (widgets != null && widgets.size() > MAX_LOG_LINES) {
 			this.logContent.subWidgetRemove(widgets.get(0));
 		}
-		
+
 		// Scroll to bottom to show newest entry
 		this.logScrollView.scrollToBottom();
 	}
