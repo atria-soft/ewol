@@ -1,21 +1,24 @@
 package sample.atriasoft.ewol;
 
-import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.ewol.widget.Slider;
 import org.atriasoft.ewol.widget.Widget;
 
 public class TestWidgetSlider implements TestWidgetInterface {
+
 	@Override
 	public Widget getWidget() {
-		final var testWidget = new Slider();
-		testWidget.setPropertyExpand(Vector2b.FALSE);
-		testWidget.setPropertyFill(Vector2b.FALSE);
-
-		return testWidget;
+		// Single slider with markers for property testing
+		final var slider = Slider.create()
+				.range(0, 100)
+				.value(50)
+				.step(1)
+				.markers(10, 25, 50, 75, 90);
+		slider.expand(true, false).fill(true, false);
+		return slider;
 	}
 
 	@Override
 	public String getTitle() {
-		return "Test Slider";
+		return "Slider";
 	}
 }
