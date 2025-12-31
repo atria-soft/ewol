@@ -110,7 +110,7 @@ public class ColorGradient extends Widget {
 	 * @param alpha value between 0 and 255
 	 */
 	public void setAlpha(final int alpha) {
-		this.alpha = FMath.clamp(0, alpha, 255);
+		this.alpha = FMath.clamp(alpha, 0, 255);
 	}
 
 	/**

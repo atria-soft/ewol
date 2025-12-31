@@ -3,12 +3,20 @@ package test.atriasoft.ewol.widget;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.atriasoft.ewol.widget.Spin;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import test.atriasoft.ewol.EwolTestContext;
 
 class SpinTest {
 
 	private Spin spin;
+
+	@BeforeAll
+	static void setUpClass() {
+		EwolTestContext.init();
+	}
 
 	@BeforeEach
 	void setUp() {
