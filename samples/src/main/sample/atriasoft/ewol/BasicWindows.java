@@ -3,7 +3,6 @@ package sample.atriasoft.ewol;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
@@ -15,7 +14,7 @@ import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ScrollView;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
-import org.atriasoft.ewol.widget.Spacer;
+import org.atriasoft.ewol.widget.SplitPane;
 import org.atriasoft.ewol.widget.Windows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,23 +104,33 @@ public class BasicWindows extends Windows {
 		menu.subWidgetAdd(previous);
 		previous.signalClick.connectAuto(this, BasicWindows::staticRequestPrevious);
 
-		// Log panel below navigation buttons
-		createLogPanel(sizerMain);
+		// SplitPane to separate test widget area from log panel
+		final var splitPane = SplitPane.vertical()
+				.splitPosition(0.75f)  // 75% for test widget, 25% for log
+				.minSizes(100.0f, 50.0f);
+		splitPane.setPropertyExpand(Vector2b.TRUE);
+		splitPane.setPropertyFill(Vector2b.TRUE);
+		sizerMain.subWidgetAdd(splitPane);
 
-		// Test widget container
+		// Test widget container (first part of split pane)
 		this.container = new Container();
 		this.container.setPropertyExpand(Vector2b.TRUE);
 		this.container.setPropertyFill(Vector2b.TRUE);
 		this.container.setPropertyExpandIfFree(Vector2b.TRUE);
-		sizerMain.subWidgetAdd(this.container);
+		splitPane.first(this.container);
 
+		// Log panel (second part of split pane)
+		final var logPanel = createLogPanel();
+		splitPane.second(logPanel);
+
+		this.testedElement.add(new TestWidgetSlider());
+		this.testedElement.add(new TestWidgetSliderShowcase());
 		this.testedElement.add(new TestWidgetIcon());
 		this.testedElement.add(new TestWidgetFileChooser());
 		this.testedElement.add(new TestWidgetColorPicker());
 		this.testedElement.add(new TestWidgetListFileSystem());
 		this.testedElement.add(new TestWidgetScrollView());
 		this.testedElement.add(new TestWidgetSplitPane());
-		this.testedElement.add(new TestWidgetSlider());
 		this.testedElement.add(new TestWidgetEntry());
 		this.testedElement.add(new TestWidgetBox());
 		this.testedElement.add(new TestWidgetButton());
@@ -133,16 +142,13 @@ public class BasicWindows extends Windows {
 	}
 
 	/**
-	 * Creates the log panel below the navigation buttons.
+	 * Creates the log panel for the split pane.
+	 * @return the log panel widget
 	 */
-	private void createLogPanel(final Sizer parent) {
-		// Log panel container with title - 25% height
+	private Sizer createLogPanel() {
 		final var logPanel = new Sizer(DisplayMode.VERTICAL);
-		logPanel.setPropertyExpand(Vector2b.TRUE_FALSE);
+		logPanel.setPropertyExpand(Vector2b.TRUE);
 		logPanel.setPropertyFill(Vector2b.TRUE);
-		logPanel.setPropertyMinSize(new Dimension2f(new Vector2f(0, 10), Distance.POURCENT));
-		logPanel.setPropertyMaxSize(new Dimension2f(new Vector2f(100, 25), Distance.POURCENT));
-		parent.subWidgetAdd(logPanel);
 
 		// Header with title and clear button
 		final var header = new Sizer(DisplayMode.HORIZONTAL);
@@ -172,14 +178,7 @@ public class BasicWindows extends Windows {
 		this.logScrollView.setPropertyFill(Vector2b.TRUE);
 		logPanel.subWidgetAdd(this.logScrollView);
 
-		// Separator line
-		final var separator = new Spacer();
-		separator.setPropertyColor(Color.DARK_GRAY);
-		separator.setPropertyExpand(Vector2b.TRUE_FALSE);
-		separator.setPropertyFill(Vector2b.TRUE);
-		separator.setPropertyMinSize(new Dimension2f(new Vector2f(0, 2), Distance.PIXEL));
-		separator.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 2), Distance.PIXEL));
-		parent.subWidgetAdd(separator);
+		return logPanel;
 	}
 
 	public static void staticClearLog(final BasicWindows self) {

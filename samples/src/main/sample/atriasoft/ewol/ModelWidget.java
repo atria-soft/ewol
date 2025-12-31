@@ -59,13 +59,16 @@ public class ModelWidget extends Container {
 	
 	private final List<Connection> conections = new ArrayList<>();
 	
+	private boolean isMetaWidget = false;
+
 	public ModelWidget(final TestWidgetInterface interfaceToTest) {
 		this(interfaceToTest, null);
 	}
-	
+
 	public ModelWidget(final TestWidgetInterface interfaceToTest,
 			final java.util.function.Consumer<String> logCallback) {
 		this.logCallback = logCallback;
+		this.isMetaWidget = interfaceToTest.isMetaWidget();
 		
 		setPropertyExpand(Vector2b.TRUE);
 		setPropertyFill(Vector2b.TRUE);
@@ -1543,13 +1546,24 @@ public class ModelWidget extends Container {
 	
 	public void setTestWidget(final Widget widget) {
 		this.sizerMenu.subWidgetRemoveAll();
-		try {
-			final var modelPojo = new IntrospectionModelComplex(widget.getClass());
-			
-			connectAllSignals(widget, modelPojo);
-			displayAllPropertyWithType(widget, modelPojo);
-		} catch (final Exception e) {
-			e.printStackTrace();
+		if (this.isMetaWidget) {
+			// Display message for meta widgets (composites without editable properties)
+			final var metaLabel = new Label("<b>Meta Widget</b><br/><br/>"
+					+ "<i>This is a composite test containing multiple widgets.<br/>"
+					+ "Individual widget properties are not available for editing.</i>");
+			metaLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+			metaLabel.setPropertyFill(Vector2b.TRUE);
+			metaLabel.setPropertyGravity(Gravity.TOP_LEFT);
+			this.sizerMenu.subWidgetAdd(metaLabel);
+		} else {
+			try {
+				final var modelPojo = new IntrospectionModelComplex(widget.getClass());
+
+				connectAllSignals(widget, modelPojo);
+				displayAllPropertyWithType(widget, modelPojo);
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 		this.sizerTestAreaHori.subWidgetRemoveAll();
 		{
