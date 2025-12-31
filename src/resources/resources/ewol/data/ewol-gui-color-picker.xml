@@ -2,7 +2,7 @@
 	<Box color="#00000000" padding="0px" margin="0%" min-size="500,320px" max-size="500,400px" expand="false" fill="false">
 		<Sizer mode="VERTICAL" lock="true" fill="true" expand="true">
 			<!-- Title bar -->
-			<Box color="#B0B0B0FF" border-radius="6,6,0,0px" padding="10px" expand="true,false" fill="true,false">
+			<Box color="#B0B0B0FF" border-radius="8,8,0,0px" padding="10px" expand="true,false" fill="true,false">
 				<Label name="[{ID}]color-picker:title-label" expand="true,false" fill="true,false">_T{ColorPicker}</Label>
 			</Box>
 
