@@ -1,5 +1,7 @@
 package org.atriasoft.ewol.widget;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.atriasoft.aknot.annotation.AknotAttribute;
@@ -10,15 +12,11 @@ import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.BorderRadius;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension1f;
 import org.atriasoft.etk.Insets;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.CompositingGC;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +29,20 @@ import org.slf4j.LoggerFactory;
 public class Slider extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Slider.class);
 
+	// Default dimensions
+	private static final float DEFAULT_MIN_WIDTH = 150.0f;
+	private static final float DEFAULT_TRACK_HEIGHT = 8.0f;
+	private static final float DEFAULT_CURSOR_WIDTH = 20.0f;
+	private static final float DEFAULT_CURSOR_HEIGHT = 20.0f;
+
+	// Default colors
+	private static final Color DEFAULT_TRACK_COLOR = new Color(0xE0, 0xE0, 0xE0, 0xFF);
+	private static final Color DEFAULT_FILL_COLOR = new Color(0x42, 0x85, 0xF4, 0xFF);
+	private static final Color DEFAULT_CURSOR_COLOR = new Color(0x21, 0x96, 0xF3, 0xFF);
+	private static final Color DEFAULT_CURSOR_BORDER_COLOR = Color.WHITE;
+	private static final Color DEFAULT_MARKER_COLOR = new Color(0x60, 0x60, 0x60, 0xFF);
+	private static final float DEFAULT_MARKER_RADIUS = 3.0f;
+
 	private float propertyValue = 0.0f;
 
 	@AknotSignal
@@ -42,19 +54,28 @@ public class Slider extends Widget {
 	private Vector2f overPositionStart = Vector2f.ZERO;
 	private Vector2f overPositionStop = Vector2f.ZERO;
 	private Vector2f overPositionSize = Vector2f.ZERO;
-	private Vector2f overCursorPositionStart = Vector2f.ZERO;
-	private Vector2f overCursorPositionStop = Vector2f.ZERO;
-	private Vector2f overCursorPositionSize = Vector2f.ZERO;
 
 	private float propertyMinimum = 0.0f;
 	private float propertyMaximum = 10.0f;
 	private float propertyStep = 0.1f;
 
-	private final Color textColorFg = Color.BLACK;
-	private final Color textColorBg = Color.BLACK.withA(0x3F);
+	// Customizable colors
+	private Color propertyTrackColor = DEFAULT_TRACK_COLOR;
+	private Color propertyFillColor = DEFAULT_FILL_COLOR;
+	private Color propertyCursorColor = DEFAULT_CURSOR_COLOR;
+	private Color propertyCursorBorderColor = DEFAULT_CURSOR_BORDER_COLOR;
+	private Color propertyMarkerColor = DEFAULT_MARKER_COLOR;
+
+	// Customizable dimensions
+	private float propertyTrackHeight = DEFAULT_TRACK_HEIGHT;
+	private float propertyCursorWidth = DEFAULT_CURSOR_WIDTH;
+	private float propertyCursorHeight = DEFAULT_CURSOR_HEIGHT;
+	private float propertyMarkerRadius = DEFAULT_MARKER_RADIUS;
+
+	// Markers (points on the track)
+	private List<Float> markers = new ArrayList<>();
 
 	private final CompositingGC vectorialDraw = new CompositingGC();
-	private final Dimension1f propertyLineWidth = new Dimension1f(20);
 
 	private boolean isDragging = false;
 
@@ -70,12 +91,10 @@ public class Slider extends Widget {
 	@Override
 	public void calculateMinMaxSize() {
 		super.calculateMinMaxSize();
-		final Padding padding = Padding.ZERO;
-		final Vector2i minHeight = Vector2i.VALUE_16;
-
-		Vector2f minimumSizeBase = new Vector2f(minHeight.x(), minHeight.y());
-		minimumSizeBase = minimumSizeBase.add(padding.x(), padding.y());
-		this.minSize = Vector2f.max(this.minSize, minimumSizeBase);
+		// Minimum size: width to fit cursor + some track, height to fit cursor
+		final float minWidth = DEFAULT_MIN_WIDTH;
+		final float minHeight = this.propertyCursorHeight + 4.0f;
+		this.minSize = Vector2f.max(this.minSize, new Vector2f(minWidth, minHeight));
 		checkMinSize();
 		LOGGER.debug("min size = {}", this.minSize);
 	}
@@ -169,6 +188,167 @@ public class Slider extends Widget {
 		}
 	}
 
+	// ========================================================================
+	// Color properties
+	// ========================================================================
+
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("track-color")
+	@AknotDescription("Background color of the slider track")
+	public Color getPropertyTrackColor() {
+		return this.propertyTrackColor;
+	}
+
+	public void setPropertyTrackColor(final Color color) {
+		if (Objects.equals(this.propertyTrackColor, color)) {
+			return;
+		}
+		this.propertyTrackColor = color;
+		markToRedraw();
+	}
+
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("fill-color")
+	@AknotDescription("Color of the filled portion of the track")
+	public Color getPropertyFillColor() {
+		return this.propertyFillColor;
+	}
+
+	public void setPropertyFillColor(final Color color) {
+		if (Objects.equals(this.propertyFillColor, color)) {
+			return;
+		}
+		this.propertyFillColor = color;
+		markToRedraw();
+	}
+
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("cursor-color")
+	@AknotDescription("Color of the slider cursor")
+	public Color getPropertyCursorColor() {
+		return this.propertyCursorColor;
+	}
+
+	public void setPropertyCursorColor(final Color color) {
+		if (Objects.equals(this.propertyCursorColor, color)) {
+			return;
+		}
+		this.propertyCursorColor = color;
+		markToRedraw();
+	}
+
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("cursor-border-color")
+	@AknotDescription("Border color of the slider cursor")
+	public Color getPropertyCursorBorderColor() {
+		return this.propertyCursorBorderColor;
+	}
+
+	public void setPropertyCursorBorderColor(final Color color) {
+		if (Objects.equals(this.propertyCursorBorderColor, color)) {
+			return;
+		}
+		this.propertyCursorBorderColor = color;
+		markToRedraw();
+	}
+
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("marker-color")
+	@AknotDescription("Color of the marker points on the track")
+	public Color getPropertyMarkerColor() {
+		return this.propertyMarkerColor;
+	}
+
+	public void setPropertyMarkerColor(final Color color) {
+		if (Objects.equals(this.propertyMarkerColor, color)) {
+			return;
+		}
+		this.propertyMarkerColor = color;
+		markToRedraw();
+	}
+
+	@AknotManaged
+	@AknotAttribute
+	@AknotName("marker-radius")
+	@AknotDescription("Radius of the marker points")
+	public float getPropertyMarkerRadius() {
+		return this.propertyMarkerRadius;
+	}
+
+	public void setPropertyMarkerRadius(final float radius) {
+		if (this.propertyMarkerRadius == radius) {
+			return;
+		}
+		this.propertyMarkerRadius = radius;
+		markToRedraw();
+	}
+
+	/**
+	 * Get the list of marker values.
+	 * @return the list of marker values
+	 */
+	public List<Float> getMarkers() {
+		return new ArrayList<>(this.markers);
+	}
+
+	/**
+	 * Set the list of marker values.
+	 * @param markers the list of marker values
+	 */
+	public void setMarkers(final List<Float> markers) {
+		this.markers = markers != null ? new ArrayList<>(markers) : new ArrayList<>();
+		markToRedraw();
+	}
+
+	/**
+	 * Add a marker at the specified value.
+	 * @param value the value where to place the marker
+	 */
+	public void addMarker(final float value) {
+		this.markers.add(value);
+		markToRedraw();
+	}
+
+	/**
+	 * Clear all markers.
+	 */
+	public void clearMarkers() {
+		this.markers.clear();
+		markToRedraw();
+	}
+
+	/**
+	 * Draw markers on the track.
+	 * @param trackStartX the X position where the track starts
+	 * @param trackY the Y position of the track
+	 * @param trackWidth the width of the track
+	 */
+	private void drawMarkers(final float trackStartX, final float trackY, final float trackWidth) {
+		if (this.markers.isEmpty() || this.propertyMaximum == this.propertyMinimum) {
+			return;
+		}
+		this.vectorialDraw.setPaintFillColor(this.propertyMarkerColor);
+		final float trackCenterY = trackY + this.propertyTrackHeight * 0.5f;
+		final float range = this.propertyMaximum - this.propertyMinimum;
+		for (final Float markerValue : this.markers) {
+			if (markerValue == null) {
+				continue;
+			}
+			final float markerRatio = (markerValue - this.propertyMinimum) / range;
+			if (markerRatio >= 0.0f && markerRatio <= 1.0f) {
+				final float markerX = trackStartX + trackWidth * markerRatio;
+				final Vector2f markerStart = new Vector2f(markerX - this.propertyMarkerRadius, trackCenterY - this.propertyMarkerRadius);
+				final Vector2f markerStop = new Vector2f(markerX + this.propertyMarkerRadius, trackCenterY + this.propertyMarkerRadius);
+				this.vectorialDraw.addRectangle(markerStart, markerStop, new Insets(0), new BorderRadius(this.propertyMarkerRadius));
+			}
+		}
+	}
+
 	/**
 	 * Update the value, clamping it to min/max and applying step.
 	 * @param newValue The new value to set
@@ -248,57 +428,73 @@ public class Slider extends Widget {
 			return;
 		}
 		this.vectorialDraw.clear();
-		{
-			// Manage external shape:
-			Vector2f sizeInsideRender = this.minSize;
-			Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
-			if (this.propertyFill.x()) {
-				sizeInsideRender = sizeInsideRender.withX(this.size.x());
-				delta = delta.withX(0.0f);
-			}
-			if (this.propertyFill.y()) {
-				sizeInsideRender = sizeInsideRender.withY(this.size.y());
-				delta = delta.withY(0.0f);
-			}
 
-			Vector2f tmpOriginShaper = delta;
-			// fix all the position in the int class:
-			sizeInsideRender = Vector2f.clipInt(sizeInsideRender);
-			tmpOriginShaper = Vector2f
-					.clipInt(tmpOriginShaper.addY(sizeInsideRender.y() * 0.5f - this.propertyLineWidth.size() * 0.5f));
-
-			this.overPositionStart = tmpOriginShaper;
-			this.overPositionSize = sizeInsideRender.withY(this.propertyLineWidth.size());
-			this.overPositionStop = tmpOriginShaper.add(this.overPositionSize);
-			this.vectorialDraw.setPaintFillColor(this.textColorBg);
-			this.vectorialDraw.addRectangle(this.overPositionStart, this.overPositionStop, new Insets(0),
-					new BorderRadius(this.propertyLineWidth.size() * 0.5f));
+		// Calculate available size
+		Vector2f sizeInsideRender = this.minSize;
+		Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(this.minSize));
+		if (this.propertyFill.x()) {
+			sizeInsideRender = sizeInsideRender.withX(this.size.x());
+			delta = delta.withX(0.0f);
 		}
-			{
-			// Manage cursor:
-			final float cursorWidth = this.propertyLineWidth.size() * 1.5f;
-			final float cursorHeight = this.propertyLineWidth.size() * 2.0f;
-
-			// Calculate the position ratio (0.0 to 1.0)
-			final float ratio = (this.propertyValue - this.propertyMinimum) / (this.propertyMaximum - this.propertyMinimum);
-
-			// Calculate the cursor X position based on the slider track
-			final float sliderTrackWidth = this.overPositionSize.x() - cursorWidth;
-			final float cursorX = this.overPositionStart.x() + sliderTrackWidth * ratio;
-
-			// Center the cursor vertically on the slider track
-			final float cursorY = this.overPositionStart.y() + (this.overPositionSize.y() - cursorHeight) * 0.5f;
-
-			this.overCursorPositionStart = Vector2f.clipInt(new Vector2f(cursorX, cursorY));
-			this.overCursorPositionSize = Vector2f.clipInt(new Vector2f(cursorWidth, cursorHeight));
-			this.overCursorPositionStop = this.overCursorPositionStart.add(this.overCursorPositionSize);
-
-			this.vectorialDraw.setColor(Color.RED);
-			this.vectorialDraw.addRectangle(this.overCursorPositionStart, this.overCursorPositionStop, new Insets(0),
-					new BorderRadius(this.propertyLineWidth.size() * 0.4f));
+		if (this.propertyFill.y()) {
+			sizeInsideRender = sizeInsideRender.withY(this.size.y());
+			delta = delta.withY(0.0f);
 		}
+
+		// Calculate track position (centered vertically, with padding for cursor)
+		final float trackPaddingX = this.propertyCursorWidth * 0.5f;
+		final float trackY = delta.y() + (sizeInsideRender.y() - this.propertyTrackHeight) * 0.5f;
+		final float trackStartX = delta.x() + trackPaddingX;
+		final float trackWidth = sizeInsideRender.x() - this.propertyCursorWidth;
+
+		this.overPositionStart = new Vector2f(trackStartX, trackY);
+		this.overPositionSize = new Vector2f(trackWidth, this.propertyTrackHeight);
+		this.overPositionStop = this.overPositionStart.add(this.overPositionSize);
+
+		final float trackRadius = this.propertyTrackHeight * 0.5f;
+
+		// Calculate the position ratio (0.0 to 1.0)
+		float ratio = 0.0f;
+		if (this.propertyMaximum != this.propertyMinimum) {
+			ratio = (this.propertyValue - this.propertyMinimum) / (this.propertyMaximum - this.propertyMinimum);
+		}
+
+		// Draw track background (unfilled portion)
+		this.vectorialDraw.setPaintFillColor(this.propertyTrackColor);
+		this.vectorialDraw.addRectangle(this.overPositionStart, this.overPositionStop, new Insets(0),
+				new BorderRadius(trackRadius));
+
+		// Draw filled portion of track
+		if (ratio > 0.0f) {
+			final float filledWidth = trackWidth * ratio;
+			final Vector2f fillStop = new Vector2f(trackStartX + filledWidth, trackY + this.propertyTrackHeight);
+			this.vectorialDraw.setPaintFillColor(this.propertyFillColor);
+			this.vectorialDraw.addRectangle(this.overPositionStart, fillStop, new Insets(0),
+					new BorderRadius(trackRadius, 0, 0, trackRadius));
+		}
+
+		// Draw markers
+		drawMarkers(trackStartX, trackY, trackWidth);
+
+		// Draw cursor
+		final float cursorX = trackStartX + trackWidth * ratio - this.propertyCursorWidth * 0.5f;
+		final float cursorY = delta.y() + (sizeInsideRender.y() - this.propertyCursorHeight) * 0.5f;
+		final Vector2f cursorStart = new Vector2f(cursorX, cursorY);
+		final Vector2f cursorStop = cursorStart.add(this.propertyCursorWidth, this.propertyCursorHeight);
+		final float cursorRadius = this.propertyCursorHeight * 0.5f;
+
+		// Cursor border (white shadow effect)
+		this.vectorialDraw.setPaintFillColor(this.propertyCursorBorderColor);
+		this.vectorialDraw.addRectangle(cursorStart, cursorStop, new Insets(0), new BorderRadius(cursorRadius));
+
+		// Cursor inner
+		final float borderWidth = 2.0f;
+		final Vector2f innerStart = cursorStart.add(borderWidth, borderWidth);
+		final Vector2f innerStop = cursorStop.less(borderWidth, borderWidth);
+		this.vectorialDraw.setPaintFillColor(this.propertyCursorColor);
+		this.vectorialDraw.addRectangle(innerStart, innerStop, new Insets(0), new BorderRadius(cursorRadius - borderWidth));
+
 		this.vectorialDraw.flush();
-
 	}
 
 	// ========================================================================
@@ -372,6 +568,102 @@ public class Slider extends Widget {
 	 */
 	public Slider onValueChange(final java.util.function.Consumer<Float> callback) {
 		this.signalValue.connect(callback::accept);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set track background color.
+	 * @param color the track color
+	 * @return this slider for chaining
+	 */
+	public Slider trackColor(final Color color) {
+		setPropertyTrackColor(color);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set filled portion color.
+	 * @param color the fill color
+	 * @return this slider for chaining
+	 */
+	public Slider fillColor(final Color color) {
+		setPropertyFillColor(color);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set cursor color.
+	 * @param color the cursor color
+	 * @return this slider for chaining
+	 */
+	public Slider cursorColor(final Color color) {
+		setPropertyCursorColor(color);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set cursor border color.
+	 * @param color the cursor border color
+	 * @return this slider for chaining
+	 */
+	public Slider cursorBorderColor(final Color color) {
+		setPropertyCursorBorderColor(color);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set marker color.
+	 * @param color the marker color
+	 * @return this slider for chaining
+	 */
+	public Slider markerColor(final Color color) {
+		setPropertyMarkerColor(color);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set marker radius.
+	 * @param radius the marker radius
+	 * @return this slider for chaining
+	 */
+	public Slider markerRadius(final float radius) {
+		setPropertyMarkerRadius(radius);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set markers from a list of values.
+	 * @param values the marker values
+	 * @return this slider for chaining
+	 */
+	public Slider markers(final List<Float> values) {
+		setMarkers(values);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set markers from varargs.
+	 * @param values the marker values
+	 * @return this slider for chaining
+	 */
+	public Slider markers(final float... values) {
+		this.markers.clear();
+		if (values != null) {
+			for (final float value : values) {
+				this.markers.add(value);
+			}
+		}
+		markToRedraw();
+		return this;
+	}
+
+	/**
+	 * Fluent method to add a single marker.
+	 * @param value the marker value
+	 * @return this slider for chaining
+	 */
+	public Slider marker(final float value) {
+		addMarker(value);
 		return this;
 	}
 }
