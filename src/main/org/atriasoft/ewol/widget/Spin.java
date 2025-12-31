@@ -56,7 +56,7 @@ public class Spin extends SpinBase {
 	 * @param value The new value to set
 	 */
 	public void checkValue(long value) {
-		value = FMath.clamp(this.propertyMin, value, this.propertyMax);
+		value = FMath.clamp(value, this.propertyMin, this.propertyMax);
 		final boolean changed = this.propertyValue != value;
 		this.propertyValue = value;
 		// Always update the entry display

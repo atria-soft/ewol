@@ -134,7 +134,7 @@ public class ProgressBar extends Widget {
 	}
 
 	public void setPropertyValue(final float propertyValue) {
-		final float clampedValue = FMath.clamp(0.0f, propertyValue, 1.0f);
+		final float clampedValue = FMath.clamp(propertyValue, 0.0f, 1.0f);
 		if (clampedValue == this.propertyValue) {
 			return;
 		}

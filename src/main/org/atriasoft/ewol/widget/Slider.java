@@ -95,9 +95,9 @@ public class Slider extends Widget {
 		if (sliderWidth <= 0) {
 			return this.propertyMinimum;
 		}
-		final float percent = FMath.clamp(0.0f,
+		final float percent = FMath.clamp(
 				(relPos.x() - this.overPositionStart.x()) / sliderWidth,
-				1.0f);
+				0.0f, 1.0f);
 		float value = (this.propertyMaximum - this.propertyMinimum) * percent + this.propertyMinimum;
 		if (this.propertyStep != 0.0f) {
 			value += this.propertyStep * 0.5f;
@@ -174,11 +174,11 @@ public class Slider extends Widget {
 	 * @param newValue The new value to set
 	 */
 	protected void updateValue(float newValue) {
-		newValue = FMath.clamp(this.propertyMinimum, newValue, this.propertyMaximum);
+		newValue = FMath.clamp(newValue, this.propertyMinimum, this.propertyMaximum);
 		if (this.propertyStep != 0.0f) {
 			final float steps = Math.round((newValue - this.propertyMinimum) / this.propertyStep);
 			newValue = this.propertyMinimum + steps * this.propertyStep;
-			newValue = FMath.clamp(this.propertyMinimum, newValue, this.propertyMaximum);
+			newValue = FMath.clamp(newValue, this.propertyMinimum, this.propertyMaximum);
 		}
 		this.propertyValue = newValue;
 		markToRedraw();

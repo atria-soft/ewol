@@ -4,12 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.Label;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import test.atriasoft.ewol.EwolTestContext;
 
 class ButtonTest {
 
 	private Button button;
+
+	@BeforeAll
+	static void setUpClass() {
+		EwolTestContext.init();
+	}
 
 	@BeforeEach
 	void setUp() {

@@ -4,12 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.atriasoft.etk.Color;
 import org.atriasoft.ewol.widget.ProgressBar;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import test.atriasoft.ewol.EwolTestContext;
 
 class ProgressBarTest {
 
 	private ProgressBar progressBar;
+
+	@BeforeAll
+	static void setUpClass() {
+		EwolTestContext.init();
+	}
 
 	@BeforeEach
 	void setUp() {
