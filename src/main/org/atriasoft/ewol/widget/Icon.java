@@ -194,14 +194,14 @@ public class Icon extends Widget {
 		final String strokeHex = colorToHex(this.propertyStrokeColor);
 
 		// Replace white (fill reference) with fill color
-		result = result.replace("#FFFFFF", fillHex);
-		result = result.replace("#ffffff", fillHex);
-		result = result.replace("#FFF", fillHex);
-		result = result.replace("#fff", fillHex);
+		result = result.replace("#000000", fillHex);
+		result = result.replace("#000", fillHex);
 
 		// Replace black (stroke reference) with stroke color
-		result = result.replace("#000000", strokeHex);
-		result = result.replace("#000", strokeHex);
+		result = result.replace("#FFFFFF", strokeHex);
+		result = result.replace("#ffffff", strokeHex);
+		result = result.replace("#FFF", strokeHex);
+		result = result.replace("#fff", strokeHex);
 
 		return result;
 	}
