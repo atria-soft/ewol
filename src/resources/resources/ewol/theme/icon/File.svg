@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="64" height="64">
-	<!-- File body -->
-	<path d="M 12,4 L 12,60 L 52,60 L 52,16 L 40,4 Z" style="fill:#FFFFFF"/>
-	<!-- Folded corner -->
-	<path d="M 40,4 L 40,16 L 52,16 Z" style="fill:#000000"/>
-</svg>

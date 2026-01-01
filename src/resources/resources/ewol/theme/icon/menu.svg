@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="menu.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="14.955882"
+     inkscape:cx="32.662734"
+     inkscape:cy="32.027532"
+     inkscape:window-width="2558"
+     inkscape:window-height="1564"
+     inkscape:window-x="0"
+     inkscape:window-y="17"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <!-- Three horizontal lines (hamburger menu) -->
+  <rect
+     x="8"
+     y="14"
+     width="48"
+     height="6"
+     rx="2"
+     style="fill:#000000;fill-opacity:1"
+     id="rect1" />
+  <rect
+     x="8"
+     y="29"
+     width="48"
+     height="6"
+     rx="2"
+     style="fill:#000000;fill-opacity:1"
+     id="rect2" />
+  <rect
+     x="8"
+     y="44"
+     width="48"
+     height="6"
+     rx="2"
+     style="fill:#000000;fill-opacity:1"
+     id="rect3" />
+</svg>

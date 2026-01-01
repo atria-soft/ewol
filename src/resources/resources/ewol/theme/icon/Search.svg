@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="64" height="64">
-	<!-- Loupe circle (inner) -->
-	<circle cx="24" cy="24" r="14" style="fill:none;stroke:#FFFFFF;stroke-width:4"/>
-	<!-- Loupe handle -->
-	<path d="M 35,35 L 54,54" style="fill:none;stroke:#FFFFFF;stroke-width:6;stroke-linecap:round"/>
-</svg>
