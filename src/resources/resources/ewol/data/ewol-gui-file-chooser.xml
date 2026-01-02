@@ -11,18 +11,18 @@
 				<Sizer mode="VERTICAL" expand="true" fill="true">
 					<!-- Folder path entry -->
 					<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
-						<Icon name="[{ID}]file-chooser:icon-folder" icon="Folder" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF"/>
+						<Icon name="[{ID}]file-chooser:icon-folder" icon="folder" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF"/>
 						<Spacer min-size="5,0px"/>
 						<Entry name="[{ID}]file-chooser:entry-folder" expand="true,false" fill="true,false"/>
 						<Spacer min-size="5,0px"/>
-						<Icon name="[{ID}]file-chooser:icon-home" icon="Home" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF"/>
+						<Icon name="[{ID}]file-chooser:icon-home" icon="home" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF"/>
 					</Sizer>
 
 					<Spacer min-size="0,5px"/>
 
 					<!-- File name entry -->
 					<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
-						<Icon name="[{ID}]file-chooser:icon-file" icon="File" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF" stroke-color="#808080FF"/>
+						<Icon name="[{ID}]file-chooser:icon-file" icon="file" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF" stroke-color="#808080FF"/>
 						<Spacer min-size="5,0px"/>
 						<Entry name="[{ID}]file-chooser:entry-file" expand="true,false" fill="true,false"/>
 						<Spacer min-size="37,0px"/>
@@ -62,7 +62,7 @@
 					<Spacer expand="true,false"/>
 					<Button name="[{ID}]file-chooser:button-validate">
 						<Sizer mode="HORIZONTAL">
-							<Icon icon="Load" fill-color="#80FF80FF" stroke-color="#408040FF" icon-size="24,24px"/>
+							<Icon icon="open-in-app" fill-color="#80FF80FF" stroke-color="#408040FF" icon-size="24,24px"/>
 							<Spacer min-size="5,0px"/>
 							<Label name="[{ID}]file-chooser:validate-label">_T{Validate}</Label>
 						</Sizer>
@@ -70,7 +70,7 @@
 					<Spacer min-size="10,0px"/>
 					<Button name="[{ID}]file-chooser:button-cancel">
 						<Sizer mode="HORIZONTAL">
-							<Icon icon="Cancel" fill-color="#FF8080FF" icon-size="24,24px"/>
+							<Icon icon="cancel" fill-color="#FF8080FF" icon-size="24,24px"/>
 							<Spacer min-size="5,0px"/>
 							<Label name="[{ID}]file-chooser:cancel-label">_T{Cancel}</Label>
 						</Sizer>
