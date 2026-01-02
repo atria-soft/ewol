@@ -29,27 +29,27 @@ public class TestWidgetIcon implements TestWidgetInterface {
 		mainSizer.subWidgetAdd(row1);
 
 		// Home icon - white
-		row1.subWidgetAdd(Icon.create("Home")
+		row1.subWidgetAdd(Icon.create("home")
 				.fill(Color.WHITE)
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Search icon - blue
-		row1.subWidgetAdd(Icon.create("Search")
+		row1.subWidgetAdd(Icon.create("search")
 				.fill(new Color(0.2f, 0.6f, 1.0f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Add icon - green
-		row1.subWidgetAdd(Icon.create("Add")
+		row1.subWidgetAdd(Icon.create("add")
 				.fill(new Color(0.2f, 0.8f, 0.2f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Close icon - red
-		row1.subWidgetAdd(Icon.create("Close")
+		row1.subWidgetAdd(Icon.create("close")
 				.fill(new Color(1.0f, 0.2f, 0.2f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Menu icon - yellow
-		row1.subWidgetAdd(Icon.create("Menu")
+		row1.subWidgetAdd(Icon.create("menu")
 				.fill(new Color(1.0f, 0.8f, 0.0f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
@@ -60,22 +60,22 @@ public class TestWidgetIcon implements TestWidgetInterface {
 		mainSizer.subWidgetAdd(row2);
 
 		// Small (24px)
-		row2.subWidgetAdd(Icon.create("Settings")
+		row2.subWidgetAdd(Icon.create("settings")
 				.fill(Color.WHITE)
 				.size(new Dimension2f(new Vector2f(24, 24), Distance.PIXEL)));
 
 		// Medium (32px)
-		row2.subWidgetAdd(Icon.create("Settings")
+		row2.subWidgetAdd(Icon.create("settings")
 				.fill(Color.WHITE)
 				.size(new Dimension2f(new Vector2f(32, 32), Distance.PIXEL)));
 
 		// Large (48px)
-		row2.subWidgetAdd(Icon.create("Settings")
+		row2.subWidgetAdd(Icon.create("settings")
 				.fill(Color.WHITE)
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Extra large (64px)
-		row2.subWidgetAdd(Icon.create("Settings")
+		row2.subWidgetAdd(Icon.create("settings")
 				.fill(Color.WHITE)
 				.size(new Dimension2f(new Vector2f(64, 64), Distance.PIXEL)));
 
@@ -85,22 +85,22 @@ public class TestWidgetIcon implements TestWidgetInterface {
 		row3.setPropertyFill(Vector2b.TRUE);
 		mainSizer.subWidgetAdd(row3);
 
-		row3.subWidgetAdd(Icon.create("ArrowLeft")
+		row3.subWidgetAdd(Icon.create("chevron-left")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
 				.stroke(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row3.subWidgetAdd(Icon.create("ArrowUp")
+		row3.subWidgetAdd(Icon.create("chevron-up")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
 				.stroke(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row3.subWidgetAdd(Icon.create("ArrowDown")
+		row3.subWidgetAdd(Icon.create("chevron-down")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
 				.stroke(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row3.subWidgetAdd(Icon.create("ArrowRight")
+		row3.subWidgetAdd(Icon.create("chevron-right")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
 				.stroke(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
@@ -111,19 +111,19 @@ public class TestWidgetIcon implements TestWidgetInterface {
 		row4.setPropertyFill(Vector2b.TRUE);
 		mainSizer.subWidgetAdd(row4);
 
-		row4.subWidgetAdd(Icon.create("Edit")
+		row4.subWidgetAdd(Icon.create("open-in-app")
 				.fill(new Color(0.9f, 0.7f, 0.2f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row4.subWidgetAdd(Icon.create("Delete")
+		row4.subWidgetAdd(Icon.create("delete")
 				.fill(new Color(0.9f, 0.3f, 0.3f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row4.subWidgetAdd(Icon.create("Save")
+		row4.subWidgetAdd(Icon.create("save")
 				.fill(new Color(0.3f, 0.7f, 0.3f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row4.subWidgetAdd(Icon.create("Check")
+		row4.subWidgetAdd(Icon.create("check")
 				.fill(new Color(0.2f, 0.9f, 0.2f))
 				.stroke(new Color(0.1f, 0.6f, 0.1f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
@@ -134,11 +134,11 @@ public class TestWidgetIcon implements TestWidgetInterface {
 		row5.setPropertyFill(Vector2b.TRUE);
 		mainSizer.subWidgetAdd(row5);
 
-		row5.subWidgetAdd(Icon.create("Folder")
+		row5.subWidgetAdd(Icon.create("folder")
 				.fill(new Color(1.0f, 0.8f, 0.3f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
-		row5.subWidgetAdd(Icon.create("File")
+		row5.subWidgetAdd(Icon.create("file")
 				.fill(Color.WHITE)
 				.stroke(Color.GRAY)
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));

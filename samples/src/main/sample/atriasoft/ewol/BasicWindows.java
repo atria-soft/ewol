@@ -123,9 +123,10 @@ public class BasicWindows extends Windows {
 		final var logPanel = createLogPanel();
 		splitPane.second(logPanel);
 
+		this.testedElement.add(new TestWidgetIcon());
+		this.testedElement.add(new TestWidgetSelect());
 		this.testedElement.add(new TestWidgetSlider());
 		this.testedElement.add(new TestWidgetSliderShowcase());
-		this.testedElement.add(new TestWidgetIcon());
 		this.testedElement.add(new TestWidgetFileChooser());
 		this.testedElement.add(new TestWidgetColorPicker());
 		this.testedElement.add(new TestWidgetListFileSystem());
