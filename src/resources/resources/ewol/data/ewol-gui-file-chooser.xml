@@ -22,7 +22,7 @@
 
 					<!-- File name entry -->
 					<Sizer mode="HORIZONTAL" expand="true,false" fill="true,false">
-						<Icon name="[{ID}]file-chooser:icon-file" icon="file" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF" stroke-color="#808080FF"/>
+						<Icon name="[{ID}]file-chooser:icon-file" icon="file" expand="false" icon-size="32,32px" fill-color="#FFFFFFFF" background-color="#808080FF"/>
 						<Spacer min-size="5,0px"/>
 						<Entry name="[{ID}]file-chooser:entry-file" expand="true,false" fill="true,false"/>
 						<Spacer min-size="37,0px"/>
@@ -62,7 +62,7 @@
 					<Spacer expand="true,false"/>
 					<Button name="[{ID}]file-chooser:button-validate">
 						<Sizer mode="HORIZONTAL">
-							<Icon icon="open-in-app" fill-color="#80FF80FF" stroke-color="#408040FF" icon-size="24,24px"/>
+							<Icon icon="open-in-app" fill-color="#80FF80FF" background-color="#408040FF" icon-size="24,24px"/>
 							<Spacer min-size="5,0px"/>
 							<Label name="[{ID}]file-chooser:validate-label">_T{Validate}</Label>
 						</Sizer>

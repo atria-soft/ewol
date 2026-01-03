@@ -5,6 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
+import java.util.Set;
+
 import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
@@ -18,69 +20,72 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
+import org.atriasoft.exml.Exml;
+import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.exml.model.XmlNode;
 import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Icon widget that displays SVG icons with customizable fill and stroke colors.
+ * Icon widget that displays SVG icons with customizable fill and background colors.
  *
- * Icons should be stored in theme/icon/ with:
- * - fill:#FFFFFF (white) for areas to be colored with fillColor
- * - stroke:#000000 (black) for strokes to be colored with strokeColor
+ * The colors are applied by replacing reference colors in the SVG:
+ * - Black colors (#000, #000000, black) are replaced with fillColor
+ * - White colors (#FFF, #FFFFFF, white) are replaced with backgroundColor
  *
  * Example usage:
  * <pre>
  * Icon.create("Home")
  *     .fill(Color.RED)
- *     .stroke(Color.BLACK)
+ *     .background(Color.TRANSPARENT)
  *     .size(new Dimension2f(32, 32))
  *     .onPressed(() -> navigateHome());
  * </pre>
  */
 public class Icon extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Icon.class);
-
+	
 	/** Compositing for SVG rendering */
 	private final CompositingSVG compositing = new CompositingSVG();
-
+	
 	/** Source URI of the icon SVG */
 	private Uri propertySource = null;
-
+	
 	/** Icon name (simple name like "Home", "Search", etc.) */
 	private String propertyIcon = null;
-
-	/** Fill color (replaces #FFFFFF in SVG) */
+	
+	/** Fill color (replaces black colors in SVG) */
 	private Color propertyFillColor = Color.WHITE;
-
-	/** Stroke color (replaces #000000 in SVG) */
-	private Color propertyStrokeColor = Color.BLACK;
-
+	
+	/** Background color (replaces white colors in SVG) */
+	private Color propertyBackgroundColor = Color.BLACK;
+	
 	/** Icon display size */
 	private Dimension2f propertyIconSize = new Dimension2f(new Vector2f(24f, 24f));
-
+	
 	/** Cached SVG data */
 	private String cachedSvgData = null;
-
+	
 	/** Cached colored SVG data */
 	private String cachedColoredSvgData = null;
-
+	
 	@AknotSignal
 	@AknotName("pressed")
 	@AknotDescription("Icon is pressed")
 	public final SignalEmpty signalPressed = new SignalEmpty();
-
+	
 	/**
 	 * Default constructor.
 	 */
 	public Icon() {
 		setMouseLimit(1);
 	}
-
+	
 	// ========================================================================
 	// Property accessors
 	// ========================================================================
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("src")
@@ -88,7 +93,7 @@ public class Icon extends Widget {
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
-
+	
 	public void setPropertySource(final Uri source) {
 		if (this.propertySource != null && this.propertySource.equals(source)) {
 			return;
@@ -100,7 +105,7 @@ public class Icon extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("icon")
@@ -108,7 +113,7 @@ public class Icon extends Widget {
 	public String getPropertyIcon() {
 		return this.propertyIcon;
 	}
-
+	
 	public void setPropertyIcon(final String iconName) {
 		if (this.propertyIcon != null && this.propertyIcon.equals(iconName)) {
 			return;
@@ -124,7 +129,7 @@ public class Icon extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("fill-color")
@@ -132,7 +137,7 @@ public class Icon extends Widget {
 	public Color getPropertyFillColor() {
 		return this.propertyFillColor;
 	}
-
+	
 	public void setPropertyFillColor(final Color color) {
 		if (this.propertyFillColor.equals(color)) {
 			return;
@@ -141,24 +146,24 @@ public class Icon extends Widget {
 		this.cachedColoredSvgData = null;
 		markToRedraw();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
-	@AknotName("stroke-color")
-	@AknotDescription("Stroke color for the icon")
-	public Color getPropertyStrokeColor() {
-		return this.propertyStrokeColor;
+	@AknotName("background-color")
+	@AknotDescription("Background color for the icon (replaces white in SVG)")
+	public Color getPropertyBackgroundColor() {
+		return this.propertyBackgroundColor;
 	}
-
-	public void setPropertyStrokeColor(final Color color) {
-		if (this.propertyStrokeColor.equals(color)) {
+	
+	public void setPropertyBackgroundColor(final Color color) {
+		if (this.propertyBackgroundColor.equals(color)) {
 			return;
 		}
-		this.propertyStrokeColor = color;
+		this.propertyBackgroundColor = color;
 		this.cachedColoredSvgData = null;
 		markToRedraw();
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("icon-size")
@@ -166,7 +171,7 @@ public class Icon extends Widget {
 	public Dimension2f getPropertyIconSize() {
 		return this.propertyIconSize;
 	}
-
+	
 	public void setPropertyIconSize(final Dimension2f size) {
 		if (this.propertyIconSize.equals(size)) {
 			return;
@@ -175,53 +180,200 @@ public class Icon extends Widget {
 		markToRedraw();
 		requestUpdateSize();
 	}
-
+	
 	// ========================================================================
 	// Color replacement
 	// ========================================================================
+	
+	/** Black color values to replace with fillColor */
+	private static final Set<String> BLACK_COLORS = Set.of("#000", "#000000", "black");
+	
+	/** White color values to replace with backgroundColor */
+	private static final Set<String> WHITE_COLORS = Set.of("#fff", "#ffffff", "#FFF", "#FFFFFF", "white");
+	
+	/** Attributes that contain color values */
+	private static final Set<String> COLOR_ATTRIBUTES = Set.of("fill", "stroke", "stop-color", "flood-color",
+			"lighting-color");
 
+	/** SVG elements that can have fill/stroke applied */
+	private static final Set<String> SHAPE_ELEMENTS = Set.of("path", "circle", "ellipse", "rect", "polygon",
+			"polyline", "line", "text", "tspan", "use");
+	
 	/**
-	 * Apply fill and stroke colors to SVG data by replacing reference colors.
+	 * Apply fill and background colors to SVG data using XML parsing.
+	 * - Black colors (#000, #000000, black) are replaced with fillColor
+	 * - White colors (#FFF, #FFFFFF, white) are replaced with backgroundColor
 	 * @param svgData Original SVG data
-	 * @return SVG data with colors replaced
+	 * @return SVG data with colors applied, or null if parsing fails
 	 */
 	private String applyColors(final String svgData) {
 		if (svgData == null) {
 			return null;
 		}
-		String result = svgData;
-		final String fillHex = colorToHex(this.propertyFillColor);
-		final String strokeHex = colorToHex(this.propertyStrokeColor);
+		try {
+			final XmlElement doc = Exml.parse(svgData);
+			if (doc == null) {
+				LOGGER.warn("Failed to parse SVG as XML");
+				return svgData;
+			}
+			final String fillHex = colorToHex(this.propertyFillColor);
+			final String backgroundHex = colorToHex(this.propertyBackgroundColor);
+			
+			// Process all elements recursively
+			applyColorsToElement(doc, fillHex, backgroundHex);
+			
+			// Generate the modified XML
+			final StringBuilder result = new StringBuilder();
+			Exml.generate(doc, result);
+			return result.toString();
+		} catch (final Exception e) {
+			LOGGER.warn("Failed to parse SVG for color replacement: {}", e.getMessage());
+			return svgData;
+		}
+	}
+	
+	/**
+	 * Recursively apply color replacements to an XML element and its children.
+	 * @param element The XML element to process
+	 * @param fillHex The hex color to replace black colors with
+	 * @param backgroundHex The hex color to replace white colors with
+	 */
+	private void applyColorsToElement(final XmlElement element, final String fillHex, final String backgroundHex) {
+		final String elementName = element.getValue() != null ? element.getValue().toLowerCase() : "";
+		final boolean isShapeElement = SHAPE_ELEMENTS.contains(elementName);
 
-		// Replace white (fill reference) with fill color
-		result = result.replace("#000000", fillHex);
-		result = result.replace("#000", fillHex);
+		// Process color attributes on this element
+		for (final String attrName : COLOR_ATTRIBUTES) {
+			if (element.existAttribute(attrName)) {
+				final String value = element.getAttribute(attrName, "").toLowerCase();
+				if (BLACK_COLORS.contains(value)) {
+					element.setAttribute(attrName, fillHex);
+				} else if (WHITE_COLORS.contains(value)) {
+					element.setAttribute(attrName, backgroundHex);
+				}
+			}
+		}
 
-		// Replace black (stroke reference) with stroke color
-		result = result.replace("#FFFFFF", strokeHex);
-		result = result.replace("#ffffff", strokeHex);
-		result = result.replace("#FFF", strokeHex);
-		result = result.replace("#fff", strokeHex);
+		// Process style attribute (only replace colors, don't add defaults here)
+		if (element.existAttribute("style")) {
+			final String style = element.getAttribute("style", "");
+			final String newStyle = applyColorsToStyle(style, fillHex, backgroundHex);
+			if (!style.equals(newStyle)) {
+				element.setAttribute("style", newStyle);
+			}
+		}
 
-		return result;
+		// For shape elements: add default fill/stroke if not specified anywhere
+		if (isShapeElement) {
+			final boolean hasFillAttr = element.existAttribute("fill");
+			final boolean hasFillInStyle = hasPropertyInStyle(element, "fill");
+
+			// SVG default fill is black - if no fill specified, add fillColor
+			if (!hasFillAttr && !hasFillInStyle) {
+				element.setAttribute("fill", fillHex);
+			}
+
+			// Check if stroke-width is defined but stroke color is not
+			final boolean hasStrokeWidth = element.existAttribute("stroke-width")
+					|| hasPropertyInStyle(element, "stroke-width");
+			final boolean hasStrokeAttr = element.existAttribute("stroke");
+			final boolean hasStrokeInStyle = hasPropertyInStyle(element, "stroke");
+
+			// If stroke-width is defined but no stroke color, add fillColor as stroke
+			if (hasStrokeWidth && !hasStrokeAttr && !hasStrokeInStyle) {
+				element.setAttribute("stroke", fillHex);
+			}
+		}
+
+		// Process child elements recursively
+		for (final XmlNode child : element.getNodes()) {
+			if (child.isElement()) {
+				applyColorsToElement(child.toElement(), fillHex, backgroundHex);
+			}
+		}
 	}
 
+	/**
+	 * Check if a CSS property exists in the style attribute.
+	 * @param element The element to check
+	 * @param propertyName The CSS property name to look for
+	 * @return true if the property is defined in the style attribute
+	 */
+	private boolean hasPropertyInStyle(final XmlElement element, final String propertyName) {
+		if (!element.existAttribute("style")) {
+			return false;
+		}
+		final String style = element.getAttribute("style", "").toLowerCase();
+		// Check for "propertyName:" pattern
+		return style.contains(propertyName + ":") || style.contains(propertyName + " :");
+	}
+
+	/**
+	 * Apply color replacements to a CSS style string.
+	 * @param style The style string (e.g., "fill:#000000;stroke:#FFFFFF")
+	 * @param fillHex The hex color to replace black colors with
+	 * @param backgroundHex The hex color to replace white colors with
+	 * @return The modified style string
+	 */
+	private String applyColorsToStyle(final String style, final String fillHex, final String backgroundHex) {
+		if (style == null || style.isEmpty()) {
+			return style;
+		}
+
+		final StringBuilder result = new StringBuilder();
+		final String[] properties = style.split(";");
+
+		for (int i = 0; i < properties.length; i++) {
+			final String property = properties[i].trim();
+			if (property.isEmpty()) {
+				continue;
+			}
+
+			final int colonIndex = property.indexOf(':');
+			if (colonIndex <= 0) {
+				// No colon or at start, keep as is
+				if (result.length() > 0) {
+					result.append(";");
+				}
+				result.append(property);
+				continue;
+			}
+
+			final String propName = property.substring(0, colonIndex).trim().toLowerCase();
+			final String propValue = property.substring(colonIndex + 1).trim().toLowerCase();
+
+			String newValue = propValue;
+			if (COLOR_ATTRIBUTES.contains(propName)) {
+				if (BLACK_COLORS.contains(propValue)) {
+					newValue = fillHex;
+				} else if (WHITE_COLORS.contains(propValue)) {
+					newValue = backgroundHex;
+				}
+			}
+
+			if (result.length() > 0) {
+				result.append(";");
+			}
+			result.append(propName).append(":").append(newValue);
+		}
+
+		return result.toString();
+	}
+	
 	/**
 	 * Convert a Color to hexadecimal string.
 	 * @param color Color to convert
 	 * @return Hex string like "#RRGGBB"
 	 */
 	private String colorToHex(final Color color) {
-		return String.format("#%02X%02X%02X",
-				(int) (color.r() * 255),
-				(int) (color.g() * 255),
+		return String.format("#%02X%02X%02X", (int) (color.r() * 255), (int) (color.g() * 255),
 				(int) (color.b() * 255));
 	}
-
+	
 	// ========================================================================
 	// Widget lifecycle
 	// ========================================================================
-
+	
 	@Override
 	public void calculateMinMaxSize() {
 		final Vector2f iconSize = this.propertyIconSize.getPixel();
@@ -230,71 +382,70 @@ public class Icon extends Widget {
 		this.maxSize = Vector2f.max(this.maxSize, this.minSize);
 		LOGGER.trace("Icon min size = {}", this.minSize);
 	}
-
+	
 	@Override
 	public void onRegenerateDisplay() {
 		if (!needRedraw()) {
 			return;
 		}
-
+		
 		this.compositing.clear();
-
+		
 		if (this.propertySource == null) {
 			return;
 		}
-
+		
 		// Load SVG data if not cached
 		if (this.cachedSvgData == null) {
 			this.cachedSvgData = Uri.getAllDataString(this.propertySource);
 			this.cachedColoredSvgData = null;
 		}
-
+		
 		if (this.cachedSvgData == null) {
 			LOGGER.warn("Failed to load icon: {}", this.propertySource);
 			return;
 		}
-
+		
 		// Apply colors if not cached
 		if (this.cachedColoredSvgData == null) {
 			this.cachedColoredSvgData = applyColors(this.cachedSvgData);
 		}
-
+		
 		// Calculate position and size
 		final Vector2f iconSize = this.propertyIconSize.getPixel();
 		final Vector2i renderSize = iconSize.toVector2i();
-
+		
 		// Center the icon in the widget
 		final Vector2f delta = this.propertyGravity.gravityGenerateDelta(this.size.less(iconSize));
-
+		
 		this.compositing.setSource(this.cachedColoredSvgData, renderSize);
 		this.compositing.setPos(delta);
 		this.compositing.print(iconSize);
 		this.compositing.flush();
 	}
-
+	
 	@Override
 	protected void onDraw() {
 		this.compositing.draw(true);
 	}
-
+	
 	@Override
 	public boolean onEventInput(final EventInput event) {
 		if (event.inputId() == 1 && event.status() == KeyStatus.pressSingle) {
 			final Vector2f relPos = relativePosition(event.pos());
 			// Check if click is inside widget bounds
-			if (relPos.x() >= 0 && relPos.y() >= 0
-					&& relPos.x() < this.size.x() && relPos.y() < this.size.y()) {
+			if (relPos.x() >= 0 && relPos.y() >= 0 && relPos.x() < this.size.x() && relPos.y() < this.size.y()) {
 				this.signalPressed.emit();
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 	// ========================================================================
 	// Factory methods and Fluent API
 	// ========================================================================
-
+	
 	/**
 	 * Create a new Icon from the theme/icon/ directory.
 	 * @param iconName Name of the icon (without .svg extension)
@@ -305,7 +456,7 @@ public class Icon extends Widget {
 		icon.setPropertySource(new Uri("THEME", "icon/" + iconName + ".svg", "ewol"));
 		return icon;
 	}
-
+	
 	/**
 	 * Create a new Icon from a custom URI.
 	 * @param source URI of the SVG icon
@@ -316,7 +467,7 @@ public class Icon extends Widget {
 		icon.setPropertySource(source);
 		return icon;
 	}
-
+	
 	/**
 	 * Set the icon by name (from theme/icon/).
 	 * @param iconName Name of the icon
@@ -326,7 +477,7 @@ public class Icon extends Widget {
 		setPropertySource(new Uri("THEME", "icon/" + iconName + ".svg", "ewol"));
 		return this;
 	}
-
+	
 	/**
 	 * Set the icon source URI.
 	 * @param source URI of the SVG icon
@@ -336,7 +487,7 @@ public class Icon extends Widget {
 		setPropertySource(source);
 		return this;
 	}
-
+	
 	/**
 	 * Set the fill color.
 	 * @param color Fill color
@@ -346,29 +497,29 @@ public class Icon extends Widget {
 		setPropertyFillColor(color);
 		return this;
 	}
-
+	
 	/**
-	 * Set the stroke color.
-	 * @param color Stroke color
+	 * Set the background color.
+	 * @param color Background color
 	 * @return This icon for chaining
 	 */
-	public Icon stroke(final Color color) {
-		setPropertyStrokeColor(color);
+	public Icon background(final Color color) {
+		setPropertyBackgroundColor(color);
 		return this;
 	}
-
+	
 	/**
-	 * Set both fill and stroke colors.
+	 * Set both fill and background colors.
 	 * @param fillColor Fill color
-	 * @param strokeColor Stroke color
+	 * @param backgroundColor Background color
 	 * @return This icon for chaining
 	 */
-	public Icon color(final Color fillColor, final Color strokeColor) {
+	public Icon color(final Color fillColor, final Color backgroundColor) {
 		setPropertyFillColor(fillColor);
-		setPropertyStrokeColor(strokeColor);
+		setPropertyBackgroundColor(backgroundColor);
 		return this;
 	}
-
+	
 	/**
 	 * Set the icon display size.
 	 * @param size Icon size
@@ -378,7 +529,7 @@ public class Icon extends Widget {
 		setPropertyIconSize(size);
 		return this;
 	}
-
+	
 	/**
 	 * Connect a callback to the pressed signal.
 	 * @param callback Callback to invoke when icon is pressed
