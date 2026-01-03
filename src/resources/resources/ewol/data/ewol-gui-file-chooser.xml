@@ -62,7 +62,7 @@
 					<Spacer expand="true,false"/>
 					<Button name="[{ID}]file-chooser:button-validate">
 						<Sizer mode="HORIZONTAL">
-							<Icon icon="open-in-app" fill-color="#80FF80FF" background-color="#408040FF" icon-size="24,24px"/>
+							<Icon icon="open-in-app" fill-color="#000000" icon-size="24,24px"/>
 							<Spacer min-size="5,0px"/>
 							<Label name="[{ID}]file-chooser:validate-label">_T{Validate}</Label>
 						</Sizer>
@@ -70,7 +70,7 @@
 					<Spacer min-size="10,0px"/>
 					<Button name="[{ID}]file-chooser:button-cancel">
 						<Sizer mode="HORIZONTAL">
-							<Icon icon="cancel" fill-color="#FF8080FF" icon-size="24,24px"/>
+							<Icon icon="cancel" fill-color="#000000" icon-size="24,24px"/>
 							<Spacer min-size="5,0px"/>
 							<Label name="[{ID}]file-chooser:cancel-label">_T{Cancel}</Label>
 						</Sizer>
