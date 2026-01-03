@@ -101,7 +101,7 @@ public class Select extends Box {
 		// Arrow icon (chevron down when closed, chevron up when open)
 		this.arrowIcon = Icon.create("chevron-down")
 				.fill(ARROW_COLOR)
-				.stroke(ARROW_COLOR)
+				.background(ARROW_COLOR)
 				.size(new Dimension2f(new Vector2f(16, 16)))
 				.minSize(new Dimension2f(new Vector2f(16, 16)));
 		this.arrowIcon.setPropertyExpand(Vector2b.FALSE);

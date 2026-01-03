@@ -87,22 +87,22 @@ public class TestWidgetIcon implements TestWidgetInterface {
 
 		row3.subWidgetAdd(Icon.create("chevron-left")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
-				.stroke(new Color(0.3f, 0.3f, 0.8f))
+				.background(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		row3.subWidgetAdd(Icon.create("chevron-up")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
-				.stroke(new Color(0.3f, 0.3f, 0.8f))
+				.background(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		row3.subWidgetAdd(Icon.create("chevron-down")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
-				.stroke(new Color(0.3f, 0.3f, 0.8f))
+				.background(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		row3.subWidgetAdd(Icon.create("chevron-right")
 				.fill(new Color(0.5f, 0.5f, 1.0f))
-				.stroke(new Color(0.3f, 0.3f, 0.8f))
+				.background(new Color(0.3f, 0.3f, 0.8f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Row 4: Action icons
@@ -125,7 +125,7 @@ public class TestWidgetIcon implements TestWidgetInterface {
 
 		row4.subWidgetAdd(Icon.create("check")
 				.fill(new Color(0.2f, 0.9f, 0.2f))
-				.stroke(new Color(0.1f, 0.6f, 0.1f))
+				.background(new Color(0.1f, 0.6f, 0.1f))
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		// Row 5: File icons
@@ -140,7 +140,7 @@ public class TestWidgetIcon implements TestWidgetInterface {
 
 		row5.subWidgetAdd(Icon.create("file")
 				.fill(Color.WHITE)
-				.stroke(Color.GRAY)
+				.background(Color.GRAY)
 				.size(new Dimension2f(new Vector2f(48, 48), Distance.PIXEL)));
 
 		return mainSizer;
