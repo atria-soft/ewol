@@ -38,8 +38,8 @@ public class Slider extends Widget {
 	// Default colors
 	private static final Color DEFAULT_TRACK_COLOR = new Color(0xE0, 0xE0, 0xE0, 0xFF);
 	private static final Color DEFAULT_FILL_COLOR = new Color(0x42, 0x85, 0xF4, 0xFF);
-	private static final Color DEFAULT_CURSOR_COLOR = new Color(0x21, 0x96, 0xF3, 0xFF);
-	private static final Color DEFAULT_CURSOR_BORDER_COLOR = Color.WHITE;
+	private static final Color DEFAULT_CURSOR_COLOR = Color.WHITE;
+	private static final Color DEFAULT_CURSOR_BORDER_COLOR = new Color(0x42, 0x85, 0xF4, 0xFF);
 	private static final Color DEFAULT_MARKER_COLOR = new Color(0x60, 0x60, 0x60, 0xFF);
 	private static final float DEFAULT_MARKER_RADIUS = 3.0f;
 
@@ -67,9 +67,9 @@ public class Slider extends Widget {
 	private Color propertyMarkerColor = DEFAULT_MARKER_COLOR;
 
 	// Customizable dimensions
-	private float propertyTrackHeight = DEFAULT_TRACK_HEIGHT;
-	private float propertyCursorWidth = DEFAULT_CURSOR_WIDTH;
-	private float propertyCursorHeight = DEFAULT_CURSOR_HEIGHT;
+	private final float propertyTrackHeight = DEFAULT_TRACK_HEIGHT;
+	private final float propertyCursorWidth = DEFAULT_CURSOR_WIDTH;
+	private final float propertyCursorHeight = DEFAULT_CURSOR_HEIGHT;
 	private float propertyMarkerRadius = DEFAULT_MARKER_RADIUS;
 
 	// Markers (points on the track)
@@ -114,9 +114,7 @@ public class Slider extends Widget {
 		if (sliderWidth <= 0) {
 			return this.propertyMinimum;
 		}
-		final float percent = FMath.clamp(
-				(relPos.x() - this.overPositionStart.x()) / sliderWidth,
-				0.0f, 1.0f);
+		final float percent = FMath.clamp((relPos.x() - this.overPositionStart.x()) / sliderWidth, 0.0f, 1.0f);
 		float value = (this.propertyMaximum - this.propertyMinimum) * percent + this.propertyMinimum;
 		if (this.propertyStep != 0.0f) {
 			value += this.propertyStep * 0.5f;
@@ -342,9 +340,12 @@ public class Slider extends Widget {
 			final float markerRatio = (markerValue - this.propertyMinimum) / range;
 			if (markerRatio >= 0.0f && markerRatio <= 1.0f) {
 				final float markerX = trackStartX + trackWidth * markerRatio;
-				final Vector2f markerStart = new Vector2f(markerX - this.propertyMarkerRadius, trackCenterY - this.propertyMarkerRadius);
-				final Vector2f markerStop = new Vector2f(markerX + this.propertyMarkerRadius, trackCenterY + this.propertyMarkerRadius);
-				this.vectorialDraw.addRectangle(markerStart, markerStop, new Insets(0), new BorderRadius(this.propertyMarkerRadius));
+				final Vector2f markerStart = new Vector2f(markerX - this.propertyMarkerRadius,
+						trackCenterY - this.propertyMarkerRadius);
+				final Vector2f markerStop = new Vector2f(markerX + this.propertyMarkerRadius,
+						trackCenterY + this.propertyMarkerRadius);
+				this.vectorialDraw.addRectangle(markerStart, markerStop, new Insets(0),
+						new BorderRadius(this.propertyMarkerRadius));
 			}
 		}
 	}
@@ -487,12 +488,12 @@ public class Slider extends Widget {
 		this.vectorialDraw.setPaintFillColor(this.propertyCursorBorderColor);
 		this.vectorialDraw.addRectangle(cursorStart, cursorStop, new Insets(0), new BorderRadius(cursorRadius));
 
-		// Cursor inner
-		final float borderWidth = 2.0f;
+		final float borderWidth = this.propertyCursorHeight * 0.15f;
 		final Vector2f innerStart = cursorStart.add(borderWidth, borderWidth);
 		final Vector2f innerStop = cursorStop.less(borderWidth, borderWidth);
 		this.vectorialDraw.setPaintFillColor(this.propertyCursorColor);
-		this.vectorialDraw.addRectangle(innerStart, innerStop, new Insets(0), new BorderRadius(cursorRadius - borderWidth));
+		this.vectorialDraw.addRectangle(innerStart, innerStop, new Insets(0),
+				new BorderRadius(cursorRadius - borderWidth));
 
 		this.vectorialDraw.flush();
 	}
