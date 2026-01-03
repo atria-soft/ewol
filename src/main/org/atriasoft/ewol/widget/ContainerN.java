@@ -218,7 +218,7 @@ public class ContainerN extends Widget {
 				continue;
 			}
 			elem.setParent(this);
-			this.subWidget.add(0, elem);
+			this.subWidget.add(elem);
 		}
 		markToRedraw();
 		requestUpdateSize();
