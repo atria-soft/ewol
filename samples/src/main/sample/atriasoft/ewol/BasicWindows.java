@@ -105,8 +105,7 @@ public class BasicWindows extends Windows {
 		previous.signalClick.connectAuto(this, BasicWindows::staticRequestPrevious);
 
 		// SplitPane to separate test widget area from log panel
-		final var splitPane = SplitPane.vertical()
-				.splitPosition(0.75f)  // 75% for test widget, 25% for log
+		final var splitPane = SplitPane.vertical().splitPosition(0.25f) // 75% for test widget, 25% for log
 				.minSizes(100.0f, 50.0f);
 		splitPane.setPropertyExpand(Vector2b.TRUE);
 		splitPane.setPropertyFill(Vector2b.TRUE);
@@ -117,11 +116,11 @@ public class BasicWindows extends Windows {
 		this.container.setPropertyExpand(Vector2b.TRUE);
 		this.container.setPropertyFill(Vector2b.TRUE);
 		this.container.setPropertyExpandIfFree(Vector2b.TRUE);
-		splitPane.first(this.container);
+		splitPane.second(this.container);
 
 		// Log panel (second part of split pane)
 		final var logPanel = createLogPanel();
-		splitPane.second(logPanel);
+		splitPane.first(logPanel);
 
 		this.testedElement.add(new TestWidgetIcon());
 		this.testedElement.add(new TestWidgetSelect());

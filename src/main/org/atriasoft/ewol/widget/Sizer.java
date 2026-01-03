@@ -5,6 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
+import java.util.List;
+
 import org.atriasoft.aknot.annotation.AknotAttribute;
 import org.atriasoft.aknot.annotation.AknotCaseSensitive;
 import org.atriasoft.aknot.annotation.AknotDescription;
@@ -20,23 +22,23 @@ import org.slf4j.LoggerFactory;
 
 public class Sizer extends ContainerN {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Sizer.class);
-	
+
 	@AknotCaseSensitive(value = false)
 	public enum DisplayMode {
 		HORIZONTAL, //!< Horizontal mode
 		VERTICAL; //!< Vertical mode
 	}
-
+	
 	protected Dimension2f propertyBorderSize = Dimension2f.ZERO; //!< Border size needed for all the display
 	protected DisplayMode propertyMode = DisplayMode.HORIZONTAL; //!< Method to display the widget list (vert/hory ...)
-
+	
 	/**
 	 * Constructor
 	 */
 	public Sizer() {
-
+		
 	}
-
+	
 	/**
 	 * Constructor
 	 * @param mode The mode to display the elements
@@ -44,15 +46,19 @@ public class Sizer extends ContainerN {
 	public Sizer(final DisplayMode mode) {
 		this.propertyMode = mode;
 	}
-
+	
 	@Override
 	public void calculateMinMaxSize() {
 		LOGGER.trace("[{}] update minimum size", getId());
+		List<Widget> orderedSubWidget = this.subWidget;
+		if (this.propertyMode == DisplayMode.VERTICAL) {
+			orderedSubWidget = this.subWidget.reversed();
+		}
 		this.subExpend = Vector2b.FALSE;
 		this.minSize = this.propertyMinSize.getPixel();
 		final Vector2f tmpBorderSize = this.propertyBorderSize.getPixel();
 		LOGGER.trace("[{}] {{}} set min size: {}", getId(), getClass().getCanonicalName(), this.minSize);
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -81,7 +87,7 @@ public class Sizer extends ContainerN {
 		this.minSize = this.minSize.add(tmpBorderSize.multiply(2));
 		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("border")
@@ -89,7 +95,7 @@ public class Sizer extends ContainerN {
 	public Dimension2f getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
-
+	
 	@AknotManaged
 	@AknotAttribute
 	@AknotName("mode")
@@ -97,18 +103,22 @@ public class Sizer extends ContainerN {
 	public DisplayMode getPropertyMode() {
 		return this.propertyMode;
 	}
-
+	
 	@Override
 	public void onChangeSize() {
 		super.onChangeSize();
+		List<Widget> orderedSubWidget = this.subWidget;
+		if (this.propertyMode == DisplayMode.VERTICAL) {
+			orderedSubWidget = this.subWidget.reversed();
+		}
 		final Vector2f tmpBorderSize = this.propertyBorderSize.getPixel();
 		LOGGER.trace("[{}] update size: {} nbElement: {} borderSize={} from border={}", getId(), this.size,
-				this.subWidget.size(), tmpBorderSize, this.propertyBorderSize);
+				orderedSubWidget.size(), tmpBorderSize, this.propertyBorderSize);
 		final Vector2f localWidgetSize = this.size.less(tmpBorderSize.multiply(2.0f));
 		// -1- calculate min-size and expand requested:
 		Vector2f minSize = Vector2f.ZERO;
 		Vector2i nbWidgetExpand = Vector2i.ZERO;
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -134,7 +144,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -3- Configure all at the min size ...
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -150,10 +160,10 @@ public class Sizer extends ContainerN {
 			}
 			// -4.1- Update every subWidget size
 			Widget lastWidget = null;
-			if (!this.subWidget.isEmpty()) {
-				lastWidget = this.subWidget.get(this.subWidget.size() - 1);
+			if (!orderedSubWidget.isEmpty()) {
+				lastWidget = orderedSubWidget.get(orderedSubWidget.size() - 1);
 			}
-			for (final Widget it : this.subWidget) {
+			for (final Widget it : orderedSubWidget) {
 				if (it == null) {
 					continue;
 				}
@@ -199,7 +209,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -5- Update the expand in the second size if vert ==> X and if hori ==> Y
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -223,7 +233,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -6- Force size at the entire number:
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -231,7 +241,7 @@ public class Sizer extends ContainerN {
 		}
 		// -7- get under Size
 		Vector2f underSize = Vector2f.ZERO;
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -243,22 +253,22 @@ public class Sizer extends ContainerN {
 			}
 		}
 		final Vector2f deltas = localWidgetSize.less(underSize);
-
+		
 		// -8- Calculate the local origin, depending of the gravity:
 		Vector2f tmpOrigin = this.origin.add(tmpBorderSize).add(this.propertyGravity.gravityGenerateDelta(deltas));
 		// -9- Set sub widget origin:
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
 			Vector2f origin;
 			final Vector2f size = it.getSize();
 			if (this.propertyMode == DisplayMode.VERTICAL) {
-				origin = Vector2f.clipInt(tmpOrigin.add(this.offset).add(
-						this.propertyGravity.gravityGenerateDelta(new Vector2f(underSize.x() - size.x(), 0.0f))));
+				origin = Vector2f.clipInt(tmpOrigin.add(this.offset)
+						.add(this.propertyGravity.gravityGenerateDelta(new Vector2f(underSize.x() - size.x(), 0.0f))));
 			} else {
-				origin = Vector2f.clipInt(tmpOrigin.add(this.offset).add(
-						this.propertyGravity.gravityGenerateDelta(new Vector2f(0.0f, underSize.y() - size.y()))));
+				origin = Vector2f.clipInt(tmpOrigin.add(this.offset)
+						.add(this.propertyGravity.gravityGenerateDelta(new Vector2f(0.0f, underSize.y() - size.y()))));
 			}
 			it.setOrigin(origin);
 			if (this.propertyMode == DisplayMode.VERTICAL) {
@@ -268,7 +278,7 @@ public class Sizer extends ContainerN {
 			}
 		}
 		// -10- Update all subSize at every element:
-		for (final Widget it : this.subWidget) {
+		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
 			}
@@ -276,25 +286,25 @@ public class Sizer extends ContainerN {
 		}
 		markToRedraw();
 	}
-
+	
 	public void setPropertyBorderSize(final Dimension2f propertyBorderSize) {
 		if (this.propertyBorderSize.equals(propertyBorderSize)) {
 			return;
 		}
 		this.propertyBorderSize = propertyBorderSize;
 	}
-
+	
 	public void setPropertyMode(final DisplayMode propertyMode) {
 		if (this.propertyMode.equals(propertyMode)) {
 			return;
 		}
 		this.propertyMode = propertyMode;
 	}
-
+	
 	// ========================================================================
 	// Factory methods and Fluent API
 	// ========================================================================
-
+	
 	/**
 	 * Create a horizontal sizer.
 	 * @return a new horizontal Sizer
@@ -302,7 +312,7 @@ public class Sizer extends ContainerN {
 	public static Sizer horizontal() {
 		return new Sizer(DisplayMode.HORIZONTAL);
 	}
-
+	
 	/**
 	 * Create a vertical sizer.
 	 * @return a new vertical Sizer
@@ -310,7 +320,7 @@ public class Sizer extends ContainerN {
 	public static Sizer vertical() {
 		return new Sizer(DisplayMode.VERTICAL);
 	}
-
+	
 	/**
 	 * Fluent method to set border size.
 	 * @param border the border size
@@ -320,7 +330,7 @@ public class Sizer extends ContainerN {
 		setPropertyBorderSize(border);
 		return this;
 	}
-
+	
 	/**
 	 * Fluent method to add a child widget.
 	 * @param widget the widget to add
@@ -330,7 +340,7 @@ public class Sizer extends ContainerN {
 		subWidgetAdd(widget);
 		return this;
 	}
-
+	
 	/**
 	 * Fluent method to add multiple child widgets.
 	 * @param widgets the widgets to add
