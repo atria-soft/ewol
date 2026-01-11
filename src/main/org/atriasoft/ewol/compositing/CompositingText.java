@@ -108,6 +108,8 @@ public class CompositingText extends TextBase {
 			LOGGER.error("No shader ...");
 			return;
 		}
+		// Enable blend for text rendering (text always needs alpha blending)
+		OpenGL.enable(OpenGL.Flag.flag_blend);
 		// set Matrix : translation/positionMatrix
 		final var projMatrix = OpenGL.getMatrix();
 		final var camMatrix = OpenGL.getCameraMatrix();
@@ -119,12 +121,14 @@ public class CompositingText extends TextBase {
 		// Texture :
 		this.oGLprogram.setTexture0(this.oGLtexID, this.font.getRendererId());
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
-		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().x());
+		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().y());
 		// Request the draw of the elements:
 		this.vbo.renderArrays(OpenGL.RenderMode.TRIANGLE);
 
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
+		// Disable blend after text rendering
+		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
 
 	@Override
@@ -142,6 +146,8 @@ public class CompositingText extends TextBase {
 			LOGGER.error("No shader ...");
 			return;
 		}
+		// Enable blend for text rendering (text always needs alpha blending)
+		OpenGL.enable(OpenGL.Flag.flag_blend);
 		if (enableDepthTest) {
 			OpenGL.enable(OpenGL.Flag.flag_depthTest);
 		}
@@ -156,7 +162,7 @@ public class CompositingText extends TextBase {
 		// Texture:
 		this.oGLprogram.setTexture0(this.oGLtexID, this.font.getRendererId());
 		this.oGLprogram.uniformInt(this.oGLtextWidth, this.font.getOpenGlSize().x());
-		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().x());
+		this.oGLprogram.uniformInt(this.oGLtextHeight, this.font.getOpenGlSize().y());
 		// Request the draw of the elements:
 		this.vbo.renderArrays(OpenGL.RenderMode.TRIANGLE);
 
@@ -165,6 +171,8 @@ public class CompositingText extends TextBase {
 		if (enableDepthTest) {
 			OpenGL.disable(OpenGL.Flag.flag_depthTest);
 		}
+		// Disable blend after text rendering
+		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
 
 	@Override
