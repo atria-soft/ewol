@@ -264,6 +264,8 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		this.vbo.setPosition(this.outTriangles.toArray(Vector3f[]::new));
 		this.vbo.setColors(this.outColors.toArray(Color[]::new));
 		this.vbo.setVertexCount(this.outTriangles.size());
+		// Request GPU upload
+		this.vbo.flush();
 	}
 
 	/**
@@ -931,7 +933,6 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		if (this.triElement >= 3) {
 			generateTriangle();
 		}
-		this.vbo.flush();
 	}
 
 	public void setPos(final float xxx, final float yyy) {
