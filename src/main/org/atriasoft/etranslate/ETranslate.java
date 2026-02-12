@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.atriasoft.ejson.Ejson;
-import org.atriasoft.ejson.model.JsonNode;
-import org.atriasoft.ejson.model.JsonObject;
+import java.util.Iterator;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import org.atriasoft.ewol.internal.JsonHelper;
 import org.atriasoft.etk.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,6 +141,19 @@ public class ETranslate {
 		return ETranslate.globalListPath.get(lib);
 	}
 	
+	private static void loadTranslationFile(final Uri uri) {
+		try {
+			final JsonNode root = JsonHelper.parse(uri);
+			final Iterator<Map.Entry<String, JsonNode>> fields = root.fields();
+			while (fields.hasNext()) {
+				final Map.Entry<String, JsonNode> element = fields.next();
+				ETranslate.globalTranslate.put(element.getKey(), element.getValue().asText());
+			}
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static void loadTranslation() {
 		if (ETranslate.globalTranslateLoadad) {
 			return;
@@ -148,77 +163,22 @@ public class ETranslate {
 		// start parse language for Major:
 		final Uri itMajor = ETranslate.globalListPath.get(ETranslate.globalMajor);
 		if (itMajor != null) {
-			Uri uri = itMajor.withPath(itMajor.getPath() + "/" + ETranslate.globalLanguage + ".json");
-			try {
-				final JsonObject root = (JsonObject) Ejson.parse(uri);
-				for (final Map.Entry<String, JsonNode> element : root.getNodes().entrySet()) {
-					final String val = element.getValue().toJsonString().getValue();
-					//LOGGER.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
-					ETranslate.globalTranslate.put(element.getKey(), val);
-				}
-			} catch (final Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			uri = itMajor.withPath(itMajor.getPath() + "/" + ETranslate.globalLanguageDefault + ".json");
-			try {
-				final JsonObject root = (JsonObject) Ejson.parse(uri);
-				for (final Map.Entry<String, JsonNode> element : root.getNodes().entrySet()) {
-					final String val = element.getValue().toJsonString().getValue();
-					//LOGGER.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
-					ETranslate.globalTranslate.put(element.getKey(), val);
-				}
-			} catch (final Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			loadTranslationFile(itMajor.withPath(itMajor.getPath() + "/" + ETranslate.globalLanguage + ".json"));
+			loadTranslationFile(itMajor.withPath(itMajor.getPath() + "/" + ETranslate.globalLanguageDefault + ".json"));
 		}
 		// start parse language:
 		for (final Map.Entry<String, Uri> it : ETranslate.globalListPath.entrySet()) {
 			if (it.getKey().contentEquals(ETranslate.globalMajor)) {
 				continue;
 			}
-			final Uri uri = it.getValue().withPath(it.getValue().getPath() + "/" + ETranslate.globalLanguage + ".json");
-			/*
-			 * TODO ... if (Uri.exist(uri) == false) { continue; }
-			 */
-			JsonObject doc;
-			try {
-				doc = (JsonObject) Ejson.parse(uri);
-			} catch (final Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				continue;
-			}
-			for (final Map.Entry<String, JsonNode> element : doc.getNodes().entrySet()) {
-				final String val = element.getValue().toJsonString().getValue();
-				//LOGGER.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
-				ETranslate.globalTranslate.put(element.getKey(), val);
-			}
+			loadTranslationFile(it.getValue().withPath(it.getValue().getPath() + "/" + ETranslate.globalLanguage + ".json"));
 		}
 		// start parse default language:
 		for (final Map.Entry<String, Uri> it : ETranslate.globalListPath.entrySet()) {
 			if (it.getKey().contentEquals(ETranslate.globalMajor)) {
 				continue;
 			}
-			final Uri uri = it.getValue()
-					.withPath(it.getValue().getPath() + "/" + ETranslate.globalLanguageDefault + ".json");
-			/*
-			 * TODO ... if (Uri.exist(uri) == false) { continue; }
-			 */
-			JsonObject doc;
-			try {
-				doc = (JsonObject) Ejson.parse(uri);
-			} catch (final Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				continue;
-			}
-			for (final Map.Entry<String, JsonNode> element : doc.getNodes().entrySet()) {
-				final String val = element.getValue().toJsonString().getValue();
-				//LOGGER.info("Add global translate: '" + element.getKey() + "' => '" + val + "'");
-				ETranslate.globalTranslate.put(element.getKey(), val);
-			}
+			loadTranslationFile(it.getValue().withPath(it.getValue().getPath() + "/" + ETranslate.globalLanguageDefault + ".json"));
 		}
 		ETranslate.globalTranslateLoadad = true;
 	}

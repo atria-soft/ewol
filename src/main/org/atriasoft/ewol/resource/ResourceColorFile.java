@@ -8,10 +8,9 @@ package org.atriasoft.ewol.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.ejson.Ejson;
-import org.atriasoft.ejson.model.JsonArray;
-import org.atriasoft.ejson.model.JsonNode;
-import org.atriasoft.ejson.model.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import org.atriasoft.ewol.internal.JsonHelper;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.gale.resource.Resource;
@@ -117,24 +116,22 @@ public class ResourceColorFile extends Resource {
 		LOGGER.info("[TODO] Mut be implemented ...");
 		// open and read all json elements:
 		try {
-			final JsonObject out = Ejson.parse(Uri.valueOf(this.name)).toJsonObject();
-			
-			final JsonArray baseArray = out.get("color").toJsonArray();
-			if (baseArray == null) {
+			final JsonNode out = JsonHelper.parse(Uri.valueOf(this.name));
+
+			final JsonNode baseArray = out.get("color");
+			if (baseArray == null || !baseArray.isArray()) {
 				LOGGER.error("Can not get basic array : 'color' in file: {}", this.name);
-				Ejson.display(out);
 				return;
 			}
 			boolean findError = false;
-			for (final JsonNode it : baseArray.getNodes()) {
-				final JsonObject tmpObj = it.toJsonObject();
-				if (tmpObj == null) {
+			for (final JsonNode it : baseArray) {
+				if (!it.isObject()) {
 					LOGGER.error(" can not get object in 'color' : {}", it);
 					findError = true;
 					continue;
 				}
-				final String name = tmpObj.get("name").toJsonString().getValue();
-				final String color = tmpObj.get("color").toJsonString().getValue();
+				final String name = it.get("name").asText();
+				final String color = it.get("color").asText();
 				LOGGER.debug("find new color : '{}' color='{}'", name, color);
 				if (name.length() == 0) {
 					LOGGER.error("Drop an empty name");
@@ -148,7 +145,6 @@ public class ResourceColorFile extends Resource {
 			}
 			if (findError) {
 				LOGGER.error("pb in parsing file: {}", this.name);
-				Ejson.display(out);
 			}
 		} catch (final Exception e) {
 			LOGGER.error("catch exception in parsing config file: {}", e.getMessage());

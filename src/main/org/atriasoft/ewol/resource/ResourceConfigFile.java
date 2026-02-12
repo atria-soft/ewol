@@ -8,9 +8,12 @@ package org.atriasoft.ewol.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.ejson.Ejson;
-import org.atriasoft.ejson.model.JsonNode;
-import org.atriasoft.ejson.model.JsonObject;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import org.atriasoft.ewol.internal.JsonHelper;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.gale.resource.Resource;
 import org.slf4j.Logger;
@@ -76,28 +79,28 @@ public class ResourceConfigFile extends Resource {
 	}
 	
 	public boolean getBoolean(final int id) {
-		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonBoolean()) {
+		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isBoolean()) {
 			return false;
 		}
-		return this.list.get(id).node.toJsonBoolean().getValue();
+		return this.list.get(id).node.asBoolean();
 	}
-	
+
 	public synchronized double getNumber(final int id) {
-		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonNumber()) {
+		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isNumber()) {
 			return 0.0;
 		}
-		return this.list.get(id).node.toJsonNumber().getValue();
+		return this.list.get(id).node.asDouble();
 	}
-	
+
 	public String getString(final int id) {
 		return getString(id, "");
 	}
-	
+
 	public String getString(final int id, final String defaultValue) {
-		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isJsonString()) {
+		if (id < 0 || this.list.get(id).node == null || !this.list.get(id).node.isTextual()) {
 			return defaultValue;
 		}
-		return this.list.get(id).node.toJsonString().getValue();
+		return this.list.get(id).node.asText();
 	}
 	
 	public synchronized void put(final String name, final JsonNode node) {
@@ -116,15 +119,18 @@ public class ResourceConfigFile extends Resource {
 		for (final ListElementConfig listElementConfig : this.list) {
 			listElementConfig.node = null;
 		}
-		JsonObject out;
+		JsonNode out;
 		try {
-			out = Ejson.parse(Uri.valueOf(this.name)).toJsonObject();
+			out = JsonHelper.parse(Uri.valueOf(this.name));
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
-		out.getNodes().forEach(this::put);
+		final Iterator<Map.Entry<String, JsonNode>> fields = out.fields();
+		while (fields.hasNext()) {
+			final Map.Entry<String, JsonNode> entry = fields.next();
+			put(entry.getKey(), entry.getValue());
+		}
 	}
 	
 	public synchronized int request(final String paramName) {
