@@ -21,7 +21,7 @@ open module org.atriasoft.ewol {
 	requires transitive org.atriasoft.etk;
 	requires transitive org.atriasoft.esvg;
 	requires transitive org.atriasoft.exml;
-	requires transitive org.atriasoft.ejson;
+	requires com.fasterxml.jackson.databind;
 	requires org.atriasoft.loader3d;
 	requires org.atriasoft.egami;
 	requires java.base;
