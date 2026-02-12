@@ -10,6 +10,9 @@ import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Uri;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.Gravity;
@@ -63,6 +66,9 @@ public class Button extends Box {
 
 	/** Periodic call handle to remove it when needed */
 	protected Connection periodicConnectionHandle = new Connection();
+
+	/** Stored connections from fluent API to prevent GC */
+	private final List<Connection> fluentConnections = new ArrayList<>();
 
 	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
 
@@ -266,7 +272,7 @@ public class Button extends Box {
 	 * @return this button for chaining
 	 */
 	public Button onClick(final Runnable callback) {
-		this.signalClick.connect(callback);
+		this.fluentConnections.add(this.signalClick.connect(callback));
 		return this;
 	}
 
@@ -276,7 +282,7 @@ public class Button extends Box {
 	 * @return this button for chaining
 	 */
 	public Button onDown(final Runnable callback) {
-		this.signalDown.connect(callback);
+		this.fluentConnections.add(this.signalDown.connect(callback));
 		return this;
 	}
 
@@ -286,7 +292,7 @@ public class Button extends Box {
 	 * @return this button for chaining
 	 */
 	public Button onUp(final Runnable callback) {
-		this.signalUp.connect(callback);
+		this.fluentConnections.add(this.signalUp.connect(callback));
 		return this;
 	}
 }

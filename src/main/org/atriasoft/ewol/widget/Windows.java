@@ -22,6 +22,8 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
+import org.atriasoft.ewol.widget.notification.DefaultNotificationManager;
+import org.atriasoft.ewol.widget.notification.NotificationManager;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +52,8 @@ public class Windows extends Widget {
 	protected ResourceColorFile resourceColor = null;
 
 	protected Widget subWidget;
+
+	protected NotificationManager notificationManager = null;
 
 	protected Windows() {
 		this.propertyCanFocus = true;
@@ -108,6 +112,13 @@ public class Windows extends Widget {
 	public Widget getWidgetAtPos(final Vector2f pos) {
 		// calculate relative position
 		final Vector2f relativePos = relativePosition(pos);
+		// check toast notifications first (they are rendered on top of everything)
+		if (this.notificationManager != null) {
+			final Widget toastWidget = this.notificationManager.getWidgetAtPos(pos);
+			if (toastWidget != null) {
+				return toastWidget;
+			}
+		}
 		// event go directly on the pop-up
 		if (this.popUpWidgetList.size() != 0) {
 			return this.popUpWidgetList.get(this.popUpWidgetList.size() - 1).getWidgetAtPos(pos);
@@ -148,6 +159,9 @@ public class Windows extends Widget {
 				it.onChangeSize();
 			}
 		}
+		if (this.notificationManager != null) {
+			this.notificationManager.onWindowChangeSize(this.size);
+		}
 	}
 	
 	@Override
@@ -159,6 +173,9 @@ public class Windows extends Widget {
 			if (it != null) {
 				it.systemRegenerateDisplay();
 			}
+		}
+		if (this.notificationManager != null) {
+			this.notificationManager.onRegenerateDisplay();
 		}
 	}
 	
@@ -317,6 +334,45 @@ public class Windows extends Widget {
 				it.systemDraw(displayProp);
 			}
 		}
+		// third: display toast notifications (on top of everything)
+		if (this.notificationManager != null) {
+			this.notificationManager.onDraw(displayProp);
+		}
+	}
+
+	// ========================================================================
+	// Notification Manager
+	// ========================================================================
+
+	/**
+	 * Get the notification manager for this window.
+	 * @return the notification manager, or null if not set
+	 */
+	public NotificationManager getNotificationManager() {
+		return this.notificationManager;
+	}
+
+	/**
+	 * Set the notification manager for this window.
+	 * @param manager the notification manager
+	 */
+	public void setNotificationManager(final NotificationManager manager) {
+		this.notificationManager = manager;
+		if (this.notificationManager != null) {
+			this.notificationManager.onWindowChangeSize(this.size);
+		}
+	}
+
+	/**
+	 * Get or create the default notification manager.
+	 * Lazily creates a DefaultNotificationManager on first call.
+	 * @return the notification manager
+	 */
+	public NotificationManager getNotification() {
+		if (this.notificationManager == null) {
+			setNotificationManager(new DefaultNotificationManager());
+		}
+		return this.notificationManager;
 	}
 
 	// ========================================================================
@@ -350,6 +406,16 @@ public class Windows extends Widget {
 	 */
 	public Windows pushPopup(final Widget widget) {
 		popUpWidgetPush(widget);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set notification manager.
+	 * @param manager the notification manager
+	 * @return this windows for chaining
+	 */
+	public Windows notificationManager(final NotificationManager manager) {
+		setNotificationManager(manager);
 		return this;
 	}
 }
