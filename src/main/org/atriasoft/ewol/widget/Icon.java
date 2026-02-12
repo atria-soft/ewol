@@ -5,6 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.atriasoft.aknot.annotation.AknotAttribute;
@@ -12,6 +14,7 @@ import org.atriasoft.aknot.annotation.AknotDescription;
 import org.atriasoft.aknot.annotation.AknotManaged;
 import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.aknot.annotation.AknotSignal;
+import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
@@ -74,6 +77,9 @@ public class Icon extends Widget {
 	@AknotName("pressed")
 	@AknotDescription("Icon is pressed")
 	public final SignalEmpty signalPressed = new SignalEmpty();
+
+	/** Stored connections from fluent API to prevent GC */
+	private final List<Connection> fluentConnections = new ArrayList<>();
 	
 	/**
 	 * Default constructor.
@@ -536,7 +542,7 @@ public class Icon extends Widget {
 	 * @return This icon for chaining
 	 */
 	public Icon onPressed(final Runnable callback) {
-		this.signalPressed.connect(callback);
+		this.fluentConnections.add(this.signalPressed.connect(callback));
 		return this;
 	}
 }
