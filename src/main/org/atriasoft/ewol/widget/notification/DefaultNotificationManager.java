@@ -1,6 +1,5 @@
 package org.atriasoft.ewol.widget.notification;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -215,10 +214,11 @@ public class DefaultNotificationManager extends NotificationManager {
 		// Index 0 = oldest = front toast (fully visible at base margin).
 		// Index N = newest = behind, with N * stackOffset further from anchor.
 		// Only layout the first maxVisibleToasts; the rest wait in queue.
-		final int count = Math.min(this.activeToasts.size(), this.config.getMaxVisibleToasts());
+		final List<ToastEntry> snapshot = List.copyOf(this.activeToasts);
+		final int count = Math.min(snapshot.size(), this.config.getMaxVisibleToasts());
 
 		for (int i = 0; i < count; i++) {
-			final ToastEntry entry = this.activeToasts.get(i);
+			final ToastEntry entry = snapshot.get(i);
 			final Vector2f minSize = entry.toast.getCalculatedMinSize();
 			final float toastHeight = minSize.y();
 
@@ -244,9 +244,10 @@ public class DefaultNotificationManager extends NotificationManager {
 
 	@Override
 	public void onRegenerateDisplay() {
-		final int count = Math.min(this.activeToasts.size(), this.config.getMaxVisibleToasts());
+		final List<ToastEntry> snapshot = List.copyOf(this.activeToasts);
+		final int count = Math.min(snapshot.size(), this.config.getMaxVisibleToasts());
 		for (int i = 0; i < count; i++) {
-			this.activeToasts.get(i).toast.regenerate();
+			snapshot.get(i).toast.regenerate();
 		}
 	}
 
@@ -254,18 +255,20 @@ public class DefaultNotificationManager extends NotificationManager {
 	public void onDraw(final DrawProperty displayProp) {
 		// Draw in reverse order: newest (back) first, oldest (front) last
 		// so the front toast is rendered on top.
-		final int count = Math.min(this.activeToasts.size(), this.config.getMaxVisibleToasts());
+		final List<ToastEntry> snapshot = List.copyOf(this.activeToasts);
+		final int count = Math.min(snapshot.size(), this.config.getMaxVisibleToasts());
 		for (int i = count - 1; i >= 0; i--) {
-			this.activeToasts.get(i).toast.draw(displayProp);
+			snapshot.get(i).toast.draw(displayProp);
 		}
 	}
 
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
 		// Check front toast first (index 0 = oldest, visually on top)
-		final int count = Math.min(this.activeToasts.size(), this.config.getMaxVisibleToasts());
+		final List<ToastEntry> snapshot = List.copyOf(this.activeToasts);
+		final int count = Math.min(snapshot.size(), this.config.getMaxVisibleToasts());
 		for (int i = 0; i < count; i++) {
-			final ToastEntry entry = this.activeToasts.get(i);
+			final ToastEntry entry = snapshot.get(i);
 			if (pos.x() >= entry.origin.x()
 					&& pos.x() <= entry.origin.x() + entry.size.x()
 					&& pos.y() >= entry.origin.y()
