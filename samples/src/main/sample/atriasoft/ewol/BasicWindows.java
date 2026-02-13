@@ -139,6 +139,7 @@ public class BasicWindows extends Windows {
 		this.testedElement.add(new TestWidgetImage());
 		this.testedElement.add(new TestWidgetLabel());
 		this.testedElement.add(new TestWidgetToast());
+		this.testedElement.add(new TestWidgetPopover());
 		requestNext();
 	}
 
