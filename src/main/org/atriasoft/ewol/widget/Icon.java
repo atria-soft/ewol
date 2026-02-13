@@ -23,10 +23,9 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.exml.Exml;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
+import org.atriasoft.ewol.internal.XmlHelper;
 import org.atriasoft.gale.key.KeyStatus;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -217,21 +216,19 @@ public class Icon extends Widget {
 			return null;
 		}
 		try {
-			final XmlElement doc = Exml.parse(svgData);
+			final Element doc = XmlHelper.parse(svgData);
 			if (doc == null) {
 				LOGGER.warn("Failed to parse SVG as XML");
 				return svgData;
 			}
 			final String fillHex = colorToHex(this.propertyFillColor);
 			final String backgroundHex = colorToHex(this.propertyBackgroundColor);
-			
+
 			// Process all elements recursively
 			applyColorsToElement(doc, fillHex, backgroundHex);
-			
+
 			// Generate the modified XML
-			final StringBuilder result = new StringBuilder();
-			Exml.generate(doc, result);
-			return result.toString();
+			return XmlHelper.generate(doc);
 		} catch (final Exception e) {
 			LOGGER.warn("Failed to parse SVG for color replacement: {}", e.getMessage());
 			return svgData;
@@ -244,14 +241,14 @@ public class Icon extends Widget {
 	 * @param fillHex The hex color to replace black colors with
 	 * @param backgroundHex The hex color to replace white colors with
 	 */
-	private void applyColorsToElement(final XmlElement element, final String fillHex, final String backgroundHex) {
-		final String elementName = element.getValue() != null ? element.getValue().toLowerCase() : "";
+	private void applyColorsToElement(final Element element, final String fillHex, final String backgroundHex) {
+		final String elementName = element.getTagName().toLowerCase();
 		final boolean isShapeElement = SHAPE_ELEMENTS.contains(elementName);
 
 		// Process color attributes on this element
 		for (final String attrName : COLOR_ATTRIBUTES) {
-			if (element.existAttribute(attrName)) {
-				final String value = element.getAttribute(attrName, "").toLowerCase();
+			if (element.hasAttribute(attrName)) {
+				final String value = element.getAttribute(attrName).toLowerCase();
 				if (BLACK_COLORS.contains(value)) {
 					element.setAttribute(attrName, fillHex);
 				} else if (WHITE_COLORS.contains(value)) {
@@ -261,8 +258,8 @@ public class Icon extends Widget {
 		}
 
 		// Process style attribute (only replace colors, don't add defaults here)
-		if (element.existAttribute("style")) {
-			final String style = element.getAttribute("style", "");
+		if (element.hasAttribute("style")) {
+			final String style = element.getAttribute("style");
 			final String newStyle = applyColorsToStyle(style, fillHex, backgroundHex);
 			if (!style.equals(newStyle)) {
 				element.setAttribute("style", newStyle);
@@ -271,7 +268,7 @@ public class Icon extends Widget {
 
 		// For shape elements: add default fill/stroke if not specified anywhere
 		if (isShapeElement) {
-			final boolean hasFillAttr = element.existAttribute("fill");
+			final boolean hasFillAttr = element.hasAttribute("fill");
 			final boolean hasFillInStyle = hasPropertyInStyle(element, "fill");
 
 			// SVG default fill is black - if no fill specified, add fillColor
@@ -280,9 +277,9 @@ public class Icon extends Widget {
 			}
 
 			// Check if stroke-width is defined but stroke color is not
-			final boolean hasStrokeWidth = element.existAttribute("stroke-width")
+			final boolean hasStrokeWidth = element.hasAttribute("stroke-width")
 					|| hasPropertyInStyle(element, "stroke-width");
-			final boolean hasStrokeAttr = element.existAttribute("stroke");
+			final boolean hasStrokeAttr = element.hasAttribute("stroke");
 			final boolean hasStrokeInStyle = hasPropertyInStyle(element, "stroke");
 
 			// If stroke-width is defined but no stroke color, add fillColor as stroke
@@ -292,10 +289,8 @@ public class Icon extends Widget {
 		}
 
 		// Process child elements recursively
-		for (final XmlNode child : element.getNodes()) {
-			if (child.isElement()) {
-				applyColorsToElement(child.toElement(), fillHex, backgroundHex);
-			}
+		for (final Element child : XmlHelper.children(element)) {
+			applyColorsToElement(child, fillHex, backgroundHex);
 		}
 	}
 
@@ -305,11 +300,11 @@ public class Icon extends Widget {
 	 * @param propertyName The CSS property name to look for
 	 * @return true if the property is defined in the style attribute
 	 */
-	private boolean hasPropertyInStyle(final XmlElement element, final String propertyName) {
-		if (!element.existAttribute("style")) {
+	private boolean hasPropertyInStyle(final Element element, final String propertyName) {
+		if (!element.hasAttribute("style")) {
 			return false;
 		}
-		final String style = element.getAttribute("style", "").toLowerCase();
+		final String style = element.getAttribute("style").toLowerCase();
 		// Check for "propertyName:" pattern
 		return style.contains(propertyName + ":") || style.contains(propertyName + " :");
 	}
