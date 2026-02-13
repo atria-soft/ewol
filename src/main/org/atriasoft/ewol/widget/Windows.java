@@ -20,6 +20,7 @@ import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.context.EwolContext;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
+import org.atriasoft.ewol.widget.meta.PopoverManager;
 import org.atriasoft.ewol.widget.notification.DefaultNotificationManager;
 import org.atriasoft.ewol.widget.notification.NotificationManager;
 import org.atriasoft.gale.backend3d.OpenGL;
@@ -46,6 +47,8 @@ public class Windows extends Widget {
 	protected ResourceColorFile resourceColor = null;
 
 	protected Widget subWidget;
+
+	protected PopoverManager popoverManager = new PopoverManager();
 
 	protected NotificationManager notificationManager = null;
 
@@ -113,6 +116,13 @@ public class Windows extends Widget {
 				return toastWidget;
 			}
 		}
+		// check popovers (above popups, below toasts)
+		if (this.popoverManager.hasActivePopovers()) {
+			final Widget popoverWidget = this.popoverManager.getWidgetAtPos(pos);
+			if (popoverWidget != null) {
+				return popoverWidget;
+			}
+		}
 		// event go directly on the pop-up
 		if (this.popUpWidgetList.size() != 0) {
 			return this.popUpWidgetList.get(this.popUpWidgetList.size() - 1).getWidgetAtPos(pos);
@@ -153,11 +163,12 @@ public class Windows extends Widget {
 				it.onChangeSize();
 			}
 		}
+		this.popoverManager.onWindowChangeSize(this.size);
 		if (this.notificationManager != null) {
 			this.notificationManager.onWindowChangeSize(this.size);
 		}
 	}
-	
+
 	@Override
 	public void onRegenerateDisplay() {
 		if (this.subWidget != null) {
@@ -168,6 +179,7 @@ public class Windows extends Widget {
 				it.systemRegenerateDisplay();
 			}
 		}
+		this.popoverManager.onRegenerateDisplay();
 		if (this.notificationManager != null) {
 			this.notificationManager.onRegenerateDisplay();
 		}
@@ -328,10 +340,24 @@ public class Windows extends Widget {
 				it.systemDraw(displayProp);
 			}
 		}
-		// third: display toast notifications (on top of everything)
+		// third: display popovers (above popups)
+		this.popoverManager.onDraw(displayProp);
+		// fourth: display toast notifications (on top of everything)
 		if (this.notificationManager != null) {
 			this.notificationManager.onDraw(displayProp);
 		}
+	}
+
+	// ========================================================================
+	// Popover Manager
+	// ========================================================================
+
+	/**
+	 * Get the popover manager for this window.
+	 * @return the popover manager (never null)
+	 */
+	public PopoverManager getPopoverManager() {
+		return this.popoverManager;
 	}
 
 	// ========================================================================
