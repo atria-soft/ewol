@@ -7,11 +7,8 @@ package org.atriasoft.ewol.widget.meta;
 
 import java.io.File;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
@@ -140,14 +137,8 @@ public class FileChooser extends Composer {
 		self.autoDestroy();
 	}
 	
-	@AknotSignal
-	@AknotName(value = "cancel")
-	@AknotDescription(value = "Cancel button is pressed")
 	public SignalEmpty signalCancel = new SignalEmpty(); //!< abort the display of the pop-up or press cancel button
-	
-	@AknotSignal
-	@AknotName(value = "validate")
-	@AknotDescription(value = "Validate button is pressed")
+
 	public Signal<String> signalValidate = new Signal<>(); //!< select file(s)
 	// properties
 	public String propertyPath = System.getProperty("user.home"); //!< Current path to explore
@@ -263,9 +254,8 @@ public class FileChooser extends Composer {
 		}
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "file")
+	@JsonProperty("file")
+	@JacksonXmlProperty(isAttribute = true, localName = "file")
 	public void setPropertyFile(final String propertyFile) {
 		if (this.propertyFile.equals(propertyFile)) {
 			return;
@@ -274,10 +264,8 @@ public class FileChooser extends Composer {
 		onChangePropertyFile();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "label-cancel")
-	@AknotDescription(value = "Label for cancel button")
+	@JsonProperty("label-cancel")
+	@JacksonXmlProperty(isAttribute = true, localName = "label-cancel")
 	public void setPropertyLabelCancel(final String propertyLabelCancel) {
 		if (this.propertyLabelCancel.equals(propertyLabelCancel)) {
 			return;
@@ -286,10 +274,8 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelCancel();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "title")
-	@AknotDescription(value = "Titile of the Pop-up")
+	@JsonProperty("title")
+	@JacksonXmlProperty(isAttribute = true, localName = "title")
 	public void setPropertyLabelTitle(final String propertyLabelTitle) {
 		if (this.propertyLabelTitle.equals(propertyLabelTitle)) {
 			return;
@@ -298,10 +284,8 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelTitle();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "label-validate")
-	@AknotDescription(value = "Label for validate button")
+	@JsonProperty("label-validate")
+	@JacksonXmlProperty(isAttribute = true, localName = "label-validate")
 	public void setPropertyLabelValidate(final String propertyLabelValidate) {
 		if (this.propertyLabelValidate.equals(propertyLabelValidate)) {
 			return;
@@ -310,10 +294,8 @@ public class FileChooser extends Composer {
 		onChangePropertyLabelValidate();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "path")
-	@AknotDescription(value = "Path of the File chooser")
+	@JsonProperty("path")
+	@JacksonXmlProperty(isAttribute = true, localName = "path")
 	public void setPropertyPath(final String propertyPath) {
 		if (this.propertyPath.equals(propertyPath)) {
 			return;

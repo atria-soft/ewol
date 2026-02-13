@@ -2,15 +2,13 @@ package org.atriasoft.ewol.object;
 
 import java.lang.ref.WeakReference;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDefaultAttribute;
-import org.atriasoft.aknot.annotation.AknotDefaultManaged;
-import org.atriasoft.aknot.annotation.AknotDefaultOptional;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotIgnoreUnknown;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
 import org.atriasoft.ewol.Ewol;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.ewol.context.EwolContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +23,8 @@ import org.slf4j.LoggerFactory;
  * Basic message classes for ewol system
  * this class permit at every Object to communicate between them.
  */
-@AknotDefaultManaged(value = false)
-@AknotDefaultOptional
-@AknotDefaultAttribute
-@AknotIgnoreUnknown
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE, fieldVisibility = Visibility.NONE)
 public class EwolObject {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EwolObject.class);
 	private static Integer valUID = 0; //!< Static used for the unique ID definition
@@ -116,10 +112,8 @@ public class EwolObject {
 		return this.uniqueId;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "name")
-	@AknotDescription(value = "Name of the object.")
+	@JsonProperty("name")
+	@JacksonXmlProperty(isAttribute = true, localName = "name")
 	public String getName() {
 		return this.name;
 	}

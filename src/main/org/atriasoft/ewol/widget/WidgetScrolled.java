@@ -1,9 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
@@ -65,18 +63,14 @@ public class WidgetScrolled extends Widget {
 		onChangePropertyShapeHori();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("shape-hori")
-	@AknotDescription("shape for the horizontal display")
+	@JsonProperty("shape-hori")
+	@JacksonXmlProperty(isAttribute = true, localName = "shape-hori")
 	public Uri getPropertyShapeHori() {
 		return this.propertyShapeHori;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("shape-vert")
-	@AknotDescription("shape for the vertical display")
+	@JsonProperty("shape-vert")
+	@JacksonXmlProperty(isAttribute = true, localName = "shape-vert")
 	public Uri getPropertyShapeVert() {
 		return this.propertyShapeVert;
 	}

@@ -5,10 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
@@ -80,10 +78,8 @@ public class ScrollView extends Container {
 	// Properties
 	// ========================================================================
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("show-horizontal")
-	@AknotDescription("Show horizontal scrollbar when needed")
+	@JsonProperty("show-horizontal")
+	@JacksonXmlProperty(isAttribute = true, localName = "show-horizontal")
 	public boolean isPropertyShowHorizontal() {
 		return this.propertyShowHorizontal;
 	}
@@ -97,10 +93,8 @@ public class ScrollView extends Container {
 		requestUpdateSize();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("show-vertical")
-	@AknotDescription("Show vertical scrollbar when needed")
+	@JsonProperty("show-vertical")
+	@JacksonXmlProperty(isAttribute = true, localName = "show-vertical")
 	public boolean isPropertyShowVertical() {
 		return this.propertyShowVertical;
 	}

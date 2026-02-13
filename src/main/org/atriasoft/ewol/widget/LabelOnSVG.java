@@ -5,11 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
@@ -33,9 +30,6 @@ public class LabelOnSVG extends Widget {
 
 	protected int propertyFontSize = 0;
 	protected String propertyValue = "";
-	@AknotSignal
-	@AknotName("pressed")
-	@AknotDescription("Label is pressed")
 	public SignalEmpty signalPressed = new SignalEmpty();
 	protected CompositingText text = new CompositingText();
 	protected String value = "";
@@ -174,10 +168,8 @@ public class LabelOnSVG extends Widget {
 		this.text.flush();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("auto-translate")
-	@AknotDescription("Translate the String with the marker {T:xxxxxx}")
+	@JsonProperty("auto-translate")
+	@JacksonXmlProperty(isAttribute = true, localName = "auto-translate")
 	public void setPropertyAutoTranslate(final boolean propertyAutoTranslate) {
 		if (this.propertyAutoTranslate == propertyAutoTranslate) {
 			return;
@@ -192,10 +184,8 @@ public class LabelOnSVG extends Widget {
 		requestUpdateSize();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("font-size")
-	@AknotDescription("Default font size (0=> system default)")
+	@JsonProperty("font-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "font-size")
 	public void setPropertyFontSize(final int propertyFontSize) {
 		if (this.propertyFontSize == propertyFontSize) {
 			return;
@@ -205,10 +195,8 @@ public class LabelOnSVG extends Widget {
 		requestUpdateSize();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("value")
-	@AknotDescription("Displayed value string")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

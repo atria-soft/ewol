@@ -1,10 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Uri;
@@ -23,14 +20,8 @@ import org.slf4j.LoggerFactory;
 public class Spin extends SpinBase {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Spin.class);
 
-	@AknotSignal
-	@AknotName("value")
-	@AknotDescription("Spin updated value (raw long value)")
 	public Signal<Long> signalValue = new Signal<>();
 
-	@AknotSignal
-	@AknotName("valueDouble")
-	@AknotDescription("Spin value as double (with mantis applied)")
 	public Signal<Double> signalValueDouble = new Signal<>();
 
 	protected long propertyValue = 0;
@@ -100,42 +91,32 @@ public class Spin extends SpinBase {
 		LOGGER.debug("connectGui [STOP]");
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("increment")
-	@AknotDescription("Increment value at each button or keyboard event")
+	@JsonProperty("increment")
+	@JacksonXmlProperty(isAttribute = true, localName = "increment")
 	public long getPropertyIncrement() {
 		return this.propertyIncrement;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("mantis")
-	@AknotDescription("Fixed-point mantissa (number of digits after decimal point)")
+	@JsonProperty("mantis")
+	@JacksonXmlProperty(isAttribute = true, localName = "mantis")
 	public int getPropertyMantis() {
 		return this.propertyMantis;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "max")
-	@AknotDescription(value = "Maximum value of the spin")
+	@JsonProperty("max")
+	@JacksonXmlProperty(isAttribute = true, localName = "max")
 	public long getPropertyMax() {
 		return this.propertyMax;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("min")
-	@AknotDescription("Minimum value of the spin")
+	@JsonProperty("min")
+	@JacksonXmlProperty(isAttribute = true, localName = "min")
 	public long getPropertyMin() {
 		return this.propertyMin;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("value")
-	@AknotDescription("Current value of the Spin")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public long getPropertyValue() {
 		return this.propertyValue;
 	}

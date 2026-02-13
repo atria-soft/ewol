@@ -5,11 +5,8 @@
  */
 package org.atriasoft.ewol.widget.meta;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
@@ -52,19 +49,10 @@ import org.slf4j.LoggerFactory;
 public class ColorPickerPopup extends Composer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ColorPickerPopup.class);
 
-	@AknotSignal
-	@AknotName(value = "color-changed")
-	@AknotDescription("Color has been changed (live update)")
 	public Signal<Color> signalColorChanged = new Signal<>();
 
-	@AknotSignal
-	@AknotName(value = "validate")
-	@AknotDescription("Color selection validated")
 	public Signal<Color> signalValidate = new Signal<>();
 
-	@AknotSignal
-	@AknotName(value = "cancel")
-	@AknotDescription("Color selection cancelled")
 	public SignalEmpty signalCancel = new SignalEmpty();
 
 	// Properties
@@ -361,10 +349,8 @@ public class ColorPickerPopup extends Composer {
 	// Property accessors
 	// ========================================================================
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "value")
-	@AknotDescription(value = "Current color value")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public Color getPropertyValue() {
 		return this.propertyValue;
 	}
@@ -378,10 +364,8 @@ public class ColorPickerPopup extends Composer {
 		updateUIFromRGB();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "title")
-	@AknotDescription(value = "Title of the popup")
+	@JsonProperty("title")
+	@JacksonXmlProperty(isAttribute = true, localName = "title")
 	public String getPropertyLabelTitle() {
 		return this.propertyLabelTitle;
 	}
@@ -401,10 +385,8 @@ public class ColorPickerPopup extends Composer {
 		}
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "label-select")
-	@AknotDescription(value = "Label for select button")
+	@JsonProperty("label-select")
+	@JacksonXmlProperty(isAttribute = true, localName = "label-select")
 	public String getPropertyLabelSelect() {
 		return this.propertyLabelSelect;
 	}
@@ -424,10 +406,8 @@ public class ColorPickerPopup extends Composer {
 		}
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "label-cancel")
-	@AknotDescription(value = "Label for cancel button")
+	@JsonProperty("label-cancel")
+	@JacksonXmlProperty(isAttribute = true, localName = "label-cancel")
 	public String getPropertyLabelCancel() {
 		return this.propertyLabelCancel;
 	}

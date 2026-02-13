@@ -8,9 +8,6 @@ package org.atriasoft.ewol.widget.meta;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
@@ -51,14 +48,8 @@ public class SelectPopup extends Widget {
 	private static final float POPUP_MAX_HEIGHT = 300.0f;
 	private static final float POPUP_MIN_WIDTH = 120.0f;
 
-	@AknotSignal
-	@AknotName(value = "selection-changed")
-	@AknotDescription("Item has been selected")
 	public Signal<Integer> signalSelectionChanged = new Signal<>();
 
-	@AknotSignal
-	@AknotName(value = "closed")
-	@AknotDescription("Popup has been closed")
 	public SignalEmpty signalClosed = new SignalEmpty();
 
 	// Items

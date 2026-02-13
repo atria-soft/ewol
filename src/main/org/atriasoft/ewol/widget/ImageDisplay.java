@@ -5,11 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.egami.ImageByteRGBA;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Dimension2f;
@@ -39,9 +36,6 @@ public class ImageDisplay extends Widget {
 	protected boolean propertySmooth = true;
 	protected Uri propertySource = null;
 	protected boolean propertyUseThemeColor = false;
-	@AknotSignal
-	@AknotName("pressed")
-	@AknotDescription(value = "Image is pressed")
 	public final SignalEmpty signalPressed = new SignalEmpty();
 	
 	/**
@@ -80,66 +74,50 @@ public class ImageDisplay extends Widget {
 		markToRedraw();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "image-border")
-	@AknotDescription(value = "Border of the image")
+	@JsonProperty("image-border")
+	@JacksonXmlProperty(isAttribute = true, localName = "image-border")
 	public Dimension2f getPropertyBorder() {
 		return this.propertyBorder;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "image-size")
-	@AknotDescription(value = "Basic display size of the image")
+	@JsonProperty("image-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "image-size")
 	public Dimension2f getPropertyImageSize() {
 		return this.propertyImageSize;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "part-start")
-	@AknotDescription(value = "Start display position in the image")
+	@JsonProperty("part-start")
+	@JacksonXmlProperty(isAttribute = true, localName = "part-start")
 	public Vector2f getPropertyPosStart() {
 		return this.propertyPosStart;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "part-stop")
-	@AknotDescription(value = "Start display position in the image")
+	@JsonProperty("part-stop")
+	@JacksonXmlProperty(isAttribute = true, localName = "part-stop")
 	public Vector2f getPropertyPosStop() {
 		return this.propertyPosStop;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "src")
-	@AknotDescription(value = "Image source path")
+	@JsonProperty("src")
+	@JacksonXmlProperty(isAttribute = true, localName = "src")
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "ratio")
-	@AknotDescription(value = "Keep ratio of the image")
+	@JsonProperty("ratio")
+	@JacksonXmlProperty(isAttribute = true, localName = "ratio")
 	public boolean isPropertyKeepRatio() {
 		return this.propertyKeepRatio;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "smooth")
-	@AknotDescription(value = "Smooth display of the image")
+	@JsonProperty("smooth")
+	@JacksonXmlProperty(isAttribute = true, localName = "smooth")
 	public boolean isPropertySmooth() {
 		return this.propertySmooth;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "use-theme-color")
-	@AknotDescription(value = "Use the theme color to display images")
+	@JsonProperty("use-theme-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "use-theme-color")
 	public boolean isPropertyUseThemeColor() {
 		return this.propertyUseThemeColor;
 	}

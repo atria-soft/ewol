@@ -1,10 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
@@ -44,24 +41,12 @@ public class Tick extends Box {
 	private boolean isDown = false;
 	private boolean mouseHover = false;
 	
-	@AknotSignal
-	@AknotName("down")
-	@AknotDescription("Tick is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
-	
-	@AknotSignal
-	@AknotName("up")
-	@AknotDescription("Tick is Up")
+
 	public SignalEmpty signalUp = new SignalEmpty();
-	
-	@AknotSignal
-	@AknotName("click")
-	@AknotDescription("Tick is Clicked")
+
 	public SignalEmpty signalClick = new SignalEmpty();
-	
-	@AknotSignal
-	@AknotName("value")
-	@AknotDescription("Tick value change")
+
 	public Signal<Boolean> signalValue = new Signal<>();
 	
 	/**
@@ -94,10 +79,8 @@ public class Tick extends Box {
 		LOGGER.trace("min size = {}", this.minSize);
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("value")
-	@AknotDescription("State of the Tick (true = checked)")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public Boolean getPropertyValue() {
 		return this.propertyValue;
 	}

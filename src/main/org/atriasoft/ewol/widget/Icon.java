@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
@@ -72,9 +69,6 @@ public class Icon extends Widget {
 	/** Cached colored SVG data */
 	private String cachedColoredSvgData = null;
 	
-	@AknotSignal
-	@AknotName("pressed")
-	@AknotDescription("Icon is pressed")
 	public final SignalEmpty signalPressed = new SignalEmpty();
 
 	/** Stored connections from fluent API to prevent GC */
@@ -91,10 +85,8 @@ public class Icon extends Widget {
 	// Property accessors
 	// ========================================================================
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("src")
-	@AknotDescription("Icon source URI")
+	@JsonProperty("src")
+	@JacksonXmlProperty(isAttribute = true, localName = "src")
 	public Uri getPropertySource() {
 		return this.propertySource;
 	}
@@ -111,10 +103,8 @@ public class Icon extends Widget {
 		requestUpdateSize();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("icon")
-	@AknotDescription("Icon name (from theme/icon/ directory, without .svg extension)")
+	@JsonProperty("icon")
+	@JacksonXmlProperty(isAttribute = true, localName = "icon")
 	public String getPropertyIcon() {
 		return this.propertyIcon;
 	}
@@ -135,10 +125,8 @@ public class Icon extends Widget {
 		requestUpdateSize();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("fill-color")
-	@AknotDescription("Fill color for the icon")
+	@JsonProperty("fill-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "fill-color")
 	public Color getPropertyFillColor() {
 		return this.propertyFillColor;
 	}
@@ -152,10 +140,8 @@ public class Icon extends Widget {
 		markToRedraw();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("background-color")
-	@AknotDescription("Background color for the icon (replaces white in SVG)")
+	@JsonProperty("background-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "background-color")
 	public Color getPropertyBackgroundColor() {
 		return this.propertyBackgroundColor;
 	}
@@ -169,10 +155,8 @@ public class Icon extends Widget {
 		markToRedraw();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("icon-size")
-	@AknotDescription("Display size of the icon")
+	@JsonProperty("icon-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "icon-size")
 	public Dimension2f getPropertyIconSize() {
 		return this.propertyIconSize;
 	}

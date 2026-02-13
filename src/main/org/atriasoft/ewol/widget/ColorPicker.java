@@ -5,11 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
@@ -35,9 +32,6 @@ import org.slf4j.LoggerFactory;
 public class ColorPicker extends Box {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ColorPicker.class);
 
-	@AknotSignal
-	@AknotName(value = "color-changed")
-	@AknotDescription("Color has been changed")
 	public Signal<Color> signalColorChanged = new Signal<>();
 
 	protected Color propertyValue = Color.WHITE;
@@ -67,10 +61,8 @@ public class ColorPicker extends Box {
 		setSubWidget(this.colorPreview);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "value")
-	@AknotDescription(value = "Current color value")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public Color getPropertyValue() {
 		return this.propertyValue;
 	}
