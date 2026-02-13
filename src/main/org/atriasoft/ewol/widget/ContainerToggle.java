@@ -5,9 +5,9 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotFactory;
-import org.atriasoft.aknot.annotation.AknotManaged;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Padding;
@@ -81,9 +81,8 @@ public class ContainerToggle extends Widget {
 		return null;
 	}
 	
-	@AknotManaged
-	@AknotFactory(value = WidgetXmlFactory.class)
-	@AknotDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
+	@JsonProperty
+	@JacksonXmlElementWrapper(useWrapping = false)
 	public Widget[] getSubWidgets() {
 		return this.subWidget;
 	}
@@ -159,7 +158,7 @@ public class ContainerToggle extends Widget {
 		onChangeSize();
 	}
 	
-	@AknotManaged(value = false)
+	@JsonIgnore
 	public void setSubWidget(final Widget newWidget) {
 		setSubWidget(newWidget, 0);
 	}

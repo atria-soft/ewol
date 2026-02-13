@@ -1,9 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /** @file
  * @author Edouard DUPIN
@@ -18,10 +16,8 @@ import org.atriasoft.ewol.compositing.CompositingGC;
 
 public class Spacer extends Widget {
 	private final CompositingDrawing vectorialDraw = new CompositingGC(); //!< Compositing drawing element
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("color")
-	@AknotDescription("background of the spacer")
+	@JsonProperty("color")
+	@JacksonXmlProperty(isAttribute = true, localName = "color")
 	protected Color propertyColor = Color.NONE; //!< Background color
 
 	/**

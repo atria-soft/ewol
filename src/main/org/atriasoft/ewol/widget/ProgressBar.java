@@ -1,10 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.FMath;
@@ -24,9 +21,6 @@ public class ProgressBar extends Widget {
 
 	private final CompositingDrawing vectorialDraw = new CompositingGC();
 
-	@AknotSignal
-	@AknotName("value")
-	@AknotDescription("Progress bar value changed")
 	public Signal<Float> signalValue = new Signal<>();
 
 	private Color propertyColorOff = Color.NONE;
@@ -50,34 +44,26 @@ public class ProgressBar extends Widget {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "color-off")
-	@AknotDescription(value = "Color of the unfilled portion")
+	@JsonProperty("color-off")
+	@JacksonXmlProperty(isAttribute = true, localName = "color-off")
 	public Color getPropertyColorOff() {
 		return this.propertyColorOff;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "color-on")
-	@AknotDescription(value = "Color of the filled portion")
+	@JsonProperty("color-on")
+	@JacksonXmlProperty(isAttribute = true, localName = "color-on")
 	public Color getPropertyColorOn() {
 		return this.propertyColorOn;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "color-border")
-	@AknotDescription(value = "Border color")
+	@JsonProperty("color-border")
+	@JacksonXmlProperty(isAttribute = true, localName = "color-border")
 	public Color getPropertyColorBorder() {
 		return this.propertyColorBorder;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "value")
-	@AknotDescription(value = "Progress value [0.0 - 1.0]")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public float getPropertyValue() {
 		return this.propertyValue;
 	}

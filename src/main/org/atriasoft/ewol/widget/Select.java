@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
@@ -48,9 +45,6 @@ public class Select extends Box {
 
 	private static final Color ARROW_COLOR = new Color(0x60, 0x60, 0x60, 0xFF);
 
-	@AknotSignal
-	@AknotName(value = "selection-changed")
-	@AknotDescription("Selection has changed")
 	public Signal<Integer> signalSelectionChanged = new Signal<>();
 
 	// Items list
@@ -221,10 +215,8 @@ public class Select extends Box {
 	// Property accessors
 	// ========================================================================
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "selected-index")
-	@AknotDescription(value = "Currently selected item index")
+	@JsonProperty("selected-index")
+	@JacksonXmlProperty(isAttribute = true, localName = "selected-index")
 	public int getPropertySelectedIndex() {
 		return this.propertySelectedIndex;
 	}
@@ -261,10 +253,8 @@ public class Select extends Box {
 		}
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "placeholder")
-	@AknotDescription(value = "Placeholder text when no selection")
+	@JsonProperty("placeholder")
+	@JacksonXmlProperty(isAttribute = true, localName = "placeholder")
 	public String getPropertyPlaceholder() {
 		return this.propertyPlaceholder;
 	}

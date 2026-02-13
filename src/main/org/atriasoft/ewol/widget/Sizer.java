@@ -7,11 +7,8 @@ package org.atriasoft.ewol.widget;
 
 import java.util.List;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotCaseSensitive;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2b;
@@ -23,7 +20,6 @@ import org.slf4j.LoggerFactory;
 public class Sizer extends ContainerN {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Sizer.class);
 
-	@AknotCaseSensitive(value = false)
 	public enum DisplayMode {
 		HORIZONTAL, //!< Horizontal mode
 		VERTICAL; //!< Vertical mode
@@ -88,18 +84,14 @@ public class Sizer extends ContainerN {
 		LOGGER.trace("[{}] Result min size : {}", getId(), this.minSize);
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("border")
-	@AknotDescription("The sizer border size")
+	@JsonProperty("border")
+	@JacksonXmlProperty(isAttribute = true, localName = "border")
 	public Dimension2f getPropertyBorderSize() {
 		return this.propertyBorderSize;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("mode")
-	@AknotDescription("The display mode")
+	@JsonProperty("mode")
+	@JacksonXmlProperty(isAttribute = true, localName = "mode")
 	public DisplayMode getPropertyMode() {
 		return this.propertyMode;
 	}

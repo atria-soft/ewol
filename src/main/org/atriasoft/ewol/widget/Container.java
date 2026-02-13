@@ -5,10 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotFactory;
-import org.atriasoft.aknot.annotation.AknotManaged;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
@@ -74,10 +72,8 @@ public class Container extends Widget {
 	 * get the main node widget
 	 * @return the requested pointer on the node
 	 */
-	@AknotManaged
-	@AknotAttribute(false)
-	@AknotFactory(WidgetXmlFactory.class)
-	@AknotDescription(value = "Sub-node with multiple names...")
+	@JsonProperty
+	@JacksonXmlElementWrapper(useWrapping = false)
 	public Widget getSubWidget() {
 		return this.subWidget;
 	}

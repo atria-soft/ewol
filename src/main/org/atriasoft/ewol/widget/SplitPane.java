@@ -7,13 +7,9 @@ package org.atriasoft.ewol.widget;
 
 import java.util.List;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotCaseSensitive;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotFactory;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
@@ -36,15 +32,11 @@ import org.slf4j.LoggerFactory;
 public class SplitPane extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SplitPane.class);
 
-	@AknotCaseSensitive(value = false)
 	public enum Orientation {
 		HORIZONTAL,
 		VERTICAL
 	}
 
-	@AknotSignal
-	@AknotName("split-changed")
-	@AknotDescription("The split position has changed")
 	public Signal<Float> signalSplitChanged = new Signal<>();
 
 	protected Widget firstWidget = null;
@@ -409,10 +401,8 @@ public class SplitPane extends Widget {
 	// Property getters and setters
 	// ========================================================================
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("orientation")
-	@AknotDescription("Split orientation (HORIZONTAL or VERTICAL)")
+	@JsonProperty("orientation")
+	@JacksonXmlProperty(isAttribute = true, localName = "orientation")
 	public Orientation getPropertyOrientation() {
 		return this.propertyOrientation;
 	}
@@ -426,10 +416,8 @@ public class SplitPane extends Widget {
 		requestUpdateSize();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("split-position")
-	@AknotDescription("Split position ratio (0.0 to 1.0)")
+	@JsonProperty("split-position")
+	@JacksonXmlProperty(isAttribute = true, localName = "split-position")
 	public float getPropertySplitPosition() {
 		return this.propertySplitPosition;
 	}
@@ -445,10 +433,8 @@ public class SplitPane extends Widget {
 		requestUpdateSize();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("separator-size")
-	@AknotDescription("Size of the separator in pixels")
+	@JsonProperty("separator-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "separator-size")
 	public float getPropertySeparatorSize() {
 		return this.propertySeparatorSize;
 	}
@@ -462,10 +448,8 @@ public class SplitPane extends Widget {
 		requestUpdateSize();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("min-first-size")
-	@AknotDescription("Minimum size of the first widget in pixels")
+	@JsonProperty("min-first-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "min-first-size")
 	public float getPropertyMinFirstSize() {
 		return this.propertyMinFirstSize;
 	}
@@ -477,10 +461,8 @@ public class SplitPane extends Widget {
 		this.propertyMinFirstSize = Math.max(0.0f, size);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("min-second-size")
-	@AknotDescription("Minimum size of the second widget in pixels")
+	@JsonProperty("min-second-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "min-second-size")
 	public float getPropertyMinSecondSize() {
 		return this.propertyMinSecondSize;
 	}
@@ -497,9 +479,8 @@ public class SplitPane extends Widget {
 	 * Returns a list containing firstWidget and secondWidget (if set).
 	 * @return list of child widgets
 	 */
-	@AknotManaged
-	@AknotFactory(value = WidgetXmlFactory.class)
-	@AknotDescription(value = "Sub-widgets of the split pane (first and second)")
+	@JsonProperty
+	@JacksonXmlElementWrapper(useWrapping = false)
 	public List<Widget> getSubWidgets() {
 		if (this.firstWidget != null && this.secondWidget != null) {
 			return List.of(this.firstWidget, this.secondWidget);

@@ -5,10 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
@@ -31,10 +29,8 @@ public class PopUp extends Box {
 		this.propertyExpand = Vector2b.FALSE;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "out-click-remove")
-	@AknotDescription(value = "Remove the widget if the use click outside")
+	@JsonProperty("out-click-remove")
+	@JacksonXmlProperty(isAttribute = true, localName = "out-click-remove")
 	public boolean isPropertyCloseOutEvent() {
 		return this.propertyCloseOutEvent;
 	}

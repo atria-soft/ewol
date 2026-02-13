@@ -5,12 +5,9 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
-import org.atriasoft.aknot.annotation.AknotText;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
@@ -27,9 +24,6 @@ import org.slf4j.LoggerFactory;
 
 public class Label extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Label.class);
-	@AknotSignal
-	@AknotName("pressed")
-	@AknotDescription("Label is pressed")
 	public SignalEmpty signalPressed = new SignalEmpty();
 	private String propertyValue = "";
 	private int propertyFontSize = 0;
@@ -179,10 +173,8 @@ public class Label extends Widget {
 		this.textCompose.flush();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "auto-translate")
-	@AknotDescription(value = "Translate the String with the marker {T:xxxxxx}")
+	@JsonProperty("auto-translate")
+	@JacksonXmlProperty(isAttribute = true, localName = "auto-translate")
 	public void setPropertyAutoTranslate(final boolean propertyAutoTranslate) {
 		if (this.propertyAutoTranslate == propertyAutoTranslate) {
 			return;
@@ -197,10 +189,8 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "font-size")
-	@AknotDescription(value = "Default font size (0=> system default)")
+	@JsonProperty("font-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "font-size")
 	public void setPropertyFontSize(final int propertyFontSize) {
 		if (this.propertyFontSize == propertyFontSize) {
 			return;
@@ -210,10 +200,8 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
-	@AknotManaged
-	@AknotText
-	@AknotName(value = "value")
-	@AknotDescription(value = "Displayed value string")
+	@JsonProperty("value")
+	@JacksonXmlText
 	public void setPropertyValue(final String propertyValue) {
 		if (this.propertyValue.equals(propertyValue)) {
 			return;

@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.BorderRadius;
 import org.atriasoft.etk.Color;
@@ -45,9 +42,6 @@ public class Slider extends Widget {
 
 	private float propertyValue = 0.0f;
 
-	@AknotSignal
-	@AknotName("value")
-	@AknotDescription("Slider value change")
 	public Signal<Float> signalValue = new Signal<>();
 
 	// Element boundaries for hit detection
@@ -122,10 +116,8 @@ public class Slider extends Widget {
 		return value;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("maximum")
-	@AknotDescription("Maximum value of the slider")
+	@JsonProperty("maximum")
+	@JacksonXmlProperty(isAttribute = true, localName = "maximum")
 	public Float getPropertyMaximum() {
 		return this.propertyMaximum;
 	}
@@ -138,10 +130,8 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("minimum")
-	@AknotDescription("Minimum value of the slider")
+	@JsonProperty("minimum")
+	@JacksonXmlProperty(isAttribute = true, localName = "minimum")
 	public Float getPropertyMinimum() {
 		return this.propertyMinimum;
 	}
@@ -154,10 +144,8 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("step")
-	@AknotDescription("Step value of the slider")
+	@JsonProperty("step")
+	@JacksonXmlProperty(isAttribute = true, localName = "step")
 	public Float getPropertyStep() {
 		return this.propertyStep;
 	}
@@ -170,10 +158,8 @@ public class Slider extends Widget {
 		updateValue(this.propertyValue);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("value")
-	@AknotDescription("Value of the slider")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public Float getPropertyValue() {
 		return this.propertyValue;
 	}
@@ -190,10 +176,8 @@ public class Slider extends Widget {
 	// Color properties
 	// ========================================================================
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("track-color")
-	@AknotDescription("Background color of the slider track")
+	@JsonProperty("track-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "track-color")
 	public Color getPropertyTrackColor() {
 		return this.propertyTrackColor;
 	}
@@ -206,10 +190,8 @@ public class Slider extends Widget {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("fill-color")
-	@AknotDescription("Color of the filled portion of the track")
+	@JsonProperty("fill-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "fill-color")
 	public Color getPropertyFillColor() {
 		return this.propertyFillColor;
 	}
@@ -222,10 +204,8 @@ public class Slider extends Widget {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("cursor-color")
-	@AknotDescription("Color of the slider cursor")
+	@JsonProperty("cursor-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "cursor-color")
 	public Color getPropertyCursorColor() {
 		return this.propertyCursorColor;
 	}
@@ -238,10 +218,8 @@ public class Slider extends Widget {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("cursor-border-color")
-	@AknotDescription("Border color of the slider cursor")
+	@JsonProperty("cursor-border-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "cursor-border-color")
 	public Color getPropertyCursorBorderColor() {
 		return this.propertyCursorBorderColor;
 	}
@@ -254,10 +232,8 @@ public class Slider extends Widget {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("marker-color")
-	@AknotDescription("Color of the marker points on the track")
+	@JsonProperty("marker-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "marker-color")
 	public Color getPropertyMarkerColor() {
 		return this.propertyMarkerColor;
 	}
@@ -270,10 +246,8 @@ public class Slider extends Widget {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("marker-radius")
-	@AknotDescription("Radius of the marker points")
+	@JsonProperty("marker-radius")
+	@JacksonXmlProperty(isAttribute = true, localName = "marker-radius")
 	public float getPropertyMarkerRadius() {
 		return this.propertyMarkerRadius;
 	}

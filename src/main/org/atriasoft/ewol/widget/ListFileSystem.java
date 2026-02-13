@@ -16,11 +16,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
@@ -40,24 +37,12 @@ import org.slf4j.LoggerFactory;
  */
 public class ListFileSystem extends WidgetList {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListFileSystem.class);
-	@AknotSignal
-	@AknotName(value = "file-select")
-	@AknotDescription(value = "A file has been selected in the List")
 	public Signal<String> signalFileSelect = new Signal<>(); //!< @event "file-select" Generated when a file is selected.
 
-	@AknotSignal
-	@AknotName(value = "file-validate")
-	@AknotDescription(value = "A file has been validated on the list (double clicked or return pressed)")
 	public Signal<String> signalFileValidate = new Signal<>(); //!< @event "file-validate" Generate when the user validate (return) or double click on the element
 
-	@AknotSignal
-	@AknotName(value = "folder-select")
-	@AknotDescription(value = "A folder has been selected in the List")
 	public Signal<String> signalFolderSelect = new Signal<>();
 
-	@AknotSignal
-	@AknotName(value = "folder-validate")
-	@AknotDescription(value = "A folder has been validated on the list (double clicked or return pressed)")
 	public Signal<String> signalFolderValidate = new Signal<>();
 	protected String propertyPath = "/";
 	protected File propertyFile = null;
@@ -151,26 +136,20 @@ public class ListFileSystem extends WidgetList {
 		return new Vector2i(1, this.list.size() + offset);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "select")
-	@AknotDescription(value = "selection af a specific file")
+	@JsonProperty("select")
+	@JacksonXmlProperty(isAttribute = true, localName = "select")
 	public File getPropertyFile() {
 		return this.propertyFile;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "filter")
-	@AknotDescription(value = "regex to filter files ...")
+	@JsonProperty("filter")
+	@JacksonXmlProperty(isAttribute = true, localName = "filter")
 	public String getPropertyFilter() {
 		return this.propertyFilter;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "Path")
-	@AknotDescription(value = "Path to display")
+	@JsonProperty("Path")
+	@JacksonXmlProperty(isAttribute = true, localName = "Path")
 	public String getPropertyPath() {
 		return this.propertyPath;
 	}
@@ -186,26 +165,20 @@ public class ListFileSystem extends WidgetList {
 		return null;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "show-file")
-	@AknotDescription(value = "Display files")
+	@JsonProperty("show-file")
+	@JacksonXmlProperty(isAttribute = true, localName = "show-file")
 	public boolean isPropertyShowFile() {
 		return this.propertyShowFile;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "show-folder")
-	@AknotDescription(value = "display folders")
+	@JsonProperty("show-folder")
+	@JacksonXmlProperty(isAttribute = true, localName = "show-folder")
 	public boolean isPropertyShowFolder() {
 		return this.propertyShowFolder;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "show-hidden")
-	@AknotDescription(value = "Show the hidden element (file, folder, ...)")
+	@JsonProperty("show-hidden")
+	@JacksonXmlProperty(isAttribute = true, localName = "show-hidden")
 	public boolean isPropertyShowHidden() {
 		return this.propertyShowHidden;
 	}

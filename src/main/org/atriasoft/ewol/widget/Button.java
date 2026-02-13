@@ -1,10 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
@@ -72,29 +69,14 @@ public class Button extends Box {
 
 	private Uri propertyConfig = new Uri("THEME", "shape/Button.json", "ewol");
 
-	@AknotSignal
-	@AknotName(value = "down")
-	@AknotDescription("Button is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName(value = "up")
-	@AknotDescription("Button is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName(value = "click")
-	@AknotDescription("Button is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName(value = "enter")
-	@AknotDescription("The cursor enters the button area")
 	public SignalEmpty signalEnter = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName(value = "leave")
-	@AknotDescription("The cursor leaves the button area")
 	public SignalEmpty signalLeave = new SignalEmpty();
 
 	private boolean buttonPressed = false;
@@ -115,10 +97,8 @@ public class Button extends Box {
 		setPropertyMargin(new DimensionInsets(0));
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "config")
-	@AknotDescription(value = "Configuration of the widget")
+	@JsonProperty("config")
+	@JacksonXmlProperty(isAttribute = true, localName = "config")
 	public Uri getPropertyConfig() {
 		return this.propertyConfig;
 	}

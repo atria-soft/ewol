@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
@@ -38,15 +36,11 @@ public class Windows extends Widget {
 
 	protected List<Widget> popUpWidgetList = new ArrayList<>();
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("file-color")
-	@AknotDescription("File color of the Windows")
+	@JsonProperty("file-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "file-color")
 	public Uri propertyColorConfiguration = new Uri("THEME", "color/Windows.json", "ewol");
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("title")
-	@AknotDescription("Title of the windows")
+	@JsonProperty("title")
+	@JacksonXmlProperty(isAttribute = true, localName = "title")
 	public String propertyTitle = "No title";
 
 	protected ResourceColorFile resourceColor = null;

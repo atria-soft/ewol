@@ -10,11 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotFactory;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
@@ -91,10 +89,8 @@ public class ContainerN extends Widget {
 		}
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "lock")
-	@AknotDescription(value = "Lock the subwidget expand")
+	@JsonProperty("lock")
+	@JacksonXmlProperty(isAttribute = true, localName = "lock")
 	public Vector2b getPropertyLockExpand() {
 		return this.propertyLockExpand;
 	}
@@ -116,9 +112,8 @@ public class ContainerN extends Widget {
 		return null;
 	}
 
-	@AknotManaged
-	@AknotFactory(value = WidgetXmlFactory.class)
-	@AknotDescription(value = "Request the widget Expand size while free space is detected (does not generate expand in upper widget)")
+	@JsonProperty
+	@JacksonXmlElementWrapper(useWrapping = false)
 	public List<Widget> getSubWidgets() {
 		return this.subWidget;
 	}

@@ -8,12 +8,12 @@ package org.atriasoft.ewol.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
@@ -49,6 +49,29 @@ import org.slf4j.LoggerFactory;
  * :** Receive Event (keyboard / mouse / ...)
  *
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = Box.class, name = "Box"),
+	@JsonSubTypes.Type(value = Label.class, name = "Label"),
+	@JsonSubTypes.Type(value = Button.class, name = "Button"),
+	@JsonSubTypes.Type(value = Sizer.class, name = "Sizer"),
+	@JsonSubTypes.Type(value = Entry.class, name = "Entry"),
+	@JsonSubTypes.Type(value = Icon.class, name = "Icon"),
+	@JsonSubTypes.Type(value = Spacer.class, name = "Spacer"),
+	@JsonSubTypes.Type(value = CheckBox.class, name = "CheckBox"),
+	@JsonSubTypes.Type(value = Tick.class, name = "Tick"),
+	@JsonSubTypes.Type(value = PopUp.class, name = "PopUp"),
+	@JsonSubTypes.Type(value = ImageDisplay.class, name = "Image"),
+	@JsonSubTypes.Type(value = SplitPane.class, name = "SplitPane"),
+	@JsonSubTypes.Type(value = ScrollView.class, name = "ScrollView"),
+	@JsonSubTypes.Type(value = Select.class, name = "Select"),
+	@JsonSubTypes.Type(value = Slider.class, name = "Slider"),
+	@JsonSubTypes.Type(value = Spin.class, name = "Spin"),
+	@JsonSubTypes.Type(value = ColorGradient.class, name = "ColorGradient"),
+	@JsonSubTypes.Type(value = ColorPicker.class, name = "ColorPicker"),
+	@JsonSubTypes.Type(value = ListFileSystem.class, name = "ListFileSystem"),
+	@JsonSubTypes.Type(value = Composer.class, name = "Composer"),
+})
 public class Widget extends EwolObject {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Widget.class);
 	/** Keyboard repeat events enabled */
@@ -75,8 +98,6 @@ public class Widget extends EwolObject {
 	protected Dimension2f propertyMaxSize = new Dimension2f(Vector2f.MAX_VALUE, Distance.PIXEL);
 	protected Dimension2f propertyMinSize = new Dimension2f(Vector2f.ZERO, Distance.PIXEL);
 	
-	@AknotSignal
-	@AknotName("shortcut")
 	public Signal<String> signalShortcut;
 	
 	protected Vector2f size = Vector2f.VALUE_16;
@@ -248,66 +269,50 @@ public class Widget extends EwolObject {
 		return this.origin;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("focus")
-	@AknotDescription("enable the widget to have the focus capacity")
+	@JsonProperty("focus")
+	@JacksonXmlProperty(isAttribute = true, localName = "focus")
 	public boolean getPropertyCanFocus() {
 		return this.propertyCanFocus;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("expand")
-	@AknotDescription("Request the widget Expand size while space is available")
+	@JsonProperty("expand")
+	@JacksonXmlProperty(isAttribute = true, localName = "expand")
 	public Vector2b getPropertyExpand() {
 		return this.propertyExpand;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("expand-free")
-	@AknotDescription("Request the widget Expand size while free space is detected (does not generate expand in upper wideget)")
+	@JsonProperty("expand-free")
+	@JacksonXmlProperty(isAttribute = true, localName = "expand-free")
 	public Vector2b getPropertyExpandIfFree() {
 		return this.propertyExpandIfFree;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("fill")
-	@AknotDescription("Fill the widget available size")
+	@JsonProperty("fill")
+	@JacksonXmlProperty(isAttribute = true, localName = "fill")
 	public Vector2b getPropertyFill() {
 		return this.propertyFill;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("gravity")
-	@AknotDescription("Gravity orientation")
+	@JsonProperty("gravity")
+	@JacksonXmlProperty(isAttribute = true, localName = "gravity")
 	public Gravity getPropertyGravity() {
 		return this.propertyGravity;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("hide")
-	@AknotDescription("The widget start hided")
+	@JsonProperty("hide")
+	@JacksonXmlProperty(isAttribute = true, localName = "hide")
 	public boolean getPropertyHide() {
 		return this.propertyHide;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("max-size")
-	@AknotDescription("User maximum size")
+	@JsonProperty("max-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "max-size")
 	public Dimension2f getPropertyMaxSize() {
 		return this.propertyMaxSize;
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName("min-size")
-	@AknotDescription("User minimum size")
+	@JsonProperty("min-size")
+	@JacksonXmlProperty(isAttribute = true, localName = "min-size")
 	public Dimension2f getPropertyMinSize() {
 		return this.propertyMinSize;
 	}

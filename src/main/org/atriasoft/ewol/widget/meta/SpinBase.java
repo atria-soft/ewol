@@ -1,9 +1,7 @@
 package org.atriasoft.ewol.widget.meta;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.DimensionBorderRadius;
 import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Uri;
@@ -57,18 +55,14 @@ public class SpinBase extends Sizer {
 		updateGui();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "shape")
-	@AknotDescription(value = "shape for the display")
+	@JsonProperty("shape")
+	@JacksonXmlProperty(isAttribute = true, localName = "shape")
 	public Uri getPropertyShape() {
 		return this.propertyShape;
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "spin-mode")
-	@AknotDescription(value = "The display spin mode")
+	@JsonProperty("spin-mode")
+	@JacksonXmlProperty(isAttribute = true, localName = "spin-mode")
 	public SpinPosition getPropertySpinMode() {
 		return this.propertySpinMode;
 	}

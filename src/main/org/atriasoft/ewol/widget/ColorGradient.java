@@ -5,9 +5,6 @@
  */
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
@@ -40,9 +37,6 @@ public class ColorGradient extends Widget {
 	private static final float CURSOR_SIZE = 12.0f;
 	private static final int GRADIENT_STEPS = 40;
 
-	@AknotSignal
-	@AknotName(value = "color-changed")
-	@AknotDescription("Color has been selected from gradient")
 	public Signal<Color> signalColorChanged = new Signal<>();
 
 	protected final CompositingGC compositing = new CompositingGC();

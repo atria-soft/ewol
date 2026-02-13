@@ -3,11 +3,8 @@ package org.atriasoft.ewol.widget;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
@@ -85,18 +82,9 @@ public class Entry extends Box {
 	private Pattern regex = null; //!< regular expression to check content
 	
 	//.create()
-	@AknotSignal
-	@AknotName(value = "click")
-	@AknotDescription("the user Click on the Entry box")
 	public SignalEmpty signalClick = new SignalEmpty(); //!< bang on click the entry box
-	@AknotSignal
-	@AknotName(value = "enter")
-	@AknotDescription("The cursor enter inside the button")
 	public Signal<String> signalEnter = new Signal<>(); //!< Enter key is pressed
 
-	@AknotSignal
-	@AknotName(value = "modify")
-	@AknotDescription("Entry box value change")
 	public Signal<String> signalModify = new Signal<>(); //!< data change
 
 	/**
@@ -594,10 +582,8 @@ public class Entry extends Box {
 		markToRedraw();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "max")
-	@AknotDescription(value = "Maximum char that can be set on the Entry")
+	@JsonProperty("max")
+	@JacksonXmlProperty(isAttribute = true, localName = "max")
 	public void setPropertyMaxCharacter(final int propertyMaxCharacter) {
 		if (this.propertyMaxCharacter == propertyMaxCharacter) {
 			return;
@@ -606,10 +592,8 @@ public class Entry extends Box {
 		onChangePropertyMaxCharacter();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "password")
-	@AknotDescription(value = "Not display content in password mode")
+	@JsonProperty("password")
+	@JacksonXmlProperty(isAttribute = true, localName = "password")
 	public void setPropertyPassword(final boolean propertyPassword) {
 		if (this.propertyPassword == propertyPassword) {
 			return;
@@ -618,10 +602,8 @@ public class Entry extends Box {
 		onChangePropertyPassword();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "regex")
-	@AknotDescription(value = "Control what it is write with a regular expression")
+	@JsonProperty("regex")
+	@JacksonXmlProperty(isAttribute = true, localName = "regex")
 	public void setPropertyRegex(final String propertyRegex) {
 		if (this.propertyRegex.equals(propertyRegex)) {
 			return;
@@ -630,10 +612,8 @@ public class Entry extends Box {
 		onChangePropertyRegex();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "empty-text")
-	@AknotDescription(value = "Text when nothing is written")
+	@JsonProperty("empty-text")
+	@JacksonXmlProperty(isAttribute = true, localName = "empty-text")
 	public void setPropertyTextWhenNothing(final String propertyTextWhenNothing) {
 		if (propertyTextWhenNothing == null) {
 			if (this.propertyTextWhenNothing == null) {
@@ -646,10 +626,8 @@ public class Entry extends Box {
 		onChangePropertyTextWhenNothing();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "value")
-	@AknotDescription(value = "Value display in the entry (decorated text)")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public void setPropertyValue(final String propertyValue) {
 		final String newValue = propertyValue != null ? propertyValue : "";
 		if (this.propertyValue.equals(newValue)) {

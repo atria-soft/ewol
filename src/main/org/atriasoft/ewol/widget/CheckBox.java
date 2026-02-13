@@ -1,10 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.annotation.AknotSignal;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.math.Vector2b;
@@ -43,24 +40,12 @@ public class CheckBox extends Container {
 		self.signalValue.emit(value);
 	}
 
-	@AknotSignal
-	@AknotName("down")
-	@AknotDescription("CheckBox is Down")
 	public SignalEmpty signalDown = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName("up")
-	@AknotDescription("CheckBox is Up")
 	public SignalEmpty signalUp = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName("click")
-	@AknotDescription("CheckBox is Clicked")
 	public SignalEmpty signalClick = new SignalEmpty();
 
-	@AknotSignal
-	@AknotName("value")
-	@AknotDescription("CheckBox value change")
 	public Signal<Boolean> signalValue = new Signal<>();
 
 	private final Tick tick;
@@ -101,18 +86,14 @@ public class CheckBox extends Container {
 		this.label.signalPressed.connectAuto(this, CheckBox::eventLabelClick);
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "label")
-	@AknotDescription(value = "Text label of the checkbox")
+	@JsonProperty("label")
+	@JacksonXmlProperty(isAttribute = true, localName = "label")
 	public String getPropertyLabel() {
 		return this.label.getPropertyValue();
 	}
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "value")
-	@AknotDescription(value = "State of the checkbox (true = checked)")
+	@JsonProperty("value")
+	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public Boolean getPropertyValue() {
 		return this.tick.getPropertyValue();
 	}

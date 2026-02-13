@@ -1,9 +1,7 @@
 package org.atriasoft.ewol.widget;
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.DimensionBorderRadius;
 import org.atriasoft.etk.DimensionInsets;
@@ -62,10 +60,8 @@ public class Box extends Container {
 
 	protected DimensionInsets propertyBorderWidth = DimensionInsets.ZERO;
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "border-width")
-	@AknotDescription(value = "Border of the box")
+	@JsonProperty("border-width")
+	@JacksonXmlProperty(isAttribute = true, localName = "border-width")
 	public DimensionInsets getPropertyBorderWidth() {
 		return this.propertyBorderWidth;
 	}
@@ -81,10 +77,8 @@ public class Box extends Container {
 	
 	protected DimensionBorderRadius propertyBorderRadius = DimensionBorderRadius.ZERO;
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "border-radius")
-	@AknotDescription(value = "Border radius of the box")
+	@JsonProperty("border-radius")
+	@JacksonXmlProperty(isAttribute = true, localName = "border-radius")
 	public DimensionBorderRadius getPropertyBorderRadius() {
 		return this.propertyBorderRadius;
 	}
@@ -100,10 +94,8 @@ public class Box extends Container {
 	
 	protected Color propertyBorderColor = Color.NONE;
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "border-color")
-	@AknotDescription(value = "Border color of the box")
+	@JsonProperty("border-color")
+	@JacksonXmlProperty(isAttribute = true, localName = "border-color")
 	public Color getPropertyBorderColor() {
 		return this.propertyBorderColor;
 	}
@@ -119,10 +111,8 @@ public class Box extends Container {
 
 	protected Color propertyColor = Color.NONE;
 
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "color")
-	@AknotDescription(value = "Border color of the box")
+	@JsonProperty("color")
+	@JacksonXmlProperty(isAttribute = true, localName = "color")
 	public Color getPropertyColor() {
 		return this.propertyColor;
 	}
@@ -138,10 +128,8 @@ public class Box extends Container {
 
 	protected DimensionInsets propertyMargin = DimensionInsets.ZERO;
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "margin")
-	@AknotDescription(value = "margin of the box")
+	@JsonProperty("margin")
+	@JacksonXmlProperty(isAttribute = true, localName = "margin")
 	public DimensionInsets getPropertyMargin() {
 		return this.propertyMargin;
 	}
@@ -157,10 +145,8 @@ public class Box extends Container {
 
 	protected DimensionInsets propertyPadding = DimensionInsets.ZERO;
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "padding")
-	@AknotDescription(value = "Padding of the box")
+	@JsonProperty("padding")
+	@JacksonXmlProperty(isAttribute = true, localName = "padding")
 	public DimensionInsets getPropertyPadding() {
 		return this.propertyPadding;
 	}

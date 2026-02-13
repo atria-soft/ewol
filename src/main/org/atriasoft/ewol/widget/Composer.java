@@ -6,20 +6,18 @@ package org.atriasoft.ewol.widget;
  * @license MPL v2.0 (see license file)
  */
 
-import org.atriasoft.aknot.annotation.AknotAttribute;
-import org.atriasoft.aknot.annotation.AknotDescription;
-import org.atriasoft.aknot.annotation.AknotManaged;
-import org.atriasoft.aknot.annotation.AknotName;
-import org.atriasoft.aknot.exception.AknotException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.Gravity;
+import org.atriasoft.ewol.internal.EwolJacksonModule;
 import org.atriasoft.ewol.object.EwolObject;
-import org.atriasoft.exml.XmlMapper;
-import org.atriasoft.exml.exception.ExmlException;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
 import org.atriasoft.gale.key.KeyKeyboard;
@@ -32,6 +30,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Composer extends Container {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Composer.class);
+
+	private static final XmlMapper XML_MAPPER = XmlMapper.builder()
+			.addModule(new EwolJacksonModule())
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.build();
 
 	public static Widget composerGenerateFile(final Uri data) {
 		return composerGenerateFile(data, 0);
@@ -63,10 +66,9 @@ public class Composer extends Container {
 		}
 		data = data.replace("{ID}", Long.toString(id));
 		Composer result = null;
-		final XmlMapper mapper = new XmlMapper();
 		try {
-			result = mapper.parse(data, Composer.class);//new WidgetXmlFactory());
-		} catch (final ExmlException | AknotException ex) {
+			result = XML_MAPPER.readValue(data, Composer.class);
+		} catch (final Exception ex) {
 			LOGGER.error("Fail to load Data !!! {}", ex.toString());
 			ex.printStackTrace();
 		}
@@ -307,10 +309,8 @@ public class Composer extends Container {
 		return super.getPropertyMinSize();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "sub-file")
-	@AknotDescription(value = "compose with a subXML file")
+	@JsonProperty("sub-file")
+	@JacksonXmlProperty(isAttribute = true, localName = "sub-file")
 	public Uri getPropertySubFile() {
 		return this.propertySubFile;
 	}
@@ -357,10 +357,8 @@ public class Composer extends Container {
 		return super.isFocused();
 	}
 	
-	@AknotManaged
-	@AknotAttribute
-	@AknotName(value = "remove-if-under-remove")
-	@AknotDescription(value = "Demand the remove iof the widget if the subObject demand a remove")
+	@JsonProperty("remove-if-under-remove")
+	@JacksonXmlProperty(isAttribute = true, localName = "remove-if-under-remove")
 	public boolean isPropertyRemoveIfUnderRemove() {
 		return this.propertyRemoveIfUnderRemove;
 	}
