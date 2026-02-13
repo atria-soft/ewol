@@ -2,7 +2,6 @@ package org.atriasoft.ewol.widget;
 
 import java.lang.ref.WeakReference;
 
-import org.atriasoft.exml.model.XmlElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,124 +30,7 @@ public class WidgetManager {
 	// ---------------------------------------------
 	private boolean haveRedraw = true; //!< something request a redraw
 
-	/**
-	 * Create a widget with his name.
-	 * @param name Name of the widget to create.
-	 * @param node Reference on the XML node.
-	 * @return The widget created (null if it does not exist).
-	 */
-		/*
-		public Widget create( final String name,  exml::Element node){
-			final String nameLower = name.toLowerCase();
-			final Class<?> it = this.creatorList.get(nameLower);
-			if (it != null) {
-				try {
-					return it.getConstructor().newInstance(node);
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return null;
-				}
-			}
-			LOGGER.warn("try to create an UnExistant widget : {}", nameLower);
-			return null;
-		}
-		*/
-
 	public WidgetManager() {
-		/*
-		this.creatorList.put("Button", Button.class);
-		this.creatorList.put("ButtonColor", ButtonColor.class);
-		this.creatorList.put("Spacer", Spacer.class);
-		this.creatorList.put("Slider", Slider.class);
-		this.creatorList.put("Sizer", Sizer.class);
-		this.creatorList.put("ProgressBar", ProgressBar.class);
-		this.creatorList.put("Layer", Layer.class);
-		this.creatorList.put("Label", Label.class);
-		this.creatorList.put("Image", Image.class);
-		this.creatorList.put("Gird", Gird.class);
-		this.creatorList.put("Entry", Entry.class);
-		this.creatorList.put("Menu", Menu.class);
-		this.creatorList.put("CheckBox", CheckBox.class);
-		this.creatorList.put("Scroll", Scroll.class);
-		this.creatorList.put("ContextMenu", ContextMenu.class);
-		this.creatorList.put("PopUp", PopUp.class);
-		this.creatorList.put("WSlider", WSlider.class);
-		this.creatorList.put("ListFileSystem", ListFileSystem.class);
-		this.creatorList.put("Composer", Composer.class);
-		this.creatorList.put("Select", Select.class);
-		this.creatorList.put("Spin", Spin.class);
-		 */
-	}
-
-	/**
-	 * @throws Exception
-	 * add a factory of a specific widget.
-	 * @param name Name of the widget that is associated of the factory.
-	 * @param klass class interface
-	 */
-	public void addWidgetCreator(final String name, final Class<?> klass) throws Exception {
-		//		if (klass == null) {
-		//			throw new Exception("Can not add widget creator without specified class.");
-		//		}
-		//		//Keep name in lower case :
-		//		final String nameLower = name.toLowerCase();
-		//		final Class<?> it = WidgetXmlFactory.creatorList.get(nameLower);
-		//		if (it != null) {
-		//			LOGGER.warn("Replace Creator of a specify widget : " + nameLower);
-		//			return;
-		//		}
-		//		this.creatorList.put(nameLower, klass);
-		//		// TODO check constructors ...
-	}
-
-	/**
-	 * Create a widget with his name.
-	 * @param name Name of the widget to create.
-	 * @return The widget created (null if it does not exist).
-	 */
-	public Widget create(final String name) {
-		final String nameLower = name.toLowerCase();
-		//		final Class<?> it = this.creatorList.get(nameLower);
-		//		if (it != null) {
-		//			try {
-		//				return (Widget) it.getConstructor().newInstance();
-		//			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//				return null;
-		//			}
-		//		}
-		LOGGER.warn("try to create an UnExistant widget : {}", nameLower);
-		return null;
-	}
-
-	public Widget create(final String name, final XmlElement node) {
-		final String nameLower = name.toLowerCase();
-		//		final Class<?> it = this.creatorList.get(nameLower);
-		//		if (it != null) {
-		//			try {
-		//				Widget tmp = (Widget) it.getConstructor().newInstance();
-		//				tmp.loadXML(node);
-		//			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//				return null;
-		//			}
-		//		}
-		LOGGER.warn("try to create an UnExistant widget : {}", nameLower);
-		return null;
-	}
-
-	/**
-	 * Check if an Widget exist
-	 * @param name Name of the widget to check.
-	 * @return true The Widget exist.
-	 * @return false The Widget Does NOT exist.
-	 */
-	public boolean exist(final String name) {
-		//		return this.creatorList.get(name.toLowerCase()) != null;
-		return false;
 	}
 
 	/**
