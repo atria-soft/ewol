@@ -11,9 +11,9 @@ import java.util.List;
 import org.atriasoft.esignal.Signal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.atriasoft.ewol.internal.WidgetDeserializer;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
@@ -49,29 +49,7 @@ import org.slf4j.LoggerFactory;
  * :** Receive Event (keyboard / mouse / ...)
  *
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-@JsonSubTypes({
-	@JsonSubTypes.Type(value = Box.class, name = "Box"),
-	@JsonSubTypes.Type(value = Label.class, name = "Label"),
-	@JsonSubTypes.Type(value = Button.class, name = "Button"),
-	@JsonSubTypes.Type(value = Sizer.class, name = "Sizer"),
-	@JsonSubTypes.Type(value = Entry.class, name = "Entry"),
-	@JsonSubTypes.Type(value = Icon.class, name = "Icon"),
-	@JsonSubTypes.Type(value = Spacer.class, name = "Spacer"),
-	@JsonSubTypes.Type(value = CheckBox.class, name = "CheckBox"),
-	@JsonSubTypes.Type(value = Tick.class, name = "Tick"),
-	@JsonSubTypes.Type(value = PopUp.class, name = "PopUp"),
-	@JsonSubTypes.Type(value = ImageDisplay.class, name = "Image"),
-	@JsonSubTypes.Type(value = SplitPane.class, name = "SplitPane"),
-	@JsonSubTypes.Type(value = ScrollView.class, name = "ScrollView"),
-	@JsonSubTypes.Type(value = Select.class, name = "Select"),
-	@JsonSubTypes.Type(value = Slider.class, name = "Slider"),
-	@JsonSubTypes.Type(value = Spin.class, name = "Spin"),
-	@JsonSubTypes.Type(value = ColorGradient.class, name = "ColorGradient"),
-	@JsonSubTypes.Type(value = ColorPicker.class, name = "ColorPicker"),
-	@JsonSubTypes.Type(value = ListFileSystem.class, name = "ListFileSystem"),
-	@JsonSubTypes.Type(value = Composer.class, name = "Composer"),
-})
+@JsonDeserialize(using = WidgetDeserializer.class)
 public class Widget extends EwolObject {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Widget.class);
 	/** Keyboard repeat events enabled */
