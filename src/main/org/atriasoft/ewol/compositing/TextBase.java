@@ -8,23 +8,18 @@ package org.atriasoft.ewol.compositing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.ewol.compositing.tools.TextDecoration;
+import org.atriasoft.ewol.internal.XmlHelper;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
-import org.atriasoft.exml.Exml;
-import org.atriasoft.exml.exception.ExmlAttributeDoesNotExist;
-import org.atriasoft.exml.exception.ExmlBuilderException;
-import org.atriasoft.exml.exception.ExmlException;
-import org.atriasoft.exml.exception.ExmlParserErrorMulti;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
 import org.atriasoft.gale.resource.ResourceProgram;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -401,23 +396,22 @@ public abstract class TextBase extends Compositing {
 	 *        include).
 	 * @param element the exml element.
 	 */
-	public void parseHtmlNode(final XmlElement element) {
-		for (final XmlNode it : element.getNodes()) {
-			if (it.isComment()) {
+	public void parseHtmlNode(final Element element) {
+		for (final Node it : XmlHelper.allChildNodes(element)) {
+			if (it.getNodeType() == Node.COMMENT_NODE) {
 				// nothing to do ...
 				continue;
 			}
-			if (it.isText()) {
-				htmlAddData(it.getValue());
-				LOGGER.trace("XML add : {}", it.getValue());
+			if (it.getNodeType() == Node.TEXT_NODE) {
+				htmlAddData(it.getTextContent());
+				LOGGER.trace("XML add : {}", it.getTextContent());
 				continue;
 			}
-			if (!it.isElement()) {
-				LOGGER.error("node not suported type : {} val='{}'", it.getType(), it.getValue());
+			if (!(it instanceof final Element elem)) {
+				LOGGER.error("node not suported type : {} val='{}'", it.getNodeType(), it.getTextContent());
 				continue;
 			}
-			final XmlElement elem = (XmlElement) it;
-			final String lowercaseValue = elem.getValue().toLowerCase();
+			final String lowercaseValue = elem.getTagName().toLowerCase();
 			if (lowercaseValue.contentEquals("br")) {
 				htmlFlush();
 				LOGGER.trace("XML flush  newLine");
@@ -425,29 +419,23 @@ public abstract class TextBase extends Compositing {
 			} else if (lowercaseValue.contentEquals("font")) {
 				LOGGER.trace("XML Font ...");
 				final TextDecoration tmpDeco = this.htmlDecoTmp;
-				if (elem.existAttribute("color")) {
+				if (elem.hasAttribute("color")) {
 					try {
 						final String colorValue = elem.getAttribute("color");
 						if (colorValue.length() != 0) {
 							this.htmlDecoTmp = this.htmlDecoTmp.withFG(Color.valueOf(colorValue));
 						}
-					} catch (final ExmlAttributeDoesNotExist e) {
-						LOGGER.error("Can not get attribute 'color' in XML: {}", e.getMessage());
-						e.printStackTrace();
 					} catch (final Exception e) {
 						LOGGER.error("Can not parse attribute 'color' in XML: {}", e.getMessage());
 						e.printStackTrace();
 					}
 				}
-				if (elem.existAttribute("colorBg")) {
+				if (elem.hasAttribute("colorBg")) {
 					try {
 						final String colorValue = elem.getAttribute("colorBg");
 						if (colorValue.length() != 0) {
 							this.htmlDecoTmp = this.htmlDecoTmp.withBG(Color.valueOf(colorValue));
 						}
-					} catch (final ExmlAttributeDoesNotExist e) {
-						LOGGER.error("Can not get attribute 'colorBg' in XML: {}", e.getMessage());
-						e.printStackTrace();
 					} catch (final Exception e) {
 						LOGGER.error("Can not parse attribute 'colorBg' in XML: {}", e.getMessage());
 						e.printStackTrace();
@@ -506,7 +494,7 @@ public abstract class TextBase extends Compositing {
 				this.alignment = AlignMode.JUSTIFY;
 				parseHtmlNode(elem);
 			} else {
-				LOGGER.error("node not suported type: {} val='{}'", elem.getType(), elem.getValue());
+				LOGGER.error("node not suported type: {} val='{}'", it.getNodeType(), elem.getTagName());
 			}
 
 			//LOGGER.error("Add data elems... @pos=", this.position);
@@ -795,32 +783,26 @@ public abstract class TextBase extends Compositing {
 		// reset parameter :
 		this.htmlDecoTmp = new TextDecoration(this.defaultColorFg, this.defaultColorBg, FontMode.REGULAR);
 		try {
-			final XmlElement doc = Exml.parse(text);
-			if (!doc.existNode("html")) {
-				LOGGER.error("can not load XML: main node not find: 'html'");
-				Exml.display(doc);
-				return;
+			final Element doc = XmlHelper.parse(text);
+			// doc is the document element — if the input is <html>..., doc IS the html element
+			Element root = doc;
+			if (!doc.getTagName().equalsIgnoreCase("html")) {
+				final Element htmlNode = XmlHelper.getNode(doc, "html");
+				if (htmlNode == null) {
+					LOGGER.error("can not load XML: main node not find: 'html'");
+					return;
+				}
+				root = htmlNode;
 			}
-			final XmlElement root = (XmlElement) doc.getNode("html");
-
-			if (!root.existNode("body")) {
+			final Element bodyNode = XmlHelper.getNode(root, "body");
+			if (bodyNode == null) {
 				LOGGER.error("can not load XML: main node not find: 'body'");
 				return;
 			}
-			final XmlElement bodyNode = (XmlElement) root.getNode("body");
 			parseHtmlNode(bodyNode);
 			htmlFlush();
-		} catch (final ExmlParserErrorMulti e) {
-			LOGGER.error("Can not parse XML data in printHTML: {}", e.getMessage());
-			e.printStackTrace();
-		} catch (final ExmlBuilderException e) {
-			LOGGER.error("Can not generate XML data in printHTML: {}", e.getMessage());
-			e.printStackTrace();
-		} catch (final ExmlException e) {
-			LOGGER.error("Error in finding node from XML data in printHTML: {}", e.getMessage());
-			e.printStackTrace();
-		} catch (final AknotException e) {
-			LOGGER.error("Error in parsing pojo data in printHTML: {}", e.getMessage());
+		} catch (final Exception e) {
+			LOGGER.error("Error in parsing XML data in printHTML: {}", e.getMessage());
 			e.printStackTrace();
 		}
 	}
