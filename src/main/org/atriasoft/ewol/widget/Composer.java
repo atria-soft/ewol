@@ -59,26 +59,24 @@ public class Composer extends Container {
 	}
 	
 	public static Widget composerGenerateString(String data, final long id) {
-		boolean requestComposer = true;
-		if (!data.startsWith("<Composer>")) {
-			data = "<Composer>\n" + data + "\n</Composer>";
-			requestComposer = false;
+		// Strip the <Composer> wrapper if present — it's just a container convention.
+		// The actual widget is the root element inside.
+		if (data.stripLeading().startsWith("<Composer>")) {
+			data = data.stripLeading().substring("<Composer>".length());
+			final String stripped = data.stripTrailing();
+			if (stripped.endsWith("</Composer>")) {
+				data = stripped.substring(0, stripped.length() - "</Composer>".length());
+			}
+			data = data.strip();
 		}
 		data = data.replace("{ID}", Long.toString(id));
-		Composer result = null;
 		try {
-			result = XML_MAPPER.readValue(data, Composer.class);
+			return XML_MAPPER.readValue(data, Widget.class);
 		} catch (final Exception ex) {
 			LOGGER.error("Fail to load Data !!! {}", ex.toString());
 			ex.printStackTrace();
 		}
-		if (result == null) {
-			return null;
-		}
-		if (requestComposer) {
-			return result;
-		}
-		return result.getSubWidget();
+		return null;
 	}
 	
 	protected boolean propertyRemoveIfUnderRemove;

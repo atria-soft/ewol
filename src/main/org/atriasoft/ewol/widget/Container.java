@@ -5,8 +5,8 @@
  */
 package org.atriasoft.ewol.widget;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.DrawProperty;
@@ -72,10 +72,20 @@ public class Container extends Widget {
 	 * get the main node widget
 	 * @return the requested pointer on the node
 	 */
-	@JsonProperty
-	@JacksonXmlElementWrapper(useWrapping = false)
+	@JsonIgnore
 	public Widget getSubWidget() {
 		return this.subWidget;
+	}
+
+	/**
+	 * Jackson XML deserialization: capture any unknown element as the child widget.
+	 * Widget types appear as XML elements whose names are the widget type.
+	 */
+	@JsonAnySetter
+	public void setChildWidget(final String name, final Widget widget) {
+		if (widget != null) {
+			setSubWidget(widget);
+		}
 	}
 
 	@Override

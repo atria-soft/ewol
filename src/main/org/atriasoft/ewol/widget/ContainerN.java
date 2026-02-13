@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -112,10 +114,22 @@ public class ContainerN extends Widget {
 		return null;
 	}
 
-	@JsonProperty
-	@JacksonXmlElementWrapper(useWrapping = false)
+	@JsonIgnore
 	public List<Widget> getSubWidgets() {
 		return this.subWidget;
+	}
+
+	/**
+	 * Jackson XML deserialization: capture any unknown element as a child widget.
+	 * Widget types (Sizer, Label, etc.) appear as XML elements whose names are the
+	 * widget type, not a fixed property name. @JsonAnySetter captures these.
+	 */
+	@JsonAnySetter
+	public void addChildWidget(final String name, final Widget widget) {
+		if (widget != null) {
+			widget.setParent(this);
+			this.subWidget.add(widget);
+		}
 	}
 
 	@Override
