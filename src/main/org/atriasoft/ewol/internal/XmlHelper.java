@@ -54,6 +54,27 @@ public final class XmlHelper {
 		}
 	}
 
+	/** Get the first direct child element with the given tag name, or null. */
+	public static Element getNode(final Element element, final String tagName) {
+		final NodeList list = element.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
+			if (list.item(i) instanceof final Element child && child.getTagName().equals(tagName)) {
+				return child;
+			}
+		}
+		return null;
+	}
+
+	/** Get all direct child Nodes (Element, Text, Comment, etc.). */
+	public static List<Node> allChildNodes(final Element element) {
+		final List<Node> result = new ArrayList<>();
+		final NodeList list = element.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
+			result.add(list.item(i));
+		}
+		return result;
+	}
+
 	/** Get all direct child Elements (skips text, comment, etc. nodes). */
 	public static List<Element> children(final Element element) {
 		final List<Element> result = new ArrayList<>();
