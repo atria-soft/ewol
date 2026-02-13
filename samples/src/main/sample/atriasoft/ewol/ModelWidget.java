@@ -1,13 +1,16 @@
 package sample.atriasoft.ewol;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.atriasoft.aknot.exception.AknotException;
-import org.atriasoft.aknot.model.IntrospectionModel;
-import org.atriasoft.aknot.pojo.IntrospectionModelComplex;
-import org.atriasoft.aknot.pojo.IntrospectionProperty;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import org.atriasoft.esignal.Connection;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
@@ -146,11 +149,11 @@ public class ModelWidget extends Container {
 		this.sizerMenu.subWidgetAdd(widget);
 	}
 	
-	public void addMenuBoolean(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuBoolean(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -162,8 +165,8 @@ public class ModelWidget extends Container {
 			this.sizerMenu.subWidgetAdd(checkBox);
 			final var con = checkBox.signalValue.connect(valueButton -> {
 				try {
-					pojo.setExistingValue(widget, valueButton);
-				} catch (final AknotException e) {
+					setter.invoke(widget,valueButton);
+				} catch (final Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return;
@@ -173,11 +176,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuDimension1f(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuDimension1f(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -196,13 +199,13 @@ public class ModelWidget extends Container {
 				final var con = spin.signalValue.connect(valueButton -> {
 					LOGGER.warn("Receved event for button ...");
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						LOGGER.warn("Receved event for button ... {}", oldValue);
 						if (oldValue instanceof final Dimension1f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withSize(valueButton));
-							pojo.setExistingValue(widget, new Dimension1f(valueButton));
+							setter.invoke(widget,new Dimension1f(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -212,11 +215,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuDimension2f(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuDimension2f(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -241,13 +244,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Dimension2f castedValue) {
 							LOGGER.warn("Set new value: {}",
 									castedValue.withSize(castedValue.size().withX(valueButton)));
-							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withX(valueButton)));
+							setter.invoke(widget,castedValue.withSize(castedValue.size().withX(valueButton)));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -274,13 +277,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Dimension2f castedValue) {
 							LOGGER.warn("Set new value: {}",
 									castedValue.withSize(castedValue.size().withY(valueButton)));
-							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withY(valueButton)));
+							setter.invoke(widget,castedValue.withSize(castedValue.size().withY(valueButton)));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -290,11 +293,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuDimension3f(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuDimension3f(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -319,13 +322,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Dimension3f castedValue) {
 							LOGGER.warn("Set new value: {}",
 									castedValue.withSize(castedValue.size().withX(valueButton)));
-							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withX(valueButton)));
+							setter.invoke(widget,castedValue.withSize(castedValue.size().withX(valueButton)));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -352,13 +355,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Dimension3f castedValue) {
 							LOGGER.warn("Set new value: {}",
 									castedValue.withSize(castedValue.size().withY(valueButton)));
-							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withY(valueButton)));
+							setter.invoke(widget,castedValue.withSize(castedValue.size().withY(valueButton)));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -385,13 +388,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Dimension3f castedValue) {
 							LOGGER.warn("Set new value: {}",
 									castedValue.withSize(castedValue.size().withZ(valueButton)));
-							pojo.setExistingValue(widget, castedValue.withSize(castedValue.size().withZ(valueButton)));
+							setter.invoke(widget,castedValue.withSize(castedValue.size().withZ(valueButton)));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -401,11 +404,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuDouble(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuDouble(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -418,8 +421,8 @@ public class ModelWidget extends Container {
 			final var con = spin.signalValue.connect(valueButton -> {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
-					pojo.setExistingValue(widget, (double) valueButton);
-				} catch (final AknotException e) {
+					setter.invoke(widget,(double) valueButton);
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -428,11 +431,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuFloat(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuFloat(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -445,8 +448,8 @@ public class ModelWidget extends Container {
 			final var con = spin.signalValue.connect(valueButton -> {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
-					pojo.setExistingValue(widget, (float) valueButton);
-				} catch (final AknotException e) {
+					setter.invoke(widget,(float) valueButton);
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -455,11 +458,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuGravity(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuGravity(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -475,7 +478,7 @@ public class ModelWidget extends Container {
 			
 			final var con = buttonGravity.signalClick.connect(() -> {
 				try {
-					final var oldValue = pojo.getValue(widget);
+					final var oldValue = getter.invoke(widget);
 					if (oldValue instanceof final Gravity castedValue) {
 						var state = castedValue;
 						// TODO: I change the gravity model to integrate the 3rd rank...
@@ -502,9 +505,9 @@ public class ModelWidget extends Container {
 						}
 						gravLabel.setPropertyValue(LABEL_GRAVITY + state.toString());
 						LOGGER.warn("Set new value: {}", state);
-						pojo.setExistingValue(widget, state);
+						setter.invoke(widget,state);
 					}
-				} catch (final AknotException e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -513,11 +516,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuInt(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuInt(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -530,9 +533,9 @@ public class ModelWidget extends Container {
 			final var con = spin.signalValue.connect(valueButton -> {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
-					pojo.setExistingValue(widget, (int) (long) valueButton);
+					setter.invoke(widget,(int) (long) valueButton);
 					
-				} catch (final AknotException e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -541,11 +544,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuLong(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuLong(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -558,8 +561,8 @@ public class ModelWidget extends Container {
 			final var con = spin.signalValue.connect(valueButton -> {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
-					pojo.setExistingValue(widget, valueButton);
-				} catch (final AknotException e) {
+					setter.invoke(widget,valueButton);
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -568,11 +571,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuString(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuString(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -585,8 +588,8 @@ public class ModelWidget extends Container {
 			final var con = element.signalModify.connect(valueButton -> {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
-					pojo.setExistingValue(widget, valueButton);
-				} catch (final AknotException e) {
+					setter.invoke(widget,valueButton);
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -595,11 +598,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuURI(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuURI(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -612,8 +615,8 @@ public class ModelWidget extends Container {
 			final var con = element.signalModify.connect(valueButton -> {
 				try {
 					LOGGER.warn("Set new value: {}", valueButton);
-					pojo.setExistingValue(widget, Uri.valueOf(valueButton));
-				} catch (final AknotException e) {
+					setter.invoke(widget,Uri.valueOf(valueButton));
+				} catch (final Exception e) {
 					e.printStackTrace();
 					return;
 				}
@@ -622,12 +625,12 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuVector2b(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuVector2b(final Widget widget, final Method getter, final Method setter) {
 		final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -643,12 +646,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(checkBox);
 				final var con = checkBox.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector2b castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
-							pojo.setExistingValue(widget, castedValue.withX(valueButton));
+							setter.invoke(widget,castedValue.withX(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -663,11 +666,11 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(checkBox);
 				final var con = checkBox.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector2b castedValue) {
-							pojo.setExistingValue(widget, castedValue.withY(valueButton));
+							setter.invoke(widget,castedValue.withY(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -678,11 +681,11 @@ public class ModelWidget extends Container {
 		
 	}
 	
-	public void addMenuVector2f(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuVector2f(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -707,12 +710,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector2f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
-							pojo.setExistingValue(widget, castedValue.withX(valueButton));
+							setter.invoke(widget,castedValue.withX(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -739,12 +742,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector2f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withY(valueButton));
-							pojo.setExistingValue(widget, castedValue.withY(valueButton));
+							setter.invoke(widget,castedValue.withY(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -754,11 +757,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuVector2i(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuVector2i(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -783,12 +786,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector2i castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withX((int) (long) valueButton));
-							pojo.setExistingValue(widget, castedValue.withX((int) (long) valueButton));
+							setter.invoke(widget,castedValue.withX((int) (long) valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -815,12 +818,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector2i castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withY((int) (long) valueButton));
-							pojo.setExistingValue(widget, castedValue.withY((int) (long) valueButton));
+							setter.invoke(widget,castedValue.withY((int) (long) valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -830,12 +833,12 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuVector3b(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuVector3b(final Widget widget, final Method getter, final Method setter) {
 		final var lineSizer = new Sizer(DisplayMode.HORIZONTAL);
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -851,12 +854,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(checkBox);
 				final var con = checkBox.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3b castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
-							pojo.setExistingValue(widget, castedValue.withX(valueButton));
+							setter.invoke(widget,castedValue.withX(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -871,11 +874,11 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(checkBox);
 				final var con = checkBox.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3b castedValue) {
-							pojo.setExistingValue(widget, castedValue.withY(valueButton));
+							setter.invoke(widget,castedValue.withY(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -890,11 +893,11 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(checkBox);
 				final var con = checkBox.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3b castedValue) {
-							pojo.setExistingValue(widget, castedValue.withZ(valueButton));
+							setter.invoke(widget,castedValue.withZ(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -905,11 +908,11 @@ public class ModelWidget extends Container {
 		
 	}
 	
-	public void addMenuVector3f(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuVector3f(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -934,12 +937,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withX(valueButton));
-							pojo.setExistingValue(widget, castedValue.withX(valueButton));
+							setter.invoke(widget,castedValue.withX(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -966,12 +969,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withY(valueButton));
-							pojo.setExistingValue(widget, castedValue.withY(valueButton));
+							setter.invoke(widget,castedValue.withY(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -998,12 +1001,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3f castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withZ(valueButton));
-							pojo.setExistingValue(widget, castedValue.withZ(valueButton));
+							setter.invoke(widget,castedValue.withZ(valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1013,11 +1016,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuVector3i(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuVector3i(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -1042,12 +1045,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3i castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withX((int) (long) valueButton));
-							pojo.setExistingValue(widget, castedValue.withX((int) (long) valueButton));
+							setter.invoke(widget,castedValue.withX((int) (long) valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1074,12 +1077,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3i castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withY((int) (long) valueButton));
-							pojo.setExistingValue(widget, castedValue.withY((int) (long) valueButton));
+							setter.invoke(widget,castedValue.withY((int) (long) valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1106,12 +1109,12 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spin);
 				final var con = spin.signalValue.connect(valueButton -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof final Vector3i castedValue) {
 							LOGGER.warn("Set new value: {}", castedValue.withZ((int) (long) valueButton));
-							pojo.setExistingValue(widget, castedValue.withZ((int) (long) valueButton));
+							setter.invoke(widget,castedValue.withZ((int) (long) valueButton));
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1121,58 +1124,62 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void connectAllSignals(final Widget widget, final IntrospectionModelComplex modelPojo) throws Exception {
+	public void connectAllSignals(final Widget widget) throws Exception {
 		LOGGER.trace("Connect all signal(s) on '{}'", widget.getName());
-		final var signals = modelPojo.getSignals();
-		for (final IntrospectionProperty pojo : signals) {
-			LOGGER.trace("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
-			LOGGER.trace("        ==> description='{}'", pojo.getDescription());
-			LOGGER.trace("        ==> type='{}'", pojo.getType());
-			LOGGER.trace("        ==> sub-type='{}'", pojo.getSubType());
-			
-			final var eventName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0]
-					: pojo.getBeanName();
-			
-			if (pojo.getSubType() != null && pojo.getType() == Signal.class) {
-				LOGGER.trace("        ** Signal<{}>", pojo.getSubType());
-				final var signalObject = pojo.getValue(widget);
+		for (final Field field : widget.getClass().getFields()) {
+			if (Modifier.isStatic(field.getModifiers())) {
+				continue;
+			}
+			final Class<?> fieldType = field.getType();
+			final String signalName = field.getName();
+
+			if (fieldType == Signal.class) {
+				// Extract generic type T from Signal<T>
+				Class<?> dataType = null;
+				final Type genericType = field.getGenericType();
+				if (genericType instanceof final ParameterizedType pt) {
+					final Type[] args = pt.getActualTypeArguments();
+					if (args.length > 0 && args[0] instanceof final Class<?> cls) {
+						dataType = cls;
+					}
+				}
+				LOGGER.trace("    - '{}' Signal<{}>", signalName, dataType);
+				final var signalObject = field.get(widget);
 				if (signalObject == null) {
-					LOGGER.error("Signal is not accessible !!!!!!! ");
+					LOGGER.error("Signal '{}' is not accessible", signalName);
 				} else {
-					final var valueNameOfSignal = eventName;
 					@SuppressWarnings("unchecked")
 					final var tmp = (Signal<Object>) signalObject;
+					final var eventName = signalName;
 					tmp.connectAuto(this, (final ModelWidget self, final Object object) -> {
-						final String logMessage = "<b>" + valueNameOfSignal + "</b>: " + object;
-						LOGGER.info("Get event from '{}' value='{}'", valueNameOfSignal, object);
+						final String logMessage = "<b>" + eventName + "</b>: " + object;
+						LOGGER.info("Get event from '{}' value='{}'", eventName, object);
 						self.addLogEntry(logMessage);
 					});
 				}
-			}
-			if (pojo.getSubType() == null && pojo.getType() == SignalEmpty.class) {
-				LOGGER.trace("        ** SignalEmpty");
-				final var signalObject = pojo.getValue(widget);
+			} else if (fieldType == SignalEmpty.class) {
+				LOGGER.trace("    - '{}' SignalEmpty", signalName);
+				final var signalObject = field.get(widget);
 				if (signalObject == null) {
-					LOGGER.error("Signal is not accessible !!!!!!! ");
+					LOGGER.error("Signal '{}' is not accessible", signalName);
 				} else {
-					final var valueNameOfSignal = eventName;
 					final var tmp = (SignalEmpty) signalObject;
+					final var eventName = signalName;
 					tmp.connectAuto(this, (final ModelWidget self) -> {
-						final String logMessage = "<b>" + valueNameOfSignal + "</b>";
-						LOGGER.info("Get event from '{}'", valueNameOfSignal);
+						final String logMessage = "<b>" + eventName + "</b>";
+						LOGGER.info("Get event from '{}'", eventName);
 						self.addLogEntry(logMessage);
 					});
 				}
-				
 			}
 		}
 	}
 	
-	public void addMenuDimensionBorderRadius(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuDimensionBorderRadius(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -1200,13 +1207,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionBorderRadius castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withBottomLeft(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1236,13 +1243,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionBorderRadius castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withBottomRight(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1272,13 +1279,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionBorderRadius castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withTopRight(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1308,13 +1315,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionBorderRadius castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withTopLeft(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1324,11 +1331,11 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void addMenuDimensionInsets(final Widget widget, final IntrospectionProperty pojo) {
+	public void addMenuDimensionInsets(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
-			valueRaw = pojo.getValue(widget);
-		} catch (final AknotException e) {
+			valueRaw = getter.invoke(widget);
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -1356,13 +1363,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionInsets castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withLeft(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1392,13 +1399,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionInsets castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withBottom(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1428,13 +1435,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionInsets castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withRight(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1464,13 +1471,13 @@ public class ModelWidget extends Container {
 				lineSizer.subWidgetAdd(spacer);
 				final var con = spin.signalValue.connect(newValue -> {
 					try {
-						final var oldValue = pojo.getValue(widget);
+						final var oldValue = getter.invoke(widget);
 						if (oldValue instanceof DimensionInsets castedValue) {
 							castedValue = castedValue.withSize(castedValue.size().withTop(newValue));
 							LOGGER.warn("Set new value: {}", castedValue);
-							pojo.setExistingValue(widget, castedValue);
+							setter.invoke(widget,castedValue);
 						}
-					} catch (final AknotException e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 						return;
 					}
@@ -1480,58 +1487,66 @@ public class ModelWidget extends Container {
 		}
 	}
 	
-	public void displayAllPropertyWithType(final Widget widget, final IntrospectionModel modelPojo) throws Exception {
+	public void displayAllPropertyWithType(final Widget widget) throws Exception {
 		LOGGER.warn("Connect all property(ies) on '{}'", widget.getName());
-		final var atributes = modelPojo.getAttributes();
-		for (final IntrospectionProperty pojo : atributes) {
-			LOGGER.trace("    - '{}' otherNames={}", pojo.getBeanName(), Arrays.toString(pojo.getNames()));
-			LOGGER.trace("        ==> description='{}'", pojo.getDescription());
-			LOGGER.trace("        ==> type='{}'", pojo.getType());
-			LOGGER.trace("        ==> sub-type='{}'", pojo.getSubType());
-			final var propertyName = pojo.getNames() != null && pojo.getNames().length != 0 ? pojo.getNames()[0]
-					: pojo.getBeanName();
-			if (pojo.getType() == int.class || pojo.getType() == Integer.class) {
-				addMenuInt(widget, pojo);
-			} else if (pojo.getType() == long.class || pojo.getType() == Long.class) {
-				addMenuLong(widget, pojo);
-			} else if (pojo.getType() == boolean.class || pojo.getType() == Boolean.class) {
-				addMenuBoolean(widget, pojo);
-			} else if (pojo.getType() == float.class || pojo.getType() == Float.class) {
-				addMenuFloat(widget, pojo);
-			} else if (pojo.getType() == double.class || pojo.getType() == Double.class) {
-				addMenuDouble(widget, pojo);
-			} else if (pojo.getType() == String.class) {
-				addMenuString(widget, pojo);
-			} else if (pojo.getType() == Vector3f.class) {
-				addMenuVector3f(widget, pojo);
-			} else if (pojo.getType() == Vector2f.class) {
-				addMenuVector2f(widget, pojo);
-			} else if (pojo.getType() == Vector3b.class) {
-				addMenuVector3b(widget, pojo);
-			} else if (pojo.getType() == Vector2b.class) {
-				addMenuVector2b(widget, pojo);
-			} else if (pojo.getType() == Vector3i.class) {
-				addMenuVector3i(widget, pojo);
-			} else if (pojo.getType() == Vector2i.class) {
-				addMenuVector2i(widget, pojo);
-			} else if (pojo.getType() == Dimension3f.class) {
-				addMenuDimension3f(widget, pojo);
-			} else if (pojo.getType() == Dimension2f.class) {
-				addMenuDimension2f(widget, pojo);
-			} else if (pojo.getType() == Dimension1f.class) {
-				addMenuDimension1f(widget, pojo);
-			} else if (pojo.getType() == DimensionBorderRadius.class) {
-				addMenuDimensionBorderRadius(widget, pojo);
-			} else if (pojo.getType() == DimensionInsets.class) {
-				addMenuDimensionInsets(widget, pojo);
-			} else if (pojo.getType() == DisplayMode.class) {
+		final var mapper = new ObjectMapper();
+		final BeanDescription beanDesc = mapper.getSerializationConfig()
+				.introspect(mapper.constructType(widget.getClass()));
+
+		for (final BeanPropertyDefinition prop : beanDesc.findProperties()) {
+			final String propertyName = prop.getName();
+			final Class<?> type = prop.getRawPrimaryType();
+			final Method propGetter = prop.getGetter() != null ? prop.getGetter().getAnnotated() : null;
+			final Method propSetter = prop.getSetter() != null ? prop.getSetter().getAnnotated() : null;
+
+			if (propGetter == null || propSetter == null) {
+				continue;
+			}
+
+			LOGGER.trace("    - '{}' type='{}'", propertyName, type);
+
+			if (type == int.class || type == Integer.class) {
+				addMenuInt(widget, propGetter, propSetter);
+			} else if (type == long.class || type == Long.class) {
+				addMenuLong(widget, propGetter, propSetter);
+			} else if (type == boolean.class || type == Boolean.class) {
+				addMenuBoolean(widget, propGetter, propSetter);
+			} else if (type == float.class || type == Float.class) {
+				addMenuFloat(widget, propGetter, propSetter);
+			} else if (type == double.class || type == Double.class) {
+				addMenuDouble(widget, propGetter, propSetter);
+			} else if (type == String.class) {
+				addMenuString(widget, propGetter, propSetter);
+			} else if (type == Vector3f.class) {
+				addMenuVector3f(widget, propGetter, propSetter);
+			} else if (type == Vector2f.class) {
+				addMenuVector2f(widget, propGetter, propSetter);
+			} else if (type == Vector3b.class) {
+				addMenuVector3b(widget, propGetter, propSetter);
+			} else if (type == Vector2b.class) {
+				addMenuVector2b(widget, propGetter, propSetter);
+			} else if (type == Vector3i.class) {
+				addMenuVector3i(widget, propGetter, propSetter);
+			} else if (type == Vector2i.class) {
+				addMenuVector2i(widget, propGetter, propSetter);
+			} else if (type == Dimension3f.class) {
+				addMenuDimension3f(widget, propGetter, propSetter);
+			} else if (type == Dimension2f.class) {
+				addMenuDimension2f(widget, propGetter, propSetter);
+			} else if (type == Dimension1f.class) {
+				addMenuDimension1f(widget, propGetter, propSetter);
+			} else if (type == DimensionBorderRadius.class) {
+				addMenuDimensionBorderRadius(widget, propGetter, propSetter);
+			} else if (type == DimensionInsets.class) {
+				addMenuDimensionInsets(widget, propGetter, propSetter);
+			} else if (type == DisplayMode.class) {
 				LOGGER.error("        ==> plop");
-			} else if (pojo.getType() == Uri.class) {
-				addMenuURI(widget, pojo);
-			} else if (pojo.getType() == Gravity.class) {
-				addMenuGravity(widget, pojo);
+			} else if (type == Uri.class) {
+				addMenuURI(widget, propGetter, propSetter);
+			} else if (type == Gravity.class) {
+				addMenuGravity(widget, propGetter, propSetter);
 			} else {
-				LOGGER.error("        ==> property type unknown='{}'", pojo.getType());
+				LOGGER.error("        ==> property type unknown='{}'", type);
 			}
 			{
 				final var simpleLabel = new Label("<b>" + propertyName + ":</b>");
@@ -1557,10 +1572,8 @@ public class ModelWidget extends Container {
 			this.sizerMenu.subWidgetAdd(metaLabel);
 		} else {
 			try {
-				final var modelPojo = new IntrospectionModelComplex(widget.getClass());
-
-				connectAllSignals(widget, modelPojo);
-				displayAllPropertyWithType(widget, modelPojo);
+				connectAllSignals(widget);
+				displayAllPropertyWithType(widget);
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
