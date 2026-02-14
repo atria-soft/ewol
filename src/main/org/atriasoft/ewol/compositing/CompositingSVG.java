@@ -387,7 +387,7 @@ public class CompositingSVG extends Compositing {
 		final EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
 		LOGGER.trace("render size = {}", size);
-		final ImageByte tmp = ToolImage.convertImageByte(doc.renderImageFloatRGBA(size));
+		final ImageByte tmp = ToolImage.fromBufferedImage(doc.renderImage(size));
 		if (tmp == null) {
 			LOGGER.error("Can not load the Raw SVG ... ");
 			return;
@@ -408,7 +408,7 @@ public class CompositingSVG extends Compositing {
 		}
 		this.svgData = null;
 		clear();
-		final ImageByte tmp = ToolImage.convertImageByte(data.renderImageFloatRGBA(size));
+		final ImageByte tmp = ToolImage.fromBufferedImage(data.renderImage(size));
 		if (tmp == null) {
 			LOGGER.error("Can not load the Raw SVG ... ");
 			return;
