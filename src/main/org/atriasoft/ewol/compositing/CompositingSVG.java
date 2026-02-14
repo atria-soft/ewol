@@ -5,9 +5,8 @@
  */
 package org.atriasoft.ewol.compositing;
 
-import org.atriasoft.egami.ImageByte;
-import org.atriasoft.egami.ImageByteRGBA;
-import org.atriasoft.egami.ToolImage;
+import java.awt.image.BufferedImage;
+
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
@@ -351,10 +350,10 @@ public class CompositingSVG extends Compositing {
 		this.position = this.position.add(pos);
 	}
 	
-	public void setSource(final ImageByteRGBA image) {
+	public void setSource(final BufferedImage image) {
 		clear();
 		this.svgData = null;
-		this.requestSize = image.getSize();
+		this.requestSize = new Vector2i(image.getWidth(), image.getHeight());
 		this.resource = new ResourceTexture2();
 		this.resource.set(image);
 	}
@@ -387,7 +386,7 @@ public class CompositingSVG extends Compositing {
 		final EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
 		LOGGER.trace("render size = {}", size);
-		final ImageByte tmp = ToolImage.fromBufferedImage(doc.renderImage(size));
+		final BufferedImage tmp = doc.renderImage(size);
 		if (tmp == null) {
 			LOGGER.error("Can not load the Raw SVG ... ");
 			return;
@@ -399,7 +398,7 @@ public class CompositingSVG extends Compositing {
 		this.svgData = data;
 		this.requestSize = size;
 	}
-	
+
 	public void setSource(final EsvgDocument data, final Vector2i size) {
 		if (this.svgData == null && this.svgDoc.equals(data) && this.requestSize.x() == size.x()
 				&& this.requestSize.y() == size.y()) {
@@ -408,7 +407,7 @@ public class CompositingSVG extends Compositing {
 		}
 		this.svgData = null;
 		clear();
-		final ImageByte tmp = ToolImage.fromBufferedImage(data.renderImage(size));
+		final BufferedImage tmp = data.renderImage(size);
 		if (tmp == null) {
 			LOGGER.error("Can not load the Raw SVG ... ");
 			return;

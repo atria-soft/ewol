@@ -5,8 +5,8 @@
  */
 package org.atriasoft.ewol.resource;
 
-import org.atriasoft.egami.ImageByte;
-import org.atriasoft.egami.ImageByteMono;
+import java.awt.image.BufferedImage;
+
 import org.atriasoft.esvg.EsvgFont;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.render.Weight;
@@ -74,17 +74,17 @@ public class ResourceFontSvg extends Resource {
 	}
 	
 	public boolean drawGlyph(
-			final ImageByte imageOut,
+			final BufferedImage imageOut,
 			final int fontSize,
 			final Vector2i glyphPosition,
 			final GlyphProperty property,
 			final int posInImage) {
 		return drawGlyph(imageOut, fontSize, glyphPosition, property, posInImage, false);
 	}
-	
+
 	// the forceClimp is to generate a forcing of the rendering in small font, this permit to have a correct view of the font, otherwise it will be transparent.
 	public synchronized boolean drawGlyph(
-			final ImageByte imageOut,
+			final BufferedImage imageOut,
 			final int fontSize,
 			final Vector2i glyphPosition,
 			final GlyphProperty property,
@@ -99,31 +99,34 @@ public class ResourceFontSvg extends Resource {
 				float valueColor = weight.get(xxx, weight.getHeight() - 1 - yyy);
 				if (forceClimp) {
 					valueColor = FMath.avg(-0.5f, ((valueColor - 0.2f) * 7.0f), 0.5f) + 0.5f;
-					//valueColor = FMath.avg(-0.5f, (valueColor * 20.0f), 0.5f) + 0.5f;
 				}
-				// set only alpha :
+				final int byteVal = (int) (valueColor * 255.0f) & 0xFF;
+				final int px = glyphPosition.x() + xxx;
+				final int py = glyphPosition.y() + yyy;
+				final int argb = imageOut.getRGB(px, py);
+				final int updated;
 				switch (posInImage) {
-					default:
-					case 0:
-						imageOut.setAFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
-						break;
 					case 1:
-						imageOut.setRFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						updated = (argb & 0xFF00FFFF) | (byteVal << 16);
 						break;
 					case 2:
-						imageOut.setGFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						updated = (argb & 0xFFFF00FF) | (byteVal << 8);
 						break;
 					case 3:
-						imageOut.setBFloat(glyphPosition.x() + xxx, glyphPosition.y() + yyy, valueColor);
+						updated = (argb & 0xFFFFFF00) | byteVal;
+						break;
+					default:
+						updated = (argb & 0x00FFFFFF) | (byteVal << 24);
 						break;
 				}
+				imageOut.setRGB(px, py, updated);
 			}
 		}
 		return true;
 	}
-	
+
 	public synchronized boolean drawGlyph(
-			final ImageByteMono imageOut,
+			final BufferedImage imageOut,
 			final int fontSize,
 			final GlyphProperty property,
 			final int borderSize) {
@@ -131,8 +134,8 @@ public class ResourceFontSvg extends Resource {
 		for (int jjj = 0; jjj < weight.getHeight(); jjj++) {
 			for (int iii = 0; iii < weight.getWidth(); iii++) {
 				final float valueColor = weight.get(iii, weight.getHeight() - 1 - jjj);
-				// real set of color
-				imageOut.set(borderSize + iii, borderSize + jjj, valueColor);
+				final int gray = (int) (valueColor * 255.0f) & 0xFF;
+				imageOut.getRaster().setSample(borderSize + iii, borderSize + jjj, 0, gray);
 			}
 		}
 		return true;

@@ -5,6 +5,7 @@
  */
 package org.atriasoft.ewol.resource;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,7 +161,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			// ???
 			setImageSize(new Vector2i(FMath.nextP2(256 * this.size / 10), 32));
 			// now we can access directly on the image
-			this.data.clear();
+			this.data = new BufferedImage(this.data.getWidth(), this.data.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		}
 		// add error glyph
 		addGlyph((char) 0);
@@ -196,14 +197,14 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				LOGGER.trace("load char: '{}'={}", val, (int) val);
 				hasChange = true;
 				// change line if needed ...
-				if (this.lastGlyphPos[iii].x() + tmpchar.sizeTexture.x() + 3 > this.data.getSize().x()) {
+				if (this.lastGlyphPos[iii].x() + tmpchar.sizeTexture.x() + 3 > this.data.getWidth()) {
 					this.lastGlyphPos[iii] = new Vector2i(1, this.lastGlyphPos[iii].y() + this.lastRawHeigh[iii]);
 					this.lastRawHeigh[iii] = 0;
 				}
 				LOGGER.trace("glyph texture size = {} last posY={} out size={}", tmpchar.sizeTexture,
-						this.lastGlyphPos[iii].y(), this.data.getSize());
-				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getSize().y()) {
-					this.data.resize(this.data.getSize().x(), this.data.getSize().y() * 2);
+						this.lastGlyphPos[iii].y(), new Vector2i(this.data.getWidth(), this.data.getHeight()));
+				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getHeight()) {
+					this.data = resizeImage(this.data, this.data.getWidth(), this.data.getHeight() * 2);
 					// note : need to rework all the layer due to the fact that the texture is used by the 4 type...
 					for (int kkk = 0; kkk < 4; kkk++) {
 						// change the coordinate on the element in the texture
@@ -217,10 +218,10 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				this.font[iii].drawGlyph(this.data, this.size, this.lastGlyphPos[iii], tmpchar, iii);
 				// set video position
 				tmpchar.texturePosStart = new Vector2f(
-						(float) this.lastGlyphPos[iii].x() / (float) this.data.getSize().x(),
-						(float) this.lastGlyphPos[iii].y() / (float) this.data.getSize().y());
-				tmpchar.texturePosSize = new Vector2f((float) tmpchar.sizeTexture.x() / this.data.getSize().x(),
-						(float) tmpchar.sizeTexture.y() / this.data.getSize().y());
+						(float) this.lastGlyphPos[iii].x() / (float) this.data.getWidth(),
+						(float) this.lastGlyphPos[iii].y() / (float) this.data.getHeight());
+				tmpchar.texturePosSize = new Vector2f((float) tmpchar.sizeTexture.x() / this.data.getWidth(),
+						(float) tmpchar.sizeTexture.y() / this.data.getHeight());
 				
 				// update the maximum of the line hight :
 				if (this.lastRawHeigh[iii] < tmpchar.sizeTexture.y()) {

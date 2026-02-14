@@ -7,7 +7,7 @@ package org.atriasoft.ewol.widget;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import org.atriasoft.egami.ImageByteRGBA;
+import java.awt.image.BufferedImage;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Uri;
@@ -220,7 +220,7 @@ public class ImageDisplay extends Widget {
 	 * Set an image with direct elements
 	 * @param image Image to set in the display
 	 */
-	public void setCustumSource(final ImageByteRGBA image) {
+	public void setCustumSource(final BufferedImage image) {
 		// TODO : Better interfacing of all element internal ==> this is a temporary prototype
 		this.compositing.setSource(image);
 		markToRedraw();

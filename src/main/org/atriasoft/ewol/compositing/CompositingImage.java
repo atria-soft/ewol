@@ -5,7 +5,7 @@
  */
 package org.atriasoft.ewol.compositing;
 
-import org.atriasoft.egami.ImageByteRGBA;
+import java.awt.image.BufferedImage;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
@@ -358,10 +358,10 @@ public class CompositingImage extends Compositing {
 		this.position = this.position.add(pos);
 	}
 
-	public void setSource(final ImageByteRGBA image) {
+	public void setSource(final BufferedImage image) {
 		clear();
 		this.filename = null;
-		this.requestSize = image.getSize();
+		this.requestSize = new Vector2i(image.getWidth(), image.getHeight());
 		this.resourceImage = new ResourceTexture2();
 		this.resourceImage.set(image);
 	}
