@@ -89,7 +89,6 @@ def configure(target, my_module):
 	
 	my_module.add_depend([
 	    'org-atriasoft-gale',
-	    'org-atriasoft-iogami',
 	    'org-atriasoft-esvg',
 	    'org-atriasoft-ejson',
 	    'org-atriasoft-exml',
