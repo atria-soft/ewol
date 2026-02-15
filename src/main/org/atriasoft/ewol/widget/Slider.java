@@ -14,6 +14,7 @@ import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.compositing.CompositingGC;
 import org.atriasoft.ewol.event.EventInput;
+import org.atriasoft.gale.key.KeyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -349,6 +350,23 @@ public class Slider extends Widget {
 		final Vector2f relPos = relativePosition(event.pos());
 		LOGGER.trace("Event on Input: {} relPos = {}", event, relPos);
 		final boolean over = isInsideSlider(relPos);
+
+		// Mouse scroll wheel: inputId 4 = scroll down, inputId 5 = scroll up
+		if ((event.inputId() == 4 || event.inputId() == 5) && event.status() == KeyStatus.down) {
+			if (over) {
+				float stepValue = this.propertyStep != 0.0f ? this.propertyStep : 1.0f;
+				if (event.specialKey().getShift()) {
+					stepValue *= 10.0f;
+				}
+				if (event.inputId() == 5) {
+					setPropertyValue(this.propertyValue + stepValue);
+				} else {
+					setPropertyValue(this.propertyValue - stepValue);
+				}
+				return true;
+			}
+			return false;
+		}
 
 		if (event.inputId() != 1) {
 			return false;
