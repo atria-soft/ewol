@@ -41,6 +41,9 @@ class InputManager {
 
 	// special grab pointer mode :
 	private WeakReference<Widget> grabWidget = null; //!< widget that grab the curent pointer.
+	// Event grab for drag operations — suppresses leave/enter events during drag.
+	// Different from grabWidget which is for FPS-style cursor lock.
+	private WeakReference<Widget> eventGrabWidget = null;
 	private KeySpecial specialKey;
 
 	public InputManager(final EwolContext context) {
@@ -96,6 +99,33 @@ class InputManager {
 		                                  + Vector2i(widget.getSize().x/2.0f,
 		                                          widget.getSize().y/2.0f) );
 		*/
+	}
+
+	/**
+	 * Grab events for drag operations. While a widget has grabbed events,
+	 * leave/enter events are suppressed for non-hover pointers (drag in progress).
+	 * The cursor still moves freely (unlike grabPointer which locks the cursor).
+	 * The grab is automatically released on mouse button UP.
+	 * @param widget The widget that requests event grab during drag
+	 */
+	public void grabEvents(final Widget widget) {
+		if (widget == null) {
+			return;
+		}
+		LOGGER.debug("Event grab acquired by: {}", widget.getClass().getSimpleName());
+		this.eventGrabWidget = new WeakReference<>(widget);
+	}
+
+	/**
+	 * Release the event grab. Leave/enter events resume normal behavior.
+	 */
+	public void unGrabEvents() {
+		if (this.eventGrabWidget != null) {
+			final Widget widget = this.eventGrabWidget.get();
+			LOGGER.debug("Event grab released from: {}",
+					widget != null ? widget.getClass().getSimpleName() : "null");
+		}
+		this.eventGrabWidget = null;
 	}
 
 	/**
@@ -218,29 +248,38 @@ class InputManager {
 			eventTable[pointerID].posEvent = pos;
 			localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId, KeyStatus.move, pos);
 		} else if (eventTable[pointerID].isUsed) {
-			if (eventTable[pointerID].isInside) {
-				if (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y()
-						|| (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
-						|| (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()) {
-					eventTable[pointerID].isInside = false;
-					//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [LEAVE] " + pos);
+			// Check if event grab is active for this widget (suppress leave/enter during drag)
+			final Widget eventGrab = this.eventGrabWidget != null ? this.eventGrabWidget.get() : null;
+			final Widget currentWidget = eventTable[pointerID].curentWidgetEvent.get();
+			final boolean isGrabbed = (eventGrab != null && eventGrab == currentWidget);
+
+			if (!isGrabbed) {
+				// Normal behavior: fire leave/enter based on bounds
+				if (eventTable[pointerID].isInside) {
+					if (eventTable[pointerID].origin.x() > pos.x() || eventTable[pointerID].origin.y() > pos.y()
+							|| (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
+							|| (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()) {
+						eventTable[pointerID].isInside = false;
+						//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [LEAVE] " + pos);
+						eventTable[pointerID].posEvent = pos;
+						localEventInput(type, currentWidget,
+								eventTable[pointerID].destinationInputId, KeyStatus.leave, pos);
+					}
+				} else if ((eventTable[pointerID].origin.x() <= pos.x()
+						&& (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) >= pos.x())
+						&& (eventTable[pointerID].origin.y() <= pos.y()
+								&& (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) >= pos.y())) {
+					eventTable[pointerID].isInside = true;
+					//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [ENTER] " + pos);
 					eventTable[pointerID].posEvent = pos;
-					localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
-							eventTable[pointerID].destinationInputId, KeyStatus.leave, pos);
+					localEventInput(type, currentWidget,
+							eventTable[pointerID].destinationInputId, KeyStatus.enter, pos);
 				}
-			} else if ((eventTable[pointerID].origin.x() <= pos.x()
-					&& (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) >= pos.x())
-					&& (eventTable[pointerID].origin.y() <= pos.y()
-							&& (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) >= pos.y())) {
-				eventTable[pointerID].isInside = true;
-				//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [ENTER] " + pos);
-				eventTable[pointerID].posEvent = pos;
-				localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
-						eventTable[pointerID].destinationInputId, KeyStatus.enter, pos);
 			}
+			// Move events are always sent regardless of grab state
 			//LOGGER.debug("GUI : Input ID=" + pointerID + " == >" + eventTable[pointerID].destinationInputId + " [MOVE]  " + pos);
 			eventTable[pointerID].posEvent = pos;
-			localEventInput(type, eventTable[pointerID].curentWidgetEvent.get(),
+			localEventInput(type, currentWidget,
 					eventTable[pointerID].destinationInputId, KeyStatus.move, pos);
 		}
 	}
@@ -249,6 +288,7 @@ class InputManager {
 	 * a new layer on the windows is set  == > might remove all the property of the current element ...
 	 */
 	public void newLayerSet() {
+		unGrabEvents();
 		for (int iii = 0; iii < InputManager.MAX_MANAGE_INPUT; iii++) {
 			// remove the property of this input ...
 			abortElement(this.eventInputSaved, iii, KeyType.finger);
@@ -410,6 +450,13 @@ class InputManager {
 				}
 				// send up event after the single event to prevent multiple widget getting elements
 				localEventInput(type, tmpWidget, pointerID, KeyStatus.upAfter, pos);
+				// Auto-release event grab on mouse button UP
+				if (type == KeyType.mouse && this.eventGrabWidget != null) {
+					final Widget grabbed = this.eventGrabWidget.get();
+					if (grabbed == null || grabbed == tmpWidget) {
+						unGrabEvents();
+					}
+				}
 				// specific for tuch event
 				if (type == KeyType.finger) {
 					cleanElement(eventTable, pointerID);

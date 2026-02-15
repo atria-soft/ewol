@@ -199,8 +199,19 @@ public class ColorGradient extends Widget {
 		final Vector2f relPos = relativePosition(event.pos());
 
 		// Handle drag end
-		if (event.status() == KeyStatus.up || event.status() == KeyStatus.upAfter || event.status() == KeyStatus.leave) {
-			this.dragging = false;
+		if (event.status() == KeyStatus.up || event.status() == KeyStatus.upAfter) {
+			if (this.dragging) {
+				this.dragging = false;
+				unGrabEvents();
+			}
+			return true;
+		}
+		// Safety fallback: if leave fires during drag (e.g. window exit)
+		if (event.status() == KeyStatus.leave) {
+			if (this.dragging) {
+				this.dragging = false;
+				unGrabEvents();
+			}
 			return true;
 		}
 
@@ -208,6 +219,7 @@ public class ColorGradient extends Widget {
 		if (event.inputId() == 1) {
 			if (event.status() == KeyStatus.down) {
 				this.dragging = true;
+				grabEvents();
 				updateFromPosition(relPos);
 				return true;
 			}

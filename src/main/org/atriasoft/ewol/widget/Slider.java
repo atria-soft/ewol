@@ -360,6 +360,7 @@ public class Slider extends Widget {
 				if (over) {
 					keepFocus();
 					this.isDragging = true;
+					grabEvents();
 					setPropertyValue(calculateValueFromPosition(relPos));
 					return true;
 				}
@@ -377,13 +378,20 @@ public class Slider extends Widget {
 				if (this.isDragging) {
 					keepFocus();
 					this.isDragging = false;
+					unGrabEvents();
 					setPropertyValue(calculateValueFromPosition(relPos));
 					return true;
 				}
 				break;
 
 			case leave:
-				this.isDragging = false;
+				// With event grab, leave should not fire during drag.
+				// Safety fallback: if leave fires anyway (e.g. window exit),
+				// stop the drag.
+				if (this.isDragging) {
+					this.isDragging = false;
+					unGrabEvents();
+				}
 				break;
 
 			default:
@@ -394,7 +402,10 @@ public class Slider extends Widget {
 
 	@Override
 	protected void onLostFocus() {
-		this.isDragging = false;
+		if (this.isDragging) {
+			this.isDragging = false;
+			unGrabEvents();
+		}
 	}
 
 	@Override
