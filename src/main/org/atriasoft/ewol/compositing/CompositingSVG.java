@@ -112,6 +112,7 @@ public class CompositingSVG extends Compositing {
 		final Matrix4f projMatrix = OpenGL.getMatrix();
 		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		this.oGLprogram.use();
+		OpenGL.enable(OpenGL.Flag.flag_blend);
 		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
 		this.oGLprogram.uniformMatrix(this.oGLMatrixTransformation, this.matrixApply);
@@ -121,6 +122,7 @@ public class CompositingSVG extends Compositing {
 		this.vbo.renderArrays(RenderMode.TRIANGLE);
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
+		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
 	
 	@Override
