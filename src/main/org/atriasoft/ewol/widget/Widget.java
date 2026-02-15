@@ -58,6 +58,8 @@ public class Widget extends EwolObject {
 	private final CompositingDrawing drawDebugBorder = null;
 	private boolean grabCursor = false;
 	private boolean hasFocus = false;
+	/** Stack trace captured at widget creation for source inspection */
+	private final StackTraceElement[] creationTrace;
 	/** Maximum number of mouse events supported [0..3] */
 	private int limitMouseEvent = 3;
 	private final List<EventShortCut> localShortcut = new ArrayList<>();
@@ -85,7 +87,9 @@ public class Widget extends EwolObject {
 	 * Constructor of the widget classes
 	 * @return (no exception generated (not managed in embedded platform))
 	 */
-	public Widget() {}
+	public Widget() {
+		this.creationTrace = Thread.currentThread().getStackTrace();
+	}
 
 	/**
 	 * calculate the minimum and maximum size (need to estimate expend properties of the widget)
@@ -229,6 +233,45 @@ public class Widget extends EwolObject {
 	 */
 	public int getMouseLimit() {
 		return this.limitMouseEvent;
+	}
+
+	/**
+	 * Get the source location where this widget was instantiated.
+	 * Filters out framework stack frames to find user code.
+	 * @return the first user-code StackTraceElement, or null if not found
+	 */
+	public StackTraceElement getSourceLocation() {
+		if (this.creationTrace == null) {
+			return null;
+		}
+		for (final StackTraceElement frame : this.creationTrace) {
+			final String className = frame.getClassName();
+			if (className.startsWith("java.")
+					|| className.startsWith("jdk.")
+					|| className.startsWith("sun.")
+					|| className.startsWith("org.lwjgl.")
+					|| className.startsWith("org.atriasoft.gale.")
+					|| className.startsWith("org.atriasoft.ewol.")
+					|| className.startsWith("org.atriasoft.esignal.")
+					|| className.startsWith("org.atriasoft.etk.")
+					|| className.startsWith("org.atriasoft.exml.")
+					|| className.startsWith("org.atriasoft.ejson.")
+					|| className.startsWith("com.fasterxml.")) {
+				continue;
+			}
+			if (!frame.isNativeMethod() && frame.getFileName() != null) {
+				return frame;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get the full creation stack trace (for detailed inspection).
+	 * @return the raw stack trace captured at widget construction
+	 */
+	public StackTraceElement[] getCreationTrace() {
+		return this.creationTrace;
 	}
 
 	/**

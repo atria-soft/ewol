@@ -251,6 +251,11 @@ public class EwolContext extends GaleApplication {
 			// No windows ...
 			return;
 		}
+		// F12: toggle Widget Inspector (intercept before any other key handling)
+		if (type == KeyKeyboard.F12 && state == KeyStatus.down) {
+			this.windowsCurrent.getWidgetInspector().toggle();
+			return;
+		}
 		final boolean repeate = (state == KeyStatus.downRepeat);
 		final boolean isDown = (state == KeyStatus.downRepeat) || (state == KeyStatus.down);
 		if (this.windowsCurrent.onEventShortCut(special, value, type, isDown)) {
