@@ -137,6 +137,22 @@ public class EwolContext extends GaleApplication {
 	public void inputEventUnGrabPointer() {
 		this.input.unGrabPointer();
 	}
+
+	/**
+	 * Grab events for drag operations. While grabbed, leave/enter events
+	 * are suppressed for the grabbing widget during active drag.
+	 * @param widget The widget requesting the event grab
+	 */
+	public void inputEventGrabEvents(final Widget widget) {
+		this.input.grabEvents(widget);
+	}
+
+	/**
+	 * Release the event grab.
+	 */
+	public void inputEventUnGrabEvents() {
+		this.input.unGrabEvents();
+	}
 	
 	@Override
 	public void onClipboardEvent(final ClipboardList clipboardId) {
@@ -315,17 +331,22 @@ public class EwolContext extends GaleApplication {
 		this.input.setLastKeyboardSpecial(special);
 		switch (state) {
 			case move:
-				// LOGGER.debug("Receive MSG : THREAD_INPUT_MOTION");
 				this.input.motion(type, pointerID, pos);
 				break;
 			case down:
 			case downRepeat:
-				// LOGGER.debug("Receive MSG : THREAD_INPUT_STATE");
 				this.input.state(type, pointerID, true, pos);
 				break;
 			case up:
-				// LOGGER.debug("Receive MSG : THREAD_INPUT_STATE");
 				this.input.state(type, pointerID, false, pos);
+				break;
+			case leave:
+				// Window-level leave: release event grab for safety
+				this.input.unGrabEvents();
+				this.input.motion(type, pointerID, pos);
+				break;
+			case enter:
+				this.input.motion(type, pointerID, pos);
 				break;
 			default:
 				LOGGER.debug("Unknown state: {}", state);

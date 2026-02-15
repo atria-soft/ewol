@@ -995,7 +995,27 @@ public class Widget extends EwolObject {
 			this.grabCursor = false;
 		}
 	}
-	
+
+	/**
+	 * Grab events for drag operations. While grabbed, leave/enter events
+	 * are suppressed for this widget during active drag. The cursor still
+	 * moves freely. The grab is automatically released on mouse button UP.
+	 *
+	 * Unlike {@link #grabCursor()} which locks the cursor for FPS-style
+	 * relative movement, this only suppresses leave/enter events to allow
+	 * smooth drag operations when the cursor exits the widget bounds.
+	 */
+	public void grabEvents() {
+		EwolObject.getContext().inputEventGrabEvents(this);
+	}
+
+	/**
+	 * Release the event grab. Leave/enter events resume normal behavior.
+	 */
+	public void unGrabEvents() {
+		EwolObject.getContext().inputEventUnGrabEvents();
+	}
+
 	// ========================================================================
 	// Fluent API methods
 	// ========================================================================
