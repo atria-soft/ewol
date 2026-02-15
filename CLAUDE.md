@@ -81,6 +81,7 @@ EwolObject                    -- Base object with signals, naming, parent tracki
 | `org.atriasoft.ewol` | Main entry point (`Ewol`), `Gravity`, `Padding`, `DrawProperty` |
 | `org.atriasoft.ewol.widget` | All widgets |
 | `org.atriasoft.ewol.widget.meta` | Composite widgets (`FileChooser`, `SelectPopup`, `ColorPickerPopup`) |
+| `org.atriasoft.ewol.widget.menu` | Menu system (`MenuPopup`, `MenuItem`, `MenuBar`, `MenuSeparator`, `ShortcutBadge`) |
 | `org.atriasoft.ewol.widget.notification` | Toast notification system (`NotificationManager`, `Toast`, `ToastType`, `ToastConfig`) |
 | `org.atriasoft.ewol.context` | `EwolApplication`, `EwolContext`, `InputManager` |
 | `org.atriasoft.ewol.object` | `EwolObject`, `ObjectManager`, `Worker` |
@@ -466,6 +467,108 @@ myWindows.setNotificationManager(new MyCustomNotificationManager());
 - `NotificationManager` - abstract base class
 - `DefaultNotificationManager` - default implementation
 
+### Menu System
+
+Context menus, dropdown menus, and menu bars. Located in `org.atriasoft.ewol.widget.menu`.
+
+**Key classes:**
+- `MenuPopup` - Popup overlay displaying a vertical list of items (follows `SelectPopup` pattern)
+- `MenuItem` - A single menu item with optional icon, text, and shortcut badges
+- `MenuSeparator` - Horizontal separator line between groups
+- `MenuBar` - Horizontal bar of buttons, each opening a `MenuPopup` dropdown
+- `ShortcutBadge` - Widget displaying a keyboard key in a rounded rectangle
+- `ShortcutFormatter` - Utility to parse `"ctrl+shift+s"` into display tokens `["Ctrl", "Shift", "S"]`
+
+#### Context Menu (right-click or programmatic)
+
+```java
+// On right-click
+@Override
+public boolean onEventInput(final EventInput event) {
+    if (event.inputId() == 3 && event.status() == KeyStatus.pressSingle) {
+        final Windows windows = Ewol.getContext().getWindows();
+        if (windows != null) {
+            MenuPopup.create()
+                .item("Cut", null, "ctrl+x", () -> cut())
+                .item("Copy", null, "ctrl+c", () -> copy())
+                .item("Paste", null, "ctrl+v", () -> paste())
+                .separator()
+                .disabledItem("Undo")
+                .item("Select All", null, "ctrl+a", () -> selectAll())
+                .anchorAt(event.pos())
+                .show(windows);
+        }
+        return true;
+    }
+    return false;
+}
+
+// Programmatic (e.g. from a button click)
+MenuPopup.create()
+    .item("Option 1", () -> doOption1())
+    .item("Option 2", "icon-name", () -> doOption2())
+    .separator()
+    .disabledItem("Not Available")
+    .anchorAt(new Vector2f(300, 200))
+    .show(windows);
+```
+
+#### Menu Bar with Dropdowns
+
+```java
+MenuBar.create()
+    .menu("File", () -> MenuPopup.create()
+        .item("New", null, "ctrl+n", () -> newFile())
+        .item("Open", null, "ctrl+o", () -> openFile())
+        .item("Save", null, "ctrl+s", () -> save())
+        .separator()
+        .item("Quit", null, "alt+F4", () -> quit()))
+    .menu("Edit", () -> MenuPopup.create()
+        .item("Undo", null, "ctrl+z", () -> undo())
+        .item("Redo", null, "ctrl+shift+z", () -> redo())
+        .separator()
+        .item("Cut", null, "ctrl+x", () -> cut())
+        .item("Copy", null, "ctrl+c", () -> copy())
+        .item("Paste", null, "ctrl+v", () -> paste()))
+    .menu("Help", () -> MenuPopup.create()
+        .item("About", () -> showAbout()));
+```
+
+**MenuPopup fluent API:**
+| Method | Description |
+|--------|-------------|
+| `.item(text, action)` | Add item with text and click action |
+| `.item(text, icon, action)` | Add item with icon |
+| `.item(text, icon, shortcut, action)` | Add item with icon and shortcut badge |
+| `.item(menuItem)` | Add a pre-built `MenuItem` instance |
+| `.separator()` | Add horizontal separator |
+| `.disabledItem(text)` | Add grayed-out non-clickable item |
+| `.disabledItem(text, icon)` | Add disabled item with icon |
+| `.anchorAt(Vector2f)` | Position popup at absolute coordinates |
+| `.anchorBelow(Widget)` | Position popup below a widget (for dropdowns) |
+| `.show(Windows)` | Push popup onto the popup stack |
+| `.close()` | Close and remove from popup stack |
+
+**MenuItem fluent API:**
+| Method | Description |
+|--------|-------------|
+| `MenuItem.create(text)` | Factory to create an item |
+| `.icon(iconName)` | Set SVG icon from `THEME/icon/` |
+| `.shortcut(shortcut)` | Set shortcut badge (e.g. `"ctrl+s"`) |
+| `.enabled(boolean)` | Enable/disable the item |
+| `.onSelect(Runnable)` | Connect a click callback |
+
+**Behaviors:**
+- **Hover highlighting** on `MenuItem` (blue background) and `MenuBar` buttons
+- **Walk-through**: hovering between `MenuBar` buttons while a menu is open switches the dropdown automatically
+- **Escape key** closes the popup
+- **Click outside** closes the popup
+- **Icon alignment**: if any item in a menu has an icon, all items reserve icon space for alignment
+- **Disabled items**: grayed out, no hover highlight, clicks ignored
+- Uses `Supplier<MenuPopup>` factory to create fresh widgets each time (avoids widget reuse corruption)
+
+**Architecture:** `MenuPopup` follows the `SelectPopup` pattern: full-window overlay that claims all events via `getWidgetAtPos()` returning `this`, routes hover events to internal items via `updateHover()`, and closes on outside click or Escape. Rendering is clipped to the popup zone via `displayProp.withLimit()`. `onRegenerateDisplay()` always propagates to children (no `needRedraw()` gate) so that hover state changes on `MenuItem` are rendered immediately.
+
 ## Signal System (esignal)
 
 Widgets communicate via signals. Two signal types:
@@ -736,6 +839,7 @@ ewol/
       InputManager.java          -- Mouse/touch input routing
     widget/                      -- All widget classes
       meta/                      -- Composite widgets (FileChooser, SelectPopup, ColorPickerPopup)
+      menu/                      -- Menu system (MenuPopup, MenuItem, MenuBar, MenuSeparator, ShortcutBadge, ShortcutFormatter)
       notification/              -- Toast notification system (NotificationManager, Toast, ToastType, ToastConfig)
     object/
       EwolObject.java            -- Base object with ID, name, parent, signals
