@@ -18,8 +18,10 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.DrawProperty;
 import org.atriasoft.ewol.context.EwolContext;
+import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.object.EwolObject;
 import org.atriasoft.ewol.resource.ResourceColorFile;
+import org.atriasoft.ewol.widget.debug.WidgetInspector;
 import org.atriasoft.ewol.widget.meta.PopoverManager;
 import org.atriasoft.ewol.widget.notification.DefaultNotificationManager;
 import org.atriasoft.ewol.widget.notification.NotificationManager;
@@ -51,6 +53,19 @@ public class Windows extends Widget {
 	protected PopoverManager popoverManager = new PopoverManager();
 
 	protected NotificationManager notificationManager = null;
+
+	protected final WidgetInspector widgetInspector = new WidgetInspector();
+
+	/**
+	 * Proxy widget that captures all input events and forwards them to the
+	 * WidgetInspector when inspection mode is active.
+	 */
+	private final Widget inspectorProxy = new Widget() {
+		@Override
+		public boolean onEventInput(final EventInput event) {
+			return Windows.this.widgetInspector.onEventInput(event, Windows.this);
+		}
+	};
 
 	protected Windows() {
 		this.propertyCanFocus = true;
@@ -107,6 +122,20 @@ public class Windows extends Widget {
 	
 	@Override
 	public Widget getWidgetAtPos(final Vector2f pos) {
+		// When inspector is active, route ALL events to the inspector proxy
+		if (this.widgetInspector.isEnabled()) {
+			return this.inspectorProxy;
+		}
+		return getWidgetAtPosForInspection(pos);
+	}
+
+	/**
+	 * Find the real widget at a position, bypassing the inspector overlay.
+	 * Used by the inspector itself to identify which widget is under the cursor.
+	 * @param pos absolute position in window coordinates
+	 * @return the widget at the given position
+	 */
+	public Widget getWidgetAtPosForInspection(final Vector2f pos) {
 		// calculate relative position
 		final Vector2f relativePos = relativePosition(pos);
 		// check toast notifications first (they are rendered on top of everything)
@@ -167,6 +196,7 @@ public class Windows extends Widget {
 		if (this.notificationManager != null) {
 			this.notificationManager.onWindowChangeSize(this.size);
 		}
+		this.widgetInspector.onWindowChangeSize(this.size);
 	}
 
 	@Override
@@ -183,6 +213,7 @@ public class Windows extends Widget {
 		if (this.notificationManager != null) {
 			this.notificationManager.onRegenerateDisplay();
 		}
+		this.widgetInspector.onRegenerateDisplay();
 	}
 	
 	/**
@@ -346,6 +377,8 @@ public class Windows extends Widget {
 		if (this.notificationManager != null) {
 			this.notificationManager.onDraw(displayProp);
 		}
+		// fifth: display widget inspector overlay (above everything)
+		this.widgetInspector.onDraw(displayProp);
 	}
 
 	// ========================================================================
@@ -358,6 +391,18 @@ public class Windows extends Widget {
 	 */
 	public PopoverManager getPopoverManager() {
 		return this.popoverManager;
+	}
+
+	// ========================================================================
+	// Widget Inspector
+	// ========================================================================
+
+	/**
+	 * Get the widget inspector for this window.
+	 * @return the widget inspector (never null)
+	 */
+	public WidgetInspector getWidgetInspector() {
+		return this.widgetInspector;
 	}
 
 	// ========================================================================
