@@ -56,4 +56,14 @@ public class TestWidgetFileChooser implements TestWidgetInterface {
 	public String getTitle() {
 		return "FileChooser";
 	}
+
+	@Override
+	public String getDescription() {
+		return "File open/save dialog";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Dialog";
+	}
 }

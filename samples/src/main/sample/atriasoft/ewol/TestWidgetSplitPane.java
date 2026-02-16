@@ -54,4 +54,14 @@ public class TestWidgetSplitPane implements TestWidgetInterface {
 	public String getTitle() {
 		return "SplitPane";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Resizable split layout";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Layout";
+	}
 }

@@ -18,4 +18,14 @@ public class TestWidgetEntry implements TestWidgetInterface {
 	public String getTitle() {
 		return "Test Entry";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Single-line text input field";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
 }

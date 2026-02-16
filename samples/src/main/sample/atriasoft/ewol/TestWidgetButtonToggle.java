@@ -19,4 +19,14 @@ public class TestWidgetButtonToggle implements TestWidgetInterface {
 	public String getTitle() {
 		return "Simple Button toggle";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Two-state toggle button";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
 }

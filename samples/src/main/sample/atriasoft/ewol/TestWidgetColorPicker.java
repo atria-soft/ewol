@@ -20,4 +20,14 @@ public class TestWidgetColorPicker implements TestWidgetInterface {
 	public String getTitle() {
 		return "ColorPicker";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Color selection dialog";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Dialog";
+	}
 }

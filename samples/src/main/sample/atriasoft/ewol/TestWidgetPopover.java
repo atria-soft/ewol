@@ -228,6 +228,16 @@ public class TestWidgetPopover implements TestWidgetInterface {
 	}
 
 	@Override
+	public String getDescription() {
+		return "Floating overlay anchored to widget";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Overlay";
+	}
+
+	@Override
 	public boolean isMetaWidget() {
 		return true;
 	}

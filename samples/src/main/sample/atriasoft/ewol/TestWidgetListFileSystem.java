@@ -25,4 +25,14 @@ public class TestWidgetListFileSystem implements TestWidgetInterface {
 	public String getTitle() {
 		return "ListFileSystem";
 	}
+
+	@Override
+	public String getDescription() {
+		return "File system browser widget";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Data";
+	}
 }

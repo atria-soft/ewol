@@ -67,6 +67,16 @@ public class TestWidgetSliderShowcase implements TestWidgetInterface {
 	}
 
 	@Override
+	public String getDescription() {
+		return "Slider variants and configurations";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Data";
+	}
+
+	@Override
 	public boolean isMetaWidget() {
 		return true;
 	}

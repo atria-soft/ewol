@@ -37,4 +37,14 @@ public class TestWidgetBox implements TestWidgetInterface {
 	public String getTitle() {
 		return "Simple CheckBox";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Container with border and background";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Layout";
+	}
 }

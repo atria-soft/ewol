@@ -57,4 +57,14 @@ public class TestWidgetScrollView implements TestWidgetInterface {
 	public String getTitle() {
 		return "ScrollView";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Scrollable content area";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Layout";
+	}
 }

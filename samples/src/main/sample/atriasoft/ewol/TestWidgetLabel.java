@@ -54,4 +54,14 @@ public class TestWidgetLabel implements TestWidgetInterface {
 		return "Simple Label test";
 	}
 
+	@Override
+	public String getDescription() {
+		return "Text display with formatting support";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
+
 }

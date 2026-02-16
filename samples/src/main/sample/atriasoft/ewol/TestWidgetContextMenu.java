@@ -138,6 +138,16 @@ public class TestWidgetContextMenu implements TestWidgetInterface {
 	}
 
 	@Override
+	public String getDescription() {
+		return "Right-click context menu";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Overlay";
+	}
+
+	@Override
 	public boolean isMetaWidget() {
 		return true;
 	}

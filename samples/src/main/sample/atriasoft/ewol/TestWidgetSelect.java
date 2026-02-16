@@ -20,4 +20,14 @@ public class TestWidgetSelect implements TestWidgetInterface {
 	public String getTitle() {
 		return "Select";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Dropdown selection list";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Data";
+	}
 }
