@@ -6,6 +6,7 @@
 package org.atriasoft.ewol.widget;
 
 import org.atriasoft.esignal.Signal;
+import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
@@ -28,7 +29,6 @@ import org.slf4j.LoggerFactory;
  *
  * Signals emitted:
  * - signalColorChanged: when a color is selected (emits the selected Color)
- * - signalHslChanged: when hue/lightness changes (emits hue, lightness as floats 0-1)
  */
 public class ColorGradient extends Widget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ColorGradient.class);
@@ -38,8 +38,17 @@ public class ColorGradient extends Widget {
 	private static final int GRADIENT_STEPS = 40;
 
 	public Signal<Color> signalColorChanged = new Signal<>();
+	public SignalEmpty signalDragEnd = new SignalEmpty();
 
-	protected final CompositingGC compositing = new CompositingGC();
+	// Static gradient background (only regenerated on resize)
+	private final CompositingGC gradientBackground = new CompositingGC();
+	// Dynamic cursor overlay (regenerated on each cursor move)
+	private final CompositingGC cursorOverlay = new CompositingGC();
+
+	// Cached size to detect when gradient needs regeneration
+	private float cachedWidth = -1;
+	private float cachedHeight = -1;
+
 	protected boolean dragging = false;
 
 	// Current HSL position (0.0 - 1.0)
@@ -47,9 +56,6 @@ public class ColorGradient extends Widget {
 	protected float lightness = 0.5f;
 	protected int alpha = 255;
 
-	/**
-	 * Default constructor.
-	 */
 	public ColorGradient() {
 		setMouseLimit(1);
 		setPropertyExpand(Vector2b.FALSE);
@@ -57,70 +63,42 @@ public class ColorGradient extends Widget {
 		setPropertyMinSize(new Dimension2f(new Vector2f(DEFAULT_SIZE, DEFAULT_SIZE), Distance.PIXEL));
 	}
 
-	/**
-	 * Get the current hue value.
-	 * @return hue value between 0.0 and 1.0
-	 */
+	public boolean isDragging() {
+		return this.dragging;
+	}
+
 	public float getHue() {
 		return this.hue;
 	}
 
-	/**
-	 * Set the hue value.
-	 * @param hue value between 0.0 and 1.0
-	 */
 	public void setHue(final float hue) {
 		this.hue = FMath.avg(0.0f, hue, 1.0f);
 		markToRedraw();
 	}
 
-	/**
-	 * Get the current lightness value.
-	 * @return lightness value between 0.0 and 1.0
-	 */
 	public float getLightness() {
 		return this.lightness;
 	}
 
-	/**
-	 * Set the lightness value.
-	 * @param lightness value between 0.0 and 1.0
-	 */
 	public void setLightness(final float lightness) {
 		this.lightness = FMath.avg(0.0f, lightness, 1.0f);
 		markToRedraw();
 	}
 
-	/**
-	 * Get the current alpha value.
-	 * @return alpha value between 0 and 255
-	 */
 	public int getAlpha() {
 		return this.alpha;
 	}
 
-	/**
-	 * Set the alpha value.
-	 * @param alpha value between 0 and 255
-	 */
 	public void setAlpha(final int alpha) {
 		this.alpha = FMath.clamp(alpha, 0, 255);
 	}
 
-	/**
-	 * Set the position from a color.
-	 * @param color the color to set position from
-	 */
 	public void setFromColor(final Color color) {
 		rgbToHsl(color);
 		this.alpha = (int) (color.a() * 255);
 		markToRedraw();
 	}
 
-	/**
-	 * Get the currently selected color.
-	 * @return the current color
-	 */
 	public Color getCurrentColor() {
 		return hslToRgb(this.hue, 1.0f, this.lightness);
 	}
@@ -131,12 +109,23 @@ public class ColorGradient extends Widget {
 			return;
 		}
 
-		this.compositing.clear();
-
 		final float width = this.size.x();
 		final float height = this.size.y();
 
-		// Draw gradient using cells
+		// Only regenerate the gradient background if the size changed
+		if (width != this.cachedWidth || height != this.cachedHeight) {
+			regenerateGradientBackground(width, height);
+			this.cachedWidth = width;
+			this.cachedHeight = height;
+		}
+
+		// Always regenerate the cursor overlay (lightweight)
+		regenerateCursorOverlay(width, height);
+	}
+
+	private void regenerateGradientBackground(final float width, final float height) {
+		this.gradientBackground.clear();
+
 		final float cellWidth = width / GRADIENT_STEPS;
 		final float cellHeight = height / GRADIENT_STEPS;
 
@@ -146,48 +135,54 @@ public class ColorGradient extends Widget {
 				final float l = 1.0f - (float) y / GRADIENT_STEPS;
 
 				final Color color = hslToRgb(h, 1.0f, l);
-				this.compositing.setColor(color);
-				this.compositing.setPos(new Vector2f(x * cellWidth, y * cellHeight));
-				this.compositing.rectangleWidth(new Vector2f(cellWidth + 1, cellHeight + 1));
+				this.gradientBackground.setColor(color);
+				this.gradientBackground.setPos(new Vector2f(x * cellWidth, y * cellHeight));
+				this.gradientBackground.rectangleWidth(new Vector2f(cellWidth + 1, cellHeight + 1));
 			}
 		}
 
-		// Draw border
-		this.compositing.setColor(Color.DARK_GRAY);
-		this.compositing.setPos(Vector2f.ZERO);
-		this.compositing.rectangleWidth(new Vector2f(width, 1));
-		this.compositing.setPos(new Vector2f(0, height - 1));
-		this.compositing.rectangleWidth(new Vector2f(width, 1));
-		this.compositing.setPos(Vector2f.ZERO);
-		this.compositing.rectangleWidth(new Vector2f(1, height));
-		this.compositing.setPos(new Vector2f(width - 1, 0));
-		this.compositing.rectangleWidth(new Vector2f(1, height));
+		// Border
+		this.gradientBackground.setColor(Color.DARK_GRAY);
+		this.gradientBackground.setPos(Vector2f.ZERO);
+		this.gradientBackground.rectangleWidth(new Vector2f(width, 1));
+		this.gradientBackground.setPos(new Vector2f(0, height - 1));
+		this.gradientBackground.rectangleWidth(new Vector2f(width, 1));
+		this.gradientBackground.setPos(Vector2f.ZERO);
+		this.gradientBackground.rectangleWidth(new Vector2f(1, height));
+		this.gradientBackground.setPos(new Vector2f(width - 1, 0));
+		this.gradientBackground.rectangleWidth(new Vector2f(1, height));
 
-		// Draw cursor
+		this.gradientBackground.flush();
+	}
+
+	private void regenerateCursorOverlay(final float width, final float height) {
+		this.cursorOverlay.clear();
+
 		final float cursorX = this.hue * width;
 		final float cursorY = (1.0f - this.lightness) * height;
 
 		// White outer ring
-		this.compositing.setColor(Color.WHITE);
-		this.compositing.setPos(new Vector2f(cursorX - CURSOR_SIZE / 2, cursorY - CURSOR_SIZE / 2));
-		this.compositing.rectangleWidth(new Vector2f(CURSOR_SIZE, CURSOR_SIZE));
+		this.cursorOverlay.setColor(Color.WHITE);
+		this.cursorOverlay.setPos(new Vector2f(cursorX - CURSOR_SIZE / 2, cursorY - CURSOR_SIZE / 2));
+		this.cursorOverlay.rectangleWidth(new Vector2f(CURSOR_SIZE, CURSOR_SIZE));
 
 		// Black inner ring
-		this.compositing.setColor(Color.BLACK);
-		this.compositing.setPos(new Vector2f(cursorX - CURSOR_SIZE / 2 + 1, cursorY - CURSOR_SIZE / 2 + 1));
-		this.compositing.rectangleWidth(new Vector2f(CURSOR_SIZE - 2, CURSOR_SIZE - 2));
+		this.cursorOverlay.setColor(Color.BLACK);
+		this.cursorOverlay.setPos(new Vector2f(cursorX - CURSOR_SIZE / 2 + 1, cursorY - CURSOR_SIZE / 2 + 1));
+		this.cursorOverlay.rectangleWidth(new Vector2f(CURSOR_SIZE - 2, CURSOR_SIZE - 2));
 
 		// Current color center
-		this.compositing.setColor(getCurrentColor());
-		this.compositing.setPos(new Vector2f(cursorX - CURSOR_SIZE / 2 + 2, cursorY - CURSOR_SIZE / 2 + 2));
-		this.compositing.rectangleWidth(new Vector2f(CURSOR_SIZE - 4, CURSOR_SIZE - 4));
+		this.cursorOverlay.setColor(getCurrentColor());
+		this.cursorOverlay.setPos(new Vector2f(cursorX - CURSOR_SIZE / 2 + 2, cursorY - CURSOR_SIZE / 2 + 2));
+		this.cursorOverlay.rectangleWidth(new Vector2f(CURSOR_SIZE - 4, CURSOR_SIZE - 4));
 
-		this.compositing.flush();
+		this.cursorOverlay.flush();
 	}
 
 	@Override
 	protected void onDraw() {
-		this.compositing.draw();
+		this.gradientBackground.draw();
+		this.cursorOverlay.draw();
 	}
 
 	@Override
@@ -203,6 +198,7 @@ public class ColorGradient extends Widget {
 			if (this.dragging) {
 				this.dragging = false;
 				unGrabEvents();
+				this.signalDragEnd.emit();
 			}
 			return true;
 		}
@@ -211,6 +207,7 @@ public class ColorGradient extends Widget {
 			if (this.dragging) {
 				this.dragging = false;
 				unGrabEvents();
+				this.signalDragEnd.emit();
 			}
 			return true;
 		}
@@ -243,9 +240,6 @@ public class ColorGradient extends Widget {
 		this.signalColorChanged.emit(getCurrentColor());
 	}
 
-	/**
-	 * Convert RGB color to HSL values (updates hue and lightness fields).
-	 */
 	protected void rgbToHsl(final Color color) {
 		final float r = color.r();
 		final float g = color.g();
@@ -270,9 +264,6 @@ public class ColorGradient extends Widget {
 		this.lightness = l;
 	}
 
-	/**
-	 * Convert HSL to RGB color.
-	 */
 	protected Color hslToRgb(final float h, final float s, final float l) {
 		float r, g, b;
 
@@ -312,19 +303,10 @@ public class ColorGradient extends Widget {
 	// Factory methods and Fluent API
 	// ========================================================================
 
-	/**
-	 * Create a new ColorGradient.
-	 * @return a new ColorGradient
-	 */
 	public static ColorGradient create() {
 		return new ColorGradient();
 	}
 
-	/**
-	 * Create a new ColorGradient with initial color.
-	 * @param color initial color to position cursor
-	 * @return a new ColorGradient
-	 */
 	public static ColorGradient create(final Color color) {
 		final ColorGradient gradient = new ColorGradient();
 		gradient.setFromColor(color);
