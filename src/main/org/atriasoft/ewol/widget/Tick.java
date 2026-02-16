@@ -33,6 +33,7 @@ public class Tick extends Box {
 	
 	private final CompositingSVG compositingTick = new CompositingSVG();
 	private final Uri uriCheckIcon = new Uri("THEME", "CheckBoxCrossRed.svg", "ewol");
+	private String cachedSvgData = null;
 	
 	/** Periodic call handle to remove it when needed */
 	protected Connection periodicConnectionHandle = new Connection();
@@ -174,8 +175,11 @@ public class Tick extends Box {
 	@Override
 	public void regenerateDisplay() {
 		super.regenerateDisplay();
+		if (this.cachedSvgData == null) {
+			this.cachedSvgData = Uri.getAllDataString(this.uriCheckIcon);
+		}
 		final Vector2f tickSize = this.overPositionStop.less(this.overPositionStart);
-		this.compositingTick.setSource(Uri.getAllDataString(this.uriCheckIcon), tickSize.toVector2i());
+		this.compositingTick.setSource(this.cachedSvgData, tickSize.toVector2i());
 		this.compositingTick.setPos(this.overPositionStart.add(2));
 		this.compositingTick.print(tickSize.less(4));
 		this.compositingTick.flush();
