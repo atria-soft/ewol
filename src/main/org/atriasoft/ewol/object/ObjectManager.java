@@ -130,11 +130,9 @@ public class ObjectManager {
 	 * @param localTime Current system Time.
 	 */
 	public synchronized void timeCall(final Clock clock, final long time) {
-		LOGGER.trace("Periodic main function : Call [START]");
 		final long previousTime = this.lastPeriodicCallTime;
 		this.lastPeriodicCallTime = time;
 		if (this.periodicCall.size() <= 0) {
-			LOGGER.trace("Periodic main dunction: Call [ END ] ==> no connection");
 			return;
 		}
 		final Duration deltaTime = Duration.ofNanos(time - previousTime);

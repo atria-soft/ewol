@@ -361,7 +361,6 @@ public class EwolContext extends GaleApplication {
 	
 	@Override
 	public void onRegenerateDisplay(final GaleContext context) {
-		//LOGGER.info("EWOL onRegenerateDisplay /// ");
 		// check if the user selected a windows
 		final Windows window = this.windowsCurrent;
 		if (window == null) {
@@ -373,7 +372,6 @@ public class EwolContext extends GaleApplication {
 		if (this.widgetManager.isDrawingNeeded()) {
 			markDrawingIsNeeded();
 		}
-		// markDrawingIsNeeded();
 	}
 	
 	@Override
