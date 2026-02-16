@@ -70,9 +70,21 @@ public class Slider extends Widget {
 	// Markers (points on the track)
 	private List<Float> markers = new ArrayList<>();
 
-	private final CompositingGC vectorialDraw = new CompositingGC();
+	// Static track background (only regenerated on resize/style change)
+	private final CompositingGC trackBackground = new CompositingGC();
+	// Dynamic cursor and fill overlay (regenerated on each value change)
+	private final CompositingGC cursorOverlay = new CompositingGC();
+
+	// Cached size to detect when track background needs regeneration
+	private float cachedSizeX = -1;
+	private float cachedSizeY = -1;
 
 	private boolean isDragging = false;
+
+	private void invalidateTrackCache() {
+		this.cachedSizeX = -1;
+		this.cachedSizeY = -1;
+	}
 
 	/**
 	 * Default constructor.
@@ -91,7 +103,7 @@ public class Slider extends Widget {
 		final float minHeight = this.propertyCursorHeight + 4.0f;
 		this.minSize = Vector2f.max(this.minSize, new Vector2f(minWidth, minHeight));
 		checkMinSize();
-		LOGGER.debug("min size = {}", this.minSize);
+		LOGGER.trace("min size = {}", this.minSize);
 	}
 
 	private boolean isInsideSlider(final Vector2f relPos) {
@@ -188,6 +200,7 @@ public class Slider extends Widget {
 			return;
 		}
 		this.propertyTrackColor = color;
+		invalidateTrackCache();
 		markToRedraw();
 	}
 
@@ -244,6 +257,7 @@ public class Slider extends Widget {
 			return;
 		}
 		this.propertyMarkerColor = color;
+		invalidateTrackCache();
 		markToRedraw();
 	}
 
@@ -258,6 +272,7 @@ public class Slider extends Widget {
 			return;
 		}
 		this.propertyMarkerRadius = radius;
+		invalidateTrackCache();
 		markToRedraw();
 	}
 
@@ -275,6 +290,7 @@ public class Slider extends Widget {
 	 */
 	public void setMarkers(final List<Float> markers) {
 		this.markers = markers != null ? new ArrayList<>(markers) : new ArrayList<>();
+		invalidateTrackCache();
 		markToRedraw();
 	}
 
@@ -284,6 +300,7 @@ public class Slider extends Widget {
 	 */
 	public void addMarker(final float value) {
 		this.markers.add(value);
+		invalidateTrackCache();
 		markToRedraw();
 	}
 
@@ -292,6 +309,7 @@ public class Slider extends Widget {
 	 */
 	public void clearMarkers() {
 		this.markers.clear();
+		invalidateTrackCache();
 		markToRedraw();
 	}
 
@@ -305,7 +323,7 @@ public class Slider extends Widget {
 		if (this.markers.isEmpty() || this.propertyMaximum == this.propertyMinimum) {
 			return;
 		}
-		this.vectorialDraw.setPaintFillColor(this.propertyMarkerColor);
+		this.trackBackground.setPaintFillColor(this.propertyMarkerColor);
 		final float trackCenterY = trackY + this.propertyTrackHeight * 0.5f;
 		final float range = this.propertyMaximum - this.propertyMinimum;
 		for (final Float markerValue : this.markers) {
@@ -319,7 +337,7 @@ public class Slider extends Widget {
 						trackCenterY - this.propertyMarkerRadius);
 				final Vector2f markerStop = new Vector2f(markerX + this.propertyMarkerRadius,
 						trackCenterY + this.propertyMarkerRadius);
-				this.vectorialDraw.addRectangle(markerStart, markerStop, new Insets(0),
+				this.trackBackground.addRectangle(markerStart, markerStop, new Insets(0),
 						new BorderRadius(this.propertyMarkerRadius));
 			}
 		}
@@ -336,13 +354,17 @@ public class Slider extends Widget {
 			newValue = this.propertyMinimum + steps * this.propertyStep;
 			newValue = FMath.clamp(newValue, this.propertyMinimum, this.propertyMaximum);
 		}
+		if (this.propertyValue == newValue) {
+			return;
+		}
 		this.propertyValue = newValue;
 		markToRedraw();
 	}
 
 	@Override
 	public void onDraw() {
-		this.vectorialDraw.draw();
+		this.trackBackground.draw();
+		this.cursorOverlay.draw();
 	}
 
 	@Override
@@ -431,7 +453,6 @@ public class Slider extends Widget {
 		if (!needRedraw()) {
 			return;
 		}
-		this.vectorialDraw.clear();
 
 		// Calculate available size
 		Vector2f sizeInsideRender = this.minSize;
@@ -455,6 +476,37 @@ public class Slider extends Widget {
 		this.overPositionSize = new Vector2f(trackWidth, this.propertyTrackHeight);
 		this.overPositionStop = this.overPositionStart.add(this.overPositionSize);
 
+		// Only regenerate the track background if the size changed
+		if (this.size.x() != this.cachedSizeX || this.size.y() != this.cachedSizeY) {
+			regenerateTrackBackground(trackStartX, trackY, trackWidth);
+			this.cachedSizeX = this.size.x();
+			this.cachedSizeY = this.size.y();
+		}
+
+		// Always regenerate the cursor overlay (lightweight: fill + cursor)
+		regenerateCursorOverlay(delta, sizeInsideRender, trackStartX, trackY, trackWidth);
+	}
+
+	private void regenerateTrackBackground(final float trackStartX, final float trackY, final float trackWidth) {
+		this.trackBackground.clear();
+
+		final float trackRadius = this.propertyTrackHeight * 0.5f;
+
+		// Draw track background (unfilled portion)
+		this.trackBackground.setPaintFillColor(this.propertyTrackColor);
+		this.trackBackground.addRectangle(this.overPositionStart, this.overPositionStop, new Insets(0),
+				new BorderRadius(trackRadius));
+
+		// Draw markers
+		drawMarkers(trackStartX, trackY, trackWidth);
+
+		this.trackBackground.flush();
+	}
+
+	private void regenerateCursorOverlay(final Vector2f delta, final Vector2f sizeInsideRender,
+			final float trackStartX, final float trackY, final float trackWidth) {
+		this.cursorOverlay.clear();
+
 		final float trackRadius = this.propertyTrackHeight * 0.5f;
 
 		// Calculate the position ratio (0.0 to 1.0)
@@ -463,22 +515,14 @@ public class Slider extends Widget {
 			ratio = (this.propertyValue - this.propertyMinimum) / (this.propertyMaximum - this.propertyMinimum);
 		}
 
-		// Draw track background (unfilled portion)
-		this.vectorialDraw.setPaintFillColor(this.propertyTrackColor);
-		this.vectorialDraw.addRectangle(this.overPositionStart, this.overPositionStop, new Insets(0),
-				new BorderRadius(trackRadius));
-
 		// Draw filled portion of track
 		if (ratio > 0.0f) {
 			final float filledWidth = trackWidth * ratio;
 			final Vector2f fillStop = new Vector2f(trackStartX + filledWidth, trackY + this.propertyTrackHeight);
-			this.vectorialDraw.setPaintFillColor(this.propertyFillColor);
-			this.vectorialDraw.addRectangle(this.overPositionStart, fillStop, new Insets(0),
+			this.cursorOverlay.setPaintFillColor(this.propertyFillColor);
+			this.cursorOverlay.addRectangle(this.overPositionStart, fillStop, new Insets(0),
 					new BorderRadius(trackRadius, 0, 0, trackRadius));
 		}
-
-		// Draw markers
-		drawMarkers(trackStartX, trackY, trackWidth);
 
 		// Draw cursor
 		final float cursorX = trackStartX + trackWidth * ratio - this.propertyCursorWidth * 0.5f;
@@ -487,18 +531,18 @@ public class Slider extends Widget {
 		final Vector2f cursorStop = cursorStart.add(this.propertyCursorWidth, this.propertyCursorHeight);
 		final float cursorRadius = this.propertyCursorHeight * 0.5f;
 
-		// Cursor border (white shadow effect)
-		this.vectorialDraw.setPaintFillColor(this.propertyCursorBorderColor);
-		this.vectorialDraw.addRectangle(cursorStart, cursorStop, new Insets(0), new BorderRadius(cursorRadius));
+		// Cursor border
+		this.cursorOverlay.setPaintFillColor(this.propertyCursorBorderColor);
+		this.cursorOverlay.addRectangle(cursorStart, cursorStop, new Insets(0), new BorderRadius(cursorRadius));
 
 		final float borderWidth = this.propertyCursorHeight * 0.15f;
 		final Vector2f innerStart = cursorStart.add(borderWidth, borderWidth);
 		final Vector2f innerStop = cursorStop.less(borderWidth, borderWidth);
-		this.vectorialDraw.setPaintFillColor(this.propertyCursorColor);
-		this.vectorialDraw.addRectangle(innerStart, innerStop, new Insets(0),
+		this.cursorOverlay.setPaintFillColor(this.propertyCursorColor);
+		this.cursorOverlay.addRectangle(innerStart, innerStop, new Insets(0),
 				new BorderRadius(cursorRadius - borderWidth));
 
-		this.vectorialDraw.flush();
+		this.cursorOverlay.flush();
 	}
 
 	// ========================================================================
@@ -657,6 +701,7 @@ public class Slider extends Widget {
 				this.markers.add(value);
 			}
 		}
+		invalidateTrackCache();
 		markToRedraw();
 		return this;
 	}
