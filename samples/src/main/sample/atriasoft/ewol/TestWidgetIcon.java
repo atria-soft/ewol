@@ -137,4 +137,14 @@ public class TestWidgetIcon implements TestWidgetInterface {
 	public String getTitle() {
 		return "Icon Widget";
 	}
+
+	@Override
+	public String getDescription() {
+		return "SVG icon rendering";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
 }

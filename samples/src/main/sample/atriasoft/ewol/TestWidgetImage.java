@@ -36,6 +36,16 @@ public class TestWidgetImage implements TestWidgetInterface {
 		return "Simple Image";
 	}
 
+	@Override
+	public String getDescription() {
+		return "Bitmap image display";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
+
 	public static void eventButtonChangeImage(final TestWidgetImage self, final Boolean value) {
 		if (value) {
 			self.testWidget.setPropertySource(new Uri("DATA", "mireC.png"));

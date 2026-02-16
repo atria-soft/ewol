@@ -14,4 +14,14 @@ public class TestWidgetButton implements TestWidgetInterface {
 	public String getTitle() {
 		return "Simple CheckBox";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Clickable button with label and icon";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
 }

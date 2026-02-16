@@ -1,8 +1,12 @@
 package sample.atriasoft.ewol;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.atriasoft.esignal.Connection;
+import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
@@ -14,8 +18,11 @@ import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ScrollView;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
+import org.atriasoft.ewol.widget.Spacer;
 import org.atriasoft.ewol.widget.SplitPane;
 import org.atriasoft.ewol.widget.Windows;
+import org.atriasoft.ewol.widget.menu.MenuBar;
+import org.atriasoft.ewol.widget.menu.MenuPopup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,105 +30,26 @@ public class BasicWindows extends Windows {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicWindows.class);
 	private static final int MAX_LOG_LINES = 100;
 
-	private int index = -1;
+	// Category display order
+	private static final List<String> CATEGORY_ORDER = List.of("Basic", "Layout", "Data", "Dialog", "Overlay");
+
 	private final List<TestWidgetInterface> testedElement = new ArrayList<>();
 	private Container container = null;
-	private Label title = null;
 	private ModelWidget currentModelWidget = null;
 
 	// Log panel components
 	private Sizer logContent;
 	private ScrollView logScrollView;
 	private final List<String> logLines = new ArrayList<>();
-	
-	public static void staticRequestNext(final BasicWindows self) {
-		self.requestNext();
-	}
-	
-	public static void staticRequestPrevious(final BasicWindows self) {
-		self.requestPrevious();
-	}
-	
-	public void requestNext() {
-		LOGGER.info("Request Next");
-		this.index++;
-		if (this.index >= this.testedElement.size()) {
-			this.index = 0;
-		}
-		updateDisplay();
-	}
-	
-	public void requestPrevious() {
-		LOGGER.info("Request Previous");
-		this.index--;
-		if (this.index < 0) {
-			this.index = this.testedElement.size() - 1;
-		}
-		updateDisplay();
-	}
-	
-	public void updateDisplay() {
-		final var test = this.testedElement.get(this.index);
-		final var titlegenerated = "<b>[" + (this.index + 1) + "/" + this.testedElement.size() + "] " + test.getTitle()
-				+ "</b>";
-		this.title.setPropertyValue(titlegenerated);
-		setPropertyTitle(titlegenerated);
-		// Clear log on test change
-		clearLog();
-		// Create new ModelWidget and set log callback
-		this.currentModelWidget = new ModelWidget(test, this::addLogEntry);
-		this.container.setSubWidget(this.currentModelWidget);
-	}
-	
+
+	// Grouped tests by category
+	private final Map<String, List<TestWidgetInterface>> categorizedTests = new LinkedHashMap<>();
+
+	// Keep signal connections alive (esignal uses weak references)
+	private final List<Connection> connections = new ArrayList<>();
+
 	public BasicWindows() {
-
-		final var sizerMain = new Sizer(DisplayMode.VERTICAL);
-		sizerMain.setPropertyExpand(Vector2b.TRUE);
-		sizerMain.setPropertyFill(Vector2b.TRUE);
-		setSubWidget(sizerMain);
-
-		// Navigation menu at top
-		final var menu = new Sizer(DisplayMode.HORIZONTAL);
-		menu.setPropertyExpand(Vector2b.TRUE_FALSE);
-		menu.setPropertyExpandIfFree(Vector2b.TRUE_FALSE);
-		menu.setPropertyFill(Vector2b.TRUE);
-		menu.setPropertyLockExpand(Vector2b.TRUE);
-		menu.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 3), Distance.CENTIMETER));
-		sizerMain.subWidgetAdd(menu);
-
-		final var next = Button.createLabelButton("&lt;&lt; Previous");
-		next.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 2), Distance.CENTIMETER));
-		menu.subWidgetAdd(next);
-		next.signalClick.connectAuto(this, BasicWindows::staticRequestNext);
-
-		this.title = new Label("unknown");
-		this.title.setPropertyFill(Vector2b.FALSE);
-		this.title.setPropertyExpand(Vector2b.TRUE);
-		menu.subWidgetAdd(this.title);
-
-		final var previous = Button.createLabelButton("Next &gt;&gt;");
-		previous.setPropertyMaxSize(new Dimension2f(new Vector2f(9999, 2), Distance.CENTIMETER));
-		menu.subWidgetAdd(previous);
-		previous.signalClick.connectAuto(this, BasicWindows::staticRequestPrevious);
-
-		// SplitPane to separate test widget area from log panel
-		final var splitPane = SplitPane.vertical().splitPosition(0.25f) // 75% for test widget, 25% for log
-				.minSizes(100.0f, 50.0f);
-		splitPane.setPropertyExpand(Vector2b.TRUE);
-		splitPane.setPropertyFill(Vector2b.TRUE);
-		sizerMain.subWidgetAdd(splitPane);
-
-		// Test widget container (first part of split pane)
-		this.container = new Container();
-		this.container.setPropertyExpand(Vector2b.TRUE);
-		this.container.setPropertyFill(Vector2b.TRUE);
-		this.container.setPropertyExpandIfFree(Vector2b.TRUE);
-		splitPane.second(this.container);
-
-		// Log panel (second part of split pane)
-		final var logPanel = createLogPanel();
-		splitPane.first(logPanel);
-
+		// Register all test widgets
 		this.testedElement.add(new TestWidgetIcon());
 		this.testedElement.add(new TestWidgetSelect());
 		this.testedElement.add(new TestWidgetSlider());
@@ -142,34 +70,234 @@ public class BasicWindows extends Windows {
 		this.testedElement.add(new TestWidgetPopover());
 		this.testedElement.add(new TestWidgetMenuBar());
 		this.testedElement.add(new TestWidgetContextMenu());
-		requestNext();
+
+		// Group by category (preserve order)
+		for (final String category : CATEGORY_ORDER) {
+			this.categorizedTests.put(category, new ArrayList<>());
+		}
+		for (final TestWidgetInterface test : this.testedElement) {
+			final String category = test.getCategory();
+			this.categorizedTests.computeIfAbsent(category, k -> new ArrayList<>()).add(test);
+		}
+
+		// Build UI
+		final Sizer sizerMain = new Sizer(DisplayMode.VERTICAL);
+		sizerMain.setPropertyExpand(Vector2b.TRUE);
+		sizerMain.setPropertyFill(Vector2b.TRUE);
+		setSubWidget(sizerMain);
+
+		// MenuBar
+		sizerMain.subWidgetAdd(buildMenuBar());
+
+		// Main content container
+		this.container = new Container();
+		this.container.setPropertyExpand(Vector2b.TRUE);
+		this.container.setPropertyFill(Vector2b.TRUE);
+		this.container.setPropertyExpandIfFree(Vector2b.TRUE);
+		sizerMain.subWidgetAdd(this.container);
+
+		// Show landing page
+		showLandingPage();
 	}
+
+	// ========================================================================
+	// MenuBar
+	// ========================================================================
+
+	private MenuBar buildMenuBar() {
+		final MenuBar menuBar = MenuBar.create();
+
+		// File menu with Quit
+		menuBar.menu("File", () -> MenuPopup.create()
+				.item("Home", "home", () -> showLandingPage())
+				.separator()
+				.item("Quit", "close", "alt+F4", () -> System.exit(0)));
+
+		// One menu per category
+		for (final Map.Entry<String, List<TestWidgetInterface>> entry : this.categorizedTests.entrySet()) {
+			final String category = entry.getKey();
+			final List<TestWidgetInterface> tests = entry.getValue();
+			if (tests.isEmpty()) {
+				continue;
+			}
+			menuBar.menu(category, () -> {
+				final MenuPopup popup = MenuPopup.create();
+				for (final TestWidgetInterface test : tests) {
+					final TestWidgetInterface capturedTest = test;
+					popup.item(test.getTitle(), () -> showTest(capturedTest));
+				}
+				return popup;
+			});
+		}
+
+		return menuBar;
+	}
+
+	// ========================================================================
+	// Landing Page
+	// ========================================================================
+
+	public void showLandingPage() {
+		setPropertyTitle("ewol Widget Gallery");
+		clearLog();
+		this.connections.clear();
+
+		final Sizer landingContent = new Sizer(DisplayMode.VERTICAL);
+		landingContent.setPropertyExpand(Vector2b.TRUE);
+		landingContent.setPropertyFill(Vector2b.TRUE);
+
+		// Title
+		final Label titleLabel = new Label("<b>ewol Widget Gallery</b>");
+		titleLabel.setPropertyFontSize(20);
+		titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+		titleLabel.setPropertyFill(Vector2b.FALSE);
+		titleLabel.setPropertyGravity(Gravity.CENTER);
+		landingContent.subWidgetAdd(titleLabel);
+
+		// Spacer after title
+		final Spacer titleSpacer = new Spacer();
+		titleSpacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, 16), Distance.PIXEL));
+		titleSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+		landingContent.subWidgetAdd(titleSpacer);
+
+		// For each category, add a section
+		for (final Map.Entry<String, List<TestWidgetInterface>> entry : this.categorizedTests.entrySet()) {
+			final String category = entry.getKey();
+			final List<TestWidgetInterface> tests = entry.getValue();
+			if (tests.isEmpty()) {
+				continue;
+			}
+
+			// Category title
+			final Label categoryLabel = new Label("<b>" + category + "</b>");
+			categoryLabel.setPropertyFontSize(16);
+			categoryLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+			categoryLabel.setPropertyFill(Vector2b.FALSE);
+			categoryLabel.setPropertyGravity(Gravity.LEFT);
+			landingContent.subWidgetAdd(categoryLabel);
+
+			// Separator line
+			final Spacer separator = new Spacer();
+			separator.setPropertyMinSize(new Dimension2f(new Vector2f(0, 1), Distance.PIXEL));
+			separator.setPropertyExpand(Vector2b.TRUE_FALSE);
+			separator.setPropertyFill(Vector2b.TRUE);
+			separator.setPropertyColor(new Color(0xC0, 0xC0, 0xC0, 0xFF));
+			landingContent.subWidgetAdd(separator);
+
+			// Spacer after separator
+			final Spacer sepSpacer = new Spacer();
+			sepSpacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, 4), Distance.PIXEL));
+			sepSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+			landingContent.subWidgetAdd(sepSpacer);
+
+			// One row per test widget: button + description
+			for (final TestWidgetInterface test : tests) {
+				final TestWidgetInterface capturedTest = test;
+
+				final Sizer row = new Sizer(DisplayMode.HORIZONTAL);
+				row.setPropertyExpand(Vector2b.TRUE_FALSE);
+				row.setPropertyFill(Vector2b.TRUE);
+				row.setPropertyGravity(Gravity.LEFT);
+				landingContent.subWidgetAdd(row);
+
+				final Button btn = Button.createLabelButton(test.getTitle());
+				btn.setPropertyExpand(Vector2b.FALSE);
+				btn.setPropertyMinSize(new Dimension2f(new Vector2f(150, 0), Distance.PIXEL));
+				this.connections.add(btn.signalClick.connect(() -> showTest(capturedTest)));
+				row.subWidgetAdd(btn);
+
+				final String description = test.getDescription();
+				if (!description.isEmpty()) {
+					final Label descLabel = new Label("<font color=\"#808080\">" + description + "</font>");
+					descLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+					descLabel.setPropertyFill(Vector2b.FALSE);
+					descLabel.setPropertyGravity(Gravity.LEFT);
+					row.subWidgetAdd(descLabel);
+				}
+			}
+
+			// Spacer between categories
+			final Spacer catSpacer = new Spacer();
+			catSpacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, 16), Distance.PIXEL));
+			catSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+			landingContent.subWidgetAdd(catSpacer);
+		}
+
+		// Wrap in ScrollView (vertical only)
+		final ScrollView scrollView = ScrollView.create()
+				.content(landingContent)
+				.showVertical(true)
+				.showHorizontal(false);
+		scrollView.setPropertyExpand(Vector2b.TRUE);
+		scrollView.setPropertyFill(Vector2b.TRUE);
+
+		this.container.setSubWidget(scrollView);
+	}
+
+	// ========================================================================
+	// Test Widget Display
+	// ========================================================================
+
+	public void showTest(final TestWidgetInterface test) {
+		LOGGER.info("Show test: {}", test.getTitle());
+		setPropertyTitle(test.getTitle());
+		clearLog();
+		this.connections.clear();
+
+		// SplitPane: test widget (top) + log panel (bottom)
+		final SplitPane splitPane = SplitPane.vertical()
+				.splitPosition(0.25f)
+				.minSizes(100.0f, 50.0f);
+		splitPane.setPropertyExpand(Vector2b.TRUE);
+		splitPane.setPropertyFill(Vector2b.TRUE);
+
+		// Test widget area
+		final Container testContainer = new Container();
+		testContainer.setPropertyExpand(Vector2b.TRUE);
+		testContainer.setPropertyFill(Vector2b.TRUE);
+		testContainer.setPropertyExpandIfFree(Vector2b.TRUE);
+		splitPane.second(testContainer);
+
+		// Log panel
+		final Sizer logPanel = createLogPanel();
+		splitPane.first(logPanel);
+
+		// Create ModelWidget
+		this.currentModelWidget = new ModelWidget(test, this::addLogEntry);
+		testContainer.setSubWidget(this.currentModelWidget);
+
+		this.container.setSubWidget(splitPane);
+	}
+
+	// ========================================================================
+	// Log Panel
+	// ========================================================================
 
 	/**
 	 * Creates the log panel for the split pane.
 	 * @return the log panel widget
 	 */
 	private Sizer createLogPanel() {
-		final var logPanel = new Sizer(DisplayMode.VERTICAL);
+		final Sizer logPanel = new Sizer(DisplayMode.VERTICAL);
 		logPanel.setPropertyExpand(Vector2b.TRUE);
 		logPanel.setPropertyFill(Vector2b.TRUE);
 
 		// Header with title and clear button
-		final var header = new Sizer(DisplayMode.HORIZONTAL);
+		final Sizer header = new Sizer(DisplayMode.HORIZONTAL);
 		header.setPropertyExpand(Vector2b.TRUE_FALSE);
 		header.setPropertyFill(Vector2b.TRUE);
 		logPanel.subWidgetAdd(header);
 
-		final var titleLabel = new Label("<b>Signal Events Log:</b>");
+		final Label titleLabel = new Label("<b>Signal Events Log:</b>");
 		titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
 		titleLabel.setPropertyFill(Vector2b.TRUE);
 		titleLabel.setPropertyGravity(Gravity.LEFT);
 		header.subWidgetAdd(titleLabel);
 
-		final var clearButton = Button.createLabelButton("Clear");
+		final Button clearButton = Button.createLabelButton("Clear");
 		clearButton.setPropertyExpand(Vector2b.FALSE);
 		header.subWidgetAdd(clearButton);
-		clearButton.signalClick.connectAuto(this, BasicWindows::staticClearLog);
+		this.connections.add(clearButton.signalClick.connect(this::clearLog));
 
 		// Log content area
 		this.logContent = new Sizer(DisplayMode.VERTICAL);
@@ -177,16 +305,15 @@ public class BasicWindows extends Windows {
 		this.logContent.setPropertyFill(Vector2b.TRUE);
 		this.logContent.setPropertyGravity(Gravity.TOP_LEFT);
 
-		this.logScrollView = ScrollView.create().content(this.logContent).showVertical(true).showHorizontal(false);
+		this.logScrollView = ScrollView.create()
+				.content(this.logContent)
+				.showVertical(true)
+				.showHorizontal(false);
 		this.logScrollView.setPropertyExpand(Vector2b.TRUE);
 		this.logScrollView.setPropertyFill(Vector2b.TRUE);
 		logPanel.subWidgetAdd(this.logScrollView);
 
 		return logPanel;
-	}
-
-	public static void staticClearLog(final BasicWindows self) {
-		self.clearLog();
 	}
 
 	/**
@@ -203,33 +330,27 @@ public class BasicWindows extends Windows {
 	 * Adds a log entry to the log panel.
 	 */
 	public void addLogEntry(final String message) {
-		// Check if log panel is initialized
 		if (this.logContent == null || this.logScrollView == null) {
 			return;
 		}
 
-		// Add to list
 		this.logLines.add(message);
 
-		// Limit the number of lines
 		while (this.logLines.size() > MAX_LOG_LINES) {
 			this.logLines.remove(0);
 		}
 
-		// Add label widget
-		final var logLabel = new Label(message);
+		final Label logLabel = new Label(message);
 		logLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
 		logLabel.setPropertyFill(Vector2b.TRUE);
 		logLabel.setPropertyGravity(Gravity.LEFT);
 		this.logContent.subWidgetAdd(logLabel);
 
-		// Remove oldest widget if exceeding limit
-		final var widgets = this.logContent.getSubWidgets();
+		final List<?> widgets = this.logContent.getSubWidgets();
 		if (widgets != null && widgets.size() > MAX_LOG_LINES) {
-			this.logContent.subWidgetRemove(widgets.get(0));
+			this.logContent.subWidgetRemove(this.logContent.getSubWidgets().get(0));
 		}
 
-		// Scroll to bottom to show newest entry
 		this.logScrollView.scrollToBottom();
 	}
 }

@@ -236,6 +236,16 @@ public class TestWidgetToast implements TestWidgetInterface {
 	}
 
 	@Override
+	public String getDescription() {
+		return "Temporary notification messages";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Overlay";
+	}
+
+	@Override
 	public boolean isMetaWidget() {
 		return true;
 	}

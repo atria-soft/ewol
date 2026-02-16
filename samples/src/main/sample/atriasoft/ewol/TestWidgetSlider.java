@@ -21,4 +21,14 @@ public class TestWidgetSlider implements TestWidgetInterface {
 	public String getTitle() {
 		return "Slider";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Numeric value slider control";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Data";
+	}
 }

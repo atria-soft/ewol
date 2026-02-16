@@ -19,4 +19,14 @@ public class TestWidgetCheckBox implements TestWidgetInterface {
 	public String getTitle() {
 		return "Simple CheckBox";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Boolean checkbox with label";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Basic";
+	}
 }

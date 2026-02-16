@@ -82,6 +82,16 @@ public class TestWidgetMenuBar implements TestWidgetInterface {
 	}
 
 	@Override
+	public String getDescription() {
+		return "Horizontal menu bar with dropdowns";
+	}
+
+	@Override
+	public String getCategory() {
+		return "Overlay";
+	}
+
+	@Override
 	public boolean isMetaWidget() {
 		return true;
 	}
