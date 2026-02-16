@@ -76,6 +76,7 @@ public class FileChooser extends PopUp {
 	private String propertyLabelTitle = "FileChooser";
 	private String propertyLabelValidate = "Validate";
 	private String propertyLabelCancel = "Cancel";
+	private String propertyFilterExtension = null;
 
 	// ========================================================================
 	// Internal widgets
@@ -405,8 +406,13 @@ public class FileChooser extends PopUp {
 			LOGGER.warn("Validate with empty file name");
 			return;
 		}
-		LOGGER.debug("Generate file opening: '{}'", self.propertyFile);
-		self.signalValidate.emit(self.propertyFile);
+		String fileName = self.propertyFile;
+		if (self.propertyFilterExtension != null && !fileName.endsWith(self.propertyFilterExtension)) {
+			fileName = fileName + self.propertyFilterExtension;
+		}
+		final String fullPath = self.propertyPath + (self.propertyPath.endsWith("/") ? "" : "/") + fileName;
+		LOGGER.debug("Generate file opening: '{}'", fullPath);
+		self.signalValidate.emit(fullPath);
 		self.autoDestroy();
 	}
 
@@ -474,6 +480,19 @@ public class FileChooser extends PopUp {
 		updateCurrentFolder();
 	}
 
+	public String getPropertyFilterExtension() {
+		return this.propertyFilterExtension;
+	}
+
+	public void setPropertyFilterExtension(final String extension) {
+		this.propertyFilterExtension = extension;
+		if (extension != null && !extension.isEmpty()) {
+			this.listFiles.setPropertyFilter(".*\\" + extension);
+		} else {
+			this.listFiles.setPropertyFilter("^.*$");
+		}
+	}
+
 	@Override
 	public void onGetFocus() {
 		this.entryFolder.keepFocus();
@@ -516,6 +535,11 @@ public class FileChooser extends PopUp {
 
 	public FileChooser file(final String file) {
 		setPropertyFile(file);
+		return this;
+	}
+
+	public FileChooser filterExtension(final String extension) {
+		setPropertyFilterExtension(extension);
 		return this;
 	}
 

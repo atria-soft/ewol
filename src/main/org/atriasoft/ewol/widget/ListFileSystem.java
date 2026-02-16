@@ -199,6 +199,11 @@ public class ListFileSystem extends WidgetList {
 					fileList.add(new File(path.toString()));
 				}
 				if (!Files.isDirectory(path) && showFiles) {
+					final String fileName = path.getFileName().toString();
+					if (this.propertyFilter != null && !this.propertyFilter.isEmpty()
+							&& !fileName.matches(this.propertyFilter)) {
+						continue;
+					}
 					LOGGER.trace("Add File      '{}'", path);
 					fileList.add(new File(path.toString()));
 				}
@@ -403,6 +408,16 @@ public class ListFileSystem extends WidgetList {
 	 */
 	public ListFileSystem showFolders(final boolean show) {
 		setPropertyShowFolder(show);
+		return this;
+	}
+
+	/**
+	 * Fluent method to set file name filter (regex).
+	 * @param filter regex pattern to match file names (e.g., ".*\\.txt")
+	 * @return this list for chaining
+	 */
+	public ListFileSystem filter(final String filter) {
+		setPropertyFilter(filter);
 		return this;
 	}
 
