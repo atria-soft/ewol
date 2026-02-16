@@ -64,14 +64,19 @@ EwolObject                    -- Base object with signals, naming, parent tracki
       Sizer                   -- Linear layout (HORIZONTAL or VERTICAL)
     Windows                   -- Top-level window (has subWidget + popUp stack + NotificationManager)
     Label                     -- Text display
-    Slider                    -- Value slider with range
+    Slider                    -- Value slider with range (cached track + dynamic cursor)
+    ColorGradient             -- HSL color gradient for color selection
     ImageDisplay              -- Image display widget
     Icon                      -- SVG icon display with color customization
     SplitPane                 -- Resizable split panel (two children)
     CheckBox                  -- Checkbox (Tick + Label composite)
     ProgressBar               -- Progress indicator (0.0 to 1.0)
     Spacer                    -- Empty space widget
-    Tick                      -- Toggle indicator (used internally by CheckBox)
+    Tick                      -- Toggle indicator (cached SVG, used internally by CheckBox)
+  meta/
+    ColorPickerPopup          -- Color picker dialog (extends PopUp, pure Java)
+    FileChooser               -- File browser dialog (extends PopUp, pure Java)
+    SelectPopup               -- Selection popup
 ```
 
 ### Key Packages
@@ -80,7 +85,7 @@ EwolObject                    -- Base object with signals, naming, parent tracki
 |---------|-------------|
 | `org.atriasoft.ewol` | Main entry point (`Ewol`), `Gravity`, `Padding`, `DrawProperty` |
 | `org.atriasoft.ewol.widget` | All widgets |
-| `org.atriasoft.ewol.widget.meta` | Composite widgets (`FileChooser`, `SelectPopup`, `ColorPickerPopup`) |
+| `org.atriasoft.ewol.widget.meta` | Composite widgets (`FileChooser`, `SelectPopup`, `ColorPickerPopup`) — all pure Java, no XML |
 | `org.atriasoft.ewol.widget.menu` | Menu system (`MenuPopup`, `MenuItem`, `MenuBar`, `MenuSeparator`, `ShortcutBadge`) |
 | `org.atriasoft.ewol.widget.notification` | Toast notification system (`NotificationManager`, `Toast`, `ToastType`, `ToastConfig`) |
 | `org.atriasoft.ewol.context` | `EwolApplication`, `EwolContext`, `InputManager` |
@@ -271,6 +276,57 @@ s.setPropertyStep(1f);
 s.setPropertyValue(50f);
 s.signalValue.connect(v -> ...);   // Signal<Float>
 ```
+
+### ColorGradient
+
+HSL color gradient for visual color selection. Horizontal axis = Hue (0-360), Vertical axis = Lightness (white top, black bottom). Rendering is split into a cached gradient background (regenerated only on resize) and a lightweight cursor overlay.
+
+```java
+// Factory
+ColorGradient.create()
+ColorGradient.create(Color.CORAL)
+
+// Setter API
+gradient.setFromColor(color);     // position cursor from RGB color
+gradient.setHue(0.5f);            // 0.0-1.0
+gradient.setLightness(0.5f);      // 0.0-1.0
+gradient.setAlpha(200);           // 0-255
+Color c = gradient.getCurrentColor();
+
+// Signals
+gradient.signalColorChanged   // Signal<Color> — emitted during drag and click
+gradient.signalDragEnd        // SignalEmpty — emitted when drag ends (mouse up/leave)
+gradient.isDragging()         // true while user is dragging
+```
+
+### ColorPickerPopup
+
+Full color picker dialog (extends `PopUp`). Built entirely in pure Java — no XML layout.
+
+```java
+// Factory
+ColorPickerPopup.create()
+ColorPickerPopup.create(Color.CORAL)
+
+// Fluent API
+ColorPickerPopup.create(Color.CORAL)
+    .title("Pick a color")
+    .selectLabel("OK")
+    .cancelLabel("Cancel")
+    .onColorChanged(color -> ...)     // live color updates during interaction
+    .onValidate(color -> ...)         // user confirmed selection
+    .onCancel(() -> ...)              // user cancelled
+
+// Show as popup
+windows.popUpWidgetPush(picker);
+
+// Signals
+picker.signalColorChanged   // Signal<Color>
+picker.signalValidate       // Signal<Color>
+picker.signalCancel          // SignalEmpty
+```
+
+**Internal structure:** ColorGradient (HSL) + 4 Sliders (RGBA 0-255) + hex Entry + preview Spacers (current/original) + Select/Cancel buttons.
 
 ### Select (Dropdown / ComboBox)
 
@@ -807,6 +863,10 @@ Problems encountered during development — read these to avoid repeating the sa
 
 - **Layer order in `Windows.systemDraw()`** (bottom to top): Main widget → Popup stack → Popover layer → Toast notifications. New overlay layers must be drawn in the correct order.
 
+- **Split static and dynamic rendering.** For widgets with expensive backgrounds (gradients, track shapes), split into a cached background `CompositingGC` (regenerated only on resize) and a lightweight cursor/fill overlay (regenerated every frame). See `ColorGradient` (gradient + cursor) and `Slider` (track + cursor/fill) for the pattern.
+
+- **Cache resource data.** `Uri.getAllDataString()` has no internal cache — it reads from classpath every call. Cache the result in a field (see `Tick.cachedSvgData`).
+
 ### Container
 
 - **`Container(Widget)` constructor does NOT call `setParent()`.** Use `setSubWidget()` to properly set the parent. The constructor just stores the reference without registering the parent relationship.
@@ -820,9 +880,8 @@ Problems encountered during development — read these to avoid repeating the sa
 | `esignal` | Signal/slot event system (weak pointer based) |
 | `aknot` | Annotation system for properties (@AknotAttribute, @AknotSignal, etc.) |
 | `esvg` | SVG rendering |
-| `egami` / `io-gami` | Image handling |
+| `egami` | Image handling (ToolImage wraps javax.imageio) |
 | `ejson` | JSON parsing (configs, color files) |
-| `exml` | XML parsing (UI definitions) |
 
 ## File Structure
 
