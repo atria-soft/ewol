@@ -7,18 +7,27 @@ package org.atriasoft.ewol.widget.meta;
 
 import java.io.File;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
-import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Dimension2f;
+import org.atriasoft.etk.DimensionBorderRadius;
+import org.atriasoft.etk.DimensionInsets;
+import org.atriasoft.etk.Distance;
+import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.ewol.widget.Box;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.CheckBox;
-import org.atriasoft.ewol.widget.Composer;
 import org.atriasoft.ewol.widget.Entry;
-import org.atriasoft.ewol.widget.ImageDisplay;
+import org.atriasoft.ewol.widget.Icon;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ListFileSystem;
+import org.atriasoft.ewol.widget.PopUp;
+import org.atriasoft.ewol.widget.Sizer;
+import org.atriasoft.ewol.widget.Sizer.DisplayMode;
+import org.atriasoft.ewol.widget.Spacer;
+import org.atriasoft.ewol.widget.SplitPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,60 +36,331 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Example usage:</p>
  * <pre>{@code
- * // Create the file chooser
- * FileChooser fileChooser = FileChooser.create();
+ * FileChooser fileChooser = FileChooser.create()
+ *     .title("Open file...")
+ *     .validateLabel("Open")
+ *     .path("/home/user");
  *
- * // Configure it
- * fileChooser.setPropertyLabelTitle("Open file...");
- * fileChooser.setPropertyLabelValidate("Open");
- * fileChooser.setPropertyPath("/home/user");
- *
- * // Register callbacks
  * fileChooser.signalValidate.connectAuto(this, MyClass::onFileSelected);
  * fileChooser.signalCancel.connectAuto(this, MyClass::onFileCanceled);
  *
- * // Show as popup
  * Windows windows = getWindows();
  * if (windows != null) {
  *     windows.popUpWidgetPush(fileChooser);
  * }
  * }</pre>
- *
- * <p>Callback example:</p>
- * <pre>{@code
- * public static void onFileSelected(MyClass self, String filePath) {
- *     System.out.println("Selected file: " + filePath);
- * }
- *
- * public static void onFileCanceled(MyClass self) {
- *     System.out.println("File selection canceled");
- * }
- * }</pre>
  */
-public class FileChooser extends Composer {
+public class FileChooser extends PopUp {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileChooser.class);
-	
+
+	private static final Color COLOR_OVERLAY = new Color(0x00, 0x00, 0x00, 0xA0);
+	private static final Color COLOR_CONTENT = new Color(0x35, 0x35, 0x35, 0xFF);
+	private static final Color COLOR_HEADER_FOOTER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
+	private static final Color COLOR_BORDER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
+	private static final Color COLOR_ICON_FILL = new Color(0xFF, 0xFF, 0xFF, 0xFF);
+	private static final Color COLOR_ICON_FILL_DARK = new Color(0x00, 0x00, 0x00, 0xFF);
+
+	// ========================================================================
+	// Signals
+	// ========================================================================
+
+	public final SignalEmpty signalCancel = new SignalEmpty();
+	public final Signal<String> signalValidate = new Signal<>();
+
+	// ========================================================================
+	// Properties
+	// ========================================================================
+
+	private String propertyPath = System.getProperty("user.home");
+	private String propertyFile = "";
+	private String propertyLabelTitle = "FileChooser";
+	private String propertyLabelValidate = "Validate";
+	private String propertyLabelCancel = "Cancel";
+
+	// ========================================================================
+	// Internal widgets
+	// ========================================================================
+
+	private final Label titleLabel;
+	private final Entry entryFolder;
+	private final Entry entryFile;
+	private final Icon iconHome;
+	private final ListFileSystem listFolder;
+	private final ListFileSystem listFiles;
+	private final CheckBox showHiddenCheckBox;
+	private final Button validateButton;
+	private final Button cancelButton;
+	private final Label validateLabelWidget;
+	private final Label cancelLabelWidget;
+
+	// ========================================================================
+	// Constructor
+	// ========================================================================
+
+	public FileChooser() {
+		// PopUp background
+		setPropertyColor(COLOR_OVERLAY);
+		setPropertyExpand(Vector2b.TRUE);
+		setPropertyFill(Vector2b.TRUE);
+
+		// Create all internal widgets
+		this.titleLabel = new Label(this.propertyLabelTitle);
+		this.titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.titleLabel.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		this.entryFolder = Entry.create();
+		this.entryFolder.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.entryFolder.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		this.entryFile = Entry.create();
+		this.entryFile.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.entryFile.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		this.iconHome = Icon.create("home");
+		this.iconHome.setPropertyIconSize(new Dimension2f(new Vector2f(32, 32), Distance.PIXEL));
+		this.iconHome.setPropertyFillColor(COLOR_ICON_FILL);
+		this.iconHome.setPropertyExpand(Vector2b.FALSE);
+
+		this.listFolder = ListFileSystem.create()
+				.showFiles(false)
+				.showFolders(true)
+				.showHidden(false);
+		this.listFolder.setPropertyExpand(Vector2b.TRUE);
+		this.listFolder.setPropertyFill(Vector2b.TRUE);
+
+		this.listFiles = ListFileSystem.create()
+				.showFiles(true)
+				.showFolders(false)
+				.showHidden(false);
+		this.listFiles.setPropertyExpand(Vector2b.TRUE);
+		this.listFiles.setPropertyFill(Vector2b.TRUE);
+
+		this.showHiddenCheckBox = CheckBox.create("Show Hidden Files");
+
+		this.validateLabelWidget = new Label(this.propertyLabelValidate);
+		this.cancelLabelWidget = new Label(this.propertyLabelCancel);
+
+		this.validateButton = new Button();
+		this.validateButton.setSubWidget(buildButtonContent("open-in-app", this.validateLabelWidget));
+
+		this.cancelButton = new Button();
+		this.cancelButton.setSubWidget(buildButtonContent("cancel", this.cancelLabelWidget));
+
+		// Connect signals
+		this.showHiddenCheckBox.signalValue.connectAuto(this, FileChooser::onCallbackHidenFileChangeChangeValue);
+		this.validateButton.signalClick.connectAuto(this, FileChooser::onCallbackListValidate);
+		this.cancelButton.signalClick.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
+		this.listFolder.signalFolderValidate.connectAuto(this, FileChooser::onCallbackListFolderSelectChange);
+		this.listFiles.signalFileSelect.connectAuto(this, FileChooser::onCallbackListFileSelectChange);
+		this.listFiles.signalFileValidate.connectAuto(this, FileChooser::onCallbackListFileValidate);
+		this.entryFile.signalModify.connectAuto(this, FileChooser::onCallbackEntryFileChangeValue);
+		this.entryFile.signalEnter.connectAuto(this, FileChooser::onCallbackEntryFileChangeValidate);
+		this.entryFolder.signalModify.connectAuto(this, FileChooser::onCallbackEntryFolderChangeValue);
+		this.iconHome.signalPressed.connectAuto(this, FileChooser::onCallbackHomePressed);
+
+		// Build the widget tree
+		setSubWidget(buildLayout());
+
+		// Initialize folder view
+		updateCurrentFolder();
+		setPropertyCanFocus(true);
+	}
+
+	// ========================================================================
+	// Layout construction
+	// ========================================================================
+
+	private Box buildLayout() {
+		// Dialog box (centered, 80%x80%)
+		final Box dialogBox = new Box();
+		dialogBox.setPropertyColor(new Color(0x00, 0x00, 0x00, 0x00));
+		dialogBox.setPropertyPadding(new DimensionInsets(0));
+		dialogBox.setPropertyMargin(new DimensionInsets(0));
+		dialogBox.setPropertyMinSize(new Dimension2f(new Vector2f(80, 80), Distance.POURCENT));
+		dialogBox.setPropertyMaxSize(new Dimension2f(new Vector2f(80, 80), Distance.POURCENT));
+		dialogBox.setPropertyExpand(Vector2b.FALSE);
+		dialogBox.setPropertyFill(Vector2b.FALSE);
+
+		final Sizer mainSizer = new Sizer(DisplayMode.VERTICAL);
+		mainSizer.setPropertyExpand(Vector2b.TRUE);
+		mainSizer.setPropertyFill(Vector2b.TRUE);
+		mainSizer.setPropertyLockExpand(Vector2b.TRUE);
+		dialogBox.setSubWidget(mainSizer);
+
+		// Title bar
+		mainSizer.subWidgetAdd(buildTitleBar());
+
+		// Content area
+		mainSizer.subWidgetAdd(buildContentArea());
+
+		// Footer
+		mainSizer.subWidgetAdd(buildFooter());
+
+		return dialogBox;
+	}
+
+	private Box buildTitleBar() {
+		final Box titleBar = new Box();
+		titleBar.setPropertyColor(COLOR_HEADER_FOOTER);
+		titleBar.setPropertyBorderRadius(new DimensionBorderRadius(8, 8, 0, 0));
+		titleBar.setPropertyPadding(new DimensionInsets(10));
+		titleBar.setPropertyExpand(Vector2b.TRUE_FALSE);
+		titleBar.setPropertyFill(Vector2b.TRUE_FALSE);
+		titleBar.setSubWidget(this.titleLabel);
+		return titleBar;
+	}
+
+	private Box buildContentArea() {
+		final Box contentBox = new Box();
+		contentBox.setPropertyColor(COLOR_CONTENT);
+		contentBox.setPropertyBorderColor(COLOR_BORDER);
+		contentBox.setPropertyBorderWidth(new DimensionInsets(0, 2, 0, 2));
+		contentBox.setPropertyPadding(new DimensionInsets(10));
+		contentBox.setPropertyExpand(Vector2b.TRUE);
+		contentBox.setPropertyFill(Vector2b.TRUE);
+
+		final Sizer contentSizer = new Sizer(DisplayMode.VERTICAL);
+		contentSizer.setPropertyExpand(Vector2b.TRUE);
+		contentSizer.setPropertyFill(Vector2b.TRUE);
+		contentBox.setSubWidget(contentSizer);
+
+		// Folder path entry row
+		contentSizer.subWidgetAdd(buildFolderRow());
+
+		// Spacer
+		contentSizer.subWidgetAdd(createVerticalSpacer(5));
+
+		// File name entry row
+		contentSizer.subWidgetAdd(buildFileRow());
+
+		// Spacer
+		contentSizer.subWidgetAdd(createVerticalSpacer(10));
+
+		// Split pane: folders | files
+		final SplitPane splitPane = SplitPane.horizontal()
+				.splitPosition(0.25f)
+				.minSizes(100.0f, 150.0f);
+		splitPane.setPropertyExpand(Vector2b.TRUE);
+		splitPane.setPropertyFill(Vector2b.TRUE);
+		splitPane.first(this.listFolder);
+		splitPane.second(this.listFiles);
+		contentSizer.subWidgetAdd(splitPane);
+
+		return contentBox;
+	}
+
+	private Sizer buildFolderRow() {
+		final Sizer row = new Sizer(DisplayMode.HORIZONTAL);
+		row.setPropertyExpand(Vector2b.TRUE_FALSE);
+		row.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		final Icon folderIcon = Icon.create("folder");
+		folderIcon.setPropertyIconSize(new Dimension2f(new Vector2f(32, 32), Distance.PIXEL));
+		folderIcon.setPropertyFillColor(COLOR_ICON_FILL);
+		folderIcon.setPropertyExpand(Vector2b.FALSE);
+		row.subWidgetAdd(folderIcon);
+
+		row.subWidgetAdd(createHorizontalSpacer(5));
+		row.subWidgetAdd(this.entryFolder);
+		row.subWidgetAdd(createHorizontalSpacer(5));
+		row.subWidgetAdd(this.iconHome);
+
+		return row;
+	}
+
+	private Sizer buildFileRow() {
+		final Sizer row = new Sizer(DisplayMode.HORIZONTAL);
+		row.setPropertyExpand(Vector2b.TRUE_FALSE);
+		row.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		final Icon fileIcon = Icon.create("file");
+		fileIcon.setPropertyIconSize(new Dimension2f(new Vector2f(32, 32), Distance.PIXEL));
+		fileIcon.setPropertyFillColor(COLOR_ICON_FILL);
+		fileIcon.setPropertyExpand(Vector2b.FALSE);
+		row.subWidgetAdd(fileIcon);
+
+		row.subWidgetAdd(createHorizontalSpacer(5));
+		row.subWidgetAdd(this.entryFile);
+
+		return row;
+	}
+
+	private Box buildFooter() {
+		final Box footerBox = new Box();
+		footerBox.setPropertyColor(COLOR_HEADER_FOOTER);
+		footerBox.setPropertyBorderRadius(new DimensionBorderRadius(0, 0, 8, 8));
+		footerBox.setPropertyPadding(new DimensionInsets(8));
+		footerBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+		footerBox.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		final Sizer footerSizer = new Sizer(DisplayMode.HORIZONTAL);
+		footerSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+		footerSizer.setPropertyFill(Vector2b.TRUE_FALSE);
+		footerBox.setSubWidget(footerSizer);
+
+		footerSizer.subWidgetAdd(this.showHiddenCheckBox);
+
+		// Expanding spacer to push buttons right
+		final Spacer expandSpacer = new Spacer();
+		expandSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+		footerSizer.subWidgetAdd(expandSpacer);
+
+		footerSizer.subWidgetAdd(this.validateButton);
+		footerSizer.subWidgetAdd(createHorizontalSpacer(10));
+		footerSizer.subWidgetAdd(this.cancelButton);
+
+		return footerBox;
+	}
+
+	private Sizer buildButtonContent(final String iconName, final Label label) {
+		final Sizer sizer = new Sizer(DisplayMode.HORIZONTAL);
+
+		final Icon icon = Icon.create(iconName);
+		icon.setPropertyFillColor(COLOR_ICON_FILL_DARK);
+		icon.setPropertyIconSize(new Dimension2f(new Vector2f(24, 24), Distance.PIXEL));
+		sizer.subWidgetAdd(icon);
+
+		sizer.subWidgetAdd(createHorizontalSpacer(5));
+		sizer.subWidgetAdd(label);
+
+		return sizer;
+	}
+
+	// ========================================================================
+	// Helper methods
+	// ========================================================================
+
+	private static Spacer createVerticalSpacer(final float height) {
+		final Spacer spacer = new Spacer();
+		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, height), Distance.PIXEL));
+		return spacer;
+	}
+
+	private static Spacer createHorizontalSpacer(final float width) {
+		final Spacer spacer = new Spacer();
+		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(width, 0), Distance.PIXEL));
+		return spacer;
+	}
+
+	// ========================================================================
+	// Static callbacks
+	// ========================================================================
+
 	static void onCallbackButtonCancelPressed(final FileChooser self) {
-		// == > Auto remove ...
 		self.signalCancel.emit();
 		self.autoDestroy();
 	}
-	
+
 	protected static void onCallbackEntryFileChangeValidate(final FileChooser self, final String value) {
 		onCallbackListFileValidate(self, value);
 	}
-	
+
 	protected static void onCallbackEntryFileChangeValue(final FileChooser self, final String value) {
 		self.propertyFile = value;
-		// Update the selected file in the list
-		if (self.getSubObjectNamed(
-				"[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
-			tmp.setPropertyFile(new File(self.propertyFile));
-		}
+		self.listFiles.setPropertyFile(new File(self.propertyFile));
 	}
-	
+
 	protected static void onCallbackEntryFolderChangeValue(final FileChooser self, final String value) {
-		// Change the folder if it exists
 		final File folder = new File(value);
 		if (folder.exists() && folder.isDirectory()) {
 			self.propertyPath = value;
@@ -88,45 +368,38 @@ public class FileChooser extends Composer {
 			self.updateCurrentFolder();
 		}
 	}
-	
+
 	protected static void onCallbackHidenFileChangeChangeValue(final FileChooser self, final Boolean value) {
-		if (self.getSubObjectNamed(
-				"[" + Long.toString(self.getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
-			tmp.setPropertyShowHidden(value);
-		}
-		if (self.getSubObjectNamed(
-				"[" + Long.toString(self.getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
-			tmp.setPropertyShowHidden(value);
-		}
+		self.listFiles.setPropertyShowHidden(value);
+		self.listFolder.setPropertyShowHidden(value);
 	}
-	
+
 	protected static void onCallbackHomePressed(final FileChooser self) {
 		final String tmpUserFolder = System.getProperty("user.home");
 		LOGGER.debug("new PATH: '{}'", tmpUserFolder);
-		
 		self.propertyPath = tmpUserFolder;
 		self.propertyFile = "";
 		self.updateCurrentFolder();
 	}
-	
+
 	protected static void onCallbackListFileSelectChange(final FileChooser self, final String value) {
 		self.setPropertyFile(value);
 	}
-	
+
 	protected static void onCallbackListFileValidate(final FileChooser self, final String value) {
 		self.setPropertyFile(value);
 		LOGGER.trace("Generate a file opening: '{}'", self.propertyFile);
 		self.signalValidate.emit(value);
 		self.autoDestroy();
 	}
-	
+
 	protected static void onCallbackListFolderSelectChange(final FileChooser self, final String value) {
 		LOGGER.debug("Path change: '{}' ==> '{}'", self.propertyPath, value);
 		self.propertyPath = value;
 		self.propertyFile = "";
 		self.updateCurrentFolder();
 	}
-	
+
 	protected static void onCallbackListValidate(final FileChooser self) {
 		if (self.propertyFile.isEmpty()) {
 			LOGGER.warn("Validate with empty file name");
@@ -136,186 +409,80 @@ public class FileChooser extends Composer {
 		self.signalValidate.emit(self.propertyFile);
 		self.autoDestroy();
 	}
-	
-	public SignalEmpty signalCancel = new SignalEmpty(); //!< abort the display of the pop-up or press cancel button
 
-	public Signal<String> signalValidate = new Signal<>(); //!< select file(s)
-	// properties
-	public String propertyPath = System.getProperty("user.home"); //!< Current path to explore
-	
-	public String propertyFile = ""; //!< Selected file
-	public String propertyLabelTitle = "_T{FileChooser}"; //!< Label of the pop-up (can use translation)
-	
-	public String propertyLabelValidate = "_T{Validate}"; //!< Label of validate button of the pop-up (can use translation)
-	public String propertyLabelCancel = "_T{Cancel}"; //!< Label of cancel/close button of the pop-up (can use translation)
-	
-	public FileChooser() {
-		// Load file with replacing the "{ID}" with the local ID of the widget ==> obtain unique ID
-		loadFromFile(new Uri("DATA", "ewol-gui-file-chooser.xml", "ewol"));
-		// Basic replacement of labels
-		onChangePropertyLabelTitle();
-		onChangePropertyLabelValidate();
-		onChangePropertyLabelCancel();
-		
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:show-hiden-file") instanceof final CheckBox tmp) {
-			tmp.signalValue.connectAuto(this, FileChooser::onCallbackHidenFileChangeChangeValue);
-		}
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:button-validate") instanceof final Button tmp) {
-			tmp.signalClick.connectAuto(this, FileChooser::onCallbackListValidate);
-		}
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:button-cancel") instanceof final Button tmp) {
-			tmp.signalClick.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
-		}
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
-			tmp.signalFolderValidate.connectAuto(this, FileChooser::onCallbackListFolderSelectChange);
-		}
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
-			tmp.signalFileSelect.connectAuto(this, FileChooser::onCallbackListFileSelectChange);
-			tmp.signalFileValidate.connectAuto(this, FileChooser::onCallbackListFileValidate);
-		}
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final Entry tmp) {
-			tmp.signalModify.connectAuto(this, FileChooser::onCallbackEntryFileChangeValue);
-			tmp.signalEnter.connectAuto(this, FileChooser::onCallbackEntryFileChangeValidate);
-		}
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
-			tmp.signalModify.connectAuto(this, FileChooser::onCallbackEntryFolderChangeValue);
-		}
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:img-home") instanceof final ImageDisplay tmp) {
-			tmp.signalPressed.connectAuto(this, FileChooser::onCallbackHomePressed);
-		}
-		// set the default Folder properties:
-		updateCurrentFolder();
-		setPropertyCanFocus(true);
-	}
-	
+	// ========================================================================
+	// Property accessors
+	// ========================================================================
+
 	public String getPropertyFile() {
 		return this.propertyFile;
 	}
-	
+
 	public String getPropertyLabelCancel() {
 		return this.propertyLabelCancel;
 	}
-	
-	// callback functions:
+
 	public String getPropertyLabelTitle() {
 		return this.propertyLabelTitle;
 	}
-	
+
 	public String getPropertyLabelValidate() {
 		return this.propertyLabelValidate;
 	}
-	
+
 	public String getPropertyPath() {
 		return this.propertyPath;
 	}
-	
-	protected void onChangePropertyFile() {
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:entry-file") instanceof final Entry tmp) {
-			tmp.setPropertyValue(this.propertyFile);
-		}
-	}
-	
-	protected void onChangePropertyLabelCancel() {
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:cancel-label") instanceof final Label tmp) {
-			tmp.setPropertyValue(this.propertyLabelCancel);
-		}
-	}
-	
-	protected void onChangePropertyLabelTitle() {
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:title-label") instanceof final Label tmp) {
-			tmp.setPropertyValue(this.propertyLabelTitle);
-		}
-	}
-	
-	protected void onChangePropertyLabelValidate() {
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:validate-label") instanceof final Label tmp) {
-			tmp.setPropertyValue(this.propertyLabelValidate);
-		}
-	}
-	
-	protected void onChangePropertyPath() {
-		this.propertyPath = this.propertyPath + "/";
-		updateCurrentFolder();
-	}
-	
-	@Override
-	public void onGetFocus() {
-		// transfert focus on a specific widget...
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
-			tmp.keepFocus();
-		}
-	}
-	
-	@JsonProperty("file")
-	@JacksonXmlProperty(isAttribute = true, localName = "file")
+
 	public void setPropertyFile(final String propertyFile) {
 		if (this.propertyFile.equals(propertyFile)) {
 			return;
 		}
 		this.propertyFile = propertyFile;
-		onChangePropertyFile();
+		this.entryFile.setPropertyValue(this.propertyFile);
 	}
-	
-	@JsonProperty("label-cancel")
-	@JacksonXmlProperty(isAttribute = true, localName = "label-cancel")
+
 	public void setPropertyLabelCancel(final String propertyLabelCancel) {
 		if (this.propertyLabelCancel.equals(propertyLabelCancel)) {
 			return;
 		}
 		this.propertyLabelCancel = propertyLabelCancel;
-		onChangePropertyLabelCancel();
+		this.cancelLabelWidget.setPropertyValue(this.propertyLabelCancel);
 	}
-	
-	@JsonProperty("title")
-	@JacksonXmlProperty(isAttribute = true, localName = "title")
+
 	public void setPropertyLabelTitle(final String propertyLabelTitle) {
 		if (this.propertyLabelTitle.equals(propertyLabelTitle)) {
 			return;
 		}
 		this.propertyLabelTitle = propertyLabelTitle;
-		onChangePropertyLabelTitle();
+		this.titleLabel.setPropertyValue(this.propertyLabelTitle);
 	}
-	
-	@JsonProperty("label-validate")
-	@JacksonXmlProperty(isAttribute = true, localName = "label-validate")
+
 	public void setPropertyLabelValidate(final String propertyLabelValidate) {
 		if (this.propertyLabelValidate.equals(propertyLabelValidate)) {
 			return;
 		}
 		this.propertyLabelValidate = propertyLabelValidate;
-		onChangePropertyLabelValidate();
+		this.validateLabelWidget.setPropertyValue(this.propertyLabelValidate);
 	}
-	
-	@JsonProperty("path")
-	@JacksonXmlProperty(isAttribute = true, localName = "path")
+
 	public void setPropertyPath(final String propertyPath) {
 		if (this.propertyPath.equals(propertyPath)) {
 			return;
 		}
 		this.propertyPath = propertyPath;
-		onChangePropertyPath();
+		updateCurrentFolder();
 	}
-	
+
+	@Override
+	public void onGetFocus() {
+		this.entryFolder.keepFocus();
+	}
+
 	private void updateCurrentFolder() {
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:list-files") instanceof final ListFileSystem tmp) {
-			tmp.setPropertyPath(this.propertyPath);
-		}
-		if (getSubObjectNamed(
-				"[" + Long.toString(getId()) + "]file-chooser:list-folder") instanceof final ListFileSystem tmp) {
-			tmp.setPropertyPath(this.propertyPath);
-		}
-		if (getSubObjectNamed("[" + Long.toString(getId()) + "]file-chooser:entry-folder") instanceof final Entry tmp) {
-			tmp.setPropertyValue(this.propertyPath);
-		}
+		this.listFiles.setPropertyPath(this.propertyPath);
+		this.listFolder.setPropertyPath(this.propertyPath);
+		this.entryFolder.setPropertyValue(this.propertyPath);
 		markToRedraw();
 	}
 
@@ -323,68 +490,35 @@ public class FileChooser extends Composer {
 	// Factory methods and Fluent API
 	// ========================================================================
 
-	/**
-	 * Create a new FileChooser.
-	 * @return a new FileChooser instance
-	 */
 	public static FileChooser create() {
 		return new FileChooser();
 	}
 
-	/**
-	 * Fluent method to set the dialog title.
-	 * @param title the title text
-	 * @return this FileChooser for chaining
-	 */
 	public FileChooser title(final String title) {
 		setPropertyLabelTitle(title);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set the validate button label.
-	 * @param label the validate button text
-	 * @return this FileChooser for chaining
-	 */
 	public FileChooser validateLabel(final String label) {
 		setPropertyLabelValidate(label);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set the cancel button label.
-	 * @param label the cancel button text
-	 * @return this FileChooser for chaining
-	 */
 	public FileChooser cancelLabel(final String label) {
 		setPropertyLabelCancel(label);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set the initial path.
-	 * @param path the initial directory path
-	 * @return this FileChooser for chaining
-	 */
 	public FileChooser path(final String path) {
 		setPropertyPath(path);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set the initial file name.
-	 * @param file the initial file name
-	 * @return this FileChooser for chaining
-	 */
 	public FileChooser file(final String file) {
 		setPropertyFile(file);
 		return this;
 	}
 
-	/**
-	 * Get the full path of the selected file (path + file).
-	 * @return the complete file path
-	 */
 	public String getFullPath() {
 		if (this.propertyFile.isEmpty()) {
 			return this.propertyPath;
