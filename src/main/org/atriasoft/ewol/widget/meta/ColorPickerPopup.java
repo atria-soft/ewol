@@ -5,18 +5,24 @@
  */
 package org.atriasoft.ewol.widget.meta;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.Dimension2f;
+import org.atriasoft.etk.DimensionBorderRadius;
+import org.atriasoft.etk.DimensionInsets;
+import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.ewol.widget.Box;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.ColorGradient;
-import org.atriasoft.ewol.widget.Composer;
 import org.atriasoft.ewol.widget.Entry;
+import org.atriasoft.ewol.widget.Icon;
 import org.atriasoft.ewol.widget.Label;
+import org.atriasoft.ewol.widget.PopUp;
+import org.atriasoft.ewol.widget.Sizer;
+import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 import org.atriasoft.ewol.widget.Slider;
 import org.atriasoft.ewol.widget.Spacer;
 import org.slf4j.Logger;
@@ -46,117 +52,355 @@ import org.slf4j.LoggerFactory;
  * }
  * }</pre>
  */
-public class ColorPickerPopup extends Composer {
+public class ColorPickerPopup extends PopUp {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ColorPickerPopup.class);
 
-	public Signal<Color> signalColorChanged = new Signal<>();
+	private static final Color COLOR_OVERLAY = new Color(0x00, 0x00, 0x00, 0xA0);
+	private static final Color COLOR_CONTENT = new Color(0x35, 0x35, 0x35, 0xFF);
+	private static final Color COLOR_HEADER_FOOTER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
+	private static final Color COLOR_BORDER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
+	private static final Color COLOR_PREVIEW_BORDER = new Color(0x60, 0x60, 0x60, 0xFF);
+	private static final Color COLOR_ICON_SELECT = new Color(0x80, 0xFF, 0x80, 0xFF);
+	private static final Color COLOR_ICON_CANCEL = new Color(0xFF, 0x80, 0x80, 0xFF);
 
-	public Signal<Color> signalValidate = new Signal<>();
+	// ========================================================================
+	// Signals
+	// ========================================================================
 
-	public SignalEmpty signalCancel = new SignalEmpty();
+	public final Signal<Color> signalColorChanged = new Signal<>();
+	public final Signal<Color> signalValidate = new Signal<>();
+	public final SignalEmpty signalCancel = new SignalEmpty();
 
+	// ========================================================================
 	// Properties
-	protected Color propertyValue = Color.WHITE;
-	protected Color originalColor = Color.WHITE;
-	protected String propertyLabelTitle = "_T{ColorPicker}";
-	protected String propertyLabelSelect = "_T{Select}";
-	protected String propertyLabelCancel = "_T{Cancel}";
+	// ========================================================================
+
+	private Color propertyValue = Color.WHITE;
+	private Color originalColor = Color.WHITE;
+	private String propertyLabelTitle = "ColorPicker";
+	private String propertyLabelSelect = "Select";
+	private String propertyLabelCancel = "Cancel";
 
 	// Current RGBA values (0-255)
-	protected int red = 255;
-	protected int green = 255;
-	protected int blue = 255;
-	protected int alpha = 255;
+	private int red = 255;
+	private int green = 255;
+	private int blue = 255;
+	private int alpha = 255;
 
 	// Flag to prevent recursive updates
-	protected boolean updating = false;
+	private boolean updating = false;
 
-	/**
-	 * Default constructor.
-	 */
+	// ========================================================================
+	// Internal widgets
+	// ========================================================================
+
+	private final Label titleLabel;
+	private final ColorGradient gradient;
+	private final Slider sliderRed;
+	private final Slider sliderGreen;
+	private final Slider sliderBlue;
+	private final Slider sliderAlpha;
+	private final Entry entryHex;
+	private final Spacer previewCurrent;
+	private final Spacer previewOriginal;
+	private final Button selectButton;
+	private final Button cancelButton;
+	private final Label selectLabelWidget;
+	private final Label cancelLabelWidget;
+
+	// ========================================================================
+	// Constructor
+	// ========================================================================
+
 	public ColorPickerPopup() {
-		loadFromFile(new Uri("DATA", "ewol-gui-color-picker.xml", "ewol"));
-
-		// Update labels
-		onChangePropertyLabelTitle();
-		onChangePropertyLabelSelect();
-		onChangePropertyLabelCancel();
-
-		// Connect signals
-		connectSignals();
-
-		setPropertyCanFocus(true);
-		// Ensure the composer expands to fill the popup area
+		setPropertyColor(COLOR_OVERLAY);
 		setPropertyExpand(Vector2b.TRUE);
 		setPropertyFill(Vector2b.TRUE);
+
+		// Create all internal widgets
+		this.titleLabel = new Label(this.propertyLabelTitle);
+		this.titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.titleLabel.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		this.gradient = ColorGradient.create();
+		this.gradient.setPropertyMinSize(new Dimension2f(new Vector2f(200, 200), Distance.PIXEL));
+		this.gradient.setPropertyExpand(Vector2b.FALSE);
+		this.gradient.setPropertyFill(Vector2b.FALSE);
+
+		this.sliderRed = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderRed.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.sliderRed.setPropertyFill(Vector2b.TRUE_FALSE);
+		this.sliderRed.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
+
+		this.sliderGreen = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderGreen.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.sliderGreen.setPropertyFill(Vector2b.TRUE_FALSE);
+		this.sliderGreen.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
+
+		this.sliderBlue = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderBlue.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.sliderBlue.setPropertyFill(Vector2b.TRUE_FALSE);
+		this.sliderBlue.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
+
+		this.sliderAlpha = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderAlpha.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.sliderAlpha.setPropertyFill(Vector2b.TRUE_FALSE);
+		this.sliderAlpha.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
+
+		this.entryHex = Entry.create();
+		this.entryHex.maxCharacters(9);
+		this.entryHex.setPropertyExpand(Vector2b.TRUE_FALSE);
+		this.entryHex.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		this.previewCurrent = new Spacer();
+		this.previewCurrent.setPropertyExpand(Vector2b.TRUE);
+		this.previewCurrent.setPropertyFill(Vector2b.TRUE);
+
+		this.previewOriginal = new Spacer();
+		this.previewOriginal.setPropertyExpand(Vector2b.TRUE);
+		this.previewOriginal.setPropertyFill(Vector2b.TRUE);
+
+		this.selectLabelWidget = new Label(this.propertyLabelSelect);
+		this.cancelLabelWidget = new Label(this.propertyLabelCancel);
+
+		this.selectButton = new Button();
+		this.selectButton.setSubWidget(buildButtonContent("check", COLOR_ICON_SELECT, this.selectLabelWidget));
+
+		this.cancelButton = new Button();
+		this.cancelButton.setSubWidget(buildButtonContent("cancel", COLOR_ICON_CANCEL, this.cancelLabelWidget));
+
+		// Connect signals
+		this.gradient.signalColorChanged.connectAuto(this, ColorPickerPopup::onGradientColorChanged);
+		this.sliderRed.signalValue.connectAuto(this, ColorPickerPopup::onRedChanged);
+		this.sliderGreen.signalValue.connectAuto(this, ColorPickerPopup::onGreenChanged);
+		this.sliderBlue.signalValue.connectAuto(this, ColorPickerPopup::onBlueChanged);
+		this.sliderAlpha.signalValue.connectAuto(this, ColorPickerPopup::onAlphaChanged);
+		this.entryHex.signalModify.connectAuto(this, ColorPickerPopup::onHexChanged);
+		this.selectButton.signalClick.connectAuto(this, ColorPickerPopup::onSelectClicked);
+		this.cancelButton.signalClick.connectAuto(this, ColorPickerPopup::onCancelClicked);
+
+		// Build the widget tree
+		setSubWidget(buildLayout());
+
+		setPropertyCanFocus(true);
 	}
 
-	/**
-	 * Constructor with initial color.
-	 */
 	public ColorPickerPopup(final Color initialColor) {
 		this();
 		setPropertyValue(initialColor);
 		this.originalColor = initialColor;
-		updatePreviewOriginal();
-	}
-
-	/**
-	 * Connect signal handlers to widgets.
-	 */
-	protected void connectSignals() {
-		final String prefix = "[" + getId() + "]color-picker:";
-
-		// Gradient
-		if (getSubObjectNamed(prefix + "gradient") instanceof final ColorGradient gradient) {
-			gradient.signalColorChanged.connectAuto(this, ColorPickerPopup::onGradientColorChanged);
-		}
-
-		// Sliders
-		if (getSubObjectNamed(prefix + "slider-red") instanceof final Slider slider) {
-			slider.signalValue.connectAuto(this, ColorPickerPopup::onRedChanged);
-		}
-		if (getSubObjectNamed(prefix + "slider-green") instanceof final Slider slider) {
-			slider.signalValue.connectAuto(this, ColorPickerPopup::onGreenChanged);
-		}
-		if (getSubObjectNamed(prefix + "slider-blue") instanceof final Slider slider) {
-			slider.signalValue.connectAuto(this, ColorPickerPopup::onBlueChanged);
-		}
-		if (getSubObjectNamed(prefix + "slider-alpha") instanceof final Slider slider) {
-			slider.signalValue.connectAuto(this, ColorPickerPopup::onAlphaChanged);
-		}
-
-		// Hex entry
-		if (getSubObjectNamed(prefix + "entry-hex") instanceof final Entry entry) {
-			entry.signalModify.connectAuto(this, ColorPickerPopup::onHexChanged);
-		}
-
-		// Buttons
-		if (getSubObjectNamed(prefix + "button-cancel") instanceof final Button button) {
-			button.signalClick.connectAuto(this, ColorPickerPopup::onCancelClicked);
-		}
-		if (getSubObjectNamed(prefix + "button-select") instanceof final Button button) {
-			button.signalClick.connectAuto(this, ColorPickerPopup::onSelectClicked);
-		}
+		this.previewOriginal.setPropertyColor(this.originalColor);
 	}
 
 	// ========================================================================
-	// Signal callbacks (static to avoid GC issues with WeakReferences)
+	// Layout construction
 	// ========================================================================
 
-	protected static void onGradientColorChanged(final ColorPickerPopup self, final Color color) {
+	private Box buildLayout() {
+		final Box dialogBox = new Box();
+		dialogBox.setPropertyColor(new Color(0x00, 0x00, 0x00, 0x00));
+		dialogBox.setPropertyPadding(new DimensionInsets(0));
+		dialogBox.setPropertyMargin(new DimensionInsets(0));
+		dialogBox.setPropertyMinSize(new Dimension2f(new Vector2f(500, 320), Distance.PIXEL));
+		dialogBox.setPropertyMaxSize(new Dimension2f(new Vector2f(500, 400), Distance.PIXEL));
+		dialogBox.setPropertyExpand(Vector2b.FALSE);
+		dialogBox.setPropertyFill(Vector2b.FALSE);
+
+		final Sizer mainSizer = new Sizer(DisplayMode.VERTICAL);
+		mainSizer.setPropertyExpand(Vector2b.TRUE);
+		mainSizer.setPropertyFill(Vector2b.TRUE);
+		mainSizer.setPropertyLockExpand(Vector2b.TRUE);
+		dialogBox.setSubWidget(mainSizer);
+
+		mainSizer.subWidgetAdd(buildTitleBar());
+		mainSizer.subWidgetAdd(buildContentArea());
+		mainSizer.subWidgetAdd(buildFooter());
+
+		return dialogBox;
+	}
+
+	private Box buildTitleBar() {
+		final Box titleBar = new Box();
+		titleBar.setPropertyColor(COLOR_HEADER_FOOTER);
+		titleBar.setPropertyBorderRadius(new DimensionBorderRadius(8, 8, 0, 0));
+		titleBar.setPropertyPadding(new DimensionInsets(10));
+		titleBar.setPropertyExpand(Vector2b.TRUE_FALSE);
+		titleBar.setPropertyFill(Vector2b.TRUE_FALSE);
+		titleBar.setSubWidget(this.titleLabel);
+		return titleBar;
+	}
+
+	private Box buildContentArea() {
+		final Box contentBox = new Box();
+		contentBox.setPropertyColor(COLOR_CONTENT);
+		contentBox.setPropertyBorderColor(COLOR_BORDER);
+		contentBox.setPropertyBorderWidth(new DimensionInsets(0, 2, 0, 2));
+		contentBox.setPropertyPadding(new DimensionInsets(10));
+		contentBox.setPropertyExpand(Vector2b.TRUE);
+		contentBox.setPropertyFill(Vector2b.TRUE);
+
+		final Sizer contentSizer = new Sizer(DisplayMode.HORIZONTAL);
+		contentSizer.setPropertyExpand(Vector2b.TRUE);
+		contentSizer.setPropertyFill(Vector2b.TRUE);
+		contentBox.setSubWidget(contentSizer);
+
+		// Left: Color gradient
+		contentSizer.subWidgetAdd(this.gradient);
+
+		// Spacer
+		contentSizer.subWidgetAdd(createHorizontalSpacer(10));
+
+		// Right: Controls
+		contentSizer.subWidgetAdd(buildControlsPanel());
+
+		return contentBox;
+	}
+
+	private Sizer buildControlsPanel() {
+		final Sizer controls = new Sizer(DisplayMode.VERTICAL);
+		controls.setPropertyExpand(Vector2b.TRUE_FALSE);
+		controls.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		// Red slider row
+		controls.subWidgetAdd(buildSliderRow("R:", this.sliderRed));
+
+		// Green slider row
+		controls.subWidgetAdd(buildSliderRow("G:", this.sliderGreen));
+
+		// Blue slider row
+		controls.subWidgetAdd(buildSliderRow("B:", this.sliderBlue));
+
+		// Alpha slider row
+		controls.subWidgetAdd(buildSliderRow("A:", this.sliderAlpha));
+
+		// Spacer
+		controls.subWidgetAdd(createVerticalSpacer(8));
+
+		// Hex entry row
+		final Sizer hexRow = new Sizer(DisplayMode.HORIZONTAL);
+		hexRow.setPropertyExpand(Vector2b.TRUE_FALSE);
+		hexRow.setPropertyFill(Vector2b.TRUE_FALSE);
+		final Label hexLabel = new Label("Hex:");
+		hexLabel.setPropertyMinSize(new Dimension2f(new Vector2f(35, 25), Distance.PIXEL));
+		hexLabel.setPropertyExpand(Vector2b.FALSE);
+		hexRow.subWidgetAdd(hexLabel);
+		hexRow.subWidgetAdd(this.entryHex);
+		controls.subWidgetAdd(hexRow);
+
+		// Spacer
+		controls.subWidgetAdd(createVerticalSpacer(8));
+
+		// Preview boxes
+		final Sizer previewRow = new Sizer(DisplayMode.HORIZONTAL);
+		previewRow.setPropertyExpand(Vector2b.TRUE_FALSE);
+		previewRow.setPropertyFill(Vector2b.TRUE_FALSE);
+		previewRow.setPropertyMinSize(new Dimension2f(new Vector2f(0, 50), Distance.PIXEL));
+
+		final Box previewCurrentBox = new Box();
+		previewCurrentBox.setPropertyExpand(Vector2b.TRUE);
+		previewCurrentBox.setPropertyFill(Vector2b.TRUE);
+		previewCurrentBox.setPropertyBorderWidth(new DimensionInsets(1));
+		previewCurrentBox.setPropertyBorderColor(COLOR_PREVIEW_BORDER);
+		previewCurrentBox.setSubWidget(this.previewCurrent);
+		previewRow.subWidgetAdd(previewCurrentBox);
+
+		final Box previewOriginalBox = new Box();
+		previewOriginalBox.setPropertyExpand(Vector2b.TRUE);
+		previewOriginalBox.setPropertyFill(Vector2b.TRUE);
+		previewOriginalBox.setPropertyBorderWidth(new DimensionInsets(1));
+		previewOriginalBox.setPropertyBorderColor(COLOR_PREVIEW_BORDER);
+		previewOriginalBox.setSubWidget(this.previewOriginal);
+		previewRow.subWidgetAdd(previewOriginalBox);
+
+		controls.subWidgetAdd(previewRow);
+
+		// Expanding spacer to push content up
+		final Spacer expandSpacer = new Spacer();
+		expandSpacer.setPropertyExpand(Vector2b.TRUE);
+		controls.subWidgetAdd(expandSpacer);
+
+		return controls;
+	}
+
+	private Sizer buildSliderRow(final String labelText, final Slider slider) {
+		final Sizer row = new Sizer(DisplayMode.HORIZONTAL);
+		row.setPropertyExpand(Vector2b.TRUE_FALSE);
+		row.setPropertyFill(Vector2b.TRUE_FALSE);
+		final Label label = new Label(labelText);
+		label.setPropertyMinSize(new Dimension2f(new Vector2f(25, 25), Distance.PIXEL));
+		label.setPropertyExpand(Vector2b.FALSE);
+		row.subWidgetAdd(label);
+		row.subWidgetAdd(slider);
+		return row;
+	}
+
+	private Box buildFooter() {
+		final Box footerBox = new Box();
+		footerBox.setPropertyColor(COLOR_HEADER_FOOTER);
+		footerBox.setPropertyBorderRadius(new DimensionBorderRadius(0, 0, 8, 8));
+		footerBox.setPropertyPadding(new DimensionInsets(10));
+		footerBox.setPropertyExpand(Vector2b.TRUE_FALSE);
+		footerBox.setPropertyFill(Vector2b.TRUE_FALSE);
+
+		final Sizer footerSizer = new Sizer(DisplayMode.HORIZONTAL);
+		footerSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
+		footerSizer.setPropertyFill(Vector2b.TRUE_FALSE);
+		footerBox.setSubWidget(footerSizer);
+
+		footerSizer.subWidgetAdd(this.selectButton);
+		footerSizer.subWidgetAdd(createHorizontalSpacer(10));
+		footerSizer.subWidgetAdd(this.cancelButton);
+
+		return footerBox;
+	}
+
+	private Sizer buildButtonContent(final String iconName, final Color iconColor, final Label label) {
+		final Sizer sizer = new Sizer(DisplayMode.HORIZONTAL);
+
+		final Icon icon = Icon.create(iconName);
+		icon.setPropertyFillColor(iconColor);
+		icon.setPropertyIconSize(new Dimension2f(new Vector2f(20, 20), Distance.PIXEL));
+		sizer.subWidgetAdd(icon);
+
+		sizer.subWidgetAdd(createHorizontalSpacer(5));
+		sizer.subWidgetAdd(label);
+
+		return sizer;
+	}
+
+	// ========================================================================
+	// Helper methods
+	// ========================================================================
+
+	private static Spacer createVerticalSpacer(final float height) {
+		final Spacer spacer = new Spacer();
+		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, height), Distance.PIXEL));
+		return spacer;
+	}
+
+	private static Spacer createHorizontalSpacer(final float width) {
+		final Spacer spacer = new Spacer();
+		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(width, 0), Distance.PIXEL));
+		return spacer;
+	}
+
+	// ========================================================================
+	// Static callbacks
+	// ========================================================================
+
+	static void onGradientColorChanged(final ColorPickerPopup self, final Color color) {
 		if (self.updating) {
 			return;
 		}
 		self.red = (int) (color.r() * 255);
 		self.green = (int) (color.g() * 255);
 		self.blue = (int) (color.b() * 255);
-		// Keep alpha unchanged
+		// Full update (sliders + hex + preview) on every color change
 		self.updateUIFromRGB();
 		self.emitColorChanged();
 	}
 
-	protected static void onRedChanged(final ColorPickerPopup self, final Float value) {
+	static void onRedChanged(final ColorPickerPopup self, final Float value) {
 		if (self.updating) {
 			return;
 		}
@@ -165,7 +409,7 @@ public class ColorPickerPopup extends Composer {
 		self.emitColorChanged();
 	}
 
-	protected static void onGreenChanged(final ColorPickerPopup self, final Float value) {
+	static void onGreenChanged(final ColorPickerPopup self, final Float value) {
 		if (self.updating) {
 			return;
 		}
@@ -174,7 +418,7 @@ public class ColorPickerPopup extends Composer {
 		self.emitColorChanged();
 	}
 
-	protected static void onBlueChanged(final ColorPickerPopup self, final Float value) {
+	static void onBlueChanged(final ColorPickerPopup self, final Float value) {
 		if (self.updating) {
 			return;
 		}
@@ -183,7 +427,7 @@ public class ColorPickerPopup extends Composer {
 		self.emitColorChanged();
 	}
 
-	protected static void onAlphaChanged(final ColorPickerPopup self, final Float value) {
+	static void onAlphaChanged(final ColorPickerPopup self, final Float value) {
 		if (self.updating) {
 			return;
 		}
@@ -192,7 +436,7 @@ public class ColorPickerPopup extends Composer {
 		self.emitColorChanged();
 	}
 
-	protected static void onHexChanged(final ColorPickerPopup self, final String value) {
+	static void onHexChanged(final ColorPickerPopup self, final String value) {
 		if (self.updating || value == null || value.isEmpty()) {
 			return;
 		}
@@ -208,12 +452,12 @@ public class ColorPickerPopup extends Composer {
 		}
 	}
 
-	protected static void onCancelClicked(final ColorPickerPopup self) {
+	static void onCancelClicked(final ColorPickerPopup self) {
 		self.signalCancel.emit();
 		self.autoDestroy();
 	}
 
-	protected static void onSelectClicked(final ColorPickerPopup self) {
+	static void onSelectClicked(final ColorPickerPopup self) {
 		self.signalValidate.emit(self.getCurrentColor());
 		self.autoDestroy();
 	}
@@ -222,85 +466,36 @@ public class ColorPickerPopup extends Composer {
 	// UI Update methods
 	// ========================================================================
 
-	protected void updateUIFromRGB() {
+	private void updateUIFromRGB() {
 		this.updating = true;
 		try {
-			final String prefix = "[" + getId() + "]color-picker:";
-
-			// Update sliders
-			if (getSubObjectNamed(prefix + "slider-red") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.red);
-			}
-			if (getSubObjectNamed(prefix + "slider-green") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.green);
-			}
-			if (getSubObjectNamed(prefix + "slider-blue") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.blue);
-			}
-			if (getSubObjectNamed(prefix + "slider-alpha") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.alpha);
-			}
-
-			// Update hex entry
-			if (getSubObjectNamed(prefix + "entry-hex") instanceof final Entry entry) {
-				entry.setPropertyValue(colorToHex(getCurrentColor()));
-			}
-
-			// Update preview
-			if (getSubObjectNamed(prefix + "preview-current") instanceof final Spacer spacer) {
-				spacer.setPropertyColor(getCurrentColor());
-			}
-
-			// Update gradient position
-			if (getSubObjectNamed(prefix + "gradient") instanceof final ColorGradient gradient) {
-				gradient.setFromColor(getCurrentColor());
-			}
+			this.sliderRed.setPropertyValue((float) this.red);
+			this.sliderGreen.setPropertyValue((float) this.green);
+			this.sliderBlue.setPropertyValue((float) this.blue);
+			this.sliderAlpha.setPropertyValue((float) this.alpha);
+			this.entryHex.setPropertyValue(colorToHex(getCurrentColor()));
+			this.previewCurrent.setPropertyColor(getCurrentColor());
+			this.gradient.setFromColor(getCurrentColor());
 		} finally {
 			this.updating = false;
 		}
 	}
 
-	protected void updateUIFromRGBKeepGradient() {
+	private void updateUIFromRGBKeepGradient() {
 		this.updating = true;
 		try {
-			final String prefix = "[" + getId() + "]color-picker:";
-
-			// Update sliders
-			if (getSubObjectNamed(prefix + "slider-red") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.red);
-			}
-			if (getSubObjectNamed(prefix + "slider-green") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.green);
-			}
-			if (getSubObjectNamed(prefix + "slider-blue") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.blue);
-			}
-			if (getSubObjectNamed(prefix + "slider-alpha") instanceof final Slider slider) {
-				slider.setPropertyValue((float) this.alpha);
-			}
-
-			// Update hex entry
-			if (getSubObjectNamed(prefix + "entry-hex") instanceof final Entry entry) {
-				entry.setPropertyValue(colorToHex(getCurrentColor()));
-			}
-
-			// Update preview
-			if (getSubObjectNamed(prefix + "preview-current") instanceof final Spacer spacer) {
-				spacer.setPropertyColor(getCurrentColor());
-			}
+			this.sliderRed.setPropertyValue((float) this.red);
+			this.sliderGreen.setPropertyValue((float) this.green);
+			this.sliderBlue.setPropertyValue((float) this.blue);
+			this.sliderAlpha.setPropertyValue((float) this.alpha);
+			this.entryHex.setPropertyValue(colorToHex(getCurrentColor()));
+			this.previewCurrent.setPropertyColor(getCurrentColor());
 		} finally {
 			this.updating = false;
 		}
 	}
 
-	protected void updatePreviewOriginal() {
-		final String prefix = "[" + getId() + "]color-picker:";
-		if (getSubObjectNamed(prefix + "preview-original") instanceof final Spacer spacer) {
-			spacer.setPropertyColor(this.originalColor);
-		}
-	}
-
-	protected void emitColorChanged() {
+	private void emitColorChanged() {
 		this.propertyValue = getCurrentColor();
 		this.signalColorChanged.emit(this.propertyValue);
 	}
@@ -313,14 +508,14 @@ public class ColorPickerPopup extends Composer {
 		return new Color(this.red / 255.0f, this.green / 255.0f, this.blue / 255.0f, this.alpha / 255.0f);
 	}
 
-	protected void setColorFromRGB(final Color color) {
+	private void setColorFromRGB(final Color color) {
 		this.red = (int) (color.r() * 255);
 		this.green = (int) (color.g() * 255);
 		this.blue = (int) (color.b() * 255);
 		this.alpha = (int) (color.a() * 255);
 	}
 
-	protected String colorToHex(final Color color) {
+	private String colorToHex(final Color color) {
 		return String.format("#%02X%02X%02X%02X",
 				(int) (color.r() * 255),
 				(int) (color.g() * 255),
@@ -328,7 +523,7 @@ public class ColorPickerPopup extends Composer {
 				(int) (color.a() * 255));
 	}
 
-	protected static Color hexToColor(final String hex) {
+	static Color hexToColor(final String hex) {
 		if (hex == null || !hex.startsWith("#")) {
 			return null;
 		}
@@ -349,8 +544,6 @@ public class ColorPickerPopup extends Composer {
 	// Property accessors
 	// ========================================================================
 
-	@JsonProperty("value")
-	@JacksonXmlProperty(isAttribute = true, localName = "value")
 	public Color getPropertyValue() {
 		return this.propertyValue;
 	}
@@ -364,8 +557,6 @@ public class ColorPickerPopup extends Composer {
 		updateUIFromRGB();
 	}
 
-	@JsonProperty("title")
-	@JacksonXmlProperty(isAttribute = true, localName = "title")
 	public String getPropertyLabelTitle() {
 		return this.propertyLabelTitle;
 	}
@@ -375,18 +566,9 @@ public class ColorPickerPopup extends Composer {
 			return;
 		}
 		this.propertyLabelTitle = title;
-		onChangePropertyLabelTitle();
+		this.titleLabel.setPropertyValue(this.propertyLabelTitle);
 	}
 
-	protected void onChangePropertyLabelTitle() {
-		final String prefix = "[" + getId() + "]color-picker:";
-		if (getSubObjectNamed(prefix + "title-label") instanceof final Label label) {
-			label.setPropertyValue(this.propertyLabelTitle);
-		}
-	}
-
-	@JsonProperty("label-select")
-	@JacksonXmlProperty(isAttribute = true, localName = "label-select")
 	public String getPropertyLabelSelect() {
 		return this.propertyLabelSelect;
 	}
@@ -396,18 +578,9 @@ public class ColorPickerPopup extends Composer {
 			return;
 		}
 		this.propertyLabelSelect = label;
-		onChangePropertyLabelSelect();
+		this.selectLabelWidget.setPropertyValue(this.propertyLabelSelect);
 	}
 
-	protected void onChangePropertyLabelSelect() {
-		final String prefix = "[" + getId() + "]color-picker:";
-		if (getSubObjectNamed(prefix + "select-label") instanceof final Label label) {
-			label.setPropertyValue(this.propertyLabelSelect);
-		}
-	}
-
-	@JsonProperty("label-cancel")
-	@JacksonXmlProperty(isAttribute = true, localName = "label-cancel")
 	public String getPropertyLabelCancel() {
 		return this.propertyLabelCancel;
 	}
@@ -417,102 +590,51 @@ public class ColorPickerPopup extends Composer {
 			return;
 		}
 		this.propertyLabelCancel = label;
-		onChangePropertyLabelCancel();
-	}
-
-	protected void onChangePropertyLabelCancel() {
-		final String prefix = "[" + getId() + "]color-picker:";
-		if (getSubObjectNamed(prefix + "cancel-label") instanceof final Label label) {
-			label.setPropertyValue(this.propertyLabelCancel);
-		}
+		this.cancelLabelWidget.setPropertyValue(this.propertyLabelCancel);
 	}
 
 	// ========================================================================
 	// Factory methods and Fluent API
 	// ========================================================================
 
-	/**
-	 * Create a new ColorPickerPopup.
-	 * @return a new ColorPickerPopup instance
-	 */
 	public static ColorPickerPopup create() {
 		return new ColorPickerPopup();
 	}
 
-	/**
-	 * Create a new ColorPickerPopup with initial color.
-	 * @param color initial color
-	 * @return a new ColorPickerPopup instance
-	 */
 	public static ColorPickerPopup create(final Color color) {
 		return new ColorPickerPopup(color);
 	}
 
-	/**
-	 * Fluent method to set color value.
-	 * @param color the color
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup value(final Color color) {
 		setPropertyValue(color);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set title.
-	 * @param title the title
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup title(final String title) {
 		setPropertyLabelTitle(title);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set select button label.
-	 * @param label the label
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup selectLabel(final String label) {
 		setPropertyLabelSelect(label);
 		return this;
 	}
 
-	/**
-	 * Fluent method to set cancel button label.
-	 * @param label the label
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup cancelLabel(final String label) {
 		setPropertyLabelCancel(label);
 		return this;
 	}
 
-	/**
-	 * Fluent method to connect a color changed callback.
-	 * @param callback the callback to invoke when color changes
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup onColorChanged(final java.util.function.Consumer<Color> callback) {
 		this.signalColorChanged.connect(callback);
 		return this;
 	}
 
-	/**
-	 * Fluent method to connect a validate callback.
-	 * @param callback the callback to invoke when color is validated
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup onValidate(final java.util.function.Consumer<Color> callback) {
 		this.signalValidate.connect(callback);
 		return this;
 	}
 
-	/**
-	 * Fluent method to connect a cancel callback.
-	 * @param callback the callback to invoke when cancelled
-	 * @return this picker for chaining
-	 */
 	public ColorPickerPopup onCancel(final Runnable callback) {
 		this.signalCancel.connect(callback);
 		return this;
