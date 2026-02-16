@@ -106,7 +106,6 @@ public class BasicWindows extends Windows {
 
 	private MenuBar buildMenuBar() {
 		final MenuBar menuBar = MenuBar.create();
-
 		// File menu with Quit
 		menuBar.menu("File", () -> MenuPopup.create()
 				.item("Home", "home", () -> showLandingPage())

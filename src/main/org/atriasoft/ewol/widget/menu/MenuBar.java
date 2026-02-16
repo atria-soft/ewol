@@ -9,11 +9,13 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.ewol.Gravity;
+import org.atriasoft.ewol.compositing.CompositingDrawing;
+import org.atriasoft.ewol.compositing.CompositingGC;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Windows;
-import org.atriasoft.ewol.Gravity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +51,8 @@ public class MenuBar extends Sizer {
 	private static final Color BUTTON_ACTIVE_COLOR = new Color(0xBB, 0xDE, 0xFB, 0xFF);
 	private static final Color BUTTON_BORDER_COLOR = Color.NONE;
 
+	private final CompositingDrawing background = new CompositingGC();
+
 	private MenuPopup activeMenu = null;
 	private Button activeButton = null;
 
@@ -70,6 +74,7 @@ public class MenuBar extends Sizer {
 		super(DisplayMode.HORIZONTAL);
 		setPropertyExpand(Vector2b.TRUE_FALSE);
 		setPropertyFill(Vector2b.TRUE);
+		setPropertyGravity(Gravity.LEFT);
 	}
 
 	// ========================================================================
@@ -123,6 +128,31 @@ public class MenuBar extends Sizer {
 		this.entries.add(entry);
 		subWidgetAdd(btn);
 		return this;
+	}
+
+	// ========================================================================
+	// Drawing
+	// ========================================================================
+
+	@Override
+	public void onDraw() {
+		this.background.draw();
+		super.onDraw();
+	}
+
+	@Override
+	public void onRegenerateDisplay() {
+		this.background.clear();
+		// Background fill
+		this.background.setColor(BAR_BG_COLOR);
+		this.background.setPos(Vector2f.ZERO);
+		this.background.rectangleWidth(new Vector2f(this.size.x(), this.size.y()));
+		// Bottom border line
+		this.background.setColor(BAR_BORDER_COLOR);
+		this.background.setPos(new Vector2f(0, 0));
+		this.background.rectangleWidth(new Vector2f(this.size.x(), 1));
+		this.background.flush();
+		super.onRegenerateDisplay();
 	}
 
 	// ========================================================================
