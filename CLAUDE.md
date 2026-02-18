@@ -73,6 +73,13 @@ EwolObject                    -- Base object with signals, naming, parent tracki
     ProgressBar               -- Progress indicator (0.0 to 1.0)
     Spacer                    -- Empty space widget
     Tick                      -- Toggle indicator (cached SVG, used internally by CheckBox)
+    WidgetScrolled            -- Base for scrollable widgets (scroll management, scrollbars)
+      TreeView                -- Generic tree view with expand/collapse, columns, indent guides
+        TreeFileSystem        -- File system browser (lazy-loading, extends TreeView)
+    TreeNode<T>               -- Generic tree data node (parent/children/expanded/leaf)
+    TreeColumn                -- Column definition (name, width, renderer)
+    TreeCellRenderer          -- Functional interface for rendering a cell
+    TreeColumnAction<T>       -- Record for column action signals
   meta/
     ColorPickerPopup          -- Color picker dialog (extends PopUp, pure Java)
     FileChooser               -- File browser dialog (extends PopUp, pure Java)
@@ -479,6 +486,76 @@ windows.popUpWidgetPop();              // hide top popup
 ### Spacer
 
 Empty space widget for layout spacing.
+
+### TreeView
+
+Generic tree view widget with configurable columns. Extends `WidgetScrolled`. Draws everything via `CompositingGC` + `CompositingText` (no child widgets per row). Features: expand/collapse chevrons, column headers with resize, selection highlight, vertical indent guide lines with hover/click.
+
+```java
+// Fluent API
+TreeView.create()
+    .rootNode(rootNode)
+    .showRoot(false)
+    .showHeaders(true)
+    .alternateRowBackground(true)
+    .column("Name", 250, TreeView.defaultLabelRenderer())
+    .column("Info", 100, myCustomRenderer)
+    .onSelect(node -> System.out.println("Selected: " + node.getLabel()))
+    .onExpand(node -> loadChildren(node))
+    .onCollapse(node -> ...)
+    .onColumnAction(action -> ...)
+
+// TreeNode — generic data model
+TreeNode<MyData> root = new TreeNode<>(data, "Root");
+TreeNode<MyData> child = new TreeNode<>(data, "Child");
+root.addChild(child);
+child.setExpanded(true);
+
+// TreeCellRenderer — functional interface for custom column rendering
+TreeCellRenderer renderer = (gc, text, node, pos, size, selected) -> {
+    text.setPos(pos);
+    text.print(node.getLabel());
+};
+```
+
+**Signals:** `signalSelect` (node selected), `signalExpand` (node expanded), `signalCollapse` (node collapsed), `signalColumnAction` (column clicked).
+
+**Indent guide lines:** Vertical gray lines at each indent level for expanded folders with more siblings below. Turn blue on hover. Single-click scrolls to the next sibling at that depth. Double-click toggles expand/collapse of the folder at that depth.
+
+**Color theme:** `resources/ewol/theme/color/TreeView.json` — keys: `text`, `background1`, `background2`, `selected`, `chevron`, `headerBg`, `headerText`, `indentGuide`, `indentGuideHover`.
+
+**Implementation notes:**
+- Chevrons use `setPos()` + `addVertex()` (NOT `drawQuad()` which has a color bug)
+- Per-cell text clipping bounded by viewport top to prevent bleeding into fixed header
+- Column resize via drag on header borders
+
+### TreeFileSystem
+
+File system browser extending `TreeView` with lazy-loading. Uses `TreeNode<Path>` nodes. Placeholder child trick for deferred loading (directories start with a dummy child, replaced on expand).
+
+```java
+// Fluent API
+TreeFileSystem.create("/home/user")
+    .showFiles(true)
+    .showFolders(true)
+    .showHidden(false)
+    .filter("*.java")
+    .onFileSelect(path -> openFile(path))
+    .onFolderSelect(path -> ...)
+
+// Setter API
+TreeFileSystem fs = new TreeFileSystem();
+fs.setRootPath("/home/user");
+fs.setShowFiles(true);
+fs.setShowHidden(false);
+fs.setFilter("*.java");
+```
+
+**Default columns:** Name (with yellow folder icon), Size, Modified, Type, Permissions (rwxrwxrwx), Owner, Group.
+
+**Signals:** `signalFileSelect(Path)`, `signalFolderSelect(Path)`, plus all `TreeView` signals.
+
+**Properties** (discoverable via ModelWidget): `root-path`, `show-files`, `show-folders`, `show-hidden`, `filter`. All setters trigger `reload()` to rebuild the tree.
 
 ### Toast Notifications
 
@@ -897,6 +974,12 @@ ewol/
       EwolContext.java           -- Main context (extends GaleApplication)
       InputManager.java          -- Mouse/touch input routing
     widget/                      -- All widget classes
+      TreeView.java              -- Generic tree view (expand/collapse, columns, indent guides)
+      TreeFileSystem.java        -- File system browser (extends TreeView, lazy-loading)
+      TreeNode.java              -- Generic tree data node
+      TreeColumn.java            -- Column definition
+      TreeCellRenderer.java      -- Functional interface for cell rendering
+      TreeColumnAction.java      -- Record for column action signals
       meta/                      -- Composite widgets (FileChooser, SelectPopup, ColorPickerPopup)
       menu/                      -- Menu system (MenuPopup, MenuItem, MenuBar, MenuSeparator, ShortcutBadge, ShortcutFormatter)
       notification/              -- Toast notification system (NotificationManager, Toast, ToastType, ToastConfig)
