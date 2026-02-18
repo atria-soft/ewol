@@ -57,6 +57,8 @@ public class BasicWindows extends Windows {
 		this.testedElement.add(new TestWidgetFileChooser());
 		this.testedElement.add(new TestWidgetColorPicker());
 		this.testedElement.add(new TestWidgetListFileSystem());
+		this.testedElement.add(new TestWidgetTreeView());
+		this.testedElement.add(new TestWidgetTreeFileSystem());
 		this.testedElement.add(new TestWidgetScrollView());
 		this.testedElement.add(new TestWidgetSplitPane());
 		this.testedElement.add(new TestWidgetEntry());

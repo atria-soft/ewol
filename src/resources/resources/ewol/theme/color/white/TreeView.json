@@ -1,0 +1,13 @@
+{
+	"color": [
+		{ name:"text",        color:"#222F" },
+		{ name:"background1", color:"#FFFF" },
+		{ name:"background2", color:"#EEEF" },
+		{ name:"selected",    color:"#88CF" },
+		{ name:"chevron",     color:"#444F" },
+		{ name:"headerBg",    color:"#DDDF" },
+		{ name:"headerText",  color:"#111F" },
+		{ name:"indentGuide", color:"#CCC8" },
+		{ name:"indentGuideHover", color:"#48F" },
+	]
+}
