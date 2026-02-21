@@ -7,9 +7,9 @@ package org.atriasoft.ewol.resource;
 
 import java.awt.image.BufferedImage;
 
-import org.atriasoft.esvg.EsvgFont;
+import org.atriasoft.esvg.SvgFont;
 import org.atriasoft.esvg.font.Glyph;
-import org.atriasoft.esvg.render.Weight;
+import org.atriasoft.esvg.raster.GlyphRaster;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -49,11 +49,11 @@ public class ResourceFontSvg extends Resource {
 		return new ResourceFontSvg(cacheKey);
 	}
 	
-	private final EsvgFont font;
+	private final SvgFont font;
 	
 	private ResourceFontSvg(final Uri uri) {
 		super(uri);
-		this.font = EsvgFont.load(uri);
+		this.font = SvgFont.load(uri);
 		if (this.font == null) {
 			LOGGER.error(
 					"... the font file could be opened and read, but it appears ... that its font format is unsupported");
@@ -90,7 +90,7 @@ public class ResourceFontSvg extends Resource {
 			final GlyphProperty property,
 			final int posInImage,
 			final boolean forceClimp) {
-		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
+		final GlyphRaster weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		if (weight == null) {
 			return false;
 		}
@@ -130,7 +130,7 @@ public class ResourceFontSvg extends Resource {
 			final int fontSize,
 			final GlyphProperty property,
 			final int borderSize) {
-		final Weight weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
+		final GlyphRaster weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
 		for (int jjj = 0; jjj < weight.getHeight(); jjj++) {
 			for (int iii = 0; iii < weight.getWidth(); iii++) {
 				final float valueColor = weight.get(iii, weight.getHeight() - 1 - jjj);
