@@ -14,12 +14,9 @@ import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.ewol.compositing.tools.TextDecoration;
-import org.atriasoft.ewol.internal.XmlHelper;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.resource.ResourceProgram;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.atriasoft.gale.resource.ResourceVirtualArrayObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -392,113 +389,294 @@ public abstract class TextBase extends Compositing {
 	}
 
 	/**
-	 * This parse a tinyXML node (void pointer to permit to hide tiny XML in
-	 *        include).
-	 * @param element the exml element.
+	 * Parse HTML-like markup and process text/elements for display.
+	 * Uses a lightweight state-machine parser instead of DOM.
+	 * @param input The HTML content to parse (inside body tags).
 	 */
-	public void parseHtmlNode(final Element element) {
-		for (final Node it : XmlHelper.allChildNodes(element)) {
-			if (it.getNodeType() == Node.COMMENT_NODE) {
-				// nothing to do ...
-				continue;
-			}
-			if (it.getNodeType() == Node.TEXT_NODE) {
-				htmlAddData(it.getTextContent());
-				LOGGER.trace("XML add : {}", it.getTextContent());
-				continue;
-			}
-			if (!(it instanceof final Element elem)) {
-				LOGGER.error("node not suported type : {} val='{}'", it.getNodeType(), it.getTextContent());
-				continue;
-			}
-			final String lowercaseValue = elem.getTagName().toLowerCase();
-			if (lowercaseValue.contentEquals("br")) {
-				htmlFlush();
-				LOGGER.trace("XML flush  newLine");
-				forceLineReturn();
-			} else if (lowercaseValue.contentEquals("font")) {
-				LOGGER.trace("XML Font ...");
-				final TextDecoration tmpDeco = this.htmlDecoTmp;
-				if (elem.hasAttribute("color")) {
-					try {
-						final String colorValue = elem.getAttribute("color");
-						if (colorValue.length() != 0) {
-							this.htmlDecoTmp = this.htmlDecoTmp.withFG(Color.valueOf(colorValue));
-						}
-					} catch (final Exception e) {
-						LOGGER.error("Can not parse attribute 'color' in XML: {}", e.getMessage());
-						e.printStackTrace();
+	public void parseHtmlContent(final String input) {
+		int pos = 0;
+		final int len = input.length();
+		final StringBuilder textBuf = new StringBuilder();
+		while (pos < len) {
+			final char ch = input.charAt(pos);
+			if (ch == '<') {
+				// flush accumulated text
+				if (textBuf.length() > 0) {
+					htmlAddData(textBuf.toString());
+					LOGGER.trace("XML add : {}", textBuf);
+					textBuf.setLength(0);
+				}
+				// find end of tag
+				final int closeAngle = input.indexOf('>', pos);
+				if (closeAngle < 0) {
+					break; // malformed, stop
+				}
+				final String tagContent = input.substring(pos + 1, closeAngle).trim();
+				pos = closeAngle + 1;
+				if (tagContent.startsWith("!--")) {
+					// comment: skip until -->
+					final int commentEnd = input.indexOf("-->", pos);
+					if (commentEnd >= 0) {
+						pos = commentEnd + 3;
+					}
+					continue;
+				}
+				if (tagContent.startsWith("/")) {
+					// closing tag — handled by the recursive caller
+					continue;
+				}
+				// self-closing check
+				final boolean selfClosing = tagContent.endsWith("/");
+				final String tagStripped = selfClosing ? tagContent.substring(0, tagContent.length() - 1).trim() : tagContent;
+				// parse tag name and attributes
+				final String tagName;
+				final String attrPart;
+				final int spaceIdx = indexOfWhitespace(tagStripped);
+				if (spaceIdx >= 0) {
+					tagName = tagStripped.substring(0, spaceIdx).toLowerCase();
+					attrPart = tagStripped.substring(spaceIdx).trim();
+				} else {
+					tagName = tagStripped.toLowerCase();
+					attrPart = "";
+				}
+				// find inner content up to matching closing tag (unless self-closing)
+				final String innerContent;
+				if (selfClosing) {
+					innerContent = null;
+				} else {
+					final String closingTag = "</" + tagName;
+					final int closingIdx = findMatchingClose(input, pos, tagName);
+					if (closingIdx >= 0) {
+						innerContent = input.substring(pos, closingIdx);
+						// skip past </tagName>
+						final int afterClose = input.indexOf('>', closingIdx);
+						pos = (afterClose >= 0) ? afterClose + 1 : input.length();
+					} else {
+						innerContent = input.substring(pos);
+						pos = len;
 					}
 				}
-				if (elem.hasAttribute("colorBg")) {
-					try {
-						final String colorValue = elem.getAttribute("colorBg");
-						if (colorValue.length() != 0) {
-							this.htmlDecoTmp = this.htmlDecoTmp.withBG(Color.valueOf(colorValue));
+				// dispatch tag
+				switch (tagName) {
+					case "br":
+						htmlFlush();
+						LOGGER.trace("XML flush  newLine");
+						forceLineReturn();
+						break;
+					case "font":
+						LOGGER.trace("XML Font ...");
+						final TextDecoration fontDeco = this.htmlDecoTmp;
+						final String colorAttr = getAttributeValue(attrPart, "color");
+						if (colorAttr != null && !colorAttr.isEmpty()) {
+							try {
+								this.htmlDecoTmp = this.htmlDecoTmp.withFG(Color.valueOf(colorAttr));
+							} catch (final Exception e) {
+								LOGGER.error("Can not parse attribute 'color' in XML: {}", e.getMessage());
+							}
 						}
-					} catch (final Exception e) {
-						LOGGER.error("Can not parse attribute 'colorBg' in XML: {}", e.getMessage());
-						e.printStackTrace();
-					}
+						final String colorBgAttr = getAttributeValue(attrPart, "colorBg");
+						if (colorBgAttr != null && !colorBgAttr.isEmpty()) {
+							try {
+								this.htmlDecoTmp = this.htmlDecoTmp.withBG(Color.valueOf(colorBgAttr));
+							} catch (final Exception e) {
+								LOGGER.error("Can not parse attribute 'colorBg' in XML: {}", e.getMessage());
+							}
+						}
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						this.htmlDecoTmp = fontDeco;
+						break;
+					case "b":
+					case "bold":
+						LOGGER.trace("XML bold ...");
+						final TextDecoration boldDeco = this.htmlDecoTmp;
+						if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
+							this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD);
+						} else if (this.htmlDecoTmp.mode() == FontMode.ITALIC) {
+							this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD_ITALIC);
+						}
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						this.htmlDecoTmp = boldDeco;
+						break;
+					case "i":
+					case "italic":
+						LOGGER.trace("XML italic ...");
+						final TextDecoration italicDeco = this.htmlDecoTmp;
+						if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
+							this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.ITALIC);
+						} else if (this.htmlDecoTmp.mode() == FontMode.BOLD) {
+							this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD_ITALIC);
+						}
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						this.htmlDecoTmp = italicDeco;
+						break;
+					case "u":
+					case "underline":
+						LOGGER.trace("XML underline ...");
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						break;
+					case "p":
+					case "paragraph":
+						LOGGER.trace("XML paragraph ...");
+						htmlFlush();
+						this.alignment = AlignMode.LEFT;
+						forceLineReturn();
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						forceLineReturn();
+						break;
+					case "center":
+						LOGGER.trace("XML center ...");
+						htmlFlush();
+						this.alignment = AlignMode.CENTER;
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						break;
+					case "left":
+						LOGGER.trace("XML left ...");
+						htmlFlush();
+						this.alignment = AlignMode.LEFT;
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						break;
+					case "right":
+						LOGGER.trace("XML right ...");
+						htmlFlush();
+						this.alignment = AlignMode.RIGHT;
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						break;
+					case "justify":
+						LOGGER.trace("XML justify ...");
+						htmlFlush();
+						this.alignment = AlignMode.JUSTIFY;
+						if (innerContent != null) {
+							parseHtmlContent(innerContent);
+						}
+						break;
+					default:
+						LOGGER.error("unsupported HTML tag: '{}'", tagName);
+						break;
 				}
-				parseHtmlNode(elem);
-				this.htmlDecoTmp = tmpDeco;
-			} else if (lowercaseValue.contentEquals("b") || lowercaseValue.contentEquals("bold")) {
-				LOGGER.trace("XML bold ...");
-				final TextDecoration tmpDeco = this.htmlDecoTmp;
-				if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD);
-				} else if (this.htmlDecoTmp.mode() == FontMode.ITALIC) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD_ITALIC);
-				}
-				parseHtmlNode(elem);
-				this.htmlDecoTmp = tmpDeco;
-			} else if (lowercaseValue.contentEquals("i") || lowercaseValue.contentEquals("italic")) {
-				LOGGER.trace("XML italic ...");
-				final TextDecoration tmpDeco = this.htmlDecoTmp;
-				if (this.htmlDecoTmp.mode() == FontMode.REGULAR) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.ITALIC);
-				} else if (this.htmlDecoTmp.mode() == FontMode.BOLD) {
-					this.htmlDecoTmp = this.htmlDecoTmp.withMode(FontMode.BOLD_ITALIC);
-				}
-				parseHtmlNode(elem);
-				this.htmlDecoTmp = tmpDeco;
-			} else if (lowercaseValue.contentEquals("u") || lowercaseValue.contentEquals("underline")) {
-				LOGGER.trace("XML underline ...");
-				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("p") || lowercaseValue.contentEquals("paragraph")) {
-				LOGGER.trace("XML paragraph ...");
-				htmlFlush();
-				this.alignment = AlignMode.LEFT;
-				forceLineReturn();
-				parseHtmlNode(elem);
-				forceLineReturn();
-			} else if (lowercaseValue.contentEquals("center")) {
-				LOGGER.trace("XML center ...");
-				htmlFlush();
-				this.alignment = AlignMode.CENTER;
-				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("left")) {
-				LOGGER.trace("XML left ...");
-				htmlFlush();
-				this.alignment = AlignMode.LEFT;
-				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("right")) {
-				LOGGER.trace("XML right ...");
-				htmlFlush();
-				this.alignment = AlignMode.RIGHT;
-				parseHtmlNode(elem);
-			} else if (lowercaseValue.contentEquals("justify")) {
-				LOGGER.trace("XML justify ...");
-				htmlFlush();
-				this.alignment = AlignMode.JUSTIFY;
-				parseHtmlNode(elem);
 			} else {
-				LOGGER.error("node not suported type: {} val='{}'", it.getNodeType(), elem.getTagName());
+				textBuf.append(ch);
+				pos++;
 			}
-
-			//LOGGER.error("Add data elems... @pos=", this.position);
 		}
+		// flush remaining text
+		if (textBuf.length() > 0) {
+			htmlAddData(textBuf.toString());
+			LOGGER.trace("XML add : {}", textBuf);
+		}
+	}
+
+	/**
+	 * Find the index of the matching closing tag, handling nested same-name tags.
+	 */
+	private static int findMatchingClose(final String input, final int startPos, final String tagName) {
+		int depth = 1;
+		int pos = startPos;
+		final int len = input.length();
+		while (pos < len) {
+			final int nextAngle = input.indexOf('<', pos);
+			if (nextAngle < 0) {
+				return -1;
+			}
+			if (nextAngle + 1 < len && input.charAt(nextAngle + 1) == '/') {
+				// closing tag
+				final int closeEnd = input.indexOf('>', nextAngle);
+				if (closeEnd < 0) {
+					return -1;
+				}
+				final String closeName = input.substring(nextAngle + 2, closeEnd).trim().toLowerCase();
+				if (closeName.equals(tagName)) {
+					depth--;
+					if (depth == 0) {
+						return nextAngle;
+					}
+				}
+				pos = closeEnd + 1;
+			} else if (nextAngle + 1 < len && input.charAt(nextAngle + 1) == '!') {
+				// comment or other, skip
+				pos = nextAngle + 1;
+			} else {
+				// opening tag — check if same name
+				final int closeEnd = input.indexOf('>', nextAngle);
+				if (closeEnd < 0) {
+					return -1;
+				}
+				final String tagContent = input.substring(nextAngle + 1, closeEnd).trim();
+				final boolean selfClose = tagContent.endsWith("/");
+				final String stripped = selfClose ? tagContent.substring(0, tagContent.length() - 1).trim() : tagContent;
+				final int sp = indexOfWhitespace(stripped);
+				final String openName = (sp >= 0) ? stripped.substring(0, sp).toLowerCase() : stripped.toLowerCase();
+				if (openName.equals(tagName) && !selfClose) {
+					depth++;
+				}
+				pos = closeEnd + 1;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Find the first whitespace character in the string.
+	 */
+	private static int indexOfWhitespace(final String str) {
+		for (int i = 0; i < str.length(); i++) {
+			if (Character.isWhitespace(str.charAt(i))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Extract an attribute value from a raw attribute string.
+	 * Handles: attrName="value" or attrName='value'
+	 */
+	private static String getAttributeValue(final String attrPart, final String attrName) {
+		final int idx = attrPart.indexOf(attrName);
+		if (idx < 0) {
+			return null;
+		}
+		int eqIdx = attrPart.indexOf('=', idx + attrName.length());
+		if (eqIdx < 0) {
+			return null;
+		}
+		eqIdx++;
+		// skip whitespace
+		while (eqIdx < attrPart.length() && Character.isWhitespace(attrPart.charAt(eqIdx))) {
+			eqIdx++;
+		}
+		if (eqIdx >= attrPart.length()) {
+			return null;
+		}
+		final char quote = attrPart.charAt(eqIdx);
+		if (quote == '"' || quote == '\'') {
+			final int endQuote = attrPart.indexOf(quote, eqIdx + 1);
+			if (endQuote < 0) {
+				return null;
+			}
+			return attrPart.substring(eqIdx + 1, endQuote);
+		}
+		// unquoted value — read until whitespace
+		final int endIdx = indexOfWhitespace(attrPart.substring(eqIdx));
+		if (endIdx < 0) {
+			return attrPart.substring(eqIdx);
+		}
+		return attrPart.substring(eqIdx, eqIdx + endIdx);
 	}
 
 	/**
@@ -783,26 +961,29 @@ public abstract class TextBase extends Compositing {
 		// reset parameter :
 		this.htmlDecoTmp = new TextDecoration(this.defaultColorFg, this.defaultColorBg, FontMode.REGULAR);
 		try {
-			final Element doc = XmlHelper.parse(text);
-			// doc is the document element — if the input is <html>..., doc IS the html element
-			Element root = doc;
-			if (!doc.getTagName().equalsIgnoreCase("html")) {
-				final Element htmlNode = XmlHelper.getNode(doc, "html");
-				if (htmlNode == null) {
-					LOGGER.error("can not load XML: main node not find: 'html'");
-					return;
-				}
-				root = htmlNode;
-			}
-			final Element bodyNode = XmlHelper.getNode(root, "body");
-			if (bodyNode == null) {
+			// Extract body content from <html><body>...</body></html>
+			final String lower = text.toLowerCase();
+			final int bodyStart = lower.indexOf("<body");
+			if (bodyStart < 0) {
 				LOGGER.error("can not load XML: main node not find: 'body'");
 				return;
 			}
-			parseHtmlNode(bodyNode);
+			final int bodyContentStart = text.indexOf('>', bodyStart);
+			if (bodyContentStart < 0) {
+				LOGGER.error("can not load XML: malformed 'body' tag");
+				return;
+			}
+			final int bodyEnd = lower.indexOf("</body>", bodyContentStart);
+			final String bodyContent;
+			if (bodyEnd >= 0) {
+				bodyContent = text.substring(bodyContentStart + 1, bodyEnd);
+			} else {
+				bodyContent = text.substring(bodyContentStart + 1);
+			}
+			parseHtmlContent(bodyContent);
 			htmlFlush();
 		} catch (final Exception e) {
-			LOGGER.error("Error in parsing XML data in printHTML: {}", e.getMessage());
+			LOGGER.error("Error in parsing HTML data in printHTML: {}", e.getMessage());
 			e.printStackTrace();
 		}
 	}
