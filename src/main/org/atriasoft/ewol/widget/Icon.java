@@ -7,7 +7,8 @@ package org.atriasoft.ewol.widget;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -20,9 +21,7 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.compositing.CompositingSVG;
 import org.atriasoft.ewol.event.EventInput;
-import org.atriasoft.ewol.internal.XmlHelper;
 import org.atriasoft.gale.key.KeyStatus;
-import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,178 +172,47 @@ public class Icon extends Widget {
 	// ========================================================================
 	// Color replacement
 	// ========================================================================
-	
-	/** Black color values to replace with fillColor */
-	private static final Set<String> BLACK_COLORS = Set.of("#000", "#000000", "black");
-	
-	/** White color values to replace with backgroundColor */
-	private static final Set<String> WHITE_COLORS = Set.of("#fff", "#ffffff", "#FFF", "#FFFFFF", "white");
-	
-	/** Attributes that contain color values */
-	private static final Set<String> COLOR_ATTRIBUTES = Set.of("fill", "stroke", "stop-color", "flood-color",
-			"lighting-color");
 
-	/** SVG elements that can have fill/stroke applied */
-	private static final Set<String> SHAPE_ELEMENTS = Set.of("path", "circle", "ellipse", "rect", "polygon",
-			"polyline", "line", "text", "tspan", "use");
-	
 	/**
-	 * Apply fill and background colors to SVG data using XML parsing.
+	 * Regex matching color attribute values that are black or white.
+	 * Captures: attribute name (group 1), color value (group 2).
+	 * Handles: fill="black", stroke="#000000", fill="#FFF", etc.
+	 */
+	private static final Pattern COLOR_ATTR_PATTERN = Pattern.compile(
+			"((?:fill|stroke|stop-color|flood-color|lighting-color)\\s*[=:]\\s*[\"']?)"
+			+ "(#000(?:000)?|#fff(?:fff)?|black|white)",
+			Pattern.CASE_INSENSITIVE);
+
+	/**
+	 * Apply fill and background colors to SVG data using string replacement.
 	 * - Black colors (#000, #000000, black) are replaced with fillColor
 	 * - White colors (#FFF, #FFFFFF, white) are replaced with backgroundColor
 	 * @param svgData Original SVG data
-	 * @return SVG data with colors applied, or null if parsing fails
+	 * @return SVG data with colors applied, or null if input is null
 	 */
 	private String applyColors(final String svgData) {
 		if (svgData == null) {
 			return null;
 		}
-		try {
-			final Element doc = XmlHelper.parse(svgData);
-			if (doc == null) {
-				LOGGER.warn("Failed to parse SVG as XML");
-				return svgData;
-			}
-			final String fillHex = colorToHex(this.propertyFillColor);
-			final String backgroundHex = colorToHex(this.propertyBackgroundColor);
+		final String fillHex = colorToHex(this.propertyFillColor);
+		final String backgroundHex = colorToHex(this.propertyBackgroundColor);
 
-			// Process all elements recursively
-			applyColorsToElement(doc, fillHex, backgroundHex);
-
-			// Generate the modified XML
-			return XmlHelper.generate(doc);
-		} catch (final Exception e) {
-			LOGGER.warn("Failed to parse SVG for color replacement: {}", e.getMessage());
-			return svgData;
-		}
-	}
-	
-	/**
-	 * Recursively apply color replacements to an XML element and its children.
-	 * @param element The XML element to process
-	 * @param fillHex The hex color to replace black colors with
-	 * @param backgroundHex The hex color to replace white colors with
-	 */
-	private void applyColorsToElement(final Element element, final String fillHex, final String backgroundHex) {
-		final String elementName = element.getTagName().toLowerCase();
-		final boolean isShapeElement = SHAPE_ELEMENTS.contains(elementName);
-
-		// Process color attributes on this element
-		for (final String attrName : COLOR_ATTRIBUTES) {
-			if (element.hasAttribute(attrName)) {
-				final String value = element.getAttribute(attrName).toLowerCase();
-				if (BLACK_COLORS.contains(value)) {
-					element.setAttribute(attrName, fillHex);
-				} else if (WHITE_COLORS.contains(value)) {
-					element.setAttribute(attrName, backgroundHex);
-				}
-			}
-		}
-
-		// Process style attribute (only replace colors, don't add defaults here)
-		if (element.hasAttribute("style")) {
-			final String style = element.getAttribute("style");
-			final String newStyle = applyColorsToStyle(style, fillHex, backgroundHex);
-			if (!style.equals(newStyle)) {
-				element.setAttribute("style", newStyle);
-			}
-		}
-
-		// For shape elements: add default fill/stroke if not specified anywhere
-		if (isShapeElement) {
-			final boolean hasFillAttr = element.hasAttribute("fill");
-			final boolean hasFillInStyle = hasPropertyInStyle(element, "fill");
-
-			// SVG default fill is black - if no fill specified, add fillColor
-			if (!hasFillAttr && !hasFillInStyle) {
-				element.setAttribute("fill", fillHex);
-			}
-
-			// Check if stroke-width is defined but stroke color is not
-			final boolean hasStrokeWidth = element.hasAttribute("stroke-width")
-					|| hasPropertyInStyle(element, "stroke-width");
-			final boolean hasStrokeAttr = element.hasAttribute("stroke");
-			final boolean hasStrokeInStyle = hasPropertyInStyle(element, "stroke");
-
-			// If stroke-width is defined but no stroke color, add fillColor as stroke
-			if (hasStrokeWidth && !hasStrokeAttr && !hasStrokeInStyle) {
-				element.setAttribute("stroke", fillHex);
-			}
-		}
-
-		// Process child elements recursively
-		for (final Element child : XmlHelper.children(element)) {
-			applyColorsToElement(child, fillHex, backgroundHex);
-		}
-	}
-
-	/**
-	 * Check if a CSS property exists in the style attribute.
-	 * @param element The element to check
-	 * @param propertyName The CSS property name to look for
-	 * @return true if the property is defined in the style attribute
-	 */
-	private boolean hasPropertyInStyle(final Element element, final String propertyName) {
-		if (!element.hasAttribute("style")) {
-			return false;
-		}
-		final String style = element.getAttribute("style").toLowerCase();
-		// Check for "propertyName:" pattern
-		return style.contains(propertyName + ":") || style.contains(propertyName + " :");
-	}
-
-	/**
-	 * Apply color replacements to a CSS style string.
-	 * @param style The style string (e.g., "fill:#000000;stroke:#FFFFFF")
-	 * @param fillHex The hex color to replace black colors with
-	 * @param backgroundHex The hex color to replace white colors with
-	 * @return The modified style string
-	 */
-	private String applyColorsToStyle(final String style, final String fillHex, final String backgroundHex) {
-		if (style == null || style.isEmpty()) {
-			return style;
-		}
-
+		final Matcher matcher = COLOR_ATTR_PATTERN.matcher(svgData);
 		final StringBuilder result = new StringBuilder();
-		final String[] properties = style.split(";");
-
-		for (int i = 0; i < properties.length; i++) {
-			final String property = properties[i].trim();
-			if (property.isEmpty()) {
-				continue;
+		while (matcher.find()) {
+			final String colorValue = matcher.group(2).toLowerCase();
+			final String replacement;
+			if ("#000".equals(colorValue) || "#000000".equals(colorValue) || "black".equals(colorValue)) {
+				replacement = matcher.group(1) + fillHex;
+			} else {
+				replacement = matcher.group(1) + backgroundHex;
 			}
-
-			final int colonIndex = property.indexOf(':');
-			if (colonIndex <= 0) {
-				// No colon or at start, keep as is
-				if (result.length() > 0) {
-					result.append(";");
-				}
-				result.append(property);
-				continue;
-			}
-
-			final String propName = property.substring(0, colonIndex).trim().toLowerCase();
-			final String propValue = property.substring(colonIndex + 1).trim().toLowerCase();
-
-			String newValue = propValue;
-			if (COLOR_ATTRIBUTES.contains(propName)) {
-				if (BLACK_COLORS.contains(propValue)) {
-					newValue = fillHex;
-				} else if (WHITE_COLORS.contains(propValue)) {
-					newValue = backgroundHex;
-				}
-			}
-
-			if (result.length() > 0) {
-				result.append(";");
-			}
-			result.append(propName).append(":").append(newValue);
+			matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
 		}
-
+		matcher.appendTail(result);
 		return result.toString();
 	}
-	
+
 	/**
 	 * Convert a Color to hexadecimal string.
 	 * @param color Color to convert

@@ -5,9 +5,18 @@
  */
 package org.atriasoft.ewol.compositing;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
-import org.atriasoft.esvg.EsvgDocument;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
@@ -33,7 +42,6 @@ public class CompositingSVG extends Compositing {
 	private float angle = 0; //!< Angle to set at the axes
 	private Color color = new Color(1, 1, 1); //!< The text foreground color
 	private String svgData;
-	private EsvgDocument svgDoc;
 	protected int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
 	protected int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
 	protected int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
@@ -127,6 +135,9 @@ public class CompositingSVG extends Compositing {
 	
 	@Override
 	public void flush() {
+		if (this.vboDataCoords == null) {
+			return;
+		}
 		this.vbo.setPosition(this.vboDataCoords);
 		this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
 		this.vbo.setColors(this.vboDataColors);
@@ -378,17 +389,36 @@ public class CompositingSVG extends Compositing {
 			LOGGER.error("try to set NULL data in svg");
 			return;
 		}
-		if (this.svgDoc == null && this.svgData.equals(data) && this.requestSize.x() == size.x()
+		if (this.svgData != null && this.svgData.equals(data) && this.requestSize.x() == size.x()
 				&& this.requestSize.y() == size.y()) {
 			// Nothing to do ...
 			return;
 		}
 		clear();
-		this.svgDoc = null;
-		final EsvgDocument doc = new EsvgDocument();
-		doc.parse(data);
 		LOGGER.trace("render size = {}", size);
-		final BufferedImage tmp = doc.renderImage(size);
+		final BufferedImage tmp;
+		final byte[] svgBytes = data.getBytes(StandardCharsets.UTF_8);
+		try (final ByteArrayInputStream bais = new ByteArrayInputStream(svgBytes)) {
+			final Iterator<ImageReader> readers = ImageIO.getImageReadersBySuffix("svg");
+			if (!readers.hasNext()) {
+				LOGGER.error("No ImageReader found for SVG format. Is imageio-batik on classpath?");
+				return;
+			}
+			final ImageReader reader = readers.next();
+			try (final ImageInputStream iis = ImageIO.createImageInputStream(bais)) {
+				reader.setInput(iis);
+				final ImageReadParam param = reader.getDefaultReadParam();
+				if (size.x() > 0 && size.y() > 0) {
+					param.setSourceRenderSize(new Dimension(size.x(), size.y()));
+				}
+				tmp = reader.read(0, param);
+			} finally {
+				reader.dispose();
+			}
+		} catch (final IOException ex) {
+			LOGGER.error("Can not load the Raw SVG", ex);
+			return;
+		}
 		if (tmp == null) {
 			LOGGER.error("Can not load the Raw SVG ... ");
 			return;
@@ -398,27 +428,6 @@ public class CompositingSVG extends Compositing {
 		}
 		this.resource.set(tmp);
 		this.svgData = data;
-		this.requestSize = size;
-	}
-
-	public void setSource(final EsvgDocument data, final Vector2i size) {
-		if (this.svgData == null && this.svgDoc.equals(data) && this.requestSize.x() == size.x()
-				&& this.requestSize.y() == size.y()) {
-			// Nothing to do ...
-			return;
-		}
-		this.svgData = null;
-		clear();
-		final BufferedImage tmp = data.renderImage(size);
-		if (tmp == null) {
-			LOGGER.error("Can not load the Raw SVG ... ");
-			return;
-		}
-		if (this.resource == null) {
-			this.resource = new ResourceTexture2();
-		}
-		this.resource.set(tmp);
-		this.svgDoc = data;
 		this.requestSize = size;
 	}
 }
