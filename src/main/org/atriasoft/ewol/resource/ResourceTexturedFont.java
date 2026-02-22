@@ -59,13 +59,13 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
 	public int[] lastRawHeigh = new int[4];
 	public List<GlyphProperty>[] listElement = new ArrayList[4];
-	private boolean forceClimp = false;
 	private final FontMode[] modeWraping = new FontMode[4]; // !< This is a wrapping mode to prevent the fact that no
+	private final boolean[] syntheticBold = new boolean[4];
+	private final boolean[] syntheticItalic = new boolean[4];
 	private int size = 10;
-	
+
 	protected ResourceTexturedFont(final Uri fontBaseUri) {
 		super(CACHE_PREFIX + fontBaseUri.toString());
-		this.forceClimp = "true".equals(fontBaseUri.getProperty("FORCE_CLIMP"));
 		LOGGER.debug("Load font: '{}'", fontBaseUri);
 		
 		this.font[0] = null;
@@ -136,6 +136,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			}
 		}
 		
+		// Load native font variants
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
 			if (this.fileName[iiiFontId] == null) {
 				LOGGER.trace("can not load FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId],
@@ -148,6 +149,21 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 			if (this.font[iiiFontId] == null) {
 				LOGGER.warn("error in loading FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId],
 						this.size);
+			}
+		}
+		// For missing variants, use the reference font with synthetic transformations
+		final ResourceFontSvg refFont = this.font[refMode.getValue()];
+		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
+			if (this.font[iiiFontId] == null && refFont != null) {
+				this.font[iiiFontId] = refFont;
+				final FontMode mode = FontMode.get(iiiFontId);
+				this.syntheticBold[iiiFontId] = (mode == FontMode.BOLD || mode == FontMode.BOLD_ITALIC);
+				this.syntheticItalic[iiiFontId] = (mode == FontMode.ITALIC || mode == FontMode.BOLD_ITALIC);
+				if (this.syntheticBold[iiiFontId] || this.syntheticItalic[iiiFontId]) {
+					LOGGER.debug("Using synthetic {} for mode {}",
+							(this.syntheticBold[iiiFontId] && this.syntheticItalic[iiiFontId]) ? "bold+italic" :
+							this.syntheticBold[iiiFontId] ? "bold" : "italic", mode);
+				}
 			}
 		}
 		for (int iiiFontId = 0; iiiFontId < 4; iiiFontId++) {
@@ -180,61 +196,86 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	
 	/**
 	 * add a glyph in a texture font.
+	 * All 4 font modes share the same texture atlas position for each glyph
+	 * to avoid spatial overlap between channels.
 	 * @param val Char value to add.
 	 * @return true if the image size have change, false otherwise
 	 */
 	private synchronized boolean addGlyph(final Character val) {
 		boolean hasChange = false;
-		// for each font :
+		// Step 1: Create GlyphProperty for all 4 modes and find max size
+		final GlyphProperty[] glyphProps = new GlyphProperty[4];
+		int maxWidth = 0;
+		int maxHeight = 0;
 		for (int iii = 0; iii < 4; iii++) {
 			if (this.font[iii] == null) {
 				continue;
 			}
-			// add the current "char"
 			final GlyphProperty tmpchar = this.font[iii].getGlyphProperty(this.size, val);
-			
+			glyphProps[iii] = tmpchar;
 			if (tmpchar != null && tmpchar.exist()) {
-				LOGGER.trace("load char: '{}'={}", val, (int) val);
-				hasChange = true;
-				// change line if needed ...
-				if (this.lastGlyphPos[iii].x() + tmpchar.sizeTexture.x() + 3 > this.data.getWidth()) {
-					this.lastGlyphPos[iii] = new Vector2i(1, this.lastGlyphPos[iii].y() + this.lastRawHeigh[iii]);
-					this.lastRawHeigh[iii] = 0;
-				}
-				LOGGER.trace("glyph texture size = {} last posY={} out size={}", tmpchar.sizeTexture,
-						this.lastGlyphPos[iii].y(), new Vector2i(this.data.getWidth(), this.data.getHeight()));
-				while (this.lastGlyphPos[iii].y() + tmpchar.sizeTexture.y() + 3 > this.data.getHeight()) {
-					this.data = resizeImage(this.data, this.data.getWidth(), this.data.getHeight() * 2);
-					// note : need to rework all the layer due to the fact that the texture is used by the 4 type...
-					for (int kkk = 0; kkk < 4; kkk++) {
-						// change the coordinate on the element in the texture
-						for (final GlyphProperty element : this.listElement[kkk]) {
-							element.texturePosStart = element.texturePosStart.multiply(new Vector2f(1.0f, 0.5f));
-							element.texturePosSize = element.texturePosSize.multiply(new Vector2f(1.0f, 0.5f));
-						}
+				// Use the renderer's own size calculation for synthetic bold/italic
+				if (this.syntheticBold[iii] || this.syntheticItalic[iii]) {
+					final Vector2i rasterSize = this.font[iii].calculateRasterSize(
+							this.size, val, this.syntheticBold[iii], this.syntheticItalic[iii]);
+					if (rasterSize != null) {
+						tmpchar.sizeTexture = rasterSize;
 					}
 				}
-				// draw the glyph
-				this.font[iii].drawGlyph(this.data, this.size, this.lastGlyphPos[iii], tmpchar, iii);
-				// set video position
-				tmpchar.texturePosStart = new Vector2f(
-						(float) this.lastGlyphPos[iii].x() / (float) this.data.getWidth(),
-						(float) this.lastGlyphPos[iii].y() / (float) this.data.getHeight());
-				tmpchar.texturePosSize = new Vector2f((float) tmpchar.sizeTexture.x() / this.data.getWidth(),
-						(float) tmpchar.sizeTexture.y() / this.data.getHeight());
-				
-				// update the maximum of the line hight :
-				if (this.lastRawHeigh[iii] < tmpchar.sizeTexture.y()) {
-					// note : +1 is for the overlapping of the glyph (Part 2)
-					this.lastRawHeigh[iii] = tmpchar.sizeTexture.y() + 1;
+				if (tmpchar.sizeTexture.x() > maxWidth) {
+					maxWidth = tmpchar.sizeTexture.x();
 				}
-				// note : +1 is for the overlapping of the glyph (Part 3)
-				// update the Bitmap position drawing :
-				this.lastGlyphPos[iii] = this.lastGlyphPos[iii].add(new Vector2i(tmpchar.sizeTexture.x() + 1, 0));
-			} else {
-				LOGGER.trace("Did not find char: '{}'={}", val, (int) val);
+				if (tmpchar.sizeTexture.y() > maxHeight) {
+					maxHeight = tmpchar.sizeTexture.y();
+				}
 			}
-			this.listElement[iii].add(tmpchar);
+		}
+		// Step 2: Use a single shared position for all modes
+		if (maxWidth > 0) {
+			hasChange = true;
+			// Check if we need to wrap to next line (use shared position from mode 0)
+			if (this.lastGlyphPos[0].x() + maxWidth + 3 > this.data.getWidth()) {
+				this.lastGlyphPos[0] = new Vector2i(1, this.lastGlyphPos[0].y() + this.lastRawHeigh[0]);
+				this.lastRawHeigh[0] = 0;
+			}
+			// Check if we need to grow the image vertically
+			while (this.lastGlyphPos[0].y() + maxHeight + 3 > this.data.getHeight()) {
+				this.data = resizeImage(this.data, this.data.getWidth(), this.data.getHeight() * 2);
+				for (int kkk = 0; kkk < 4; kkk++) {
+					for (final GlyphProperty element : this.listElement[kkk]) {
+						element.texturePosStart = element.texturePosStart.multiply(new Vector2f(1.0f, 0.5f));
+						element.texturePosSize = element.texturePosSize.multiply(new Vector2f(1.0f, 0.5f));
+					}
+				}
+			}
+			final Vector2i sharedPos = this.lastGlyphPos[0];
+			// Step 3: Draw each mode at the shared position
+			for (int iii = 0; iii < 4; iii++) {
+				final GlyphProperty tmpchar = glyphProps[iii];
+				if (tmpchar == null || !tmpchar.exist() || this.font[iii] == null) {
+					this.listElement[iii].add(tmpchar);
+					continue;
+				}
+				this.font[iii].drawGlyph(this.data, this.size, sharedPos, tmpchar, iii,
+						this.syntheticBold[iii], this.syntheticItalic[iii]);
+				tmpchar.texturePosStart = new Vector2f(
+						(float) sharedPos.x() / (float) this.data.getWidth(),
+						(float) sharedPos.y() / (float) this.data.getHeight());
+				tmpchar.texturePosSize = new Vector2f(
+						(float) tmpchar.sizeTexture.x() / this.data.getWidth(),
+						(float) tmpchar.sizeTexture.y() / this.data.getHeight());
+				this.listElement[iii].add(tmpchar);
+			}
+			// Update shared position tracking
+			if (this.lastRawHeigh[0] < maxHeight) {
+				this.lastRawHeigh[0] = maxHeight + 1;
+			}
+			this.lastGlyphPos[0] = this.lastGlyphPos[0].add(new Vector2i(maxWidth + 1, 0));
+		} else {
+			// No existing glyph in any mode — just add the properties
+			for (int iii = 0; iii < 4; iii++) {
+				this.listElement[iii].add(glyphProps[iii]);
+			}
 		}
 		if (hasChange) {
 			LOGGER.trace("All gliph added ====> request a redraw of all the GUI");
@@ -327,4 +368,5 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	public FontMode getWrappingMode(final FontMode source) {
 		return this.modeWraping[source.getValue()];
 	}
+
 }

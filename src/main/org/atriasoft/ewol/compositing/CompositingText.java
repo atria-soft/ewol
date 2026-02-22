@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Configs;
+import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector3f;
@@ -27,14 +28,10 @@ public class CompositingText extends TextBase {
 	protected ResourceTexturedFont font; // !< Font resources
 	protected List<Vector3f> pointPositions = new ArrayList<>();
 	protected float size;
-	// the forceClimp is to generate a forcing of the rendering in small font, this
-	// permit to have a correct view of the font, otherwise it will be transparent.
-	protected final boolean forceClimp = true;
 	protected List<Vector2f> texturePositions = new ArrayList<>();
 
 	protected String currentFontName = "";
 	protected int currentFontSize = -2; // -1 is to perform first initialization
-	protected int currentFontSizeRequired = -2; // -1 is to perform first initialization
 
 	public CompositingText() {
 		this("");
@@ -56,26 +53,21 @@ public class CompositingText extends TextBase {
 
 	@Override
 	public Vector2f calculateSizeChar(final Character charcode) {
-		final var renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
-		// get a pointer on the glyph property :
-		final var myGlyphProperty = getGlyphPointer(charcode);
-		final var fontHeigh = (int) getHeight();
+		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
+		final int fontHeight = (int) getHeight();
 		if (myGlyphProperty == null) {
 			if (this.font == null) {
 				LOGGER.warn("no Glyph... in no font");
 			} else {
 				LOGGER.warn("no Glyph... in font : {}", this.font.getName());
 			}
-			return new Vector2f(0.2f, fontHeigh);
+			return new Vector2f(0.2f, fontHeight);
 		}
-		// get the kerning offset :
-		var kerningOffset = 0F;
+		float kerningOffset = 0F;
 		if (this.kerning) {
 			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode);
 		}
-
-		final var outputSize = new Vector2f((myGlyphProperty.getAdvenceX() + kerningOffset) * renderRatio, fontHeigh);
-		// Register the previous character
+		final Vector2f outputSize = new Vector2f(myGlyphProperty.getAdvenceX() + kerningOffset, fontHeight);
 		this.previousCharcode = charcode;
 		return outputSize;
 	}
@@ -111,8 +103,8 @@ public class CompositingText extends TextBase {
 		// Enable blend for text rendering (text always needs alpha blending)
 		OpenGL.enable(OpenGL.Flag.flag_blend);
 		// set Matrix : translation/positionMatrix
-		final var projMatrix = OpenGL.getMatrix();
-		final var camMatrix = OpenGL.getCameraMatrix();
+		final Matrix4f projMatrix = OpenGL.getMatrix();
+		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		this.oGLprogram.use();
 		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
@@ -152,8 +144,8 @@ public class CompositingText extends TextBase {
 			OpenGL.enable(OpenGL.Flag.flag_depthTest);
 		}
 		// set Matrix : translation/positionMatrix
-		final var projMatrix = OpenGL.getMatrix();
-		final var camMatrix = OpenGL.getCameraMatrix();
+		final Matrix4f projMatrix = OpenGL.getMatrix();
+		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
 		this.oGLprogram.use();
 		this.vbo.bindForRendering();
 		this.oGLprogram.uniformMatrix(this.oGLMatrixProjection, projMatrix);
@@ -203,8 +195,7 @@ public class CompositingText extends TextBase {
 			LOGGER.warn("no font...");
 			return 10.0f;
 		}
-		final var renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
-		return this.font.getHeight(this.mode) * renderRatio;
+		return this.font.getHeight(this.mode);
 	}
 
 	@Override
@@ -213,51 +204,38 @@ public class CompositingText extends TextBase {
 			LOGGER.warn("no font...");
 			return 1.0f;
 		}
-		final var renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
-		return this.font.getFontSize() * renderRatio;
+		return this.font.getFontSize();
 	}
 
 	@Override
 	public void printChar(final Character charcode) {
-		// LOGGER.error("Request printChar : '{}' @pos={}", charcode, this.position);
-		// get a pointer on the glyph property :
-		final var myGlyphProperty = getGlyphPointer(charcode);
+		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
 		if (myGlyphProperty == null) {
 			LOGGER.error(" font does not really existed ...");
 			return;
 		}
-		// sometime we do net require the correct size to the glyph renderer (due to the
-		// fact SVG render is not clear on lower size...)
-		final var renderRatio = (float) this.currentFontSizeRequired / (float) this.currentFontSizeRequired;
+		final int fontSize = (int) getSize();
+		final int fontHeight = (int) getHeight();
 
-		final var fontSize = (int) (getSize() * renderRatio);
-		final var fontHeigh = (int) (getHeight() * renderRatio);
-
-		// get the kerning offset :
-		var kerningOffset = 0F;
+		float kerningOffset = 0F;
 		if (this.kerning) {
-			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode) * renderRatio;
-			if (kerningOffset != 0) {
-				// LOGGER.debug("Kerning between : '" + this.previousCharcode + "''" +
-				// myGlyph.UVal
-				// + "' value : " + kerningOffset);
-			}
+			kerningOffset = myGlyphProperty.kerningGet(this.previousCharcode);
 		}
 		// 0x01 == 0x20 == ' ';
 		if (charcode != 0x01) {
 			/*
 			 * Bitmap position xA xB yC *------* | | | | yD *------*
 			 */
-			var dxA = this.position.x() + myGlyphProperty.getTextureRenderOffset().x() * renderRatio + kerningOffset;
-			var dxB = dxA + myGlyphProperty.sizeTexture.x() * renderRatio;
-			var dyC = this.position.y() + myGlyphProperty.getTextureRenderOffset().y() * renderRatio + fontHeigh
+			float dxA = this.position.x() + myGlyphProperty.getTextureRenderOffset().x() + kerningOffset;
+			float dxB = dxA + myGlyphProperty.sizeTexture.x();
+			float dyC = this.position.y() + myGlyphProperty.getTextureRenderOffset().y() + fontHeight
 					- fontSize;
-			var dyD = dyC - myGlyphProperty.sizeTexture.y() * renderRatio;
+			float dyD = dyC - myGlyphProperty.sizeTexture.y();
 
-			var tuA = myGlyphProperty.texturePosStart.x();
-			var tuB = tuA + myGlyphProperty.texturePosSize.x();
-			var tvC = myGlyphProperty.texturePosStart.y();
-			var tvD = tvC + myGlyphProperty.texturePosSize.y();
+			float tuA = myGlyphProperty.texturePosStart.x();
+			float tuB = tuA + myGlyphProperty.texturePosSize.x();
+			float tvC = myGlyphProperty.texturePosStart.y();
+			float tvD = tvC + myGlyphProperty.texturePosSize.y();
 
 			// Clipping and drawing area
 			if (this.clippingEnable && (dxB < this.clippingPosStart.x() || dxA > this.clippingPosStop.x()
@@ -266,41 +244,41 @@ public class CompositingText extends TextBase {
 			} else {
 				if (this.clippingEnable) {
 					// generate a positions...
-					final var texSizeX = tuB - tuA;
+					final float texSizeX = tuB - tuA;
 					if (dxA < this.clippingPosStart.x()) {
 						// clip display
-						final var drawSize = this.clippingPosStart.x() - dxA;
+						final float drawSize = this.clippingPosStart.x() - dxA;
 						// update element start display
 						dxA = this.clippingPosStart.x();
-						final var addElement = texSizeX * drawSize / myGlyphProperty.sizeTexture.x();
+						final float addElement = texSizeX * drawSize / myGlyphProperty.sizeTexture.x();
 						// update texture start X Pos
 						tuA += addElement;
 					}
 					if (dxB > this.clippingPosStop.x()) {
 						// clip display
-						final var drawSize = dxB - this.clippingPosStop.x();
+						final float drawSize = dxB - this.clippingPosStop.x();
 						// update element start display
 						dxB = this.clippingPosStop.x();
-						final var addElement = texSizeX * drawSize / myGlyphProperty.sizeTexture.x();
+						final float addElement = texSizeX * drawSize / myGlyphProperty.sizeTexture.x();
 						// update texture start X Pos
 						tuB -= addElement;
 					}
-					final var texSizeY = tvC - tvD;
+					final float texSizeY = tvC - tvD;
 					if (dyC > this.clippingPosStop.y()) {
 						// clip display
-						final var drawSize = dyC - this.clippingPosStop.y();
+						final float drawSize = dyC - this.clippingPosStop.y();
 						// update element start display
 						dyC = this.clippingPosStop.y();
-						final var addElement = texSizeY * drawSize / myGlyphProperty.sizeTexture.y();
+						final float addElement = texSizeY * drawSize / myGlyphProperty.sizeTexture.y();
 						// update texture start X Pos
 						tvC -= addElement;
 					}
 					if (dyD < this.clippingPosStart.y()) {
 						// clip display
-						final var drawSize = this.clippingPosStart.y() - dyD;
+						final float drawSize = this.clippingPosStart.y() - dyD;
 						// update element start display
 						dyD = this.clippingPosStart.y();
-						final var addElement = texSizeY * drawSize / myGlyphProperty.sizeTexture.y();
+						final float addElement = texSizeY * drawSize / myGlyphProperty.sizeTexture.y();
 						// update texture start X Pos
 						tvD += addElement;
 					}
@@ -311,17 +289,17 @@ public class CompositingText extends TextBase {
 					/*
 					 * Bitmap position 0------1 | | | | 3------2
 					 */
-					final var drawPosition0 = new Vector3f((int) dxA, (int) dyC, 0);
-					final var drawPosition1 = new Vector3f((int) dxB, (int) dyC, 0);
-					final var drawPosition2 = new Vector3f((int) dxB, (int) dyD, 0);
-					final var drawPosition3 = new Vector3f((int) dxA, (int) dyD, 0);
+					final Vector3f drawPosition0 = new Vector3f((int) dxA, (int) dyC, 0);
+					final Vector3f drawPosition1 = new Vector3f((int) dxB, (int) dyC, 0);
+					final Vector3f drawPosition2 = new Vector3f((int) dxB, (int) dyD, 0);
+					final Vector3f drawPosition3 = new Vector3f((int) dxA, (int) dyD, 0);
 					/*
 					 * texture Position : 0------1 | | | | 3------2
 					 */
-					final var texturePos0 = new Vector2f(tuA + this.mode.getValue(), tvC);
-					final var texturePos1 = new Vector2f(tuB + this.mode.getValue(), tvC);
-					final var texturePos2 = new Vector2f(tuB + this.mode.getValue(), tvD);
-					final var texturePos3 = new Vector2f(tuA + this.mode.getValue(), tvD);
+					final Vector2f texturePos0 = new Vector2f(tuA + this.mode.getValue(), tvC);
+					final Vector2f texturePos1 = new Vector2f(tuB + this.mode.getValue(), tvC);
+					final Vector2f texturePos2 = new Vector2f(tuB + this.mode.getValue(), tvD);
+					final Vector2f texturePos3 = new Vector2f(tuA + this.mode.getValue(), tvD);
 
 					// NOTE : Android does not support the Quads elements ...
 					/*
@@ -365,7 +343,7 @@ public class CompositingText extends TextBase {
 		// "
 		// kerningOffset=" + kerningOffset);
 		this.position = this.position
-				.withX(this.position.x() + myGlyphProperty.getAdvenceX() * renderRatio + kerningOffset);
+				.withX(this.position.x() + myGlyphProperty.getAdvenceX() + kerningOffset);
 		// LOGGER.debug(" 6 print '" + char-code + "' : start=" + this.sizeDisplayStart
 		// + "
 		// stop=" + this.sizeDisplayStop + " pos=" + this.position);
@@ -379,10 +357,10 @@ public class CompositingText extends TextBase {
 			return;
 		}
 
-		var fontName = inputFontName;
-		var fontSize = inputFontSize;
+		String fontName = inputFontName;
+		int fontSize = inputFontSize;
 		// remove old one
-		final var previousFont = this.font;
+		final ResourceTexturedFont previousFont = this.font;
 		if (fontSize <= 0) {
 			fontSize = Configs.getConfigFonts().getSize();
 		}
@@ -390,24 +368,10 @@ public class CompositingText extends TextBase {
 			fontName = Configs.getConfigFonts().getName();
 		}
 
-		// if size in under 25, we request upper size:
-		var sizeRequest = 25;
-		if (this.forceClimp || fontSize > 25) {
-			sizeRequest = fontSize;
-		}
-		if (inputFontName.equals(this.currentFontName) && this.currentFontSizeRequired == sizeRequest) {
-			this.currentFontSize = inputFontSize;
-			return;
-		}
-
 		clear();
-		final var fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
-		fontUri.setProperty("size", Integer.toString(sizeRequest));
-		LOGGER.trace("fontName={} sizeRequest={}", fontName, sizeRequest);
-		// link to new one
-		if (this.forceClimp) {
-			fontUri.setProperty("FORCE_CLIMP", "true");
-		}
+		final Uri fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
+		fontUri.setProperty("size", Integer.toString(fontSize));
+		LOGGER.trace("fontName={} fontSize={}", fontName, fontSize);
 		this.font = ResourceTexturedFont.create(fontUri);
 		if (this.font == null) {
 			LOGGER.error("Can not get font resource");
@@ -415,7 +379,6 @@ public class CompositingText extends TextBase {
 		} else {
 			this.currentFontName = inputFontName;
 			this.currentFontSize = inputFontSize;
-			this.currentFontSizeRequired = sizeRequest;
 		}
 	}
 
