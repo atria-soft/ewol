@@ -354,7 +354,6 @@ public class Windows extends Widget {
 			colorBg = this.resourceColor.get(this.colorBg);
 		}
 		OpenGL.clearColor(colorBg);
-		OpenGL.clearColor(Color.PURPLE);
 		OpenGL.clear(OpenGL.ClearFlag.clearFlag_colorBuffer);
 		OpenGL.clear(OpenGL.ClearFlag.clearFlag_depthBuffer);
 		
