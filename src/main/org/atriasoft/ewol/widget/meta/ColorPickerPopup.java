@@ -127,17 +127,23 @@ public class ColorPickerPopup extends PopUp {
 		this.gradient.setPropertyExpand(Vector2b.FALSE);
 		this.gradient.setPropertyFill(Vector2b.FALSE);
 
-		this.sliderRed = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderRed = Slider.create().range(0, 255).step(1).value(255)
+				.fillColor(new Color(0xF4, 0x43, 0x36, 0xFF))
+				.cursorBorderColor(new Color(0xD3, 0x2F, 0x2F, 0xFF));
 		this.sliderRed.setPropertyExpand(Vector2b.TRUE_FALSE);
 		this.sliderRed.setPropertyFill(Vector2b.TRUE_FALSE);
 		this.sliderRed.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
 
-		this.sliderGreen = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderGreen = Slider.create().range(0, 255).step(1).value(255)
+				.fillColor(new Color(0x4C, 0xAF, 0x50, 0xFF))
+				.cursorBorderColor(new Color(0x38, 0x8E, 0x3C, 0xFF));
 		this.sliderGreen.setPropertyExpand(Vector2b.TRUE_FALSE);
 		this.sliderGreen.setPropertyFill(Vector2b.TRUE_FALSE);
 		this.sliderGreen.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
 
-		this.sliderBlue = Slider.create().range(0, 255).step(1).value(255);
+		this.sliderBlue = Slider.create().range(0, 255).step(1).value(255)
+				.fillColor(new Color(0x21, 0x96, 0xF3, 0xFF))
+				.cursorBorderColor(new Color(0x19, 0x76, 0xD2, 0xFF));
 		this.sliderBlue.setPropertyExpand(Vector2b.TRUE_FALSE);
 		this.sliderBlue.setPropertyFill(Vector2b.TRUE_FALSE);
 		this.sliderBlue.setPropertyMinSize(new Dimension2f(new Vector2f(120, 25), Distance.PIXEL));
