@@ -40,8 +40,9 @@ import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ScrollView;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
+import org.atriasoft.ewol.widget.Select;
 import org.atriasoft.ewol.widget.Spacer;
-import org.atriasoft.ewol.widget.Spin;
+import org.atriasoft.ewol.widget.NumberInput;
 import org.atriasoft.ewol.widget.Widget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +192,7 @@ public class ModelWidget extends Container {
 				lineSizer.setPropertyFill(Vector2b.TRUE);
 				this.sizerMenu.subWidgetAdd(lineSizer);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size());
@@ -237,7 +238,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().x());
@@ -270,7 +271,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().y());
@@ -315,7 +316,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().x());
@@ -348,7 +349,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().y());
@@ -381,7 +382,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().z());
@@ -413,7 +414,7 @@ public class ModelWidget extends Container {
 			return;
 		}
 		if (valueRaw instanceof final Double value) {
-			final var spin = new Spin();
+			final var spin = new NumberInput();
 			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue((int) (double) value);
@@ -440,7 +441,7 @@ public class ModelWidget extends Container {
 			return;
 		}
 		if (valueRaw instanceof final Float value) {
-			final var spin = new Spin();
+			final var spin = new NumberInput();
 			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue((int) (float) value);
@@ -458,6 +459,12 @@ public class ModelWidget extends Container {
 		}
 	}
 	
+	private static final Gravity[] GRAVITY_VALUES = {
+		Gravity.BOTTOM_LEFT, Gravity.BOTTOM, Gravity.BOTTOM_RIGHT,
+		Gravity.LEFT, Gravity.CENTER, Gravity.RIGHT,
+		Gravity.TOP_LEFT, Gravity.TOP, Gravity.TOP_RIGHT,
+	};
+
 	public void addMenuGravity(final Widget widget, final Method getter, final Method setter) {
 		Object valueRaw = null;
 		try {
@@ -467,49 +474,31 @@ public class ModelWidget extends Container {
 			return;
 		}
 		if (valueRaw instanceof final Gravity value) {
-			final var buttonGravity = Button.createLabelButton("Gravity");
-			buttonGravity.setPropertyExpand(Vector2b.TRUE_FALSE);
-			buttonGravity.setPropertyFill(Vector2b.TRUE);
-			buttonGravity.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
-			buttonGravity.setPropertyGravity(Gravity.CENTER);
-			this.sizerMenu.subWidgetAdd(buttonGravity);
-			final var gravLabel = (Label) buttonGravity.getSubWidget();
-			gravLabel.setPropertyValue(LABEL_GRAVITY + Gravity.BOTTOM_LEFT);
-			
-			final var con = buttonGravity.signalClick.connect(() -> {
+			final Select select = Select.create(
+					"BOTTOM_LEFT", "BOTTOM", "BOTTOM_RIGHT",
+					"LEFT", "CENTER", "RIGHT",
+					"TOP_LEFT", "TOP", "TOP_RIGHT");
+			select.setPropertyExpand(Vector2b.TRUE_FALSE);
+			select.setPropertyFill(Vector2b.TRUE);
+			// Find current value index
+			int currentIndex = 4; // default CENTER
+			for (int i = 0; i < GRAVITY_VALUES.length; i++) {
+				if (GRAVITY_VALUES[i].equals(value)) {
+					currentIndex = i;
+					break;
+				}
+			}
+			select.setPropertySelectedIndex(currentIndex);
+			this.sizerMenu.subWidgetAdd(select);
+			final Connection con = select.signalSelectionChanged.connect(index -> {
 				try {
-					final var oldValue = getter.invoke(widget);
-					if (oldValue instanceof final Gravity castedValue) {
-						var state = castedValue;
-						// TODO: I change the gravity model to integrate the 3rd rank...
-						if (state.x() == GravityHorizontal.LEFT && state.y() == GravityVertical.BOTTOM) {
-							state = new Gravity(GravityHorizontal.CENTER, GravityVertical.BOTTOM, GravityDepth.CENTER);
-						} else if (state.x() == GravityHorizontal.CENTER && state.y() == GravityVertical.BOTTOM) {
-							state = new Gravity(GravityHorizontal.RIGHT, GravityVertical.BOTTOM, GravityDepth.CENTER);
-						} else if (state.x() == GravityHorizontal.RIGHT && state.y() == GravityVertical.BOTTOM) {
-							state = new Gravity(GravityHorizontal.LEFT, GravityVertical.CENTER, GravityDepth.CENTER);
-							
-						} else if (state.x() == GravityHorizontal.LEFT && state.y() == GravityVertical.CENTER) {
-							state = new Gravity(GravityHorizontal.CENTER, GravityVertical.CENTER, GravityDepth.CENTER);
-						} else if (state.x() == GravityHorizontal.CENTER && state.y() == GravityVertical.CENTER) {
-							state = new Gravity(GravityHorizontal.RIGHT, GravityVertical.CENTER, GravityDepth.CENTER);
-						} else if (state.x() == GravityHorizontal.RIGHT && state.y() == GravityVertical.CENTER) {
-							state = new Gravity(GravityHorizontal.LEFT, GravityVertical.TOP, GravityDepth.CENTER);
-							
-						} else if (state.x() == GravityHorizontal.LEFT && state.y() == GravityVertical.TOP) {
-							state = new Gravity(GravityHorizontal.CENTER, GravityVertical.TOP, GravityDepth.CENTER);
-						} else if (state.x() == GravityHorizontal.CENTER && state.y() == GravityVertical.TOP) {
-							state = new Gravity(GravityHorizontal.RIGHT, GravityVertical.TOP, GravityDepth.CENTER);
-						} else if (state.x() == GravityHorizontal.RIGHT && state.y() == GravityVertical.TOP) {
-							state = new Gravity(GravityHorizontal.LEFT, GravityVertical.BOTTOM, GravityDepth.CENTER);
-						}
-						gravLabel.setPropertyValue(LABEL_GRAVITY + state.toString());
-						LOGGER.warn("Set new value: {}", state);
-						setter.invoke(widget,state);
+					if (index >= 0 && index < GRAVITY_VALUES.length) {
+						final Gravity newGravity = GRAVITY_VALUES[index];
+						LOGGER.warn("Set new value: {}", newGravity);
+						setter.invoke(widget, newGravity);
 					}
 				} catch (final Exception e) {
 					e.printStackTrace();
-					return;
 				}
 			});
 			this.conections.add(con);
@@ -525,7 +514,7 @@ public class ModelWidget extends Container {
 			return;
 		}
 		if (valueRaw instanceof final Integer value) {
-			final var spin = new Spin();
+			final var spin = new NumberInput();
 			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue(value);
@@ -553,7 +542,7 @@ public class ModelWidget extends Container {
 			return;
 		}
 		if (valueRaw instanceof final Long value) {
-			final var spin = new Spin();
+			final var spin = new NumberInput();
 			spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 			spin.setPropertyFill(Vector2b.TRUE);
 			spin.setPropertyValue(value);
@@ -703,7 +692,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.x());
@@ -735,7 +724,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.y());
@@ -779,7 +768,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.x());
@@ -811,7 +800,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.y());
@@ -930,7 +919,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.x());
@@ -962,7 +951,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.y());
@@ -994,7 +983,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.z());
@@ -1038,7 +1027,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.x());
@@ -1070,7 +1059,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.y());
@@ -1102,7 +1091,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue(value.z());
@@ -1197,7 +1186,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().bottomLeft());
@@ -1233,7 +1222,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().bottomRight());
@@ -1269,7 +1258,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().topRight());
@@ -1305,7 +1294,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().topLeft());
@@ -1353,7 +1342,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().left());
@@ -1389,7 +1378,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().bottom());
@@ -1425,7 +1414,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().right());
@@ -1461,7 +1450,7 @@ public class ModelWidget extends Container {
 				simpleLabel.setPropertyGravity(Gravity.LEFT);
 				lineSizer.subWidgetAdd(simpleLabel);
 				
-				final var spin = new Spin();
+				final var spin = new NumberInput();
 				spin.setPropertyExpand(Vector2b.TRUE_FALSE);
 				spin.setPropertyFill(Vector2b.TRUE);
 				spin.setPropertyValue((int) value.size().top());
@@ -1505,6 +1494,14 @@ public class ModelWidget extends Container {
 
 			LOGGER.trace("    - '{}' type='{}'", propertyName, type);
 
+			{
+				final Label simpleLabel = new Label("<b>" + propertyName + ":</b>");
+				simpleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
+				simpleLabel.setPropertyFill(Vector2b.FALSE);
+				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
+				simpleLabel.setPropertyGravity(Gravity.LEFT);
+				this.sizerMenu.subWidgetAdd(simpleLabel);
+			}
 			if (type == int.class || type == Integer.class) {
 				addMenuInt(widget, propGetter, propSetter);
 			} else if (type == long.class || type == Long.class) {
@@ -1547,14 +1544,6 @@ public class ModelWidget extends Container {
 				addMenuGravity(widget, propGetter, propSetter);
 			} else {
 				LOGGER.error("        ==> property type unknown='{}'", type);
-			}
-			{
-				final var simpleLabel = new Label("<b>" + propertyName + ":</b>");
-				simpleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
-				simpleLabel.setPropertyFill(Vector2b.FALSE);
-				simpleLabel.setPropertyMinSize(new Dimension2f(Vector2f.VALUE_16, Distance.PIXEL));
-				simpleLabel.setPropertyGravity(Gravity.LEFT);
-				this.sizerMenu.subWidgetAdd(simpleLabel);
 			}
 		}
 	}
