@@ -248,6 +248,15 @@ class InputManager {
 			eventTable[pointerID].posEvent = pos;
 			localEventInput(type, tmpWidget, eventTable[pointerID].destinationInputId, KeyStatus.move, pos);
 		} else if (eventTable[pointerID].isUsed) {
+			// Reset multi-click counter if the pointer moved significantly from the initial down position.
+			// This prevents multi-click accumulation when dragging between widgets.
+			final InputLimit localLimit = (type == KeyType.mouse) ? this.eventMouseLimit : this.eventInputLimit;
+			if (eventTable[pointerID].nbClickEvent > 0
+					&& (FMath.abs(eventTable[pointerID].downStart.x() - pos.x()) >= localLimit.dpiOffset
+						|| FMath.abs(eventTable[pointerID].downStart.y() - pos.y()) >= localLimit.dpiOffset)) {
+				eventTable[pointerID].nbClickEvent = 0;
+			}
+
 			// Check if event grab is active for this widget (suppress leave/enter during drag)
 			final Widget eventGrab = this.eventGrabWidget != null ? this.eventGrabWidget.get() : null;
 			final Widget currentWidget = eventTable[pointerID].curentWidgetEvent.get();

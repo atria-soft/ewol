@@ -106,9 +106,9 @@ public class Slider extends Widget {
 		LOGGER.trace("min size = {}", this.minSize);
 	}
 
-	private boolean isInsideSlider(final Vector2f relPos) {
-		return relPos.x() > this.overPositionStart.x() && relPos.y() > this.overPositionStart.y()
-				&& relPos.x() < this.overPositionStop.x() && relPos.y() < this.overPositionStop.y();
+	private boolean isInsideWidget(final Vector2f relPos) {
+		return relPos.x() >= 0 && relPos.y() >= 0
+				&& relPos.x() <= this.size.x() && relPos.y() <= this.size.y();
 	}
 
 	/**
@@ -371,23 +371,21 @@ public class Slider extends Widget {
 	public boolean onEventInput(final EventInput event) {
 		final Vector2f relPos = relativePosition(event.pos());
 		LOGGER.trace("Event on Input: {} relPos = {}", event, relPos);
-		final boolean over = isInsideSlider(relPos);
+		final boolean over = isInsideWidget(relPos);
 
 		// Mouse scroll wheel: inputId 4 = scroll down, inputId 5 = scroll up
+		// Accept scroll anywhere on the widget (event routing already ensures we're the target)
 		if ((event.inputId() == 4 || event.inputId() == 5) && event.status() == KeyStatus.down) {
-			if (over) {
-				float stepValue = this.propertyStep != 0.0f ? this.propertyStep : 1.0f;
-				if (event.specialKey().getShift()) {
-					stepValue *= 10.0f;
-				}
-				if (event.inputId() == 5) {
-					setPropertyValue(this.propertyValue + stepValue);
-				} else {
-					setPropertyValue(this.propertyValue - stepValue);
-				}
-				return true;
+			float stepValue = this.propertyStep != 0.0f ? this.propertyStep : 1.0f;
+			if (event.specialKey().getShift()) {
+				stepValue *= 10.0f;
 			}
-			return false;
+			if (event.inputId() == 5) {
+				setPropertyValue(this.propertyValue + stepValue);
+			} else {
+				setPropertyValue(this.propertyValue - stepValue);
+			}
+			return true;
 		}
 
 		if (event.inputId() != 1) {
@@ -395,7 +393,6 @@ public class Slider extends Widget {
 		}
 
 		switch (event.status()) {
-			case pressSingle:
 			case down:
 				if (over) {
 					keepFocus();
