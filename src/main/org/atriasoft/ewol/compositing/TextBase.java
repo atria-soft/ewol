@@ -123,9 +123,9 @@ public abstract class TextBase extends Compositing {
 			return Vector2f.ZERO;
 		}
 
-		final StringBuilder tmpData = new StringBuilder("<html><body>\n");
+		final StringBuilder tmpData = new StringBuilder("<html><body>");
 		tmpData.append(text);
-		tmpData.append("\n</body></html>\n");
+		tmpData.append("</body></html>");
 		return calculateSizeHTML(tmpData.toString());
 	}
 
@@ -922,9 +922,9 @@ public abstract class TextBase extends Compositing {
 	 * @TODO : implementation not done ....
 	 */
 	public void printDecorated(final String text) {
-		final StringBuilder tmpData = new StringBuilder("<html>\n<body>\n");
+		final StringBuilder tmpData = new StringBuilder("<html><body>");
 		tmpData.append(text);
-		tmpData.append("\n</body>\n</html>\n");
+		tmpData.append("</body></html>");
 		// LOGGER.debug("plop : " + tmpData);
 		printHTML(tmpData.toString());
 	}
