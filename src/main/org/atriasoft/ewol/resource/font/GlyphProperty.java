@@ -59,7 +59,16 @@ public class GlyphProperty {
 		this.fontSize = fontSize;
 		this.sizeTexture = font.calculateWidthRendering(glyph.getUnicodeValue(), fontSize);
 		this.scaleFactor = font.calculateScaleFactor(fontSize);
-		this.textureRenderOffset = font.calculateRenderOffset(fontSize);
+		final Vector2f baseOffset = font.calculateRenderOffset(fontSize);
+		// Compensate for glyphs that extend left of the origin (leftOverhang shifts right in texture)
+		final float leftOverhang = font.getGlyphLeftOverhang(glyph.getUnicodeValue());
+		if (leftOverhang > 0) {
+			this.textureRenderOffset = new Vector2f(
+					baseOffset.x() - leftOverhang * this.scaleFactor,
+					baseOffset.y());
+		} else {
+			this.textureRenderOffset = baseOffset;
+		}
 	}
 	
 	public GlyphProperty(final SvgFont font, final int charcode, final int fontSize) {

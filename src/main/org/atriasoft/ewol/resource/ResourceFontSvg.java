@@ -11,7 +11,6 @@ import org.atriasoft.esvg.SvgFont;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.raster.GlyphRaster;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
@@ -25,11 +24,10 @@ public class ResourceFontSvg extends Resource {
 	
 	public static ResourceFontSvg create(final Uri uri) {
 		LOGGER.trace("KEEP: FontFreeType: {}", uri);
-		// Create cache key without size/FORCE_CLIMP properties (they're only for rendering, not loading)
+		// Create cache key without size property (it's only for rendering, not loading)
 		// Keep other properties like 'lib' that are needed for resource resolution
 		final Uri cacheKey = uri.clone();
 		cacheKey.getproperties().remove("size");
-		cacheKey.getproperties().remove("FORCE_CLIMP");
 
 		ResourceFontSvg object = null;
 		final Resource object2 = Resource.getManager().localKeep(cacheKey);
@@ -73,36 +71,42 @@ public class ResourceFontSvg extends Resource {
 		LOGGER.debug("    number of glyph = {}", this.font.getNumGlyphs());
 	}
 	
-	public boolean drawGlyph(
+	public synchronized boolean drawGlyph(
 			final BufferedImage imageOut,
 			final int fontSize,
 			final Vector2i glyphPosition,
 			final GlyphProperty property,
 			final int posInImage) {
-		return drawGlyph(imageOut, fontSize, glyphPosition, property, posInImage, false);
+		return drawGlyph(imageOut, fontSize, glyphPosition, property, posInImage, false, false);
 	}
 
-	// the forceClimp is to generate a forcing of the rendering in small font, this permit to have a correct view of the font, otherwise it will be transparent.
 	public synchronized boolean drawGlyph(
 			final BufferedImage imageOut,
 			final int fontSize,
 			final Vector2i glyphPosition,
 			final GlyphProperty property,
 			final int posInImage,
-			final boolean forceClimp) {
-		final GlyphRaster weight = this.font.render(property.glyph.getUnicodeValue(), fontSize);
+			final boolean syntheticBold,
+			final boolean syntheticItalic) {
+		final GlyphRaster weight = this.font.render(property.glyph.getUnicodeValue(), fontSize,
+				syntheticBold, syntheticItalic);
 		if (weight == null) {
 			return false;
 		}
-		for (int yyy = 0; yyy < weight.getHeight(); yyy++) {
-			for (int xxx = 0; xxx < weight.getWidth(); xxx++) {
-				float valueColor = weight.get(xxx, weight.getHeight() - 1 - yyy);
-				if (forceClimp) {
-					valueColor = FMath.avg(-0.5f, ((valueColor - 0.2f) * 7.0f), 0.5f) + 0.5f;
-				}
+		// Update sizeTexture to match actual raster size (authoritative source of truth)
+		if (weight.getWidth() != property.sizeTexture.x() || weight.getHeight() != property.sizeTexture.y()) {
+			property.sizeTexture = new Vector2i(
+					Math.max(property.sizeTexture.x(), weight.getWidth()),
+					Math.max(property.sizeTexture.y(), weight.getHeight()));
+		}
+		final int maxX = Math.min(weight.getWidth(), imageOut.getWidth() - glyphPosition.x());
+		final int maxY = Math.min(weight.getHeight(), imageOut.getHeight() - glyphPosition.y());
+		for (int y = 0; y < maxY; y++) {
+			for (int x = 0; x < maxX; x++) {
+				final float valueColor = weight.get(x, weight.getHeight() - 1 - y);
 				final int byteVal = (int) (valueColor * 255.0f) & 0xFF;
-				final int px = glyphPosition.x() + xxx;
-				final int py = glyphPosition.y() + yyy;
+				final int px = glyphPosition.x() + x;
+				final int py = glyphPosition.y() + y;
 				final int argb = imageOut.getRGB(px, py);
 				final int updated;
 				switch (posInImage) {
@@ -141,6 +145,11 @@ public class ResourceFontSvg extends Resource {
 		return true;
 	}
 	
+	public synchronized Vector2i calculateRasterSize(final int fontSize, final int unicodeVal,
+			final boolean syntheticBold, final boolean syntheticItalic) {
+		return this.font.calculateRasterSize(unicodeVal, fontSize, syntheticBold, syntheticItalic);
+	}
+
 	public synchronized GlyphProperty getGlyphProperty(final int fontSize, final int uicodeVal) {
 		final Glyph glyph = this.font.getGlyphNullIfMissing(uicodeVal);
 		GlyphProperty out;
@@ -165,5 +174,4 @@ public class ResourceFontSvg extends Resource {
 	public synchronized float getSizeWithHeight(final float fontHeight) {
 		return this.font.calculateFontSizeWithHeight(fontHeight);
 	}
-	
 }
