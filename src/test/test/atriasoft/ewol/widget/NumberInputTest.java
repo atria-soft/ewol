@@ -2,16 +2,16 @@ package test.atriasoft.ewol.widget;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.atriasoft.ewol.widget.Spin;
+import org.atriasoft.ewol.widget.NumberInput;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import test.atriasoft.ewol.EwolTestContext;
 
-class SpinTest {
+class NumberInputTest {
 
-	private Spin spin;
+	private NumberInput numberInput;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -20,65 +20,65 @@ class SpinTest {
 
 	@BeforeEach
 	void setUp() {
-		spin = new Spin();
+		numberInput = new NumberInput();
 	}
 
 	@Test
 	void testDefaultValues() {
-		assertEquals(0, spin.getPropertyValue(), "Default value should be 0");
-		assertEquals(Long.MIN_VALUE, spin.getPropertyMin(), "Default min should be Long.MIN_VALUE");
-		assertEquals(Long.MAX_VALUE, spin.getPropertyMax(), "Default max should be Long.MAX_VALUE");
-		assertEquals(1, spin.getPropertyIncrement(), "Default increment should be 1");
-		assertEquals(0, spin.getPropertyMantis(), "Default mantis should be 0");
+		assertEquals(0, numberInput.getPropertyValue(), "Default value should be 0");
+		assertEquals(Long.MIN_VALUE, numberInput.getPropertyMin(), "Default min should be Long.MIN_VALUE");
+		assertEquals(Long.MAX_VALUE, numberInput.getPropertyMax(), "Default max should be Long.MAX_VALUE");
+		assertEquals(1, numberInput.getPropertyIncrement(), "Default increment should be 1");
+		assertEquals(0, numberInput.getPropertyMantis(), "Default mantis should be 0");
 	}
 
 	@Test
 	void testSetValue() {
-		spin.setPropertyValue(42);
-		assertEquals(42, spin.getPropertyValue(), "Value should be set to 42");
+		numberInput.setPropertyValue(42);
+		assertEquals(42, numberInput.getPropertyValue(), "Value should be set to 42");
 	}
 
 	@Test
 	void testValueClamping() {
-		spin.setPropertyMin(0);
-		spin.setPropertyMax(100);
+		numberInput.setPropertyMin(0);
+		numberInput.setPropertyMax(100);
 
-		spin.setPropertyValue(150);
-		assertEquals(100, spin.getPropertyValue(), "Value should be clamped to max");
+		numberInput.setPropertyValue(150);
+		assertEquals(100, numberInput.getPropertyValue(), "Value should be clamped to max");
 
-		spin.setPropertyValue(-10);
-		assertEquals(0, spin.getPropertyValue(), "Value should be clamped to min");
+		numberInput.setPropertyValue(-10);
+		assertEquals(0, numberInput.getPropertyValue(), "Value should be clamped to min");
 	}
 
 	@Test
 	void testIncrement() {
-		spin.setPropertyMin(0);
-		spin.setPropertyMax(100);
-		spin.setPropertyValue(50);
-		spin.setPropertyIncrement(5);
+		numberInput.setPropertyMin(0);
+		numberInput.setPropertyMax(100);
+		numberInput.setPropertyValue(50);
+		numberInput.setPropertyIncrement(5);
 
-		assertEquals(5, spin.getPropertyIncrement(), "Increment should be 5");
+		assertEquals(5, numberInput.getPropertyIncrement(), "Increment should be 5");
 	}
 
 	@Test
 	void testMantisConversion() {
-		spin.setPropertyMantis(2);
-		spin.setPropertyValue(1234);
+		numberInput.setPropertyMantis(2);
+		numberInput.setPropertyValue(1234);
 
-		assertEquals(12.34, spin.getValueAsDouble(), 0.001, "Value as double with mantis 2 should be 12.34");
+		assertEquals(12.34, numberInput.getValueAsDouble(), 0.001, "Value as double with mantis 2 should be 12.34");
 	}
 
 	@Test
 	void testMantisZero() {
-		spin.setPropertyMantis(0);
-		spin.setPropertyValue(100);
+		numberInput.setPropertyMantis(0);
+		numberInput.setPropertyValue(100);
 
-		assertEquals(100.0, spin.getValueAsDouble(), 0.001, "Value as double with mantis 0 should be 100.0");
+		assertEquals(100.0, numberInput.getValueAsDouble(), 0.001, "Value as double with mantis 0 should be 100.0");
 	}
 
 	@Test
 	void testSignalsNotNull() {
-		assertNotNull(spin.signalValue, "signalValue should not be null");
-		assertNotNull(spin.signalValueDouble, "signalValueDouble should not be null");
+		assertNotNull(numberInput.signalValue, "signalValue should not be null");
+		assertNotNull(numberInput.signalValueDouble, "signalValueDouble should not be null");
 	}
 }
