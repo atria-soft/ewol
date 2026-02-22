@@ -249,6 +249,10 @@ public class Sizer extends ContainerN {
 		// -8- Calculate the local origin, depending of the gravity:
 		Vector2f tmpOrigin = this.origin.add(tmpBorderSize).add(this.propertyGravity.gravityGenerateDelta(deltas));
 		// -9- Set sub widget origin:
+		// For perpendicular centering, use the smaller of underSize and localWidgetSize.
+		// Otherwise, when the content overflows the container, children would be centered
+		// relative to the overflow area, shifting them out of the visible region.
+		final Vector2f crossAlignSize = Vector2f.min(underSize, localWidgetSize);
 		for (final Widget it : orderedSubWidget) {
 			if (it == null) {
 				continue;
@@ -257,10 +261,10 @@ public class Sizer extends ContainerN {
 			final Vector2f size = it.getSize();
 			if (this.propertyMode == DisplayMode.VERTICAL) {
 				origin = Vector2f.clipInt(tmpOrigin.add(this.offset)
-						.add(this.propertyGravity.gravityGenerateDelta(new Vector2f(underSize.x() - size.x(), 0.0f))));
+						.add(this.propertyGravity.gravityGenerateDelta(new Vector2f(crossAlignSize.x() - size.x(), 0.0f))));
 			} else {
 				origin = Vector2f.clipInt(tmpOrigin.add(this.offset)
-						.add(this.propertyGravity.gravityGenerateDelta(new Vector2f(0.0f, underSize.y() - size.y()))));
+						.add(this.propertyGravity.gravityGenerateDelta(new Vector2f(0.0f, crossAlignSize.y() - size.y()))));
 			}
 			it.setOrigin(origin);
 			if (this.propertyMode == DisplayMode.VERTICAL) {
