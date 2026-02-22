@@ -52,6 +52,28 @@ public class CompositingText extends TextBase {
 	}
 
 	@Override
+	public Vector2f calculateSize(final String text) {
+		final Vector2f baseSize = super.calculateSize(text);
+		if (text.isEmpty()) {
+			return baseSize;
+		}
+		// Account for the last character's visual extent beyond its advance width.
+		// The advance width is used for cursor positioning, but the glyph shape may
+		// extend further right (e.g. italic overhang, serifs). Without this, the
+		// widget may clip the last character.
+		final char lastChar = text.charAt(text.length() - 1);
+		final GlyphProperty lastGlyph = getGlyphPointer(lastChar);
+		if (lastGlyph != null && lastGlyph.exist()) {
+			final float visualWidth = lastGlyph.getTextureRenderOffset().x() + lastGlyph.sizeTexture.x();
+			final float overhang = visualWidth - lastGlyph.getAdvenceX();
+			if (overhang > 0) {
+				return baseSize.withX(baseSize.x() + overhang);
+			}
+		}
+		return baseSize;
+	}
+
+	@Override
 	public Vector2f calculateSizeChar(final Character charcode) {
 		final GlyphProperty myGlyphProperty = getGlyphPointer(charcode);
 		final int fontHeight = (int) getHeight();
@@ -338,15 +360,18 @@ public class CompositingText extends TextBase {
 				}
 			}
 		}
+		// Track the visual right edge of this glyph (may exceed advance width)
+		final float visualRight = this.position.x() + myGlyphProperty.getTextureRenderOffset().x()
+				+ kerningOffset + myGlyphProperty.sizeTexture.x();
 		// move the position :
-		// LOGGER.debug(" 5 pos=" + this.position + " advance=" + myGlyph.advance.x() +
-		// "
-		// kerningOffset=" + kerningOffset);
 		this.position = this.position
 				.withX(this.position.x() + myGlyphProperty.getAdvenceX() + kerningOffset);
-		// LOGGER.debug(" 6 print '" + char-code + "' : start=" + this.sizeDisplayStart
-		// + "
-		// stop=" + this.sizeDisplayStop + " pos=" + this.position);
+		// Ensure sizeDisplayStop includes the full visual extent of this glyph,
+		// not just the advance width (important for the last character in a line)
+		if (visualRight > this.position.x()) {
+			this.sizeDisplayStop = this.sizeDisplayStop.withX(
+					Math.max(this.sizeDisplayStop.x(), visualRight));
+		}
 		// Register the previous character
 		this.previousCharcode = charcode;
 	}
