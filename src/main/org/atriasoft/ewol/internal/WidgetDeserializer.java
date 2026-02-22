@@ -44,7 +44,8 @@ public class WidgetDeserializer extends StdDeserializer<Widget> {
 		TYPE_MAP.put("ScrollView", ScrollView.class);
 		TYPE_MAP.put("Select", Select.class);
 		TYPE_MAP.put("Slider", Slider.class);
-		TYPE_MAP.put("Spin", Spin.class);
+		TYPE_MAP.put("Spin", NumberInput.class);
+		TYPE_MAP.put("NumberInput", NumberInput.class);
 		TYPE_MAP.put("ColorGradient", ColorGradient.class);
 		TYPE_MAP.put("ColorPicker", ColorPicker.class);
 		TYPE_MAP.put("ListFileSystem", ListFileSystem.class);
