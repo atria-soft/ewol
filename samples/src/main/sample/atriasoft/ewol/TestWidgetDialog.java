@@ -90,13 +90,13 @@ public class TestWidgetDialog implements TestWidgetInterface {
 				self.nameEntry.getPropertyValue(),
 				self.volumeSlider.getPropertyValue(),
 				self.enableCheck.isChecked());
-		self.currentDialog.autoDestroy();
+		self.currentDialog.destroy();
 		self.currentDialog = null;
 	}
 
 	private static void onCancelClicked(final TestWidgetDialog self) {
 		LOGGER.info("Dialog Cancel clicked");
-		self.currentDialog.autoDestroy();
+		self.currentDialog.destroy();
 		self.currentDialog = null;
 	}
 
