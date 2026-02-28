@@ -364,6 +364,11 @@ public class Windows extends Widget {
 			//LOGGER.debug("Draw Windows");
 		}
 		
+		// Restore OpenGL state for UI overlays (the main widget may have changed
+		// blend, depth test, etc. during 3D rendering)
+		OpenGL.enable(OpenGL.Flag.flag_blend);
+		OpenGL.blendFuncAuto();
+		OpenGL.disable(OpenGL.Flag.flag_depthTest);
 		// second display the pop-up
 		for (final Widget it : this.popUpWidgetList) {
 			if (it != null) {
