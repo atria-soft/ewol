@@ -59,6 +59,7 @@ EwolObject                    -- Base object with signals, naming, parent tracki
         Entry                 -- Text input field
         PopUp                 -- Popup overlay widget
           Dialog              -- Structured dialog (title bar + content + footer buttons)
+        FieldSet              -- Grouping container with border, legend, optional icon and checkbox
         Select                -- Dropdown / ComboBox
       ScrollView              -- Scrollable single-child container with scrollbars
     ContainerN                -- Multiple children container
@@ -259,6 +260,37 @@ cb.toggle();
 cb.isChecked();
 cb.signalValue.connect(value -> ...);   // Signal<Boolean>
 ```
+
+### FieldSet
+
+Grouping container with a legend title, optional icon, and optional checkbox to enable/disable the section. Equivalent to HTML `<fieldset>`.
+
+```java
+// Factory
+FieldSet.create("General Settings")
+
+// Fluent API
+FieldSet.create("Lighting")
+    .icon("light")
+    .checkable(true)
+    .checked(false)
+    .add(intensitySlider)
+    .add(colorPicker)
+    .onActivate(() -> enableLighting())
+    .onDeactivate(() -> disableLighting())
+
+// Setter API
+FieldSet fs = new FieldSet("title");
+fs.setPropertyTitle("New Title");
+fs.setEnabled(true);             // check/uncheck tick (no-op if no tick)
+fs.isEnabled();                  // true if no tick
+```
+
+**Header order:** [Tick] [Icon] Title (left to right).
+
+**Signals:** `signalActivate` (section enabled), `signalDeactivate` (section disabled).
+
+**Content visibility:** When the tick is unchecked, the content sizer is hidden via `setPropertyHide(true)`. The layout collapses automatically.
 
 ### Slider
 

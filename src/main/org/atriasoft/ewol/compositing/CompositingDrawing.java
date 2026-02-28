@@ -24,35 +24,35 @@ import org.slf4j.LoggerFactory;
 
 public abstract class CompositingDrawing extends CompositingDraw {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompositingDrawing.class);
-
+	
 	protected static int vboIdColor = 1;
 	protected static int vboIdCoord = 0;
-	private boolean clippingEnable = false; // !< true if the clipping must be activated
-	private Vector3f clippingPosStart = Vector3f.ZERO; // !< Clipping start position
-	private Vector3f clippingPosStop = Vector3f.ZERO; // !< Clipping stop position
-	private Color color = Color.BLACK; // !< The text foreground color
-	private Color colorBg = Color.NONE; // !< The text background color
+	protected boolean clippingEnable = false; // !< true if the clipping must be activated
+	protected Vector3f clippingPosStart = Vector3f.ZERO; // !< Clipping start position
+	protected Vector3f clippingPosStop = Vector3f.ZERO; // !< Clipping stop position
+	protected Color color = Color.BLACK; // !< The text foreground color
+	protected Color colorBg = Color.NONE; // !< The text background color
 	//private int oGLMatrix = -1; // !< openGL id on the element (transformation matrix)
 	//private int oGLMatrixPosition = -1; // !< position matrix
-	private int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
-	private int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
-	private int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
-	private ResourceProgram oGLprogram; // !< pointer on the opengl display program
-	private final List<Color> outColors = new ArrayList<>();
-	private final List<Vector3f> outTriangles = new ArrayList<>();
-
-	private Vector3f position = new Vector3f(0, 0, 0); // !< The current position to draw
-
-	private float thickness = 0; // !< when drawing line and other things
-
-	private final Vector3f[] triangle = new Vector3f[3]; // !< Register every system with a combinaison of tiangle
-
-	private final Color[] tricolor = new Color[3]; // !< Register every the associated color foreground
-
-	private int triElement = 0; // !< special counter of the single dot generated
+	protected int oGLMatrixProjection = -1; //!< openGL id on the element (Projection matrix)
+	protected int oGLMatrixTransformation = -1; //!< openGL id on the element (transformation matrix)
+	protected int oGLMatrixView = -1; //!< openGL id on the element (view matrix)
+	protected ResourceProgram oGLprogram; // !< pointer on the opengl display program
+	protected final List<Color> outColors = new ArrayList<>();
+	protected final List<Vector3f> outTriangles = new ArrayList<>();
+	
+	protected Vector3f position = new Vector3f(0, 0, 0); // !< The current position to draw
+	
+	protected float thickness = 0; // !< when drawing line and other things
+	
+	protected final Vector3f[] triangle = new Vector3f[3]; // !< Register every system with a combinaison of tiangle
+	
+	protected final Color[] tricolor = new Color[3]; // !< Register every the associated color foreground
+	
+	protected int triElement = 0; // !< special counter of the single dot generated
 	//protected ResourceVirtualBufferObject vbo;
 	protected ResourceVirtualArrayObject vbo;
-
+	
 	// internal API for the generation abstraction of triangles
 	/**
 	 * Basic ructor
@@ -68,7 +68,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		// TO facilitate some debugs we add a name of the VBO:
 		this.vbo.setName("[VBO] of ewol::compositing::Area");
 	}
-
+	
 	/**
 	 * add a point reference at the current position (this is a vertex
 	 *        reference at the current position
@@ -77,7 +77,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		internalSetColor(this.color);
 		setPoint(this.position);
 	}
-
+	
 	/**
 	 * draw a 2D circle with the specify rafdius parameter.
 	 * @param radius Distence to the dorder
@@ -87,11 +87,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void circle(final float radius) {
 		circle(radius, 0);
 	}
-
+	
 	public void circle(final float radius, final float angleStart) {
 		circle(radius, angleStart, 2.0f * FMath.PI);
 	}
-	
+
 	public void circleBorderRaw(
 			final Vector3f centerPos,
 			final float radius,
@@ -100,7 +100,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			final float angleStop) {
 		circleBorderRaw(centerPos, radius, thickness, thickness, angleStart, angleStop);
 	}
-
+	
 	public void circleBorderRaw(
 			final Vector3f centerPos,
 			final float radius,
@@ -147,11 +147,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			setPoint(new Vector3f(centerPos.x() + offsetIntx, centerPos.y() + offsetInty, 0));
 		}
 	}
-
+	
 	public void circleRaw(final Vector3f centerPos, final float radius, final float angleStart, final float angleStop) {
 		circleRaw(centerPos, radius, radius, angleStart, angleStop);
 	}
-
+	
 	public void circleRaw(
 			final Vector3f centerPos,
 			final float radiusStart,
@@ -170,35 +170,35 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		for (int iii = 0; iii < nbOcurence; iii++) {
 			final float radius = radiusStart + ((radiusStart - radiusStop) * iii * invertOccurence);
 			setPoint(new Vector3f(centerPos.x(), centerPos.y(), 0));
-
+			
 			final float angleOne = angleStart + (angleStop * iii * invertOccurence);
 			float offsety = FMath.sin(angleOne) * radius;
 			float offsetx = FMath.cos(angleOne) * radius;
-
+			
 			setPoint(new Vector3f(centerPos.x() + offsetx, centerPos.y() + offsety, 0));
-
+			
 			final float angleTwo = angleStart + (angleStop * (iii + 1) * invertOccurence);
 			offsety = FMath.sin(angleTwo) * radius;
 			offsetx = FMath.cos(angleTwo) * radius;
-
+			
 			setPoint(new Vector3f(centerPos.x() + offsetx, centerPos.y() + offsety, 0));
 		}
 	}
-	
+
 	public void circle(float radius, final float angleStart, float angleStop) {
 		resetCount();
-
+		
 		if (radius < 0) {
 			radius *= -1;
 		}
 		angleStop = angleStop - angleStart;
-
+		
 		// display background :
 		if (this.colorBg.a() != 0) {
 			internalSetColor(this.colorBg);
 			circleRaw(this.position, radius, angleStart, angleStop);
 		}
-
+		
 		// show if we have a border :
 		if (this.thickness == 0 || this.color.a() == 0) {
 			return;
@@ -206,7 +206,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		internalSetColor(this.color);
 		circleBorderRaw(this.position, radius, this.thickness, angleStart, angleStop);
 	}
-
+	
 	/**
 	 * clear all the registered element in the current element
 	 */
@@ -218,23 +218,23 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		this.vbo.clear();
 		this.outTriangles.clear();
 		this.outColors.clear();
-
+		
 		// reset temporal variables :
 		this.position = Vector3f.ZERO;
-
+		
 		this.clippingPosStart = Vector3f.ZERO;
 		this.clippingPosStop = Vector3f.ZERO;
 		this.clippingEnable = false;
-
+		
 		this.color = Color.BLACK;
 		this.colorBg = Color.NONE;
-
+		
 		for (int iii = 0; iii < 3; iii++) {
 			this.triangle[iii] = this.position;
 			this.tricolor[iii] = this.color;
 		}
 	}
-
+	
 	/**
 	 * draw All the refistered text in the current element on openGL
 	 */
@@ -257,7 +257,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
 	}
-
+	
 	@Override
 	public void flush() {
 		// push data on the VBO
@@ -267,7 +267,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		// Request GPU upload
 		this.vbo.flush();
 	}
-
+	
 	/**
 	 * Lunch the generation of triangle
 	 */
@@ -280,7 +280,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		this.outColors.add(this.tricolor[1]);
 		this.outColors.add(this.tricolor[2]);
 	}
-
+	
 	/**
 	 * Get the foreground color of the font.
 	 * @return Foreground color.
@@ -288,7 +288,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public Color getColor() {
 		return this.color;
 	}
-
+	
 	/**
 	 * Get the background color of the font.
 	 * @return Background color.
@@ -296,7 +296,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public Color getColorBg() {
 		return this.colorBg;
 	}
-
+	
 	/**
 	 * get the current display position (sometime needed in the gui control)
 	 * @return the current position.
@@ -304,7 +304,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public Vector3f getPos() {
 		return this.position;
 	}
-
+	
 	/**
 	 * set the Color of the current triangle drawing
 	 * @param color Color to current dots generated
@@ -320,7 +320,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			this.tricolor[2] = color;
 		}
 	}
-
+	
 	/**
 	 * Relative drawing a line (special vector)
 	 * @param vect Vector of the current line.
@@ -328,31 +328,31 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void lineRel(final float xxx, final float yyy) {
 		lineTo(this.position.add(new Vector3f(xxx, yyy, 0)));
 	}
-
+	
 	public void lineRel(final float xxx, final float yyy, final float zzz) {
 		lineTo(this.position.add(new Vector3f(xxx, yyy, zzz)));
 	}
-
+	
 	public void lineRel(final Vector2f vect) {
 		lineRel(new Vector3f(vect.x(), vect.y(), 0));
 	}
-
+	
 	public void lineRel(final Vector3f vect) {
 		lineTo(this.position.add(vect));
 	}
-
+	
 	public void lineTo(final float xxx, final float yyy) {
 		lineTo(new Vector3f(xxx, yyy, 0));
 	}
-
+	
 	public void lineTo(final float xxx, final float yyy, final float zzz) {
 		lineTo(new Vector3f(xxx, yyy, zzz));
 	}
-
+	
 	public void lineTo(final Vector2f dest) {
 		lineTo(new Vector3f(dest.x(), dest.y(), 0));
 	}
-
+	
 	/**
 	 * draw a line to a specific position
 	 * @param dest Position of the end of the line.
@@ -383,14 +383,14 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		setPoint(new Vector3f(this.position.x() - offsetx, this.position.y() - offsety, this.position.z()));
 		setPoint(new Vector3f(this.position.x() + offsetx, this.position.y() + offsety, this.position.z()));
 		setPoint(new Vector3f(dest.x() + offsetx, dest.y() + offsety, this.position.z()));
-
+		
 		setPoint(new Vector3f(dest.x() + offsetx, dest.y() + offsety, dest.z()));
 		setPoint(new Vector3f(dest.x() - offsetx, dest.y() - offsety, dest.z()));
 		setPoint(new Vector3f(this.position.x() - offsetx, this.position.y() - offsety, dest.z()));
 		// update the system position :
 		this.position = dest;
 	}
-
+	
 	/**
 	 * load the openGL program and get all the ID needed
 	 */
@@ -409,19 +409,19 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			this.oGLMatrixView = this.oGLprogram.getUniform("in_matrixView");
 		}
 	}
-
+	
 	public void rectangle(final float xxx, final float yyy) {
 		rectangle(new Vector3f(xxx, yyy, 0));
 	}
-
+	
 	public void rectangle(final float xxx, final float yyy, final float zzz) {
 		rectangle(new Vector3f(xxx, yyy, zzz));
 	}
-
+	
 	public void rectangle(final Vector2f dest) {
 		rectangle(dest.toVector3f());
 	}
-
+	
 	/**
 	 * draw a 2D rectangle to the position requested.
 	 * @param dest Position the the end of the rectangle
@@ -430,7 +430,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		internalSetColor(this.color);
 		rectangleRaw(this.position, dest);
 	}
-
+	
 	public void rectangleRaw(final Vector3f startPos, final Vector3f endPos) {
 		resetCount();
 		/*
@@ -476,27 +476,27 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		setPoint(new Vector3f(dxA, dyD, 0));
 		setPoint(new Vector3f(dxA, dyC, 0));
 		setPoint(new Vector3f(dxB, dyC, 0));
-
+		
 		setPoint(new Vector3f(dxB, dyC, 0));
 		setPoint(new Vector3f(dxB, dyD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
 	}
-
+	
 	public void drawQuad(final Vector3f pos1, final Vector3f pos2, final Vector3f pos3, final Vector3f pos4) {
 		resetCount();
 		setPoint(pos1);
 		setPoint(pos2);
 		setPoint(pos3);
-
+		
 		setPoint(pos1);
 		setPoint(pos3);
 		setPoint(pos4);
 	}
-	
+
 	public void rectangleBorder(final Vector2f dest, final float borderWidth) {
 		rectangleBorder(dest.toVector3f(), borderWidth);
 	}
-	
+
 	public void rectangleBorder(final Vector3f dest, final float borderWidth) {
 		/*
 		 * Bitmap position xA             xB
@@ -572,39 +572,39 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		setPoint(new Vector3f(dxA, dyC, 0));
 		setPoint(new Vector3f(dxB, dyC, 0));
 		setPoint(new Vector3f(dxpA, dypC, 0));
-		
+
 		setPoint(new Vector3f(dxB, dyC, 0));
 		setPoint(new Vector3f(dxpA, dypC, 0));
 		setPoint(new Vector3f(dxpB, dypC, 0));
-
+		
 		// Right border:
 		setPoint(new Vector3f(dxpB, dypC, 0));
 		setPoint(new Vector3f(dxB, dyC, 0));
 		setPoint(new Vector3f(dxB, dyD, 0));
-		
+
 		setPoint(new Vector3f(dxpB, dypC, 0));
 		setPoint(new Vector3f(dxB, dyD, 0));
 		setPoint(new Vector3f(dxpB, dypD, 0));
-		
+
 		// Top border:
 		setPoint(new Vector3f(dxpB, dypD, 0));
 		setPoint(new Vector3f(dxB, dyD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
-		
+
 		setPoint(new Vector3f(dxpB, dypD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
 		setPoint(new Vector3f(dxpA, dypD, 0));
-
+		
 		// Left border:
 		setPoint(new Vector3f(dxpA, dypD, 0));
 		setPoint(new Vector3f(dxA, dyD, 0));
 		setPoint(new Vector3f(dxpA, dypC, 0));
-
+		
 		setPoint(new Vector3f(dxA, dyD, 0));
 		setPoint(new Vector3f(dxpA, dypC, 0));
 		setPoint(new Vector3f(dxA, dyC, 0));
 	}
-
+	
 	/**
 	 * draw a 2D rectangle to the position requested.
 	 * @param dest Position the the end of the rectangle
@@ -612,11 +612,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void rectangleRadius(final Vector2f dest, final float radius) {
 		rectangleRadius(dest.toVector3f(), radius);
 	}
-
+	
 	public void rectangleRadius(final Vector3f dest, final float radius) {
 		internalSetColor(this.color);
 		final boolean showConstruct = false;
-
+		
 		rectangleRaw(this.position.add(new Vector3f(radius, 0, 0)), dest.less(new Vector3f(radius, 0, 0)));
 		if (showConstruct) {
 			internalSetColor(Color.ORANGE);
@@ -628,7 +628,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		rectangleRaw(new Vector3f(dest.x() - radius, this.position.y() + radius, 0),
 				new Vector3f(dest.x(), dest.y() - radius, 0));
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.AQUA_MARINE);
 		}
@@ -638,7 +638,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 				FMath.PI * 0.5f);
 		circleRaw(new Vector3f(this.position.x() + radius, dest.y() - radius, 0), radius, FMath.PI * 0.5f,
 				FMath.PI * 0.5f);
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.BLACK);
 			rectangleRaw(this.position, this.position.add(10));
@@ -646,11 +646,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			rectangleRaw(dest.less(10), dest);
 		}
 	}
-	
+
 	public void rectangleRadius(final Vector2f dest, final Insets thickness, final BorderRadius radius) {
 		internalSetColor(this.color);
 		final boolean showConstruct = false;
-		
+
 		if (showConstruct) {
 			internalSetColor(Color.DARK_KHAKI);
 		}
@@ -677,13 +677,13 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		final Vector3f centerTopLeft = new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(),
 				0);
 		circleRaw(centerTopLeft, radius.topLeft(), FMath.PI * 0.5f, FMath.PI * 0.5f);
-
+		
 		// center area:
 		if (showConstruct) {
 			internalSetColor(Color.DARK_GOLDENROD);
 		}
 		drawQuad(centerBottomLeft, centerTopLeft, centerTopRight, centerBottomRight);
-
+		
 		// buttom area:
 		if (showConstruct) {
 			internalSetColor(Color.DARK_BLUE);
@@ -696,7 +696,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		drawQuad(centerTopLeft.add(0, radius.topLeft(), 0), centerTopLeft, centerTopRight,
 				centerTopRight.add(0, radius.topRight(), 0));
-
+		
 		// right area:
 		if (showConstruct) {
 			internalSetColor(Color.DARK_SLATE_GRAY);
@@ -709,7 +709,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		drawQuad(centerBottomLeft.less(radius.bottomLeft(), 0, 0), centerBottomLeft, centerTopLeft,
 				centerTopLeft.less(radius.topLeft(), 0, 0));
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.BLACK);
 			rectangleRaw(this.position, this.position.add(10));
@@ -717,7 +717,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			rectangleRaw(dest.toVector3f().less(10), dest.toVector3f());
 		}
 	}
-
+	
 	public void rectangleBorderRadius(
 			//final Vector2f pos,
 			final Vector2f dest,
@@ -725,7 +725,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			final BorderRadius radius) {
 		internalSetColor(this.colorBg);
 		final boolean showConstruct = false;
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.KHAKI);
 		}
@@ -733,7 +733,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		final Vector3f centerBottomLeft = this.position.add(radius.bottomLeft(), radius.bottomLeft(), 0);
 		circleBorderRaw(centerBottomLeft, radius.bottomLeft(), thickness.left(), thickness.bottom(), FMath.PI,
 				FMath.PI * 0.5f);
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.CYAN);
 		}
@@ -756,7 +756,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 				0);
 		circleBorderRaw(centerTopLeft, radius.topLeft(), thickness.top(), thickness.left(), FMath.PI * 0.5f,
 				FMath.PI * 0.5f);
-
+		
 		// buttom area:
 		if (showConstruct) {
 			internalSetColor(Color.BLUE);
@@ -773,7 +773,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 				centerTopLeft.add(0, radius.topLeft() - thickness.top(), 0), //
 				centerTopRight.add(0, radius.topRight() - thickness.top(), 0), //
 				centerTopRight.add(0, radius.topRight(), 0));
-
+		
 		// right area:
 		if (showConstruct) {
 			internalSetColor(Color.SLATE_GRAY);
@@ -790,7 +790,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 				centerBottomLeft.less(radius.bottomLeft() - thickness.left(), 0, 0), //
 				centerTopLeft.less(radius.topLeft() - thickness.left(), 0, 0), //
 				centerTopLeft.less(radius.topLeft(), 0, 0));
-		
+
 		if (showConstruct) {
 			internalSetColor(Color.BLACK);
 			rectangleRaw(this.position, this.position.add(10));
@@ -798,11 +798,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			rectangleRaw(dest.toVector3f().less(10), dest.toVector3f());
 		}
 	}
-	
+
 	public void rectangleBorderRadius(final Vector2f dest, final float thickness, final float radius) {
 		rectangleBorderRadius(dest.toVector3f(), thickness, radius);
 	}
-	
+
 	public void rectangleBorderRadius(final Vector3f dest, final float thickness, final float radius) {
 		internalSetColor(this.colorBg);
 		final boolean showConstruct = false;
@@ -821,7 +821,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		// right
 		rectangleRaw(new Vector3f(dest.x() - thickness * 0.5f, this.position.y() + radius, 0),
 				new Vector3f(dest.x() + thickness * 0.5f, dest.y() - radius, 0));
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.DARK_RED);
 		}
@@ -831,7 +831,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 				FMath.PI * 1.5f, FMath.PI * 0.5f);
 		circleBorderRaw(new Vector3f(this.position.x() + radius, dest.y() - radius, 0), radius, thickness,
 				FMath.PI * 0.5f, FMath.PI * 0.5f);
-
+		
 		if (showConstruct) {
 			internalSetColor(Color.BLACK);
 			rectangleRaw(this.position, this.position.add(10));
@@ -839,19 +839,19 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			rectangleRaw(dest.less(10), dest);
 		}
 	}
-
+	
 	public void rectangleWidth(final float xxx, final float yyy) {
 		rectangleWidth(new Vector3f(xxx, yyy, 0));
 	}
-
+	
 	public void rectangleWidth(final float xxx, final float yyy, final float zzz) {
 		rectangleWidth(new Vector3f(xxx, yyy, zzz));
 	}
-
+	
 	public void rectangleWidth(final Vector2f size) {
 		rectangleWidth(new Vector3f(size.x(), size.y(), 0));
 	}
-
+	
 	/**
 	 * draw a 2D rectangle to the requested size.
 	 * @param size size of the rectangle
@@ -859,18 +859,18 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void rectangleWidth(final Vector3f size) {
 		rectangle(this.position.add(size));
 	}
-
+	
 	/**
 	 * in case of some error the count can be reset
 	 */
 	private void resetCount() {
 		this.triElement = 0;
 	}
-
+	
 	public void setClipping(final Vector2f pos, final Vector2f posEnd) {
 		setClipping(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(posEnd.x(), posEnd.y(), 1));
 	}
-
+	
 	/**
 	 * Request a clipping area for the text (next draw only)
 	 * @param pos Start position of the clipping
@@ -883,7 +883,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		this.clippingPosStart = Vector3f.min(pos, posEnd);
 		this.clippingEnable = true;
 	}
-
+	
 	/**
 	 * enable/Disable the clipping (without lose the current clipping
 	 *        position)
@@ -892,11 +892,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void setClippingMode(final boolean newMode) {
 		this.clippingEnable = newMode;
 	}
-
+	
 	public void setClippingWidth(final Vector2f pos, final Vector2f width) {
 		setClippingWidth(new Vector3f(pos.x(), pos.y(), -1), new Vector3f(width.x(), width.y(), 2));
 	}
-
+	
 	/**
 	 * Request a clipping area for the text (next draw only)
 	 * @param pos Start position of the clipping
@@ -905,7 +905,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void setClippingWidth(final Vector3f pos, final Vector3f width) {
 		setClipping(pos, pos.add(width));
 	}
-
+	
 	/**
 	 * set the Color of the current foreground font
 	 * @param color Color to set on foreground (for next print)
@@ -913,7 +913,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void setColor(final Color color) {
 		this.color = color;
 	}
-
+	
 	/**
 	 * set the background color of the font (for selected Text (not the
 	 *        global BG))
@@ -921,6 +921,16 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	 */
 	public void setColorBg(final Color color) {
 		this.colorBg = color;
+	}
+
+	/**
+	 * Set the color used for the next drawing primitives (drawQuad, circleBorderRaw, etc.).
+	 * Unlike {@link #setColor(Color)} which only stores the foreground color,
+	 * this method immediately applies the color to the triangle color buffer.
+	 * @param color Color to apply for next drawing operations
+	 */
+	public void setDrawingColor(final Color color) {
+		internalSetColor(color);
 	}
 
 	/**
@@ -934,19 +944,19 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			generateTriangle();
 		}
 	}
-
+	
 	public void setPos(final float xxx, final float yyy) {
 		setPos(new Vector3f(xxx, yyy, 0));
 	}
-
+	
 	public void setPos(final float xxx, final float yyy, final float zzz) {
 		setPos(new Vector3f(xxx, yyy, zzz));
 	}
-
+	
 	public void setPos(final Vector2f pos) {
 		setPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-
+	
 	/**
 	 * set position for the next text written
 	 * @param pos Position of the text (in 3D)
@@ -954,11 +964,11 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void setPos(final Vector3f pos) {
 		this.position = pos;
 	}
-
+	
 	public void setRelPos(final float xxx, final float yyy) {
 		this.position = this.position.add(xxx, yyy, 0);
 	}
-
+	
 	/**
 	 * set relative position for the next text writen
 	 * @param pos ofset apply of the text (in 3D)
@@ -966,15 +976,15 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	public void setRelPos(final float xxx, final float yyy, final float zzz) {
 		this.position = this.position.add(xxx, yyy, zzz);
 	}
-
+	
 	public void setRelPos(final Vector2f pos) {
 		setRelPos(new Vector3f(pos.x(), pos.y(), 0));
 	}
-
+	
 	public void setRelPos(final Vector3f pos) {
 		this.position = this.position.add(pos);
 	}
-
+	
 	/**
 	 * Specify the line thickness for the next elements
 	 * @param thickness The thickness desired for the next print
@@ -986,12 +996,12 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			this.thickness *= -1;
 		}
 	}
-
+	
 	/**
 	 * Un-Load the openGL program and get all the ID needed
 	 */
 	private void unLoadProgram() {
 		this.oGLprogram = null;
 	}
-
+	
 }

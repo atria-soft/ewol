@@ -59,11 +59,11 @@ public class Tick extends Box {
 		setMouseLimit(1);
 		setPropertyExpand(Vector2b.FALSE);
 		setPropertyFill(Vector2b.TRUE);
-		setPropertyMinSize(new Dimension2f(new Vector2f(32f, 32f)));
-		setPropertyBorderWidth(new DimensionInsets(4));
+		setPropertyMinSize(new Dimension2f(new Vector2f(16f, 16f)));
+		setPropertyBorderWidth(new DimensionInsets(2));
 		setPropertyBorderColor(Color.BLACK);
 		setPropertyColor(Color.WHITE);
-		setPropertyPadding(new DimensionInsets(3));
+		setPropertyPadding(new DimensionInsets(1));
 		setPropertyMargin(new DimensionInsets(0));
 	}
 	

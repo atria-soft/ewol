@@ -41,7 +41,9 @@ public class CompositingGC extends CompositingDrawing {
 	@Override
 	public void addRectangle(final Vector2f position, final Vector2f size) {
 		setPos(position);
-		rectangle(position.add(size));
+		if (this.color.a() != 0) {
+			rectangle(position.add(size));
+		}
 		if (this.strokeSize > 0) {
 			rectangleBorder(position.add(size), this.strokeSize);
 		}
@@ -53,7 +55,9 @@ public class CompositingGC extends CompositingDrawing {
 			addRectangle(position, size);
 		} else {
 			setPos(position);
-			rectangleRadius(position.add(size), roundedCorner.x());
+			if (this.color.a() != 0) {
+				rectangleRadius(position.add(size), roundedCorner.x());
+			}
 			if (this.strokeSize > 0) {
 				rectangleBorderRadius(position.add(size), this.strokeSize, roundedCorner.x());
 			}
@@ -67,7 +71,9 @@ public class CompositingGC extends CompositingDrawing {
 			final Insets thickness,
 			final BorderRadius radius) {
 		setPos(positionStart);
-		rectangleRadius(positionStop, thickness, radius);
+		if (this.color.a() != 0) {
+			rectangleRadius(positionStop, thickness, radius);
+		}
 		if (!thickness.isZero()) {
 			rectangleBorderRadius(positionStop, thickness, radius);
 		}

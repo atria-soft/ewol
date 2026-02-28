@@ -243,11 +243,11 @@ public class Box extends Container {
 		}
 	}
 
-	private Vector2f calculateOriginRendering(final Vector2f renderSize) {
+	protected Vector2f calculateOriginRendering(final Vector2f renderSize) {
 		return this.propertyGravity.gravityGenerateDelta(this.size.less(renderSize));
 	}
 	
-	private Vector2f calculateSizeRendering() {
+	protected Vector2f calculateSizeRendering() {
 		Vector2f tmpRenderSize = this.minSize;
 		if (this.propertyFill.x()) {
 			tmpRenderSize = tmpRenderSize.withX(this.size.x());
