@@ -9,7 +9,6 @@ import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
-import org.atriasoft.etk.DimensionBorderRadius;
 import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
@@ -17,10 +16,10 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.widget.Box;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.ColorGradient;
+import org.atriasoft.ewol.widget.Dialog;
 import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.Icon;
 import org.atriasoft.ewol.widget.Label;
-import org.atriasoft.ewol.widget.PopUp;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 import org.atriasoft.ewol.widget.Slider;
@@ -29,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ColorPickerPopup is a popup widget for selecting colors.
+ * ColorPickerPopup is a dialog widget for selecting colors.
  *
  * <p>Features:</p>
  * <ul>
@@ -52,13 +51,9 @@ import org.slf4j.LoggerFactory;
  * }
  * }</pre>
  */
-public class ColorPickerPopup extends PopUp {
+public class ColorPickerPopup extends Dialog {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ColorPickerPopup.class);
 
-	private static final Color COLOR_OVERLAY = new Color(0x00, 0x00, 0x00, 0xA0);
-	private static final Color COLOR_CONTENT = new Color(0x35, 0x35, 0x35, 0xFF);
-	private static final Color COLOR_HEADER_FOOTER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
-	private static final Color COLOR_BORDER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
 	private static final Color COLOR_PREVIEW_BORDER = new Color(0x60, 0x60, 0x60, 0xFF);
 	private static final Color COLOR_ICON_SELECT = new Color(0x80, 0xFF, 0x80, 0xFF);
 	private static final Color COLOR_ICON_CANCEL = new Color(0xFF, 0x80, 0x80, 0xFF);
@@ -94,7 +89,6 @@ public class ColorPickerPopup extends PopUp {
 	// Internal widgets
 	// ========================================================================
 
-	private final Label titleLabel;
 	private final ColorGradient gradient;
 	private final Slider sliderRed;
 	private final Slider sliderGreen;
@@ -113,15 +107,11 @@ public class ColorPickerPopup extends PopUp {
 	// ========================================================================
 
 	public ColorPickerPopup() {
-		setPropertyColor(COLOR_OVERLAY);
-		setPropertyExpand(Vector2b.TRUE);
-		setPropertyFill(Vector2b.TRUE);
+		// Dialog handles: overlay, title bar with close button, content box, footer
+		setPropertyTitle(this.propertyLabelTitle);
+		setDialogSize(500, 320, 500, 400);
 
-		// Create all internal widgets
-		this.titleLabel = new Label(this.propertyLabelTitle);
-		this.titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
-		this.titleLabel.setPropertyFill(Vector2b.TRUE_FALSE);
-
+		// Create color picker widgets
 		this.gradient = ColorGradient.create();
 		this.gradient.setPropertyMinSize(new Dimension2f(new Vector2f(200, 200), Distance.PIXEL));
 		this.gradient.setPropertyExpand(Vector2b.FALSE);
@@ -185,10 +175,12 @@ public class ColorPickerPopup extends PopUp {
 		this.selectButton.signalClick.connectAuto(this, ColorPickerPopup::onSelectClicked);
 		this.cancelButton.signalClick.connectAuto(this, ColorPickerPopup::onCancelClicked);
 
-		// Build the widget tree
-		setSubWidget(buildLayout());
+		// Set content and footer via Dialog API
+		setContentWidget(buildColorPickerContent());
 
-		setPropertyCanFocus(true);
+		addFooterWidget(this.selectButton);
+		addFooterWidget(createHorizontalSpacer(10));
+		addFooterWidget(this.cancelButton);
 	}
 
 	public ColorPickerPopup(final Color initialColor) {
@@ -199,56 +191,23 @@ public class ColorPickerPopup extends PopUp {
 	}
 
 	// ========================================================================
+	// Close behavior
+	// ========================================================================
+
+	@Override
+	protected void handleClose() {
+		this.signalCancel.emit();
+		super.handleClose();
+	}
+
+	// ========================================================================
 	// Layout construction
 	// ========================================================================
 
-	private Box buildLayout() {
-		final Box dialogBox = new Box();
-		dialogBox.setPropertyColor(new Color(0x00, 0x00, 0x00, 0x00));
-		dialogBox.setPropertyPadding(new DimensionInsets(0));
-		dialogBox.setPropertyMargin(new DimensionInsets(0));
-		dialogBox.setPropertyMinSize(new Dimension2f(new Vector2f(500, 320), Distance.PIXEL));
-		dialogBox.setPropertyMaxSize(new Dimension2f(new Vector2f(500, 400), Distance.PIXEL));
-		dialogBox.setPropertyExpand(Vector2b.FALSE);
-		dialogBox.setPropertyFill(Vector2b.FALSE);
-
-		final Sizer mainSizer = new Sizer(DisplayMode.VERTICAL);
-		mainSizer.setPropertyExpand(Vector2b.TRUE);
-		mainSizer.setPropertyFill(Vector2b.TRUE);
-		mainSizer.setPropertyLockExpand(Vector2b.TRUE);
-		dialogBox.setSubWidget(mainSizer);
-
-		mainSizer.subWidgetAdd(buildTitleBar());
-		mainSizer.subWidgetAdd(buildContentArea());
-		mainSizer.subWidgetAdd(buildFooter());
-
-		return dialogBox;
-	}
-
-	private Box buildTitleBar() {
-		final Box titleBar = new Box();
-		titleBar.setPropertyColor(COLOR_HEADER_FOOTER);
-		titleBar.setPropertyBorderRadius(new DimensionBorderRadius(8, 8, 0, 0));
-		titleBar.setPropertyPadding(new DimensionInsets(10));
-		titleBar.setPropertyExpand(Vector2b.TRUE_FALSE);
-		titleBar.setPropertyFill(Vector2b.TRUE_FALSE);
-		titleBar.setSubWidget(this.titleLabel);
-		return titleBar;
-	}
-
-	private Box buildContentArea() {
-		final Box contentBox = new Box();
-		contentBox.setPropertyColor(COLOR_CONTENT);
-		contentBox.setPropertyBorderColor(COLOR_BORDER);
-		contentBox.setPropertyBorderWidth(new DimensionInsets(0, 2, 0, 2));
-		contentBox.setPropertyPadding(new DimensionInsets(10));
-		contentBox.setPropertyExpand(Vector2b.TRUE);
-		contentBox.setPropertyFill(Vector2b.TRUE);
-
+	private Sizer buildColorPickerContent() {
 		final Sizer contentSizer = new Sizer(DisplayMode.HORIZONTAL);
 		contentSizer.setPropertyExpand(Vector2b.TRUE);
 		contentSizer.setPropertyFill(Vector2b.TRUE);
-		contentBox.setSubWidget(contentSizer);
 
 		// Left: Color gradient
 		contentSizer.subWidgetAdd(this.gradient);
@@ -259,7 +218,7 @@ public class ColorPickerPopup extends PopUp {
 		// Right: Controls
 		contentSizer.subWidgetAdd(buildControlsPanel());
 
-		return contentBox;
+		return contentSizer;
 	}
 
 	private Sizer buildControlsPanel() {
@@ -340,26 +299,6 @@ public class ColorPickerPopup extends PopUp {
 		return row;
 	}
 
-	private Box buildFooter() {
-		final Box footerBox = new Box();
-		footerBox.setPropertyColor(COLOR_HEADER_FOOTER);
-		footerBox.setPropertyBorderRadius(new DimensionBorderRadius(0, 0, 8, 8));
-		footerBox.setPropertyPadding(new DimensionInsets(10));
-		footerBox.setPropertyExpand(Vector2b.TRUE_FALSE);
-		footerBox.setPropertyFill(Vector2b.TRUE_FALSE);
-
-		final Sizer footerSizer = new Sizer(DisplayMode.HORIZONTAL);
-		footerSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
-		footerSizer.setPropertyFill(Vector2b.TRUE_FALSE);
-		footerBox.setSubWidget(footerSizer);
-
-		footerSizer.subWidgetAdd(this.selectButton);
-		footerSizer.subWidgetAdd(createHorizontalSpacer(10));
-		footerSizer.subWidgetAdd(this.cancelButton);
-
-		return footerBox;
-	}
-
 	private Sizer buildButtonContent(final String iconName, final Color iconColor, final Label label) {
 		final Sizer sizer = new Sizer(DisplayMode.HORIZONTAL);
 
@@ -372,22 +311,6 @@ public class ColorPickerPopup extends PopUp {
 		sizer.subWidgetAdd(label);
 
 		return sizer;
-	}
-
-	// ========================================================================
-	// Helper methods
-	// ========================================================================
-
-	private static Spacer createVerticalSpacer(final float height) {
-		final Spacer spacer = new Spacer();
-		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, height), Distance.PIXEL));
-		return spacer;
-	}
-
-	private static Spacer createHorizontalSpacer(final float width) {
-		final Spacer spacer = new Spacer();
-		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(width, 0), Distance.PIXEL));
-		return spacer;
 	}
 
 	// ========================================================================
@@ -572,7 +495,7 @@ public class ColorPickerPopup extends PopUp {
 			return;
 		}
 		this.propertyLabelTitle = title;
-		this.titleLabel.setPropertyValue(this.propertyLabelTitle);
+		setPropertyTitle(this.propertyLabelTitle);
 	}
 
 	public String getPropertyLabelSelect() {

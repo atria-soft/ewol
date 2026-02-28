@@ -11,19 +11,16 @@ import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
-import org.atriasoft.etk.DimensionBorderRadius;
-import org.atriasoft.etk.DimensionInsets;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.ewol.widget.Box;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.CheckBox;
+import org.atriasoft.ewol.widget.Dialog;
 import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.Icon;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ListFileSystem;
-import org.atriasoft.ewol.widget.PopUp;
 import org.atriasoft.ewol.widget.Sizer;
 import org.atriasoft.ewol.widget.Sizer.DisplayMode;
 import org.atriasoft.ewol.widget.Spacer;
@@ -32,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FileChooser is a simple file selector widget for opening or saving files.
+ * FileChooser is a simple file selector dialog for opening or saving files.
  *
  * <p>Example usage:</p>
  * <pre>{@code
@@ -50,13 +47,9 @@ import org.slf4j.LoggerFactory;
  * }
  * }</pre>
  */
-public class FileChooser extends PopUp {
+public class FileChooser extends Dialog {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileChooser.class);
 
-	private static final Color COLOR_OVERLAY = new Color(0x00, 0x00, 0x00, 0xA0);
-	private static final Color COLOR_CONTENT = new Color(0x35, 0x35, 0x35, 0xFF);
-	private static final Color COLOR_HEADER_FOOTER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
-	private static final Color COLOR_BORDER = new Color(0xB0, 0xB0, 0xB0, 0xFF);
 	private static final Color COLOR_ICON_FILL = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 	private static final Color COLOR_ICON_FILL_DARK = new Color(0x00, 0x00, 0x00, 0xFF);
 
@@ -82,7 +75,6 @@ public class FileChooser extends PopUp {
 	// Internal widgets
 	// ========================================================================
 
-	private final Label titleLabel;
 	private final Entry entryFolder;
 	private final Entry entryFile;
 	private final Icon iconHome;
@@ -99,16 +91,11 @@ public class FileChooser extends PopUp {
 	// ========================================================================
 
 	public FileChooser() {
-		// PopUp background
-		setPropertyColor(COLOR_OVERLAY);
-		setPropertyExpand(Vector2b.TRUE);
-		setPropertyFill(Vector2b.TRUE);
+		// Dialog handles: overlay, title bar with close button, content box, footer
+		// Default size is 80%x80% which is what we want
+		setPropertyTitle(this.propertyLabelTitle);
 
-		// Create all internal widgets
-		this.titleLabel = new Label(this.propertyLabelTitle);
-		this.titleLabel.setPropertyExpand(Vector2b.TRUE_FALSE);
-		this.titleLabel.setPropertyFill(Vector2b.TRUE_FALSE);
-
+		// Create file browser widgets
 		this.entryFolder = Entry.create();
 		this.entryFolder.setPropertyExpand(Vector2b.TRUE_FALSE);
 		this.entryFolder.setPropertyFill(Vector2b.TRUE_FALSE);
@@ -159,71 +146,39 @@ public class FileChooser extends PopUp {
 		this.entryFolder.signalModify.connectAuto(this, FileChooser::onCallbackEntryFolderChangeValue);
 		this.iconHome.signalPressed.connectAuto(this, FileChooser::onCallbackHomePressed);
 
-		// Build the widget tree
-		setSubWidget(buildLayout());
+		// Set content and footer via Dialog API
+		setContentWidget(buildFileChooserContent());
+
+		addFooterWidget(this.showHiddenCheckBox);
+		final Spacer expandSpacer = new Spacer();
+		expandSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
+		addFooterWidget(expandSpacer);
+		addFooterWidget(this.validateButton);
+		addFooterWidget(createHorizontalSpacer(10));
+		addFooterWidget(this.cancelButton);
 
 		// Initialize folder view
 		updateCurrentFolder();
-		setPropertyCanFocus(true);
+	}
+
+	// ========================================================================
+	// Close behavior
+	// ========================================================================
+
+	@Override
+	protected void handleClose() {
+		this.signalCancel.emit();
+		super.handleClose();
 	}
 
 	// ========================================================================
 	// Layout construction
 	// ========================================================================
 
-	private Box buildLayout() {
-		// Dialog box (centered, 80%x80%)
-		final Box dialogBox = new Box();
-		dialogBox.setPropertyColor(new Color(0x00, 0x00, 0x00, 0x00));
-		dialogBox.setPropertyPadding(new DimensionInsets(0));
-		dialogBox.setPropertyMargin(new DimensionInsets(0));
-		dialogBox.setPropertyMinSize(new Dimension2f(new Vector2f(80, 80), Distance.POURCENT));
-		dialogBox.setPropertyMaxSize(new Dimension2f(new Vector2f(80, 80), Distance.POURCENT));
-		dialogBox.setPropertyExpand(Vector2b.FALSE);
-		dialogBox.setPropertyFill(Vector2b.FALSE);
-
-		final Sizer mainSizer = new Sizer(DisplayMode.VERTICAL);
-		mainSizer.setPropertyExpand(Vector2b.TRUE);
-		mainSizer.setPropertyFill(Vector2b.TRUE);
-		mainSizer.setPropertyLockExpand(Vector2b.TRUE);
-		dialogBox.setSubWidget(mainSizer);
-
-		// Title bar
-		mainSizer.subWidgetAdd(buildTitleBar());
-
-		// Content area
-		mainSizer.subWidgetAdd(buildContentArea());
-
-		// Footer
-		mainSizer.subWidgetAdd(buildFooter());
-
-		return dialogBox;
-	}
-
-	private Box buildTitleBar() {
-		final Box titleBar = new Box();
-		titleBar.setPropertyColor(COLOR_HEADER_FOOTER);
-		titleBar.setPropertyBorderRadius(new DimensionBorderRadius(8, 8, 0, 0));
-		titleBar.setPropertyPadding(new DimensionInsets(10));
-		titleBar.setPropertyExpand(Vector2b.TRUE_FALSE);
-		titleBar.setPropertyFill(Vector2b.TRUE_FALSE);
-		titleBar.setSubWidget(this.titleLabel);
-		return titleBar;
-	}
-
-	private Box buildContentArea() {
-		final Box contentBox = new Box();
-		contentBox.setPropertyColor(COLOR_CONTENT);
-		contentBox.setPropertyBorderColor(COLOR_BORDER);
-		contentBox.setPropertyBorderWidth(new DimensionInsets(0, 2, 0, 2));
-		contentBox.setPropertyPadding(new DimensionInsets(10));
-		contentBox.setPropertyExpand(Vector2b.TRUE);
-		contentBox.setPropertyFill(Vector2b.TRUE);
-
+	private Sizer buildFileChooserContent() {
 		final Sizer contentSizer = new Sizer(DisplayMode.VERTICAL);
 		contentSizer.setPropertyExpand(Vector2b.TRUE);
 		contentSizer.setPropertyFill(Vector2b.TRUE);
-		contentBox.setSubWidget(contentSizer);
 
 		// Folder path entry row
 		contentSizer.subWidgetAdd(buildFolderRow());
@@ -247,7 +202,7 @@ public class FileChooser extends PopUp {
 		splitPane.second(this.listFiles);
 		contentSizer.subWidgetAdd(splitPane);
 
-		return contentBox;
+		return contentSizer;
 	}
 
 	private Sizer buildFolderRow() {
@@ -286,33 +241,6 @@ public class FileChooser extends PopUp {
 		return row;
 	}
 
-	private Box buildFooter() {
-		final Box footerBox = new Box();
-		footerBox.setPropertyColor(COLOR_HEADER_FOOTER);
-		footerBox.setPropertyBorderRadius(new DimensionBorderRadius(0, 0, 8, 8));
-		footerBox.setPropertyPadding(new DimensionInsets(8));
-		footerBox.setPropertyExpand(Vector2b.TRUE_FALSE);
-		footerBox.setPropertyFill(Vector2b.TRUE_FALSE);
-
-		final Sizer footerSizer = new Sizer(DisplayMode.HORIZONTAL);
-		footerSizer.setPropertyExpand(Vector2b.TRUE_FALSE);
-		footerSizer.setPropertyFill(Vector2b.TRUE_FALSE);
-		footerBox.setSubWidget(footerSizer);
-
-		footerSizer.subWidgetAdd(this.showHiddenCheckBox);
-
-		// Expanding spacer to push buttons right
-		final Spacer expandSpacer = new Spacer();
-		expandSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
-		footerSizer.subWidgetAdd(expandSpacer);
-
-		footerSizer.subWidgetAdd(this.validateButton);
-		footerSizer.subWidgetAdd(createHorizontalSpacer(10));
-		footerSizer.subWidgetAdd(this.cancelButton);
-
-		return footerBox;
-	}
-
 	private Sizer buildButtonContent(final String iconName, final Label label) {
 		final Sizer sizer = new Sizer(DisplayMode.HORIZONTAL);
 
@@ -325,22 +253,6 @@ public class FileChooser extends PopUp {
 		sizer.subWidgetAdd(label);
 
 		return sizer;
-	}
-
-	// ========================================================================
-	// Helper methods
-	// ========================================================================
-
-	private static Spacer createVerticalSpacer(final float height) {
-		final Spacer spacer = new Spacer();
-		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(0, height), Distance.PIXEL));
-		return spacer;
-	}
-
-	private static Spacer createHorizontalSpacer(final float width) {
-		final Spacer spacer = new Spacer();
-		spacer.setPropertyMinSize(new Dimension2f(new Vector2f(width, 0), Distance.PIXEL));
-		return spacer;
 	}
 
 	// ========================================================================
@@ -461,7 +373,7 @@ public class FileChooser extends PopUp {
 			return;
 		}
 		this.propertyLabelTitle = propertyLabelTitle;
-		this.titleLabel.setPropertyValue(this.propertyLabelTitle);
+		setPropertyTitle(this.propertyLabelTitle);
 	}
 
 	public void setPropertyLabelValidate(final String propertyLabelValidate) {
