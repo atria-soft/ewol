@@ -58,6 +58,7 @@ EwolObject                    -- Base object with signals, naming, parent tracki
         Button                -- Clickable button (contains a sub-widget, typically Label)
         Entry                 -- Text input field
         PopUp                 -- Popup overlay widget
+          Dialog              -- Structured dialog (title bar + content + footer buttons)
         Select                -- Dropdown / ComboBox
       ScrollView              -- Scrollable single-child container with scrollbars
     ContainerN                -- Multiple children container
@@ -482,6 +483,56 @@ popup.setPropertyCloseOutEvent(true);  // close on outside click
 windows.popUpWidgetPush(popup);        // show
 windows.popUpWidgetPop();              // hide top popup
 ```
+
+### Dialog
+
+Structured popup with title bar (close button), content area, and footer button bar. Extends `PopUp`.
+
+```java
+// Factory + Fluent API
+Dialog.create()
+    .title("My Dialog")
+    .content(myContentWidget)
+    .footer(Button.create("OK").onClick(() -> dialog.autoDestroy()))
+    .footer(Button.create("Cancel").onClick(() -> dialog.autoDestroy()))
+    .dialogSizePercent(50, 50)    // default: 80%x80%
+    .onClose(() -> ...)           // close button (X) callback
+
+// Show as popup
+windows.popUpWidgetPush(dialog);
+
+// Setter API
+Dialog d = new Dialog();
+d.setPropertyTitle("Title");
+d.setContentWidget(widget);
+d.addFooterWidget(button);
+d.setDialogSizePercent(50, 50);
+d.setDialogSize(400, 300, 800, 600);  // pixel min/max
+```
+
+**Signals:** `signalClose` (emitted when close button clicked).
+
+**Subclassing:** Override `handleClose()` to customize close behavior (default: emit `signalClose` + `autoDestroy()`).
+
+```java
+public class MyDialog extends Dialog {
+    public MyDialog() {
+        setPropertyTitle("My Dialog");
+        setContentWidget(buildContent());
+        addFooterWidget(Button.create("OK"));
+    }
+
+    @Override
+    protected void handleClose() {
+        // custom close logic
+        autoDestroy();
+    }
+}
+```
+
+**Structure:** Dialog fills the entire window as an overlay. The inner dialog box (default 80%x80%) is centered and contains: title bar (label + close icon) → content area → footer button bar.
+
+**Color constants** (protected, available to subclasses): `COLOR_OVERLAY`, `COLOR_CONTENT`, `COLOR_HEADER_FOOTER`, `COLOR_BORDER`.
 
 ### Spacer
 
