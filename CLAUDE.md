@@ -72,9 +72,12 @@ EwolObject                    -- Base object with signals, naming, parent tracki
     Icon                      -- SVG icon display with color customization
     SplitPane                 -- Resizable split panel (two children)
     CheckBox                  -- Checkbox (Tick + Label composite)
+    RadioButton               -- Radio button (RadioIndicator + arbitrary Widget composite)
+    RadioGroup                -- Exclusive selection group of RadioButtons (extends Sizer)
     ProgressBar               -- Progress indicator (0.0 to 1.0)
     Spacer                    -- Empty space widget
     Tick                      -- Toggle indicator (cached SVG, used internally by CheckBox)
+    RadioIndicator            -- Circular radio indicator (used internally by RadioButton)
     WidgetScrolled            -- Base for scrollable widgets (scroll management, scrollbars)
       TreeView                -- Generic tree view with expand/collapse, columns, indent guides
         TreeFileSystem        -- File system browser (lazy-loading, extends TreeView)
@@ -260,6 +263,35 @@ cb.toggle();
 cb.isChecked();
 cb.signalValue.connect(value -> ...);   // Signal<Boolean>
 ```
+
+### RadioButton / RadioGroup
+
+Exclusive selection radio buttons. A `RadioButton` combines a circular `RadioIndicator` with an arbitrary content widget. A `RadioGroup` manages exclusive selection among multiple `RadioButton` children.
+
+```java
+// Simple text radio group
+RadioGroup.vertical()
+    .addRadio("Option A")
+    .addRadio("Option B")
+    .addRadio("Option C")
+    .selectedIndex(0)
+    .onSelectionChanged(index -> System.out.println("Selected: " + index))
+
+// Radio group with custom widget content
+RadioGroup group = RadioGroup.vertical();
+group.addRadio(new RadioButton(myCustomWidget));
+group.addRadio(new RadioButton(anotherWidget));
+group.selectedIndex(0);
+
+// Setter API
+group.setPropertySelectedIndex(1);
+group.getPropertySelectedIndex();   // int (-1 if none)
+group.getSelected();                // RadioButton or null
+```
+
+**Signals:** `RadioGroup.signalSelectionChanged` (`Signal<Integer>` — selected index), `RadioButton.signalValue` (`Signal<Boolean>`), `RadioButton.signalClick` (`SignalEmpty`).
+
+**RadioIndicator:** Internal circular indicator widget (extends `Box`). Draws an empty circle when unselected, filled dot when selected. Unlike `Tick`, clicking always sets to `true` (deselection managed by `RadioGroup`).
 
 ### FieldSet
 
