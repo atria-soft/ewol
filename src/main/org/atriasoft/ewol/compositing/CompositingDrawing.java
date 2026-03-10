@@ -24,7 +24,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class CompositingDrawing extends CompositingDraw {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompositingDrawing.class);
-	
+
+	/** Anti-aliasing fringe width in pixels for smooth edges on curved shapes. */
+	private static final float AA_FRINGE = 1.0f;
+
 	protected static int vboIdColor = 1;
 	protected static int vboIdCoord = 0;
 	protected boolean clippingEnable = false; // !< true if the clipping must be activated
@@ -108,6 +111,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			float thicknessStop,
 			final float angleStart,
 			final float angleStop) {
+		final Color opaqueColor = this.tricolor[0];
 		resetCount();
 		if (thicknessStart < 0.001 && thicknessStop < 0.001) {
 			return;
@@ -121,68 +125,162 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		if (thicknessStop > radius) {
 			thicknessStop = radius;
 		}
-		int nbOcurence = (int) radius;
-		if (nbOcurence < 10) {
-			nbOcurence = 10;
+		int nbOcurence = (int) (radius * 2);
+		if (nbOcurence < 20) {
+			nbOcurence = 20;
 		}
+		final Color fringeColor = withZeroAlpha(opaqueColor);
 		for (int iii = 0; iii < nbOcurence; iii++) {
 			final float ratio = (float) iii / (float) nbOcurence;
 			final float thickness = thicknessStart + ((thicknessStop - thicknessStart) * ratio);
-			//final float thickness = thicknessStart * FMath.cos(ratio * FMath.PI * 0.5f)	+ thicknessStop * FMath.sin(ratio * FMath.PI * 0.5f);
 			final float angleOne = angleStart + (angleStop * ratio);
-			final float offsetExty = FMath.sin(angleOne) * (radius);
-			final float offsetExtx = FMath.cos(angleOne) * (radius);
-			final float offsetInty = FMath.sin(angleOne) * (radius - thickness);
-			final float offsetIntx = FMath.cos(angleOne) * (radius - thickness);
 			final float angleTwo = angleStart + (angleStop * (iii + 1) / nbOcurence);
-			final float offsetExt2y = FMath.sin(angleTwo) * (radius);
-			final float offsetExt2x = FMath.cos(angleTwo) * (radius);
-			final float offsetInt2y = FMath.sin(angleTwo) * (radius - thickness);
-			final float offsetInt2x = FMath.cos(angleTwo) * (radius - thickness);
-			setPoint(new Vector3f(centerPos.x() + offsetIntx, centerPos.y() + offsetInty, 0));
-			setPoint(new Vector3f(centerPos.x() + offsetExtx, centerPos.y() + offsetExty, 0));
-			setPoint(new Vector3f(centerPos.x() + offsetExt2x, centerPos.y() + offsetExt2y, 0));
-			setPoint(new Vector3f(centerPos.x() + offsetExt2x, centerPos.y() + offsetExt2y, 0));
-			setPoint(new Vector3f(centerPos.x() + offsetInt2x, centerPos.y() + offsetInt2y, 0));
-			setPoint(new Vector3f(centerPos.x() + offsetIntx, centerPos.y() + offsetInty, 0));
+
+			final float cosOne = FMath.cos(angleOne);
+			final float sinOne = FMath.sin(angleOne);
+			final float cosTwo = FMath.cos(angleTwo);
+			final float sinTwo = FMath.sin(angleTwo);
+
+			final float outerRadius = radius;
+			final float innerRadius = radius - thickness;
+			// Fringe ramps up from 0 at arc edges to full after AA_FRINGE_ANGLE
+			final float arcAngle = angleStop * ratio;
+			final float arcAngleEnd = angleStop * (1.0f - ratio);
+			final float minEdgeAngle = Math.min(arcAngle, arcAngleEnd);
+			final float AA_FRINGE_ANGLE = 15.0f * FMath.PI / 180.0f;
+			final float fringeScale = Math.min(1.0f, minEdgeAngle / AA_FRINGE_ANGLE);
+			final float fringe = AA_FRINGE * fringeScale;
+			// Fringe extends outward from original border edges
+			final float outerFringeRadius = outerRadius + fringe;
+			final float innerFringeRadius = Math.max(0f, innerRadius - fringe);
+
+			// Solid border quad at original size
+			final Vector3f ext1 = new Vector3f(centerPos.x() + cosOne * outerRadius, centerPos.y() + sinOne * outerRadius, 0);
+			final Vector3f ext2 = new Vector3f(centerPos.x() + cosTwo * outerRadius, centerPos.y() + sinTwo * outerRadius, 0);
+			final Vector3f int1 = new Vector3f(centerPos.x() + cosOne * innerRadius, centerPos.y() + sinOne * innerRadius, 0);
+			final Vector3f int2 = new Vector3f(centerPos.x() + cosTwo * innerRadius, centerPos.y() + sinTwo * innerRadius, 0);
+
+			internalSetColor(opaqueColor);
+			setPoint(int1);
+			setPoint(ext1);
+			setPoint(ext2);
+			setPoint(ext2);
+			setPoint(int2);
+			setPoint(int1);
+
+			if (fringe > 0.3f) {
+				// Outer fringe: outer(opaque) → outerFringe(transparent)
+				final Vector3f fExt1 = new Vector3f(centerPos.x() + cosOne * outerFringeRadius, centerPos.y() + sinOne * outerFringeRadius, 0);
+				final Vector3f fExt2 = new Vector3f(centerPos.x() + cosTwo * outerFringeRadius, centerPos.y() + sinTwo * outerFringeRadius, 0);
+
+				internalSetColor(opaqueColor);
+				setPoint(ext1);
+				internalSetColor(fringeColor);
+				setPoint(fExt1);
+				setPoint(fExt2);
+				internalSetColor(fringeColor);
+				setPoint(fExt2);
+				internalSetColor(opaqueColor);
+				setPoint(ext2);
+				setPoint(ext1);
+
+				// Inner fringe: inner(opaque) → innerFringe(transparent)
+				final Vector3f fInt1 = new Vector3f(centerPos.x() + cosOne * innerFringeRadius, centerPos.y() + sinOne * innerFringeRadius, 0);
+				final Vector3f fInt2 = new Vector3f(centerPos.x() + cosTwo * innerFringeRadius, centerPos.y() + sinTwo * innerFringeRadius, 0);
+
+				internalSetColor(opaqueColor);
+				setPoint(int1);
+				internalSetColor(fringeColor);
+				setPoint(fInt1);
+				setPoint(fInt2);
+				internalSetColor(fringeColor);
+				setPoint(fInt2);
+				internalSetColor(opaqueColor);
+				setPoint(int2);
+				setPoint(int1);
+			}
 		}
+		internalSetColor(opaqueColor);
 	}
 	
 	public void circleRaw(final Vector3f centerPos, final float radius, final float angleStart, final float angleStop) {
-		circleRaw(centerPos, radius, radius, angleStart, angleStop);
+		circleRaw(centerPos, radius, radius, angleStart, angleStop, true);
 	}
-	
+
 	public void circleRaw(
 			final Vector3f centerPos,
 			final float radiusStart,
 			final float radiusStop,
 			final float angleStart,
 			final float angleStop) {
+		circleRaw(centerPos, radiusStart, radiusStop, angleStart, angleStop, true);
+	}
+
+	private void circleRaw(
+			final Vector3f centerPos,
+			final float radiusStart,
+			final float radiusStop,
+			final float angleStart,
+			final float angleStop,
+			final boolean antiAlias) {
 		if (radiusStart < 0.001 && radiusStop < 0.001) {
 			return;
 		}
+		final Color opaqueColor = this.tricolor[0];
 		resetCount();
-		int nbOcurence = (int) FMath.max(radiusStart, radiusStop);
-		if (nbOcurence < 10) {
-			nbOcurence = 10;
+		int nbOcurence = (int) (FMath.max(radiusStart, radiusStop) * 2);
+		if (nbOcurence < 20) {
+			nbOcurence = 20;
 		}
+		final Color fringeColor = antiAlias ? withZeroAlpha(opaqueColor) : null;
 		final float invertOccurence = 1.0f / nbOcurence;
+		final float AA_FRINGE_ANGLE = 15.0f * FMath.PI / 180.0f;
 		for (int iii = 0; iii < nbOcurence; iii++) {
+			final float ratio = (float) iii * invertOccurence;
 			final float radius = radiusStart + ((radiusStart - radiusStop) * iii * invertOccurence);
-			setPoint(new Vector3f(centerPos.x(), centerPos.y(), 0));
-			
 			final float angleOne = angleStart + (angleStop * iii * invertOccurence);
-			float offsety = FMath.sin(angleOne) * radius;
-			float offsetx = FMath.cos(angleOne) * radius;
-			
-			setPoint(new Vector3f(centerPos.x() + offsetx, centerPos.y() + offsety, 0));
-			
 			final float angleTwo = angleStart + (angleStop * (iii + 1) * invertOccurence);
-			offsety = FMath.sin(angleTwo) * radius;
-			offsetx = FMath.cos(angleTwo) * radius;
-			
-			setPoint(new Vector3f(centerPos.x() + offsetx, centerPos.y() + offsety, 0));
+
+			final float cosOne = FMath.cos(angleOne);
+			final float sinOne = FMath.sin(angleOne);
+			final float cosTwo = FMath.cos(angleTwo);
+			final float sinTwo = FMath.sin(angleTwo);
+
+			// Solid triangle at original radius
+			internalSetColor(opaqueColor);
+			setPoint(new Vector3f(centerPos.x(), centerPos.y(), 0));
+			setPoint(new Vector3f(centerPos.x() + cosOne * radius, centerPos.y() + sinOne * radius, 0));
+			setPoint(new Vector3f(centerPos.x() + cosTwo * radius, centerPos.y() + sinTwo * radius, 0));
+
+			if (antiAlias) {
+				// Fringe ramps up from 0 at arc edges to full after AA_FRINGE_ANGLE
+				final float arcAngle = angleStop * ratio;
+				final float arcAngleEnd = angleStop * (1.0f - ratio);
+				final float minEdgeAngle = Math.min(arcAngle, arcAngleEnd);
+				final float fringeScale = Math.min(1.0f, minEdgeAngle / AA_FRINGE_ANGLE);
+				final float fringe = AA_FRINGE * fringeScale;
+
+				if (fringe > 0.3f) {
+					final float fringeRadius = radius + fringe;
+					final Vector3f e1 = new Vector3f(centerPos.x() + cosOne * radius, centerPos.y() + sinOne * radius, 0);
+					final Vector3f e2 = new Vector3f(centerPos.x() + cosTwo * radius, centerPos.y() + sinTwo * radius, 0);
+					final Vector3f f1 = new Vector3f(centerPos.x() + cosOne * fringeRadius, centerPos.y() + sinOne * fringeRadius, 0);
+					final Vector3f f2 = new Vector3f(centerPos.x() + cosTwo * fringeRadius, centerPos.y() + sinTwo * fringeRadius, 0);
+
+					internalSetColor(opaqueColor);
+					setPoint(e1);
+					internalSetColor(fringeColor);
+					setPoint(f1);
+					setPoint(f2);
+					internalSetColor(fringeColor);
+					setPoint(f2);
+					internalSetColor(opaqueColor);
+					setPoint(e2);
+					setPoint(e1);
+				}
+			}
 		}
+		internalSetColor(opaqueColor);
 	}
 
 	public void circle(float radius, final float angleStart, float angleStop) {
@@ -193,14 +291,15 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		angleStop = angleStop - angleStart;
 		
+		final boolean hasBorder = this.thickness != 0 && this.color.a() != 0;
 		// display background :
 		if (this.colorBg.a() != 0) {
 			internalSetColor(this.colorBg);
-			circleRaw(this.position, radius, angleStart, angleStop);
+			circleRaw(this.position, radius, radius, angleStart, angleStop, !hasBorder);
 		}
-		
+
 		// show if we have a border :
-		if (this.thickness == 0 || this.color.a() == 0) {
+		if (!hasBorder) {
 			return;
 		}
 		internalSetColor(this.color);
@@ -244,6 +343,8 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			LOGGER.error("No shader ...");
 			return;
 		}
+		OpenGL.enable(OpenGL.Flag.flag_blend);
+		OpenGL.blendFuncAuto();
 		// set Matrix : translation/positionMatrix
 		final Matrix4f projMatrix = OpenGL.getMatrix();
 		final Matrix4f camMatrix = OpenGL.getCameraMatrix();
@@ -256,6 +357,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		this.vbo.renderArrays(OpenGL.RenderMode.TRIANGLE);
 		this.vbo.unBindForRendering();
 		this.oGLprogram.unUse();
+		OpenGL.disable(OpenGL.Flag.flag_blend);
 	}
 	
 	@Override
@@ -309,6 +411,10 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	 * set the Color of the current triangle drawing
 	 * @param color Color to current dots generated
 	 */
+	private static Color withZeroAlpha(final Color c) {
+		return new Color(c.r(), c.g(), c.b(), 0f);
+	}
+
 	private void internalSetColor(final Color color) {
 		if (this.triElement < 1) {
 			this.tricolor[0] = color;
