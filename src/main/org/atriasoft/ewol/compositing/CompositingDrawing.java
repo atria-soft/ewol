@@ -27,6 +27,8 @@ public abstract class CompositingDrawing extends CompositingDraw {
 
 	/** Anti-aliasing fringe width in pixels for smooth edges on curved shapes. */
 	private static final float AA_FRINGE = 1.0f;
+	/** Arc length in pixels over which the fringe ramps from 0 to full. Smaller radius → larger angle, larger radius → smaller angle. */
+	private static final float AA_FRINGE_ARC_LENGTH = 8.0f;
 
 	protected static int vboIdColor = 1;
 	protected static int vboIdCoord = 0;
@@ -143,13 +145,14 @@ public abstract class CompositingDrawing extends CompositingDraw {
 
 			final float outerRadius = radius;
 			final float innerRadius = radius - thickness;
-			// Fringe ramps up from 0 at arc edges to full after AA_FRINGE_ANGLE
+			// Fringe ramps up from 0 at arc edges to full after a radius-dependent angle
 			final float arcAngle = angleStop * ratio;
 			final float arcAngleEnd = angleStop * (1.0f - ratio);
 			final float minEdgeAngle = Math.min(arcAngle, arcAngleEnd);
-			final float AA_FRINGE_ANGLE = 15.0f * FMath.PI / 180.0f;
-			final float fringeScale = Math.min(1.0f, minEdgeAngle / AA_FRINGE_ANGLE);
-			final float fringe = AA_FRINGE * fringeScale;
+			final float fringeAngle = AA_FRINGE_ARC_LENGTH / Math.max(1.0f, outerRadius);
+			final float fringeScale = Math.min(1.0f, minEdgeAngle / fringeAngle);
+			final float maxFringe = Math.min(AA_FRINGE, thickness * 0.4f);
+			final float fringe = maxFringe * fringeScale;
 			// Fringe extends outward from original border edges
 			final float outerFringeRadius = outerRadius + fringe;
 			final float innerFringeRadius = Math.max(0f, innerRadius - fringe);
@@ -234,7 +237,6 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		final Color fringeColor = antiAlias ? withZeroAlpha(opaqueColor) : null;
 		final float invertOccurence = 1.0f / nbOcurence;
-		final float AA_FRINGE_ANGLE = 15.0f * FMath.PI / 180.0f;
 		for (int iii = 0; iii < nbOcurence; iii++) {
 			final float ratio = (float) iii * invertOccurence;
 			final float radius = radiusStart + ((radiusStart - radiusStop) * iii * invertOccurence);
@@ -253,11 +255,12 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			setPoint(new Vector3f(centerPos.x() + cosTwo * radius, centerPos.y() + sinTwo * radius, 0));
 
 			if (antiAlias) {
-				// Fringe ramps up from 0 at arc edges to full after AA_FRINGE_ANGLE
+				// Fringe ramps up from 0 at arc edges to full after a radius-dependent angle
 				final float arcAngle = angleStop * ratio;
 				final float arcAngleEnd = angleStop * (1.0f - ratio);
 				final float minEdgeAngle = Math.min(arcAngle, arcAngleEnd);
-				final float fringeScale = Math.min(1.0f, minEdgeAngle / AA_FRINGE_ANGLE);
+				final float fringeAngle = AA_FRINGE_ARC_LENGTH / Math.max(1.0f, radius);
+				final float fringeScale = Math.min(1.0f, minEdgeAngle / fringeAngle);
 				final float fringe = AA_FRINGE * fringeScale;
 
 				if (fringe > 0.3f) {
@@ -716,13 +719,21 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	 * @param dest Position the the end of the rectangle
 	 */
 	public void rectangleRadius(final Vector2f dest, final float radius) {
-		rectangleRadius(dest.toVector3f(), radius);
+		rectangleRadius(dest.toVector3f(), radius, true);
 	}
-	
+
+	public void rectangleRadius(final Vector2f dest, final float radius, final boolean antiAlias) {
+		rectangleRadius(dest.toVector3f(), radius, antiAlias);
+	}
+
 	public void rectangleRadius(final Vector3f dest, final float radius) {
+		rectangleRadius(dest, radius, true);
+	}
+
+	public void rectangleRadius(final Vector3f dest, final float radius, final boolean antiAlias) {
 		internalSetColor(this.color);
 		final boolean showConstruct = false;
-		
+
 		rectangleRaw(this.position.add(new Vector3f(radius, 0, 0)), dest.less(new Vector3f(radius, 0, 0)));
 		if (showConstruct) {
 			internalSetColor(Color.ORANGE);
@@ -734,17 +745,17 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		rectangleRaw(new Vector3f(dest.x() - radius, this.position.y() + radius, 0),
 				new Vector3f(dest.x(), dest.y() - radius, 0));
-		
+
 		if (showConstruct) {
 			internalSetColor(Color.AQUA_MARINE);
 		}
-		circleRaw(this.position.add(radius, radius, 0), radius, FMath.PI, FMath.PI * 0.5f);
-		circleRaw(dest.less(radius, radius, 0), radius, 0, FMath.PI * 0.5f);
-		circleRaw(new Vector3f(dest.x() - radius, this.position.y() + radius, 0), radius, FMath.PI * 1.5f,
-				FMath.PI * 0.5f);
-		circleRaw(new Vector3f(this.position.x() + radius, dest.y() - radius, 0), radius, FMath.PI * 0.5f,
-				FMath.PI * 0.5f);
-		
+		circleRaw(this.position.add(radius, radius, 0), radius, radius, FMath.PI, FMath.PI * 0.5f, antiAlias);
+		circleRaw(dest.less(radius, radius, 0), radius, radius, 0, FMath.PI * 0.5f, antiAlias);
+		circleRaw(new Vector3f(dest.x() - radius, this.position.y() + radius, 0), radius, radius, FMath.PI * 1.5f,
+				FMath.PI * 0.5f, antiAlias);
+		circleRaw(new Vector3f(this.position.x() + radius, dest.y() - radius, 0), radius, radius, FMath.PI * 0.5f,
+				FMath.PI * 0.5f, antiAlias);
+
 		if (showConstruct) {
 			internalSetColor(Color.BLACK);
 			rectangleRaw(this.position, this.position.add(10));
@@ -754,6 +765,10 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	}
 
 	public void rectangleRadius(final Vector2f dest, final Insets thickness, final BorderRadius radius) {
+		rectangleRadius(dest, thickness, radius, true);
+	}
+
+	public void rectangleRadius(final Vector2f dest, final Insets thickness, final BorderRadius radius, final boolean antiAlias) {
 		internalSetColor(this.color);
 		final boolean showConstruct = false;
 
@@ -762,27 +777,27 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		}
 		// buttom-left
 		final Vector3f centerBottomLeft = this.position.add(radius.bottomLeft(), radius.bottomLeft(), 0);
-		circleRaw(centerBottomLeft, radius.bottomLeft(), FMath.PI, FMath.PI * 0.5f);
+		circleRaw(centerBottomLeft, radius.bottomLeft(), radius.bottomLeft(), FMath.PI, FMath.PI * 0.5f, antiAlias);
 		if (showConstruct) {
 			internalSetColor(Color.DARK_CYAN);
 		}
 		// Top right
 		final Vector3f centerTopRight = dest.toVector3f().less(radius.topRight(), radius.topRight(), 0);
-		circleRaw(centerTopRight, radius.topRight(), 0, FMath.PI * 0.5f);
+		circleRaw(centerTopRight, radius.topRight(), radius.topRight(), 0, FMath.PI * 0.5f, antiAlias);
 		if (showConstruct) {
 			internalSetColor(Color.DARK_OLIVEGREEN);
 		}
 		// bottom right
 		final Vector3f centerBottomRight = new Vector3f(dest.x() - radius.bottomRight(),
 				this.position.y() + radius.bottomRight(), 0);
-		circleRaw(centerBottomRight, radius.bottomRight(), FMath.PI * 1.5f, FMath.PI * 0.5f);
+		circleRaw(centerBottomRight, radius.bottomRight(), radius.bottomRight(), FMath.PI * 1.5f, FMath.PI * 0.5f, antiAlias);
 		if (showConstruct) {
 			internalSetColor(Color.DARK_ORANGE);
 		}
 		// top-left
 		final Vector3f centerTopLeft = new Vector3f(this.position.x() + radius.topLeft(), dest.y() - radius.topLeft(),
 				0);
-		circleRaw(centerTopLeft, radius.topLeft(), FMath.PI * 0.5f, FMath.PI * 0.5f);
+		circleRaw(centerTopLeft, radius.topLeft(), radius.topLeft(), FMath.PI * 0.5f, FMath.PI * 0.5f, antiAlias);
 		
 		// center area:
 		if (showConstruct) {

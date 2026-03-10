@@ -55,10 +55,11 @@ public class CompositingGC extends CompositingDrawing {
 			addRectangle(position, size);
 		} else {
 			setPos(position);
+			final boolean hasBorder = this.strokeSize > 0;
 			if (this.color.a() != 0) {
-				rectangleRadius(position.add(size), roundedCorner.x());
+				rectangleRadius(position.add(size), roundedCorner.x(), !hasBorder);
 			}
-			if (this.strokeSize > 0) {
+			if (hasBorder) {
 				rectangleBorderRadius(position.add(size), this.strokeSize, roundedCorner.x());
 			}
 		}
@@ -71,10 +72,11 @@ public class CompositingGC extends CompositingDrawing {
 			final Insets thickness,
 			final BorderRadius radius) {
 		setPos(positionStart);
+		final boolean hasBorder = !thickness.isZero();
 		if (this.color.a() != 0) {
-			rectangleRadius(positionStop, thickness, radius);
+			rectangleRadius(positionStop, thickness, radius, !hasBorder);
 		}
-		if (!thickness.isZero()) {
+		if (hasBorder) {
 			rectangleBorderRadius(positionStop, thickness, radius);
 		}
 	}
