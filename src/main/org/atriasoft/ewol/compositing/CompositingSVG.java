@@ -397,7 +397,10 @@ public class CompositingSVG extends Compositing {
 		clear();
 		LOGGER.trace("render size = {}", size);
 		final BufferedImage tmp;
-		final byte[] svgBytes = data.getBytes(StandardCharsets.UTF_8);
+		// Inject SVG namespace if missing — Batik's SAXSVGDocumentFactory
+		// requires xmlns="http://www.w3.org/2000/svg" on the root <svg> element.
+		final String fixedData = ensureSvgNamespace(data);
+		final byte[] svgBytes = fixedData.getBytes(StandardCharsets.UTF_8);
 		try (final ByteArrayInputStream bais = new ByteArrayInputStream(svgBytes)) {
 			final Iterator<ImageReader> readers = ImageIO.getImageReadersBySuffix("svg");
 			if (!readers.hasNext()) {
@@ -429,5 +432,24 @@ public class CompositingSVG extends Compositing {
 		this.resource.set(tmp);
 		this.svgData = data;
 		this.requestSize = size;
+	}
+
+	/**
+	 * Ensure the SVG data contains the required xmlns declaration on the root &lt;svg&gt; element.
+	 * Batik's SAXSVGDocumentFactory rejects SVG without {@code xmlns="http://www.w3.org/2000/svg"}.
+	 */
+	private static String ensureSvgNamespace(final String svgData) {
+		if (svgData.contains("xmlns=\"http://www.w3.org/2000/svg\"")
+				|| svgData.contains("xmlns='http://www.w3.org/2000/svg'")) {
+			return svgData;
+		}
+		final int svgTagStart = svgData.indexOf("<svg");
+		if (svgTagStart < 0) {
+			return svgData;
+		}
+		final int insertPos = svgTagStart + 4; // right after "<svg"
+		return svgData.substring(0, insertPos)
+				+ " xmlns=\"http://www.w3.org/2000/svg\""
+				+ svgData.substring(insertPos);
 	}
 }
