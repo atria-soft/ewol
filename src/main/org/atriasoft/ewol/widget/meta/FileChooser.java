@@ -70,6 +70,7 @@ public class FileChooser extends Dialog {
 	private String propertyLabelValidate = "Validate";
 	private String propertyLabelCancel = "Cancel";
 	private String propertyFilterExtension = null;
+	private boolean propertyDirectoryOnly = false;
 
 	// ========================================================================
 	// Internal widgets
@@ -85,6 +86,8 @@ public class FileChooser extends Dialog {
 	private final Button cancelButton;
 	private final Label validateLabelWidget;
 	private final Label cancelLabelWidget;
+	private Sizer fileRow;
+	private SplitPane splitPane;
 
 	// ========================================================================
 	// Constructor
@@ -187,20 +190,21 @@ public class FileChooser extends Dialog {
 		contentSizer.subWidgetAdd(createVerticalSpacer(5));
 
 		// File name entry row
-		contentSizer.subWidgetAdd(buildFileRow());
+		this.fileRow = buildFileRow();
+		contentSizer.subWidgetAdd(this.fileRow);
 
 		// Spacer
 		contentSizer.subWidgetAdd(createVerticalSpacer(10));
 
 		// Split pane: folders | files
-		final SplitPane splitPane = SplitPane.horizontal()
+		this.splitPane = SplitPane.horizontal()
 				.splitPosition(0.25f)
 				.minSizes(100.0f, 150.0f);
-		splitPane.setPropertyExpand(Vector2b.TRUE);
-		splitPane.setPropertyFill(Vector2b.TRUE);
-		splitPane.first(this.listFolder);
-		splitPane.second(this.listFiles);
-		contentSizer.subWidgetAdd(splitPane);
+		this.splitPane.setPropertyExpand(Vector2b.TRUE);
+		this.splitPane.setPropertyFill(Vector2b.TRUE);
+		this.splitPane.first(this.listFolder);
+		this.splitPane.second(this.listFiles);
+		contentSizer.subWidgetAdd(this.splitPane);
 
 		return contentSizer;
 	}
@@ -314,6 +318,12 @@ public class FileChooser extends Dialog {
 	}
 
 	protected static void onCallbackListValidate(final FileChooser self) {
+		if (self.propertyDirectoryOnly) {
+			LOGGER.debug("Generate folder selection: '{}'", self.propertyPath);
+			self.signalValidate.emit(self.propertyPath);
+			self.autoDestroy();
+			return;
+		}
 		if (self.propertyFile.isEmpty()) {
 			LOGGER.warn("Validate with empty file name");
 			return;
@@ -452,6 +462,26 @@ public class FileChooser extends Dialog {
 
 	public FileChooser filterExtension(final String extension) {
 		setPropertyFilterExtension(extension);
+		return this;
+	}
+
+	public boolean isPropertyDirectoryOnly() {
+		return this.propertyDirectoryOnly;
+	}
+
+	public void setPropertyDirectoryOnly(final boolean directoryOnly) {
+		this.propertyDirectoryOnly = directoryOnly;
+		if (this.fileRow != null) {
+			this.fileRow.setPropertyHide(directoryOnly);
+		}
+		if (this.splitPane != null && directoryOnly) {
+			// Give all space to folder list when in directory-only mode
+			this.splitPane.splitPosition(1.0f);
+		}
+	}
+
+	public FileChooser directoryOnly(final boolean directoryOnly) {
+		setPropertyDirectoryOnly(directoryOnly);
 		return this;
 	}
 
