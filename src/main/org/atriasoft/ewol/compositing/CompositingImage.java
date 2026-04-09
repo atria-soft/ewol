@@ -134,6 +134,9 @@ public class CompositingImage extends Compositing {
 
 	@Override
 	public void flush() {
+		if (this.vboDataCoords == null) {
+			return;
+		}
 		this.vbo.setPosition(this.vboDataCoords);
 		this.vbo.setTextureCoordinate(this.vboDataCoordsTex);
 		this.vbo.setColors(this.vboDataColors);
@@ -204,11 +207,18 @@ public class CompositingImage extends Compositing {
 	 * @param sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 	 */
 	public void printPart(final Vector2f size, final Vector2f sourcePosStartIn, final Vector2f sourcePosStopIn) {
-		if (this.resource == null) {
+		if (this.resource == null && this.resourceImage == null) {
 			return;
 		}
-		final Vector2f openGLSize = new Vector2f(this.resource.getOpenGlSize().x(), this.resource.getOpenGlSize().y());
-		final Vector2i usefullSize = this.resource.getUsableSize();
+		final Vector2f openGLSize;
+		final Vector2i usefullSize;
+		if (this.resource != null) {
+			openGLSize = new Vector2f(this.resource.getOpenGlSize().x(), this.resource.getOpenGlSize().y());
+			usefullSize = this.resource.getUsableSize();
+		} else {
+			openGLSize = new Vector2f(this.resourceImage.getOpenGlSize().x(), this.resourceImage.getOpenGlSize().y());
+			usefullSize = this.resourceImage.getUsableSize();
+		}
 		final Vector2f ratio = new Vector2f(usefullSize.x() / openGLSize.x(), usefullSize.y() / openGLSize.y());
 		final Vector2f sourcePosStart = sourcePosStartIn.multiply(ratio);
 		final Vector2f sourcePosStop = sourcePosStopIn.multiply(ratio);
