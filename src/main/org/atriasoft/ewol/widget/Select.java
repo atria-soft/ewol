@@ -467,7 +467,7 @@ public class Select extends Box {
 	 * @return this select for chaining
 	 */
 	public Select onSelectionChanged(final java.util.function.Consumer<Integer> callback) {
-		this.signalSelectionChanged.connect(callback);
+		this.signalSelectionChanged.connectAuto(this, (final Select self, final Integer index) -> callback.accept(index));
 		return this;
 	}
 
@@ -477,8 +477,8 @@ public class Select extends Box {
 	 * @return this select for chaining
 	 */
 	public Select onSelectionChanged(final java.util.function.BiConsumer<Integer, String> callback) {
-		this.signalSelectionChanged.connect(index -> {
-			final String value = (index >= 0 && index < this.items.size()) ? this.items.get(index) : null;
+		this.signalSelectionChanged.connectAuto(this, (final Select self, final Integer index) -> {
+			final String value = (index >= 0 && index < self.items.size()) ? self.items.get(index) : null;
 			callback.accept(index, value);
 		});
 		return this;
