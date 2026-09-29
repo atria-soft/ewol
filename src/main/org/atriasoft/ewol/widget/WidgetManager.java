@@ -17,7 +17,8 @@ public class WidgetManager {
 	// ---------------------------------------------
 	// --  Factory area
 	// ---------------------------------------------
-	private WeakReference<Widget> focusWidgetCurrent; //!< Current focus selected
+	/** Current focus selected (an empty reference before the first focus, never null). */
+	private WeakReference<Widget> focusWidgetCurrent = new WeakReference<>(null);
 	// ---------------------------------------------
 	// --  Focus area
 	// ---------------------------------------------
