@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ETranslate {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ETranslate.class);
-	private static boolean globalIsInit = false;
 	private static String globalLanguage = "";
 	private static String globalLanguageDefault = "EN";
 	private static Map<String, Uri> globalListPath = new HashMap<>();
@@ -58,9 +57,6 @@ public class ETranslate {
 	 * Automatic detection of the system language
 	 */
 	public static void autoDetectLanguage() {
-		if (!ETranslate.globalIsInit) {
-			LOGGER.error("E-translate system has not been init");
-		}
 		LOGGER.trace("Auto-detect language of system");
 		final String nonameLocalName = "EN";
 		final String userLocalName = "EN";
@@ -75,7 +71,7 @@ public class ETranslate {
 		 * // TODO Do it better RuntimeError e) {
 		 * LOGGER.error("Can not get Locals ==> set English ..."); }
 		 */
-		LOGGER.error("Can not get Locals ==> set English ...");
+		LOGGER.debug("Detection of the system locale is not implemented: use English");
 		
 		String lang = nonameLocalName;
 		if (lang.equals("*") || lang.isEmpty()) {
