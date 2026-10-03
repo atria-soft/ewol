@@ -372,15 +372,15 @@ class InputManager {
 				// set the element inside ...
 				eventTable[pointerID].isInside = true;
 				Widget tmpWidget = this.grabWidget == null ? null : this.grabWidget.get();
-				LOGGER.info("InputManager: DOWN event grabWidget={}", tmpWidget != null ? tmpWidget.getClass().getSimpleName() : "null");
+				LOGGER.trace("InputManager: DOWN event grabWidget={}", tmpWidget != null ? tmpWidget.getClass().getSimpleName() : "null");
 				// get destination widget :
 				if (tmpWindows != null) {
 					if (tmpWidget != null && type == KeyType.mouse) {
-						LOGGER.info("InputManager: using grabWidget for mouse");
+						LOGGER.trace("InputManager: using grabWidget for mouse");
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 					} else {
 						tmpWidget = tmpWindows.getWidgetAtPos(pos);
-						LOGGER.info("InputManager: getWidgetAtPos returned: {}", tmpWidget != null ? tmpWidget.getClass().getSimpleName() : "null");
+						LOGGER.trace("InputManager: getWidgetAtPos returned: {}", tmpWidget != null ? tmpWidget.getClass().getSimpleName() : "null");
 						eventTable[pointerID].curentWidgetEvent = new WeakReference<>(tmpWidget);
 						/*
 						if (tmpWidget != null) {
