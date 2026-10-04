@@ -32,11 +32,13 @@ import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.event.EventShortCut;
 import org.atriasoft.ewol.event.InputSystem;
 import org.atriasoft.ewol.object.EwolObject;
+import org.atriasoft.ewol.resource.OwnedResources;
 import org.atriasoft.gale.backend3d.OpenGL;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.context.Cursor;
 import org.atriasoft.gale.key.KeyKeyboard;
 import org.atriasoft.gale.key.KeySpecial;
+import org.atriasoft.gale.resource.Resource;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +65,8 @@ public class Widget extends EwolObject {
 	/** Maximum number of mouse events supported [0..3] */
 	private int limitMouseEvent = 3;
 	private final List<EventShortCut> localShortcut = new ArrayList<>();
+	/** The resources this widget created or kept (color files...), released when it is collected; built at the first one. */
+	private OwnedResources ownedResources = null;
 	
 	protected Vector2f maxSize = Vector2f.MAX_VALUE;
 	protected Vector2f minSize = Vector2f.ZERO;
@@ -89,6 +93,34 @@ public class Widget extends EwolObject {
 	 */
 	public Widget() {
 		this.creationTrace = Thread.currentThread().getStackTrace();
+	}
+
+	/**
+	 * Take ownership of a resource created or kept for this widget (a color
+	 * file...): it is released when the widget is collected by the garbage
+	 * collector, the only end of a widget (one taken out of the tree can be put
+	 * back).
+	 * @param resource The resource (null accepted).
+	 * @return {@code resource}.
+	 */
+	protected final <T extends Resource> T own(final T resource) {
+		if (resource == null) {
+			return null;
+		}
+		if (this.ownedResources == null) {
+			this.ownedResources = new OwnedResources(this);
+		}
+		return this.ownedResources.own(resource);
+	}
+
+	/**
+	 * Release now a resource owned by this widget, replaced by another one.
+	 * @param resource The resource replaced (null accepted).
+	 */
+	protected final void releaseOwned(final Resource resource) {
+		if (this.ownedResources != null) {
+			this.ownedResources.releaseOwned(resource);
+		}
 	}
 
 	/**

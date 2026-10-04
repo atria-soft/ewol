@@ -65,7 +65,7 @@ public class ScrollView extends Container {
 	protected float pixelScrolling = 30.0f;
 
 	public ScrollView() {
-		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/ScrollView.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(new Uri("THEME", "/color/ScrollView.json", "ewol")));
 		if (this.colorProperty != null) {
 			this.colorScrollbarTrack = this.colorProperty.request("track");
 			this.colorScrollbarThumb = this.colorProperty.request("thumb");

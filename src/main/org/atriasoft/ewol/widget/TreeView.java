@@ -132,8 +132,8 @@ public class TreeView extends WidgetScrolled {
 		setMouseLimit(2);
 
 		// Load color theme
-		this.colorProperty = new ResourceColorFile(
-				new Uri("THEME", "/color/TreeView.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(
+				new Uri("THEME", "/color/TreeView.json", "ewol")));
 		this.colorIdText = this.colorProperty.request("text");
 		this.colorIdBackground1 = this.colorProperty.request("background1");
 		this.colorIdBackground2 = this.colorProperty.request("background2");

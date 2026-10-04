@@ -61,7 +61,7 @@ public class SplitPane extends Widget {
 	private float dragStartSplit = 0.0f;
 
 	public SplitPane() {
-		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/SplitPane.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(new Uri("THEME", "/color/SplitPane.json", "ewol")));
 		if (this.colorProperty != null) {
 			this.colorIdSeparator = this.colorProperty.request("separator");
 			this.colorIdSeparatorHover = this.colorProperty.request("separator-hover");

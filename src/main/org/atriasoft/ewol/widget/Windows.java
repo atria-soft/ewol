@@ -165,7 +165,9 @@ public class Windows extends Widget {
 	}
 	
 	protected void onChangePropertyColor() {
-		this.resourceColor = ResourceColorFile.create(this.propertyColorConfiguration);
+		final ResourceColorFile previous = this.resourceColor;
+		this.resourceColor = own(ResourceColorFile.create(this.propertyColorConfiguration));
+		releaseOwned(previous);
 		if (this.resourceColor != null) {
 			this.colorBg = this.resourceColor.request("background");
 		} else {

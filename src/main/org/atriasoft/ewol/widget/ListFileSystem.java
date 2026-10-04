@@ -61,7 +61,7 @@ public class ListFileSystem extends WidgetList {
 
 	public ListFileSystem() {
 
-		this.colorProperty = new ResourceColorFile(new Uri("THEME", "/color/ListFileSystem.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(new Uri("THEME", "/color/ListFileSystem.json", "ewol")));
 		if (this.colorProperty != null) {
 			this.colorIdText = this.colorProperty.request("text");
 			this.colorIdBackground1 = this.colorProperty.request("background1");

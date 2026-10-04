@@ -40,7 +40,7 @@ public class Label extends Widget {
 	}
 	
 	public Label(final String label) {
-		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol")));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");
 			this.colorDefaultBgText = this.colorProperty.request("background");

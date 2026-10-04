@@ -35,7 +35,7 @@ public class LabelOnSVG extends Widget {
 	protected String value = "";
 
 	public LabelOnSVG() {
-		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol")));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");
 			this.colorDefaultBgText = this.colorProperty.request("background");
@@ -49,7 +49,7 @@ public class LabelOnSVG extends Widget {
 	 * @param newLabel The displayed decorated text.
 	 */
 	public LabelOnSVG(final String newLabel) {
-		this.colorProperty = ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol"));
+		this.colorProperty = own(ResourceColorFile.create(new Uri("THEME", "/color/Label.json", "ewol")));
 		if (this.colorProperty != null) {
 			this.colorDefaultFgText = this.colorProperty.request("foreground");
 			this.colorDefaultBgText = this.colorProperty.request("background");
