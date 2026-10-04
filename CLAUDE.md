@@ -1059,6 +1059,13 @@ Problems encountered during development — read these to avoid repeating the sa
 
 - **Cache resource data.** `Uri.getAllDataString()` has no internal cache — it reads from classpath every call. Cache the result in a field (see `Tick.cachedSvgData`).
 
+### Resources (gale `create()`/`keep()`/`release()`)
+
+- **Widgets have no destruction step.** A widget taken out of the tree can be put back (a window set again, a popup pushed again), so it dies only when the garbage collector collects it. Never release a resource because a widget left its parent.
+- **Give each resource you create or keep to an owner** (`OwnedResources`): it is released exactly once, when the owner replaces it (`releaseOwned`), when the owner knows it is dead (`releaseAll`), otherwise when the owner is collected (a `Cleaner`). A reachable owner, thus one still drawn, is never collected.
+- **Compositings own their resources** (vertex array, program, texture, font) through `own(...)`. `Compositing.release()` frees them at once when the layer is drawn no more (a replaced layer, a HUD rebuilt); it draws nothing afterwards. Widgets use `Widget.own(...)` (color files...).
+- **Factories with a cache keep the shared resource** (`keepExisting(name, Type.class)`, which throws `IllegalStateException` on a name of another type): one `release()` per `create()`. Do not call `new ResourceColorFile(...)`: it registers a duplicate, use `ResourceColorFile.create(...)`.
+
 ### Container
 
 - **`Container(Widget)` constructor does NOT call `setParent()`.** Use `setSubWidget()` to properly set the parent. The constructor just stores the reference without registering the parent relationship.
