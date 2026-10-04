@@ -318,10 +318,9 @@ public class Gird extends Widget {
 				this.subWidget.add(iii, prop);
 				return;
 			} else {
-				// The element already exist  == > replace it ...
-				this.tmpWidget = this.subWidget.get(iii).widget;
+				// The cell is taken: the new widget replaces the old one.
 				this.subWidget.get(iii).widget = newWidget;
-				this.tmpWidget = null;
+				return;
 			}
 		}
 		// not find  == > just adding it ...
