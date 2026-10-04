@@ -79,7 +79,7 @@ public abstract class TextBase extends Compositing {
 			loadProgram(vertexShader, fragmentShader);
 		}
 		// Create the VBO:
-		this.vbo = ResourceVirtualArrayObject.createDynamic();
+		this.vbo = own(ResourceVirtualArrayObject.createDynamic());
 		// TO facilitate some debugs we add a name of the VBO:
 		this.vbo.setName("[VBO] of super.TextBase");
 	}
@@ -372,8 +372,8 @@ public abstract class TextBase extends Compositing {
 	 * load the openGL program and get all the ID needed
 	 */
 	public void loadProgram(final Uri vertexShader, final Uri fragmentShader) {
-		ResourceProgram old = this.oGLprogram;
-		this.oGLprogram = ResourceProgram.create(vertexShader, fragmentShader);
+		final ResourceProgram old = this.oGLprogram;
+		this.oGLprogram = own(ResourceProgram.create(vertexShader, fragmentShader));
 		if (this.oGLprogram != null) {
 			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
 			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
@@ -381,11 +381,20 @@ public abstract class TextBase extends Compositing {
 			this.oGLtexID = this.oGLprogram.getUniform("in_texID");
 			this.oGLtextWidth = this.oGLprogram.getUniform("in_texWidth");
 			this.oGLtextHeight = this.oGLprogram.getUniform("in_texHeight");
+			releaseOwned(old);
 		} else {
 			LOGGER.error("Can not load the program => create previous one...");
 			this.oGLprogram = old;
-			old = null;
 		}
+	}
+
+	/**
+	 * Release the resources of the text and of its background drawing.
+	 */
+	@Override
+	public void release() {
+		super.release();
+		this.vectorialDraw.release();
 	}
 
 	/**

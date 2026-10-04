@@ -65,7 +65,7 @@ public class CompositingSVG extends Compositing {
 	public CompositingSVG(final String data, final int size) {
 		this.svgData = data;
 		// Create the VBO:
-		this.vbo = ResourceVirtualArrayObject.createDynamic();
+		this.vbo = own(ResourceVirtualArrayObject.createDynamic());
 		if (this.vbo == null) {
 			LOGGER.error("can not instanciate VBO ...");
 			return;
@@ -97,6 +97,9 @@ public class CompositingSVG extends Compositing {
 	 */
 	@Override
 	public void draw(final boolean disableDepthTest) {
+		if (isReleased()) {
+			return;
+		}
 		/*
 		if (this.VBO.bufferSize(this.vboIdCoord) <= 0) {
 			//LOGGER.warn("Nothink to draw...");
@@ -177,8 +180,8 @@ public class CompositingSVG extends Compositing {
 	 */
 	private void loadProgram() {
 		// get the shader resource:
-		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"),
-				new Uri("DATA", "textured3D.frag", "ewol"));
+		this.oGLprogram = own(ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"),
+				new Uri("DATA", "textured3D.frag", "ewol")));
 		if (this.oGLprogram != null) {
 			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
 			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
@@ -367,7 +370,9 @@ public class CompositingSVG extends Compositing {
 		clear();
 		this.svgData = null;
 		this.requestSize = new Vector2i(image.getWidth(), image.getHeight());
-		this.resource = new ResourceTexture2();
+		if (this.resource == null) {
+			this.resource = own(new ResourceTexture2());
+		}
 		this.resource.set(image);
 	}
 	
@@ -427,7 +432,7 @@ public class CompositingSVG extends Compositing {
 			return;
 		}
 		if (this.resource == null) {
-			this.resource = new ResourceTexture2();
+			this.resource = own(new ResourceTexture2());
 		}
 		this.resource.set(tmp);
 		this.svgData = data;

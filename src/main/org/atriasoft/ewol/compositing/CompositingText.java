@@ -107,6 +107,9 @@ public class CompositingText extends TextBase {
 
 	@Override
 	public void drawD(final boolean disableDepthTest) {
+		if (isReleased()) {
+			return;
+		}
 		// draw BG in any case:
 		this.vectorialDraw.draw(disableDepthTest);
 
@@ -147,6 +150,9 @@ public class CompositingText extends TextBase {
 
 	@Override
 	public void drawMT(final Matrix4f transformationMatrix, final boolean enableDepthTest) {
+		if (isReleased()) {
+			return;
+		}
 
 		// draw BG in any case:
 		this.vectorialDraw.draw();
@@ -397,11 +403,12 @@ public class CompositingText extends TextBase {
 		final Uri fontUri = Configs.getConfigFonts().getFontUri(fontName).clone();
 		fontUri.setProperty("size", Integer.toString(fontSize));
 		LOGGER.trace("fontName={} fontSize={}", fontName, fontSize);
-		this.font = ResourceTexturedFont.create(fontUri);
+		this.font = own(ResourceTexturedFont.create(fontUri));
 		if (this.font == null) {
 			LOGGER.error("Can not get font resource");
 			this.font = previousFont;
 		} else {
+			releaseOwned(previousFont);
 			this.currentFontName = inputFontName;
 			this.currentFontSize = inputFontSize;
 		}

@@ -59,7 +59,7 @@ public class CompositingImage extends Compositing {
 	public CompositingImage(final Uri uri, final int size) {
 		this.filename = uri;
 		// Create the VBO:
-		this.vbo = ResourceVirtualArrayObject.createDynamic();
+		this.vbo = own(ResourceVirtualArrayObject.createDynamic());
 		if (this.vbo == null) {
 			LOGGER.error("can not instanciate VBO ...");
 			return;
@@ -91,6 +91,9 @@ public class CompositingImage extends Compositing {
 	 */
 	@Override
 	public void draw(final boolean disableDepthTest) {
+		if (isReleased()) {
+			return;
+		}
 		/*
 		if (this.VBO.bufferSize(this.vboIdCoord) <= 0) {
 			//LOGGER.warn("Nothink to draw...");
@@ -179,8 +182,8 @@ public class CompositingImage extends Compositing {
 	 */
 	private void loadProgram() {
 		// get the shader resource:
-		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"),
-				new Uri("DATA", "textured3D.frag", "ewol"));
+		this.oGLprogram = own(ResourceProgram.create(new Uri("DATA", "textured3D.vert", "ewol"),
+				new Uri("DATA", "textured3D.frag", "ewol")));
 		if (this.oGLprogram != null) {
 			this.oGLMatrixTransformation = this.oGLprogram.getUniform("in_matrixTransformation");
 			this.oGLMatrixProjection = this.oGLprogram.getUniform("in_matrixProjection");
@@ -372,7 +375,9 @@ public class CompositingImage extends Compositing {
 		clear();
 		this.filename = null;
 		this.requestSize = new Vector2i(image.getWidth(), image.getHeight());
-		this.resourceImage = new ResourceTexture2();
+		if (this.resourceImage == null) {
+			this.resourceImage = own(new ResourceTexture2());
+		}
 		this.resourceImage.set(image);
 	}
 
@@ -405,7 +410,7 @@ public class CompositingImage extends Compositing {
 		// note that no image can be loaded...
 		if (!uri.isEmpty()) {
 			// link to new one
-			this.resource = ResourceTextureFile.create(this.filename, tmpSize);
+			this.resource = own(ResourceTextureFile.create(this.filename, tmpSize));
 			if (this.resource == null) {
 				LOGGER.error("Can not get Image resource");
 			}
@@ -419,7 +424,11 @@ public class CompositingImage extends Compositing {
 				LOGGER.warn("Retrive previous resource (image)");
 				this.resourceImage = resourceTex;
 			}
+			return;
 		}
+		// The new texture replaces the previous ones.
+		releaseOwned(resource);
+		releaseOwned(resourceTex);
 	}
 
 }

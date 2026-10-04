@@ -69,7 +69,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 			this.tricolor[iii] = this.color;
 		}
 		// Create the VBO:
-		this.vbo = ResourceVirtualArrayObject.createDynamic();
+		this.vbo = own(ResourceVirtualArrayObject.createDynamic());
 		// TO facilitate some debugs we add a name of the VBO:
 		this.vbo.setName("[VBO] of ewol::compositing::Area");
 	}
@@ -342,6 +342,9 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	 */
 	@Override
 	public void draw(final boolean disableDepthTest) {
+		if (isReleased()) {
+			return;
+		}
 		if (this.oGLprogram == null) {
 			LOGGER.error("No shader ...");
 			return;
@@ -507,8 +510,8 @@ public abstract class CompositingDrawing extends CompositingDraw {
 		// remove previous loading ... in case
 		unLoadProgram();
 		// oad the new ...
-		this.oGLprogram = ResourceProgram.create(new Uri("DATA", "color3.vert", "ewol"),
-				new Uri("DATA", "color3.frag", "ewol"));
+		this.oGLprogram = own(ResourceProgram.create(new Uri("DATA", "color3.vert", "ewol"),
+				new Uri("DATA", "color3.frag", "ewol")));
 		// get the shader resource :
 		if (this.oGLprogram != null) {
 			//this.oGLPosition = this.oGLprogram.getAttribute("in_coord3d");
@@ -1122,6 +1125,7 @@ public abstract class CompositingDrawing extends CompositingDraw {
 	 * Un-Load the openGL program and get all the ID needed
 	 */
 	private void unLoadProgram() {
+		releaseOwned(this.oGLprogram);
 		this.oGLprogram = null;
 	}
 	

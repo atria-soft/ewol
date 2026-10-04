@@ -2,6 +2,8 @@ package org.atriasoft.ewol.compositing;
 
 import org.atriasoft.etk.math.Matrix4f;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.ewol.resource.OwnedResources;
+import org.atriasoft.gale.resource.Resource;
 
 /** @file
  * @author Edouard DUPIN
@@ -9,8 +11,16 @@ import org.atriasoft.etk.math.Vector2f;
  * @license MPL v2.0 (see license file)
  */
 
+/**
+ * Base of the drawing layers of the widgets. The gale resources of a layer
+ * (vertex array, program, texture, font) are released once: when the widget
+ * that holds it is collected by the garbage collector, or at once by
+ * {@link #release()} when its owner knows it is drawn no more.
+ */
 public abstract class Compositing {
 	protected Matrix4f matrixApply = Matrix4f.IDENTITY;
+	/** The resources this layer created or kept; released with it. */
+	private final OwnedResources resources = new OwnedResources(this);
 	
 	/**
 	 * clear all the registered element in the current element
@@ -33,6 +43,41 @@ public abstract class Compositing {
 	 */
 	public abstract void flush();
 	
+	/**
+	 * Whether the resources of this layer were released: it draws nothing any more.
+	 * @return true once released.
+	 */
+	public boolean isReleased() {
+		return this.resources.isReleased();
+	}
+
+	/**
+	 * Take ownership of a resource created or kept for this layer: it is released
+	 * with the layer.
+	 * @param resource The resource (null accepted).
+	 * @return {@code resource}.
+	 */
+	protected final <T extends Resource> T own(final T resource) {
+		return this.resources.own(resource);
+	}
+
+	/**
+	 * Release now the resources of this layer, when its owner knows it is drawn
+	 * no more (otherwise the garbage collector does it when the layer is
+	 * collected). The layer draws nothing afterwards; a second call does nothing.
+	 */
+	public void release() {
+		this.resources.releaseAll();
+	}
+
+	/**
+	 * Release now a resource owned by this layer, replaced by another one.
+	 * @param resource The resource replaced (null accepted).
+	 */
+	protected final void releaseOwned(final Resource resource) {
+		this.resources.releaseOwned(resource);
+	}
+
 	/**
 	 * reset to the eye matrix the openGL moving system
 	 */

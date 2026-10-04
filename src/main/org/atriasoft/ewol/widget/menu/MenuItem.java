@@ -100,6 +100,10 @@ public class MenuItem extends Widget {
 	 */
 	public MenuItem icon(final String iconName) {
 		this.iconName = iconName;
+		// The previous icon is drawn by this item only: its texture goes now.
+		if (this.iconDraw != null) {
+			this.iconDraw.release();
+		}
 		if (iconName != null && !iconName.isEmpty()) {
 			this.iconDraw = new CompositingSVG();
 			final String svgData = Uri.getAllDataString(new Uri("THEME", "icon/" + iconName + ".svg", "ewol"));
