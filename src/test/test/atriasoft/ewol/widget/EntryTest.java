@@ -115,4 +115,17 @@ class EntryTest {
 		// A letter alone is no shortcut.
 		assertFalse(this.entry.onEventShortCut(keys(false, false, false, false), 'c', KeyKeyboard.CHARACTER, true));
 	}
+
+	@Test
+	void theShortcutsOfTheEntryDoNothingUntilTheClipboardWorks() {
+		// To wire once gale's ClipBoard exists (a stub today): a cut must never erase a selection it did not copy.
+		final KeySpecial ctrl = keys(true, false, false, false);
+		this.entry.onEventShortCut(ctrl, 'a', KeyKeyboard.CHARACTER, true);
+		this.entry.onEventShortCut(ctrl, 'x', KeyKeyboard.CHARACTER, true);
+		this.entry.onEventShortCut(ctrl, 'w', KeyKeyboard.CHARACTER, true);
+		assertEquals("abc", this.entry.getPropertyValue(), "nothing cut nor cleaned");
+		// Nothing selected by ctrl+a: a letter goes after the text.
+		type(keys(false, false, false, false), 'd');
+		assertEquals("abcd", this.entry.getPropertyValue());
+	}
 }

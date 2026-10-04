@@ -107,7 +107,9 @@ public class Entry extends Box {
 		shortCutAdd("ctrl+v", "paste");
 		shortCutAdd("ctrl+a", "select:all");
 		shortCutAdd("ctrl+shift+a", "select:none");
-		//TODO this.signalShortcut.connect(this, Entry::onCallbackShortCut);
+		// The shortcuts are caught (they insert no letter) but do nothing yet: gale's ClipBoard is a stub
+		// (set and request do nothing, get gives null), so a cut would erase a selection it did not copy.
+		// Once ClipBoard works: this.signalShortcut.connectAuto(this, Entry::onCallbackShortCut).
 		setPropertyColor(Color.WHITE);
 		setPropertyBorderColor(Color.BLACK);
 		setPropertyBorderWidth(new DimensionInsets(2));

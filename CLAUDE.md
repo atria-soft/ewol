@@ -240,7 +240,9 @@ e.signalEnter.connect(text -> ...);    // Signal<String>
 e.signalClick.connect(() -> ...);
 ```
 
-Built-in shortcuts: `ctrl+a` select all, `ctrl+c` copy, `ctrl+x` cut, `ctrl+v` paste, `ctrl+w` clean.
+Shortcuts `ctrl+a` (select all), `ctrl+c`, `ctrl+x`, `ctrl+v` and `ctrl+w` (clean) are caught but do
+nothing yet: gale's `ClipBoard` is a stub, and a cut must never erase a selection it did not copy.
+Connect `signalShortcut` to `onCallbackShortCut` once `ClipBoard` works.
 
 Text typed: a printable character typed without Control, or with Control and AltGr (X11 hands AltGr
 without Control, Windows with it). gale hands a letter typed with Control alone as the letter (Ctrl+Z
