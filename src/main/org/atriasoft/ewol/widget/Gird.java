@@ -215,27 +215,19 @@ public class Gird extends Widget {
 	 */
 	public void setColNumber(final int colNumber) {
 		if ((long) this.sizeCol.size() > colNumber) {
-			int errorControl = this.subWidget.size();
-			// remove subWidget :
-			for (int iii = this.subWidget.size(); iii >= 0; iii--) {
+			// remove the sub-widgets of the removed columns:
+			for (int iii = this.subWidget.size() - 1; iii >= 0; iii--) {
 				if (this.subWidget.get(iii).col > (colNumber - 1)) {
-					// out of bounds : must remove it ...
-					if (this.subWidget.get(iii).widget != null) {
-						this.subWidget.get(iii).widget = null;
-						// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
-						if (errorControl == this.subWidget.size()) {
-							LOGGER.error("[{}] The number of element might have been reduced...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function", getId());
-							System.exit(-1);
-						}
-					} else {
+					if (this.subWidget.get(iii).widget == null) {
 						LOGGER.warn("[{}] Must not have null pointer on the subWidget list", getId());
-						this.subWidget.remove(iii);
 					}
-					errorControl = this.subWidget.size();
+					this.subWidget.remove(iii);
 				}
 			}
-			// just add the col size:
-			this.sizeCol.remove(this.sizeCol.size() - 1);
+			// remove the columns:
+			while (this.sizeCol.size() > Math.max(colNumber, 0)) {
+				this.sizeCol.remove(this.sizeCol.size() - 1);
+			}
 		} else {
 			// just add the col size:
 			for (int iii = this.sizeCol.size() - 1; iii < colNumber - 1; iii++) {

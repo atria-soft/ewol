@@ -168,10 +168,9 @@ public class EwolObject {
 	 * @param child Object of the child that want to remove itself
 	 */
 	protected void requestDestroyFromChild(final EwolObject child) {
-		LOGGER.info(
-				"requestDestroyFromChild(...) is called when an object reference as a parent have a child that request quto-destroy ...");
-		LOGGER.error("Call From Child with no effects ==> must implement : requestDestroyFromChild(...)");
-		System.exit(-1);
+		// The child is marked destroyed all the same; only its parent keeps a reference on it.
+		LOGGER.error("[{}] {} cannot remove its destroyed child [{}] {}: it must implement requestDestroyFromChild(...)",
+				getId(), getClass().getCanonicalName(), child.getId(), child.getClass().getCanonicalName());
 	}
 
 	public void setName(final String name) {

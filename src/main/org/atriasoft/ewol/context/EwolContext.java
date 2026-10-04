@@ -55,14 +55,17 @@ public class EwolContext extends GaleApplication {
 	
 	private Windows windowsCurrent = null; // !< current displayed windows
 	
+	/**
+	 * @param application The application run in this context.
+	 * @throws IllegalArgumentException if {@code application} is null.
+	 */
 	public EwolContext(final EwolApplication application) {
+		if (application == null) {
+			throw new IllegalArgumentException("Cannot start an ewol context without application");
+		}
 		this.application = application;
 		this.objectManager = new ObjectManager(this);
 		this.input = new InputManager(this);
-		if (this.application == null) {
-			LOGGER.error("Can not start context with no Application ==> rtfm ...");
-			System.exit(-1);
-		}
 	}
 	
 	/**
