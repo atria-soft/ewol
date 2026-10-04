@@ -2,6 +2,7 @@ package test.atriasoft.ewol.widget;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.atriasoft.ewol.event.EventEntry;
 import org.atriasoft.ewol.widget.Entry;
@@ -86,5 +87,19 @@ class EntryTest {
 	void backspaceStillErasesWithControl() {
 		type(keys(true, false, false, false), '\b');
 		assertEquals("ab", this.entry.getPropertyValue());
+	}
+
+	@Test
+	void theShortcutsOfTheEntryAreCaught() {
+		// ctrl+w/x/c/v/a reach the entry as letters now: caught as shortcuts, without any error, press and release.
+		for (final char letter : new char[] { 'w', 'x', 'c', 'v', 'a' }) {
+			assertTrue(this.entry.onEventShortCut(keys(true, false, false, false), letter, KeyKeyboard.CHARACTER, true),
+					"ctrl+" + letter);
+			assertTrue(this.entry.onEventShortCut(keys(true, false, false, false), letter, KeyKeyboard.CHARACTER, false),
+					"release of ctrl+" + letter);
+		}
+		assertTrue(this.entry.onEventShortCut(keys(true, true, false, false), 'A', KeyKeyboard.CHARACTER, true));
+		// A letter alone is no shortcut.
+		assertFalse(this.entry.onEventShortCut(keys(false, false, false, false), 'c', KeyKeyboard.CHARACTER, true));
 	}
 }

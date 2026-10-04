@@ -82,7 +82,7 @@ public class Widget extends EwolObject {
 	protected Dimension2f propertyMaxSize = new Dimension2f(Vector2f.MAX_VALUE, Distance.PIXEL);
 	protected Dimension2f propertyMinSize = new Dimension2f(Vector2f.ZERO, Distance.PIXEL);
 	
-	public Signal<String> signalShortcut;
+	public Signal<String> signalShortcut = new Signal<>();
 	
 	protected Vector2f size = Vector2f.VALUE_16;
 	protected float zoom = 1.0f;
