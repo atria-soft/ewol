@@ -67,6 +67,17 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 
 	protected ResourceTexturedFont(final Uri fontBaseUri) {
 		super(CACHE_PREFIX + fontBaseUri.toString());
+		try {
+			load(fontBaseUri);
+		} catch (final RuntimeException | Error ex) {
+			// The half-built font leaves the cache: the fonts it kept, then its own reference, are given back.
+			releaseOwnedFonts();
+			abandonConstruction();
+			throw ex;
+		}
+	}
+
+	private void load(final Uri fontBaseUri) {
 		LOGGER.debug("Load font: '{}'", fontBaseUri);
 		
 		this.font[0] = null;
@@ -208,6 +219,11 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	@Override
 	public void cleanUp() {
 		super.cleanUp();
+		releaseOwnedFonts();
+	}
+
+	/** Release once each font created for this one. */
+	private void releaseOwnedFonts() {
 		for (final ResourceFontSvg it : this.ownedFonts) {
 			it.release();
 		}
