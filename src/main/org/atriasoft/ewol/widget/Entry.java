@@ -21,6 +21,7 @@ import org.atriasoft.ewol.event.EventTime;
 import org.atriasoft.gale.context.ClipBoard;
 import org.atriasoft.gale.context.ClipboardList;
 import org.atriasoft.gale.key.KeyKeyboard;
+import org.atriasoft.gale.key.KeySpecial;
 import org.atriasoft.gale.key.KeyStatus;
 import org.atriasoft.gale.key.KeyType;
 import org.slf4j.Logger;
@@ -295,11 +296,29 @@ public class Entry extends Box {
 		this.signalModify.emit(this.propertyValue);
 	}
 
+	/**
+	 * Whether the keys held make a character a shortcut rather than text:
+	 * Control without Alt. gale hands the symbol of a key held with Control
+	 * (Ctrl+Z comes as a z), which an entry must not insert; Control with Alt
+	 * is AltGr (Windows, X11), which types the third symbol of a key (@, #,
+	 * [, €...).
+	 *
+	 * @param special the keys held, null if unknown
+	 */
+	private static boolean isShortcut(final KeySpecial special) {
+		return special != null && special.getCtrl() && !special.getAlt();
+	}
+
 	@Override
 	public boolean onEventEntry(final EventEntry event) {
 		LOGGER.trace("Event on Entry: {}", event);
 		if (event.type() == KeyKeyboard.CHARACTER) {
 			if (event.status() == KeyStatus.down) {
+				final char typed = event.getChar();
+				if (typed >= ' ' && typed != 0x7F && isShortcut(event.specialKey())) {
+					// A shortcut nobody took (Ctrl+Z, Ctrl+S...): no text, and the selection stays.
+					return false;
+				}
 				// remove current selected data ...
 				removeSelected();
 				if (event.getChar() == '\n' || event.getChar() == '\r') {
@@ -325,7 +344,7 @@ public class Entry extends Box {
 						this.displayCursorPos = Math.max(this.displayCursorPos, 0);
 						this.displayCursorPosSelection = this.displayCursorPos;
 					}
-				} else if (event.getChar() >= 20) {
+				} else if (event.getChar() >= ' ') {
 					LOGGER.debug("get data: '{}' = '{}'", event.getChar(), event.getChar());
 					if ((long) this.propertyValue.length() > this.propertyMaxCharacter) {
 						LOGGER.debug("Reject data for entry: '{}'", event.getChar());
