@@ -297,16 +297,24 @@ public class Entry extends Box {
 	}
 
 	/**
-	 * Whether the keys held make a character a shortcut rather than text:
-	 * Control without Alt. gale hands the symbol of a key held with Control
-	 * (Ctrl+Z comes as a z), which an entry must not insert; Control with Alt
-	 * is AltGr (Windows, X11), which types the third symbol of a key (@, #,
-	 * [, €...).
+	 * Whether a character typed is text to insert: a printable character
+	 * (neither a control character nor the U+FFFF AWT hands for a key that
+	 * types nothing), typed without Control, or with Control and AltGr. gale
+	 * hands the letter of a key held with Control alone (Ctrl+Z comes as a z):
+	 * a shortcut, never text. AltGr types the third symbol of a key (@, #, [,
+	 * €...); X11 hands it without Control, Windows with Control. A key held
+	 * with Control and the left Alt is a shortcut too (Windows' Control+Alt
+	 * for AltGr is not supported). Return, Backspace and Delete are no text:
+	 * they edit whatever the keys held.
 	 *
+	 * @param typed   the character typed
 	 * @param special the keys held, null if unknown
 	 */
-	private static boolean isShortcut(final KeySpecial special) {
-		return special != null && special.getCtrl() && !special.getAlt();
+	private static boolean isText(final char typed, final KeySpecial special) {
+		if (Character.isISOControl(typed) || !Character.isDefined(typed)) {
+			return false;
+		}
+		return special == null || !special.getCtrl() || special.getAltGr();
 	}
 
 	@Override
@@ -315,8 +323,10 @@ public class Entry extends Box {
 		if (event.type() == KeyKeyboard.CHARACTER) {
 			if (event.status() == KeyStatus.down) {
 				final char typed = event.getChar();
-				if (typed >= ' ' && typed != 0x7F && isShortcut(event.specialKey())) {
-					// A shortcut nobody took (Ctrl+Z, Ctrl+S...): no text, and the selection stays.
+				final boolean editing = typed == '\n' || typed == '\r' || typed == 0x7F || typed == 0x08;
+				if (!editing && !isText(typed, event.specialKey())) {
+					// A shortcut nobody took (Ctrl+Z, Ctrl+S...) or a key that types nothing here (Escape, Tab):
+					// no change, the selection stays.
 					return false;
 				}
 				// remove current selected data ...
@@ -344,7 +354,7 @@ public class Entry extends Box {
 						this.displayCursorPos = Math.max(this.displayCursorPos, 0);
 						this.displayCursorPosSelection = this.displayCursorPos;
 					}
-				} else if (event.getChar() >= ' ') {
+				} else {
 					LOGGER.debug("get data: '{}' = '{}'", event.getChar(), event.getChar());
 					if ((long) this.propertyValue.length() > this.propertyMaxCharacter) {
 						LOGGER.debug("Reject data for entry: '{}'", event.getChar());

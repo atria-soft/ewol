@@ -242,6 +242,11 @@ e.signalClick.connect(() -> ...);
 
 Built-in shortcuts: `ctrl+a` select all, `ctrl+c` copy, `ctrl+x` cut, `ctrl+v` paste, `ctrl+w` clean.
 
+Text typed: a printable character typed without Control, or with Control and AltGr (X11 hands AltGr
+without Control, Windows with it). gale hands a letter typed with Control alone as the letter (Ctrl+Z
+comes as `z`): the entry takes it for a shortcut and inserts nothing; Control with the left Alt too.
+A key that inserts nothing leaves the selection as it is.
+
 ### CheckBox
 
 Toggle checkbox with label.

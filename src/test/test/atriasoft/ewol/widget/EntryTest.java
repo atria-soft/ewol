@@ -66,20 +66,33 @@ class EntryTest {
 
 	@Test
 	void altGrTypesItsSymbols() {
-		// X11 or Windows: AltGr comes with Control and Alt held.
-		type(keys(true, false, false, true), '@');
-		type(keys(true, false, true, false), '€');
+		// X11: AltGr comes alone (VK_ALT_GRAPH), without Control.
 		type(keys(false, false, false, true), '#');
+		type(keys(false, true, false, true), '€');
+		// Windows: AltGr comes with Control.
+		type(keys(true, false, false, true), '@');
 		type(keys(true, true, false, true), '[');
-		assertEquals("abc@€#[", this.entry.getPropertyValue());
+		assertEquals("abc#€@[", this.entry.getPropertyValue());
+	}
+
+	@Test
+	void controlWithTheLeftAltIsAShortcut() {
+		// X11: a real Control+Alt chord; gale hands what AWT typed (the 1 of the key, the control code of T).
+		assertFalse(type(keys(true, false, true, false), '1'));
+		assertFalse(type(keys(true, false, true, false), '\u0014'));
+		assertEquals("abc", this.entry.getPropertyValue());
 	}
 
 	@Test
 	void controlCharactersAreNotInserted() {
-		// Escape, and the control codes AWT typed for Ctrl+T to Ctrl+Z before gale handed the letters.
+		// Escape, Tab, the control codes AWT types for Ctrl+T to Ctrl+Z, and the U+FFFF of a key that types
+		// nothing (a dead key, AltGr on a key without third symbol).
 		type(keys(false, false, false, false), '\u001b');
+		type(keys(false, false, false, false), '\t');
 		type(keys(true, false, false, false), '\u0014');
 		type(keys(true, false, false, false), '\u001a');
+		type(keys(false, false, false, false), '\uffff');
+		type(keys(true, false, false, true), '\uffff');
 		assertEquals("abc", this.entry.getPropertyValue());
 	}
 
