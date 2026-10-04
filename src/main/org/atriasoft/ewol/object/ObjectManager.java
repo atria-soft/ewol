@@ -169,14 +169,18 @@ public class ObjectManager {
 			LOGGER.debug(" == > Remove all workers");
 			this.workerList.clear();
 		}
+		// The objects have no destruction step: the garbage collector frees them once nothing references them
+		// (their OpenGL resources with them). The ones left are still referenced (the application keeps its
+		// windows) or not collected yet; it is not a leak.
+		int living = 0;
 		for (final WeakReference<EwolObject> it : this.eObjectList) {
-			final EwolObject element = it.get();
-			if (element != null) {
-				//it.removeObject();
+			if (it.get() != null) {
+				living++;
 			}
 		}
-		if (this.eObjectList.size() != 0) {
-			LOGGER.error("Have {} active Object", this.eObjectList.size());
+		if (living != 0) {
+			LOGGER.info("{} objects not collected yet at the end (still referenced, or no garbage collection since)",
+					living);
 		}
 		this.eObjectList.clear();
 	}
