@@ -35,20 +35,21 @@ class ListElement {
 public class ResourceColorFile extends Resource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceColorFile.class);
 
+	/**
+	 * Get the color file of {@code uri}, shared: the living one is kept (count of
+	 * references + 1), otherwise it is loaded. Call {@link #release()} once when
+	 * it is not used any more.
+	 * @param uri File of the colors.
+	 * @return the color file.
+	 * @throws IllegalStateException if a resource of another type has this name.
+	 */
 	public static ResourceColorFile create(final Uri uri) {
-		LOGGER.trace("KEEP: ColorFile: " + uri);
-		final ResourceColorFile object = null;
-		final Resource object2 = Resource.getManager().localKeep(uri);
-		if (object2 != null) {
-			if (object2 instanceof ResourceColorFile) {
-				return (ResourceColorFile) object2;
-			}
-			LOGGER.error("Request resource file : '" + uri + "' With the wrong type (dynamic cast error)");
-			System.exit(-1);
-			return null;
+		LOGGER.trace("KEEP: ColorFile: {}", uri);
+		final ResourceColorFile existing = keepExisting(uri.toString(), ResourceColorFile.class);
+		if (existing != null) {
+			return existing;
 		}
-		LOGGER.debug("CREATE: FontFreeType: " + uri);
-		// need to crate a new one ...
+		LOGGER.debug("CREATE: ColorFile: {}", uri);
 		return new ResourceColorFile(uri);
 	}
 	

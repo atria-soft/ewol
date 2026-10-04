@@ -16,7 +16,6 @@ import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.resource.font.FontMode;
 import org.atriasoft.ewol.resource.font.GlyphProperty;
-import org.atriasoft.gale.resource.Resource;
 import org.atriasoft.gale.resource.ResourceTexture2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,25 +25,25 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 
 	private static final String CACHE_PREFIX = "__TEXTURED_FONT__>>";
 	
+	/**
+	 * Get the textured font of {@code fontBaseUri} (with its size property),
+	 * shared: the living one is kept (count of references + 1), otherwise it is
+	 * built. Call {@link #release()} once when it is not used any more.
+	 * @param fontBaseUri File of the regular font, with the size property.
+	 * @return the textured font, or null without a file name.
+	 * @throws IllegalStateException if a resource of another type has this name.
+	 */
 	public static ResourceTexturedFont create(final Uri fontBaseUri) {
-		ResourceTexturedFont resource;
-		Resource resource2;
 		if (fontBaseUri.isEmpty()) {
 			LOGGER.error("Can not create a Texture Font without a filename: {}", fontBaseUri);
 			return null;
 		}
-		resource2 = Resource.getManager().localKeep(CACHE_PREFIX + fontBaseUri.toString());
-		if (resource2 != null) {
-			if (resource2 instanceof ResourceTexturedFont) {
-				return (ResourceTexturedFont) resource2;
-			}
-			LOGGER.error("Request resource fontName: '{}' with the wrong type (dynamic cast error)", fontBaseUri);
-			System.exit(-1);
-			return null;
+		final ResourceTexturedFont existing = keepExisting(CACHE_PREFIX + fontBaseUri.toString(),
+				ResourceTexturedFont.class);
+		if (existing != null) {
+			return existing;
 		}
-		resource = new ResourceTexturedFont(fontBaseUri);
-		Resource.getManager().localAdd(resource);
-		return resource;
+		return new ResourceTexturedFont(fontBaseUri);
 	}
 	
 	// font is define for a specific mode
@@ -54,6 +53,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	// == > otherwise I can just generate italic ...
 	// == > Bold is a little more complicated (maybe with the border-size)
 	private final ResourceFontSvg[] font = new ResourceFontSvg[4];
+	/** The fonts created for this one (a mode without its own file shares the reference font), released with it. */
+	private final List<ResourceFontSvg> ownedFonts = new ArrayList<>();
 	private final int[] height = new int[4];
 	// for the texture generation :
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
@@ -145,8 +146,15 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 				continue;
 			}
 			LOGGER.debug("Load FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId], this.size);
-			this.font[iiiFontId] = ResourceFontSvg.create(this.fileName[iiiFontId]);
-			if (this.font[iiiFontId] == null) {
+			try {
+				this.font[iiiFontId] = ResourceFontSvg.create(this.fileName[iiiFontId]);
+			} catch (final IllegalStateException ex) {
+				LOGGER.error("Cannot load the font [{}] '{}': {}", iiiFontId, this.fileName[iiiFontId], ex.getMessage());
+				this.font[iiiFontId] = null;
+			}
+			if (this.font[iiiFontId] != null) {
+				this.ownedFonts.add(this.font[iiiFontId]);
+			} else {
 				LOGGER.warn("error in loading FONT [{}] name: \"{}\" ==> size={}", iiiFontId, this.fileName[iiiFontId],
 						this.size);
 			}
@@ -194,6 +202,18 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		LOGGER.debug("    {} ==> {}", FontMode.BOLD_ITALIC, getWrappingMode(FontMode.BOLD_ITALIC));
 	}
 	
+	/**
+	 * Delete the texture and release the fonts created for this one.
+	 */
+	@Override
+	public void cleanUp() {
+		super.cleanUp();
+		for (final ResourceFontSvg it : this.ownedFonts) {
+			it.release();
+		}
+		this.ownedFonts.clear();
+	}
+
 	/**
 	 * add a glyph in a texture font.
 	 * All 4 font modes share the same texture atlas position for each glyph

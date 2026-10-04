@@ -22,6 +22,14 @@ import org.slf4j.LoggerFactory;
 public class ResourceFontSvg extends Resource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceFontSvg.class);
 	
+	/**
+	 * Get the font of {@code uri} (its size property apart), shared: the living
+	 * one is kept (count of references + 1), otherwise it is loaded. Call
+	 * {@link #release()} once when it is not used any more.
+	 * @param uri File of the font.
+	 * @return the font.
+	 * @throws IllegalStateException if a resource of another type has this name.
+	 */
 	public static ResourceFontSvg create(final Uri uri) {
 		LOGGER.trace("KEEP: FontFreeType: {}", uri);
 		// Create cache key without size property (it's only for rendering, not loading)
@@ -29,18 +37,9 @@ public class ResourceFontSvg extends Resource {
 		final Uri cacheKey = uri.clone();
 		cacheKey.getproperties().remove("size");
 
-		ResourceFontSvg object = null;
-		final Resource object2 = Resource.getManager().localKeep(cacheKey);
-		if (object2 != null) {
-			if (!(object2 instanceof ResourceFontSvg)) {
-				LOGGER.error("Request resource file: '{}' with the wrong type (dynamic cast error)", uri);
-				System.exit(-1);
-				return null;
-			}
-			object = (ResourceFontSvg) object2;
-		}
-		if (object != null) {
-			return object;
+		final ResourceFontSvg existing = keepExisting(cacheKey.toString(), ResourceFontSvg.class);
+		if (existing != null) {
+			return existing;
 		}
 		LOGGER.debug("CREATE: FontFreeType: {}", uri);
 		// need to crate a new one ...

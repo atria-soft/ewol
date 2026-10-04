@@ -33,29 +33,21 @@ public class ResourceConfigFile extends Resource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceConfigFile.class);
 
 	/**
-	 * keep the resource pointer.
-	 * @note Never free this pointer by your own...
+	 * Get the configuration file {@code name}, shared: the living one is kept
+	 * (count of references + 1), otherwise it is loaded. Call {@link #release()}
+	 * once when it is not used any more.
 	 * @param name Name of the configuration file.
-	 * @return pointer on the resource or null if an error occurred.
+	 * @return the configuration file.
+	 * @throws IllegalStateException if a resource of another type has this name.
 	 */
 	public static ResourceConfigFile create(final Uri name) {
-		Resource resource2 = null;
 		if (name != null && !name.isEmpty()) {
-			resource2 = Resource.getManager().localKeep(name);
-		}
-		if (resource2 != null) {
-			if (resource2 instanceof final ResourceConfigFile tmpp) {
-				resource2.keep();
-				return tmpp;
+			final ResourceConfigFile existing = keepExisting(name.toString(), ResourceConfigFile.class);
+			if (existing != null) {
+				return existing;
 			}
-			LOGGER.error("Request resource file : '" + name + "' With the wrong type (dynamic cast error)");
-			System.exit(-1);
-			return null;
 		}
-		final ResourceConfigFile resource = new ResourceConfigFile(name);
-		Resource.getManager().localAdd(resource);
-		return resource;
-		
+		return new ResourceConfigFile(name);
 	}
 	
 	public static ResourceConfigFile keep(final String name) {
