@@ -21,22 +21,6 @@
 			</roles>
 		</developer>
 	</developers>
-	<repositories>
-		<repository>
-			<id>gitea</id>
-			<url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-		</repository>
-	</repositories>
-	<distributionManagement>
-		<repository>
-			<id>gitea</id>
-			<url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-		</repository>
-		<snapshotRepository>
-			<id>gitea</id>
-			<url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-		</snapshotRepository>
-	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.atriasoft</groupId>
