@@ -46,10 +46,23 @@ public class Dialog extends PopUp {
 	// Color constants (shared with subclasses)
 	// ========================================================================
 
-	protected static final Color COLOR_OVERLAY = new Color(0x00, 0x00, 0x00, 0x60);
-	protected static final Color COLOR_CONTENT = new Color(0xF5, 0xF5, 0xF5, 0xFF);
-	protected static final Color COLOR_HEADER_FOOTER = new Color(0xE0, 0xE0, 0xE0, 0xFF);
-	protected static final Color COLOR_BORDER = new Color(0xC0, 0xC0, 0xC0, 0xFF);
+	/** Skin given to the new dialogs: follows the active theme, see {@link #setDefaultSkin(DialogSkin)}. */
+	private static volatile DialogSkin defaultSkin = DialogSkin.LIGHT;
+
+	/**
+	 * Set the skin of every dialog created afterwards (dark theme: {@link DialogSkin#DARK}).
+	 * @param skin the skin, null for the light one
+	 */
+	public static void setDefaultSkin(final DialogSkin skin) {
+		defaultSkin = skin != null ? skin : DialogSkin.LIGHT;
+	}
+
+	/**
+	 * @return the skin given to the new dialogs
+	 */
+	public static DialogSkin getDefaultSkin() {
+		return defaultSkin;
+	}
 
 	// ========================================================================
 	// Signal
@@ -66,6 +79,10 @@ public class Dialog extends PopUp {
 	private final Box contentBox;
 	private final Sizer footerSizer;
 	private final Box dialogBox;
+	private final Icon closeIcon;
+	private Box titleBar;
+	private Box footerBox;
+	private DialogSkin skin = DialogSkin.LIGHT;
 
 	// ========================================================================
 	// Properties
@@ -85,7 +102,7 @@ public class Dialog extends PopUp {
 		setPropertyFill(Vector2b.TRUE);
 
 		// Overlay background
-		setPropertyColor(COLOR_OVERLAY);
+		setPropertyColor(DialogSkin.LIGHT.overlay());
 
 		// Title label
 		this.titleLabel = new Label(this.propertyTitle);
@@ -94,13 +111,14 @@ public class Dialog extends PopUp {
 
 		// Close button (X)
 		final Icon closeIcon = Icon.create("close");
-		closeIcon.setPropertyFillColor(new Color(0x40, 0x40, 0x40, 0xFF));
+		this.closeIcon = closeIcon;
+		closeIcon.setPropertyFillColor(DialogSkin.LIGHT.icon());
 		closeIcon.setPropertyIconSize(new Dimension2f(new Vector2f(16, 16), Distance.PIXEL));
 		closeIcon.setPropertyExpand(Vector2b.FALSE);
 		this.closeButton = new Button();
 		this.closeButton.setPropertyExpand(Vector2b.FALSE);
 		this.closeButton.setPropertyFill(Vector2b.FALSE);
-		this.closeButton.setPropertyColor(COLOR_HEADER_FOOTER);
+		this.closeButton.setPropertyColor(DialogSkin.LIGHT.headerFooter());
 		this.closeButton.setPropertyBorderColor(Color.NONE);
 		this.closeButton.setPropertyBorderWidth(new DimensionInsets(2));
 		this.closeButton.setPropertyPadding(new DimensionInsets(2));
@@ -110,8 +128,8 @@ public class Dialog extends PopUp {
 
 		// Content area
 		this.contentBox = new Box();
-		this.contentBox.setPropertyColor(COLOR_CONTENT);
-		this.contentBox.setPropertyBorderColor(COLOR_BORDER);
+		this.contentBox.setPropertyColor(DialogSkin.LIGHT.content());
+		this.contentBox.setPropertyBorderColor(DialogSkin.LIGHT.border());
 		this.contentBox.setPropertyBorderWidth(new DimensionInsets(0, 2, 0, 2));
 		this.contentBox.setPropertyPadding(new DimensionInsets(10));
 		this.contentBox.setPropertyExpand(Vector2b.TRUE);
@@ -129,6 +147,41 @@ public class Dialog extends PopUp {
 		setSubWidget(this.dialogBox);
 
 		setPropertyCanFocus(true);
+		setSkin(defaultSkin);
+	}
+
+	/**
+	 * Dress this dialog with a skin (colours of the overlay, panels, border, close icon and title).
+	 * @param skin the skin, null for the light one
+	 */
+	public void setSkin(final DialogSkin skin) {
+		this.skin = skin != null ? skin : DialogSkin.LIGHT;
+		setPropertyColor(this.skin.overlay());
+		this.closeIcon.setPropertyFillColor(this.skin.icon());
+		this.closeButton.setPropertyColor(this.skin.headerFooter());
+		this.contentBox.setPropertyColor(this.skin.content());
+		this.contentBox.setPropertyBorderColor(this.skin.border());
+		this.titleBar.setPropertyColor(this.skin.headerFooter());
+		this.footerBox.setPropertyColor(this.skin.headerFooter());
+		this.titleLabel.setPropertyTextColor(this.skin.title());
+		markToRedraw();
+	}
+
+	/**
+	 * @return the skin of this dialog
+	 */
+	public DialogSkin getSkin() {
+		return this.skin;
+	}
+
+	/**
+	 * Fluent method to set the skin.
+	 * @param skin the skin
+	 * @return this dialog for chaining
+	 */
+	public Dialog skin(final DialogSkin skin) {
+		setSkin(skin);
+		return this;
 	}
 
 	// ========================================================================
@@ -170,7 +223,8 @@ public class Dialog extends PopUp {
 
 	private Box buildTitleBar() {
 		final Box bar = new Box();
-		bar.setPropertyColor(COLOR_HEADER_FOOTER);
+		this.titleBar = bar;
+		bar.setPropertyColor(DialogSkin.LIGHT.headerFooter());
 		bar.setPropertyBorderRadius(new DimensionBorderRadius(8, 8, 0, 0));
 		bar.setPropertyPadding(new DimensionInsets(10));
 		bar.setPropertyExpand(Vector2b.TRUE_FALSE);
@@ -194,7 +248,8 @@ public class Dialog extends PopUp {
 
 	private Box buildFooterBox() {
 		final Box footer = new Box();
-		footer.setPropertyColor(COLOR_HEADER_FOOTER);
+		this.footerBox = footer;
+		footer.setPropertyColor(DialogSkin.LIGHT.headerFooter());
 		footer.setPropertyBorderRadius(new DimensionBorderRadius(0, 0, 8, 8));
 		footer.setPropertyPadding(new DimensionInsets(10));
 		footer.setPropertyExpand(Vector2b.TRUE_FALSE);

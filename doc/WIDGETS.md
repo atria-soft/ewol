@@ -65,6 +65,9 @@ s.subWidgetRemoveAll();
 ### Label
 
 Text display. Supports decorated text with HTML-like tags: `<b>bold</b>`, `<i>italic</i>`, `<font color="#FF0000">color</font>`.
+The text is markup: a literal `<`, `>` or `&` is written `&lt;`, `&gt;`, `&amp;` (numeric `&#233;` works too), or
+`Label.create(Label.escape(plainText))`. Latin-1, Latin Extended and the euro sign are drawn (glyphs are added to the
+font atlas on first use). `label.setPropertyTextColor(color)` overrides the theme colour.
 
 ```java
 // Factory
@@ -450,6 +453,9 @@ windows.popUpWidgetPop();              // hide top popup
 ### Dialog
 
 Structured popup with title bar (close button), content area, and footer button bar. Extends `PopUp`.
+Colours come from a `DialogSkin` (`LIGHT` by default, `DARK`): `Dialog.setDefaultSkin(DialogSkin.DARK)` makes every
+new dialog (and subclass) follow the active theme, `dialog.skin(DialogSkin.DARK)` dresses one. The content widgets
+keep their own colours (a `Label` in a dark dialog needs `setPropertyTextColor`).
 
 ```java
 // Factory + Fluent API
