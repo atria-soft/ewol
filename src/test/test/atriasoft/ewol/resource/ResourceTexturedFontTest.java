@@ -1,7 +1,10 @@
 package test.atriasoft.ewol.resource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +13,8 @@ import java.nio.file.Path;
 
 import org.atriasoft.etk.Uri;
 import org.atriasoft.ewol.resource.ResourceTexturedFont;
+import org.atriasoft.ewol.resource.font.FontMode;
+import org.atriasoft.ewol.resource.font.GlyphProperty;
 import org.atriasoft.gale.context.GaleContext;
 import org.atriasoft.gale.resource.ResourceManager;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,6 +31,31 @@ class ResourceTexturedFontTest {
 	@BeforeAll
 	static void setUpClass() {
 		EwolTestContext.init();
+	}
+
+	@Test
+	void accentedCharactersAndTheEuroSignHaveTheirOwnGlyph() {
+		final Uri fontUri = new Uri("FONTS", "FreeSherif.svg", "esvg");
+		fontUri.setProperty("size", "14");
+		final ResourceTexturedFont font = ResourceTexturedFont.create(fontUri);
+		try {
+			final GlyphProperty error = font.getGlyph((char) 0, FontMode.REGULAR);
+			final String wanted = "éèàçôüßœ€";
+			for (int iii = 0; iii < wanted.length(); iii++) {
+				final char code = wanted.charAt(iii);
+				// twice: the first call adds the glyph to the atlas, the second finds it
+				for (int pass = 0; pass < 2; pass++) {
+					final GlyphProperty glyph = font.getGlyph(code, FontMode.REGULAR);
+					assertNotSame(error, glyph, "error glyph for U+" + Integer.toHexString(code) + " pass " + pass);
+					assertEquals(code, glyph.getUnicodeValue());
+					assertTrue(glyph.exist());
+				}
+			}
+			assertEquals('A', font.getGlyph('A', FontMode.BOLD).getUnicodeValue());
+			assertEquals('~', font.getGlyph('~', FontMode.REGULAR).getUnicodeValue());
+		} finally {
+			font.release();
+		}
 	}
 
 	@Test

@@ -57,6 +57,8 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 	private final List<ResourceFontSvg> ownedFonts = new ArrayList<>();
 	private final int[] height = new int[4];
 	// for the texture generation :
+	/** First character not preloaded in the atlas (characters 0x20..0x7E are, at index code - 0x1F). */
+	private static final int FIRST_DYNAMIC_CHAR = 0x7F;
 	public Vector2i[] lastGlyphPos = new Vector2i[4];
 	public int[] lastRawHeigh = new int[4];
 	public List<GlyphProperty>[] listElement = new ArrayList[4];
@@ -201,7 +203,7 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		// add error glyph
 		addGlyph((char) 0);
 		// by default we set only the first AINSI char available
-		for (int iii = 0x20; iii < 0x7F; iii++) {
+		for (int iii = 0x20; iii < FIRST_DYNAMIC_CHAR; iii++) {
 			LOGGER.trace("Add glyph: {}", iii);
 			addGlyph((char) iii);
 		}
@@ -371,27 +373,34 @@ public class ResourceTexturedFont extends ResourceTexture2 {
 		if (charcode < 0x20) {
 			return 0;
 		}
-		if (charcode < 0x80) {
+		if (charcode < FIRST_DYNAMIC_CHAR) {
 			return charcode - 0x1F;
 		}
-		for (int iii = 0x80 - 0x20; iii < this.listElement[displayMode.getValue()].size(); iii++) {
-			// LOGGER.debug("search : '" + charcode + "' =?= '" +
-			// (this.listElement[displayMode])[iii].UVal + "'");
-			if (charcode == this.listElement[displayMode.getValue()].get(iii).getUnicodeValue()) {
-				// LOGGER.debug("search : '" + charcode + "'");
-				if (this.listElement[displayMode.getValue()].get(iii).exist()) {
-					// LOGGER.debug("return " + iii);
-					return charcode;
-				}
-				return 0;
+		final int found = findDynamicIndex(charcode, displayMode);
+		if (found >= 0) {
+			return found;
+		}
+		// not in the atlas yet: add it (the atlas is updated at once), then look it up again
+		addGlyph(charcode);
+		final int added = findDynamicIndex(charcode, displayMode);
+		return added >= 0 ? added : 0;
+	}
+
+	/**
+	 * Search a character outside the basic ASCII range in the atlas.
+	 * @param charcode The unicodeValue
+	 * @param displayMode Mode to display the current font
+	 * @return the index in the table, 0 if the font has no glyph for it, -1 if it is not in the atlas yet
+	 */
+	private int findDynamicIndex(final Character charcode, final FontMode displayMode) {
+		final List<GlyphProperty> list = this.listElement[displayMode.getValue()];
+		for (int iii = FIRST_DYNAMIC_CHAR - 0x1F; iii < list.size(); iii++) {
+			final GlyphProperty element = list.get(iii);
+			if (element != null && charcode == element.getUnicodeValue()) {
+				return element.exist() ? iii : 0;
 			}
 		}
-		if (addGlyph(charcode)) {
-			// TODO : This does not work due to the fact that the update of open GL is not
-			// done in the context main cycle !!!
-			Ewol.getContext().forceRedrawAll();
-		}
-		return 0;
+		return -1;
 	}
 	
 	/**
