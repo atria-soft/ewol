@@ -109,7 +109,7 @@ class ComposerTest {
 				<Sizer mode="VERTICAL" lock="true" fill="true" expand="true">
 					<Label name="[555]file-chooser:title-label">Change height</Label>
 					<Sizer mode="HORIZONTAL" lock="true" expand="true,false,false">
-						<Image src="width.svg" expand="false" image-size="48,48px"/>
+						<Image src="THEME:/icon/edit.svg?lib=ewol" expand="false" image-size="48,48px"/>
 						<Spacer min-size="2,2mm"/>
 						<Slider name="[555]HeighMap:slider-width"
 								expand="true,false"

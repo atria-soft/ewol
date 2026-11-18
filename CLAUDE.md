@@ -49,7 +49,7 @@ public class MyWindows extends Windows {
 ## Build / test
 
 Maven module of the multi-module project (see the root `CLAUDE.md` for the build order and commit format):
-`. .island/manifest/java-home.sh && /usr/bin/mvn install -DskipTests`. Known failing tests: ComposerTest, ProgressBarTest, etc.
+`. .island/manifest/java-home.sh && /usr/bin/mvn install -DskipTests`. All tests pass headless; a test needing a resource must use one bundled with ewol (`THEME:/icon/...?lib=ewol`).
 
 ## Where to find what (`doc/`, read on demand: `cs PATTERN doc/`)
 

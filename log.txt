@@ -2,3 +2,5 @@
 - CLAUDE.md reduced from 42 Ko to under 5 Ko (loaded every turn): the API reference moved verbatim to doc/
   (ARCHITECTURE.md, WIDGETS.md, SIGNALS_AND_CUSTOM_WIDGETS.md, PITFALLS.md), read on demand.
 - CLAUDE.md keeps Quick Start, build, dependencies, one-line pitfalls with pointers, and a "Where to find what" table.
+
+2026-11-18 ewol tests green: ComposerTest.testToolMapHeightLikeXml referenced an app-only width.svg (gale threw on the missing file); the test now uses a bundled THEME icon.
