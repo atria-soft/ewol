@@ -18,7 +18,7 @@ public class Appl implements EwolApplication {
 			final var tmpppp = context.getCmd().get(iii);
 			if (tmpppp == "-h" || tmpppp == "--help") {
 				LOGGER.info("  -h/--help display this help");
-				System.exit(0);
+				context.exit(0);
 			}
 		}
 		// ! [ewol_sample_HW_main_parse_arguments]

@@ -11,6 +11,7 @@ import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.ewol.Ewol;
 import org.atriasoft.ewol.Gravity;
 import org.atriasoft.ewol.widget.Button;
 import org.atriasoft.ewol.widget.Container;
@@ -119,7 +120,7 @@ public class BasicWindows extends Windows {
 		menuBar.menu("File", () -> MenuPopup.create()
 				.item("Home", "home", () -> showLandingPage())
 				.separator()
-				.item("Quit", "close", "alt+F4", () -> System.exit(0)));
+				.item("Quit", "close", "alt+F4", () -> Ewol.getContext().exit(0)));
 
 		// One menu per category
 		for (final Map.Entry<String, List<TestWidgetInterface>> entry : this.categorizedTests.entrySet()) {
