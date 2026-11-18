@@ -5,10 +5,13 @@
  */
 package org.atriasoft.ewol.widget;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import org.atriasoft.esignal.SignalEmpty;
+import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -16,6 +19,7 @@ import org.atriasoft.etranslate.ETranslate;
 import org.atriasoft.ewol.Padding;
 import org.atriasoft.ewol.compositing.AlignMode;
 import org.atriasoft.ewol.compositing.CompositingText;
+import org.atriasoft.ewol.compositing.TextBase;
 import org.atriasoft.ewol.event.EventInput;
 import org.atriasoft.ewol.resource.ResourceColorFile;
 import org.atriasoft.gale.key.KeyStatus;
@@ -29,7 +33,8 @@ public class Label extends Widget {
 	private int propertyFontSize = 0;
 	private final CompositingText textCompose = new CompositingText();
 	private String value = "";
-	
+	private Color textColor = null;
+
 	protected int colorDefaultBgText = -1;
 	protected int colorDefaultFgText = -1;
 	protected ResourceColorFile colorProperty;
@@ -165,6 +170,9 @@ public class Label extends Widget {
 			this.textCompose.setDefaultColorFg(this.colorProperty.get(this.colorDefaultFgText));
 			this.textCompose.setDefaultColorBg(this.colorProperty.get(this.colorDefaultBgText));
 		}
+		if (this.textColor != null) {
+			this.textCompose.setDefaultColorFg(this.textColor);
+		}
 		this.textCompose.setPos(tmpTextOrigin);
 		LOGGER.trace("[{}] '{}' display at pos={}, size={}", getId(), this.value, tmpTextOrigin, this.size);
 		this.textCompose.setTextAlignment(tmpTextOrigin.x(), tmpTextOrigin.x() + tmpSizeText.x(), AlignMode.LEFT);
@@ -189,6 +197,18 @@ public class Label extends Widget {
 		requestUpdateSize();
 	}
 	
+	/**
+	 * Set the colour of the text, overriding the theme one.
+	 * @param textColor the colour, null to follow the theme
+	 */
+	public void setPropertyTextColor(final Color textColor) {
+		if (Objects.equals(this.textColor, textColor)) {
+			return;
+		}
+		this.textColor = textColor;
+		markToRedraw();
+	}
+
 	@JsonProperty("font-size")
 	@JacksonXmlProperty(isAttribute = true, localName = "font-size")
 	public void setPropertyFontSize(final int propertyFontSize) {
@@ -219,6 +239,16 @@ public class Label extends Widget {
 	// ========================================================================
 	// Factory methods and Fluent API
 	// ========================================================================
+
+	/**
+	 * Escape a plain text to give it to a label, which parses its text as markup:
+	 * {@code Label.create(Label.escape("a < b"))} shows a literal '&lt;'.
+	 * @param text the plain text
+	 * @return the text with '&amp;', '&lt;' and '&gt;' as entities
+	 */
+	public static String escape(final String text) {
+		return TextBase.escapeMarkup(text);
+	}
 
 	/**
 	 * Create a new Label with text.

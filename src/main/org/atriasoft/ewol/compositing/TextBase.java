@@ -336,10 +336,105 @@ public abstract class TextBase extends Compositing {
 	public abstract float getSize();
 
 	/**
+	 * Escape a plain text so that it is shown literally by the decorated print (the text is parsed as markup).
+	 * @param text The plain text.
+	 * @return The text with '&amp;', '&lt;' and '&gt;' replaced by entities.
+	 */
+	public static String escapeMarkup(final String text) {
+		final StringBuilder out = new StringBuilder(text.length() + 8);
+		for (int iii = 0; iii < text.length(); iii++) {
+			final char ch = text.charAt(iii);
+			switch (ch) {
+				case '&':
+					out.append("&amp;");
+					break;
+				case '<':
+					out.append("&lt;");
+					break;
+				case '>':
+					out.append("&gt;");
+					break;
+				default:
+					out.append(ch);
+					break;
+			}
+		}
+		return out.toString();
+	}
+
+	/**
+	 * Decode the entities of a text part of the markup: &amp;lt; &amp;gt; &amp;amp; &amp;quot; &amp;apos; &amp;nbsp;
+	 * and numeric ones (&amp;#233; or &amp;#xE9;). Unknown sequences (a lone '&amp;') are kept as is.
+	 * @param text The text part.
+	 * @return The decoded text.
+	 */
+	public static String unescapeMarkup(final String text) {
+		if (text.indexOf('&') < 0) {
+			return text;
+		}
+		final StringBuilder out = new StringBuilder(text.length());
+		int pos = 0;
+		while (pos < text.length()) {
+			final char ch = text.charAt(pos);
+			if (ch == '&') {
+				final int semi = text.indexOf(';', pos);
+				if (semi > pos + 1 && semi - pos <= 10) {
+					final String name = text.substring(pos + 1, semi);
+					final int decoded = decodeEntity(name);
+					if (decoded >= 0) {
+						out.appendCodePoint(decoded);
+						pos = semi + 1;
+						continue;
+					}
+				}
+			}
+			out.append(ch);
+			pos++;
+		}
+		return out.toString();
+	}
+
+	private static int decodeEntity(final String name) {
+		switch (name) {
+			case "lt":
+				return '<';
+			case "gt":
+				return '>';
+			case "amp":
+				return '&';
+			case "quot":
+				return '"';
+			case "apos":
+				return '\'';
+			case "nbsp":
+				return 0xA0;
+			default:
+				break;
+		}
+		if (name.length() > 1 && name.charAt(0) == '#') {
+			try {
+				final int value;
+				if (name.charAt(1) == 'x' || name.charAt(1) == 'X') {
+					value = Integer.parseInt(name.substring(2), 16);
+				} else {
+					value = Integer.parseInt(name.substring(1));
+				}
+				if (Character.isValidCodePoint(value)) {
+					return value;
+				}
+			} catch (final NumberFormatException e) {
+				return -1;
+			}
+		}
+		return -1;
+	}
+
+	/**
 	 * add a line with the current this.htmlDecoTmp decoration
 	 * @param data The cuurent data to add.
 	 */
-	public void htmlAddData(final String data) {
+	public void htmlAddData(final String rawData) {
+		final String data = unescapeMarkup(rawData);
 		//LOGGER.error("Add data '{}' @pos=", data, this.position);
 		if (this.htmlCurrentLine.length() > 0
 				&& this.htmlCurrentLine.charAt(this.htmlCurrentLine.length() - 1) != (char) Character.SPACE_SEPARATOR) {
