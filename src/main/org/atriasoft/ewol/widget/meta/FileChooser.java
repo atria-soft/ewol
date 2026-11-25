@@ -6,12 +6,20 @@
 package org.atriasoft.ewol.widget.meta;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Set;
 
 import org.atriasoft.esignal.Signal;
 import org.atriasoft.esignal.SignalEmpty;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
+import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2b;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.ewol.widget.Button;
@@ -19,6 +27,7 @@ import org.atriasoft.ewol.widget.CheckBox;
 import org.atriasoft.ewol.widget.Dialog;
 import org.atriasoft.ewol.widget.Entry;
 import org.atriasoft.ewol.widget.Icon;
+import org.atriasoft.ewol.widget.ImageDisplay;
 import org.atriasoft.ewol.widget.Label;
 import org.atriasoft.ewol.widget.ListFileSystem;
 import org.atriasoft.ewol.widget.Sizer;
@@ -53,6 +62,9 @@ public class FileChooser extends Dialog {
 	private static final Color COLOR_ICON_FILL = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 	private static final Color COLOR_ICON_FILL_DARK = new Color(0x00, 0x00, 0x00, 0xFF);
 
+	private static final Set<String> IMAGE_EXTENSIONS = Set.of("png", "jpg", "jpeg", "bmp", "gif", "svg");
+	private static final float PREVIEW_SPLIT_RATIO = 0.7f;
+
 	// ========================================================================
 	// Signals
 	// ========================================================================
@@ -82,12 +94,20 @@ public class FileChooser extends Dialog {
 	private final ListFileSystem listFolder;
 	private final ListFileSystem listFiles;
 	private final CheckBox showHiddenCheckBox;
+	private final CheckBox showPreviewCheckBox;
 	private final Button validateButton;
 	private final Button cancelButton;
 	private final Label validateLabelWidget;
 	private final Label cancelLabelWidget;
 	private Sizer fileRow;
 	private SplitPane splitPane;
+	private SplitPane outerSplitPane;
+	private Sizer previewPanel;
+	private ImageDisplay previewImage;
+	private Label previewName;
+	private Label previewSize;
+	private Label previewModified;
+	private Label previewType;
 
 	// ========================================================================
 	// Constructor
@@ -127,6 +147,18 @@ public class FileChooser extends Dialog {
 		this.listFiles.setPropertyFill(Vector2b.TRUE);
 
 		this.showHiddenCheckBox = CheckBox.create("Show Hidden Files");
+		this.showPreviewCheckBox = CheckBox.create("Show Preview");
+
+		this.previewImage = ImageDisplay.create();
+		this.previewImage.setPropertyExpand(Vector2b.TRUE);
+		this.previewImage.setPropertyFill(Vector2b.TRUE);
+		this.previewImage.setPropertyKeepRatio(true);
+		this.previewImage.setPropertySmooth(true);
+
+		this.previewName = new Label("");
+		this.previewSize = new Label("");
+		this.previewModified = new Label("");
+		this.previewType = new Label("");
 
 		this.validateLabelWidget = new Label(this.propertyLabelValidate);
 		this.cancelLabelWidget = new Label(this.propertyLabelCancel);
@@ -139,6 +171,7 @@ public class FileChooser extends Dialog {
 
 		// Connect signals
 		this.showHiddenCheckBox.signalValue.connectAuto(this, FileChooser::onCallbackHidenFileChangeChangeValue);
+		this.showPreviewCheckBox.signalValue.connectAuto(this, FileChooser::onCallbackShowPreviewChangeValue);
 		this.validateButton.signalClick.connectAuto(this, FileChooser::onCallbackListValidate);
 		this.cancelButton.signalClick.connectAuto(this, FileChooser::onCallbackButtonCancelPressed);
 		this.listFolder.signalFolderValidate.connectAuto(this, FileChooser::onCallbackListFolderSelectChange);
@@ -153,6 +186,8 @@ public class FileChooser extends Dialog {
 		setContentWidget(buildFileChooserContent());
 
 		addFooterWidget(this.showHiddenCheckBox);
+		addFooterWidget(createHorizontalSpacer(15));
+		addFooterWidget(this.showPreviewCheckBox);
 		final Spacer expandSpacer = new Spacer();
 		expandSpacer.setPropertyExpand(Vector2b.TRUE_FALSE);
 		addFooterWidget(expandSpacer);
@@ -204,9 +239,37 @@ public class FileChooser extends Dialog {
 		this.splitPane.setPropertyFill(Vector2b.TRUE);
 		this.splitPane.first(this.listFolder);
 		this.splitPane.second(this.listFiles);
-		contentSizer.subWidgetAdd(this.splitPane);
+
+		// Preview panel on the right side, hidden by default
+		this.previewPanel = buildPreviewPanel();
+		this.previewPanel.setPropertyHide(true);
+
+		// Outer split: [folders | files] | preview
+		this.outerSplitPane = SplitPane.horizontal()
+				.splitPosition(1.0f)
+				.minSizes(200.0f, 0.0f);
+		this.outerSplitPane.setPropertyExpand(Vector2b.TRUE);
+		this.outerSplitPane.setPropertyFill(Vector2b.TRUE);
+		this.outerSplitPane.first(this.splitPane);
+		this.outerSplitPane.second(this.previewPanel);
+		contentSizer.subWidgetAdd(this.outerSplitPane);
 
 		return contentSizer;
+	}
+
+	private Sizer buildPreviewPanel() {
+		final Sizer panel = new Sizer(DisplayMode.VERTICAL);
+		panel.setPropertyExpand(Vector2b.TRUE);
+		panel.setPropertyFill(Vector2b.TRUE);
+
+		panel.subWidgetAdd(this.previewImage);
+		panel.subWidgetAdd(createVerticalSpacer(5));
+		panel.subWidgetAdd(this.previewName);
+		panel.subWidgetAdd(this.previewType);
+		panel.subWidgetAdd(this.previewSize);
+		panel.subWidgetAdd(this.previewModified);
+
+		return panel;
 	}
 
 	private Sizer buildFolderRow() {
@@ -301,6 +364,15 @@ public class FileChooser extends Dialog {
 
 	protected static void onCallbackListFileSelectChange(final FileChooser self, final String value) {
 		self.setPropertyFile(value);
+		self.updatePreview(value);
+	}
+
+	protected static void onCallbackShowPreviewChangeValue(final FileChooser self, final Boolean value) {
+		self.previewPanel.setPropertyHide(!value);
+		self.outerSplitPane.splitPosition(value ? PREVIEW_SPLIT_RATIO : 1.0f);
+		if (value && !self.propertyFile.isEmpty()) {
+			self.updatePreview(self.propertyFile);
+		}
 	}
 
 	protected static void onCallbackListFileValidate(final FileChooser self, final String value) {
@@ -324,11 +396,17 @@ public class FileChooser extends Dialog {
 			self.autoDestroy();
 			return;
 		}
-		if (self.propertyFile.isEmpty()) {
+		// Read directly from the Entry at validate time. Relying on propertyFile
+		// alone misses edits that haven't fired signalModify yet (e.g. when the
+		// user types and clicks Save without losing focus first).
+		final String entryValue = self.entryFile.getPropertyValue();
+		final String fileName0 = (entryValue != null && !entryValue.isEmpty())
+				? entryValue : self.propertyFile;
+		if (fileName0 == null || fileName0.isEmpty()) {
 			LOGGER.warn("Validate with empty file name");
 			return;
 		}
-		String fileName = self.propertyFile;
+		String fileName = fileName0;
 		if (self.propertyFilterExtension != null && !fileName.endsWith(self.propertyFilterExtension)) {
 			fileName = fileName + self.propertyFilterExtension;
 		}
@@ -425,6 +503,82 @@ public class FileChooser extends Dialog {
 		this.listFolder.setPropertyPath(this.propertyPath);
 		this.entryFolder.setPropertyValue(this.propertyPath);
 		markToRedraw();
+	}
+
+	private void updatePreview(final String fileValue) {
+		if (this.previewPanel == null || this.previewPanel.getPropertyHide()) {
+			return;
+		}
+		if (fileValue == null || fileValue.isEmpty()) {
+			clearPreview();
+			return;
+		}
+		File file = new File(fileValue);
+		if (!file.isAbsolute()) {
+			final String separator = this.propertyPath.endsWith("/") ? "" : "/";
+			file = new File(this.propertyPath + separator + fileValue);
+		}
+		if (!file.exists() || file.isDirectory()) {
+			clearPreview();
+			return;
+		}
+		final String name = file.getName();
+		final String extension = extractExtension(name);
+
+		this.previewName.setPropertyValue("<b>" + escapeMarkup(name) + "</b>");
+		this.previewType.setPropertyValue(extension.isEmpty() ? "Type: -" : "Type: " + extension);
+		this.previewSize.setPropertyValue("Size: " + formatSize(file.length()));
+		this.previewModified.setPropertyValue("Modified: " + formatModified(file.toPath()));
+
+		if (IMAGE_EXTENSIONS.contains(extension.toLowerCase(Locale.ROOT))) {
+			this.previewImage.setPropertyHide(false);
+			this.previewImage.setPropertySource(new Uri("FILE", file.getAbsolutePath()));
+		} else {
+			this.previewImage.setPropertyHide(true);
+		}
+	}
+
+	private void clearPreview() {
+		this.previewImage.setPropertyHide(true);
+		this.previewName.setPropertyValue("");
+		this.previewType.setPropertyValue("");
+		this.previewSize.setPropertyValue("");
+		this.previewModified.setPropertyValue("");
+	}
+
+	private static String extractExtension(final String name) {
+		final int dot = name.lastIndexOf('.');
+		if (dot <= 0 || dot == name.length() - 1) {
+			return "";
+		}
+		return name.substring(dot + 1);
+	}
+
+	private static String formatSize(final long bytes) {
+		if (bytes < 1024L) {
+			return bytes + " B";
+		}
+		if (bytes < 1024L * 1024L) {
+			return String.format(Locale.ROOT, "%.1f KB", bytes / 1024.0);
+		}
+		if (bytes < 1024L * 1024L * 1024L) {
+			return String.format(Locale.ROOT, "%.1f MB", bytes / (1024.0 * 1024.0));
+		}
+		return String.format(Locale.ROOT, "%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0));
+	}
+
+	private static String formatModified(final Path path) {
+		try {
+			final FileTime time = Files.getLastModifiedTime(path);
+			final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT);
+			return fmt.format(new Date(time.toMillis()));
+		} catch (final Exception e) {
+			return "-";
+		}
+	}
+
+	private static String escapeMarkup(final String text) {
+		return text.replace("<", "&lt;").replace(">", "&gt;");
 	}
 
 	// ========================================================================
